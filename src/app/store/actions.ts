@@ -1,0 +1,9 @@
+export const PROCESSING = 'IS_PROCESSING';
+export const CODE_GENERATOR = 'CODE_GENERATOR';
+export const CHANGE_CODE_GENERATOR = 'CHANGE_CODE_GENERATOR';
+
+export const ADD_NODE = 'ADD_NODE';
+export const REMOVE_NODE = 'REMOVE_NODE';
+
+
+export const SELECT_NODE = 'SELECT_NODE';

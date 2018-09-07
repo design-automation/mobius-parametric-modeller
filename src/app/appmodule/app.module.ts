@@ -5,12 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { NgRedux, NgReduxModule } from '@angular-redux/store';
-import { IAppState, rootReducer, INITIAL_STATE } from '../store/store';
+import { IAppState, rootReducer, INITIAL_STATE } from '../core/store/store';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { PageNotFoundComponent } from './components/not-found/not-found.componen
     FormsModule,
     NgReduxModule,
     AppRoutingModule,
+    CoreModule
   ],
   declarations: [
     AppComponent,

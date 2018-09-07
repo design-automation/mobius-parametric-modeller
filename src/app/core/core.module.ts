@@ -5,9 +5,10 @@
  */
 
 import { NgModule, SkipSelf, Optional } from "@angular/core";
+import { DataService } from "./services/data.service";
 
 @NgModule({
-    providers: [ /* GLOBAL SERVICES */]
+    providers: [ DataService/* GLOBAL SERVICES */]
 })
 export class CoreModule{
     constructor(@Optional() @SkipSelf() core: CoreModule){

@@ -7,6 +7,7 @@
     "types": [],
     "paths": {
       "@views" : ["app/views"],
+      "@services" : ["app/core/services"]
     },
   },
   "exclude": [

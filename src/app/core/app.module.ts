@@ -8,11 +8,9 @@ import { NgRedux, NgReduxModule } from '@angular-redux/store';
 import { IAppState, rootReducer, INITIAL_STATE } from '../store/store';
 
 import { AppRoutingModule } from './app-routing.module';
-import { RendererModule } from '../modules/renderer/renderer.module';
 
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
-import { MobiusViewerComponent } from './components/mobius-viewer/mobius-viewer.component';
 
 @NgModule({
   imports: [
@@ -21,13 +19,11 @@ import { MobiusViewerComponent } from './components/mobius-viewer/mobius-viewer.
     HttpClientModule, 
     FormsModule,
     NgReduxModule,
-    AppRoutingModule, 
-    RendererModule,
+    AppRoutingModule,
   ],
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    MobiusViewerComponent  
   ],
   entryComponents: [ ],
   providers: [ ],

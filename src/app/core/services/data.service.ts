@@ -3,17 +3,10 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DataService {
   
-  private static _data = {
-      'name' : "Akshata", 
-      'age' : 27, 
-      'interests' : [ 'coding', 'traveling', 'food' ] 
-  }; 
+  private static _data = {  }; 
   
   constructor() { 
-
       // alert if recreated
-      alert("Data Service recreated!")
-
   };
 
   public static get data(){

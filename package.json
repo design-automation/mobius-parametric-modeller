@@ -31,6 +31,7 @@
     "@angular/platform-browser": "^5.2.10",
     "@angular/platform-browser-dynamic": "^5.2.10",
     "@angular/router": "^5.2.10",
+    "@types/circular-json": "^0.4.0",
     "@types/three": "^0.84.27",
     "circular-json": "^0.4.0",
     "core-js": "^2.5.5",

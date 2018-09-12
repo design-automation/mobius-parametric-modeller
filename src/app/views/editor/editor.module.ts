@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { SharedModule } from '@shared/shared.module';
+
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component'; 
 
@@ -11,7 +13,8 @@ import { EditorComponent } from './editor.component';
   exports: [],
   imports: [
     CommonModule, 
-    EditorRoutingModule
+    EditorRoutingModule, 
+    SharedModule
   ],
   entryComponents: [ ],
   providers: [ ]

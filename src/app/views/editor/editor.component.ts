@@ -7,6 +7,9 @@ import { DataService } from '@services';
 })
 export class EditorComponent{
     data; 
-
     constructor(){ this.data = DataService.data; }
+
+    get_str(): string{
+      return "edit::" + Object.keys(this.data).join("__");
+    }
 }

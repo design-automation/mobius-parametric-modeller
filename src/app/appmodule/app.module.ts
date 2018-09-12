@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
 import { CoreModule } from '../core/core.module';
 
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -25,7 +26,7 @@ import { CoreModule } from '../core/core.module';
   ],
   declarations: [
     AppComponent,
-    PageNotFoundComponent,
+    PageNotFoundComponent
   ],
   entryComponents: [ ],
   providers: [ ],

@@ -13,7 +13,10 @@ export const INITIAL_STATE: IAppState = {
     name: "default_file.mob",
     author: "new_user", 
     flowchart: <IFlowchart>{ nodes: [
-            {name: "first_node", position: {x: 0, y: 0}}, 
+            {   name: "first_node", 
+                position: {x: 0, y: 0}, 
+                procedure: [1, 2, 3]
+            }, 
             {name: "second_node", position: {x: 0, y: 0}}, 
         ]},
     last_updated: new Date(),

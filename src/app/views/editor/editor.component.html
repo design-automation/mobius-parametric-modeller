@@ -1,17 +1,22 @@
-<h1>Editor</h1>
-<div class="editor">
-	<split  direction="horizontal" 
-			gutterColor="white"
-            [gutterSize]="7" 
-            [useTransition]="true">
+<split  
+		class="editor" 
+		direction="horizontal" 
+		[gutterSize]="7" 
+		[useTransition]="true">
 
-		<split-area [size]="30" order="1">
-			<flowchart [data]='flowchart'></flowchart>
-		</split-area>
+	<split-area [size]="30" order="1">
+		<flowchart [data]="flowchart"></flowchart>
+	</split-area>
 
-		<split-area [size]="70" order="2">
-			<div class="editor-container">
-			</div>
-		</split-area>
-    </split>
-</div>
+	<split-area [size]="70" order="2">
+		<split direction="vertical">
+			<split-area><h1>Viewer Container</h1></split-area>
+			<split-area>
+					<procedure-editor 
+						[node]='(flowchart | async).nodes[0]'>
+					</procedure-editor>
+			</split-area>
+			<split-area><h1>Parameter Viewer</h1></split-area>
+		</split>
+	</split-area>
+</split>

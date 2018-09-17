@@ -3,7 +3,8 @@ import { NgRedux, select, IAppState, ADD_NODE } from '@store';
 
 @Component({
   selector: 'editor',
-  templateUrl: './editor.component.html'
+  templateUrl: './editor.component.html',
+  styles: [ ".editor { height: 100%; width: 500px }" ]
 })
 export class EditorComponent{
     

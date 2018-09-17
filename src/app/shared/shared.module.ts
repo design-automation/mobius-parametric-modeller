@@ -5,11 +5,14 @@
  */
 
 import { NgModule, SkipSelf, Optional } from "@angular/core";
+import { CommonModule } from '@angular/common';
+
 import { MbFileReaderDirective } from "./directives/filesys";
 
 @NgModule({
     providers: [/* GLOBAL SERVICES */],
     declarations: [ MbFileReaderDirective ],
+    imports: [ CommonModule ],
     exports: [ MbFileReaderDirective ]
 })
 export class SharedModule{
@@ -17,7 +20,7 @@ export class SharedModule{
 
         /// Prevents any module apart from AppModule from re-importing
         if(shared){
-            throw new Error("Core Module has already been imported")
+            throw new Error("Core Module has already been imported");
         }
     }
 }

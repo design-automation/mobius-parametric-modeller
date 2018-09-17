@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { DataService } from '@services';
+import { NgRedux, select, IAppState, ADD_NODE } from '@store';
 
 @Component({
   selector: 'editor',
   templateUrl: './editor.component.html'
 })
 export class EditorComponent{
-    data; 
-    constructor(){ this.data = DataService.data; }
+    
+    @select() flowchart;
+    constructor(private ngRedux: NgRedux<IAppState>){}
 
-    get_str(): string{
-      return "edit::" + Object.keys(this.data).join("__");
+    add(): void{
+      this.ngRedux.dispatch({type: ADD_NODE})
     }
 }

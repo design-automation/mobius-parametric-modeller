@@ -1,4 +1,17 @@
 <h1>Editor</h1>
-{{ get_str(data) }}
+<div class="editor">
+	<split  direction="horizontal" 
+			gutterColor="white"
+            [gutterSize]="7" 
+            [useTransition]="true">
 
+		<split-area [size]="30" order="1">
+			<flowchart [data]='flowchart'></flowchart>
+		</split-area>
 
+		<split-area [size]="70" order="2">
+			<div class="editor-container">
+			</div>
+		</split-area>
+    </split>
+</div>

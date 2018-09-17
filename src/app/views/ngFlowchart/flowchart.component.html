@@ -1,0 +1,8 @@
+<h3>Flowchart Editor</h3>
+
+<node
+    *ngFor="let node of (data | async).nodes; let node_index = index" 
+    [node]='node' 
+    [node_index]='node_index'
+    [zoom]=1>
+</node>

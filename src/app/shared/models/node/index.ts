@@ -1,4 +1,1 @@
-export {IGraphNode} from './IGraphNode';
-export {GraphNode} from './GraphNode';
-export {IEdge} from './IEdge';
-export {NodeUtils} from './NodeUtils'; 
+export { INode } from './node.interface';

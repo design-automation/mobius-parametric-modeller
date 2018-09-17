@@ -6,7 +6,8 @@
     "module": "es2015",
     "types": [],
     "paths": {
-      "@models/*" : ["app/shared/models"],
+      "@store" : ["app/core/store"],
+      "@models/*" : ["app/shared/models/*"],
       "@utils" : ["app/shared/utils"],
       "@shared/*" : ["app/shared/*"],
       "@views" : ["app/views"],

@@ -1,0 +1,35 @@
+<div class='node' 
+    id='n{{node_index}}'
+    draggable='true'
+    [style.top.px]='node.position.y'
+    [style.left.px]='node.position.x'
+    ngDraggable
+    [node]='node'
+    [zoom]='zoom'
+    (dragged)='updatePosition($event)'>
+    
+    <div class="node__name" 
+        contenteditable="true">
+        {{node.name}}
+    </div>
+
+    <div class='node__body'>
+        
+        <div class='container--input'>
+            <port></port>
+            <port></port>
+            <port></port>
+        </div>
+
+        <div class='container--info'>
+            node description
+            time taken
+        </div>
+
+        <div class='container--output'>
+            <port></port>
+            <port></port>
+        </div>
+
+    </div>
+</div>

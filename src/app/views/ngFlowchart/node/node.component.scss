@@ -1,0 +1,51 @@
+$color-main: #2D4885;
+$color-accent: #50ABB9;
+$color-muted: #88D4DD;
+$color-text-accent: #DC772F;
+
+$node-width: 100px;
+$default-padding: 10px;
+
+.node{
+    position: absolute;
+    
+    max-width: $node-width;
+    margin: $default-padding;
+
+    border: 2px solid $color-main;
+    border-radius: 5px;
+
+    .node__name{
+        background-color: $color-main;
+        color: $color-text-accent;
+    }
+
+    .node__body{
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container--input{
+            @extend .container;
+            margin-left: -12.5px;
+        }
+
+        .container--output{
+            @extend .container;
+            margin-right: -12.5px;
+        }
+
+        .container--info{
+            @extend .container;
+            padding: 5px;
+        }
+    }
+
+}

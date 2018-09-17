@@ -1,30 +1,16 @@
-<h1>Hello, World! I am the viewer</h1>
-
-<p>Reprehenderit in ex do ad consequat nisi excepteur duis voluptate pariatur sit commodo commodo et.
-<!-- <param-view></param-view> -->Anim quis reprehenderit nulla incididunt deserunt incididunt incididunt voluptate enim. Laborum enim est Lorem deserunt minim adipisicing esse est fugiat. Enim laboris in qui cillum dolor velit laborum. Occaecat velit commodo in eiusmod id cupidatat. Elit incididunt sit reprehenderit deserunt nostrud. Sit pariatur irure labore elit ullamco excepteur nulla qui et veniam. Cillum cillum tempor culpa dolore ut commodo eiusmod id officia.
-</p>
-
-{{data.name}}
-{{data.age}}  <button (click)='data.age = data.age + 1;'>Increment</button>
-{{data.interests}}
-
-<br><br><br>
 Load file:
-<input type='file' mbFileReader [data]='data'>
-{{get_str(data)}}
-<h1>Mobius Viewer</h1>
-
+<input type='file' 
+	mbFileReader [data]='data' 
+	(load)='load_file($event)'>
 <h2> Open file in <li [routerLink]="['/editor']">Editor</li></h2>
-
-<h3>List of contents</h3>
-<ul>
-	<li>Different viewers (display properties of node)</li>
-	<li>Flowchart</li>
-	<li>Parameter-Changer</li>
-	<li>Execute</li>
-</ul>
-
-
+<h1>Mobius Viewer</h1>
 <div class='container' style='height: 400px; width: 800px; border: 1px dashed black;'>
-	
+	<h3>List of contents</h3>
+	<ul>
+		<li>Different viewers (display properties of node)</li>
+		<li>Flowchart</li>
+		<app-flowchart></app-flowchart>
+		<li>Parameter-Changer</li>
+		<li>Execute</li>
+	</ul>
 </div>

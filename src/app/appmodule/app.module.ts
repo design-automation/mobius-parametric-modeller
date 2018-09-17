@@ -4,14 +4,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { NgRedux, NgReduxModule } from '@angular-redux/store';
-import { IAppState, rootReducer, INITIAL_STATE } from '../core/store/store';
-
+import { CoreModule } from '../core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
-import { CoreModule } from '../core/core.module';
 
 
 @NgModule({
@@ -20,7 +17,6 @@ import { CoreModule } from '../core/core.module';
     BrowserAnimationsModule,
     HttpClientModule, 
     FormsModule,
-    NgReduxModule,
     AppRoutingModule,
     CoreModule
   ],
@@ -33,8 +29,6 @@ import { CoreModule } from '../core/core.module';
   bootstrap: [ AppComponent ]
 })
 export class AppModule {
-    constructor (ngRedux: NgRedux<IAppState>) {
-        ngRedux.configureStore(rootReducer, INITIAL_STATE);
-    }
+    constructor () { }
 }
 

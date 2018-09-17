@@ -4,9 +4,8 @@
  *	Flowchart
  * 
  */
-import { Directive, ElementRef, Input, HostBinding, HostListener, Renderer } from '@angular/core';
+import { Directive, ElementRef, Input, Output, HostBinding, HostListener, EventEmitter } from '@angular/core';
 import * as CircularJSON from 'circular-json';
-import { DataService } from '@services';
 
 @Directive({
 	selector: "[mbFileReader]"
@@ -14,7 +13,9 @@ import { DataService } from '@services';
 export class MbFileReaderDirective { 
 
 	@Input() data: any = {};
-	constructor(private el: ElementRef, private renderer: Renderer){ console.log(CircularJSON) }
+	@Output() load = new EventEmitter();
+
+	constructor(private el: ElementRef){ }
 
 	@HostListener("change")
 	onFileChange() {
@@ -46,13 +47,10 @@ export class MbFileReaderDirective {
 	  
 	  try{
 			let data = CircularJSON.parse(fileString);
-			//this.data.language = data.language;
-			//this.data.flowchart = data.flowchart;
-			this.data.flowchart = data.flowchart; 
-			this.data.modules = data.modules;
-			this.data.language = data.language;
-			//this.output.file = data;
-			//DataService.data = data;
+			this.load.emit(data);
+			// this.data.flowchart = data.flowchart; 
+			// this.data.modules = data.modules;
+			// this.data.language = data.language;
 
 	    // this.update_code_generator(CodeFactory.getCodeGenerator(data["language"]));
 	    //TODO: this.update_modules();

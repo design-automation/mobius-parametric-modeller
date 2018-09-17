@@ -6,10 +6,6 @@
  *  Procedures are internal to the nodes and are an array of function calls in a sequence
  * 
  */
-import { IPosition } from "@models/node/position";
-import { InputPort, OutputPort } from "@models/port";
-import { IProcedure } from "@models/procedure";
-
 export interface INode{
 	// basic properties
 	id: string;
@@ -19,16 +15,16 @@ export interface INode{
 	version: number; 
 
 	// type: string;
-	position: IPosition;
+	position: any;
 	enabled: boolean;
 	hasExecuted: boolean;
 	hasError: boolean;
 	timeTaken: number;
 
 	// contents
-	inputs: InputPort[];
-	outputs: OutputPort[];
-	procedure: IProcedure[];
+	inputs: any[];
+	outputs: any[];
+	procedure: any[];
 
 	// stores the state
 	state: {

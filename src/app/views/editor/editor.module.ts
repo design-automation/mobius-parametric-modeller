@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/shared.module';
 
+import { AngularSplitModule } from 'angular-split';
+import { NgFlowchart } from '../ngFlowchart'; 
+
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component'; 
 
@@ -14,7 +17,9 @@ import { EditorComponent } from './editor.component';
   imports: [
     CommonModule, 
     EditorRoutingModule, 
-    SharedModule
+    SharedModule, 
+    AngularSplitModule, 
+    NgFlowchart
   ],
   entryComponents: [ ],
   providers: [ ]

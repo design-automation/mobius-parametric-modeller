@@ -1,49 +1,44 @@
-import { ADD_NODE, REMOVE_NODE, SELECT_NODE } from './actions';
-
-/// import test data
-/// remove in production
-import * as test_data from './mocks/simple-test-1.mob';
+import * as ACTION from './actions';
+import { IFlowchart } from '@models/flowchart';
 
 export interface IAppState{
-    mbJSON: any;
-	nodes: any[];
-    selected_node: any;
-	lastAction: string;
-	lastUpdate: Date;
-}
-
-export function rootReducer(state, action){
-    switch (action.type) {
-        case ADD_NODE:
-            return Object.assign({}, state, {
-                nodes: state.nodes.concat(Object.assign({}, {name: "newnode"} )),
-                lastUpdate: new Date()
-            })
-        
-        case REMOVE_NODE:
-            return Object.assign({}, state, {
-                nodes: state.nodes.filter(t => t.id !== action.id),
-                lastUpdate: new Date()
-            })
-
-        case SELECT_NODE:
-            console.log("action", action, "state", state)
-            return Object.assign({}, state, {
-                nodes: state.nodes,
-                selected_node: action.action,
-                lastAction: SELECT_NODE,
-                lastUpdate: new Date()
-            })
-    }
-    return state;
+    name: string;
+    author: string; 
+    flowchart: IFlowchart;
+    last_updated: Date;
+    version: number;
 }
 
 export const INITIAL_STATE: IAppState = {
-    mbJSON: null,
-	nodes: [],
-    selected_node: null,
-	lastAction: null,
-    lastUpdate: new Date()
+    name: "default_file.mob",
+    author: "new_user", 
+    flowchart: <IFlowchart>{ nodes: [
+            {name: "first_node", position: {x: 0, y: 0}}, 
+            {name: "second_node", position: {x: 0, y: 0}}, 
+        ]},
+    last_updated: new Date(),
+    version: 0
+}
+
+export function rootReducer(state, action){
+
+    switch (action.type) {
+
+        case ACTION.ADD_NODE:
+            return Object.assign({}, state);
+            // return Object.assign({}, state, FlowchartUtils.add_node(state.flowchart));
+        
+        case ACTION.NEW_FLOWCHART:
+            state.flowchart = <IFlowchart>{}
+            return Object.assign({}, state, state);
+        
+        case ACTION.LOAD_FLOWCHART:
+            state.flowchart = action.flowchart.flowchart;
+            return Object.assign({}, state, state);
+
+    }
+
+    return state;
 }
 
 

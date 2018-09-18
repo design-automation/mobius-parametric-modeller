@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { IModule, IFunction } from '@models/procedure';
+import { IModule, IFunction, IArgument } from '@models/procedure';
 import * as Modules from '@modules';
 
 // todo: bug fix for defaults
-function extract_params(func: Function){
+function extract_params(func: Function): IArgument[] {
     let fnStr = func.toString().replace( /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg, '');
     let result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).split(",")//.match( /([^\s,]+)/g);
     if(result === null || result[0]==""){
@@ -16,10 +16,10 @@ function extract_params(func: Function){
         let r_value = r.split("=");
 
         if (r_value.length == 1){
-            return { name: r_value[0].trim(), value: r_value[0].trim() }
+            return { name: r_value[0].trim(), value: r_value[0].trim(), default: r_value[0].trim() }
         }
         else{
-            return { name: r_value[0].trim(), value: r_value[1].trim() }
+            return { name: r_value[0].trim(), value: r_value[1].trim(), default: r_value[1].trim() }
         }
 
     });

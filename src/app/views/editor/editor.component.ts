@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgRedux, select, IAppState, ADD_NODE } from '@store';
+import { NgRedux, select, IAppState, ADD_NODE, EXECUTE } from '@store';
 
 @Component({
   selector: 'editor',
@@ -11,7 +11,7 @@ export class EditorComponent{
     @select() flowchart;
     constructor(private ngRedux: NgRedux<IAppState>){}
 
-    add(): void{
-      this.ngRedux.dispatch({type: ADD_NODE})
+    execute(): void{
+      this.ngRedux.dispatch({type: EXECUTE})
     }
 }

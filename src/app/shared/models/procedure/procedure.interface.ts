@@ -7,9 +7,11 @@ export interface IProcedure{
     children: IProcedure[];
 
     argCount: number;
-    args: { name: string, value: string }[];
+    args: IArgument[];
 
     meta: { name: string, module: string };
+    
+    enabled: boolean;
 }
 
 export interface IModule{
@@ -21,6 +23,13 @@ export interface IFunction{
     module: string,
     name: string, 
     argCount: number,
-    args: {name: string, value: string}[];
+    args: IArgument[];
+}
+
+
+export interface IArgument{
+    name: string, 
+    default: any,
+    value: any
 }
 

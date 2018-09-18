@@ -14,6 +14,10 @@ export abstract class NodeUtils{
 
         switch(prod.type){
 
+            case ProcedureTypes.VARIABLE:
+                prod.argCount = 2;
+                prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
+
             case ProcedureTypes.FUNCTION:
                 if(type == ProcedureTypes.FUNCTION){
         
@@ -23,7 +27,7 @@ export abstract class NodeUtils{
                     
                     prod.meta = { module: data.module, name: data.name };
                     prod.argCount = data.argCount + 1;
-                    prod.args = [{name: 'var_name', value: 'result'}, ...data.args];
+                    prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
                 }
 
         }

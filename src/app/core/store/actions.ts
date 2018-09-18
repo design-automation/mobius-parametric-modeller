@@ -9,3 +9,6 @@ export const REMOVE_NODE = 'REMOVE_NODE';
 export const SELECT_NODE = 'SELECT_NODE';
 export const LOAD_FLOWCHART = 'LOAD_FLOWCHART';
 export const NEW_FLOWCHART = 'NEW_FLOWCHART';
+
+
+export const EXECUTE = 'EXECUTE';

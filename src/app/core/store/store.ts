@@ -1,7 +1,7 @@
 import * as ACTION from './actions';
 import { IFlowchart } from '@models/flowchart';
+import { execute_flowchart } from '../execute';
 
-import { ProcedureTypes } from '@models/procedure';
 
 export interface IAppState{
     name: string;
@@ -14,137 +14,33 @@ export interface IAppState{
 export const INITIAL_STATE: IAppState = {
     name: "default_file.mob",
     author: "new_user", 
-    flowchart: <IFlowchart>{ nodes: [
-            {   
-                id: 'asdads',
-                name: "first_node", 
-                position: {x: 0, y: 0}, 
-                procedure: [
-                    {
-                        type: ProcedureTypes.VARIABLE,
-                        args: [ {
-                                    name: 'new_variable', 
-                                    value: 'x'
-                                  },
-                                  {
-                                    name: 'value', 
-                                    value: 10
-                                  }
-                                ],
-                        parent: undefined,
-                        children: []
-                    },
-                    {
-                        type: ProcedureTypes.FOREACH,
-                        args: [ {
-                                    name: 'element', 
-                                    value: 'x'
-                                  },
-                                  {
-                                    name: 'array', 
-                                    value: undefined
-                                  }
-                                ],
-                        parent: undefined,
-                        children: [
-                            {
-                                type: ProcedureTypes.VARIABLE,
-                                args: [ {
-                                            name: 'new_variable', 
-                                            value: 'x'
-                                          },
-                                          {
-                                            name: 'value', 
-                                            value: 10
-                                          }
-                                        ],
-                                parent: undefined,
-                                children: []
-                            },
-                            {
-                                type: ProcedureTypes.FOREACH,
-                                args: [ {
-                                            name: 'new_variable', 
-                                            value: 'x'
-                                          },
-                                          {
-                                            name: 'value', 
-                                            value: 10
-                                          }
-                                        ],
-                                parent: undefined,
-                                children: [
-                                    {
-                                        type: ProcedureTypes.VARIABLE,
-                                        args: [ {
-                                                    name: 'new_variable', 
-                                                    value: 'x'
-                                                  },
-                                                  {
-                                                    name: 'value', 
-                                                    value: 10
-                                                  }
-                                                ],
-                                        parent: undefined,
-                                        children: []
-                                    },
-                                    {
-                                        type: ProcedureTypes.FOREACH,
-                                        args: [ {
-                                                    name: 'element', 
-                                                    value: 'x'
-                                                  },
-                                                  {
-                                                    name: 'array', 
-                                                    value: undefined
-                                                  }
-                                                ],
-                                        parent: undefined,
-                                        children: [
-                                            {
-                                                type: ProcedureTypes.VARIABLE,
-                                                args: [ {
-                                                            name: 'new_variable', 
-                                                            value: 'x'
-                                                          },
-                                                          {
-                                                            name: 'value', 
-                                                            value: 10
-                                                          }
-                                                        ],
-                                                parent: undefined,
-                                                children: []
-                                            },
-                                            {
-                                                type: ProcedureTypes.VARIABLE,
-                                                args: [ {
-                                                            name: 'new_variable', 
-                                                            value: 'x'
-                                                          },
-                                                          {
-                                                            name: 'value', 
-                                                            value: 10
-                                                          }
-                                                        ],
-                                                parent: undefined,
-                                                children: []
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }, 
-            {
-                id: 'sadsdad',
-                name: "second_node", 
-                position: {x: 0, y: 0}
-            }, 
-        ]},
+    flowchart: <IFlowchart>{ 
+                    nodes: [
+                        {   
+                            id: 'asdads',
+                            name: "first_node", 
+                            position: {x: 0, y: 0}, 
+                            procedure: [],
+                            inputs: [
+                                { name: 'a', type: 'Slider', default: 12, }
+                            ],
+                            outputs: [
+                                { name: 'result' }
+                            ]
+                        }, 
+                        {
+                            id: 'sadsdad',
+                            name: "second_node", 
+                            position: {x: 0, y: 0},
+                            procedure: [],
+                            outputs: [
+                                { name: 'result' }
+                            ]
+                        }, 
+                    ]
+                },
     last_updated: new Date(),
-    version: 0
+    version: 1
 }
 
 export function rootReducer(state, action){
@@ -162,7 +58,10 @@ export function rootReducer(state, action){
         case ACTION.LOAD_FLOWCHART:
             state.flowchart = action.flowchart.flowchart;
             return Object.assign({}, state, state);
-
+        
+        case ACTION.EXECUTE:
+            state.flowchart = execute_flowchart(state.flowchart);
+            return Object.assign({}, state, state); ;
     }
 
     return state;

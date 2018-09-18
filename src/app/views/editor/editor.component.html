@@ -10,11 +10,14 @@
 
 	<split-area [size]="70" order="2">
 		<split direction="vertical">
-			<split-area><h1>Viewer Container</h1></split-area>
+			<button (click)='execute()'>Execute</button>
+			<split-area>
+				<text-viewer [node]='(flowchart | async).nodes[0]'></text-viewer>
+			</split-area>
 			<split-area>
 					<procedure-editor [node]='(flowchart | async).nodes[0]'></procedure-editor>
 			</split-area>
-			<split-area><h1>Parameter Viewer</h1></split-area>
+			<split-area><h5>Parameter Viewer</h5></split-area>
 		</split>
 	</split-area>
 </split>

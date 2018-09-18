@@ -8,12 +8,13 @@ import { NgModule, SkipSelf, Optional } from "@angular/core";
 import { CommonModule } from '@angular/common';
 
 import { MbFileReaderDirective } from "./directives/filesys";
+import { TextViewerComponent } from "./components/viewers/viewer-text.component";
 
 @NgModule({
     providers: [/* GLOBAL SERVICES */],
-    declarations: [ MbFileReaderDirective ],
+    declarations: [ MbFileReaderDirective, TextViewerComponent ],
     imports: [ CommonModule ],
-    exports: [ MbFileReaderDirective ]
+    exports: [ MbFileReaderDirective, TextViewerComponent ]
 })
 export class SharedModule{
     constructor(@Optional() @SkipSelf() shared: SharedModule){

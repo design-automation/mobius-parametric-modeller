@@ -26,6 +26,8 @@ export interface INode{
 	outputs: any[];
 	procedure: any[];
 
+	active_procedure;
+
 	// stores the state
 	state: {
 		procedure: number,

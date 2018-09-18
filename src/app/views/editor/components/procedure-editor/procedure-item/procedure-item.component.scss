@@ -1,3 +1,19 @@
+.container--nested{
+    position: relative;
+    padding-left: 30px;
+}
+
+.container--line{
+    margin: 10px 0px;
+}
+
+.hasChildren::before{
+    content: '\25B6';
+    position: absolute;
+    left: 15px;
+    font-size: 22px;
+}
+
 // .seg2{
 // }
 

@@ -1,6 +1,8 @@
 import * as ACTION from './actions';
 import { IFlowchart } from '@models/flowchart';
 
+import { ProcedureTypes } from '@models/procedure';
+
 export interface IAppState{
     name: string;
     author: string; 
@@ -13,11 +15,133 @@ export const INITIAL_STATE: IAppState = {
     name: "default_file.mob",
     author: "new_user", 
     flowchart: <IFlowchart>{ nodes: [
-            {   name: "first_node", 
+            {   
+                id: 'asdads',
+                name: "first_node", 
                 position: {x: 0, y: 0}, 
-                procedure: [1, 2, 3]
+                procedure: [
+                    {
+                        type: ProcedureTypes.VARIABLE,
+                        args: [ {
+                                    name: 'new_variable', 
+                                    value: 'x'
+                                  },
+                                  {
+                                    name: 'value', 
+                                    value: 10
+                                  }
+                                ],
+                        parent: undefined,
+                        children: []
+                    },
+                    {
+                        type: ProcedureTypes.FOREACH,
+                        args: [ {
+                                    name: 'element', 
+                                    value: 'x'
+                                  },
+                                  {
+                                    name: 'array', 
+                                    value: undefined
+                                  }
+                                ],
+                        parent: undefined,
+                        children: [
+                            {
+                                type: ProcedureTypes.VARIABLE,
+                                args: [ {
+                                            name: 'new_variable', 
+                                            value: 'x'
+                                          },
+                                          {
+                                            name: 'value', 
+                                            value: 10
+                                          }
+                                        ],
+                                parent: undefined,
+                                children: []
+                            },
+                            {
+                                type: ProcedureTypes.FOREACH,
+                                args: [ {
+                                            name: 'new_variable', 
+                                            value: 'x'
+                                          },
+                                          {
+                                            name: 'value', 
+                                            value: 10
+                                          }
+                                        ],
+                                parent: undefined,
+                                children: [
+                                    {
+                                        type: ProcedureTypes.VARIABLE,
+                                        args: [ {
+                                                    name: 'new_variable', 
+                                                    value: 'x'
+                                                  },
+                                                  {
+                                                    name: 'value', 
+                                                    value: 10
+                                                  }
+                                                ],
+                                        parent: undefined,
+                                        children: []
+                                    },
+                                    {
+                                        type: ProcedureTypes.FOREACH,
+                                        args: [ {
+                                                    name: 'element', 
+                                                    value: 'x'
+                                                  },
+                                                  {
+                                                    name: 'array', 
+                                                    value: undefined
+                                                  }
+                                                ],
+                                        parent: undefined,
+                                        children: [
+                                            {
+                                                type: ProcedureTypes.VARIABLE,
+                                                args: [ {
+                                                            name: 'new_variable', 
+                                                            value: 'x'
+                                                          },
+                                                          {
+                                                            name: 'value', 
+                                                            value: 10
+                                                          }
+                                                        ],
+                                                parent: undefined,
+                                                children: []
+                                            },
+                                            {
+                                                type: ProcedureTypes.VARIABLE,
+                                                args: [ {
+                                                            name: 'new_variable', 
+                                                            value: 'x'
+                                                          },
+                                                          {
+                                                            name: 'value', 
+                                                            value: 10
+                                                          }
+                                                        ],
+                                                parent: undefined,
+                                                children: []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }, 
-            {name: "second_node", position: {x: 0, y: 0}}, 
+            {
+                id: 'sadsdad',
+                name: "second_node", 
+                position: {x: 0, y: 0}
+            }, 
         ]},
     last_updated: new Date(),
     version: 0

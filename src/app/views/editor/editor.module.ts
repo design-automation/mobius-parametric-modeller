@@ -5,19 +5,23 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 
 import { AngularSplitModule } from 'angular-split';
-import { MatExpansionModule, MatIconModule } from '@angular/material';
+import { MatExpansionModule, MatIconModule, MatListModule } from '@angular/material';
 import { NgFlowchart } from '../ngFlowchart'; 
 
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component'; 
 import { ProcedureEditorComponent } from './components/procedure-editor/procedure-editor.component';
 import { ProcedureItemComponent } from './components/procedure-editor/procedure-item/procedure-item.component';
+import { ToolsetComponent } from './components/procedure-editor/toolset/toolset.component';
+
+
 
 @NgModule({
   declarations: [
     EditorComponent,
     ProcedureEditorComponent,
-    ProcedureItemComponent
+    ProcedureItemComponent,
+    ToolsetComponent
   ],
   exports: [],
   imports: [
@@ -28,6 +32,7 @@ import { ProcedureItemComponent } from './components/procedure-editor/procedure-
     AngularSplitModule, 
     MatExpansionModule,
     MatIconModule,
+    MatListModule,
     NgFlowchart
   ],
   entryComponents: [ ],

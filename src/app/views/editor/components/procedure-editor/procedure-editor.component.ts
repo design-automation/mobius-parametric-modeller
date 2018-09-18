@@ -1,14 +1,14 @@
 import { Component, Input} from '@angular/core';
 
 import { INode, NodeUtils } from '@models/node';
-import { IProcedure, ProcedureUtils } from '@models/procedure';
+import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 
 /*
  *	Displays the drag-drop procedure for a node
  *
  * 	Updates on:
  * 	- selected_node is changed
- * 	- selected_node is updated
+* 	- selected_node is updated
  */
 
 @Component({
@@ -18,9 +18,13 @@ import { IProcedure, ProcedureUtils } from '@models/procedure';
 })
 export class ProcedureEditorComponent{
 
-	@Input() node: INode[];
+	@Input() node: INode;
 	copiedProd: IProcedure;
 
-	constructor(){ }
+  constructor(){ }
+  
+  add(data: {type: ProcedureTypes, data: IFunction}): void{
+      NodeUtils.add_procedure(this.node, data.type, data.data);
+  } 
 
 }

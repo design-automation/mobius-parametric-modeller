@@ -1,0 +1,32 @@
+<div id='toolset'>
+
+    <mat-list class='toolset__basic'>
+            <mat-list-item 
+                *ngFor="let type of ProcedureTypesArr"
+                (click)='add(ProcedureTypes[type])'> 
+                {{type}} 
+            </mat-list-item>
+    </mat-list>
+    
+    <hr>
+
+    <div class='toolset__functions'>
+            
+            <mat-expansion-panel *ngFor='let mod of Modules'>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{ mod.module }}
+                        </mat-panel-title>
+                        <!-- <mat-panel-description>
+                            Imported from {{ mod.src }}
+                        </mat-panel-description> -->
+                    </mat-expansion-panel-header>
+                
+                    <mat-list class='toolset__functions--subset'>
+                        <mat-list-item *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </mat-list-item>
+                    </mat-list>
+                
+            </mat-expansion-panel>
+    </div>
+
+</div>

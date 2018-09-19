@@ -1,7 +1,7 @@
 import * as ACTION from './actions';
 import { IFlowchart } from '@models/flowchart';
 import { execute_flowchart } from '../execute';
-
+import { PortType, InputType, OutputType } from '@models/port'; 
 
 export interface IAppState{
     name: string;
@@ -22,10 +22,25 @@ export const INITIAL_STATE: IAppState = {
                             position: {x: 0, y: 0}, 
                             procedure: [],
                             inputs: [
-                                { name: 'a', type: 'Slider', default: 12, }
+                                {
+                                    name: 'a--input', 
+                                    default: 0,
+                                    value: 0,
+                                    isConnected: false,
+                                    meta: {
+                                        mode: InputType.Slider, 
+                                        opts: { min: 0, max: 12, increment: 1}
+                                    }
+                                }
                             ],
                             outputs: [
-                                { name: 'result' }
+                                {
+                                    name: 'a-output', 
+                                    isConnected: false,
+                                    meta: {
+                                        mode: OutputType.Text, 
+                                    }
+                                }
                             ]
                         }, 
                         {
@@ -60,7 +75,8 @@ export function rootReducer(state, action){
             return Object.assign({}, state, state);
         
         case ACTION.EXECUTE:
-            state.flowchart = execute_flowchart(state.flowchart);
+            //state.flowchart = execute_flowchart(state.flowchart);
+            alert("Executing!");
             return Object.assign({}, state, state); ;
     }
 

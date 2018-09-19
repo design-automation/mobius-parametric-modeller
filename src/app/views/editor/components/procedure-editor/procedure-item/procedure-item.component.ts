@@ -10,8 +10,6 @@ import { ProcedureTypesAware } from '@shared/decorators';
     styleUrls: ['procedure-item.component.scss']
 })
 export class ProcedureItemComponent{
-
     @Input() data: IProcedure;
-
 
 }

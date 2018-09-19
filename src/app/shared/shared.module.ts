@@ -9,12 +9,13 @@ import { CommonModule } from '@angular/common';
 
 import { MbFileReaderDirective } from "./directives/filesys";
 import { TextViewerComponent } from "./components/viewers/viewer-text.component";
+import { ExecuteComponent } from "./components/execute/execute.component";
 
 @NgModule({
     providers: [/* GLOBAL SERVICES */],
-    declarations: [ MbFileReaderDirective, TextViewerComponent ],
+    declarations: [ MbFileReaderDirective, TextViewerComponent, ExecuteComponent ],
     imports: [ CommonModule ],
-    exports: [ MbFileReaderDirective, TextViewerComponent ]
+    exports: [ MbFileReaderDirective, TextViewerComponent, ExecuteComponent ]
 })
 export class SharedModule{
     constructor(@Optional() @SkipSelf() shared: SharedModule){

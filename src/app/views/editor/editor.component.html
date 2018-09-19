@@ -6,18 +6,26 @@
 
 	<split-area [size]="30" order="1">
 		<flowchart [data]="flowchart"></flowchart>
+		<execute></execute>
 	</split-area>
 
 	<split-area [size]="70" order="2">
 		<split direction="vertical">
-			<button (click)='execute()'>Execute</button>
+			
 			<split-area>
 				<text-viewer [node]='(flowchart | async).nodes[0]'></text-viewer>
 			</split-area>
+			
 			<split-area>
-					<procedure-editor [node]='(flowchart | async).nodes[0]'></procedure-editor>
+				<parameter-editor [node]='(flowchart | async).nodes[0]'></parameter-editor>
+				<procedure-editor [node]='(flowchart | async).nodes[0]'></procedure-editor>
 			</split-area>
-			<split-area><h5>Parameter Viewer</h5></split-area>
+
+			<split-area>
+				<parameter-viewer [node]='(flowchart | async).nodes[0]'></parameter-viewer>
+			</split-area>
+
 		</split>
 	</split-area>
+
 </split>

@@ -1,2 +1,2 @@
-export { IProcedure, IModule, IFunction, IArgument } from './procedure.interface';
+export { IProcedure, IModule, IFunction } from './procedure.interface';
 export { ProcedureTypes } from './types';

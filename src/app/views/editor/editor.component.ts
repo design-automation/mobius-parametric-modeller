@@ -7,11 +7,8 @@ import { NgRedux, select, IAppState, ADD_NODE, EXECUTE } from '@store';
   styles: [ ".editor { height: 100%; width: 500px }" ]
 })
 export class EditorComponent{
-    
+
     @select() flowchart;
     constructor(private ngRedux: NgRedux<IAppState>){}
-
-    execute(): void{
-      this.ngRedux.dispatch({type: EXECUTE})
-    }
+    
 }

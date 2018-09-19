@@ -1,9 +1,7 @@
 <div class='container--editor'>
-
 	<toolset (select)='add($event)'></toolset>
 	
 	<div id='procedure' class="container--procedure">
 		<procedure-item *ngFor="let line of node?.procedure" [data]="line"></procedure-item>
 	</div>
-
 </div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { IModule, IFunction, IArgument } from '@models/procedure';
+import { IModule, IFunction } from '@models/procedure';
+import { IArgument } from '@models/code';
 import * as Modules from '@modules';
 
 // todo: bug fix for defaults

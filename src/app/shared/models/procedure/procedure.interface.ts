@@ -1,4 +1,5 @@
 import { ProcedureTypes } from './types';
+import { IArgument } from '@models/code';
 
 export interface IProcedure{
     type: ProcedureTypes;
@@ -24,12 +25,5 @@ export interface IFunction{
     name: string, 
     argCount: number,
     args: IArgument[];
-}
-
-
-export interface IArgument{
-    name: string, 
-    default: any,
-    value: any
 }
 

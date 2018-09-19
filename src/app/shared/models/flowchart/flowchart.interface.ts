@@ -13,4 +13,8 @@ export interface IFlowchart{
 
 	nodes: any[];
 	edges: any[];
+
+	meta: {
+		selected_nodes: number[];
+	}
 };

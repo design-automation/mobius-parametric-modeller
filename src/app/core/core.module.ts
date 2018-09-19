@@ -4,23 +4,19 @@
  * 
  */
 import { NgModule, SkipSelf, Optional } from "@angular/core";
-
-import { NgRedux, NgReduxModule } from '@angular-redux/store';
-import { IAppState, rootReducer, INITIAL_STATE } from './store';
-
-
+import { DataService } from "./services/data.service";
+ 
 @NgModule({
-    imports: [ NgReduxModule ],
-    providers: [ ]
+    imports: [ ],
+    declarations: [ ],
+    providers: [ DataService ],
+    exports: [ ]
 })
 export class CoreModule{
-    constructor(@Optional() @SkipSelf() core: CoreModule, 
-                ngRedux: NgRedux<IAppState>){
+    constructor(@Optional() @SkipSelf() core: CoreModule){
         /// Prevents any module apart from AppModule from re-importing
         if(core){
             throw new Error("Core Module has already been imported");
         }
-
-        ngRedux.configureStore(rootReducer, INITIAL_STATE);
     }
 }

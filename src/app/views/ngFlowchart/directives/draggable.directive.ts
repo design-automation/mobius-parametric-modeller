@@ -35,6 +35,11 @@ export class DraggableDirective {
 
 		this.trend = {x: 1, y: 1};
 		this.shakeCount = 0; 
+
+		if(!this.node.position){
+			console.warn("Setting nodde position in directive");
+			this.node.position = {x: 0, y: 0};
+		}
 	}
 
 	@HostListener("drag", ['$event'])

@@ -2,6 +2,19 @@ import { INode } from './node.interface';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 
 export abstract class NodeUtils{
+
+    static getNewNode(): INode{
+        let node: INode = <INode>{
+            id: 'asdads',
+            name: 'new_node', 
+            position: {x: 0, y: 0},
+            procedure: [],
+            outputs: [
+                { name: 'result' }
+            ]
+        };
+        return node;
+    };
     
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
         // todo: 

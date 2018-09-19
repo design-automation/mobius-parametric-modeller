@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'port',
-  template: '<div class="port"></div>',
+  template: "<div class='port'></div><input [(ngModel)]='data.name' placeholder='Name of Node'>",
   styles:   [
       '.port {\
             width: 15px; \

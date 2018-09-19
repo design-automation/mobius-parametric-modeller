@@ -15,9 +15,16 @@ $default-padding: 10px;
     border: 2px solid $color-main;
     border-radius: 5px;
 
+    background-color: white;
+
+    &.node--selected{
+        background-color: green;
+    }
+
     .node__name{
         background-color: $color-main;
         color: $color-text-accent;
+        text-align: center;
     }
 
     .node__body{

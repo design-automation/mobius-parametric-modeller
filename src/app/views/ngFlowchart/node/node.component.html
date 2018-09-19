@@ -1,4 +1,5 @@
 <div class='node' 
+    [class.node--selected]='selected'
     id='n{{node_index}}'
     draggable='true'
     [style.top.px]='node.position.y'
@@ -6,19 +7,19 @@
     ngDraggable
     [node]='node'
     [zoom]='zoom'
-    (dragged)='updatePosition($event)'>
+    (dragged)='updatePosition($event)'
+    (click)='nodeClicked($event)'>
     
-    <div class="node__name" 
-        contenteditable="true">
-        {{node.name}}
+    <div class="node__name">
+        <input [(ngModel)]='node.name'
+               name='node.name'
+               placeholder='Name of Node'>  
     </div>
 
     <div class='node__body'>
         
         <div class='container--input'>
-            <port></port>
-            <port></port>
-            <port></port>
+            <port *ngFor="let inp of node.inputs;" [data]='inp'></port>
         </div>
 
         <div class='container--info'>
@@ -27,8 +28,7 @@
         </div>
 
         <div class='container--output'>
-            <port></port>
-            <port></port>
+            <port *ngFor="let oup of node.outputs;" [data]='oup'></port>
         </div>
 
     </div>

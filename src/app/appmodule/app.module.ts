@@ -8,8 +8,6 @@ import { CoreModule } from '../core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { PageNotFoundComponent } from './components/not-found/not-found.component';
-
 
 @NgModule({
   imports: [
@@ -22,7 +20,6 @@ import { PageNotFoundComponent } from './components/not-found/not-found.componen
   ],
   declarations: [
     AppComponent,
-    PageNotFoundComponent
   ],
   entryComponents: [ ],
   providers: [ ],

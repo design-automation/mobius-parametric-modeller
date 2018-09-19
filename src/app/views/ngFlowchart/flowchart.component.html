@@ -1,9 +1,12 @@
 <div class='container'>
     <h3>Flowchart Editor</h3>
+    <button (click)='addNode()'> Add Node </button>
     <node
-        *ngFor="let node of (data | async).nodes; let node_index = index" 
+        *ngFor="let node of data.nodes; let node_index = index" 
         [node]='node' 
         [node_index]='node_index'
-        [zoom]=1>
+        [selected]='isSelected(node_index)'
+        [zoom]=1
+        (select)='selectNode($event)'>
     </node>
 </div>

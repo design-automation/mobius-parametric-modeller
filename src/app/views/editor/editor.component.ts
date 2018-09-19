@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
-import { NgRedux, select, IAppState, ADD_NODE, EXECUTE } from '@store';
+import { INode } from '@models/node';
+import { DataService } from '@services';
+import { IFlowchart } from '@models/flowchart';
 
 @Component({
   selector: 'editor',
   templateUrl: './editor.component.html',
-  styles: [ ".editor { height: 100%; width: 500px }" ]
+  styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent{
 
-    @select() flowchart;
-    constructor(private ngRedux: NgRedux<IAppState>){}
+    private flowchart: IFlowchart;
+    constructor(private dataService: DataService){
+        this.flowchart = dataService.flowchart;
+    }
+
+    select_node(node: INode): void{  console.log('select node');  }
     
 }

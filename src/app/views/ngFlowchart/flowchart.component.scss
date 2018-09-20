@@ -1,11 +1,7 @@
 .container{
     position: relative;
-    height: 100%;
-    min-height: 700px;
-
-    border: 1px solid black;
+	height: 100%;
 }
-
 
 @import '~scss/globals';
 
@@ -358,83 +354,6 @@ input:focus{
 
 					}
 				}
-
-				/* .port-container{
-					display: flex; 
-					flex-direction: row; 
-					justify-content: space-around;
-				
-					position: relative;
-					height: 10px;
-					width: 100%;
-					z-index: 1;
-				
-					margin-top: -2px;
-					
-					&.input{
-				
-						.port{
-							border-top-right-radius: 15px;
-							border-top-left-radius: 15px;
-						}
-					}
-				
-					&.output{
-				
-						.port{
-							border-bottom-right-radius: 15px;
-							border-bottom-left-radius: 15px;
-						}
-				
-					}
-				
-					.port{
-						height: 7.5px;
-						width: 15px;
-						border: 2px solid black;
-						border-radius: 50%;
-						display: inline-block;
-						background-color: black;
-						margin: 0px 2px;
-						
-						z-index: 3;
-				
-						&:hover{
-							background-color: orange;
-							cursor: pointer;
-						}
-				
-						&.connected{
-							background-color: green;
-						}
-					}
-				
-					.btn-sm{
-						position: absolute; 
-						right: -15px;
-						border: 2px solid gray;
-						color: gray;
-						height: 15px; 
-						width: 15px;
-						font-size: 10px; 
-						line-height: 15px;
-						cursor: pointer;
-				
-						background: url('../../../../assets/img/plus.png');
-						background-size: cover;
-				
-				
-						&.input{
-							top: -5px; 
-						}
-				
-						&.output{
-							bottom: 0px; 
-							left: -15px;
-						}
-					}
-				
-				} */
 
 			&:active{
 				cursor: none;

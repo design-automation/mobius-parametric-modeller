@@ -16,17 +16,16 @@
 	<split-area [size]="70" order="2">
 		<split direction="vertical">
 			
-			<split-area>
-				<text-viewer [node]='flowchart.nodes[0]'></text-viewer>
+			<split-area class='content__panel'>
+				
 			</split-area>
 			
-			<split-area>
-				<parameter-editor [node]='flowchart.nodes[0]'></parameter-editor>
-				<procedure-editor [node]='flowchart.nodes[0]'></procedure-editor>
+			<split-area class='content__panel'>
+				
 			</split-area>
 
-			<split-area>
-				<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>
+			<split-area class='content__panel'>
+				
 			</split-area>
 
 		</split>
@@ -36,19 +35,43 @@
 <div class='container'>
 
 	<div class='container__header'>
-		Mobius Editor		
+		Mobius Editor	
+		<execute></execute>
+		<navigation></navigation>
 	</div>
 
-	<split class='container__content' [direction]="horizontal">
-		<split-area size="30">
-			<flowchart [data]="flowchart" (select)='select_node($event)'></flowchart>
+	<split class='container__content' direction="horizontal">
+
+		<split-area size="60">
+			<!-- Main Panel: Flowchart-->
+			<div class='content__panel'>
+				<flowchart [data]="flowchart" (select)='select_node($event)'></flowchart>
+			</div>
 		</split-area>
-		<split-area size="70">
-			<split [direction]="vertical">
-				<split-area size="20"></split-area>
-				<split-area size="30"></split-area>
-				<split-area size="50"></split-area>
-			</split>
+		
+		<split-area size="40">
+
+				<!-- Side content__Panel: Split into three panes -->
+				<split direction="vertical">
+
+					<split-area class='content__panel'>
+						<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>
+						
+					</split-area>
+					
+					<split-area class='content__panel'>
+						<parameter-editor [node]='flowchart.nodes[0]'></parameter-editor>
+						<procedure-editor [node]='flowchart.nodes[0]'></procedure-editor>
+					</split-area>
+					
+					<split-area class='content__panel'>
+						<text-viewer [node]='flowchart.nodes[0]'></text-viewer>
+					</split-area>
+				
+				</split>
+				
 		</split-area>
+
 	</split>
+
 </div>

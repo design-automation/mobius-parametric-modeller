@@ -1,0 +1,19 @@
+.container{
+    background-color: transparent;
+
+    width: auto;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    padding: 10px 15px;
+}
+
+div[class^="container--"]{
+    display: flex; 
+    flex-direction: column;
+
+    margin: 10px 0px;
+}

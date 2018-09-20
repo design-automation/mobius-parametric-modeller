@@ -1,13 +1,9 @@
-<section>
-	<h3>Inputs :: {{ node.name }}</h3>
+<div class='container'>
+	<h3>{{ node.name }} // parameters </h3>
+	<p>Edit the parameters of your flowchart here. These parameters are visible in the viewer when you share your flowchart.</p>
 	<div class='container--input'>
-		<input-port-viewer *ngFor="let inp of node.inputs" [port]="inp"></input-port-viewer>
+		<input-port-viewer 
+			*ngFor="let inp of node.inputs" [port]="inp">
+		</input-port-viewer>
 	</div>
-</section>
-
-<section>
-	<h3>Outputs</h3>
-	<div class='container--output'>
-		<output-port-viewer *ngFor="let oup of node.outputs" [port]="oup"></output-port-viewer>
-	</div>
-</section>
+</div>

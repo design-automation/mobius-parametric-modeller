@@ -22,13 +22,8 @@
             <port *ngFor="let inp of node.inputs;" [data]='inp'></port>
         </div>
 
-        <div class='container--info'>
-            node description
-            time taken
-        </div>
-
-        <div class='container--output'>
-            <port *ngFor="let oup of node.outputs;" [data]='oup'></port>
+        <div class='container--output' sty>
+            <port class='port--invert' *ngFor="let oup of node.outputs;" [data]='oup'></port>
         </div>
 
     </div>

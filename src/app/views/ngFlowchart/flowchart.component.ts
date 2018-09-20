@@ -14,8 +14,6 @@ export class FlowchartComponent{
 
   @Input() data: IFlowchart;
   @Output() select = new EventEmitter();
-  // Input() flowchart: IFlowchart;
-  // Input() isAsync: boolean;
 
   ngOnInit(){ }
 

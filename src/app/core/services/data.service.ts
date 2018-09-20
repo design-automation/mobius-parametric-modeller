@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { INode } from '@models/node'; 
-import { InputType, OutputType, } from '@models/port';
+import { InputType, OutputType, PortType } from '@models/port';
 
 @Injectable()
 export class DataService {
@@ -22,13 +22,36 @@ export class DataService {
                             procedure: [],
                             inputs: [
                                 {
-                                    name: 'a--input', 
+                                    name: 'a--simpleinput', 
                                     default: 0,
+                                    value: undefined,
+                                    isConnected: false,
+                                    type: PortType.Input,
+                                    meta: {
+                                        mode: InputType.SimpleInput, 
+                                        opts: undefined
+                                    }
+                                },
+                                {
+                                    name: 'a--slider', 
+                                    default: 6,
                                     value: 0,
                                     isConnected: false,
+                                    type: PortType.Input,
                                     meta: {
                                         mode: InputType.Slider, 
                                         opts: { min: 0, max: 12, increment: 1}
+                                    }
+                                },
+                                {
+                                    name: 'a--checkbox', 
+                                    default: true,
+                                    value: undefined,
+                                    isConnected: false,
+                                    type: PortType.Input,
+                                    meta: {
+                                        mode: InputType.Checkbox, 
+                                        opts:undefined
                                     }
                                 }
                             ],

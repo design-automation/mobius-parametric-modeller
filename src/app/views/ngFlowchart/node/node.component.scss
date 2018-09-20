@@ -11,11 +11,13 @@ $default-padding: 10px;
     
     max-width: $node-width;
     margin: $default-padding;
+    width: auto;
 
     border: 2px solid $color-main;
     border-radius: 5px;
 
     background-color: white;
+
 
     &.node--selected{
         background-color: green;
@@ -25,34 +27,43 @@ $default-padding: 10px;
         background-color: $color-main;
         color: $color-text-accent;
         text-align: center;
+
+        overflow: hidden;
     }
 
     .node__body{
 
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
 
         .container{
             display: flex;
             flex-direction: column;
-            justify-content: center;
+
         }
 
         .container--input{
             @extend .container;
-            margin-left: -12.5px;
         }
 
         .container--output{
             @extend .container;
-            margin-right: -12.5px;
         }
 
         .container--info{
             @extend .container;
             padding: 5px;
+            border: 1px solid red;
         }
     }
 
+}
+
+.port--invert{
+    float: right;
+
+    .container--port{
+        flex-direction: row-reverse !important;
+    }
 }

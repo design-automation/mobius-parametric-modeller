@@ -2,10 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+
 import { SharedModule } from '@shared/shared.module';
 
+import { MatSliderModule, MatCheckboxModule } from '@angular/material';
 import { AngularSplitModule } from 'angular-split';
 import { NgFlowchart } from '../ngFlowchart'; 
+
+
 
 import { EditorRoutingModule } from './editor-routing.module';
 import { EditorComponent } from './editor.component'; 
@@ -40,7 +44,8 @@ import { ParameterViewerComponent } from './components/parameter-viewer/paramete
     EditorRoutingModule, 
     SharedModule, 
     AngularSplitModule, 
-    NgFlowchart
+    NgFlowchart, 
+    MatSliderModule, MatCheckboxModule
   ],
   entryComponents: [ ],
   providers: [ ]

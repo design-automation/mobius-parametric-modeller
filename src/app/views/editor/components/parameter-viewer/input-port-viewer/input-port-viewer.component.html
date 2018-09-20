@@ -1,5 +1,28 @@
-{{ port?.name }}
-{{ port?.value }}
+<div class='container container--parameter'>
 
-Type: {{ port?.type }}
-{{ port?.meta.mode }}
+    <div class='parameter__name'>{{ port.name }}</div>
+
+    <!-- todo: default -->
+    <!-- <div class='parameter__value'>
+        <input [(ngModel)]='port.value' name='port.value' placeholder={{port.default}}>  
+    </div> -->
+
+    <!-- Slider, SimpleInput ... etc -->
+    <div class='parameter__mode' [ngSwitch]="port.meta.mode">
+
+        <!-- Simple Input Template -->
+        <div *ngSwitchCase="portTypes.SimpleInput">
+            <input>
+        </div>
+
+        <div *ngSwitchCase="portTypes.Slider">
+            <mat-slider></mat-slider>
+        </div>
+
+        <div *ngSwitchCase="portTypes.Checkbox">
+            <mat-checkbox></mat-checkbox>
+        </div>
+                
+    </div>
+
+</div>

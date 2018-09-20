@@ -1,11 +1,31 @@
+$header-height: 45px;
+
+:host{
+    display: block;
+    height: 100%; 
+    min-height: 100px;
+}
+
 .container{
-    height: 700px;
+    position: relative;
+    height: 100%;
+        
+    h1, h2, h3, h4, h5, h6, p{
+        margin: 0px;
+        padding: 0px;
+    }
 
     .container__header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        padding: 0px 0px 0px 15px;
+
         background-color: #3F4651;
         color: #E7BF00;
 
-        height: 45px;
+        height: $header-height;
         line-height: 45px;
         text-transform: uppercase;
     
@@ -15,11 +35,14 @@
     }
 
     .container__content{
-
+        border: 3px solid black;
+        height: calc(100% - $header-height); 
+        min-height: 0px;
     }
 }
 
-:host {
-    display: block;
-    width: 100%;
+
+.content__panel{
+    background-color: rgb(199, 200, 204);
+    height: 100%; 
 }

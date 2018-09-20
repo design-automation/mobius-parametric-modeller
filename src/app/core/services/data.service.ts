@@ -52,7 +52,9 @@ export class DataService {
                             ]
                         }, 
                     ],
-                    edges: []
+                    edges: [
+                        { id: '123213', start: [ 0, 1 ], end: [] }
+                    ]
                 },
     last_updated: new Date(),
     version: 1

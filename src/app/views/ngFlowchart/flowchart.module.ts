@@ -8,6 +8,7 @@ import { FlowchartComponent } from './flowchart.component';
 import { NodeComponent } from './node/node.component';
 import { PortComponent } from './port/port.component';
 import { DraggableDirective } from './directives/draggable.directive';
+import { EdgeComponent } from './edge/edge.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { DraggableDirective } from './directives/draggable.directive';
     FlowchartComponent, 
     NodeComponent, 
     PortComponent, 
+    EdgeComponent,
     DraggableDirective
   ],
   exports: [ FlowchartComponent ],

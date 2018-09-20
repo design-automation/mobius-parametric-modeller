@@ -4,10 +4,12 @@ import { CommonModule } from '@angular/common';
 
 import { GalleryRoutingModule } from './gallery-routing.module';
 import { GalleryComponent } from './gallery.component'; 
+import { SimpleNamePipe } from './simple-name.pipe';
 
 @NgModule({
   declarations: [
-    GalleryComponent
+    GalleryComponent,
+    SimpleNamePipe
   ],
   exports: [],
   imports: [

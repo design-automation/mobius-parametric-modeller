@@ -1,12 +1,20 @@
 <div class='container'>
-    <h3>Flowchart Editor</h3>
-    <button (click)='addNode()'> Add Node </button>
-    <node
-        *ngFor="let node of data.nodes; let node_index = index" 
-        [node]='node' 
-        [node_index]='node_index'
-        [selected]='isSelected(node_index)'
-        [zoom]=1
-        (select)='selectNode($event)'>
-    </node>
+	<button (click)='addNode()'> Add Node </button>
+	
+    <node *ngFor="let node of data.nodes; let node_index = index" 
+          [node]='node' 
+          [node_index]='node_index'
+          [selected]='isSelected(node_index)'
+          [zoom]=1
+          (select)='selectNode($event)'>
+	</node>
+
+	<edge *ngFor="let e of data.edges; let edge_index = index"
+		  [edge]='e'
+		  [edge_index]='edge_index'
+		  [input_position]=''
+		  [output_position]=''
+		  [temporary]=''></edge>
 </div>
+
+

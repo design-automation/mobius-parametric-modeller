@@ -41,8 +41,7 @@
 
 	<split class='container__content' [direction]="horizontal">
 		<split-area size="30">
-			<flowchart [data]="flowchart" (select)='select_node($event)'>
-		</flowchart>
+			<flowchart [data]="flowchart" (select)='select_node($event)'></flowchart>
 		</split-area>
 		<split-area size="70">
 			<split [direction]="vertical">

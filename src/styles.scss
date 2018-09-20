@@ -3,6 +3,16 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); 
 @import './scss/globals';
 
+
+.highlight{
+    text-transform: uppercase;
+    background-color: black;
+    color: yellow;
+    border-radius: 5px;
+    padding: 5px;
+    display: inline-block;
+}
+
 html{
 	position: relative;
 	height: 100%; 

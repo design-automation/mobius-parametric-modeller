@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'navigation',
   template: `<ul class='nav'>
-                <li class='link' [routerLink]="['/about']">About</li>
-                <li class='link' [routerLink]="['/gallery']">Gallery</li>
-                <li class='link' [routerLink]="['/viewer']">Viewer</li>
-                <li class='link' [routerLink]="['/editor']">Editor</li>
+                <li class='link' *ngFor='let link of _links;' 
+                      [class.active]='link.path == _router.url'
+                      [routerLink]="link.path" 
+                      >{{link.name}}</li>
               </ul>`,
   styles: [`
       ul.nav{
@@ -30,8 +31,32 @@ import { Component } from '@angular/core';
         background-color: gray;
         color: white;
       }
+
+      .active{
+        background-color: #222;
+        color: white;
+        border-color: #222 !important;
+      }
   `],
 })
 export class NavigationComponent{
-    constructor(){  }
+
+    private _links = [
+      { path: '/about', 
+        name: 'about'
+      },
+      { path: '/gallery', 
+        name: 'gallery'
+      },
+      { path: '/viewer', 
+        name: 'viewer'
+      },
+      { path: '/editor', 
+        name: 'editor'
+      },
+
+    ];
+
+    constructor(private _router: Router){ }
+
 }

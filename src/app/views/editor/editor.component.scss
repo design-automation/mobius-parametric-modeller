@@ -1,14 +1,13 @@
 $header-height: 45px;
 
-:host{
-    display: block;
-    height: 100%; 
-    min-height: 100px;
-}
-
 .container{
     position: relative;
+    overflow: auto;
     height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
         
     h1, h2, h3, h4, h5, h6, p{
         margin: 0px;
@@ -16,6 +15,9 @@ $header-height: 45px;
     }
 
     .container__header{
+        flex: 0 1 auto;
+        min-height: $header-height;
+
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -24,9 +26,8 @@ $header-height: 45px;
 
         background-color: #3F4651;
         color: #E7BF00;
-
-        height: $header-height;
-        line-height: 45px;
+        
+        line-height: $header-height;
         text-transform: uppercase;
     
         font-size: 18px;
@@ -35,9 +36,23 @@ $header-height: 45px;
     }
 
     .container__content{
-        border: 3px solid black;
-        height: calc(100% - $header-height); 
-        min-height: 0px;
+        flex-grow: 1;
+        height: 0px;
+        border: 2px solid #3F4651;
+        overflow: auto;
+
+        split{
+            height: 100%;
+        }
+    }
+
+    .container__footer{
+        text-align: center;
+        font-size: 12px;
+        line-height: 18px;
+
+        background-color: #3F4651;
+        color: #E7BF00;
     }
 }
 

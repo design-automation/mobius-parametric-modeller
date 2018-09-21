@@ -26,6 +26,6 @@ import { EdgeComponent } from './edge/edge.component';
   entryComponents: [ ],
   providers: [ ]
 })
-export class NgFlowchart {
+export class NgFlowchartModule {
     constructor () { }
 }

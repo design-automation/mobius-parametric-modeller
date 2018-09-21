@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { INode } from '@models/node';
 
 
@@ -16,6 +16,11 @@ export class NodeComponent{
     @Input() node_index: number;
 
     @Output() select = new EventEmitter();
+    
+    @HostListener('document:keypress', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent) { 
+        console.log(event.key)
+    }
 
     ngOnInit(){ }
 

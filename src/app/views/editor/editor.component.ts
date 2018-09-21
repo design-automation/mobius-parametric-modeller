@@ -15,6 +15,10 @@ export class EditorComponent{
         this.flowchart = dataService.flowchart;
     }
 
-    select_node(node: INode): void{  console.log('select node');  }
+    selectNode(node_index: number): void{  
+        if( typeof(node_index) == 'number' ){
+            this.flowchart.meta.selected_nodes = [node_index];  
+        }
+    }
     
 }

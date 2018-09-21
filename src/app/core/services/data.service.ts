@@ -12,7 +12,7 @@ export class DataService {
                     language: "js",
                     modules: [],
                     meta: {
-                        selected_nodes: [0]
+                        selected_nodes: [1]
                     },
                     nodes: [
                         {   
@@ -59,6 +59,7 @@ export class DataService {
                                 {
                                     name: 'a-output', 
                                     isConnected: false,
+                                    type: PortType.Output,
                                     meta: {
                                         mode: OutputType.Text, 
                                     }
@@ -70,9 +71,8 @@ export class DataService {
                             name: "second_node", 
                             position: {x: 0, y: 0},
                             procedure: [],
-                            outputs: [
-                                { name: 'result' }
-                            ]
+                            inputs: [],
+                            outputs: []
                         }, 
                     ],
                     edges: [

@@ -2,12 +2,8 @@ import { IArgument } from '@models/code';
 import { PortType, InputType, OutputType } from './types';
 
 interface IPort extends IArgument{
-    id: string,
     type: PortType,
     isConnected: boolean,
-
-    update();
-    reset();
 }
 
 export interface IPortInput extends IPort{

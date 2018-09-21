@@ -5,13 +5,11 @@ export abstract class NodeUtils{
 
     static getNewNode(): INode{
         let node: INode = <INode>{
-            id: 'asdads',
-            name: 'new_node', 
+            name: '', 
             position: {x: 0, y: 0},
             procedure: [],
-            outputs: [
-                { name: 'result' }
-            ]
+            inputs: [],
+            outputs: []
         };
         return node;
     };

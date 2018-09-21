@@ -3,7 +3,7 @@ import { NgClass } from '@angular/common';
 
 // todo: make internal to flowchart
 import { IFlowchart } from '@models/flowchart';
-import { INode, NodeUtils } from '@models/node';
+import { NodeUtils } from '@models/node';
 
 @Component({
   selector: 'flowchart',
@@ -18,7 +18,7 @@ export class FlowchartComponent{
   ngOnInit(){ }
 
   selectNode($event): void{
-    this.select.emit($event);
+      this.select.emit($event);
   }
 
   isSelected(node_index: number): boolean{

@@ -11,7 +11,6 @@ import { IProcedure } from '@models/procedure';
 
 export interface INode{
 	// basic properties
-	id: string;
 	name: string;
 	description: string;
 	author: string;

@@ -20,7 +20,6 @@ import { ParameterEditorComponent } from './components/parameter-editor/paramete
 import { InputPortEditorComponent } from './components/parameter-editor/input-port-editor/input-port-editor.component';
 import { InputPortViewerComponent } from './components/parameter-viewer/input-port-viewer/input-port-viewer.component';
 import { OutputPortEditorComponent } from './components/parameter-editor/output-port-editor/output-port-editor.component';
-import { OutputPortViewerComponent } from './components/parameter-viewer/output-port-viewer/output-port-viewer.component';
 import { ParameterViewerComponent } from './components/parameter-viewer/parameter-viewer.component';
 
 
@@ -34,8 +33,7 @@ import { ParameterViewerComponent } from './components/parameter-viewer/paramete
     ParameterViewerComponent,
     InputPortEditorComponent, 
     InputPortViewerComponent, 
-    OutputPortEditorComponent, 
-    OutputPortViewerComponent
+    OutputPortEditorComponent
   ],
   exports: [],
   imports: [

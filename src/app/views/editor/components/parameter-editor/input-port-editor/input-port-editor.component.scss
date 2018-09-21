@@ -1,0 +1,16 @@
+.container{
+    margin: 5px 0px;
+}
+
+.container--parameter{
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap;
+}
+
+
+.parameter__name{
+    width: 100px;
+    height: auto; 
+    word-wrap: break-word;
+}

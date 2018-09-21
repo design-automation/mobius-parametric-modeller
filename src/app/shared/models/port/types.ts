@@ -12,5 +12,6 @@ export enum InputType{
 }
 
 export enum OutputType{
-    Text
+    Text, 
+    Code
 }

@@ -11,15 +11,15 @@
     <div class='parameter__mode' [ngSwitch]="port.meta.mode">
 
         <!-- Simple Input Template -->
-        <div *ngSwitchCase="portTypes.SimpleInput">
+        <div *ngSwitchCase="PortTypes.SimpleInput">
             <input>
         </div>
 
-        <div *ngSwitchCase="portTypes.Slider">
+        <div *ngSwitchCase="PortTypes.Slider">
             <mat-slider></mat-slider>
         </div>
 
-        <div *ngSwitchCase="portTypes.Checkbox">
+        <div *ngSwitchCase="PortTypes.Checkbox">
             <mat-checkbox></mat-checkbox>
         </div>
                 

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IPortInput } from '@models/port';
-
+import { PortTypesAware } from '@shared/decorators';
+ 
+@PortTypesAware
 @Component({
   selector: 'input-port-editor',
   templateUrl: './input-port-editor.component.html',
@@ -10,7 +12,7 @@ export class InputPortEditorComponent{
 
     @Input() port: IPortInput;
     @Output() delete = new EventEmitter();
-
+    
     constructor(){ }
 
     editOptions(): void{

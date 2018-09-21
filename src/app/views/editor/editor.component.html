@@ -1,37 +1,3 @@
-<!-- <split  
-		class="editor" 
-		direction="horizontal" 
-		[gutterSize]="7" 
-		[useTransition]="true">
-
-	<split-area [size]="30" order="1">
-		<flowchart 
-				[data]="flowchart" 
-				(select)='select_node($event)'>
-		</flowchart>
-
-		<execute></execute>
-	</split-area>
-	
-	<split-area [size]="70" order="2">
-		<split direction="vertical">
-			
-			<split-area class='content__panel'>
-				
-			</split-area>
-			
-			<split-area class='content__panel'>
-				
-			</split-area>
-
-			<split-area class='content__panel'>
-				
-			</split-area>
-
-		</split>
-	</split-area>
-
-</split> -->
 <div class='container'>
 
 	<div class='container__header'>
@@ -54,18 +20,23 @@
 				<!-- Side content__Panel: Split into three panes -->
 				<split direction="vertical">
 
-					<split-area class='content__panel'>
-						<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>
-						
+					<split-area>
+						<div class='content__panel'>
+							<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>
+						</div>
 					</split-area>
 					
-					<split-area class='content__panel'>
-						<parameter-editor [node]='flowchart.nodes[0]'></parameter-editor>
-						<procedure-editor [node]='flowchart.nodes[0]'></procedure-editor>
+					<split-area>
+						<div class='content__panel'>
+							<parameter-editor [node]='flowchart.nodes[0]'></parameter-editor>
+							<procedure-editor [node]='flowchart.nodes[0]'></procedure-editor>
+						</div>
 					</split-area>
 					
-					<split-area class='content__panel'>
-						<text-viewer [node]='flowchart.nodes[0]'></text-viewer>
+					<split-area>
+						<div class='content__panel'>
+							<text-viewer [node]='flowchart.nodes[0]'></text-viewer>
+						</div>
 					</split-area>
 				
 				</split>

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IPortOutput } from '@models/port';
+import { ViewerTypesAware } from '@shared/decorators';
 
+@ViewerTypesAware
 @Component({
   selector: 'output-port-editor',
   templateUrl: './output-port-editor.component.html',
@@ -12,9 +14,5 @@ export class OutputPortEditorComponent{
     @Output() delete = new EventEmitter();
 
     constructor(){}
-
-    editOptions(): void{
-
-    }
 
 }

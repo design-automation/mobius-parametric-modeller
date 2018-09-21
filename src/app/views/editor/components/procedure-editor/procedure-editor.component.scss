@@ -1,12 +1,6 @@
-.container--procedure{
-    position: relative;
-    padding-left: 30px;
-}
-
 .container--editor{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: flex; 
+    flex-direction: column;
 
     #toolset{
         width: 30%; 
@@ -17,45 +11,15 @@
         flex-grow: 1;
     }
 }
-// .seg1{
-// 	&.disabled{
-// 		opacity: 0.4;
-// 	}
-	
-// 	&.print{
-// 		background-color: #A5F3A5;
-// 	}
-// 	&.error{
-// 		background-color: red;
-// 	}
-// }
 
-// mat-expansion-panel-header{
-// 	background-color: $color3 !important;
-// 	border-top: 1px solid $color2 !important;
-// 	border-bottom: 1px solid $color2 !important;
-// 	padding-left: $default-side-padding !important;
-// 	mat-panel-title{
-// 		color: $color1 !important;
-// 		font-weight: bold !important;
-// 		font-size: $fsize2 !important;
-// 	}
-// 	&:hover{
-// 		background-color: $color3 !important;
-// 	}
-// }
+.container--procedure{
+    position: relative;
+    padding-left: 30px;
+}
 
 
-// input{
-// 	border: none;
-// }
-
-// input:focus{
-// 	border-bottom: 1px dashed gray;
-// }
-
-
-
-// .selected{
-// 	background-color: gray;
-// }
+.container__content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

@@ -32,7 +32,7 @@ import { NavigationComponent } from "./components/navigation/navigation.componen
             TextViewerComponent, 
             ExecuteComponent, 
             PageNotFoundComponent, 
-            NavigationComponent 
+            NavigationComponent
         ]
 })
 export class SharedModule{

@@ -3,7 +3,9 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons'); 
 @import './scss/globals';
 
-
+.mat-slider-horizontal{
+	height: 24px !important;
+}
 
 .highlight{
     text-transform: uppercase;

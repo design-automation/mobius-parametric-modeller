@@ -18,13 +18,13 @@ import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 })
 export class ProcedureEditorComponent{
 
-	@Input() node: INode;
-	copiedProd: IProcedure;
+  @Input() node: INode;
+  copiedProd: IProcedure;
 
-  constructor(){ }
-  
-  add(data: {type: ProcedureTypes, data: IFunction}): void{
+  constructor() { }
+
+  add(data: {type: ProcedureTypes, data: IFunction}): void {
       NodeUtils.add_procedure(this.node, data.type, data.data);
-  } 
+  }
 
 }

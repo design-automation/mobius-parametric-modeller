@@ -19,7 +19,6 @@ export class NodeComponent{
     
     @HostListener('document:keypress', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) { 
-        console.log(event.key)
     }
 
     ngOnInit(){ }

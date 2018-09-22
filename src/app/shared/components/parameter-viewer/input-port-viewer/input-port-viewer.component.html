@@ -2,24 +2,21 @@
 
     <div class='parameter__name'>{{ port.name }}</div>
 
-    <!-- todo: default -->
-    <!-- <div class='parameter__value'>
-        <input [(ngModel)]='port.value' name='port.value' placeholder={{port.default}}>  
-    </div> -->
-
     <!-- Slider, SimpleInput ... etc -->
     <div class='parameter__mode' [ngSwitch]="port.meta.mode">
-
         <!-- Simple Input Template -->
         <div *ngSwitchCase="PortTypes.SimpleInput">
-            <input>
+            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value'> 
         </div>
 
         <div *ngSwitchCase="PortTypes.Slider">
+            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value'> 
             <mat-slider></mat-slider>
         </div>
 
         <div *ngSwitchCase="PortTypes.Checkbox">
+            <mat-checkbox></mat-checkbox>
+            <mat-checkbox></mat-checkbox>
             <mat-checkbox></mat-checkbox>
         </div>
                 

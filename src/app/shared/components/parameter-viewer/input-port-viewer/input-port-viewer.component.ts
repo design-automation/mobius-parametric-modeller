@@ -13,6 +13,4 @@ export class InputPortViewerComponent{
     @Input() port: IPortInput;
     constructor(){ }
 
-    editOptions(): void{ }
-
 }

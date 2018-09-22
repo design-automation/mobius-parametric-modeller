@@ -12,7 +12,7 @@ export class DataService {
                     language: "js",
                     modules: [],
                     meta: {
-                        selected_nodes: [1]
+                        selected_nodes: [0]
                     },
                     nodes: [
                         {   
@@ -22,7 +22,7 @@ export class DataService {
                             procedure: [],
                             inputs: [
                                 {
-                                    name: 'a--simpleinput', 
+                                    name: 'asimpleinput', 
                                     default: 0,
                                     value: undefined,
                                     isConnected: false,
@@ -33,7 +33,7 @@ export class DataService {
                                     }
                                 },
                                 {
-                                    name: 'a--slider', 
+                                    name: 'aslider', 
                                     default: 6,
                                     value: 0,
                                     isConnected: false,
@@ -44,7 +44,7 @@ export class DataService {
                                     }
                                 },
                                 {
-                                    name: 'a--checkbox', 
+                                    name: 'acheckbox', 
                                     default: true,
                                     value: undefined,
                                     isConnected: false,
@@ -57,7 +57,7 @@ export class DataService {
                             ],
                             outputs: [
                                 {
-                                    name: 'a-output', 
+                                    name: 'aoutput', 
                                     isConnected: false,
                                     type: PortType.Output,
                                     meta: {

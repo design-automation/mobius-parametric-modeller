@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IFlowchart } from '@models/flowchart';
+import { CodeUtils } from '@models/code';
+import { INode } from '@models/node';
 
 @Component({
   selector: 'execute',
-  template:  `<button class="btn--execute" 
+  template: `<button class="btn--execute" 
                     (click)="execute($event)">
-                    Execute
-              </button>`,
+                Execute
+             </button>`,
   styles: [ 
             `.btn--execute{ 
                 font-size: 14px;
@@ -20,8 +23,27 @@ import { Component } from '@angular/core';
               }` 
           ]
 })
-export class ExecuteComponent{
-    constructor(){}
-    
-    execute($event): void{  }
+export class ExecuteComponent {
+
+    @Input() flowchart: IFlowchart;
+
+    execute($event): void {
+
+        // order the nodes based on edges array
+
+        // for each node,
+        // get code
+        // execute node
+        // update dependent nodes
+        this.flowchart.nodes.map((node: INode) => {
+            const fnBody = CodeUtils.getNodeCode(node);
+            const fn = new Function(fnBody);
+            let results = fn();
+            node.outputs.map( (oup) => {
+                oup.value = results[oup.name];
+            });
+            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
+        });
+
+    }
 }

@@ -7,6 +7,7 @@
 import { NgModule, SkipSelf, Optional } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { MatSliderModule, MatCheckboxModule } from '@angular/material';
 import { NgFlowchartModule } from '../../app/ngFlowchart';
@@ -44,9 +45,11 @@ import { InputPortViewerComponent } from "./components/parameter-viewer/input-po
             RouterModule,
             MatSliderModule, MatCheckboxModule,
             NgFlowchartModule, 
-            AngularSplitModule
+            AngularSplitModule, 
+            FormsModule
         ],
     exports: [  
+            FormsModule,
             MbFileReaderDirective, 
             TextViewerComponent, 
             ExecuteComponent, 

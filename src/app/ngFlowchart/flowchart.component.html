@@ -1,5 +1,5 @@
 <div class='container'>
-	<button (click)='addNode()'> Add Node </button>
+	<button class='btn--addNode' (click)='addNode()'> Add Node </button>
 	
     <node *ngFor="let node of data.nodes; let node_index = index" 
           [node]='node' 

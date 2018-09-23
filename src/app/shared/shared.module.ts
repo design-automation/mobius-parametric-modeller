@@ -14,6 +14,7 @@ import { NgFlowchartModule } from '../../app/ngFlowchart';
 import { AngularSplitModule } from 'angular-split';
 
 import { MbFileReaderDirective } from "./directives/filesys";
+import { ViewerContainerComponent } from "./components/viewer-container/viewer-container.component";
 import { TextViewerComponent } from "./components/viewers/viewer-text.component";
 import { ExecuteComponent } from "./components/execute/execute.component";
 import { PageNotFoundComponent } from "./components/not-found/not-found.component";
@@ -30,7 +31,8 @@ import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './compon
     providers: [ ],
     declarations: [
             MbFileReaderDirective, 
-            TextViewerComponent, 
+            ViewerContainerComponent,
+            TextViewerComponent,
             ExecuteComponent, 
             PageNotFoundComponent, 
             NavigationComponent, 
@@ -47,11 +49,15 @@ import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './compon
             AngularSplitModule, 
             FormsModule
         ],
+    entryComponents: [
+        TextViewerComponent
+    ],
     exports: [  
             FormsModule,
             NgFlowchartModule, 
             AngularSplitModule,
             MbFileReaderDirective, 
+            ViewerContainerComponent,
             TextViewerComponent, 
             ExecuteComponent, 
             PageNotFoundComponent, 

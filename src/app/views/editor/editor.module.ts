@@ -29,7 +29,6 @@ import { OutputPortEditorComponent } from './components/parameter-editor/output-
     EditorRoutingModule, 
     SharedModule
   ],
-  entryComponents: [ ],
   providers: [ ]
 })
 export class EditorModule {

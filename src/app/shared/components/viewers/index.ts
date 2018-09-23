@@ -1,0 +1,1 @@
+export { TextViewerComponent } from './viewer-text.component';

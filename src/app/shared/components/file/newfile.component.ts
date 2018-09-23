@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { FlowchartUtils } from '@models/flowchart';
 
@@ -15,6 +15,8 @@ export class NewFileComponent{
 
     @Output() create = new EventEmitter();
 
+    constructor(private cdr: ChangeDetectorRef){}
+
     sendNewFile(){
         const file: IMobius = {
             name: "default_file.mob",
@@ -24,5 +26,6 @@ export class NewFileComponent{
             version: 1
         }
         this.create.emit(JSON.stringify(file));
+        this.cdr.detectChanges()
     }
 }

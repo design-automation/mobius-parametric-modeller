@@ -10,7 +10,8 @@ import { DataService } from "./services/data.service";
     imports: [ ],
     declarations: [ ],
     providers: [ DataService ],
-    exports: [ ]
+    exports: [ ],
+    entryComponents: [ ]
 })
 export class CoreModule{
     constructor(@Optional() @SkipSelf() core: CoreModule){

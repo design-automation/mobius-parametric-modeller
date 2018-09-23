@@ -4,11 +4,8 @@
 		Mobius Editor	
 		<navigation></navigation>
 		<execute [flowchart]='flowchart'></execute>
-		<file-new (create)='updateFile($event)'></file-new>
-		<file-load (loaded)='updateFile($event)'></file-load>
-		<file-save [file]='file'></file-save>
 	</div>
-
+	
 	<div class='container__content'>
 		<split direction="horizontal">
 	
@@ -17,10 +14,16 @@
 				<div class='content__panel'>
 					<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
 				</div>
+				
+				<div class='btn--container' style='position: absolute; top: 150px; left: 15px; display: flex; flex-direction: column; padding: 10px;'>
+					<file-new (create)='updateFile($event)'></file-new>
+					<file-load (loaded)='updateFile($event)'></file-load>
+					<file-save [file]='file'></file-save>
+				</div>
 			</split-area>
 			
 			<split-area size="40">
-	
+				
 					<!-- Side content__Panel: Split into three panes -->
 					<split direction="vertical">
 	
@@ -33,7 +36,7 @@
 						
 						<split-area size='40'>
 							<div class='content__panel'>
-								<text-viewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></text-viewer>
+								<viewer-container [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></viewer-container>
 							</div>
 						</split-area>
 					

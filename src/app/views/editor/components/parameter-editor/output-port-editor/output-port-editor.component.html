@@ -8,4 +8,5 @@
             <option *ngFor="let viewer of ViewerTypesArr" [value]="viewer" >{{viewer}}</option>
         </select>
         
+        <button (click)='delete.emit()'>Delete</button>
     </div>

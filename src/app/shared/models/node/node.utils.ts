@@ -1,16 +1,38 @@
 import { INode } from './node.interface';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
+import { PortType, InputType, OutputType } from '@models/port';
 
 export abstract class NodeUtils{
 
     static getNewNode(): INode{
         let node: INode = <INode>{
-            name: '', 
-            position: {x: 0, y: 0},
+            name: "a_new_node", 
+            position: {x: 0, y: 0}, 
             procedure: [],
-            inputs: [],
-            outputs: []
-        };
+            inputs: [
+                {
+                    name: 'first_input', 
+                    default: 0,
+                    value: undefined,
+                    isConnected: false,
+                    type: PortType.Input,
+                    meta: {
+                        mode: InputType.SimpleInput, 
+                        opts: undefined
+                    }
+                }
+            ],
+            outputs: [
+                {
+                    name: 'first_output', 
+                    isConnected: false,
+                    type: PortType.Output,
+                    meta: {
+                        mode: OutputType.Text, 
+                    }
+                }
+            ]
+        }
         return node;
     };
     

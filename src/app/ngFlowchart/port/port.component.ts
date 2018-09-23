@@ -7,7 +7,7 @@ import { PortTypesAware } from '@shared/decorators';
   template: `
             <div class='container--port' [class.invert]='data.type'>
                 <div class='port'></div>
-                <input [(ngModel)]='data.name' placeholder='port_name'>
+                <input autocomplete=off [(ngModel)]='data.name' placeholder='port_name'>
             </div>
             `,
   styles:   [

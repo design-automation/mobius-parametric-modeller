@@ -4,6 +4,9 @@
 		Mobius Editor	
 		<navigation></navigation>
 		<execute [flowchart]='flowchart'></execute>
+		<file-new (create)='updateFile($event)'></file-new>
+		<file-load (loaded)='updateFile($event)'></file-load>
+		<file-save [file]='file'></file-save>
 	</div>
 
 	<div class='container__content'>

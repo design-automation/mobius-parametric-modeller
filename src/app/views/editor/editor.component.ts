@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { INode } from '@models/node';
 import { DataService } from '@services';
 import { IFlowchart } from '@models/flowchart';
+import { IMobius } from '@models/mobius';
 
 @Component({
   selector: 'editor',
@@ -10,8 +10,11 @@ import { IFlowchart } from '@models/flowchart';
 })
 export class EditorComponent{
 
-    private flowchart: IFlowchart;
+    private file: IMobius;
+    private flowchart: IFlowchart; 
+
     constructor(private dataService: DataService){
+        this.file = dataService.file;
         this.flowchart = dataService.flowchart;
     }
 
@@ -19,6 +22,10 @@ export class EditorComponent{
         if( typeof(node_index) == 'number' ){
             this.flowchart.meta.selected_nodes = [node_index];  
         }
+    }
+
+    updateFile($event: string){
+        this.dataService.file = JSON.parse($event);
     }
     
 }

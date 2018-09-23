@@ -15,5 +15,7 @@
             [value]="PortTypes[ptype]" 
             [selected]="port.meta.mode == ptype">{{ptype}}</option>
     </select>
+
+    <button (click)='delete.emit()'>Delete</button>
 </div>
 

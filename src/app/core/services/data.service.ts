@@ -1,90 +1,32 @@
 import { Injectable } from '@angular/core';
-import { IFlowchart } from '@models/flowchart';
+import { IMobius } from '@models/mobius';
+import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node'; 
-import { InputType, OutputType, PortType } from '@models/port';
+
 
 @Injectable()
 export class DataService {
-  private static _data = {
+  private static _data: IMobius = {
     name: "default_file.mob",
     author: "new_user", 
-    flowchart: <IFlowchart>{ 
-                    language: "js",
-                    modules: [],
-                    meta: {
-                        selected_nodes: [0]
-                    },
-                    nodes: [
-                        {   
-                            id: 'asdads',
-                            name: "first_node", 
-                            position: {x: 0, y: 0}, 
-                            procedure: [],
-                            inputs: [
-                                {
-                                    name: 'asimpleinput', 
-                                    default: 0,
-                                    value: undefined,
-                                    isConnected: false,
-                                    type: PortType.Input,
-                                    meta: {
-                                        mode: InputType.SimpleInput, 
-                                        opts: undefined
-                                    }
-                                },
-                                {
-                                    name: 'aslider', 
-                                    default: 6,
-                                    value: 0,
-                                    isConnected: false,
-                                    type: PortType.Input,
-                                    meta: {
-                                        mode: InputType.Slider, 
-                                        opts: { min: 0, max: 12, increment: 1}
-                                    }
-                                },
-                                {
-                                    name: 'acheckbox', 
-                                    default: true,
-                                    value: undefined,
-                                    isConnected: false,
-                                    type: PortType.Input,
-                                    meta: {
-                                        mode: InputType.Checkbox, 
-                                        opts:undefined
-                                    }
-                                }
-                            ],
-                            outputs: [
-                                {
-                                    name: 'aoutput', 
-                                    isConnected: false,
-                                    type: PortType.Output,
-                                    meta: {
-                                        mode: OutputType.Text, 
-                                    }
-                                }
-                            ]
-                        }, 
-                        {
-                            id: 'sadsdad',
-                            name: "second_node", 
-                            position: {x: 0, y: 0},
-                            procedure: [],
-                            inputs: [],
-                            outputs: []
-                        }, 
-                    ],
-                    edges: [
-                        { id: '123213', start: [ 0, 1 ], end: [] }
-                    ]
-                },
     last_updated: new Date(),
-    version: 1
+    version: 1,
+    flowchart: FlowchartUtils.newflowchart()
   }; 
 
   private static _selected: number = 0;
 
-  get flowchart(): IFlowchart{ return DataService._data.flowchart; }
-  get node(): INode{ return DataService._data.flowchart.nodes[DataService._selected] };
+    get file(){ return DataService._data; }
+    set file(data: IMobius){ 
+        DataService._data = <IMobius>{
+            name: data.name, 
+            author: data.author, 
+            flowchart: data.flowchart, 
+            last_updated: data.last_updated, 
+            version: data.version
+        };
+    }
+
+    get flowchart(): IFlowchart{ return DataService._data.flowchart; }
+    get node(): INode{ return DataService._data.flowchart.nodes[DataService._selected] };
 }

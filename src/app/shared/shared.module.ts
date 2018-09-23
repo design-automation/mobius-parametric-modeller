@@ -24,6 +24,7 @@ import { AddNodeComponent } from "./components/add-components/add_node.component
 import { AddInputComponent } from "./components/add-components/add_input.component";
 import { ParameterViewerComponent } from "./components/parameter-viewer/parameter-viewer.component";
 import { InputPortViewerComponent } from "./components/parameter-viewer/input-port-viewer/input-port-viewer.component";
+import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
 @NgModule({
     providers: [ ],
@@ -34,11 +35,9 @@ import { InputPortViewerComponent } from "./components/parameter-viewer/input-po
             PageNotFoundComponent, 
             NavigationComponent, 
             HeaderComponent, 
-            AddNodeComponent, 
-            AddInputComponent,
-            AddOutputComponent,
-            ParameterViewerComponent, 
-            InputPortViewerComponent
+            AddNodeComponent, AddInputComponent, AddOutputComponent,
+            ParameterViewerComponent,  InputPortViewerComponent, 
+            NewFileComponent, SaveFileComponent, LoadFileComponent
         ],
     imports: [ 
             CommonModule, 
@@ -50,6 +49,8 @@ import { InputPortViewerComponent } from "./components/parameter-viewer/input-po
         ],
     exports: [  
             FormsModule,
+            NgFlowchartModule, 
+            AngularSplitModule,
             MbFileReaderDirective, 
             TextViewerComponent, 
             ExecuteComponent, 
@@ -60,9 +61,8 @@ import { InputPortViewerComponent } from "./components/parameter-viewer/input-po
             AddInputComponent,
             AddOutputComponent,
             ParameterViewerComponent,
-            NgFlowchartModule, 
-            AngularSplitModule
-        ]
+            NewFileComponent, SaveFileComponent, LoadFileComponent
+    ]
 })
 export class SharedModule{
     constructor(@Optional() @SkipSelf() shared: SharedModule){

@@ -11,7 +11,7 @@
     (click)='nodeClicked($event)'>
     
     <div class="node__name">
-        <input [(ngModel)]='node.name'
+        <input autocomplete=off [(ngModel)]='node.name'
                name='node.name'
                placeholder='Name of Node'>  
     </div>

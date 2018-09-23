@@ -1,11 +1,12 @@
 <div id='toolset'>
 
     <ul class='toolset__basic'>
-        <li 
-            *ngFor="let type of ProcedureTypesArr"
-            (click)='add(ProcedureTypes[type])'> 
-            {{type}} 
-        </li>
+        <ng-container *ngFor="let type of ProcedureTypesArr">
+            <li *ngIf='type !== "FUNCTION"'
+                (click)='add(ProcedureTypes[type])'> 
+                {{type}} 
+            </li>
+        </ng-container>
     </ul>
     
     <hr>

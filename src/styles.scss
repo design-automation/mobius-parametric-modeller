@@ -1,7 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons'); 
 @import './scss/globals';
+
+.btn{
+	font-size: 12px;
+	text-align: center;
+	font-weight: 600px;
+	border: 2px solid #222; 
+	border-radius: 4px;
+	padding: 0px 5px;
+
+	&:hover{
+		color: blue;
+		cursor: pointer;
+	}
+}
 
 input[type="text"] {
 	-webkit-box-sizing: border-box; // Safari/Chrome, other WebKit

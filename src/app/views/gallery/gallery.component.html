@@ -11,10 +11,8 @@
 
     <div class="container__element container__element--project-container">
         <div class="project-container__project" *ngFor="let f of  (allFiles | async)">
-            <div class="project__content">
-            <a href="./viewer/{{f.name}}">
+            <div class="project__content" (click)='loadFile(f)'>
                 {{ f.name | simplename }}
-            </a>
             </div>
         </div>
     </div>

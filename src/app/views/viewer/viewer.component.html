@@ -7,11 +7,12 @@
 	</div>
 
 	<div class='container__content'>
-		<split direction="horizontal">
-	
+		<file-new *ngIf='!flowchart'></file-new>
+
+		<split direction="horizontal" *ngIf='flowchart'>
 			<split-area size="60">
 				<!-- Main Panel: Flowchart-->
-				<div class='content__panel'>
+				<div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>
 					<text-viewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></text-viewer>
 				</div>
 			</split-area>
@@ -36,7 +37,6 @@
 					</split>
 					
 			</split-area>
-	
 		</split>
 	</div>
 

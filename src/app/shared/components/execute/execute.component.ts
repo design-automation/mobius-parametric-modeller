@@ -3,6 +3,9 @@ import { IFlowchart } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
 import { INode } from '@models/node';
 
+import * as Modules from '@modules';
+
+
 @Component({
   selector: 'execute',
   template: `<button class="btn--execute" 
@@ -28,7 +31,6 @@ export class ExecuteComponent {
     @Input() flowchart: IFlowchart;
 
     execute($event): void {
-
         // order the nodes based on edges array
 
         // for each node,
@@ -36,13 +38,21 @@ export class ExecuteComponent {
         // execute node
         // update dependent nodes
         this.flowchart.nodes.map((node: INode) => {
-            const fnBody = CodeUtils.getNodeCode(node);
-            const fn = new Function(fnBody);
-            let results = fn();
-            node.outputs.map( (oup) => {
-                oup.value = results[oup.name];
-            });
-            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
+
+            try{
+
+                //new Function ([arg1[, arg2[, ...argN]],] functionBody)
+                const fn = new Function('__MODULES__', CodeUtils.getNodeCode(node));
+                let results = fn(Modules);
+                node.outputs.map( (oup) => {
+                    oup.value = results[oup.name];
+                });
+                
+            }
+            catch(ex){
+                console.warn(`${node.name} errored`);
+            }
+            
         });
 
     }

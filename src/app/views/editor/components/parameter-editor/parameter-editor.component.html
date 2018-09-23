@@ -4,7 +4,7 @@
 		<add-input [node]='node'></add-input>
 		<!-- <p>Edit the inputs of your flowchart here. These are the parameters that are visible in the viewer when you share your flowchart.</p> -->
 		<div class='container--input'>
-			<input-port-editor *ngFor="let inp of node?.inputs" [port]="inp"></input-port-editor>
+			<input-port-editor *ngFor="let inp of node?.inputs; let idx=index" [port]="inp" (delete)='deletePort(inp, idx)'></input-port-editor>
 		</div>
 	</section>
 	<section>
@@ -12,7 +12,7 @@
 		<add-output [node]='node'></add-output>
 		<!-- <p>Edit the outputs of your flowchart here. These are the values that are visible in the viewer</p> -->
 		<div class='container--output'>
-			<output-port-editor *ngFor="let oup of node?.outputs" [port]="oup"></output-port-editor>
+			<output-port-editor *ngFor="let oup of node?.outputs; let idx=index" [port]="oup" (delete)='deletePort(oup, idx)'></output-port-editor>
 		</div>
 	</section>
 </div>

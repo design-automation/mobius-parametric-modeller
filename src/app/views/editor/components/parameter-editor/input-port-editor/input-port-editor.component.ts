@@ -15,8 +15,6 @@ export class InputPortEditorComponent{
     
     constructor(){ }
 
-    editOptions(): void{
-
-    }
+    editOptions(): void{ }
 
 }

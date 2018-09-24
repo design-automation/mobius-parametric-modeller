@@ -4,11 +4,11 @@ import { IFlowchart } from '@models/flowchart';
 import { IMobius } from '@models/mobius';
 
 @Component({
-  selector: 'editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss']
+  selector: 'view-editor',
+  templateUrl: './view-editor.component.html',
+  styleUrls: ['./view-editor.component.scss']
 })
-export class EditorComponent{
+export class ViewEditorComponent{
 
     private file: IMobius;
     private flowchart: IFlowchart; 

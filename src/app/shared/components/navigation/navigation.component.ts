@@ -48,8 +48,8 @@ export class NavigationComponent{
       { path: '/gallery', 
         name: 'gallery'
       },
-      { path: '/viewer', 
-        name: 'viewer'
+      { path: '/publish', 
+        name: 'publish'
       },
       { path: '/editor', 
         name: 'editor'

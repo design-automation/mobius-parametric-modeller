@@ -50,6 +50,10 @@ export abstract class NodeUtils{
             case ProcedureTypes.VARIABLE:
                 prod.argCount = 2;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
+            
+            case ProcedureTypes.FOREACH:
+                prod.argCount = 2; 
+                prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
 
             case ProcedureTypes.FUNCTION:
                 if(type == ProcedureTypes.FUNCTION){

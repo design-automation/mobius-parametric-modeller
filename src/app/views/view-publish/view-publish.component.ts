@@ -3,11 +3,11 @@ import { DataService } from '@services';
 import { IFlowchart } from '@models/flowchart';
 
 @Component({
-  selector: 'viewer',
-  templateUrl: './viewer.component.html',
-  styleUrls: ['./viewer.component.scss']
+  selector: 'view-publish',
+  templateUrl: './view-publish.component.html',
+  styleUrls: ['./view-publish.component.scss']
 })
-export class ViewerComponent{
+export class ViewPublishComponent{
 
     private flowchart: IFlowchart;
     constructor(private dataService: DataService){

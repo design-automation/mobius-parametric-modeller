@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/shared.module';
 
-import { EditorRoutingModule } from './editor-routing.module';
-import { EditorComponent } from './editor.component'; 
+import { ViewEditorRoutingModule } from './view-editor-routing.module';
+import { ViewEditorComponent } from './view-editor.component'; 
 import { ProcedureEditorComponent } from './components/procedure-editor/procedure-editor.component';
 import { ProcedureItemComponent } from './components/procedure-editor/procedure-item/procedure-item.component';
 import { ToolsetComponent } from './components/procedure-editor/toolset/toolset.component';
@@ -15,7 +15,7 @@ import { OutputPortEditorComponent } from './components/parameter-editor/output-
 
 @NgModule({
   declarations: [
-    EditorComponent,
+    ViewEditorComponent,
     ProcedureEditorComponent,
     ProcedureItemComponent,
     ToolsetComponent,
@@ -26,11 +26,11 @@ import { OutputPortEditorComponent } from './components/parameter-editor/output-
   exports: [],
   imports: [
     CommonModule, 
-    EditorRoutingModule, 
+    ViewEditorRoutingModule, 
     SharedModule
   ],
   providers: [ ]
 })
-export class EditorModule {
+export class ViewEditorModule {
     constructor () { }
 }

@@ -1,26 +1,24 @@
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { SharedModule } from '@shared/shared.module';
 
-import { GalleryRoutingModule } from './gallery-routing.module';
-import { GalleryComponent } from './gallery.component'; 
-import { SimpleNamePipe } from './simple-name.pipe';
+import { ViewAboutRoutingModule } from './view-about-routing.module';
+import { ViewAboutComponent } from './view-about.component'; 
 
 @NgModule({
   declarations: [
-    GalleryComponent,
-    SimpleNamePipe
+    ViewAboutComponent
   ],
   exports: [],
   imports: [
     CommonModule, 
-    GalleryRoutingModule,
+    ViewAboutRoutingModule,
     SharedModule
   ],
   entryComponents: [ ],
   providers: [ ]
 })
-export class GalleryModule {
+export class ViewAboutModule {
     constructor () { }
 }

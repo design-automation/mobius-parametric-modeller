@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Constants } from "./gallery.config";
+import { Constants } from "./view-gallery.config";
 import { Observable } from 'rxjs';
 
 import { DataService } from '@services';
 
 @Component({
-  selector: 'gallery',
-  templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.scss']
+  selector: 'view-gallery',
+  templateUrl: './view-gallery.component.html',
+  styleUrls: ['./view-gallery.component.scss']
 })
-export class GalleryComponent{
+export class ViewGalleryComponent{
 
     private allFiles: Observable<any>;
     constructor(private http: HttpClient, private dataService: DataService) { 

@@ -2,23 +2,22 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/shared.module';
-
-import { AboutRoutingModule } from './about-routing.module';
-import { AboutComponent } from './about.component'; 
+import { ViewPublishRoutingModule } from './view-publish-routing.module';
+import { ViewPublishComponent } from './view-publish.component';
 
 @NgModule({
   declarations: [
-    AboutComponent
+    ViewPublishComponent
   ],
   exports: [],
   imports: [
-    CommonModule, 
-    AboutRoutingModule,
-    SharedModule
+    CommonModule,
+    SharedModule,
+    ViewPublishRoutingModule
   ],
   entryComponents: [ ],
   providers: [ ]
 })
-export class AboutModule {
+export class ViewPublishModule {
     constructor () { }
 }

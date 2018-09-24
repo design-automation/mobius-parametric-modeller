@@ -20,7 +20,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-redux/store": "^9.0.0",
     "@angular/animations": "^6.1.7",
     "@angular/cdk": "^5.2.5",
     "@angular/common": "^6.1.7",
@@ -32,13 +31,10 @@
     "@angular/platform-browser-dynamic": "^6.1.7",
     "@angular/router": "^6.1.7",
     "@types/circular-json": "^0.4.0",
-    "@types/three": "^0.84.27",
     "angular-split": "^1.0.0-rc.3",
     "circular-json": "^0.4.0",
     "core-js": "^2.5.5",
     "hammerjs": "^2.0.8",
-    "redux": "^4.0.0",
-    "rxjs": "^6.3.2",
     "rxjs-compat": "^6.3.2",
     "typescript-compiler": "^1.4.1",
     "zone.js": "^0.8.26"

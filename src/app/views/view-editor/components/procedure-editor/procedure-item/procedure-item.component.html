@@ -2,7 +2,6 @@
 
     <!-- Variable Assignment Template -->
     <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
-        let 
         <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  
@@ -10,6 +9,20 @@
         <input [(ngModel)]='data.args[1].value'
                name='data.args[1].name'
                placeholder={{data.args[1].name}}>  
+    </div>
+
+    <!-- Function Template -->
+    <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
+            <input [(ngModel)]='data.args[0].value'
+                    placeholder={{data.args[0].name}}>  
+            = 
+            {{ data.meta.module }} ::: {{ data.meta.name }} 
+            (
+                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                    <input [(ngModel)]='p.value' placeholder={{p.name}}>    
+                </ng-container>
+            ) 
+
     </div>
 
     <!-- Variable Assignment Template -->
@@ -22,26 +35,15 @@
             <input [(ngModel)]='data.args[1].value'
                    name='data.args[1].name'
                    placeholder={{data.args[1].name}}>  
-
+                   
             <div class='container--nested'>
-                <procedure-item *ngFor="let line of data?.children" [data]="line" ></procedure-item>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (delete)='deleteChild($event, idx)'></procedure-item>
             </div>
     </div>
-
-
-    <!-- Function Template -->
-    <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
-            <input [(ngModel)]='data.args[0].value'
-                   placeholder={{data.args[0].name}}>  
-            = 
-            {{ data.meta.module }} ::: {{ data.meta.name }} 
-            (
-                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                    <input [(ngModel)]='p.value' placeholder={{p.name}}>    
-                </ng-container>
-            ) 
-
-    </div>
-
+               
+    <button class='btn btn--delete' (click)='emitDelete()'>Delete</button>
 
 </div>

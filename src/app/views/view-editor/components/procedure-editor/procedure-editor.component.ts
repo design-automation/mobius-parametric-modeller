@@ -27,4 +27,8 @@ export class ProcedureEditorComponent{
       NodeUtils.add_procedure(this.node, data.type, data.data);
   }
 
+  deleteChild($event, index: number): void{
+      this.node.procedure.splice(index, 1);
+  }
+
 }

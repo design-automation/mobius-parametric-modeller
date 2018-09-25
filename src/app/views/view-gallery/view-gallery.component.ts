@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Constants } from "./view-gallery.config";
 import { Observable } from 'rxjs';
 import { IMobius } from '@models/mobius';
+import {Router} from '@angular/router';
 
 import { DataService } from '@services';
 
@@ -14,7 +15,7 @@ import { DataService } from '@services';
 export class ViewGalleryComponent{
 
     private allFiles: Observable<any>;
-    constructor(private http: HttpClient, private dataService: DataService) { 
+    constructor(private http: HttpClient, private dataService: DataService, private router: Router) { 
         this.allFiles = this.getFilesFromURL()
     }
 
@@ -52,6 +53,7 @@ export class ViewGalleryComponent{
     
     stream.subscribe(loadeddata => {
       this.dataService.file = loadeddata;
+      this.router.navigate(['/publish'])
     });
   }
 

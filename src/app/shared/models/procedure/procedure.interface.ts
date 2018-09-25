@@ -13,6 +13,7 @@ export interface IProcedure{
     meta: { name: string, module: string };
     
     enabled: boolean;
+    selected: boolean;
 }
 
 export interface IModule{

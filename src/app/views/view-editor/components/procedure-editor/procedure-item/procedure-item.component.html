@@ -1,4 +1,6 @@
-<div class='container--line' [ngSwitch]="data.type">
+<div class='container--line' 
+    [class.selected]="data.selected"
+    [ngSwitch]="data.type">
 
     <!-- Variable Assignment Template -->
     <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
@@ -12,21 +14,21 @@
     </div>
 
     <!-- IF Template -->
-    <div class='line--if' *ngSwitchCase="ProcedureTypes.IF">
+    <div class='line--if hasChildren' *ngSwitchCase="ProcedureTypes.IF">
        if ( <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
     </div>
 
     <!-- ELSEIF Template -->
-    <div class='line--elseif' *ngSwitchCase="ProcedureTypes.ELSEIF">
+    <div class='line--elseif hasChildren' *ngSwitchCase="ProcedureTypes.ELSEIF">
        elseif ( <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
     </div>
 
     <!-- ELSE Template -->
-    <div class='line--else' *ngSwitchCase="ProcedureTypes.ELSE">
+    <div class='line--else hasChildren' *ngSwitchCase="ProcedureTypes.ELSE">
        else
     </div>
 

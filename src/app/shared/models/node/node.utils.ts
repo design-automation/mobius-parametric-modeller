@@ -9,6 +9,11 @@ export abstract class NodeUtils{
             name: "a_new_node", 
             position: {x: 0, y: 0}, 
             procedure: [],
+            state: {
+                procedure: undefined, 
+                input_port: undefined, 
+                output_port: undefined
+            },
             inputs: [
                 {
                     name: 'first_input', 
@@ -43,6 +48,14 @@ export abstract class NodeUtils{
         // add new procedure line - as default
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
+        
+        // todo: set active procedure for node
+        // node.state.procedure = prod;
+
+        // todo: check where to add procedure
+        // node.state.procedure - selected procedure
+        // if undefined, add to node.procedure
+        // if defined, check if 
         node.procedure.push(prod);
 
         switch(prod.type){

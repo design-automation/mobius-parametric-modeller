@@ -25,7 +25,9 @@ export class ViewEditorComponent{
     }
 
     updateFile($event: string){
-        this.dataService.file = JSON.parse($event);
+        //this.dataService.file = JSON.parse($event);
+        this.file = JSON.parse($event);
+        this.flowchart = this.file.flowchart;
     }
     
 }

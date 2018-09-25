@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { IMobius } from '@models/mobius';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'file-load',
-  template:  `<div class='btn btn--loadfile' (click)='sendloadfile()'>Load File</div>`,
+  template:  `<div class='btn btn--loadfile' onclick="document.getElementById('file-input').click();">Load File</div>
+              <input id="file-input" type="file" name="name" (change)="sendloadfile()" style=" display: none;" />`,
   styles: [ 
             `.btn--loadfile{ 
              }
@@ -13,14 +15,34 @@ import { IMobius } from '@models/mobius';
 export class LoadFileComponent{
 
     @Output() loaded = new EventEmitter();
-
+    
+    
     sendloadfile(){
-        // todo: load file
-        const file: IMobius = <IMobius>{};
-
-        this.loaded.emit(JSON.stringify(file));
+        var selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
+        console.log(selectedFile);
+        let stream = Observable.create(observer => {
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                //if (typeof reader.result === 'string') {}
+                var f = JSON.parse(<string>reader.result);
+                const file: IMobius = {
+                    name: f.name,
+                    author: f.author, 
+                    flowchart: f.flowchart,
+                    last_updated: f.last_updated,
+                    version: f.version
+                }
+                observer.next(file);
+                observer.complete();
+                }
+            reader.readAsText(selectedFile);
+        });
+        stream.subscribe(loadeddata => {
+            this.loaded.emit(JSON.stringify(loadeddata));
+        });
+        (<HTMLInputElement>document.getElementById('file-input')).value = "";
     }
-
+    
 
     //   @ViewChild('fileInput') fileInput: ElementRef;
     //   openPicker(): void{

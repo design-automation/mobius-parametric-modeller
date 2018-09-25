@@ -50,23 +50,40 @@ export abstract class NodeUtils{
             case ProcedureTypes.VARIABLE:
                 prod.argCount = 2;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
+                break;
             
             case ProcedureTypes.FOREACH:
                 prod.argCount = 2; 
                 prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
+                prod.children = [];
+                break;
+
+            case ProcedureTypes.WHILE:
+                prod.argCount = 1; 
+                prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                break;
 
             case ProcedureTypes.IF: 
+            case ProcedureTypes.ELSEIF:
                 prod.argCount = 1;
                 prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                prod.children = [];
+                break;
 
-            case ProcedureTypes.
+            case ProcedureTypes.ELSE:
+                prod.argCount = 0;
+                prod.args = [];
+                prod.children = [];
+                break;
+
+            case ProcedureTypes.BREAK:
+            case ProcedureTypes.CONTINUE:
+                prod.argCount = 0;
+                prod.args = [];
 
             case ProcedureTypes.FUNCTION:
                 if(type == ProcedureTypes.FUNCTION){
-        
-                    if(!data){
-                        throw Error('No function data');
-                    }
+                    if(!data) throw Error('No function data');
                     
                     prod.meta = { module: data.module, name: data.name };
                     prod.argCount = data.argCount + 1;

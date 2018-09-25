@@ -11,11 +11,33 @@
                placeholder={{data.args[1].name}}>  
     </div>
 
-    <!-- Variable Assignment Template -->
-    <div class='line--variable' *ngSwitchCase="ProcedureTypes.IF">
+    <!-- IF Template -->
+    <div class='line--if' *ngSwitchCase="ProcedureTypes.IF">
        if ( <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
+    </div>
+
+    <!-- ELSEIF Template -->
+    <div class='line--elseif' *ngSwitchCase="ProcedureTypes.ELSEIF">
+       elseif ( <input [(ngModel)]='data.args[0].value'
+               name='data.args[0].name'
+               placeholder={{data.args[0].name}}>  )
+    </div>
+
+    <!-- ELSE Template -->
+    <div class='line--else' *ngSwitchCase="ProcedureTypes.ELSE">
+       else
+    </div>
+
+    <!-- BREAK Template -->
+    <div class='line--break' *ngSwitchCase="ProcedureTypes.BREAK">
+       break
+    </div>
+
+    <!-- CONTINUE Template -->
+    <div class='line--continue' *ngSwitchCase="ProcedureTypes.CONTINUE">
+       continue
     </div>
 
     <!-- Function Template -->
@@ -32,7 +54,7 @@
 
     </div>
 
-    <!-- Variable Assignment Template -->
+    <!-- FOREACH Template -->
     <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.FOREACH">
             for 
             <input [(ngModel)]='data.args[0].value'
@@ -43,6 +65,21 @@
                    name='data.args[1].name'
                    placeholder={{data.args[1].name}}>  
                    
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (delete)='deleteChild($event, idx)'></procedure-item>
+            </div>
+    </div>
+
+    <!-- WHILE Template -->
+    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.WHILE">
+            while 
+            <input [(ngModel)]='data.args[0].value'
+                   name='data.args[0].name'
+                   placeholder={{data.args[0].name}}>  
+
             <div class='container--nested'>
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 

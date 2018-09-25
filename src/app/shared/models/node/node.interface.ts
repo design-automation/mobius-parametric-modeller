@@ -30,7 +30,7 @@ export interface INode{
 
 	// stores the state
 	state: {
-		procedure: number,
+		procedure: IProcedure,
 		input_port: number,
 		output_port: number
 	}

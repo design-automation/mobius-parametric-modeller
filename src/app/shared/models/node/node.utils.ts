@@ -40,6 +40,15 @@ export abstract class NodeUtils{
         }
         return node;
     };
+
+    static select_procedure(node: INode, procedure: IProcedure){
+        if(node.state.procedure){
+            node.state.procedure.selected = false;
+        }
+
+        node.state.procedure = procedure;
+        procedure.selected = true;
+    }
     
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
         // todo: 
@@ -49,14 +58,14 @@ export abstract class NodeUtils{
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
         
-        // todo: set active procedure for node
-        // node.state.procedure = prod;
-
         // todo: check where to add procedure
         // node.state.procedure - selected procedure
         // if undefined, add to node.procedure
         // if defined, check if 
         node.procedure.push(prod);
+
+        // select the procedure
+        NodeUtils.select_procedure(node, prod);
 
         switch(prod.type){
 

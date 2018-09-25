@@ -31,7 +31,7 @@ export class EdgeComponent implements OnInit, DoCheck{
     }
 
     ngDoCheck(){
-        console.log(this.edge, this.nodeSourcePosition, this.nodeTargetPosition);
+        //console.log(this.edge, this.nodeSourcePosition, this.nodeTargetPosition);
         //this.drawEdge();
     }
     

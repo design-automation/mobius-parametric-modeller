@@ -11,6 +11,7 @@
 			<procedure-item 
 				*ngFor="let line of node?.procedure; let idx=index" 
 				[data]="line"
+				(select)="selectProcedure($event, line)"
 				(delete)="deleteChild($event, idx)"></procedure-item>
 		</div>
 	</div>

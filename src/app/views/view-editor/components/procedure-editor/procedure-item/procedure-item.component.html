@@ -1,6 +1,7 @@
 <div class='container--line' 
     [class.selected]="data.selected"
-    [ngSwitch]="data.type">
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'>
 
     <!-- Variable Assignment Template -->
     <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
@@ -71,6 +72,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    (select)='selectChild($event, line)'
                     (delete)='deleteChild($event, idx)'></procedure-item>
             </div>
     </div>
@@ -86,6 +88,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    (select)='selectChild($event, line)'
                     (delete)='deleteChild($event, idx)'></procedure-item>
             </div>
     </div>

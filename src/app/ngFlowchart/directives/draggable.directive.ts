@@ -29,6 +29,8 @@ export class DraggableDirective {
 	
 	@HostListener("dragstart", ['$event'])
 	nodeDragStart($event): void{
+		if($event.ctrlKey) return;
+
 		$event.dataTransfer.setDragImage( new Image(), 0, 0);
 		// todo : find more elegant solution
 		this.dragStart = {x: $event.pageX, y: $event.pageY}; 
@@ -44,12 +46,14 @@ export class DraggableDirective {
 
 	@HostListener("drag", ['$event'])
 	nodeDragging($event): void{
+		if($event.ctrlKey) return;
+
 		let relX: number = $event.pageX - this.dragStart.x; 
 		let relY: number = $event.pageY - this.dragStart.y;
 
 		// if node is going beyond canvas, do nothing
 		if( (this.node.position.x + relX/this.zoom) < 0 || (this.node.position.y + relY/this.zoom) < 0){
-		return;
+			return;
 		}
 		
 		this.node.position.x += relX/this.zoom; 
@@ -75,6 +79,8 @@ export class DraggableDirective {
 
 	@HostListener("dragend", ['$event'])
 	nodeDragEnd($event): void{
+		if($event.ctrlKey) return;
+
 		let relX: number = $event.pageX - this.dragStart.x; 
 		let relY: number = $event.pageY - this.dragStart.y;
 

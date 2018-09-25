@@ -2,6 +2,7 @@
 	<button class='btn--addNode' (click)='addNode()'> Add Node </button>
 	
     <node *ngFor="let node of data.nodes; let node_index = index" 
+          id='flw_node_{{node_index}}'
           [node]='node' 
           [node_index]='node_index'
           [selected]='isSelected(node_index)'
@@ -9,12 +10,10 @@
           (select)='selectNode($event)'>
 	</node>
 
-	<!-- <edge *ngFor="let e of data.edges; let edge_index = index"
+	<edge *ngFor="let e of data.edges; let edge_index = index"
 		  [edge]='e'
-		  [edge_index]='edge_index'
-		  [input_position]=''
-		  [output_position]=''
-		  [temporary]=''></edge> -->
+		  [nodeSourcePosition]='data.nodes[e.source[0]]?.position'
+		  [nodeTargetPosition]='data.nodes[e.target[0]]?.position'></edge>
 </div>
 
 

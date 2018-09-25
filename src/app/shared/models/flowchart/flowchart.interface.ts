@@ -4,15 +4,14 @@
 // It also 
 //
 
-// import { INode, IEdge } from '@models/node';
-// import { CodeLanguage } from '@models/code';
+import { INode } from '@models/node';
+import { IEdge } from '@models/edge';
 
 export interface IFlowchart{
-	language: any;
-	modules: any;
+	language: string;
 
-	nodes: any[];
-	edges: any[];
+	nodes: INode[];
+	edges: IEdge[];
 
 	meta: {
 		selected_nodes: number[];

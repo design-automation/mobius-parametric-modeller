@@ -55,6 +55,12 @@ export abstract class NodeUtils{
                 prod.argCount = 2; 
                 prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
 
+            case ProcedureTypes.IF: 
+                prod.argCount = 1;
+                prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+
+            case ProcedureTypes.
+
             case ProcedureTypes.FUNCTION:
                 if(type == ProcedureTypes.FUNCTION){
         

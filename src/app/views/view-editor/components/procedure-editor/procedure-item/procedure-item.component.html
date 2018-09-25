@@ -11,6 +11,13 @@
                placeholder={{data.args[1].name}}>  
     </div>
 
+    <!-- Variable Assignment Template -->
+    <div class='line--variable' *ngSwitchCase="ProcedureTypes.IF">
+       if ( <input [(ngModel)]='data.args[0].value'
+               name='data.args[0].name'
+               placeholder={{data.args[0].name}}>  )
+    </div>
+
     <!-- Function Template -->
     <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
             <input [(ngModel)]='data.args[0].value'

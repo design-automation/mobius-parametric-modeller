@@ -42,27 +42,33 @@ export abstract class NodeUtils{
     };
 
     static select_procedure(node: INode, procedure: IProcedure){
-        if(node.state.procedure){
-            node.state.procedure.selected = false;
+
+        if(node.state.procedure === procedure){
+            node.state.procedure = undefined;
+            procedure.selected = false;
+        }else{
+            if(node.state.procedure){
+                node.state.procedure.selected = false;
+            }
+
+            node.state.procedure = procedure;
+            procedure.selected = true;
         }
 
-        node.state.procedure = procedure;
-        procedure.selected = true;
     }
     
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
-        // todo: 
-        // check active procedure in node
-        // add new procedure line of particular type to below active procedure, if any
-        // add new procedure line - as default
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
         
-        // todo: check where to add procedure
-        // node.state.procedure - selected procedure
-        // if undefined, add to node.procedure
-        // if defined, check if 
+        // TODO: Procedure should be added below the selected procedure
+        // If no procedure is selected, add it to root: node.procedure
+        // If a procedure is selected, 
+        //          check is procedure.children is defined - if defined, add the procedure to the children array of the selected procedure
+        //          if not defined - add the procedure to the children array of the parent of the selected procedure, below the selected procedure
         node.procedure.push(prod);
+
+        // TODO: Add appropriate parent to the procedure. If added to root, leave undefined;
 
         // select the procedure
         NodeUtils.select_procedure(node, prod);

@@ -4,21 +4,23 @@
 
     <!-- Slider, SimpleInput ... etc -->
     <div class='parameter__mode' [ngSwitch]="port.meta.mode">
+        
         <!-- Simple Input Template -->
         <div *ngSwitchCase="PortTypes.SimpleInput">
-            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value'> 
+            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value: Defaults to {{port.default}}'> 
         </div>
 
         <div *ngSwitchCase="PortTypes.Slider">
-            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value'> 
+            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value: Defaults to {{port.default}}'> 
             <mat-slider></mat-slider>
         </div>
 
         <div *ngSwitchCase="PortTypes.Checkbox">
             <mat-checkbox></mat-checkbox>
-            <mat-checkbox></mat-checkbox>
-            <mat-checkbox></mat-checkbox>
         </div>
+
+        <!-- TODO1: SwitchCase for remaining PortTypes -->
+        <!-- TODO2: Connect values to port.value -->
                 
     </div>
 

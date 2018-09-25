@@ -1,13 +1,13 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'text-viewer',
-  template: `<h3>Text Viewer</h3>
+  selector: 'json-viewer',
+  template: `<h3>JSON Viewer</h3>
              <div>{{ node?.outputs[0]?.value || "no-value" }}</div>`,
   styles: []
 })
-export class TextViewerComponent{
+export class JSONViewerComponent{
     @Input() node; 
 
-    constructor(){ console.log(`Text Viewer Created`); }
+    constructor(){ console.log(`JSON Viewer Created`); }
 }

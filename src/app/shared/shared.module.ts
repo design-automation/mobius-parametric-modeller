@@ -14,8 +14,6 @@ import { NgFlowchartModule } from '../../app/ngFlowchart';
 import { AngularSplitModule } from 'angular-split';
 
 import { MbFileReaderDirective } from "./directives/filesys";
-import { ViewerContainerComponent } from "./components/viewer-container/viewer-container.component";
-import { TextViewerComponent } from "./components/viewers/viewer-text.component";
 import { ExecuteComponent } from "./components/execute/execute.component";
 import { PageNotFoundComponent } from "./components/not-found/not-found.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
@@ -27,12 +25,15 @@ import { ParameterViewerComponent } from "./components/parameter-viewer/paramete
 import { InputPortViewerComponent } from "./components/parameter-viewer/input-port-viewer/input-port-viewer.component";
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
+import { ViewerContainerComponent } from "./components/viewer-container/viewer-container.component";
+import { TextViewerComponent, JSONViewerComponent } from "./components/viewers";
+
 @NgModule({
     providers: [ ],
     declarations: [
-            MbFileReaderDirective, 
             ViewerContainerComponent,
-            TextViewerComponent,
+            TextViewerComponent, JSONViewerComponent,
+            MbFileReaderDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 
             NavigationComponent, 
@@ -56,9 +57,9 @@ import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './compon
             FormsModule,
             NgFlowchartModule, 
             AngularSplitModule,
-            MbFileReaderDirective, 
             ViewerContainerComponent,
-            TextViewerComponent, 
+            TextViewerComponent, JSONViewerComponent,
+            MbFileReaderDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 
             NavigationComponent, 

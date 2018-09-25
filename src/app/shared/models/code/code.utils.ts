@@ -20,6 +20,7 @@ export class CodeUtils {
                 codeStr.push(`${prefix} ${args[0].value} = ${fnCall};`);
                 break;
 
+            // TODO: ProcedureTypes.IF | ELSE | ELSEIF | FOR | WHILE
         }
 
         return codeStr.join('\n');
@@ -33,6 +34,9 @@ export class CodeUtils {
 
         const codeStr = [];
         const varsDefined: string[] = [];
+
+        // TODO [think later]: How to handle defaults / values for FileInputs and WebURLs?
+        // IDEA-1: Load and add as parameter; Will need to the synchronous
 
         // input initializations
         node.inputs.map( (inp)=> {

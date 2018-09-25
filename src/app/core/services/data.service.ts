@@ -7,7 +7,7 @@ import { INode } from '@models/node';
 @Injectable()
 export class DataService {
   private static _data: IMobius = {
-    name: "default_file.mob",
+    name: "default_file",
     author: "new_user", 
     last_updated: new Date(),
     version: 1,

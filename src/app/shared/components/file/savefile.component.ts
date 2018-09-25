@@ -16,6 +16,10 @@ export class SaveFileComponent{
 
     // todo: save file
     download(){
+
+        // TODO-1: Split downloading part into another function or in a general utils file that can be used by others also
+        // TODO-2: Before downloading, input/output values (not defaults) should be cleared from all ports for all nodes
+
         const fileString = JSON.stringify(this.file);
   
         let fname: string = `${this.file.name}.mob`;

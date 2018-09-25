@@ -9,6 +9,11 @@ export abstract class NodeUtils{
             name: "a_new_node", 
             position: {x: 0, y: 0}, 
             procedure: [],
+            state: {
+                procedure: undefined, 
+                input_port: undefined, 
+                output_port: undefined
+            },
             inputs: [
                 {
                     name: 'first_input', 
@@ -35,6 +40,15 @@ export abstract class NodeUtils{
         }
         return node;
     };
+
+    static select_procedure(node: INode, procedure: IProcedure){
+        if(node.state.procedure){
+            node.state.procedure.selected = false;
+        }
+
+        node.state.procedure = procedure;
+        procedure.selected = true;
+    }
     
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
         // todo: 
@@ -43,24 +57,55 @@ export abstract class NodeUtils{
         // add new procedure line - as default
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
+        
+        // todo: check where to add procedure
+        // node.state.procedure - selected procedure
+        // if undefined, add to node.procedure
+        // if defined, check if 
         node.procedure.push(prod);
+
+        // select the procedure
+        NodeUtils.select_procedure(node, prod);
 
         switch(prod.type){
 
             case ProcedureTypes.VARIABLE:
                 prod.argCount = 2;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
+                break;
             
             case ProcedureTypes.FOREACH:
                 prod.argCount = 2; 
                 prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
+                prod.children = [];
+                break;
+
+            case ProcedureTypes.WHILE:
+                prod.argCount = 1; 
+                prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                break;
+
+            case ProcedureTypes.IF: 
+            case ProcedureTypes.ELSEIF:
+                prod.argCount = 1;
+                prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                prod.children = [];
+                break;
+
+            case ProcedureTypes.ELSE:
+                prod.argCount = 0;
+                prod.args = [];
+                prod.children = [];
+                break;
+
+            case ProcedureTypes.BREAK:
+            case ProcedureTypes.CONTINUE:
+                prod.argCount = 0;
+                prod.args = [];
 
             case ProcedureTypes.FUNCTION:
                 if(type == ProcedureTypes.FUNCTION){
-        
-                    if(!data){
-                        throw Error('No function data');
-                    }
+                    if(!data) throw Error('No function data');
                     
                     prod.meta = { module: data.module, name: data.name };
                     prod.argCount = data.argCount + 1;

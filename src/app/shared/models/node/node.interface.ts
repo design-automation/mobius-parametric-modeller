@@ -12,9 +12,9 @@ import { IProcedure } from '@models/procedure';
 export interface INode{
 	// basic properties
 	name: string;
-	description: string;
-	author: string;
-	version: number; 
+	description?: string;
+	author?: string;
+	version?: number; 
 
 	// type: string;
 	position: any;
@@ -28,11 +28,9 @@ export interface INode{
 	outputs: IPortOutput[];
 	procedure: IProcedure[];
 
-	active_procedure;
-
 	// stores the state
 	state: {
-		procedure: number,
+		procedure: IProcedure,
 		input_port: number,
 		output_port: number
 	}

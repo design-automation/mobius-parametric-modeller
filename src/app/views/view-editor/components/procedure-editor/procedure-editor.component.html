@@ -8,7 +8,11 @@
 		<toolset (select)='add($event)'></toolset>
 		
 		<div id='procedure' class="container--procedure">
-			<procedure-item *ngFor="let line of node?.procedure" [data]="line"></procedure-item>
+			<procedure-item 
+				*ngFor="let line of node?.procedure; let idx=index" 
+				[data]="line"
+				(select)="selectProcedure($event, line)"
+				(delete)="deleteChild($event, idx)"></procedure-item>
 		</div>
 	</div>
 

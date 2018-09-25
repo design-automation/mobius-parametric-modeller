@@ -1,8 +1,10 @@
-<div class='container--line' [ngSwitch]="data.type">
+<div class='container--line' 
+    [class.selected]="data.selected"
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'>
 
     <!-- Variable Assignment Template -->
     <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
-        let 
         <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  
@@ -12,27 +14,39 @@
                placeholder={{data.args[1].name}}>  
     </div>
 
-    <!-- Variable Assignment Template -->
-    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.FOREACH">
-            for 
-            <input [(ngModel)]='data.args[0].value'
-                   name='data.args[0].name'
-                   placeholder={{data.args[0].name}}>  
-            in 
-            <input [(ngModel)]='data.args[1].value'
-                   name='data.args[1].name'
-                   placeholder={{data.args[1].name}}>  
-
-            <div class='container--nested'>
-                <procedure-item *ngFor="let line of data?.children" [data]="line" ></procedure-item>
-            </div>
+    <!-- IF Template -->
+    <div class='line--if hasChildren' *ngSwitchCase="ProcedureTypes.IF">
+       if ( <input [(ngModel)]='data.args[0].value'
+               name='data.args[0].name'
+               placeholder={{data.args[0].name}}>  )
     </div>
 
+    <!-- ELSEIF Template -->
+    <div class='line--elseif hasChildren' *ngSwitchCase="ProcedureTypes.ELSEIF">
+       elseif ( <input [(ngModel)]='data.args[0].value'
+               name='data.args[0].name'
+               placeholder={{data.args[0].name}}>  )
+    </div>
+
+    <!-- ELSE Template -->
+    <div class='line--else hasChildren' *ngSwitchCase="ProcedureTypes.ELSE">
+       else
+    </div>
+
+    <!-- BREAK Template -->
+    <div class='line--break' *ngSwitchCase="ProcedureTypes.BREAK">
+       break
+    </div>
+
+    <!-- CONTINUE Template -->
+    <div class='line--continue' *ngSwitchCase="ProcedureTypes.CONTINUE">
+       continue
+    </div>
 
     <!-- Function Template -->
     <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
             <input [(ngModel)]='data.args[0].value'
-                   placeholder={{data.args[0].name}}>  
+                    placeholder={{data.args[0].name}}>  
             = 
             {{ data.meta.module }} ::: {{ data.meta.name }} 
             (
@@ -43,5 +57,42 @@
 
     </div>
 
+    <!-- FOREACH Template -->
+    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.FOREACH">
+            for 
+            <input [(ngModel)]='data.args[0].value'
+                   name='data.args[0].name'
+                   placeholder={{data.args[0].name}}>  
+            in 
+            <input [(ngModel)]='data.args[1].value'
+                   name='data.args[1].name'
+                   placeholder={{data.args[1].name}}>  
+                   
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild($event, idx)'></procedure-item>
+            </div>
+    </div>
+
+    <!-- WHILE Template -->
+    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.WHILE">
+            while 
+            <input [(ngModel)]='data.args[0].value'
+                   name='data.args[0].name'
+                   placeholder={{data.args[0].name}}>  
+
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild($event, idx)'></procedure-item>
+            </div>
+    </div>
+               
+    <button class='btn btn--delete' (click)='emitDelete()'>Delete</button>
 
 </div>

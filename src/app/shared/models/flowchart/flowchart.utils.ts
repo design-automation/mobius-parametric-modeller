@@ -6,12 +6,11 @@ export class FlowchartUtils{
     public static newflowchart(): IFlowchart{
         const flw: IFlowchart = { 
             language: "js",
-            modules: [],
             meta: {
                 selected_nodes: [0]
             },
-            nodes: [  NodeUtils.getNewNode()  ],
-            edges: [ ]
+            nodes: [  NodeUtils.getNewNode(), NodeUtils.getNewNode()  ],
+            edges: [ {source: [0, 0], target: [1, 0] } ]
         }
 
         return flw;

@@ -11,5 +11,22 @@ import { ProcedureTypesAware } from '@shared/decorators';
 })
 export class ProcedureItemComponent{
     @Input() data: IProcedure;
+    @Output() delete = new EventEmitter();
+    @Output() select = new EventEmitter();
 
+    emitDelete(index: number): void{
+        this.delete.emit(index);
+    }
+
+    emitSelect($event, procedure: IProcedure){
+        this.select.emit(procedure);
+    }
+
+    selectChild($event, procedure: IProcedure){
+        this.select.emit(procedure);
+    }
+
+    deleteChild($event, index: number): void{
+        this.data.children.splice(index, 1);
+    }
 }

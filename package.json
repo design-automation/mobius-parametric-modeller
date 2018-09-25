@@ -35,6 +35,7 @@
     "circular-json": "^0.4.0",
     "core-js": "^2.5.5",
     "hammerjs": "^2.0.8",
+    "rxjs": "^6.3.2",
     "rxjs-compat": "^6.3.2",
     "typescript-compiler": "^1.4.1",
     "zone.js": "^0.8.26"

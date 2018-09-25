@@ -7,6 +7,10 @@
     margin: 10px 0px;
 }
 
+.selected{
+    border: 1px solid black;
+}
+
 .hasChildren::before{
     content: '\25B6';
     position: absolute;

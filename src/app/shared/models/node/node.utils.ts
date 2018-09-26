@@ -1,6 +1,7 @@
 import { INode } from './node.interface';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { PortType, InputType, OutputType } from '@models/port';
+import { not } from '@angular/compiler/src/output/output_ast';
 
 export abstract class NodeUtils{
 
@@ -42,7 +43,7 @@ export abstract class NodeUtils{
     };
 
     static select_procedure(node: INode, procedure: IProcedure){
-
+        
         if(node.state.procedure === procedure){
             node.state.procedure = undefined;
             procedure.selected = false;
@@ -60,13 +61,33 @@ export abstract class NodeUtils{
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
-        
+       
         // TODO: Procedure should be added below the selected procedure
         // If no procedure is selected, add it to root: node.procedure
         // If a procedure is selected, 
         //          check is procedure.children is defined - if defined, add the procedure to the children array of the selected procedure
         //          if not defined - add the procedure to the children array of the parent of the selected procedure, below the selected procedure
-        node.procedure.push(prod);
+        if (node.state.procedure){
+            if (node.state.procedure.hasOwnProperty("children")){
+                node.state.procedure.children.push(prod);
+                prod.parent = node.state.procedure;
+            } else {
+                if (node.state.procedure.hasOwnProperty("parent")){
+                    prod.parent = node.state.procedure.parent;
+                    var list = prod.parent.children;
+                } else {
+                    var list = node.procedure;
+                }
+                for (let index in list){
+                    if (list[index].selected){
+                        list.splice(parseInt(index)+1, 0, prod);
+                        break;
+                    }
+                }
+            }
+        } else {
+            node.procedure.push(prod);
+        }
 
         // TODO: Add appropriate parent to the procedure. If added to root, leave undefined;
 
@@ -89,6 +110,7 @@ export abstract class NodeUtils{
             case ProcedureTypes.WHILE:
                 prod.argCount = 1; 
                 prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                prod.children = [];
                 break;
 
             case ProcedureTypes.IF: 

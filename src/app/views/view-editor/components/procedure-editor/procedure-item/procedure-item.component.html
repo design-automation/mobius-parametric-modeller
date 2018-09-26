@@ -19,6 +19,14 @@
        if ( <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
+        <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild($event, idx)'></procedure-item>
+        </div>
+
     </div>
 
     <!-- ELSEIF Template -->
@@ -26,6 +34,13 @@
        elseif ( <input [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
+        <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild($event, idx)'></procedure-item>
+        </div>
     </div>
 
     <!-- ELSE Template -->

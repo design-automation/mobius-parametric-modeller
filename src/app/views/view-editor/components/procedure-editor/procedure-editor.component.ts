@@ -32,7 +32,7 @@ export class ProcedureEditorComponent{
     }
 
     selectProcedure($event, procedure: IProcedure): void{
-      NodeUtils.select_procedure(this.node, procedure);
+      NodeUtils.select_procedure(this.node, $event);
     }
 
 }

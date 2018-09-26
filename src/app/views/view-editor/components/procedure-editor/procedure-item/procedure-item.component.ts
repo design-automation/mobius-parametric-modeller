@@ -23,7 +23,8 @@ export class ProcedureItemComponent{
     }
 
     selectChild($event, procedure: IProcedure){
-        this.select.emit(procedure);
+        event.stopPropagation();
+        this.select.emit($event);
     }
 
     deleteChild($event, index: number): void{

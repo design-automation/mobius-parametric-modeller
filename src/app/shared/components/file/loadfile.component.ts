@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { Observable } from 'rxjs';
+import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'file-load',
@@ -24,7 +25,7 @@ export class LoadFileComponent{
             let reader = new FileReader();
             reader.onloadend = () => {
                 //if (typeof reader.result === 'string') {}
-                var f = JSON.parse(<string>reader.result);
+                var f = circularJSON.parse(<string>reader.result);
                 const file: IMobius = {
                     name: f.name,
                     author: f.author, 
@@ -38,7 +39,7 @@ export class LoadFileComponent{
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
-            this.loaded.emit(JSON.stringify(loadeddata));
+            this.loaded.emit(circularJSON.stringify(loadeddata));
         });
         (<HTMLInputElement>document.getElementById('file-input')).value = "";
     }

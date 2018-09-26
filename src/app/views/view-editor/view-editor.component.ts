@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DataService } from '@services';
 import { IFlowchart } from '@models/flowchart';
 import { IMobius } from '@models/mobius';
+import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'view-editor',
@@ -25,7 +26,7 @@ export class ViewEditorComponent{
     }
 
     updateFile($event: string){
-        this.dataService.file = JSON.parse($event);
+        this.dataService.file = circularJSON.parse($event);
         this.file = this.dataService.file;
         this.flowchart = this.dataService.flowchart;
     }

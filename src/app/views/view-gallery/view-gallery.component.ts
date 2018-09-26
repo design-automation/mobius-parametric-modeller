@@ -6,6 +6,7 @@ import { IMobius } from '@models/mobius';
 import {Router} from '@angular/router';
 
 import { DataService } from '@services';
+import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'view-gallery',
@@ -30,7 +31,7 @@ export class ViewGalleryComponent{
       request.open('GET', f.download_url);
       request.onload = () => {
           if (request.status === 200) {
-              var f = JSON.parse(request.responseText);
+              var f = circularJSON.parse(request.responseText);
               const file: IMobius = {
                   name: f.name,
                   author: f.author, 

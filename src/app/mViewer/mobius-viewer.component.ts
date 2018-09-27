@@ -1,9 +1,8 @@
 import { Component, Injector, Input, 
-    ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef
-    OnDestroy } from '@angular/core';
+    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 import { INode } from '@models/node';
 import { IView } from './view.interface';
-import { TextViewerComponent, JSONViewerComponent } from './viewers';
+import { Viewers } from './viewers.config';
 
 @Component({
     selector: 'mviewer',
@@ -17,8 +16,7 @@ import { TextViewerComponent, JSONViewerComponent } from './viewers';
                 </div>
                 <ng-container #vc></ng-container>
             </div>`,    
-    styleUrls: [],
-    entryComponents: [ TextViewerComponent, JSONViewerComponent ]
+    styleUrls: []
 })
 export class ViewerContainerComponent implements OnDestroy {
 
@@ -27,15 +25,12 @@ export class ViewerContainerComponent implements OnDestroy {
 
     constructor(private injector: Injector, private r: ComponentFactoryResolver) {}
 
-    Viewers: IView[] = [
-        {   name: 'text-viewer', icon: undefined, component: TextViewerComponent },
-        {   name: 'json-viewer', icon: undefined, component: JSONViewerComponent }
-    ];
-
     private views = [];
-    private activeView: IView = {   name: 'text-viewer', icon: undefined, component: TextViewerComponent };
+    private Viewers = Viewers;
+    private activeView: IView;
 
     ngOnInit(){
+        this.activeView = this.Viewers[0];
         this.updateView( this.activeView );
     }
 

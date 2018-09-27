@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { FlowchartUtils } from '@models/flowchart';
+import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'file-new',
@@ -25,7 +26,7 @@ export class NewFileComponent{
             last_updated: new Date(),
             version: 1
         }
-        this.create.emit(JSON.stringify(file));
+        this.create.emit(circularJSON.stringify(file));
         this.cdr.detectChanges()
     }
 }

@@ -8,7 +8,7 @@
     [node]='node'
     [zoom]='zoom'
     (dragged)='updatePosition($event)'
-    (click)='nodeClicked($event)'>
+    (click)='nodeSelect($event)'>
     
     <div class="node__name">
         <input autocomplete=off [(ngModel)]='node.name'
@@ -26,5 +26,10 @@
             <port class='port--invert' *ngFor="let oup of node.outputs;" [data]='oup'></port>
         </div>
 
+    </div>
+
+    <div class='node__actions'>
+        <button (click)='delete()'>Delete</button>
+        <button (click)='copy()'>Copy</button>
     </div>
 </div>

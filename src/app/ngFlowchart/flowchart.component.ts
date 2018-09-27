@@ -4,6 +4,7 @@ import { NgClass } from '@angular/common';
 // todo: make internal to flowchart
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils } from '@models/node';
+import { ACTIONS } from './node/node.actions';
 
 @Component({
   selector: 'flowchart',
@@ -13,12 +14,33 @@ import { NodeUtils } from '@models/node';
 export class FlowchartComponent{
 
   @Input() data: IFlowchart;
+
+  // TODO: Is this redundant?
   @Output() select = new EventEmitter();
 
   ngOnInit(){ }
 
-  selectNode($event): void{
-      this.select.emit($event);
+  selectNode(node_index): void{
+      //this.select.emit($event);
+  }
+
+  nodeAction($event, node_index): void{
+
+    switch($event.action){
+        case ACTIONS.SELECT:
+          this.data.meta.selected_nodes = [ node_index ];  
+          break;
+
+        case ACTIONS.DELETE:
+          // TODO: Add a delete function in NodeUtils / FlowchartUtils
+          break;
+
+        case ACTIONS.COPY:
+          // TODO: Add a copy function in NodeUtils / FlowchartUtils
+          break;
+
+    }
+
   }
 
   isSelected(node_index: number): boolean{

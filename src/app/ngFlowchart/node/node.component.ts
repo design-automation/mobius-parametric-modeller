@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { INode } from '@models/node';
-
+import { ACTIONS } from './node.actions'
 
 @Component({
   selector: 'node',
@@ -15,7 +15,8 @@ export class NodeComponent{
     
     @Input() node_index: number;
 
-    @Output() select = new EventEmitter();
+    @Output() action = new EventEmitter();
+    
     
     @HostListener('document:keypress', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) { 
@@ -27,8 +28,16 @@ export class NodeComponent{
         this.node.position = position; 
     };
 
-    nodeClicked($event){
-        this.select.emit(this.node_index);
+    nodeSelect($event){
+        this.action.emit({ action: ACTIONS.SELECT });
+    };
+
+    nodeDelete($event){
+        this.action.emit({ action: ACTIONS.DELETE });
+    };
+
+    nodeCopy($event){
+        this.action.emit({ action: ACTIONS.COPY });
     }
 
 }

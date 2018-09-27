@@ -7,7 +7,7 @@
           [node_index]='node_index'
           [selected]='isSelected(node_index)'
           [zoom]=1
-          (select)='selectNode($event)'>
+          (action)='nodeAction($event, node_index)'>
 	</node>
 
 	<!-- <edge *ngFor="let e of data.edges; let edge_index = index"

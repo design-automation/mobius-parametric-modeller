@@ -18,7 +18,7 @@ $default-padding: 10px;
 
 
     &.node--selected{
-        font-weight: 600;
+        border-color: blue;
     }
 
     .node__name{

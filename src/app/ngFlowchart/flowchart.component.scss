@@ -160,8 +160,7 @@ input:focus{
 			font-weight: normal !important;
 		}
 	}
-
-
+	
 	.node-container{
 		position: relative;
 	
@@ -236,7 +235,7 @@ input:focus{
 					}
 
 					&.selected{
-						border-width: 5px;
+						border-color: green;
 					}
 
 					&.library{

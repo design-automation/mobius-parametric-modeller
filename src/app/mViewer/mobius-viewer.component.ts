@@ -6,9 +6,10 @@ import { Viewers } from './viewers.config';
 
 @Component({
     selector: 'mviewer',
-    template:   `<div class="viewer-container">  
-                <div class= "btn-group">
+    template:   `<div class='viewer-container'>  
+                <div class= 'btn-group'>
                     <div class='btn btn--viewer' 
+                        [class.selected]='view.name == activeView.name'
                         *ngFor='let view of Viewers;' 
                         (click)='updateView(view)'>
                         <span>{{view.name}}</span>
@@ -16,7 +17,17 @@ import { Viewers } from './viewers.config';
                 </div>
                 <ng-container #vc></ng-container>
             </div>`,    
-    styleUrls: []
+    styles: [
+            `.btn{
+                display: inline-block;
+            }
+            
+            .selected{
+                background-color: black;
+                color: yellow;
+            }
+            `
+    ]
 })
 export class ViewerContainerComponent implements OnDestroy {
 

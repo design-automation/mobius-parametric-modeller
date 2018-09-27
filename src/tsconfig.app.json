@@ -12,6 +12,7 @@
       "@utils" : ["app/shared/utils"],
       "@shared/*" : ["app/shared/*"],
       "@views" : ["app/views"],
+      "@mviewers": ["app/mobius-viewer/viewers"],
       "@services" : ["app/core/services"],
       "@modules" : ["app/core/modules"]
     },

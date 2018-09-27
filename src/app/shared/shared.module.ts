@@ -26,13 +26,11 @@ import { InputPortViewerComponent } from "./components/parameter-viewer/input-po
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
 import { ViewerContainerComponent } from "./components/viewer-container/viewer-container.component";
-import { TextViewerComponent, JSONViewerComponent } from "./components/viewers";
 
 @NgModule({
     providers: [ ],
     declarations: [
             ViewerContainerComponent,
-            TextViewerComponent, JSONViewerComponent,
             MbFileReaderDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 
@@ -50,15 +48,12 @@ import { TextViewerComponent, JSONViewerComponent } from "./components/viewers";
             AngularSplitModule, 
             FormsModule
         ],
-    entryComponents: [
-        TextViewerComponent
-    ],
+    entryComponents: [  ],
     exports: [  
             FormsModule,
             NgFlowchartModule, 
             AngularSplitModule,
             ViewerContainerComponent,
-            TextViewerComponent, JSONViewerComponent,
             MbFileReaderDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 

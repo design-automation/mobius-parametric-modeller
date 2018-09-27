@@ -4,14 +4,14 @@
  * 
  */
 import { NgModule, SkipSelf, Optional } from "@angular/core";
-import { DataService } from "./services/data.service";
- 
+import { DataService, ViewerService } from "@services";
+
 @NgModule({
     imports: [ ],
     declarations: [ ],
-    providers: [ DataService ],
+    providers: [ DataService, ViewerService ],
     exports: [ ],
-    entryComponents: [ ]
+    entryComponents: []
 })
 export class CoreModule{
     constructor(@Optional() @SkipSelf() core: CoreModule){

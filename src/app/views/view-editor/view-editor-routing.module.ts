@@ -7,7 +7,12 @@ const routes: Routes = [
   {   
     path: '', 
     component: ViewEditorComponent, 
-    children: []
+    children: [
+      // {
+      //   path: '',         
+      //   loadChildren: '../../mobius-viewer/mobius-viewer.module#MobiusViewerModule',
+      // }
+    ]
   }
 ];
 

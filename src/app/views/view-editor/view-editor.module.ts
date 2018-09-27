@@ -12,7 +12,6 @@ import { ParameterEditorComponent } from './components/parameter-editor/paramete
 import { InputPortEditorComponent } from './components/parameter-editor/input-port-editor/input-port-editor.component';
 import { OutputPortEditorComponent } from './components/parameter-editor/output-port-editor/output-port-editor.component';
 
-
 @NgModule({
   declarations: [
     ViewEditorComponent,
@@ -23,7 +22,8 @@ import { OutputPortEditorComponent } from './components/parameter-editor/output-
     InputPortEditorComponent, 
     OutputPortEditorComponent
   ],
-  exports: [],
+  entryComponents: [
+  ], 
   imports: [
     CommonModule, 
     ViewEditorRoutingModule, 

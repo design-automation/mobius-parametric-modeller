@@ -17,6 +17,7 @@ export class SaveFileComponent{
     // todo: save file
     download(){
 
+        // TODO-0: Check if the file gets stringified directly with the interlinked Procedure references; If not, use circular-json to do so
         // TODO-1: Split downloading part into another function or in a general utils file that can be used by others also
         // TODO-2: Before downloading, input/output values (not defaults) should be cleared from all ports for all nodes
 

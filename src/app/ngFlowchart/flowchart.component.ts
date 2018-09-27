@@ -33,6 +33,7 @@ export class FlowchartComponent{
 
         case ACTIONS.DELETE:
           // TODO: Add a delete function in NodeUtils / FlowchartUtils
+          this.data.nodes.splice( node_index, 1 );
           break;
 
         case ACTIONS.COPY:

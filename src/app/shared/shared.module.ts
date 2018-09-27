@@ -25,12 +25,11 @@ import { ParameterViewerComponent } from "./components/parameter-viewer/paramete
 import { InputPortViewerComponent } from "./components/parameter-viewer/input-port-viewer/input-port-viewer.component";
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
-import { ViewerContainerComponent } from "./components/viewer-container/viewer-container.component";
+import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
 
 @NgModule({
     providers: [ ],
     declarations: [
-            ViewerContainerComponent,
             MbFileReaderDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 
@@ -45,6 +44,7 @@ import { ViewerContainerComponent } from "./components/viewer-container/viewer-c
             RouterModule,
             MatSliderModule, MatCheckboxModule,
             NgFlowchartModule, 
+            MobiusViewerModule,
             AngularSplitModule, 
             FormsModule
         ],
@@ -52,8 +52,8 @@ import { ViewerContainerComponent } from "./components/viewer-container/viewer-c
     exports: [  
             FormsModule,
             NgFlowchartModule, 
+            MobiusViewerModule,
             AngularSplitModule,
-            ViewerContainerComponent,
             MbFileReaderDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 

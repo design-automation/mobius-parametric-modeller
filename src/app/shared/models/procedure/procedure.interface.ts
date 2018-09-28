@@ -3,6 +3,7 @@ import { IArgument } from '@models/code';
 
 export interface IProcedure{
     type: ProcedureTypes;
+    ID: string;
 
     parent: IProcedure;
     children: IProcedure[];
@@ -14,6 +15,7 @@ export interface IProcedure{
     
     enabled: boolean;
     selected: boolean;
+    hasError: boolean;
 }
 
 export interface IModule{

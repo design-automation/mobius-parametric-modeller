@@ -1,5 +1,6 @@
 <div class='container--line' 
     [class.selected]="data.selected"
+    [class.error]="data.hasError"
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'>
 
@@ -45,7 +46,14 @@
 
     <!-- ELSE Template -->
     <div class='line--else hasChildren' *ngSwitchCase="ProcedureTypes.ELSE">
-       else
+        else
+        <div class='container--nested'>
+        <procedure-item 
+            *ngFor="let line of data?.children; let idx=index" 
+            [data]="line"
+            (select)='selectChild($event, line)'
+            (delete)='deleteChild($event, idx)'></procedure-item>
+        </div>
     </div>
 
     <!-- BREAK Template -->

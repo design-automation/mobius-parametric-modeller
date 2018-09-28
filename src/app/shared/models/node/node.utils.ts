@@ -61,12 +61,7 @@ export abstract class NodeUtils{
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
-       
-        // TODO: Procedure should be added below the selected procedure
-        // If no procedure is selected, add it to root: node.procedure
-        // If a procedure is selected, 
-        //          check is procedure.children is defined - if defined, add the procedure to the children array of the selected procedure
-        //          if not defined - add the procedure to the children array of the parent of the selected procedure, below the selected procedure
+        
         if (node.state.procedure){
             if (node.state.procedure.hasOwnProperty("children")){
                 node.state.procedure.children.push(prod);
@@ -89,7 +84,10 @@ export abstract class NodeUtils{
             node.procedure.push(prod);
         }
 
-        // TODO: Add appropriate parent to the procedure. If added to root, leave undefined;
+        // add ID to the procedure
+        prod.ID = 'prod-' + Math.random().toString(36).substr(2, 16);
+        console.log(prod.ID);
+
 
         // select the procedure
         NodeUtils.select_procedure(node, prod);

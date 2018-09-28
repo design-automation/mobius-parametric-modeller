@@ -11,6 +11,10 @@
     border: 1px solid black;
 }
 
+.error{
+    border: 1px solid red;
+}
+
 .hasChildren::before{
     content: '\25B6';
     position: absolute;

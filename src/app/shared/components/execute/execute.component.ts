@@ -32,13 +32,7 @@ export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
 
-    execute($event): void {      
-        this.flowchart.nodes.map((node: INode) => {
-            this.executeNode(node);
-        });
-    /*
     execute($event): void {
-
         let all_nodes = this.flowchart.nodes;
         let executed = [];
         
@@ -62,18 +56,18 @@ export class ExecuteComponent {
 					else{
 
 						let flag = true;
-						let inputs = node.getInputs();
+						let inputs = node.inputs;
 						for(let i=0; i < inputs.length; i++){
 							let inp = inputs[i];
 
-							if(inp.getValue() && inp.getValue()["port"] && !inp.isFunction()){
+							if(inp.value && inp.value["port"] /*&& !inp.isFunction() */){
 								flag = false;
 								break;
 							}
 						}
 
 						if(flag){
-                            console.log(`${node.getName()} executing...`);
+                            console.log(`${node.name} executing...`);
                             this.executeNode(node);
 							this.updateDependentInputs(node, index); 
 							executed.push(index);
@@ -83,8 +77,6 @@ export class ExecuteComponent {
 				}
 			} 
 		}
-    */
-
     }
 
     executeNode(node: INode): void{

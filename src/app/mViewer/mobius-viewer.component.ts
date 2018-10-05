@@ -1,24 +1,26 @@
 import { Component, Injector, Input, 
-    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, ComponentRef } from '@angular/core';
 import { INode } from '@models/node';
-import { IView } from './view.interface';
+import { IView , gs_default, cesium_default} from './view.interface';
 import { Viewers } from './viewers.config';
+import * as gs from 'gs-json';
 
 @Component({
     selector: 'mviewer',
     template:   `<div class='viewer-container'>  
-                <div class= 'btn-group'>
-                    <div class='btn btn--viewer' 
-                        [class.selected]='view.name == activeView.name'
-                        *ngFor='let view of Viewers;' 
-                        (click)='updateView(view)'>
-                        <span>{{view.name}}</span>
+                    <div class= 'btn-group'>
+                        <div class='btn btn--viewer' 
+                            [class.selected]='view.name == activeView.name'
+                            *ngFor='let view of Viewers;' 
+                            (click)='updateView(view)'>
+                            <span>{{view.name}}</span>
+                        </div>
                     </div>
-                </div>
-                <ng-container #vc></ng-container>
-            </div>`,    
+                    <ng-container #vc></ng-container>
+                </div>`,    
     styles: [
-            `.btn{
+            `
+            .btn{
                 display: inline-block;
             }
             
@@ -46,7 +48,10 @@ export class ViewerContainerComponent implements OnDestroy {
     }
 
     ngOnDestroy(){
-        // TODO: Destroy all componentRefs to prevent memory leaks
+        console.log('onDestroy')
+        for (let view of this.views){
+            view.destroy();
+        }
     }
 
     ngOnChanges(){
@@ -54,11 +59,44 @@ export class ViewerContainerComponent implements OnDestroy {
     }
 
     createView(view: IView){
-        let component = view.component;
-        let factory = this.r.resolveComponentFactory(component);
-        let componentRef = factory.create(this.injector);
-        componentRef.instance["node"] = this.node;
-        return componentRef;
+        if (view.name == 'gs-viewer'){
+            let component = view.component;
+            let factory = this.r.resolveComponentFactory(component);
+            let componentRef = factory.create(this.injector);
+            componentRef.instance["node"] = this.node;
+            /*
+            try{
+                console.log(this.node.outputs[0].value)
+                let data: gs.IModel = new gs.Model(JSON.parse(this.node.outputs[0].value));
+                componentRef.instance["data"] = data;
+            }
+            catch(ex){
+                let data: gs.IModel = gs_default;
+                componentRef.instance["data"] = data;
+            }
+            */
+            return componentRef;
+        } else if (view.name == 'mobius-cesium'){
+            let component = view.component;
+            let factory = this.r.resolveComponentFactory(component);
+            let componentRef = factory.create(this.injector);
+            try{
+                let data = JSON.parse(this.node.outputs[0].value);
+                componentRef.instance["data"] = data;
+            }
+            catch(ex){
+                let data = {};
+                componentRef.instance["data"] = data;
+            }
+            componentRef.instance["mode"] = 'editor';
+            return componentRef;
+        } else{
+            let component = view.component;
+            let factory = this.r.resolveComponentFactory(component);
+            let componentRef = factory.create(this.injector);
+            componentRef.instance["node"] = this.node;
+            return componentRef;
+        }
     }
 
     updateView(view: IView): void{
@@ -66,9 +104,9 @@ export class ViewerContainerComponent implements OnDestroy {
 
         if( this.views[ this.activeView.name ] == undefined){
             this.views[ this.activeView.name ] = this.createView(view);
+        } else{
+            this.updateValue();
         }
-
-        this.updateValue();
 
         this.vc.detach();
         this.vc.insert( this.views[ this.activeView.name ].hostView );
@@ -77,7 +115,21 @@ export class ViewerContainerComponent implements OnDestroy {
     updateValue(){
         try{
             let componentRef =  this.views[ this.activeView.name ]; 
-            componentRef.instance["node"] = this.node;
+            if (this.activeView.name == 'gs-viewer'){
+                try{
+                    let data: gs.IModel = new gs.Model(JSON.parse(this.node.outputs[0].value));
+                    componentRef.instance["data"] = data;
+                }
+                catch(ex){
+                    let data: gs.IModel = gs_default;
+                    componentRef.instance["data"] = data;
+                }
+            } else if (this.activeView.name == 'mobius-cesium'){
+                let data = JSON.parse(this.node.outputs[0].value);
+                componentRef.instance["data"] = data;
+                } else{
+                componentRef.instance["node"] = this.node;
+            }
         }
         catch(ex){
             console.log(`Active View not defined`);

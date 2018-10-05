@@ -193,7 +193,7 @@ export class GroupsComponent extends DataSubscriber implements OnInit {
   changeaxis(){
     this.axisVisible = !this.axisVisible;
     if(this.axisVisible){
-      let axishelper:THREE.AxisHelper = new THREE.AxisHelper( 10 );
+      let axishelper:THREE.AxesHelper = new THREE.AxesHelper( 10 );
       axishelper.name="AxisHelper";
       this.scene.add( axishelper);
     }else{

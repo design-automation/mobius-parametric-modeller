@@ -193,7 +193,7 @@ export class SettingComponent implements OnInit {
   changeaxis(){
     this.axisVisible = !this.axisVisible;
     if(this.axisVisible){
-      var axishelper = new THREE.AxisHelper( 10 );
+      var axishelper = new THREE.AxesHelper( 10 );
       axishelper.name="AxisHelper";
       this.scene.add( axishelper);
     }else{

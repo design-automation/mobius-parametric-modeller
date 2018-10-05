@@ -1,0 +1,70 @@
+<div id="setandgroup" >
+<mat-tab-group class="mat-tab-group">
+  <mat-tab label="Groups" >
+  	<div id="groupsview">
+	<mat-accordion>
+	  <mat-expansion-panel *ngFor="let group of groups">
+		  <mat-expansion-panel-header *ngIf="group.parent===null" class="mat-header">
+		    <div class="mat-header"><label id="groupname">{{group.name}}</label></div>
+		  </mat-expansion-panel-header>
+		    <!-- <div class="mat-list-text-parent"><span id="parent">parent : {{group.parent}} </span></div> -->
+		    <div ><span class="mat-list-text" (click)="selectpoint(group)">point : {{group.num_point}} </span></div>
+		    <div ><span class="mat-list-text" (click)="selectvertice(group)">vertice : {{group.num_vertice}} </span></div>
+		    <div ><span class="mat-list-text" (click)="selectedge(group)">edge : {{group.num_edge}} </span></div>
+		    <div ><span class="mat-list-text" (click)="selectwire(group)">wire : {{group.num_wire}} </span></div>
+		    <div ><span class="mat-list-text" (click)="selectface(group)">face : {{group.num_face}} </span></div>
+		    <div ><span class="mat-list-text" (click)="selectobject(group)">object : {{group.num_object}} </span><hr/></div>
+		    <div class="mat-list-descr" *ngFor="let prop of group.props"><span >{{prop[0]}} : {{prop[1]}} </span></div>
+		    <div *ngIf="group.child!==null" >
+ 		    	<mat-accordion>
+			  		<mat-expansion-panel >
+			  			<mat-expansion-panel-header ><div class="mat-header"><label id="groupname">{{group.child.name}}</label></div></mat-expansion-panel-header>
+			  			<div class="mat-list-text-parent"><span id="parent">parent : {{group.child.parent}} </span><hr></div>
+			  			<div ><span class="mat-list-text" (click)="selectpoint(group)">point : {{group.child.num_point}} </span></div>
+					    <div ><span class="mat-list-text" (click)="selectvertice(group)">vertice : {{group.child.num_vertice}} </span></div>
+					    <div ><span class="mat-list-text" (click)="selectedge(group)">edge : {{group.child.num_edge}} </span></div>
+					    <div ><span class="mat-list-text" (click)="selectwire(group)">wire : {{group.child.num_wire}} </span></div>
+					    <div ><span class="mat-list-text" (click)="selectface(group)">face : {{group.child.num_face}} </span></div>
+					    <div ><span class="mat-list-text" (click)="selectobject(group)">object : {{group.child.num_object}} </span><hr/></div>
+					    <div class="mat-list-descr" *ngFor="let prop of group.child.props"><span >{{prop[0]}} : {{prop[1]}} </span></div>
+ 			  		</mat-expansion-panel>
+		 		 </mat-accordion>
+			</div>
+ 		</mat-expansion-panel>
+	</mat-accordion>
+	</div>
+  </mat-tab>
+  <mat-tab label="Settings" >
+  	<div id="settingview">
+  		<input id="grid" class="check" #grid type="checkbox" [checked]="gridVisible" (click)="changegrid()"> <label id="name" value="gridVisible">grid</label><br/>
+		<input id="axis" class="check" type="checkbox" [checked]="axisVisible" (click)="changeaxis()"> <label id="name" value="axisVisible">axis</label><br/>
+		<input id="shadow" class="check"  type="checkbox" [checked]="shadowVisible" (click)="changeshadow()"> <label id="name" value="shadowVisible">shadow</label><br/>
+		<input id="frame" class="check" type="checkbox" [checked]="frameVisible" (click)="changeframe()"> <label id="name" value="frameVisible">wireframe</label><br/>
+		<input id="point" class="check" type="checkbox" [checked]="pointVisible" (click)="changepoint()"> <label id="name" value="pointVisible">point</label><br/>
+		<hr/><div  id="GridCenter" >Grid Center<button (click)="getcenter()" style="margin-left: 30px;width: 40px;height: 20px; font-family: sans-serif;font-size: 12px;">Get</button></div><br/>
+		<label class="name" >XYZ</label><input type="text" name="center" id="centerx" #centerx value={{_centerx}} (change)=changecenter(centerx.value,centery.value,centerz.value)><input type="text" name="center" #centery id="centery" value={{_centery}} (change)=changecenter(centerx.value,centery.value,centerz.value)><input type="text" name="center"  #centerz id="centerz" value={{_centerz}} (change)=changecenter(centerx.value,centery.value,centerz.value)><br/>
+		<label class="name" >Size</label><input type="text" name="center"  #size id="centersize" value={{_centersize}} (change)=changecentersize(size.value)><br/>
+		<hr/><div style="margin-left: 10px;"><label  >Selection Settings:</label></div><!-- <br/> -->
+		<div class="name"><label >Line Precision</label></div><!-- <br/> -->
+  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="name" >Radius</label>&nbsp;<input type="text" value={{_linepre}} #linetext (change)="changeline(linetext.value)" style="width: 30px; ">&nbsp;<span>0</span>
+
+  		<mat-slider class="slider" name="range" id="linerange" min=0 max=1 step=0.01 thumbLabel=true value="_linepre" #linepre (change)="changeline(linepre.value.toPrecision(2))" >
+  		</mat-slider>
+
+  		<span>1</span><br/>
+  		<div class="name"><label>Points Precision</label></div><!-- <br/> -->
+  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="name" >Radius</label>&nbsp;<input type="text" value={{_materialpoint}} #pointtext1 (change)="changeradius(pointtext1.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="sizerange" min=0 max=5 step=0.1 thumbLabel=true value={{_materialpoint}} #pointsize1 (change)="changeradius(pointsize1.value.toPrecision(2))" ></mat-slider><span>5</span><br/>
+  		<!-- &nbsp;&nbsp;&nbsp;&nbsp;<label class="name" >Selected</label>&nbsp;<input type="text" value={{_pointsize}} #pointtext (change)="changepointsize(pointtext.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="sizerange" min=0 max=5 step=0.1 thumbLabel=true value={{_pointsize}} #pointsize (change)="changepointsize(pointsize.value.toPrecision(2))" ></mat-slider><span>5</span><br/> -->
+  		<div class="name"><label >Points Size</label></div><!-- <br/> -->
+  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="name" >Size</label>&nbsp;<input type="text" value={{_pointsize}} #pointtext (change)="changepointsize(pointtext.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="sizerange" min=0 max=5 step=0.1 thumbLabel=true value={{_pointsize}} #pointsize (change)="changepointsize(pointsize.value.toPrecision(2))" ></mat-slider><span>5</span><br/><!-- <input type="text" value={{_materialpoint}} #pointtext1 (change)="changematerialpoint(pointtext1.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="sizerange" min=0 max=5 step=0.1 thumbLabel=true value={{_pointsize1}} #pointsize1 (change)="changematerialpoint(pointsize1.value.toPrecision(2))" ></mat-slider><span>5</span><br/> -->
+  		<hr/><label class="name" >Hemisphere Light</label>&nbsp;&nbsp;<br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="name" >Hue</label>&nbsp;
+		<input type="text" value={{hue}} #huetext (change)="changelight(huetext.value,slider1.value,slider2.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="huerange" min=0 max=1 step=0.01 thumbLabel=true value={{hue}} #slider (change)="changelight(slider.value,slider1.value,slider2.value)" ></mat-slider><span>1</span><br/>
+		&nbsp;<label class="name" >Saturation</label>&nbsp;
+		<input type="text" value={{saturation}} #satutext (change)="changelight(slider.value,satutext.value,slider2.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="satrange" min=0 max=1 step=0.01 thumbLabel=true value={{saturation}} #slider1 (change)="changelight(slider.value,slider1.value,slider2.value)" ></mat-slider><span>1</span><br/>
+		&nbsp;&nbsp;<label class="name" >Lightness</label>&nbsp;
+		<input type="text" value={{lightness}} #lighttext (change)="changelight(slider.value,slider1.value,lighttext.value)" style="width: 30px; ">&nbsp;<span>0</span><mat-slider class="slider" name="range" id="lirange" min=0 max=1 step=0.01 thumbLabel=true value={{lightness}} #slider2 (change)="changelight(slider.value,slider1.value,slider2.value)" ></mat-slider><span>1</span><br/>
+  	</div>
+  </mat-tab>
+</mat-tab-group>
+</div>

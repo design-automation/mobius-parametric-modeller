@@ -1,0 +1,125 @@
+#settingview{
+  position:absolute;
+  background-color: white;
+  top:0px;
+  right:30px;
+  color:#395d73;
+  width:400px;
+  height:430px;
+}
+#grid{
+  margin-left: 20px;
+  font-family:sans-serif;
+  margin-top:10px;
+}
+#axis{
+  margin-left: 30px;
+  font-family:sans-serif;
+}
+#shadow{
+  margin-left: 30px;
+  font-family:sans-serif;
+}
+#frame{
+  margin-left: 30px;
+  font-family:sans-serif;
+}
+#nomal{
+  margin-left: 20px;
+  font-family:sans-serif;
+}
+#point{
+  margin-left: 20px;
+  font-family:sans-serif;
+}
+#huerange{
+  margin-left: 41px;
+  width: 60%;
+  font-family:sans-serif;
+}
+#satrange{
+  margin-left: 18px;
+  width: 60%;
+  font-family:sans-serif;
+}
+#lirange{
+  margin-left: 20px;
+  width: 60%;
+  font-family:sans-serif;
+}
+#oprange{
+  margin-left: 20px;
+  width: 60%;
+  font-family:sans-serif;
+}
+
+#name{
+  font-family:sans-serif;
+}
+#redrange{
+  margin-left: 60px;
+  width: 60%;
+  font-family:sans-serif;
+}
+#greenrange{
+  margin-left: 60px;
+  width: 60%;
+  font-family:sans-serif;
+}
+#bluerange{
+  margin-left: 60px;
+  width: 60%;
+  font-family:sans-serif;
+}
+#linerange{
+  margin-left: 5px;
+  width: 50%;
+  font-family:sans-serif;
+}
+#pointrange{
+  margin-left: 3px;
+  width: 50%;
+  font-family:sans-serif;
+}
+
+#sizerange{
+  width: 50%;
+  font-family:sans-serif;
+}
+
+#centerx{
+  width:30px;
+  margin-left:10px;
+}
+#centery{
+  width:30px;
+  margin-left:10px;
+}
+#centerz{
+  width:30px;
+  margin-left:10px;
+}
+#centersize{
+  width:30px;
+  margin-left:10px;
+}
+.name{
+  margin-left: 10px;
+}
+.center{
+  margin-left: 10px;
+}
+
+
+::ng-deep .mat-accent .mat-slider-thumb {
+    background-color: #395d73;
+    font-family:sans-serif;
+} 
+::ng-deep .mat-accent .mat-slider-thumb-label {
+    background-color: #395d73;
+    font-family:sans-serif;
+} 
+::ng-deep .mat-accent .mat-slider-track-fill {
+    background-color: #395d73;
+    font-family:sans-serif;
+} 

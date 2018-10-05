@@ -1,0 +1,52 @@
+body{
+  background: red;
+}
+#cesiumContainer{
+ height: 100%;
+ width: 100%; 
+ font-family: sans-serif !important;
+ margin: 0px !important;
+ padding: 0px !important;
+ font-size: 14px;
+}
+
+#ColorBar{
+  z-index:99;
+  margin: 5px;
+  width: 100%;
+  padding: 2px 5px;
+  position: absolute;
+  display:inline-block;
+  bottom: 7%;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+#ColorKey{
+  z-index:99;
+  margin: 5px;
+  width: 100%;
+  padding: 2px 5px;
+  position: absolute;
+  display:inline-block;
+  bottom: 2%;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+#Download{
+  z-index: 99;
+  top: 5px;
+  position: absolute;
+  right: 120px;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border-radius: 14%;
+  padding: 0;
+  vertical-align: middle;
+}
+

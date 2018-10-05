@@ -1,0 +1,31 @@
+<div id="DisplayView"  style="background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;"  >
+	<table>
+      <tr>
+      <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;">Imagery</div></th>
+      <th><div>
+        <select class="cesium-button" (change)="onChangeImagery($event.target.value)" [ngModel]="_Imagery">
+          <option class="cesium-option"  *ngFor="let Imagery of _ImageryList" value={{Imagery}}>{{Imagery}}</option>
+        </select>
+      </div></th>
+      </tr>
+    </table>
+    <hr>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Sun</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_Sun" (click)="changeSun()"></div></th></tr>
+    </table>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Shadows</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_Shadow" (click)="changeShadow()"></div></th></tr>
+    </table>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Date</div></th>
+      <th style="width:80px;height: 18px;"><input type="text"  value={{_Date}} style="width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left" (change)="changeDate($event.target.value,_UTC)"></th></tr>  
+    </table>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">UTC</div></th>
+      <th style="width:80px;height: 18px;"><input type="text"  value={{_UTC}} style="width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left" (change)="changeDate(_Date,$event.target.value)"></th></tr>  
+    </table>
+    
+</div>
+  

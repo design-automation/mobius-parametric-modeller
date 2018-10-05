@@ -1,0 +1,21 @@
+<div id="appdiv" (mousedown)="leaflet()">
+	<split direction="vertical">
+		<split-area [size]="90" id="splitcontainer">
+		  <div style="height: 100%">
+		    <split direction="horizontal">
+		      <split-area [size]="0.5" id="splitgroups" style="overflow-x:hidden;overflow-y: auto;">
+		        <app-groups></app-groups>
+		      </split-area>
+		      <split-area [size]="99.5" id="splitviewer">
+		        <!-- <app-viewer *ngIf="imVisible===false"></app-viewer>
+		        <app-map *ngIf="imVisible===true"></app-map> -->
+		        <app-viewer></app-viewer>
+		      </split-area>
+		    </split>
+		  </div>
+		</split-area>
+		<split-area [size]="10" id="splittoolwindow">
+			<app-toolwindow></app-toolwindow>
+		</split-area>
+	</split>
+</div>

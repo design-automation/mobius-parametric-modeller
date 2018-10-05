@@ -1,0 +1,132 @@
+#toolwindow{
+  background-color:white;
+  font-family:sans-serif;
+  width: 100%;
+  position:relative;
+}
+#gsattri-bar{
+  background-color: #f1f1f1 !important;
+  position:relative;
+  display: inline-flex;
+  width: 100%;
+}
+#toolbar{
+  background-color: #f1f1f1 !important;
+  width: 48%;
+  height: 30px;
+  margin:0px;
+  overflow: hidden !important;
+  font-family:sans-serif;
+  position: relative !important;
+}
+#pagination{
+  width: 48%;
+  height: 30px;
+  position: relative ;
+  top:unset !important;
+  margin: 0px;
+  background-color: #f1f1f1 !important;
+}
+
+.table_ojbs{
+  table-layout:fixed;
+  overflow-x: scroll !important;
+  font-family:sans-serif;
+}
+.Number{
+  overflow:hidden; 
+  white-space:nowrap; 
+}
+#toolview{
+  position:relative;
+  margin-top: 0px;
+  width: 100%;
+  float: left;
+}
+
+#selectedname{
+  font-size: 12px;
+  vertical-align: middle;
+}
+#gsv-point{
+  margin-left:25px;
+}
+#gsv-selected{
+  margin-left:30px;
+}
+.gsv-toolbar{
+  font-size:15px;
+  background-color:transparent;
+  border:0;
+  font-family:sans-serif;
+  padding-top:1px;
+  padding-right: 6px;
+  padding-bottom: 1px;
+  padding-left: 6px;
+  align-items: flex-start;
+  text-align: center;
+  cursor: default;
+  color: unset;
+  margin-right: 0px;
+  margin-left: 0px;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  box-sizing: border-box;
+  border-width: unset;
+  border-style: unset;
+  border-color: unset;
+  border-image: unset;
+}
+.visible{
+  background-color: white !important;
+  color:#395d73;
+}
+.selectvisible{
+  background-color:  white !important;
+  color:#395d73;
+}
+
+#table{
+  width:100% ;
+  height: 15px;
+}
+#tablename{
+  width:100% ;
+  height: 15px;
+  color:grey;
+}
+.table_text{
+  width:180px;
+  word-wrap:break-word;
+  font-weight: normal;
+}
+#numberbutton{
+  width:100%;
+  border:0;
+}
+#attrib{
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+/*.selectid{
+  background-color:#66CCFF;
+}*/
+#select{
+  position: relative;
+  float:right;
+  margin-right: 30px;
+}
+
+.my-pagination /deep/ .ngx-pagination{
+  margin:0px !important;
+  color:black !important;
+  float: right;
+  margin-right:20px !important;
+}
+.my-pagination /deep/ .ngx-pagination .current {
+  margin-top:0px;
+  color:black;
+  background-color: white;
+}

@@ -1,0 +1,116 @@
+<div  class="node" id="n{{node_index}}"
+        [style.left.px]="node.position[0]" 
+        [style.top.px]="node.position[1]">
+
+        <!-- node-controls-->
+        <div class="btn-container" *ngIf="node.id == active_node?.id" >
+            <div class="btn-group port-btns">
+
+                <!-- copy node -->
+                <div class="action-button" (click)="duplicate_node()" 		
+                    matTooltip="Copy Node">
+                    <mat-icon>content_copy</mat-icon>
+                </div>
+
+                <!-- delete node -->
+                <div class="action-button" (click)="delete_node(node.id)" 		
+                    matTooltip="Delete Node">
+                    <mat-icon>delete</mat-icon>
+                </div>
+                
+                <!-- disable / enable node -->
+                <div class="action-button" (click)="node.enabled = !node.enabled;">
+                    <mat-icon>{{ node.enabled ? 'check_circle' : 'highlight_off' }} </mat-icon>
+                </div>
+
+                <!--todo -->
+                <div class="action-button" 
+                    (click)="save_node_to_library()" 
+                    matTooltip="Save Node To Library"
+                    *ngIf="false && node.type == undefined">
+                    <mat-icon>file_download</mat-icon>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- node body -->
+        <div class="node-body" 
+            [class.library]="node.type !== undefined"
+            [class.error]="node._hasError"
+            [class.disabled] ="!node.enabled" 
+            (click)="active_node = node; push_node();"
+            draggable=true  
+            (dragstart)="nodeDragStart($event, node)" 
+            (drag)="nodeDragging($event, node, node_index)" 
+            (dragend)="nodeDragEnd($event, node)">
+            
+            <div class="node-name" 
+                    [class.selected]="node.id == active_node?.id">
+                    <input matInput
+                    [(ngModel)]="node.name"
+                    style="margin: 2px; min-width: 50px; max-width: 80px;"
+                    placeholder="Node Name" value="{{ node.name }}"/>
+            </div>
+            
+            <!--inputs -->
+            <div class="port-container">
+                
+                <div class="port input" 
+                    *ngFor="let port of node.inputs; let pi=index"  
+                    id="n{{node.id}}pi{{pi}}"
+                    [class.hidden]="port.type != 'Input'">
+
+                    <div class="port-grip" 
+                        draggable=true
+                        [class.connected]="port.isConnected" 
+                        (dragstart)="portDragStart($event, port, [node_index, pi])" 
+                        (drag)="portDragging($event, port)" 
+                        (dragend)="portDragEnd($event, port)"
+                        (drop)="portDrop($event, port, [node_index, pi])">
+                    </div>
+
+                    <input matInput
+                    [(ngModel)]="port.name"
+                    style="margin: 2px; min-width: 50px; max-width: 80px;"
+                    placeholder="Input Port Name" value="{{ port.name }}"/>
+
+                    <!-- <span class="port-name">{{ port.name | shortname: 10 }}</span> -->
+                </div>
+
+            </div>
+
+            <span style="margin: 0 auto;" *ngIf='node.time_taken'>Time: {{node.time_taken}}s</span>
+
+            <!-- outputs -->
+            <div class="port-container">
+                <div class="port output"
+                    *ngFor="let port of node.outputs; let po=index;"
+                    id="n{{node.id}}po{{po}}">
+
+                    <input matInput
+                    [(ngModel)]="port.name"
+                    style="margin: 2px; min-width: 50px; max-width: 80px; text-align: right;"
+                    placeholder="Output Port Name" value="{{ port.name }}"/>
+
+                    <div class="port-grip" 
+                        draggable=true
+                        [class.selected]="isPortSelected(node_index, po)"
+                        [class.connected]="port.isConnected" 
+                        (click)="clickPort($event, node_index, po)"
+                        (dragstart)="portDragStart($event, port, [node_index, po])" 
+                        (drag)="portDragging($event, port)" 
+                        (dragend)="portDragEnd($event, port)"
+                        (drop)="portDrop($event, port, [node_index, po])">
+                    </div>
+
+                </div>
+            </div> 
+
+
+            <!-- <div class="fromLibrary"  style="font-size: 8px; text-align: center">
+                Library Node
+            </div> -->
+
+        </div>
+</div>

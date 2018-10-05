@@ -1,0 +1,22 @@
+<div class='container container--parameter'>
+
+    <div class='parameter__name'>
+        <input [(ngModel)]='port.name' name='port.name' placeholder='Name of the the port'> 
+    </div>
+
+    <!-- TODO: Appropriate components for default inputs:  Slider / Boolean / Fileinput and-->
+    <div class='parameter__name'>
+        <input [(ngModel)]='port.default' name='port.default' placeholder='Default Value'> 
+    </div>
+
+    <!-- Slider, SimpleInput ... etc -->
+    <select name={{port.name}}_type [(ngModel)]="port.meta.mode">
+        <option 
+            *ngFor="let ptype of PortTypesArr" 
+            [value]="PortTypes[ptype]" 
+            [selected]="port.meta.mode == ptype">{{ptype}}</option>
+    </select>
+
+    <button (click)='delete.emit()'>Delete</button>
+</div>
+

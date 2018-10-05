@@ -1,0 +1,19 @@
+<div class='container'>
+	<button class='btn--addNode' (click)='addNode()'> Add Node </button>
+	
+    <node *ngFor="let node of data.nodes; let node_index = index" 
+          id='flw_node_{{node_index}}'
+          [node]='node' 
+          [node_index]='node_index'
+          [selected]='isSelected(node_index)'
+          [zoom]=1
+          (action)='nodeAction($event, node_index)'>
+	</node>
+
+	<!-- <edge *ngFor="let e of data.edges; let edge_index = index"
+		  [edge]='e'
+		  [nodeSourcePosition]='data.nodes[e.source[0]]?.position'
+		  [nodeTargetPosition]='data.nodes[e.target[0]]?.position'></edge> -->
+</div>
+
+

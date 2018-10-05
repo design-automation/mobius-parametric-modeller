@@ -1,0 +1,36 @@
+<div class='node' 
+    [class.node--selected]='selected'
+    [class.node--error]="node.hasError"
+    id='n{{node_index}}'
+    draggable='true'
+    [style.top.px]='node.position.y'
+    [style.left.px]='node.position.x'
+    ngDraggable
+    [node]='node'
+    [zoom]='zoom'
+    (dragged)='updatePosition($event)'
+    (click)='nodeSelect($event)'>
+    
+    <div class="node__name">
+        <input autocomplete=off [(ngModel)]='node.name'
+               name='node.name'
+               placeholder='Name of Node'>  
+    </div>
+
+    <div class='node__body'>
+        
+        <div class='container--input'>
+            <port *ngFor="let inp of node.inputs;" [data]='inp'></port>
+        </div>
+
+        <div class='container--output' sty>
+            <port class='port--invert' *ngFor="let oup of node.outputs;" [data]='oup'></port>
+        </div>
+
+    </div>
+
+    <div class='node__actions'>
+        <button (click)='nodeDelete()'>Delete</button>
+        <button (click)='nodeCopy()'>Copy</button>
+    </div>
+</div>

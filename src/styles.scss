@@ -1,0 +1,400 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import './scss/globals';
+
+.btn{
+	font-size: 12px;
+	text-align: center;
+	font-weight: 600px;
+	border: 2px solid #222; 
+	border-radius: 4px;
+	padding: 0px 5px;
+
+	&:hover{
+		color: blue;
+		cursor: pointer;
+	}
+}
+
+input[type="text"] {
+	-webkit-box-sizing: border-box; // Safari/Chrome, other WebKit
+	-moz-box-sizing: border-box;    // Firefox, other Gecko
+	box-sizing: border-box;         // Opera/IE 8+
+
+	border-style: solid;
+	border: none;
+	box-shadow: none;
+	padding: 5px;
+	background: transparent;
+}
+
+*:focus { outline: none; }
+
+.mat-slider-horizontal{
+	height: 24px !important;
+}
+
+.highlight{
+    text-transform: uppercase;
+    background-color: black;
+    color: yellow;
+    border-radius: 5px;
+    padding: 5px;
+    display: inline-block;
+}
+
+html{
+	position: relative;
+	height: 100%; 
+	width: 100%; 
+
+	padding: 0px;
+	margin: 0px;
+
+	font-family: sans-serif;
+	font-size: $fsize2;
+	line-height: 14px; 
+}
+
+body{
+	position: relative;
+
+	width: auto;
+	height: 100%;
+	overflow: auto;
+
+	padding: 0px;
+	margin: 0px; 
+}
+
+.message-general{
+	width: 100%; 
+	height: 100%; 
+	position: absolute;
+	background-repeat: no-repeat;
+	background-position: center;
+	z-index: 100;
+
+	&.loading{
+		background-image: url("./assets/img/loading_icon.gif");
+	}
+
+	&.sad-face{
+		background-image: url("./assets/img/SadSmiley.gif")
+	}
+
+	&.processing{
+		position: absolute;
+		top: 0px;
+		background-color: rgba(0,0,0,0.4);
+
+		.loading{
+			background-image: url("./assets/img/loading-2.gif");
+		}
+	}
+}
+
+
+.hidden{
+	display: none !important;
+}
+
+.mat-tab-body-content{
+	overflow: hidden !important;
+}
+
+split-area{
+	overflow-y: hidden !important;
+	height: 100% !important;
+}
+
+split-gutter{
+	border-right: 1px solid $color2 !important;
+	border-top: 1px solid $color2 !important;
+}
+
+.mat-tab-label{
+	font-size: $fsize2 !important; 
+	line-height: 18px;
+	min-height: 30px !important; 
+	min-width: 100px !important;
+	padding: 0px; 
+	height: 30px !important;
+	padding: 0 10px; 
+}
+
+.mat-accordion{
+	height: 100% !important;
+	width: 100% !important;
+}
+
+.mat-expansion-indicator{
+	color: $color1 !important;
+}
+
+.mat-expansion-panel-header{
+	height: 28px !important;
+	background-color: white !important;
+	border-top: 1px solid $color2 !important;
+	border-bottom: 1px solid $color2 !important;
+	padding-left: $default-side-padding !important;
+	.mat-expansion-panel-header-title{
+		color: $color1 !important;
+		font-weight: bold !important;
+		font-size: $fsize2 !important;
+	}
+	&:hover{
+		background-color: white !important;
+	}
+}
+
+.mat-expansion-panel-body{
+		height: 100%;
+		color: $color1;
+		padding: 0 !important;
+		box-sizing: border-box !important;
+
+    span{
+		color: $color1;
+		padding: 0 !important;
+		&:hover{
+			cursor: pointer;
+			color: $color4;
+			border: 0px !important;
+		}
+	}
+	.content{
+        color: $color1 !important;
+        
+		select{
+			color:$color1 !important;
+			border-color: $color1 !important;
+			&:focus{
+				background-color:$color4 !important;
+			}
+        }
+        
+		&:hover{
+			color:$color4 !important;
+			cursor: text !important;
+		}
+
+        &:focus{
+			background-color: $color4 !important;
+			color: $color1 !important;
+		}
+
+    }
+	.label{
+
+        color: $color2 !important;
+
+        &:hover{
+			cursor: default !important;
+		}
+	}
+}
+
+.mat-expansion-panel{
+	box-shadow: none !important;
+}
+
+.mat-raised-button{
+	color: white !important;
+
+    &:hover{
+		color: $color1 !important;
+		background-color: $color4 !important;
+	}
+}
+.param-container{
+	display: inline-block;
+}
+
+
+
+.node-content-wrapper.node-content-wrapper-active.node-content-wrapper-focused{
+	background-color: $color3 !important;
+	.full-container{
+		display: flex !important;
+	}
+}
+
+span.addBtn{
+	padding-left: $default-side-padding !important;
+}
+
+// checkboxes
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background{
+	background-color: $color1;
+}
+
+
+.mat-input-wrapper{
+	font-family: 'Ubuntu Mono', monospace !important;
+	padding: 0 !important;
+	font-size: $fsize2 !important;
+	color: $color1;
+	max-width: 95%;
+}
+
+.mat-input-infix{
+	padding: 0 !important;
+	border: 0 !important;
+}
+
+.mat-input-underline{
+	display: none !important;
+}
+
+mat-dialog-container{
+	color: $color1 !important;
+	h2{
+		border-bottom: 1px solid $color3;
+		padding-bottom: 5px;
+	}
+	mat-form-field{
+		width: 100%;
+	}
+}
+
+.mat-slider-track-fill,
+.mat-slider-thumb-label {
+    background-color: $color1 !important;
+}
+
+.mat-slider-thumb-label-text {
+    color: $color1 !important;
+    font-size: $fsize2!important;
+}
+
+.mat-slider-thumb{
+	border-radius: 0 !important;
+	background-color: white !important;
+	border: 1px solid $color1 !important;
+	width: 5px !important;
+	right: -5px !important;
+}
+
+.mat-slider-thumb-label{
+    height: 15px !important;
+    width: 15px !important;
+    top: -20px !important;
+    right: -7px !important;
+    background-color: white !important;
+    border: 1px solid $pcolor3 !important;
+}
+
+.mat-slider{
+	width: 60% !important;
+}
+
+.mat-slider-wrapper{
+	top: 12px !important;
+}
+
+split-area{
+	div{
+		#splittoolwindow{
+		    height: 100%;
+		    overflow-y: auto;
+
+		    box-sizing: border-box;
+		    padding-bottom: $header-height;
+		    #toolwindow{
+		      	#toolbar{
+		      		background-color: $color3;
+			        height: $header-height;
+
+			        display: flex;
+			        flex-flow: row nowrap;
+			        justify-content: space-between;
+			        width: 100%;
+			        .sec1, .sec2{
+						display: flex;
+						flex-flow: row nowrap;
+						margin: 0;
+						button{
+							font-size: $fsize2;
+							margin: 0;
+						}
+			        }
+
+			        .sec1{
+			        	display: flex;
+			        	flex-flow: row nowrap;
+			        	justify-content: flex-start;
+			        }
+			        .sec2{
+			        	display: flex;
+			        	flex-flow: row nowrap;
+			        	
+			        	align-items: center;
+			        	justify-content: center;
+
+			        	padding: 0px 5px;
+
+						label{
+							margin:0;
+							white-space: nowrap;
+							font-size: $fsize2;
+						}
+						input{
+							margin: 0;
+						}
+			        }
+			    }
+		    }
+		}
+	}
+}
+
+
+#cesiumContainer {  
+    width: 100%;  
+    height: 100%;  
+    margin: 0;  
+    padding: 0;  
+    overflow: hidden;  
+} 
+.cesium-infoBox {
+   color: #F1F1F1;
+}
+
+#Attribute-container, #Setting-Container{
+	height: 100%;
+	box-sizing: border-box;
+	padding-bottom: 2*$header-height;
+}
+#AttribsView{
+	overflow-y: auto;
+	height: 100%;
+	padding: 0 $default-side-padding;
+	table{
+		width: 100%;
+		tbody{
+			width: 100%;
+			tr{
+				display: flex;
+				flex-flow: row nowrap;
+				width: 100%;
+				th{
+					display: flex;
+					margin: 0;
+					width: 50% !important;
+					div{
+						width: 100% !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+#SettingView{
+	padding-left: $default-side-padding;
+	padding-right: $default-side-padding;
+	font-size: $fsize2;
+	overflow-y: auto;
+	height: 100%;
+}

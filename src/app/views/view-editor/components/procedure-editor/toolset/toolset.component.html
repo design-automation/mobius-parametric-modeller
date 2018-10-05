@@ -1,0 +1,24 @@
+<div id='toolset'>
+
+    <ul class='toolset__basic'>
+        <ng-container *ngFor="let type of ProcedureTypesArr">
+            <li *ngIf='type !== "FUNCTION"'
+                (click)='add(ProcedureTypes[type])'> 
+                {{type}} 
+            </li>
+        </ng-container>
+    </ul>
+    
+    <hr>
+
+    <div class='toolset__functions'>
+        <section *ngFor='let mod of Modules'>
+            <h3>{{ mod.module }}</h3>
+        
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+            </ul>
+        </section>
+    </div>
+
+</div>

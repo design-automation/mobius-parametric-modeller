@@ -1,0 +1,55 @@
+<div class='container'>
+
+	<div class='container__header'>
+		Mobius Editor	
+		<navigation></navigation>
+		<execute [flowchart]='flowchart'></execute>
+	</div>
+	
+	<div class='container__content'>
+		<split direction="horizontal">
+	
+			<split-area size="60">
+				<!-- Main Panel: Flowchart-->
+				<div class='content__panel'>
+					<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
+				</div>
+				
+				<div class='btn--container' style='position: absolute; top: 150px; left: 15px; display: flex; flex-direction: column; padding: 10px;'>
+					<file-new (create)='updateFile($event)'></file-new>
+					<file-load (loaded)='updateFile($event)'></file-load>
+					<file-save [file]='file'></file-save>
+				</div>
+			</split-area>
+			
+			<split-area size="40">
+				
+					<!-- Side content__Panel: Split into three panes -->
+					<split direction="vertical">
+	
+						<split-area size='60'>
+							<div class='content__panel'>
+								<parameter-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></parameter-editor>
+								<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></procedure-editor>
+							</div>
+						</split-area>
+						
+						<split-area size='40'>
+							<div class='content__panel'>
+								<mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
+							</div>
+						</split-area>
+					
+					</split>
+					
+			</split-area>
+	
+		</split>
+	</div>
+
+	<div class='container__footer'>
+		Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.
+	</div>
+
+
+</div>

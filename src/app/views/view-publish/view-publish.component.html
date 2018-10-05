@@ -1,0 +1,48 @@
+<div class='container'>
+
+	<div class='container__header'>
+		Mobius Viewer	
+		<navigation></navigation>
+		<execute [flowchart]='flowchart'></execute>
+	</div>
+
+	<div class='container__content'>
+		<file-new *ngIf='!flowchart'></file-new>
+
+		<split direction="horizontal" *ngIf='flowchart'>
+			<split-area size="60">
+				<!-- Main Panel: Flowchart-->
+				<div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>
+					<mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
+				</div>
+			</split-area>
+			
+			<split-area size="40">
+	
+					<!-- Side content__Panel: Split into three panes -->
+					<split direction="vertical">
+	
+						<split-area size='20'>
+							<div class='content__panel'>
+								<parameter-viewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></parameter-viewer>
+							</div>
+						</split-area>
+						
+						<!-- <split-area size='20'>
+							<div class='content__panel'>
+								 <flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
+							</div>
+						</split-area> -->
+					
+					</split>
+					
+			</split-area>
+		</split>
+	</div>
+
+	<div class='container__footer'>
+		Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.
+	</div>
+	
+	
+</div>

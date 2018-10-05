@@ -6,12 +6,14 @@
 
 import { INode } from '@models/node';
 import { IEdge } from '@models/edge';
+import { IFunction } from '@models/procedure';
 
 export interface IFlowchart{
 	language: string;
 
 	nodes: INode[];
 	edges: IEdge[];
+	functions: IFunction[];
 
 	meta: {
 		selected_nodes: number[];

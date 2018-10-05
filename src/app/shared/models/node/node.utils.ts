@@ -2,6 +2,7 @@ import { INode } from './node.interface';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { PortType, InputType, OutputType } from '@models/port';
 import { not } from '@angular/compiler/src/output/output_ast';
+import * as circularJSON from 'circular-json';
 
 export abstract class NodeUtils{
 
@@ -9,6 +10,7 @@ export abstract class NodeUtils{
         let node: INode = <INode>{
             name: "a_new_node", 
             position: {x: 0, y: 0}, 
+            type: '',
             procedure: [],
             state: {
                 procedure: undefined, 
@@ -42,6 +44,35 @@ export abstract class NodeUtils{
         return node;
     };
 
+    static getStartNode(): INode{
+        let node = NodeUtils.getNewNode();
+        node.name = 'start';
+        node.type = 'start';
+        node.position= {x: 0, y: 200}, 
+        node.inputs[0].name = 'start_input';
+        node.outputs[0].name = 'start_output';
+        return node;
+    };
+
+    static getEndNode(): INode{
+        let node = NodeUtils.getNewNode();
+        node.name = 'end';
+        node.type = 'end';
+        node.position= {x: 400, y: 200}, 
+        node.inputs[0].name = 'end_input';
+        node.outputs[0].name = 'end_output';
+        return node;
+    };
+    
+
+
+    static deselect_procedure(node: INode){
+        if (node.state.procedure){
+            node.state.procedure.selected = false;
+            node.state.procedure = undefined;
+        }
+    }
+
     static select_procedure(node: INode, procedure: IProcedure){
         
         if(node.state.procedure === procedure){
@@ -57,11 +88,8 @@ export abstract class NodeUtils{
         }
 
     }
-    
-    static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
-        let prod: IProcedure = <IProcedure>{};
-        prod.type= type;
-        
+
+    static insert_procedure(node: INode, prod: IProcedure){
         if (node.state.procedure){
             if (node.state.procedure.hasOwnProperty("children")){
                 node.state.procedure.children.push(prod);
@@ -84,8 +112,20 @@ export abstract class NodeUtils{
             node.procedure.push(prod);
         }
 
+    }
+    
+    static generateProdID(){
+        return 'prod-' + Math.random().toString(36).substr(2, 16);
+    }
+    static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
+        let prod: IProcedure = <IProcedure>{};
+        prod.type= type;
+        
+        NodeUtils.insert_procedure(node, prod);
+
         // add ID to the procedure
-        prod.ID = 'prod-' + Math.random().toString(36).substr(2, 16);
+        prod.ID = NodeUtils.generateProdID();
+
         console.log(prod.ID);
 
 
@@ -130,16 +170,36 @@ export abstract class NodeUtils{
                 prod.args = [];
 
             case ProcedureTypes.FUNCTION:
-                if(type == ProcedureTypes.FUNCTION){
-                    if(!data) throw Error('No function data');
-                    
-                    prod.meta = { module: data.module, name: data.name };
-                    prod.argCount = data.argCount + 1;
-                    prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
-                }
+                if(!data) throw Error('No function data');
+                
+                prod.meta = { module: data.module, name: data.name };
+                prod.argCount = data.argCount + 1;
+                prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
 
+            case ProcedureTypes.IMPORTED:
+                prod.meta = { module: data.module, name: data.name };
+                prod.argCount = data.argCount + 1;
+                prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
+                console.log('args:',prod);
         }
         
+    }
+
+    static updateID(prod: IProcedure): any{
+        if (prod.hasOwnProperty('children')){
+            prod.children.map((child: IProcedure) => {	
+                NodeUtils.updateID(child);	
+            });
+        }
+        prod.ID = NodeUtils.generateProdID();
+        return prod
+    }
+
+    static paste_procedure(node: INode, prod: IProcedure ){
+        const newProd = NodeUtils.updateID(circularJSON.parse(circularJSON.stringify(prod)));
+        
+        NodeUtils.insert_procedure(node, newProd);
+        NodeUtils.select_procedure(node, newProd);
     }
 
 }

@@ -7,6 +7,7 @@ export enum ProcedureTypes {
     WHILE, 
     BREAK, 
     CONTINUE,
-    FUNCTION
+    FUNCTION,
+    IMPORTED
 }
 

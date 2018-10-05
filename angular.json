@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mobius-core": {
+    "mobius-parametric-modeller": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -18,12 +18,15 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              { "glob": "**/*", "input": "./node_modules/cesium/Build/Cesium", "output": "/assets/cesium" } 
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
             ],
-            "scripts": []
+            "scripts": ["./node_modules/cesium/Build/Cesium/Cesium.js",
+                        "./node_modules/hammerjs/hammer.min.js"]
           },
           "configurations": {
             "production": {
@@ -48,18 +51,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mobius-core:build"
+            "browserTarget": "mobius-parametric-modeller:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "mobius-core:build:production"
+              "browserTarget": "mobius-parametric-modeller:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mobius-core:build"
+            "browserTarget": "mobius-parametric-modeller:build"
           }
         },
         "test": {
@@ -93,7 +96,7 @@
         }
       }
     },
-    "mobius-core-e2e": {
+    "mobius-parametric-modeller-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -102,7 +105,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "mobius-core:serve"
+            "devServerTarget": "mobius-parametric-modeller:serve"
           }
         },
         "lint": {
@@ -119,7 +122,7 @@
       }
     }
   },
-  "defaultProject": "mobius-core",
+  "defaultProject": "mobius-parametric-modeller",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

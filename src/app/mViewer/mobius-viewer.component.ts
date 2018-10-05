@@ -85,8 +85,7 @@ export class ViewerContainerComponent implements OnDestroy {
                 componentRef.instance["data"] = data;
             }
             catch(ex){
-                let data = {};
-                componentRef.instance["data"] = data;
+                componentRef.instance["data"] = cesium_default;
             }
             componentRef.instance["mode"] = 'editor';
             return componentRef;
@@ -125,10 +124,13 @@ export class ViewerContainerComponent implements OnDestroy {
                     componentRef.instance["data"] = data;
                 }
             } else if (this.activeView.name == 'mobius-cesium'){
-                let data = JSON.parse(this.node.outputs[0].value);
-                componentRef.instance["data"] = data;
-                } else{
-                componentRef.instance["node"] = this.node;
+                try{
+                    let data = JSON.parse(this.node.outputs[0].value);
+                    componentRef.instance["data"] = data;
+                }
+                catch(ex){
+                    componentRef.instance["data"] = cesium_default;
+                }
             }
         }
         catch(ex){

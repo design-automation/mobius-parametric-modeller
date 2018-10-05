@@ -18,9 +18,21 @@ import { DisplayComponent } from "./setting/display.copmponent";
 
 
 @NgModule({
-    imports: [       ],
-    exports: [],
-    declarations: [],
+    imports: [CommonModule,
+              AngularSplitModule,
+              MatTabsModule,
+              MatTooltipModule,
+              MatSliderModule,
+              FormsModule
+       ],
+    exports: [ MobiuscesiumComponent ],
+    declarations: [MobiuscesiumComponent,
+                    ViewerComponent,
+                    SettingComponent,
+                    DataComponent,
+                    SelectComponent,
+                    PublishComponent,
+                    DisplayComponent],
     providers: [DataService],
 })
 export class MobiusCesium {
@@ -33,5 +45,3 @@ export class MobiusCesium {
         };
     }
 }
-
-

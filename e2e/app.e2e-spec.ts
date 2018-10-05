@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('mobius-core App', () => {
+describe('mobius-parametric-modeller App', () => {
   let page: AppPage;
 
   beforeEach(() => {

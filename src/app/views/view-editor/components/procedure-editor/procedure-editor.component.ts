@@ -1,7 +1,8 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input, Output, EventEmitter} from '@angular/core';
 
 import { INode, NodeUtils } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
+import { IFlowchart } from '@models/flowchart';
 
 /*
  *	Displays the drag-drop procedure for a node
@@ -19,6 +20,8 @@ import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 export class ProcedureEditorComponent{
 
     @Input() node: INode;
+    @Input() functions: IFunction[];
+    @Output() imported = new EventEmitter();
     copiedProd: IProcedure;
 
     constructor() { }
@@ -29,10 +32,28 @@ export class ProcedureEditorComponent{
 
     deleteChild($event, index: number): void{
       this.node.procedure.splice(index, 1);
+      NodeUtils.deselect_procedure(this.node);
     }
 
-    selectProcedure($event, procedure: IProcedure): void{
+    selectProcedure($event): void{
       NodeUtils.select_procedure(this.node, $event);
+    }
+
+    setCopied($event){
+      console.log('pasting', $event)
+      this.copiedProd = $event;
+    }
+
+    pasteProd($event){
+      if (this.copiedProd){
+        console.log('pasting',this.copiedProd.ID)
+        NodeUtils.paste_procedure(this.node, this.copiedProd);
+        //this.copiedProd = undefined;
+      }
+    }
+
+    importFunction($event){
+      this.imported.emit($event);
     }
 
 }

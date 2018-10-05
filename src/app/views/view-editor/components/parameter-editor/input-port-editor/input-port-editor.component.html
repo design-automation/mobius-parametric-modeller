@@ -4,9 +4,17 @@
         <input [(ngModel)]='port.name' name='port.name' placeholder='Name of the the port'> 
     </div>
 
+
     <!-- TODO: Appropriate components for default inputs:  Slider / Boolean / Fileinput and-->
-    <div class='parameter__name'>
-        <input [(ngModel)]='port.default' name='port.default' placeholder='Default Value'> 
+    <div class='parameter__name' [ngSwitch]="port.meta.mode">
+        <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='port.default' name='port.default' placeholder='Default Value'>
+        <div *ngSwitchCase="PortTypes.Slider">
+            <input [(ngModel)]='port.default' value='port.default' disabled>
+            <input [(ngModel)]='port.default' name='port.default' type="range" >
+        </div>
+        <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='port.default' name='port.default' type="checkbox">
+        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='port.default' name='port.default' placeholder='Default URL'>
+        <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
     </div>
 
     <!-- Slider, SimpleInput ... etc -->
@@ -16,7 +24,7 @@
             [value]="PortTypes[ptype]" 
             [selected]="port.meta.mode == ptype">{{ptype}}</option>
     </select>
-
+    
     <button (click)='delete.emit()'>Delete</button>
 </div>
 

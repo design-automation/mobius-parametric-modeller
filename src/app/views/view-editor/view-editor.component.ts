@@ -30,5 +30,9 @@ export class ViewEditorComponent{
         this.file = this.dataService.file;
         this.flowchart = this.dataService.flowchart;
     }
+
+    importFunction($event){
+        this.flowchart.functions.push($event);
+    }
     
 }

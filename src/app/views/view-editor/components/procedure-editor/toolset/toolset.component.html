@@ -14,9 +14,20 @@
     <div class='toolset__functions'>
         <section *ngFor='let mod of Modules'>
             <h3>{{ mod.module }}</h3>
-        
             <ul class='toolset__functions--subset'>
                 <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+            </ul>
+        </section>
+    </div>
+    
+    <div class='toolset__functions'>
+        <section>
+            <h3>IMPORTED</h3>
+
+            <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
+            <input type="button" value="Import" onclick="document.getElementById('selectedFile').click();" />
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} </li>
             </ul>
         </section>
     </div>

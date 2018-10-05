@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlowchartViewerComponent } from './flowchart-viewer.component';
+import { FlowchartComponent } from './flowchart.component';
 
-describe('FlowchartViewerComponent', () => {
+describe('FlowchartComponent', () => {
 /*  let component: FlowchartViewerComponent;
   let fixture: ComponentFixture<FlowchartViewerComponent>;
 

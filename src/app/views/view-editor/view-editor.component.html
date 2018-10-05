@@ -30,7 +30,9 @@
 						<split-area size='60'>
 							<div class='content__panel'>
 								<parameter-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></parameter-editor>
-								<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></procedure-editor>
+								<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)'></procedure-editor>
+								<br>
+								<br>
 							</div>
 						</split-area>
 						

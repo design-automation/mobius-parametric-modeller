@@ -17,7 +17,6 @@ export class NodeComponent{
 
     @Output() action = new EventEmitter();
     
-    
     @HostListener('document:keypress', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent) { 
     }
@@ -38,6 +37,10 @@ export class NodeComponent{
 
     nodeCopy($event){
         this.action.emit({ action: ACTIONS.COPY });
+    }
+
+    nodeConnected($event){
+        this.action.emit({ action: ACTIONS.CONNECT, data: $event });
     }
 
 }

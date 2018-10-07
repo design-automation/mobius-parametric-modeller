@@ -19,11 +19,11 @@
     <div class='node__body'>
         
         <div class='container--input'>
-            <port *ngFor="let inp of node.inputs;" [data]='inp'></port>
+            <port *ngFor="let inp of node.inputs;" [data]='inp' (connected)='nodeConnected($event)'></port>
         </div>
 
-        <div class='container--output' sty>
-            <port class='port--invert' *ngFor="let oup of node.outputs;" [data]='oup'></port>
+        <div class='container--output'>
+            <port class='port--invert' *ngFor="let oup of node.outputs;" [data]='oup' (connected)='nodeConnected($event)'></port>
         </div>
 
     </div>

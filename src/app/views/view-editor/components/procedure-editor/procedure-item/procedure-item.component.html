@@ -2,7 +2,10 @@
     [class.selected]="data.selected"
     [class.error]="data.hasError"
     [ngSwitch]="data.type"
-    (click)='emitSelect($event, data)'>
+    (click)='emitSelect($event, data)'
+    (copy)='copyProd($event,data)'
+    (cut) ='cutProd($event,data)'
+    (paste)='pasteProd($event,data)'>
 
     <!-- Variable Assignment Template -->
     <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
@@ -25,7 +28,9 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild($event, idx)'></procedure-item>
+                    (delete)='deleteChild($event, idx)'
+                    (copied)='copyChild($event)'
+                    (pasteOn)='pasteChild($event)'></procedure-item>
         </div>
 
     </div>
@@ -40,7 +45,9 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild($event, idx)'></procedure-item>
+                    (delete)='deleteChild($event, idx)'
+                    (copied)='copyChild($event)'
+                    (pasteOn)='pasteChild($event)'></procedure-item>
         </div>
     </div>
 
@@ -52,7 +59,10 @@
             *ngFor="let line of data?.children; let idx=index" 
             [data]="line"
             (select)='selectChild($event, line)'
-            (delete)='deleteChild($event, idx)'></procedure-item>
+            (delete)='deleteChild($event, idx)'
+            (copied)='copyChild($event)'
+            (pasteOn)='pasteChild($event)'></procedure-item>
+
         </div>
     </div>
 
@@ -68,19 +78,20 @@
 
     <!-- Function Template -->
     <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
-            <input [(ngModel)]='data.args[0].value'
-                    placeholder={{data.args[0].name}}>  
-            = 
-            {{ data.meta.module }} ::: {{ data.meta.name }} 
-            (
-                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                    <input [(ngModel)]='p.value' placeholder={{p.name}}>    
-                </ng-container>
-            ) 
+        <input [(ngModel)]='data.args[0].value'
+                placeholder={{data.args[0].name}}>  
+        = 
+        {{ data.meta.module }} ::: {{ data.meta.name }} 
+        (
+            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                <input [(ngModel)]='p.value' placeholder={{p.name}}>    
+            </ng-container>
+        ) 
 
     </div>
 
-    <!-- FOREACH Template -->
+
+<!-- FOREACH Template -->
     <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.FOREACH">
             for 
             <input [(ngModel)]='data.args[0].value'
@@ -96,7 +107,9 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild($event, idx)'></procedure-item>
+                    (delete)='deleteChild($event, idx)'
+                    (copied)='copyChild($event)'
+                    (pasteOn)='pasteChild($event)'></procedure-item>
             </div>
     </div>
 
@@ -112,9 +125,27 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild($event, idx)'></procedure-item>
+                    (delete)='deleteChild($event, idx)'
+                    (copied)='copyChild($event)'
+                    (pasteOn)='pasteChild($event)'></procedure-item>
             </div>
     </div>
+    
+    <!-- Imported Function Template -->
+    <div class='line--imported' *ngSwitchCase="ProcedureTypes.IMPORTED">
+        <input [(ngModel)]='data.args[0].value'
+                placeholder={{data.args[0].name}}>  
+        = 
+        {{ data.meta.name }} 
+        (
+            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                <input [(ngModel)]='p.value' placeholder={{p.name}}>    
+            </ng-container>
+        ) 
+
+    </div>
+
+
                
     <button class='btn btn--delete' (click)='emitDelete()'>Delete</button>
 

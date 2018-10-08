@@ -9,3 +9,5 @@ declare module "*.mob" {
     const value: any;
     export default value;
 }
+
+declare var Cesium;

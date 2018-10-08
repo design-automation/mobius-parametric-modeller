@@ -3,8 +3,9 @@ import { NgClass } from '@angular/common';
 
 // todo: make internal to flowchart
 import { IFlowchart } from '@models/flowchart';
-import { NodeUtils } from '@models/node';
+import { NodeUtils, INode } from '@models/node';
 import { ACTIONS } from './node/node.actions';
+import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'flowchart',
@@ -17,6 +18,8 @@ export class FlowchartComponent{
 
   // TODO: Is this redundant?
   @Output() select = new EventEmitter();
+
+  copied: string;
 
   ngOnInit(){ }
 
@@ -37,7 +40,8 @@ export class FlowchartComponent{
           break;
 
         case ACTIONS.COPY:
-          // TODO: Add a copy function in NodeUtils / FlowchartUtils
+          console.log('copied node:', this.data.nodes[node_index]);
+          this.copied = circularJSON.stringify(this.data.nodes[node_index]);
           break;
 
     }
@@ -49,6 +53,23 @@ export class FlowchartComponent{
   }
 
   addNode(): void{  this.data.nodes.push(NodeUtils.getNewNode());  }
+
+  copyNode($event): void{
+    const node = this.data.nodes[this.data.meta.selected_nodes[0]];
+    if (node.type != 'start' && node.type != 'end'){
+      console.log('copied node:', node);
+      this.copied = circularJSON.stringify(node);
+    }
+  }
+
+  pasteNode($event): void{
+    if (this.copied){
+      const newNode = circularJSON.parse(this.copied);
+      newNode.position = {x:0, y:0};
+      this.data.nodes.push(newNode);
+      console.log('pasting node:', newNode);
+    }
+  }
 
 }
 

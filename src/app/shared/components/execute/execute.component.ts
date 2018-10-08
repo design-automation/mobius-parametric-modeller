@@ -31,7 +31,12 @@ import * as Modules from '@modules';
 export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
-
+    execute($event): void {
+        this.flowchart.nodes.map((node: INode) => {	
+            this.executeNode(node);	
+        });
+    }
+    /*
     execute($event): void {
         let all_nodes = this.flowchart.nodes;
         let executed = [];
@@ -60,7 +65,7 @@ export class ExecuteComponent {
 						for(let i=0; i < inputs.length; i++){
 							let inp = inputs[i];
 
-							if(inp.value && inp.value["port"] /*&& !inp.isFunction() */){
+							if(inp.value && inp.value["port"] && !inp.isFunction() s){
 								flag = false;
 								break;
 							}
@@ -78,12 +83,14 @@ export class ExecuteComponent {
 			} 
 		}
     }
+    */
 
-    executeNode(node: INode): void{
+    async executeNode(node: INode){
         let prodArr: string[] = [''];
         try{
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
-            const fn = new Function('__MODULES__', '__PRODARR__', CodeUtils.getNodeCode(node));
+            var fnString = await CodeUtils.getNodeCode(node, true);
+            const fn = new Function('__MODULES__', '__PRODARR__', fnString);
             let results = fn(Modules, prodArr);
             node.outputs.map( (oup) => {
                 if (typeof results[oup.name] === 'number' || results[oup.name] === undefined){

@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ParameterEditorComponent } from './parameter-editor.component';
+import { ParameterViewerComponent } from './parameter-viewer.component';
 
-describe('ParameterEditorComponent', () => {
+describe('ParameterViewerComponent', () => {
   /*let component: ParameterEditorComponent;
   let fixture: ComponentFixture<ParameterEditorComponent>;
 

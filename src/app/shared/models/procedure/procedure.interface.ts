@@ -24,7 +24,7 @@ export interface IModule{
 }
 
 export interface IFunction{
-    module: string,
+    module: any,
     name: string, 
     argCount: number,
     args: IArgument[];

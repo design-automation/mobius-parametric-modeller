@@ -17,4 +17,8 @@ export class InputPortEditorComponent{
 
     editOptions(): void{ }
 
+    onFileChange(event){
+      this.port.default = event.target.files[0];
+    }
+
 }

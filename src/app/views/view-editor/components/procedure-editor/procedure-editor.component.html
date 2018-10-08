@@ -5,14 +5,16 @@
 	</div>
 
 	<div class='container__content'>
-		<toolset (select)='add($event)'></toolset>
+		<toolset [functions]='functions' (select)='add($event)' (imported)='importFunction($event)'></toolset>
 		
 		<div id='procedure' class="container--procedure">
 			<procedure-item 
 				*ngFor="let line of node?.procedure; let idx=index" 
 				[data]="line"
-				(select)="selectProcedure($event, line)"
-				(delete)="deleteChild($event, idx)"></procedure-item>
+				(select)="selectProcedure($event)"
+				(delete)="deleteChild($event, idx)"
+				(copied)="setCopied($event)"
+				(pasteOn)="pasteProd($event)"></procedure-item>
 		</div>
 	</div>
 

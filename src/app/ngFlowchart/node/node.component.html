@@ -1,5 +1,6 @@
 <div class='node' 
     [class.node--selected]='selected'
+    [class.node--error]="node.hasError"
     id='n{{node_index}}'
     draggable='true'
     [style.top.px]='node.position.y'
@@ -29,7 +30,7 @@
     </div>
 
     <div class='node__actions'>
-        <button (click)='nodeDelete()'>Delete</button>
-        <button (click)='nodeCopy()'>Copy</button>
+        <button *ngIf="node.type!='start' && node.type!='end'" (click)='nodeDelete()'>Delete</button>
+        <button *ngIf="node.type!='start' && node.type!='end'" (click)='nodeCopy()'>Copy</button>
     </div>
 </div>

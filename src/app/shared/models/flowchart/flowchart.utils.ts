@@ -9,8 +9,9 @@ export class FlowchartUtils{
             meta: {
                 selected_nodes: [0]
             },
-            nodes: [  NodeUtils.getNewNode(), NodeUtils.getNewNode()  ],
+            nodes: [  NodeUtils.getStartNode(), NodeUtils.getEndNode()  ],
             edges: []
+            functions: []
         }
 
         return flw;

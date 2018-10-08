@@ -8,6 +8,17 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
+    "paths": {
+      "@assets/*" : ["assets/*"],
+      "@store" : ["src/app/core/store"],
+      "@models/*" : ["src/app/shared/models/*"],
+      "@utils" : ["src/app/shared/utils"],
+      "@shared/*" : ["src/app/shared/*"],
+      "@views" : ["src/app/views"],
+      "@mviewers": ["src/app/mobius-viewer/viewers"],
+      "@services" : ["src/app/core/services"],
+      "@modules" : ["src/app/core/modules"]
+    },
     "typeRoots": [
       "node_modules/@types"
     ],

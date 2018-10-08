@@ -21,6 +21,10 @@ $default-padding: 10px;
         border-color: blue;
     }
 
+    &.node--error{
+        border: 3px solid red;
+    }
+
     .node__name{
         background-color: white;
         color: $color-text-accent;

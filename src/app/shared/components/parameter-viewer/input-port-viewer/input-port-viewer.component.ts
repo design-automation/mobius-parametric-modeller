@@ -13,4 +13,8 @@ export class InputPortViewerComponent{
     @Input() port: IPortInput;
     constructor(){ }
 
+    onFileChange(event){
+      this.port.value = event.target.files[0];
+    }
+
 }

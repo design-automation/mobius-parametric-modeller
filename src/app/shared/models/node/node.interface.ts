@@ -16,7 +16,7 @@ export interface INode{
 	author?: string;
 	version?: number; 
 
-	// type: string;
+	type: string;
 	position: any;
 	enabled: boolean;
 	hasExecuted: boolean;

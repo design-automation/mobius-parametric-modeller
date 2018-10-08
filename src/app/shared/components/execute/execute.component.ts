@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
 import { INode } from '@models/node';
+import { IProcedure } from '@models/procedure';
 import { IEdge } from '@models/edge';
 
 import * as Modules from '@modules';
@@ -30,9 +31,7 @@ import * as Modules from '@modules';
 export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
-
     execute($event): void {
-
         let executed = [];
         let count = 0;
 		while(executed.length < this.flowchart.nodes.length || count > 100){
@@ -52,7 +51,7 @@ export class ExecuteComponent {
 					// if yes, execute add to executed
 					// if no, set flag to true 
 					// check status of the node; don't rerun
-					if( !node.enabled /* or hasFnOutput */ ){
+					if( !node.enabled ){ // or hasFnOutput  
 						// do nothing
 						executed.push(index);
 					}
@@ -85,17 +84,28 @@ export class ExecuteComponent {
 				}
 			} 
 		}
-
     }
+    */
 
-    executeNode(node: INode): void{
+    async executeNode(node: INode){
+        let prodArr: string[] = [''];
         try{
-
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
-            const fn = new Function('__MODULES__', CodeUtils.getNodeCode(node));
-            let results = fn(Modules);
+            var fnString = await CodeUtils.getNodeCode(node, true);
+            const fn = new Function('__MODULES__', '__PRODARR__', fnString);
+            let results = fn(Modules, prodArr);
             node.outputs.map( (oup) => {
-                oup.value = results[oup.name];
+                if (typeof results[oup.name] === 'number' || results[oup.name] === undefined){
+                    oup.value = results[oup.name];
+                } else if (typeof results[oup.name] === 'string'){
+                    oup.value = '"' + results[oup.name] + '"';
+                } else if (results[oup.name].constructor === [].constructor){
+                    oup.value = '[' + results[oup.name] + ']';
+                } else if (results[oup.name].constructor === {}.constructor) {
+                    oup.value = JSON.stringify(results[oup.name]);
+                } else {
+                    oup.value = results[oup.name];
+                }
 
                 // iterate through all edges
                 // for every edge with source as this output-port
@@ -108,13 +118,51 @@ export class ExecuteComponent {
                         console.log('Assigned value');
                     }
                 }
-
             });
 
             
         }
         catch(ex){
-            console.warn(`${node.name} errored`);
+            node.hasError = true;
+            //console.warn(`${node.name} errored`);
+
+            // Unexpected Identifier
+            // Unexpected token
+            let prodWithError: string = prodArr[0]; 
+            let markError = function(prod: IProcedure, id: string){
+                if(prod["ID"] && id && prod["ID"] == id){
+                    prod.hasError = true;
+                }
+                if(prod.hasOwnProperty('children')){
+                    prod.children.map(function(p){
+                        markError(p, id);
+                    });
+                }
+            }
+            if(prodWithError != ''){
+                node.procedure.map(function(prod: IProcedure){
+                    if(prod["ID"] == prodWithError){
+                        prod.hasError = true;
+                    }
+                    if(prod.hasOwnProperty('children')){
+                        prod.children.map(function(p){
+                            markError(p, prodWithError);
+                        })
+                    }
+                });
+            }
+            let error: Error;
+            if(ex.toString().indexOf("Unexpected identifier") > -1){
+                error = new Error("Unexpected Identifier error. Did you declare everything? Check that your strings are enclosed in quotes (\")");
+            }
+            else if(ex.toString().indexOf("Unexpected token") > -1){
+                error = new Error("Unexpected token error. Check for stray spaces or reserved keywords?");
+            }
+            else{
+                 error = new Error(ex);
+            }
+            throw error;
+            
         }
     }
 

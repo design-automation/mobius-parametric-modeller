@@ -20,7 +20,6 @@ export class LoadFileComponent{
     
     sendloadfile(){
         var selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
-        console.log(selectedFile);
         let stream = Observable.create(observer => {
             let reader = new FileReader();
             reader.onloadend = () => {

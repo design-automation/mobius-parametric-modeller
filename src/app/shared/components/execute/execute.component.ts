@@ -6,7 +6,7 @@ import { IProcedure } from '@models/procedure';
 import { IEdge } from '@models/edge';
 
 import * as Modules from '@modules';
-
+import * as gs from 'gs-json'
 
 @Component({
   selector: 'execute',
@@ -131,7 +131,7 @@ export class ExecuteComponent {
 
                     if( edge.source.id == oup.id ){
                         edge.target.value = oup.value; 
-                        console.log('Assigned value',edge.target);
+                        console.log('Assigned value', oup.value);
                     }
                 }
             });

@@ -59,26 +59,14 @@ export class ViewerContainerComponent implements OnDestroy {
     }
 
     createView(view: IView){
-        if (view.name == 'gs-viewer'){
-            let component = view.component;
-            let factory = this.r.resolveComponentFactory(component);
-            let componentRef = factory.create(this.injector);
-            componentRef.instance["node"] = this.node;
-            return componentRef;
-        } else if (view.name == 'mobius-cesium'){
-            let component = view.component;
-            let factory = this.r.resolveComponentFactory(component);
-            let componentRef = factory.create(this.injector);
-            componentRef.instance["node"] = this.node;
+        let component = view.component;
+        let factory = this.r.resolveComponentFactory(component);
+        let componentRef = factory.create(this.injector);
+        componentRef.instance["node"] = this.node;
+        if (view.name == 'mobius-cesium'){
             componentRef.instance["mode"] = 'editor';
-            return componentRef;
-        } else{
-            let component = view.component;
-            let factory = this.r.resolveComponentFactory(component);
-            let componentRef = factory.create(this.injector);
-            componentRef.instance["node"] = this.node;
-            return componentRef;
         }
+        return componentRef;
     }
 
     updateView(view: IView): void{

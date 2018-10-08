@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FlowchartComponent } from './flowchart.component';
 
 describe('FlowchartComponent', () => {
-/*  let component: FlowchartViewerComponent;
+  let component: FlowchartViewerComponent;
   let fixture: ComponentFixture<FlowchartViewerComponent>;
 
   beforeEach(async(() => {
@@ -21,5 +21,6 @@ describe('FlowchartComponent', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy();
-  });*/
+  });
 });
+*/

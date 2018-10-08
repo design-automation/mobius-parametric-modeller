@@ -68,15 +68,28 @@ export class ToolsetComponent{
                             };
                             func.args.push(arg);
                         }
+                        if (func.args.length == 0){
+                            resolve('error');
+                        }
                     }
                 }
+                if (!func.hasOwnProperty('argCount')){
+                    resolve('error');
+                }
                 resolve(func)
+            }
+            reader.onerror = function(){
+                resolve('error')
             }
             reader.readAsText($event.target.files[0])
         });
         const fnc = await p;
-        this.imported.emit(fnc);
         (<HTMLInputElement>document.getElementById('selectedFile')).value = "";
+        if (fnc === 'error'){
+            console.warn('Error reading file')
+            return
+        }
+        this.imported.emit(fnc);
     }
 
 }

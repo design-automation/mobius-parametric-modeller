@@ -1,12 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PortTypesAware } from '@shared/decorators';
+import { PortType } from '@models/port';
 
 @PortTypesAware
 @Component({
   selector: 'port',
   template: `
-            <div class='container--port' [class.invert]='data.type'>
-                <div class='port' 
+            <div class='container--port' [class.invert]='data.type' 
+                (drop)='portDrop($event)'
+                (dragover)='portDragOver($event)'
+                dropzone='link'>
+                <div *ngIf="dragable" class='port' 
+                    id={{data.id}}
                     draggable=true
                     (dragstart)='dragStartPort($event)'
                     (drag)='dragPort($event)'
@@ -42,6 +47,7 @@ import { PortTypesAware } from '@shared/decorators';
                 background-color: #222;
                 border-radius: 50%; 
                 margin-top: 6.5px;
+                z-index: 100;
         }
 
         input{
@@ -60,106 +66,76 @@ import { PortTypesAware } from '@shared/decorators';
        `]
 })
 export class PortComponent{
+
+    readonly dataTransferVar: string = 'connection';
+    
     @Input() data: any;
     @Input() zoom: number;
+    @Input() dragable: boolean;
+    @Output() connected = new EventEmitter();
 
     private dragStart = { x: 0, y: 0 };
+    private source: string;
     private mouse_pos = { 
         start: {x: 0, y: 0}, 
         current: {x: 0, y: 0}
     }
 
-    // dragStartPort($event): void{
-    //     $event.stopPropagation();
+    portDragOver($event): void{
+        $event.preventDefault();
+    }
 
-    //     $event.dataTransfer.setDragImage( new Image(), 0, 0);
-    //     this._startPort = port; 
-    //     this._startPort['address'] = address;
-    //     this._linkMode = true;
+    dragStartPort($event): void{
+        $event.stopPropagation();
+        $event.dataTransfer.setDragImage( new Image(), 0, 0 );
+    }
+
+    dragPort($event): void{
+        $event.stopPropagation();
+        $event.dataTransfer.setData(this.dataTransferVar, this.data.id );
+
+        // todo: compute total offset of this div dynamically
+        // urgent!
+        let relX: number = $event.clientX - this.dragStart.x; 
+        let relY: number = $event.clientY - this.dragStart.y;
   
-    //     let type: string;
-    //     if(port instanceof InputPort){
-    //       type = "pi";
-    //     }
-    //     if(port instanceof OutputPort){
-    //       type = "po";
-    //     }
+        this.mouse_pos.current.x += relX/this.zoom; 
+        this.mouse_pos.current.y += relY/this.zoom; 
+  
+        this.dragStart = {x: $event.clientX, y: $event.clientY}; 
+
+        // TODO: Check if it is target or source based on porttype
+        if(this.data.type == PortType.Input)
+            this.connected.emit({target: this.data, dragging: true, mouse: {x: $event.clientX, y: $event.clientY} });
+        else
+            this.connected.emit({source: this.data, dragging: true, mouse: {x: $event.clientX, y: $event.clientY} });
+    }
+
+    dragEndPort($event): void{
+        $event.stopPropagation();
+
+        let relX: number = $event.clientX - this.dragStart.x; 
+        let relY: number = $event.clientY - this.dragStart.y;   
+        this.mouse_pos.current.x += relX; 
+        this.mouse_pos.current.y += relY; 
         
-  
-    //     let port_position =  this.getPortPosition(address[0], address[1], type);
-  
-    //     this.mouse_pos.start = {x: port_position.x, y: port_position.y };
-    //     this.mouse_pos.current = {x: port_position.x, y: port_position.y };
+        this.dragStart = {x: 0, y: 0}; 
+
+        if(this.data.type == PortType.Input)
+            this.connected.emit({target: this.data, dragover: true});
+        else
+            this.connected.emit({source: this.data, dragover: true});
+
         
-    //     this.dragStart = {x: $event.clientX, y: $event.clientY};
-    // }
+    }
 
-    // dragPort($event): void{
-    //     $event.stopPropagation();
+    portDrop($event){
+        $event.preventDefault();
 
-    //     // todo: compute total offset of this div dynamically
-    //     // urgent!
-    //     let relX: number = $event.clientX - this.dragStart.x; 
-    //     let relY: number = $event.clientY - this.dragStart.y;
-  
-    //     this.mouse_pos.current.x += relX/this.zoom; 
-    //     this.mouse_pos.current.y += relY/this.zoom; 
-  
-    //     this.dragStart = {x: $event.clientX, y: $event.clientY}; 
-    // }
-
-    // dragEndPort(): void{
-    //     $event.stopPropagation();
-
-    //     let relX: number = $event.clientX - this.dragStart.x; 
-    //     let relY: number = $event.clientY - this.dragStart.y;
-    //     this.mouse_pos.current.x += relX; 
-    //     this.mouse_pos.current.y += relY; 
-        
-    //     this.dragStart = {x: 0, y: 0}; 
-  
-    //     this._startPort = undefined; 
-    //     this._endPort = undefined;
-    //     this._linkMode = false;
-    // }
-
-    // portDrop($event, port: InputPort|OutputPort, address: number[]){
-      
-    //     this._endPort = port; 
-    //     this._endPort["address"] = address;
-  
-    //     if(this._startPort !== undefined && this._endPort !== undefined){
-  
-  
-    //       let inputPort: number[]; 
-    //       let outputPort: number[];
-  
-    //       if( this._startPort instanceof InputPort ){
-    //         inputPort = this._startPort["address"];
-    //       }
-  
-    //       if( this._startPort instanceof OutputPort ){
-    //         outputPort = this._startPort["address"];
-    //       }
-  
-    //       if( this._endPort instanceof InputPort ){
-    //         inputPort = this._endPort["address"];
-    //       }
-  
-    //       if( this._endPort instanceof OutputPort ){
-    //         outputPort = this._startPort["address"];
-    //       }
-  
-    //       if( inputPort !== undefined && outputPort !== undefined){
-    //           this.addEdge(outputPort, inputPort);
-    //       }
-    //       else{
-    //           alert("Invalid connection")
-    //       }
-  
-    //       // clear the variables
-    //       this._startPort = undefined; 
-    //       this._endPort = undefined;
-    //     }
-    // }
+        // TODO: Check if it is target or source based on porttype
+        if(this.data.type == PortType.Input)
+            this.connected.emit({target: this.data});
+        else
+            this.connected.emit({source: this.data});
+    }
 }

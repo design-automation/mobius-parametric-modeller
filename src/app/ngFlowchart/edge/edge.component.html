@@ -1,8 +1,11 @@
 <div class="edge-container" 
 	style="position: absolute;"
-	[style.top.px]="40"
-	[style.left.px]="40"
+	[style.top.px]="getTop()"
+	[style.left.px]="getLeft()"
 	[style.width.px]="getWidth()"
-	[style.height.px]="getHeight()">
+	[style.height.px]="getHeight()"
+	[class.selected]='edge.selected'
+	(click)='select()'>
 	<canvas #canvas></canvas>
+	<button *ngIf='edge.selected' (click)='deleteEdge()'>Delete</button>
 </div>

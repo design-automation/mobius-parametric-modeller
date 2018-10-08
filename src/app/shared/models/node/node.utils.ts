@@ -1,6 +1,6 @@
 import { INode } from './node.interface';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
-import { PortType, InputType, OutputType } from '@models/port';
+import { PortType, InputType, OutputType, PortUtils } from '@models/port';
 import { not } from '@angular/compiler/src/output/output_ast';
 import * as circularJSON from 'circular-json';
 
@@ -10,6 +10,7 @@ export abstract class NodeUtils{
         let node: INode = <INode>{
             name: "a_new_node", 
             position: {x: 0, y: 0}, 
+            enabled: true,
             type: '',
             procedure: [],
             state: {
@@ -17,29 +18,8 @@ export abstract class NodeUtils{
                 input_port: undefined, 
                 output_port: undefined
             },
-            inputs: [
-                {
-                    name: 'first_input', 
-                    default: 0,
-                    value: undefined,
-                    isConnected: false,
-                    type: PortType.Input,
-                    meta: {
-                        mode: InputType.SimpleInput, 
-                        opts: undefined
-                    }
-                }
-            ],
-            outputs: [
-                {
-                    name: 'first_output', 
-                    isConnected: false,
-                    type: PortType.Output,
-                    meta: {
-                        mode: OutputType.Text, 
-                    }
-                }
-            ]
+            inputs: [ PortUtils.getNewInput() ],
+            outputs: [ PortUtils.getNewOutput() ]
         }
         return node;
     };

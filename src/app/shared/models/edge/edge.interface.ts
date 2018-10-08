@@ -1,4 +1,7 @@
+import { IPortInput, IPortOutput } from '@models/port';
+
 export interface IEdge{
-    source: number[], 
-    target: number[]
+    source: IPortOutput, 
+    target: IPortInput,
+    selected: boolean
 }

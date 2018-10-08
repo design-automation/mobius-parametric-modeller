@@ -31,22 +31,30 @@ import * as Modules from '@modules';
 export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
-    execute($event): void {
-        this.flowchart.nodes.map((node: INode) => {	
-            this.executeNode(node);	
-        });
-    }
-    /*
-    execute($event): void {
-        let all_nodes = this.flowchart.nodes;
+    async execute($event) {
         let executed = [];
-        
-		while(executed.length < all_nodes.length){
-			for(let index=0; index < all_nodes.length; index++){
+        let count = 0;
+        var checkOverflow = 0;
+        for (let node of this.flowchart.nodes){
+            if (node.type != 'start'){
+                for (let inp of node.inputs){
+                    if (inp.edge){
+                        inp.value = undefined;
+                    }
+                }
+            }
+        }
+        while(executed.length < this.flowchart.nodes.length || count > 100){
 
-				let node = all_nodes[index];
+            // TODO: Remove after debugging
+            count = count + 1;
+
+            for(let index=0; index < this.flowchart.nodes.length; index++){
+
+                let node = this.flowchart.nodes[index];
+                console.log(node)
 				if(executed.indexOf(index) > -1){
-					//do nothing
+					// node has already executed - do nothing
 				}
 				else{
 
@@ -55,35 +63,45 @@ export class ExecuteComponent {
 					// if no, set flag to true 
 					// check status of the node; don't rerun
 					if( !node.enabled ){ // or hasFnOutput  
-						// do nothing
+                        // do nothing
 						executed.push(index);
 					}
 					else{
 
-						let flag = true;
-						let inputs = node.inputs;
-						for(let i=0; i < inputs.length; i++){
-							let inp = inputs[i];
-
-							if(inp.value && inp.value["port"] && !inp.isFunction() s){
-								flag = false;
+                        let flag = true;
+						for(let i=0; i < node.inputs.length; i++){
+                            if (node.type == 'start'){
+                                break
+                            }
+							let inp = node.inputs[i];
+                            // if input has a value and the value has a port property
+                            // port property means the port is connected to another port - 
+                            // and is waiting for previous node to execute
+							if(inp.edge && !inp.value){
+                                flag = false;
 								break;
 							}
 						}
 
+                        // if there is a missing input, the flag is false
 						if(flag){
                             console.log(`${node.name} executing...`);
-                            this.executeNode(node);
-							this.updateDependentInputs(node, index); 
+                            await this.executeNode(node);
 							executed.push(index);
-						}
+                        }
+                        else{
+                            checkOverflow += 1;
+                            if (checkOverflow > 100){
+                                throw Error;
+                            }
+                            console.log(`${node.name} waiting for inputs...`);
+                        }
 
 					}
 				}
 			} 
 		}
     }
-    */
 
     async executeNode(node: INode){
         let prodArr: string[] = [''];
@@ -104,7 +122,20 @@ export class ExecuteComponent {
                 } else {
                     oup.value = results[oup.name];
                 }
+
+                // iterate through all edges
+                // for every edge with source as this output-port
+                // update the connected input-port
+                for(let edge of this.flowchart.edges){
+                    //let edge: IEdge = this.flowchart.edges[e];
+
+                    if( edge.source.id == oup.id ){
+                        edge.target.value = oup.value; 
+                        console.log('Assigned value',edge.target);
+                    }
+                }
             });
+
             
         }
         catch(ex){
@@ -151,25 +182,4 @@ export class ExecuteComponent {
         }
     }
 
-    updateDependentInputs(node: INode, originalRank: number): void{
-
-		let selectedEdges: IEdge[] = this.flowchart.edges.filter(function(edge){
-			return edge.target[0] == originalRank;
-		});
-
-		for( let e=0;  e < selectedEdges.length; e++ ){
-
-			let edge: IEdge = selectedEdges[e];
-			let inputNode: INode = this.flowchart.nodes[ edge.source[0] ];
-
-			// set computed value of port
-			// should this be from within the node?
-			let outputPort =  node.outputs[ edge.target[1] ];
-			let inputPort = inputNode.inputs[ edge.source[1] ];
-
-
-			inputPort.value =  JSON.parse(JSON.stringify( outputPort.value )) ;
-
-		}
-	}
 }

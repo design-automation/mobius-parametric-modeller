@@ -10,7 +10,7 @@ export class FlowchartUtils{
                 selected_nodes: [0]
             },
             nodes: [  NodeUtils.getStartNode(), NodeUtils.getEndNode()  ],
-            edges: [ {source: [0, 0], target: [1, 0] } ],
+            edges: [],
             functions: []
         }
 

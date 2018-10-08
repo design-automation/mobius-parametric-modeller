@@ -97,11 +97,7 @@ export class ViewerContainerComponent implements OnDestroy {
     updateValue(){
         try{
             let componentRef =  this.views[ this.activeView.name ]; 
-            if (this.activeView.name == 'gs-viewer'){
-                componentRef.instance["node"] = this.node;
-            } else if (this.activeView.name == 'mobius-cesium'){
-                componentRef.instance["node"] = this.node;
-            }
+            componentRef.instance["node"] = this.node;
         }
         catch(ex){
             console.log(`Active View not defined`);

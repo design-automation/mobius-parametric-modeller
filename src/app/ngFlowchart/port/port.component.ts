@@ -10,7 +10,7 @@ import { PortType } from '@models/port';
                 (drop)='portDrop($event)'
                 (dragover)='portDragOver($event)'
                 dropzone='link'>
-                <div class='port' 
+                <div *ngIf="dragable" class='port' 
                     id={{data.id}}
                     draggable=true
                     (dragstart)='dragStartPort($event)'
@@ -71,6 +71,7 @@ export class PortComponent{
     
     @Input() data: any;
     @Input() zoom: number;
+    @Input() dragable: boolean;
     @Output() connected = new EventEmitter();
 
     private dragStart = { x: 0, y: 0 };

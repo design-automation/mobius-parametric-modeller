@@ -9,6 +9,7 @@ interface IPort extends IArgument{
 
 export interface IPortInput extends IPort{
     type: PortType.Input,
+    edge: any,
     meta: {
         mode: InputType, 
         opts: any

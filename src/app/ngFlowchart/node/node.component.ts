@@ -43,4 +43,11 @@ export class NodeComponent{
         this.action.emit({ action: ACTIONS.CONNECT, data: $event });
     }
 
+    inputDragable(): boolean{
+        return !(this.node.type == 'start');
+    }
+
+    outputDragable(): boolean{
+        return !(this.node.type == 'end');
+    }
 }

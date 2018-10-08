@@ -31,17 +31,28 @@ import * as Modules from '@modules';
 export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
-    execute($event): void {
+    async execute($event) {
         let executed = [];
         let count = 0;
-		while(executed.length < this.flowchart.nodes.length || count > 100){
+        var checkOverflow = 0;
+        for (let node of this.flowchart.nodes){
+            if (node.type != 'start'){
+                for (let inp of node.inputs){
+                    if (inp.edge){
+                        inp.value = undefined;
+                    }
+                }
+            }
+        }
+        while(executed.length < this.flowchart.nodes.length || count > 100){
 
             // TODO: Remove after debugging
             count = count + 1;
 
             for(let index=0; index < this.flowchart.nodes.length; index++){
 
-				let node = this.flowchart.nodes[index];
+                let node = this.flowchart.nodes[index];
+                console.log(node)
 				if(executed.indexOf(index) > -1){
 					// node has already executed - do nothing
 				}
@@ -52,19 +63,21 @@ export class ExecuteComponent {
 					// if no, set flag to true 
 					// check status of the node; don't rerun
 					if( !node.enabled ){ // or hasFnOutput  
-						// do nothing
+                        // do nothing
 						executed.push(index);
 					}
 					else{
 
-						let flag = true;
+                        let flag = true;
 						for(let i=0; i < node.inputs.length; i++){
+                            if (node.type == 'start'){
+                                break
+                            }
 							let inp = node.inputs[i];
-
                             // if input has a value and the value has a port property
                             // port property means the port is connected to another port - 
                             // and is waiting for previous node to execute
-							if(inp.value && inp.value["port"]){
+							if(inp.edge && !inp.value){
                                 flag = false;
 								break;
 							}
@@ -73,10 +86,14 @@ export class ExecuteComponent {
                         // if there is a missing input, the flag is false
 						if(flag){
                             console.log(`${node.name} executing...`);
-                            this.executeNode(node);
+                            await this.executeNode(node);
 							executed.push(index);
                         }
                         else{
+                            checkOverflow += 1;
+                            if (checkOverflow > 100){
+                                throw Error;
+                            }
                             console.log(`${node.name} waiting for inputs...`);
                         }
 
@@ -85,7 +102,6 @@ export class ExecuteComponent {
 			} 
 		}
     }
-    */
 
     async executeNode(node: INode){
         let prodArr: string[] = [''];
@@ -110,12 +126,12 @@ export class ExecuteComponent {
                 // iterate through all edges
                 // for every edge with source as this output-port
                 // update the connected input-port
-                for(let e=0; e < this.flowchart.edges.length; e++){
-                    let edge: IEdge = this.flowchart.edges[e];
+                for(let edge of this.flowchart.edges){
+                    //let edge: IEdge = this.flowchart.edges[e];
 
                     if( edge.source.id == oup.id ){
                         edge.target.value = oup.value; 
-                        console.log('Assigned value');
+                        console.log('Assigned value',edge.target);
                     }
                 }
             });

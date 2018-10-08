@@ -66,7 +66,17 @@ export class FlowchartComponent{
           if(this.edge.source && this.edge.target){
             // add the edge
             this.data.edges.push(this.edge);
-            this.edge.target.value = {port: this.edge.source.id};
+
+            // remove existing edge connected to target port
+            if (this.edge.target.edge){
+              for (let edge_index in this.data.edges){
+                if (this.data.edges[edge_index] == this.edge.target.edge){
+                  this.data.edges.splice(parseInt(edge_index), 1); 
+                }
+              }
+            }
+            // update target port's edge
+            this.edge.target.edge = this.edge;
             this.edge = { source: undefined, target: undefined, selected: false };
             this.temporaryEdge = false;
           }
@@ -83,7 +93,10 @@ export class FlowchartComponent{
 
   addNode(): void{  this.data.nodes.push(NodeUtils.getNewNode());  }
 
-  deleteEdge(edge_index){ this.data.edges.splice(edge_index, 1); }
+  deleteEdge(edge_index){ 
+    this.data.edges[edge_index].target.edge = undefined;
+    this.data.edges.splice(edge_index, 1); 
+  }
 
   copyNode($event): void{
     const node = this.data.nodes[this.data.meta.selected_nodes[0]];

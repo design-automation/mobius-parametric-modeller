@@ -69,13 +69,7 @@ export class ViewerContainerComponent implements OnDestroy {
             let component = view.component;
             let factory = this.r.resolveComponentFactory(component);
             let componentRef = factory.create(this.injector);
-            try{
-                let data = JSON.parse(this.node.outputs[0].value);
-                componentRef.instance["data"] = data;
-            }
-            catch(ex){
-                componentRef.instance["data"] = cesium_default;
-            }
+            componentRef.instance["node"] = this.node;
             componentRef.instance["mode"] = 'editor';
             return componentRef;
         } else{
@@ -106,13 +100,7 @@ export class ViewerContainerComponent implements OnDestroy {
             if (this.activeView.name == 'gs-viewer'){
                 componentRef.instance["node"] = this.node;
             } else if (this.activeView.name == 'mobius-cesium'){
-                try{
-                    let data = JSON.parse(this.node.outputs[0].value);
-                    componentRef.instance["data"] = data;
-                }
-                catch(ex){
-                    componentRef.instance["data"] = cesium_default;
-                }
+                componentRef.instance["node"] = this.node;
             }
         }
         catch(ex){

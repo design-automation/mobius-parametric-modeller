@@ -1,6 +1,16 @@
 import { Component, OnInit, Input } from "@angular/core";
 import {DataService} from "./data/data.service";
 import { trigger, state, style, transition, animate, keyframes } from "@angular/animations";
+import { INode } from "@models/node";
+
+const defaultText = `{
+  "type": "FeatureCollection",
+  "name": "default",
+  "crs": { "type": "name", "properties": { "name": "0" } },
+  "features": [
+  { "type": "Feature", "properties": { "OBJECTID": 1, "OID_1": 0, "INC_CRC": "593E775CE158CC1F", "FMEL_UPD_D": "2014\/06\/23", "X_ADDR": 26044.8109, "Y_ADDR": 48171.43, "SHAPE_Leng": 298.85929234299999, "SHAPE_Area": 1070.8993405900001 }, "geometry": { "type": "MultiPolygon", "coordinates": [] } }
+  ]
+  }`;
 
 @Component({
   selector: "mobius-cesium",
@@ -22,8 +32,10 @@ import { trigger, state, style, transition, animate, keyframes } from "@angular/
   ],
 })
 export class MobiuscesiumComponent {
-  @Input() data: JSON;
+  @Input() node: INode;
   @Input() mode: string;
+  data: JSON;
+  text: string;
   private showFiller:boolean;
 
   constructor(private dataService: DataService) {
@@ -35,19 +47,24 @@ export class MobiuscesiumComponent {
   		this.dataService.setGsModel(data);
   	}
   	catch(ex) {
+			this.text = '';
   		this.data = undefined;
 
   	}
   }
   //pass data to dataService
   public ngOnInit() {
+		this.text = this.node.outputs[0].value;
+		this.data = JSON.parse(this.text||defaultText);
   	this.setModel(this.data);
     this.dataService.setMode(this.mode);
     // console.log(this.data);
 
   }
   public ngDoCheck() {
-  	if(this.dataService.getGsModel() !== this.data) {
+  	if(this.text !== this.node.outputs[0].value) {
+			this.text = this.node.outputs[0].value;
+      this.data = JSON.parse(this.text||defaultText);
   		this.setModel(this.data);
       // console.log("data changed");
       // console.log("mode:", this.mode);

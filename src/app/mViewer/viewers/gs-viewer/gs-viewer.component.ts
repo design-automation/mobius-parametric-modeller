@@ -21,8 +21,6 @@ export class GSViewerComponent {
 
 	setModel(data: gs.IModel): void{
 		try{
-			console.log('dataservice',this.dataService)
-			console.log('data',data) 
 			this.dataService.setGsModel(data);
 		}
 		catch(ex){

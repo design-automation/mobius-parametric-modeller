@@ -12,7 +12,7 @@ export const VIEWER_ARR = [
     // Step-2: Add Component here
     //CesiumViewerComponent,
     GSViewerComponent,
-    MobiuscesiumComponent,
+    //MobiuscesiumComponent,
 ];
 
 export const Viewers: IView[] = [
@@ -22,6 +22,6 @@ export const Viewers: IView[] = [
     //{ name: 'three-viewer', icon: undefined, component: ThreeViewerComponent },
     //{ name: 'cesium-viewer', icon: undefined, component: CesiumViewerComponent },
     { name: 'gs-viewer', icon: undefined, component: GSViewerComponent },
-    { name: 'mobius-cesium', icon: undefined, component: MobiuscesiumComponent },
+    //{ name: 'mobius-cesium', icon: undefined, component: MobiuscesiumComponent },
 ];
 

@@ -153,11 +153,12 @@ export class CodeUtils {
                 input = await p;
             } else {
                 input = inp.value || inp.default;
-                if  (typeof input === 'string'){
-                    if (node.type != 'start'){
+                if (typeof input === 'number' || input === undefined){
+                    // do nothing
+                } else if (typeof input === 'string'){
+                    if(node.type != 'start' && inp.edge){
                         input = '"' + input + '"';
                     }
-                    // else do nothing
                 } else if (input.constructor === [].constructor){
                     input = '[' + input + ']';
                 } else if (input.constructor === {}.constructor) {

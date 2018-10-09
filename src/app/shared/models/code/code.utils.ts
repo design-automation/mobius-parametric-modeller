@@ -153,10 +153,9 @@ export class CodeUtils {
                 if (typeof input === 'number' || input === undefined){
                     // do nothing
                 } else if (typeof input === 'string'){
-                    if (isNaN(input)){
+                    if(node.type != 'start' && inp.edge){
                         input = '"' + input + '"';
                     }
-                    // else do nothing
                 } else if (input.constructor === [].constructor){
                     input = '[' + input + ']';
                 } else if (input.constructor === {}.constructor) {

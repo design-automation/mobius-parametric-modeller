@@ -1,14 +1,5 @@
 import * as gs from "gs-json";
 
-/**
- * Creates a new model and populates the model with data.
- *
- * @param model_data The model data in gs-json format.
- * @returns New model if successful, null if unsuccessful or on error.
- */
-export function FromData(model_data: string): gs.IModel {
-    return new gs.Model(JSON.parse(model_data));
-}
 
 /**
  * Save a model to file as gs-json data.

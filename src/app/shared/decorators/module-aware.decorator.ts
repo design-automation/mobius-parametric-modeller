@@ -32,7 +32,10 @@ function extract_params(func: Function): IArgument[] {
 export function ModuleAware(constructor: Function) {
     let module_list = [];
     for( let m_name in Modules ){
-        
+        if (m_name == 'gs' || m_name == 'gsConstructor'){
+            continue
+        }
+
         let modObj = <IModule>{};
         modObj.module = m_name;
         modObj.functions = [];

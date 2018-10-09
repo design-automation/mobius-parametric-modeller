@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { gsConstructor } from '@modules';
 
 @Component({
   selector: 'text-viewer',
@@ -42,6 +43,8 @@ export class TextViewerComponent{
         this.outputs.push('[' + oup.value + ']');
       } else if (oup.value.constructor === {}.constructor) {
         this.outputs.push(JSON.stringify(oup.value));
+      } else if (oup.value.constructor === gsConstructor) {
+        this.outputs.push(JSON.stringify(oup.value.toJSON()));
       } else {
         console.log('Unknown output type:', oup.value);
         this.outputs.push(oup.value);
@@ -62,6 +65,8 @@ export class TextViewerComponent{
         this.outputs.push('[' + oup.value + ']');
       } else if (oup.value.constructor === {}.constructor) {
         this.outputs.push(JSON.stringify(oup.value));
+      } else if (oup.value.constructor === gsConstructor) {
+        this.outputs.push(JSON.stringify(oup.value.toJSON()));
       } else {
         console.log('Unknown output type:', oup.value);
         this.outputs.push(oup.value);

@@ -7,6 +7,9 @@ import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { promise } from 'protractor';
 
+import { gsConstructor } from '@modules';
+
+
 export class CodeUtils {
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string {
@@ -128,7 +131,7 @@ export class CodeUtils {
 
         // input initializations
         for (let inp of node.inputs){
-            var input: any;
+            let input: any;
             if (inp.meta.mode == InputType.URL){
                 const p = new Promise((resolve) => {
                     let request = new XMLHttpRequest();
@@ -150,10 +153,8 @@ export class CodeUtils {
                 input = await p;
             } else {
                 input = inp.value || inp.default;
-                if (typeof input === 'number' || input === undefined){
-                    // do nothing
-                } else if (typeof input === 'string'){
-                    if (isNaN(input)){
+                if  (typeof input === 'string'){
+                    if (node.type != 'start'){
                         input = '"' + input + '"';
                     }
                     // else do nothing
@@ -161,7 +162,9 @@ export class CodeUtils {
                     input = '[' + input + ']';
                 } else if (input.constructor === {}.constructor) {
                     input = JSON.stringify(input);
-                } else {
+                } else if (input.constructor === gsConstructor) {
+                    input = `new __MODULES__.gs.Model(${input.toJSON()})`
+                } else{
                     // do nothing
                 }
             }
@@ -170,7 +173,7 @@ export class CodeUtils {
         };
 
         for (let oup of node.outputs){
-            const line = `let ${oup.name} = ${oup.value || oup.default};`;
+            const line = `let ${oup.name} = undefined;`;
             codeStr.push(line);
             varsDefined.push(oup.name);
         };

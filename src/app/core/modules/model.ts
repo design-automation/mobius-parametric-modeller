@@ -31,6 +31,16 @@ export function New(): gs.IModel {
 //  ===============================================================================================================
 
 /**
+ * Creates a new model and populates the model with data.
+ *
+ * @param model_data The model data in gs-json format.
+ * @returns New model if successful, null if unsuccessful or on error.
+ */
+export function FromData(model_data: string): gs.IModel {
+    return new gs.Model(JSON.parse(model_data));
+}
+
+/**
  * Merges the second model into the first model. The geometry, attribues, and groups are all merged.
  * If the models contain contain groups with the same names, then the groups will be merged.
  *

@@ -10,12 +10,13 @@ import { PortType } from '@models/port';
                 (drop)='portDrop($event)'
                 (dragover)='portDragOver($event)'
                 dropzone='link'>
-                <div *ngIf="dragable" class='port' 
+                <div class='port' *ngIf="dragable; else hiddenPort"  
                     id={{data.id}}
                     draggable=true
                     (dragstart)='dragStartPort($event)'
                     (drag)='dragPort($event)'
                     (dragend)='dragEndPort($event)'></div>
+                <ng-template #hiddenPort><div class='hiddenPort'></div></ng-template>
                 <input autocomplete=off [(ngModel)]='data.name' placeholder='port_name'>
             </div>
             `,
@@ -41,13 +42,17 @@ import { PortType } from '@models/port';
         }
         
         .port {
-                width: 5px; 
-                height: 5px;
-                border: 2px solid #222;
-                background-color: #222;
-                border-radius: 50%; 
-                margin-top: 6.5px;
-                z-index: 100;
+            width: 5px; 
+            height: 5px;
+            border: 2px solid #222;
+            background-color: #222;
+            border-radius: 50%; 
+            margin-top: 6.5px;
+            z-index: 100;
+        }
+        
+        .hiddenPort {
+            margin: 0px 5px; 
         }
 
         input{

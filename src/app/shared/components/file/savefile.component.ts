@@ -24,12 +24,12 @@ export class SaveFileComponent{
         for (let node of savedfile.flowchart.nodes){
             for (let input of node.inputs){
                 if (input.hasOwnProperty('value')){
-                    input.value = ""
+                    input.value = undefined;
                 }
             }
             for (let output of node.outputs){
                 if (output.hasOwnProperty('value')){
-                    output.value = ""
+                    output.value = undefined;
                 }
             }
         }

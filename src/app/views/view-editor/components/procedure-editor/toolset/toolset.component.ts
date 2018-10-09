@@ -41,7 +41,6 @@ export class ToolsetComponent{
     }
 
     add_imported_function(fnData){
-        console.log('........',fnData);
         this.select.emit( { type: ProcedureTypes.IMPORTED, data: fnData } ); 
     }
 

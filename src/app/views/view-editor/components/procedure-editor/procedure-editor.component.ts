@@ -35,8 +35,12 @@ export class ProcedureEditorComponent{
       NodeUtils.deselect_procedure(this.node);
     }
 
-    selectProcedure($event): void{
-      NodeUtils.select_procedure(this.node, $event);
+    selectProcedure($event, line): void{
+      if ($event.target){
+        NodeUtils.select_procedure(this.node, line);
+      } else{
+        NodeUtils.select_procedure(this.node, $event);
+      }
     }
 
     setCopied($event){

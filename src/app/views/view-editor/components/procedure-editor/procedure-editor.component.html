@@ -11,7 +11,7 @@
 			<procedure-item 
 				*ngFor="let line of node?.procedure; let idx=index" 
 				[data]="line"
-				(select)="selectProcedure($event)"
+				(select)="selectProcedure($event,line)"
 				(delete)="deleteChild($event, idx)"
 				(copied)="setCopied($event)"
 				(pasteOn)="pasteProd($event)"></procedure-item>

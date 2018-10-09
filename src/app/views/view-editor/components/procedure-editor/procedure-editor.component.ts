@@ -40,7 +40,7 @@ export class ProcedureEditorComponent{
     }
 
     setCopied($event){
-      console.log('pasting', $event)
+      console.log('copying', $event)
       this.copiedProd = $event;
     }
 

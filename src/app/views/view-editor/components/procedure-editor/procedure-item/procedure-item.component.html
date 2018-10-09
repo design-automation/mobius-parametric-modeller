@@ -9,18 +9,21 @@
 
     <!-- Variable Assignment Template -->
     <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
-        <input [(ngModel)]='data.args[0].value'
+        <input (cut)='stopProp()' (paste)='stopProp()'
+               [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  
         = 
-        <input [(ngModel)]='data.args[1].value'
+        <input (cut)='stopProp()' (paste)='stopProp()'
+               [(ngModel)]='data.args[1].value'
                name='data.args[1].name'
                placeholder={{data.args[1].name}}>  
     </div>
 
     <!-- IF Template -->
     <div class='line--if hasChildren' *ngSwitchCase="ProcedureTypes.IF">
-       if ( <input [(ngModel)]='data.args[0].value'
+       if ( <input (cut)='stopProp()' (paste)='stopProp()'
+               [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
         <div class='container--nested'>
@@ -37,7 +40,8 @@
 
     <!-- ELSEIF Template -->
     <div class='line--elseif hasChildren' *ngSwitchCase="ProcedureTypes.ELSEIF">
-       elseif ( <input [(ngModel)]='data.args[0].value'
+       elseif ( <input (cut)='stopProp()' (paste)='stopProp()' 
+               [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
         <div class='container--nested'>
@@ -78,13 +82,13 @@
 
     <!-- Function Template -->
     <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
-        <input [(ngModel)]='data.args[0].value'
+        <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='data.args[0].value'
                 placeholder={{data.args[0].name}}>  
         = 
         {{ data.meta.module }}.{{ data.meta.name }} 
         (
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                <input [(ngModel)]='p.value' placeholder={{p.name}}>    
+                <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='p.value' placeholder={{p.name}}>    
             </ng-container>
         ) 
 
@@ -94,11 +98,13 @@
 <!-- FOREACH Template -->
     <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.FOREACH">
             for 
-            <input [(ngModel)]='data.args[0].value'
+            <input (cut)='stopProp()' (paste)='stopProp()'
+                   [(ngModel)]='data.args[0].value'
                    name='data.args[0].name'
                    placeholder={{data.args[0].name}}>  
             in 
-            <input [(ngModel)]='data.args[1].value'
+            <input (cut)='stopProp()' (paste)='stopProp()'
+                   [(ngModel)]='data.args[1].value'
                    name='data.args[1].name'
                    placeholder={{data.args[1].name}}>  
                    
@@ -116,7 +122,8 @@
     <!-- WHILE Template -->
     <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.WHILE">
             while 
-            <input [(ngModel)]='data.args[0].value'
+            <input (cut)='stopProp()' (paste)='stopProp()'
+                   [(ngModel)]='data.args[0].value'
                    name='data.args[0].name'
                    placeholder={{data.args[0].name}}>  
 
@@ -133,13 +140,13 @@
     
     <!-- Imported Function Template -->
     <div class='line--imported' *ngSwitchCase="ProcedureTypes.IMPORTED">
-        <input [(ngModel)]='data.args[0].value'
+        <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='data.args[0].value'
                 placeholder={{data.args[0].name}}>  
         = 
         {{ data.meta.name }} 
         (
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                <input [(ngModel)]='p.value' placeholder={{p.name}}>    
+                <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='p.value' placeholder={{p.name}}>    
             </ng-container>
         ) 
 

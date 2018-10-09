@@ -59,4 +59,8 @@ export class ProcedureItemComponent{
         this.pasteOn.emit($event);
     }
 
+    stopProp($event):void{
+        event.stopPropagation();
+    }
+
 }

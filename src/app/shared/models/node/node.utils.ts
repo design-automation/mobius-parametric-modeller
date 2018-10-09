@@ -113,7 +113,6 @@ export abstract class NodeUtils{
         NodeUtils.select_procedure(node, prod);
 
         switch(prod.type){
-
             case ProcedureTypes.VARIABLE:
                 prod.argCount = 2;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
@@ -148,6 +147,7 @@ export abstract class NodeUtils{
             case ProcedureTypes.CONTINUE:
                 prod.argCount = 0;
                 prod.args = [];
+                break;
 
             case ProcedureTypes.FUNCTION:
                 if(!data) throw Error('No function data');
@@ -155,12 +155,13 @@ export abstract class NodeUtils{
                 prod.meta = { module: data.module, name: data.name };
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
+                break;
 
             case ProcedureTypes.IMPORTED:
                 prod.meta = { module: data.module, name: data.name };
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
-                console.log('args:',prod);
+                break;
         }
         
     }

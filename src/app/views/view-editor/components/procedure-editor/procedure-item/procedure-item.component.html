@@ -81,7 +81,7 @@
         <input [(ngModel)]='data.args[0].value'
                 placeholder={{data.args[0].name}}>  
         = 
-        {{ data.meta.module }} ::: {{ data.meta.name }} 
+        {{ data.meta.module }}.{{ data.meta.name }} 
         (
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input [(ngModel)]='p.value' placeholder={{p.name}}>    

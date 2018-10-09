@@ -36,8 +36,13 @@ export function New(): gs.IModel {
  * @param model_data The model data in gs-json format.
  * @returns New model if successful, null if unsuccessful or on error.
  */
-export function FromData(model_data: string): gs.IModel {
-    return new gs.Model(JSON.parse(model_data));
+export function FromData(model_data: any): gs.IModel {
+    if (typeof model_data == 'string'){
+        return new gs.Model(JSON.parse(model_data));
+    }
+    else{
+        return new gs.Model(model_data);
+    }
 }
 
 /**

@@ -4,7 +4,7 @@ import { gsConstructor } from '@modules';
 @Component({
   selector: 'text-viewer',
   template: `<h3>Text Viewer :: {{ node?.name }}</h3>
-             <div>{{ outputs || "no-value" }}</div>`,
+             <div *ngFor="let oup of outputs; let ind = index"><h5>{{node?.outputs[ind].name}}:</h5>{{oup}}<br><br></div>`,
   styles: []
 })
 export class TextViewerComponent{
@@ -44,7 +44,7 @@ export class TextViewerComponent{
       } else if (oup.value.constructor === {}.constructor) {
         this.outputs.push(JSON.stringify(oup.value));
       } else if (oup.value.constructor === gsConstructor) {
-        this.outputs.push(JSON.stringify(oup.value.toJSON()));
+        this.outputs.push(oup.value.toJSON());
       } else {
         console.log('Unknown output type:', oup.value);
         this.outputs.push(oup.value);

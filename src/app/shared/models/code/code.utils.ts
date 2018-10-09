@@ -128,7 +128,7 @@ export class CodeUtils {
 
         // input initializations
         for (let inp of node.inputs){
-            var line = `let ${inp.name} = `;
+            var input: any;
             if (inp.meta.mode == InputType.URL){
                 const p = new Promise((resolve) => {
                     let request = new XMLHttpRequest();
@@ -138,7 +138,7 @@ export class CodeUtils {
                     }
                     request.send();
                 });
-                line += await p + ';';
+                input = await p;
             } else if (inp.meta.mode == InputType.File) {
                 const p = new Promise((resolve) => {
                     let reader = new FileReader();
@@ -147,11 +147,25 @@ export class CodeUtils {
                     }
                     reader.readAsText(inp.value || inp.default)
                 });
-                line += await p + ';';
+                input = await p;
             } else {
-                line += `${inp.value || inp.default};`;
+                input = inp.value || inp.default;
+                if (typeof input === 'number' || input === undefined){
+                    // do nothing
+                } else if (typeof input === 'string'){
+                    if (isNaN(input)){
+                        input = '"' + input + '"';
+                    }
+                    // else do nothing
+                } else if (input.constructor === [].constructor){
+                    input = '[' + input + ']';
+                } else if (input.constructor === {}.constructor) {
+                    input = JSON.stringify(input);
+                } else {
+                    // do nothing
+                }
             }
-            codeStr.push(line);
+            codeStr.push('let ' + inp.name + ' = ' + input + ';');
             varsDefined.push(inp.name);
         };
 

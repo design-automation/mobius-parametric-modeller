@@ -111,6 +111,8 @@ export class ExecuteComponent {
             const fn = new Function('__MODULES__', '__PRODARR__', fnString);
             let results = fn(Modules, prodArr);
             node.outputs.map( (oup) => {
+                oup.value = results[oup.name];
+                /*
                 if (typeof results[oup.name] === 'number' || results[oup.name] === undefined){
                     oup.value = results[oup.name];
                 } else if (typeof results[oup.name] === 'string'){
@@ -122,6 +124,7 @@ export class ExecuteComponent {
                 } else {
                     oup.value = results[oup.name];
                 }
+                */
 
                 // iterate through all edges
                 // for every edge with source as this output-port

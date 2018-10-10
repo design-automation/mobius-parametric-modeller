@@ -12,6 +12,11 @@ export class AddInputComponent{
     @Input() node: INode; 
     constructor(){}
 
-    addInput(): void{ this.node.inputs.push(PortUtils.getNewInput());  }
+    addInput(): void{ 
+      return
+      let newPort = PortUtils.getNewInput();
+      newPort.parentNode = this.node;
+      this.node.inputs.push(newPort);  
+    }
 
 }

@@ -38,7 +38,7 @@ export class ExecuteComponent {
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
                 for (let inp of node.inputs){
-                    if (inp.edge){
+                    if (inp.edges){
                         inp.value = undefined;
                     }
                 }
@@ -67,8 +67,8 @@ export class ExecuteComponent {
 						executed.push(index);
 					}
 					else{
-
                         let flag = true;
+                        /*
 						for(let i=0; i < node.inputs.length; i++){
                             if (node.type == 'start'){
                                 break
@@ -77,11 +77,23 @@ export class ExecuteComponent {
                             // if input has a value and the value has a port property
                             // port property means the port is connected to another port - 
                             // and is waiting for previous node to execute
-							if(inp.edge && !inp.value){
+							if(inp.edges && !inp.value){
                                 flag = false;
 								break;
 							}
-						}
+                        }
+                        */
+                        for(let edge of node.inputs[0].edges){
+                            if (node.type == 'start'){
+                                break
+                            }
+                            console.log(edge.source.value)
+                            if (!edge.source.value){
+                                flag = false;
+                                break;
+                            }
+                        }
+
 
                         // if there is a missing input, the flag is false
 						if(flag){
@@ -113,32 +125,18 @@ export class ExecuteComponent {
             node.outputs.map( (oup) => {
                 oup.value = results[oup.name];
                 /*
-                if (typeof results[oup.name] === 'number' || results[oup.name] === undefined){
-                    oup.value = results[oup.name];
-                } else if (typeof results[oup.name] === 'string'){
-                    oup.value = '"' + results[oup.name] + '"';
-                } else if (results[oup.name].constructor === [].constructor){
-                    oup.value = '[' + results[oup.name] + ']';
-                } else if (results[oup.name].constructor === {}.constructor) {
-                    oup.value = JSON.stringify(results[oup.name]);
-                } else {
-                    oup.value = results[oup.name];
-                }
-                */
-
                 // iterate through all edges
                 // for every edge with source as this output-port
                 // update the connected input-port
                 for(let edge of this.flowchart.edges){
                     //let edge: IEdge = this.flowchart.edges[e];
-
                     if( edge.source.id == oup.id ){
                         edge.target.value = oup.value; 
                         console.log('Assigned value',edge.target);
                     }
                 }
+                */
             });
-
             
         }
         catch(ex){

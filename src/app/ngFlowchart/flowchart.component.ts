@@ -64,19 +64,24 @@ export class FlowchartComponent{
           if(edata.source) this.edge.source = edata.source;
 
           if(this.edge.source && this.edge.target){
+            // check if the edge already exists
+            var existed = false;
+            for (let edge of this.data.edges){
+              if (edge.target === this.edge.target && edge.source === this.edge.source){
+                existed = true;
+                break;
+              }
+            }
+            if (existed){
+              break;
+            }
+
             // add the edge
             this.data.edges.push(this.edge);
 
-            // remove existing edge connected to target port
-            if (this.edge.target.edge){
-              for (let edge_index in this.data.edges){
-                if (this.data.edges[edge_index] == this.edge.target.edge){
-                  this.data.edges.splice(parseInt(edge_index), 1); 
-                }
-              }
-            }
             // update target port's edge
-            this.edge.target.edge = this.edge;
+            this.edge.target.edges.push(this.edge);
+            this.edge.source.edges.push(this.edge);
             this.edge = { source: undefined, target: undefined, selected: false };
             this.temporaryEdge = false;
           }
@@ -94,7 +99,19 @@ export class FlowchartComponent{
   addNode(): void{  this.data.nodes.push(NodeUtils.getNewNode());  }
 
   deleteEdge(edge_index){ 
-    this.data.edges[edge_index].target.edge = undefined;
+    const tbrEdge = this.data.edges[edge_index]
+    for (let i in tbrEdge.target.edges){
+      if (tbrEdge.target.edges[i] == tbrEdge){
+        tbrEdge.target.edges.splice(Number(i), 1); 
+        break;
+      }
+    }
+    for (let i in tbrEdge.source.edges){
+      if (tbrEdge.source.edges[i] == tbrEdge){
+        tbrEdge.source.edges.splice(Number(i), 1);
+        break;
+      }
+    }
     this.data.edges.splice(edge_index, 1); 
   }
 

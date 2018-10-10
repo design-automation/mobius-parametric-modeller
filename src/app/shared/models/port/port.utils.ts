@@ -8,10 +8,10 @@ export class PortUtils{
         let inp: IPortInput = <IPortInput>{
             id: IdGenerator.getId(),
             name: 'sample_input', 
-            isConnected: false,
             type: PortType.Input,
             value: undefined,
             default: undefined,
+            edges: [],
             meta: {
                 mode: InputType.SimpleInput,
                 opts: {}
@@ -25,8 +25,8 @@ export class PortUtils{
         let oup: IPortOutput = <IPortOutput>{
             id: IdGenerator.getId(),
             name: 'sample_output', 
-            isConnected: false,
             type: PortType.Output,
+            edges: [],
             meta: {
                 mode: OutputType.Text, 
             }

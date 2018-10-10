@@ -11,10 +11,15 @@ export class FlowchartUtils{
             },
             nodes: [  NodeUtils.getStartNode(), NodeUtils.getEndNode()  ],
             edges: [],
-            functions: []
+            functions: [],
+            nodeOrder: []
         }
 
         return flw;
+    }
+
+    public static orderNodes(flw: IFlowchart){
+        
     }
     
 }

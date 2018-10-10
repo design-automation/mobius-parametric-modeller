@@ -21,6 +21,9 @@ export abstract class NodeUtils{
             inputs: [ PortUtils.getNewInput() ],
             outputs: [ PortUtils.getNewOutput() ]
         }
+        node.inputs[0].parentNode = node;
+        node.outputs[0].parentNode = node;
+        
         return node;
     };
 

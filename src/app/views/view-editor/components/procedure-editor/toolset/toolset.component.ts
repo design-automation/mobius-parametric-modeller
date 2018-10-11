@@ -41,6 +41,9 @@ export class ToolsetComponent{
     }
 
     add_imported_function(fnData){
+        fnData.args = fnData.args.map( (arg) => { 
+            return {name: arg.name, value: arg.value};
+            });
         this.select.emit( { type: ProcedureTypes.IMPORTED, data: fnData } ); 
     }
 

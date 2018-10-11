@@ -12,6 +12,7 @@ import { IProcedure } from '@models/procedure';
 export interface INode{
 	// basic properties
 	name: string;
+	id: string;
 	description?: string;
 	author?: string;
 	version?: number; 

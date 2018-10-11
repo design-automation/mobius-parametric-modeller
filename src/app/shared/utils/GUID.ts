@@ -10,4 +10,12 @@ export abstract class IdGenerator{
 	  return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
 	    this.s4() + '-' + this.s4() + this.s4() + this.s4();
 	}
+
+	static getNodeID():string{
+		return 'node_' + Math.random().toString(36).substr(2, 16);
+	}
+
+	static getProdID(){
+		return 'prod-' + Math.random().toString(36).substr(2, 16);
+	}
 }

@@ -14,7 +14,7 @@ export interface IFlowchart{
 	nodes: INode[];
 	edges: IEdge[];
 	functions: IFunction[];
-	nodeOrder: Number[];
+	ordered: boolean;
 
 	meta: {
 		selected_nodes: number[];

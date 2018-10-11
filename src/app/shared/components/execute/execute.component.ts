@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IFlowchart } from '@models/flowchart';
+import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
 import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
@@ -7,6 +7,13 @@ import { IEdge } from '@models/edge';
 
 import * as Modules from '@modules';
 
+const mergingResults = `function mergeResults(l){
+    var result = l[0];
+    for (let i = 1; i < l.length; i++){
+        result += l[i];
+    }
+    return result;
+}\n\n`
 
 @Component({
   selector: 'execute',
@@ -44,6 +51,18 @@ export class ExecuteComponent {
                 }
             }
         }
+        if (!this.flowchart.ordered){
+            FlowchartUtils.orderNodes(this.flowchart);
+        }
+        let funcStrings = {};
+        for (let func of this.flowchart.functions){
+            funcStrings[func.name] = await CodeUtils.getFunctionString(func);
+        }
+        for (let node of this.flowchart.nodes){
+            console.log(`${node.name} executing...`);
+            await this.executeNode(node, funcStrings);
+        }
+        /*
         while(executed.length < this.flowchart.nodes.length || count > 100){
 
             // TODO: Remove after debugging
@@ -82,7 +101,7 @@ export class ExecuteComponent {
 								break;
 							}
                         }
-                        */
+                        *//*
                         for(let edge of node.inputs[0].edges){
                             if (node.type == 'start'){
                                 break
@@ -112,14 +131,24 @@ export class ExecuteComponent {
 					}
 				}
 			} 
-		}
+        }
+        */
     }
 
-    async executeNode(node: INode){
+    async executeNode(node: INode, funcStrings){
         let prodArr: string[] = [''];
         try{
-            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             var fnString = await CodeUtils.getNodeCode(node, true);
+            var hasFunctions = false;
+            for (let funcName in funcStrings){
+                fnString = funcStrings[funcName] + fnString;
+                hasFunctions = true;
+            }
+            if (hasFunctions){
+                fnString = mergingResults + fnString
+            }
+            console.log(fnString);
+            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__MODULES__', '__PRODARR__', fnString);
             let results = fn(Modules, prodArr);
             node.outputs.map( (oup) => {

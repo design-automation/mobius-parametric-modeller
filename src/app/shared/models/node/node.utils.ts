@@ -3,12 +3,14 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { PortType, InputType, OutputType, PortUtils } from '@models/port';
 import { not } from '@angular/compiler/src/output/output_ast';
 import * as circularJSON from 'circular-json';
+import { IdGenerator } from '@utils';
 
 export abstract class NodeUtils{
 
     static getNewNode(): INode{
         let node: INode = <INode>{
             name: "a_new_node", 
+            id: IdGenerator.getNodeID(),
             position: {x: 0, y: 0}, 
             enabled: true,
             type: '',
@@ -97,9 +99,6 @@ export abstract class NodeUtils{
 
     }
     
-    static generateProdID(){
-        return 'prod-' + Math.random().toString(36).substr(2, 16);
-    }
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ){
         let prod: IProcedure = <IProcedure>{};
         prod.type= type;
@@ -107,7 +106,7 @@ export abstract class NodeUtils{
         NodeUtils.insert_procedure(node, prod);
 
         // add ID to the procedure
-        prod.ID = NodeUtils.generateProdID();
+        prod.ID = IdGenerator.getProdID();
 
         console.log(prod.ID);
 
@@ -175,7 +174,7 @@ export abstract class NodeUtils{
                 NodeUtils.updateID(child);	
             });
         }
-        prod.ID = NodeUtils.generateProdID();
+        prod.ID = IdGenerator.getProdID();
         return prod
     }
 

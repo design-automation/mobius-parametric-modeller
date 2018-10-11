@@ -43,6 +43,7 @@ export class FlowchartComponent{
           // TODO: Add a delete function in NodeUtils / FlowchartUtils
           // TODO: Delete all edges associated with this node
           this.data.nodes.splice( node_index, 1 );
+          this.data.ordered = false;
           break;
 
         case ACTIONS.COPY:
@@ -84,6 +85,7 @@ export class FlowchartComponent{
             this.edge.source.edges.push(this.edge);
             this.edge = { source: undefined, target: undefined, selected: false };
             this.temporaryEdge = false;
+            this.data.ordered = false;
           }
 
           break;
@@ -113,6 +115,7 @@ export class FlowchartComponent{
       }
     }
     this.data.edges.splice(edge_index, 1); 
+    this.data.ordered = false
   }
 
   copyNode($event): void{

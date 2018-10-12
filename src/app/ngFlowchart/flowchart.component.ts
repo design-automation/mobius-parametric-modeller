@@ -9,6 +9,7 @@ import { IEdge } from '@models/edge';
 import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
 
+
 @Component({
   selector: 'flowchart',
   templateUrl: './flowchart.component.html',
@@ -20,10 +21,12 @@ export class FlowchartComponent{
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
   private temporaryEdge: boolean = false;
   private mouse;
+  private zoom: number = 1;
 
   // TODO: Is this redundant?
   @Output() select = new EventEmitter();
 
+  
   copied: string;
 
   ngOnInit(){ }
@@ -134,6 +137,48 @@ export class FlowchartComponent{
       console.log('pasting node:', newNode);
     }
   }
+
+  resetViewer(): void{
+    this.zoom = 1; 
+    /*
+    this.left = 0; 
+    this.top = 0; 
+    this.pan_mode = false;
+    */
+  }
+
+  getZoomStyle(): string{
+    let value: string = "scale(" + this.zoom + ")";
+    return value;
+  }
+
+  getMousePos(): string{
+    console.log('mouse pos:',this.mouse)
+    return this.mouse;
+  }
+
+  //
+  //  node class is assigned a zoom value based on this value
+  //  this position of this node is absolute coordinates
+  //
+  scale($event: WheelEvent): void{
+
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    let scaleFactor: number = 0.1;
+    let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
+    
+    if(value >= 0.2 && value <= 1.5){
+      value = Number( (value).toPrecision(2) )
+      this.zoom = Number( (value).toPrecision(2) );
+    } else {
+      return
+    }
+    this.mouse = `${$event.offsetX}px ${$event.offsetY}px`;
+
+  }
+
 
 }
 

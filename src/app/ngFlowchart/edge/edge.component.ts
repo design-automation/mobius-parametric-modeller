@@ -18,8 +18,8 @@ import { IEdge } from '@models/edge';
 })
 export class EdgeComponent implements OnInit, DoCheck{
 
-    readonly topBarHeight: number = 50;
-    readonly leftWidth: number = 10;
+    readonly topBarHeight: number = 40;
+    readonly leftWidth: number = -5;
 
     private getOffset( el ) {
         var _x = 0;

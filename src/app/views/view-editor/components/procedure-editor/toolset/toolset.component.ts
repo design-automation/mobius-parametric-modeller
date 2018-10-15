@@ -59,6 +59,7 @@ export class ToolsetComponent{
                     },
                     name: $event.target.files[0].name.split('.')[0],
                 };
+                var funcs = [];
                 for (let i of fl.nodes){
                     if (i.type == 'start'){
                         func.argCount = i.inputs.length;
@@ -78,7 +79,11 @@ export class ToolsetComponent{
                 if (!func.hasOwnProperty('argCount')){
                     resolve('error');
                 }
-                resolve(func)
+                funcs.push(func);
+                for (let i of fl.functions){
+                    funcs.push(i)
+                }
+                resolve(funcs)
             }
             reader.onerror = function(){
                 resolve('error')

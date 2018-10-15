@@ -20,7 +20,7 @@ export class FlowchartComponent{
   @Input() data: IFlowchart;
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
   private temporaryEdge: boolean = false;
-  private mouse;
+  private mouse =[0,0];
   private zoom: number = 1;
 
   // TODO: Is this redundant?
@@ -148,13 +148,10 @@ export class FlowchartComponent{
   }
 
   getZoomStyle(): string{
-    let value: string = "scale(" + this.zoom + ")";
+    let value: string = "scale(" + this.zoom +")";
+    //let value: string = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+this.mouse[0]+","+this.mouse[1]+")";
+    //console.log(value)
     return value;
-  }
-
-  getMousePos(): string{
-    console.log('mouse pos:',this.mouse)
-    return this.mouse;
   }
 
   //
@@ -171,14 +168,54 @@ export class FlowchartComponent{
     
     if(value >= 0.2 && value <= 1.5){
       value = Number( (value).toPrecision(2) )
-      this.zoom = Number( (value).toPrecision(2) );
     } else {
+      this.mouse = [0,0]
       return
     }
-    this.mouse = `${$event.offsetX}px ${$event.offsetY}px`;
-
+    var newX = $event.offsetX - $event.offsetX * value / this.zoom ;
+    newX = Number( (newX).toPrecision(2) )
+    var newY = $event.offsetY - $event.offsetY * value / this.zoom ;
+    newY = Number( (newY).toPrecision(2) )
+    this.mouse = [newX,newY];
+    this.mouse = [0,0];
+    this.zoom = value;
   }
 
+  dragNodeOver($event){
+    return false
+  }
+
+  dropNode($event){
+    $event.preventDefault();
+		if($event.ctrlKey) return;
+    if (!(typeof InstallTrigger !== 'undefined')){
+      return
+    }
+
+
+    const inp = $event.dataTransfer.getData('text').split('|');
+    const id = inp[0];
+    const posX = inp[1];
+    const posY = inp[2];
+    
+    for (let node of this.data.nodes){
+      if (node.id == id){
+        node.position.x = $event.clientX; 
+        node.position.y = $event.clientY; 
+        /*
+        let relX: number = $event.pageX - posX; 
+        let relY: number = $event.pageY - posY;
+        if( (node.position.x + relX/this.zoom) < 0 || (node.position.y + relY/this.zoom) < 0){
+          return;
+        }
+        
+        node.position.x += relX; 
+        node.position.y += relY; 
+        */
+      }
+    }
+    return
+  }
 
 }
 

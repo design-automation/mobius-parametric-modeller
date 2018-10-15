@@ -14,9 +14,11 @@ export class AddOutputComponent{
 
     addOutput(): void{  
       return
+      /*
       let newPort = PortUtils.getNewOutput();
       newPort.parentNode = this.node;
       this.node.outputs.push(newPort);  
+      */
     }
 
 }

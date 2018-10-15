@@ -6,7 +6,7 @@
  */
 import { Directive, ElementRef, 
          Input, Output,  
-         HostListener, EventEmitter } from '@angular/core';
+		 HostListener, EventEmitter } from '@angular/core';
 
 @Directive({
 	selector: "[ngDraggable]"
@@ -30,10 +30,15 @@ export class DraggableDirective {
 	@HostListener("dragstart", ['$event'])
 	nodeDragStart($event): void{
 		if($event.ctrlKey) return;
-
-		$event.dataTransfer.setDragImage( new Image(), 0, 0);
 		// todo : find more elegant solution
 		this.dragStart = {x: $event.pageX, y: $event.pageY}; 
+
+		if ($event.dataTransfer.setDragImage){
+			$event.dataTransfer.setData('text', this.node.id+'|'+$event.pageX+'|'+$event.pageY);  
+		}
+		if (!!window['chrome']&& !!window['chrome']['webstore']){
+			$event.dataTransfer.setDragImage( new Image(), 0, 0);
+		}
 
 		this.trend = {x: 1, y: 1};
 		this.shakeCount = 0; 
@@ -43,14 +48,13 @@ export class DraggableDirective {
 			this.node.position = {x: 0, y: 0};
 		}
 	}
-
+	
 	@HostListener("drag", ['$event'])
 	nodeDragging($event): void{
 		if($event.ctrlKey) return;
 
 		let relX: number = $event.pageX - this.dragStart.x; 
 		let relY: number = $event.pageY - this.dragStart.y;
-
 		// if node is going beyond canvas, do nothing
 		if( (this.node.position.x + relX/this.zoom) < 0 || (this.node.position.y + relY/this.zoom) < 0){
 			return;
@@ -78,12 +82,11 @@ export class DraggableDirective {
 	}
 
 	@HostListener("dragend", ['$event'])
-	nodeDragEnd($event): void{
+	nodeDragEnd($event: DragEvent): void{
 		if($event.ctrlKey) return;
 
 		let relX: number = $event.pageX - this.dragStart.x; 
 		let relY: number = $event.pageY - this.dragStart.y;
-
 		if( (this.node.position.x + relX/this.zoom) < 0 || (this.node.position.y + relY/this.zoom) < 0){
 			return;
 		}
@@ -95,8 +98,8 @@ export class DraggableDirective {
 
 		this.trend = {x: 1, y: 1};
 		this.shakeCount = 0;
-
 		this.dragged.emit({x: this.node.position.x, y: this.node.position.y});
 	}
 
+	
 }

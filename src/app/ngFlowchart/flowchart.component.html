@@ -1,5 +1,6 @@
 <div class='container' 
-      
+      (dragover)='dragNodeOver($event)'
+      (drop)='dropNode($event)'
       (copy)='copyNode($event)'  
       (paste)='pasteNode($event)' 
       (wheel)="scale($event)">
@@ -13,7 +14,7 @@
             [node]='node' 
             [node_index]='node_index'
             [selected]='isSelected(node_index)'
-            [zoom]=1
+            [zoom]='zoom'
             (action)='nodeAction($event, node_index)'>
       </node>
       

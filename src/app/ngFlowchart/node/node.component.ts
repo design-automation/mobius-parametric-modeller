@@ -24,6 +24,7 @@ export class NodeComponent{
     ngOnInit(){ }
 
     updatePosition(position){ 
+        //console.log('dragged...')
         this.node.position = position; 
     };
 

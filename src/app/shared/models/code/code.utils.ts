@@ -137,7 +137,7 @@ export class CodeUtils {
             result += edges[i].source.value
         }
         return result;
-        return edges[0].source.value;
+        //return edges[0].source.value;
     }
 
     static async getInputValue(inp: IPortInput, node: INode): Promise<string>{

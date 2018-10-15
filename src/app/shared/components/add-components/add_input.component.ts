@@ -14,9 +14,11 @@ export class AddInputComponent{
 
     addInput(): void{ 
       return
+      /*
       let newPort = PortUtils.getNewInput();
       newPort.parentNode = this.node;
       this.node.inputs.push(newPort);  
+      */
     }
 
 }

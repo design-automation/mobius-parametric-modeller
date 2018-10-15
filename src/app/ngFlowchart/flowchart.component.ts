@@ -20,7 +20,8 @@ export class FlowchartComponent{
   @Input() data: IFlowchart;
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
   private temporaryEdge: boolean = false;
-  private mouse =[0,0];
+  private mouse;
+  private mousePos =[0,0];
   private zoom: number = 1;
 
   // TODO: Is this redundant?
@@ -147,6 +148,13 @@ export class FlowchartComponent{
     */
   }
 
+  getMousePos(): string{
+    //let value: string = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+this.mouse[0]+","+this.mouse[1]+")";
+    //console.log(value)
+    //console.log(this.mousePos[0]+'px '+this.mousePos[1]+'px')
+    return this.mousePos[0]+'px '+this.mousePos[1]+'px';
+  }
+
   getZoomStyle(): string{
     let value: string = "scale(" + this.zoom +")";
     //let value: string = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+this.mouse[0]+","+this.mouse[1]+")";
@@ -166,18 +174,18 @@ export class FlowchartComponent{
     let scaleFactor: number = 0.1;
     let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
     
-    if(value >= 0.2 && value <= 1.5){
+    if(value > 0.2 && value < 1.5){
       value = Number( (value).toPrecision(2) )
     } else {
-      this.mouse = [0,0]
       return
     }
-    var newX = $event.offsetX - $event.offsetX * value / this.zoom ;
-    newX = Number( (newX).toPrecision(2) )
-    var newY = $event.offsetY - $event.offsetY * value / this.zoom ;
-    newY = Number( (newY).toPrecision(2) )
-    this.mouse = [newX,newY];
-    this.mouse = [0,0];
+    const divObj = document.getElementsByClassName('transform--container')[0];
+
+    var newX = $event.clientX * value / this.zoom ;
+    newX = Number( (newX).toPrecision(3) )
+    var newY = $event.clientY * value / this.zoom ;
+    newY = Number( (newY).toPrecision(3) )
+    this.mousePos = [$event.offsetX,$event.offsetY];
     this.zoom = value;
   }
 
@@ -187,16 +195,14 @@ export class FlowchartComponent{
 
   dropNode($event){
     $event.preventDefault();
-		if($event.ctrlKey) return;
+    if($event.ctrlKey) return;
+    //@ts-ignore
     if (!(typeof InstallTrigger !== 'undefined')){
       return
     }
 
 
-    const inp = $event.dataTransfer.getData('text').split('|');
-    const id = inp[0];
-    const posX = inp[1];
-    const posY = inp[2];
+    const id = $event.dataTransfer.getData('text');
     
     for (let node of this.data.nodes){
       if (node.id == id){

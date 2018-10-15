@@ -3,12 +3,12 @@
       (drop)='dropNode($event)'
       (copy)='copyNode($event)'  
       (paste)='pasteNode($event)' 
-      (wheel)="scale($event)">
+      (wheel)="scale($event)" >
       <button style="position: absolute; top: 10px; left: 22px;" class='btn' (click)='addNode()'> Add Node </button>
       <!--
       <div class="transform--container" [style.transform-origin]="getMousePos()" [style.transform]="getZoomStyle()">
       -->
-      <div class="transform--container" [style.transform]="getZoomStyle()">
+      <div class="transform--container" [style.transform]="getZoomStyle()" [style.transform-origin]="getMousePos()">
       <node *ngFor="let node of data.nodes; let node_index = index" 
             id='flw_node_{{node_index}}'
             [node]='node' 

@@ -34,7 +34,7 @@ export class DraggableDirective {
 		this.dragStart = {x: $event.pageX, y: $event.pageY}; 
 
 		if ($event.dataTransfer.setDragImage){
-			$event.dataTransfer.setData('text', this.node.id+'|'+$event.pageX+'|'+$event.pageY);  
+			$event.dataTransfer.setData('text', this.node.id);  
 		}
 		if (!!window['chrome']&& !!window['chrome']['webstore']){
 			$event.dataTransfer.setDragImage( new Image(), 0, 0);

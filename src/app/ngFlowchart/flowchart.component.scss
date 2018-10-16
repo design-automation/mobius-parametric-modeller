@@ -3,14 +3,22 @@
 
 .container{
     position: relative;
+	width: 100%;
 	height: 100%;
+	overflow: hidden;
 }
 
 .transform--container{
 	position: absolute;
     width: 100%;
-    transition: transform 0.2s;
-    //transition-timing-function: ease-in-out;
+	//height: 90%;
+    //width: 2048px;
+	//height: 1024px;
+    transition: transform 0.1s;
+	//transition-timing-function: ease-in-out;
+	//overflow: hidden;
+	//border: 1px solid black;
+
 }
 
 split-area{

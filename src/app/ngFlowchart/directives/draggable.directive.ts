@@ -26,10 +26,27 @@ export class DraggableDirective {
 	dragStart = {x: 0, y: 0};
 	trend = {x: 1, y: 1};
 	shakeCount: number = 0;
+
+	/*
+	@HostListener("mousedown", ['$event'])
+	mdown($event): void{
+		if(!$event.ctrlKey) return;
+		event.preventDefault();
+		event.stopPropagation();
+	}
+
+	@HostListener("mousemove", ['$event'])
+	mmove($event): void{
+		if(!$event.ctrlKey) return;
+		event.preventDefault();
+		event.stopPropagation();
+	}
+	*/
 	
 	@HostListener("dragstart", ['$event'])
 	nodeDragStart($event): void{
 		if($event.ctrlKey) return;
+		event.stopPropagation();
 		// todo : find more elegant solution
 		this.dragStart = {x: $event.pageX, y: $event.pageY}; 
 
@@ -55,10 +72,12 @@ export class DraggableDirective {
 
 		let relX: number = $event.pageX - this.dragStart.x; 
 		let relY: number = $event.pageY - this.dragStart.y;
+		/*
 		// if node is going beyond canvas, do nothing
 		if( (this.node.position.x + relX/this.zoom) < 0 || (this.node.position.y + relY/this.zoom) < 0){
 			return;
 		}
+		*/
 		
 		this.node.position.x += relX/this.zoom; 
 		this.node.position.y += relY/this.zoom; 

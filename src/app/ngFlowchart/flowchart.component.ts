@@ -23,6 +23,9 @@ export class FlowchartComponent{
   private mouse;
   private mousePos =[0,0];
   private zoom: number = 1;
+  private isDown = false;
+  private last = [0, 0];
+  private startCoords = [];
 
   // TODO: Is this redundant?
   @Output() select = new EventEmitter();
@@ -104,7 +107,7 @@ export class FlowchartComponent{
 
   addNode(): void{  this.data.nodes.push(NodeUtils.getNewNode());  }
 
-  deleteEdge(edge_index){ 
+  deleteEdge(edge_index){
     const tbrEdge = this.data.edges[edge_index]
     for (let i in tbrEdge.target.edges){
       if (tbrEdge.target.edges[i] == tbrEdge){
@@ -179,14 +182,62 @@ export class FlowchartComponent{
     } else {
       return
     }
-    const divObj = document.getElementsByClassName('transform--container')[0];
 
     var newX = $event.clientX * value / this.zoom ;
     newX = Number( (newX).toPrecision(3) )
     var newY = $event.clientY * value / this.zoom ;
     newY = Number( (newY).toPrecision(3) )
-    this.mousePos = [$event.offsetX,$event.offsetY];
+    this.mousePos = [$event.clientX,$event.clientY];
     this.zoom = value;
+
+    let element = <HTMLElement>document.getElementsByClassName("transform--container")[0];
+    let transf = "scale(" + this.zoom + ")";
+    //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
+    element.style.webkitTransformOrigin = $event.screenX+'px '+$event.screenY+'px';
+    element.style.webkitTransform = transf;
+
+  }
+
+  panStart(e):void{
+    if (!e.ctrlKey){ return; }
+    e.preventDefault();
+    this.isDown = true;
+
+    this.startCoords = [
+      e.clientX - this.last[0],
+      e.clientY - this.last[1]
+    ];
+    if (this.startCoords[0] == NaN){
+      this.startCoords = [0,0];
+    }
+  }
+
+  panMove(e):void{
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    if(!this.isDown) return;
+    let mainContainer = <HTMLElement>document.getElementById("flowchart-main-container");
+    if (mainContainer != e.target) return;
+    //console.log(e.target, e.clientX, e.clientY)
+    var x = Number(e.clientX - this.startCoords[0]);
+    var y = Number(e.clientY - this.startCoords[1]);
+    //if (x > 0) x = 0;
+    //if (y > 0) y = 0;
+    let element = <HTMLElement>document.getElementsByClassName("transform--container")[0];
+    let transf = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")"
+    //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
+    //console.log(transf)
+    element.style.webkitTransform = transf;
+  }
+
+  panEnd(e):void{
+    e.preventDefault();
+    this.isDown = false;
+    
+    this.last = [
+        e.clientX - this.startCoords[0],
+        e.clientY - this.startCoords[1]
+    ];
   }
 
   dragNodeOver($event){

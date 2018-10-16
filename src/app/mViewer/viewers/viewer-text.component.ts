@@ -8,64 +8,41 @@ import { Component, Input } from '@angular/core';
 })
 export class TextViewerComponent{
     @Input() node; 
-    output : string[];
+    output : string;
 
     constructor(){ 
       console.log(`Text Viewer Created`); 
     }
-    /*
-      for (let oup of this.node.output){
-        if (typeof oup === 'number' || oup === undefined){
-          this.output.push(oup);
-        } else if (typeof oup === 'string'){
-          this.output.push('"' + oup + '"');
-        } else if (oup.constructor === [].constructor){
-          this.output.push('[' + oup + ']');
-        } else if (oup.constructor === {}.constructor) {
-          this.output.push(JSON.stringify(oup));
-        } else {
-          console.log('Unknown output type:', oup);
-          this.output.push(oup);
-        }
-  
-      }
 
-    */
    ngOnInit() {
-    this.output = [];
-    for (let oup of this.node.output){
-      if (typeof oup.value === 'number' || oup.value === undefined){
-        this.output.push(oup.value);
-      } else if (typeof oup.value === 'string'){
-        this.output.push('"' + oup.value + '"');
-      } else if (oup.value.constructor === [].constructor){
-        this.output.push('[' + oup.value + ']');
-      } else if (oup.value.constructor === {}.constructor) {
-        this.output.push(JSON.stringify(oup.value));
-      } else {
-        console.log('Unknown output type:', oup.value);
-        this.output.push(oup.value);
-      }
+    if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
+      this.output = this.node.output.value;
+    } else if (typeof this.node.output.value === 'string'){
+      this.output = '"' + this.node.output.value + '"';
+    } else if (this.node.output.value.constructor === [].constructor){
+      this.output = '[' + this.node.output.value + ']';
+    } else if (this.node.output.value.constructor === {}.constructor) {
+      this.output = JSON.stringify(this.node.output.value);
+    } else {
+      console.log('Unknown output type:', this.node.output.value);
+      this.output = this.node.output.value;
     }
   
 	}
 
 
 	ngDoCheck(){
-    this.output = [];
-    for (let oup of this.node.output){
-      if (typeof oup.value === 'number' || oup.value === undefined){
-        this.output.push(oup.value);
-      } else if (typeof oup.value === 'string'){
-        this.output.push('"' + oup.value + '"');
-      } else if (oup.value.constructor === [].constructor){
-        this.output.push('[' + oup.value + ']');
-      } else if (oup.value.constructor === {}.constructor) {
-        this.output.push(JSON.stringify(oup.value));
-      } else {
-        console.log('Unknown output type:', oup.value);
-        this.output.push(oup.value);
-      }
+    if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
+      this.output = this.node.output.value;
+    } else if (typeof this.node.output.value === 'string'){
+      this.output = '"' + this.node.output.value + '"';
+    } else if (this.node.output.value.constructor === [].constructor){
+      this.output = '[' + this.node.output.value + ']';
+    } else if (this.node.output.value.constructor === {}.constructor) {
+      this.output = JSON.stringify(this.node.output.value);
+    } else {
+      console.log('Unknown output type:', this.node.output.value);
+      this.output = this.node.output.value;
     }
 	}
 

@@ -148,8 +148,8 @@ export class ExecuteComponent {
             console.log(fnString);
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__MODULES__', '__PRODARR__', fnString);
-            let results = fn(Modules, prodArr);
-            node.output.value = results[0]
+            let result = fn(Modules, prodArr);
+            node.output.value = result;
             
         }
         catch(ex){

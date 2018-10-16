@@ -25,7 +25,7 @@ export class FlowchartUtils{
         } else if (node.type === 'start' ){
             nodeOrder.push(node)
         } else {
-            for (let edge of node.inputs[0].edges){
+            for (let edge of node.input.edges){
                 if (!edge.source.parentNode.hasExecuted){
                     return
                 }
@@ -33,7 +33,7 @@ export class FlowchartUtils{
             nodeOrder.push(node)
         }
         node.hasExecuted = true;
-        for (let edge of node.outputs[0].edges){
+        for (let edge of node.output.edges){
             FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode);
         }
     }
@@ -50,7 +50,7 @@ export class FlowchartUtils{
         FlowchartUtils.checkNode(nodeOrder, startNode);
         if (nodeOrder.length < flw.nodes.length){
             for (let node of flw.nodes){
-                if (node.type != 'start' && node.inputs[0].edges.length == 0){
+                if (node.type != 'start' && node.input.edges.length == 0){
                     FlowchartUtils.checkNode(nodeOrder, node);
                 }
             }

@@ -17,7 +17,7 @@ export class AddOutputComponent{
       /*
       let newPort = PortUtils.getNewOutput();
       newPort.parentNode = this.node;
-      this.node.outputs.push(newPort);  
+      this.node.output.push(newPort);  
       */
     }
 

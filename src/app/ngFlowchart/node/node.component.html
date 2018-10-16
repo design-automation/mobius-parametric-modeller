@@ -21,8 +21,7 @@
         
         <div class='container--input'>
             <port 
-            *ngFor="let inp of node.inputs;" 
-            [data]='inp' 
+            [data]='node.input' 
             [zoom]='zoom'
             [dragable]='inputDragable()' 
             (connected)='nodeConnected($event)'></port>
@@ -30,8 +29,7 @@
 
         <div class='container--output'>
             <port class='port--invert' 
-            *ngFor="let oup of node.outputs;" 
-            [data]='oup' 
+            [data]='node.output' 
             [zoom]='zoom'
             [dragable]='outputDragable()'  
             (connected)='nodeConnected($event)'></port>

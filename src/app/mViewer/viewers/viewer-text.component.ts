@@ -3,48 +3,48 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'text-viewer',
   template: `<h3>Text Viewer :: {{ node?.name }}</h3>
-             <div>{{ outputs || "no-value" }}</div>`,
+             <div>{{ output || "no-value" }}</div>`,
   styles: []
 })
 export class TextViewerComponent{
     @Input() node; 
-    outputs : string[];
+    output : string[];
 
     constructor(){ 
       console.log(`Text Viewer Created`); 
     }
     /*
-      for (let oup of this.node.outputs){
+      for (let oup of this.node.output){
         if (typeof oup === 'number' || oup === undefined){
-          this.outputs.push(oup);
+          this.output.push(oup);
         } else if (typeof oup === 'string'){
-          this.outputs.push('"' + oup + '"');
+          this.output.push('"' + oup + '"');
         } else if (oup.constructor === [].constructor){
-          this.outputs.push('[' + oup + ']');
+          this.output.push('[' + oup + ']');
         } else if (oup.constructor === {}.constructor) {
-          this.outputs.push(JSON.stringify(oup));
+          this.output.push(JSON.stringify(oup));
         } else {
           console.log('Unknown output type:', oup);
-          this.outputs.push(oup);
+          this.output.push(oup);
         }
   
       }
 
     */
    ngOnInit() {
-    this.outputs = [];
-    for (let oup of this.node.outputs){
+    this.output = [];
+    for (let oup of this.node.output){
       if (typeof oup.value === 'number' || oup.value === undefined){
-        this.outputs.push(oup.value);
+        this.output.push(oup.value);
       } else if (typeof oup.value === 'string'){
-        this.outputs.push('"' + oup.value + '"');
+        this.output.push('"' + oup.value + '"');
       } else if (oup.value.constructor === [].constructor){
-        this.outputs.push('[' + oup.value + ']');
+        this.output.push('[' + oup.value + ']');
       } else if (oup.value.constructor === {}.constructor) {
-        this.outputs.push(JSON.stringify(oup.value));
+        this.output.push(JSON.stringify(oup.value));
       } else {
         console.log('Unknown output type:', oup.value);
-        this.outputs.push(oup.value);
+        this.output.push(oup.value);
       }
     }
   
@@ -52,19 +52,19 @@ export class TextViewerComponent{
 
 
 	ngDoCheck(){
-    this.outputs = [];
-    for (let oup of this.node.outputs){
+    this.output = [];
+    for (let oup of this.node.output){
       if (typeof oup.value === 'number' || oup.value === undefined){
-        this.outputs.push(oup.value);
+        this.output.push(oup.value);
       } else if (typeof oup.value === 'string'){
-        this.outputs.push('"' + oup.value + '"');
+        this.output.push('"' + oup.value + '"');
       } else if (oup.value.constructor === [].constructor){
-        this.outputs.push('[' + oup.value + ']');
+        this.output.push('[' + oup.value + ']');
       } else if (oup.value.constructor === {}.constructor) {
-        this.outputs.push(JSON.stringify(oup.value));
+        this.output.push(JSON.stringify(oup.value));
       } else {
         console.log('Unknown output type:', oup.value);
-        this.outputs.push(oup.value);
+        this.output.push(oup.value);
       }
     }
 	}

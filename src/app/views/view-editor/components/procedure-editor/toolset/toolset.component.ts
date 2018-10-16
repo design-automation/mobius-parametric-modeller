@@ -62,9 +62,9 @@ export class ToolsetComponent{
                 var funcs = [];
                 for (let i of fl.nodes){
                     if (i.type == 'start'){
-                        func.argCount = i.inputs.length;
+                        func.argCount = i.input.length;
                         func.args = [];
-                        for (let j of i.inputs){
+                        for (let j of i.input){
                             var arg: IArgument = <IArgument>{
                                 name: j.name,
                                 default: j.default

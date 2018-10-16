@@ -1,12 +1,12 @@
 <div class='container container--parameter'>
 
     <div class='parameter__name'>
-        <input [(ngModel)]='port.name' name='port.name' placeholder='Name of the the port'> 
+        <input [(ngModel)]='port.name' name='port.name' placeholder='Name of the port'> 
     </div>
 
 
     <!-- TODO: Appropriate components for default inputs:  Slider / Boolean / Fileinput and-->
-    <div class='parameter__name' [ngSwitch]="port.meta.mode">
+    <div class='parameter__name' *ngIf="port.parentNode.type=='start'" [ngSwitch]="port.meta.mode">
         <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='port.default' name='port.default' placeholder='Default Value'>
         <div *ngSwitchCase="PortTypes.Slider">
             <input [(ngModel)]='port.default' value='port.default' disabled>
@@ -18,13 +18,12 @@
     </div>
 
     <!-- Slider, SimpleInput ... etc -->
-    <select name={{port.name}}_type [(ngModel)]="port.meta.mode">
+    <select name={{port.name}}_type *ngIf="port.parentNode.type=='start'"  [(ngModel)]="port.meta.mode">
         <option 
             *ngFor="let ptype of PortTypesArr" 
             [value]="PortTypes[ptype]" 
             [selected]="port.meta.mode == ptype">{{ptype}}</option>
     </select>
     
-    <button (click)='delete.emit()'>Delete</button>
 </div>
 

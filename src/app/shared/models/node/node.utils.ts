@@ -20,11 +20,11 @@ export abstract class NodeUtils{
                 input_port: undefined, 
                 output_port: undefined
             },
-            inputs: [ PortUtils.getNewInput() ],
-            outputs: [ PortUtils.getNewOutput() ]
+            input: PortUtils.getNewInput(),
+            output: PortUtils.getNewOutput()
         }
-        node.inputs[0].parentNode = node;
-        node.outputs[0].parentNode = node;
+        node.input.parentNode = node;
+        node.output.parentNode = node;
         
         return node;
     };
@@ -34,8 +34,8 @@ export abstract class NodeUtils{
         node.name = 'start';
         node.type = 'start';
         node.position= {x: 0, y: 200}, 
-        node.inputs[0].name = 'start_input';
-        node.outputs[0].name = 'start_output';
+        node.input.name = 'start_input';
+        node.output.name = 'start_output';
         return node;
     };
 
@@ -44,8 +44,8 @@ export abstract class NodeUtils{
         node.name = 'end';
         node.type = 'end';
         node.position= {x: 400, y: 200}, 
-        node.inputs[0].name = 'end_input';
-        node.outputs[0].name = 'end_output';
+        node.input.name = 'end_input';
+        node.output.name = 'end_output';
         return node;
     };
     

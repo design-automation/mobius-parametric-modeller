@@ -9,18 +9,19 @@ import { PortType } from '@models/port';
 })
 export class ParameterEditorComponent{
     @Input() node: INode;
-
+    /*
     deletePort(port, index){
       const porttype = port.type;
 
-      if(porttype == PortType.Input && this.node.inputs[index] !== undefined){
-          this.node.inputs.splice(index, 1);
+      if(porttype == PortType.Input && this.node.input[index] !== undefined){
+          this.node.input.splice(index, 1);
       }
-      else if(porttype == PortType.Output && this.node.outputs[index] !== undefined){
-          this.node.outputs.splice(index, 1);
+      else if(porttype == PortType.Output && this.node.output[index] !== undefined){
+          this.node.output.splice(index, 1);
       }
 
     }
+    */
 }
 
 

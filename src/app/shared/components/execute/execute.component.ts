@@ -44,10 +44,8 @@ export class ExecuteComponent {
         var checkOverflow = 0;
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
-                for (let inp of node.inputs){
-                    if (inp.edges){
-                        inp.value = undefined;
-                    }
+                if (node.input.edges){
+                    node.input.value = undefined;
                 }
             }
         }
@@ -88,11 +86,11 @@ export class ExecuteComponent {
 					else{
                         let flag = true;
                         /*
-						for(let i=0; i < node.inputs.length; i++){
+						for(let i=0; i < node.input.length; i++){
                             if (node.type == 'start'){
                                 break
                             }
-							let inp = node.inputs[i];
+							let inp = node.input[i];
                             // if input has a value and the value has a port property
                             // port property means the port is connected to another port - 
                             // and is waiting for previous node to execute
@@ -102,7 +100,7 @@ export class ExecuteComponent {
 							}
                         }
                         *//*
-                        for(let edge of node.inputs[0].edges){
+                        for(let edge of node.input.edges){
                             if (node.type == 'start'){
                                 break
                             }
@@ -151,21 +149,7 @@ export class ExecuteComponent {
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__MODULES__', '__PRODARR__', fnString);
             let results = fn(Modules, prodArr);
-            node.outputs.map( (oup) => {
-                oup.value = results[oup.name];
-                /*
-                // iterate through all edges
-                // for every edge with source as this output-port
-                // update the connected input-port
-                for(let edge of this.flowchart.edges){
-                    //let edge: IEdge = this.flowchart.edges[e];
-                    if( edge.source.id == oup.id ){
-                        edge.target.value = oup.value; 
-                        console.log('Assigned value',edge.target);
-                    }
-                }
-                */
-            });
+            node.output.value = results[0]
             
         }
         catch(ex){

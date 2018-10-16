@@ -194,37 +194,23 @@ export class CodeUtils {
 
         // input initializations
         if (addProdArr){
-            for (let inp of node.inputs){
-                var input = await CodeUtils.getInputValue(inp, node);
-                codeStr.push('let ' + inp.name + ' = ' + input + ';');
-                varsDefined.push(inp.name);
-            };
+            var input = await CodeUtils.getInputValue(node.input, node);
+            codeStr.push('let ' + node.input.name + ' = ' + input + ';');
+            varsDefined.push(node.input.name);
         }
 
-        for (let oup of node.outputs){
-            const line = `let ${oup.name} = undefined;`;
-            codeStr.push(line);
-            varsDefined.push(oup.name);
-        };
+        const line = `let ${node.output.name} = undefined;`;
+        codeStr.push(line);
+        varsDefined.push(node.output.name);
 
         // procedure
         for (let prod of node.procedure){
             codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         };
 
-
-        // output intializations
-        const outStatements = [];
-        for (let oup of node.outputs){
-            outStatements.push( `${oup.name} : ${oup.name}` );
-        };
-
         //console.log( `{\n${codeStr.join('\n')}\nreturn { ${outStatements.join(',') } };\n}`);
-        if (!addProdArr){
-            return `{\n${codeStr.join('\n')}\nreturn ${node.outputs[0].name};\n}`;
-        } else {
-            return `{\n${codeStr.join('\n')}\nreturn { ${outStatements.join(',') } };\n}`;
-        }
+        return `{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
+
 
     }
     
@@ -233,13 +219,13 @@ export class CodeUtils {
         let fnCode = `function ${func.name}(${func.args[0].name}){\nvar merged;\n`;
         for (let node of func.module.nodes){
             let code =  await CodeUtils.getNodeCode(node, false)
-            fullCode += `function ${node.id}(${node.inputs[0].name})` + code + `\n\n`;
+            fullCode += `function ${node.id}(${node.input.name})` + code + `\n\n`;
             if (node.type ==='start'){
                 fnCode += `let result_${node.id} = ${node.id}(${func.args[0].name});\n`
-            } else if (node.inputs[0].edges.length == 1) {
-                fnCode += `let result_${node.id} = ${node.id}(result_${node.inputs[0].edges[0].source.parentNode.id});\n`
+            } else if (node.input.edges.length == 1) {
+                fnCode += `let result_${node.id} = ${node.id}(result_${node.input.edges[0].source.parentNode.id});\n`
             } else {
-                fnCode += `merged = mergeResults([${node.inputs[0].edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
+                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
                 fnCode += `let result_${node.id} = ${node.id}(merged);\n`
             }
             if (node.type === 'end'){

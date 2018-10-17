@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MatSliderModule, MatCheckboxModule } from '@angular/material';
 import { NgFlowchartModule } from '../../app/ngFlowchart';
+import { SVGFlowchartModule } from '../../app/ngFlowchart-svg';
 import { AngularSplitModule } from 'angular-split';
 
 import { MbFileReaderDirective } from "./directives/filesys";
@@ -44,6 +45,7 @@ import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
             RouterModule,
             MatSliderModule, MatCheckboxModule,
             NgFlowchartModule, 
+            SVGFlowchartModule, 
             MobiusViewerModule,
             AngularSplitModule, 
             FormsModule
@@ -52,6 +54,7 @@ import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
     exports: [  
             FormsModule,
             NgFlowchartModule, 
+            SVGFlowchartModule, 
             MobiusViewerModule,
             AngularSplitModule,
             MbFileReaderDirective, 

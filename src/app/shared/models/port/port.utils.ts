@@ -7,7 +7,7 @@ export class PortUtils{
     static getNewInput(): IPortInput{
         let inp: IPortInput = <IPortInput>{
             id: IdGenerator.getId(),
-            name: 'sample_input', 
+            name: 'input', 
             type: PortType.Input,
             value: undefined,
             default: undefined,
@@ -24,7 +24,7 @@ export class PortUtils{
     static getNewOutput(): IPortOutput{
         let oup: IPortOutput = <IPortOutput>{
             id: IdGenerator.getId(),
-            name: 'sample_output', 
+            name: 'output', 
             type: PortType.Output,
             edges: [],
             meta: {

@@ -9,9 +9,10 @@ import { IEdge } from '@models/edge';
 import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
 
+const offset = [2, 47];
 
 @Component({
-  selector: '_flowchart',
+  selector: 'flowchart',
   templateUrl: './flowchart.component.html',
   styleUrls: ['./flowchart.component.scss']
 })
@@ -19,19 +20,18 @@ export class FlowchartComponent{
 
   @Input() data: IFlowchart;
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
-  private temporaryEdge: boolean = false;
-  private mouse;
   private mousePos =[0,0];
   private zoom: number = 1;
-  private isDown = false;
-  private last = [0, 0];
+  private isDown: number;
+  private screenOffset = [0, 0];
   private startCoords = [];
-
-  // TODO: Is this redundant?
-  @Output() select = new EventEmitter();
+  private dragNode: INode;
+  private element: any;
 
   
   copied: string;
+  temporaryEdge: boolean;
+  mouse: any;
 
   ngOnInit(){ }
 
@@ -42,6 +42,17 @@ export class FlowchartComponent{
   nodeAction($event, node_index): void{
 
     switch($event.action){
+        case ACTIONS.DRAGNODE:
+          this.dragNode = this.data.nodes[node_index];
+          this.startCoords = [
+            $event.data.pageX,
+            $event.data.pageY
+          ];
+          if (this.startCoords[0] == NaN){
+            this.startCoords = [0,0];
+          }
+          this.isDown = 2;
+          break;
         case ACTIONS.SELECT:
           this.data.meta.selected_nodes = [ node_index ];  
           break;
@@ -151,20 +162,6 @@ export class FlowchartComponent{
     */
   }
 
-  getMousePos(): string{
-    //let value: string = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+this.mouse[0]+","+this.mouse[1]+")";
-    //console.log(value)
-    //console.log(this.mousePos[0]+'px '+this.mousePos[1]+'px')
-    return this.mousePos[0]+'px '+this.mousePos[1]+'px';
-  }
-
-  getZoomStyle(): string{
-    let value: string = "scale(" + this.zoom +")";
-    //let value: string = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+this.mouse[0]+","+this.mouse[1]+")";
-    //console.log(value)
-    return value;
-  }
-
   //
   //  node class is assigned a zoom value based on this value
   //  this position of this node is absolute coordinates
@@ -177,102 +174,122 @@ export class FlowchartComponent{
     let scaleFactor: number = 0.1;
     let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
     
-    if(value > 0.2 && value < 1.5){
-      value = Number( (value).toPrecision(2) )
+    if(value >= 1 && value <= 2.5){
+      value = Number( (value).toPrecision(5) )
     } else {
       return
     }
+    this.element = <HTMLElement>document.getElementById("svg-canvas");
+    //let transf = "scale(" + value + ")";
+    var p = this.element.createSVGPoint();
+    p.x = $event.clientX - offset[0];
+    p.y = $event.clientY - offset[1];
+    var m = this.element.createSVGMatrix()
+            .translate(p.x, p.y)
+            .scale(value)
+            .translate(-p.x, -p.y);
 
-    var newX = $event.clientX * value / this.zoom ;
-    newX = Number( (newX).toPrecision(3) )
-    var newY = $event.clientY * value / this.zoom ;
-    newY = Number( (newY).toPrecision(3) )
-    this.mousePos = [$event.clientX,$event.clientY];
+    //let transf = "matrix(" + value + ",0,0,"+ value+","+ (- bRect.x + offset[0])+","+ (- bRect.y + offset[1])+")"
+    let transf = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")"
+    console.log(transf)
+    //this.element.style.transition = 'transform 100ms';
+    //this.element.style.webkitTransformOrigin = this.mousePos[0]+'px '+ this.mousePos[1]+'px';
+    this.element.style.transition = 'transform 100ms ease-in';
+    this.element.style.webkitTransformOrigin = `top left`;
+    this.element.style.webkitTransform = transf;
     this.zoom = value;
 
-    let element = <HTMLElement>document.getElementsByClassName("transform--container")[0];
-    let transf = "scale(" + this.zoom + ")";
-    //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
-    element.style.webkitTransformOrigin = $event.screenX+'px '+$event.screenY+'px';
-    element.style.webkitTransform = transf;
+    /*
+function setCTM(element, matrix) {
+    var m = matrix;
+    var s = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")";
+    
+    element.setAttributeNS(null, "transform", s);
+}
 
+var svgEl = document.getElementById('svg');
+var zoomEl = document.getElementById('zoom');
+var zoomScale = 1;
+
+svgEl.addEventListener('wheel', function(e) {
+    var delta = e.wheelDeltaY;
+    zoomScale = Math.pow(1.1, delta/360);
+    
+    var p = svgEl.createSVGPoint();
+    p.x = e.clientX;
+    p.y = e.clientY;
+    
+    p = p.matrixTransform( svgEl.getCTM().inverse() );
+    
+    var zoomMat = svgEl.createSVGMatrix()
+            .translate(p.x, p.y)
+            .scale(zoomScale)
+            .translate(-p.x, -p.y);
+    
+    setCTM(zoomEl, zoomEl.getCTM().multiply(zoomMat));
+});
+
+    */
   }
 
-  panStart(e):void{
-    if (!e.ctrlKey){ return; }
-    e.preventDefault();
-    this.isDown = true;
-
+  panStart($event:MouseEvent) {
+    event.preventDefault();
+    this.isDown = 1;
+    this.element = <HTMLElement>document.getElementById("svg-canvas");
+    let bRect = <DOMRect>this.element.getBoundingClientRect();
     this.startCoords = [
-      e.clientX - this.last[0],
-      e.clientY - this.last[1]
+      $event.clientX - (bRect.x - offset[0]),
+      $event.clientY - (bRect.y - offset[1])
     ];
-    if (this.startCoords[0] == NaN){
-      this.startCoords = [0,0];
-    }
+    this.isDown = 1;
   }
 
-  panMove(e):void{
-    if (!e.ctrlKey) return;
-    e.preventDefault();
-    if(!this.isDown) return;
-    let mainContainer = <HTMLElement>document.getElementById("flowchart-main-container");
-    if (mainContainer != e.target) return;
-    //console.log(e.target, e.clientX, e.clientY)
-    var x = Number(e.clientX - this.startCoords[0]);
-    var y = Number(e.clientY - this.startCoords[1]);
-    //if (x > 0) x = 0;
-    //if (y > 0) y = 0;
-    let element = <HTMLElement>document.getElementsByClassName("transform--container")[0];
-    let transf = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")"
-    //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
-    //console.log(transf)
-    element.style.webkitTransform = transf;
-  }
-
-  panEnd(e):void{
-    e.preventDefault();
-    this.isDown = false;
-    
-    this.last = [
-        e.clientX - this.startCoords[0],
-        e.clientY - this.startCoords[1]
-    ];
-  }
-
-  dragNodeOver($event){
-    return false
-  }
-
-  dropNode($event){
-    $event.preventDefault();
-    if($event.ctrlKey) return;
-    //@ts-ignore
-    if (!(typeof InstallTrigger !== 'undefined')){
-      return
-    }
-
-
-    const id = $event.dataTransfer.getData('text');
-    
-    for (let node of this.data.nodes){
-      if (node.id == id){
-        node.position.x = $event.clientX; 
-        node.position.y = $event.clientY; 
-        /*
-        let relX: number = $event.pageX - posX; 
-        let relY: number = $event.pageY - posY;
-        if( (node.position.x + relX/this.zoom) < 0 || (node.position.y + relY/this.zoom) < 0){
-          return;
-        }
-        
-        node.position.x += relX; 
-        node.position.y += relY; 
-        */
+  handleMouseMove($event:MouseEvent){
+    if (!this.isDown) {
+      return;
+    } else if(this.isDown == 1){
+      event.preventDefault();
+      var x = Number($event.clientX - this.startCoords[0]);
+      var y = Number($event.clientY - this.startCoords[1]);
+      let bRect = <DOMRect>this.element.getBoundingClientRect();
+      let boundingDiv = <DOMRect>document.getElementById("flowchart-main-container").getBoundingClientRect();
+      if (x > 0 || bRect.width < boundingDiv.width){
+        x = 0
+      } else if (boundingDiv.width - x > bRect.width){
+        x = boundingDiv.width - bRect.width
       }
+      if (y > 0 || bRect.height < boundingDiv.height){
+        y = 0
+      } else if (boundingDiv.height - y > bRect.height){
+        y = boundingDiv.height - bRect.height
+      }
+      let transf = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")"
+      //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
+      //console.log(transf)
+      this.element.style.transition = 'transform 0ms linear';
+      this.element.style.webkitTransformOrigin = `top left`;
+      this.element.style.webkitTransform = transf;
+    } else if(this.isDown == 2){
+      event.preventDefault();
+      const xDiff = this.startCoords[0] - $event.pageX;
+      const yDiff = this.startCoords[1] - $event.pageY;
+    
+      this.startCoords[0] = $event.pageX;
+      this.startCoords[1] = $event.pageY;
+    
+      this.dragNode.position.x -= xDiff;
+      this.dragNode.position.y -= yDiff;
     }
-    return
+
   }
+
+  handleMouseUp($event){
+    this.isDown = 0;
+    this.dragNode = undefined;
+  }
+
+
+
 
 }
 

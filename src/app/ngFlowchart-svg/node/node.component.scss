@@ -1,0 +1,103 @@
+/*
+$color-main: #2D4885;
+$color-accent: #50ABB9;
+$color-muted: #88D4DD;
+$color-text-accent: #DC772F;
+*/
+
+$default-padding: 4px;
+.node{
+    width: 100px;
+    height: 80px;
+    fill:blue;
+    stroke-width:$default-padding;
+    stroke: white;
+    fill-opacity:0.1;
+    stroke-opacity:0.9;
+
+
+    &.node--selected{
+        stroke: blue;
+    }
+
+    &.node--error{
+        stroke: red;
+    }
+
+    .node__name{
+        background-color: white;
+        text-align: center;
+        overflow: hidden;
+
+        input{
+            font-size: 10px;
+            text-align: center;
+            width: 95%;
+        }
+    }
+}
+
+/*
+.node{
+    position: absolute;
+    
+    max-width: $node-width;
+    margin: $default-padding;
+    width: auto;
+
+    border: 3px solid white;
+    border-radius: 5px;
+
+
+    &.node--selected{
+        border-color: blue;
+    }
+
+    &.node--error{
+        border: 3px solid red;
+    }
+
+    .node__name{
+        background-color: white;
+        color: $color-text-accent;
+        text-align: center;
+
+        overflow: hidden;
+
+        input{
+            font-size: 10px;
+            text-align: center;
+            width: 95%;
+        }
+
+
+    }
+
+    .node__body{
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .container{
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .container--input{
+            @extend .container;
+        }
+
+        .container--output{
+            @extend .container;
+        }
+
+        .container--info{
+            @extend .container;
+            padding: 5px;
+        }
+    }
+
+}
+*/

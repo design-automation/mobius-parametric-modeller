@@ -15,9 +15,13 @@
 					<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
 				</div>
 				
-				<div class='btn--container' style='position: absolute; top: 150px; left: 15px; display: flex; flex-direction: column; padding: 10px;'>
+				<div class='btn--container' style='position: absolute; top: 47px; left: 150px; display: flex; flex-direction: column; padding: 10px;'>
 					<file-new (create)='updateFile($event)'></file-new>
+				</div>
+				<div class='btn--container' style='position: absolute; top: 47px; left: 210px; display: flex; flex-direction: column; padding: 10px;'>
 					<file-load (loaded)='updateFile($event)'></file-load>
+				</div>
+				<div class='btn--container' style='position: absolute; top: 47px; left: 270px; display: flex; flex-direction: column; padding: 10px;'>
 					<file-save [file]='file'></file-save>
 				</div>
 			</split-area>

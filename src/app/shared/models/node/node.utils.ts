@@ -9,7 +9,7 @@ export abstract class NodeUtils{
 
     static getNewNode(): INode{
         let node: INode = <INode>{
-            name: "a_new_node", 
+            name: "new_node", 
             id: IdGenerator.getNodeID(),
             position: {x: 0, y: 0}, 
             enabled: true,
@@ -33,9 +33,7 @@ export abstract class NodeUtils{
         let node = NodeUtils.getNewNode();
         node.name = 'start';
         node.type = 'start';
-        node.position= {x: 0, y: 200}, 
-        node.input.name = 'start_input';
-        node.output.name = 'start_output';
+        node.position= {x: 600, y: 600};
         return node;
     };
 
@@ -43,9 +41,7 @@ export abstract class NodeUtils{
         let node = NodeUtils.getNewNode();
         node.name = 'end';
         node.type = 'end';
-        node.position= {x: 400, y: 200}, 
-        node.input.name = 'end_input';
-        node.output.name = 'end_output';
+        node.position= {x: 1000, y: 600};
         return node;
     };
     

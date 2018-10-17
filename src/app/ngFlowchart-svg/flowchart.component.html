@@ -1,0 +1,65 @@
+<!--
+<div id = 'flowchart-main-container'
+      class='container' 
+      (dragover)='dragNodeOver($event)'
+      (drop)='dropNode($event)'
+      (copy)='copyNode($event)'  
+      (paste)='pasteNode($event)' 
+      (wheel)="scale($event)"
+      (mousedown)="panStart($event)"
+      (mousemove)="panMove($event)"
+      (mouseup)="panEnd($event)"
+      >
+      <button style="position: absolute; top: 10px; left: 22px;" class='btn' (click)='addNode()'> Add Node </button>
+      <div class="transform--container">
+            <node *ngFor="let node of data.nodes; let node_index = index" 
+                  id='flw_node_{{node_index}}'
+                  [node]='node' 
+                  [node_index]='node_index'
+                  [selected]='isSelected(node_index)'
+                  [zoom]='zoom'
+                  (action)='nodeAction($event, node_index)'>
+            </node>
+            
+            <edge *ngFor="let e of data.edges; let edge_index = index"
+                  [edge]='e' [temporary]='false'
+                  (delete)='deleteEdge(edge_index);'></edge>
+      
+            <edge [edge]='edge' [temporary]='true' [mouse]='mouse' *ngIf='temporaryEdge'></edge>
+            </div>
+      </div>
+-->
+<div id = 'flowchart-main-container' class='container'>
+      <svg id="svg-canvas" viewBox="0 0 1500 1500" 
+      preserveAspectRatio="xMinYMin meet"
+      (mousedown)='panStart($event)'
+      (mousemove)='handleMouseMove($event)'  
+      (mouseup)='handleMouseUp($event)'
+      (wheel)='scale($event)'
+      >
+            <defs>
+                  <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
+                  </pattern>
+                  <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <rect width="100" height="100" fill="url(#smallGrid)"/>
+                    <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
+                  </pattern>
+                </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+                          
+              
+            <g node *ngFor="let node of data.nodes; let node_index = index" 
+            id='flw_node_{{node_index}}'
+            [node]='node' 
+            [node_index]='node_index'
+            [selected]='isSelected(node_index)'
+            [zoom]='zoom'
+            (action)='nodeAction($event, node_index)'
+            />
+      </svg>
+      <button style="position: absolute; top: 10px; left: 22px;" class='btn' (click)='addNode()'> Add Node </button>
+</div>
+
+
+

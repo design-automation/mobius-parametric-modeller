@@ -162,12 +162,13 @@ export class FlowchartComponent{
     */
   }
 
+
+
   //
   //  node class is assigned a zoom value based on this value
   //  this position of this node is absolute coordinates
   //
   scale($event: WheelEvent): void{
-
     $event.preventDefault();
     $event.stopPropagation();
 
@@ -180,62 +181,28 @@ export class FlowchartComponent{
       return
     }
     this.element = <HTMLElement>document.getElementById("svg-canvas");
-    //let transf = "scale(" + value + ")";
-    var p = this.element.createSVGPoint();
-    p.x = $event.clientX - offset[0];
-    p.y = $event.clientY - offset[1];
-    var m = this.element.createSVGMatrix()
-            .translate(p.x, p.y)
-            .scale(value)
-            .translate(-p.x, -p.y);
 
-    //let transf = "matrix(" + value + ",0,0,"+ value+","+ (- bRect.x + offset[0])+","+ (- bRect.y + offset[1])+")"
+    if (value > this.zoom){
+      this.mousePos = [$event.clientX - offset[0], $event.clientY - offset[1]]
+    }
+    var m = this.element.createSVGMatrix()
+    .translate(this.mousePos[0], this.mousePos[1])
+    .scale(value)
+    .translate(-this.mousePos[0], -this.mousePos[1]);
     let transf = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")"
     console.log(transf)
-    //this.element.style.transition = 'transform 100ms';
-    //this.element.style.webkitTransformOrigin = this.mousePos[0]+'px '+ this.mousePos[1]+'px';
-    this.element.style.transition = 'transform 100ms ease-in';
-    this.element.style.webkitTransformOrigin = `top left`;
-    this.element.style.webkitTransform = transf;
+    this.element.style.transition = 'transform 50ms ease-in';
+    this.element.style.transformOrigin = `top left`;
+    this.element.style.transform = transf;
     this.zoom = value;
-
-    /*
-function setCTM(element, matrix) {
-    var m = matrix;
-    var s = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")";
-    
-    element.setAttributeNS(null, "transform", s);
-}
-
-var svgEl = document.getElementById('svg');
-var zoomEl = document.getElementById('zoom');
-var zoomScale = 1;
-
-svgEl.addEventListener('wheel', function(e) {
-    var delta = e.wheelDeltaY;
-    zoomScale = Math.pow(1.1, delta/360);
-    
-    var p = svgEl.createSVGPoint();
-    p.x = e.clientX;
-    p.y = e.clientY;
-    
-    p = p.matrixTransform( svgEl.getCTM().inverse() );
-    
-    var zoomMat = svgEl.createSVGMatrix()
-            .translate(p.x, p.y)
-            .scale(zoomScale)
-            .translate(-p.x, -p.y);
-    
-    setCTM(zoomEl, zoomEl.getCTM().multiply(zoomMat));
-});
-
-    */
   }
 
   panStart($event:MouseEvent) {
     event.preventDefault();
     this.isDown = 1;
     this.element = <HTMLElement>document.getElementById("svg-canvas");
+    this.element.style.transition = 'transform 0ms linear';
+    this.element.style.transformOrigin = `top left`;
     let bRect = <DOMRect>this.element.getBoundingClientRect();
     this.startCoords = [
       $event.clientX - (bRect.x - offset[0]),
@@ -266,9 +233,7 @@ svgEl.addEventListener('wheel', function(e) {
       let transf = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")"
       //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
       //console.log(transf)
-      this.element.style.transition = 'transform 0ms linear';
-      this.element.style.webkitTransformOrigin = `top left`;
-      this.element.style.webkitTransform = transf;
+      this.element.style.transform = transf;
     } else if(this.isDown == 2){
       event.preventDefault();
       const xDiff = this.startCoords[0] - $event.pageX;

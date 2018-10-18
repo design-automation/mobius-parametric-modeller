@@ -33,7 +33,7 @@ export abstract class NodeUtils{
         let node = NodeUtils.getNewNode();
         node.name = 'start';
         node.type = 'start';
-        node.position= {x: 600, y: 600};
+        node.position= {x: 0, y: 200};
         return node;
     };
 
@@ -41,7 +41,7 @@ export abstract class NodeUtils{
         let node = NodeUtils.getNewNode();
         node.name = 'end';
         node.type = 'end';
-        node.position= {x: 1000, y: 600};
+        node.position= {x: 400, y: 200};
         return node;
     };
     

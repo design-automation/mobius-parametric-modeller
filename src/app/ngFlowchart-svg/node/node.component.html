@@ -46,7 +46,7 @@
 -->
 
 <!-- svg group for the selectable and draggable area of the node -->
-<svg:g (click)='nodeSelect($event)' draggable="true" (mousedown)='handleMouseDown($event)'>
+<svg:g (click)='nodeSelect($event)' draggable="true" (mousedown)='startDragNode($event)'>
     <rect class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
@@ -54,13 +54,29 @@
         [attr.y]="node.position.y"
         />
     <text [attr.x]="node.position.x+3" [attr.y]="node.position.y + 38">{{node.input.name}}</text>
-    <text text-anchor="end" [attr.x]="node.position.x+97" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
+    <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
 </svg:g>
 
 <!-- svg group for other area of the node: editable node name, draggable part of the input/output port -->
 <svg:g>
-    <circle *ngIf="inputDraggable()" [attr.cx]="node.position.x-5" [attr.cy]="node.position.y + 35" r="5" fill="black"/>
-    <circle *ngIf="outputDraggable()" [attr.cx]="node.position.x+105" [attr.cy]="node.position.y + 65" r="5" fill="black"/>
+    <circle *ngIf="inputDraggable()" 
+    id = 'node.input.id'
+    (mousedown)='startDragPort($event, "input")' 
+    (mouseup)='dropPort($event, "input")' 
+    [attr.cx]="node.position.x + inputOffset[0]" 
+    [attr.cy]="node.position.y + inputOffset[1]" 
+    pointer-events="fill"
+    r="8" 
+    fill="black"/>
+    <circle *ngIf="outputDraggable()" 
+    id = 'node.output.id'
+    (mousedown)='startDragPort($event, "output")' 
+    (mouseup)='dropPort($event, "output")' 
+    [attr.cx]="node.position.x + outputOffset[0]" 
+    [attr.cy]="node.position.y + outputOffset[1]" 
+    pointer-events="fill"
+    r="8"
+    fill="black"/>
 </svg:g>
 
 <svg:foreignObject [attr.x]="node.position.x + 3" [attr.y]="node.position.y + 3" 

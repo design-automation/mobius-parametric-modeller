@@ -30,7 +30,7 @@
       </div>
 -->
 <div id = 'flowchart-main-container' class='container'>
-      <svg id="svg-canvas" class = "svgCanvas" viewBox="0 0 1500 1500" 
+      <svg id="svg-canvas" class = "svgCanvas" viewBox="0 0 1000 1000" 
       preserveAspectRatio="xMinYMin meet"
       (mousedown)='panStart($event)'
       (mousemove)='handleMouseMove($event)'  
@@ -57,8 +57,12 @@
             [zoom]='zoom'
             (action)='nodeAction($event, node_index)'
             />
+            <g edge *ngFor="let edge of data.edges; let edge_index = index" [edge]='edge'/>
+            <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0' style="visibility: visible"></line>
       </svg>
-      <button style="position: absolute; top: 10px; left: 22px;" class='btn' (click)='addNode()'> Add Node </button>
+      <button style='position: absolute; top: 0px; left: 10px; ' class='btn' (click)='addNode()'> Add Node </button>
+      <button style='position: absolute; top: 0px; left: 77px; ' class='btn' (click)='deleteNode()'> Delete Node </button>
+      <button style='position: absolute; top: 0px; left: 157px;' class='btn' (click)='deleteEdge()'> Delete Edge </button>
 </div>
 
 

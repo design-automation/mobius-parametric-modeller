@@ -4,4 +4,6 @@ export enum ACTIONS{
     COPY, 
     CONNECT,
     DRAGNODE,
+    DROPPORT,
+    DRAGPORT
 }

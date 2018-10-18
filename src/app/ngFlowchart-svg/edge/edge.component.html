@@ -1,11 +1,9 @@
-<div class="edge-container" 
-	style="position: absolute;"
-	[style.top.px]="getTop()"
-	[style.left.px]="getLeft()"
-	[style.width.px]="getWidth()"
-	[style.height.px]="getHeight()"
-	[class.selected]='edge.selected'
-	(click)='select($event)'>
-	<canvas #canvas></canvas>
-	<button *ngIf='edge.selected' (click)='deleteEdge()'>Delete</button>
-</div>
+<svg:line id="edge" 
+class = "edge"
+[class.selected] = "edge.selected"
+[attr.x1]='edge.source.parentNode.position.x + outputOffset[0] + 7' 
+[attr.y1]='edge.source.parentNode.position.y + outputOffset[1]' 
+[attr.x2]='edge.target.parentNode.position.x + inputOffset[0] - 7' 
+[attr.y2]='edge.target.parentNode.position.y + inputOffset[1]' 
+(click)='select($event)'
+/>

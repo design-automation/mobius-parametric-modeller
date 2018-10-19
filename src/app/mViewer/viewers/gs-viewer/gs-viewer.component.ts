@@ -31,15 +31,15 @@ export class GSViewerComponent {
 	}
 
 	ngOnInit() {
-		this.data = this.node.outputs[0].value;
+		this.data = this.node.output.value;
 		this.setModel(this.data);
 		
 	}
 
 
 	ngDoCheck(){
-		if(this.data !== this.node.outputs[0].value){
-			this.data = this.node.outputs[0].value;
+		if(this.data !== this.node.output.value){
+			this.data = this.node.output.value;
 			this.setModel(this.data);
 		}
 	}

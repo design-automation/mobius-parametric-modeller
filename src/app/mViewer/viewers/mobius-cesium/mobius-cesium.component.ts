@@ -54,7 +54,7 @@ export class MobiuscesiumComponent {
   }
   //pass data to dataService
   public ngOnInit() {
-		this.text = this.node.outputs[0].value;
+		this.text = this.node.output.value;
 		this.data = JSON.parse(this.text||defaultText);
   	this.setModel(this.data);
     this.dataService.setMode(this.mode);
@@ -62,8 +62,8 @@ export class MobiuscesiumComponent {
 
   }
   public ngDoCheck() {
-  	if(this.text !== this.node.outputs[0].value) {
-			this.text = this.node.outputs[0].value;
+  	if(this.text !== this.node.output.value) {
+			this.text = this.node.output.value;
       this.data = JSON.parse(this.text||defaultText);
   		this.setModel(this.data);
       // console.log("data changed");

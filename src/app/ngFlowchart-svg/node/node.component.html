@@ -48,6 +48,8 @@
 <!-- svg group for the selectable and draggable area of the node -->
 <svg:g (click)='nodeSelect($event)' draggable="true" (mousedown)='startDragNode($event)'>
     <rect class="node" 
+        [class.node--start]='node.type=="start"'
+        [class.node--end]='node.type=="end"'
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
         [attr.x]="node.position.x" 
@@ -62,23 +64,23 @@
     <circle *ngIf="inputDraggable()" 
     id = 'node.input.id'
     (mousedown)='startDragPort($event, "input")' 
-    (mouseup)='dropPort($event, "input")' 
     [attr.cx]="node.position.x + inputOffset[0]" 
     [attr.cy]="node.position.y + inputOffset[1]" 
-    pointer-events="fill"
+    pointer-events="all"
     r="8" 
     fill="black"/>
     <circle *ngIf="outputDraggable()" 
     id = 'node.output.id'
     (mousedown)='startDragPort($event, "output")' 
-    (mouseup)='dropPort($event, "output")' 
     [attr.cx]="node.position.x + outputOffset[0]" 
     [attr.cy]="node.position.y + outputOffset[1]" 
-    pointer-events="fill"
+    pointer-events="all"
     r="8"
     fill="black"/>
 </svg:g>
-
+<!--
+    (mouseup)='dropPort($event, "input")'
+-->
 <svg:foreignObject [attr.x]="node.position.x + 3" [attr.y]="node.position.y + 3" 
 (mousedown)='stopPropagation($event)'
 (click)='stopPropagation($event)'>

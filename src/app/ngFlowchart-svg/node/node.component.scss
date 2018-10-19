@@ -13,8 +13,17 @@ $default-padding: 4px;
     stroke-width:$default-padding;
     stroke: white;
     fill-opacity:0.1;
-    stroke-opacity:0.9;
+    stroke-opacity:0.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 
+    &.node--start{
+        fill: green;
+    }
+
+    &.node--end{
+        fill: red;
+    }
 
     &.node--selected{
         stroke: blue;

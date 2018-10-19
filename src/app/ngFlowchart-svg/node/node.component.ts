@@ -12,15 +12,12 @@ import { ACTIONS } from './node.actions'
 export class NodeComponent{
     
     @Input() node: INode;
-    @Input() zoom: number;
     @Input() selected: boolean;
-    
-    @Input() node_index: number;
+    @Input() inputOffset;
+    @Input() outputOffset;
+
 
     @Output() action = new EventEmitter();
-
-    inputOffset = [-10, 35];
-    outputOffset = [110, 65];
     startType: string;
     last = [0,0];    
     isDown = false;
@@ -80,17 +77,6 @@ export class NodeComponent{
             pos = [pos.x + this.outputOffset[0], pos.y + this.outputOffset[1]];
         }
         this.action.emit({ action: ACTIONS.DRAGPORT, data: data, position: pos, type: portType});
-    }
-
-    
-    dropPort($event: MouseEvent, portType){
-        var data: any;
-        if (portType == 'input'){
-            data = this.node.input;
-        } else {
-            data = this.node.output;
-        }
-        this.action.emit({ action: ACTIONS.DROPPORT, data: data, type: portType});
     }
 
     stopPropagation($event: Event){

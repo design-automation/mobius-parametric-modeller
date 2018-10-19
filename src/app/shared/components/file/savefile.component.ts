@@ -25,15 +25,11 @@ export class SaveFileComponent{
         }
         var savedfile = circularJSON.parse(circularJSON.stringify(this.file))
         for (let node of savedfile.flowchart.nodes){
-            for (let input of node.input){
-                if (input.hasOwnProperty('value')){
-                    input.value = undefined;
-                }
+            if (node.input.hasOwnProperty('value')){
+                node.input.value = undefined;
             }
-            for (let output of node.output){
-                if (output.hasOwnProperty('value')){
-                    output.value = undefined;
-                }
+            if (node.output.hasOwnProperty('value')){
+                node.output.value = undefined;
             }
         }
 

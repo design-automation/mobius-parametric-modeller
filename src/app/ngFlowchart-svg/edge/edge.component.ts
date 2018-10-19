@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, DoCheck, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ElementRef, DoCheck, Output, EventEmitter } from '@angular/core';
 import { IEdge } from '@models/edge';
 
 @Component({
@@ -6,9 +6,12 @@ import { IEdge } from '@models/edge';
   templateUrl: './edge.component.html',
   styles: [`
     .edge{
+        fill: none;
         stroke: green;
+        stroke-linecap: round;
+        stroke-linejoin: round;
         stroke-width: 5px;
-        opacity: 0.5;
+        opacity: 0.6;
         pointer-events: stroke
     }  
     .selected{
@@ -21,10 +24,10 @@ export class EdgeComponent{
 
     @ViewChild('canvas') canvas: ElementRef;
     @Input() edge: IEdge;
-    @Output() delete = new EventEmitter();
+    @Input() inputOffset;
+    @Input() outputOffset;
 
-    inputOffset = [-10, 35];
-    outputOffset = [110, 65];
+    @Output() delete = new EventEmitter();
 
     select($event){
         event.preventDefault();

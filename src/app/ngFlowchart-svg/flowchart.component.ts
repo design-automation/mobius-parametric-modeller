@@ -32,19 +32,19 @@ export class FlowchartComponent{
 
   // variable for edge dragging/dropping
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
-  private startType: boolean;
+  private startType: string;
 
   // variable for copied node
   private copied: string;
 
   
+  inputOffset = [-10, 35];
+  outputOffset = [110, 65];
 
   ngOnInit(){ 
     this.canvas = <HTMLElement>document.getElementById("svg-canvas");
   }
 
-  selectNode(node_index): void{
-  }
 
   nodeAction($event, node_index): void{
 
@@ -90,26 +90,6 @@ export class FlowchartComponent{
         this.element.setAttribute('y2', $event.position[1]);
         this.isDown = 3;
         break;
-      case ACTIONS.DROPPORT:
-        if (this.startType == $event.type) return;
-        if ($event.type == 'input'){
-          this.edge.target = $event.data;
-        } else {
-          this.edge.source = $event.data;
-        }
-        for (let edge of this.data.edges){
-          if (edge.target == this.edge.target && edge.source == this.edge.source){
-            return;
-          }
-        }
-        this.edge.target.edges.push(this.edge);
-        this.edge.source.edges.push(this.edge);
-        this.data.edges.push(this.edge);
-        console.log('.......................')
-        console.log(this.edge)
-        console.log(this.data.edges)
-        this.data.ordered = false;
-        break;
     }
 
   }
@@ -120,31 +100,6 @@ export class FlowchartComponent{
 
   addNode(): void{  
     this.data.nodes.push(NodeUtils.getNewNode());  
-  }
-
-  deleteEdge(){
-    var edge_index = 0
-    while (edge_index < this.data.edges.length){
-      let tbrEdge = this.data.edges[edge_index];
-      if (!tbrEdge.selected){
-        edge_index += 1;
-        continue;
-      }
-      for (let i in this.data.edges){
-        if (tbrEdge.target.edges[i] == tbrEdge){
-          tbrEdge.target.edges.splice(Number(i), 1); 
-          break;
-        }
-      }
-      for (let i in tbrEdge.source.edges){
-        if (tbrEdge.source.edges[i] == tbrEdge){
-          tbrEdge.source.edges.splice(Number(i), 1);
-          break;
-        }
-      }
-      this.data.edges.splice(edge_index, 1); 
-    }
-    this.data.ordered = false
   }
 
   copyNode($event): void{
@@ -161,6 +116,54 @@ export class FlowchartComponent{
       newNode.position = {x:0, y:0};
       this.data.nodes.push(newNode);
       console.log('pasting node:', newNode);
+    }
+  }
+
+  deleteSelectedNodes(){
+    while (this.data.meta.selected_nodes.length > 0){
+      let node_index = this.data.meta.selected_nodes.pop();
+      let node = this.data.nodes[node_index];
+      if (node.type == "start" || node.type == "end") continue;
+      var edge_index = 0;
+      while (edge_index < this.data.edges.length){
+        let tbrEdge = this.data.edges[edge_index];
+        if (tbrEdge.target.parentNode == node || tbrEdge.source.parentNode == node){
+          this.deleteEdge(edge_index)
+          continue;
+        }
+        edge_index += 1;
+      }
+      this.data.nodes.splice(Number(node_index),1)
+    }
+  }
+
+  deleteEdge(edge_index){
+    let tbrEdge = this.data.edges[edge_index];
+    for (let i in this.data.edges){
+      if (tbrEdge.target.edges[i] == tbrEdge){
+        tbrEdge.target.edges.splice(Number(i), 1); 
+        break;
+      }
+    }
+    for (let i in tbrEdge.source.edges){
+      if (tbrEdge.source.edges[i] == tbrEdge){
+        tbrEdge.source.edges.splice(Number(i), 1);
+        break;
+      }
+    }
+    this.data.edges.splice(edge_index, 1); 
+    this.data.ordered = false
+  }
+
+  deleteSelectedEdges(){
+    var edge_index = 0
+    while (edge_index < this.data.edges.length){
+      let tbrEdge = this.data.edges[edge_index];
+      if (tbrEdge.selected){
+        this.deleteEdge(edge_index)
+        continue;
+      }
+      edge_index += 1;
     }
   }
 
@@ -233,10 +236,9 @@ export class FlowchartComponent{
       } else if (boundingDiv.height - y > bRect.height){
         y = boundingDiv.height - bRect.height
       }
-      let transf = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")"
       //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
       //console.log(transf)
-      this.canvas.style.transform = transf;
+      this.canvas.style.transform = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")";
     } else if(this.isDown == 2){
       const xDiff = this.startCoords[0] - $event.pageX;
       const yDiff = this.startCoords[1] - $event.pageY;
@@ -264,6 +266,37 @@ export class FlowchartComponent{
 
   handleMouseUp($event){
     if (this.isDown == 3){
+      var pt = this.canvas.createSVGPoint();
+
+      pt.x = $event.pageX;
+      pt.y = $event.pageY;
+
+      const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+      for (let n of this.data.nodes){
+        var p, pPos;
+        if (this.startType == 'input'){
+          if (this.edge.target.parentNode == n) continue;
+          this.edge.source = n.output;
+          pPos = [n.position.x+this.outputOffset[0], n.position.y+this.outputOffset[1]];
+        } else {
+          if (this.edge.source.parentNode == n) continue;
+          this.edge.target = n.input;
+          pPos = [n.position.x+this.inputOffset[0], n.position.y+this.inputOffset[1]];
+        }
+        if (Math.abs(pPos[0]-svgP.x) > 15 || Math.abs(pPos[1]-svgP.y) > 15 ) continue;
+
+        for (let edge of this.data.edges){
+          if (edge.target == this.edge.target && edge.source == this.edge.source){
+            return;
+          }
+        }
+        this.edge.target.edges.push(this.edge);
+        this.edge.source.edges.push(this.edge);
+        this.data.edges.push(this.edge);
+        this.data.ordered = false;  
+        break;
+
+      }
       let tempLine = <HTMLElement>document.getElementById("temporary-wire");
       tempLine.setAttribute('x1', '0');
       tempLine.setAttribute('y1', '0');

@@ -18,8 +18,8 @@ import { IEdge } from '@models/edge';
 })
 export class EdgeComponent implements OnInit, DoCheck{
 
-    readonly topBarHeight: number = 50;
-    readonly leftWidth: number = 10;
+    readonly topBarHeight: number = 40;
+    readonly leftWidth: number = -5;
 
     private getOffset( el ) {
         var _x = 0;
@@ -39,11 +39,11 @@ export class EdgeComponent implements OnInit, DoCheck{
     @Output() delete = new EventEmitter();
 
     edgePos = { inputPosition: undefined, outputPosition: undefined}; 
-    _buffer: number = 50;
+    _buffer: number = 3;
 
-    select(){
-        if (this.temporary) return;
-
+    select($event){
+        if ($event.ctrlKey||this.temporary) return;
+        event.stopPropagation();
         this.edge.selected = !this.edge.selected;
     }
 
@@ -87,7 +87,7 @@ export class EdgeComponent implements OnInit, DoCheck{
         context.lineWidth = 2;
 
         context.strokeStyle = this.temporary ? '#8AA8C0' : '#395D73';
-
+        
         // if temporary edge
         if(this.temporary){
             context.setLineDash([5, 10])

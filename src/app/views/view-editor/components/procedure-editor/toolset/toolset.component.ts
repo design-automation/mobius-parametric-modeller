@@ -41,6 +41,9 @@ export class ToolsetComponent{
     }
 
     add_imported_function(fnData){
+        fnData.args = fnData.args.map( (arg) => { 
+            return {name: arg.name, value: arg.value};
+            });
         this.select.emit( { type: ProcedureTypes.IMPORTED, data: fnData } ); 
     }
 
@@ -56,26 +59,25 @@ export class ToolsetComponent{
                     },
                     name: $event.target.files[0].name.split('.')[0],
                 };
+                var funcs = [];
                 for (let i of fl.nodes){
                     if (i.type == 'start'){
-                        func.argCount = i.inputs.length;
-                        func.args = [];
-                        for (let j of i.inputs){
-                            var arg: IArgument = <IArgument>{
-                                name: j.name,
-                                default: j.default
-                            };
-                            func.args.push(arg);
-                        }
-                        if (func.args.length == 0){
-                            resolve('error');
-                        }
+                        func.argCount = i.input.length;
+                        var arg: IArgument = <IArgument>{
+                            name: i.input.name,
+                            default: i.input.default
+                        };
+                        func.args = [arg];
                     }
                 }
                 if (!func.hasOwnProperty('argCount')){
                     resolve('error');
                 }
-                resolve(func)
+                funcs.push(func);
+                for (let i of fl.functions){
+                    funcs.push(i)
+                }
+                resolve(funcs)
             }
             reader.onerror = function(){
                 resolve('error')

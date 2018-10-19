@@ -32,7 +32,9 @@ export class ViewEditorComponent{
     }
 
     importFunction($event){
-        this.flowchart.functions.push($event);
+        for (let func of $event){
+            this.flowchart.functions.push(func);
+        }
     }
     
 }

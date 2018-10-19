@@ -4,73 +4,50 @@ import { gsConstructor } from '@modules';
 @Component({
   selector: 'text-viewer',
   template: `<h3>Text Viewer :: {{ node?.name }}</h3>
-             <div *ngFor="let oup of outputs; let ind = index"><h5>{{node?.outputs[ind].name}}:</h5>{{oup}}<br><br></div>`,
+             <div>{{ output || "no-value" }}</div>`,
   styles: []
 })
 export class TextViewerComponent{
     @Input() node; 
-    outputs : string[];
+    output : string;
 
     constructor(){ 
       console.log(`Text Viewer Created`); 
     }
-    /*
-      for (let oup of this.node.outputs){
-        if (typeof oup === 'number' || oup === undefined){
-          this.outputs.push(oup);
-        } else if (typeof oup === 'string'){
-          this.outputs.push('"' + oup + '"');
-        } else if (oup.constructor === [].constructor){
-          this.outputs.push('[' + oup + ']');
-        } else if (oup.constructor === {}.constructor) {
-          this.outputs.push(JSON.stringify(oup));
-        } else {
-          console.log('Unknown output type:', oup);
-          this.outputs.push(oup);
-        }
-  
-      }
 
-    */
    ngOnInit() {
-    this.outputs = [];
-    for (let oup of this.node.outputs){
-      if (typeof oup.value === 'number' || oup.value === undefined){
-        this.outputs.push(oup.value);
-      } else if (typeof oup.value === 'string'){
-        this.outputs.push('"' + oup.value + '"');
-      } else if (oup.value.constructor === [].constructor){
-        this.outputs.push('[' + oup.value + ']');
-      } else if (oup.value.constructor === {}.constructor) {
-        this.outputs.push(JSON.stringify(oup.value));
-      } else if (oup.value.constructor === gsConstructor) {
-        this.outputs.push(oup.value.toJSON());
-      } else {
-        console.log('Unknown output type:', oup.value);
-        this.outputs.push(oup.value);
-      }
+    if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
+      this.output = this.node.output.value;
+    } else if (typeof this.node.output.value === 'string'){
+      this.output = '"' + this.node.output.value + '"';
+    } else if (this.node.output.value.constructor === [].constructor){
+      this.output = '[' + this.node.output.value + ']';
+    } else if (this.node.output.value.constructor === {}.constructor) {
+      this.output = JSON.stringify(this.node.output.value);
+    } else if (this.node.output.value.constructor === gsConstructor) {
+      this.output = this.node.output.value.toJSON();
+    } else {
+    console.log('Unknown output type:', this.node.output.value);
+      this.output = this.node.output.value;
     }
   
 	}
 
 
 	ngDoCheck(){
-    this.outputs = [];
-    for (let oup of this.node.outputs){
-      if (typeof oup.value === 'number' || oup.value === undefined){
-        this.outputs.push(oup.value);
-      } else if (typeof oup.value === 'string'){
-        this.outputs.push('"' + oup.value + '"');
-      } else if (oup.value.constructor === [].constructor){
-        this.outputs.push('[' + oup.value + ']');
-      } else if (oup.value.constructor === {}.constructor) {
-        this.outputs.push(JSON.stringify(oup.value));
-      } else if (oup.value.constructor === gsConstructor) {
-        this.outputs.push(JSON.stringify(oup.value.toJSON()));
-      } else {
-        console.log('Unknown output type:', oup.value);
-        this.outputs.push(oup.value);
-      }
+    if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
+      this.output = this.node.output.value;
+    } else if (typeof this.node.output.value === 'string'){
+      this.output = '"' + this.node.output.value + '"';
+    } else if (this.node.output.value.constructor === [].constructor){
+      this.output = '[' + this.node.output.value + ']';
+    } else if (this.node.output.value.constructor === {}.constructor) {
+      this.output = JSON.stringify(this.node.output.value);
+    } else if (this.node.output.value.constructor === gsConstructor) {
+      this.output = JSON.stringify(this.node.output.value.toJSON());
+    } else {
+    console.log('Unknown output type:', this.node.output.value);
+      this.output = this.node.output.value;
     }
 	}
 

@@ -15,9 +15,13 @@
 					<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
 				</div>
 				
-				<div class='btn--container' style='position: absolute; top: 150px; left: 15px; display: flex; flex-direction: column; padding: 10px;'>
+				<div class='btn--container' style='position: absolute; top: 37px; left: 250px; display: flex; flex-direction: column; padding: 10px;'>
 					<file-new (create)='updateFile($event)'></file-new>
+				</div>
+				<div class='btn--container' style='position: absolute; top: 37px; left: 310px; display: flex; flex-direction: column; padding: 10px;'>
 					<file-load (loaded)='updateFile($event)'></file-load>
+				</div>
+				<div class='btn--container' style='position: absolute; top: 37px; left: 370px; display: flex; flex-direction: column; padding: 10px;'>
 					<file-save [file]='file'></file-save>
 				</div>
 			</split-area>
@@ -48,10 +52,12 @@
 	
 		</split>
 	</div>
-
+	<!--
 	<div class='container__footer'>
 		Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.
 	</div>
+
+	-->
 
 
 </div>

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IFlowchart } from '@models/flowchart';
+import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
 import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
@@ -7,6 +7,14 @@ import { IEdge } from '@models/edge';
 
 import * as Modules from '@modules';
 import * as gs from 'gs-json'
+
+const mergingResults = `function mergeResults(l){
+    var result = l[0];
+    for (let i = 1; i < l.length; i++){
+        result += l[i];
+    }
+    return result;
+}\n\n`
 
 @Component({
   selector: 'execute',
@@ -37,13 +45,23 @@ export class ExecuteComponent {
         var checkOverflow = 0;
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
-                for (let inp of node.inputs){
-                    if (inp.edge){
-                        inp.value = undefined;
-                    }
+                if (node.input.edges){
+                    node.input.value = undefined;
                 }
             }
         }
+        if (!this.flowchart.ordered){
+            FlowchartUtils.orderNodes(this.flowchart);
+        }
+        let funcStrings = {};
+        for (let func of this.flowchart.functions){
+            funcStrings[func.name] = await CodeUtils.getFunctionString(func);
+        }
+        for (let node of this.flowchart.nodes){
+            console.log(`${node.name} executing...`);
+            await this.executeNode(node, funcStrings);
+        }
+        /*
         while(executed.length < this.flowchart.nodes.length || count > 100){
 
             // TODO: Remove after debugging
@@ -67,21 +85,33 @@ export class ExecuteComponent {
 						executed.push(index);
 					}
 					else{
-
                         let flag = true;
-						for(let i=0; i < node.inputs.length; i++){
+                        /*
+						for(let i=0; i < node.input.length; i++){
                             if (node.type == 'start'){
                                 break
                             }
-							let inp = node.inputs[i];
+							let inp = node.input[i];
                             // if input has a value and the value has a port property
                             // port property means the port is connected to another port - 
                             // and is waiting for previous node to execute
-							if(inp.edge && !inp.value){
+							if(inp.edges && !inp.value){
                                 flag = false;
 								break;
 							}
-						}
+                        }
+                        *//*
+                        for(let edge of node.input.edges){
+                            if (node.type == 'start'){
+                                break
+                            }
+                            console.log(edge.source.value)
+                            if (!edge.source.value){
+                                flag = false;
+                                break;
+                            }
+                        }
+
 
                         // if there is a missing input, the flag is false
 						if(flag){
@@ -100,45 +130,27 @@ export class ExecuteComponent {
 					}
 				}
 			} 
-		}
+        }
+        */
     }
 
-    async executeNode(node: INode){
+    async executeNode(node: INode, funcStrings){
         let prodArr: string[] = [''];
         try{
-            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             var fnString = await CodeUtils.getNodeCode(node, true);
+            var hasFunctions = false;
+            for (let funcName in funcStrings){
+                fnString = funcStrings[funcName] + fnString;
+                hasFunctions = true;
+            }
+            if (hasFunctions){
+                fnString = mergingResults + fnString
+            }
+            console.log(fnString);
+            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__MODULES__', '__PRODARR__', fnString);
-            let results = fn(Modules, prodArr);
-            node.outputs.map( (oup) => {
-                oup.value = results[oup.name];
-                /*
-                if (typeof results[oup.name] === 'number' || results[oup.name] === undefined){
-                    oup.value = results[oup.name];
-                } else if (typeof results[oup.name] === 'string'){
-                    oup.value = '"' + results[oup.name] + '"';
-                } else if (results[oup.name].constructor === [].constructor){
-                    oup.value = '[' + results[oup.name] + ']';
-                } else if (results[oup.name].constructor === {}.constructor) {
-                    oup.value = JSON.stringify(results[oup.name]);
-                } else {
-                    oup.value = results[oup.name];
-                }
-                */
-
-                // iterate through all edges
-                // for every edge with source as this output-port
-                // update the connected input-port
-                for(let edge of this.flowchart.edges){
-                    //let edge: IEdge = this.flowchart.edges[e];
-
-                    if( edge.source.id == oup.id ){
-                        edge.target.value = oup.value; 
-                        console.log('Assigned value', oup.value);
-                    }
-                }
-            });
-
+            let result = fn(Modules, prodArr);
+            node.output.value = result;
             
         }
         catch(ex){

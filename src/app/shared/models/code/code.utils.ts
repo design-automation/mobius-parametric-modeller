@@ -1,11 +1,13 @@
-import { INode } from '@models/node';
-import { IProcedure, ProcedureTypes } from '@models/procedure';
-import { InputType } from '@models/port';
+import { INode, NodeUtils } from '@models/node';
+import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
+import { InputType, IPortInput } from '@models/port';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { promise } from 'protractor';
+import { IEdge } from '@models/edge';
+import * as gs from 'gs-json';
 
 import { gsConstructor } from '@modules';
 
@@ -26,15 +28,6 @@ export class CodeUtils {
         switch ( prod.type ) {
             case ProcedureTypes.VARIABLE:
                 codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
-                if (prefix === 'let '){
-                    existingVars.push(args[0].value)
-                }
-                break;
-
-            case ProcedureTypes.FUNCTION:
-                const argValues = args.slice(1).map((arg)=>arg.value).join(',');
-                const fnCall: string = `__MODULES__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`
-                codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
                 if (prefix === 'let '){
                     existingVars.push(args[0].value)
                 }
@@ -89,6 +82,26 @@ export class CodeUtils {
                 codeStr.push(`continue;`);
                 break;
 
+            case ProcedureTypes.FUNCTION:
+                const argValues = args.slice(1).map((arg)=>arg.value).join(',');
+                const fnCall: string = `__MODULES__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`
+                codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
+                if (prefix === 'let '){
+                    existingVars.push(args[0].value)
+                }
+                break;
+
+            case ProcedureTypes.IMPORTED:
+                console.log('args: ',args)
+                const argsVals = args.slice(1).map((arg)=>arg.value).join(',');
+                const fn: string = `${prod.meta.name}( ${argsVals} )`
+                codeStr.push(`${prefix}${args[0].value} = ${fn};`);
+                if (prefix === 'let '){
+                    existingVars.push(args[0].value)
+                }
+                break;
+
+
         }
 
         return codeStr.join('\n');
@@ -121,17 +134,20 @@ export class CodeUtils {
         });
     }
 
-    public static async getNodeCode(node: INode, addProdArr = false): Promise<string> {
-        node.hasError = false;
-        const codeStr = [];
-        const varsDefined: string[] = [];
+    static mergeInputs(edges: IEdge[]): any{
+        var result = new gs.Model();
+        for (let i = 0; i<edges.length; i++){
+            console.log(edges[i].source)
+            if (!edges[i].source.value || edges[i].source.value.constructor != gsConstructor) continue;
+            result.merge(edges[i].source.value);
+        }
+        return result;
+        //return edges[0].source.value;
+    }
 
-        // TODO [think later]: How to handle defaults / values for FileInputs and WebURLs?
-        // IDEA-1: Load and add as parameter; Will need to the synchronous
-
-        // input initializations
-        for (let inp of node.inputs){
-            let input: any;
+    static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
+        var input: any;
+        if (node.type == 'start' || inp.edges.length == 0){
             if (inp.meta.mode == InputType.URL){
                 const p = new Promise((resolve) => {
                     let request = new XMLHttpRequest();
@@ -153,51 +169,70 @@ export class CodeUtils {
                 input = await p;
             } else {
                 input = inp.value || inp.default;
-                if (typeof input === 'number' || input === undefined){
-                    // do nothing
-                } else if (typeof input === 'string'){
-                    if(node.type != 'start' && inp.edge){
-                        input = '"' + input + '"';
-                    }
-                } else if (input.constructor === [].constructor){
-                    input = '[' + input + ']';
-                } else if (input.constructor === {}.constructor) {
-                    input = JSON.stringify(input);
-                } else if (input.constructor === gsConstructor) {
-                    input = `new __MODULES__.gs.Model(${input.toJSON()})`
-                } else{
-                    // do nothing
-                }
             }
-            codeStr.push('let ' + inp.name + ' = ' + input + ';');
-            varsDefined.push(inp.name);
-        };
+        } else {
+            input = CodeUtils.mergeInputs(inp.edges);
+            if (input.constructor === gsConstructor) {
+                input = `new __MODULES__.gs.Model(${input.toJSON()})`
+            } else {
+                // do nothing
+            }
+        }
+        return input;
+    }
 
-        for (let oup of node.outputs){
-            const line = `let ${oup.name} = undefined;`;
-            codeStr.push(line);
-            varsDefined.push(oup.name);
-        };
+    public static async getNodeCode(node: INode, addProdArr = false): Promise<string> {
+        node.hasError = false;
+        const codeStr = [];
+        const varsDefined: string[] = [];
+
+        // TODO [think later]: How to handle defaults / values for FileInputs and WebURLs?
+        // IDEA-1: Load and add as parameter; Will need to the synchronous
+
+        // input initializations
+        if (addProdArr){
+            var input = await CodeUtils.getInputValue(node.input, node);
+            codeStr.push('let ' + node.input.name + ' = ' + input + ';');
+            varsDefined.push(node.input.name);
+        }
+
+        const line = `let ${node.output.name} = undefined;`;
+        codeStr.push(line);
+        varsDefined.push(node.output.name);
 
         // procedure
         for (let prod of node.procedure){
             codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         };
 
+        //console.log( `{\n${codeStr.join('\n')}\nreturn { ${outStatements.join(',') } };\n}`);
+        return `{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
 
-        // output intializations
-        const outStatements = [];
-        for (let oup of node.outputs){
-            outStatements.push( `${oup.name} : ${oup.name}` );
-        };
 
-        console.log( `{\n${codeStr.join('\n')}\nreturn { ${outStatements.join(',') } };\n}`);
-
-        return `{
-            ${codeStr.join('\n')}
-            return { ${outStatements.join(',') } };
-        }`;
-
+    }
+    
+    static async getFunctionString(func: IFunction): Promise<string>{
+        let fullCode = '';
+        let fnCode = `function ${func.name}(${func.args[0].name}){\nvar merged;\n`;
+        for (let node of func.module.nodes){
+            let code =  await CodeUtils.getNodeCode(node, false)
+            fullCode += `function ${node.id}(${node.input.name})` + code + `\n\n`;
+            if (node.type ==='start'){
+                fnCode += `let result_${node.id} = ${node.id}(${func.args[0].name});\n`
+            } else if (node.input.edges.length == 1) {
+                fnCode += `let result_${node.id} = ${node.id}(result_${node.input.edges[0].source.parentNode.id});\n`
+            } else {
+                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
+                fnCode += `let result_${node.id} = ${node.id}(merged);\n`
+            }
+            if (node.type === 'end'){
+                fnCode += `return result_${node.id};\n`;
+            }
+        }
+        fnCode += '}\n\n'
+        fullCode += fnCode
+        //console.log(fullCode)
+        return fullCode
     }
 
 }

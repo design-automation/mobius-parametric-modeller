@@ -2,6 +2,7 @@ import { Component, Input} from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { downloadUtils } from './download.utils'
 import * as circularJSON from 'circular-json';
+import { FlowchartUtils } from '@models/flowchart';
 
 @Component({
   selector: 'file-save',
@@ -19,18 +20,16 @@ export class SaveFileComponent{
 
     // todo: save file
     download(){
-
+        if (!this.file.flowchart.ordered){
+            FlowchartUtils.orderNodes(this.file.flowchart)
+        }
         var savedfile = circularJSON.parse(circularJSON.stringify(this.file))
         for (let node of savedfile.flowchart.nodes){
-            for (let input of node.inputs){
-                if (input.hasOwnProperty('value')){
-                    input.value = undefined;
-                }
+            if (node.input.hasOwnProperty('value')){
+                node.input.value = undefined;
             }
-            for (let output of node.outputs){
-                if (output.hasOwnProperty('value')){
-                    output.value = undefined;
-                }
+            if (node.output.hasOwnProperty('value')){
+                node.output.value = undefined;
             }
         }
 

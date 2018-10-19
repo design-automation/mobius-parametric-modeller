@@ -4,7 +4,9 @@ import { PortType } from '@models/port';
 
 @PortTypesAware
 @Component({
-  selector: 'port',
+  selector: '[port]',
+  template: `<svg:circle [attr.cx]="data.parentNode.position.x-5" [attr.cy]="data.parentNode.position.y + 35" r="5" fill="black" />`,
+  /*
   template: `
             <div class='container--port' [class.invert]='data.type' 
                 (drop)='portDrop($event)'
@@ -20,6 +22,7 @@ import { PortType } from '@models/port';
                 <input autocomplete=off [(ngModel)]='data.name' placeholder='port_name'>
             </div>
             `,
+  */
   styles:   [
       `
         .container--port{
@@ -77,13 +80,24 @@ export class PortComponent{
     @Input() data: any;
     @Input() zoom: number;
     @Input() dragable: boolean;
+    @Input() inputPort: boolean;
     @Output() connected = new EventEmitter();
+
 
     private dragStart = { x: 0, y: 0 };
     private source: string;
     private mouse_pos = { 
         start: {x: 0, y: 0}, 
         current: {x: 0, y: 0}
+    }
+    private position;
+
+    ngOnInit(){
+        if (this.inputPort){
+            this.position = [this.data.parentNode.position.x, this.data.parentNode.position.y +40]
+        } else {
+            this.position = [this.data.parentNode.position.x + 100, this.data.parentNode.position.y +80]
+        }
     }
 
     portDragOver($event): void{

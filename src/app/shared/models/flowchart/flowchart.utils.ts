@@ -1,5 +1,6 @@
 import { IFlowchart } from './flowchart.interface';
-import { NodeUtils } from '@models/node';
+import { NodeUtils, INode } from '@models/node';
+import { NgModuleFactoryLoader } from '@angular/core';
 
 export class FlowchartUtils{
     
@@ -11,10 +12,50 @@ export class FlowchartUtils{
             },
             nodes: [  NodeUtils.getStartNode(), NodeUtils.getEndNode()  ],
             edges: [],
-            functions: []
+            functions: [],
+            ordered: false
         }
 
         return flw;
     }
-    
+
+    static checkNode(nodeOrder: INode[], node: INode){
+        if (node.hasExecuted){
+            return
+        } else if (node.type === 'start' ){
+            nodeOrder.push(node)
+        } else {
+            for (let edge of node.input.edges){
+                if (!edge.source.parentNode.hasExecuted){
+                    return
+                }
+            }
+            nodeOrder.push(node)
+        }
+        node.hasExecuted = true;
+        for (let edge of node.output.edges){
+            FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode);
+        }
+    }
+
+    public static orderNodes(flw: IFlowchart){
+        var startNode = undefined;
+        for (let node of flw.nodes){
+            if (node.type === 'start'){
+                startNode = node;
+            }
+            node.hasExecuted = false;
+        }
+        var nodeOrder = [];
+        FlowchartUtils.checkNode(nodeOrder, startNode);
+        if (nodeOrder.length < flw.nodes.length){
+            for (let node of flw.nodes){
+                if (node.type != 'start' && node.input.edges.length == 0){
+                    FlowchartUtils.checkNode(nodeOrder, node);
+                }
+            }
+        }
+        flw.nodes = nodeOrder;
+        flw.ordered = true;
+    }
 }

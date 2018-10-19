@@ -5,7 +5,7 @@
 	[style.width.px]="getWidth()"
 	[style.height.px]="getHeight()"
 	[class.selected]='edge.selected'
-	(click)='select()'>
+	(click)='select($event)'>
 	<canvas #canvas></canvas>
 	<button *ngIf='edge.selected' (click)='deleteEdge()'>Delete</button>
 </div>

@@ -1,20 +1,34 @@
-<div class='container' (copy)='copyNode($event)'  (paste)='pasteNode($event)'>
-	<button class='btn--addNode' (click)='addNode()'> Add Node </button>
-	
-    <node *ngFor="let node of data.nodes; let node_index = index" 
-          id='flw_node_{{node_index}}'
-          [node]='node' 
-          [node_index]='node_index'
-          [selected]='isSelected(node_index)'
-          [zoom]=1
-          (action)='nodeAction($event, node_index)'>
-    </node>
-    
-    <edge *ngFor="let e of data.edges; let edge_index = index"
-          [edge]='e' [temporary]='false'
-          (delete)='deleteEdge(edge_index);'></edge>
+<div id = 'flowchart-main-container'
+      class='container' 
+      (dragover)='dragNodeOver($event)'
+      (drop)='dropNode($event)'
+      (copy)='copyNode($event)'  
+      (paste)='pasteNode($event)' 
+      (wheel)="scale($event)"
+      (mousedown)="panStart($event)"
+      (mousemove)="panMove($event)"
+      (mouseup)="panEnd($event)"
+      >
+      <button style="position: absolute; top: 10px; left: 22px;" class='btn' (click)='addNode()'> Add Node </button>
+      <!--
+      <div class="transform--container" [style.transform-origin]="getMousePos()" [style.transform]="getZoomStyle()">
+      -->
+      <div class="transform--container">
+      <node *ngFor="let node of data.nodes; let node_index = index" 
+            id='flw_node_{{node_index}}'
+            [node]='node' 
+            [node_index]='node_index'
+            [selected]='isSelected(node_index)'
+            [zoom]='zoom'
+            (action)='nodeAction($event, node_index)'>
+      </node>
+      
+      <edge *ngFor="let e of data.edges; let edge_index = index"
+            [edge]='e' [temporary]='false'
+            (delete)='deleteEdge(edge_index);'></edge>
 
-    <edge [edge]='edge' [temporary]='true' [mouse]='mouse' *ngIf='temporaryEdge'></edge>
+      <edge [edge]='edge' [temporary]='true' [mouse]='mouse' *ngIf='temporaryEdge'></edge>
+      </div>
 </div>
 
 

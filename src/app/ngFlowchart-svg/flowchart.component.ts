@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 // todo: make internal to flowchart
@@ -8,6 +8,7 @@ import { IEdge } from '@models/edge';
 
 import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
+import { fromEvent, Observable, Subscriber  } from 'rxjs';
 
 const offset = [2, 47];
 
@@ -36,7 +37,11 @@ export class FlowchartComponent{
 
   // variable for copied node
   private copied: string;
-
+  private copyListener = fromEvent(document, 'copy');
+  private pasteListener = fromEvent(document, 'paste');
+  private copySub: any;
+  private pasteSub: any;
+  
   
   inputOffset = [-10, 35];
   outputOffset = [110, 65];
@@ -102,22 +107,30 @@ export class FlowchartComponent{
     this.data.nodes.push(NodeUtils.getNewNode());  
   }
 
-  copyNode($event): void{
-    const node = this.data.nodes[this.data.meta.selected_nodes[0]];
-    if (node.type != 'start' && node.type != 'end'){
-      console.log('copied node:', node);
-      this.copied = circularJSON.stringify(node);
-    }
+  activateCopyPaste($event): void{
+    this.copySub = this.copyListener.subscribe(val => {
+      const node = this.data.nodes[this.data.meta.selected_nodes[0]];
+      if (node.type != 'start' && node.type != 'end'){
+        console.log('copied node:', node);
+        this.copied = circularJSON.stringify(node);
+      }
+    })
+    this.pasteSub = this.pasteListener.subscribe(val =>{
+      if (this.copied){
+        const newNode = circularJSON.parse(this.copied);
+        newNode.position = {x:0, y:0};
+        this.data.nodes.push(newNode);
+        console.log('pasting node:', newNode);
+      }
+    })
+
   }
 
-  pasteNode($event): void{
-    if (this.copied){
-      const newNode = circularJSON.parse(this.copied);
-      newNode.position = {x:0, y:0};
-      this.data.nodes.push(newNode);
-      console.log('pasting node:', newNode);
-    }
+  deactivateCopyPaste($event): void{
+    this.copySub.unsubscribe();
+    this.pasteSub.unsubscribe();
   }
+
 
   deleteSelectedNodes(){
     while (this.data.meta.selected_nodes.length > 0){
@@ -179,7 +192,6 @@ export class FlowchartComponent{
   scale($event: WheelEvent): void{
     $event.preventDefault();
     $event.stopPropagation();
-
     let scaleFactor: number = 0.1;
     let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
     

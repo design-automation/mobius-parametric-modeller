@@ -1,4 +1,5 @@
-<div class='container--editor'>
+<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
+(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
 
 	<div class='container__heading'>
 		<h3>{{ node?.name }} // procedure</h3>
@@ -12,9 +13,7 @@
 				*ngFor="let line of node?.procedure; let idx=index" 
 				[data]="line"
 				(select)="selectProcedure($event,line)"
-				(delete)="deleteChild($event, idx)"
-				(copied)="setCopied($event)"
-				(pasteOn)="pasteProd($event)"></procedure-item>
+				(delete)="deleteChild($event, idx)"></procedure-item>
 		</div>
 	</div>
 

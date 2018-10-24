@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'text-viewer',
-  template: `<h3>Text Viewer :: {{ node?.name }}</h3>
-             <div>{{ output || "no-value" }}</div>`,
+  template: `<br><div>{{ output || "no-value" }}</div>`,
   styles: []
 })
 export class TextViewerComponent{

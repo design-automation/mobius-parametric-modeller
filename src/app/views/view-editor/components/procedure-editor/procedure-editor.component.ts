@@ -49,16 +49,16 @@ export class ProcedureEditorComponent{
 
     cutProd($event){
       if (!this.copyCheck || document.activeElement.nodeName == "INPUT") return;
-      console.log('cutting', this.node.state.procedure[0])
+      console.log('cutting', this.node.state.procedure)
       this.copiedProd = this.node.state.procedure;
       var parentArray;
       for (let prod of this.copiedProd){
         if (prod.parent){
-          parentArray = prod.parent.children
-        } else parentArray = this.node.procedure
+          parentArray = prod.parent.children;
+        } else parentArray = this.node.procedure;
 
         for (let i = 0; i < parentArray.length; i++ ){
-          if (parentArray[i] == this.copiedProd){
+          if (parentArray[i] === prod){
             parentArray.splice(i, 1);
             break;
           }
@@ -70,12 +70,30 @@ export class ProcedureEditorComponent{
     pasteProd($event){
       if (this.copyCheck && document.activeElement.nodeName != "INPUT"){
         const pastingPlace = this.node.state.procedure[0];
-        for (let i = this.copiedProd.length-1; i>=0; i --){
-          console.log('pasting', this.copiedProd[i].ID)
-          NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
-          this.node.state.procedure[0].selected = false;
-          pastingPlace.selected = true
-          this.node.state.procedure = [pastingPlace]
+        if (pastingPlace === undefined){
+          for (let i = 0; i< this.copiedProd.length; i++){
+            console.log('pasting', this.copiedProd[i].ID)
+            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
+            this.node.state.procedure[0].selected = false;
+            this.node.state.procedure = []
+          }
+        } else if (pastingPlace.children){
+          for (let i = 0; i< this.copiedProd.length; i++){
+            console.log('pasting', this.copiedProd[i].ID)
+            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
+            this.node.state.procedure[0].selected = false;
+            pastingPlace.selected = true
+            this.node.state.procedure = [pastingPlace]
+          }
+
+        } else {
+          for (let i = this.copiedProd.length-1; i>=0; i --){
+            console.log('pasting', this.copiedProd[i].ID)
+            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
+            this.node.state.procedure[0].selected = false;
+            pastingPlace.selected = true
+            this.node.state.procedure = [pastingPlace]
+          }
         }
         //this.copiedProd = undefined;
       }

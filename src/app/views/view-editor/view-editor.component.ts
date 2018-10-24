@@ -36,5 +36,6 @@ export class ViewEditorComponent{
             this.flowchart.functions.push(func);
         }
     }
+
     
 }

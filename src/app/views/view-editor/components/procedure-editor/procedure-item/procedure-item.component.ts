@@ -21,7 +21,7 @@ export class ProcedureItemComponent{
     }
 
     emitSelect($event, procedure: IProcedure){
-        this.select.emit(procedure);
+        this.select.emit({"ctrl":$event.ctrlKey, "prod":procedure});
     }
 
     selectChild($event, procedure: IProcedure){
@@ -31,32 +31,6 @@ export class ProcedureItemComponent{
 
     deleteChild($event, index: number): void{
         this.data.children.splice(index, 1);
-    }
-
-    copyProd($event, procedure: IProcedure): void{
-        event.stopPropagation();
-        this.copied.emit(procedure);
-    }
-
-    cutProd($event, procedure: IProcedure): void{
-        event.stopPropagation();
-        this.copied.emit(procedure);
-        this.delete.emit(undefined);
-    }
-
-    pasteProd($event, procedure: IProcedure): void{
-        event.stopPropagation();
-        this.pasteOn.emit(procedure);
-    }
-
-    copyChild($event): void{
-        event.stopPropagation();
-        this.copied.emit($event);
-    }
-
-    pasteChild($event): void{
-        event.stopPropagation();
-        this.pasteOn.emit($event);
     }
 
     stopProp($event):void{

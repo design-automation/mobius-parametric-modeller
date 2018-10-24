@@ -680,7 +680,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit {
       }
       const points = new THREE.Points( geometry, pointsmaterial);
       points.userData.id=point.id;
-      points["material"].needsUpdate=true;
+      //points["material"].needsUpdate=true;
       points.name="selects";
       this.scene.add(points);
       this.renderer.render(this.scene,this.camera);
@@ -705,7 +705,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit {
       }
       const points = new THREE.Points( geometry, pointsmaterial);
       points.userData.id=vertice.id;
-      points["material"].needsUpdate=true;
+      //points["material"].needsUpdate=true;
       points.name="selects";
       this.scene.add(points);
       this.renderer.render(this.scene,this.camera);
@@ -731,7 +731,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit {
       }
       const points = new THREE.Points( geometry, pointsmaterial);
       points.userData.id=vertice.id;
-      points["material"].needsUpdate=true;
+      //points["material"].needsUpdate=true;
       points.name="selects";
       this.scene.add(points);
       this.dataService.addclickshow(vertice);

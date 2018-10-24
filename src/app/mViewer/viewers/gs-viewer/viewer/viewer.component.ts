@@ -250,7 +250,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
         var radius=0;
         for(var i=0;i< objectData.children.length;i++){
           let chd = objectData.children[i];
-          chd["material"].needsUpdate=true;
+          //chd["material"].needsUpdate=true;
           chd["material"].transparent=true;
           chd["material"].blending=1;
           if( chd.name==="All faces"||chd.name==="All wires"||chd.name==="All edges"||chd.name==="All vertices"||
@@ -303,7 +303,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     context.fillText( name , canvas.width/2, canvas.height/2);
     context.font ="Bold  100px sans-serif";
     var texture = new THREE.Texture(canvas) 
-    texture.needsUpdate = true;
+    //texture.needsUpdate = true;
     var spriteMaterial = new THREE.SpriteMaterial( { map: texture, color: 0xffffff } );
     return spriteMaterial;
   }
@@ -679,7 +679,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
             const line = new THREE.Line( geometry, material);
             line.userData.id=id;
-            line["material"].needsUpdate=true;
+            //line["material"].needsUpdate=true;
             line.name="selects";
             this.scene.add(line);
            }
@@ -710,7 +710,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
               var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
               const line = new THREE.Line( geometry, material);
               line.userData.id=id;
-              line["material"].needsUpdate=true;
+              //line["material"].needsUpdate=true;
               line.name="selects";
               this.scene.add(line);
             }
@@ -751,7 +751,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
           var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
           const line = new THREE.Line( geometry, material);
           line.userData.id=face.getLabel();
-          line["material"].needsUpdate=true;
+          //line["material"].needsUpdate=true;
           line.name="selects";
           this.scene.add(line);
           this.addTextLabel(label,label_xyz, face.getLabel(),path, "All faces");
@@ -776,7 +776,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
             const line = new THREE.Line( geometry, material);
             line.userData.id=face.getLabel();
-            line["material"].needsUpdate=true;
+            //line["material"].needsUpdate=true;
             line.name="selects";
             this.scene.add(line);
             this.addTextLabel(label,label_xyz,face.getLabel(),path, "All faces");
@@ -800,7 +800,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
           var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
           const line = new THREE.Line( geometry, material);
           line.userData.id=label;
-          line["material"].needsUpdate=true;
+          //line["material"].needsUpdate=true;
           line.name="selects";
           this.scene.add(line);
           this.addTextLabel(label,label_xyz, label,path,"All wires");
@@ -825,7 +825,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
             const line = new THREE.Line( geometry, material);
             line.userData.id=label;
-            line["material"].needsUpdate=true;
+            //line["material"].needsUpdate=true;
             line.name="selects";
             this.scene.add(line);
             this.addTextLabel(label,label_xyz, label,path,"All wires");
@@ -877,7 +877,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
             const line = new THREE.Line( geometry, material);
             line.userData.id=edge.getLabel();
-            line["material"].needsUpdate=true;
+            //line["material"].needsUpdate=true;
             line.name="selects";
             this.scene.add(line);
             this.addTextLabel(label,label_xyz, edge.getLabel(),path,"All edges");
@@ -937,7 +937,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             var material=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
             const line = new THREE.Line( geometry, material);
             line.userData.id=label;
-            line["material"].needsUpdate=true;
+            //line["material"].needsUpdate=true;
             line.name="selects";
             this.scene.add(line);
             this.addTextLabel(label,label_xyz, label,path,"Other lines");
@@ -1041,7 +1041,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
           }
           const points = new THREE.Points( geometry, pointsmaterial);
           points.userData.id=id;
-          points["material"].needsUpdate=true;
+          //points["material"].needsUpdate=true;
           points.name="selects";
           this.scene.add(points);
           this.addTextLabel(label,verts_xyz, id,id,"All points");
@@ -1067,7 +1067,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             }
             const points = new THREE.Points( geometry, pointsmaterial);
             points.userData.id=id;
-            points["material"].needsUpdate=true;
+            //points["material"].needsUpdate=true;
             points.name="selects";
             this.scene.add(points);
             this.addTextLabel(label,verts_xyz, id,id,"All points");
@@ -1129,7 +1129,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
           }
           const points = new THREE.Points( geometry, pointsmaterial);
           points.userData.id=id;
-          points["material"].needsUpdate=true;
+          //points["material"].needsUpdate=true;
           points.name="selects";
           this.scene.add(points);
           this.addTextLabel(label,verts_xyz, id,id,"All points");
@@ -1155,7 +1155,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
             }
             const points = new THREE.Points( geometry, pointsmaterial);
             points.userData.id=id;
-            points["material"].needsUpdate=true;
+            //points["material"].needsUpdate=true;
             points.name="selects";
             this.scene.add(points);
             this.addTextLabel(label,verts_xyz, id,id,"All points");
@@ -1467,7 +1467,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     context.fillText( message, borderThickness, fontsize + borderThickness);
 
     var texture = new THREE.Texture(canvas) 
-    texture.needsUpdate = true;
+    //texture.needsUpdate = true;
 
     var spriteMaterial = new THREE.SpriteMaterial( { map: texture, color: 0xffffff } );
     var sprite = new THREE.Sprite( spriteMaterial );

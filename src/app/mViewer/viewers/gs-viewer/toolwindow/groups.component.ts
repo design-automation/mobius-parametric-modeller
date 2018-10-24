@@ -443,7 +443,7 @@ export class GroupsComponent extends DataSubscriber implements OnInit {
           }
           let points:THREE.Points = new THREE.Points( geometry, pointsmaterial);
           points.userData.id=label;
-          points["material"].needsUpdate=true;
+          //points["material"].needsUpdate=true;
           points.name="selects";
           this.scene.add(points);
           point.label=label;
@@ -482,7 +482,7 @@ export class GroupsComponent extends DataSubscriber implements OnInit {
           }
           let points = new THREE.Points( geometry, pointsmaterial);
           points.userData.id=label;
-          points["material"].needsUpdate=true;
+          //points["material"].needsUpdate=true;
           points.name="selects";
           this.scene.add(points);
           point.label=label;
@@ -522,7 +522,7 @@ export class GroupsComponent extends DataSubscriber implements OnInit {
           let material:THREE.LineBasicMaterial=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
           let line:THREE.Line = new THREE.Line( geometry, material);
           line.userData.id=edge.getLabel();
-          line["material"].needsUpdate=true;
+          //line["material"].needsUpdate=true;
           line.name="selects";
           this.scene.add(line);
         }
@@ -557,7 +557,7 @@ export class GroupsComponent extends DataSubscriber implements OnInit {
           let material:THREE.LineBasicMaterial=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
           let line:THREE.Line = new THREE.Line( geometry, material);
           line.userData.id=label;
-          line["material"].needsUpdate=true;
+          //line["material"].needsUpdate=true;
           line.name="selects";
           this.scene.add(line);
         }
@@ -591,7 +591,7 @@ export class GroupsComponent extends DataSubscriber implements OnInit {
           let material:THREE.LineBasicMaterial=new THREE.LineBasicMaterial( { color:0x00ff00,side:THREE.DoubleSide} );
           let line:THREE.Line = new THREE.Line( geometry, material);
           line.userData.id=face.getLabel();
-          line["material"].needsUpdate=true;
+          //line["material"].needsUpdate=true;
           line.name="selects";
           this.scene.add(line);
         }

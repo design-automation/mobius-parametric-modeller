@@ -5,11 +5,27 @@ import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'file-load',
-  template:  `<div class='btn btn--loadfile' onclick="document.getElementById('file-input').click();">Load File</div>
+  template:  `<button class='btn' onclick="document.getElementById('file-input').click();">Load</button>
               <input id="file-input" type="file" name="name" (change)="sendloadfile()" style=" display: none;" />`,
   styles: [ 
-            `.btn--loadfile{ 
+            `            
+            button.btn{ 
+                margin: 0px 0px 0px 0px;
+                font-size: 10px;
+                line-height: 12px;
+                border: 2px solid gray;
+                border-radius: 4px;
+                padding: 2px 5px;
+                background-color: #3F4651; 
+                color: #E7BF00;
+                font-weight: 600;
+                text-transform: uppercase;
              }
+            button.btn:hover{
+                background-color: gray;
+                color: white;
+            }
+
              `
           ]
 })

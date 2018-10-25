@@ -12,11 +12,21 @@ import { IEdge } from '@models/edge';
         stroke-linejoin: round;
         stroke-width: 5px;
         opacity: 0.6;
-        pointer-events: stroke
+        pointer-events: stroke;
+        marker-end: url(#arrow);
+    }  
+    .inviEdge{
+        fill: none;
+        stroke: gray;
+        stroke-width: 30px;
+        opacity: 0;
+        pointer-events: stroke;
     }  
     .selected{
         stroke: blue;
         opacity: 0.8;
+        marker-end: url(#arrow_selected);
+
     }
   `]
 })

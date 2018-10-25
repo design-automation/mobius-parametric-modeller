@@ -36,7 +36,8 @@
       (mouseup)='handleMouseUp($event)'
       (mouseenter)='activateCopyPaste($event)'
       (mouseleave)='deactivateCopyPaste($event)'
-      (wheel)='scale($event)'>
+      (wheel)='scale($event)'
+      >
             <defs>
                   <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
                     <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
@@ -45,7 +46,13 @@
                     <rect width="100" height="100" fill="url(#smallGrid)"/>
                     <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
                   </pattern>
-                </defs>
+                  <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
+                    <path d="M0,0 L0,6 L7,3 z" fill="green" />
+                  </marker>
+                  <marker id="arrow_selected" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
+                        <path d="M0,0 L0,6 L7,3 z" fill="blue" />
+                  </marker>
+            </defs>
             <rect width="100%" height="100%" fill="url(#grid)" />
                           
               
@@ -66,7 +73,7 @@
       </svg>
       <button style='position: absolute; top: 0px; left: 10px; ' class='btn' (click)='addNode()'> Add Node </button>
       <button style='position: absolute; top: 0px; left: 77px; ' class='btn' (click)='deleteSelectedNodes()'> Delete Node </button>
-      <button style='position: absolute; top: 0px; left: 157px;' class='btn' (click)='deleteSelectedEdges()'> Delete Edge </button>
+      <button style='position: absolute; top: 0px; left: 157px;' class='btn' (click)='deleteSelectedEdges()'> Delete Wire </button>
 </div>
 
 

@@ -1,3 +1,14 @@
+
+<div class='container'>
+	<div class='content__panel'>
+		<parameter-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></parameter-editor>
+		<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)'></procedure-editor>
+		<br>
+		<br>
+	</div>
+</div>
+
+<!--
 <div class='container'>
 
 	<div class='container__header'>
@@ -10,7 +21,7 @@
 		<split direction="horizontal">
 	
 			<split-area size="60">
-				<!-- Main Panel: Flowchart-->
+
 				<div class='content__panel'>
 					<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
 				</div>
@@ -28,7 +39,6 @@
 			
 			<split-area size="40">
 				
-					<!-- Side content__Panel: Split into three panes -->
 					<split direction="vertical">
 	
 						<split-area size='60'>
@@ -52,12 +62,5 @@
 	
 		</split>
 	</div>
-	<!--
-	<div class='container__footer'>
-		Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.
-	</div>
-
-	-->
-
-
 </div>
+-->

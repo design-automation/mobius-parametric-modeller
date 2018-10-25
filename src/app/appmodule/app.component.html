@@ -1,1 +1,39 @@
-<h1>Hello World</h1>
+
+<div class='container'>
+    <split direction="horizontal">
+        <split-area size="60">
+            <div class='container__header'>
+                <div style ="display: flex-start">
+                    <button class='btn' [class.active]='false' (click)='updateView("publish")'>Publish</button>
+                    <button class='btn' [class.active]='false' (click)='updateView("flowchart")'>Flowchart</button>
+                    <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
+                </div>
+                <div style ="display: inline-flex">
+                    <file-new (create)='updateFile($event)'></file-new>
+                    <file-save [file]='file'></file-save>
+                    <file-load (loaded)='updateFile($event)'></file-load>        
+
+                </div>
+                <execute [flowchart]='flowchart'></execute>
+            </div>
+            <div class='content__panel'>
+                
+                <ng-container #vc></ng-container>
+                <!--
+                    <flowchart *ngIf="activeView=='flowchart'" [data]="flowchart"></flowchart> 
+                    <view-editor *ngIf="activeView=='editor'" [flowchart]="flowchart"></view-editor> 
+                -->
+            </div>
+        </split-area>
+
+        <split-area size="40">
+            <div class='content__panel' >
+                <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
+            </div>
+        </split-area>
+        
+
+    </split>
+
+</div>
+

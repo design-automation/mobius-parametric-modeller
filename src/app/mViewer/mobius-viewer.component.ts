@@ -7,29 +7,8 @@ import * as gs from 'gs-json';
 
 @Component({
     selector: 'mviewer',
-    template:   `<div class='viewer-container'>  
-                    <div class= 'btn-group'>
-                        <div class='btn btn--viewer' 
-                            [class.selected]='view.name == activeView.name'
-                            *ngFor='let view of Viewers;' 
-                            (click)='updateView(view)'>
-                            <span>{{view.name}}</span>
-                        </div>
-                    </div>
-                    <ng-container #vc></ng-container>
-                </div>`,    
-    styles: [
-            `
-            .btn{
-                display: inline-block;
-            }
-            
-            .selected{
-                background-color: black;
-                color: yellow;
-            }
-            `
-    ]
+    templateUrl:  'mobius-viewer.component.html',    
+    styleUrls: ['mobius-viewer.component.scss']
 })
 export class ViewerContainerComponent implements OnDestroy {
 

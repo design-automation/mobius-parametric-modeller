@@ -9,9 +9,9 @@
                     <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
                 </div>
                 <div style ="display: inline-flex">
-                    <file-save [file]='file'></file-save>
-                    <file-load (loaded)='updateFile($event)'></file-load>
                     <file-new (create)='updateFile($event)'></file-new>
+                    <file-save [file]='file'></file-save>
+                    <file-load (loaded)='updateFile($event)'></file-load>        
 
                 </div>
                 <execute [flowchart]='flowchart'></execute>
@@ -27,7 +27,7 @@
         </split-area>
 
         <split-area size="40">
-            <div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>
+            <div class='content__panel' >
                 <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
             </div>
         </split-area>

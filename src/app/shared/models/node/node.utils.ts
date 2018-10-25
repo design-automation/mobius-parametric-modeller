@@ -10,7 +10,7 @@ export abstract class NodeUtils{
 
     static getNewNode(): INode{
         let node: INode = <INode>{
-            name: "new_node", 
+            name: "node", 
             id: IdGenerator.getNodeID(),
             position: {x: 0, y: 0}, 
             enabled: true,

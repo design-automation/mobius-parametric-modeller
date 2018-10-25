@@ -5,7 +5,7 @@ import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'file-new',
-  template:  `<button class='btn' (click)='sendNewFile()'>New File</button>`,
+  template:  `<button class='btn' (click)='sendNewFile()'>New</button>`,
   styles: [ 
             `
             button.btn{ 

@@ -43,8 +43,8 @@ export class FlowchartComponent{
   
   private offset;
   
-  inputOffset = [-10, 35];
-  outputOffset = [110, 65];
+  inputOffset = [50, -10];
+  outputOffset = [50, 90];
 
   ngOnInit(){ 
     this.canvas = <HTMLElement>document.getElementById("svg-canvas");

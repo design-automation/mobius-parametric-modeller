@@ -1,0 +1,44 @@
+$header-height: 45px;
+
+.container__header{
+    flex: 0 1 auto;
+    min-height: $header-height;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 0px 0px 0px 15px;
+
+    background-color: #3F4651;
+    color: #E7BF00;
+    
+    line-height: $header-height;
+    text-transform: uppercase;
+
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+button.btn{ 
+    margin: 10px;
+    font-size: 14px;
+    line-height: 18px;
+    border: 2px solid gray;
+    border-radius: 4px;
+    padding: 2px 10px;
+    background-color: #3F4651; 
+    color: #E7BF00;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+button.btn:hover{
+    background-color: gray;
+    color: white;
+}
+
+.selected{
+    background-color: black;
+    color: yellow;
+}

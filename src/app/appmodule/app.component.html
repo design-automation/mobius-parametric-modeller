@@ -4,9 +4,9 @@
         <split-area size="60">
             <div class='container__header'>
                 <div style ="display: flex-start">
-                    <li class='link' [class.active]='false' (click)='updateView("publish")'>Publish</li>
-                    <li class='link' [class.active]='false' (click)='updateView("flowchart")'>Flowchart</li>
-                    <li class='link' [class.active]='false' (click)='updateView("editor")'>Procedures</li>
+                    <button class='btn' [class.active]='false' (click)='updateView("publish")'>Publish</button>
+                    <button class='btn' [class.active]='false' (click)='updateView("flowchart")'>Flowchart</button>
+                    <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
                 </div>
                 <div style ="display: inline-flex">
                     <file-save [file]='file'></file-save>

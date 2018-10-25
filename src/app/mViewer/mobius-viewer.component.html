@@ -1,0 +1,14 @@
+<div class='viewer-container'>  
+    <div class='container__header'>
+        <div style ="display: flex-start">
+            <button class='btn' 
+            [class.selected]='view.name == activeView.name'
+            *ngFor='let view of Viewers;' 
+            (click)='updateView(view)'>
+            {{view.name}}
+            </button>
+        </div>
+    </div>
+
+    <ng-container #vc></ng-container>
+</div>

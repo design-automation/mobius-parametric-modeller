@@ -3,7 +3,8 @@ $header-height: 45px;
 .container{
     position: relative;
     overflow: auto;
-    height: 100%;
+    height: auto;
+    margin: 10px 10px;
 
     display: flex;
     flex-direction: column;

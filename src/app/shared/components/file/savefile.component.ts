@@ -6,10 +6,25 @@ import { FlowchartUtils } from '@models/flowchart';
 
 @Component({
   selector: 'file-save',
-  template:  `<div class='btn btn--save' (click)='download()'>Save File</div>`,
+  template:  `<button class='btn' (click)='download()'>Save File</button>`,
   styles: [ 
-            `.btn--save{ 
+            `
+            button.btn{ 
+                margin: 0px 0px 0px 0px;
+                font-size: 10px;
+                line-height: 12px;
+                border: 2px solid gray;
+                border-radius: 4px;
+                padding: 2px 5px;
+                background-color: #3F4651; 
+                color: #E7BF00;
+                font-weight: 600;
+                text-transform: uppercase;
              }
+            button.btn:hover{
+                background-color: gray;
+                color: white;
+            }
              `
           ]
 })

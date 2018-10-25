@@ -1,4 +1,4 @@
-import { NgModule }              from '@angular/core';
+/*import { NgModule }              from '@angular/core';
 import { RouterModule, Routes }  from '@angular/router';
 import { Component } from '@angular/core';
 
@@ -25,4 +25,4 @@ const appRoutes: Routes = [
   ]
 })
 export class AppRoutingModule {}
-
+*/

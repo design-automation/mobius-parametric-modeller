@@ -71,10 +71,11 @@ import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
 })
 export class SharedModule{
     constructor(@Optional() @SkipSelf() shared: SharedModule){
-
+        /*
         /// Prevents any module apart from AppModule from re-importing
         if(shared){
             throw new Error("Core Module has already been imported");
         }
+        */
     }
 }

@@ -9,11 +9,12 @@ import { ViewPublishComponent } from './view-publish.component';
   declarations: [
     ViewPublishComponent
   ],
-  exports: [],
+  exports: [ 
+    ViewPublishComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
-    ViewPublishRoutingModule
   ],
   entryComponents: [ ],
   providers: [ ]

@@ -1,4 +1,4 @@
-import { Component, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild } from '@angular/core';
+import { Component, Injector, ComponentFactoryResolver, ViewContainerRef, ViewChild, EventEmitter, HostListener } from '@angular/core';
 import { ViewEditorComponent, ViewPublishComponent } from '@views';
 import { IMobius } from '@models/mobius';
 import { IFlowchart } from '@models/flowchart';
@@ -50,7 +50,10 @@ export class AppComponent{
     let componentRef = factory.create(this.injector);
     if (view == "flowchart"){
       componentRef.instance["data"] = this.flowchart;
-    } else if(view == "editor"){
+      componentRef.instance["switch"].subscribe(data => this.updateView(data))
+  } else if(view == "editor"){
+      componentRef.instance["flowchart"] = this.flowchart;
+    } else if(view == "publish"){
       componentRef.instance["flowchart"] = this.flowchart;
     }
     return componentRef;
@@ -75,14 +78,16 @@ export class AppComponent{
         componentRef.instance["data"] = this.flowchart;
       } else if(view == "editor"){
         componentRef.instance["flowchart"] = this.flowchart;
+      } else if(view == "publish"){
+        componentRef.instance["flowchart"] = this.flowchart;
       }
 
     }
   }
 
 }
-
 /*
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html', 
@@ -113,6 +118,9 @@ export class AppComponent{
     this.flowchart = this.dataService.flowchart;
   }
 
+  switchView($event){
+    this.activeView = "editor"
+  }
 
 }
 */

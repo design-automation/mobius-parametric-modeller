@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { DataService } from '@services';
+import { Component, Input } from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 
 @Component({
@@ -8,11 +7,9 @@ import { IFlowchart } from '@models/flowchart';
   styleUrls: ['./view-publish.component.scss']
 })
 export class ViewPublishComponent{
+    @Input() flowchart: IFlowchart;
 
-    private flowchart: IFlowchart;
-    constructor(private dataService: DataService){
-        this.flowchart = dataService.flowchart;
-    }
+    constructor(){}
 
     selectNode(node_index: number): void{  
       if( typeof(node_index) == 'number' ){

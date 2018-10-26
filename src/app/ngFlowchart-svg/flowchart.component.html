@@ -30,7 +30,7 @@
       </div>
 -->
 <div id = 'flowchart-main-container' class='container'>
-      <svg id="svg-canvas" class = "svgCanvas" viewBox="0 0 1000 1000" 
+      <svg id="svg-canvas" class = "svgCanvas" viewBox="0 0 1500 1500" 
       (mousedown)='panStart($event)'
       (mousemove)='handleMouseMove($event)'  
       (mouseup)='handleMouseUp($event)'
@@ -68,6 +68,7 @@
             [edge]='edge'
             [inputOffset]='inputOffset'
             [outputOffset]='outputOffset'
+            (selected)='selectEdge(edge)'
             />
             <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0' style="visibility: visible"></line>
       </svg>

@@ -3,12 +3,12 @@
     <split direction="horizontal">
         <split-area size="60">
             <div class='container__header'>
-                <div style ="display: flex-start">
+                <div>
                     <button class='btn' [class.active]='false' (click)='updateView("publish")'>Publish</button>
                     <button class='btn' [class.active]='false' (click)='updateView("flowchart")'>Flowchart</button>
                     <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
                 </div>
-                <div style ="display: inline-flex">
+                <div>
                     <file-new (create)='updateFile($event)'></file-new>
                     <file-save [file]='file'></file-save>
                     <file-load (loaded)='updateFile($event)'></file-load>        
@@ -17,11 +17,13 @@
                 <execute [flowchart]='flowchart'></execute>
             </div>
             <div class='content__panel'>
-                
+
                 <ng-container #vc></ng-container>
                 <!--
-                    <flowchart *ngIf="activeView=='flowchart'" [data]="flowchart"></flowchart> 
-                    <view-editor *ngIf="activeView=='editor'" [flowchart]="flowchart"></view-editor> 
+
+                <flowchart *ngIf="activeView=='flowchart'" [data]="flowchart" (switch)="switchView($event)"></flowchart> 
+                <view-editor *ngIf="activeView=='editor'" [flowchart]="flowchart" ></view-editor> 
+                <view-publish *ngIf="activeView=='publish'" [flowchart]="flowchart"></view-publish> 
                 -->
             </div>
         </split-area>

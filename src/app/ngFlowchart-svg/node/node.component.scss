@@ -6,14 +6,14 @@ $color-text-accent: #DC772F;
 */
 
 $default-padding: 4px;
-.node{
+.node--header{
     width: 100px;
-    height: 80px;
+    height: 15px;
     fill:blue;
     stroke-width:$default-padding;
     stroke: white;
-    fill-opacity:0.1;
-    stroke-opacity:0.7;
+    fill-opacity:0.3;
+    stroke-opacity: 1;
     stroke-linecap: round;
     stroke-linejoin: round;
 
@@ -33,87 +33,63 @@ $default-padding: 4px;
         stroke: red;
     }
 
-    .node__name{
-        background-color: white;
-        text-align: center;
-        overflow: hidden;
-
-        input{
-            font-size: 10px;
-            text-align: center;
-            width: 95%;
-        }
-    }
 }
 
+.node{
+    width: 100px;
+    height: 80px;
+    fill:blue;
+    stroke-width:$default-padding;
+    stroke: white;
+    fill-opacity:0.1;
+    stroke-opacity: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    .node--ellipse{
+        fill:blue;
+        stroke-width:$default-padding;
+        stroke: white;
+        fill-opacity:0.1;
+        stroke-opacity: 1;
+    }
+
+    &.node--start{
+        fill: green;
+    }
+
+    &.node--end{
+        fill: red;
+    }
+
+    &.node--selected{
+        stroke: blue;
+    }
+
+    &.node--error{
+        stroke: red;
+    }
+
+}
+
+.textdiv{
+    text-align: center; 
+    width: 94px;
+}
+textarea{
+    font-family: sans-serif; 
+    background: transparent; 
+    border:none; 
+    font-size: 10px; 
+    width: 100%; 
+    height: 70px;
+    text-align: center; 
+    resize: none; 
+    overflow: hidden;
+}
 
 .port{
     width: 16px;
     height: 12px;
     fill:black;
 }
-
-/*
-.node{
-    position: absolute;
-    
-    max-width: $node-width;
-    margin: $default-padding;
-    width: auto;
-
-    border: 3px solid white;
-    border-radius: 5px;
-
-
-    &.node--selected{
-        border-color: blue;
-    }
-
-    &.node--error{
-        border: 3px solid red;
-    }
-
-    .node__name{
-        background-color: white;
-        color: $color-text-accent;
-        text-align: center;
-
-        overflow: hidden;
-
-        input{
-            font-size: 10px;
-            text-align: center;
-            width: 95%;
-        }
-
-
-    }
-
-    .node__body{
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .container{
-            display: flex;
-            flex-direction: column;
-
-        }
-
-        .container--input{
-            @extend .container;
-        }
-
-        .container--output{
-            @extend .container;
-        }
-
-        .container--info{
-            @extend .container;
-            padding: 5px;
-        }
-    }
-
-}
-*/

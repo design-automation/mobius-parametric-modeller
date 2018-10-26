@@ -19,6 +19,7 @@ import { fromEvent, Observable, Subscriber  } from 'rxjs';
 export class FlowchartComponent{
 
   @Input() data: IFlowchart;
+  @Output() switch = new EventEmitter(); 
 
   // general variable for mouse events
   private isDown: number;
@@ -30,8 +31,9 @@ export class FlowchartComponent{
   private mousePos =[0,0];
   private zoom: number = 1;
 
-  // variable for edge dragging/dropping
+  // variable for edge
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
+  private selectedEdge: IEdge = undefined;
   private startType: string;
 
   // variable for copied node
@@ -56,6 +58,10 @@ export class FlowchartComponent{
   nodeAction($event, node_index): void{
 
     switch($event.action){
+      case ACTIONS.PROCEDURE:
+        this.switch.emit("editor");
+        break;
+
       case ACTIONS.SELECT:
         this.data.meta.selected_nodes = [ node_index ];  
         break;
@@ -114,7 +120,16 @@ export class FlowchartComponent{
   }
 
   addNode(): void{  
-    this.data.nodes.push(NodeUtils.getNewNode());  
+    var newNode = NodeUtils.getNewNode();
+    var pt = this.canvas.createSVGPoint();
+
+    pt.x = 20;
+    pt.y = 100;
+
+    const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+    newNode.position.x = svgP.x
+    newNode.position.y = svgP.y
+    this.data.nodes.push(newNode); 
   }
 
   activateCopyPaste($event): void{
@@ -128,7 +143,14 @@ export class FlowchartComponent{
     this.pasteSub = this.pasteListener.subscribe(val =>{
       if (this.copied){
         const newNode = circularJSON.parse(this.copied);
-        newNode.position = {x:0, y:0};
+
+        var pt = this.canvas.createSVGPoint();
+        pt.x = 20;
+        pt.y = 100;
+        const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        newNode.position.x = svgP.x
+        newNode.position.y = svgP.y
+
         this.data.nodes.push(newNode);
         console.log('pasting node:', newNode);
       }
@@ -188,6 +210,14 @@ export class FlowchartComponent{
       }
       edge_index += 1;
     }
+    this.selectedEdge = undefined;
+  }
+
+  selectEdge(edge){
+    if (this.selectedEdge){
+      this.selectedEdge.selected = false;
+    }
+    this.selectedEdge = edge;
   }
 
   resetViewer(): void{

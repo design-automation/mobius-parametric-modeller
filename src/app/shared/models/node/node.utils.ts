@@ -10,7 +10,7 @@ export abstract class NodeUtils{
 
     static getNewNode(): INode{
         let node: INode = <INode>{
-            name: "node", 
+            name: "Node", 
             id: IdGenerator.getNodeID(),
             position: {x: 0, y: 0}, 
             enabled: true,
@@ -32,21 +32,20 @@ export abstract class NodeUtils{
 
     static getStartNode(): INode{
         let node = NodeUtils.getNewNode();
-        node.name = 'start';
+        node.name = 'Start';
         node.type = 'start';
-        node.position= {x: 0, y: 200};
+        node.position= {x: 400, y: 0};
         return node;
     };
 
     static getEndNode(): INode{
         let node = NodeUtils.getNewNode();
-        node.name = 'end';
+        node.name = 'End';
         node.type = 'end';
-        node.position= {x: 400, y: 200};
+        node.position= {x: 400, y: 400};
         return node;
     };
     
-
 
     static deselect_procedure(node: INode){
         for (let prod of node.state.procedure){

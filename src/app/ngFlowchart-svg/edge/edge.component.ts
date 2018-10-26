@@ -38,11 +38,15 @@ export class EdgeComponent{
     @Input() outputOffset;
 
     @Output() delete = new EventEmitter();
+    @Output() selected = new EventEmitter();
 
     select($event){
         event.preventDefault();
         event.stopPropagation();
         this.edge.selected = !this.edge.selected;
+        if(this.edge.selected){
+            this.selected.emit();
+        }
     }
 
     deleteEdge(){ 

@@ -46,7 +46,10 @@
 -->
 
 <!-- svg group for the selectable and draggable area of the node -->
-<svg:g (click)='nodeSelect($event)' draggable="true" (mousedown)='startDragNode($event)' >
+<svg:g (click)='nodeSelect($event)' draggable="true" 
+(mousedown)='startDragNode($event)' 
+(dblclick)='switchToProcedure($event)'
+*ngIf='node.type!="start" && node.type != "end"'>
     <rect class="node" 
         [class.node--start]='node.type=="start"'
         [class.node--end]='node.type=="end"'
@@ -60,18 +63,53 @@
     <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
     -->
 
-    <svg:foreignObject [attr.x]="node.position.x + 3" [attr.y]="node.position.y + 7" 
-    (mousedown)='stopPropagation()'>
-        <xhtml:div style="background-color: white; text-align: center; width: 94px">
-            <xhtml:input style="border:none; font-size: 10px; width: 95%; text-align: center; resize: none; display:block;"
+    <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 3" 
+    (mousedown)='focusText($event)'>
+        <xhtml:div class='textdiv'>
+            <xhtml:textarea 
+                id={{node.id}}
                 autocomplete=off 
                 [(ngModel)]='node.name'
-                name='node.name'
-                placeholder='Name of Node'/>  
+                name={{node.name}}
+                style="font-weight: 600;"
+                placeholder='Description of Node'/>  
         </xhtml:div>
     </svg:foreignObject>
-    
+</svg:g>
 
+<svg:g (click)='nodeSelect($event)' draggable="true" 
+(mousedown)='startDragNode($event)' 
+(dblclick)='switchToProcedure($event)'
+*ngIf='node.type!=""'>
+    <ellipse class="node" 
+        [class.node--start]='node.type=="start"'
+        [class.node--end]='node.type=="end"'
+        [class.node--selected]='selected'
+        [class.node--error]="node.hasError"
+        [attr.cx]="node.position.x + inputOffset[0]" 
+        [attr.cy]="node.position.y + (inputOffset[1]+outputOffset[1])/2"
+        [attr.rx]="60"
+        [attr.ry]="40"
+
+        />
+    <!--
+    <text [attr.x]="node.position.x+3" [attr.y]="node.position.y + 38">{{node.input.name}}</text>
+    <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
+    -->
+
+    <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 28" 
+    (mousedown)='focusText($event)'>
+        <xhtml:div class='textdiv'>
+            <xhtml:textarea 
+                id={{node.id}}
+                autocomplete=off 
+                [(ngModel)]='node.name'
+                name={{node.name}}
+                placeholder='Description of Node'
+                style="font-weight: 600; color:black"
+                disabled/>  
+        </xhtml:div>
+    </svg:foreignObject>
 </svg:g>
 
 <!-- svg group for other area of the node: editable node name, draggable part of the input/output port -->

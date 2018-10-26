@@ -79,8 +79,11 @@ export class NodeComponent{
         this.action.emit({ action: ACTIONS.DRAGPORT, data: data, position: pos, type: portType});
     }
 
-    stopPropagation($event: Event){
-        event.stopPropagation();
+    focusText($event: MouseEvent){
+        document.getElementById(this.node.id).focus();
     }
     
+    switchToProcedure($event: Event){
+        this.action.emit({action:ACTIONS.PROCEDURE})
+    }
 }

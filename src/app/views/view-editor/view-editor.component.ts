@@ -1,8 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataService } from '@services';
 import { IFlowchart } from '@models/flowchart';
-import { IMobius } from '@models/mobius';
-import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'view-editor',

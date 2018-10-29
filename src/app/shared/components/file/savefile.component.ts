@@ -46,6 +46,14 @@ export class SaveFileComponent{
             if (node.output.hasOwnProperty('value')){
                 node.output.value = undefined;
             }
+            for (let prod of node.state.procedure){
+                prod.selected = false 
+            }
+            node.state.procedure = [];
+        }
+        savedfile.flowchart.meta.selected_nodes = [0];
+        for (let edge of savedfile.flowchart.edges){
+            edge.selected = false;
         }
 
         const fileString = circularJSON.stringify(savedfile);

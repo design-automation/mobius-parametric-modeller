@@ -23,6 +23,7 @@ export class ToolsetComponent{
     @Output() select = new EventEmitter();
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
+    @Input() nodeType: string;
 
     constructor(){}
     

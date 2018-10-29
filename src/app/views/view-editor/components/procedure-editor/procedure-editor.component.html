@@ -6,7 +6,7 @@
 	</div>
 
 	<div class='container__content'>
-		<toolset [functions]='functions' (select)='add($event)' (imported)='importFunction($event)'></toolset>
+		<toolset [functions]='functions' [nodeType]='node.type' (select)='add($event)' (imported)='importFunction($event)'></toolset>
 		
 		<div id='procedure' class="container--procedure">
 			<procedure-item 

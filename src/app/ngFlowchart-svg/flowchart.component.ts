@@ -33,15 +33,17 @@ export class FlowchartComponent{
 
   // variable for edge
   private edge: IEdge  = { source: undefined, target: undefined, selected: false };
-  private selectedEdge: IEdge = undefined;
+  private selectedEdge = [];
   private startType: string;
 
   // variable for copied node
   private copied: string;
   private copyListener = fromEvent(document, 'copy');
   private pasteListener = fromEvent(document, 'paste');
+  private keydownListener = fromEvent(document, 'keydown');
   private copySub: any;
   private pasteSub: any;
+  private keydownSub: any;
   
   private offset;
   
@@ -132,7 +134,7 @@ export class FlowchartComponent{
     this.data.nodes.push(newNode); 
   }
 
-  activateCopyPaste($event): void{
+  activateKeyEvent($event): void{
     this.copySub = this.copyListener.subscribe(val => {
       const node = this.data.nodes[this.data.meta.selected_nodes[0]];
       if (node.type != 'start' && node.type != 'end'){
@@ -142,6 +144,7 @@ export class FlowchartComponent{
     })
     this.pasteSub = this.pasteListener.subscribe(val =>{
       if (this.copied){
+        event.preventDefault();
         const newNode = circularJSON.parse(this.copied);
 
         var pt = this.canvas.createSVGPoint();
@@ -155,10 +158,14 @@ export class FlowchartComponent{
         console.log('pasting node:', newNode);
       }
     })
-
+    this.keydownSub = this.keydownListener.subscribe(val =>{
+      if ((<KeyboardEvent> val).key == 'Delete'){
+        this.deleteSelectedEdges();
+      }
+    })
   }
 
-  deactivateCopyPaste($event): void{
+  deactivateKeyEvent($event): void{
     this.copySub.unsubscribe();
     this.pasteSub.unsubscribe();
   }
@@ -201,23 +208,29 @@ export class FlowchartComponent{
   }
 
   deleteSelectedEdges(){
-    var edge_index = 0
-    while (edge_index < this.data.edges.length){
-      let tbrEdge = this.data.edges[edge_index];
-      if (tbrEdge.selected){
-        this.deleteEdge(edge_index)
-        continue;
-      }
-      edge_index += 1;
+    this.selectedEdge.sort().reverse();
+    console.log(this.selectedEdge)
+    for (let edge_index of this.selectedEdge){
+      console.log(edge_index)
+      this.deleteEdge(edge_index)
     }
-    this.selectedEdge = undefined;
+    this.selectedEdge = [];
   }
 
-  selectEdge(edge){
-    if (this.selectedEdge){
-      this.selectedEdge.selected = false;
+  selectEdge($event, edge_index){
+    if ($event == 'ctrl'){
+      this.selectedEdge.push(edge_index);
+    } else if ($event == 'single') {
+      if (this.selectedEdge.length > 0){
+        for (let e of this.selectedEdge) this.data.edges[e].selected = false;
+      }
+      this.selectedEdge = [edge_index];
+    } else {
+      for (let i = 0; i < this.selectedEdge.length; i ++) if (this.selectedEdge[i] == edge_index) {
+        this.selectedEdge.splice(i,1);
+        break;
+      }
     }
-    this.selectedEdge = edge;
   }
 
   resetViewer(): void{

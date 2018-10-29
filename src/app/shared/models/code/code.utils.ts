@@ -188,10 +188,6 @@ export class CodeUtils {
         node.hasError = false;
         const codeStr = [];
         const varsDefined: string[] = [];
-
-        // TODO [think later]: How to handle defaults / values for FileInputs and WebURLs?
-        // IDEA-1: Load and add as parameter; Will need to the synchronous
-
         // input initializations
         if (addProdArr){
             var input = await CodeUtils.getInputValue(node.input, node);
@@ -199,17 +195,25 @@ export class CodeUtils {
             varsDefined.push(node.input.name);
         }
 
-        const line = `let ${node.output.name} = undefined;`;
-        codeStr.push(line);
-        varsDefined.push(node.output.name);
-
-        // procedure
-        for (let prod of node.procedure){
-            codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
-        };
+        // TODO [think later]: How to handle defaults / values for FileInputs and WebURLs?
+        // IDEA-1: Load and add as parameter; Will need to the synchronous
+        if (node.type == 'start' ){
+            codeStr.push(`let ${node.output.name} = ${node.input.name};`);
+            varsDefined.push(node.output.name);
+        } else if (node.type == 'end'){
+            codeStr.push(`let ${node.output.name} = ${node.input.name};`);
+            varsDefined.push(node.output.name);
+        } else {
+            codeStr.push(`let ${node.output.name} = undefined;`);
+            varsDefined.push(node.output.name);
+            // procedure
+            for (let prod of node.procedure){
+                codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
+            };
+        }
 
         //console.log( `{\n${codeStr.join('\n')}\nreturn { ${outStatements.join(',') } };\n}`);
-        return `{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
+        return `/*    ${node.name.toUpperCase()}    */\n\n{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
 
 
     }

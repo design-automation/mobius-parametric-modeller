@@ -111,5 +111,4 @@ export class ProcedureEditorComponent{
       this.imported.emit($event);
     }
 
-
 }

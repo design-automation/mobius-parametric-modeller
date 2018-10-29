@@ -1,5 +1,5 @@
 <div class='container'>
-	<section>
+	<section *ngIf="node.type != 'end'">
 		<panel-header [node]='node' [title]="'inputs'"></panel-header>
 		<!-- <add-input [node]='node'></add-input> -->
 		<!-- <p>Edit the inputs of your flowchart here. These are the parameters that are visible in the viewer when you share your flowchart.</p> -->
@@ -7,7 +7,7 @@
 			<input-port-editor [port]="node?.input" ></input-port-editor>
 		</div>
 	</section>
-	<section>
+	<section *ngIf="node.type != 'start'">
 		<panel-header [node]='node' [title]="'output'"></panel-header>
 		<!-- <add-output [node]='node'></add-output> -->
 		<!-- <p>Edit the outputs of your flowchart here. These are the values that are visible in the viewer</p> -->

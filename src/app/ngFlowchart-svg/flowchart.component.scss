@@ -12,7 +12,9 @@
 		.temp-wire{
 			stroke: black;
 			stroke-width: 5px;
-			stroke-dasharray: 15 5;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-dasharray: 10 15;
 			opacity: 0.25;
 		}
 	}

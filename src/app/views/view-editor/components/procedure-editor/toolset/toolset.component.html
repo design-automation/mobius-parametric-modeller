@@ -1,4 +1,4 @@
-<div id='toolset'>
+<div id='toolset_main' class = 'toolset' *ngIf="nodeType == ''">
 
     <ul class='toolset__basic'>
         <ng-container *ngFor="let type of ProcedureTypesArr">
@@ -12,11 +12,13 @@
     <hr>
 
     <div class='toolset__functions'>
-        <section *ngFor='let mod of Modules'>
-            <h3>{{ mod.module }}</h3>
-            <ul class='toolset__functions--subset'>
-                <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
-            </ul>
+        <section *ngFor='let mod of Modules' >
+            <div *ngIf='mod.module != "INPUT" && mod.module != "OUTPUT"'>
+                <h3>{{ mod.module }}</h3>
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+                </ul>
+            </div>
         </section>
     </div>
     
@@ -31,4 +33,29 @@
         </section>
     </div>
 
+</div>
+<div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'start'">
+    
+    <div class='toolset__functions'>
+        <section *ngFor='let mod of Modules' >
+            <div *ngIf='mod.module == "INPUT"'>
+                <h3>{{ mod.module }}</h3>
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>
+<div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
+    <div class='toolset__functions'>
+        <section *ngFor='let mod of Modules' >
+            <div *ngIf='mod.module == "OUTPUT"'>
+                <h3>{{ mod.module }}</h3>
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+                </ul>
+            </div>
+        </section>
+    </div>
 </div>

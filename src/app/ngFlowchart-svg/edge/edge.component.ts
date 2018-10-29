@@ -43,10 +43,11 @@ export class EdgeComponent{
     select($event){
         event.preventDefault();
         event.stopPropagation();
+        if(!this.edge.selected){
+            if ($event.ctrlKey) this.selected.emit('ctrl');
+            else this.selected.emit('single');
+        } else this.selected.emit('remove');
         this.edge.selected = !this.edge.selected;
-        if(this.edge.selected){
-            this.selected.emit();
-        }
     }
 
     deleteEdge(){ 

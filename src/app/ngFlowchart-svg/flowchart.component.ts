@@ -220,12 +220,15 @@ export class FlowchartComponent{
   selectEdge($event, edge_index){
     if ($event == 'ctrl'){
       this.selectedEdge.push(edge_index);
-    } else if ($event == 'single') {
+      this.data.edges[edge_index].selected = true;
+    } else if ($event == 'single' || ($event === false && this.selectedEdge.length > 1)) {
       if (this.selectedEdge.length > 0){
         for (let e of this.selectedEdge) this.data.edges[e].selected = false;
       }
       this.selectedEdge = [edge_index];
+      this.data.edges[edge_index].selected = true;
     } else {
+      this.data.edges[edge_index].selected = false;
       for (let i = 0; i < this.selectedEdge.length; i ++) if (this.selectedEdge[i] == edge_index) {
         this.selectedEdge.splice(i,1);
         break;
@@ -243,8 +246,8 @@ export class FlowchartComponent{
   //  this position of this node is absolute coordinates
   //
   scale($event: WheelEvent): void{
-    $event.preventDefault();
-    $event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
     let scaleFactor: number = 0.1;
     let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
     

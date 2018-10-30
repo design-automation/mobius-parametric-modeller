@@ -1,7 +1,9 @@
 
 <div class='container'>
 	<div class='content__panel'>
+		<!--
 		<parameter-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></parameter-editor>
+		-->
 		<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)'></procedure-editor>
 		<br>
 		<br>

@@ -38,14 +38,14 @@ export class ToolsetComponent{
             return {name: arg.name, value: arg.value};
             });
         
-        this.select.emit( { type: ProcedureTypes.FUNCTION, data: fnData } ); 
+        this.select.emit( { type: ProcedureTypes.Function, data: fnData } ); 
     }
 
     add_imported_function(fnData){
         fnData.args = fnData.args.map( (arg) => { 
             return {name: arg.name, value: arg.value};
             });
-        this.select.emit( { type: ProcedureTypes.IMPORTED, data: fnData } ); 
+        this.select.emit( { type: ProcedureTypes.Imported, data: fnData } ); 
     }
 
     async import_function($event){

@@ -75,6 +75,9 @@ export abstract class NodeUtils{
     }
 
     static select_procedure(node: INode, procedure: IProcedure, ctrl: boolean){
+        if (!procedure){
+            return
+        }
         if (ctrl){
             var selIndex = 0;
             var selected = false;
@@ -149,43 +152,43 @@ export abstract class NodeUtils{
         NodeUtils.select_procedure(node, prod, false);
 
         switch(prod.type){
-            case ProcedureTypes.VARIABLE:
+            case ProcedureTypes.Variable:
                 prod.argCount = 2;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
                 break;
             
-            case ProcedureTypes.FOREACH:
+            case ProcedureTypes.Foreach:
                 prod.argCount = 2; 
                 prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.WHILE:
+            case ProcedureTypes.While:
                 prod.argCount = 1; 
                 prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.IF: 
-            case ProcedureTypes.ELSEIF:
+            case ProcedureTypes.If: 
+            case ProcedureTypes.Elseif:
                 prod.argCount = 1;
                 prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.ELSE:
+            case ProcedureTypes.Else:
                 prod.argCount = 0;
                 prod.args = [];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.BREAK:
-            case ProcedureTypes.CONTINUE:
+            case ProcedureTypes.Break:
+            case ProcedureTypes.Continue:
                 prod.argCount = 0;
                 prod.args = [];
                 break;
 
-            case ProcedureTypes.FUNCTION:
+            case ProcedureTypes.Function:
                 if(!data) throw Error('No function data');
                 
                 prod.meta = { module: data.module, name: data.name };
@@ -193,7 +196,7 @@ export abstract class NodeUtils{
                 prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
                 break;
 
-            case ProcedureTypes.IMPORTED:
+            case ProcedureTypes.Imported:
                 prod.meta = { module: data.module, name: data.name };
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];

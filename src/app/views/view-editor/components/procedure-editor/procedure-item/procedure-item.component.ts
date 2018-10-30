@@ -37,4 +37,11 @@ export class ProcedureItemComponent{
         event.stopPropagation();
     }
 
+    varMod($event){
+        if(!$event) return $event;
+        let str = $event.trim();
+        str = str.replace(' ',"_");
+        //str = str.replace('"',"'");
+        return str;
+    }
 }

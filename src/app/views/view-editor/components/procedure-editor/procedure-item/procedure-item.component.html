@@ -72,24 +72,6 @@
        continue
     </div>
 
-    <!-- Function Template -->
-    <div class='line--function' *ngSwitchCase="ProcedureTypes.Function">
-        <input 
-                [ngModel]='data.args[0].value'
-                (ngModelChange)='data.args[0].value=varMod($event)'
-                (cut)='stopProp()' 
-                (paste)='stopProp()'
-                placeholder={{data.args[0].name}}>  
-        = 
-        {{ data.meta.module }}.{{ data.meta.name }} 
-        (
-            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='p.value' placeholder={{p.name}}>    
-            </ng-container>
-        ) 
-
-    </div>
-
 
 <!-- FOREACH Template -->
     <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.Foreach">
@@ -130,6 +112,52 @@
             </div>
     </div>
     
+    <!-- Function Template -->
+    <div class='line--function' *ngSwitchCase="ProcedureTypes.Function">
+        <input 
+                [ngModel]='data.args[0].value'
+                (ngModelChange)='data.args[0].value=varMod($event)'
+                (cut)='stopProp()' 
+                (paste)='stopProp()'
+                placeholder={{data.args[0].name}}>  
+        = 
+        {{data.meta.module}}.{{data.meta.name}}(
+        <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+            <!--
+            <input *ngIf="p.name.toUpperCase() !== '__MODEL__'; else text_template" 
+            
+            (cut)='stopProp()' 
+            (paste)='stopProp()' 
+            [(ngModel)]='p.value' 
+            placeholder={{p.name}}>    
+            
+            <ng-template #text_template>
+                model,
+            </ng-template>
+            -->
+
+            <input *ngIf="p.name.indexOf('__') == -1; else model_template" 
+                    (cut)='stopProp()' 
+                    (paste)='stopProp()' 
+                    [(ngModel)]='p.value' 
+                    placeholder={{p.name}}>    
+            
+            <ng-template #model_template>
+                <ng-container *ngIf="p.name.toUpperCase() == '__MODEL__'; else params_template">
+                    model,
+                </ng-container>
+            </ng-template>
+            <ng-template #params_template>
+                <ng-container *ngIf="p.name.toUpperCase() == '__PARAMS__';">
+                    const_list,
+                </ng-container>
+            </ng-template>
+
+        </ng-container>
+        ) 
+
+    </div>
+
     <!-- Imported Function Template -->
     <div class='line--imported' *ngSwitchCase="ProcedureTypes.Imported">
         <input 

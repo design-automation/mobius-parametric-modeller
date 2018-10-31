@@ -22,12 +22,13 @@ export interface INode{
 	enabled: boolean;
 	hasExecuted: boolean;
 	hasError: boolean;
-	timeTaken: number;
+	//timeTaken: number;
 
 	// contents
 	input: IPortInput;
 	output: IPortOutput;
 	procedure: IProcedure[];
+	model: JSON;
 
 	// stores the state
 	state: {

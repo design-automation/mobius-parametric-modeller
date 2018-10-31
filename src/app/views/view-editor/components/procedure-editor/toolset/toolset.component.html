@@ -48,7 +48,7 @@
     </div>
 </div>
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
-    <div class='toolset__functions'>
+    <div class='toolset__functions' *ngIf="prodCount==0">
         <section *ngFor='let mod of Modules' >
             <div *ngIf='mod.module == "OUTPUT"'>
                 <h3>{{ mod.module }}</h3>

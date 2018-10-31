@@ -145,8 +145,6 @@ export abstract class NodeUtils{
         // add ID to the procedure
         prod.ID = IdGenerator.getProdID();
 
-        console.log(prod.ID);
-
 
         // select the procedure
         NodeUtils.select_procedure(node, prod, false);
@@ -203,6 +201,17 @@ export abstract class NodeUtils{
                 break;
         }
         
+    }
+
+    static updateNode(newNode:INode, newPos): INode{
+        newNode.id = IdGenerator.getNodeID();
+        newNode.input = PortUtils.getNewInput();
+        newNode.output = PortUtils.getNewOutput();
+        newNode.input.parentNode = newNode;
+        newNode.output.parentNode = newNode;
+        newNode.position.x = newPos.x
+        newNode.position.y = newPos.y
+        return newNode;
     }
 
     static updateID(prod: IProcedure): any{

@@ -38,8 +38,10 @@ const mergingResults = `function mergeResults(l){
 export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
+    private globalVars: string;
+
     async execute() {
-        let params = {};
+        this.globalVars = '';
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
                 if (node.input.edges){
@@ -56,14 +58,16 @@ export class ExecuteComponent {
         }
         for (let node of this.flowchart.nodes){
             //console.log(`${node.name} executing...`);
-            await this.executeNode(node, funcStrings, params);
+            await this.executeNode(node, funcStrings);
         }
     }
 
-    async executeNode(node: INode, funcStrings, params){
-        params["_p"] = [''];
+    async executeNode(node: INode, funcStrings){
+        let params = {"_p": ['']};
         try{
             var fnString = await CodeUtils.getNodeCode(node, true);
+            fnString = this.globalVars + fnString;
+            params["model"] = node.input.value;
             var hasFunctions = false;
             for (let funcName in funcStrings){
                 fnString = funcStrings[funcName] + fnString;
@@ -74,9 +78,15 @@ export class ExecuteComponent {
             }
             console.log(`/*    ${node.name.toUpperCase()}    */\n\n`+fnString);
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
-            const fn = new Function('_modules', '_params', fnString);
+            const fn = new Function('__modules__', '__params__', fnString);
             let result = fn(Modules, params);
             node.output.value = result;
+            if (node.type == 'start'){
+                for (let constant in params["constants"]){
+                    this.globalVars += `const ${constant} = ${params["constants"][constant]};\n`;
+                }
+                this.globalVars += '\n';
+            }
             
         }
         catch(ex){

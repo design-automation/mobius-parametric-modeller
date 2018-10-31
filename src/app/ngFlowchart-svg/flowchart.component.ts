@@ -62,6 +62,7 @@ export class FlowchartComponent{
     switch($event.action){
       case ACTIONS.PROCEDURE:
         this.switch.emit("editor");
+        this.deactivateKeyEvent();
         break;
 
       case ACTIONS.SELECT:
@@ -75,10 +76,6 @@ export class FlowchartComponent{
         this.data.ordered = false;
         break;
 
-      case ACTIONS.COPY:
-        console.log('copied node:', this.data.nodes[node_index]);
-        this.copied = circularJSON.stringify(this.data.nodes[node_index]);
-        break;
       case ACTIONS.DRAGNODE:
         this.element = this.data.nodes[node_index];
         var pt = this.canvas.createSVGPoint();
@@ -134,26 +131,24 @@ export class FlowchartComponent{
     this.data.nodes.push(newNode); 
   }
 
-  activateKeyEvent($event): void{
+  activateKeyEvent(): void{
     this.copySub = this.copyListener.subscribe(val => {
       const node = this.data.nodes[this.data.meta.selected_nodes[0]];
       if (node.type != 'start' && node.type != 'end'){
         console.log('copied node:', node);
-        this.copied = circularJSON.stringify(node);
+        let cp = circularJSON.parse(circularJSON.stringify(node));
+        this.copied = circularJSON.stringify(cp);
       }
     })
     this.pasteSub = this.pasteListener.subscribe(val =>{
       if (this.copied){
         event.preventDefault();
-        const newNode = circularJSON.parse(this.copied);
-
+        let newNode = <INode>circularJSON.parse(this.copied);
         var pt = this.canvas.createSVGPoint();
         pt.x = 20;
         pt.y = 100;
         const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-        newNode.position.x = svgP.x
-        newNode.position.y = svgP.y
-
+        NodeUtils.updateNode(newNode, svgP);
         this.data.nodes.push(newNode);
         console.log('pasting node:', newNode);
       }
@@ -165,7 +160,8 @@ export class FlowchartComponent{
     })
   }
 
-  deactivateKeyEvent($event): void{
+  deactivateKeyEvent(): void{
+
     this.copySub.unsubscribe();
     this.pasteSub.unsubscribe();
   }

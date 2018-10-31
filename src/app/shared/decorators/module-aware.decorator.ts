@@ -11,7 +11,6 @@ function extract_params(func: Function): IArgument[] {
     if(result === null || result[0]==""){
          result = [];
     }
-
     let final_result = result.map(function(r){ 
         r = r.trim();
         let r_value = r.split("=");
@@ -24,7 +23,6 @@ function extract_params(func: Function): IArgument[] {
         }
 
     });
-
     return final_result;
 }
 
@@ -46,13 +44,10 @@ export function ModuleAware(constructor: Function) {
             fnObj.name = fn_name;
             fnObj.argCount = func.length;
             fnObj.args = extract_params(func);
-            
             modObj.functions.push(fnObj);
         }
-    
         module_list.push(modObj);
     }
-
 
     constructor.prototype.Modules = module_list;
 }

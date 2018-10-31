@@ -14,7 +14,9 @@ export class TextViewerComponent{
     }
 
    ngOnInit() {
-    if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
+    if (! this.node) {
+      this.output = "no-value";
+    } else if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
       this.output = this.node.output.value;
     } else if (typeof this.node.output.value === 'string'){
       this.output = '"' + this.node.output.value + '"';
@@ -31,7 +33,9 @@ export class TextViewerComponent{
 
 
 	ngDoCheck(){
-    if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
+    if (! this.node) {
+      this.output = "no-value";
+    } else if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
       this.output = this.node.output.value;
     } else if (typeof this.node.output.value === 'string'){
       this.output = '"' + this.node.output.value + '"';

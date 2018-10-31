@@ -1,4 +1,3 @@
-export var model = {};
-export * from './json';
+export * from './model';
 export * from './input';
 export * from './output';

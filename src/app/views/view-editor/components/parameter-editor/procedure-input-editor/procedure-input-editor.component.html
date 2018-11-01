@@ -1,0 +1,48 @@
+<div class='container container--parameter'>
+
+    <div class='parameter__name'>
+        <!--
+        <input [(ngModel)]='prod.name' name='prod.name' placeholder='Name of the port'> 
+        -->
+        {{prod.args[prod.argCount-2].value}}:
+    </div>
+    <div class='parameter__name' [ngSwitch]="prod.meta.inputMode">
+        <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default Value'>
+        <div *ngSwitchCase="PortTypes.Slider">
+            <input [(ngModel)]='prod.args[prod.argCount-1].default' value='prod.args[prod.argCount-1].default' disabled>
+            <input [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="range" >
+        </div>
+        <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'>
+        <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
+    </div>
+
+    <select name={{prod.id}}_type [(ngModel)]="prod.meta.inputMode">
+        <option 
+            *ngFor="let ptype of PortTypesArr" 
+            [value]="PortTypes[ptype]" 
+            [selected]="prod.meta.inputMode == ptype">{{ptype}}</option>
+    </select>
+    
+    <!--
+    <div class='parameter__name' [ngSwitch]="prod.meta.mode">
+        <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default Value'>
+        <div *ngSwitchCase="PortTypes.Slider">
+            <input [(ngModel)]='prod.args[prod.argCount-1].default' value='prod.args[prod.argCount-1].default' disabled>
+            <input [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="range" >
+        </div>
+        <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'>
+        <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
+    </div>
+
+    <select name={{prod.name}}_type *ngIf="prod.parentNode.type=='start'"  [(ngModel)]="prod.meta.mode">
+        <option 
+            *ngFor="let ptype of PortTypesArr" 
+            [value]="PortTypes[ptype]" 
+            [selected]="prod.meta.mode == ptype">{{ptype}}</option>
+    </select>
+    -->
+
+</div>
+

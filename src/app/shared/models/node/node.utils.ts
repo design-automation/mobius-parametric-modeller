@@ -189,18 +189,28 @@ export abstract class NodeUtils{
             case ProcedureTypes.Function:
                 if(!data) throw Error('No function data');
                 
-                prod.meta = { module: data.module, name: data.name };
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
                 prod.argCount = data.argCount + 1;
-                prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
+                let returnArg = {name: 'var_name', value: 'result', default: undefined};
+                if (!data.hasReturn){
+                    returnArg = {name: '__none__', value: '__none__', default: undefined}
+                }
+
+                // --UNSTABLE--
+                // changing the value of the last argument of all functions in input node to be undefined
+                if (node.type == 'start'){
+                    data.args[data.argCount-1].value = undefined
+                }
+                
+                prod.args = [ returnArg, ...data.args];
                 break;
 
             case ProcedureTypes.Imported:
-                prod.meta = { module: data.module, name: data.name };
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
                 break;
         }
-        
     }
 
     static updateNode(newNode:INode, newPos): INode{

@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { promise } from 'protractor';
 import { IEdge } from '@models/edge';
+import { _parameterTypes } from '@modules';
 
 
 export class CodeUtils {
@@ -18,7 +19,7 @@ export class CodeUtils {
         const args = prod.args;
         const prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
         if (addProdArr && prod.type != ProcedureTypes.Else && prod.type != ProcedureTypes.Elseif){
-            codeStr.push(`__params__._p[0] = "${prod.ID}";`);
+            codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
         }
 
         switch ( prod.type ) {
@@ -86,21 +87,24 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argValues = args.slice(1).map((arg)=>{
                     // if __params__ is present in the value of the argument, throw unexpected identifier
-                    if (arg.value.indexOf('__params__') != -1){
-                        if (arg.name.toUpperCase() == "__PARAMS__") return "__params__.constants";
-                        throw new Error("Unexpected Identifier");
-                    } 
-                    if (arg.name.toUpperCase() == "__MODEL__") return "__params__.model";
+                    if (arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
+                    if (arg.name == _parameterTypes.constList) return "__params__.constants";
+                    if (arg.name == _parameterTypes.model) return "__params__.model";
                     //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                     return arg.value;
                 }).join(',');
-                const fnCall: string = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`
-                codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
-                if (prefix === 'let '){
-                    existingVars.push(args[0].value)
+                const fnCall: string = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
+                if ( prod.meta.module.toUpperCase() == 'OUTPUT'){
+                    codeStr.push(`return ${fnCall};`);
+                } else if (args[0].name == '__none__'){
+                    codeStr.push(`${fnCall};`);
+                } else {
+                    codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
+                    if (prefix === 'let '){
+                        existingVars.push(args[0].value)
+                    }
                 }
                 break;
-
             case ProcedureTypes.Imported:
                 //('args: ',args)
                 const argsVals = args.slice(1).map((arg)=>arg.value).join(',');
@@ -110,7 +114,6 @@ export class CodeUtils {
                     existingVars.push(args[0].value)
                 }
                 break;
-
 
         }
         return codeStr.join('\n');
@@ -222,7 +225,11 @@ export class CodeUtils {
         for (let prod of node.procedure){
             codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         };
+        if (node.type == 'end' && node.procedure.length > 0){
+            return `{\n${codeStr.join('\n')}\n}`;
+        } 
         return `{\n${codeStr.join('\n')}\nreturn __params__.model;\n}`;
+        
 
         //return `{\n${codeStr.join('\n')}\nreturn result;\n}`;
         //return `/*    ${node.name.toUpperCase()}    */\n\n{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;

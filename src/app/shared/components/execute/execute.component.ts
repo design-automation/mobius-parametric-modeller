@@ -63,7 +63,7 @@ export class ExecuteComponent {
     }
 
     async executeNode(node: INode, funcStrings){
-        let params = {"_p": ['']};
+        let params = {"currentProcedure": ['']};
         try{
             var fnString = await CodeUtils.getNodeCode(node, true);
             fnString = this.globalVars + fnString;
@@ -87,7 +87,6 @@ export class ExecuteComponent {
                 }
                 this.globalVars += '\n';
             }
-            
         }
         catch(ex){
             node.hasError = true;
@@ -95,7 +94,7 @@ export class ExecuteComponent {
 
             // Unexpected Identifier
             // Unexpected token
-            let prodWithError: string = params["_p"][0]; 
+            let prodWithError: string = params["currentProcedure"][0]; 
             let markError = function(prod: IProcedure, id: string){
                 if(prod["ID"] && id && prod["ID"] == id){
                     prod.hasError = true;

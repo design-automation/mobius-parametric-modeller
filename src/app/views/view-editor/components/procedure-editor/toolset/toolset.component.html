@@ -13,7 +13,7 @@
 
     <div class='toolset__functions'>
         <section *ngFor='let mod of Modules' >
-            <div *ngIf='mod.module != "INPUT" && mod.module != "OUTPUT"'>
+            <div *ngIf='mod.module.toUpperCase() != "INPUT" && mod.module.toUpperCase() != "OUTPUT"'>
                 <h3>{{ mod.module }}</h3>
                 <ul class='toolset__functions--subset'>
                     <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
@@ -38,7 +38,7 @@
     
     <div class='toolset__functions'>
         <section *ngFor='let mod of Modules' >
-            <div *ngIf='mod.module == "INPUT"'>
+            <div *ngIf='mod.module.toUpperCase() == "INPUT"'>
                 <h3>{{ mod.module }}</h3>
                 <ul class='toolset__functions--subset'>
                     <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
@@ -50,7 +50,7 @@
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
     <div class='toolset__functions' *ngIf="prodCount==0">
         <section *ngFor='let mod of Modules' >
-            <div *ngIf='mod.module == "OUTPUT"'>
+            <div *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
                 <h3>{{ mod.module }}</h3>
                 <ul class='toolset__functions--subset'>
                     <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>

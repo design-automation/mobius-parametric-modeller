@@ -2,6 +2,7 @@ import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy} from '@angu
 
 import { IProcedure } from '@models/procedure';
 import { ProcedureTypesAware } from '@shared/decorators';
+import { _parameterTypes} from '@modules';
 
 @ProcedureTypesAware
 @Component({
@@ -16,6 +17,9 @@ export class ProcedureItemComponent{
     @Output() copied = new EventEmitter();
     @Output() pasteOn = new EventEmitter();
 
+    private model = _parameterTypes.model;
+    private constList = _parameterTypes.constList;
+    
     emitDelete(index: number): void{
         this.delete.emit(index);
     }

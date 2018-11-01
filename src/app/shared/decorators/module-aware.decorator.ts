@@ -5,8 +5,9 @@ import { IArgument } from '@models/code';
 import * as Modules from '@modules';
 
 // todo: bug fix for defaults
-function extract_params(func: Function): IArgument[] {
+function extract_params(func: Function): [IArgument[], boolean] {
     let fnStr = func.toString().replace( /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg, '');
+    
     let result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).split(",")//.match( /([^\s,]+)/g);
     if(result === null || result[0]==""){
          result = [];
@@ -23,13 +24,18 @@ function extract_params(func: Function): IArgument[] {
         }
 
     });
-    return final_result;
+    let hasReturn = true;
+    if (fnStr.indexOf("return") === -1 || fnStr.indexOf("return;") !== -1){
+        hasReturn = false;
+    }
+    return [final_result, hasReturn];
 }
 
 
 export function ModuleAware(constructor: Function) {
     let module_list = [];
     for( let m_name in Modules ){
+        if (m_name[0] == '_') continue;
         
         let modObj = <IModule>{};
         modObj.module = m_name;
@@ -43,7 +49,9 @@ export function ModuleAware(constructor: Function) {
             fnObj.module = m_name;
             fnObj.name = fn_name;
             fnObj.argCount = func.length;
-            fnObj.args = extract_params(func);
+            let args = extract_params(func);
+            fnObj.args = args[0];
+            fnObj.hasReturn = args[1];
             modObj.functions.push(fnObj);
         }
         module_list.push(modObj);

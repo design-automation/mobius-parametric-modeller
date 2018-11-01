@@ -36,7 +36,7 @@ export class ToolsetComponent{
         // create a fresh copy of the params to avoid linked objects
         // todo: figure out
         fnData.args = fnData.args.map( (arg) => { 
-            return {name: arg.name, value: arg.value};
+            return {name: arg.name, value: arg.value, default: arg.default};
             });
         
         this.select.emit( { type: ProcedureTypes.Function, data: fnData } ); 

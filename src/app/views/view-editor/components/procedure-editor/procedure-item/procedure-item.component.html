@@ -114,13 +114,16 @@
     
     <!-- Function Template -->
     <div class='line--function' *ngSwitchCase="ProcedureTypes.Function">
-        <input 
-                [ngModel]='data.args[0].value'
-                (ngModelChange)='data.args[0].value=varMod($event)'
-                (cut)='stopProp()' 
-                (paste)='stopProp()'
-                placeholder={{data.args[0].name}}>  
-        = 
+        <ng-container *ngIf="data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'">
+            <input 
+            [ngModel]='data.args[0].value'
+            (ngModelChange)='data.args[0].value=varMod($event)'
+            (cut)='stopProp()' 
+            (paste)='stopProp()'
+            placeholder={{data.args[0].name}}>  
+            = 
+
+        </ng-container>
         {{data.meta.module}}.{{data.meta.name}}(
         <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
             <!--
@@ -143,12 +146,12 @@
                     placeholder={{p.name}}>    
             
             <ng-template #model_template>
-                <ng-container *ngIf="p.name.toUpperCase() == '__MODEL__'; else params_template">
+                <ng-container *ngIf="p.name == model; else params_template">
                     model,
                 </ng-container>
             </ng-template>
             <ng-template #params_template>
-                <ng-container *ngIf="p.name.toUpperCase() == '__PARAMS__';">
+                <ng-container *ngIf="p.name == constList;">
                     const_list,
                 </ng-container>
             </ng-template>

@@ -1,3 +1,5 @@
+<parameter-editor *ngIf="node.type == 'start'" [node]='node'></parameter-editor>
+
 <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
 (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
 

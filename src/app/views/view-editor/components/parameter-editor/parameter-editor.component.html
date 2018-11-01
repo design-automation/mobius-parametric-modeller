@@ -1,18 +1,24 @@
 <div class='container'>
+
 	<section *ngIf="node.type != 'end'">
 		<panel-header [node]='node' [title]="'inputs'"></panel-header>
-		<!-- <add-input [node]='node'></add-input> -->
-		<!-- <p>Edit the inputs of your flowchart here. These are the parameters that are visible in the viewer when you share your flowchart.</p> -->
+		<div class='container--input'>
+			<procedure-input-editor *ngFor="let prod of node.procedure" [prod]="prod" ></procedure-input-editor>
+		</div>
+	</section>
+		
+	<!--
+	<section *ngIf="node.type != 'end'">
+		<panel-header [node]='node' [title]="'inputs'"></panel-header>
 		<div class='container--input'>
 			<input-port-editor [port]="node?.input" ></input-port-editor>
 		</div>
 	</section>
 	<section *ngIf="node.type != 'start'">
 		<panel-header [node]='node' [title]="'output'"></panel-header>
-		<!-- <add-output [node]='node'></add-output> -->
-		<!-- <p>Edit the outputs of your flowchart here. These are the values that are visible in the viewer</p> -->
 		<div class='container--output'>
 			<output-port-editor [port]="node?.output" ></output-port-editor>
 		</div>
 	</section>
+	-->
 </div>

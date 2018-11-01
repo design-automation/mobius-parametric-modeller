@@ -1,5 +1,5 @@
-export module INPUT{
-    export function declare_constant(__params__: JSON, const_name: string, const_value: any): void{
-        __params__[const_name] = const_value;
+export module Input{
+    export function declare_constant(__constList__: JSON, const_name: string, const_value: any = 3): void{
+        __constList__[const_name] = const_value;
     }
 }

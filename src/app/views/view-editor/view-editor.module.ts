@@ -13,6 +13,7 @@ import { OutputPortEditorComponent } from './components/parameter-editor/output-
 import { procedureInputEditorComponent } from './components/parameter-editor/procedure-input-editor/procedure-input-editor.component';
 import { DataService } from '@services';
 import { _parameterTypes} from '@modules';
+import { MatSliderModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { _parameterTypes} from '@modules';
   ], 
   imports: [
     CommonModule, 
-    SharedModule
+    SharedModule,
+    MatSliderModule
   ],
   exports: [
     ViewEditorComponent,

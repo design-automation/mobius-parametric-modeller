@@ -17,10 +17,10 @@ function extract_params(func: Function): [IArgument[], boolean] {
         let r_value = r.split("=");
 
         if (r_value.length == 1){
-            return { name: r_value[0].trim(), value: r_value[0].trim(), default: r_value[0].trim() }
+            return { name: r_value[0].trim(), value: r_value[0].trim(), default: 0 }
         }
         else{
-            return { name: r_value[0].trim(), value: r_value[1].trim(), default: r_value[1].trim() }
+            return { name: r_value[0].trim(), value: r_value[1].trim(), default: 0 }
         }
 
     });

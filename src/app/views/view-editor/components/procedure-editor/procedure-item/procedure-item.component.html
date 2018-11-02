@@ -139,12 +139,14 @@
             </ng-template>
             -->
 
-            <input *ngIf="p.name.indexOf('__') == -1; else model_template" 
+            <input *ngIf="p.name.indexOf('__') == -1" 
                     (cut)='stopProp()' 
                     (paste)='stopProp()' 
                     [(ngModel)]='p.value' 
-                    placeholder={{p.name}}>    
+                    placeholder={{p.name}}>
             
+            <!--
+
             <ng-template #model_template>
                 <ng-container *ngIf="p.name == model; else params_template">
                     model,
@@ -155,6 +157,7 @@
                     const_list,
                 </ng-container>
             </ng-template>
+            -->
 
         </ng-container>
         ) 

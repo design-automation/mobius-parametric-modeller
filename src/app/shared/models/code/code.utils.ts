@@ -87,6 +87,9 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argValues = args.slice(1).map((arg)=>{
                     // if __params__ is present in the value of the argument, throw unexpected identifier
+                    if (arg.name == _parameterTypes.input) { 
+                        console.log(arg.value, arg.default);
+                        let val = arg.value || arg.default; return val; };
                     if (arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                     if (arg.name == _parameterTypes.constList) return "__params__.constants";
                     if (arg.name == _parameterTypes.model) return "__params__.model";

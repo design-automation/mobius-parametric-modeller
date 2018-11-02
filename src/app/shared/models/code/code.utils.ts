@@ -242,21 +242,34 @@ export class CodeUtils {
     
     static async getFunctionString(func: IFunction): Promise<string>{
         let fullCode = '';
-        let fnCode = `function ${func.name}(input){\nvar merged;\n`;
+        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
         for (let node of func.module.nodes){
             let code =  await CodeUtils.getNodeCode(node, false)
-            fullCode += `function ${node.id}(result)` + code + `\n\n`;
+            fullCode += `function ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')})` + code + `\n\n`;
             if (node.type ==='start'){
-                fnCode += `let result_${node.id} = ${node.id}(input);\n`
+                //fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
+                fnCode += `let result_${node.id} = __params__.model;\n`
+            } else if (node.input.edges.length == 1) {
+                fnCode += `__params__.model = JSON.parse(JSON.stringify(result_${node.input.edges[0].source.parentNode.id}));\n`
+                fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')});\n`
+            } else {
+                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
+                fnCode += `__params__.model = merged;\n`
+                fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')});\n`
+            }
+            /*
             } else if (node.input.edges.length == 1) {
                 fnCode += `let result_${node.id} = ${node.id}(result_${node.input.edges[0].source.parentNode.id});\n`
             } else {
                 fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
                 fnCode += `let result_${node.id} = ${node.id}(merged);\n`
-            }
+
+
+            */
             if (node.type === 'end'){
                 fnCode += `return result_${node.id};\n`;
             }
+            //fnCode += `console.log(result_${node.id});\n`;
         }
         fnCode += '}\n\n'
         fullCode += fnCode

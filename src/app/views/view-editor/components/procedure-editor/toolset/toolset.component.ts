@@ -64,12 +64,15 @@ export class ToolsetComponent{
                 var funcs = [];
                 for (let i of fl.nodes){
                     if (i.type == 'start'){
-                        func.argCount = i.input.length;
-                        var arg: IArgument = <IArgument>{
-                            name: i.input.name,
-                            default: i.input.default
-                        };
-                        func.args = [arg];
+                        func.argCount = i.procedure.length;
+                        func.args = i.procedure.map(prod => {
+                            return <IArgument>{
+                                name: prod.args[prod.argCount-2].value.substring(1,prod.args[prod.argCount-2].value.length-1),
+                                default: prod.args[prod.argCount-1].default,
+                                value: undefined
+                            };
+                        });
+                        console.log(func.args);
                     }
                 }
                 if (!func.hasOwnProperty('argCount')){

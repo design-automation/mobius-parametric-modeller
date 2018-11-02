@@ -149,19 +149,18 @@ export class CodeUtils {
         });
     }
 
-    static mergeInputs(edges: IEdge[]): any{
+    static mergeInputs(models): any{
         var result = {};
-        for (let i = 0; i<edges.length; i++){
-            for (let j in edges[i].source.value){
+        for (let model of models){
+            for (let j in model){
                 if (result[j]){
-                    result[j] += edges[i].source.value[j];
+                    result[j] += model[j];
                 } else {
-                    result[j] = edges[i].source.value[j];
+                    result[j] = model[j];
                 }
             }
         }
         return result;
-        //return edges[0].source.value;
     }
 
     static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
@@ -193,7 +192,7 @@ export class CodeUtils {
             }
             */
         } else {
-            input = CodeUtils.mergeInputs(inp.edges);
+            input = CodeUtils.mergeInputs(inp.edges.map(edge=>{ return edge.source.value}));
             /*
             if (typeof input === 'number' || input === undefined){
                 // do nothing
@@ -253,7 +252,7 @@ export class CodeUtils {
                 fnCode += `__params__.model = JSON.parse(JSON.stringify(result_${node.input.edges[0].source.parentNode.id}));\n`
                 fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')});\n`
             } else {
-                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
+                fnCode += `merged = mergeInputs([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
                 fnCode += `__params__.model = merged;\n`
                 fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')});\n`
             }

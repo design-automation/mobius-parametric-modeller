@@ -7,13 +7,6 @@ import { IEdge } from '@models/edge';
 
 import * as Modules from '@modules';
 
-const mergingResults = `function mergeResults(l){
-    var result = l[0];
-    for (let i = 1; i < l.length; i++){
-        result += l[i];
-    }
-    return result;
-}\n\n`
 
 @Component({
   selector: 'execute',
@@ -74,7 +67,8 @@ export class ExecuteComponent {
                 hasFunctions = true;
             }
             if (hasFunctions){
-                fnString = mergingResults + fnString;
+                let mergeString = CodeUtils.mergeInputs.toString();
+                fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) +'\n\n' + fnString;
             }
             console.log(`/*    ${node.name.toUpperCase()}    */\n\n`+fnString);
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)

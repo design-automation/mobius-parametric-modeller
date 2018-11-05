@@ -76,6 +76,7 @@ $default-padding: 4px;
     text-align: center; 
     width: 94px;
 }
+
 textarea{
     font-family: sans-serif; 
     background: transparent; 
@@ -86,6 +87,10 @@ textarea{
     text-align: center; 
     resize: none; 
     overflow: hidden;
+}
+
+.textarea_startend{
+    height: 15px;
 }
 
 .port{

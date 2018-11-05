@@ -10,6 +10,7 @@ import { IEdge } from '@models/edge';
 import * as gs from 'gs-json';
 
 import { gsConstructor } from '@modules';
+import { _parameterTypes } from '@modules';
 
 
 export class CodeUtils {
@@ -20,20 +21,21 @@ export class CodeUtils {
         const codeStr: string[] = [];
         const args = prod.args;
         const prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
-
-        if (addProdArr && prod.type != ProcedureTypes.ELSE && prod.type != ProcedureTypes.ELSEIF){
-            codeStr.push(`__PRODARR__[0] = "${prod.ID}";`);
+        if (addProdArr && prod.type != ProcedureTypes.Else && prod.type != ProcedureTypes.Elseif){
+            codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
         }
 
         switch ( prod.type ) {
-            case ProcedureTypes.VARIABLE:
+            case ProcedureTypes.Variable:
+                if (args[0].value.indexOf('__params__') != -1 || args[1].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
                 if (prefix === 'let '){
                     existingVars.push(args[0].value)
                 }
                 break;
 
-            case ProcedureTypes.IF:
+            case ProcedureTypes.If:
+                if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`if (${args[0].value}){`);
                 for (let p of prod.children){
                     codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
@@ -41,7 +43,7 @@ export class CodeUtils {
                 codeStr.push(`}`)
                 break;
 
-            case ProcedureTypes.ELSE:
+            case ProcedureTypes.Else:
                 codeStr.push(`else {`);
                 for (let p of prod.children){
                     codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
@@ -49,7 +51,8 @@ export class CodeUtils {
                 codeStr.push(`}`)
                 break;
 
-            case ProcedureTypes.ELSEIF:
+            case ProcedureTypes.Elseif:
+                if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`else if(${args[0].value}){`);
                 for (let p of prod.children){
                     codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
@@ -57,8 +60,9 @@ export class CodeUtils {
                 codeStr.push(`}`)
                 break;
 
-            case ProcedureTypes.FOREACH:
+            case ProcedureTypes.Foreach:
                 //codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
+                if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`for (${prefix} ${args[0].value} of ${args[1].value}){`);
                 for (let p of prod.children){
                     codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
@@ -66,7 +70,8 @@ export class CodeUtils {
                 codeStr.push(`}`)
                 break;
 
-            case ProcedureTypes.WHILE:
+            case ProcedureTypes.While:
+                if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`while (${args[0].value}){`);
                 for (let p of prod.children){
                     codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
@@ -74,25 +79,40 @@ export class CodeUtils {
                 codeStr.push(`}`)
                 break;
 
-            case ProcedureTypes.BREAK:
+            case ProcedureTypes.Break:
                 codeStr.push(`break;`);
                 break;
                 
-            case ProcedureTypes.CONTINUE:
+            case ProcedureTypes.Continue:
                 codeStr.push(`continue;`);
                 break;
 
-            case ProcedureTypes.FUNCTION:
-                const argValues = args.slice(1).map((arg)=>arg.value).join(',');
-                const fnCall: string = `__MODULES__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`
-                codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
-                if (prefix === 'let '){
-                    existingVars.push(args[0].value)
+            case ProcedureTypes.Function:
+                const argValues = args.slice(1).map((arg)=>{
+                    // if __params__ is present in the value of the argument, throw unexpected identifier
+                    if (arg.name == _parameterTypes.input) { 
+                        console.log(arg.value, arg.default);
+                        let val = arg.value || arg.default; return val; };
+                    if (arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
+                    if (arg.name == _parameterTypes.constList) return "__params__.constants";
+                    if (arg.name == _parameterTypes.model) return "__params__.model";
+                    //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
+                    return arg.value;
+                }).join(',');
+                const fnCall: string = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
+                if ( prod.meta.module.toUpperCase() == 'OUTPUT'){
+                    codeStr.push(`return ${fnCall};`);
+                } else if (args[0].name == '__none__'){
+                    codeStr.push(`${fnCall};`);
+                } else {
+                    codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
+                    if (prefix === 'let '){
+                        existingVars.push(args[0].value)
+                    }
                 }
                 break;
-
-            case ProcedureTypes.IMPORTED:
-                console.log('args: ',args)
+            case ProcedureTypes.Imported:
+                //('args: ',args)
                 const argsVals = args.slice(1).map((arg)=>arg.value).join(',');
                 const fn: string = `${prod.meta.name}( ${argsVals} )`
                 codeStr.push(`${prefix}${args[0].value} = ${fn};`);
@@ -101,9 +121,7 @@ export class CodeUtils {
                 }
                 break;
 
-
         }
-
         return codeStr.join('\n');
     }
 
@@ -134,20 +152,21 @@ export class CodeUtils {
         });
     }
 
-    static mergeInputs(edges: IEdge[]): any{
+    static mergeInputs(models): any{
         var result = new gs.Model();
-        for (let i = 0; i<edges.length; i++){
-            console.log(edges[i].source)
-            if (!edges[i].source.value || edges[i].source.value.constructor != gsConstructor) continue;
-            result.merge(edges[i].source.value);
+        for (let model of models){
+            console.log(model)
+            if (!model || model.constructor != gsConstructor) continue;
+            result.merge(model);
         }
         return result;
-        //return edges[0].source.value;
     }
 
     static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
         var input: any;
         if (node.type == 'start' || inp.edges.length == 0){
+            input = {};
+            /*
             if (inp.meta.mode == InputType.URL){
                 const p = new Promise((resolve) => {
                     let request = new XMLHttpRequest();
@@ -170,8 +189,9 @@ export class CodeUtils {
             } else {
                 input = inp.value || inp.default;
             }
+            */
         } else {
-            input = CodeUtils.mergeInputs(inp.edges);
+            input = CodeUtils.mergeInputs(inp.edges.map(edge=>{ return edge.source.value}));
             if (input.constructor === gsConstructor) {
                 input = `new __MODULES__.gs.Model(${input.toJSON()})`
             } else {
@@ -185,49 +205,61 @@ export class CodeUtils {
         node.hasError = false;
         const codeStr = [];
         const varsDefined: string[] = [];
-
-        // TODO [think later]: How to handle defaults / values for FileInputs and WebURLs?
-        // IDEA-1: Load and add as parameter; Will need to the synchronous
-
         // input initializations
         if (addProdArr){
             var input = await CodeUtils.getInputValue(node.input, node);
-            codeStr.push('let ' + node.input.name + ' = ' + input + ';');
-            varsDefined.push(node.input.name);
+            node.input.value = input;
         }
 
-        const line = `let ${node.output.name} = undefined;`;
-        codeStr.push(line);
-        varsDefined.push(node.output.name);
-
+        if (node.type =='start'){
+            codeStr.push('__params__.constants = {};\n')
+        }
         // procedure
         for (let prod of node.procedure){
             codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         };
+        if (node.type == 'end' && node.procedure.length > 0){
+            return `{\n${codeStr.join('\n')}\n}`;
+        } 
+        return `{\n${codeStr.join('\n')}\nreturn __params__.model;\n}`;
+        
 
-        //console.log( `{\n${codeStr.join('\n')}\nreturn { ${outStatements.join(',') } };\n}`);
-        return `{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
+        //return `{\n${codeStr.join('\n')}\nreturn result;\n}`;
+        //return `/*    ${node.name.toUpperCase()}    */\n\n{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
 
 
     }
     
     static async getFunctionString(func: IFunction): Promise<string>{
         let fullCode = '';
-        let fnCode = `function ${func.name}(${func.args[0].name}){\nvar merged;\n`;
+        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
         for (let node of func.module.nodes){
             let code =  await CodeUtils.getNodeCode(node, false)
-            fullCode += `function ${node.id}(${node.input.name})` + code + `\n\n`;
+            fullCode += `function ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')})` + code + `\n\n`;
             if (node.type ==='start'){
-                fnCode += `let result_${node.id} = ${node.id}(${func.args[0].name});\n`
+                //fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
+                fnCode += `let result_${node.id} = __params__.model;\n`
+            } else if (node.input.edges.length == 1) {
+                fnCode += `__params__.model = JSON.parse(JSON.stringify(result_${node.input.edges[0].source.parentNode.id}));\n`
+                fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')});\n`
+            } else {
+                fnCode += `merged = mergeInputs([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
+                fnCode += `__params__.model = merged;\n`
+                fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')});\n`
+            }
+            /*
             } else if (node.input.edges.length == 1) {
                 fnCode += `let result_${node.id} = ${node.id}(result_${node.input.edges[0].source.parentNode.id});\n`
             } else {
                 fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
                 fnCode += `let result_${node.id} = ${node.id}(merged);\n`
-            }
+
+
+            */
             if (node.type === 'end'){
                 fnCode += `return result_${node.id};\n`;
             }
+            //fnCode += `console.log(result_${node.id});\n`;
         }
         fnCode += '}\n\n'
         fullCode += fnCode

@@ -2,6 +2,6 @@
 	<panel-header [node]='node' [title]="'parameters'"></panel-header>
 	<!-- <p>Edit the parameters of your flowchart here. These parameters are visible in the viewer when you share your flowchart.</p> -->
 	<div class='container--input'>
-		<input-port-viewer [port]="node.input"></input-port-viewer>
+		<procedure-input-viewer *ngFor="let prod of node.procedure" [prod]="prod"></procedure-input-viewer>
 	</div>
 </div>

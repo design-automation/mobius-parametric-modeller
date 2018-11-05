@@ -75,6 +75,9 @@ export abstract class NodeUtils{
     }
 
     static select_procedure(node: INode, procedure: IProcedure, ctrl: boolean){
+        if (!procedure){
+            return
+        }
         if (ctrl){
             var selIndex = 0;
             var selected = false;
@@ -142,64 +145,83 @@ export abstract class NodeUtils{
         // add ID to the procedure
         prod.ID = IdGenerator.getProdID();
 
-        console.log(prod.ID);
-
 
         // select the procedure
         NodeUtils.select_procedure(node, prod, false);
 
         switch(prod.type){
-            case ProcedureTypes.VARIABLE:
+            case ProcedureTypes.Variable:
                 prod.argCount = 2;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
                 break;
             
-            case ProcedureTypes.FOREACH:
+            case ProcedureTypes.Foreach:
                 prod.argCount = 2; 
                 prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.WHILE:
+            case ProcedureTypes.While:
                 prod.argCount = 1; 
                 prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.IF: 
-            case ProcedureTypes.ELSEIF:
+            case ProcedureTypes.If: 
+            case ProcedureTypes.Elseif:
                 prod.argCount = 1;
                 prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.ELSE:
+            case ProcedureTypes.Else:
                 prod.argCount = 0;
                 prod.args = [];
                 prod.children = [];
                 break;
 
-            case ProcedureTypes.BREAK:
-            case ProcedureTypes.CONTINUE:
+            case ProcedureTypes.Break:
+            case ProcedureTypes.Continue:
                 prod.argCount = 0;
                 prod.args = [];
                 break;
 
-            case ProcedureTypes.FUNCTION:
+            case ProcedureTypes.Function:
                 if(!data) throw Error('No function data');
                 
-                prod.meta = { module: data.module, name: data.name };
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
                 prod.argCount = data.argCount + 1;
-                prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
+                let returnArg = {name: 'var_name', value: 'result', default: undefined};
+                if (!data.hasReturn){
+                    returnArg = {name: '__none__', value: '__none__', default: undefined}
+                }
+
+                // --UNSTABLE--
+                // changing the value of the last argument of all functions in input node to be undefined
+                if (node.type == 'start'){
+                    data.args[data.argCount-1].value = undefined
+                }
+                
+                prod.args = [ returnArg, ...data.args];
                 break;
 
-            case ProcedureTypes.IMPORTED:
-                prod.meta = { module: data.module, name: data.name };
+            case ProcedureTypes.Imported:
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
                 break;
         }
-        
+    }
+
+    static updateNode(newNode:INode, newPos): INode{
+        newNode.id = IdGenerator.getNodeID();
+        newNode.input = PortUtils.getNewInput();
+        newNode.output = PortUtils.getNewOutput();
+        newNode.input.parentNode = newNode;
+        newNode.output.parentNode = newNode;
+        newNode.position.x = newPos.x
+        newNode.position.y = newPos.y
+        return newNode;
     }
 
     static updateID(prod: IProcedure): any{

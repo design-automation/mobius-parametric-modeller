@@ -11,6 +11,7 @@ import { IArgument } from '@models/code';
  *  was clicked
  */
 
+
 @ProcedureTypesAware
 @ModuleAware
 @Component({
@@ -23,6 +24,8 @@ export class ToolsetComponent{
     @Output() select = new EventEmitter();
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
+    @Input() nodeType: string;
+    @Input() prodCount: number;
 
     constructor(){}
     
@@ -34,17 +37,17 @@ export class ToolsetComponent{
         // create a fresh copy of the params to avoid linked objects
         // todo: figure out
         fnData.args = fnData.args.map( (arg) => { 
-            return {name: arg.name, value: arg.value};
+            return {name: arg.name, value: arg.value, default: arg.default};
             });
         
-        this.select.emit( { type: ProcedureTypes.FUNCTION, data: fnData } ); 
+        this.select.emit( { type: ProcedureTypes.Function, data: fnData } ); 
     }
 
     add_imported_function(fnData){
         fnData.args = fnData.args.map( (arg) => { 
             return {name: arg.name, value: arg.value};
             });
-        this.select.emit( { type: ProcedureTypes.IMPORTED, data: fnData } ); 
+        this.select.emit( { type: ProcedureTypes.Imported, data: fnData } ); 
     }
 
     async import_function($event){
@@ -62,12 +65,15 @@ export class ToolsetComponent{
                 var funcs = [];
                 for (let i of fl.nodes){
                     if (i.type == 'start'){
-                        func.argCount = i.input.length;
-                        var arg: IArgument = <IArgument>{
-                            name: i.input.name,
-                            default: i.input.default
-                        };
-                        func.args = [arg];
+                        func.argCount = i.procedure.length;
+                        func.args = i.procedure.map(prod => {
+                            return <IArgument>{
+                                name: prod.args[prod.argCount-2].value.substring(1,prod.args[prod.argCount-2].value.length-1),
+                                default: prod.args[prod.argCount-1].default,
+                                value: undefined
+                            };
+                        });
+                        console.log(func.args);
                     }
                 }
                 if (!func.hasOwnProperty('argCount')){

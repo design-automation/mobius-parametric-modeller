@@ -4,10 +4,10 @@ id="main-edge"
 class = "edge" 
 [class.selected] = "edge.selected"
 [attr.points] = "(edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1]+7) + ' ' +
+                    (edge.source.parentNode.position.y + outputOffset[1]+ 9) + ' ' +
 
                     (edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1] + 15) + ' ' +
+                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
                     (edge.target.parentNode.position.y + inputOffset[1] - 29) + ' ' +
@@ -20,16 +20,16 @@ class = "edge"
 id="invisible-edge" 
 class = "inviEdge" 
 [attr.points] = "(edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1]+7) + ' ' +
+                    (edge.source.parentNode.position.y + outputOffset[1]+ 15) + ' ' +
 
                     (edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1] + 15) + ' ' +
+                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
                     (edge.target.parentNode.position.y + inputOffset[1] - 29) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 7)" 
+                    (edge.target.parentNode.position.y + inputOffset[1] - 10)" 
 (click)='select($event)'/>
     
 

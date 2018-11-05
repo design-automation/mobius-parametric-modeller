@@ -5,9 +5,10 @@
     (click)='emitSelect($event, data)'>
 
     <!-- Variable Assignment Template -->
-    <div class='line--variable' *ngSwitchCase="ProcedureTypes.VARIABLE">
+    <div class='line--variable' *ngSwitchCase="ProcedureTypes.Variable">
         <input 
-               [(ngModel)]='data.args[0].value'
+               [ngModel]='data.args[0].value'
+               (ngModelChange)='data.args[0].value=varMod($event)'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  
         = 
@@ -18,7 +19,7 @@
     </div>
 
     <!-- IF Template -->
-    <div class='line--if hasChildren' *ngSwitchCase="ProcedureTypes.IF">
+    <div class='line--if hasChildren' *ngSwitchCase="ProcedureTypes.If">
        if ( <input (cut)='stopProp()' (paste)='stopProp()'
                [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
@@ -34,8 +35,8 @@
     </div>
 
     <!-- ELSEIF Template -->
-    <div class='line--elseif hasChildren' *ngSwitchCase="ProcedureTypes.ELSEIF">
-       elseif ( <input (cut)='stopProp()' (paste)='stopProp()' 
+    <div class='line--Elseif hasChildren' *ngSwitchCase="ProcedureTypes.Elseif">
+       Elseif ( <input (cut)='stopProp()' (paste)='stopProp()' 
                [(ngModel)]='data.args[0].value'
                name='data.args[0].name'
                placeholder={{data.args[0].name}}>  )
@@ -49,7 +50,7 @@
     </div>
 
     <!-- ELSE Template -->
-    <div class='line--else hasChildren' *ngSwitchCase="ProcedureTypes.ELSE">
+    <div class='line--else hasChildren' *ngSwitchCase="ProcedureTypes.Else">
         else
         <div class='container--nested'>
         <procedure-item 
@@ -62,32 +63,18 @@
     </div>
 
     <!-- BREAK Template -->
-    <div class='line--break' *ngSwitchCase="ProcedureTypes.BREAK">
+    <div class='line--break' *ngSwitchCase="ProcedureTypes.Break">
        break
     </div>
 
     <!-- CONTINUE Template -->
-    <div class='line--continue' *ngSwitchCase="ProcedureTypes.CONTINUE">
+    <div class='line--continue' *ngSwitchCase="ProcedureTypes.Continue">
        continue
-    </div>
-
-    <!-- Function Template -->
-    <div class='line--function' *ngSwitchCase="ProcedureTypes.FUNCTION">
-        <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='data.args[0].value'
-                placeholder={{data.args[0].name}}>  
-        = 
-        {{ data.meta.module }}.{{ data.meta.name }} 
-        (
-            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='p.value' placeholder={{p.name}}>    
-            </ng-container>
-        ) 
-
     </div>
 
 
 <!-- FOREACH Template -->
-    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.FOREACH">
+    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.Foreach">
             for 
             <input (cut)='stopProp()' (paste)='stopProp()'
                    [(ngModel)]='data.args[0].value'
@@ -109,7 +96,7 @@
     </div>
 
     <!-- WHILE Template -->
-    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.WHILE">
+    <div class='line--foreach hasChildren' *ngSwitchCase="ProcedureTypes.While">
             while 
             <input (cut)='stopProp()' (paste)='stopProp()'
                    [(ngModel)]='data.args[0].value'
@@ -125,9 +112,64 @@
             </div>
     </div>
     
+    <!-- Function Template -->
+    <div class='line--function' *ngSwitchCase="ProcedureTypes.Function">
+        <ng-container *ngIf="data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'">
+            <input 
+            [ngModel]='data.args[0].value'
+            (ngModelChange)='data.args[0].value=varMod($event)'
+            (cut)='stopProp()' 
+            (paste)='stopProp()'
+            placeholder={{data.args[0].name}}>  
+            = 
+
+        </ng-container>
+        {{data.meta.module}}.{{data.meta.name}}(
+        <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+            <!--
+            <input *ngIf="p.name.toUpperCase() !== '__MODEL__'; else text_template" 
+            
+            (cut)='stopProp()' 
+            (paste)='stopProp()' 
+            [(ngModel)]='p.value' 
+            placeholder={{p.name}}>    
+            
+            <ng-template #text_template>
+                model,
+            </ng-template>
+            -->
+
+            <input *ngIf="p.name.indexOf('__') == -1" 
+                    (cut)='stopProp()' 
+                    (paste)='stopProp()' 
+                    [(ngModel)]='p.value' 
+                    placeholder={{p.name}}>
+            
+            <!--
+
+            <ng-template #model_template>
+                <ng-container *ngIf="p.name == model; else params_template">
+                    model,
+                </ng-container>
+            </ng-template>
+            <ng-template #params_template>
+                <ng-container *ngIf="p.name == constList;">
+                    const_list,
+                </ng-container>
+            </ng-template>
+            -->
+
+        </ng-container>
+        ) 
+
+    </div>
+
     <!-- Imported Function Template -->
-    <div class='line--imported' *ngSwitchCase="ProcedureTypes.IMPORTED">
-        <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='data.args[0].value'
+    <div class='line--imported' *ngSwitchCase="ProcedureTypes.Imported">
+        <input 
+                [ngModel]='data.args[0].value'
+                (ngModelChange)='data.args[0].value=varMod($event)'
+                (cut)='stopProp()' (paste)='stopProp()'
                 placeholder={{data.args[0].name}}>  
         = 
         {{ data.meta.name }} 

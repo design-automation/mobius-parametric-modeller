@@ -8,18 +8,11 @@ import { IEdge } from '@models/edge';
 import * as Modules from '@modules';
 import * as gs from 'gs-json'
 
-const mergingResults = `function mergeResults(l){
-    var result = l[0];
-    for (let i = 1; i < l.length; i++){
-        result += l[i];
-    }
-    return result;
-}\n\n`
 
 @Component({
   selector: 'execute',
   template: `<button class="btn--execute" 
-                    (click)="execute($event)">
+                    (click)="execute()">
                 Execute
              </button>`,
   styles: [ 
@@ -39,10 +32,10 @@ const mergingResults = `function mergeResults(l){
 export class ExecuteComponent {
 
     @Input() flowchart: IFlowchart;
-    async execute($event) {
-        let executed = [];
-        let count = 0;
-        var checkOverflow = 0;
+    private globalVars: string;
+
+    async execute() {
+        this.globalVars = '';
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
                 if (node.input.edges){
@@ -58,100 +51,37 @@ export class ExecuteComponent {
             funcStrings[func.name] = await CodeUtils.getFunctionString(func);
         }
         for (let node of this.flowchart.nodes){
-            console.log(`${node.name} executing...`);
+            //console.log(`${node.name} executing...`);
             await this.executeNode(node, funcStrings);
         }
-        /*
-        while(executed.length < this.flowchart.nodes.length || count > 100){
-
-            // TODO: Remove after debugging
-            count = count + 1;
-
-            for(let index=0; index < this.flowchart.nodes.length; index++){
-
-                let node = this.flowchart.nodes[index];
-                console.log(node)
-				if(executed.indexOf(index) > -1){
-					// node has already executed - do nothing
-				}
-				else{
-
-					// check if all inputs have valid inputs
-					// if yes, execute add to executed
-					// if no, set flag to true 
-					// check status of the node; don't rerun
-					if( !node.enabled ){ // or hasFnOutput  
-                        // do nothing
-						executed.push(index);
-					}
-					else{
-                        let flag = true;
-                        /*
-						for(let i=0; i < node.input.length; i++){
-                            if (node.type == 'start'){
-                                break
-                            }
-							let inp = node.input[i];
-                            // if input has a value and the value has a port property
-                            // port property means the port is connected to another port - 
-                            // and is waiting for previous node to execute
-							if(inp.edges && !inp.value){
-                                flag = false;
-								break;
-							}
-                        }
-                        *//*
-                        for(let edge of node.input.edges){
-                            if (node.type == 'start'){
-                                break
-                            }
-                            console.log(edge.source.value)
-                            if (!edge.source.value){
-                                flag = false;
-                                break;
-                            }
-                        }
-
-
-                        // if there is a missing input, the flag is false
-						if(flag){
-                            console.log(`${node.name} executing...`);
-                            await this.executeNode(node);
-							executed.push(index);
-                        }
-                        else{
-                            checkOverflow += 1;
-                            if (checkOverflow > 100){
-                                throw Error;
-                            }
-                            console.log(`${node.name} waiting for inputs...`);
-                        }
-
-					}
-				}
-			} 
-        }
-        */
     }
 
     async executeNode(node: INode, funcStrings){
-        let prodArr: string[] = [''];
+        let params = {"currentProcedure": ['']};
         try{
             var fnString = await CodeUtils.getNodeCode(node, true);
+            fnString = this.globalVars + fnString;
+            params["model"] = node.input.value;
             var hasFunctions = false;
             for (let funcName in funcStrings){
                 fnString = funcStrings[funcName] + fnString;
                 hasFunctions = true;
             }
             if (hasFunctions){
-                fnString = mergingResults + fnString
+                let mergeString = CodeUtils.mergeInputs.toString();
+                fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) +'\n\n' + fnString;
             }
-            console.log(fnString);
+            console.log(`/*    ${node.name.toUpperCase()}    */\n\n`+fnString);
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
-            const fn = new Function('__MODULES__', '__PRODARR__', fnString);
-            let result = fn(Modules, prodArr);
+            const fn = new Function('__modules__', '__params__', fnString);
+            let result = fn(Modules, params);
             node.output.value = result;
-            
+            if (node.type == 'start'){
+                for (let constant in params["constants"]){
+                    this.globalVars += `const ${constant} = ${params["constants"][constant]};\n`;
+                }
+                this.globalVars += '\n';
+            }
         }
         catch(ex){
             node.hasError = true;
@@ -159,7 +89,7 @@ export class ExecuteComponent {
 
             // Unexpected Identifier
             // Unexpected token
-            let prodWithError: string = prodArr[0]; 
+            let prodWithError: string = params["currentProcedure"][0]; 
             let markError = function(prod: IProcedure, id: string){
                 if(prod["ID"] && id && prod["ID"] == id){
                     prod.hasError = true;

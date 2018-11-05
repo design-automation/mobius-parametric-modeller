@@ -34,8 +34,8 @@
       (mousedown)='panStart($event)'
       (mousemove)='handleMouseMove($event)'  
       (mouseup)='handleMouseUp($event)'
-      (mouseenter)='activateCopyPaste($event)'
-      (mouseleave)='deactivateCopyPaste($event)'
+      (mouseenter)='activateKeyEvent()'
+      (mouseleave)='deactivateKeyEvent()'
       (wheel)='scale($event)'
       >
             <defs>
@@ -55,7 +55,13 @@
             </defs>
             <rect width="100%" height="100%" fill="url(#grid)" />
                           
-              
+            <g edge *ngFor="let edge of data.edges; let edge_index = index" 
+            [edge]='edge'
+            [inputOffset]='inputOffset'
+            [outputOffset]='outputOffset'
+            (selected)='selectEdge($event, edge_index)'
+            />
+            <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
             <g node *ngFor="let node of data.nodes; let node_index = index" 
             id='flw_node_{{node_index}}'
             [node]='node' 
@@ -64,13 +70,6 @@
             [outputOffset]='outputOffset'
             (action)='nodeAction($event, node_index)'
             />
-            <g edge *ngFor="let edge of data.edges; let edge_index = index" 
-            [edge]='edge'
-            [inputOffset]='inputOffset'
-            [outputOffset]='outputOffset'
-            (selected)='selectEdge(edge)'
-            />
-            <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0' style="visibility: visible"></line>
       </svg>
       <button style='position: absolute; top: 0px; left: 10px; ' class='btn' (click)='addNode()'> Add Node </button>
       <button style='position: absolute; top: 0px; left: 77px; ' class='btn' (click)='deleteSelectedNodes()'> Delete Node </button>

@@ -43,9 +43,11 @@ export class EdgeComponent{
     select($event){
         event.preventDefault();
         event.stopPropagation();
-        this.edge.selected = !this.edge.selected;
         if(this.edge.selected){
-            this.selected.emit();
+            this.selected.emit($event.ctrlKey);        
+        } else {
+            if ($event.ctrlKey) this.selected.emit('ctrl');
+            else this.selected.emit('single');
         }
     }
 

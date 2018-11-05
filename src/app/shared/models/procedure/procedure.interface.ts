@@ -11,7 +11,7 @@ export interface IProcedure{
     argCount: number;
     args: IArgument[];
 
-    meta: { name: string, module: string };
+    meta: { name: string, module: string, inputMode: number};
     
     enabled: boolean;
     selected: boolean;
@@ -27,6 +27,7 @@ export interface IFunction{
     module: any,
     name: string, 
     argCount: number,
+    hasReturn: boolean,
     args: IArgument[];
 }
 

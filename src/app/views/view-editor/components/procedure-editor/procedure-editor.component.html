@@ -1,12 +1,14 @@
+<parameter-editor *ngIf="node.type == 'start'" [node]='node'></parameter-editor>
+
 <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
 (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
 
 	<div class='container__heading'>
-		<h3>{{ node?.name }} // procedure</h3>
+		<h2>{{node?.name}}</h2>
 	</div>
 
 	<div class='container__content'>
-		<toolset [functions]='functions' (select)='add($event)' (imported)='importFunction($event)'></toolset>
+		<toolset [functions]='functions' [prodCount]='node.procedure.length' [nodeType]='node.type' (select)='add($event)' (imported)='importFunction($event)'></toolset>
 		
 		<div id='procedure' class="container--procedure">
 			<procedure-item 

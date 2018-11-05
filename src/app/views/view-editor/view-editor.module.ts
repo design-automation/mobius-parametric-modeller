@@ -10,7 +10,10 @@ import { ToolsetComponent } from './components/procedure-editor/toolset/toolset.
 import { ParameterEditorComponent } from './components/parameter-editor/parameter-editor.component';
 import { InputPortEditorComponent } from './components/parameter-editor/input-port-editor/input-port-editor.component';
 import { OutputPortEditorComponent } from './components/parameter-editor/output-port-editor/output-port-editor.component';
+import { procedureInputEditorComponent } from './components/parameter-editor/procedure-input-editor/procedure-input-editor.component';
 import { DataService } from '@services';
+import { _parameterTypes} from '@modules';
+import { MatSliderModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -20,13 +23,15 @@ import { DataService } from '@services';
     ToolsetComponent,
     ParameterEditorComponent,
     InputPortEditorComponent, 
-    OutputPortEditorComponent
+    OutputPortEditorComponent,
+    procedureInputEditorComponent
   ],
   entryComponents: [
   ], 
   imports: [
     CommonModule, 
-    SharedModule
+    SharedModule,
+    MatSliderModule
   ],
   exports: [
     ViewEditorComponent,

@@ -155,7 +155,6 @@ export class CodeUtils {
     static mergeInputs(models): any{
         var result = new gs.Model();
         for (let model of models){
-            console.log(model)
             if (!model || model.constructor != gsConstructor) continue;
             result.merge(model);
         }
@@ -165,38 +164,16 @@ export class CodeUtils {
     static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
         var input: any;
         if (node.type == 'start' || inp.edges.length == 0){
-            input = {};
-            /*
-            if (inp.meta.mode == InputType.URL){
-                const p = new Promise((resolve) => {
-                    let request = new XMLHttpRequest();
-                    request.open('GET', inp.value || inp.default);
-                    request.onload = () => {
-                        resolve(request.responseText);
-                    }
-                    request.send();
-                });
-                input = await p;
-            } else if (inp.meta.mode == InputType.File) {
-                const p = new Promise((resolve) => {
-                    let reader = new FileReader();
-                    reader.onload = function(){
-                        resolve(reader.result)
-                    }
-                    reader.readAsText(inp.value || inp.default)
-                });
-                input = await p;
-            } else {
-                input = inp.value || inp.default;
-            }
-            */
+            input = new gs.Model();
         } else {
             input = CodeUtils.mergeInputs(inp.edges.map(edge=>{ return edge.source.value}));
+            /*
             if (input.constructor === gsConstructor) {
                 input = `new __MODULES__.gs.Model(${input.toJSON()})`
             } else {
                 // do nothing
             }
+            */
         }
         return input;
     }

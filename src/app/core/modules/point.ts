@@ -113,28 +113,28 @@ export function CopyToModel(model: gs.IModel, point: gs.IPoint): gs.IPoint {
 /**
  * Creates a point from XYZ coordinates.
  *
- * @param model Model to add points to.
+ * @param __model__ Model to add points to.
  * @param xyz XYZ coordinates, as a list of three numbers.
  * @returns New point if successful, null if unsuccessful or on error.
  */
-export function FromXYZ(model: gs.IModel, xyz: gs.XYZ): gs.IPoint {
+export function FromXYZ(__model__: gs.IModel, xyz: gs.XYZ): gs.IPoint {
     error.checkXYZ(xyz);
-    return model.getGeom().addPoint(xyz);
+    return __model__.getGeom().addPoint(xyz);
 }
 
 /**
  * Creates a list of points from a list of X, Y and Z coordinates.
  * Points are returned in list order.
  *
- * @param model Model to add points to.
+ * @param __model__ Model to add points to.
  * @param xyzs A list XYZ coordinates, as a list of lists of three numbers.
  * @returns New list of points if successful, null if unsuccessful or on error
  */
-export function FromXYZs(model: gs.IModel, xyzs: gs.XYZ[]): gs.IPoint[] {
+export function FromXYZs(__model__: gs.IModel, xyzs: gs.XYZ[]): gs.IPoint[] {
     const points: gs.IPoint[] = [];
     for (const xyz of xyzs as gs.XYZ[]) {
         error.checkXYZ(xyz);
-        points.push(model.getGeom().addPoint(xyz));
+        points.push(__model__.getGeom().addPoint(xyz));
     }
     return points;
 }

@@ -22,6 +22,7 @@ import { IArgument } from '@models/code';
 export class ToolsetComponent{
 
     @Output() select = new EventEmitter();
+    @Output() delete = new EventEmitter();
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
     @Input() nodeType: string;
@@ -48,6 +49,10 @@ export class ToolsetComponent{
             return {name: arg.name, value: arg.value};
             });
         this.select.emit( { type: ProcedureTypes.Imported, data: fnData } ); 
+    }
+
+    delete_imported_function(fnData){
+        this.delete.emit(fnData); 
     }
 
     async import_function($event){

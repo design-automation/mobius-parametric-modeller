@@ -19,7 +19,7 @@ export class FlowchartUtils{
         return flw;
     }
 
-    static checkNode(nodeOrder: INode[], node: INode){
+    static checkNode(nodeOrder: INode[], node: INode, enabled: boolean){
         if (node.hasExecuted){
             return
         } else if (node.type === 'start' ){
@@ -33,8 +33,9 @@ export class FlowchartUtils{
             nodeOrder.push(node)
         }
         node.hasExecuted = true;
+        node.enabled = enabled
         for (let edge of node.output.edges){
-            FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode);
+            FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode, enabled);
         }
     }
 
@@ -47,11 +48,11 @@ export class FlowchartUtils{
             node.hasExecuted = false;
         }
         var nodeOrder = [];
-        FlowchartUtils.checkNode(nodeOrder, startNode);
+        FlowchartUtils.checkNode(nodeOrder, startNode, true);
         if (nodeOrder.length < flw.nodes.length){
             for (let node of flw.nodes){
                 if (node.type != 'start' && node.input.edges.length == 0){
-                    FlowchartUtils.checkNode(nodeOrder, node);
+                    FlowchartUtils.checkNode(nodeOrder, node, false);
                 }
             }
         }

@@ -50,6 +50,10 @@ export class ExecuteComponent {
             funcStrings[func.name] = await CodeUtils.getFunctionString(func);
         }
         for (let node of this.flowchart.nodes){
+            if (!node.enabled) {
+                node.output.value = undefined;
+                continue;
+            }
             //console.log(`${node.name} executing...`);
             await this.executeNode(node, funcStrings);
         }

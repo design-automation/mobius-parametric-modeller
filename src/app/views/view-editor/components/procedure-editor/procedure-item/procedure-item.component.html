@@ -124,7 +124,7 @@
             = 
 
         </ng-container>
-        {{data.meta.module}}.{{data.meta.name}}(
+        {{data.meta.module}}.{{data.meta.name}}
         <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
             <!--
             <input *ngIf="p.name.toUpperCase() !== '__MODEL__'; else text_template" 
@@ -160,7 +160,7 @@
             -->
 
         </ng-container>
-        ) 
+        
 
     </div>
 
@@ -173,11 +173,11 @@
                 placeholder={{data.args[0].name}}>  
         = 
         {{ data.meta.name }} 
-        (
+        
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input (cut)='stopProp()' (paste)='stopProp()' [(ngModel)]='p.value' placeholder={{p.name}}>    
             </ng-container>
-        ) 
+        
 
     </div>
 

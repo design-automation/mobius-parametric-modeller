@@ -8,15 +8,13 @@
 	</div>
 
 	<div class='container__content'>
-		<toolset [functions]='functions' [prodCount]='node.procedure.length' [nodeType]='node.type' (select)='add($event)' (imported)='importFunction($event)'></toolset>
-		
+		<toolset [functions]='functions' [prodCount]='node.procedure.length' [nodeType]='node.type' (delete)='deleteFunction($event)' (select)='add($event)' (imported)='importFunction($event)'></toolset>
 		<div id='procedure' class="container--procedure">
 			<procedure-item 
 				*ngFor="let line of node?.procedure; let idx=index" 
 				[data]="line"
 				(select)="selectProcedure($event,line)"
-				(delete)="deleteChild($event, idx)"></procedure-item>
+				(delete)="deleteChild(idx)"></procedure-item>
 		</div>
 	</div>
-
 </div>

@@ -28,7 +28,10 @@
             <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
             <input type="button" value="Import" onclick="document.getElementById('selectedFile').click();" />
             <ul class='toolset__functions--subset'>
-                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} </li>
+                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} 
+                    <button (click)='delete_imported_function(fn)'>x</button>
+
+                </li>
             </ul>
         </section>
     </div>

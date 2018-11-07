@@ -58,6 +58,7 @@ export {gs};
 
 export * from './input';
 export * from './output';
+export * from './console';
 export * from './_parameterTypes';
 
 const gsConstructor = new gs.Model().constructor;

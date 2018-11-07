@@ -1,7 +1,7 @@
 
 <div class='container'>
 	<div class='content__panel'>
-		<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)'></procedure-editor>
+		<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)' (delete_Function)='deleteFunction($event)'></procedure-editor>
 		<br>
 		<br>
 	</div>

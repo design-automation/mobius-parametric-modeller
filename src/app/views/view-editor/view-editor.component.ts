@@ -23,4 +23,13 @@ export class ViewEditorComponent{
         }
     }
 
+    deleteFunction($event){
+        for (let i = 0; i < this.flowchart.functions.length; i++){
+            if (this.flowchart.functions[i] == $event){
+                this.flowchart.functions.splice(i,1);
+                break;
+            }
+        }
+    }
+
 }

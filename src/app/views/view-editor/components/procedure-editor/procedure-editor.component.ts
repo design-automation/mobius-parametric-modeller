@@ -22,6 +22,7 @@ export class ProcedureEditorComponent{
     @Input() node: INode;
     @Input() functions: IFunction[];
     @Output() imported = new EventEmitter();
+    @Output() delete_Function = new EventEmitter();
     copiedProd: IProcedure[];
 
     private copyCheck: boolean = false;
@@ -32,7 +33,11 @@ export class ProcedureEditorComponent{
       NodeUtils.add_procedure(this.node, data.type, data.data);
     }
 
-    deleteChild($event, index: number): void{
+    deleteFunction(data): void {
+      this.delete_Function.emit(data);
+    }
+
+    deleteChild(index: number): void{
       this.node.procedure.splice(index, 1);
       NodeUtils.deselect_procedure(this.node);
     }

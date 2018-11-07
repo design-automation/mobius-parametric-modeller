@@ -1,4 +1,3 @@
-<parameter-editor *ngIf="node.type == 'start'" [node]='node'></parameter-editor>
 
 <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
 (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
@@ -10,6 +9,7 @@
 	<div class='container__content'>
 		<toolset [functions]='functions' [prodCount]='node.procedure.length' [nodeType]='node.type' (delete)='deleteFunction($event)' (select)='add($event)' (imported)='importFunction($event)'></toolset>
 		<div id='procedure' class="container--procedure">
+			<parameter-editor *ngIf="node.type == 'start'" [node]='node'></parameter-editor>
 			<procedure-item 
 				*ngFor="let line of node?.procedure; let idx=index" 
 				[data]="line"

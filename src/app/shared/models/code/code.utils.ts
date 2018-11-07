@@ -93,6 +93,10 @@ export class CodeUtils {
                     if (arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                     if (arg.name == _parameterTypes.constList) return "__params__.constants";
                     if (arg.name == _parameterTypes.model) return "__params__.model";
+                    if (arg.value.substring(0,1) == '@') {
+                        if (prod.meta.module.toUpperCase() == 'QUERY') return '"'+arg.value.replace('"',"'")+'"';
+                        return '__modules__.Query.get( __params__.model,"'+arg.value.replace('"',"'")+'" )';
+                    }
                     //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                     return arg.value;
                 }).join(',');
@@ -150,13 +154,17 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any{
-        var result = {};
+        var result = [];
         for (let model of models){
-            for (let j in model){
-                if (result[j]){
-                    result[j] += model[j];
-                } else {
-                    result[j] = model[j];
+            for (let j of model){
+                let existing = false;
+                for(let i of result){
+                    if (i.value == j.value){
+                        existing = true;
+                    }
+                }
+                if (!existing){
+                    result.push(j)
                 }
             }
         }

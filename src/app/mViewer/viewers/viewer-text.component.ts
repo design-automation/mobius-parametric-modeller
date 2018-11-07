@@ -21,7 +21,7 @@ export class TextViewerComponent{
     } else if (typeof this.node.output.value === 'string'){
       this.output = '"' + this.node.output.value + '"';
     } else if (this.node.output.value.constructor === [].constructor){
-      this.output = '[' + this.node.output.value + ']';
+      this.output = JSON.stringify(this.node.output.value);
     } else if (this.node.output.value.constructor === {}.constructor) {
       this.output = JSON.stringify(this.node.output.value);
     } else {
@@ -40,7 +40,7 @@ export class TextViewerComponent{
     } else if (typeof this.node.output.value === 'string'){
       this.output = '"' + this.node.output.value + '"';
     } else if (this.node.output.value.constructor === [].constructor){
-      this.output = '[' + this.node.output.value + ']';
+      this.output = JSON.stringify(this.node.output.value);
     } else if (this.node.output.value.constructor === {}.constructor) {
       this.output = JSON.stringify(this.node.output.value);
     } else {

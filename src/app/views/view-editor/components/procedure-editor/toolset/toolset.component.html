@@ -2,9 +2,9 @@
 
     <ul class='toolset__basic'>
         <ng-container *ngFor="let type of ProcedureTypesArr">
-            <li *ngIf='type !== "FUNCTION"'
+            <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"'
                 (click)='add(ProcedureTypes[type])'> 
-                {{type}} 
+                {{type}}
             </li>
         </ng-container>
     </ul>

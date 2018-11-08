@@ -48,4 +48,12 @@ export class ProcedureItemComponent{
         //str = str.replace('"',"'");
         return str;
     }
+
+    resize(e, val){
+        if(!val) {
+            e.target.size = 1;
+            return
+        }
+        e.target.size = val.length;
+    }
 }

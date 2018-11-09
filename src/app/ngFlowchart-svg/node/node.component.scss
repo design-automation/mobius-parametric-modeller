@@ -36,30 +36,20 @@ $default-padding: 4px;
 }
 
 .node{
-    width: 100px;
-    height: 80px;
-    fill:blue;
+    fill:rgb(199, 200, 230);
     stroke-width:$default-padding;
     stroke: white;
-    fill-opacity:0.1;
     stroke-opacity: 1;
     stroke-linecap: round;
     stroke-linejoin: round;
 
-    .node--ellipse{
-        fill:blue;
-        stroke-width:$default-padding;
-        stroke: white;
-        fill-opacity:0.1;
-        stroke-opacity: 1;
-    }
 
     &.node--start{
-        fill: green;
+        fill: rgb(199, 226, 204);
     }
 
     &.node--end{
-        fill: red;
+        fill: rgb(225, 200, 204);
     }
 
     &.node--selected{
@@ -80,16 +70,19 @@ $default-padding: 4px;
 textarea{
     font-family: sans-serif; 
     background: transparent; 
+    display:inline-block;
     border:none; 
-    font-size: 10px; 
+    font-size: 14px; 
     width: 100%; 
     height: 70px;
     text-align: center; 
+    vertical-align: middle;
     resize: none; 
     overflow: hidden;
 }
 
 .textarea_startend{
+    font-size: 18px; 
     height: 15px;
 }
 

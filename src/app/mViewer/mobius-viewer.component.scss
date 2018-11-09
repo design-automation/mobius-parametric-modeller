@@ -1,4 +1,4 @@
-$header-height: 45px;
+$header-height: 35px;
 
 .container__header{
     flex: 0 1 auto;
@@ -41,4 +41,34 @@ button.btn:hover{
 .selected{
     background-color: black;
     color: yellow;
+}
+
+
+/* Style the tab */
+.tab {
+    border: 2px ;
+    overflow: hidden;
+    background-color: #3F4651;
+}
+
+.tab button {
+    background-color: inherit;
+    color: #E7BF00;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 8px 10px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.tab button:hover {
+    background-color: #222;
+}
+
+.tab button.active {
+    background-color: #222;
+    color: white;
+    border-color: #222 !important;
 }

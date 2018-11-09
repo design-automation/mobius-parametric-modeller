@@ -174,7 +174,7 @@ export class CodeUtils {
     static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
         var input: any;
         if (node.type == 'start' || inp.edges.length == 0){
-            input = {};
+            input = [];
             /*
             if (inp.meta.mode == InputType.URL){
                 const p = new Promise((resolve) => {

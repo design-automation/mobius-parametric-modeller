@@ -1,4 +1,4 @@
-$header-height: 45px;
+$header-height: 35px;
 .container{
     position: relative;
     overflow: auto;
@@ -33,6 +33,41 @@ $header-height: 45px;
         font-size: 18px;
         font-weight: 600;
         text-align: center;
+
+        /* tab styling */
+        .tab {
+            border: 2px ;
+            overflow: hidden;
+            background-color: #3F4651;
+        }
+
+        .tab button {
+            background-color: inherit;
+            color: #E7BF00;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 8px 10px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        .tab button:hover {
+            background-color: #222;
+        }
+
+        .tab button.active {
+            background-color: #222;
+            color: white;
+            border-color: #222 !important;
+        }
+
+        /* dropdown menu styling */
+
+        .dropmenu {
+            display: inline-flex;
+        }
     }
 
     .container__content{
@@ -54,6 +89,11 @@ $header-height: 45px;
         background-color: #3F4651;
         color: #E7BF00;
     }
+
+
+
+
+
 }
 
 
@@ -90,12 +130,13 @@ li.link:hover{
 }
 
 button.btn{ 
+    display: inline-block;
+    vertical-align: middle;
     margin: 0px 0px 0px 0px;
     font-size: 12px;
-    line-height: 14px;
-    border: 2px solid gray;
+    line-height: 10px;
+    border: none;
     border-radius: 4px;
-    padding: 2px 5px;
     background-color: #3F4651; 
     color: #E7BF00;
     font-weight: 600;

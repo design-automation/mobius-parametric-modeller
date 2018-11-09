@@ -11,7 +11,7 @@ import { IEdge } from '@models/edge';
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-width: 5px;
-        opacity: 0.6;
+        opacity: 1;
         pointer-events: stroke;
         marker-end: url(#arrow);
     }  
@@ -24,7 +24,7 @@ import { IEdge } from '@models/edge';
     }  
     .selected{
         stroke: blue;
-        opacity: 0.8;
+        opacity: 1;
         marker-end: url(#arrow_selected);
 
     }

@@ -6,7 +6,7 @@ import { FlowchartUtils } from '@models/flowchart';
 
 @Component({
   selector: 'file-save',
-  template:  `<button class='btn' (click)='download()'>Save</button>`,
+  template:  `<button id='savefile' class='btn' (click)='download()'>Save</button>`,
   styles: [ 
             `
             button.btn{ 

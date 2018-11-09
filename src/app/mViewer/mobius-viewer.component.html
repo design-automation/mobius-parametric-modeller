@@ -1,8 +1,8 @@
 <div class='viewer-container'>  
     <div class='container__header'>
-        <div style ="display: inline-flex">
-            <button class='btn' 
-            [class.selected]='view.name == activeView.name'
+        <div class="tab">
+            <button class='btn-tab' 
+            [class.active]='view.name == activeView.name'
             *ngFor='let view of Viewers;' 
             (click)='updateView(view)'>
             {{view.name}}

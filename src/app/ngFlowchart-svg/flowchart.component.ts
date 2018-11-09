@@ -47,8 +47,8 @@ export class FlowchartComponent{
   
   private offset;
   
-  inputOffset = [50, -10];
-  outputOffset = [50, 90];
+  inputOffset = [50, -10, 50, -10];
+  outputOffset = [50, 90, 50, 90];
 
   ngOnInit(){ 
     this.canvas = <HTMLElement>document.getElementById("svg-canvas");
@@ -336,6 +336,7 @@ export class FlowchartComponent{
   }
 
   handleMouseUp($event){
+    // drop edge --> create new edge if drop position is within 15px of an input/output port
     if (this.isDown == 3){
       var pt = this.canvas.createSVGPoint();
 
@@ -344,18 +345,25 @@ export class FlowchartComponent{
 
       const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
       for (let n of this.data.nodes){
-        var p, pPos;
+        var pPos;
+
+        // find the node's corresponding port and its position
         if (this.startType == 'input'){
-          if (this.edge.target.parentNode == n) continue;
+          if (this.edge.target.parentNode == n || n.type == 'end') continue;
           this.edge.source = n.output;
+
           pPos = [n.position.x+this.outputOffset[0], n.position.y+this.outputOffset[1]];
         } else {
-          if (this.edge.source.parentNode == n) continue;
+          if (this.edge.source.parentNode == n || n.type == 'start') continue;
           this.edge.target = n.input;
+
           pPos = [n.position.x+this.inputOffset[0], n.position.y+this.inputOffset[1]];
         }
-        if (Math.abs(pPos[0]-svgP.x) > 15 || Math.abs(pPos[1]-svgP.y) > 15 ) continue;
 
+        // if the distance between the port's position and the dropped position is bigger than 15px, continue
+        if (Math.abs(pPos[0]-svgP.x) > 25 || Math.abs(pPos[1]-svgP.y) > 25 ) continue;
+
+        // if there is already an existing edge with the same source and target as the new edge, return
         for (let edge of this.data.edges){
           if (edge.target == this.edge.target && edge.source == this.edge.source){
             return;

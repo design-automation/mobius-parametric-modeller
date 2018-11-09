@@ -1,34 +1,64 @@
 
 <div class='container'>
     <split direction="horizontal">
-        <split-area size="60">
+        <split-area size="50">
             <div class='container__header'>
-                <div>
-                    <button class='btn' [class.active]='false' (click)='updateView("publish")'>Publish</button>
-                    <button class='btn' [class.active]='false' (click)='updateView("flowchart")'>Flowchart</button>
+                <div class="tab">
+                    <button class='btn-tab' [class.active]='activeView=="publish"' (click)='updateView("publish")'>Publish</button>
+                    <button class='btn-tab' [class.active]='activeView=="flowchart"' (click)='updateView("flowchart")'>Flowchart</button>
+                    <!--
                     <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
+                    -->
                 </div>
+                <!--
                 <div>
                     <file-new (create)='updateFile($event)'></file-new>
                     <file-save [file]='file'></file-save>
                     <file-load (loaded)='updateFile($event)'></file-load>        
-
+                    <execute [flowchart]='flowchart'></execute>
                 </div>
-                <execute [flowchart]='flowchart'></execute>
+                -->
+
+                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+                <div style="display: none;">
+                    <file-new (create)='updateFile($event)'></file-new>
+                    <file-save [file]='file'></file-save>
+                    <file-load (loaded)='updateFile($event)'></file-load>        
+                </div>
+
+                <div class="dropmenu">
+                    <!-- dropdown menu for new file, save file, loaf file-->
+                    <div>
+                        <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button  mat-menu-item onclick="document.getElementById('newfile').click();">
+                                <mat-icon>rotate_left</mat-icon>
+                                <span>Reset</span>
+                            </button>
+                            <button mat-menu-item onclick="document.getElementById('savefile').click();">
+                                <mat-icon>save_alt</mat-icon>
+                                <span>Save File</span>
+                            </button>
+                            <button mat-menu-item onclick="document.getElementById('file-input').click();">
+                                <mat-icon>launch</mat-icon>
+                                <span>Load File</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    <!-- execute button -->
+                    <div>
+                        <execute [flowchart]='flowchart'></execute>
+                    </div>
+                </div>
             </div>
             <div class='content__panel'>
-
                 <ng-container #vc></ng-container>
-                <!--
-
-                <flowchart *ngIf="activeView=='flowchart'" [data]="flowchart" (switch)="switchView($event)"></flowchart> 
-                <view-editor *ngIf="activeView=='editor'" [flowchart]="flowchart" ></view-editor> 
-                <view-publish *ngIf="activeView=='publish'" [flowchart]="flowchart"></view-publish> 
-                -->
             </div>
         </split-area>
 
-        <split-area size="40">
+        <split-area size="50">
             <div class='content__panel' >
                 <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
             </div>

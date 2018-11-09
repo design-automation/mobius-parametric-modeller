@@ -15,6 +15,7 @@ import { ViewPublishComponent } from '@views';
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@services';
 import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
+import { MatMenuModule, MatIconModule } from '@angular/material';
 
 
 @NgModule({
@@ -31,6 +32,8 @@ import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
     ViewEditorModule,
     ViewPublishModule,
     SharedModule,
+    MatMenuModule,
+    MatIconModule,
   ],
   entryComponents: [ 
     ViewEditorComponent,

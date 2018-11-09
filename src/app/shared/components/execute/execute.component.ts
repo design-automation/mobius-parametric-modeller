@@ -16,11 +16,13 @@ import * as Modules from '@modules';
              </button>`,
   styles: [ 
             `.btn--execute{ 
+                display: inline-block;
+                vertical-align: middle;
                 font-size: 14px;
                 line-height: 18px;
                 border: 3px solid #E0C229;
                 border-radius: 4px;
-                padding: 2px 10px;
+                padding: 1px 10px;
                 background-color: #E0C229; 
                 color: #494D59;
                 font-weight: 600;

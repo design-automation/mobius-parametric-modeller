@@ -71,9 +71,36 @@
             (action)='nodeAction($event, node_index)'
             />
       </svg>
+      <!--
       <button style='position: absolute; top: 0px; left: 10px; ' class='btn' (click)='addNode()'> Add Node </button>
       <button style='position: absolute; top: 0px; left: 77px; ' class='btn' (click)='deleteSelectedNodes()'> Delete Node </button>
       <button style='position: absolute; top: 0px; left: 157px;' class='btn' (click)='deleteSelectedEdges()'> Delete Wire </button>
+      -->
+      
+      <div class='button-row'>
+            <button mat-icon-button disableRipple='true' (click)='addNode()' title="Add Node">
+            <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title="Delete Selected Node">
+            <mat-icon>remove</mat-icon>
+            </button>
+            <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title="Delete Selected Wires">
+            <mat-icon>link_off</mat-icon>
+            </button>
+            <!--
+                  <mat-icon (click)='addNode()' title="Add Node">add</mat-icon>
+                  <mat-icon (click)='deleteSelectedNodes()' title="Delete Node">remove</mat-icon>
+                  <mat-icon (click)='deleteSelectedEdges()' title="Delete Wire">link_off</mat-icon>
+            -->
+      </div>
+      <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='resetViewer()' title="Reset Flowchart View">
+            <mat-icon>control_camera</mat-icon>
+            <!--
+            <mat-icon>zoom_out_map</mat-icon>
+            -->
+      </button>
+      
+
 </div>
 
 

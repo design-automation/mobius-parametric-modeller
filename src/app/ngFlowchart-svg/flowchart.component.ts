@@ -234,6 +234,9 @@ export class FlowchartComponent{
 
   resetViewer(): void{
     this.zoom = 1; 
+    this.canvas.style.transition = 'transform 0ms ease-in';
+    this.canvas.style.transformOrigin = `top left`;
+    this.canvas.style.transform = "matrix(1,0,0,1,0,0)";
   }
 
 

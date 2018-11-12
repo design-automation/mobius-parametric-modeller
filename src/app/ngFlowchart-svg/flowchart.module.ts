@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatButtonModule } from '@angular/material';
 
 import { FlowchartComponent } from './flowchart.component';
 import { NodeComponent } from './node/node.component';
 import { EdgeComponent } from './edge/edge.component';
-
 
 @NgModule({
   declarations: [
@@ -18,7 +17,8 @@ import { EdgeComponent } from './edge/edge.component';
   exports: [ FlowchartComponent ],
   imports: [ CommonModule,
              FormsModule, 
-             MatIconModule ],
+             MatIconModule,
+             MatButtonModule ],
   entryComponents: [ ],
   providers: [ ]
 })

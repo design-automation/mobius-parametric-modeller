@@ -56,6 +56,22 @@ input:focus{
 	color: $color2;
 }
 
+.button-row {
+	position: absolute; 
+	top: 0px; 
+	left: 10px;
+
+	button{
+		width: 28px;
+	}
+}
+
+.resetViewer-button{
+	position: absolute; 
+	top: 0px; 
+	right: 0px;
+}
+
 .viewer{
 
 	@extend .viewer;

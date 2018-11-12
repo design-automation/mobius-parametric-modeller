@@ -28,29 +28,33 @@
 
                 <div class="dropmenu">
                     <!-- dropdown menu for new file, save file, loaf file-->
+                    <!-- execute button -->
+                    <div>
+                        <execute [flowchart]='flowchart'></execute>
+                    </div>
                     <div>
                         <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
                             <mat-icon>menu</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button  mat-menu-item onclick="document.getElementById('newfile').click();">
+                            <button  mat-menu-item onclick="document.getElementById('newfile').click();"
+                            title="Reset Flowchart to Default">
                                 <mat-icon>rotate_left</mat-icon>
                                 <span>Reset</span>
                             </button>
-                            <button mat-menu-item onclick="document.getElementById('savefile').click();">
+                            <button mat-menu-item onclick="document.getElementById('savefile').click();"
+                            title="Save Flowchart File to Computer">
                                 <mat-icon>save_alt</mat-icon>
                                 <span>Save File</span>
                             </button>
-                            <button mat-menu-item onclick="document.getElementById('file-input').click();">
+                            <button mat-menu-item onclick="document.getElementById('file-input').click();"
+                            title="Load Flowchart File from Computer">
                                 <mat-icon>launch</mat-icon>
                                 <span>Load File</span>
                             </button>
                         </mat-menu>
                     </div>
-                    <!-- execute button -->
-                    <div>
-                        <execute [flowchart]='flowchart'></execute>
-                    </div>
+                    
                 </div>
             </div>
             <div class='content__panel'>

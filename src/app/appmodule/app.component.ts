@@ -34,6 +34,7 @@ export class AppComponent{
   ngOnInit(){
     this.activeView = "flowchart";
     this.updateView("flowchart");
+     
   }
 
 

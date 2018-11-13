@@ -25,11 +25,11 @@ export class ProcedureItemComponent{
     }
 
     emitSelect(event, procedure: IProcedure){
+        event.stopPropagation();
         this.select.emit({"ctrl":event.ctrlKey, "prod":procedure});
     }
 
     selectChild(event, procedure: IProcedure){
-        event.stopPropagation();
         this.select.emit(event);
     }
 

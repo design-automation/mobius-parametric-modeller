@@ -36,8 +36,6 @@
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="start"'>
     <ellipse class="node" 
-        [class.node--start]='node.type=="start"'
-        [class.node--end]='node.type=="end"'
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
         [attr.cx]="node.position.x + inputOffset[0]" 
@@ -79,8 +77,6 @@
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="end"'>
     <ellipse class="node" 
-        [class.node--start]='node.type=="start"'
-        [class.node--end]='node.type=="end"'
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
         [attr.cx]="node.position.x + inputOffset[0]" 
@@ -107,24 +103,78 @@
 
 
 <!-- svg group for other area of the node: editable node name, draggable part of the input/output port -->
-<svg:circle *ngIf="inputDraggable()" 
+
+<!--
+<svg:polygon
+[attr.points] = "(node.position.x + inputOffset[0]) + ',' +
+                    (node.position.y + inputOffset[1]+6) + ' ' +
+
+                    (node.position.x+inputOffset[0] + 6) + ',' +
+                    (node.position.y + inputOffset[1]+6) + ' ' +
+
+                    (node.position.x+inputOffset[0]) + ',' +
+                    (node.position.y + inputOffset[1]-6) + ' ' +
+
+                    (node.position.x+inputOffset[0] - 6) + ',' +
+                    (node.position.y + inputOffset[1]+6)"  
+*ngIf="inputDraggable()" 
+class='inputPort'
 id = 'node.input.id'
-(mousedown)='startDragPort($event, "input")' 
+(mousedown)='startDragPort($event, "input")'/>
+
+<svg:circle
+r=6
 [attr.cx]="node.position.x + inputOffset[0]" 
-[attr.cy]="node.position.y + inputOffset[1]" 
+[attr.cy]="node.position.y + inputOffset[1]"
+*ngIf="inputDraggable()" 
+class='inputPort'
+id = 'node.input.id'
+(mousedown)='startDragPort($event, "input")'/>
+
+-->
+<svg:circle
+r=3
+[attr.cx]="node.position.x + inputOffset[0]" 
+[attr.cy]="node.position.y + inputOffset[1]"
+*ngIf="inputDraggable()" 
+class='inputPort'
+id = 'node.input.id'
+(mousedown)='startDragPort($event, "input")'/>
+
+<svg:circle *ngIf="outputDraggable()" 
+class='outputPort'
+id = 'node.output.id'
+(mousedown)='startDragPort($event, "output")' 
+[attr.cx]="node.position.x + outputOffset[0]" 
+[attr.cy]="node.position.y + outputOffset[1]" 
 pointer-events="all"
-r="8" 
+r=3
 fill="black"/>
+
+<!--
+<svg:polygon
+[attr.points] = "(node.position.x + outputOffset[0]) + ',' +
+                    (node.position.y + outputOffset[1]-6) + ' ' +
+
+                    (node.position.x + outputOffset[0] + 6) + ',' +
+                    (node.position.y + outputOffset[1]-6) + ' ' +
+
+                    (node.position.x + outputOffset[0]) + ',' +
+                    (node.position.y + outputOffset[1]+6) + ' ' +
+
+                    (node.position.x + outputOffset[0] - 6) + ',' +
+                    (node.position.y + outputOffset[1]-6)"  
+*ngIf="outputDraggable()" 
+class='outputPort'
+id = 'node.output.id'
+(mousedown)='startDragPort($event, "output")'/>
+
 <svg:circle *ngIf="outputDraggable()" 
 id = 'node.output.id'
 (mousedown)='startDragPort($event, "output")' 
 [attr.cx]="node.position.x + outputOffset[0]" 
 [attr.cy]="node.position.y + outputOffset[1]" 
 pointer-events="all"
-r="8"
+r="6"
 fill="black"/>
-<!--
-    (mouseup)='dropPort($event, "input")'
 -->
-
-

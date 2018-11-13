@@ -10,10 +10,16 @@ import * as Modules from '@modules';
 
 @Component({
   selector: 'execute',
+  /*
   template: `<button class="btn--execute" 
                     (click)="execute()">
                 Execute
              </button>`,
+    */
+   template:`<button class="btn" mat-icon-button title="Execute" (click)="execute()">
+    <mat-icon>play_circle_outline</mat-icon>
+    </button>
+    `,
   styles: [ 
             `.btn--execute{ 
                 display: inline-block;
@@ -27,6 +33,15 @@ import * as Modules from '@modules';
                 color: #494D59;
                 font-weight: 600;
                 text-transform: uppercase;
+              }
+              .btn{
+                vertical-align: middle;
+                background-color: transparent; 
+                border: none;
+                color: rgb(80,80,80);
+              }
+              .btn:hover{
+                color: blue;
               }` 
           ]
 })
@@ -76,6 +91,7 @@ export class ExecuteComponent {
                 let mergeString = CodeUtils.mergeInputs.toString();
                 fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) +'\n\n' + fnString;
             }
+
             console.log(`/*    ${node.name.toUpperCase()}    */\n\n`+fnString);
             //new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);

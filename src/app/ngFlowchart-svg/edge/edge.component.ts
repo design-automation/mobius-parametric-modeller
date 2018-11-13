@@ -7,10 +7,10 @@ import { IEdge } from '@models/edge';
   styles: [`
     .edge{
         fill: none;
-        stroke: green;
+        stroke: rgb(80, 80, 80);
         stroke-linecap: round;
         stroke-linejoin: round;
-        stroke-width: 5px;
+        stroke-width: 2px;
         opacity: 1;
         pointer-events: stroke;
         marker-end: url(#arrow);

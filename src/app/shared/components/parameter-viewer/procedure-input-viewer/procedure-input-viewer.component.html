@@ -3,12 +3,14 @@
     <div class='parameter__name'>
         {{prod.args[prod.argCount-2].value}}:
     </div>
+    <!--
     <select name={{prod.id}}_type [(ngModel)]="prod.meta.inputMode">
         <option 
             *ngFor="let ptype of PortTypesArr" 
             [value]="PortTypes[ptype]" 
             [selected]="prod.meta.inputMode == ptype">{{ptype}}</option>
     </select>
+    -->
     <div class='parameter__name' [ngSwitch]="prod.meta.inputMode"  class = 'container--parameter'>
         <!--
 

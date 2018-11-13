@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 // todo: make internal to flowchart
@@ -47,8 +47,8 @@ export class FlowchartComponent{
   
   private offset;
   
-  inputOffset = [50, -10, 50, -10];
-  outputOffset = [50, 90, 50, 90];
+  inputOffset = [50, -8];
+  outputOffset = [50, 88];
 
   ngOnInit(){ 
     this.canvas = <HTMLElement>document.getElementById("svg-canvas");
@@ -229,9 +229,7 @@ export class FlowchartComponent{
 
   deleteSelectedEdges(){
     this.selectedEdge.sort().reverse();
-    console.log(this.selectedEdge)
     for (let edge_index of this.selectedEdge){
-      console.log(edge_index)
       this.deleteEdge(edge_index)
     }
     this.selectedEdge = [];
@@ -288,7 +286,6 @@ export class FlowchartComponent{
     .scale(value)
     .translate(-this.mousePos[0], -this.mousePos[1]);
     let transf = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")"
-    //console.log(transf)
     this.canvas.style.transition = 'transform 50ms ease-in';
     this.canvas.style.transformOrigin = `top left`;
     this.canvas.style.transform = transf;
@@ -328,7 +325,6 @@ export class FlowchartComponent{
         y = boundingDiv.height - bRect.height
       }
       //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
-      //console.log(transf)
       this.canvas.style.transform = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")";
       //this.canvas.style.transform = "matrix(1,1,1,1,1,1)";
     } else if(this.isDown == 2){
@@ -392,6 +388,7 @@ export class FlowchartComponent{
   }
 
   handleMouseUp(event){
+    this.element = undefined;
     // drop edge --> create new edge if drop position is within 15px of an input/output port
     if (this.isDown == 3){
       var pt = this.canvas.createSVGPoint();
@@ -412,6 +409,12 @@ export class FlowchartComponent{
       } else {
         svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
       }
+
+      let tempLine = <HTMLElement>document.getElementById("temporary-wire");
+      tempLine.setAttribute('x1', '0');
+      tempLine.setAttribute('y1', '0');
+      tempLine.setAttribute('x2', '0');
+      tempLine.setAttribute('y2', '0');
 
       for (let n of this.data.nodes){
         var pPos;
@@ -435,6 +438,7 @@ export class FlowchartComponent{
         // if there is already an existing edge with the same source and target as the new edge, return
         for (let edge of this.data.edges){
           if (edge.target == this.edge.target && edge.source == this.edge.source){
+            this.isDown = 0;
             return;
           }
         }
@@ -443,16 +447,9 @@ export class FlowchartComponent{
         this.data.edges.push(this.edge);
         this.data.ordered = false;  
         break;
-
       }
-      let tempLine = <HTMLElement>document.getElementById("temporary-wire");
-      tempLine.setAttribute('x1', '0');
-      tempLine.setAttribute('y1', '0');
-      tempLine.setAttribute('x2', '0');
-      tempLine.setAttribute('y2', '0');
     }
     this.isDown = 0;
-    this.element = undefined;
   }
 
 

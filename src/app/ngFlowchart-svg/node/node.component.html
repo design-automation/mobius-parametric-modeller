@@ -16,13 +16,14 @@
     -->
 
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 3" 
+    width="100" height = "80"
     (mousedown)='focusText($event)'>
         <xhtml:div class='textdiv'>
             <xhtml:textarea 
                 id={{node.id}}
                 autocomplete=off 
                 [(ngModel)]='node.name'
-                name={{node.name}}
+                title={{node.name}}
                 style="font-weight: 600;"
                 placeholder='Description of Node'/>  
         </xhtml:div>
@@ -48,18 +49,26 @@
     <text [attr.x]="node.position.x+3" [attr.y]="node.position.y + 38">{{node.input.name}}</text>
     <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
     -->
-    <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 38" 
-    (mousedown)='focusText($event)'>
+    <svg:foreignObject 
+    [attr.x]="node.position.x" [attr.y]="node.position.y + 38" 
+    width="100" height = "40">
+        <!--
+        <xhtml:div class='textdiv'>
+            <xhtml:textarea 
+                id={{node.id}}
+                autocomplete=off 
+                [(ngModel)]='node.name'
+                title={{node.name}}
+                style="font-weight: 600;"
+                placeholder='Description of Node'/>  
+        </xhtml:div>
+        -->
         <xhtml:div class='textdiv'>
             <xhtml:textarea 
                 id={{node.id}}
                 class='textarea_startend'
                 autocomplete=off 
-                [(ngModel)]='node.name'
-                name={{node.name}}
-                placeholder='Description of Node'
-                style="font-weight: 600; color:black"
-                disabled/>  
+                [(ngModel)]='node.name'/>  
         </xhtml:div>
     </svg:foreignObject>
 </svg:g>
@@ -84,17 +93,13 @@
     <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
     -->
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 18" 
-    (mousedown)='focusText($event)'>
+    width="100" height = "40">
         <xhtml:div class='textdiv'>
             <xhtml:textarea 
                 id={{node.id}}
                 class='textarea_startend'
                 autocomplete=off 
-                [(ngModel)]='node.name'
-                name={{node.name}}
-                placeholder='Description of Node'
-                style="font-weight: 600; color:black"
-                disabled/>  
+                [(ngModel)]='node.name'/>  
         </xhtml:div>
     </svg:foreignObject>
 </svg:g>

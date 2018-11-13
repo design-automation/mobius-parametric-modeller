@@ -67,6 +67,11 @@ $default-padding: 4px;
     width: 94px;
 }
 
+.foreignObject{
+    width: 100; 
+    height: 80;
+}
+
 textarea{
     font-family: sans-serif; 
     background: transparent; 
@@ -83,7 +88,10 @@ textarea{
 
 .textarea_startend{
     font-size: 18px; 
-    height: 15px;
+    font-weight: 600; 
+    color:black;
+    height: 20px;
+    pointer-events: none;
 }
 
 .port{

@@ -86,31 +86,31 @@ export class PortComponent{
         current: {x: 0, y: 0}
     }
 
-    portDragOver($event): void{
-        $event.preventDefault();
+    portDragOver(event): void{
+        event.preventDefault();
     }
 
-    dragStartPort($event): void{
-        $event.stopPropagation();
-        $event.dataTransfer.setData(this.dataTransferVar, this.data.id );
-        //$event.dataTransfer.setDragImage( new Image(), 0, 0 );
+    dragStartPort(event): void{
+        event.stopPropagation();
+        event.dataTransfer.setData(this.dataTransferVar, this.data.id );
+        //event.dataTransfer.setDragImage( new Image(), 0, 0 );
     }
 
-    dragPort($event): void{
-        $event.stopPropagation();
-        //$event.dataTransfer.setData(this.dataTransferVar, this.data.id );
+    dragPort(event): void{
+        event.stopPropagation();
+        //event.dataTransfer.setData(this.dataTransferVar, this.data.id );
         
         // todo: compute total offset of this div dynamically
         // urgent!
-        let relX: number = $event.clientX - this.dragStart.x; 
-        let relY: number = $event.clientY - this.dragStart.y;
+        let relX: number = event.clientX - this.dragStart.x; 
+        let relY: number = event.clientY - this.dragStart.y;
         
         this.mouse_pos.current.x += relX; 
         this.mouse_pos.current.y += relY; 
         
-        this.dragStart = {x: $event.clientX, y: $event.clientY}; 
-        const nX = Number($event.clientX) / this.zoom;
-        const nY = Number($event.clientY) / this.zoom;
+        this.dragStart = {x: event.clientX, y: event.clientY}; 
+        const nX = Number(event.clientX) / this.zoom;
+        const nY = Number(event.clientY) / this.zoom;
         // TODO: Check if it is target or source based on porttype
         if(this.data.type == PortType.Input)
             this.connected.emit({target: this.data, dragging: true, mouse: {x: nX, y: nY} });
@@ -118,11 +118,11 @@ export class PortComponent{
             this.connected.emit({source: this.data, dragging: true, mouse: {x: nX, y: nY} });
     }
 
-    dragEndPort($event): void{
-        $event.stopPropagation();
+    dragEndPort(event): void{
+        event.stopPropagation();
 
-        let relX: number = $event.clientX - this.dragStart.x; 
-        let relY: number = $event.clientY - this.dragStart.y;   
+        let relX: number = event.clientX - this.dragStart.x; 
+        let relY: number = event.clientY - this.dragStart.y;   
         this.mouse_pos.current.x += relX / this.zoom; 
         this.mouse_pos.current.y += relY / this.zoom; 
         
@@ -136,8 +136,8 @@ export class PortComponent{
         
     }
 
-    portDrop($event){
-        $event.preventDefault();
+    portDrop(event){
+        event.preventDefault();
         // TODO: Check if it is target or source based on porttype
         if(this.data.type == PortType.Input)
             this.connected.emit({target: this.data});

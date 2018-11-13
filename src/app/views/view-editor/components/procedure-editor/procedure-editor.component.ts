@@ -42,8 +42,8 @@ export class ProcedureEditorComponent{
       NodeUtils.deselect_procedure(this.node);
     }
 
-    selectProcedure($event, line): void{
-      NodeUtils.select_procedure(this.node, $event.prod, $event.ctrl||false);
+    selectProcedure(event, line): void{
+      NodeUtils.select_procedure(this.node, event.prod, event.ctrl||false);
     }
 
     copyProd(){
@@ -52,7 +52,7 @@ export class ProcedureEditorComponent{
       this.copiedProd = this.node.state.procedure;
     }
 
-    cutProd($event){
+    cutProd(event){
       if (!this.copyCheck || document.activeElement.nodeName == "INPUT") return;
       console.log('cutting', this.node.state.procedure)
       this.copiedProd = this.node.state.procedure;
@@ -72,7 +72,7 @@ export class ProcedureEditorComponent{
       NodeUtils.deselect_procedure(this.node);
     }
 
-    pasteProd($event){
+    pasteProd(event){
       if (this.copyCheck && document.activeElement.nodeName.toUpperCase() != "INPUT"){
         const pastingPlace = this.node.state.procedure[0];
         if (pastingPlace === undefined){
@@ -112,8 +112,8 @@ export class ProcedureEditorComponent{
       this.copyCheck = false;
     }
 
-    importFunction($event){
-      this.imported.emit($event);
+    importFunction(event){
+      this.imported.emit(event);
     }
 
 }

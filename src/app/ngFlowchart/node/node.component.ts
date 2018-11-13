@@ -28,20 +28,20 @@ export class NodeComponent{
         this.node.position = position; 
     };
 
-    nodeSelect($event){
+    nodeSelect(event){
         this.action.emit({ action: ACTIONS.SELECT });
     };
 
-    nodeDelete($event){
+    nodeDelete(event){
         this.action.emit({ action: ACTIONS.DELETE });
     };
 
-    nodeCopy($event){
+    nodeCopy(event){
         this.action.emit({ action: ACTIONS.COPY });
     }
 
-    nodeConnected($event){
-        this.action.emit({ action: ACTIONS.CONNECT, data: $event });
+    nodeConnected(event){
+        this.action.emit({ action: ACTIONS.CONNECT, data: event });
     }
 
     inputDragable(): boolean{

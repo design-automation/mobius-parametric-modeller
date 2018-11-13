@@ -24,26 +24,26 @@ export class ProcedureItemComponent{
         this.delete.emit(index);
     }
 
-    emitSelect($event, procedure: IProcedure){
-        this.select.emit({"ctrl":$event.ctrlKey, "prod":procedure});
+    emitSelect(event, procedure: IProcedure){
+        this.select.emit({"ctrl":event.ctrlKey, "prod":procedure});
     }
 
-    selectChild($event, procedure: IProcedure){
+    selectChild(event, procedure: IProcedure){
         event.stopPropagation();
-        this.select.emit($event);
+        this.select.emit(event);
     }
 
-    deleteChild($event, index: number): void{
+    deleteChild(event, index: number): void{
         this.data.children.splice(index, 1);
     }
 
-    stopProp($event):void{
+    stopProp(event):void{
         event.stopPropagation();
     }
 
-    varMod($event){
-        if(!$event) return $event;
-        let str = $event.trim();
+    varMod(event){
+        if(!event) return event;
+        let str = event.trim();
         str = str.replace(' ',"_");
         //str = str.replace('"',"'");
         return str;

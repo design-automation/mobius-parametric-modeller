@@ -17,15 +17,15 @@ export class ViewEditorComponent{
         }
     }
 
-    importFunction($event){
-        for (let func of $event){
+    importFunction(event){
+        for (let func of event){
             this.flowchart.functions.push(func);
         }
     }
 
-    deleteFunction($event){
+    deleteFunction(event){
         for (let i = 0; i < this.flowchart.functions.length; i++){
-            if (this.flowchart.functions[i] == $event){
+            if (this.flowchart.functions[i] == event){
                 this.flowchart.functions.splice(i,1);
                 break;
             }

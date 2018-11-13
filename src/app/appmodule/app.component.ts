@@ -37,8 +37,8 @@ export class AppComponent{
   }
 
 
-  updateFile($event: string){
-    this.dataService.file = circularJSON.parse($event);
+  updateFile(event: string){
+    this.dataService.file = circularJSON.parse(event);
     this.file = this.dataService.file;
     this.flowchart = this.dataService.flowchart;
     this.updateValue();
@@ -112,13 +112,13 @@ export class AppComponent{
 
 
 
-  updateFile($event: string){
-    this.dataService.file = circularJSON.parse($event);
+  updateFile(event: string){
+    this.dataService.file = circularJSON.parse(event);
     this.file = this.dataService.file;
     this.flowchart = this.dataService.flowchart;
   }
 
-  switchView($event){
+  switchView(event){
     this.activeView = "editor"
   }
 

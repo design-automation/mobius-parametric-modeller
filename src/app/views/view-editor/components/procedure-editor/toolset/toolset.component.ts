@@ -55,7 +55,7 @@ export class ToolsetComponent{
         this.delete.emit(fnData); 
     }
 
-    async import_function($event){
+    async import_function(event){
         const p = new Promise((resolve) => {
             let reader = new FileReader();
             reader.onload = function(){
@@ -65,7 +65,7 @@ export class ToolsetComponent{
                         nodes: fl.nodes,
                         edges: fl.edges
                     },
-                    name: $event.target.files[0].name.split('.')[0],
+                    name: event.target.files[0].name.split('.')[0],
                 };
                 var funcs = [];
                 for (let i of fl.nodes){
@@ -93,7 +93,7 @@ export class ToolsetComponent{
             reader.onerror = function(){
                 resolve('error')
             }
-            reader.readAsText($event.target.files[0])
+            reader.readAsText(event.target.files[0])
         });
         const fnc = await p;
         (<HTMLInputElement>document.getElementById('selectedFile')).value = "";

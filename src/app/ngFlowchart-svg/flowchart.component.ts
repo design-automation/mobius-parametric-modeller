@@ -10,6 +10,7 @@ import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
 import { fromEvent, Observable, Subscriber  } from 'rxjs';
 
+declare const InstallTrigger: any;
 
 @Component({
   selector: 'flowchart',
@@ -43,7 +44,6 @@ export class FlowchartComponent{
   private keydownListener = fromEvent(document, 'keydown');
   private copySub: any;
   private pasteSub: any;
-  private keydownSub: any;
   
   private offset;
   
@@ -57,9 +57,9 @@ export class FlowchartComponent{
   }
 
 
-  nodeAction($event, node_index): void{
+  nodeAction(event, node_index): void{
 
-    switch($event.action){
+    switch(event.action){
       case ACTIONS.PROCEDURE:
         this.switch.emit("editor");
         this.deactivateKeyEvent();
@@ -80,11 +80,23 @@ export class FlowchartComponent{
         this.element = this.data.nodes[node_index];
         var pt = this.canvas.createSVGPoint();
 
-        pt.x = $event.data.pageX;
-        pt.y = $event.data.pageY;
+        pt.x = event.data.pageX;
+        pt.y = event.data.pageY;
   
-        const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-
+        let svgP: any;
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox){
+          let ctm = this.canvas.getScreenCTM()
+          let bRect = this.canvas.getBoundingClientRect()
+          ctm.a = ctm.a * this.zoom
+          ctm.d = ctm.d * this.zoom
+          ctm.e = bRect.x
+          ctm.f = bRect.y
+          svgP = pt.matrixTransform(ctm.inverse());
+        } else {
+          svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        }
+  
         this.startCoords = [
           svgP.x,
           svgP.y
@@ -97,17 +109,17 @@ export class FlowchartComponent{
 
       case ACTIONS.DRAGPORT:
         this.edge = <IEdge>{source: undefined, target: undefined, selected: false};
-        if ($event.type == 'input'){
-          this.edge.target = $event.data;
+        if (event.type == 'input'){
+          this.edge.target = event.data;
         } else {
-          this.edge.source = $event.data;
+          this.edge.source = event.data;
         }
-        this.startType = $event.type;
+        this.startType = event.type;
         this.element = <HTMLElement>document.getElementById("temporary-wire");
-        this.element.setAttribute('x1', $event.position[0]);
-        this.element.setAttribute('y1', $event.position[1]);
-        this.element.setAttribute('x2', $event.position[0]);
-        this.element.setAttribute('y2', $event.position[1]);
+        this.element.setAttribute('x1', event.position[0]);
+        this.element.setAttribute('y1', event.position[1]);
+        this.element.setAttribute('x2', event.position[0]);
+        this.element.setAttribute('y2', event.position[1]);
         this.isDown = 3;
         break;
     }
@@ -125,7 +137,19 @@ export class FlowchartComponent{
     pt.x = 20;
     pt.y = 100;
 
-    const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+    let svgP: any;
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    if (isFirefox){
+      let ctm = this.canvas.getScreenCTM()
+      let bRect = this.canvas.getBoundingClientRect()
+      ctm.a = ctm.a * this.zoom
+      ctm.d = ctm.d * this.zoom
+      ctm.e = bRect.x
+      ctm.f = bRect.y
+      svgP = pt.matrixTransform(ctm.inverse());
+    } else {
+      svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+    }
     newNode.position.x = svgP.x
     newNode.position.y = svgP.y
     this.data.nodes.push(newNode); 
@@ -153,7 +177,7 @@ export class FlowchartComponent{
         console.log('pasting node:', newNode);
       }
     })
-    this.keydownSub = this.keydownListener.subscribe(val =>{
+    this.keydownListener.subscribe(val =>{
       if ((<KeyboardEvent> val).key == 'Delete'){
         this.deleteSelectedEdges();
       }
@@ -213,11 +237,11 @@ export class FlowchartComponent{
     this.selectedEdge = [];
   }
 
-  selectEdge($event, edge_index){
-    if ($event == 'ctrl'){
+  selectEdge(event, edge_index){
+    if (event == 'ctrl'){
       this.selectedEdge.push(edge_index);
       this.data.edges[edge_index].selected = true;
-    } else if ($event == 'single' || ($event === false && this.selectedEdge.length > 1)) {
+    } else if (event == 'single' || (event === false && this.selectedEdge.length > 1)) {
       if (this.selectedEdge.length > 0){
         for (let e of this.selectedEdge) this.data.edges[e].selected = false;
       }
@@ -244,12 +268,12 @@ export class FlowchartComponent{
   //  node class is assigned a zoom value based on this value
   //  this position of this node is absolute coordinates
   //
-  scale($event: WheelEvent): void{
+  scale(event: WheelEvent): void{
     event.preventDefault();
     event.stopPropagation();
     let scaleFactor: number = 0.1;
-    let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
-    
+    let value: number = this.zoom  - (Math.sign(event.deltaY))*scaleFactor;
+
     if(value >= 1 && value <= 2.5){
       value = Number( (value).toPrecision(5) )
     } else {
@@ -257,7 +281,7 @@ export class FlowchartComponent{
     }
 
     if (value > this.zoom){
-      this.mousePos = [$event.clientX - this.offset[0], $event.clientY - this.offset[1]]
+      this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]]
     }
     var m = this.canvas.createSVGMatrix()
     .translate(this.mousePos[0], this.mousePos[1])
@@ -271,27 +295,27 @@ export class FlowchartComponent{
     this.zoom = value;
   }
 
-  panStart($event:MouseEvent) {
+  panStart(event:MouseEvent) {
     event.preventDefault();
     this.isDown = 1;
     this.canvas.style.transition = 'transform 0ms linear';
     this.canvas.style.transformOrigin = `top left`;
     let bRect = <DOMRect>this.canvas.getBoundingClientRect();
     this.startCoords = [
-      $event.clientX - (bRect.x - this.offset[0]),
-      $event.clientY - (bRect.y - this.offset[1])
+      event.clientX - (bRect.left - this.offset[0]),
+      event.clientY - (bRect.top - this.offset[1])
     ];
     this.isDown = 1;
   }
 
-  handleMouseMove($event:MouseEvent){
+  handleMouseMove(event:MouseEvent){
     if (!this.isDown) {
       return;
     } else if(this.isDown == 1){
       event.preventDefault();
       let bRect = <DOMRect>this.canvas.getBoundingClientRect();
-      var x = Number($event.clientX - this.startCoords[0]);
-      var y = Number($event.clientY - this.startCoords[1]);
+      var x = Number(event.clientX - this.startCoords[0]);
+      var y = Number(event.clientY - this.startCoords[1]);
       let boundingDiv = <DOMRect>document.getElementById("flowchart-main-container").getBoundingClientRect();
       if (x > 0 || bRect.width < boundingDiv.width){
         x = 0
@@ -306,14 +330,28 @@ export class FlowchartComponent{
       //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
       //console.log(transf)
       this.canvas.style.transform = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")";
+      //this.canvas.style.transform = "matrix(1,1,1,1,1,1)";
     } else if(this.isDown == 2){
 
       var pt = this.canvas.createSVGPoint();
 
-      pt.x = $event.pageX;
-      pt.y = $event.pageY;
+      pt.x = event.pageX;
+      pt.y = event.pageY;
 
-      const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+      let svgP: any;
+      var isFirefox = typeof InstallTrigger !== 'undefined';
+      if (isFirefox){
+        let ctm = this.canvas.getScreenCTM()
+        let bRect = this.canvas.getBoundingClientRect()
+        ctm.a = ctm.a * this.zoom
+        ctm.d = ctm.d * this.zoom
+        ctm.e = bRect.x
+        ctm.f = bRect.y
+        svgP = pt.matrixTransform(ctm.inverse());
+      } else {
+        svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+      }
+
       const xDiff = this.startCoords[0] - svgP.x;
       const yDiff = this.startCoords[1] - svgP.y;
       this.startCoords[0] = svgP.x;
@@ -327,26 +365,54 @@ export class FlowchartComponent{
       event.preventDefault();
       var pt = this.canvas.createSVGPoint();
 
-      pt.x = $event.pageX;
-      pt.y = $event.pageY;
+      pt.x = event.pageX;
+      pt.y = event.pageY;
 
-      const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
-      this.element.setAttribute('x2', svgP.x);
-      this.element.setAttribute('y2', svgP.y);
+      var isFirefox = typeof InstallTrigger !== 'undefined';
+      if (isFirefox){
+        let ctm = this.canvas.getScreenCTM()
+        let bRect = this.canvas.getBoundingClientRect()
+        ctm.a = ctm.a * this.zoom
+        ctm.d = ctm.d * this.zoom
+        ctm.e = bRect.x
+        ctm.f = bRect.y
+        const svgP = pt.matrixTransform(ctm.inverse());
+        this.element.setAttribute('x2', svgP.x);
+        this.element.setAttribute('y2', svgP.y);
+
+      } else {
+        const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        this.element.setAttribute('x2', svgP.x);
+        this.element.setAttribute('y2', svgP.y);
+      }
+      
     }
 
   }
 
-  handleMouseUp($event){
+  handleMouseUp(event){
     // drop edge --> create new edge if drop position is within 15px of an input/output port
     if (this.isDown == 3){
       var pt = this.canvas.createSVGPoint();
 
-      pt.x = $event.pageX;
-      pt.y = $event.pageY;
+      pt.x = event.pageX;
+      pt.y = event.pageY;
+      let svgP: any;
 
-      const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+      var isFirefox = typeof InstallTrigger !== 'undefined';
+      if (isFirefox){
+        let ctm = this.canvas.getScreenCTM()
+        let bRect = this.canvas.getBoundingClientRect()
+        ctm.a = ctm.a * this.zoom
+        ctm.d = ctm.d * this.zoom
+        ctm.e = bRect.x
+        ctm.f = bRect.y
+        svgP = pt.matrixTransform(ctm.inverse());
+      } else {
+        svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+      }
+
       for (let n of this.data.nodes){
         var pPos;
 

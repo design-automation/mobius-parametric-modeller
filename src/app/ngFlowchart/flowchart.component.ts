@@ -36,12 +36,12 @@ export class FlowchartComponent{
   ngOnInit(){ }
 
   selectNode(node_index): void{
-      //this.select.emit($event);
+      //this.select.emit(event);
   }
 
-  nodeAction($event, node_index): void{
+  nodeAction(event, node_index): void{
 
-    switch($event.action){
+    switch(event.action){
         case ACTIONS.SELECT:
           this.data.meta.selected_nodes = [ node_index ];  
           break;
@@ -59,7 +59,7 @@ export class FlowchartComponent{
           break;
 
         case ACTIONS.CONNECT:
-          let edata = $event.data;
+          let edata = event.data;
 
           if(edata.dragging){ 
             this.temporaryEdge = true;
@@ -125,7 +125,7 @@ export class FlowchartComponent{
     this.data.ordered = false
   }
 
-  copyNode($event): void{
+  copyNode(event): void{
     const node = this.data.nodes[this.data.meta.selected_nodes[0]];
     if (node.type != 'start' && node.type != 'end'){
       console.log('copied node:', node);
@@ -133,7 +133,7 @@ export class FlowchartComponent{
     }
   }
 
-  pasteNode($event): void{
+  pasteNode(event): void{
     if (this.copied){
       const newNode = circularJSON.parse(this.copied);
       newNode.position = {x:0, y:0};
@@ -169,13 +169,13 @@ export class FlowchartComponent{
   //  node class is assigned a zoom value based on this value
   //  this position of this node is absolute coordinates
   //
-  scale($event: WheelEvent): void{
+  scale(event: WheelEvent): void{
 
-    $event.preventDefault();
-    $event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
 
     let scaleFactor: number = 0.1;
-    let value: number = this.zoom  + (Math.sign($event.wheelDelta))*scaleFactor;
+    let value: number = this.zoom  + (Math.sign(event.wheelDelta))*scaleFactor;
     
     if(value > 0.2 && value < 1.5){
       value = Number( (value).toPrecision(2) )
@@ -183,17 +183,17 @@ export class FlowchartComponent{
       return
     }
 
-    var newX = $event.clientX * value / this.zoom ;
+    var newX = event.clientX * value / this.zoom ;
     newX = Number( (newX).toPrecision(3) )
-    var newY = $event.clientY * value / this.zoom ;
+    var newY = event.clientY * value / this.zoom ;
     newY = Number( (newY).toPrecision(3) )
-    this.mousePos = [$event.clientX,$event.clientY];
+    this.mousePos = [event.clientX,event.clientY];
     this.zoom = value;
 
     let element = <HTMLElement>document.getElementsByClassName("transform--container")[0];
     let transf = "scale(" + this.zoom + ")";
     //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
-    element.style.webkitTransformOrigin = $event.screenX+'px '+$event.screenY+'px';
+    element.style.webkitTransformOrigin = event.screenX+'px '+event.screenY+'px';
     element.style.webkitTransform = transf;
 
   }
@@ -240,28 +240,28 @@ export class FlowchartComponent{
     ];
   }
 
-  dragNodeOver($event){
+  dragNodeOver(event){
     return false
   }
 
-  dropNode($event){
-    $event.preventDefault();
-    if($event.ctrlKey) return;
+  dropNode(event){
+    event.preventDefault();
+    if(event.ctrlKey) return;
     //@ts-ignore
     if (!(typeof InstallTrigger !== 'undefined')){
       return
     }
 
 
-    const id = $event.dataTransfer.getData('text');
+    const id = event.dataTransfer.getData('text');
     
     for (let node of this.data.nodes){
       if (node.id == id){
-        node.position.x = $event.clientX; 
-        node.position.y = $event.clientY; 
+        node.position.x = event.clientX; 
+        node.position.y = event.clientY; 
         /*
-        let relX: number = $event.pageX - posX; 
-        let relY: number = $event.pageY - posY;
+        let relX: number = event.pageX - posX; 
+        let relY: number = event.pageY - posY;
         if( (node.position.x + relX/this.zoom) < 0 || (node.position.y + relY/this.zoom) < 0){
           return;
         }

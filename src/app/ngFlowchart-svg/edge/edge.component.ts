@@ -40,13 +40,13 @@ export class EdgeComponent{
     @Output() delete = new EventEmitter();
     @Output() selected = new EventEmitter();
 
-    select($event){
+    select(event){
         event.preventDefault();
         event.stopPropagation();
         if(this.edge.selected){
-            this.selected.emit($event.ctrlKey);        
+            this.selected.emit(event.ctrlKey);        
         } else {
-            if ($event.ctrlKey) this.selected.emit('ctrl');
+            if (event.ctrlKey) this.selected.emit('ctrl');
             else this.selected.emit('single');
         }
     }

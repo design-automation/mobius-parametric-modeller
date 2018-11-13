@@ -34,20 +34,20 @@ export class NodeComponent{
         this.node.position = position; 
     };
 
-    nodeSelect($event){
+    nodeSelect(event){
         this.action.emit({ action: ACTIONS.SELECT });
     };
 
-    nodeDelete($event){
+    nodeDelete(event){
         this.action.emit({ action: ACTIONS.DELETE });
     };
 
-    nodeCopy($event){
+    nodeCopy(event){
         this.action.emit({ action: ACTIONS.COPY });
     }
 
-    nodeConnected($event){
-        this.action.emit({ action: ACTIONS.CONNECT, data: $event });
+    nodeConnected(event){
+        this.action.emit({ action: ACTIONS.CONNECT, data: event });
     }
 
     inputDraggable(): boolean{
@@ -58,13 +58,13 @@ export class NodeComponent{
         return !(this.node.type == 'end');
     }
 
-    startDragNode($event:MouseEvent) {
+    startDragNode(event:MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
-        this.action.emit({ action: ACTIONS.DRAGNODE, data: $event});
+        this.action.emit({ action: ACTIONS.DRAGNODE, data: event});
     }
 
-    startDragPort($event:MouseEvent, portType) {
+    startDragPort(event:MouseEvent, portType) {
         event.preventDefault();
         event.stopPropagation();
         let pos = this.node.position;
@@ -79,11 +79,12 @@ export class NodeComponent{
         this.action.emit({ action: ACTIONS.DRAGPORT, data: data, position: pos, type: portType});
     }
 
-    focusText($event: MouseEvent){
+    focusText(event: MouseEvent){
+        //event.stopPropagation()
         document.getElementById(this.node.id).focus();
     }
     
-    switchToProcedure($event: Event){
+    switchToProcedure(event: Event){
         this.action.emit({action:ACTIONS.PROCEDURE})
     }
 }

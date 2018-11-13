@@ -29,32 +29,32 @@ export class DraggableDirective {
 
 	/*
 	@HostListener("mousedown", ['$event'])
-	mdown($event): void{
-		if(!$event.ctrlKey) return;
+	mdown(event): void{
+		if(!event.ctrlKey) return;
 		event.preventDefault();
 		event.stopPropagation();
 	}
 
 	@HostListener("mousemove", ['$event'])
-	mmove($event): void{
-		if(!$event.ctrlKey) return;
+	mmove(event): void{
+		if(!event.ctrlKey) return;
 		event.preventDefault();
 		event.stopPropagation();
 	}
 	*/
 	
 	@HostListener("dragstart", ['$event'])
-	nodeDragStart($event): void{
-		if($event.ctrlKey) return;
+	nodeDragStart(event): void{
+		if(event.ctrlKey) return;
 		event.stopPropagation();
 		// todo : find more elegant solution
-		this.dragStart = {x: $event.pageX, y: $event.pageY}; 
+		this.dragStart = {x: event.pageX, y: event.pageY}; 
 
-		if ($event.dataTransfer.setDragImage){
-			$event.dataTransfer.setData('text', this.node.id);  
+		if (event.dataTransfer.setDragImage){
+			event.dataTransfer.setData('text', this.node.id);  
 		}
 		if (!!window['chrome']&& !!window['chrome']['webstore']){
-			$event.dataTransfer.setDragImage( new Image(), 0, 0);
+			event.dataTransfer.setDragImage( new Image(), 0, 0);
 		}
 
 		this.trend = {x: 1, y: 1};
@@ -67,11 +67,11 @@ export class DraggableDirective {
 	}
 	
 	@HostListener("drag", ['$event'])
-	nodeDragging($event): void{
-		if($event.ctrlKey) return;
+	nodeDragging(event): void{
+		if(event.ctrlKey) return;
 
-		let relX: number = $event.pageX - this.dragStart.x; 
-		let relY: number = $event.pageY - this.dragStart.y;
+		let relX: number = event.pageX - this.dragStart.x; 
+		let relY: number = event.pageY - this.dragStart.y;
 		/*
 		// if node is going beyond canvas, do nothing
 		if( (this.node.position.x + relX/this.zoom) < 0 || (this.node.position.y + relY/this.zoom) < 0){
@@ -82,7 +82,7 @@ export class DraggableDirective {
 		this.node.position.x += relX/this.zoom; 
 		this.node.position.y += relY/this.zoom; 
 
-		this.dragStart = {x: $event.pageX, y: $event.pageY};
+		this.dragStart = {x: event.pageX, y: event.pageY};
 
 		if(relX && relY){
 			if( Math.sign(relX) !== this.trend.x || Math.sign(relY) !== this.trend.y ){
@@ -101,11 +101,11 @@ export class DraggableDirective {
 	}
 
 	@HostListener("dragend", ['$event'])
-	nodeDragEnd($event: DragEvent): void{
-		if($event.ctrlKey) return;
+	nodeDragEnd(event: DragEvent): void{
+		if(event.ctrlKey) return;
 
-		let relX: number = $event.pageX - this.dragStart.x; 
-		let relY: number = $event.pageY - this.dragStart.y;
+		let relX: number = event.pageX - this.dragStart.x; 
+		let relY: number = event.pageY - this.dragStart.y;
 		if( (this.node.position.x + relX/this.zoom) < 0 || (this.node.position.y + relY/this.zoom) < 0){
 			return;
 		}

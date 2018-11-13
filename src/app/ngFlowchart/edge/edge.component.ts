@@ -41,8 +41,8 @@ export class EdgeComponent implements OnInit, DoCheck{
     edgePos = { inputPosition: undefined, outputPosition: undefined}; 
     _buffer: number = 3;
 
-    select($event){
-        if ($event.ctrlKey||this.temporary) return;
+    select(event){
+        if (event.ctrlKey||this.temporary) return;
         event.stopPropagation();
         this.edge.selected = !this.edge.selected;
     }

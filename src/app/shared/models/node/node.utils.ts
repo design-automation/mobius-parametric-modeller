@@ -163,14 +163,14 @@ export abstract class NodeUtils{
 
             case ProcedureTypes.While:
                 prod.argCount = 1; 
-                prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                prod.args = [ {name: 'condition', value: undefined, default: undefined} ];
                 prod.children = [];
                 break;
 
             case ProcedureTypes.If: 
             case ProcedureTypes.Elseif:
                 prod.argCount = 1;
-                prod.args = [ {name: 'conditional_statement', value: undefined, default: undefined} ];
+                prod.args = [ {name: 'condition', value: undefined, default: undefined} ];
                 prod.children = [];
                 break;
 
@@ -191,9 +191,9 @@ export abstract class NodeUtils{
                 
                 prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
                 prod.argCount = data.argCount + 1;
-                let returnArg = {name: 'var_name', value: 'result', default: undefined};
+                let returnArg = {name: 'var_name', value: undefined, default: undefined};
                 if (!data.hasReturn){
-                    returnArg = {name: '__none__', value: '__none__', default: undefined}
+                    returnArg = {name: '__none__', value: undefined, default: undefined}
                 }
 
                 // --UNSTABLE--
@@ -208,7 +208,7 @@ export abstract class NodeUtils{
             case ProcedureTypes.Imported:
                 prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
                 prod.argCount = data.argCount + 1;
-                prod.args = [ {name: 'var_name', value: 'result', default: undefined}, ...data.args];
+                prod.args = [ {name: 'var_name', value: undefined, default: undefined}, ...data.args];
                 break;
         }
     }

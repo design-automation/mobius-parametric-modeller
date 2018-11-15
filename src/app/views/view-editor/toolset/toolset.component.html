@@ -9,7 +9,6 @@
         </ng-container>
     </ul>
     
-    <hr>
 
     <div class='toolset__functions'>
         <section *ngFor='let mod of Modules' >
@@ -21,19 +20,25 @@
             </div>
         </section>
     </div>
+
     
     <div class='toolset__functions'>
         <section>
-            <h3>IMPORTED</h3>
-            <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
-            <input type="button" value="Import" onclick="document.getElementById('selectedFile').click();" />
+            <h3>Imported</h3>
             <ul class='toolset__functions--subset'>
                 <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} 
-                    <button (click)='delete_imported_function(fn)'>x</button>
-
+                    <button class='remove-btn' (click)='delete_imported_function(fn)'>
+                        <mat-icon class='remove-icon'>close</mat-icon>
+                    </button>
                 </li>
             </ul>
         </section>
+        <br>
+        <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
+        <button class='add-btn' onclick="document.getElementById('selectedFile').click();">
+            <mat-icon class='add-icon'>open_in_browser</mat-icon>
+        </button>
+
     </div>
 
 </div>
@@ -51,7 +56,7 @@
     </div>
 </div>
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
-    <div class='toolset__functions' *ngIf="prodCount==0">
+    <div class='toolset__functions' *ngIf="hasProd===false">
         <section *ngFor='let mod of Modules' >
             <div *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
                 <h3>{{ mod.module }}</h3>

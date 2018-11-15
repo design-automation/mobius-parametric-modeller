@@ -23,7 +23,7 @@ import { IEdge } from '@models/edge';
         pointer-events: stroke;
     }  
     .selected{
-        stroke: blue;
+        stroke: rgb(0, 0, 150);
         opacity: 1;
         marker-end: url(#arrow_selected);
 

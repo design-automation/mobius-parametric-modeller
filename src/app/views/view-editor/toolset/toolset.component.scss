@@ -1,0 +1,35 @@
+.toolset{
+    min-width: 100px;
+    ul{
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+
+        li{
+            margin: 0px;
+            padding: 0px;
+        }
+    }
+}
+.remove-btn{
+    background-color: transparent;
+    border: none;
+    height : 13px;
+    float: right;
+
+    .remove-icon{
+        font-size: 11px;
+        height : 11px;
+    }
+}
+
+.add-btn{
+    background-color: transparent;
+    border: 1px solid black;
+    float: left;
+
+    .add-icon{
+        float:left;
+        //font-size: 30px;
+    }
+}

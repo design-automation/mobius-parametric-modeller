@@ -1,65 +1,29 @@
-
-<div class='container'>
-	<div class='content__panel'>
-		<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)' (delete_Function)='deleteFunction($event)'></procedure-editor>
-		<br>
-		<br>
-	</div>
-</div>
-
 <!--
-<div class='container'>
+<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)' (delete_Function)='deleteFunction($event)'></procedure-editor>
+<br>
+<br>
+-->
 
-	<div class='container__header'>
-		Mobius Editor	
-		<navigation></navigation>
-		<execute [flowchart]='flowchart'></execute>
+<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
+(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
+
+	<div class='container__heading'>
+		<h2>{{node?.name}}</h2>
 	</div>
-	
-	<div class='container__content'>
-		<split direction="horizontal">
-	
-			<split-area size="60">
 
-				<div class='content__panel'>
-					<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
-				</div>
-				
-				<div class='btn--container' style='position: absolute; top: 37px; left: 250px; display: flex; flex-direction: column; padding: 10px;'>
-					<file-new (create)='updateFile($event)'></file-new>
-				</div>
-				<div class='btn--container' style='position: absolute; top: 37px; left: 310px; display: flex; flex-direction: column; padding: 10px;'>
-					<file-load (loaded)='updateFile($event)'></file-load>
-				</div>
-				<div class='btn--container' style='position: absolute; top: 37px; left: 370px; display: flex; flex-direction: column; padding: 10px;'>
-					<file-save [file]='file'></file-save>
-				</div>
-			</split-area>
-			
-			<split-area size="40">
-				
-					<split direction="vertical">
-	
-						<split-area size='60'>
-							<div class='content__panel'>
-								<parameter-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></parameter-editor>
-								<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)'></procedure-editor>
-								<br>
-								<br>
-							</div>
-						</split-area>
-						
-						<split-area size='40'>
-							<div class='content__panel'>
-								<mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
-							</div>
-						</split-area>
-					
-					</split>
-					
-			</split-area>
-	
-		</split>
+	<div class='container__content'>
+		<div class="container--toolset">
+			<toolset [functions]='flowchart.functions' [nodeType]='node.type' [hasProd]='node.procedure.length>0' (delete)='deleteFunction($event)' (select)='add($event)' (imported)='importFunction($event)'></toolset>
+		</div>
+		<div id='procedure' class="container--procedure">
+			<parameter-editor *ngIf="node.type == 'start'" [node]='node'></parameter-editor>
+			<procedure-item 
+			*ngFor="let line of node?.procedure; let idx=index" 
+			[data]="line"
+			(select)="selectProcedure($event,line)"
+			(delete)="deleteChild(idx)"></procedure-item>
+		</div>
+	</div>
+	<div class='container__heading'>
 	</div>
 </div>
--->

@@ -1,5 +1,6 @@
 
 @import '~scss/globals';
+$text-color: rgb(80,80,80);
 
 .container{
     position: relative;
@@ -10,12 +11,10 @@
 	.svgCanvas{
 
 		.temp-wire{
-			stroke: black;
-			stroke-width: 5px;
-			stroke-linecap: round;
-			stroke-linejoin: round;
+			stroke: $text-color;
+			stroke-width: 2px;
 			stroke-dasharray: 10 15;
-			opacity: 0.25;
+			opacity: 0.5;
 		}
 	}
 	

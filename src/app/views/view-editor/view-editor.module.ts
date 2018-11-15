@@ -4,34 +4,34 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
 
 import { ViewEditorComponent } from './view-editor.component'; 
-import { ProcedureEditorComponent } from './components/procedure-editor/procedure-editor.component';
-import { ProcedureItemComponent } from './components/procedure-editor/procedure-item/procedure-item.component';
-import { ToolsetComponent } from './components/procedure-editor/toolset/toolset.component';
-import { ParameterEditorComponent } from './components/parameter-editor/parameter-editor.component';
-import { InputPortEditorComponent } from './components/parameter-editor/input-port-editor/input-port-editor.component';
-import { OutputPortEditorComponent } from './components/parameter-editor/output-port-editor/output-port-editor.component';
-import { procedureInputEditorComponent } from './components/parameter-editor/procedure-input-editor/procedure-input-editor.component';
-import { DataService } from '@services';
+import { ProcedureItemComponent } from './procedure-item/procedure-item.component';
+import { ToolsetComponent } from './toolset/toolset.component';
+import { ParameterEditorComponent } from './parameter-editor/parameter-editor.component';
+import { InputPortEditorComponent } from './parameter-editor/input-port-editor/input-port-editor.component';
+import { OutputPortEditorComponent } from './parameter-editor/output-port-editor/output-port-editor.component';
+import { procedureInputEditorComponent } from './parameter-editor/procedure-input-editor/procedure-input-editor.component';
 import { _parameterTypes} from '@modules';
-import { MatSliderModule } from '@angular/material';
+import { MatSliderModule, MatIconModule, MatExpansionModule, MatButtonModule } from '@angular/material';
 
 @NgModule({
   declarations: [
     ViewEditorComponent,
-    ProcedureEditorComponent,
     ProcedureItemComponent,
     ToolsetComponent,
     ParameterEditorComponent,
     InputPortEditorComponent, 
     OutputPortEditorComponent,
-    procedureInputEditorComponent
+    procedureInputEditorComponent,
   ],
   entryComponents: [
   ], 
   imports: [
     CommonModule, 
     SharedModule,
-    MatSliderModule
+    MatSliderModule,
+    MatIconModule,
+    MatExpansionModule,
+    MatButtonModule,
   ],
   exports: [
     ViewEditorComponent,

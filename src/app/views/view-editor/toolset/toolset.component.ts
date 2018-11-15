@@ -26,7 +26,7 @@ export class ToolsetComponent{
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
     @Input() nodeType: string;
-    @Input() prodCount: number;
+    @Input() hasProd: boolean;
 
     constructor(){}
     

@@ -90,10 +90,10 @@ export class CodeUtils {
                     if (arg.name == _parameterTypes.input) { 
                         console.log(arg.value, arg.default);
                         let val = arg.value || arg.default; return val; };
-                    if (arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
+                    if (arg.value && arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                     if (arg.name == _parameterTypes.constList) return "__params__.constants";
                     if (arg.name == _parameterTypes.model) return "__params__.model";
-                    if (arg.value.substring(0,1) == '@') {
+                    if (arg.value && arg.value.substring(0,1) == '@') {
                         if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT') 
                             return '"'+arg.value.replace('"',"'")+'"';
                         return '__modules__.Query.get( __params__.model,"'+arg.value.replace('"',"'")+'" )';

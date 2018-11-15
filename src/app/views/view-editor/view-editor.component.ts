@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
+import { NodeUtils, INode } from '@models/node';
+import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 
 @Component({
   selector: 'view-editor',
@@ -8,19 +10,100 @@ import { IFlowchart } from '@models/flowchart';
 })
 export class ViewEditorComponent{
     @Input() flowchart: IFlowchart; 
+    @Input() node: INode;
+    @Output() imported = new EventEmitter();
+    @Output() delete_Function = new EventEmitter();
+    copiedProd: IProcedure[];
 
-    constructor(){}
+    private copyCheck: boolean = false;
 
-    selectNode(node_index: number): void{  
-        if( typeof(node_index) == 'number' ){
-            this.flowchart.meta.selected_nodes = [node_index];  
-        }
+    constructor() { 
     }
 
-    importFunction(event){
-        for (let func of event){
-            this.flowchart.functions.push(func);
+    add(data: {type: ProcedureTypes, data: IFunction}): void {
+      NodeUtils.add_procedure(this.node, data.type, data.data);
+    }
+
+    deleteChild(index: number): void{
+      this.node.procedure.splice(index, 1);
+      NodeUtils.deselect_procedure(this.node);
+    }
+
+    selectProcedure(event, line): void{
+      NodeUtils.select_procedure(this.node, event.prod, event.ctrl||false);
+    }
+
+    copyProd(){
+      if (!this.copyCheck) return;
+      console.log('copying', this.node.state.procedure)
+      this.copiedProd = this.node.state.procedure;
+    }
+
+    cutProd(event){
+      if (!this.copyCheck || document.activeElement.nodeName == "INPUT") return;
+      console.log('cutting', this.node.state.procedure)
+      this.copiedProd = this.node.state.procedure;
+      var parentArray;
+      for (let prod of this.copiedProd){
+        if (prod.parent){
+          parentArray = prod.parent.children;
+        } else parentArray = this.node.procedure;
+
+        for (let i = 0; i < parentArray.length; i++ ){
+          if (parentArray[i] === prod){
+            parentArray.splice(i, 1);
+            break;
+          }
         }
+      }
+      NodeUtils.deselect_procedure(this.node);
+    }
+
+    pasteProd(event){
+      if (this.copyCheck && document.activeElement.nodeName.toUpperCase() != "INPUT"){
+        const pastingPlace = this.node.state.procedure[0];
+        if (pastingPlace === undefined){
+          for (let i = 0; i< this.copiedProd.length; i++){
+            console.log('pasting', this.copiedProd[i].ID)
+            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
+            this.node.state.procedure[0].selected = false;
+            this.node.state.procedure = []
+          }
+        } else if (pastingPlace.children){
+          for (let i = 0; i< this.copiedProd.length; i++){
+            console.log('pasting', this.copiedProd[i].ID)
+            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
+            this.node.state.procedure[0].selected = false;
+            pastingPlace.selected = true
+            this.node.state.procedure = [pastingPlace]
+          }
+
+        } else {
+          for (let i = this.copiedProd.length-1; i>=0; i --){
+            console.log('pasting', this.copiedProd[i].ID)
+            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
+            this.node.state.procedure[0].selected = false;
+            pastingPlace.selected = true
+            this.node.state.procedure = [pastingPlace]
+          }
+        }
+        //this.copiedProd = undefined;
+      }
+    }
+
+    activateCopyPaste(): void{
+      this.copyCheck = true;
+    }
+  
+    deactivateCopyPaste(): void{
+      this.copyCheck = false;
+    }
+
+
+    importFunction(event){
+      for (let func of event){
+        this.flowchart.functions.push(func);
+      }
     }
 
     deleteFunction(event){

@@ -1,9 +1,49 @@
+$separator: rgb(239,239,239);
+
+.container--editor{
+    display: block; 
+    height: 100%;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.container__heading{
+    display: block;
+    text-align: center;
+    width: 98%;
+
+}
+
+h2{
+    text-align: center;
+}
+
+.container__content{
+    display: inline-flex;
+    width: 100%;
+    min-height: 88%;
+}
+
+.container--toolset{
+    display: inline-flex;
+    width: 20%;
+}
+
+.container--procedure{
+    display: block;
+    width: 76%;
+    bottom: 10px;
+    background-color: rgb(250,250,250);
+    padding-top: 0px;
+    padding-left: 20px;
+}
+
+/*
 $header-height: 45px;
 
 .container{
     position: relative;
     overflow: auto;
-    height: auto;
     margin: 10px 10px;
 
     display: flex;
@@ -64,3 +104,4 @@ $header-height: 45px;
 
     //padding: 10px 15px;
 }
+*/

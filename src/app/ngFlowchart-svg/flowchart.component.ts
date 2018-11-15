@@ -255,10 +255,43 @@ export class FlowchartComponent{
   }
 
   resetViewer(): void{
-    this.zoom = 1; 
+    let frame = [this.data.nodes[0].position.x, this.data.nodes[0].position.y, 
+                this.data.nodes[0].position.x, this.data.nodes[0].position.y]
+    for (let node of this.data.nodes){
+      console.log(node.position)
+      if (node.position.x < frame[0]){
+        frame[0] = node.position.x;
+      } else if (node.position.x > frame[2]){
+        frame[2] = node.position.x;
+      }
+      if (node.position.y < frame[1]){
+        frame[1] = node.position.y;
+      } else if (node.position.y > frame[3]){
+        frame[3] = node.position.y;
+      }
+    }
+    frame[2] += 100;
+    frame[3] += 80;
+    
+    let bRect = <DOMRect>this.canvas.getBoundingClientRect();
+    let ctm = <SVGMatrix>this.canvas.getScreenCTM();
+    let zoom = bRect.width/(ctm.a * (frame[2] - frame[0]))
+    let heightZoom = bRect.height/(ctm.d * (frame[3] - frame[1]))
+    console.log(zoom, heightZoom, frame)
+
+    if (zoom > heightZoom) zoom = heightZoom;
+    if (zoom > 2.5) zoom = 2.5;
+    let height_width_diff = ((frame[3] - frame[1]) - (frame[2] - frame[0])) / 2;
+    if (height_width_diff > 0){
+      frame[0] -= height_width_diff
+    }
+    if (frame[0]<0) frame[0] = 0;
+    if (frame[1]<0) frame[1] = 0;
     this.canvas.style.transition = 'transform 0ms ease-in';
-    this.canvas.style.transformOrigin = `top left`;
-    this.canvas.style.transform = "matrix(1,0,0,1,0,0)";
+    this.canvas.style.transformOrigin = 'top left';
+    console.log(`!!!!!!!!!!!!!\nmatrix(${zoom},0,0,${zoom},${-frame[0]*ctm.a*zoom/this.zoom},${-frame[1]*ctm.a*zoom/this.zoom})`)
+    this.canvas.style.transform = `matrix(${zoom},0,0,${zoom},${-frame[0]*ctm.a*zoom/this.zoom},${-frame[1]*ctm.a*zoom/this.zoom})`;
+    this.zoom = zoom; 
   }
 
 

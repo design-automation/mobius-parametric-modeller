@@ -54,6 +54,7 @@ export class AppComponent{
       componentRef.instance["switch"].subscribe(data => this.updateView(data))
   } else if(view == "editor"){
       componentRef.instance["flowchart"] = this.flowchart;
+      componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
     } else if(view == "publish"){
       componentRef.instance["flowchart"] = this.flowchart;
     }
@@ -65,7 +66,7 @@ export class AppComponent{
 
     if( this.views[ view ] == undefined){
         this.views[ view ] = this.createView(view);
-    }
+    } else this.updateValue();
 
     this.vc.detach();
     this.vc.insert( this.views[ view ].hostView );
@@ -79,6 +80,7 @@ export class AppComponent{
         componentRef.instance["data"] = this.flowchart;
       } else if(view == "editor"){
         componentRef.instance["flowchart"] = this.flowchart;
+        componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
       } else if(view == "publish"){
         componentRef.instance["flowchart"] = this.flowchart;
       }

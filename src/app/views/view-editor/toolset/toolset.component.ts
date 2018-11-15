@@ -75,7 +75,9 @@ export class ToolsetComponent{
                             return <IArgument>{
                                 name: prod.args[prod.argCount-2].value.substring(1,prod.args[prod.argCount-2].value.length-1),
                                 default: prod.args[prod.argCount-1].default,
-                                value: undefined
+                                value: undefined,
+                                min: undefined,
+                                max: undefined
                             };
                         });
                         console.log(func.args);
@@ -102,6 +104,19 @@ export class ToolsetComponent{
             return
         }
         this.imported.emit(fnc);
+    }
+    toggleAccordion(id: string){
+        var acc = document.getElementById(id);
+        //var acc = document.getElementsByClassName("accordion");
+        acc.classList.toggle("active");
+        var panel = <HTMLElement>acc.nextElementSibling;
+        console.log(panel)
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+        
     }
 
 }

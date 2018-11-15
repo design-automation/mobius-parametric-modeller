@@ -1,10 +1,10 @@
 $separator: rgb(239,239,239);
+$text-color: rgb(80,80,80);
 
 .container--editor{
     display: block; 
-    height: 100%;
+    height: 90%;
     width: 100%;
-    padding-left: 10px;
 }
 
 .container__heading{
@@ -13,15 +13,23 @@ $separator: rgb(239,239,239);
     width: 98%;
 
 }
-
 h2{
+    color: $text-color;
     text-align: center;
+    width:100%;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+hr{
+    border-top: 2px solid $separator;
 }
 
 .container__content{
     display: inline-flex;
     width: 100%;
-    min-height: 88%;
+    min-height: 95%;
+    overflow: inherit;
 }
 
 .container--toolset{
@@ -36,6 +44,12 @@ h2{
     background-color: rgb(250,250,250);
     padding-top: 0px;
     padding-left: 20px;
+}
+
+hr{
+    border-top: 2px solid $separator;
+    width:100%;
+
 }
 
 /*

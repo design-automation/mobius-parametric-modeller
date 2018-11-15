@@ -3,13 +3,11 @@
 <br>
 <br>
 -->
+<h2>{{node?.name}}</h2>
+<hr>
 
 <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
 (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
-
-	<div class='container__heading'>
-		<h2>{{node?.name}}</h2>
-	</div>
 
 	<div class='container__content'>
 		<div class="container--toolset">
@@ -22,8 +20,9 @@
 			[data]="line"
 			(select)="selectProcedure($event,line)"
 			(delete)="deleteChild(idx)"></procedure-item>
+			<br>
+			<br>
 		</div>
 	</div>
-	<div class='container__heading'>
-	</div>
+
 </div>

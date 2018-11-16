@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Injectable } from '@angular/core';
 import {DataService} from './data/data.service';
 import * as gs from "gs-json";
 import { INode } from '@models/node';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'gs-viewer',
@@ -42,6 +43,7 @@ export class GSViewerComponent {
 
 
 	ngDoCheck(){
+		if (!this.node) return;
 		let val = this.node.output.value;
 		if(this.node.type == 'output') val = this.node.input.value;
 		if(this.data !== val){

@@ -8,8 +8,8 @@ import { VIEWER_ARR } from './viewers.config';
 import { GSViewer } from './viewers/gs-viewer/gs-viewer.module';
 
 import {MobiusCesium} from './viewers/mobius-cesium/mobius-cesium.module';
-
 import { TextViewerComponent} from './viewers';
+import { ConsoleViewerComponent } from './viewers';
 //import { VisualiseComponent } from "./viewers/mobius-cesium/setting/visualise.component";
 //import { AttributesComponent } from "./viewers/mobius-cesium/setting/attributes.copmponent";
 
@@ -17,6 +17,7 @@ import { TextViewerComponent} from './viewers';
   declarations: [
     ViewerContainerComponent,
     TextViewerComponent,
+    ConsoleViewerComponent,
   ],
   exports: [ ViewerContainerComponent ],
   imports: [ CommonModule, 

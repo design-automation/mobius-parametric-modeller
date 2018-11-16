@@ -6,6 +6,10 @@ $text-color: rgb(80,80,80);
 $selected-color: rgb(0, 0, 150);
 $hover-color: blue;
 
+.viewer-container{
+    height: 100%;
+}
+
 .container__header{
     flex: 0 1 auto;
     min-height: $header-height;

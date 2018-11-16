@@ -34,11 +34,12 @@ export class AppComponent{
   ngOnInit(){
     this.activeView = "flowchart";
     this.updateView("flowchart");
+     
   }
 
 
-  updateFile($event: string){
-    this.dataService.file = circularJSON.parse($event);
+  updateFile(event: string){
+    this.dataService.file = circularJSON.parse(event);
     this.file = this.dataService.file;
     this.flowchart = this.dataService.flowchart;
     this.updateValue();
@@ -53,6 +54,7 @@ export class AppComponent{
       componentRef.instance["switch"].subscribe(data => this.updateView(data))
   } else if(view == "editor"){
       componentRef.instance["flowchart"] = this.flowchart;
+      componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
     } else if(view == "publish"){
       componentRef.instance["flowchart"] = this.flowchart;
     }
@@ -64,7 +66,7 @@ export class AppComponent{
 
     if( this.views[ view ] == undefined){
         this.views[ view ] = this.createView(view);
-    }
+    } else this.updateValue();
 
     this.vc.detach();
     this.vc.insert( this.views[ view ].hostView );
@@ -78,6 +80,7 @@ export class AppComponent{
         componentRef.instance["data"] = this.flowchart;
       } else if(view == "editor"){
         componentRef.instance["flowchart"] = this.flowchart;
+        componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
       } else if(view == "publish"){
         componentRef.instance["flowchart"] = this.flowchart;
       }
@@ -86,41 +89,3 @@ export class AppComponent{
   }
 
 }
-/*
-
-@Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html', 
-  styleUrls: ['app.component.scss']
-})
-export class AppComponent{
-
-  private file: IMobius;
-  private flowchart: IFlowchart; 
-
-  private activeView: string;
-
-  constructor(private dataService: DataService){
-    this.file = dataService.file;
-    this.flowchart = dataService.flowchart;
-    this.activeView = "flowchart";
-  }
-
-  updateView(view:string){
-    this.activeView = view;
-  }
-
-
-
-  updateFile($event: string){
-    this.dataService.file = circularJSON.parse($event);
-    this.file = this.dataService.file;
-    this.flowchart = this.dataService.flowchart;
-  }
-
-  switchView($event){
-    this.activeView = "editor"
-  }
-
-}
-*/

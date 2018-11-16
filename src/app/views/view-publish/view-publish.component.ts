@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
+import { INode } from '@models/node';
 
 @Component({
   selector: 'view-publish',
@@ -14,6 +15,12 @@ export class ViewPublishComponent{
     selectNode(node_index: number): void{  
       if( typeof(node_index) == 'number' ){
           this.flowchart.meta.selected_nodes = [node_index];  
+      }
+    }
+
+    getEndNode(): INode {
+      for (let node of this.flowchart.nodes){
+        if (node.type == 'end') return node;
       }
     }
     

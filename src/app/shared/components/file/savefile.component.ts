@@ -6,7 +6,7 @@ import { FlowchartUtils } from '@models/flowchart';
 
 @Component({
   selector: 'file-save',
-  template:  `<button class='btn' (click)='download()'>Save</button>`,
+  template:  `<button id='savefile' class='btn' (click)='download()'>Save</button>`,
   styles: [ 
             `
             button.btn{ 
@@ -51,6 +51,14 @@ export class SaveFileComponent{
             }
             node.state.procedure = [];
         }
+
+        // **** need to modify this when changing the input's constant function: 
+        // **** this part resets the value of the last argument of the function when saving the file
+        for (let prod of savedfile.flowchart.nodes[0].procedure){
+            prod.args[prod.argCount-1].value = undefined;
+        }
+
+
         savedfile.flowchart.meta.selected_nodes = [0];
         for (let edge of savedfile.flowchart.edges){
             edge.selected = false;

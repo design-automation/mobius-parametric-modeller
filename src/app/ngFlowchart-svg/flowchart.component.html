@@ -1,35 +1,6 @@
-<!--
-<div id = 'flowchart-main-container'
-      class='container' 
-      (dragover)='dragNodeOver($event)'
-      (drop)='dropNode($event)'
-      (copy)='copyNode($event)'  
-      (paste)='pasteNode($event)' 
-      (wheel)="scale($event)"
-      (mousedown)="panStart($event)"
-      (mousemove)="panMove($event)"
-      (mouseup)="panEnd($event)"
-      >
-      <button style="position: absolute; top: 10px; left: 22px;" class='btn' (click)='addNode()'> Add Node </button>
-      <div class="transform--container">
-            <node *ngFor="let node of data.nodes; let node_index = index" 
-                  id='flw_node_{{node_index}}'
-                  [node]='node' 
-                  [node_index]='node_index'
-                  [selected]='isSelected(node_index)'
-                  [zoom]='zoom'
-                  (action)='nodeAction($event, node_index)'>
-            </node>
-            
-            <edge *ngFor="let e of data.edges; let edge_index = index"
-                  [edge]='e' [temporary]='false'
-                  (delete)='deleteEdge(edge_index);'></edge>
-      
-            <edge [edge]='edge' [temporary]='true' [mouse]='mouse' *ngIf='temporaryEdge'></edge>
-            </div>
-      </div>
--->
 <div id = 'flowchart-main-container' class='container'>
+
+      <!-- svg component -->
       <svg id="svg-canvas" class = "svgCanvas" viewBox="0 0 1500 1500" 
       (mousedown)='panStart($event)'
       (mousemove)='handleMouseMove($event)'  
@@ -38,7 +9,9 @@
       (mouseleave)='deactivateKeyEvent()'
       (wheel)='scale($event)'
       >
+            <!-- definitions for svg: grid patterns, arrow head for connecting wire-->
             <defs>
+                  <!-- grid pattern -->
                   <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
                     <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
                   </pattern>
@@ -46,22 +19,32 @@
                     <rect width="100" height="100" fill="url(#smallGrid)"/>
                     <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
                   </pattern>
-                  <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
-                    <path d="M0,0 L0,6 L7,3 z" fill="green" />
+
+                  <!-- arrow head -->
+                  <marker id="arrow" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
+                    <path d="M0,0 L0,8 L9,4 z" stroke="rgb(80, 80, 80)" fill="transparent" />
                   </marker>
-                  <marker id="arrow_selected" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth" viewBox="0 0 20 20">
-                        <path d="M0,0 L0,6 L7,3 z" fill="blue" />
+                  <marker id="arrow_selected" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
+                        <path d="M0,0 L0,8 L9,4 z" stroke="rgb(0, 0, 150)" fill="transparent"  />
                   </marker>
             </defs>
+
+            <!-- svg frame-->
             <rect width="100%" height="100%" fill="url(#grid)" />
                           
+
+            <!-- wires => edge.component -->
             <g edge *ngFor="let edge of data.edges; let edge_index = index" 
             [edge]='edge'
             [inputOffset]='inputOffset'
             [outputOffset]='outputOffset'
             (selected)='selectEdge($event, edge_index)'
             />
+
+            <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->
             <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
+
+            <!-- nodes => node.component -->
             <g node *ngFor="let node of data.nodes; let node_index = index" 
             id='flw_node_{{node_index}}'
             [node]='node' 
@@ -71,9 +54,26 @@
             (action)='nodeAction($event, node_index)'
             />
       </svg>
-      <button style='position: absolute; top: 0px; left: 10px; ' class='btn' (click)='addNode()'> Add Node </button>
-      <button style='position: absolute; top: 0px; left: 77px; ' class='btn' (click)='deleteSelectedNodes()'> Delete Node </button>
-      <button style='position: absolute; top: 0px; left: 157px;' class='btn' (click)='deleteSelectedEdges()'> Delete Wire </button>
+
+      <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->
+      <div class='button-row'>
+            <button mat-icon-button disableRipple='true' (click)='addNode()' title="Add Node">
+            <mat-icon>add</mat-icon>
+            </button>
+            <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title="Delete Selected Node">
+            <mat-icon>remove</mat-icon>
+            </button>
+            <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title="Delete Selected Wires">
+            <mat-icon>link_off</mat-icon>
+            </button>
+      </div>
+
+      <!-- focus on flowchart button on the top right of the svg -->
+      <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Focus on Flowchart">
+            <mat-icon>control_camera</mat-icon>
+      </button>
+      
+
 </div>
 
 

@@ -5,7 +5,7 @@ import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'file-new',
-  template:  `<button class='btn' (click)='sendNewFile()'>New</button>`,
+  template:  `<button id='newfile' class='btn' (click)='sendNewFile()'>New</button>`,
   styles: [ 
             `
             button.btn{ 
@@ -34,6 +34,8 @@ export class NewFileComponent{
     constructor(private cdr: ChangeDetectorRef){}
 
     sendNewFile(){
+        let confirmed = confirm("Resetting would delete the current flowchart. Would you like to continue?");
+        if (!confirmed) return
         const file: IMobius = {
             name: "default_file.mob",
             author: "new_user", 

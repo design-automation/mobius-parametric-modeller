@@ -9,8 +9,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { MatSliderModule, MatCheckboxModule } from '@angular/material';
-import { NgFlowchartModule } from '../../app/ngFlowchart';
+import { MatSliderModule, MatCheckboxModule, MatIconModule } from '@angular/material';
 import { SVGFlowchartModule } from '../../app/ngFlowchart-svg';
 import { AngularSplitModule } from 'angular-split';
 
@@ -45,16 +44,15 @@ import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
             CommonModule, 
             RouterModule,
             MatSliderModule, MatCheckboxModule,
-            NgFlowchartModule, 
             SVGFlowchartModule, 
             MobiusViewerModule,
             AngularSplitModule, 
-            FormsModule
+            FormsModule,
+            MatIconModule,
         ],
     entryComponents: [  ],
     exports: [  
             FormsModule,
-            NgFlowchartModule, 
             SVGFlowchartModule, 
             MobiusViewerModule,
             AngularSplitModule,

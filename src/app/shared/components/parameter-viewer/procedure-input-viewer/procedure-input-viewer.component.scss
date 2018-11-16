@@ -1,12 +1,26 @@
+$prod-background-color: rgb(250,250,250);
+$background-color: rgb(220,220,220);
+$text-color: rgb(80,80,80);
+$selected-color: rgb(0,0,150);
+$function-text-color: rgb(190, 140, 30);
+$separator: rgb(239,239,239);
+
 .container{
-    margin: 5px 0px;
+    display: block; 
+    margin: 5px 0px 0px 5px;
+    width: 100%;
 }
 
 .container--parameter{
-    display: inline-flex; 
+    display: inline-block; 
     flex-direction: row; 
     flex-wrap: wrap;
     bottom: 0px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid $separator;
+    border-left: 1px solid $separator;
+    width: 100%;
+
 }
 
 .container--input{
@@ -14,11 +28,23 @@
     flex-direction: row; 
   }
 
+input{
+    color: $text-color;
+    background-color: $background-color;
+    border: none;
+    border-bottom: 1px solid $text-color;
+    margin-left: 5px;
+    vertical-align: bottom;
+    &.disabled-input{
+        border-bottom: none;
+    }
+}
 
 .parameter__name{
+    display: inline-block; 
+    flex-direction: row; 
+    flex-wrap: wrap;
     width: 100px;
-    height: auto; 
-    word-wrap: break-word;
 }
 
 mat-slider {

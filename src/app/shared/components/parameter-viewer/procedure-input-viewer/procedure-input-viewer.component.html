@@ -1,51 +1,62 @@
-<div class='container container--parameter'>
-
-    <div class='parameter__name'>
-        {{prod.args[prod.argCount-2].value}}:
-    </div>
-    <select name={{prod.id}}_type [(ngModel)]="prod.meta.inputMode">
-        <option 
-            *ngFor="let ptype of PortTypesArr" 
-            [value]="PortTypes[ptype]" 
-            [selected]="prod.meta.inputMode == ptype">{{ptype}}</option>
-    </select>
-    <div class='parameter__name' [ngSwitch]="prod.meta.inputMode"  class = 'container--parameter'>
+<div class='container'>
+    <div class='container--parameter'>
+        <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||"Undefined"}}:' disabled>
         <!--
-
-        <div *ngSwitchCase="PortTypes.SimpleInput">
-            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value: Defaults to {{port.default}}'> 
-        </div>
-
-        <div *ngSwitchCase="PortTypes.Slider">
-            <input [(ngModel)]='port.value' value='port.value' placeholder='{{port.default}}' disabled>
-            <input [(ngModel)]='port.value' name='port.name' placeholder='{{port.default}}' type="range">
-        </div>
-
-        <div *ngSwitchCase="PortTypes.Checkbox">
-            <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='port.value' name='port.name' type="checkbox">
-        </div>
-
-        <div *ngSwitchCase="PortTypes.URL">
-            <input [(ngModel)]='port.value' name='port.name' placeholder='Enter URL: Defaults to {{port.default}}'> 
-        </div>
-        <div *ngSwitchCase="PortTypes.File">
-            <input (change)="onFileChange($event)" type="file">
-        </div>
-    
+        <select name={{prod.id}}_type [(ngModel)]="prod.meta.inputMode">
+            <option 
+                *ngFor="let ptype of PortTypesArr" 
+                [value]="PortTypes[ptype]" 
+                [selected]="prod.meta.inputMode == ptype">{{ptype}}</option>
+        </select>
         -->
+        <ng-container class='parameter__name' [ngSwitch]="prod.meta.inputMode">
+            <!--
 
-        <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' name='prod.args[prod.argCount-1].value' placeholder='Enter Value: Defaults to {{prod.args[prod.argCount-1].default}}'>
+            <div *ngSwitchCase="PortTypes.SimpleInput">
+                <input [(ngModel)]='port.value' name='port.name' placeholder='Enter Value: Defaults to {{port.default}}'> 
+            </div>
+
+            <div *ngSwitchCase="PortTypes.Slider">
+                <input [(ngModel)]='port.value' value='port.value' placeholder='{{port.default}}' disabled>
+                <input [(ngModel)]='port.value' name='port.name' placeholder='{{port.default}}' type="range">
+            </div>
+
+            <div *ngSwitchCase="PortTypes.Checkbox">
+                <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='port.value' name='port.name' type="checkbox">
+            </div>
+
+            <div *ngSwitchCase="PortTypes.URL">
+                <input [(ngModel)]='port.value' name='port.name' placeholder='Enter URL: Defaults to {{port.default}}'> 
+            </div>
+            <div *ngSwitchCase="PortTypes.File">
+                <input (change)="onFileChange($event)" type="file">
+            </div>
         
-        <div *ngSwitchCase="PortTypes.Slider">
-            <input [(ngModel)]='prod.args[prod.argCount-1].value' name='prod.args[prod.argCount-1].value' type="range" placeholder='{{prod.args[prod.argCount-1].default}}'>
-            <input [(ngModel)]='prod.args[prod.argCount-1].value' value='prod.args[prod.argCount-1].value'  placeholder='{{prod.args[prod.argCount-1].default}}' disabled>
-        </div>
-        <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].value' name='prod.args[prod.argCount-1].value' type="checkbox">
-        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' name='prod.args[prod.argCount-1].value' placeholder='Enter URL: Defaults to {{prod.args[prod.argCount-1].default}}'>
-        <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
+            -->
+
+            <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' 
+            placeholder='{{prod.args[prod.argCount-1].default}}'
+            size={{prod.args[prod.argCount-1].value?.length||prod.args[prod.argCount-1].default.length}}>
+            
+            <ng-container *ngSwitchCase="PortTypes.Slider">
+                <mat-slider
+                    [(ngModel)]='prod.args[prod.argCount-1].value'
+                    thumbLabel
+                    tickInterval="auto"
+                    min={{prod.args[prod.argCount-1].min||0}}
+                    max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
+                <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].value' size={{prod.args[prod.argCount-1].value?.length||1}} disabled>
+
+
+                <!--
+                <input [(ngModel)]='prod.args[prod.argCount-1].value' name='prod.args[prod.argCount-1].value' type="range" placeholder='{{prod.args[prod.argCount-1].default}}'>
+                <input [(ngModel)]='prod.args[prod.argCount-1].value' value='prod.args[prod.argCount-1].value'  placeholder='{{prod.args[prod.argCount-1].default}}' disabled>
+                -->
+            </ng-container>
+            <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].value' type="checkbox">
+            <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Enter URL: Defaults to {{prod.args[prod.argCount-1].default}}'>
+            <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
+        </ng-container>
     </div>
-
-    
-
 </div>
 

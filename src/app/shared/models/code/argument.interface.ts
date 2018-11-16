@@ -1,5 +1,7 @@
 export interface IArgument{
     name: string, 
     default: any,
-    value: any
+    value: any,
+    min?: number,
+    max?: number
 }

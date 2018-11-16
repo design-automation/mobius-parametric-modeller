@@ -6,6 +6,8 @@ export class FlowchartUtils{
     
     public static newflowchart(): IFlowchart{
         const flw: IFlowchart = { 
+            name: "new_flowchart",
+            description: 'new flowchart description',
             language: "js",
             meta: {
                 selected_nodes: [0]

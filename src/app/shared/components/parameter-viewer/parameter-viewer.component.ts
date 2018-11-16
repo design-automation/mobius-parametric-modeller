@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { INode } from '@models/node';
+import { IFlowchart } from '@models/flowchart';
 
 @Component({
   selector: 'parameter-viewer',
@@ -7,7 +8,9 @@ import { INode } from '@models/node';
   styleUrls: ['./parameter-viewer.component.scss']
 })
 export class ParameterViewerComponent{
-    @Input() node: INode;
+  @Input() flowchart: IFlowchart;
+  @Input() startNode: INode;
+  @Input() endNode: INode;
 }
 
 

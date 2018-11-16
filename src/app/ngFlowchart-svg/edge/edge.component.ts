@@ -7,11 +7,11 @@ import { IEdge } from '@models/edge';
   styles: [`
     .edge{
         fill: none;
-        stroke: green;
+        stroke: rgb(80, 80, 80);
         stroke-linecap: round;
         stroke-linejoin: round;
-        stroke-width: 5px;
-        opacity: 0.6;
+        stroke-width: 2px;
+        opacity: 1;
         pointer-events: stroke;
         marker-end: url(#arrow);
     }  
@@ -23,8 +23,8 @@ import { IEdge } from '@models/edge';
         pointer-events: stroke;
     }  
     .selected{
-        stroke: blue;
-        opacity: 0.8;
+        stroke: rgb(0, 0, 150);
+        opacity: 1;
         marker-end: url(#arrow_selected);
 
     }
@@ -40,17 +40,19 @@ export class EdgeComponent{
     @Output() delete = new EventEmitter();
     @Output() selected = new EventEmitter();
 
-    select($event){
+    // select a wire
+    select(event){
         event.preventDefault();
         event.stopPropagation();
         if(this.edge.selected){
-            this.selected.emit($event.ctrlKey);        
+            this.selected.emit(event.ctrlKey);        
         } else {
-            if ($event.ctrlKey) this.selected.emit('ctrl');
+            if (event.ctrlKey) this.selected.emit('ctrl');
             else this.selected.emit('single');
         }
     }
 
+    // delete a wire
     deleteEdge(){ 
         this.delete.emit()
     }

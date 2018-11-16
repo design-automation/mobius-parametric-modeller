@@ -1,0 +1,103 @@
+<ng-container *ngIf="nodeType == ''">
+    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
+    <ul class='toolset__basic'>
+        <ng-container *ngFor="let type of ProcedureTypesArr">
+            <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"'
+                (click)='add(ProcedureTypes[type])'> 
+                {{type}}
+            </li>
+        </ng-container>
+    </ul>
+    
+    <!--
+    <div class='toolset__functions'>
+        <section *ngFor='let mod of Modules' >
+            <div *ngIf='mod.module.toUpperCase() != "INPUT" && mod.module.toUpperCase() != "OUTPUT"'>
+                <h3>{{ mod.module }}</h3>
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <div class='toolset__functions'>
+        <section>
+            <h3>Imported</h3>
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} 
+                    <button class='remove-btn' (click)='delete_imported_function(fn)'>
+                        <mat-icon class='remove-icon'>close</mat-icon>
+                    </button>
+                </li>
+            </ul>
+        </section>
+        <br>
+        <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
+        <button class='add-btn' onclick="document.getElementById('selectedFile').click();">
+            <mat-icon class='add-icon'>open_in_browser</mat-icon>
+        </button>
+    </div>
+    -->
+
+    <!-- functions from core.modules -->
+    <ng-container *ngFor='let mod of Modules' >
+
+        <button id='{{mod.module}}' class="accordion" 
+        *ngIf='mod.module.toUpperCase() != "INPUT" && mod.module.toUpperCase() != "OUTPUT"'
+        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
+        <div class="panel">
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+            </ul>
+        </div>
+    </ng-container>
+
+    <!-- imported functions -->
+    <ng-container>
+        <button id='imported' class="accordion" 
+        (click)='toggleAccordion("imported")' >Imported</button>
+        <div class="panel">
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} 
+                    <button class='remove-btn' (click)='delete_imported_function(fn)'>
+                        <mat-icon class='remove-icon'>close</mat-icon>
+                    </button>
+                </li>
+            </ul>
+            <br>
+            <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
+            <button class='add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
+                <mat-icon class='add-icon'>open_in_browser</mat-icon>
+            </button>
+        </div>
+    </ng-container>
+</ng-container>
+
+<!-- functions for input nodes -->
+<div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'start'">
+    
+    <div class='toolset__functions'>
+        <section *ngFor='let mod of Modules' >
+            <div *ngIf='mod.module.toUpperCase() == "INPUT"'>
+                <!-- <h3>{{ mod.module }}</h3> -->
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- functions for output nodes -->
+<div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
+    <div class='toolset__functions' *ngIf="hasProd===false">
+        <section *ngFor='let mod of Modules' >
+            <div *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
+                <!-- <h3>{{ mod.module }}</h3> -->
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</div>

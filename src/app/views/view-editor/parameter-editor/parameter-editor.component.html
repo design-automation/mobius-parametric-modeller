@@ -1,7 +1,6 @@
 <div class='container'>
 
 	<section *ngIf="node.type != 'end'">
-		<panel-header [node]='node' [title]="'inputs'"></panel-header>
 		<div class='container--input'>
 			<procedure-input-editor *ngFor="let prod of node.procedure" [prod]="prod" ></procedure-input-editor>
 		</div>

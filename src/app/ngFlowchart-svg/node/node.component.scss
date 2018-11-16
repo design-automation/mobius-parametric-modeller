@@ -56,6 +56,10 @@ textarea{
     resize: none; 
     overflow: hidden;
     color: $text-color;
+
+    &.selected{
+        color: $selected-color;
+    }
 }
 
 .textarea_startend{

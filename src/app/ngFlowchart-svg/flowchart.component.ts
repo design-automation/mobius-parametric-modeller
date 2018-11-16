@@ -39,14 +39,19 @@ export class FlowchartComponent{
 
   // variable for copied node
   private copied: string;
-  private copyListener = fromEvent(document, 'copy');
-  private pasteListener = fromEvent(document, 'paste');
-  private keydownListener = fromEvent(document, 'keydown');
   private copySub: any;
   private pasteSub: any;
-  
+  private keydownSub: any;
+
+  // listener for events, only activated when the mouse is hovering over the svg component
+  private keydownListener = fromEvent(document, 'keydown');
+  private copyListener = fromEvent(document, 'copy');
+  private pasteListener = fromEvent(document, 'paste');
+
+  // position of the current canvas view relative to the full svg canvas
   private offset;
   
+  // constants for offset positions of input/output port relative to the node's position
   inputOffset = [50, -8];
   outputOffset = [50, 88];
 
@@ -56,33 +61,34 @@ export class FlowchartComponent{
     this.offset = [bRect.left, bRect.top]
   }
 
-
+  /*
+  handle event received from node component
+  */
   nodeAction(event, node_index): void{
 
     switch(event.action){
+
+      // switch the viewchild of the appModule to the node's procedure view when double-click on the node
       case ACTIONS.PROCEDURE:
         this.switch.emit("editor");
         this.deactivateKeyEvent();
         break;
 
+      // select a node
       case ACTIONS.SELECT:
         this.data.meta.selected_nodes = [ node_index ];  
         break;
 
-      case ACTIONS.DELETE:
-        // TODO: Add a delete function in NodeUtils / FlowchartUtils
-        // TODO: Delete all edges associated with this node
-        this.data.nodes.splice( node_index, 1 );
-        this.data.ordered = false;
-        break;
-
+      // initiate dragging node
       case ACTIONS.DRAGNODE:
         this.element = this.data.nodes[node_index];
         var pt = this.canvas.createSVGPoint();
 
+        // get current mouse position in the page
         pt.x = event.data.pageX;
         pt.y = event.data.pageY;
-  
+
+        // convert mouse position to svg position (special procedure for firefox)
         let svgP: any;
         var isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox){
@@ -97,6 +103,7 @@ export class FlowchartComponent{
           svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
         }
   
+        // save the svg position as startCoords
         this.startCoords = [
           svgP.x,
           svgP.y
@@ -104,17 +111,25 @@ export class FlowchartComponent{
         if (this.startCoords[0] == NaN){
           this.startCoords = [0,0];
         }
+
+        // mark the dragging mode as dragNode
         this.isDown = 2;
         break;
 
+      // initiate dragging input/output port
       case ACTIONS.DRAGPORT:
+        // create a new edge
         this.edge = <IEdge>{source: undefined, target: undefined, selected: false};
+
+        // assign the port to the edge's input/output accordingly
         if (event.type == 'input'){
           this.edge.target = event.data;
         } else {
           this.edge.source = event.data;
         }
         this.startType = event.type;
+
+        // modify the temporary-edge's coordinate
         this.element = <HTMLElement>document.getElementById("temporary-wire");
         this.element.setAttribute('x1', event.position[0]);
         this.element.setAttribute('y1', event.position[1]);
@@ -123,20 +138,26 @@ export class FlowchartComponent{
         this.isDown = 3;
         break;
     }
-
   }
 
+  // check if the node at node_index is selected 
   isSelected(node_index: number): boolean{
     return this.data.meta.selected_nodes.indexOf(node_index) > -1;
   }
 
+  // add a new node
   addNode(): void{  
+
+    // create a new node
     var newNode = NodeUtils.getNewNode();
+
+    // the new node's position would be (20,100) relative to the current view
     var pt = this.canvas.createSVGPoint();
 
     pt.x = 20;
     pt.y = 100;
 
+    // convert the position to svg position
     let svgP: any;
     var isFirefox = typeof InstallTrigger !== 'undefined';
     if (isFirefox){
@@ -150,12 +171,17 @@ export class FlowchartComponent{
     } else {
       svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
     }
+
+    // assign the position to the new node and add it to the flowchart
     newNode.position.x = svgP.x
     newNode.position.y = svgP.y
     this.data.nodes.push(newNode); 
   }
 
+  // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
   activateKeyEvent(): void{
+
+    // copy: copy node
     this.copySub = this.copyListener.subscribe(val => {
       const node = this.data.nodes[this.data.meta.selected_nodes[0]];
       if (node.type != 'start' && node.type != 'end'){
@@ -164,6 +190,8 @@ export class FlowchartComponent{
         this.copied = circularJSON.stringify(cp);
       }
     })
+
+    // paste: paste copied node
     this.pasteSub = this.pasteListener.subscribe(val =>{
       if (this.copied){
         event.preventDefault();
@@ -171,32 +199,55 @@ export class FlowchartComponent{
         var pt = this.canvas.createSVGPoint();
         pt.x = 20;
         pt.y = 100;
-        const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
+        let svgP: any;
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox){
+          let ctm = this.canvas.getScreenCTM()
+          let bRect = this.canvas.getBoundingClientRect()
+          ctm.a = ctm.a * this.zoom
+          ctm.d = ctm.d * this.zoom
+          ctm.e = bRect.x
+          ctm.f = bRect.y
+          svgP = pt.matrixTransform(ctm.inverse());
+        } else {
+          svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        }
+
         NodeUtils.updateNode(newNode, svgP);
         this.data.nodes.push(newNode);
         console.log('pasting node:', newNode);
       }
     })
-    this.keydownListener.subscribe(val =>{
+
+    // delete: delete selected edge(s)
+    this.keydownSub = this.keydownListener.subscribe(val =>{
       if ((<KeyboardEvent> val).key == 'Delete'){
         this.deleteSelectedEdges();
       }
     })
   }
 
+  // deactivate the event listeners when the mouse exit the svg component
   deactivateKeyEvent(): void{
-
     this.copySub.unsubscribe();
     this.pasteSub.unsubscribe();
+    this.keydownSub.unsubscribe();
   }
 
-
+  // delete selected node
   deleteSelectedNodes(){
+
+    // for each of the selected node
     while (this.data.meta.selected_nodes.length > 0){
       let node_index = this.data.meta.selected_nodes.pop();
       let node = this.data.nodes[node_index];
+
+      // continue if the node is a start/end node
       if (node.type == "start" || node.type == "end") continue;
       var edge_index = 0;
+
+      // delete all the edges connected to the node
       while (edge_index < this.data.edges.length){
         let tbrEdge = this.data.edges[edge_index];
         if (tbrEdge.target.parentNode == node || tbrEdge.source.parentNode == node){
@@ -205,28 +256,39 @@ export class FlowchartComponent{
         }
         edge_index += 1;
       }
+
+      // remove the node from the flowchart
       this.data.nodes.splice(Number(node_index),1)
     }
   }
 
+  // delete an edge with a known index
   deleteEdge(edge_index){
     let tbrEdge = this.data.edges[edge_index];
+
+    // remove the edge from the target node's list of edges
     for (let i in this.data.edges){
       if (tbrEdge.target.edges[i] == tbrEdge){
         tbrEdge.target.edges.splice(Number(i), 1); 
         break;
       }
     }
+
+    // remove the edge from the source node's list of edges
     for (let i in tbrEdge.source.edges){
       if (tbrEdge.source.edges[i] == tbrEdge){
         tbrEdge.source.edges.splice(Number(i), 1);
         break;
       }
     }
+
+    // remove the edge from the general list of edges
     this.data.edges.splice(edge_index, 1); 
     this.data.ordered = false
   }
 
+
+  // delete all the selected edges
   deleteSelectedEdges(){
     this.selectedEdge.sort().reverse();
     for (let edge_index of this.selectedEdge){
@@ -235,17 +297,23 @@ export class FlowchartComponent{
     this.selectedEdge = [];
   }
 
+  // select an edge
   selectEdge(event, edge_index){
+
+    // if ctrl is pressed, add the edge into the list of selected edges
     if (event == 'ctrl'){
       this.selectedEdge.push(edge_index);
       this.data.edges[edge_index].selected = true;
-    } else if (event == 'single' || (event === false && this.selectedEdge.length > 1)) {
+    } 
+
+    else if (event == 'single' || (event === false && this.selectedEdge.length > 1)) {
       if (this.selectedEdge.length > 0){
         for (let e of this.selectedEdge) this.data.edges[e].selected = false;
       }
       this.selectedEdge = [edge_index];
       this.data.edges[edge_index].selected = true;
-    } else {
+    } 
+    else {
       this.data.edges[edge_index].selected = false;
       for (let i = 0; i < this.selectedEdge.length; i ++) if (this.selectedEdge[i] == edge_index) {
         this.selectedEdge.splice(i,1);
@@ -254,11 +322,12 @@ export class FlowchartComponent{
     }
   }
 
-  resetViewer(): void{
+  // focus view onto the flowchart
+  focusFlowchart(): void{
+    // find the frame of the flowchart: frame = [minX, minY, maxX, maxY]
     let frame = [this.data.nodes[0].position.x, this.data.nodes[0].position.y, 
                 this.data.nodes[0].position.x, this.data.nodes[0].position.y]
     for (let node of this.data.nodes){
-      console.log(node.position)
       if (node.position.x < frame[0]){
         frame[0] = node.position.x;
       } else if (node.position.x > frame[2]){
@@ -273,74 +342,92 @@ export class FlowchartComponent{
     frame[2] += 100;
     frame[3] += 80;
     
+    // calculate the zoom to fit the whole flowchart
     let bRect = <DOMRect>this.canvas.getBoundingClientRect();
     let ctm = <SVGMatrix>this.canvas.getScreenCTM();
     let zoom = bRect.width/(ctm.a * (frame[2] - frame[0]))
     let heightZoom = bRect.height/(ctm.d * (frame[3] - frame[1]))
-    console.log(zoom, heightZoom, frame)
-
     if (zoom > heightZoom) zoom = heightZoom;
     if (zoom > 2.5) zoom = 2.5;
+
+    // calculate the difference between height and width, if height is bigger than width, centering the flowchart based on the difference
     let height_width_diff = ((frame[3] - frame[1]) - (frame[2] - frame[0])) / 2;
     if (height_width_diff > 0){
       frame[0] -= height_width_diff
     }
+
+    // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
     if (frame[0]<0) frame[0] = 0;
     if (frame[1]<0) frame[1] = 0;
+
+    // transform
     this.canvas.style.transition = 'transform 0ms ease-in';
     this.canvas.style.transformOrigin = 'top left';
-    console.log(`!!!!!!!!!!!!!\nmatrix(${zoom},0,0,${zoom},${-frame[0]*ctm.a*zoom/this.zoom},${-frame[1]*ctm.a*zoom/this.zoom})`)
     this.canvas.style.transform = `matrix(${zoom},0,0,${zoom},${-frame[0]*ctm.a*zoom/this.zoom},${-frame[1]*ctm.a*zoom/this.zoom})`;
     this.zoom = zoom; 
   }
 
 
-  //
-  //  node class is assigned a zoom value based on this value
-  //  this position of this node is absolute coordinates
-  //
+  // scale view on mouse wheel
   scale(event: WheelEvent): void{
     event.preventDefault();
     event.stopPropagation();
+
+    // calculate new zoom value
     let scaleFactor: number = 0.1;
     let value: number = this.zoom  - (Math.sign(event.deltaY))*scaleFactor;
 
+    // limit the zoom value to be between 1 and 2.5
     if(value >= 1 && value <= 2.5){
       value = Number( (value).toPrecision(5) )
     } else {
       return
     }
 
+    // if new zoom is bigger than current zoom, update the mouse position to current position
     if (value > this.zoom){
       this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]]
     }
+
+    // find transformation matrix
     var m = this.canvas.createSVGMatrix()
     .translate(this.mousePos[0], this.mousePos[1])
     .scale(value)
     .translate(-this.mousePos[0], -this.mousePos[1]);
     let transf = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")"
+
+    // transform
     this.canvas.style.transition = 'transform 50ms ease-in';
     this.canvas.style.transformOrigin = `top left`;
     this.canvas.style.transform = transf;
     this.zoom = value;
   }
 
+
+  // initiate dragging the view window
   panStart(event:MouseEvent) {
     event.preventDefault();
-    this.isDown = 1;
+
     this.canvas.style.transition = 'transform 0ms linear';
     this.canvas.style.transformOrigin = `top left`;
     let bRect = <DOMRect>this.canvas.getBoundingClientRect();
+
+    // set start coords to current view window position
     this.startCoords = [
       event.clientX - (bRect.left - this.offset[0]),
       event.clientY - (bRect.top - this.offset[1])
     ];
+    // set drag mode to drag view
     this.isDown = 1;
   }
 
+  // handle mouse move for dragging view/node/port
   handleMouseMove(event:MouseEvent){
+    // return if no dragging initiated
     if (!this.isDown) {
       return;
+
+    // if drag view
     } else if(this.isDown == 1){
       event.preventDefault();
       let bRect = <DOMRect>this.canvas.getBoundingClientRect();
@@ -357,9 +444,9 @@ export class FlowchartComponent{
       } else if (boundingDiv.height - y > bRect.height){
         y = boundingDiv.height - bRect.height
       }
-      //let a = `translate(${x - this.startCoords[0]}px ,${y - this.startCoords[1]}px)`
       this.canvas.style.transform = "matrix(" + this.zoom + ",0,0,"+ this.zoom+","+ x+","+y+")";
-      //this.canvas.style.transform = "matrix(1,1,1,1,1,1)";
+
+    // if drag node
     } else if(this.isDown == 2){
 
       var pt = this.canvas.createSVGPoint();
@@ -389,7 +476,7 @@ export class FlowchartComponent{
       this.element.position.x -= xDiff;
       this.element.position.y -= yDiff;
 
-
+  // if drag port
   } else if (this.isDown == 3){
       event.preventDefault();
       var pt = this.canvas.createSVGPoint();
@@ -422,7 +509,7 @@ export class FlowchartComponent{
 
   handleMouseUp(event){
     this.element = undefined;
-    // drop edge --> create new edge if drop position is within 15px of an input/output port
+    // drop port --> create new edge if drop position is within 15px of an input/output port
     if (this.isDown == 3){
       var pt = this.canvas.createSVGPoint();
 
@@ -443,12 +530,14 @@ export class FlowchartComponent{
         svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
       }
 
+      // reset temporary edge position to <(0,0),(0,0)>
       let tempLine = <HTMLElement>document.getElementById("temporary-wire");
       tempLine.setAttribute('x1', '0');
       tempLine.setAttribute('y1', '0');
       tempLine.setAttribute('x2', '0');
       tempLine.setAttribute('y2', '0');
 
+      // go through all of the nodes' input/output ports
       for (let n of this.data.nodes){
         var pPos;
 

@@ -20,40 +20,38 @@ export class ProcedureItemComponent{
     private model = _parameterTypes.model;
     private constList = _parameterTypes.constList;
     
+    // delete this procedure
     emitDelete(index: number): void{
         this.delete.emit(index);
     }
 
+    // select this procedure
     emitSelect(event, procedure: IProcedure){
         event.stopPropagation();
         this.select.emit({"ctrl":event.ctrlKey, "prod":procedure});
     }
 
-    selectChild(event, procedure: IProcedure){
-        this.select.emit(event);
-    }
-
+    // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(event, index: number): void{
         this.data.children.splice(index, 1);
     }
 
+    // select child procedure (after receiving emitSelect from child procedure)
+    selectChild(event, procedure: IProcedure){
+        this.select.emit(event);
+    }
+
+    // stopPropagation to prevent cut/paste with input box focused
     stopProp(event):void{
         event.stopPropagation();
     }
 
+    // modify input: replace space " " with underscore "_"
     varMod(event){
         if(!event) return event;
         let str = event.trim();
         str = str.replace(' ',"_");
         //str = str.replace('"',"'");
         return str;
-    }
-
-    resize(e, val){
-        if(!val) {
-            e.target.size = 1;
-            return
-        }
-        e.target.size = val.length;
     }
 }

@@ -3,6 +3,8 @@
     <split direction="horizontal">
         <split-area size="50">
             <div class='container__header'>
+
+                <!-- top left tab menu  -->
                 <div class="tab">
                     <button class='btn-tab' [class.active]='activeView=="publish"' (click)='updateView("publish")'>Publish</button>
                     <button class='btn-tab' [class.active]='activeView=="flowchart"' (click)='updateView("flowchart")'>Flowchart</button>
@@ -10,14 +12,6 @@
                     <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
                     -->
                 </div>
-                <!--
-                <div>
-                    <file-new (create)='updateFile($event)'></file-new>
-                    <file-save [file]='file'></file-save>
-                    <file-load (loaded)='updateFile($event)'></file-load>        
-                    <execute [flowchart]='flowchart'></execute>
-                </div>
-                -->
 
                 <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
                 <div style="display: none;">
@@ -26,6 +20,7 @@
                     <file-load (loaded)='updateFile($event)'></file-load>        
                 </div>
 
+                <!-- top right dropdown menu -->
                 <div class="dropmenu">
                     <!-- dropdown menu for new file, save file, loaf file-->
                     <!-- execute button -->
@@ -57,12 +52,14 @@
                     
                 </div>
             </div>
+            <!-- viewchild content -->
             <div class='content__panel'>
                 <ng-container #vc></ng-container>
             </div>
         </split-area>
 
         <split-area size="50">
+            <!-- mViewer panel -->
             <div class='content__panel' >
                 <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
             </div>

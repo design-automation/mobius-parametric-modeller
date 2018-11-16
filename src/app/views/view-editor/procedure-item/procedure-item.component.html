@@ -186,11 +186,12 @@
     </div>
 
 
-               
+    <!-- delete button-->
     <button class='btn' mat-icon-button title="Delete" (click)="emitDelete()" tabindex="-1">
         <mat-icon class='icon'>delete_outline</mat-icon>
     </button>
 
+    <!-- list of child procedures (if the procedure has children) -->
     <div *ngIf="data?.children" class='container--nested'>
         <procedure-item 
             *ngFor="let line of data?.children; let idx=index" 

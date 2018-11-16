@@ -52,6 +52,7 @@ export class ExecuteComponent {
 
     async execute() {
         this.globalVars = '';
+        // reset input of all nodes except start
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
                 if (node.input.edges){
@@ -59,19 +60,24 @@ export class ExecuteComponent {
                 }
             }
         }
+
+        // order the flowchart
         if (!this.flowchart.ordered){
             FlowchartUtils.orderNodes(this.flowchart);
         }
+
+        // get the string of all imported functions
         let funcStrings = {};
         for (let func of this.flowchart.functions){
             funcStrings[func.name] = await CodeUtils.getFunctionString(func);
         }
+
+        // execute each node
         for (let node of this.flowchart.nodes){
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
-            //console.log(`${node.name} executing...`);
             await this.executeNode(node, funcStrings);
         }
     }
@@ -79,9 +85,14 @@ export class ExecuteComponent {
     async executeNode(node: INode, funcStrings){
         let params = {"currentProcedure": ['']};
         try{
+            // get the code for the node
             var fnString = await CodeUtils.getNodeCode(node, true);
+
+            // add the constants from the start node
             fnString = this.globalVars + fnString;
             params["model"] = node.input.value;
+
+            // add the imported functions code
             var hasFunctions = false;
             for (let funcName in funcStrings){
                 fnString = funcStrings[funcName] + fnString;
@@ -93,8 +104,9 @@ export class ExecuteComponent {
             }
 
             console.log(`/*    ${node.name.toUpperCase()}    */\n\n`+fnString);
-            //new Function ([arg1[, arg2[, ...argN]],] functionBody)
+            // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
+            // execute the function
             let result = fn(Modules, params);
             node.output.value = result;
             if (node.type == 'start'){

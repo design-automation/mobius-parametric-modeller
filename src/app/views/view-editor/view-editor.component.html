@@ -1,20 +1,25 @@
-<!--
-<procedure-editor [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]' [functions]='flowchart.functions' (imported)='importFunction($event)' (delete_Function)='deleteFunction($event)'></procedure-editor>
-<br>
-<br>
--->
 <h2>{{node?.name}}</h2>
-<hr>
 
 <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
 (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
 
 	<div class='container__content'>
+		<!-- toolset on the left side -->
 		<div class="container--toolset">
-			<toolset [functions]='flowchart.functions' [nodeType]='node.type' [hasProd]='node.procedure.length>0' (delete)='deleteFunction($event)' (select)='add($event)' (imported)='importFunction($event)'></toolset>
+			<toolset [functions]='flowchart.functions' 
+			[nodeType]='node.type' 
+			[hasProd]='node.procedure.length>0' 
+			(delete)='deleteFunction($event)' 
+			(select)='add($event)' 
+			(imported)='importFunction($event)'></toolset>
 		</div>
+
+		<!-- procedure editor on the right side -->
 		<div id='procedure' class="container--procedure">
+			<!-- parameter-editor only for start node -->
 			<parameter-editor *ngIf="node.type == 'start'" [node]='node'></parameter-editor>
+
+			<!-- list of procedure items for all nodes -->
 			<procedure-item 
 			*ngFor="let line of node?.procedure; let idx=index" 
 			[data]="line"

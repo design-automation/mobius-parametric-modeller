@@ -4,9 +4,10 @@ $text-color: rgb(80,80,80);
 $selected-color: rgb(0,0,150);
 $function-text-color: rgb(190, 140, 30);
 $separator: rgb(239,239,239);
-
+$li-background: #ccc;
 :host{
     width: 100%;
+    background-color: $separator;
 }
 
 ul{
@@ -20,7 +21,7 @@ ul{
         margin: 0px;
         padding: 0px;
         color: $text-color;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 18px;
     }
 
@@ -66,7 +67,7 @@ ul{
     display: block;
     text-align: left;
     outline: none;
-    font-size: 15px;
+    font-size: 12px;
     transition: 0.4s;
     font-weight: 550;
 }

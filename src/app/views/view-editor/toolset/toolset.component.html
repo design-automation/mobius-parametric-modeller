@@ -1,5 +1,5 @@
 <ng-container *ngIf="nodeType == ''">
-
+    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     <ul class='toolset__basic'>
         <ng-container *ngFor="let type of ProcedureTypesArr">
             <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"'
@@ -39,6 +39,7 @@
     </div>
     -->
 
+    <!-- functions from core.modules -->
     <ng-container *ngFor='let mod of Modules' >
 
         <button id='{{mod.module}}' class="accordion" 
@@ -51,6 +52,7 @@
         </div>
     </ng-container>
 
+    <!-- imported functions -->
     <ng-container>
         <button id='imported' class="accordion" 
         (click)='toggleAccordion("imported")' >Imported</button>
@@ -71,6 +73,7 @@
     </ng-container>
 </ng-container>
 
+<!-- functions for input nodes -->
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'start'">
     
     <div class='toolset__functions'>
@@ -84,6 +87,8 @@
         </section>
     </div>
 </div>
+
+<!-- functions for output nodes -->
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
     <div class='toolset__functions' *ngIf="hasProd===false">
         <section *ngFor='let mod of Modules' >

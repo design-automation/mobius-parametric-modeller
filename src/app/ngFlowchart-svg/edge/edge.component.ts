@@ -40,6 +40,7 @@ export class EdgeComponent{
     @Output() delete = new EventEmitter();
     @Output() selected = new EventEmitter();
 
+    // select a wire
     select(event){
         event.preventDefault();
         event.stopPropagation();
@@ -51,6 +52,7 @@ export class EdgeComponent{
         }
     }
 
+    // delete a wire
     deleteEdge(){ 
         this.delete.emit()
     }

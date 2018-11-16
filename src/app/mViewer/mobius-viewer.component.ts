@@ -26,7 +26,9 @@ export class ViewerContainerComponent implements OnDestroy {
     }
 
     ngOnDestroy(){
-        // TODO: Destroy all componentRefs to prevent memory leaks
+        for (let i=this.views.length; i>0; i--){
+            delete this.views[0];
+        }
     }
 
     ngOnChanges(){

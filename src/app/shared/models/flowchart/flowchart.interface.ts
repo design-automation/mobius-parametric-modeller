@@ -9,6 +9,8 @@ import { IEdge } from '@models/edge';
 import { IFunction } from '@models/procedure';
 
 export interface IFlowchart{
+	name: string;
+	description: string;
 	language: string;
 
 	nodes: INode[];

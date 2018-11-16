@@ -20,25 +20,31 @@ export class ViewEditorComponent{
     constructor() { 
     }
 
+    // add a procedure
     add(data: {type: ProcedureTypes, data: IFunction}): void {
       NodeUtils.add_procedure(this.node, data.type, data.data);
     }
 
+
+    // delete a procedure
     deleteChild(index: number): void{
       this.node.procedure.splice(index, 1);
       NodeUtils.deselect_procedure(this.node);
     }
 
+    // select a procedure
     selectProcedure(event, line): void{
       NodeUtils.select_procedure(this.node, event.prod, event.ctrl||false);
     }
 
+    // copy selected procedures
     copyProd(){
       if (!this.copyCheck) return;
       console.log('copying', this.node.state.procedure)
       this.copiedProd = this.node.state.procedure;
     }
 
+    // cut selected procedures
     cutProd(event){
       if (!this.copyCheck || document.activeElement.nodeName == "INPUT") return;
       console.log('cutting', this.node.state.procedure)
@@ -59,6 +65,7 @@ export class ViewEditorComponent{
       NodeUtils.deselect_procedure(this.node);
     }
 
+    // paste copied procedures
     pasteProd(event){
       if (this.copyCheck && document.activeElement.nodeName.toUpperCase() != "INPUT"){
         const pastingPlace = this.node.state.procedure[0];
@@ -91,21 +98,24 @@ export class ViewEditorComponent{
       }
     }
 
+    // activate copying/cutting/pasting when the mouse hovers over the procedure list
     activateCopyPaste(): void{
       this.copyCheck = true;
     }
-  
+
+    // deactivate copying/cutting/pasting when the mouse exit the procedure list
     deactivateCopyPaste(): void{
       this.copyCheck = false;
     }
 
-
+    // import a flowchart as function
     importFunction(event){
       for (let func of event){
         this.flowchart.functions.push(func);
       }
     }
 
+    // delete an imported function
     deleteFunction(event){
         for (let i = 0; i < this.flowchart.functions.length; i++){
             if (this.flowchart.functions[i] == event){

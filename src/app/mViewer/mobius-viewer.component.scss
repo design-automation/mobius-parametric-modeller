@@ -1,5 +1,6 @@
 $header-height: 35px;
 $light-background: rgb(220,220,220);
+$title-background: #ccc;
 $separator: rgb(238,238,238);
 $text-color: rgb(80,80,80);
 $selected-color: rgb(0, 0, 150);
@@ -15,7 +16,7 @@ $hover-color: blue;
 
     padding: 0px 0px 0px 15px;
 
-    background-color: $light-background;
+    background-color: $title-background;
     border-bottom: 3px solid $separator;
 
     line-height: $header-height;
@@ -44,7 +45,7 @@ button.btn:hover{
 .tab {
     border: 2px ;
     overflow: hidden;
-    background-color: $light-background;
+    background-color: $title-background;
 }
 
 .tab button {
@@ -65,7 +66,7 @@ button.btn:hover{
 }
 
 .tab button.active {
-    background-color: $light-background;
+    background-color: $title-background;
     color: $selected-color;
     font-weight: 600;
     border-color: #222 !important;

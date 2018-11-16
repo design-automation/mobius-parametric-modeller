@@ -3,6 +3,8 @@
 (mousedown)='startDragNode($event)' 
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type==""'>
+
+    <!-- rectangular box with border -->
     <rect class="node" 
     width="100" height="80"
     [class.node--selected]='selected'
@@ -10,11 +12,8 @@
     [attr.x]="node.position.x" 
     [attr.y]="node.position.y"
     />
-    <!--
-    <text [attr.x]="node.position.x+3" [attr.y]="node.position.y + 38">{{node.input.name}}</text>
-    <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
-    -->
 
+    <!-- node description inside the rectangular box -->
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 3" 
     width="100" height = "80"
     (mousedown)='focusText($event)'>
@@ -23,6 +22,7 @@
                 id={{node.id}}
                 autocomplete=off 
                 [(ngModel)]='node.name'
+                [class.selected]='selected'
                 title={{node.name}}
                 style="font-weight: 600;"
                 placeholder='Description of Node'/>  
@@ -35,6 +35,8 @@
 (mousedown)='startDragNode($event)' 
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="start"'>
+
+    <!-- ellipse with border -->
     <ellipse class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
@@ -43,39 +45,29 @@
         [attr.rx]="40"
         [attr.ry]="30"
         />
-    <!--
-    <text [attr.x]="node.position.x+3" [attr.y]="node.position.y + 38">{{node.input.name}}</text>
-    <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
-    -->
+
+    <!-- node description inside the ellipse -->
     <svg:foreignObject 
     [attr.x]="node.position.x" [attr.y]="node.position.y + 38" 
     width="100" height = "40">
-        <!--
-        <xhtml:div class='textdiv'>
-            <xhtml:textarea 
-                id={{node.id}}
-                autocomplete=off 
-                [(ngModel)]='node.name'
-                title={{node.name}}
-                style="font-weight: 600;"
-                placeholder='Description of Node'/>  
-        </xhtml:div>
-        -->
         <xhtml:div class='textdiv'>
             <xhtml:textarea 
                 id={{node.id}}
                 class='textarea_startend'
                 autocomplete=off 
+                [class.selected]='selected'
                 [(ngModel)]='node.name'/>  
         </xhtml:div>
     </svg:foreignObject>
 </svg:g>
 
-<!-- svg group for the selectable and draggable area of start node -->
+<!-- svg group for the selectable and draggable area of end node -->
 <svg:g (click)='nodeSelect($event)' draggable="true" 
 (mousedown)='startDragNode($event)' 
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="end"'>
+
+    <!-- ellipse with border -->
     <ellipse class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
@@ -84,10 +76,8 @@
         [attr.rx]="40"
         [attr.ry]="30"
         />
-    <!--
-    <text [attr.x]="node.position.x+3" [attr.y]="node.position.y + 38">{{node.input.name}}</text>
-    <text text-anchor="end" [attr.x]="node.position.x+95" [attr.y]="node.position.y + 68">{{node.output.name}}</text>
-    -->
+
+    <!-- node description inside the ellipse -->
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 18" 
     width="100" height = "40">
         <xhtml:div class='textdiv'>
@@ -95,6 +85,7 @@
                 id={{node.id}}
                 class='textarea_startend'
                 autocomplete=off 
+                [class.selected]='selected'
                 [(ngModel)]='node.name'/>  
         </xhtml:div>
     </svg:foreignObject>
@@ -102,36 +93,7 @@
 
 
 
-<!-- svg group for other area of the node: editable node name, draggable part of the input/output port -->
-
-<!--
-<svg:polygon
-[attr.points] = "(node.position.x + inputOffset[0]) + ',' +
-                    (node.position.y + inputOffset[1]+6) + ' ' +
-
-                    (node.position.x+inputOffset[0] + 6) + ',' +
-                    (node.position.y + inputOffset[1]+6) + ' ' +
-
-                    (node.position.x+inputOffset[0]) + ',' +
-                    (node.position.y + inputOffset[1]-6) + ' ' +
-
-                    (node.position.x+inputOffset[0] - 6) + ',' +
-                    (node.position.y + inputOffset[1]+6)"  
-*ngIf="inputDraggable()" 
-class='inputPort'
-id = 'node.input.id'
-(mousedown)='startDragPort($event, "input")'/>
-
-<svg:circle
-r=6
-[attr.cx]="node.position.x + inputOffset[0]" 
-[attr.cy]="node.position.y + inputOffset[1]"
-*ngIf="inputDraggable()" 
-class='inputPort'
-id = 'node.input.id'
-(mousedown)='startDragPort($event, "input")'/>
-
--->
+<!-- circles as draggable input/output ports of the node -->
 <svg:circle
 r=3
 [attr.cx]="node.position.x + inputOffset[0]" 
@@ -151,30 +113,3 @@ pointer-events="all"
 r=3
 fill="black"/>
 
-<!--
-<svg:polygon
-[attr.points] = "(node.position.x + outputOffset[0]) + ',' +
-                    (node.position.y + outputOffset[1]-6) + ' ' +
-
-                    (node.position.x + outputOffset[0] + 6) + ',' +
-                    (node.position.y + outputOffset[1]-6) + ' ' +
-
-                    (node.position.x + outputOffset[0]) + ',' +
-                    (node.position.y + outputOffset[1]+6) + ' ' +
-
-                    (node.position.x + outputOffset[0] - 6) + ',' +
-                    (node.position.y + outputOffset[1]-6)"  
-*ngIf="outputDraggable()" 
-class='outputPort'
-id = 'node.output.id'
-(mousedown)='startDragPort($event, "output")'/>
-
-<svg:circle *ngIf="outputDraggable()" 
-id = 'node.output.id'
-(mousedown)='startDragPort($event, "output")' 
-[attr.cx]="node.position.x + outputOffset[0]" 
-[attr.cy]="node.position.y + outputOffset[1]" 
-pointer-events="all"
-r="6"
-fill="black"/>
--->

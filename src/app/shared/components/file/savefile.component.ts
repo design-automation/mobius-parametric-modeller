@@ -63,9 +63,11 @@ export class SaveFileComponent{
         for (let edge of savedfile.flowchart.edges){
             edge.selected = false;
         }
+        
+        savedfile.name = savedfile.flowchart.name;
 
         const fileString = circularJSON.stringify(savedfile);
-        let fname: string = `${savedfile.name}.mob`;
+        let fname: string = `${savedfile.flowchart.name.replace(/\ /g,'_')}.mob`;
         var blob = new Blob([fileString], {type: 'application/json'});
         downloadUtils.downloadFile(fname, blob);
 

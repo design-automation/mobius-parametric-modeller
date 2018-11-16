@@ -26,8 +26,9 @@ export class ViewerContainerComponent implements OnDestroy {
     }
 
     ngOnDestroy(){
-        for (let i=this.views.length; i>0; i--){
-            delete this.views[0];
+        console.log('onDestroy')
+        for (let view of this.views){
+            view.destroy();
         }
     }
 

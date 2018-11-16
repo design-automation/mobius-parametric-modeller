@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { INode } from '@models/node';
 import { PortType } from '@models/port';
+import { IFlowchart } from '@models/flowchart';
 
 @Component({
   selector: 'parameter-editor',
@@ -9,6 +10,7 @@ import { PortType } from '@models/port';
 })
 export class ParameterEditorComponent{
     @Input() node: INode;
+    @Input() flowchart: IFlowchart;
     /*
     deletePort(port, index){
       const porttype = port.type;

@@ -50,8 +50,7 @@ export class ProcedureItemComponent{
     varMod(event){
         if(!event) return event;
         let str = event.trim();
-        str = str.replace(' ',"_");
-        //str = str.replace('"',"'");
+        str = str.replace(/ /g,"_");
         return str;
     }
 }

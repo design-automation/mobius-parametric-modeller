@@ -27,11 +27,13 @@ import { procedureInputViewerComponent } from "./components/parameter-viewer/pro
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
 import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
+import { autogrowDirective } from "./directives/textarea";
 
 @NgModule({
     providers: [ ],
     declarations: [
             MbFileReaderDirective, 
+            autogrowDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 
             NavigationComponent, 
@@ -57,6 +59,7 @@ import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
             MobiusViewerModule,
             AngularSplitModule,
             MbFileReaderDirective, 
+            autogrowDirective, 
             ExecuteComponent, 
             PageNotFoundComponent, 
             NavigationComponent, 

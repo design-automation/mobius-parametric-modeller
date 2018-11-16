@@ -5,7 +5,7 @@ $selected-color: rgb(0,0,150);
 $function-text-color: rgb(190, 140, 30);
 
 .container--nested{
-    padding-left: 10px;
+    padding-left: 0px;
 }
 
 .container--line{
@@ -13,6 +13,7 @@ $function-text-color: rgb(190, 140, 30);
     padding: 2px 0px 2px 2px;
     border-bottom: 1px solid $background-color;
     border-left: 1px solid $background-color;
+    margin-left: 10px;
     color: $text-color;
     min-height: 22px;
 }

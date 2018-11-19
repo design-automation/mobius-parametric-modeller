@@ -41,6 +41,14 @@ export class ProcedureItemComponent{
         this.select.emit(event);
     }
 
+    markPrint(){
+        this.data.print = !this.data.print;
+    }
+
+    markDisabled(){
+        this.data.enabled = !this.data.enabled;
+    }
+
     // stopPropagation to prevent cut/paste with input box focused
     stopProp(event):void{
         event.stopPropagation();

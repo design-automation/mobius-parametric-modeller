@@ -20,9 +20,9 @@ export class AppComponent{
   @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
   private views = [];
   private Viewers = {
-    "editor":ViewEditorComponent,
-    "publish":ViewPublishComponent,
-    "flowchart":FlowchartComponent
+    "editor":ViewEditorComponent,   // src/views/editor/
+    "publish":ViewPublishComponent, // src/views/publish/
+    "flowchart":FlowchartComponent  // src/ngFlowchart-svg/
                     };
   private activeView: string;
 

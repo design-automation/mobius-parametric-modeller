@@ -13,6 +13,8 @@ import { _parameterTypes } from '@modules';
 export class CodeUtils {
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string {
+        if(!prod.enabled) return '';
+
         prod.hasError = false;
 
         const codeStr: string[] = [];

@@ -16,6 +16,20 @@ $function-text-color: rgb(190, 140, 30);
     border-left: 1px solid $background-color;
     color: $text-color;
     min-height: 22px;
+    opacity: 1;
+
+    &.disabled{
+        opacity: 0.5;
+    }
+
+    &.selected{
+        border: 1px solid $selected-color;
+        background-color: $background-color;
+    }
+    
+    &.error{
+        border: 1px solid red;
+    }
 }
 
 .container--item{
@@ -32,6 +46,10 @@ $function-text-color: rgb(190, 140, 30);
     border: none;
     display: none;
     color: $button-color;
+
+    &.highlighted{
+        background-color: rgb(255,150,150);
+    }
 }
 
 .container--item:hover .btn {display: block}
@@ -46,14 +64,7 @@ $function-text-color: rgb(190, 140, 30);
     color: $text-color;
 }
 
-.selected{
-    border: 1px solid $selected-color;
-    background-color: $background-color;
-}
 
-.error{
-    border: 1px solid red;
-}
 
 /*
 .hasChildren::before{

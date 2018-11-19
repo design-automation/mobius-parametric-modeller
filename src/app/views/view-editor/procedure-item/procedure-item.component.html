@@ -1,6 +1,7 @@
 <div class='container--line' 
     [class.selected]="data.selected"
     [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'>
     <div class='container--item' >
@@ -191,11 +192,11 @@
             <mat-icon class='icon'>delete_outline</mat-icon>
         </button>
         <!-- Disable button-->
-        <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
+        <button class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
             <mat-icon class='icon'>tv_off</mat-icon>
         </button>
         <!-- Print button-->
-        <button class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint()' tabindex="-1">
+        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
             <mat-icon class='icon'>print</mat-icon>
         </button>
         <!-- help button-->

@@ -49,6 +49,10 @@ export class ProcedureItemComponent{
         this.data.enabled = !this.data.enabled;
     }
 
+    canBePrinted(){
+        return (this.data.argCount > 0 && this.data.args[0].name == 'var_name')
+    }
+
     // stopPropagation to prevent cut/paste with input box focused
     stopProp(event):void{
         event.stopPropagation();

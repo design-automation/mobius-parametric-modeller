@@ -13,7 +13,7 @@ import { _parameterTypes } from '@modules';
 export class CodeUtils {
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string {
-        if(!prod.enabled) return '';
+        if(prod.enabled === false) return '';
 
         prod.hasError = false;
 
@@ -125,6 +125,9 @@ export class CodeUtils {
                 }
                 break;
 
+        }
+        if(prod.print) {
+            codeStr.push(`console.log('${prod.args[0].value}:',${prod.args[0].value})`);
         }
         return codeStr.join('\n');
     }

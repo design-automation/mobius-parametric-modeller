@@ -1,8 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IPortInput, InputType } from '@models/port';
-import { PortTypesAware } from '@shared/decorators';
 
-@PortTypesAware
 @Component({
   selector: 'input-port-viewer',
   templateUrl: './input-port-viewer.component.html',

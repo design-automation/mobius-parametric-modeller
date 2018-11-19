@@ -1,6 +1,6 @@
 import { INode, NodeUtils } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
-import { InputType, IPortInput } from '@models/port';
+import { IPortInput } from '@models/port';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { HttpClient } from '@angular/common/http';

@@ -1,3 +1,4 @@
+/*
 import { Component } from '@angular/core';
 
 @Component({
@@ -9,3 +10,4 @@ export class ParameterViewerComponent{
 	constructor(){ console.log("param viewer initialized") }
 }
 
+*/

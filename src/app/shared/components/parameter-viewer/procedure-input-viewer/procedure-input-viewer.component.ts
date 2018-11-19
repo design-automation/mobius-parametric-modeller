@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PortTypesAware } from '@shared/decorators';
 import { IProcedure } from '@models/procedure';
- 
+import { InputType } from '@models/port';
+
 @PortTypesAware
 @Component({
   selector: 'procedure-input-viewer',
@@ -12,6 +13,7 @@ export class procedureInputViewerComponent{
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();
+    PortTypes = InputType;
     
     constructor(){ }
 

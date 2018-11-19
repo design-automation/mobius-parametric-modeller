@@ -14,8 +14,8 @@ import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
 })
 export class AppComponent{
 
-  private file: IMobius;
-  private flowchart: IFlowchart; 
+  file: IMobius;
+  flowchart: IFlowchart; 
 
   @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
   private views = [];
@@ -24,7 +24,7 @@ export class AppComponent{
     "publish":ViewPublishComponent, // src/views/publish/
     "flowchart":FlowchartComponent  // src/ngFlowchart-svg/
                     };
-  private activeView: string;
+  activeView: string;
 
   constructor(private dataService: DataService, private injector: Injector, private r: ComponentFactoryResolver){
     this.file = dataService.file;

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IPortInput } from '@models/port';
+import { IPortInput, InputType } from '@models/port';
 import { PortTypesAware } from '@shared/decorators';
 
 @PortTypesAware
@@ -11,6 +11,8 @@ import { PortTypesAware } from '@shared/decorators';
 export class InputPortViewerComponent{
 
     @Input() port: IPortInput;
+    PortTypes = InputType;
+    
     constructor(){ }
 
     onFileChange(event){

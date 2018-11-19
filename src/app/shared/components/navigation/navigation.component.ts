@@ -41,7 +41,7 @@ import { Router } from '@angular/router';
 })
 export class NavigationComponent{
 
-    private _links = [
+    _links = [
       { path: '/about', 
         name: 'about'
       },

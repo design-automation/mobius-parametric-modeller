@@ -1,7 +1,8 @@
 import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy} from '@angular/core';
 
-import { IProcedure } from '@models/procedure';
+import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { ProcedureTypesAware } from '@shared/decorators';
+
 import { _parameterTypes} from '@modules';
 
 @ProcedureTypesAware
@@ -19,10 +20,11 @@ export class ProcedureItemComponent{
 
     private model = _parameterTypes.model;
     private constList = _parameterTypes.constList;
-    
+    ProcedureTypes = ProcedureTypes;
+
     // delete this procedure
-    emitDelete(index: number): void{
-        this.delete.emit(index);
+    emitDelete(): void{
+        this.delete.emit();
     }
 
     // select this procedure
@@ -32,7 +34,7 @@ export class ProcedureItemComponent{
     }
 
     // delete child procedure (after receiving emitDelete from child procedure)
-    deleteChild(event, index: number): void{
+    deleteChild(index: number): void{
         this.data.children.splice(index, 1);
     }
 

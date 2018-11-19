@@ -210,7 +210,7 @@
             *ngFor="let line of data?.children; let idx=index" 
             [data]="line"
             (select)='selectChild($event, line)'
-            (delete)='deleteChild($event, idx)'></procedure-item>
+            (delete)='deleteChild(idx)'></procedure-item>
     </div>
 
 

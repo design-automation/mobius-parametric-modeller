@@ -5,23 +5,23 @@
 	<div class='container__content'>
 	
 		< !-- Side content__Panel: Split into three panes -- >
-		<split direction="vertical">
+		<as-split direction="vertical">
 
-			<split-area size='20'>
+			<as-split-area size='20'>
 				<div class='content__panel'>
 					<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>
 				</div>
-			</split-area>
+			</as-split-area>
 			
 			< !-- 
-			<split-area size='20'>
+			<as-split-area size='20'>
 				<div class='content__panel'>
 						<flowchart [data]="flowchart" (select)='selectNode($event)'></flowchart>
 				</div>
-			</split-area> 
+			</as-split-area> 
 			-- >
 		
-		</split>
+		</as-split>
 					
 	</div>
 </div>
@@ -38,30 +38,30 @@
 	<div class='container__content'>
 		<file-new *ngIf='!flowchart'></file-new>
 
-		<split direction="horizontal" *ngIf='flowchart'>
-			<split-area size="60">
+		<as-split direction="horizontal" *ngIf='flowchart'>
+			<as-split-area size="60">
 
 				<div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>
 					<mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
 				</div>
-			</split-area>
+			</as-split-area>
 			
-			<split-area size="40">
+			<as-split-area size="40">
 	
 
-				<split direction="vertical">
+				<as-split direction="vertical">
 	
-						<split-area size='20'>
+						<as-split-area size='20'>
 							<div class='content__panel'>
 								<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>
 							</div>
-						</split-area>
+						</as-split-area>
 						
 					
-					</split>
+					</as-split>
 					
-			</split-area>
-		</split>
+			</as-split-area>
+		</as-split>
 	</div>
 
 	<div class='container__footer'>

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { PortTypesAware } from '@shared/decorators';
 import { IProcedure } from '@models/procedure';
- 
-@PortTypesAware
+import { InputType } from '@models/port';
+const keys = Object.keys(InputType);
+
 @Component({
   selector: 'procedure-input-editor',
   templateUrl: './procedure-input-editor.component.html',
@@ -12,6 +12,9 @@ export class procedureInputEditorComponent{
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();
+
+    PortTypes = InputType;
+    PortTypesArr = keys.slice(keys.length / 2);
     
     constructor(){ }
 

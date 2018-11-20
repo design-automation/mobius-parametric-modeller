@@ -13,6 +13,7 @@ export interface IProcedure{
 
     meta: { name: string, module: string, inputMode: number};
     
+    print: boolean;
     enabled: boolean;
     selected: boolean;
     hasError: boolean;

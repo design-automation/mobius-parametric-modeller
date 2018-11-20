@@ -144,7 +144,8 @@ export abstract class NodeUtils{
 
         // add ID to the procedure
         prod.ID = IdGenerator.getProdID();
-
+        prod.enabled = true;
+        prod.print = false;
 
         // select the procedure
         NodeUtils.select_procedure(node, prod, false);

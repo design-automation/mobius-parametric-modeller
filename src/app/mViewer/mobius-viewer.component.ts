@@ -18,8 +18,8 @@ export class ViewerContainerComponent implements OnDestroy {
     constructor(private injector: Injector, private r: ComponentFactoryResolver) {}
 
     private views = [];
-    private Viewers = Viewers;
     private activeView: IView;
+    Viewers = Viewers;
 
     ngOnInit(){
         this.activeView = this.Viewers[0];

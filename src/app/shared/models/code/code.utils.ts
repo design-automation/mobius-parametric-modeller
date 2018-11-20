@@ -1,6 +1,6 @@
 import { INode, NodeUtils } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
-import { InputType, IPortInput } from '@models/port';
+import { IPortInput } from '@models/port';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +16,8 @@ import { _parameterTypes } from '@modules';
 export class CodeUtils {
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string {
+        if(prod.enabled === false) return '';
+
         prod.hasError = false;
 
         const codeStr: string[] = [];
@@ -126,6 +128,9 @@ export class CodeUtils {
                 }
                 break;
 
+        }
+        if(prod.print) {
+            codeStr.push(`console.log('${prod.args[0].value}:',${prod.args[0].value})`);
         }
         return codeStr.join('\n');
     }

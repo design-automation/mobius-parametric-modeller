@@ -1,7 +1,8 @@
 import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy} from '@angular/core';
 
-import { IProcedure } from '@models/procedure';
+import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { ProcedureTypesAware } from '@shared/decorators';
+
 import { _parameterTypes} from '@modules';
 
 @ProcedureTypesAware
@@ -19,10 +20,11 @@ export class ProcedureItemComponent{
 
     private model = _parameterTypes.model;
     private constList = _parameterTypes.constList;
-    
+    ProcedureTypes = ProcedureTypes;
+
     // delete this procedure
-    emitDelete(index: number): void{
-        this.delete.emit(index);
+    emitDelete(): void{
+        this.delete.emit();
     }
 
     // select this procedure
@@ -32,13 +34,25 @@ export class ProcedureItemComponent{
     }
 
     // delete child procedure (after receiving emitDelete from child procedure)
-    deleteChild(event, index: number): void{
+    deleteChild(index: number): void{
         this.data.children.splice(index, 1);
     }
 
     // select child procedure (after receiving emitSelect from child procedure)
     selectChild(event, procedure: IProcedure){
         this.select.emit(event);
+    }
+
+    markPrint(){
+        this.data.print = !this.data.print;
+    }
+
+    markDisabled(){
+        this.data.enabled = !this.data.enabled;
+    }
+
+    canBePrinted(){
+        return (this.data.argCount > 0 && this.data.args[0].name == 'var_name')
     }
 
     // stopPropagation to prevent cut/paste with input box focused

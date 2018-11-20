@@ -1,3 +1,4 @@
+/*
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IPortOutput } from '@models/port';
 
@@ -18,3 +19,4 @@ export class OutputPortViewerComponent{
     }
 
 }
+*/

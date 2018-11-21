@@ -40,7 +40,9 @@ export class ViewerContainerComponent implements OnDestroy {
         let component = view.component;
         let factory = this.r.resolveComponentFactory(component);
         let componentRef = factory.create(this.injector);
-        componentRef.instance["node"] = this.node;
+        if (view.name != 'Console'){
+            componentRef.instance["node"] = this.node;
+        } 
         return componentRef;
     }
 
@@ -60,7 +62,9 @@ export class ViewerContainerComponent implements OnDestroy {
     updateValue(){
         try{
             let componentRef =  this.views[ this.activeView.name ]; 
-            componentRef.instance["node"] = this.node;
+            if (this.activeView.name != 'Console'){
+                componentRef.instance["node"] = this.node;
+            } 
         }
         catch(ex){
             console.log(`Active View not defined`);

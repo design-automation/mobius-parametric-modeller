@@ -5,10 +5,12 @@ import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
 import * as Modules from '@modules';
+import { ModuleAware } from '@shared/decorators';
 
 
 const keys = Object.keys(ProcedureTypes);
 
+@ModuleAware
 @Component({
   selector: 'toolset',
   templateUrl: './toolset.component.html',
@@ -22,8 +24,6 @@ export class ToolsetComponent{
     @Input() functions: IFunction[];
     @Input() nodeType: string;
     @Input() hasProd: boolean;
-
-    Modules = ToolsetComponent.ModuleAware();
     
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
@@ -120,7 +120,6 @@ export class ToolsetComponent{
         //var acc = document.getElementsByClassName("accordion");
         acc.classList.toggle("active");
         var panel = <HTMLElement>acc.nextElementSibling;
-        console.log(panel)
         if (panel.style.display === "block") {
             panel.style.display = "none";
         } else {
@@ -130,60 +129,4 @@ export class ToolsetComponent{
     }
 
 
-
-    // todo: bug fix for defaults
-    static extract_params(func: Function): [IArgument[], boolean] {
-    let fnStr = func.toString().replace( /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg, '');
-    
-    let result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).split(",")//.match( /([^\s,]+)/g);
-    if(result === null || result[0]==""){
-         result = [];
-    }
-    let final_result = result.map(function(r){ 
-        r = r.trim();
-        let r_value = r.split("=");
-
-        if (r_value.length == 1){
-            return { name: r_value[0].trim(), value: undefined, default: 0}
-        }
-        else{
-            return { name: r_value[0].trim(), value: undefined, default: 0 }
-        }
-
-    });
-    let hasReturn = true;
-    if (fnStr.indexOf("return") === -1 || fnStr.indexOf("return;") !== -1){
-        hasReturn = false;
-    }
-    return [final_result, hasReturn];
-    }
-
-
-    static ModuleAware() {
-    let module_list = [];
-    for( let m_name in Modules ){
-        if (m_name[0] == '_') continue;
-        
-        let modObj = <IModule>{};
-        modObj.module = m_name;
-        modObj.functions = [];
-        
-        for( let fn_name of Object.keys(Modules[m_name])){
-            
-            let func = Modules[m_name][fn_name];
-
-            let fnObj = <IFunction>{};
-            fnObj.module = m_name;
-            fnObj.name = fn_name;
-            fnObj.argCount = func.length;
-            let args = ToolsetComponent.extract_params(func);
-            fnObj.args = args[0];
-            fnObj.hasReturn = args[1];
-            modObj.functions.push(fnObj);
-        }
-        module_list.push(modObj);
-    }
-
-    return module_list;
-    }
 }

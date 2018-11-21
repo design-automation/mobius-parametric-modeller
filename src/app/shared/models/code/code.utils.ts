@@ -20,6 +20,7 @@ export class CodeUtils {
         const codeStr: string[] = [];
         const args = prod.args;
         const prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
+        codeStr.push('');
         if (addProdArr && prod.type != ProcedureTypes.Else && prod.type != ProcedureTypes.Elseif){
             codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
         }
@@ -36,46 +37,26 @@ export class CodeUtils {
             case ProcedureTypes.If:
                 if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`if (${args[0].value}){`);
-                for (let p of prod.children){
-                    codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                }
-                codeStr.push(`}`)
                 break;
 
             case ProcedureTypes.Else:
                 codeStr.push(`else {`);
-                for (let p of prod.children){
-                    codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                }
-                codeStr.push(`}`)
                 break;
 
             case ProcedureTypes.Elseif:
                 if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`else if(${args[0].value}){`);
-                for (let p of prod.children){
-                    codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                }
-                codeStr.push(`}`)
                 break;
 
             case ProcedureTypes.Foreach:
                 //codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
                 if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`for (${prefix} ${args[0].value} of ${args[1].value}){`);
-                for (let p of prod.children){
-                    codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                }
-                codeStr.push(`}`)
                 break;
 
             case ProcedureTypes.While:
                 if (args[0].value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                 codeStr.push(`while (${args[0].value}){`);
-                for (let p of prod.children){
-                    codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                }
-                codeStr.push(`}`)
                 break;
 
             case ProcedureTypes.Break:
@@ -90,7 +71,6 @@ export class CodeUtils {
                 const argValues = args.slice(1).map((arg)=>{
                     // if __params__ is present in the value of the argument, throw unexpected identifier
                     if (arg.name == _parameterTypes.input) { 
-                        console.log(arg.value, arg.default);
                         let val = arg.value || arg.default; return val; };
                     if (arg.value && arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                     if (arg.name == _parameterTypes.constList) return "__params__.constants";
@@ -126,8 +106,16 @@ export class CodeUtils {
                 break;
 
         }
+        if(prod.children){
+            for (let p of prod.children){
+                codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
+            }
+            codeStr.push(`}`)
+        }
+
         if(prod.print) {
-            codeStr.push(`console.log('${prod.args[0].value}:',${prod.args[0].value})`);
+            codeStr.push(`console.log('${prod.args[0].value}: '+ ${prod.args[0].value});`);
+            codeStr.push(`wait(5000);`);
         }
         return codeStr.join('\n');
     }
@@ -237,6 +225,17 @@ export class CodeUtils {
         if (node.type =='start'){
             codeStr.push('__params__.constants = {};\n')
         }
+
+        codeStr.push(`
+function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+        end = new Date().getTime();
+    }
+}
+        `)
+
         // procedure
         for (let prod of node.procedure){
             codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
@@ -244,7 +243,9 @@ export class CodeUtils {
         if (node.type == 'end' && node.procedure.length > 0){
             return `{\n${codeStr.join('\n')}\n}`;
         } 
-        return `{\n${codeStr.join('\n')}\nreturn __params__.model;\n}`;
+
+
+        return `\n${codeStr.join('\n')}\n\nreturn __params__.model;\n`;
         
 
         //return `{\n${codeStr.join('\n')}\nreturn result;\n}`;
@@ -257,7 +258,7 @@ export class CodeUtils {
         let fullCode = '';
         let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
         for (let node of func.module.nodes){
-            let code =  await CodeUtils.getNodeCode(node, false)
+            let code = '{' + await CodeUtils.getNodeCode(node, false) + '}';
             fullCode += `function ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')})` + code + `\n\n`;
             if (node.type ==='start'){
                 //fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
@@ -280,7 +281,7 @@ export class CodeUtils {
 
             */
             if (node.type === 'end'){
-                fnCode += `return result_${node.id};\n`;
+                fnCode += `\nreturn result_${node.id};\n`;
             }
             //fnCode += `console.log(result_${node.id});\n`;
         }

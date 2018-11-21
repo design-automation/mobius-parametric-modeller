@@ -7,6 +7,20 @@ import * as circularJSON from 'circular-json';
 import { IView } from '../mViewer/view.interface';
 import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
 
+// @ts-ignore
+console.stdlog = console.log.bind(console);
+// @ts-ignore
+console.logs = [];
+// @ts-ignore
+console.log = function(){
+  // @ts-ignore
+  console.logs.push(Array.from(arguments));
+  // @ts-ignore
+  console.stdlog.apply(console, arguments);
+}
+/*
+
+*/
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html', 
@@ -23,7 +37,7 @@ export class AppComponent{
     "editor":ViewEditorComponent,   // src/views/editor/
     "publish":ViewPublishComponent, // src/views/publish/
     "flowchart":FlowchartComponent  // src/ngFlowchart-svg/
-                    };
+  };
   activeView: string;
 
   constructor(private dataService: DataService, private injector: Injector, private r: ComponentFactoryResolver){

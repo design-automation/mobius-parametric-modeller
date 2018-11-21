@@ -105,6 +105,14 @@ $hover-color: blue;
 
 .content__panel{
     background-color: rgb(220, 220, 220);
+    height: 95%; 
+    overflow: hidden auto;
+
+    //padding: 10px 15px;
+}
+
+.content__viewer{
+    background-color: rgb(220, 220, 220);
     height: 100%; 
     overflow: auto;
 

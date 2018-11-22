@@ -7,10 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { promise } from 'protractor';
 import { IEdge } from '@models/edge';
-import * as gs from 'gs-json';
-
-import { gsConstructor } from '@modules';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes, functions } from '@modules';
 
 
 export class CodeUtils {
@@ -101,7 +98,7 @@ export class CodeUtils {
             case ProcedureTypes.Imported:
                 //('args: ',args)
                 const argsVals = args.slice(1).map((arg)=>arg.value).join(',');
-                const fn: string = `${prod.meta.name}( ${argsVals} )`
+                const fn: string = `${prod.meta.name}(__params__, ${argsVals} )`
                 codeStr.push(`${prefix}${args[0].value} = ${fn};`);
                 if (prefix === 'let '){
                     existingVars.push(args[0].value)
@@ -118,7 +115,7 @@ export class CodeUtils {
 
         if(prod.print) {
             codeStr.push(`console.log('${prod.args[0].value}: '+ ${prod.args[0].value});`);
-            codeStr.push(`wait(5000);`);
+            //codeStr.push(`wait(5000);`);
         }
         return codeStr.join('\n');
     }
@@ -151,18 +148,43 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any{
-        var result = new gs.Model();
+        var result = functions.__new__();
         for (let model of models){
-            if (!model || model.constructor != gsConstructor) continue;
-            result.merge(model);
+            functions.__merge__(result, model)
         }
         return result;
     }
 
+    
+    
     static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
         var input: any;
         if (node.type == 'start' || inp.edges.length == 0){
-            input = new gs.Model();
+            input = functions.__new__();
+            /*
+            if (inp.meta.mode == InputType.URL){
+                const p = new Promise((resolve) => {
+                    let request = new XMLHttpRequest();
+                    request.open('GET', inp.value || inp.default);
+                    request.onload = () => {
+                        resolve(request.responseText);
+                    }
+                    request.send();
+                });
+                input = await p;
+            } else if (inp.meta.mode == InputType.File) {
+                const p = new Promise((resolve) => {
+                    let reader = new FileReader();
+                    reader.onload = function(){
+                        resolve(reader.result)
+                    }
+                    reader.readAsText(inp.value || inp.default)
+                });
+                input = await p;
+            } else {
+                input = inp.value || inp.default;
+            }
+            */
         } else {
             input = CodeUtils.mergeInputs(inp.edges.map(edge=>{ return edge.source.value}));
             /*
@@ -190,6 +212,7 @@ export class CodeUtils {
             codeStr.push('__params__.constants = {};\n')
         }
 
+        /*
         codeStr.push(`
 function wait(ms){
     var start = new Date().getTime();
@@ -199,6 +222,7 @@ function wait(ms){
     }
 }
         `)
+        */
 
         // procedure
         for (let prod of node.procedure){
@@ -220,7 +244,8 @@ function wait(ms){
     
     static async getFunctionString(func: IFunction): Promise<string>{
         let fullCode = '';
-        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
+        //let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
+        let fnCode = `function ${func.name}(__mainParams__,${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":__modules__.Model.New()};\n`;
         for (let node of func.module.nodes){
             let code = '{' + await CodeUtils.getNodeCode(node, false) + '}';
             fullCode += `function ${node.id}(__params__, ${func.args.map(arg=>{return arg.name}).join(',')})` + code + `\n\n`;
@@ -245,7 +270,8 @@ function wait(ms){
 
             */
             if (node.type === 'end'){
-                fnCode += `\nreturn result_${node.id};\n`;
+                fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`
+                fnCode += `return result_${node.id};\n`;
             }
             //fnCode += `console.log(result_${node.id});\n`;
         }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { gsConstructor } from '@modules';
+//import { gsConstructor } from '@modules';
 
 @Component({
   selector: 'text-viewer',
@@ -37,8 +37,6 @@ export class TextViewerComponent{
       this.output = JSON.stringify(this.data);
     } else if (this.data.constructor === {}.constructor) {
       this.output = JSON.stringify(this.data);
-    } else if (this.data.constructor === gsConstructor) {
-      this.output = this.data.toJSON();
     } else {
     console.log('Unknown output type:', this.data);
       this.output = this.data;
@@ -56,8 +54,6 @@ export class TextViewerComponent{
       this.output = JSON.stringify(this.data);
     } else if (this.data.constructor === {}.constructor) {
       this.output = JSON.stringify(this.data);
-    } else if (this.data.constructor === gsConstructor) {
-      this.output = JSON.stringify(this.data.toJSON());
     } else {
       console.log('Unknown output type:', this.data);
       this.output = this.data;

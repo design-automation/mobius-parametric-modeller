@@ -9,6 +9,7 @@
     width="100" height="80"
     [class.node--selected]='selected'
     [class.node--error]="node.hasError"
+    [class.node--disabled]='!node.enabled'
     [attr.x]="node.position.x" 
     [attr.y]="node.position.y"
     />
@@ -23,6 +24,7 @@
                 autocomplete=off 
                 [(ngModel)]='node.name'
                 [class.selected]='selected'
+                [class.disabled]='!node.enabled'
                 title={{node.name}}
                 style="font-weight: 600;"
                 placeholder='Description of Node'/>  
@@ -71,6 +73,7 @@
     <ellipse class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
+        [class.node--disabled]='!node.enabled'
         [attr.cx]="node.position.x + inputOffset[0]" 
         [attr.cy]="node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10"
         [attr.rx]="40"
@@ -86,6 +89,7 @@
                 class='textarea_startend'
                 autocomplete=off 
                 [class.selected]='selected'
+                [class.disabled]='!node.enabled'
                 [(ngModel)]='node.name'/>  
         </xhtml:div>
     </svg:foreignObject>

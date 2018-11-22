@@ -1,5 +1,32 @@
 export module Model{
     /**
+     * create a new model
+     * @returns empty new model
+     */
+    export function New(): any[]{
+        return [];
+    }
+
+    /**
+     * create a new model
+     * @returns empty new model
+     */
+    export function Merge(model1, model2): void{
+        for (let j of model2){
+            let existing = false;
+            for(let i of model1){
+                if (i.value == j.value){
+                    existing = true;
+                }
+            }
+            if (!existing){
+                model1.push(j)
+            }
+        }
+        return model1;
+    }
+
+    /**
      * set a value in the model
      * @param __model__  Model of the node.
      * @param var_value  Value to be set.
@@ -14,7 +41,7 @@ export module Model{
         var obj = {  
             "value": var_value,
             "properties":{}
-         };
+        };
         __model__.push(obj);
         return [__model__.length-1];
     }

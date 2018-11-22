@@ -7,6 +7,15 @@ import { IProcedure } from '@models/procedure';
 import * as Modules from '@modules';
 
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+const mergeInputsFunc = `
+function mergeInputs(models){
+    var result = __modules__.Model.New();
+    for (let model of models){
+        __modules__.Model.Merge(result, model);
+    }
+    return result;
+}
+`
 
 @Component({
   selector: 'execute',
@@ -144,11 +153,10 @@ export class ExecuteComponent {
                 hasFunctions = true;
             }
             if (hasFunctions){
-                let mergeString = CodeUtils.mergeInputs.toString();
-                fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) +'\n\n' + fnString;
+                fnString = mergeInputsFunc +'\n\n' + fnString;
             }
 
-            console.log(` ______________________________________________________________
+            console.log(`______________________________________________________________
             \n/*    ${node.name.toUpperCase()}    */
             \n`+fnString+`--------------------------\n`);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)

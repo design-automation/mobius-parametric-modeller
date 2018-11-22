@@ -5,6 +5,10 @@ import { ProcedureTypesAware } from '@shared/decorators';
 
 import { _parameterTypes} from '@modules';
 
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext("2d");
+ctx.font = "14px Arial";        
+
 @ProcedureTypesAware
 @Component({
     selector: 'procedure-item',
@@ -66,5 +70,12 @@ export class ProcedureItemComponent{
         let str = event.trim();
         str = str.replace(/ /g,"_");
         return str;
+    }
+
+
+    updateInputSize(event){
+        let val = event.target.value||event.target.placeholder;
+        event.target.style.width = ctx.measureText(val).width + 10 + 'px';
+        console.log(ctx.measureText(event.target.value).width)
     }
 }

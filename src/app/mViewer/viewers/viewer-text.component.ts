@@ -24,7 +24,7 @@ export class TextViewerComponent{
     output : string;
 
     constructor(){ 
-      console.log(`Text Viewer Created`); 
+      //console.log(`Text Viewer Created`); 
     }
 
    ngOnInit() {

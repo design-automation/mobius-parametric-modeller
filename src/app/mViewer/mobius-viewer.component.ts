@@ -67,7 +67,7 @@ export class ViewerContainerComponent implements OnDestroy {
             } 
         }
         catch(ex){
-            console.log(`Active View not defined`);
+            //console.log(`Active View not defined`);
         }
     }
 }

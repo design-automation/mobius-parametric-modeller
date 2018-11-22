@@ -8,7 +8,7 @@ import { IEdge } from '@models/edge';
 
 import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
-import { fromEvent, Observable, Subscriber  } from 'rxjs';
+import { fromEvent } from 'rxjs';
 
 declare const InstallTrigger: any;
 
@@ -251,7 +251,7 @@ export class FlowchartComponent{
       while (edge_index < this.data.edges.length){
         let tbrEdge = this.data.edges[edge_index];
         if (tbrEdge.target.parentNode == node || tbrEdge.source.parentNode == node){
-          this.deleteEdge(edge_index)
+          this.deleteEdge(edge_index, node.id)
           continue;
         }
         edge_index += 1;
@@ -263,7 +263,7 @@ export class FlowchartComponent{
   }
 
   // delete an edge with a known index
-  deleteEdge(edge_index){
+  deleteEdge(edge_index, deletedNode = undefined){
     let tbrEdge = this.data.edges[edge_index];
 
     // remove the edge from the target node's list of edges
@@ -280,6 +280,12 @@ export class FlowchartComponent{
         tbrEdge.source.edges.splice(Number(i), 1);
         break;
       }
+    }
+    
+    if (tbrEdge.target.parentNode.input.edges.length == 0 && deletedNode !== tbrEdge.target.parentNode.id){
+      FlowchartComponent.disableNode(tbrEdge.target.parentNode);
+    } else {
+      FlowchartComponent.enableNode(tbrEdge.target.parentNode);
     }
 
     // remove the edge from the general list of edges
@@ -568,14 +574,34 @@ export class FlowchartComponent{
         this.edge.source.edges.push(this.edge);
         this.data.edges.push(this.edge);
         this.data.ordered = false;  
+        if (this.edge.source.parentNode.enabled){
+          FlowchartComponent.enableNode(this.edge.target.parentNode);
+        } else {
+          FlowchartComponent.disableNode(this.edge.target.parentNode);
+        }
         break;
       }
     }
     this.isDown = 0;
   }
 
+  static enableNode(node: INode){
+    for (let edge of node.input.edges){
+      if (!edge.source.parentNode.enabled) return
+    }
+    node.enabled = true;
+    for (let edge of node.output.edges){
+      FlowchartComponent.enableNode(edge.target.parentNode);
+    }
+  }
+  
 
-
+  static disableNode(node: INode){
+    node.enabled = false;
+    for (let edge of node.output.edges){
+      FlowchartComponent.disableNode(edge.target.parentNode);
+    }
+  }
 
 }
 

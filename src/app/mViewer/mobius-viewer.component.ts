@@ -13,7 +13,7 @@ import * as gs from 'gs-json';
 export class ViewerContainerComponent implements OnDestroy {
 
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
-    @Input() node: INode;
+    @Input() data: any;
 
     constructor(private injector: Injector, private r: ComponentFactoryResolver) {}
 
@@ -41,10 +41,9 @@ export class ViewerContainerComponent implements OnDestroy {
         let component = view.component;
         let factory = this.r.resolveComponentFactory(component);
         let componentRef = factory.create(this.injector);
-        componentRef.instance["node"] = this.node;
-        if (view.name == 'mobius-cesium'){
-            componentRef.instance["mode"] = 'editor';
-        }
+        if (view.name != 'Console'){
+            componentRef.instance["data"] = this.data;
+        } 
         return componentRef;
     }
 
@@ -64,7 +63,9 @@ export class ViewerContainerComponent implements OnDestroy {
     updateValue(){
         try{
             let componentRef =  this.views[ this.activeView.name ]; 
-            componentRef.instance["node"] = this.node;
+            if (this.activeView.name != 'Console'){
+                componentRef.instance["data"] = this.data;
+            } 
         }
         catch(ex){
             console.log(`Active View not defined`);

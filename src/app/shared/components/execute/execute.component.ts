@@ -3,11 +3,11 @@ import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
 import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
-import { IEdge } from '@models/edge';
 
 import * as Modules from '@modules';
 import * as gs from 'gs-json'
 
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 
 @Component({
   selector: 'execute',
@@ -51,8 +51,52 @@ export class ExecuteComponent {
     @Input() flowchart: IFlowchart;
     private globalVars: string;
 
-    async execute() {
+    async execute(): Promise<any>{
+        const p = new Promise(async (resolve)=>{
+            this.globalVars = '';
+
+            // @ts-ignore
+            console.logs = []
+    
+            // reset input of all nodes except start
+            for (let node of this.flowchart.nodes){
+                if (node.type != 'start'){
+                    if (node.input.edges){
+                        node.input.value = undefined;
+                    }
+                }
+            }
+    
+            // order the flowchart
+            if (!this.flowchart.ordered){
+                FlowchartUtils.orderNodes(this.flowchart);
+            }
+    
+            // get the string of all imported functions
+            let funcStrings = {};
+            for (let func of this.flowchart.functions){
+                funcStrings[func.name] = await CodeUtils.getFunctionString(func);
+            }
+    
+            // execute each node
+            for (let node of this.flowchart.nodes){
+                if (!node.enabled) {
+                    node.output.value = undefined;
+                    continue;
+                }
+                await this.executeNode(node, funcStrings);
+            }
+            resolve('')
+        });
+        return p;
+
+        
+        /*
         this.globalVars = '';
+
+        // @ts-ignore
+        //console.logs = []
+
         // reset input of all nodes except start
         for (let node of this.flowchart.nodes){
             if (node.type != 'start'){
@@ -81,6 +125,7 @@ export class ExecuteComponent {
             }
             await this.executeNode(node, funcStrings);
         }
+        */
     }
 
     async executeNode(node: INode, funcStrings){
@@ -104,7 +149,9 @@ export class ExecuteComponent {
                 fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) +'\n\n' + fnString;
             }
 
-            console.log(`/*    ${node.name.toUpperCase()}    */\n\n`+fnString);
+            console.log(` ______________________________________________________________
+            \n/*    ${node.name.toUpperCase()}    */
+            \n`+fnString+`--------------------------\n`);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function

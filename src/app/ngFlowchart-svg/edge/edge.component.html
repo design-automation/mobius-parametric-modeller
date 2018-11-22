@@ -4,16 +4,16 @@ id="main-edge"
 class = "edge" 
 [class.selected] = "edge.selected"
 [attr.points] = "(edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1]+ 9) + ' ' +
+                    (edge.source.parentNode.position.y + outputOffset[1]+ 8) + ' ' +
 
                     (edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +
+                    (edge.source.parentNode.position.y + outputOffset[1] + 16) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 29) + ' ' +
+                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 24)" 
+                    (edge.target.parentNode.position.y + inputOffset[1] - 22)" 
 />
 
 <!--a wider invisible line to make the wire easier to click-->
@@ -27,10 +27,10 @@ class = "inviEdge"
                     (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 29) + ' ' +
+                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +
 
                     (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 10)" 
+                    (edge.target.parentNode.position.y + inputOffset[1] - 12)" 
 (click)='select($event)'/>
     
 

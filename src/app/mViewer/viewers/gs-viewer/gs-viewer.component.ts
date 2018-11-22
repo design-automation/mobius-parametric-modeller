@@ -13,9 +13,8 @@ export class GSViewerComponent {
 	imVisible:boolean=false;
 
 	// gs model data passed to the viewer
-	@Input() node: INode;
-	data:gs.IModel;
-	text:string;
+	@Input() data: any;
+	modelData:gs.IModel;
 
 	constructor(private dataService: DataService){
 	};
@@ -25,30 +24,22 @@ export class GSViewerComponent {
 			this.dataService.setGsModel(data);
 		}
 		catch(ex){
-			this.text = '';
-			this.data = undefined;
+			this.modelData = undefined;
 			console.error("Error generating model");
 		}
 	}
 
 	ngOnInit() {
-		if(this.node.type == 'output'){
-			this.data = this.node.input.value;
-		} else{
-			this.data = this.node.output.value;
-		}
-		this.setModel(this.data);
+		this.modelData = this.data
+		this.setModel(this.modelData);
 		
 	}
 
 
 	ngDoCheck(){
-		if (!this.node) return;
-		let val = this.node.output.value;
-		if(this.node.type == 'output') val = this.node.input.value;
-		if(this.data !== val){
-			this.data = val;
-			this.setModel(this.data);
+		if(this.modelData !== this.data){
+			this.modelData = this.data;
+			this.setModel(this.modelData);
 		}
 	}
 

@@ -7,13 +7,15 @@ $selected-color: rgb(0, 0, 150);
 $hover-color: blue;
 
 .viewer-container{
+    display: block;
     height: 100%;
+    overflow: hidden;
 }
 
 .container__header{
     flex: 0 1 auto;
-    min-height: $header-height;
-
+    height: $header-height;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -30,6 +32,17 @@ $hover-color: blue;
     font-weight: 600;
     text-align: center;
 }
+
+.content__panel{
+    background-color: rgb(220, 220, 220);
+    width: 97%;
+    height: 93%; 
+    overflow: auto;
+
+    //padding: 10px 15px;
+}
+
+
 
 button.btn{ 
     margin: 10px;

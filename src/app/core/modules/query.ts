@@ -19,6 +19,13 @@ import * as gs from "gs-json";
 const x = "temp";
 
 export module Query{
+    /**
+     * assign properties to a certain value in the model
+     * @param __model__  Model of the node.
+     * @param indices  indices of the value to set properties with.
+     * @param statement  properties to be added to the value.
+     * @returns void
+     */
     export function set(__model__: any[], indices: number[], statement: string): void{
         let properties: any = statement.split('&');
         properties = properties.map(prop => {
@@ -38,7 +45,13 @@ export module Query{
         }
     }
 
-    export function get(__model__: JSON[], statement: string): any{
+    /**
+     * get a list of indices of the values that have certain properties
+     * @param __model__  Model of the node.
+     * @param statement  properties to be added to the value.
+     * @returns list of indices
+     */
+    export function get(__model__: JSON[], statement: string): number[]{
         let property: any = statement.substring(1);
         if (property.indexOf('==') != -1){
             property = property.split('==');

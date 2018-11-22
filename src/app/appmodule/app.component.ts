@@ -102,4 +102,11 @@ export class AppComponent{
     }
   }
 
+  viewerData(){
+    let node = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
+    if (!node) return '';
+    if (node.type == 'output') return node.input.value;
+    return node.output.value
+  }
+
 }

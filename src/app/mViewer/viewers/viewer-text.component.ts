@@ -20,7 +20,7 @@ import { Component, Input } from '@angular/core';
   }`]
 })
 export class TextViewerComponent{
-    @Input() node; 
+    @Input() data; 
     output : string;
 
     constructor(){ 
@@ -28,38 +28,34 @@ export class TextViewerComponent{
     }
 
    ngOnInit() {
-    if (! this.node) {
-      this.output = "no-value";
-    } else if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
-      this.output = this.node.output.value;
-    } else if (typeof this.node.output.value === 'string'){
-      this.output = '"' + this.node.output.value + '"';
-    } else if (this.node.output.value.constructor === [].constructor){
-      this.output = JSON.stringify(this.node.output.value);
-    } else if (this.node.output.value.constructor === {}.constructor) {
-      this.output = JSON.stringify(this.node.output.value);
+    if (typeof this.data === 'number' || this.data === undefined){
+      this.output = this.data;
+    } else if (typeof this.data === 'string'){
+      this.output = '"' + this.data + '"';
+    } else if (this.data.constructor === [].constructor){
+      this.output = JSON.stringify(this.data);
+    } else if (this.data.constructor === {}.constructor) {
+      this.output = JSON.stringify(this.data);
     } else {
-      console.log('Unknown output type:', this.node.output.value);
-      this.output = this.node.output.value;
+      console.log('Unknown output type:', this.data);
+      this.output = this.data;
     }
   
 	}
 
 
 	ngDoCheck(){
-    if (! this.node) {
-      this.output = "no-value";
-    } else if (typeof this.node.output.value === 'number' || this.node.output.value === undefined){
-      this.output = this.node.output.value;
-    } else if (typeof this.node.output.value === 'string'){
-      this.output = '"' + this.node.output.value + '"';
-    } else if (this.node.output.value.constructor === [].constructor){
-      this.output = JSON.stringify(this.node.output.value);
-    } else if (this.node.output.value.constructor === {}.constructor) {
-      this.output = JSON.stringify(this.node.output.value);
+    if (typeof this.data === 'number' || this.data === undefined){
+      this.output = this.data;
+    } else if (typeof this.data === 'string'){
+      this.output = '"' + this.data + '"';
+    } else if (this.data.constructor === [].constructor){
+      this.output = JSON.stringify(this.data);
+    } else if (this.data.constructor === {}.constructor) {
+      this.output = JSON.stringify(this.data);
     } else {
-      console.log('Unknown output type:', this.node.output.value);
-      this.output = this.node.output.value;
+      console.log('Unknown output type:', this.data);
+      this.output = this.data;
     }
 	}
 

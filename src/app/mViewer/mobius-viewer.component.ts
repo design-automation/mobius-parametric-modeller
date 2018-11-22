@@ -12,7 +12,7 @@ import { Viewers } from './viewers.config';
 export class ViewerContainerComponent implements OnDestroy {
 
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
-    @Input() node: INode;
+    @Input() data: any;
 
     constructor(private injector: Injector, private r: ComponentFactoryResolver) {}
 
@@ -41,7 +41,7 @@ export class ViewerContainerComponent implements OnDestroy {
         let factory = this.r.resolveComponentFactory(component);
         let componentRef = factory.create(this.injector);
         if (view.name != 'Console'){
-            componentRef.instance["node"] = this.node;
+            componentRef.instance["data"] = this.data;
         } 
         return componentRef;
     }
@@ -63,7 +63,7 @@ export class ViewerContainerComponent implements OnDestroy {
         try{
             let componentRef =  this.views[ this.activeView.name ]; 
             if (this.activeView.name != 'Console'){
-                componentRef.instance["node"] = this.node;
+                componentRef.instance["data"] = this.data;
             } 
         }
         catch(ex){

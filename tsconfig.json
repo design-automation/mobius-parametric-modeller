@@ -7,9 +7,10 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "target": "es5",
     "paths": {
-      "@assets/*" : ["assets/*"],
+      "@assets/*" : ["src/assets/*"],
       "@store" : ["src/app/core/store"],
       "@models/*" : ["src/app/shared/models/*"],
       "@utils" : ["src/app/shared/utils"],

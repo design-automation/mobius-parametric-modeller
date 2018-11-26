@@ -47,6 +47,7 @@ export class FlowchartComponent{
   private keydownListener = fromEvent(document, 'keydown');
   private copyListener = fromEvent(document, 'copy');
   private pasteListener = fromEvent(document, 'paste');
+  private listenerActive = false;
 
   // position of the current canvas view relative to the full svg canvas
   private offset;
@@ -59,6 +60,56 @@ export class FlowchartComponent{
     this.canvas = <HTMLElement>document.getElementById("svg-canvas");
     let bRect = <DOMRect>this.canvas.getBoundingClientRect();
     this.offset = [bRect.left, bRect.top]
+
+    // copy: copy node
+    this.copySub = this.copyListener.subscribe(val => {
+      if (!this.listenerActive) return
+      const node = this.data.nodes[this.data.meta.selected_nodes[0]];
+      if (node.type != 'start' && node.type != 'end'){
+        console.log('copied node:', node);
+        let cp = circularJSON.parse(circularJSON.stringify(node));
+        this.copied = circularJSON.stringify(cp);
+      }
+    })
+
+    // paste: paste copied node
+    this.pasteSub = this.pasteListener.subscribe(val =>{
+      if (!this.listenerActive) return
+      if (this.copied){
+        event.preventDefault();
+        let newNode = <INode>circularJSON.parse(this.copied);
+        var pt = this.canvas.createSVGPoint();
+        pt.x = 20;
+        pt.y = 100;
+
+        let svgP: any;
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox){
+          let ctm = this.canvas.getScreenCTM()
+          let bRect = this.canvas.getBoundingClientRect()
+          ctm.a = ctm.a * this.zoom
+          ctm.d = ctm.d * this.zoom
+          ctm.e = bRect.x
+          ctm.f = bRect.y
+          svgP = pt.matrixTransform(ctm.inverse());
+        } else {
+          svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        }
+
+        NodeUtils.updateNode(newNode, svgP);
+        this.data.nodes.push(newNode);
+        console.log('pasting node:', newNode);
+      }
+    })
+
+    // delete: delete selected edge(s)
+    this.keydownSub = this.keydownListener.subscribe(val =>{
+      if (!this.listenerActive) return
+      if ((<KeyboardEvent> val).key == 'Delete'){
+        this.deleteSelectedEdges();
+      }
+    })
+
   }
 
   /*
@@ -180,59 +231,12 @@ export class FlowchartComponent{
 
   // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
   activateKeyEvent(): void{
-
-    // copy: copy node
-    this.copySub = this.copyListener.subscribe(val => {
-      const node = this.data.nodes[this.data.meta.selected_nodes[0]];
-      if (node.type != 'start' && node.type != 'end'){
-        console.log('copied node:', node);
-        let cp = circularJSON.parse(circularJSON.stringify(node));
-        this.copied = circularJSON.stringify(cp);
-      }
-    })
-
-    // paste: paste copied node
-    this.pasteSub = this.pasteListener.subscribe(val =>{
-      if (this.copied){
-        event.preventDefault();
-        let newNode = <INode>circularJSON.parse(this.copied);
-        var pt = this.canvas.createSVGPoint();
-        pt.x = 20;
-        pt.y = 100;
-
-        let svgP: any;
-        var isFirefox = typeof InstallTrigger !== 'undefined';
-        if (isFirefox){
-          let ctm = this.canvas.getScreenCTM()
-          let bRect = this.canvas.getBoundingClientRect()
-          ctm.a = ctm.a * this.zoom
-          ctm.d = ctm.d * this.zoom
-          ctm.e = bRect.x
-          ctm.f = bRect.y
-          svgP = pt.matrixTransform(ctm.inverse());
-        } else {
-          svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-        }
-
-        NodeUtils.updateNode(newNode, svgP);
-        this.data.nodes.push(newNode);
-        console.log('pasting node:', newNode);
-      }
-    })
-
-    // delete: delete selected edge(s)
-    this.keydownSub = this.keydownListener.subscribe(val =>{
-      if ((<KeyboardEvent> val).key == 'Delete'){
-        this.deleteSelectedEdges();
-      }
-    })
+    this.listenerActive = true
   }
 
   // deactivate the event listeners when the mouse exit the svg component
   deactivateKeyEvent(): void{
-    this.copySub.unsubscribe();
-    this.pasteSub.unsubscribe();
-    this.keydownSub.unsubscribe();
+    this.listenerActive = false
   }
 
   // delete selected node

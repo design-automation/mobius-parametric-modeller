@@ -3,8 +3,14 @@
     <ul class='toolset__basic'>
         <ng-container *ngFor="let type of ProcedureTypesArr">
             <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"'
-                (click)='add(ProcedureTypes[type])'> 
+            class='tooltip'
+            (click)='add(ProcedureTypes[type])'> 
                 {{type}}
+                <!--
+                <span class="tooltiptext">
+                    <p class='funcDesc'>{{type}}</p>
+                </span>
+                -->
             </li>
         </ng-container>
     </ul>
@@ -18,7 +24,18 @@
         (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
         <div class="panel">
             <ul class='toolset__functions--subset'>
-                <li *ngFor='let fn of mod.functions' title='{{ModulesDoc[mod.module][fn.name].description}}' (click)='add_function(fn)'> {{fn.name}} </li>
+                <li 
+                class='tooltip'
+                *ngFor='let fn of mod.functions' 
+                (click)='add_function(fn)'> 
+                    {{fn.name}} 
+                    <span class="tooltiptext">
+                        <p class='funcDesc'>{{ModulesDoc[mod.module][fn.name].summary||ModulesDoc[mod.module][fn.name].description}}</p>
+                        <p *ngIf='ModulesDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
+                        <p class='paramP' *ngFor='let param of ModulesDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                        <p *ngIf='ModulesDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModulesDoc[mod.module][fn.name].returns}}</p>
+                    </span>
+                </li>
             </ul>
         </div>
     </ng-container>

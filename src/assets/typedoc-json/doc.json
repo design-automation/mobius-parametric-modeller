@@ -31,7 +31,13 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Declare a new constant for the input node",
-								"returns": "void\n"
+								"returns": "Void\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Declare new constant\n"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -41,7 +47,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"shortText": "list of constants to be added."
+										"shortText": "List of constants to be added."
 									},
 									"type": {
 										"type": "reference",
@@ -69,7 +75,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"shortText": "value of the constant."
+										"shortText": "Value of the constant.\n"
 									},
 									"type": {
 										"type": "intrinsic",
@@ -86,7 +92,7 @@
 					"sources": [
 						{
 							"fileName": "Input.ts",
-							"line": 8,
+							"line": 11,
 							"character": 32
 						}
 					]
@@ -135,8 +141,14 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "merge two models, first model will be modified",
-								"returns": "merged model\n"
+								"shortText": "Merge two models, first model will be modified",
+								"returns": "Merged model\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Merge two models\n"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -146,7 +158,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "first model to be merged, will be modified to become the merged model after execution of the function"
+										"text": "First model to be merged, will be modified to become the merged model after execution of the function"
 									},
 									"type": {
 										"type": "intrinsic",
@@ -160,7 +172,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "second model to be merged, unchanged after execution of the function"
+										"text": "Second model to be merged, unchanged after execution of the function\n"
 									},
 									"type": {
 										"type": "intrinsic",
@@ -180,7 +192,7 @@
 					"sources": [
 						{
 							"fileName": "Model.ts",
-							"line": 15,
+							"line": 20,
 							"character": 21
 						}
 					]
@@ -201,8 +213,14 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "create a new model",
-								"returns": "empty new model\n"
+								"shortText": "Create a new model",
+								"returns": "Empty new model\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "New model\n"
+									}
+								]
 							},
 							"type": {
 								"type": "array",
@@ -216,7 +234,7 @@
 					"sources": [
 						{
 							"fileName": "Model.ts",
-							"line": 5,
+							"line": 7,
 							"character": 19
 						}
 					]
@@ -237,8 +255,14 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "get a value from the model with a list of indices",
-								"returns": "value\n"
+								"shortText": "Get a value from the model with a list of indices",
+								"returns": "Value\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Get a specific value\n"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -265,7 +289,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "list of indices of the values to be retrieved from the model."
+										"text": "List of indices of the values to be retrieved from the model.\n"
 									},
 									"type": {
 										"type": "array",
@@ -285,7 +309,7 @@
 					"sources": [
 						{
 							"fileName": "Model.ts",
-							"line": 56,
+							"line": 68,
 							"character": 19
 						}
 					]
@@ -306,7 +330,13 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "remove certain value from the model with a list of indices"
+								"shortText": "Remove certain value from the model with a list of indices",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Remove a specific value\n"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -333,7 +363,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "list of indices of the values to be removed from the model.\n"
+										"text": "List of indices of the values to be removed from the model.\n"
 									},
 									"type": {
 										"type": "array",
@@ -353,7 +383,7 @@
 					"sources": [
 						{
 							"fileName": "Model.ts",
-							"line": 73,
+							"line": 87,
 							"character": 22
 						}
 					]
@@ -374,8 +404,18 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "set a value in the model",
-								"returns": "index of the set value\n"
+								"shortText": "Register a value in the model",
+								"returns": "Index of the set value\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Set a value\n"
+									},
+									{
+										"tag": "test",
+										"text": "test1"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -402,7 +442,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Value to be set."
+										"text": "Value to be set.\n"
 									},
 									"type": {
 										"type": "intrinsic",
@@ -422,7 +462,7 @@
 					"sources": [
 						{
 							"fileName": "Model.ts",
-							"line": 36,
+							"line": 45,
 							"character": 19
 						}
 					]
@@ -475,8 +515,14 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "return certain value from the model",
-								"returns": "value\n"
+								"shortText": "Return certain value from the model for the flowchart's end node",
+								"returns": "Value\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Return a specific value"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -503,7 +549,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "index of the value to be returned."
+										"text": "Index of the value to be returned."
 									},
 									"type": {
 										"type": "intrinsic",
@@ -520,7 +566,7 @@
 					"sources": [
 						{
 							"fileName": "Output.ts",
-							"line": 8,
+							"line": 9,
 							"character": 28
 						}
 					]
@@ -569,8 +615,14 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "get a list of indices of the values that have certain properties",
-								"returns": "list of indices\n"
+								"shortText": "Get a list of indices of the values that have certain properties",
+								"returns": "List of indices\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Get indices of values"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -597,7 +649,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "properties to be added to the value."
+										"text": "Properties to be added to the value."
 									},
 									"type": {
 										"type": "intrinsic",
@@ -617,7 +669,7 @@
 					"sources": [
 						{
 							"fileName": "Query.ts",
-							"line": 34,
+							"line": 36,
 							"character": 19
 						}
 					]
@@ -638,8 +690,14 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "assign properties to a certain value in the model",
-								"returns": "void\n"
+								"shortText": "Assign properties to a certain value in the model",
+								"returns": "Void\n",
+								"tags": [
+									{
+										"tag": "summary",
+										"text": "Assign a property"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -666,7 +724,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "indices of the value to set properties with."
+										"text": "Indices of the value to set properties with."
 									},
 									"type": {
 										"type": "array",
@@ -683,7 +741,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "properties to be added to the value."
+										"text": "Properties to be added to the value."
 									},
 									"type": {
 										"type": "intrinsic",
@@ -700,7 +758,7 @@
 					"sources": [
 						{
 							"fileName": "Query.ts",
-							"line": 9,
+							"line": 10,
 							"character": 19
 						}
 					]

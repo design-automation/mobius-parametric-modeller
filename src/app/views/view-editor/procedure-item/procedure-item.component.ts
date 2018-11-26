@@ -59,6 +59,10 @@ export class ProcedureItemComponent{
         return (this.data.argCount > 0 && this.data.args[0].name == 'var_name')
     }
 
+    haveHelpText(){
+        return (this.data.type == ProcedureTypes.Function || this.data.type ==  ProcedureTypes.Imported)
+    }
+
     // stopPropagation to prevent cut/paste with input box focused
     stopProp(event):void{
         event.stopPropagation();
@@ -76,6 +80,5 @@ export class ProcedureItemComponent{
     updateInputSize(event){
         let val = event.target.value||event.target.placeholder;
         event.target.style.width = ctx.measureText(val).width + 10 + 'px';
-        console.log(ctx.measureText(event.target.value).width)
     }
 }

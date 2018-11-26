@@ -207,7 +207,7 @@
             <mat-icon class='icon'>print</mat-icon>
         </button>
         <!-- help button-->
-        <button class='btn' mat-icon-button title="Help" tabindex="-1">
+        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1">
             <mat-icon class='icon'>help</mat-icon>
         </button>
     </div>

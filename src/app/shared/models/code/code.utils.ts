@@ -1,6 +1,6 @@
 import { INode, NodeUtils } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
-import { IPortInput } from '@models/port';
+import { IPortInput, InputType } from '@models/port';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { _parameterTypes, functions } from '@modules';
 
 export class CodeUtils {
 
-    static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string {
+    static async getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): Promise<string> {
         if(prod.enabled === false) return '';
 
         prod.hasError = false;
@@ -68,10 +68,85 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Function:
-                const argValues = args.slice(1).map((arg)=>{
+                var argVals = [];
+                for (let arg of args.slice(1)){
+                    if (arg.name == _parameterTypes.input) { 
+                        let val = arg.value || arg.default; 
+                        if (prod.meta.inputMode == InputType.URL){
+                            const p = new Promise((resolve) => {
+                                let request = new XMLHttpRequest();
+                                request.open('GET', arg.value || arg.default);
+                                request.onload = () => {
+                                    resolve(request.responseText);
+                                }
+                                request.send();
+                            });
+                            val = await p; 
+                        } else if (prod.meta.inputMode == InputType.File) {
+                            const p = new Promise((resolve) => {
+                                let reader = new FileReader();
+                                reader.onload = function(){
+                                    resolve(reader.result)
+                                }
+                                reader.readAsText(arg.value || arg.default)
+                            });
+                            val = await p; 
+                        } else {}
+                        argVals.push(val); 
+                        continue
+                    }
+                    if (arg.value && arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
+                    if (arg.name == _parameterTypes.constList) {
+                        argVals.push("__params__.constants")
+                        continue;
+                    };
+                    if (arg.name == _parameterTypes.model) {
+                        argVals.push("__params__.model"); 
+                        continue;
+                    }
+                    if (arg.value && arg.value.substring(0,1) == '@') {
+                        if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT') {
+                            argVals.push('"'+arg.value.replace(/"/g,"'")+'"');
+                            continue
+                        }
+                        argVals.push('__modules__.Query.get( __params__.model,"'+arg.value.replace(/"/g,"'")+'" )');
+                        continue
+                    }
+                    //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
+                    argVals.push(arg.value);
+
+                }
+                let argValues = argVals.join(',');
+                /*
+                const argValues = args.slice(1).map(async (arg)=>{
                     // if __params__ is present in the value of the argument, throw unexpected identifier
                     if (arg.name == _parameterTypes.input) { 
-                        let val = arg.value || arg.default; return val; };
+                        console.log(prod)
+                        console.log(arg)
+                        let val = arg.value || arg.default; 
+                        if (prod.meta.inputMode == InputType.URL){
+                            const p = new Promise((resolve) => {
+                                let request = new XMLHttpRequest();
+                                request.open('GET', arg.value || arg.default);
+                                request.onload = () => {
+                                    resolve(request.responseText);
+                                }
+                                request.send();
+                            });
+                            val = await p; 
+                            console.log(val)
+                        } else if (prod.meta.inputMode == InputType.File) {
+                            const p = new Promise((resolve) => {
+                                let reader = new FileReader();
+                                reader.onload = function(){
+                                    resolve(reader.result)
+                                }
+                                reader.readAsText(arg.value || arg.default)
+                            });
+                            val = await p; 
+                        } else {}
+                        return val; 
+                    }
                     if (arg.value && arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
                     if (arg.name == _parameterTypes.constList) return "__params__.constants";
                     if (arg.name == _parameterTypes.model) return "__params__.model";
@@ -83,6 +158,8 @@ export class CodeUtils {
                     //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                     return arg.value;
                 }).join(',');
+                */
+                await argValues;
                 const fnCall: string = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
                 if ( prod.meta.module.toUpperCase() == 'OUTPUT'){
                     codeStr.push(`return ${fnCall};`);
@@ -108,7 +185,7 @@ export class CodeUtils {
         }
         if(prod.children){
             for (let p of prod.children){
-                codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
+                codeStr.push(await CodeUtils.getProcedureCode(p, existingVars, addProdArr));
             }
             codeStr.push(`}`)
         }
@@ -157,7 +234,7 @@ export class CodeUtils {
 
     
     
-    static async getInputValue(inp: IPortInput, node: INode): Promise<string>{
+    static getInputValue(inp: IPortInput, node: INode): Promise<string>{
         var input: any;
         if (node.type == 'start' || inp.edges.length == 0){
             input = functions.__new__();
@@ -224,9 +301,10 @@ function wait(ms){
         `)
         */
 
+
         // procedure
         for (let prod of node.procedure){
-            codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
+            codeStr.push(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         };
         if (node.type == 'end' && node.procedure.length > 0){
             return `{\n${codeStr.join('\n')}\n}`;

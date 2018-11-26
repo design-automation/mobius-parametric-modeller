@@ -21,7 +21,7 @@ export class procedureInputEditorComponent{
     editOptions(): void{ }
 
     onFileChange(event){
-      this.prod.args[this.prod.args.length -1] = event.target.files[0];
+      this.prod.args[this.prod.argCount-1].default = event.target.files[0];
     }
 
 }

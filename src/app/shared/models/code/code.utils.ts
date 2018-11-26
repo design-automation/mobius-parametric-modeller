@@ -117,48 +117,6 @@ export class CodeUtils {
 
                 }
                 let argValues = argVals.join(',');
-                /*
-                const argValues = args.slice(1).map(async (arg)=>{
-                    // if __params__ is present in the value of the argument, throw unexpected identifier
-                    if (arg.name == _parameterTypes.input) { 
-                        console.log(prod)
-                        console.log(arg)
-                        let val = arg.value || arg.default; 
-                        if (prod.meta.inputMode == InputType.URL){
-                            const p = new Promise((resolve) => {
-                                let request = new XMLHttpRequest();
-                                request.open('GET', arg.value || arg.default);
-                                request.onload = () => {
-                                    resolve(request.responseText);
-                                }
-                                request.send();
-                            });
-                            val = await p; 
-                            console.log(val)
-                        } else if (prod.meta.inputMode == InputType.File) {
-                            const p = new Promise((resolve) => {
-                                let reader = new FileReader();
-                                reader.onload = function(){
-                                    resolve(reader.result)
-                                }
-                                reader.readAsText(arg.value || arg.default)
-                            });
-                            val = await p; 
-                        } else {}
-                        return val; 
-                    }
-                    if (arg.value && arg.value.indexOf('__params__') != -1) throw new Error("Unexpected Identifier");
-                    if (arg.name == _parameterTypes.constList) return "__params__.constants";
-                    if (arg.name == _parameterTypes.model) return "__params__.model";
-                    if (arg.value && arg.value.substring(0,1) == '@') {
-                        if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT') 
-                            return '"'+arg.value.replace(/"/g,"'")+'"';
-                        return '__modules__.Query.get( __params__.model,"'+arg.value.replace(/"/g,"'")+'" )';
-                    }
-                    //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
-                    return arg.value;
-                }).join(',');
-                */
                 await argValues;
                 const fnCall: string = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
                 if ( prod.meta.module.toUpperCase() == 'OUTPUT'){

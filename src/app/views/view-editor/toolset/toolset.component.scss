@@ -25,8 +25,6 @@ ul{
         line-height: 18px;
     }
 
-    
-
 }
 .remove-btn{
     background-color: transparent;
@@ -84,19 +82,24 @@ ul{
     overflow: hidden;
 }
 
+.tooltip{
+    display: block;
+}
 /* Tooltip text */
 .tooltip .tooltiptext {
-    visibility: hidden;
+    //visibility: hidden;
     //width: 250px;
     min-width: 50px;
     max-width: 500px;
     background-color: $separator;
     border: 1px solid $title-background;
     color: $text-color;
+    pointer-events: none;
     //text-align: left;
     padding: 0px 10px 0px 10px;
     //border-radius: 6px;
- 
+    opacity:0;
+
     position: absolute;
     z-index: 1;
 
@@ -115,11 +118,10 @@ ul{
                 content: '';
                 -webkit-border-radius: 0.25rem;
                 border-radius: 0.25rem;
-                height: 0.5rem;
-                width: 0.5rem;
-                margin-right: 0.5rem;
+                height: 0.25rem;
+                width: 0.25rem;
+                margin: 0rem 0.3rem 0.15rem 0rem;
                 background-color: $text-color;
-                
             }
         }
     
@@ -127,11 +129,10 @@ ul{
             font-style: italic;
         }
     }
-
-
 }
-
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
-    visibility: visible;
+    transition-delay: 1s;
+    transition-duration: 0.3s;
+    opacity: 1;
 }

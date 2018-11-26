@@ -5,7 +5,6 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { IModule, IFunction } from '@models/procedure';
 import { IArgument } from '@models/code';
-import * as doc from '@assets/typedoc-json/doc.json';
+//import * as doc from '@assets/typedoc-json/doc.json';
+var doc = require('@assets/typedoc-json/doc.json');
 
 import * as Modules from '@modules';
 
@@ -45,8 +46,10 @@ function extract_docs(){
             let fn = {};
             fn["name"] = func.name;
             fn["description"] = func["signatures"][0].comment.shortText;
-            for (let fnTag of func["signatures"][0].comment.tags){
-                if (fnTag.tag == 'summary') fn["summary"] = fnTag.text;
+            if (func["signatures"][0].comment.tags){
+                for (let fnTag of func["signatures"][0].comment.tags){
+                    if (fnTag.tag == 'summary') fn["summary"] = fnTag.text;
+                }    
             }
             fn["returns"] = func["signatures"][0].comment.returns;
             if (fn["returns"]) fn["returns"] = fn["returns"].trim();

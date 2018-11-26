@@ -1,10 +1,11 @@
 
 /**
- * assign properties to a certain value in the model
+ * Assign properties to a certain value in the model
+ * @summary Assign a property
  * @param {any[]} __model__  Model of the node.
- * @param {number[]} indices  indices of the value to set properties with.
- * @param {string} statement  properties to be added to the value.
- * @returns void
+ * @param {number[]} indices  Indices of the value to set properties with.
+ * @param {string} statement  Properties to be added to the value.
+ * @returns Void
  */
 export function set(__model__: any[], indices: number[], statement: string): void{
     let properties: any = statement.split('&');
@@ -26,10 +27,11 @@ export function set(__model__: any[], indices: number[], statement: string): voi
 }
 
 /**
- * get a list of indices of the values that have certain properties
+ * Get a list of indices of the values that have certain properties
+ * @summary Get indices of values
  * @param {any[]} __model__  Model of the node.
- * @param {string} statement  properties to be added to the value.
- * @returns {number[]} list of indices
+ * @param {string} statement  Properties to be added to the value.
+ * @returns {number[]} List of indices
  */
 export function get(__model__: JSON[], statement: string): number[]{
     let property: any = statement.substring(1);

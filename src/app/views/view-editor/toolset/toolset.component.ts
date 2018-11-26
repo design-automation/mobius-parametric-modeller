@@ -128,10 +128,4 @@ export class ToolsetComponent{
         
     }
 
-    getFunctionHoverText(event){
-        console.log()
-        //console.log( '_____', event.name)
-    }
-
-
 }

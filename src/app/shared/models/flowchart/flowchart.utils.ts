@@ -42,14 +42,14 @@ export class FlowchartUtils{
     }
 
     public static orderNodes(flw: IFlowchart){
-        var startNode = undefined;
+        let startNode = undefined;
         for (let node of flw.nodes){
             if (node.type === 'start'){
                 startNode = node;
             }
             node.hasExecuted = false;
         }
-        var nodeOrder = [];
+        let nodeOrder = [];
         FlowchartUtils.checkNode(nodeOrder, startNode, true);
         if (nodeOrder.length < flw.nodes.length){
             for (let node of flw.nodes){

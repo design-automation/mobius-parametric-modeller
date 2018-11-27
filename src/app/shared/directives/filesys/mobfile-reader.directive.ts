@@ -21,7 +21,7 @@ export class MbFileReaderDirective {
 	onFileChange() {
 		let f = this.el.nativeElement.files[0];
 		if (f) {
-		    var reader = new FileReader();
+		    let reader = new FileReader();
 				reader.readAsText(f, "UTF-8");
 				let ins = this;
 		    reader.onload = function (evt) {

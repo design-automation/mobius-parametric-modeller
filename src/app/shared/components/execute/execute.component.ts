@@ -9,7 +9,7 @@ import * as Modules from '@modules';
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 const mergeInputsFunc = `
 function mergeInputs(models){
-    var result = __modules__.Model.New();
+    let result = __modules__.Model.New();
     for (let model of models){
         __modules__.Model.Merge(result, model);
     }
@@ -140,14 +140,14 @@ export class ExecuteComponent {
         let params = {"currentProcedure": ['']};
         try{
             // get the code for the node
-            var fnString = await CodeUtils.getNodeCode(node, true);
+            let fnString = await CodeUtils.getNodeCode(node, true);
 
             // add the constants from the start node
             fnString = this.globalVars + fnString;
             params["model"] = node.input.value;
 
             // add the imported functions code
-            var hasFunctions = false;
+            let hasFunctions = false;
             for (let funcName in funcStrings){
                 fnString = funcStrings[funcName] + fnString;
                 hasFunctions = true;

@@ -3,6 +3,7 @@ import { Component, Injector, Input,
 import { INode } from '@models/node';
 import { IView } from './view.interface';
 import { Viewers } from './viewers.config';
+import { EventEmitter } from 'events';
 
 @Component({
     selector: 'mviewer',
@@ -13,8 +14,12 @@ export class ViewerContainerComponent implements OnDestroy {
 
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
     @Input() data: any;
+    @Input() helpView: any;
+    currentHelpView: any;
 
-    constructor(private injector: Injector, private r: ComponentFactoryResolver) {}
+    constructor(private injector: Injector, private r: ComponentFactoryResolver) {
+        
+    }
 
     private views = [];
     private activeView: IView;
@@ -33,16 +38,25 @@ export class ViewerContainerComponent implements OnDestroy {
     }
 
     ngOnChanges(){
-        this.updateValue();
+        if (this.currentHelpView !== this.helpView){
+            let view = undefined
+            for (let v of this.Viewers){
+                if (v.name == 'Help') view = v
+            }
+            this.currentHelpView = this.helpView;
+            this.updateView(view)
+        } else this.updateValue();
     }
 
     createView(view: IView){
         let component = view.component;
         let factory = this.r.resolveComponentFactory(component);
         let componentRef = factory.create(this.injector);
+        /*
         if (view.name != 'Console'){
             componentRef.instance["data"] = this.data;
         } 
+        */
         return componentRef;
     }
 
@@ -62,7 +76,9 @@ export class ViewerContainerComponent implements OnDestroy {
     updateValue(){
         try{
             let componentRef =  this.views[ this.activeView.name ]; 
-            if (this.activeView.name != 'Console'){
+            if (this.activeView.name == 'Help'){
+                componentRef.instance["output"] = this.currentHelpView;
+            } else if (this.activeView.name != 'Console'){
                 componentRef.instance["data"] = this.data;
             } 
         }

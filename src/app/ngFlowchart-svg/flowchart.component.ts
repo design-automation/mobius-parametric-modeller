@@ -78,12 +78,12 @@ export class FlowchartComponent{
       if (this.copied){
         event.preventDefault();
         let newNode = <INode>circularJSON.parse(this.copied);
-        var pt = this.canvas.createSVGPoint();
+        let pt = this.canvas.createSVGPoint();
         pt.x = 20;
         pt.y = 100;
 
         let svgP: any;
-        var isFirefox = typeof InstallTrigger !== 'undefined';
+        let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox){
           let ctm = this.canvas.getScreenCTM()
           let bRect = this.canvas.getBoundingClientRect()
@@ -133,7 +133,7 @@ export class FlowchartComponent{
       // initiate dragging node
       case ACTIONS.DRAGNODE:
         this.element = this.data.nodes[node_index];
-        var pt = this.canvas.createSVGPoint();
+        let pt = this.canvas.createSVGPoint();
 
         // get current mouse position in the page
         pt.x = event.data.pageX;
@@ -141,7 +141,7 @@ export class FlowchartComponent{
 
         // convert mouse position to svg position (special procedure for firefox)
         let svgP: any;
-        var isFirefox = typeof InstallTrigger !== 'undefined';
+        let isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox){
           let ctm = this.canvas.getScreenCTM()
           let bRect = this.canvas.getBoundingClientRect()
@@ -200,17 +200,17 @@ export class FlowchartComponent{
   addNode(): void{  
 
     // create a new node
-    var newNode = NodeUtils.getNewNode();
+    let newNode = NodeUtils.getNewNode();
 
     // the new node's position would be (20,100) relative to the current view
-    var pt = this.canvas.createSVGPoint();
+    let pt = this.canvas.createSVGPoint();
 
     pt.x = 20;
     pt.y = 100;
 
     // convert the position to svg position
     let svgP: any;
-    var isFirefox = typeof InstallTrigger !== 'undefined';
+    let isFirefox = typeof InstallTrigger !== 'undefined';
     if (isFirefox){
       let ctm = this.canvas.getScreenCTM()
       let bRect = this.canvas.getBoundingClientRect()
@@ -249,7 +249,7 @@ export class FlowchartComponent{
 
       // continue if the node is a start/end node
       if (node.type == "start" || node.type == "end") continue;
-      var edge_index = 0;
+      let edge_index = 0;
 
       // delete all the edges connected to the node
       while (edge_index < this.data.edges.length){
@@ -400,7 +400,7 @@ export class FlowchartComponent{
     }
 
     // find transformation matrix
-    var m = this.canvas.createSVGMatrix()
+    let m = this.canvas.createSVGMatrix()
     .translate(this.mousePos[0], this.mousePos[1])
     .scale(value)
     .translate(-this.mousePos[0], -this.mousePos[1]);
@@ -441,8 +441,8 @@ export class FlowchartComponent{
     } else if(this.isDown == 1){
       event.preventDefault();
       let bRect = <DOMRect>this.canvas.getBoundingClientRect();
-      var x = Number(event.clientX - this.startCoords[0]);
-      var y = Number(event.clientY - this.startCoords[1]);
+      let x = Number(event.clientX - this.startCoords[0]);
+      let y = Number(event.clientY - this.startCoords[1]);
       let boundingDiv = <DOMRect>document.getElementById("flowchart-main-container").getBoundingClientRect();
       if (x > 0 || bRect.width < boundingDiv.width){
         x = 0
@@ -459,13 +459,13 @@ export class FlowchartComponent{
     // if drag node
     } else if(this.isDown == 2){
 
-      var pt = this.canvas.createSVGPoint();
+      let pt = this.canvas.createSVGPoint();
 
       pt.x = event.pageX;
       pt.y = event.pageY;
 
       let svgP: any;
-      var isFirefox = typeof InstallTrigger !== 'undefined';
+      let isFirefox = typeof InstallTrigger !== 'undefined';
       if (isFirefox){
         let ctm = this.canvas.getScreenCTM()
         let bRect = this.canvas.getBoundingClientRect()
@@ -489,13 +489,13 @@ export class FlowchartComponent{
   // if drag port
   } else if (this.isDown == 3){
       event.preventDefault();
-      var pt = this.canvas.createSVGPoint();
+      let pt = this.canvas.createSVGPoint();
 
       pt.x = event.pageX;
       pt.y = event.pageY;
 
 
-      var isFirefox = typeof InstallTrigger !== 'undefined';
+      let isFirefox = typeof InstallTrigger !== 'undefined';
       if (isFirefox){
         let ctm = this.canvas.getScreenCTM()
         let bRect = this.canvas.getBoundingClientRect()
@@ -521,13 +521,13 @@ export class FlowchartComponent{
     this.element = undefined;
     // drop port --> create new edge if drop position is within 15px of an input/output port
     if (this.isDown == 3){
-      var pt = this.canvas.createSVGPoint();
+      let pt = this.canvas.createSVGPoint();
 
       pt.x = event.pageX;
       pt.y = event.pageY;
       let svgP: any;
 
-      var isFirefox = typeof InstallTrigger !== 'undefined';
+      let isFirefox = typeof InstallTrigger !== 'undefined';
       if (isFirefox){
         let ctm = this.canvas.getScreenCTM()
         let bRect = this.canvas.getBoundingClientRect()
@@ -549,7 +549,7 @@ export class FlowchartComponent{
 
       // go through all of the nodes' input/output ports
       for (let n of this.data.nodes){
-        var pPos;
+        let pPos;
 
         // find the node's corresponding port and its position
         if (this.startType == 'input'){

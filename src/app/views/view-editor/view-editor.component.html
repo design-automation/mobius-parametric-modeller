@@ -24,7 +24,8 @@
 			*ngFor="let line of node?.procedure; let idx=index" 
 			[data]="line"
 			(select)="selectProcedure($event,line)"
-			(delete)="deleteChild(idx)"></procedure-item>
+			(delete)="deleteChild(idx)"
+			(helpText)='emitHelpText($event)'></procedure-item>
 			<br>
 			<br>
 		</div>

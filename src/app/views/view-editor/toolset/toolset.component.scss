@@ -109,10 +109,10 @@ ul{
         &.funcDesc{
             font-weight: 600;
         }
-    
+
         &.paramP{
             padding-left: 5px;
-    
+
         ::before{
                 display: inline-block;
                 content: '';
@@ -124,7 +124,7 @@ ul{
                 background-color: $text-color;
             }
         }
-    
+
         span{
             font-style: italic;
         }

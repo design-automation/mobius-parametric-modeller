@@ -35,12 +35,12 @@ export class LoadFileComponent{
     
     
     sendloadfile(){
-        var selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
+        let selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
         let stream = Observable.create(observer => {
             let reader = new FileReader();
             reader.onloadend = () => {
                 //if (typeof reader.result === 'string') {}
-                var f = circularJSON.parse(<string>reader.result);
+                let f = circularJSON.parse(<string>reader.result);
                 const file: IMobius = {
                     name: f.name,
                     author: f.author, 
@@ -69,7 +69,7 @@ export class LoadFileComponent{
     //   loadFile(url ?:string): void{
     //     let file = this.fileInput.nativeElement.files[0];
     //     if (file) {
-    //         var reader = new FileReader();
+    //         let reader = new FileReader();
     //         reader.readAsText(file, "UTF-8");
     //         let fs = this.flowchartService;
     //         reader.onload = function (evt) {

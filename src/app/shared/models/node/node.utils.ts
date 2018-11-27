@@ -62,7 +62,7 @@ export abstract class NodeUtils{
                 if (pr.children) NodeUtils.rearrangeSelected(prodList, tempList, pr.children)
                 continue
             };
-            var i = 0;
+            let i = 0;
             while (i < tempList.length){
                 if (tempList[i] === pr){
                     prodList.push(pr)
@@ -80,8 +80,8 @@ export abstract class NodeUtils{
             return
         }
         if (ctrl){
-            var selIndex = 0;
-            var selected = false;
+            let selIndex = 0;
+            let selected = false;
             while (selIndex < node.state.procedure.length){
                 if (node.state.procedure[selIndex] === procedure){
                     selected = true;
@@ -118,11 +118,12 @@ export abstract class NodeUtils{
                 node.state.procedure[0].children.push(prod);
                 prod.parent = node.state.procedure[0];
             } else {
+                let list;
                 if (node.state.procedure[0].parent){
                     prod.parent = node.state.procedure[0].parent;
-                    var list = prod.parent.children;
+                    list = prod.parent.children;
                 } else {
-                    var list = node.procedure;
+                    list = node.procedure;
                 }
                 for (let index in list){
                     if (list[index].selected){

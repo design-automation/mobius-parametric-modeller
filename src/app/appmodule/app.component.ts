@@ -6,6 +6,7 @@ import { DataService } from '@services';
 import * as circularJSON from 'circular-json';
 import { IView } from '../mViewer/view.interface';
 import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
+import { Observable } from 'rxjs';
 
 // @ts-ignore
 console.stdlog = console.log.bind(console);
@@ -39,6 +40,7 @@ export class AppComponent{
     "flowchart":FlowchartComponent  // src/ngFlowchart-svg/
   };
   activeView: string;
+  helpView: any;
 
   constructor(private dataService: DataService, private injector: Injector, private r: ComponentFactoryResolver){
     this.file = dataService.file;
@@ -64,13 +66,9 @@ export class AppComponent{
     let factory = this.r.resolveComponentFactory(component);
     let componentRef = factory.create(this.injector);
     if (view == "flowchart"){
-      componentRef.instance["data"] = this.flowchart;
       componentRef.instance["switch"].subscribe(data => this.updateView(data))
-  } else if(view == "editor"){
-      componentRef.instance["flowchart"] = this.flowchart;
-      componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
-    } else if(view == "publish"){
-      componentRef.instance["flowchart"] = this.flowchart;
+    } else if(view == "editor"){
+      componentRef.instance["helpText"].subscribe(data => this.helpView = data)
     }
     return componentRef;
   }
@@ -80,7 +78,8 @@ export class AppComponent{
 
     if( this.views[ view ] == undefined){
         this.views[ view ] = this.createView(view);
-    } else this.updateValue();
+    } 
+    this.updateValue();
 
     this.vc.detach();
     this.vc.insert( this.views[ view ].hostView );
@@ -102,11 +101,11 @@ export class AppComponent{
     }
   }
 
-  viewerData(){
+  viewerData(): any{
     let node = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
     if (!node) return '';
     if (node.type == 'output') return node.input.value;
-    return node.output.value
+    return node.output.value;
   }
 
 }

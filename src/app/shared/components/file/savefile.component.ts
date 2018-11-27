@@ -38,7 +38,7 @@ export class SaveFileComponent{
         if (!this.file.flowchart.ordered){
             FlowchartUtils.orderNodes(this.file.flowchart)
         }
-        var savedfile = circularJSON.parse(circularJSON.stringify(this.file))
+        let savedfile = circularJSON.parse(circularJSON.stringify(this.file))
         for (let node of savedfile.flowchart.nodes){
             if (node.input.hasOwnProperty('value')){
                 node.input.value = undefined;
@@ -68,7 +68,7 @@ export class SaveFileComponent{
 
         const fileString = circularJSON.stringify(savedfile);
         let fname: string = `${savedfile.flowchart.name.replace(/\ /g,'_')}.mob`;
-        var blob = new Blob([fileString], {type: 'application/json'});
+        let blob = new Blob([fileString], {type: 'application/json'});
         downloadUtils.downloadFile(fname, blob);
 
     }

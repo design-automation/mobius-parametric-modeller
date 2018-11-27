@@ -207,7 +207,7 @@
             <mat-icon class='icon'>print</mat-icon>
         </button>
         <!-- help button-->
-        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1">
+        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
             <mat-icon class='icon'>help</mat-icon>
         </button>
     </div>
@@ -217,7 +217,8 @@
             *ngFor="let line of data?.children; let idx=index" 
             [data]="line"
             (select)='selectChild($event, line)'
-            (delete)='deleteChild(idx)'></procedure-item>
+            (delete)='deleteChild(idx)'
+            (helpText)='emitHelpText($event)'></procedure-item>
     </div>
 
 

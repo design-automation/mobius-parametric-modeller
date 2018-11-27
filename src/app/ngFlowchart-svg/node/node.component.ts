@@ -67,7 +67,7 @@ export class NodeComponent{
         event.preventDefault();
         event.stopPropagation();
         let pos = this.node.position;
-        var data: any;
+        let data: any;
         if (portType == 'input'){
             data = this.node.input;
             pos = [pos.x + this.inputOffset[0], pos.y + this.inputOffset[1]];

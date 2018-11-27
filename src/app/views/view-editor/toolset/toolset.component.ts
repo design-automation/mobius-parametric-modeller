@@ -5,12 +5,13 @@ import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
 import * as Modules from '@modules';
-import { ModuleAware } from '@shared/decorators';
+import { ModuleAware, ModuleDocAware } from '@shared/decorators';
 
 
 const keys = Object.keys(ProcedureTypes);
 
 @ModuleAware
+@ModuleDocAware
 @Component({
   selector: 'toolset',
   templateUrl: './toolset.component.html',
@@ -69,8 +70,8 @@ export class ToolsetComponent{
                 // parse the flowchart
                 const fl = CircularJSON.parse(reader.result.toString()).flowchart;
                 // create function
-                var funcs = [];
-                var func: IFunction = <IFunction>{
+                let funcs = [];
+                let func: IFunction = <IFunction>{
                     module: <IFlowchart>{
                         name: fl.name,
                         nodes: fl.nodes,
@@ -116,16 +117,15 @@ export class ToolsetComponent{
     }
 
     toggleAccordion(id: string){
-        var acc = document.getElementById(id);
-        //var acc = document.getElementsByClassName("accordion");
+        let acc = document.getElementById(id);
+        // acc = document.getElementsByClassName("accordion");
         acc.classList.toggle("active");
-        var panel = <HTMLElement>acc.nextElementSibling;
+        let panel = <HTMLElement>acc.nextElementSibling;
         if (panel.style.display === "block") {
             panel.style.display = "none";
         } else {
             panel.style.display = "block";
         }
-        
     }
 
 }

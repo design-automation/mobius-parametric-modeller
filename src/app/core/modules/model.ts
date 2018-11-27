@@ -48,7 +48,7 @@ export function set(__model__: any[], var_value: any): number[]{
             return [i]
         }
     }
-    var obj = {  
+    let obj = {  
         "value": var_value,
         "properties":{}
     };

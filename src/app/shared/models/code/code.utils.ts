@@ -68,7 +68,7 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Function:
-                var argVals = [];
+                let argVals = [];
                 for (let arg of args.slice(1)){
                     if (arg.name == _parameterTypes.input) { 
                         let val = arg.value || arg.default; 
@@ -183,7 +183,7 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any{
-        var result = Model.New();
+        let result = Model.New();
         for (let model of models){
             Model.Merge(result, model)
         }
@@ -193,7 +193,7 @@ export class CodeUtils {
     
     
     static getInputValue(inp: IPortInput, node: INode): Promise<string>{
-        var input: any;
+        let input: any;
         if (node.type == 'start' || inp.edges.length == 0){
             input = Model.New();
         } else {
@@ -221,7 +221,7 @@ export class CodeUtils {
         const varsDefined: string[] = [];
         // input initializations
         if (addProdArr){
-            var input = await CodeUtils.getInputValue(node.input, node);
+            let input = await CodeUtils.getInputValue(node.input, node);
             node.input.value = input;
         }
 
@@ -232,8 +232,8 @@ export class CodeUtils {
         /*
         codeStr.push(`
 function wait(ms){
-    var start = new Date().getTime();
-    var end = start;
+     start = new Date().getTime();
+     end = start;
     while(end < start + ms) {
         end = new Date().getTime();
     }

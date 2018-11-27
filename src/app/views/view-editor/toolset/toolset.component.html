@@ -29,11 +29,11 @@
                     (click)='add_function(fn)'> 
                         {{fn.name}} 
                     </li>
-                    <span class="tooltiptext" *ngIf='ModulesDoc[mod.module] && ModulesDoc[mod.module][fn.name]'>
-                        <p class='funcDesc'>{{ModulesDoc[mod.module][fn.name].summary||ModulesDoc[mod.module][fn.name].description}}</p>
-                        <p *ngIf='ModulesDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
-                        <p class='paramP' *ngFor='let param of ModulesDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                        <p *ngIf='ModulesDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModulesDoc[mod.module][fn.name].returns}}</p>
+                    <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
+                        <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
+                        <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
+                        <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                        <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
                     </span>
                 </div>
             </ul>

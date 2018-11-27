@@ -13,6 +13,7 @@ export class ViewEditorComponent{
     @Input() node: INode;
     @Output() imported = new EventEmitter();
     @Output() delete_Function = new EventEmitter();
+    @Output() helpText = new EventEmitter();
     copiedProd: IProcedure[];
 
     private copyCheck: boolean = false;
@@ -49,7 +50,7 @@ export class ViewEditorComponent{
       if (!this.copyCheck || document.activeElement.nodeName == "INPUT") return;
       console.log('cutting', this.node.state.procedure)
       this.copiedProd = this.node.state.procedure;
-      var parentArray;
+      let parentArray;
       for (let prod of this.copiedProd){
         if (prod.parent){
           parentArray = prod.parent.children;
@@ -123,6 +124,10 @@ export class ViewEditorComponent{
                 break;
             }
         }
+    }
+
+    emitHelpText(event){
+      this.helpText.emit(event)
     }
 
 }

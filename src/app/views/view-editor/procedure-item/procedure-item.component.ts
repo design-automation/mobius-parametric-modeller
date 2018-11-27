@@ -1,7 +1,7 @@
 import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy} from '@angular/core';
 
 import { IProcedure, ProcedureTypes } from '@models/procedure';
-import { ProcedureTypesAware } from '@shared/decorators';
+import { ProcedureTypesAware, ModuleDocAware } from '@shared/decorators';
 
 import { _parameterTypes} from '@modules';
 
@@ -10,6 +10,7 @@ const ctx = canvas.getContext("2d");
 ctx.font = "14px Arial";        
 
 @ProcedureTypesAware
+@ModuleDocAware
 @Component({
     selector: 'procedure-item',
     templateUrl: './procedure-item.component.html', 
@@ -21,6 +22,7 @@ export class ProcedureItemComponent{
     @Output() select = new EventEmitter();
     @Output() copied = new EventEmitter();
     @Output() pasteOn = new EventEmitter();
+    @Output() helpText = new EventEmitter();
 
     private model = _parameterTypes.model;
     private constList = _parameterTypes.constList;
@@ -61,6 +63,20 @@ export class ProcedureItemComponent{
 
     haveHelpText(){
         return (this.data.type == ProcedureTypes.Function || this.data.type ==  ProcedureTypes.Imported)
+    }
+
+    emitHelpText($event){
+        if ($event) {
+            this.helpText.emit($event)
+            return;
+        }
+        try{
+            // @ts-ignore
+            this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name])
+        } catch(ex) {
+            this.helpText.emit('error')
+        }
+        
     }
 
     // stopPropagation to prevent cut/paste with input box focused

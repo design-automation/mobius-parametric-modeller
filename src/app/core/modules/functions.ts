@@ -58,6 +58,8 @@ export function __merge__(model1: any, model2: any): any {
  */
 export function addData(__model__: any, model_data: any): any {
     // TO DO use the merge function to keep existing data
-    __model__ = model_data;
+    for (let i in model_data){
+        __model__[i] = model_data[i]
+    }
     
 }

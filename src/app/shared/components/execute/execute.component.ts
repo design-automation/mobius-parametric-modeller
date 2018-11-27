@@ -166,7 +166,8 @@ export class ExecuteComponent {
             node.output.value = result;
             if (node.type == 'start'){
                 for (let constant in params["constants"]){
-                    this.globalVars += `const ${constant} = ${params["constants"][constant]};\n`;
+                    let constString = JSON.stringify(params["constants"][constant])
+                    this.globalVars += `const ${constant} = ${constString};\n`;
                 }
                 this.globalVars += '\n';
             }

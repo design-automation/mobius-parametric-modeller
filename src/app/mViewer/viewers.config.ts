@@ -1,7 +1,7 @@
 import { IView } from './view.interface'; 
 // Step-1: Add new ViewerComponet here
 import { TextViewerComponent } from './viewers';
-import { GSViewerComponent } from './viewers/gs-viewer/gs-viewer.component';
+import { GSViewerComponent } from './viewers/gsviewer/gsviewer.component';
 import { ConsoleViewerComponent } from './viewers/console-viewer.component';
 //import { procedureHelpComponent } from './viewers/procedure-help.component';
 
@@ -18,8 +18,9 @@ export const VIEWER_ARR = [
 ];
 
 export const Viewers: IView[] = [
+    { name: 'gsviewer', icon: undefined, component: GSViewerComponent },
     { name: 'Summary', icon: undefined, component: TextViewerComponent },
-    { name: 'gs-viewer', icon: undefined, component: GSViewerComponent },
+    
     { name: 'Console', icon: undefined, component: ConsoleViewerComponent },
     //{ name: 'Help', icon: undefined, component: procedureHelpComponent },
     // { name: 'json-viewer', icon: undefined, component: JSONViewerComponent },

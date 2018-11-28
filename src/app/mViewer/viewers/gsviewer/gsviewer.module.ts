@@ -2,12 +2,9 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AngularSplitModule } from 'angular-split';
 import {MatSliderModule } from '@angular/material/slider';
-import { GSViewerComponent } from './gs-viewer.component';
+import { GSViewerComponent } from './gsviewer.component';
 import { ViewerComponent } from './viewer/viewer.component';
-import { SettingComponent } from './setting/setting.component';
-import { ToolwindowComponent } from './toolwindow/toolwindow.component';
 import { DataService } from './data/data.service';
-import { GroupsComponent } from './toolwindow/groups.component';
 import { NgxPaginationModule} from 'ngx-pagination';
 import { MatExpansionModule} from '@angular/material/expansion';
 import { BrowserAnimationsModule ,NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -30,10 +27,7 @@ import {MatSortModule} from '@angular/material/sort';
 			 ],
     exports: [ GSViewerComponent ],
     declarations: [GSViewerComponent,
-    			ViewerComponent,
-			    SettingComponent,
-			    ToolwindowComponent,
-			    GroupsComponent],
+    			ViewerComponent],
     providers: [DataService],
 })
 export class GSViewer {

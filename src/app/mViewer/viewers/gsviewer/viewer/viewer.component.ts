@@ -1,7 +1,6 @@
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import { AngularSplitModule } from 'angular-split';
-import { SettingComponent } from '../setting/setting.component';
 import * as gs from "gs-json";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {NgxPaginationModule} from 'ngx-pagination';
@@ -13,7 +12,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
 })
 export class ViewerComponent extends DataSubscriber implements OnInit {
   
-  _model: gs.IModel;
+  _model: any;
   scene: THREE.Scene;
   renderer: THREE.WebGLRenderer;
   camera: THREE.PerspectiveCamera;
@@ -114,6 +113,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
   //
   notify(message: string): void{
     if(message == "model_update" && this.scene){
+
       this.updateModel();
     }
   }
@@ -227,7 +227,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
   // todo: optimize
   // 
   updateModel(): void{
-    this._model = this.dataService.getGsModel(); 
+    this._model = this.dataService.getModel(); 
     if( !this._model || !this.scene ){
       console.warn("Model or Scene not defined.");
       this._modelshow=false;
@@ -236,54 +236,178 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     try{
       this._updatemodel=true;
       this._modelshow=true;
-      this.scene_and_maps= this.dataService.getscememaps();
-      const scene_data = this.scene_and_maps.scene;
-      this.clearScene();
-      let loader = new THREE.ObjectLoader();
-      // loading data
-      let objectData = loader.parse( scene_data );
-      this.seVisible=false;
-      this.imVisible=false;
-      this.LineNo=0;
-      // preprocessing
-      if( objectData.children!==undefined){
-        var radius=0;
-        for(var i=0;i< objectData.children.length;i++){
-          let chd = objectData.children[i];
-          //chd["material"].needsUpdate=true;
-          chd["material"].transparent=true;
-          chd["material"].blending=1;
-          if( chd.name==="All faces"||chd.name==="All wires"||chd.name==="All edges"||chd.name==="All vertices"||
-            chd.name==="Other lines"||chd.name==="All points"){
-              chd["material"].transparent=false;
-              chd["geometry"].computeVertexNormals();
-              chd["geometry"].computeBoundingBox();
-              chd["geometry"].computeBoundingSphere();
-              if(chd.name==="All points"){
-                this.center=chd["geometry"].boundingSphere.center;
-              }
-              if(chd.name==="All edges"){
-                this.basicMat=chd["material"].color;
-              }else if(chd.name==="Other lines"){
-                this.basicMat=chd["material"].color;
-              }
-              if(chd.type==="LineSegments"&&chd["geometry"].index.count!==undefined){
-                this.LineNo=this.LineNo+chd["geometry"].index.count;
-              }
-          }
-          if(chd["geometry"]!=undefined&&chd["geometry"].boundingSphere.radius!==null){
-            if(chd["geometry"].boundingSphere.radius>radius){
-              radius=chd["geometry"].boundingSphere.radius;
-              this.center=chd["geometry"].boundingSphere.center;
-            }
-          }
+      console.log("MODEL LOADED")
+      console.debug(this._model)
+
+      var geometry = new THREE.BufferGeometry();
+    var normals = [];
+    var colors = [];
+    
+    const positions = this._model.attributes.positions;
+    const positions_values=positions.values;
+    const positions_keys=positions.keys;
+    let positions_ = []
+    positions_keys.forEach((v,k)=>{
+      positions_.push(positions_values[v])
+    });
+    const positions_flat = [].concat(...positions_);
+
+
+
+    const coordinates =this._model.attributes.positions.filter(attr=>attr.name==='coordinates');
+
+    const triangles=this._model.topology.triangles;
+    const triangles_flat = [].concat(...triangles);
+
+
+    const triangles_flat_values=coordinates.values;
+    const triangles_flat_keys=coordinates.keys;
+    let triangles_flat_ = []
+    triangles_flat_keys.forEach((v,k)=>{
+      triangles_flat_.push(triangles_flat_values[v])
+    });
+    const triangles_flat_coords = [].concat(...triangles_flat_);
+
+
+    const vertices = this._model.topology.vertices;
+    let edges = this._model.topology.edges
+
+    // remove duplicated edges
+    let edges_sorted = edges.map(x => x.sort()).sort();
+
+    var edges_unique = [];
+
+    for (var i = 1; i < edges_sorted.length; i++){
+      if (JSON.stringify(edges_sorted[i]) != JSON.stringify(edges_sorted[i-1])){
+        edges_unique.push(edges_sorted[i]);
         }
-      }
-      // setting controls
-      this.controls.target.set(this.center.x,this.center.y,this.center.z);
+    }
+
+
+    const edges_flat = [].concat(...edges);
+    let edges_flat_coords = []
+    edges_flat.forEach((v,k)=>{
+      edges_flat_coords.push(coordinates[vertices[v]])
+    });
+
+
+    let attr_normal = this._model.attributes.vertices.filter(attr=>attr.name==='normal')
+
+    const normal_values=attr_normal[0].values;
+    const normal_keys=attr_normal[0].keys;
+    let normals_ = []
+    normal_keys.forEach((v,k)=>{
+      normals_.push(normal_values[v])
+    });
+    const normals_flat = [].concat(...normals_);
+
+    let attr_color = this._model.attributes.vertices.filter(attr=>attr.name==='color')
+
+    const color_values=attr_color[0].values;
+    const color_keys=attr_color[0].keys;
+    let colors_ = []
+    color_keys.forEach((v,k)=>{
+      colors_.push(color_values[v])
+    });
+    const colors_flat = [].concat(...colors_);
+    
+
+    colors = [0,0,1,1,0,1,0,1,0,1,1,1]
+    
+    for (let i = 0; i < coordinates.length; i++ ){
+      normals.push(0,0,0)
+      colors.push(0,0,1)
+    }
+
+    
+    // console.log(colors)
+    
+  
+    // tri
+    geometry.setIndex( triangles_flat_coords );
+    geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions_flat, 3 ) );
+    geometry.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
+    geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+    var material = new THREE.MeshPhongMaterial( {
+      specular: 0xffffff, shininess: 0,
+      side: THREE.DoubleSide, vertexColors: THREE.VertexColors,
+      // wireframe:true
+    } );
+    let mesh = new THREE.Mesh( geometry, material );
+    this.scene.add( mesh );
+
+   // lines
+   var geometry3 = new THREE.BufferGeometry();
+   geometry3.setIndex( edges_flat_coords );
+   geometry3.addAttribute( 'position', new THREE.Float32BufferAttribute( positions_flat, 3 ) );
+   geometry3.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
+   geometry3.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+   var material3 = new THREE.LineBasicMaterial( {
+    color: 0xffffff,
+    linewidth: 1,
+    linecap: 'round', //ignored by WebGLRenderer
+    linejoin:  'round' //ignored by WebGLRenderer
+  } );
+   let lines = new THREE.LineSegments( geometry3, material3 );
+   this.scene.add( lines );
+
+    // points
+    var geometry2 = new THREE.BufferGeometry();
+    geometry2.addAttribute( 'position', new THREE.Float32BufferAttribute( positions_flat, 3 ) );
+    geometry2.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+    geometry2.computeBoundingSphere();
+    //
+    var material2 = new THREE.PointsMaterial( { size: 0.1, vertexColors: THREE.VertexColors } );
+    let mesh2 = new THREE.Points( geometry2, material2 );
+    this.scene.add( mesh2 );
+      //todo: Change to new viewer
+      // const scene_data = this._model.scene;
+      // this.clearScene();
+      // let loader = new THREE.ObjectLoader();
+      // // loading data
+      // let objectData = loader.parse( scene_data );
+      // this.seVisible=false;
+      // this.imVisible=false;
+      // this.LineNo=0;
+      // // preprocessing
+      // if( objectData.children!==undefined){
+      //   var radius=0;
+      //   for(var i=0;i< objectData.children.length;i++){
+      //     let chd = objectData.children[i];
+      //     //chd["material"].needsUpdate=true;
+      //     chd["material"].transparent=true;
+      //     chd["material"].blending=1;
+      //     if( chd.name==="All faces"||chd.name==="All wires"||chd.name==="All edges"||chd.name==="All vertices"||
+      //       chd.name==="Other lines"||chd.name==="All points"){
+      //         chd["material"].transparent=false;
+      //         chd["geometry"].computeVertexNormals();
+      //         chd["geometry"].computeBoundingBox();
+      //         chd["geometry"].computeBoundingSphere();
+      //         if(chd.name==="All points"){
+      //           this.center=chd["geometry"].boundingSphere.center;
+      //         }
+      //         if(chd.name==="All edges"){
+      //           this.basicMat=chd["material"].color;
+      //         }else if(chd.name==="Other lines"){
+      //           this.basicMat=chd["material"].color;
+      //         }
+      //         if(chd.type==="LineSegments"&&chd["geometry"].index.count!==undefined){
+      //           this.LineNo=this.LineNo+chd["geometry"].index.count;
+      //         }
+      //     }
+      //     if(chd["geometry"]!=undefined&&chd["geometry"].boundingSphere.radius!==null){
+      //       if(chd["geometry"].boundingSphere.radius>radius){
+      //         radius=chd["geometry"].boundingSphere.radius;
+      //         this.center=chd["geometry"].boundingSphere.center;
+      //       }
+      //     }
+      //   }
+      // }
+      // // setting controls
+      // this.controls.target.set(this.center.x,this.center.y,this.center.z);
       this.controls.update();
-      // adding the object to the scene
-      this.scene.add(objectData);  
+      // // adding the object to the scene
+      // this.scene.add(objectData);  
       this.render(this);
       this.dataService.getpoints=[];
     }
@@ -1075,94 +1199,6 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
         }
       }
 
-      /*if(this.scenechildren[0].name === "All vertices"){
-        var distance:number=intersects[ 0 ].distanceToRay;
-        var index:number=intersects[ 0 ].index;
-        for(var i=1;i<intersects.length;i++){
-          if(distance>intersects[ i ].distanceToRay){
-            distance=intersects[ i ].distanceToRay;
-            index=intersects[ i ].index;
-          }
-        }
-        var id:string=this._model.getGeom().getAllPoints()[index].getLabel();
-        var label:string="";
-        var getpoints:Array<any>;
-        var getpoints=this.dataService.getpoints;
-        var pointname=this.dataService.pointname;
-
-        /*var path: gs.ITopoPathData = this.scene_and_maps.vertices_map.get(index);
-        var vertices: gs.IVertex = this._model.getGeom().getTopo(path) as gs.IVertex;
-        var id: string = "";
-        var attributevertix=this.dataService.getattrvertix();*/
-        //var vertices: gs.IVertex= this._model.getGeom().getTopo(path) as gs.IVertex;
-        //var id:string=this._model.getGeom().getAllPoints()[index].getLabel();
-        //console.log(vertices.getPoint().getPosition());
-
-        /*var label:string="";
-        var attributevertix=this.dataService.getattrvertix();
-        console.log(attributevertix);
-        for(var i=0;i<attributevertix.length;i++){
-          if(vertices.getLabel()===attributevertix[i].vertixlabel){
-            id=attributevertix[i].pointid;
-            label=vertices.getLabel();
-            break;
-          }
-        }
-        console.log(id);
-        if(id!==""){
-          for(var i=0;i<attributevertix.length;i++){
-            if(id===attributevertix[i].pointid){
-              var str=attributevertix[i].vertixlabel;
-              if(label!==str) label=label+"<br/>"+str;
-            }
-          }
-        }*/
-        /*const verts_xyz: gs.XYZ = vertices.getPoint().getPosition();//this._model.getGeom().getAllPoints()[index].getPosition();//vertices.getPoint().getPosition();
-        console.log(verts_xyz);
-        if(this.textlabels.length===0) {
-          var geometry=new THREE.Geometry();
-          geometry.vertices.push(new THREE.Vector3(verts_xyz[0],verts_xyz[1],verts_xyz[2]));
-          var pointsmaterial=new THREE.PointsMaterial( { color:0x00ff00,size:1} );
-          //pointsmaterial.sizeAttenuation=false;
-          if(this.dataService.pointsize!==undefined){
-            pointsmaterial.size=this.dataService.pointsize;
-          }
-          const points = new THREE.Points( geometry, pointsmaterial);
-          points.userData.id=id;
-          //points["material"].needsUpdate=true;
-          points.name="selects";
-          this.scene.add(points);
-          this.addTextLabel(label,verts_xyz, id,id,"All points");
-        }else{
-          for(var j=0;j<this.scene.children.length;j++){
-            if(id===this.scene.children[j].userData.id){
-              select=true;
-              this.scene.remove(this.scene.children[j]);
-            }
-          }
-          for(var j=0;j<this.textlabels.length;j++){
-              if(id===this.textlabels[j]["id"]){
-                select=true;
-                this.removeTextLabel(this.textlabels[j]["id"]);
-              }
-          }
-          if(select==false){
-            var geometry=new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3(verts_xyz[0],verts_xyz[1],verts_xyz[2]));
-            var pointsmaterial=new THREE.PointsMaterial( { color:0x00ff00,size:1} );
-            if(this.dataService.pointsize!==undefined){
-              pointsmaterial.size=this.dataService.pointsize;
-            }
-            const points = new THREE.Points( geometry, pointsmaterial);
-            points.userData.id=id;
-            //points["material"].needsUpdate=true;
-            points.name="selects";
-            this.scene.add(points);
-            this.addTextLabel(label,verts_xyz, id,id,"All points");
-          }
-        }
-      }*/
-      
     } else {
       /*for(var i=0;i<this.dataService.sprite.length;i++){
         this.dataService.sprite[i].visible=false;
@@ -1350,272 +1386,5 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     event.stopPropagation();
     this.imVisible=!this.imVisible;
     this.dataService.imVisible=this.imVisible;
-
-
-    //console.log(this.dataService.imVisible);
-    /*for(var i=0;i<this.scene.children.length;i++){
-      if(this.scene.children[i].type!=="DirectionalLight"&&this.scene.children[i].type!=="HemisphereLight"){
-        this.scene.remove(this.scene.children[i]);
-      }
-    }*/
-    /*var mymap = L.map('map').setView([51.505, -0.09], 13);
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox.streets',
-    accessToken: 'your.mapbox.access.token'
-    }).addTo(mymap);*/
-    /*let map = L.map("map").setView([38, -77], 13);
-    console.log(map);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);*/
   }
-
-  /*getSceneChildren() {
-    var scenechildren=[];
-    var children;
-    for (var i = 0; i<this.scene.children.length; i++) {
-      if(this.scene.children[i].name=="Scene") {
-        children=this.scene.children[i].children;
-        break;
-      }
-      if(i==this.scene.children.length-1) {
-        return [];
-      }
-    }
-    for(var i=0;i<children.length;i++){
-      for(var j=0;j<children[i].children.length;j++){
-        if(children[i].children[j].type==="Mesh"||children[i].children[j].type==="LineSegments"||children[i].children[j].type==="LineLoop"){
-          scenechildren.push(children[i].children[j]);
-        }
-      }
-    }
-    return scenechildren;
-  }*/
-  //One Mesh
-  /*getSceneChildren() {
-    var scenechildren=[];
-    var children;
-    for (var i = 0; i<this.scene.children.length; i++) {
-      if(this.scene.children[i].name=="Scene") {
-        children=this.scene.children[i].children;
-        break;
-      }
-      if(i==this.scene.children.length-1) {
-        return [];
-      }
-    }
-    for(var i=0;i<children.length;i++){
-        if(children[i].type==="Mesh"||children[i].type==="LineSegments"||children[i].type==="LineLoop"){
-          scenechildren.push(children[i]);
-        }
-      }
-    return scenechildren;
-  }*/
-
-
-
-
-
-  /*render():void {
-    let self = this;
-    (function render(){
-        var scenechildren=self.getSceneChildren();
-        console.log(scenechildren);
-        self.raycaster.setFromCamera(self.mouse,self.camera);
-        var intersects = self.raycaster.intersectObjects(scenechildren);
-        for (var i = 0; i < scenechildren.length; i++) {
-          var currObj=scenechildren[i];
-          if(self.dataService.getSelectingIndex(currObj.uuid)<0) {
-            if ( intersects.length > 0 &&  intersects[ 0 ].object.uuid==currObj.uuid) {
-              currObj.material=self.mousehovMat;
-            } else {
-              currObj.material=self.basicMat;
-            }
-          }
-        }
-      requestAnimationFrame(render);
-      self.renderer.render(self.scene, self.camera);
-    }());
-    this.renderer.render( this.scene, this.camera );
-  }
-*/
-  /*sprite( message: string, parameters?: any ): THREE.Sprite{
-
-    if ( parameters === 2 ) parameters = {};
-    var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"] : "Arial";
-    var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"] : 30;
-    var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"] : 0.1;
-    var borderColor = parameters.hasOwnProperty("borderColor") ?parameters["borderColor"] : { r:0, g:0, b:0, a:1.0 };
-    var backgroundColor = parameters.hasOwnProperty("backgroundColor") ?parameters["backgroundColor"] : { r:0, g:0, b:0, a:1.0 };
-    var textColor = parameters.hasOwnProperty("textColor") ?parameters["textColor"] : { r:0, g:0, b:255, a:1.0 };
-
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
-
-    context.font = "Bold " + fontsize + "px " + fontface;
-    var metrics = context.measureText( message );
-    var textWidth = metrics.width;
-
-    context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
-    context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
-
-    context.lineWidth = borderThickness;
-
-    context.fillStyle = "rgba("+textColor.r+", "+textColor.g+", "+textColor.b+", 1.0)";
-    context.fillText( message, borderThickness, fontsize + borderThickness);
-
-    var texture = new THREE.Texture(canvas) 
-    //texture.needsUpdate = true;
-
-    var spriteMaterial = new THREE.SpriteMaterial( { map: texture, color: 0xffffff } );
-    var sprite = new THREE.Sprite( spriteMaterial );
-    return sprite;  
-  }*/
-
-  //
-  //  viewer functionality
-  //  not required for now
-  //
-  // zoomfit(){
-     
-  //   // todo: fix
-  //   document.body.style.cursor = "no-drop";
-
-  //   // enable zoom; disable everything else
-  //   this.controls.enabled = true;
-  //   this.controls.enableZoom = true;
-  //   this.controls.enableRotate = false;
-  //   this.controls.enablePan = false;
-
-  //   this.Visible="zoomfit";
-    
-  //   // repeat??
-  //   if(this.selecting.length===0){
-  //     var obj=new THREE.Object3D();
-  //     obj=this.scene;
-  //     var boxHelper = new THREE.BoxHelper(obj);
-  //     var boundingSphere=boxHelper.geometry.boundingSphere;
-  //     var center = boundingSphere.center;
-  //     var radius = boundingSphere.radius;
-  //     var fov=this.camera.fov * ( Math.PI / 180 );
-  //     var vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
-  //     vec_centre_to_pos.subVectors(this.camera.position, center);
-  //     var tmp_vec=new THREE.Vector3( Math.abs( radius / Math.sin( fov / 2 )),
-  //                                    Math.abs( radius / Math.sin( fov / 2 ) ),
-  //                                    Math.abs( radius / Math.sin( fov / 2 )));
-  //     vec_centre_to_pos.setLength(tmp_vec.length());
-  //     var perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
-  //     perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-  //     var newLookAt = new THREE.Vector3(center.x,center.y,center.z)
-  //     this.camera.position.copy(perspectiveNewPos);
-  //     this.camera.lookAt(newLookAt);
-  //     this.camera.updateProjectionMatrix();
-  //     this.controls.target.set(newLookAt.x, newLookAt.y,newLookAt.z);
-  //   }else{
-  //     var axisX,axisY,axisZ,centerX,centerY,centerZ=0;
-  //     var radius=0;
-  //     for(var i=0;i<this.selecting.length;i++){
-  //       axisX+=this.selecting[i].geometry.boundingSphere.center.x;
-  //       axisY+=this.selecting[i].geometry.boundingSphere.center.y;
-  //       axisZ+=this.selecting[i].geometry.boundingSphere.center.z;
-  //       radius=Math.max(this.selecting[i].geometry.boundingSphere.radius,radius);
-  //     }
-  //     centerX=axisX/this.scene.children[1].children.length;
-  //     centerY=axisY/this.scene.children[1].children.length;
-  //     centerY=axisY/this.scene.children[1].children.length;
-  //     var center = new THREE.Vector3(centerX,centerY,centerZ);
-  //     var fov=this.camera.fov * ( Math.PI / 180 );
-  //     var vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
-  //     vec_centre_to_pos.subVectors(this.camera.position, center);
-  //     var tmp_vec=new THREE.Vector3(Math.abs( radius / Math.sin( fov / 2 )),
-  //                                   Math.abs( radius / Math.sin( fov / 2 ) ),
-  //                                   Math.abs( radius / Math.sin( fov / 2 )));
-  //     vec_centre_to_pos.setLength(tmp_vec.length());
-  //     var perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
-  //     perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-  //     var newLookAt = new THREE.Vector3(center.x,center.y,center.z)
-  //     this.camera.position.copy(perspectiveNewPos);
-  //     this.camera.lookAt(newLookAt);
-  //     this.camera.updateProjectionMatrix();
-  //     this.controls.target.set(newLookAt.x, newLookAt.y,newLookAt.z);
-  //   }
-
-  // }
-
-  // pan(){
-    
-  //   this.camera.updateProjectionMatrix();
-
-  //   this.controls.enabled = true;
-  //   this.controls.enableZoom = false;
-  //   this.controls.enableRotate = false;
-  //   this.controls.enablePan = true;
-
-  //   //todo: remove
-  //   document.body.style.cursor = "-webkit-grab";
-  //   this.Visible="pan";
-
-  // }
-
-  // rotate(){
-  //   document.body.style.cursor = " pointer";
-
-  //   // reset controls
-  //   this.controls.enabled = true;
-  //   this.controls.enableZoom = false;
-  //   this.controls.enableRotate = true;
-  //   this.controls.enablePan = false;
-
-  //   if(this.selecting.length===0){
-  //     var centerX=0;
-  //     var centerY=0;
-  //     var centerZ=0;
-  //     for(var i=0;i<this.scene.children[1].children.length;i++){
-  //       centerX+=this.scene.children[1].children[i].children[0]["geometry"].boundingSphere.center.x;
-  //       centerY+=this.scene.children[1].children[i].children[0]["geometry"].boundingSphere.center.y;
-  //       centerZ+=this.scene.children[1].children[i].children[0]["geometry"].boundingSphere.center.z;
-  //     }
-  //     centerX=centerX/this.scene.children[1].children.length;
-  //     centerY=centerY/this.scene.children[1].children.length;
-  //     centerZ=centerZ/this.scene.children[1].children.length;
-  //     //this.controls.target.set(centerX,centerY,centerZ);
-  //   }else{
-  //     var axisX=0;
-  //     var axisY=0;
-  //     var axisZ=0;
-  //     var centerX=0;
-  //     var centerY=0;
-  //     var centerZ=0;
-  //     for(var i=0;i<this.selecting.length;i++){
-  //       axisX+=this.selecting[i].geometry.boundingSphere.center.x;
-  //       axisY+=this.selecting[i].geometry.boundingSphere.center.y;
-  //       axisZ+=this.selecting[i].geometry.boundingSphere.center.z;
-  //     }
-  //     centerX=axisX/this.scene.children[1].children.length;
-  //     centerY=axisY/this.scene.children[1].children.length;
-  //     centerZ=axisY/this.scene.children[1].children.length;
-  //     //this.controls.target.set(centerX,centerY,centerZ);
-  //   }
-
-  //   this.Visible="rotate";
-  // }
-
-  // select(event){
-  //   event.stopPropagation();
-
-  //   document.body.style.cursor = "default";
-
-  //   // reset controls
-  //   // this.controls.enabled = false;
-  //   // this.controls.enableZoom = false;
-  //   // this.controls.enableRotate = false;
-  //   // this.controls.enablePan = false;
-
-  //   this.Visible="select";
-  // }
-
-
- 
 }

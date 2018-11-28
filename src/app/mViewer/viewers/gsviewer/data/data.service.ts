@@ -13,7 +13,7 @@ export class DataService {
   private _OC: OrbitControls; 
 
   // gs-model that needs to be displayed
-  private _gsModel: gs.IModel;
+  private _model: any;
 
   // three scene 
   private _scene:  THREE.Scene;
@@ -44,13 +44,6 @@ export class DataService {
   visible:string;
   scenechildren:Array<any>=[];
   center:THREE.Vector3;
-  scenemaps:{
-          scene: gs.IThreeScene, 
-          faces_map: Map<number, gs.ITopoPathData>, 
-          wires_map: Map<number, gs.ITopoPathData>, 
-          edges_map: Map<number, gs.ITopoPathData>,
-          vertices_map: Map<number, gs.ITopoPathData>,
-          points_map: Map<number, gs.ITopoPathData>} ;
   textlabels:Array<any>=[];
   attributevertix:Array<any>;
   centerx:number;
@@ -165,16 +158,13 @@ export class DataService {
   //
   //  Getter and Setting for gs-model
   //
-  getGsModel(): gs.IModel{
-    return this._gsModel; 
+  getModel(): any{
+    return this._model; 
   }
 
-  setGsModel(model: gs.IModel){
-    this._gsModel = model;
-    if(this._gsModel!==undefined){
-      this.generateSceneMaps();
-    }
-    else{
+  setModel(model: any){
+    this._model = model;
+    if(model!==undefined){
       // remove all children from the scene
       for(var i=0;i<this._scene.children.length;i++){
         if(this._scene.children[i].type==="Scene"){
@@ -185,20 +175,7 @@ export class DataService {
     this.sendMessage("model_update");
   }
 
-  generateSceneMaps():void{
-    var scene_and_maps:any/*{
-          scene: gs.IThreeScene, 
-          faces_map: Map<number, gs.ITopoPathData>, 
-          wires_map: Map<number, gs.ITopoPathData>, 
-          edges_map: Map<number, gs.ITopoPathData>,
-          vertices_map: Map<number, gs.ITopoPathData>,
-          points_map: Map<number, gs.ITopoPathData>}*/= gs.genThreeOptModelAndMaps( this._gsModel );
-    this.scenemaps=scene_and_maps;
-  }
-  getscememaps():any{
-    return this.scenemaps;
-
-  }
+  
 
   getScene(width?: number, height?: number): THREE.Scene{
     if(width && height){
@@ -369,101 +346,4 @@ export class DataService {
  addpointname(pointname){
    this.pointname=pointname;
  }
-
-
- //To add text labels just provide label text, label position[x,y,z] and its id
-  /*addTextLabel(label, label_xyz, id,index,path) {
-    //console.log(document.getElementsByTagName("app-viewer")[0].children.namedItem("container"));
-    //let container = this.myElement.nativeElement.children.namedItem("container");
-    let container = document.getElementsByTagName("app-viewer")[0].children.namedItem("container");
-    let star = this.creatStarGeometry(label_xyz);
-    let textLabel=this.createTextLabel(label, star, id,index,path);
-    this.starsGeometry.vertices.push( star );
-    this.textlabels.push(textLabel);
-    this.pushselecting(textLabel);
-    container.appendChild(textLabel.element);
-  }
-
-  //To remove text labels just provide its id
-  removeTextLabel(id) {
-    let i=0;
-    for(i=0; i<this.textlabels.length; i++) {
-      if(this.textlabels[i].id==id) {
-        // let container = this.myElement.nativeElement.children.namedItem("container");
-        let container = document.getElementsByTagName("app-viewer")[0].children.namedItem("container");
-        container.removeChild(this.textlabels[i].element);
-        let index = this.starsGeometry.vertices.indexOf(this.textlabels[i].parent);
-        if(index !== -1) {
-          this.starsGeometry.vertices.splice(index, 1);
-        }
-        break;
-      }
-    }
-    if(i<this.textlabels.length) {
-      this.textlabels.splice(i, 1);
-      this.spliceselecting(i, 1);
-    }
-  }
-
-  creatStarGeometry(label_xyz) {
-    let star = new THREE.Vector3();
-    star.x = label_xyz[0];
-    star.y = label_xyz[1];
-    star.z = label_xyz[2];
-    return star;
-  }
-
-  createTextLabel(label, star, id,index,path) {
-    let div = this.createLabelDiv();
-    var self=this;
-    let textLabel= {
-      id: id,
-      index:index,
-      path:path,
-      element: div,
-      parent: false,
-      position: new THREE.Vector3(0,0,0),
-      setHTML: function(html) {
-        this.element.innerHTML = html;
-      },
-      setParent: function(threejsobj) {
-        this.parent = threejsobj;
-      },
-      updatePosition: function() {
-        if(parent) {
-          this.position.copy(this.parent);
-        }
-        
-        var coords2d = this.get2DCoords(this.position, this.camera);
-        this.element.style.left = coords2d.x + 'px';
-        this.element.style.top = coords2d.y + 'px';
-      },
-      get2DCoords: function(position, camera) {
-        var vector = position.project(camera);
-        vector.x = (vector.x + 1)/2 * this.width;
-        vector.y = -(vector.y - 1)/2 * this.height;
-        return vector;
-      }
-    };
-    textLabel.setHTML(label);
-    textLabel.setParent(star);
-    return textLabel;
-  }
-
-  createLabelDiv() {
-    var div=document.createElement("div");
-    div.style.color= '#00f';
-    div.style.fontFamily= '"Fira Mono", Monaco, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace';
-    div.style.margin='-5px 0 0 15px';
-    div.style.pointerEvents='none';
-    div.style.position = 'absolute';
-    div.style.width = '100';
-    div.style.height = '100';
-    div.style.top = '-1000';
-    div.style.left = '-1000';
-    div.style.textShadow="0px 0px 3px white";
-    div.style.color="black";
-    return div;
-   }
-*/
 }

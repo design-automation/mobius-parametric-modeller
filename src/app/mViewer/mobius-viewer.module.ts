@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ViewerContainerComponent } from './mobius-viewer.component';
 import { VIEWER_ARR } from './viewers.config';
 
-import { GSViewer } from './viewers/gs-viewer/gs-viewer.module';
+import { GSViewer } from './viewers/gsviewer/gsviewer.module';
 
 import {MobiusCesium} from './viewers/mobius-cesium/mobius-cesium.module';
 import { TextViewerComponent} from './viewers';

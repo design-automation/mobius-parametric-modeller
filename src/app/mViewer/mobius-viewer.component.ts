@@ -3,7 +3,6 @@ import { Component, Injector, Input,
 import { INode } from '@models/node';
 import { IView , gs_default, cesium_default} from './view.interface';
 import { Viewers } from './viewers.config';
-import * as gs from 'gs-json';
 
 @Component({
     selector: 'mviewer',

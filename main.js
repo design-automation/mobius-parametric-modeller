@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horizontal\">\r\n        <as-split-area size=\"50\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='activeView==\"publish\"' (click)='updateView(\"publish\")'>Publish</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"flowchart\"' (click)='updateView(\"flowchart\")'>Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new (create)='updateFile($event)'></file-new>\r\n                    <file-save [file]='file'></file-save>\r\n                    <file-load (loaded)='updateFile($event)'></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute [flowchart]='flowchart'></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Reset Flowchart to Default\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>Reset</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <ng-container #vc></ng-container>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area size=\"50\">\r\n            <!-- mViewer panel -->\r\n            <div class='content__panel' >\r\n                <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n\r\n    </as-split>\r\n\r\n</div>\r\n\r\n"
+module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horizontal\">\r\n        <as-split-area size=\"50\" >\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='activeView==\"publish\"' (click)='updateView(\"publish\")'>Publish</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"flowchart\"' (click)='updateView(\"flowchart\")'>Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new (create)='updateFile($event)'></file-new>\r\n                    <file-save [file]='file'></file-save>\r\n                    <file-load (loaded)='updateFile($event)'></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute [flowchart]='flowchart'></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Reset Flowchart to Default\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>Reset</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <ng-container #vc></ng-container>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area size=\"50\">\r\n            <!-- mViewer panel -->\r\n            <div class='content__viewer' >\r\n                <mviewer [data]='viewerData()'></mviewer>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n\r\n    </as-split>\r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -41,7 +41,7 @@ module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horiz
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around; }\n  .container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p {\n    margin: 0px;\n    padding: 0px; }\n  .container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n  .container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n  .container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n  .container .container__header .tab button:hover {\n      color: blue; }\n  .container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n  .container .container__header .dropmenu {\n      display: inline-flex; }\n  .container .container__content {\n    flex-grow: 1;\n    height: 0px;\n    border: 2px solid #3F4651;\n    overflow: auto; }\n  .container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n  .content__panel {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n  ul.nav {\n  margin: 0px;\n  padding: 0px; }\n  li.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n  li.link:hover {\n  background-color: gray;\n  color: white; }\n  button.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n  button.btn:hover {\n  color: blue; }\n  .active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n"
+module.exports = ".container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around; }\n  .container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p {\n    margin: 0px;\n    padding: 0px; }\n  .container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n  .container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n  .container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n  .container .container__header .tab button:hover {\n      color: blue; }\n  .container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n  .container .container__header .dropmenu {\n      display: inline-flex; }\n  .container .container__content {\n    flex-grow: 1;\n    height: 0px;\n    border: 2px solid #3F4651;\n    overflow: auto; }\n  .container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n  .content__panel {\n  background-color: gainsboro;\n  height: 95%;\n  overflow: hidden auto; }\n  .content__viewer {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n  ul.nav {\n  margin: 0px;\n  padding: 0px; }\n  li.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n  li.link:hover {\n  background-color: gray;\n  color: white; }\n  button.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n  button.btn:hover {\n  color: blue; }\n  .active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n"
 
 /***/ }),
 
@@ -75,6 +75,20 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+// @ts-ignore
+console.stdlog = console.log.bind(console);
+// @ts-ignore
+console.logs = [];
+// @ts-ignore
+console.log = function () {
+    // @ts-ignore
+    console.logs.push(Array.from(arguments));
+    // @ts-ignore
+    console.stdlog.apply(console, arguments);
+};
+/*
+
+*/
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService, injector, r) {
         this.dataService = dataService;
@@ -143,6 +157,14 @@ var AppComponent = /** @class */ (function () {
                 componentRef.instance["flowchart"] = this.flowchart;
             }
         }
+    };
+    AppComponent.prototype.viewerData = function () {
+        var node = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
+        if (!node)
+            return '';
+        if (node.type == 'output')
+            return node.input.value;
+        return node.output.value;
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('vc', { read: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"] }),
@@ -245,508 +267,54 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/core/modules/_error_msgs_dev.ts":
-/*!*************************************************!*\
-  !*** ./src/app/core/modules/_error_msgs_dev.ts ***!
-  \*************************************************/
-/*! exports provided: checkEnt, checkEntList, notEnt, notEntInList, entNotExist, mustBeEntList, entListTooFew, entInOtherModel, checkObjID, checkObj, checkObjList, checkObjsSameModel, objNotExist, objInOtherModel, objWrongType, pointNotExist, objListTooFew, objListEmpty, mustBeObjList, checkPointID, checkPoint, checkPointList, checkPointNestedList, checkPointsSameModel, pointInOtherModel, pointListEmpty, pointListTooFew, pointNestedListTooFew, pointNestedListJagged, mustBePointList, mustBePointNestedList, invalidID, mustBeIDList, checkGroup, groupNotExist, checkXYZ, xyzWrongLength, xyzInvalidData, xyzNotList, checkNum, checkPosNum, checkPosNums, checkNumListLength, argMustBeNumList, argNumListWrongLength, numMustBePos, argUndefined */
+/***/ "./src/app/core/modules/Input.ts":
+/*!***************************************!*\
+  !*** ./src/app/core/modules/Input.ts ***!
+  \***************************************/
+/*! exports provided: declare_constant */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkEnt", function() { return checkEnt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkEntList", function() { return checkEntList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "notEnt", function() { return notEnt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "notEntInList", function() { return notEntInList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entNotExist", function() { return entNotExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mustBeEntList", function() { return mustBeEntList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entListTooFew", function() { return entListTooFew; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "entInOtherModel", function() { return entInOtherModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkObjID", function() { return checkObjID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkObj", function() { return checkObj; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkObjList", function() { return checkObjList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkObjsSameModel", function() { return checkObjsSameModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objNotExist", function() { return objNotExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objInOtherModel", function() { return objInOtherModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objWrongType", function() { return objWrongType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointNotExist", function() { return pointNotExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objListTooFew", function() { return objListTooFew; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objListEmpty", function() { return objListEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mustBeObjList", function() { return mustBeObjList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPointID", function() { return checkPointID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPoint", function() { return checkPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPointList", function() { return checkPointList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPointNestedList", function() { return checkPointNestedList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPointsSameModel", function() { return checkPointsSameModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointInOtherModel", function() { return pointInOtherModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointListEmpty", function() { return pointListEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointListTooFew", function() { return pointListTooFew; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointNestedListTooFew", function() { return pointNestedListTooFew; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointNestedListJagged", function() { return pointNestedListJagged; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mustBePointList", function() { return mustBePointList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mustBePointNestedList", function() { return mustBePointNestedList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "invalidID", function() { return invalidID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mustBeIDList", function() { return mustBeIDList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkGroup", function() { return checkGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "groupNotExist", function() { return groupNotExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkXYZ", function() { return checkXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xyzWrongLength", function() { return xyzWrongLength; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xyzInvalidData", function() { return xyzInvalidData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xyzNotList", function() { return xyzNotList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkNum", function() { return checkNum; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPosNum", function() { return checkPosNum; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPosNums", function() { return checkPosNums; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkNumListLength", function() { return checkNumListLength; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "argMustBeNumList", function() { return argMustBeNumList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "argNumListWrongLength", function() { return argNumListWrongLength; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numMustBePos", function() { return numMustBePos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "argUndefined", function() { return argUndefined; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declare_constant", function() { return declare_constant; });
 /**
- * Objects are a type of entity. They consist of conics, polylines, polymeshes, planes and rays.
+ * Declare a new constant for the input node
+ * @summary Declare new constant
  *
- * Objects are formed by a combination of topologies. More information can be found on the page for topo.
+ * @param {JSON} __constList__  List of constants to be added.
+ * @param {string} const_name  Name of the constant.
+ * @param {any} __input__  Value of the constant.
+ *
+ * @returns Void
  */
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
+function declare_constant(__constList__, const_name, __input__) {
+    __constList__[const_name] = __input__;
+}
 
-//  ===============================================================================================================
-//  Error messages for end users ====================================================================================================
-//  ===============================================================================================================
-// Entities ====================================================================================================
-function checkEnt(ent) {
-    if (!(ent instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Ent"])) {
-        notEnt();
-    }
-    if (!ent.exists()) {
-        entNotExist();
-    }
-    return ent.getModel();
-}
-function checkEntList(ents, min_len) {
-    var e_1, _a;
-    if (!Array.isArray(ents)) {
-        mustBeEntList();
-    }
-    if (ents.length < min_len) {
-        objListTooFew();
-    }
-    if (!(ents[0] instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Ent"])) {
-        notEntInList();
-    }
-    var model = ents[0].getModel();
-    try {
-        for (var ents_1 = __values(ents), ents_1_1 = ents_1.next(); !ents_1_1.done; ents_1_1 = ents_1.next()) {
-            var ent = ents_1_1.value;
-            if (!(ent instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Ent"])) {
-                notEntInList();
-            }
-            if (!ent.exists()) {
-                entNotExist();
-            }
-            if (ent.getModel() !== model) {
-                entInOtherModel();
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (ents_1_1 && !ents_1_1.done && (_a = ents_1.return)) _a.call(ents_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return model;
-}
-function notEnt() {
-    throw new Error("The argument must be a point or object.");
-}
-function notEntInList() {
-    throw new Error("One of the items in the list was neither a point nor an object.");
-}
-function entNotExist() {
-    throw new Error("Point or object does not exist. It was probably deleted.");
-}
-function mustBeEntList() {
-    throw new Error("A list of objects and/or points must be given.");
-}
-function entListTooFew() {
-    throw new Error("The list conatins too few objects and/or points.");
-}
-function entInOtherModel() {
-    throw new Error("Entity is in a different model.");
-}
-// Objects ====================================================================================================
-function checkObjID(model, obj_id, obj_tye) {
-    var obj = model.getGeom().getObj(obj_id);
-    if (!obj.exists()) {
-        objNotExist();
-    }
-    if (obj.getModel() !== model) {
-        objInOtherModel();
-    }
-    if (obj_tye !== undefined) {
-        if (obj.getObjType() !== obj_tye) {
-            objWrongType();
-        }
-    }
-    return obj;
-}
-function checkObj(obj, obj_tye) {
-    if (!obj.exists()) {
-        objNotExist();
-    }
-    if (obj_tye !== undefined) {
-        if (obj.getObjType() !== obj_tye) {
-            objWrongType();
-        }
-    }
-    return obj.getModel();
-}
-function checkObjList(objs, min_len, obj_tye) {
-    var e_2, _a;
-    if (!Array.isArray(objs)) {
-        mustBeObjList();
-    }
-    if (objs.length < min_len) {
-        objListTooFew();
-    }
-    var model = objs[0].getModel();
-    if (model === undefined) {
-        mustBeObjList();
-    }
-    try {
-        for (var objs_1 = __values(objs), objs_1_1 = objs_1.next(); !objs_1_1.done; objs_1_1 = objs_1.next()) {
-            var obj = objs_1_1.value;
-            if (!obj.exists()) {
-                objNotExist();
-            }
-            if (obj.getModel() !== model) {
-                objInOtherModel();
-            }
-            if (obj_tye !== undefined) {
-                if (obj.getObjType() !== obj_tye) {
-                    objWrongType();
-                }
-            }
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (objs_1_1 && !objs_1_1.done && (_a = objs_1.return)) _a.call(objs_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    return model;
-}
-function checkObjsSameModel(objs) {
-    var e_3, _a;
-    if (!Array.isArray(objs)) {
-        mustBeObjList();
-    }
-    var model = objs[0].getModel();
-    try {
-        for (var objs_2 = __values(objs), objs_2_1 = objs_2.next(); !objs_2_1.done; objs_2_1 = objs_2.next()) {
-            var obj = objs_2_1.value;
-            if (obj.getModel() !== model) {
-                objInOtherModel();
-            }
-        }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (objs_2_1 && !objs_2_1.done && (_a = objs_2.return)) _a.call(objs_2);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-}
-function objNotExist() {
-    throw new Error("Object does not exist. It was probably deleted.");
-}
-function objInOtherModel() {
-    throw new Error("Object is in a different model.");
-}
-function objWrongType() {
-    throw new Error("Object is of wrong type.");
-}
-function pointNotExist() {
-    throw new Error("Point does not exist. It was probably deleted.");
-}
-function objListTooFew() {
-    throw new Error("The list conatins too few objects.");
-}
-function objListEmpty() {
-    throw new Error("The list of objects was empty.");
-}
-function mustBeObjList() {
-    throw new Error("A list of objects must be given.");
-}
-// Points ====================================================================================================
-function checkPointID(model, point_id) {
-    var point = model.getGeom().getPoint(point_id);
-    if (!point.exists()) {
-        pointNotExist();
-    }
-    if (point.getModel() !== model) {
-        pointInOtherModel();
-    }
-    return point;
-}
-function checkPoint(point) {
-    if (!point.exists()) {
-        objNotExist();
-    }
-    return point.getModel();
-}
-function checkPointList(points, min_len) {
-    var e_4, _a;
-    if (!Array.isArray(points)) {
-        mustBePointList();
-    }
-    if (points.length < min_len) {
-        pointListTooFew();
-    }
-    var model = points[0].getModel();
-    try {
-        for (var points_1 = __values(points), points_1_1 = points_1.next(); !points_1_1.done; points_1_1 = points_1.next()) {
-            var point = points_1_1.value;
-            if (!point.exists()) {
-                pointNotExist();
-            }
-            if (point.getModel() !== model) {
-                pointInOtherModel();
-            }
-        }
-    }
-    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-    finally {
-        try {
-            if (points_1_1 && !points_1_1.done && (_a = points_1.return)) _a.call(points_1);
-        }
-        finally { if (e_4) throw e_4.error; }
-    }
-    return model;
-}
-function checkPointNestedList(points, min_len1, min_len2) {
-    var e_5, _a, e_6, _b;
-    if (!Array.isArray(points)) {
-        mustBePointNestedList();
-    }
-    var list_len1 = points.length;
-    if (list_len1 < min_len1) {
-        pointNestedListTooFew();
-    }
-    var list_len2 = points[0].length;
-    if (list_len2 < min_len2) {
-        pointListTooFew();
-    }
-    var model = points[0][0].getModel();
-    try {
-        for (var points_2 = __values(points), points_2_1 = points_2.next(); !points_2_1.done; points_2_1 = points_2.next()) {
-            var point_list = points_2_1.value;
-            if (!Array.isArray(point_list)) {
-                mustBePointList();
-            }
-            if (point_list.length < min_len2) {
-                pointListTooFew();
-            }
-            try {
-                for (var point_list_1 = __values(point_list), point_list_1_1 = point_list_1.next(); !point_list_1_1.done; point_list_1_1 = point_list_1.next()) {
-                    var point = point_list_1_1.value;
-                    if (!point.exists()) {
-                        pointNotExist();
-                    }
-                    if (point.getModel() !== model) {
-                        pointInOtherModel();
-                    }
-                }
-            }
-            catch (e_6_1) { e_6 = { error: e_6_1 }; }
-            finally {
-                try {
-                    if (point_list_1_1 && !point_list_1_1.done && (_b = point_list_1.return)) _b.call(point_list_1);
-                }
-                finally { if (e_6) throw e_6.error; }
-            }
-        }
-    }
-    catch (e_5_1) { e_5 = { error: e_5_1 }; }
-    finally {
-        try {
-            if (points_2_1 && !points_2_1.done && (_a = points_2.return)) _a.call(points_2);
-        }
-        finally { if (e_5) throw e_5.error; }
-    }
-    return model;
-}
-function checkPointsSameModel(points) {
-    var e_7, _a;
-    if (!Array.isArray(points)) {
-        mustBePointList();
-    }
-    var model = points[0].getModel();
-    try {
-        for (var points_3 = __values(points), points_3_1 = points_3.next(); !points_3_1.done; points_3_1 = points_3.next()) {
-            var point = points_3_1.value;
-            if (point.getModel() !== model) {
-                pointInOtherModel();
-            }
-        }
-    }
-    catch (e_7_1) { e_7 = { error: e_7_1 }; }
-    finally {
-        try {
-            if (points_3_1 && !points_3_1.done && (_a = points_3.return)) _a.call(points_3);
-        }
-        finally { if (e_7) throw e_7.error; }
-    }
-}
-function pointInOtherModel() {
-    throw new Error("Point is in a different model.");
-}
-function pointListEmpty() {
-    throw new Error("The list of points was empty.");
-}
-function pointListTooFew() {
-    throw new Error("The list of points did not contain enough points.");
-}
-function pointNestedListTooFew() {
-    throw new Error("The list did not contain enough points lists.");
-}
-function pointNestedListJagged() {
-    throw new Error("The lists of points must all be of equal length.");
-}
-function mustBePointList() {
-    throw new Error("A list of points must be given.");
-}
-function mustBePointNestedList() {
-    throw new Error("A list of lists of points must be given.");
-}
-// IDs ====================================================================================================
-function invalidID() {
-    throw new Error("The ID is invalid. It must be an integer number.");
-}
-function mustBeIDList() {
-    throw new Error("A list of IDs must be given.");
-}
-// GROUPS ====================================================================================================
-function checkGroup(model, group_name) {
-    var group = model.getGroup(group_name);
-    if (group === undefined) {
-        groupNotExist();
-    }
-    return group;
-}
-function groupNotExist() {
-    throw new Error("Group does not exist.");
-}
-// XYZ ====================================================================================================
-function checkXYZ(xyz) {
-    if (xyz === undefined) {
-        argUndefined();
-    }
-    if (!Array.isArray(xyz)) {
-        xyzNotList();
-    }
-    if (xyz.length !== 3) {
-        xyzWrongLength();
-    }
-    if (isNaN(xyz[0]) || isNaN(xyz[1]) || isNaN(xyz[2])) {
-        xyzInvalidData();
-    }
-}
-function xyzWrongLength() {
-    throw new Error("XYZ list is wrong length. It should consist of three numbers.");
-}
-function xyzInvalidData() {
-    throw new Error("XYZ list contains invalid data. It should consist of three numbers.");
-}
-function xyzNotList() {
-    throw new Error("XYZ list must be a list of three numbers.");
-}
-// Angles ====================================================================================================
-// export function checkAngles(angles: [number, number]):void {
-//     if (angles === undefined) {argUndefined();}
-//     if (angles.length !== 2 ) {anglesWrongLength();}
-//     if (isNaN(angles[0]) || isNaN(angles[1])) {anglesInvalidData();}
-//     if (angles[0] < 0 || angles[0] > 360) {anglesInvalidData();}
-//     if (angles[1] < 0 || angles[1] > 360) {anglesInvalidData();}
-// }
-// export function anglesWrongLength():void {
-//     throw new Error("Angles list is wrong length. It should consist of two numbers between 0 and 360.");
-// }
-// export function anglesInvalidData():void {
-//     throw new Error("Angles list contains invalid data. It should consist of two numbers between 0 and 360.");
-// }
-// Numbers ====================================================================================================
-function checkNum(x) {
-    if (x === undefined) {
-        argUndefined();
-    }
-}
-function checkPosNum(x) {
-    if (x === undefined) {
-        argUndefined();
-    }
-    if (x < 0) {
-        numMustBePos();
-    }
-}
-function checkPosNums(nums) {
-    var e_8, _a;
-    if (nums === undefined) {
-        argUndefined();
-    }
-    try {
-        for (var nums_1 = __values(nums), nums_1_1 = nums_1.next(); !nums_1_1.done; nums_1_1 = nums_1.next()) {
-            var num = nums_1_1.value;
-            if (num < 0) {
-                numMustBePos();
-            }
-        }
-    }
-    catch (e_8_1) { e_8 = { error: e_8_1 }; }
-    finally {
-        try {
-            if (nums_1_1 && !nums_1_1.done && (_a = nums_1.return)) _a.call(nums_1);
-        }
-        finally { if (e_8) throw e_8.error; }
-    }
-}
-function checkNumListLength(list, length) {
-    if (list === undefined) {
-        argUndefined();
-    }
-    if (!Array.isArray(list)) {
-        argMustBeNumList(length);
-    }
-    if (list.length !== length) {
-        argNumListWrongLength(length);
-    }
-}
-function argMustBeNumList(length) {
-    throw new Error("Argument must be a list of " + length + "numbers.");
-}
-function argNumListWrongLength(length) {
-    throw new Error("Argument must be a list of " + length + " numbers.");
-}
-function numMustBePos() {
-    throw new Error("Argument must be a positive number.");
-}
-// GENERAL ====================================================================================================
-function argUndefined() {
-    throw new Error("Argument is undefined.");
+
+/***/ }),
+
+/***/ "./src/app/core/modules/Output.ts":
+/*!****************************************!*\
+  !*** ./src/app/core/modules/Output.ts ***!
+  \****************************************/
+/*! exports provided: return_value */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "return_value", function() { return return_value; });
+/**
+ * Return certain value from the model for the flowchart's end node
+ * @summary Return a specific value
+ * @param {any[]} __model__  Model of the node.
+ * @param {number} index  Index of the value to be returned.
+ * @returns {any} Value
+ */
+function return_value(__model__, index) {
+    if (index > __model__.length)
+        return __model__;
+    return __model__[index].value;
 }
 
 
@@ -765,1287 +333,197 @@ __webpack_require__.r(__webpack_exports__);
 var _parameterTypes = {
     constList: "__constList__",
     model: "__model__",
-    input: "__input__"
+    input: "__input__",
+    new: "__new__",
+    merge: "__megre__",
+    preprocess: "__preprocess__",
+    prostprocess: "__postprocess__"
 };
 
 
 /***/ }),
 
-/***/ "./src/app/core/modules/_utils_dev.ts":
-/*!********************************************!*\
-  !*** ./src/app/core/modules/_utils_dev.ts ***!
-  \********************************************/
-/*! exports provided: copyObjPoints */
+/***/ "./src/app/core/modules/functions.ts":
+/*!*******************************************!*\
+  !*** ./src/app/core/modules/functions.ts ***!
+  \*******************************************/
+/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, addData */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "copyObjPoints", function() { return copyObjPoints; });
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__new__", function() { return __new__; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__preprocess__", function() { return __preprocess__; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__postprocess__", function() { return __postprocess__; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__merge__", function() { return __merge__; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addData", function() { return addData; });
+/**
+ * Functions for working with gs-json models.
+ * Models are datastructures that contain geometric entities with attributes.
+ */
+//  ===============================================================================================================
+//  Enums, Types, and Interfaces
+//  ===============================================================================================================
+//enums
+var data_types;
+(function (data_types) {
+    data_types["Int"] = "Int";
+    data_types["Float"] = "Float";
+    data_types["String"] = "String";
+})(data_types || (data_types = {}));
+//  ===============================================================================================================
+//  Functions used by Mobius
+//  ===============================================================================================================
+/**
+ * Creates a new empty model.
+ *
+ * @returns New model empty.
+ */
+function __new__() {
     return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
+        topology: {
+            triangles: [],
+            vertices: [],
+            edges: [],
+            wires: [],
+            faces: [],
+            collections: []
+        },
+        attributes: {
+            positions: {
+                name: "coordinates",
+                data_type: data_types.Float,
+                data_length: 3,
+                keys: [],
+                values: []
+            },
+            vertices: [],
+            edges: [],
+            wires: [],
+            faces: [],
+            collections: []
         }
     };
-};
-function copyObjPoints(obj, reverse_faces) {
-    var e_1, _a, e_2, _b, e_3, _c, e_4, _d;
-    var new_points_map = new Map();
-    var new_faces_points = [];
-    var new_wires_points = [];
-    var faces = obj.getFaces();
-    try {
-        for (var faces_1 = __values(faces), faces_1_1 = faces_1.next(); !faces_1_1.done; faces_1_1 = faces_1.next()) {
-            var face = faces_1_1.value;
-            var face_points = face.getVertices().map(function (v) { return v.getPoint(); });
-            var new_face_points = [];
-            try {
-                for (var face_points_1 = __values(face_points), face_points_1_1 = face_points_1.next(); !face_points_1_1.done; face_points_1_1 = face_points_1.next()) {
-                    var point = face_points_1_1.value;
-                    if (new_points_map.has(point.getID())) {
-                        new_face_points.push(new_points_map.get(point.getID()));
-                    }
-                    else {
-                        var new_point = point.copy();
-                        new_face_points.push(new_point);
-                        new_points_map.set(point.getID(), new_point);
-                    }
-                }
-            }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
-            finally {
-                try {
-                    if (face_points_1_1 && !face_points_1_1.done && (_b = face_points_1.return)) _b.call(face_points_1);
-                }
-                finally { if (e_2) throw e_2.error; }
-            }
-            if (reverse_faces) {
-                new_face_points.reverse();
-            }
-            new_faces_points.push(new_face_points);
+}
+/**
+ * A function to preprocess the model, before it enters the node.
+ * In cases where there is more than one model connected to a node,
+ * the preprocess function will be called before the merge function.
+ *
+ * @param model The model to preprocess.
+ */
+function __preprocess__(__model__) {
+    // TODO
+}
+/**
+ * A function to postprocess the model, after it enters the node.
+ *
+ * @param model The model to postprocess.
+ */
+function __postprocess__(__model__) {
+    // TODO
+    // Remove all the undefined values for the arrays
+}
+/**
+ * Merges the second model into the first model. The geometry, attribues, and groups are all merged.
+ * If the models contain contain groups with the same names, then the groups will be merged.
+ *
+ * @param model1 The model to merge into.
+ * @param model2 The model to merge from    .
+ */
+function __merge__(model1, model2) {
+    // Get the lengths of data arrays in model1, required later
+    var num_positions = model2.attributes.positions.keys.length;
+    var num_triangles = model2.topology.triangles.length;
+    var num_vertices = model2.topology.vertices.length;
+    var num_edges = model2.topology.edges.length;
+    var num_wires = model2.topology.wires.length;
+    var num_faces = model2.topology.faces.length;
+    var num_collections = model2.topology.collections.length;
+    // Add triangles from model2 to model1
+    var new_triangles = model2.topology.triangles.map(function (t) { return t.map(function (p) { return p + num_positions; }); });
+    model1.topology.triangles = model1.topology.triangles.concat(new_triangles);
+    // Add vertices from model2 to model1
+    var new_vertices = model2.topology.vertices.map(function (p) { return p + num_positions; });
+    model1.topology.vertices = model1.topology.vertices.concat(new_vertices);
+    // Add edges from model2 to model1
+    var new_edges = model2.topology.edges.map(function (e) { return e.map(function (v) { return v + num_vertices; }); });
+    model1.topology.edges = model1.topology.edges.concat(new_edges);
+    // Add wires from model2 to model1
+    var new_wires = model2.topology.wires.map(function (w) { return w.map(function (e) { return e + num_edges; }); });
+    model1.topology.wires = model1.topology.wires.concat(new_wires);
+    // Add faces from model2 to model1
+    var new_faces = model2.topology.faces.map(function (f) { return [
+        f[0].map(function (w) { return w + num_wires; }),
+        f[1].map(function (t) { return t + num_triangles; })
+    ]; });
+    model1.topology.faces = model1.topology.faces.concat(new_faces);
+    // Add collections from model2 to model1
+    var new_collections = model2.topology.collections.map(function (c) { return [
+        c[0] + num_collections,
+        c[1].map(function (v) { return v + num_vertices; }),
+        c[2].map(function (w) { return w + num_wires; }),
+        c[3].map(function (f) { return f + num_faces; })
+    ]; });
+    model1.topology.collections = model1.topology.collections.concat(new_collections);
+    // Add  attributes from model2 to model1
+    _addKeysValues(model1.attributes.positions, model2.attributes.positions);
+    _addAttribs(model1.attributes.vertices, model2.attributes.vertices, num_vertices);
+    _addAttribs(model1.attributes.edges, model2.attributes.edges, num_edges);
+    _addAttribs(model1.attributes.wires, model2.attributes.wires, num_wires);
+    _addAttribs(model1.attributes.faces, model2.attributes.faces, num_faces);
+    _addAttribs(model1.attributes.collections, model2.attributes.collections, num_collections);
+    // No return
+}
+/*
+ * Helper function that adds attributes
+ */
+function _addAttribs(attribs1, attribs2, size1) {
+    var attribs_map = new Map();
+    attribs1.forEach(function (attrib, idx) {
+        attribs_map[attrib.name + attrib.data_type + attrib.data_length] = attrib;
+    });
+    attribs2.forEach(function (attrib2) {
+        var attrib1 = attribs_map[attrib2.name + attrib2.data_type + attrib2.data_length];
+        if (attrib1 === undefined) {
+            attrib2.values = Array(size1).fill(undefined).concat(attrib2.values);
+            attribs1.push(attrib2);
         }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (faces_1_1 && !faces_1_1.done && (_a = faces_1.return)) _a.call(faces_1);
+        else {
+            _addKeysValues(attrib1, attrib2);
         }
-        finally { if (e_1) throw e_1.error; }
-    }
-    var wires = obj.getWires();
-    try {
-        for (var wires_1 = __values(wires), wires_1_1 = wires_1.next(); !wires_1_1.done; wires_1_1 = wires_1.next()) {
-            var wire = wires_1_1.value;
-            var wire_points = wire.getVertices().map(function (v) { return v.getPoint(); });
-            var new_wire_points = [];
-            try {
-                for (var wire_points_1 = __values(wire_points), wire_points_1_1 = wire_points_1.next(); !wire_points_1_1.done; wire_points_1_1 = wire_points_1.next()) {
-                    var point = wire_points_1_1.value;
-                    if (new_points_map.has(point.getID())) {
-                        new_wire_points.push(new_points_map.get(point.getID()));
-                    }
-                    else {
-                        var new_point = point.copy();
-                        new_wire_points.push(new_point);
-                        new_points_map.set(point.getID(), new_point);
-                    }
-                }
-            }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
-            finally {
-                try {
-                    if (wire_points_1_1 && !wire_points_1_1.done && (_d = wire_points_1.return)) _d.call(wire_points_1);
-                }
-                finally { if (e_4) throw e_4.error; }
-            }
-            new_wires_points.push(new_wire_points); // do not reverse
+    });
+}
+/*
+ * Helper function that adds values, updates keys.
+ * The values are all assumed to be unique.
+ * Values are added from the values to array to the values1 array is the are unique.
+ * New keys are added to the keys1 array.
+ */
+function _addKeysValues(kv1, kv2) {
+    var values_map = new Map();
+    kv2.values.forEach(function (val, idx) {
+        var idx_new = kv1.values.indexOf(val);
+        if (idx_new === -1) {
+            idx_new = kv1.values.push(val) - 1;
         }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (wires_1_1 && !wires_1_1.done && (_c = wires_1.return)) _c.call(wires_1);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-    return [new_wires_points, new_faces_points];
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/attrib.ts":
-/*!****************************************!*\
-  !*** ./src/app/core/modules/attrib.ts ***!
-  \****************************************/
-/*! exports provided: Get, getAll, getAllEnts, getAllTopos, Create, del, getName, setName, getEntValue, setEntValue, getTopoValue, setTopoValue */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAll", function() { return getAll; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllEnts", function() { return getAllEnts; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllTopos", function() { return getAllTopos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Create", function() { return Create; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "del", function() { return del; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getName", function() { return getName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setName", function() { return setName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEntValue", function() { return getEntValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setEntValue", function() { return setEntValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTopoValue", function() { return getTopoValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setTopoValue", function() { return setTopoValue; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * Attributes are properties assigned to each object.
- */
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-//  ===============================================================================================================
-//  Attrib Get ====================================================================================================
-//  ===============================================================================================================
-/**
- * Gets attribute that apply for a specified geometry type from a model
- * @param model Model to get attribute from
- * @param name The attribute name
- * @param geom_type Type of geometry to get attribute from
- * @returns List of attributes
- */
-function Get(model, name, geom_type) {
-    switch (geom_type) {
-        case gs_json__WEBPACK_IMPORTED_MODULE_0__["EGeomType"].points:
-        case gs_json__WEBPACK_IMPORTED_MODULE_0__["EGeomType"].objs:
-            return model.getEntAttrib(name, geom_type);
-        default:
-            return model.getTopoAttrib(name, geom_type);
-    }
-}
-/**
- * Gets all entity attribs
- * @param model Model to get attribute from
- * @returns List of attributes
- */
-function getAll(model) {
-    return __spread(model.getAllEntAttribs(), model.getAllTopoAttribs());
-}
-/**
- * Gets all entity attribs
- * @param model Model to get attribute from
- * @returns List of attributes
- */
-function getAllEnts(model) {
-    return model.getAllEntAttribs();
-}
-/**
- * Gets all topo attribs
- * @param model Model to get attribute from
- * @returns List of attributes
- */
-function getAllTopos(model) {
-    return model.getAllTopoAttribs();
+        values_map[idx] = idx_new;
+    });
+    kv2.keys.forEach(function (idx) {
+        kv1.keys.push(values_map[idx]);
+    });
 }
 //  ===============================================================================================================
-//  Attrib Constructors ===========================================================================================
+//  End user functions
 //  ===============================================================================================================
 /**
- * Adds an attribute to a model
- * @param model Model to add to
- * @param name Name of new attribute
- * @param geom_type Type of geometry to add to
- * @param geom_type Data type for attribute values. (number, string, boolean, number[], string[], boolean[])
- * @returns New attribute
- */
-function Create(model, name, geom_type, data_type) {
-    switch (geom_type) {
-        case gs_json__WEBPACK_IMPORTED_MODULE_0__["EGeomType"].points:
-        case gs_json__WEBPACK_IMPORTED_MODULE_0__["EGeomType"].objs:
-            return model.addEntAttrib(name, geom_type, data_type);
-        default:
-            return model.addTopoAttrib(name, geom_type, data_type);
-    }
-}
-//  ===============================================================================================================
-//  Attrib Functions ==============================================================================================
-//  ===============================================================================================================
-/**
- * Deletes an attribute
- * @param attrib Attribute to delete
- * @returns True if successful
- */
-function del(attrib) {
-    return attrib.getModel().delAttrib(attrib);
-}
-/**
- * Gets the name of an attribute
- * @param attrib Attribute to get name of
- * @returns Name of specified attribute
- */
-function getName(attrib) {
-    return attrib.getName();
-}
-/**
- * Sets the name of an attribute
- * @param attrib Attribute to set name
- * @param name New name of attribute
- * @returns Old name of specified attribute
- */
-function setName(attrib, name) {
-    return attrib.setName(name);
-}
-// TODO - see if these set and get methods can be combined
-/**
- * Gets the value of a ent attribute for a specified geometry
- * @param attrib Attribute
- * @param ent Geometry
- * @returns Value of attribute
- */
-function getEntValue(attrib, ent) {
-    return ent.getAttribValue(attrib);
-}
-/**
- * Sets the value of a ent attribute for a specified geometry
- * @param attrib Attribute
- * @param ent Geometry
- * @param value New value of attribute
- * @returns Old value of specified attribute
- */
-function setEntValue(attrib, ent, value) {
-    return ent.setAttribValue(attrib, value);
-}
-/**
- * Gets the value of a topo attribute for a specified geometry
- * @param attrib Attribute
- * @param topo Geometry
- * @returns Value of attribute
- */
-function getTopoValue(attrib, topo) {
-    return topo.getAttribValue(attrib);
-}
-/**
- * Sets the value of a topo attribute for a specified geometry
- * @param attrib Attribute
- * @param topo Geometry
- * @param value New value of attribute
- * @returns Old value of specified attribute
- */
-function setTopoValue(attrib, topo, value) {
-    return topo.setAttribValue(attrib, value);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/calc.ts":
-/*!**************************************!*\
-  !*** ./src/app/core/modules/calc.ts ***!
-  \**************************************/
-/*! exports provided: distBetweenPoints, vectorBetweenPoints */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distBetweenPoints", function() { return distBetweenPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorBetweenPoints", function() { return vectorBetweenPoints; });
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/**
- * Function for doing various geometric calculations.
- */
-
-
-//  ===============================================================================================================
-//  Pline Get and Copy ============================================================================================
-//  ===============================================================================================================
-/**
- * Calculate the distance between two points.
+ * Creates a new model and populates the model with data.
  *
- * @param point1 The first point.
- * @param point2 The second point.
- * @returns The distance.
+ * @param model_data The model data in gs-json format.
+ * @returns New model if successful, null if unsuccessful or on error.
  */
-function distBetweenPoints(point1, point2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point2);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointsSameModel"]([point1, point2]);
-    return _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](point1, point2).length();
-}
-/**
- * Creates a vector (a list of 3 numbers) from point 1 to point 2.
- *
- * @param point1 The first point.
- * @param point2 The second point.
- * @returns A list of three numbers.
- */
-function vectorBetweenPoints(point1, point2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point2);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointsSameModel"]([point1, point2]);
-    return _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](point1, point2).toArray();
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/circle.ts":
-/*!****************************************!*\
-  !*** ./src/app/core/modules/circle.ts ***!
-  \****************************************/
-/*! exports provided: Get, Copy, CopyToModel, FromOrigin2Vectors, FromOrigin2Points, FromOriginXY, FromOriginYZ, FromOriginZX, FromPlane, From3Points, getOrigin, getAxes, getArcAngles, setArcAngles, isClosed, close, calcLength, evalParam, evalParamTangent, evalPoint, tangentPlinesInner2D, tangentPlinesOuter2D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CopyToModel", function() { return CopyToModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOrigin2Vectors", function() { return FromOrigin2Vectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOrigin2Points", function() { return FromOrigin2Points; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginXY", function() { return FromOriginXY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginYZ", function() { return FromOriginYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginZX", function() { return FromOriginZX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromPlane", function() { return FromPlane; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "From3Points", function() { return From3Points; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getOrigin", function() { return getOrigin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAxes", function() { return getAxes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getArcAngles", function() { return getArcAngles; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setArcAngles", function() { return setArcAngles; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isClosed", function() { return isClosed; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "close", function() { return close; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calcLength", function() { return calcLength; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalParam", function() { return evalParam; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalParamTangent", function() { return evalParamTangent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalPoint", function() { return evalPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tangentPlinesInner2D", function() { return tangentPlinesInner2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tangentPlinesOuter2D", function() { return tangentPlinesOuter2D; });
-/* harmony import */ var _circle_dev__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./circle_dev */ "./src/app/core/modules/circle_dev.ts");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _libs_conics_circles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./libs/conics/circles */ "./src/app/core/modules/libs/conics/circles.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/**
- * Functions for working with circles.
- * Circles are geometric objects definded by a single vertex and a set of parameters.
- * The circle object can be either a closed circle or an open arc.
- */
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-
-
-
-
-//  ===============================================================================================================
-//  Circle Get and Copy =====================================================================================================
-//  ===============================================================================================================
-/**
- * Gets a circle from the model based on an ID number.
- * In the viewer, the object label can display (it starts with 'o'), which contains the ID.
- * For example, if the label is "o123", then the ID is the number 123.
- *
- * @param model Model to get circle object from.
- * @param id ID number of circle object.
- * @returns Circle object.
- */
-function Get(model, id) {
-    // check args
-    var obj = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjID"](model, id, 3 /* circle */);
-    // return the circle
-    return obj;
-}
-/**
- * Create a copy of a circle object.
- *
- * @param circle The circle object to copy.
- * @param copy_attribs If true, attributes are copied to the new circle.
- * @returns Circle object.
- */
-function Copy(circle, copy_attribs) {
-    // check args
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    // copy and return
-    return circle.copy(copy_attribs);
-}
-/**
- * Copies a circle from one model into another model.
- *
- * @param model The model to copy to.
- * @param circle The circle object to copy.
- * @returns The copied circle object in the model.
- */
-function CopyToModel(model, circle) {
-    // check args
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    // check it is not already in the model
-    if (circle.getModel() === model) {
-        throw new Error("Error: circle is already in model.");
-    }
-    // copy circle and return it
-    return model.getGeom().copyCircleFromModel(circle);
-}
-//  ===============================================================================================================
-//  Constructors ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a circle from an origin point parallel to a plane defined by the two X and Y vectors.
- * The radius will be equal to the length of the X vector.
- * If no angle is defined, a circle is created. Otherwise, an arc is created, with the specified angles
- * starting at the x-axis in an anti-clockwise direction.
- *
- * @param origin Point object, the center of the circle.
- * @param vec_x X-axis of the circle plane. (The length of the vecor described the radius.)
- * @param vec Vector on the circle plane.
- * @param angles Two angles between 0 and 360, or null for a circle.
- * @returns Circle object.
- */
-function FromOrigin2Vectors(origin, vec_x, vec, angles) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkXYZ"](vec_x);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkXYZ"](vec);
-    // make the circle
-    return origin.getGeom().addCircle(origin, vec_x, vec, _circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-}
-/**
- * Create a circle at the origin point parallel to a plane that passes through two other points.
- * The radius will be equal to the distance from the origin to point1.
- * If angle is undefined, a circle is created. Otherwise, an arc is created, with the specified angles
- * starting at point1 in an anti-clockwise direction.
- *
- * @param origin Point object, the center of the circle.
- * @param point1 Point object, on the circle perimeter, and defining teh x-axis of the plane.
- * @param point2 Point object, on the plane.
- * @param angles Two angles between 0 and 360, or null for a circle.
- * @returns Circle object.
- */
-function FromOrigin2Points(origin, point1, point2, angles) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](point1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](point2);
-    // create the vectors
-    var vec_x = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_2__["vectorFromPointsAtoB"](origin, point1).toArray();
-    var vec = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_2__["vectorFromPointsAtoB"](origin, point2).toArray();
-    // make the circle
-    return origin.getGeom().addCircle(origin, vec_x, vec, _circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-}
-/**
- * Create a circle at the origin point parallel to the WCS XY plane, with the specified radius.
- * If angle is undefined, a circle is created. Otherwise, an arc is created, with the specified angles
- * starting at point1 in an anti-clockwise direction.
- *
- * @param origin Point object, the center of the circle.
- * @param radius Radius of circle.
- * @param angles Two angles between 0 and 360, or null for a circle.
- * @returns Circle object.
- */
-function FromOriginXY(origin, radius, angles) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNum"](radius);
-    // create the vectors
-    var vec_x = [radius, 0, 0];
-    var vec = [0, 1, 0];
-    // make the circle
-    return origin.getGeom().addCircle(origin, vec_x, vec, _circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-}
-/**
- * Create a circle at the origin point parallel to the WCS YZ plane, with the specified radius.
- * If angle is undefined, a circle is created. Otherwise, an arc is created, with the specified angles
- * starting at point1 in an anti-clockwise direction.
- *
- * @param origin Point object, the center of the circle.
- * @param radius Radius of circle.
- * @param angles Two angles between 0 and 360, or null for a circle.
- * @returns Circle object.
- */
-function FromOriginYZ(origin, radius, angles) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNum"](radius);
-    // create the vectors
-    var vec_x = [0, radius, 0];
-    var vec = [0, 0, 1];
-    // make the circle
-    return origin.getGeom().addCircle(origin, vec_x, vec, _circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-}
-/**
- * Create a circle at the origin point parallel to the WCS ZX plane, with the specified radius.
- * If angle is undefined, a circle is created. Otherwise, an arc is created, with the specified angles
- * starting at point1 in an anti-clockwise direction.
- *
- * @param origin Point object, the center of the circle.
- * @param radius Radius of circle.
- * @param angles Two angles between 0 and 360, or null for a circle.
- * @returns New circle (or arc).
- */
-function FromOriginZX(origin, radius, angles) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNum"](radius);
-    // create the vectors
-    var vec_x = [0, 0, radius];
-    var vec = [1, 0, 0];
-    // make the circle
-    return origin.getGeom().addCircle(origin, vec_x, vec, _circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-}
-/**
- * Create a circle from a plane, with the specified radius.
- * If angle is undefined, a circle is created. Otherwise, an arc is created, with the specified angles
- * starting at point1 in an anti-clockwise direction.
- *
- * @param plane Plane object to construct circle on.
- * @param radius Radius of circle.
- * @param angles Two angles between 0 and 360, or null for a circle.
- * @returns New circle object.
- */
-function FromPlane(plane, radius, angles) {
-    var _a;
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](plane, 2 /* plane */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNum"](radius);
-    // create the vectors
-    var vecs = plane.getAxes();
-    var vec_x = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], vecs[0])))().setLength(radius).toArray();
-    var vec = vecs[1];
-    // make the circle
-    return plane.getGeom().addCircle(plane.getOrigin(), vec_x, vec, _circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-}
-/**
- * Create a circle that passes through three points.
- * If is_closed is false, an arc is created. Otherwise, an arc is created.
- *
- * @param point1 Point object, on the circle.
- * @param point2 Point object, on the circle.
- * @param point3 Point object, on the circle.
- * @param is_closed If false, an arc is generated that starts at point1 and end at point3, passing through point 2.
- * @returns New circle object.
- */
-function From3Points(point1, point2, point3, is_closed) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPointList"]([point1, point2, point3], 3);
-    // do the maths
-    var result = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_3__["circleFrom3Points"](point1.getPosition(), point2.getPosition(), point3.getPosition(), is_closed);
-    var origin = model.getGeom().addPoint(result.origin);
-    // make the circle or arc
-    if (is_closed) {
-        return origin.getGeom().addCircle(origin, result.vec_x, result.vec_y);
-    }
-    else {
-        return origin.getGeom().addCircle(origin, result.vec_x, result.vec_y, [0, result.angle]);
-    }
-}
-//  ===============================================================================================================
-//  Get and Set ===================================================================================================
-//  ===============================================================================================================
-/**
- * Gets the origin of the circle.
- * @param circle Circle objject to obtain origin from.
- * @returns Point object, the origin of teh circle.
- */
-function getOrigin(circle) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    return circle.getOrigin();
-}
-/**
- * Gets the X and Y vectors of the circle plane. The circle radius is equal to the length of the X vector.
- *
- * @param circle Circle object to get vectors from.
- * @returns Two vectors, the X and Y vectors of teh circle plane.
- */
-function getAxes(circle) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    return circle.getAxes();
-}
-/**
- * Gets the arc angles of the circle.
- *
- * @param circle Circle object to get angles from.
- * @returns The angles, or null if it is a closed circle.
- */
-function getArcAngles(circle) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    return circle.getAngles();
-}
-/**
- * Sets the angles for the arc.
- *
- * @param circle Circle object to set angles for.
- * @param angles The angles to set, two numbers between 0 and 360. If null, then the circle is closed.
- */
-function setArcAngles(circle, angles) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    var old_angles = circle.getAngles();
-    circle.setAngles(_circle_dev__WEBPACK_IMPORTED_MODULE_0__["_argsCheckAngles"](angles));
-    return old_angles;
-}
-/**
- * Checks if a circle object is closed. If it is not closed, then it must be an arc.
- *
- * @param circle Circle object to test.
- * @returns True if the circle is closed.
- */
-function isClosed(circle) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    return circle.isClosed();
-}
-/**
- * Closes the arc, so that it becomes a circle.
- *
- * @param circle Circle object to close.
- * @return True if the open circle was closed, false if the circle was already closed.
- */
-function close(circle) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    if (circle.isClosed()) {
-        return false;
-    }
-    circle.setAngles(undefined);
-    return true;
-}
-//  ===============================================================================================================
-//  Functions =====================================================================================================
-//  ===============================================================================================================
-/**
- * Returns the perimeter length of a circle.
- * If the circle is an open arc, then the length of the arc is returned.
- *
- * @param circle Circle object to calculate length for.
- * @returns Length of circle or arc.
- */
-function calcLength(circle) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    return circle.length();
-}
-/**
- * Returns a point by evaluating the position along a circle.
- * The position is specified by a t parameter that starts at 0 and ends at 1.
- * If the circle object is closed, 0 and 1 will have the same position.
- * Values for of t<0 and t>1 are valid, they will loop around.
- * If the circle object is an open arc, the 0 will be the start of the arc, and 1 will be the end of the arc.
- * Values for of t<0 and t>1 are automatically converted to 0 and 1 respectively.
- *
- * @param circle Cricle object to evaluate.
- * @param t Parameter to evaluate (0 is the start of the circular arc, 1 is the end of the circular arc)
- * @returns Point.
- */
-function evalParam(circle, t) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkNum"](t);
-    if (circle.isClosed()) {
-        if (t < 0) {
-            t = (t % 1) + 1;
-        }
-        if (t > 1) {
-            t = (t % 1) - 1;
-        }
-    }
-    else {
-        if (t < 0) {
-            t = 0;
-        }
-        if (t > 1) {
-            t = 1;
-        }
-    }
-    return circle.evalParam(t);
-}
-/**
- * Returns a tangent unit vector by evaluating the position along a circle.
- * The position is specified by a t parameter that starts at 0 and ends at 1.
- * If the circle object is closed, 0 and 1 will have the same position.
- * Values for of t<0 and t>1 are valid, they will loop around.
- * If the circle object is an open arc, the 0 will be the start of the arc, and 1 will be the end of the arc.
- * Values for of t<0 and t>1 are automatically converted to 0 and 1 respectively.
- *
- * @param circle Cricle object to evaluate.
- * @param t Parameter to evaluate (0 is the start of the circular arc, 1 is the end of the circular arc)
- * @returns Tangent unit vector (a list of three numbers).
- */
-function evalParamTangent(circle, t) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkNum"](t);
-    if (circle.isClosed()) {
-        if (t < 0) {
-            t = (t % 1) + 1;
-        }
-        if (t > 1) {
-            t = (t % 1) - 1;
-        }
-    }
-    else {
-        if (t < 0) {
-            t = 0;
-        }
-        if (t > 1) {
-            t = 1;
-        }
-    }
-    return circle.evalParamTangent(t);
-}
-/**
- * Returns a t parameter by projecting a point onto a circle.
- * The t parameter represents a position on the circle.
- * The parameter starts at 0 and ends at 1.
- * If the circle object is closed, 0 and 1 will have the same position.
- * If the circle object is an open arc, the 0 will be the start of the arc, and 1 will be the end of the arc.
- * The point is projected onto the closest point on the circle, and t is then caclulated for that point.
- *
- * @param circle Cricle object to evaluate.
- * @param point The point to be projected onto the circle or arc.
- * @returns t parameter.
- */
-function evalPoint(circle, point) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](point);
-    return circle.evalPoint(point);
-}
-/**
- * Returns two polylines that are tangential (inner tangents) to two coplanar circles.
- *
- * @param circle1 The first circle.
- * @param circle2 The second circle.
- * @returns Two polylines, or null if inner tangents cannot be calculated.
- */
-function tangentPlinesInner2D(circle1, circle2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle1, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle2, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjsSameModel"]([circle1, circle2]);
-    return _libs_conics_circles__WEBPACK_IMPORTED_MODULE_3__["innerTangentsCircleCircle2D"](circle1, circle2);
-}
-/**
- * Returns two polylines that are tangential (outer tangents) to two coplanar circles.
- *
- * @param circle1 The first circle.
- * @param circle2 The second circle.
- * @returns Two polylines, or null if outer tangents cannot be calculated.
- */
-function tangentPlinesOuter2D(circle1, circle2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle1, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle2, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjsSameModel"]([circle1, circle2]);
-    return _libs_conics_circles__WEBPACK_IMPORTED_MODULE_3__["outerTangentsCircleCircle2D"](circle1, circle2);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/circle_dev.ts":
-/*!********************************************!*\
-  !*** ./src/app/core/modules/circle_dev.ts ***!
-  \********************************************/
-/*! exports provided: _argsCheckAngles, From3Points, ArcFrom3Points, CircleFrom3Points, evalParam, evalPoint, extendArc, extendEllArc */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_argsCheckAngles", function() { return _argsCheckAngles; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "From3Points", function() { return From3Points; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ArcFrom3Points", function() { return ArcFrom3Points; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CircleFrom3Points", function() { return CircleFrom3Points; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalParam", function() { return evalParam; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalPoint", function() { return evalPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extendArc", function() { return extendArc; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extendEllArc", function() { return extendEllArc; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _libs_conics_circles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./libs/conics/circles */ "./src/app/core/modules/libs/conics/circles.ts");
-/* harmony import */ var _libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./libs/arr/arr */ "./src/app/core/modules/libs/arr/arr.ts");
-
-
-
-
-//  ==========================================================================================================
-//  Util method
-//  ==========================================================================================================
-function _argsCheckAngles(angles) {
-    //export function checkCircleAngles(angles: [number, number]): [number, number] {
-    if (angles === undefined || angles === null) {
-        return null;
-    }
-    // fix angle 0
-    if (Math.abs(angles[0]) > 360) {
-        angles[0] = angles[0] % 360;
-    }
-    if (angles[0] < 0) {
-        angles[0] = 360 + angles[0];
-    }
-    // fix angle 1
-    if (Math.abs(angles[1]) > 360) {
-        angles[1] = angles[1] % 360;
-    }
-    if (angles[1] < 0) {
-        angles[1] = 360 + angles[1];
-    }
-    // return the fixed angles
-    return angles;
-}
-//  ===============================================================================================================
-//  Circle Constructors ============================================================================================
-//  ===============================================================================================================
-// Still not working
-/**
- * Create a circle that passes three points.
- * If is_arc is false, a circle is created.
- * Otherwise, an arc is created.
- *
- * @param point1 Point object, on the circle.
- * @param point2 Point object, on the circle.
- * @param point3 Point object, on the circle.
- * @param is_arc If true, an arc is generated that starts at point1 and end at point3, passing through point 2.
- * @returns New circle object.
- */
-function From3Points(point1, point2, point3, is_closed) {
-    if (!point1.exists()) {
-        throw new Error("Error: point1 has been deleted.");
-    }
-    if (!point2.exists()) {
-        throw new Error("Error: point2 has been deleted.");
-    }
-    if (!point3.exists()) {
-        throw new Error("Error: point3 has been deleted.");
-    }
-    // check
-    var model = point1.getModel();
-    if (point2.getModel() !== model) {
-        throw new Error("Error: Points must all be in same model.");
-    }
-    if (point3.getModel() !== model) {
-        throw new Error("Error: Points must all be in same model.");
-    }
-    // do the maths
-    var result = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_2__["circleFrom3Points"](point1.getPosition(), point2.getPosition(), point3.getPosition(), is_closed);
-    var origin = model.getGeom().addPoint(result.origin);
-    var vec_x = result.vec_x;
-    var vec = result.vec_y;
-    // make the circle or arc
-    if (is_closed) {
-        return origin.getGeom().addCircle(origin, vec_x, vec);
-    }
-    else {
-        return origin.getGeom().addCircle(origin, vec_x, vec, [0, result.angle]);
-    }
-}
-/**
- * Adds an arc to the model based on three points
- *
- * All points are taken to be points along the arc
- * @param pt1 Start point of arc
- * @param pt2 Second point on arc
- * @param pt3 End point of arc
- * @returns New arc if successful
- */
-function ArcFrom3Points(pt1, pt2, pt3) {
-    var m1 = pt1.getModel();
-    var m2 = pt2.getModel();
-    var m3 = pt3.getModel();
-    if (m1 !== m2) {
-        throw new Error("Points must be in the same model.");
-    }
-    if (m1 !== m3) {
-        throw new Error("Points must be in the same model.");
-    }
-    var g1 = m1.getGeom();
-    if (_libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorsAreCodir"](_libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["subPoints"](pt1, pt2), _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["subPoints"](pt1, pt3))) {
-        throw new Error("Points must be not aligned");
-    }
-    var AB = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](pt1, pt2);
-    var AC = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](pt1, pt3);
-    var BC = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](pt2, pt3);
-    var radius = BC.length() / (2 * _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](AB.normalize(), AC.normalize(), false).length());
-    var m = new gs_json__WEBPACK_IMPORTED_MODULE_0__["Model"]();
-    var g = m.getGeom();
-    var circle_1 = g.addCircle(pt1, [radius, 0, 0], [0, radius, 0]);
-    var circle_2 = g.addCircle(pt2, [radius, 0, 0], [0, radius, 0]);
-    var circle_3 = g.addCircle(pt3, [radius, 0, 0], [0, radius, 0]);
-    var c1 = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_2__["isectCircleCircle2D"](circle_1, circle_2);
-    var c2 = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_2__["isectCircleCircle2D"](circle_1, circle_3);
-    var center = null;
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[0].getPosition(), c2[0].getPosition())) {
-        center = g.addPoint(c1[0].getPosition());
-        // center = g1.addPoint(c1[0].getPosition());
-    }
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[0].getPosition(), c2[1].getPosition())) {
-        center = g.addPoint(c1[0].getPosition());
-        // center = g1.addPoint(c1[0].getPosition());
-    }
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[1].getPosition(), c2[0].getPosition())) {
-        center = g.addPoint(c1[1].getPosition());
-        // center = g1.addPoint(c1[1].getPosition());
-    }
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[1].getPosition(), c2[1].getPosition())) {
-        center = g.addPoint(c1[1].getPosition());
-        // center = g1.addPoint(c1[1].getPosition());
-    }
-    if (center === null) {
-        throw new Error("Review thresholds");
-    }
-    var center_pt1 = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](center, pt1);
-    var center_pt2 = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](center, pt2);
-    var center_pt3 = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](center, pt3);
-    var angle = Math.max(Math.min(center_pt1.angleTo(center_pt2), center_pt2.angleTo(center_pt1)), Math.min(center_pt1.angleTo(center_pt3), center_pt3.angleTo(center_pt1)), Math.min(center_pt2.angleTo(center_pt3), center_pt3.angleTo(center_pt2)));
-    var start_point = null;
-    if (angle === center_pt1.angleTo(center_pt2)) {
-        start_point = g.addPoint(pt1.getPosition());
-    }
-    if (angle === center_pt2.angleTo(center_pt1)) {
-        start_point = g.addPoint(pt2.getPosition());
-    }
-    if (angle === center_pt1.angleTo(center_pt3)) {
-        start_point = g.addPoint(pt1.getPosition());
-    }
-    if (angle === center_pt3.angleTo(center_pt1)) {
-        start_point = g.addPoint(pt3.getPosition());
-    }
-    if (angle === center_pt2.angleTo(center_pt3)) {
-        start_point = g.addPoint(pt2.getPosition());
-    }
-    if (angle === center_pt3.angleTo(center_pt2)) {
-        start_point = g.addPoint(pt3.getPosition());
-    }
-    var u = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](center, start_point);
-    var normal = null;
-    normal = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](u, center_pt1);
-    if (normal.length() === 0) {
-        normal = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](u, center_pt2);
-    }
-    if (normal.length() === 0) {
-        normal = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](u, center_pt3);
-    }
-    var v = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](normal.normalize(), u);
-    return g1.addCircle(g1.addPoint(center.getPosition()), [u[0], u[1], u[2]], [v[0], v[1], v[2]], [0, angle]);
-}
-/**
- * Adds a closed circle to the model based on three points
- *
- * All points are taken to be points along the circumference of the circle
- * @param pt1 First point on circle
- * @param pt2 Second point on circle
- * @param pt3 Third point on circle
- * @returns New circle if successful
- */
-function CircleFrom3Points(pt1, pt2, pt3) {
-    var m1 = pt1.getModel();
-    var m2 = pt2.getModel();
-    var m3 = pt3.getModel();
-    if (m1 !== m2) {
-        throw new Error("Points must be in the same model.");
-    }
-    if (m1 !== m3) {
-        throw new Error("Points must be in the same model.");
-    }
-    if (_libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorsAreCodir"](_libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["subPoints"](pt1, pt2), _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["subPoints"](pt1, pt3))) {
-        throw new Error("Points must be not aligned");
-    }
-    var AB = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](pt1, pt2);
-    var AC = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](pt1, pt3);
-    var BC = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](pt2, pt3);
-    var radius = BC.length() / (2 * _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](AB.normalize(), AC.normalize(), false).length());
-    var m = new gs_json__WEBPACK_IMPORTED_MODULE_0__["Model"]();
-    var g = m.getGeom();
-    var circle_1 = g.addCircle(pt1, [radius, 0, 0], [0, radius, 0], [0, 360]);
-    var circle_2 = g.addCircle(pt2, [radius, 0, 0], [0, radius, 0], [0, 360]);
-    var circle_3 = g.addCircle(pt3, [radius, 0, 0], [0, radius, 0], [0, 360]);
-    var c1 = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_2__["isectCircleCircle2D"](circle_1, circle_2);
-    var c2 = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_2__["isectCircleCircle2D"](circle_1, circle_3);
-    var g1 = m1.getGeom();
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[0].getPosition(), c2[0].getPosition())) {
-        return g1.addCircle(g1.addPoint(c1[0].getPosition()), [radius, 0, 0], [0, radius, 0], [0, 360]);
-    }
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[0].getPosition(), c2[1].getPosition())) {
-        return g1.addCircle(g1.addPoint(c1[0].getPosition()), [radius, 0, 0], [0, radius, 0], [0, 360]);
-    }
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[1].getPosition(), c2[0].getPosition())) {
-        return g1.addCircle(g1.addPoint(c1[1].getPosition()), [radius, 0, 0], [0, radius, 0], [0, 360]);
-    }
-    if (_libs_arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].equal(c1[1].getPosition(), c2[1].getPosition())) {
-        return g1.addCircle(g1.addPoint(c1[1].getPosition()), [radius, 0, 0], [0, radius, 0], [0, 360]);
-    }
-    throw new Error("Review thresholds");
-}
-//  ===============================================================================================================
-//  Conic Functions ===============================================================================================
-//  ===============================================================================================================
-// - WEEK 6 -
-/**
- * Returns a point on a conic curve based on a parameter between 0 and 1
- *
- * @param curve Conic curve to evaluate
- * @param t Parameter along curve to evaluate (0 is the start of the curve and 1 is the end)
- * @returns Point on curve
- */
-function evalParam(curve, t) {
-    throw new Error("Method not implemented");
-}
-// - WEEK 6 -
-/**
- * Returns a parameter along a conic curve based on a point on the curve
- *
- * Returns null if point specified does not lie on the curve (within a tolerance of 0.1)
- * @param curve Conic curve to evaluate
- * @param point Point to evaluate
- * @returns Parameter on curve if successful, null if unsuccessful or on error
- */
-function evalPoint(curve, point) {
-    throw new Error("Method not implemented");
-}
-/**
- * Extends an arc
- *
- * Changes the starting and ending angles for a conic curve such that the curve is lengthened<br/>
- * Conic curve should be either a circular arc or an elliptical arc<br/>
- * Extension will follow the original curvature of the circle or ellipse the arc was constructed from<br>
- * If extension causes length of curve to exceed the circumference of the underlying circle or ellipse,
- * returns a closed circle or ellipse.<br/>
- * Returns null if distance is negative
- * @param curve Conic curve to extend
- * @param direction Direction to extend curve in (0-Start, 1-End, 2-Both)
- * @param distance Distance to extend curve
- * @param copy Performs transformation on a duplicate copy of the input curve if true
- * @returns Extended conic curve, null if unsuccessful or on error
- */
-function extendArc(curve, direction, distance, copy) {
-    throw new Error("Method not implemented");
-}
-/**
- * Extends an elliptical arc
- *
- * Changes the starting and ending angles for a conic curve such that the curve is lengthened<br/>
- * Conic curve should be either a circular arc or an elliptical arc<br/>
- * Extension will follow the original curvature of the circle or ellipse the arc was constructed from<br>
- * If extension causes length of curve to exceed the circumference of the underlying circle or ellipse,
- * returns a closed circle or ellipse.<br/>
- * Returns null if distance is negative
- * @param curve Conic curve to extend
- * @param direction Direction to extend curve in (0-Start, 1-End, 2-Both)
- * @param distance Distance to extend curve
- * @param copy Performs transformation on a duplicate copy of the input curve if true
- * @returns Extended conic curve, null if unsuccessful or on error
- */
-function extendEllArc(curve, direction, distance, copy) {
-    throw new Error("Method not implemented");
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/console.ts":
-/*!*****************************************!*\
-  !*** ./src/app/core/modules/console.ts ***!
-  \*****************************************/
-/*! exports provided: Console */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Console", function() { return Console; });
-var Console;
-(function (Console) {
-    function log(val) {
-        console.log('============================\nConsole Log:\n', val);
-    }
-    Console.log = log;
-})(Console || (Console = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/group.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/group.ts ***!
-  \***************************************/
-/*! exports provided: GetNames, Create, Creates, del, getParent, setParent, getChildren */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetNames", function() { return GetNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Create", function() { return Create; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Creates", function() { return Creates; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "del", function() { return del; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getParent", function() { return getParent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setParent", function() { return setParent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChildren", function() { return getChildren; });
-/**
- * Functions for working with groups.
- */
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-//  ===============================================================================================================
-//  Group Get =====================================================================================================
-//  ===============================================================================================================
-/**
- * Gets the names of all the groups in the model.
- *
- * @param model Model to get group names from.
- * @returns List of group names
- */
-function GetNames(model) {
-    return model.getAllGroups().map(function (group) { return group.getName(); });
-}
-//  ===============================================================================================================
-//  Group Constructors ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a new group.
- *
- * @param model Model to create group in.
- * @param name Group name.
- * @returns Ture if the group was successfully created.
- */
-function Create(model, name) {
-    if (model.getGroup(name) !== null) {
-        throw new Error("Group already exists.");
-    }
-    var group = model.addGroup(name);
-    if (group === undefined) {
-        return false;
-    }
-    return true;
-}
-/**
- * Creates a set of new groups.
- *
- * @param model Model to create groups in.
- * @param name List of group names.
- * @returns Ture if all groups were successfully created.
- */
-function Creates(model, names) {
-    var e_1, _a;
-    var ok = true;
-    try {
-        for (var names_1 = __values(names), names_1_1 = names_1.next(); !names_1_1.done; names_1_1 = names_1.next()) {
-            var name_1 = names_1_1.value;
-            if (model.getGroup(name_1) !== null) {
-                throw new Error("Group already exists.");
-            }
-            var group = model.addGroup(name_1);
-            if (group === undefined) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (names_1_1 && !names_1_1.done && (_a = names_1.return)) _a.call(names_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return ok;
-}
-//  ===============================================================================================================
-//  Group Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- * Deletes a group from the model.
- *
- * @param model Model containing the groups.
- * @param group_name Group name to delete.
- * @param delete_geom If true, the objects and points in the group will be deleted.
- * @returns True if the group was successfully deleted.
- */
-function del(model, group_name, delete_geom) {
-    var group = model.getGroup(group_name);
-    if (group === null) {
-        throw new Error("Group does not exist.");
-    }
-    if (delete_geom) {
-        model.getGeom().delObjs(group.getObjs(), false);
-        model.getGeom().delPoints(group.getPoints());
-    }
-    return group.getModel().delGroup(group);
-}
-/**
- * Gets the parent of a group.
- * Returns null if specified group does not have a parent group.
- *
- * @param model Model containing the groups.
- * @param group_name Group name to get parent from.
- * @returns Parent group of specified group if successful, null if unsuccessful or on error
- */
-function getParent(model, group_name) {
-    var group = model.getGroup(group_name);
-    if (group === null) {
-        throw new Error("Group does not exist.");
-    }
-    return group.getParentGroup().getName();
-}
-/**
- * Sets the parent of a group.
- *
- * @param model Model containing the groups.
- * @param group_name Group name to set parent for.
- * @param parent_name Group name of parent.
- * @returns The old parent.
- */
-function setParent(model, group_name, parent_name) {
-    var group = model.getGroup(group_name);
-    var parent = model.getGroup(parent_name);
-    if (group === null) {
-        throw new Error("Group does not exist.");
-    }
-    if (parent === null) {
-        throw new Error("Group does not exist.");
-    }
-    return group.setParentGroup(parent).getName();
-}
-/**
- * Gets the list of names of groups that are children of this group.
- * Returns empty list if specified group does not have any children.
- *
- * @param model Model containing the groups.
- * @param group_name Group name to get children from.
- * @returns A list of group names.
- */
-function getChildren(model, group_name) {
-    var group = model.getGroup(group_name);
-    if (group === null) {
-        throw new Error("Group does not exist.");
-    }
-    return group.getChildGroups().map(function (group) { return group.getName(); });
+function addData(__model__, model) {
+    __model__ = __merge__(__model__, model);
 }
 
 
@@ -2055,6536 +533,29 @@ function getChildren(model, group_name) {
 /*!***************************************!*\
   !*** ./src/app/core/modules/index.ts ***!
   \***************************************/
-/*! exports provided: model, point, pline, plane, pmesh, circle, intersect, object, calc, attrib, group, query, ray, split, topo, list, math, string, gs, gsConstructor, Input, Output, Console, _parameterTypes */
+/*! exports provided: functions, Input, Output, _parameterTypes */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gsConstructor", function() { return gsConstructor; });
-/* harmony import */ var _model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./model */ "./src/app/core/modules/model.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "model", function() { return _model__WEBPACK_IMPORTED_MODULE_0__; });
-/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./point */ "./src/app/core/modules/point.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "point", function() { return _point__WEBPACK_IMPORTED_MODULE_1__; });
-/* harmony import */ var _pline__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pline */ "./src/app/core/modules/pline.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "pline", function() { return _pline__WEBPACK_IMPORTED_MODULE_2__; });
-/* harmony import */ var _plane__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plane */ "./src/app/core/modules/plane.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "plane", function() { return _plane__WEBPACK_IMPORTED_MODULE_3__; });
-/* harmony import */ var _pmesh__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pmesh */ "./src/app/core/modules/pmesh.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "pmesh", function() { return _pmesh__WEBPACK_IMPORTED_MODULE_4__; });
-/* harmony import */ var _circle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./circle */ "./src/app/core/modules/circle.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "circle", function() { return _circle__WEBPACK_IMPORTED_MODULE_5__; });
-/* harmony import */ var _intersect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./intersect */ "./src/app/core/modules/intersect.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "intersect", function() { return _intersect__WEBPACK_IMPORTED_MODULE_6__; });
-/* harmony import */ var _object__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./object */ "./src/app/core/modules/object.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "object", function() { return _object__WEBPACK_IMPORTED_MODULE_7__; });
-/* harmony import */ var _calc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./calc */ "./src/app/core/modules/calc.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "calc", function() { return _calc__WEBPACK_IMPORTED_MODULE_8__; });
-/* harmony import */ var _attrib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./attrib */ "./src/app/core/modules/attrib.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "attrib", function() { return _attrib__WEBPACK_IMPORTED_MODULE_9__; });
-/* harmony import */ var _group__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./group */ "./src/app/core/modules/group.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "group", function() { return _group__WEBPACK_IMPORTED_MODULE_10__; });
-/* harmony import */ var _query__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./query */ "./src/app/core/modules/query.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "query", function() { return _query__WEBPACK_IMPORTED_MODULE_11__; });
-/* harmony import */ var _ray__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ray */ "./src/app/core/modules/ray.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ray", function() { return _ray__WEBPACK_IMPORTED_MODULE_12__; });
-/* harmony import */ var _split__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./split */ "./src/app/core/modules/split.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "split", function() { return _split__WEBPACK_IMPORTED_MODULE_13__; });
-/* harmony import */ var _topo__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./topo */ "./src/app/core/modules/topo.ts");
-/* harmony import */ var _topo__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_topo__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "topo", function() { return _topo__WEBPACK_IMPORTED_MODULE_14__; });
-/* harmony import */ var _list__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./list */ "./src/app/core/modules/list.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "list", function() { return _list__WEBPACK_IMPORTED_MODULE_15__; });
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./math */ "./src/app/core/modules/math.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "math", function() { return _math__WEBPACK_IMPORTED_MODULE_16__; });
-/* harmony import */ var _string__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./string */ "./src/app/core/modules/string.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "string", function() { return _string__WEBPACK_IMPORTED_MODULE_17__; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "gs", function() { return gs_json__WEBPACK_IMPORTED_MODULE_18__; });
-/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./input */ "./src/app/core/modules/input.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Input", function() { return _input__WEBPACK_IMPORTED_MODULE_19__["Input"]; });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/app/core/modules/functions.ts");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "functions", function() { return _functions__WEBPACK_IMPORTED_MODULE_0__; });
+/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Input */ "./src/app/core/modules/Input.ts");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Input", function() { return _Input__WEBPACK_IMPORTED_MODULE_1__; });
+/* harmony import */ var _Output__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Output */ "./src/app/core/modules/Output.ts");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Output", function() { return _Output__WEBPACK_IMPORTED_MODULE_2__; });
+/* harmony import */ var _parameterTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_parameterTypes */ "./src/app/core/modules/_parameterTypes.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_parameterTypes", function() { return _parameterTypes__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"]; });
 
-/* harmony import */ var _output__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./output */ "./src/app/core/modules/output.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Output", function() { return _output__WEBPACK_IMPORTED_MODULE_20__["Output"]; });
 
-/* harmony import */ var _console__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./console */ "./src/app/core/modules/console.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Console", function() { return _console__WEBPACK_IMPORTED_MODULE_21__["Console"]; });
 
-/* harmony import */ var _parameterTypes__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./_parameterTypes */ "./src/app/core/modules/_parameterTypes.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_parameterTypes", function() { return _parameterTypes__WEBPACK_IMPORTED_MODULE_22__["_parameterTypes"]; });
 
 
 
 
+//./old/point
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var gsConstructor = new gs_json__WEBPACK_IMPORTED_MODULE_18__["Model"]().constructor;
-
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/input.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/input.ts ***!
-  \***************************************/
-/*! exports provided: Input */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Input", function() { return Input; });
-var Input;
-(function (Input) {
-    function declare_constant(__constList__, const_name, __input__) {
-        __constList__[const_name] = __input__;
-    }
-    Input.declare_constant = declare_constant;
-})(Input || (Input = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/intersect.ts":
-/*!*******************************************!*\
-  !*** ./src/app/core/modules/intersect.ts ***!
-  \*******************************************/
-/*! exports provided: circleCircle2D, polylinePolyline2D, circlePlane3D, polylinePlane3D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "circleCircle2D", function() { return circleCircle2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "polylinePolyline2D", function() { return polylinePolyline2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "circlePlane3D", function() { return circlePlane3D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "polylinePlane3D", function() { return polylinePlane3D; });
-/* harmony import */ var _libs_conics_circles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/conics/circles */ "./src/app/core/modules/libs/conics/circles.ts");
-/* harmony import */ var _libs_poly_poly__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/poly/poly */ "./src/app/core/modules/libs/poly/poly.ts");
-/* harmony import */ var _libs_poly_polylinePlane__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./libs/poly/polylinePlane */ "./src/app/core/modules/libs/poly/polylinePlane.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/**
- * Function for intersecting geometric objects.
- */
-
-
-
-
-//  ===============================================================================================================
-//  Intersect Functions ===========================================================================================
-//  ===============================================================================================================
-/**
- * Finds the intersection points between two intersecting co-planar circles.
- *
- * @param circle1 Circle 1
- * @param circle2 Circle 2
- * @returns List of intersection points.
- */
-function circleCircle2D(circle1, circle2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObjList"]([circle1, circle2], 2, 3 /* circle */);
-    return _libs_conics_circles__WEBPACK_IMPORTED_MODULE_0__["isectCircleCircle2D"](circle1, circle2);
-}
-/**
- * Finds the intersection points between two coplanar polylines.
- *
- * @param pline1 Polyline 1
- * @param pline2 Polyline 2
- * @returns List of intersection points.
- */
-function polylinePolyline2D(pline1, pline2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObjList"]([pline1, pline2], 2, 100 /* polyline */);
-    return _libs_poly_poly__WEBPACK_IMPORTED_MODULE_1__["_isectPolylinePolyline2D"](pline1, pline2);
-}
-/**
- * Finds the intersection points between a circle and a plane.
- * If no intersection points are found, or if the circle and plane are co-planar,
- * an empty list is returned.
- *
- * @param circle Circle
- * @param plane Plane
- * @returns List of intersection points (0, 1 or 2).
- */
-function circlePlane3D(circle, plane) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObj"](circle, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObj"](plane, 2 /* plane */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObjsSameModel"]([circle, plane]);
-    return _libs_conics_circles__WEBPACK_IMPORTED_MODULE_0__["isectCirclePlane3D"](circle, plane);
-}
-/**
- * Finds the intersection points between a polyine and a plane.
- * If no intersection points are found, an empty list is returned.
- *
- * @param pline Polyline
- * @param plane Plane
- * @returns List of intersection points.
- */
-function polylinePlane3D(pline, plane) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObj"](pline, 100 /* polyline */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObj"](plane, 2 /* plane */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_3__["checkObjsSameModel"]([pline, plane]);
-    return _libs_poly_polylinePlane__WEBPACK_IMPORTED_MODULE_2__["isectPolylinePlane3D"](pline, plane);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/arr/arr.ts":
-/*!**********************************************!*\
-  !*** ./src/app/core/modules/libs/arr/arr.ts ***!
-  \**********************************************/
-/*! exports provided: Arr */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Arr", function() { return Arr; });
-/**
- * A set of static methods for working with arrays of simple types.
- * The arrays can be nested, but they do not contain any objects.
- */
-var Arr = /** @class */ (function () {
-    function Arr() {
-    }
-    /**
-     * Make an array of numbers. All elements in the array will have the same value.
-     * @param length The length of the new array. If length is 0, then an empty array is returned.
-     * @param value The values in the array.
-     * @returns The resulting array.
-     */
-    Arr.make = function (length, value) {
-        if (length === 0) {
-            return [];
-        }
-        return Array.apply(0, new Array(length)).map(function (v, i) { return value; });
-    };
-    /**
-     * Make an array of numbers. All elements in the array will be a numerical sequence, 0, 1, 2, 3....
-     * @param length  The length of the new array. If length is 0, then an empty array is returned.
-     * @returns The resulting array.
-     */
-    Arr.makeSeq = function (length) {
-        if (length === 0) {
-            return [];
-        }
-        return Array.apply(0, new Array(length)).map(function (v, i) { return i; });
-    };
-    /**
-     * Check if two nD arrays are equal (i.e. that all elements in the array are equal, ===.).
-     * If the arrays are unequal in length, false is returned.
-     * Elements in the array can have any value.
-     * @param arr1 The first value.
-     * @param arr2 The second values.
-     * @returns True or false.
-     */
-    Arr.equal = function (arr1, arr2) {
-        if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
-            return arr1 === arr2;
-        }
-        if (arr1.length !== arr2.length) {
-            return false;
-        }
-        for (var i = 0; i < arr1.length; i++) {
-            if (!this.equal(arr1[i], arr2[i])) {
-                return false;
-            }
-        }
-        return true;
-    };
-    /**
-     * Find the position of the first occurrence of a specified value in an array.
-     * The value can be an array (which is not the case for Array.indexOf()).
-     * If the value is not found or is undefined, return -1.
-     * If the array is null or undefined, return -1.
-     * @param value The value, can be a value or a 1D array of values.
-     * @returns The index in the array of the first occurance of the value.
-     */
-    Arr.indexOf = function (arr, value) {
-        if (!Array.isArray(arr)) {
-            throw new Error("First argument must be a array.");
-        }
-        if (!Array.isArray(value)) {
-            return arr.indexOf(value);
-        }
-        for (var i = 0; i < arr.length; i++) {
-            if (Array.isArray(arr[i]) && this.equal(value, arr[i])) {
-                return i;
-            }
-        }
-        return -1;
-    };
-    /**
-     * Replace all occurrences of a specified value in an array.
-     * The input array is changed.
-     * The value can be an array.
-     * If the value is not found or is undefined, return -1.
-     * @param old_value The old value to replace.
-     * @param new_value The new value.
-     * @param arr The array.
-     */
-    Arr.replace = function (arr, old_value, new_value) {
-        if (!Array.isArray(arr)) {
-            throw new Error("First argument must be a array.");
-        }
-        for (var i = 0; i < arr.length; i++) {
-            if (this.equal(arr[i], old_value)) {
-                arr[i] = new_value;
-            }
-        }
-    };
-    /**
-     * Take an nD array and flattens it.
-     * A new array is returned. The input array remains unchanged.
-     * For example, [1, 2, [3, 4], [5, 6]] will become [1, 2, 3, 4, 5, 6].
-     * If the input array is undefined, an empty array is returned.
-     * @param arr The multidimensional array to flatten.
-     * @returns A new 1D array.
-     */
-    Arr.flatten = function (arr, depth) {
-        if (arr === undefined) {
-            return [];
-        }
-        return arr.reduce(function (flat, toFlatten) {
-            if (depth === undefined) {
-                return flat.concat(Array.isArray(toFlatten) ? Arr.flatten(toFlatten) : toFlatten);
-            }
-            else {
-                return flat.concat((Array.isArray(toFlatten) && (depth !== 0)) ?
-                    Arr.flatten(toFlatten, depth - 1) : toFlatten);
-            }
-        }, []);
-    };
-    /**
-     * Make a copy of an nD array.
-     * If the input is not an array, then just return the same thing.
-     * A new array is returned. The input array remains unchanged.
-     * If the input array is undefined, an empty array is returned.
-     * If the input is s sparse array, then the output will alos be a sparse array.
-     * @param arr The nD array to copy.
-     * @returns The new nD array.
-     */
-    Arr.deepCopy = function (arr) {
-        if (arr === undefined) {
-            return [];
-        }
-        if (!Array.isArray(arr)) {
-            return arr;
-        }
-        var arr2 = [];
-        for (var i = 0; i < arr.length; i++) {
-            if (Array.isArray(arr[i])) {
-                arr2[i] = (Arr.deepCopy(arr[i]));
-            }
-            else {
-                if (arr[i] !== undefined) {
-                    arr2[i] = (arr[i]);
-                }
-            }
-        }
-        return arr2;
-    };
-    /**
-     * Fills an nD array with new values (all the same value).
-     * The input array is changed.
-     * If the input array is undefined, an empty array is returned.
-     * The input can be a sparse array.
-     * @param arr The nD array to fill.
-     * @param value The value to insert into the array.
-     */
-    Arr.deepFill = function (arr, value) {
-        if (arr === undefined) {
-            return;
-        }
-        for (var i = 0; i < arr.length; i++) {
-            if (Array.isArray(arr[i])) {
-                Arr.deepFill(arr[i], value);
-            }
-            else {
-                if (arr[i] !== undefined) {
-                    arr[i] = value;
-                }
-            }
-        }
-    };
-    /**
-     * Counts the number of values in an nD array .
-     * The input array remains unchanged.
-     * If the input array is undefined, 0 is returned.
-     * The input can be a sparse array. Undefined values are ignored.
-     * For example, for [1, 2, , , 3], the count will be 3.
-     * @param arr The nD array to count.
-     * @return The number of elements in the nD array.
-     */
-    Arr.deepCount = function (arr) {
-        if (arr === undefined) {
-            return 0;
-        }
-        var a = 0;
-        for (var i in arr) {
-            if (Array.isArray(arr[i])) {
-                a = a + Arr.deepCount(arr[i]);
-            }
-            else {
-                if (arr[i] !== undefined) {
-                    a = a + 1;
-                }
-            }
-        }
-        return a;
-    };
-    return Arr;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/circle3Points.ts":
-/*!***********************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/circle3Points.ts ***!
-  \***********************************************************/
-/*! exports provided: circleFrom3Points */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "circleFrom3Points", function() { return circleFrom3Points; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-
-var EPS = 1e-6;
-// import * as roots from "poly-roots";
-// import * as quadratic from "solve-quadratic-equation";
-// import * as trigo from "./trigo";
-// import * as pl from "../../plane_dev"; // TODO - can be reomved?
-/**
- * Find the center of a circle that passes through three XYZ positions in 3D space.
- * @returns An array of intersection points
- */
-function _circleCenterFrom3Points(a, b, c) {
-    //https://math.stackexchange.com/questions/1076177/3d-coordinates-of-circle-center-given-three-point-on-the-circle
-    var ax = a[0];
-    var ay = a[1];
-    var az = a[2];
-    var bx = b[0];
-    var by = b[1];
-    var bz = b[2];
-    var cx = c[0];
-    var cy = c[1];
-    var cz = c[2];
-    var Cx = bx - ax;
-    var Cy = by - ay;
-    var Cz = bz - az;
-    var Bx = cx - ax;
-    var By = cy - ay;
-    var Bz = cz - az;
-    var B2 = Math.pow(ax, 2) - Math.pow(cx, 2) + Math.pow(ay, 2) - Math.pow(cy, 2) + Math.pow(az, 2) - Math.pow(cz, 2);
-    var C2 = Math.pow(ax, 2) - Math.pow(bx, 2) + Math.pow(ay, 2) - Math.pow(by, 2) + Math.pow(az, 2) - Math.pow(bz, 2);
-    var CByz = Cy * Bz - Cz * By;
-    var CBxz = Cx * Bz - Cz * Bx;
-    var CBxy = Cx * By - Cy * Bx;
-    var ZZ1 = -(Bz - Cz * Bx / Cx) / (By - Cy * Bx / Cx);
-    var Z01 = -(B2 - Bx / Cx * C2) / (2 * (By - Cy * Bx / Cx));
-    var ZZ2 = -(ZZ1 * Cy + Cz) / Cx;
-    var Z02 = -(2 * Z01 * Cy + C2) / (2 * Cx);
-    // and finally the coordinates of the center:
-    var dz = -((Z02 - ax) * CByz - (Z01 - ay) * CBxz - az * CBxy) / (ZZ2 * CByz - ZZ1 * CBxz + CBxy);
-    var dx = ZZ2 * dz + Z02;
-    var dy = ZZ1 * dz + Z01;
-    return [dx, dy, dz];
-}
-function circleFrom3Points(xyz1, xyz2, xyz3, is_closed) {
-    var _a, _b, _c, _d;
-    // create vectors
-    var p1 = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], xyz1)))();
-    var p2 = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], xyz2)))();
-    var p3 = new ((_c = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_c, __spread([void 0], xyz3)))();
-    var world_x = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](1, 0, 0);
-    var world_y = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-    var world_z = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 0, 1);
-    // calc vectors for xform matrix
-    var x_axis = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](p2, p1); // .normalize();
-    var tmp_vec = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](p3, p2);
-    var z_axis = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](x_axis, tmp_vec); // .normalize();
-    var y_axis = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](z_axis, x_axis); // .normalize();
-    // create the xform matrices to map 3d -> 2d
-    var m = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](p1, x_axis, y_axis);
-    var m_inv = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["matrixInverse"](m);
-    // calc the circle origin
-    var p2_2d = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](p2, m);
-    var p3_2d = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](p3, m);
-    var origin_2d_xyz = _circleCenterFrom3Points([0, 0, 0], p2_2d.toArray(), p3_2d.toArray());
-    var origin_2d = new ((_d = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_d, __spread([void 0], origin_2d_xyz)))();
-    var circle_origin = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](origin_2d, m_inv);
-    // calc the circle radius
-    // const radius: number = origin_2d.length();
-    // is not arc? then return data for circle
-    m_inv.setPosition(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]());
-    if (is_closed) {
-        var circle_x_axis_2d_1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](origin_2d.length(), 0, 0);
-        var circle_x_axis_1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](circle_x_axis_2d_1, m_inv);
-        var circle_y_axis_2d_1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-        var circle_y_axis_1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](circle_y_axis_2d_1, m_inv);
-        return {
-            origin: circle_origin.toArray(),
-            vec_x: circle_x_axis_1.toArray(),
-            vec_y: circle_y_axis_1.toArray(),
-            angle: null
-        };
-    }
-    // calc the circle vectors
-    var circle_x_axis_2d = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorNegate"](origin_2d);
-    var circle_x_axis = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](circle_x_axis_2d, m_inv);
-    var circle_y_axis_2d = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](world_z, circle_x_axis_2d);
-    var circle_y_axis = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](circle_y_axis_2d, m_inv);
-    // calc the circle angles
-    var angle_vec_2d = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](p3_2d, origin_2d);
-    var angle = circle_x_axis_2d.angleTo(angle_vec_2d);
-    angle = angle * 180 / Math.PI;
-    var angle_gt_180 = (_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](circle_x_axis_2d, angle_vec_2d).z < 0);
-    var y_gt_0 = (circle_origin.y > 0);
-    if (angle_gt_180) {
-        angle = 360 - angle;
-    }
-    // return the data for arc
-    return {
-        origin: circle_origin.toArray(),
-        vec_x: circle_x_axis.toArray(),
-        vec_y: circle_y_axis.toArray(),
-        angle: angle
-    };
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/circleCircle2D.ts":
-/*!************************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/circleCircle2D.ts ***!
-  \************************************************************/
-/*! exports provided: isectCircleCircle2D, innerTangentsCircleCircle2D, outerTangentsCircleCircle2D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isectCircleCircle2D", function() { return isectCircleCircle2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "innerTangentsCircleCircle2D", function() { return innerTangentsCircleCircle2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "outerTangentsCircleCircle2D", function() { return outerTangentsCircleCircle2D; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var kld_intersections__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! kld-intersections */ "./node_modules/kld-intersections/index.js");
-/* harmony import */ var kld_intersections__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(kld_intersections__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _circleUtil__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./circleUtil */ "./src/app/core/modules/libs/conics/circleUtil.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-
-
-var EPS = 1e-6;
-/**
- * Circle-circle intersection
- * @param circle1
- * @param circle2
- * @returns An array of intersection points
- */
-function isectCircleCircle2D(circle1, circle2) {
-    var _a, _b, _c, _d, _e, _f, e_1, _g, e_2, _h, e_3, _j;
-    var m1 = circle1.getModel();
-    var m2 = circle2.getModel();
-    if (m1 !== m2) {
-        throw new Error("Entities must be in the same model.");
-    }
-    var v1 = circle1.getAxes();
-    var v2 = circle2.getAxes();
-    if (!_threex_threex__WEBPACK_IMPORTED_MODULE_1__["planesAreCoplanar"](circle1.getOrigin(), v1[2], circle2.getOrigin(), v2[2])) {
-        throw new Error("Entities must be coplanar.");
-    }
-    var g1 = m1.getGeom();
-    var r = circle1.getRadius() + circle2.getRadius();
-    var O1O2 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromPointsAtoB"](circle1.getOrigin(), circle2.getOrigin(), false);
-    if (O1O2.length() > r) {
-        return null;
-    }
-    // Direct Orthonormal Basis of reference
-    var O1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 0, 0);
-    var e1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](1, 0, 0);
-    var e2 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-    var e3 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 0, 1);
-    // Circle 1 Direct Orthonormal Basis
-    var C1 = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], circle1.getOrigin().getPosition())))();
-    var U1 = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], v1[0])))().normalize();
-    var V1 = new ((_c = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_c, __spread([void 0], v1[1])))().normalize();
-    var W1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](U1, V1, true);
-    var angles1 = circle1.getAngles();
-    if (angles1 === null) {
-        angles1 = [0, 360];
-    }
-    var angles_circle_1 = angles1[1] - angles1[0];
-    // Circle 2 Direct Orthonormal Basis
-    var C2 = new ((_d = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_d, __spread([void 0], circle2.getOrigin().getPosition())))();
-    var U2 = new ((_e = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_e, __spread([void 0], v2[0])))().normalize();
-    var V2 = new ((_f = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_f, __spread([void 0], v2[1])))().normalize();
-    var W2 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](U2, V2, true);
-    var angles2 = circle2.getAngles();
-    if (angles2 === null) {
-        angles2 = [0, 360];
-    }
-    var angles_circle_2 = angles2[1] - angles2[0];
-    // Rotation Matrix expressed in the reference direct orthonormal basis
-    // Circle 1
-    var C1O1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](O1, C1, false);
-    var vec_O_1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](_threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](C1O1, U1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](C1O1, V1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](C1O1, W1));
-    var x1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](_threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](e1, U1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](e1, V1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](e1, W1));
-    var y1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](_threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](e2, U1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](e2, V1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](e2, W1));
-    var rotation1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](vec_O_1, x1, y1);
-    // Initial Rotation Matrix expressed in the reference direct orthonormal basis
-    // Circle 1
-    var O1C1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](C1, O1, false);
-    var init_vec_O_1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](_threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](O1C1, e1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](O1C1, e2), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](O1C1, e3));
-    var init_x1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](_threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](U1, e1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](U1, e2), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](U1, e3));
-    var init_y1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](_threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](V1, e1), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](V1, e2), _threex_threex__WEBPACK_IMPORTED_MODULE_1__["dotVectors"](V1, e3));
-    var init_rotation1 = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](init_vec_O_1, init_x1, init_y1);
-    var a = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](C1, init_rotation1);
-    var b = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](C2, init_rotation1);
-    var circle_1 = {
-        center: new kld_intersections__WEBPACK_IMPORTED_MODULE_2__["Point2D"](a.x, a.y),
-        radius: circle1.getRadius(),
-    };
-    var circle_2 = {
-        center: new kld_intersections__WEBPACK_IMPORTED_MODULE_2__["Point2D"](b.x, b.y),
-        radius: circle2.getRadius(),
-    };
-    var result = kld_intersections__WEBPACK_IMPORTED_MODULE_2__["Intersection"].intersectCircleCircle(circle_1.center, circle_1.radius, circle_2.center, circle_2.radius);
-    // Retransforming into original coordinates system
-    var results = [];
-    try {
-        for (var _k = __values(result.points), _l = _k.next(); !_l.done; _l = _k.next()) {
-            var point = _l.value;
-            results.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](point.x, point.y, 0));
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (_l && !_l.done && (_g = _k.return)) _g.call(_k);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    var results_c1 = [];
-    try {
-        for (var results_1 = __values(results), results_1_1 = results_1.next(); !results_1_1.done; results_1_1 = results_1.next()) {
-            var point = results_1_1.value;
-            results_c1.push(_threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](point, rotation1));
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (results_1_1 && !results_1_1.done && (_h = results_1.return)) _h.call(results_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    var points = [];
-    try {
-        for (var results_c1_1 = __values(results_c1), results_c1_1_1 = results_c1_1.next(); !results_c1_1_1.done; results_c1_1_1 = results_c1_1.next()) {
-            var point = results_c1_1_1.value;
-            var c1_to_point = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](point.x - C1.x, point.y - C1.y, point.z - C1.z);
-            var c2_to_point = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](point.x - C2.x, point.y - C2.y, point.z - C2.z);
-            var angle_1 = U1.angleTo(c1_to_point) * 180 / Math.PI;
-            if (_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](U1, c1_to_point).dot(_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](U1, V1)) < 0) {
-                angle_1 = 360 - angle_1;
-            }
-            var angle_2 = U2.angleTo(c2_to_point) * 180 / Math.PI;
-            if (_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](U2, c2_to_point).dot(_threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](U2, V2)) < 0) {
-                angle_2 = 360 - angle_2;
-            }
-            // if (angles_circle_1 - angle_1 >= 0 && angles_circle_2 - angle_2 >= 0) {
-            //     points.push(g1.addPoint([point.x, point.y, point.z]));
-            // }
-            if (_circleUtil__WEBPACK_IMPORTED_MODULE_3__["angleInCircle"](circle1, angle_1) && _circleUtil__WEBPACK_IMPORTED_MODULE_3__["angleInCircle"](circle2, angle_2)) {
-                points.push(g1.addPoint([point.x, point.y, point.z]));
-            }
-        }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (results_c1_1_1 && !results_c1_1_1.done && (_j = results_c1_1.return)) _j.call(results_c1_1);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-    return points;
-}
-/**
- * Find the inner tangents of two coplanar circles.
- * @param circle1
- * @param circle2
- * @returns An array of start and end points of the two tangent lines
- */
-function innerTangentsCircleCircle2D(circle1, circle2) {
-    var _a, _b;
-    var c1_origin = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], circle1.getOrigin().getPosition())))();
-    var c1_axes = circle1.getAxes().map(function (v) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], v)))();
-    });
-    var c2_origin = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], circle2.getOrigin().getPosition())))();
-    var c2_axes = circle2.getAxes().map(function (v) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], v)))();
-    });
-    if (!_threex_threex__WEBPACK_IMPORTED_MODULE_1__["planesAreCoplanar"](c1_origin, c1_axes[2], c2_origin, c2_axes[2])) {
-        throw new Error("Circles must be coplanar.");
-    }
-    // set the x axis to be from o1 to o2
-    var x_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().subVectors(c2_origin, c1_origin).normalize();
-    var y_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().crossVectors(x_vec, c1_axes[2]);
-    // make matrixes
-    var matrix_pos = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](c1_origin, x_vec, y_vec);
-    var matrix_neg = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](c1_origin, x_vec, y_vec);
-    // transform origins from 3d to 2d
-    c1_origin.applyMatrix4(matrix_neg);
-    c2_origin.applyMatrix4(matrix_neg);
-    // get the radii
-    var r1 = circle1.getRadius();
-    var r2 = circle2.getRadius();
-    // check that circles do not overlap
-    if ((r1 + r2) >= c2_origin.x) {
-        return null;
-    }
-    // calc mid point
-    var dist = c2_origin.x;
-    var dist1 = dist * (r1 / (r1 + r2));
-    var dist2 = dist - dist1;
-    // calc angles, a1 is the angle to the start point
-    var a1 = Math.acos(r1 / dist1);
-    // calc start and end of each inner tangent line
-    var t1_start = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](r1 * Math.cos(a1), r1 * Math.sin(a1), 0);
-    var t2_start = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](t1_start.x, -t1_start.y, 0);
-    var t1_end = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](dist - (r2 * Math.cos(a1)), -r2 * Math.sin(a1), 0);
-    var t2_end = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](t1_end.x, -t1_end.y, 0);
-    // tranform points from 2d to 3d
-    t1_start.applyMatrix4(matrix_pos);
-    t2_start.applyMatrix4(matrix_pos);
-    t1_end.applyMatrix4(matrix_pos);
-    t2_end.applyMatrix4(matrix_pos);
-    // create points in the model
-    var g = circle1.getModel().getGeom();
-    var t1_start_point = g.addPoint(t1_start.toArray());
-    var t2_start_point = g.addPoint(t2_start.toArray());
-    var t1_end_point = g.addPoint(t1_end.toArray());
-    var t2_end_point = g.addPoint(t2_end.toArray());
-    // return the two polylines
-    return [
-        g.addPolyline([t1_start_point, t1_end_point], false),
-        g.addPolyline([t2_start_point, t2_end_point], false)
-    ];
-}
-/**
- * Find the outer tangents of two coplanar circles.
- * @param circle1
- * @param circle2
- * @returns An array of two tangent lines
- */
-function outerTangentsCircleCircle2D(circle1, circle2) {
-    var _a, _b;
-    var c1_origin = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], circle1.getOrigin().getPosition())))();
-    var c1_axes = circle1.getAxes().map(function (v) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], v)))();
-    });
-    var c2_origin = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], circle2.getOrigin().getPosition())))();
-    var c2_axes = circle2.getAxes().map(function (v) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], v)))();
-    });
-    if (!_threex_threex__WEBPACK_IMPORTED_MODULE_1__["planesAreCoplanar"](c1_origin, c1_axes[2], c2_origin, c2_axes[2])) {
-        throw new Error("Circles must be coplanar.");
-    }
-    // set the x axis to be from o1 to o2
-    var x_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().subVectors(c2_origin, c1_origin).normalize();
-    var y_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().crossVectors(x_vec, c1_axes[2]);
-    // make matrixes
-    var matrix_pos = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](c1_origin, x_vec, y_vec);
-    var matrix_neg = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](c1_origin, x_vec, y_vec);
-    // transform origins from 3d to 2d
-    c1_origin.applyMatrix4(matrix_neg);
-    c2_origin.applyMatrix4(matrix_neg);
-    // get the radii
-    var r1 = circle1.getRadius();
-    var r2 = circle2.getRadius();
-    // check that circles do not overlap
-    if ((r1 + r2) >= c2_origin.x) {
-        return null;
-    }
-    // dist between origins
-    var dist = c2_origin.x;
-    // calc angles, a1 is the angle to the start point
-    var a1;
-    if (r1 > r1) {
-        a1 = Math.acos((r2 - r1) / dist);
-    }
-    else {
-        a1 = -Math.acos((r1 - r2) / dist);
-    }
-    // calc start and end of each inner tangent line
-    var t1_start = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](r1 * Math.cos(a1), r1 * Math.sin(a1), 0);
-    var t1_end = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](dist + (r2 * Math.cos(a1)), r2 * Math.sin(a1), 0);
-    var t2_start = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](t1_start.x, -t1_start.y, 0);
-    var t2_end = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](t1_end.x, -t1_end.y, 0);
-    // tranform points from 2d to 3d
-    t1_start.applyMatrix4(matrix_pos);
-    t2_start.applyMatrix4(matrix_pos);
-    t1_end.applyMatrix4(matrix_pos);
-    t2_end.applyMatrix4(matrix_pos);
-    // create points in the model
-    var g = circle1.getModel().getGeom();
-    var t1_start_point = g.addPoint(t1_start.toArray());
-    var t2_start_point = g.addPoint(t2_start.toArray());
-    var t1_end_point = g.addPoint(t1_end.toArray());
-    var t2_end_point = g.addPoint(t2_end.toArray());
-    // return the two polylines
-    return [
-        g.addPolyline([t1_start_point, t1_end_point], false),
-        g.addPolyline([t2_start_point, t2_end_point], false)
-    ];
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/circlePlane3D.ts":
-/*!***********************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/circlePlane3D.ts ***!
-  \***********************************************************/
-/*! exports provided: isectCirclePlane3D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isectCirclePlane3D", function() { return isectCirclePlane3D; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _trigo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./trigo */ "./src/app/core/modules/libs/conics/trigo.ts");
-/* harmony import */ var _circleUtil__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./circleUtil */ "./src/app/core/modules/libs/conics/circleUtil.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-
-var EPS = 1e-6;
-/**
- * Circle-Plane intersection
- * @param circle
- * @param plane
- * @returns Adds intersecting points to the geometry if successfull, [] if empty or coplanar
- */
-function isectCirclePlane3D(circle, plane) {
-    var _a, _b, e_1, _c;
-    // http://mathforum.org/library/drmath/view/69136.html
-    var m = circle.getModel();
-    var eps = 1e-7;
-    // get plane
-    var PO = plane.getOrigin().getPosition();
-    var n1 = [plane.getCartesians()[0], plane.getCartesians()[1], plane.getCartesians()[2]];
-    // get circle
-    var C0 = circle.getOrigin().getPosition();
-    var CA = circle.getAxes();
-    var U1 = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], CA[0])))();
-    var V1 = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], CA[1])))().setLength(U1.length());
-    var _n1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](n1[0], n1[1], n1[2]);
-    // calculate t
-    var A = n1[0] * (C0[0] - PO[0]) + n1[1] * (C0[1] - PO[1]) + n1[2] * (C0[2] - PO[2]);
-    var B = n1[0] * U1.x + n1[1] * U1.y + n1[2] * U1.z;
-    var C = n1[0] * V1.x + n1[1] * V1.y + n1[2] * V1.z;
-    var _t = _trigo__WEBPACK_IMPORTED_MODULE_1__["_solve_trigo"](A, B, C);
-    if (_t === null) {
-        return [];
-    }
-    var result = [];
-    if (Math.abs(Math.abs(_t[0] - _t[1]) - Math.PI) < EPS) {
-        delete _t[0];
-    }
-    try {
-        for (var _t_1 = __values(_t), _t_1_1 = _t_1.next(); !_t_1_1.done; _t_1_1 = _t_1.next()) {
-            var t = _t_1_1.value;
-            if ((t !== null) && (t != undefined)) {
-                var ok1 = false;
-                var ok2 = false;
-                if (circle.isClosed()) {
-                    ok1 = true;
-                    ok2 = true;
-                }
-                else {
-                    var angle = t * (180 / Math.PI);
-                    if (_circleUtil__WEBPACK_IMPORTED_MODULE_2__["angleInCircle"](circle, angle)) {
-                        ok1 = true;
-                    }
-                    if (_circleUtil__WEBPACK_IMPORTED_MODULE_2__["angleInCircle"](circle, angle + 180)) {
-                        ok2 = true;
-                    }
-                    //console.log(circle.getAngles(), angle, ok1, angle + 180, ok2);
-                }
-                if (ok1) {
-                    var point1 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](C0[0] + Math.cos(t) * U1.x + Math.sin(t) * V1.x - PO[0], C0[1] + Math.cos(t) * U1.y + Math.sin(t) * V1.y - PO[1], C0[2] + Math.cos(t) * U1.z + Math.sin(t) * V1.z - PO[2]);
-                    //console.log("point1", t, point1);
-                    if (Math.abs(_n1.dot(point1)) < eps) {
-                        result.push(m.getGeom().addPoint([
-                            C0[0] + Math.cos(t) * U1.x + Math.sin(t) * V1.x,
-                            C0[1] + Math.cos(t) * U1.y + Math.sin(t) * V1.y,
-                            C0[2] + Math.cos(t) * U1.z + Math.sin(t) * V1.z
-                        ]));
-                    }
-                }
-                if (ok2) {
-                    var point2 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](C0[0] + Math.cos(t + Math.PI) * U1.x + Math.sin(t + Math.PI) * V1.x - PO[0], C0[1] + Math.cos(t + Math.PI) * U1.y + Math.sin(t + Math.PI) * V1.y - PO[1], C0[2] + Math.cos(t + Math.PI) * U1.z + Math.sin(t + Math.PI) * V1.z - PO[2]);
-                    //console.log("point2", t, point2);
-                    if (Math.abs(_n1.dot(point2)) < eps) {
-                        result.push(m.getGeom().addPoint([
-                            C0[0] + Math.cos(t + Math.PI) * U1.x + Math.sin(t + Math.PI) * V1.x,
-                            C0[1] + Math.cos(t + Math.PI) * U1.y + Math.sin(t + Math.PI) * V1.y,
-                            C0[2] + Math.cos(t + Math.PI) * U1.z + Math.sin(t + Math.PI) * V1.z
-                        ]));
-                    }
-                }
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (_t_1_1 && !_t_1_1.done && (_c = _t_1.return)) _c.call(_t_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return result;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/circlePolyline2D.ts":
-/*!**************************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/circlePolyline2D.ts ***!
-  \**************************************************************/
-/*! exports provided: _isectCircleLine2D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_isectCircleLine2D", function() { return _isectCircleLine2D; });
-var EPS = 1e-6;
-/**
- * Circle-Line intersection
- * @param circle
- * @param Line, represented by 2 Points
- * @returns An array of intersection points
- */
-function _isectCircleLine2D() {
-    throw new Error("Method not implemented.");
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/circleUtil.ts":
-/*!********************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/circleUtil.ts ***!
-  \********************************************************/
-/*! exports provided: pointInCircle, tInCircle, angleInCircle */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointInCircle", function() { return pointInCircle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tInCircle", function() { return tInCircle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "angleInCircle", function() { return angleInCircle; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-
-var EPS = 1e-6;
-/**
- * Check if a points is within the circle arc
- * @param circle
- * @param point
- * @returns True is it is inside
- */
-function pointInCircle(circle, point) {
-    var _a;
-    if (circle.isClosed()) {
-        return true;
-    }
-    // create matrix to map from the 3D plane for circle into the XY plane
-    var origin = circle.getOrigin().getPosition();
-    var axes = circle.getAxes();
-    var matrix = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixFromXYZAxes"](origin, axes, true);
-    // map the point onto the XY plane
-    var vpoint = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], point.getPosition())))();
-    vpoint.applyMatrix4(matrix);
-    // calculate the angle between the point vector and the x axis, in radians
-    var angle_rad = Math.atan2(vpoint.y, vpoint.x);
-    if (angle_rad < 0) {
-        angle_rad += (2 * Math.PI);
-    }
-    var angle_deg = angle_rad * (180 / Math.PI);
-    // mow check angle
-    return angleInCircle(circle, angle_deg);
-}
-/**
- * Check if a t value (for closed circle) is within the circle arc
- * @param circle
- * @param t
- * @returns True is it is inside
- */
-function tInCircle(circle, t) {
-    if (circle.isClosed()) {
-        return true;
-    }
-    var angle = t * (180 / Math.PI);
-    return angleInCircle(circle, angle);
-}
-/**
- * Check if an angle (in degrees) isf within the circle arc
- * @param circle
- * @param angle
- * @returns True is it is inside
- */
-function angleInCircle(circle, angle) {
-    if (circle.isClosed()) {
-        return true;
-    }
-    // convert angle to 0 to 360
-    if (angle < 0) {
-        angle = 360 + (angle % 360);
-    }
-    if (angle > 360) {
-        angle = angle % 360;
-    }
-    // get the angles, calc start and end, incl EPS
-    var angles = circle.getAngles();
-    var start = angles[0] - EPS;
-    var end = angles[1] + EPS;
-    // return result
-    if (angles[0] < angles[1]) {
-        if ((angle >= start) && (angle <= end)) {
-            return true;
-        }
-    }
-    else {
-        if ((angle >= start) || (angle <= end)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/circles.ts":
-/*!*****************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/circles.ts ***!
-  \*****************************************************/
-/*! exports provided: circleFrom3Points, isectCircleCircle2D, innerTangentsCircleCircle2D, outerTangentsCircleCircle2D, _isectCircleLine2D, isectCirclePlane3D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _circle3Points__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./circle3Points */ "./src/app/core/modules/libs/conics/circle3Points.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "circleFrom3Points", function() { return _circle3Points__WEBPACK_IMPORTED_MODULE_0__["circleFrom3Points"]; });
-
-/* harmony import */ var _circleCircle2D__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./circleCircle2D */ "./src/app/core/modules/libs/conics/circleCircle2D.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isectCircleCircle2D", function() { return _circleCircle2D__WEBPACK_IMPORTED_MODULE_1__["isectCircleCircle2D"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "innerTangentsCircleCircle2D", function() { return _circleCircle2D__WEBPACK_IMPORTED_MODULE_1__["innerTangentsCircleCircle2D"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "outerTangentsCircleCircle2D", function() { return _circleCircle2D__WEBPACK_IMPORTED_MODULE_1__["outerTangentsCircleCircle2D"]; });
-
-/* harmony import */ var _circlePolyline2D__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./circlePolyline2D */ "./src/app/core/modules/libs/conics/circlePolyline2D.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_isectCircleLine2D", function() { return _circlePolyline2D__WEBPACK_IMPORTED_MODULE_2__["_isectCircleLine2D"]; });
-
-/* harmony import */ var _circlePlane3D__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./circlePlane3D */ "./src/app/core/modules/libs/conics/circlePlane3D.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isectCirclePlane3D", function() { return _circlePlane3D__WEBPACK_IMPORTED_MODULE_3__["isectCirclePlane3D"]; });
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/conics/trigo.ts":
-/*!***************************************************!*\
-  !*** ./src/app/core/modules/libs/conics/trigo.ts ***!
-  \***************************************************/
-/*! exports provided: _solve_trigo */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_solve_trigo", function() { return _solve_trigo; });
-/**
-  * Solves exact solutions of the trigonometric equation A + B.cos(t) + C.sin(t) = 0
-  * @param A, real number, parameter of the trigonometric equation
-  * @param B, real number, parameter of the trigonometric equation
-  * @param C, real number, parameter of the trigonometric equation
-  * @return a set of 2 real numbers solutions of the equation
-  */
-function _solve_trigo(A, B, C) {
-    var num1 = -A;
-    var den1 = Math.sqrt(B * B + C * C);
-    var num2 = B;
-    var den2 = C;
-    if (C === 0) {
-        if (B === 0) {
-            return null;
-        }
-        if (Math.abs(A / B) > 1) {
-            return null;
-        }
-        return [(-Math.acos(-A / B)) % (2 * Math.PI), (Math.acos(-A / B)) % (2 * Math.PI)];
-    }
-    if (Math.abs(num1 / den1) > 1) {
-        return null;
-    }
-    var t1 = Math.asin(num1 / den1) - Math.atan(num2 / den2);
-    var t2 = Math.PI - Math.atan(num2 / den2) - Math.asin(num1 / den1);
-    return [t1 % (2 * Math.PI), t2 % (2 * Math.PI)];
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/filesys/download.ts":
-/*!*******************************************************!*\
-  !*** ./src/app/core/modules/libs/filesys/download.ts ***!
-  \*******************************************************/
-/*! exports provided: save */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "save", function() { return save; });
-function save(data, filename) {
-    var data_type = 'text/plain;charset=utf-8';
-    var data_bom = decodeURIComponent('%ef%bb%bf');
-    if (window.navigator.msSaveBlob) {
-        var blob = new Blob([data_bom + data], { type: data_type });
-        window.navigator.msSaveBlob(blob, data);
-    }
-    else {
-        var link = document.createElement('a');
-        var content = data_bom + data;
-        var uriScheme = ['data:', data_type, ','].join('');
-        link.href = uriScheme + content;
-        link.download = filename;
-        //FF requires the link in actual DOM
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-    return true;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/poly/poly.ts":
-/*!************************************************!*\
-  !*** ./src/app/core/modules/libs/poly/poly.ts ***!
-  \************************************************/
-/*! exports provided: getVertexNormal, pointsLoftLoop, pointsLoft, pointsExtend, pointsEvaluate, _isectPolylinePolyline2D, _splitPolylinePolyline2D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getVertexNormal", function() { return getVertexNormal; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointsLoftLoop", function() { return pointsLoftLoop; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointsLoft", function() { return pointsLoft; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointsExtend", function() { return pointsExtend; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointsEvaluate", function() { return pointsEvaluate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_isectPolylinePolyline2D", function() { return _isectPolylinePolyline2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_splitPolylinePolyline2D", function() { return _splitPolylinePolyline2D; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-var EPS = 1e-6;
-/**
- * Get a normal from a face vertex
- */
-function getVertexNormal(vertex) {
-    var next = vertex.next();
-    var prev = vertex.previous();
-    var vector_next = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromVerticesAtoB"](vertex, next);
-    var vector_prev = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromVerticesAtoB"](vertex, prev);
-    var normal = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](vector_next, vector_prev);
-    //console.log("normal", normal.lengthSq());
-    if (normal.lengthSq() > EPS) {
-        return normal;
-    } //TODO normal length looks big
-    // this will be executed for degenerate cases, e.g. colinear points
-    for (var i = 0; i < vertex.getWireOrFace().numVertices() - 2; i++) {
-        if (vector_prev.lengthSq() < EPS) {
-            prev = prev.previous();
-            vector_prev = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromVerticesAtoB"](vertex, prev);
-        }
-        next = next.next();
-        vector_next = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["vectorFromVerticesAtoB"](vertex, next);
-        normal = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](vector_next, vector_prev);
-        if (normal.lengthSq() > EPS) {
-            return normal;
-        }
-    }
-    throw new Error("Failed to get normal from face.");
-}
-/**
- *  Loop through a list of list of points, and loft.
- *  The lists represent rows, each row has sub lists. The sub lists get lofted.
- */
-function pointsLoftLoop(points_lists, is_closed) {
-    var mesh_points = [];
-    var num_lists = points_lists.length;
-    var list_length = points_lists[0].length;
-    for (var list_pos = 0; list_pos < list_length; list_pos++) {
-        var points_list = [];
-        for (var list_num = 0; list_num < num_lists; list_num++) {
-            points_list.push(points_lists[list_num][list_pos]);
-        }
-        mesh_points.push.apply(mesh_points, __spread(pointsLoft(points_list, is_closed)));
-    }
-    return mesh_points;
-}
-/**
- *  Generate a nested list of points, ready for creating polymesh faces.
- */
-function pointsLoft(points, is_closed) {
-    var mesh_points = [];
-    for (var i = 0; i < points.length - 1; i++) {
-        for (var j = 0; j < points[i].length; j++) {
-            if (j < points[i].length - 1) {
-                mesh_points.push([points[i][j], points[i][j + 1], points[i + 1][j + 1], points[i + 1][j]]);
-            }
-            else {
-                if (is_closed) {
-                    mesh_points.push([points[i][j], points[i][0], points[i + 1][0], points[i + 1][j]]);
-                }
-            }
-        }
-    }
-    return mesh_points;
-}
-/**
- * Moves the end point away from the start point by distance.
- * If create_point is true, then a new point get created, otherwise the existing point gets moved.
- */
-function pointsExtend(start, end, distance, create) {
-    if (create === void 0) { create = true; }
-    var _a, _b;
-    var start_vec = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], start.getPosition())))();
-    var end_vec = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], end.getPosition())))();
-    var dir_vec = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](end_vec, start_vec);
-    dir_vec.setLength(distance);
-    var new_xyz = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["addVectors"](end_vec, dir_vec).toArray();
-    if (create) {
-        var geom = start.getGeom();
-        return geom.addPoint(new_xyz);
-    }
-    else {
-        end.setPosition(new_xyz);
-        return end;
-    }
-}
-/**
- * Evaluates the position between a sequence of points.
- * A new point is always created.
- */
-function pointsEvaluate(points, t_param) {
-    var geom = points[0].getGeom();
-    if (t_param === 0) {
-        return geom.addPoint(points[0].getPosition());
-    }
-    if (t_param === 1) {
-        return geom.addPoint(points[points.length - 1].getPosition());
-    }
-    if (t_param < 0 || t_param > 1) {
-        throw new Error("t parameter is out of range");
-    }
-    var vec_points = points.map(function (point) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], point.getPosition())))();
-    });
-    var num_segs = points.length - 1;
-    var dists_to_segends = [0];
-    var total_length = 0;
-    for (var i = 0; i < num_segs; i++) {
-        var seg_vec = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](vec_points[i + 1], vec_points[i]);
-        total_length += seg_vec.length();
-        dists_to_segends.push(total_length);
-    }
-    var t_mapped = t_param * total_length;
-    for (var i = 0; i < vec_points.length - 1; i++) {
-        if (t_mapped >= dists_to_segends[i] && t_mapped < dists_to_segends[i + 1]) {
-            var start_seg = vec_points[i];
-            var end_seg = vec_points[i + 1];
-            var seg_vec = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](end_seg, start_seg);
-            var start_dist = dists_to_segends[i];
-            seg_vec.setLength(t_mapped - start_dist);
-            var xyz = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["addVectors"](start_seg, seg_vec).toArray();
-            return geom.addPoint(xyz);
-        }
-    }
-    throw new Error("Something went wrong evaluating the t parameter.");
-}
-/**
- * Intersect polylines.
- */
-function _isectPolylinePolyline2D(pline1, pline2) {
-    var e_1, _a, e_2, _b;
-    var model = pline1.getModel();
-    var points1 = pline1.getPointsArr();
-    var points2 = pline2.getPointsArr();
-    // Add points for closed polylines
-    if (pline1.isClosed()) {
-        points1.push(points1[0]);
-    }
-    if (pline2.isClosed()) {
-        points2.push(points2[0]);
-    }
-    // Create vpoints
-    var points1_vec = points1.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    var points2_vec = points2.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    var ortho_vecs = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["orthoVectorsFromPlanarVPoints"](__spread(points1_vec, points2_vec));
-    // Create the matrixes to transform between 3d and 2d
-    if (ortho_vecs === null) {
-        throw new Error("Entities must be coplanar.");
-    }
-    var matrix_neg = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](points1_vec[0], ortho_vecs[0], ortho_vecs[1]);
-    var matrix_pos = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](points1_vec[0], ortho_vecs[0], ortho_vecs[1]);
-    try {
-        // Make the polyline points 2D, and also check that they really are 2d
-        for (var points1_vec_1 = __values(points1_vec), points1_vec_1_1 = points1_vec_1.next(); !points1_vec_1_1.done; points1_vec_1_1 = points1_vec_1.next()) {
-            var point = points1_vec_1_1.value;
-            point.applyMatrix4(matrix_neg);
-            if (Math.abs(point.z) > EPS) {
-                return null;
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (points1_vec_1_1 && !points1_vec_1_1.done && (_a = points1_vec_1.return)) _a.call(points1_vec_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    try {
-        for (var points2_vec_1 = __values(points2_vec), points2_vec_1_1 = points2_vec_1.next(); !points2_vec_1_1.done; points2_vec_1_1 = points2_vec_1.next()) {
-            var point = points2_vec_1_1.value;
-            point.applyMatrix4(matrix_neg);
-            if (Math.abs(point.z) > EPS) {
-                return null;
-            }
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (points2_vec_1_1 && !points2_vec_1_1.done && (_b = points2_vec_1.return)) _b.call(points2_vec_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    // Loop through each edge and check for intersections
-    var isect_points = [];
-    for (var i = 0; i < points1_vec.length - 1; i++) {
-        var line1_start = points1_vec[i];
-        var line1_end = points1_vec[i + 1];
-        for (var j = 0; j < points2_vec.length - 1; j++) {
-            var line2_start = points2_vec[j];
-            var line2_end = points2_vec[j + 1];
-            var result = _isectLineLine2D(line1_start, line1_end, line2_start, line2_end);
-            if (result !== null) {
-                var xyz = result.isect_point.applyMatrix4(matrix_pos).toArray();
-                var isect_point = model.getGeom().addPoint(xyz);
-                // add the point
-                isect_points.push(isect_point);
-            }
-        }
-    }
-    return isect_points;
-}
-/**
- * Split polylines.
- */
-function _splitPolylinePolyline2D(pline1, pline2) {
-    var e_3, _a, e_4, _b, e_5, _c, e_6, _d;
-    var model = pline1.getModel();
-    var points1 = pline1.getPointsArr();
-    var points2 = pline2.getPointsArr();
-    // Add points for closed polylines
-    if (pline1.isClosed()) {
-        points1.push(points1[0]);
-    }
-    if (pline2.isClosed()) {
-        points2.push(points2[0]);
-    }
-    // Create vpoints
-    var points1_vec = points1.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    var points2_vec = points2.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    var ortho_vecs = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["orthoVectorsFromPlanarVPoints"](__spread(points1_vec, points2_vec));
-    // Create the matrixes to transform between 3d and 2d
-    if (ortho_vecs === null) {
-        throw new Error("Entities must be coplanar.");
-    }
-    var matrix_neg = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](points1_vec[0], ortho_vecs[0], ortho_vecs[1]);
-    var matrix_pos = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](points1_vec[0], ortho_vecs[0], ortho_vecs[1]);
-    try {
-        // Make the polyline points 2D, and also check that they really are 2d
-        for (var points1_vec_2 = __values(points1_vec), points1_vec_2_1 = points1_vec_2.next(); !points1_vec_2_1.done; points1_vec_2_1 = points1_vec_2.next()) {
-            var point = points1_vec_2_1.value;
-            point.applyMatrix4(matrix_neg);
-            if (Math.abs(point.z) > EPS) {
-                return null;
-            }
-        }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (points1_vec_2_1 && !points1_vec_2_1.done && (_a = points1_vec_2.return)) _a.call(points1_vec_2);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-    try {
-        for (var points2_vec_2 = __values(points2_vec), points2_vec_2_1 = points2_vec_2.next(); !points2_vec_2_1.done; points2_vec_2_1 = points2_vec_2.next()) {
-            var point = points2_vec_2_1.value;
-            point.applyMatrix4(matrix_neg);
-            if (Math.abs(point.z) > EPS) {
-                return null;
-            }
-        }
-    }
-    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-    finally {
-        try {
-            if (points2_vec_2_1 && !points2_vec_2_1.done && (_b = points2_vec_2.return)) _b.call(points2_vec_2);
-        }
-        finally { if (e_4) throw e_4.error; }
-    }
-    // Loop through each edge and check for intersections
-    var isect1_map = new Map();
-    var isect2_map = new Map();
-    for (var i = 0; i < points1_vec.length - 1; i++) {
-        var line1_start = points1_vec[i];
-        var line1_end = points1_vec[i + 1];
-        for (var j = 0; j < points2_vec.length - 1; j++) {
-            var line2_start = points2_vec[j];
-            var line2_end = points2_vec[j + 1];
-            var result = _isectLineLine2D(line1_start, line1_end, line2_start, line2_end);
-            if (result !== null) {
-                var xyz = result.isect_point.applyMatrix4(matrix_pos).toArray();
-                var isect_point = model.getGeom().addPoint(xyz);
-                // add the point for pline1
-                if (!isect1_map.has(i)) {
-                    isect1_map.set(i, []);
-                }
-                isect1_map.get(i).push({ t: result.t1, isect_point: isect_point });
-                // add the point for pline2
-                if (!isect2_map.has(j)) {
-                    isect2_map.set(j, []);
-                }
-                isect2_map.get(j).push({ t: result.t2, isect_point: isect_point });
-            }
-        }
-    }
-    // make the list of points for pline 1
-    var new_points1 = [[points1[0]]];
-    for (var i = 0; i < points1.length - 1; i++) {
-        if (isect1_map.has(i)) {
-            // sort the points in the list by t value
-            var isects = isect1_map.get(i);
-            isects.sort(function (a, b) { return a.t - b.t; });
-            try {
-                // for each isect, start a new array of points
-                for (var isects_1 = __values(isects), isects_1_1 = isects_1.next(); !isects_1_1.done; isects_1_1 = isects_1.next()) {
-                    var isect = isects_1_1.value;
-                    new_points1[new_points1.length - 1].push(isect.isect_point);
-                    new_points1.push([isect.isect_point]);
-                }
-            }
-            catch (e_5_1) { e_5 = { error: e_5_1 }; }
-            finally {
-                try {
-                    if (isects_1_1 && !isects_1_1.done && (_c = isects_1.return)) _c.call(isects_1);
-                }
-                finally { if (e_5) throw e_5.error; }
-            }
-        }
-        // add the next point
-        new_points1[new_points1.length - 1].push(points1[i + 1]);
-    }
-    // if the polyline was closed, then merge first and last lists
-    if (pline1.isClosed()) {
-        var last = new_points1[new_points1.length - 1];
-        last.push.apply(last, __spread(new_points1[0]));
-        new_points1[0] = last;
-        new_points1.pop();
-    }
-    // make the list of points for pline 2
-    var new_points2 = [[points2[0]]];
-    for (var i = 0; i < points2.length - 1; i++) {
-        if (isect2_map.has(i)) {
-            // sort the points in the list by t value
-            var isects = isect2_map.get(i);
-            isects.sort(function (a, b) { return a.t - b.t; });
-            try {
-                // for each isect, start a new array of points
-                for (var isects_2 = __values(isects), isects_2_1 = isects_2.next(); !isects_2_1.done; isects_2_1 = isects_2.next()) {
-                    var isect = isects_2_1.value;
-                    new_points2[new_points2.length - 1].push(isect.isect_point);
-                    new_points2.push([isect.isect_point]);
-                }
-            }
-            catch (e_6_1) { e_6 = { error: e_6_1 }; }
-            finally {
-                try {
-                    if (isects_2_1 && !isects_2_1.done && (_d = isects_2.return)) _d.call(isects_2);
-                }
-                finally { if (e_6) throw e_6.error; }
-            }
-        }
-        // add the next point
-        new_points2[new_points2.length - 1].push(points2[i + 1]);
-    }
-    // if the polyline was closed, then merge first and last lists
-    if (pline2.isClosed()) {
-        var last = new_points2[new_points2.length - 1];
-        last.push.apply(last, __spread(new_points2[0]));
-        new_points2[0] = last;
-        new_points2.pop();
-    }
-    // delete the old plines
-    model.getGeom().delObjs([pline1, pline2], true);
-    // return an array of new plines
-    var new_plines1 = new_points1.map(function (pts) { return model.getGeom().addPolyline(pts, false); });
-    var new_plines2 = new_points2.map(function (pts) { return model.getGeom().addPolyline(pts, false); });
-    return [new_plines1, new_plines2];
-}
-/**
- * Intersect lines.
- * http://jsfiddle.net/justin_c_rounds/Gd2S2/light/
- */
-function _isectLineLine2D(line1_start, line1_end, line2_start, line2_end) {
-    var denominator = ((line2_end.y - line2_start.y) * (line1_end.x - line1_start.x)) -
-        ((line2_end.x - line2_start.x) * (line1_end.y - line1_start.y));
-    // lines are parallel
-    if (denominator === 0) {
-        return null;
-    }
-    // calc intersection
-    var t1 = line1_start.y - line2_start.y;
-    var t2 = line1_start.x - line2_start.x;
-    var numerator1 = ((line2_end.x - line2_start.x) * t1) - ((line2_end.y - line2_start.y) * t2);
-    var numerator2 = ((line1_end.x - line1_start.x) * t1) - ((line1_end.y - line1_start.y) * t2);
-    t1 = numerator1 / denominator;
-    t2 = numerator2 / denominator;
-    // check intersection point is on both line segments
-    if ((t1 <= 0) || (t1 > 1)) {
-        return null;
-    }
-    if ((t2 <= 0) || (t2 > 1)) {
-        return null;
-    }
-    // intersection point
-    var result_x = line1_start.x + (t1 * (line1_end.x - line1_start.x));
-    var result_y = line1_start.y + (t1 * (line1_end.y - line1_start.y));
-    // return the result
-    return { isect_point: new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](result_x, result_y, 0), t1: t1, t2: t2 };
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/poly/polylinePipe.ts":
-/*!********************************************************!*\
-  !*** ./src/app/core/modules/libs/poly/polylinePipe.ts ***!
-  \********************************************************/
-/*! exports provided: pipe */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pipe", function() { return pipe; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-var EPS = 1e-6;
-/**
- * Pipes a polylines.
- */
-function pipe(pline, radius, segments) {
-    var e_1, _a;
-    var model = pline.getModel();
-    // create the section
-    var sec_vpts_xy = [new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](radius, 0, 0)];
-    var rot_matrix = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]().makeRotationZ((Math.PI * 2) / segments);
-    for (var i = 1; i < segments; i++) {
-        sec_vpts_xy.push(sec_vpts_xy[sec_vpts_xy.length - 1].clone().applyMatrix4(rot_matrix));
-    }
-    // Get the points
-    var points_raw = pline.getPointsArr();
-    var points = [];
-    // check for zero dist points
-    for (var i = 0; i < points_raw.length; i++) {
-        var p1 = points_raw[i];
-        var inext = i + 1;
-        if (i === points_raw.length - 1) {
-            inext = 0;
-        }
-        var p2 = points_raw[inext];
-        if (_threex_threex__WEBPACK_IMPORTED_MODULE_1__["distManPointToPoint"](p1, p2) > EPS) {
-            points.push(p1);
-        } // TODO COuld be slow
-    }
-    // Add points for closed polylines
-    if (pline.isClosed() && pline.numVertices() > 3) {
-        points.push(points[0]);
-        points.push(points[1]);
-    }
-    // Create vpoints
-    var vpoints = points.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    // Do all the other points first
-    var start_x_vec = null;
-    var end_x_vec = null;
-    var prev_x_vec = null;
-    var sec_pts_array = [];
-    if (points.length > 2) {
-        var _loop_1 = function (i) {
-            // Get the points
-            var prev = vpoints[i - 1];
-            var curr = vpoints[i];
-            var next = vpoints[i + 1];
-            var vec_c_p = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().subVectors(prev, curr).normalize();
-            var vec_c_n = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().subVectors(next, curr).normalize();
-            var x_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().crossVectors(vec_c_p, vec_c_n);
-            var y_vec = void 0;
-            // get a valid x vector
-            if (x_vec.length() > EPS) {
-                prev_x_vec = x_vec;
-                y_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().addVectors(vec_c_p, vec_c_n).multiplyScalar(0.5);
-            }
-            else {
-                if (prev_x_vec !== null) {
-                    x_vec = prev_x_vec;
-                }
-                else {
-                    if (vec_c_n.y > EPS || vec_c_n.z > EPS) {
-                        x_vec.crossVectors(vec_c_n, new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](1, 0, 0));
-                    }
-                    else {
-                        x_vec.crossVectors(vec_c_n, new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0));
-                    }
-                }
-                y_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().crossVectors(vec_c_n, x_vec).normalize();
-            }
-            // calc the transform
-            var matrix = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](curr, x_vec, y_vec);
-            var angle = vec_c_p.angleTo(vec_c_n);
-            var scale = Math.cos(angle / 2);
-            var matrix_scale = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]().makeScale(1, 1 + scale, 1);
-            matrix.multiply(matrix_scale); // first scale, then transform
-            var xformed = sec_vpts_xy.map(function (p) { return p.clone().applyMatrix4(matrix); });
-            var new_points = xformed.map(function (v) { return model.getGeom().addPoint([v.x, v.y, v.z]); });
-            sec_pts_array.push(new_points);
-            if (i === 1) {
-                start_x_vec = x_vec;
-            }
-            if (i === points.length - 2) {
-                end_x_vec = x_vec;
-            }
-        };
-        // Loop through pline segments
-        for (var i = 1; i < points.length - 1; i++) {
-            _loop_1(i);
-        }
-    }
-    // For open plines, calc start and end sections
-    if (!pline.isClosed()) {
-        // Do the first and last points for open polylines
-        var start_end = [];
-        var first = [vpoints[0], vpoints[1], start_x_vec];
-        var extend = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().subVectors(vpoints[vpoints.length - 1], vpoints[vpoints.length - 2]).add(vpoints[vpoints.length - 1]);
-        var last = [vpoints[vpoints.length - 1], extend, end_x_vec];
-        var _loop_2 = function (triple) {
-            var z_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().subVectors(triple[1], triple[0]).normalize();
-            var x_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-            if (triple[2] !== null) {
-                x_vec = triple[2];
-            }
-            else if (z_vec.y > EPS || z_vec.z > EPS) {
-                x_vec.crossVectors(z_vec, new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](1, 0, 0));
-            }
-            else {
-                x_vec.crossVectors(z_vec, new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0));
-            }
-            var y_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().crossVectors(z_vec, x_vec);
-            var matrix = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](triple[0], x_vec, y_vec);
-            var xformed = sec_vpts_xy.map(function (v) { return v.clone().applyMatrix4(matrix); });
-            var new_points = xformed.map(function (v) { return model.getGeom().addPoint([v.x, v.y, v.z]); });
-            start_end.push(new_points);
-        };
-        try {
-            for (var _b = __values([first, last]), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var triple = _c.value;
-                _loop_2(triple);
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-        sec_pts_array.unshift(start_end[0]);
-        sec_pts_array.push(start_end[1]);
-    }
-    // Create the mesh points
-    var mesh_points = [];
-    for (var i = 0; i < sec_pts_array.length; i++) {
-        var inext = i + 1;
-        if (pline.isClosed() && inext === sec_pts_array.length) {
-            inext = 0;
-        }
-        if (!pline.isClosed() && inext === sec_pts_array.length) {
-            break;
-        }
-        for (var j = 0; j < segments; j++) {
-            var jnext = j + 1;
-            if (jnext === segments) {
-                jnext = 0;
-            }
-            var v1 = sec_pts_array[i][j];
-            var v2 = sec_pts_array[i][jnext];
-            var v3 = sec_pts_array[inext][jnext];
-            var v4 = sec_pts_array[inext][j];
-            mesh_points.push([v1, v2, v3, v4]);
-        }
-    }
-    // Create the mesh
-    //console.log(mesh_points);
-    return model.getGeom().addPolymesh(mesh_points);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/poly/polylinePlane.ts":
-/*!*********************************************************!*\
-  !*** ./src/app/core/modules/libs/poly/polylinePlane.ts ***!
-  \*********************************************************/
-/*! exports provided: splitPolylinePlane3D, isectPolylinePlane3D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitPolylinePlane3D", function() { return splitPolylinePlane3D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isectPolylinePlane3D", function() { return isectPolylinePlane3D; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-var EPS = 1e-6;
-/**
- * Split polylines with a plane.
- */
-function splitPolylinePlane3D(pline, plane) {
-    var _a, e_1, _b;
-    var model = pline.getModel();
-    var points = pline.getPointsArr();
-    var origin = plane.getOrigin();
-    var axes = plane.getAxes();
-    // Add points for closed polylines
-    if (pline.isClosed()) {
-        points.push(points[0]);
-    }
-    // Create vpoints
-    var vpoints = points.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    var vaxes = axes.map(function (a) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], a)))();
-    });
-    var vorigin = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], origin.getPosition())))();
-    // Create the matrixes to transform between 3d and 2d
-    var matrix_neg = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](vorigin, vaxes[0], vaxes[1]);
-    var matrix_pos = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](vorigin, vaxes[0], vaxes[1]);
-    try {
-        // Project the polyline points
-        for (var vpoints_1 = __values(vpoints), vpoints_1_1 = vpoints_1.next(); !vpoints_1_1.done; vpoints_1_1 = vpoints_1.next()) {
-            var vpoint = vpoints_1_1.value;
-            vpoint.applyMatrix4(matrix_neg);
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (vpoints_1_1 && !vpoints_1_1.done && (_b = vpoints_1.return)) _b.call(vpoints_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    // Loop through each edge and check for intersections
-    var pline_points_array = [];
-    var pline_points = [];
-    for (var i = 0; i < vpoints.length - 1; i++) {
-        pline_points.push(points[i]);
-        var line1_start = vpoints[i];
-        var line1_end = vpoints[i + 1];
-        var result = _isectLineXYPlane3D(line1_start, line1_end);
-        if (result !== null) {
-            var xyz = result.applyMatrix4(matrix_pos).toArray();
-            var isect_point = model.getGeom().addPoint(xyz);
-            pline_points.push(isect_point);
-            pline_points_array.push(pline_points);
-            pline_points = [isect_point];
-        }
-        if (i === vpoints.length - 2) {
-            pline_points.push(points[i + 1]);
-            pline_points_array.push(pline_points);
-        }
-    }
-    if (pline_points_array.length === 1) {
-        return null;
-    }
-    if (pline.isClosed() && pline_points_array.length > 2) {
-        var first = pline_points_array[0];
-        var last = pline_points_array.pop();
-        last.push.apply(last, __spread(first));
-        pline_points_array[0] = last;
-    }
-    return pline_points_array.map(function (pts) { return model.getGeom().addPolyline(pts, false); });
-}
-/**
- * Isect polylines with a plane.
- */
-function isectPolylinePlane3D(pline, plane) {
-    var _a, e_2, _b;
-    var model = pline.getModel();
-    var points = pline.getPointsArr();
-    var origin = plane.getOrigin();
-    var axes = plane.getAxes();
-    // Add points for closed polylines
-    if (pline.isClosed()) {
-        points.push(points[0]);
-    }
-    // Create vpoints
-    var vpoints = points.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-    var vaxes = axes.map(function (a) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], a)))();
-    });
-    var vorigin = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], origin.getPosition())))();
-    // Create the matrixes to transform between 3d and 2d
-    var matrix_neg = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixNeg"](vorigin, vaxes[0], vaxes[1]);
-    var matrix_pos = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrixPos"](vorigin, vaxes[0], vaxes[1]);
-    try {
-        // Project the polyline points
-        for (var vpoints_2 = __values(vpoints), vpoints_2_1 = vpoints_2.next(); !vpoints_2_1.done; vpoints_2_1 = vpoints_2.next()) {
-            var vpoint = vpoints_2_1.value;
-            vpoint.applyMatrix4(matrix_neg);
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (vpoints_2_1 && !vpoints_2_1.done && (_b = vpoints_2.return)) _b.call(vpoints_2);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    // Loop through each edge and check for intersections
-    var isect_points = [];
-    for (var i = 0; i < vpoints.length - 1; i++) {
-        var line1_start = vpoints[i];
-        var line1_end = vpoints[i + 1];
-        var result = _isectLineXYPlane3D(line1_start, line1_end);
-        if (result !== null) {
-            var xyz = result.applyMatrix4(matrix_pos).toArray();
-            var isect_point = model.getGeom().addPoint(xyz);
-            isect_points.push(isect_point);
-        }
-    }
-    return isect_points;
-}
-/**
- * Intersect line with XY plane.
- */
-function _isectLineXYPlane3D(line_start, line_end) {
-    if (line_start.z === 0) {
-        return line_start.clone();
-    }
-    if (line_end.z === 0) {
-        return line_end.clone();
-    }
-    if ((line_start.z * line_end.z) > 0) {
-        return null;
-    }
-    var start_z = Math.abs(line_start.z);
-    var end_z = Math.abs(line_end.z);
-    var scalar_z = start_z / (start_z + end_z);
-    var line_vec = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]()
-        .subVectors(line_end, line_start).multiplyScalar(scalar_z);
-    return new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]().addVectors(line_start, line_vec);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/libs/threex/threex.ts":
-/*!****************************************************!*\
-  !*** ./src/app/core/modules/libs/threex/threex.ts ***!
-  \****************************************************/
-/*! exports provided: multVectorMatrix, multXYZMatrix, xformMatrixNeg, xformMatrixPos, matrixInverse, xformMatrixFromXYZAxes, xformMatrixFromXYZVectors, orthoVectors, vectorNegate, vectorFromVertex, vectorFromPoint, vectorsFromVertices, vectorsFromPoints, subVectors, addVectors, crossVectors, dotVectors, vectorFromPointsAtoB, vectorFromVerticesAtoB, normalVectorFromPlanarVPoints, orthoVectorsFromPlanarVPoints, interpVPoints, subXYZs, addXYZs, crossXYZs, dotXYZs, normalizeXYZ, lengthXYZ, subPoints, addPoints, addPointXYZ, subPointXYZ, movePointsAddXYZ, distPointToPoint, distSquPointToPoint, distManPointToPoint, subVertices, addVertices, makeVertices2D, planesAreParallel, planesAreCoplanar, pointIsOnPlane, vectorsAreCodir */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "multVectorMatrix", function() { return multVectorMatrix; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "multXYZMatrix", function() { return multXYZMatrix; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformMatrixNeg", function() { return xformMatrixNeg; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformMatrixPos", function() { return xformMatrixPos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "matrixInverse", function() { return matrixInverse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformMatrixFromXYZAxes", function() { return xformMatrixFromXYZAxes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformMatrixFromXYZVectors", function() { return xformMatrixFromXYZVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "orthoVectors", function() { return orthoVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorNegate", function() { return vectorNegate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorFromVertex", function() { return vectorFromVertex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorFromPoint", function() { return vectorFromPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorsFromVertices", function() { return vectorsFromVertices; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorsFromPoints", function() { return vectorsFromPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subVectors", function() { return subVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addVectors", function() { return addVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "crossVectors", function() { return crossVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dotVectors", function() { return dotVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorFromPointsAtoB", function() { return vectorFromPointsAtoB; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorFromVerticesAtoB", function() { return vectorFromVerticesAtoB; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "normalVectorFromPlanarVPoints", function() { return normalVectorFromPlanarVPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "orthoVectorsFromPlanarVPoints", function() { return orthoVectorsFromPlanarVPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "interpVPoints", function() { return interpVPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subXYZs", function() { return subXYZs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addXYZs", function() { return addXYZs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "crossXYZs", function() { return crossXYZs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dotXYZs", function() { return dotXYZs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "normalizeXYZ", function() { return normalizeXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lengthXYZ", function() { return lengthXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subPoints", function() { return subPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPoints", function() { return addPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPointXYZ", function() { return addPointXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subPointXYZ", function() { return subPointXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "movePointsAddXYZ", function() { return movePointsAddXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distPointToPoint", function() { return distPointToPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distSquPointToPoint", function() { return distSquPointToPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distManPointToPoint", function() { return distManPointToPoint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subVertices", function() { return subVertices; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addVertices", function() { return addVertices; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeVertices2D", function() { return makeVertices2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "planesAreParallel", function() { return planesAreParallel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "planesAreCoplanar", function() { return planesAreCoplanar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointIsOnPlane", function() { return pointIsOnPlane; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vectorsAreCodir", function() { return vectorsAreCodir; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _arr_arr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../arr/arr */ "./src/app/core/modules/libs/arr/arr.ts");
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-
-/**
- * Utility functions for threejs.
- */
-var EPS = 1e-6;
-// Matrices ======================================================================================================
-function multVectorMatrix(v, m) {
-    var v2 = v.clone();
-    v2.applyMatrix4(m);
-    return v2;
-}
-function multXYZMatrix(xyz, m) {
-    var _a;
-    var v2 = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz)))();
-    v2.applyMatrix4(m);
-    return v2;
-}
-/*
- * Transforms from LCS to GCS. The LCS is defined by origin, x axis, y axis.
- */
-function xformMatrixNeg(o, x, y) {
-    var m1 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    var o_neg = o.clone().negate();
-    m1.setPosition(o_neg);
-    var m2 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    m2.makeBasis(x.normalize(), y.normalize(), crossVectors(x, y, true));
-    m2.getInverse(m2);
-    var m3 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    // first translate to (0,0,0), then xform, so m1 x m2
-    m3.multiplyMatrices(m2, m1);
-    return m3;
-}
-/*
- * Transforms from GCS to LCS.The LCS is defined by origin, x axis, y axis.
- */
-function xformMatrixPos(o, x, y) {
-    var m1 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    m1.setPosition(o);
-    var m2 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    m2.makeBasis(x.normalize(), y.normalize(), crossVectors(x, y, true));
-    var m3 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    // first xform, then translate to origin, so m1 x m2
-    m3.multiplyMatrices(m1, m2);
-    return m3;
-}
-// get the inverse of a matrix
-function matrixInverse(m) {
-    var m_inv = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    return m_inv.getInverse(m);
-}
-function xformMatrixFromXYZAxes(o, axes, neg) {
-    var _a, _b, _c, _d;
-    var x_vec = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], axes[0])))().normalize();
-    var y_vec = new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], axes[1])))().normalize();
-    if (neg) {
-        return xformMatrixNeg(new ((_c = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_c, __spread([void 0], o)))(), x_vec, y_vec);
-    }
-    return xformMatrixPos(new ((_d = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_d, __spread([void 0], o)))(), x_vec, y_vec);
-}
-function xformMatrixFromXYZVectors(o, xaxis, xyplane, neg) {
-    var _a, _b, _c, _d;
-    var x_vec = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xaxis)))().normalize();
-    var xyplane_vec = new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyplane)))().normalize();
-    var z_vec = crossVectors(x_vec, xyplane_vec);
-    var y_vec = crossVectors(z_vec, x_vec);
-    if (neg) {
-        return xformMatrixNeg(new ((_c = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_c, __spread([void 0], o)))(), x_vec, y_vec);
-    }
-    return xformMatrixPos(new ((_d = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_d, __spread([void 0], o)))(), x_vec, y_vec);
-}
-//  Vectors =======================================================================================================
-/*
- * returns the y vector
- */
-function orthoVectors(vec_x, vec) {
-    return crossVectors(vec_x, vec).cross(vec_x);
-}
-function vectorNegate(vector) {
-    return vector.clone().negate();
-}
-function vectorFromVertex(vertex) {
-    var _a;
-    return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], vertex.getPoint().getPosition())))();
-}
-function vectorFromPoint(point) {
-    var _a;
-    return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], point.getPosition())))();
-}
-function vectorsFromVertices(vertices) {
-    return vertices.map(function (v) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], v.getPoint().getPosition())))();
-    });
-}
-function vectorsFromPoints(points) {
-    return points.map(function (p) {
-        var _a;
-        return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p.getPosition())))();
-    });
-}
-function subVectors(v1, v2, norm) {
-    if (norm === void 0) { norm = false; }
-    var v3 = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-    v3.subVectors(v1, v2);
-    if (norm) {
-        v3.normalize();
-    }
-    return v3;
-}
-function addVectors(v1, v2, norm) {
-    if (norm === void 0) { norm = false; }
-    var v3 = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-    v3.addVectors(v1, v2);
-    if (norm) {
-        v3.normalize();
-    }
-    return v3;
-}
-function crossVectors(v1, v2, norm) {
-    if (norm === void 0) { norm = false; }
-    var v3 = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-    v3.crossVectors(v1, v2);
-    if (norm) {
-        v3.normalize();
-    }
-    return v3;
-}
-function dotVectors(v1, v2) {
-    return v1.dot(v2);
-}
-function vectorFromPointsAtoB(a, b, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    var v = subVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], b.getPosition())))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], a.getPosition())))());
-    if (norm) {
-        v.normalize();
-    }
-    return v;
-}
-function vectorFromVerticesAtoB(a, b, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    var v = subVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], b.getPoint().getPosition())))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], a.getPoint().getPosition())))());
-    if (norm) {
-        v.normalize();
-    }
-    return v;
-}
-// /*
-//  * Finds the two orthogonal vectors in a plane defined by a set of co-planar points.
-//  */
-// export function orthoVectorsFromXYZs(points: three.Vector3[]): [three.Vector3, three.Vector3] {
-//     if (points.length < 3) {return null;}
-//     if (points.length == 3) {
-//         const vec_x: three.Vector3 = new three.Vector3().subVectors(points[1], points[0]).normalize();
-//         const vec: three.Vector3 = new three.Vector3().subVectors(points[2], points[0]).normalize();
-//         const vec_y: three.Vector3 = orthoVectors(vec_x, vec);
-//         if (vec_y.length() < EPS) {return null;}
-//         return [vec_x, vec_y];
-//     }
-//     const x_bbox: {min:three.Vector3, max:three.Vector3, dim:number} = {min:null, max:null, dim:null};
-//     const y_bbox: {min:three.Vector3, max:three.Vector3, dim:number} = {min:null, max:null, dim:null};
-//     const z_bbox: {min:three.Vector3, max:three.Vector3, dim:number} = {min:null, max:null, dim:null};
-//     for (const point of points) {
-//         // find min max of x
-//         if ((x_bbox.min === null) || (point.x < x_bbox.min.x)) {
-//             x_bbox.min = point;
-//         }
-//         if ((x_bbox.max === null) || (point.x > x_bbox.max.x)) {
-//             x_bbox.max = point;
-//         }
-//         // find min max of y
-//         if ((y_bbox.min === null) || (point.y < y_bbox.min.y)) {
-//             y_bbox.min = point;
-//         }
-//         if ((y_bbox.max === null) || (point.y > y_bbox.max.y)) {
-//             y_bbox.max = point;
-//         }
-//         // find min max of z
-//         if ((z_bbox.min === null) || (point.z < z_bbox.min.z)) {
-//             z_bbox.min = point;
-//         }
-//         if ((z_bbox.max === null) || (point.z > z_bbox.max.z)) {
-//             z_bbox.max = point;
-//         }
-//     }
-//     x_bbox.dim = Math.abs(x_bbox.max[0] - x_bbox.min[0]);
-//     y_bbox.dim = Math.abs(y_bbox.max[1] - y_bbox.min[1]);
-//     z_bbox.dim = Math.abs(z_bbox.max[2] - z_bbox.min[2]);
-//     const sorted_bbox = [x_bbox, y_bbox, z_bbox].sort((n1,n2) => {
-//         if (n1.dim > n2.dim) {return -1;}
-//         return 1;
-//     });
-//     if (sorted_bbox[0].dim < EPS) {return null;}
-//     if (sorted_bbox[1].dim < EPS) {return null;}
-//     const p1: three.Vector3 = sorted_bbox[0].min;
-//     const p2: three.Vector3 = sorted_bbox[0].max;
-//     const p3: three.Vector3 = sorted_bbox[1].min;
-//     const p4: three.Vector3 = sorted_bbox[1].max;
-//     const vec_x: three.Vector3 = p2.sub(p1).normalize();
-//     const vec: three.Vector3 = p4.sub(p3).normalize();
-//     const vec_y: three.Vector3 = orthoVectors(vec_x, vec);
-//     if (vec_y.length() < EPS) {return null;}
-//     return [vec_x, vec_y];
-// }
-/*
- * Finds the normal using Newell's method
- */
-function normalVectorFromPlanarVPoints(points) {
-    var normal = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-    for (var i = 0; i < points.length - 1; i++) {
-        var point0 = points[i];
-        var point1 = points[i + 1];
-        normal.x += (point0.y - point1.y) * (point0.z + point1.z);
-        normal.y += (point0.z - point1.z) * (point0.x + point1.x);
-        normal.z += (point0.x - point1.x) * (point0.y + point1.y);
-    }
-    return normal.normalize();
-}
-/*
- * Finds the ortho vectors using Newell's method
- */
-function orthoVectorsFromPlanarVPoints(points) {
-    var normal = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-    var max_vec_len = 0;
-    var vec_x = null;
-    for (var i = 0; i < points.length - 1; i++) {
-        var point0 = points[i];
-        var point1 = points[i + 1];
-        var test_vec = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]().subVectors(point1, point0);
-        if (test_vec.lengthSq() > max_vec_len) {
-            vec_x = test_vec;
-        }
-        normal.x += (point0.y - point1.y) * (point0.z + point1.z);
-        normal.y += (point0.z - point1.z) * (point0.x + point1.x);
-        normal.z += (point0.x - point1.x) * (point0.y + point1.y);
-    }
-    normal.normalize();
-    vec_x.normalize();
-    var vec_y = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]().crossVectors(vec_x, normal);
-    if (vec_y.length() < EPS) {
-        return null;
-    }
-    return [vec_x, vec_y];
-}
-/**
- * Create new vpoints between two existing vpoints.
- */
-function interpVPoints(pt1, pt2, num_points) {
-    if (num_points < 1) {
-        return [];
-    }
-    var vec = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]().subVectors(pt2, pt1);
-    vec.divideScalar(num_points + 1);
-    var points = [];
-    var next = pt1;
-    for (var i = 0; i < num_points; i++) {
-        next = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]().addVectors(next, vec);
-        points.push(next);
-    }
-    return points;
-}
-//  XYZ ===========================================================================================================
-function subXYZs(xyz1, xyz2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return subVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz1)))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz2)))(), norm).toArray();
-}
-function addXYZs(xyz1, xyz2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return addVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz1)))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz2)))(), norm).toArray();
-}
-function crossXYZs(xyz1, xyz2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return crossVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz1)))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz2)))(), norm).toArray();
-}
-function dotXYZs(xyz1, xyz2) {
-    var _a, _b;
-    return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz1)))().dot(new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz2)))());
-}
-function normalizeXYZ(xyz) {
-    var _a;
-    return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz)))().normalize().toArray();
-}
-function lengthXYZ(xyz) {
-    var _a;
-    return new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz)))().length();
-}
-//  Points ========================================================================================================
-function subPoints(p1, p2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return subVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], p2.getPosition())))(), norm).toArray();
-}
-function addPoints(p1, p2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return addVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], p2.getPosition())))(), norm).toArray();
-}
-function addPointXYZ(p1, xyz_vec) {
-    var _a, _b;
-    return (new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))().add(new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz_vec)))())).toArray();
-}
-function subPointXYZ(p1, xyz_vec) {
-    var _a, _b;
-    return (new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))().sub(new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz_vec)))())).toArray();
-}
-function movePointsAddXYZ(points, xyz_vec) {
-    var _a, e_1, _b, e_2, _c, _d;
-    var vec = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz_vec)))();
-    var points_flat = _arr_arr__WEBPACK_IMPORTED_MODULE_2__["Arr"].flatten(points);
-    var point_ids = [];
-    var points_no_dups = [];
-    try {
-        for (var points_flat_1 = __values(points_flat), points_flat_1_1 = points_flat_1.next(); !points_flat_1_1.done; points_flat_1_1 = points_flat_1.next()) {
-            var point = points_flat_1_1.value;
-            if (point_ids.indexOf(point.getID()) === -1) {
-                points_no_dups.push(point);
-                point_ids.push(point.getID());
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (points_flat_1_1 && !points_flat_1_1.done && (_b = points_flat_1.return)) _b.call(points_flat_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    try {
-        for (var points_no_dups_1 = __values(points_no_dups), points_no_dups_1_1 = points_no_dups_1.next(); !points_no_dups_1_1.done; points_no_dups_1_1 = points_no_dups_1.next()) {
-            var point = points_no_dups_1_1.value;
-            var xyz_point = (new ((_d = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_d, __spread([void 0], point.getPosition())))().add(vec)).toArray();
-            point.setPosition(xyz_point);
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (points_no_dups_1_1 && !points_no_dups_1_1.done && (_c = points_no_dups_1.return)) _c.call(points_no_dups_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-}
-function distPointToPoint(p1, p2) {
-    var _a, _b;
-    return (new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))()).distanceTo(new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], p2.getPosition())))());
-}
-function distSquPointToPoint(p1, p2) {
-    var _a, _b;
-    return (new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))()).distanceToSquared(new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], p2.getPosition())))());
-}
-function distManPointToPoint(p1, p2) {
-    var _a, _b;
-    return (new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], p1.getPosition())))()).manhattanDistanceTo(new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], p2.getPosition())))());
-}
-//  Vertices ======================================================================================================
-function subVertices(v1, v2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return subVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], v1.getPoint().getPosition())))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], v2.getPoint().getPosition())))(), norm).toArray();
-}
-function addVertices(v1, v2, norm) {
-    if (norm === void 0) { norm = false; }
-    var _a, _b;
-    return addVectors(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], v1.getPoint().getPosition())))(), new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], v2.getPoint().getPosition())))(), norm).toArray();
-}
-//  3D to 2D ======================================================================================================
-/**
- * Transform a set of vertices in 3d space onto the xy plane. This function assumes that the vertices
- * are co-planar. Returns a set of three Vectors that represent points on the xy plane.
- */
-function makeVertices2D(vertices) {
-    var e_3, _a;
-    var points = vectorsFromVertices(vertices);
-    var o = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-    try {
-        for (var points_1 = __values(points), points_1_1 = points_1.next(); !points_1_1.done; points_1_1 = points_1.next()) {
-            var v = points_1_1.value;
-            o.add(v);
-        }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (points_1_1 && !points_1_1.done && (_a = points_1.return)) _a.call(points_1);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-    o.divideScalar(points.length);
-    var vx;
-    var vz;
-    var got_vx = false;
-    for (var i = 0; i < vertices.length; i++) {
-        if (!got_vx) {
-            vx = subVectors(points[i], o).normalize();
-            if (vx.lengthSq() !== 0) {
-                got_vx = true;
-            }
-        }
-        else {
-            vz = crossVectors(vx, subVectors(points[i], o).normalize()).normalize();
-            if (vz.lengthSq() !== 0) {
-                break;
-            }
-        }
-        if (i === vertices.length - 1) {
-            throw new Error("Trinagulation found bad face.");
-        }
-    }
-    var vy = crossVectors(vz, vx);
-    var m = xformMatrixNeg(o, vx, vy);
-    // const m: three.Matrix4 = xformMatrix(o, vx, vy, vz);
-    var points_2d = points.map(function (v) { return multVectorMatrix(v, m); });
-    // console.log(o, vx, vy, vz);
-    // console.log(points_2d);
-    return points_2d;
-}
-//  Query ======================================================================================================
-/**
- * Check planes are parallel.
- * The plane is represented by an origin and a normal.
- */
-function planesAreParallel(normal1, normal2) {
-    var _a, _b;
-    // args
-    var normal1_v;
-    if (Array.isArray(normal1)) {
-        normal1_v = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], normal1)))();
-    }
-    else {
-        normal1_v = normal1;
-    }
-    normal1_v.normalize();
-    var normal2_v;
-    if (Array.isArray(normal2)) {
-        normal2_v = new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], normal2)))();
-    }
-    else {
-        normal2_v = normal2;
-    }
-    normal2_v.normalize();
-    // check is vectors are same
-    if (Math.abs(1 - normal1_v.dot(normal2_v)) > EPS) {
-        return false;
-    }
-    return true;
-}
-/**
- * Check a point is on a plane.
- * The plane is represented by an origin and a normal.
- */
-function planesAreCoplanar(origin1, normal1, origin2, normal2) {
-    var _a, _b, _c, _d;
-    // args
-    var origin1_v;
-    if (origin1 instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        origin1_v = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], origin1.getPosition())))();
-    }
-    else {
-        origin1_v = origin1;
-    }
-    var normal1_v;
-    if (Array.isArray(normal1)) {
-        normal1_v = new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], normal1)))();
-    }
-    else {
-        normal1_v = normal1;
-    }
-    normal1_v.normalize();
-    var origin2_v;
-    if (origin2 instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        origin2_v = new ((_c = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_c, __spread([void 0], origin2.getPosition())))();
-    }
-    else {
-        origin2_v = origin2;
-    }
-    var normal2_v;
-    if (Array.isArray(normal2)) {
-        normal2_v = new ((_d = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_d, __spread([void 0], normal2)))();
-    }
-    else {
-        normal2_v = normal2;
-    }
-    normal2_v.normalize();
-    // Check if point is on plane
-    if (Math.abs(dotVectors(subVectors(origin1_v, origin2_v), normal2_v)) > EPS) {
-        return false;
-    }
-    // check is vectors are same
-    if (Math.abs(1 - normal1_v.dot(normal2_v)) > EPS) {
-        return false;
-    }
-    return true;
-}
-/**
- * Check a point is on a plane.
- * The plane is represented by an origin and a normal.
- */
-function pointIsOnPlane(origin, normal, point) {
-    var _a, _b, _c;
-    var origin_v = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], origin.getPosition())))();
-    var normal_v = new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], normal)))().normalize();
-    var point_v = new ((_c = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_c, __spread([void 0], point.getPosition())))();
-    if (dotVectors(subVectors(point_v, origin_v), normal_v) === 0) {
-        return true;
-    }
-    return false;
-}
-/**
- * Check if vectors are same dir.
- */
-function vectorsAreCodir(xyz1, xyz2) {
-    var _a, _b;
-    // Check if point is on plane
-    var v1 = new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], xyz1)))().normalize();
-    var v2 = new ((_b = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_b, __spread([void 0], xyz2)))().normalize();
-    if (Math.abs(1 - v1.dot(v2)) > EPS) {
-        return false;
-    }
-    return true;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/list.ts":
-/*!**************************************!*\
-  !*** ./src/app/core/modules/list.ts ***!
-  \**************************************/
-/*! exports provided: Copy, FromRange, len, append, appendFront, extend, extendFront, flatten, removeIndex, removeValue, reverse, sortAlpha, sortNum, slice, splice */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromRange", function() { return FromRange; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "len", function() { return len; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "append", function() { return append; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appendFront", function() { return appendFront; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extend", function() { return extend; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extendFront", function() { return extendFront; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flatten", function() { return flatten; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeIndex", function() { return removeIndex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeValue", function() { return removeValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reverse", function() { return reverse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sortAlpha", function() { return sortAlpha; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sortNum", function() { return sortNum; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "slice", function() { return slice; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splice", function() { return splice; });
-/* harmony import */ var _libs_arr_arr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/arr/arr */ "./src/app/core/modules/libs/arr/arr.ts");
-/**
- * The <i>List</i> module provides a set of functions for working with lists.
- * Lists are containers that can hold other values. The values inside the list are called <i>items</i>.<br/>
- *
- * The items in a list can be of any data type.
- * The items can also be other lists, thereby allowing more complex nested data strictures to be created.
- * Items are ordered and will be returned in the same order or accessed by the same index unless
- * changes are made to alter it.<br/>
- *
- * When instantiating a list, use square brackets as follows: <code>[10,20,30]</code>.<br/>
- *
- * To refer to an item in a list, use index notation as follows: <code>list_name[index_num]</code>.
- */
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-//  ===============================================================================================================
-//  List Constructors =============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a new list by making a copy of an existing list.
- *
- * @param list List to copy.
- * @returns New duplicated list.
- *
- * <h3>Example:</h3>
- * <code>
- * list = [1,2,3]<br/>
- * copy = List.Copy(list)</code><br/><br/>
- * Expected value of copy is [1,2,3].
- */
-function Copy(list) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    return list.slice();
-}
-/**
- * Creates a new list of integer numbers between two bounds.
- * Lower bound is inclusive and upper bound is exclusive.
- *
- * @param min Lower bound integer.
- * @param max Upper bound integer.
- * @returns New list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = List.FromRange(0,5)</code><br/><br/>
- * Expected value of list is [0,1,2,3,4].
- */
-function FromRange(min, max) {
-    if (min === undefined) {
-        throw new Error("Invalid arg: min must be defined.");
-    }
-    if (max === undefined) {
-        throw new Error("Invalid arg: max must be defined.");
-    }
-    return _libs_arr_arr__WEBPACK_IMPORTED_MODULE_0__["Arr"].makeSeq(max - min).map(function (v) { return v + min; });
-}
-//  ===============================================================================================================
-//  List Functions ================================================================================================
-//  ===============================================================================================================
-/**
- * Returns the number of items in an list.
- *
- * @param list List.
- * @returns Length of the list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * len = List.len(list)</code><br/><br/>
- * Expected value of len is 3.
- */
-function len(list) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    return list.length;
-}
-/**
- * Adds an item to the end of a list.
- * If item is a list, the entire list will be appended as one item.
- *
- * @param list List to add to.
- * @param item Item to add.
- * @returns New list with added item.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * append = List.append(list,4)</code><br/><br/>
- * Expected value of list is [1,2,3,4].
- */
-function append(list, item) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (item === undefined) {
-        throw new Error("Invalid arg: item must be defined.");
-    }
-    var list2 = list.slice();
-    list2.push(item);
-    return list2;
-}
-/**
- * Adds an item to the front of a list.
- * If the item is a list, the entire list will be appended as one item.
- *
- * @param list List to add to.
- * @param item Item to add.
- * @returns New list with added item.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * append = List.appendFront(list,4)</code><br/><br/>
- * Expected value of list is [4,1,2,3].
- */
-function appendFront(list, item) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (item === undefined) {
-        throw new Error("Invalid arg: item must be defined.");
-    }
-    var list2 = list.slice();
-    list2.unshift(item);
-    return list2;
-}
-/**
- * Adds items (from a list) to the end of an list.
- * Items are added to list individually as seperate items.
- *
- * @param list List to add to.
- * @param items List of items to add.
- * @returns List with added items.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * list2 = [9,0]<br/>
- * extend = List.extend(list,list2)</code><br/><br/>
- * Expected value of extend is [1,2,3,9,0].
- */
-function extend(list, items) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (items === undefined) {
-        throw new Error("Invalid arg: items must be defined.");
-    }
-    return list.concat(items);
-}
-/**
- * Adds items (from a list) to the front of an list.
- * Items are added to list individually as seperate items.
- *
- * @param list List to add to.
- * @param items List of items to add.
- * @returns List with added items.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * list2 = [9,0]<br/>
- * extend = List.extend(list,list2)</code><br/><br/>
- * Expected value of extend is [9,0,1,2,3].
- */
-function extendFront(list, items) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (items === undefined) {
-        throw new Error("Invalid arg: items must be defined.");
-    }
-    return items.concat(list);
-}
-/**
- * Flattens an n-dimensional list into a one-dimensional list.
- *
- * @param list List to flatten.
- * @returns Flattened list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3,[4,5]]<br/>
- * flatten = List.flatten(list)</code><br/><br/>
- * Expected value of list is [1,2,3,4,5].
- */
-function flatten(list) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    return _libs_arr_arr__WEBPACK_IMPORTED_MODULE_0__["Arr"].flatten(list);
-}
-/**
- * Removes the item at the specified index from a list.
- *
- * @param list List to remove item from.
- * @param index Zero-based index number of item to remove.
- * @returns List with item removed.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * remove = List.removeIndex(list,1)</code><br/><br/>
- * Expected value of list is [1,3].
- */
-function removeIndex(list, index) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (index === undefined) {
-        throw new Error("Invalid arg: index must be defined.");
-    }
-    var list2 = list.slice();
-    list2.splice(index, 1);
-    return list2;
-}
-/**
- * Removes items that match specified value from a list.
- * Items must match both the value and type of specified value<br/>
- *
- * Returns original list if no items in list match specified value.
- *
- * @param list List to remove item from.
- * @param value Value to search for.
- * @param remove_all Removes all instances of specified value if true, removes only the first instance if
- *      false.
- * @returns List with item removed
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,2,3]<br/>
- * remove = List.removeValue(list,2,true)</code><br/><br/>
- * Expected value of list is [1,3].
- */
-function removeValue(list, value, remove_all) {
-    if (remove_all === void 0) { remove_all = true; }
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (value === undefined) {
-        throw new Error("Invalid arg: value must be defined.");
-    }
-    var list2 = list.slice();
-    for (var i = list2.length - 1; i >= 0; i--) {
-        if (list2[i] === value) {
-            list2.splice(i, 1);
-            if (remove_all === false) {
-                break;
-            }
-        }
-    }
-    return list2;
-}
-/**
- * Reverses the order of items in an list.
- *
- * @param list List to reverse.
- * @returns New reversed list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3]<br/>
- * result = List.reverse(list)</code><br/><br/>
- * Expected value of result is [3,2,1].
- */
-function reverse(list) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    var list2 = list.slice();
-    list2.reverse();
-    return list2;
-}
-/**
- * Sorts a list of strings alphabetically.
- * If items are not strings, they are treated as strings.<br/>
- *
- * Items are sorted according to string Unicode code points (character by character, numbers before upper case
- * alphabets, upper case alphabets before lower case alphabets)
- *
- * @param list List to sort.
- * @returns New sorted list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = ["1","2","10","Orange","apple"]<br/>
- * sort = List.sortAlpha(list)</code><br/><br/>
- * Expected value of list is ["1","10","2","Orange","apple"].
- */
-function sortAlpha(list) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    var list2 = list.slice();
-    list2.sort();
-    return list2;
-}
-/**
- * Sorts a list of numbers in ascending order.
- * The list must contain numbers.
- *
- * @param list List to add to.
- * @returns New sorted list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [56,6,48]<br/>
- * sort = List.sortNum(list)</code><br/><br/>
- * Expected value of list is [6,48,56].
- */
-function sortNum(list) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    var list2 = list.slice();
-    list2.sort(function (a, b) { return a - b; });
-    return list2;
-}
-/**
- * Creates a copy of a portion of a list, from start index to end index (end not included).
- *
- * @param list List to slice.
- * @param start Zero-based index at which to begin slicing.
- *      A negative index can be used, indicating an offset from the end of the sequence.
- *      If start is undefined, slice begins from index 0.
- * @param end Zero-based index before which to end slicing. Slice extracts up to but not including end.
- *      A negative index can be used, indicating an offset from the end of the sequence.
- *      If end is undefined, slice extracts through the end of the sequence.
- * @returns A new list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [1,2,3,4,5]<br/>
- * result = List.slice(list,1,3)</code><br/><br/>
- * Expected value of result is [2,3].
- */
-function slice(list, start, end) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (start === undefined) {
-        throw new Error("Invalid arg: start must be defined.");
-    }
-    if (end === undefined) {
-        throw new Error("Invalid arg: end must be defined.");
-    }
-    var list2 = list.slice();
-    return list2.slice(start, end);
-}
-/**
- * Adds and/or removes items to/from a list.
- *
- * If no items_to_add are specified, then items are only removed.
- * If num_to_remove is 0, then items are only added.<br/>
- *
- * @param list List to splice
- * @param index Zero-based index at which to add/remove items. (Items are added/removed after specified index)
- * @param num_to_remove Number of items to remove.
- * @param items_to_add List of items to add.
- * @returns A new list.
- *
- * <h3>Example: </h3>
- * <code>
- * list = [10, 20, 30, 40, 50]<br/>
- * result = List.splice(list, 1, 3, [2.2, 3.3])</code><br/><br/>
- * Expected value of result is [10, 2.2, 3.2, 50].
- */
-function splice(list, index, num_to_remove, items_to_add) {
-    if (list === undefined) {
-        throw new Error("Invalid arg: list must be defined.");
-    }
-    if (index === undefined) {
-        throw new Error("Invalid arg: index must be defined.");
-    }
-    var list2 = list.slice();
-    list2.splice.apply(list2, __spread([index, num_to_remove], items_to_add));
-    return list2;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/math.ts":
-/*!**************************************!*\
-  !*** ./src/app/core/modules/math.ts ***!
-  \**************************************/
-/*! exports provided: PI, POS_INF, NEG_INF, cos, acos, sin, asin, tan, atan, pow, ceiling, floor, abs, max, min, rand, randInt, randFloat */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PI", function() { return PI; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "POS_INF", function() { return POS_INF; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NEG_INF", function() { return NEG_INF; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cos", function() { return cos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "acos", function() { return acos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sin", function() { return sin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asin", function() { return asin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tan", function() { return tan; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "atan", function() { return atan; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pow", function() { return pow; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ceiling", function() { return ceiling; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "floor", function() { return floor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "abs", function() { return abs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "max", function() { return max; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "min", function() { return min; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rand", function() { return rand; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randInt", function() { return randInt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randFloat", function() { return randFloat; });
-/**
- * The <i>Math</i> module provides commonly used mathematical functions.
- * It also provides functions that return a number of constants such as PI and positive and negative infinity.
- */
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/PI
-/**
- * Returns the value of PI.
- * @returns Value of pi
- */
-function PI() {
-    return Math.PI;
-}
-/**
- * Returns the value of positive infinity
- * @returns Value of positive infinity
- */
-function POS_INF() {
-    return Number.POSITIVE_INFINITY;
-}
-/**
- * Returns the value of negative infinity
- * @returns Value of negative infinity
- */
-function NEG_INF() {
-    return Number.NEGATIVE_INFINITY;
-}
-//  ===============================================================================================================
-//  Math Methods ==================================================================================================
-//  ===============================================================================================================
-/**
- * Returns the cosine of a specified angle in degrees.
- *
- * @param angle Angle in degrees.
- * @returns Cosine of angle.
- */
-function cos(angle) {
-    if (angle === undefined) {
-        throw new Error("Invalid arg: angle must be defined.");
-    }
-    return Math.cos(angle * (Math.PI / 180));
-}
-/**
- * Returns the arc cosine (or inverse cosine) of a specified number, converted to degrees.
- *
- * @param num Number.
- * @returns Angle, the arc cosine of num converted to degrees.
- */
-function acos(num) {
-    if (num === undefined) {
-        throw new Error("Invalid arg: num must be defined.");
-    }
-    return Math.acos(num) * (180 / Math.PI);
-}
-/**
- * Returns the sine of a specified angle in degrees.
- *
- * @param angle Angle in degrees.
- * @returns Sine of angle.
- */
-function sin(angle) {
-    if (angle === undefined) {
-        throw new Error("Invalid arg: angle must be defined.");
-    }
-    return Math.sin(angle * (Math.PI / 180));
-}
-/**
- * Returns the arc sine (or inverse sine) of a specified number, converted to degrees.
- *
- * @param num Number.
- * @returns Angle, the arc cosine of num converted to degrees.
- */
-function asin(num) {
-    if (num === undefined) {
-        throw new Error("Invalid arg: num must be defined.");
-    }
-    return Math.asin(num) * (180 / Math.PI);
-}
-/**
- * Returns the tangent of a specified angle in degrees.
- *
- * @param angle Angle in degrees.
- * @returns Tangent of angle.
- */
-function tan(angle) {
-    if (angle === undefined) {
-        throw new Error("Invalid arg: angle must be defined.");
-    }
-    return Math.tan(angle * (Math.PI / 180));
-}
-/**
- * Returns the arc tangent (or inverse tangent) of a specified number, converted to degrees.
- *
- * @param num Number.
- * @returns Angle, the arc tangent of num converted to degrees.
- */
-function atan(num) {
-    if (num === undefined) {
-        throw new Error("Invalid arg: num must be defined.");
-    }
-    return Math.atan(num) * (180 / Math.PI);
-}
-/**
- * Returns a number representing the given base taken to the power of the given exponent.
- *
- * @param base Base number.
- * @param exponent Power of exponent.
- * @returns Number representing the given base taken to the power of the given exponent.
- *
- * <h3>Example:</h3>
- * <code>
- * num = Math.pow(2,3)</code><br/><br/>
- * Expected value of num is 8.
- */
-function pow(base, exponent) {
-    if (base === undefined) {
-        throw new Error("Invalid arg: base must be defined.");
-    }
-    if (exponent === undefined) {
-        throw new Error("Invalid arg: exponent must be defined.");
-    }
-    return Math.pow(base, exponent);
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/ceil
-/**
- * Rounds a number up to the nearest integer.
- *
- * @param num Number.
- * @returns A number representing the smallest integer more than or equal to the specified number.
- *
- * <h3>Example:</h3>
- * <code>
- * num = Math.ceiling(4.3)</code><br/><br/>
- * Expected value of num is 5.
- */
-function ceiling(num) {
-    if (num === undefined) {
-        throw new Error("Invalid arg: num must be defined.");
-    }
-    return Math.ceil(num);
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor
-/**
- * Rounds a number down to the nearest integer.
- *
- * @param num Number.
- * @returns A number representing the largest integer less than or equal to the specified number.
- *
- * <h3>Example:</h3>
- * <code>
- * num = Math.floor(4.3)</code><br/><br/>
- * Expected value of num is 4.
- */
-function floor(num) {
-    if (num === undefined) {
-        throw new Error("Invalid arg: num must be defined.");
-    }
-    return Math.floor(num);
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/abs
-/**
- * Returns the absolute value of a number.
- *
- * Returns num if num is positive, -num if num is negative and 0 if num=0<br/>
- *
- * @param num Number.
- * @returns A number representing the absolute value of the specified number.
- *
- * <h3>Example:</h3>
- * <code>
- * num1 = Math.abs(-1.234)
- * num2 = Math.abs(2.345)<br/>
- * </code><br/><br/>
- * Expected value of num1 is 1.234, and of num2 is 2.345.
- */
-function abs(num) {
-    if (num === undefined) {
-        throw new Error("Invalid arg: num must be defined.");
-    }
-    return Math.abs(num);
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max
-/**
- * Returns the largest number in a list of numbers.
- *
- * @param nums List of numbers.
- * @returns A number representing the largest number in specified list of numbers.
- *
- * <h3>Example:</h3>
- * <code>
- * list = [8,9,6,1,3]<br/>
- * num = Math.max(list)</code><br/><br/>
- * Expected value of num is 9.
- */
-function max(nums) {
-    var e_1, _a;
-    if (nums === undefined) {
-        throw new Error("Invalid arg: nums must be defined.");
-    }
-    var maximum = Number.NEGATIVE_INFINITY;
-    try {
-        for (var nums_1 = __values(nums), nums_1_1 = nums_1.next(); !nums_1_1.done; nums_1_1 = nums_1.next()) {
-            var num = nums_1_1.value;
-            if (num > maximum) {
-                maximum = num;
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (nums_1_1 && !nums_1_1.done && (_a = nums_1.return)) _a.call(nums_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return maximum;
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/min
-/**
- * Returns the smallest number in a list of numbers.
- *
- * @param num List of numbers.
- * @returns A number representing the smallest number in specified list of numbers.
- *
- * <h3>Example:</h3>
- * <code>
- * list = [8,9,6,1,3]<br/>
- * num = Math.max(list)</code><br/><br/>
- * Expected value of num is 1.
- */
-function min(nums) {
-    var e_2, _a;
-    if (nums === undefined) {
-        throw new Error("Invalid arg: nums must be defined.");
-    }
-    var minimum = Number.POSITIVE_INFINITY;
-    try {
-        for (var nums_2 = __values(nums), nums_2_1 = nums_2.next(); !nums_2_1.done; nums_2_1 = nums_2.next()) {
-            var num = nums_2_1.value;
-            if (num < minimum) {
-                minimum = num;
-            }
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (nums_2_1 && !nums_2_1.done && (_a = nums_2.return)) _a.call(nums_2);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    return minimum;
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-/**
- * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive).
- *
- * @returns A pseudo-random number.
- */
-function rand() {
-    return Math.random();
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-/**
- * Returns a pseudo-random integer number between two numbers.
- *
- * Lower bound number is inclusive and upper bound number is exclusive.
- * @param min Lower bound of range.
- * @param max Upper bound of range.
- * @returns A pseudo-random integer number.
- */
-function randInt(min, max) {
-    if (min === undefined) {
-        throw new Error("Invalid arg: min must be defined.");
-    }
-    if (max === undefined) {
-        throw new Error("Invalid arg: max must be defined.");
-    }
-    var lower = Math.ceil(min);
-    var upper = Math.floor(max);
-    return Math.floor(Math.random() * (upper - lower)) + lower;
-}
-/**
- * Returns a pseudo-random floating point number between two numbers.
- *
- * @param min Lower bound of range.
- * @param max Upper bound of range.
- * @returns A pseudo-random floating point number.
- */
-function randFloat(min, max) {
-    if (min === undefined) {
-        throw new Error("Invalid arg: min must be defined.");
-    }
-    if (max === undefined) {
-        throw new Error("Invalid arg: max must be defined.");
-    }
-    return (Math.random() * (max - min)) + min;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/model.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/model.ts ***!
-  \***************************************/
-/*! exports provided: New, FromData, merge, exportObj */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "New", function() { return New; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromData", function() { return FromData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return merge; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportObj", function() { return exportObj; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _libs_filesys_download__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/filesys/download */ "./src/app/core/modules/libs/filesys/download.ts");
-/**
- * Functions for working with models.
- * Models are datastructures that contain geometric entities with attributes,
- * possibly organised into groups.
- */
-/**
- * Models can contain two types of geometric entities: points and objects.
- * The objects are further sudivided into different types, e.g. polylines, polymeshes, circle, etc.
- */
-
-
-//  ===============================================================================================================
-//  Model Constructors ===========================================================================================
-//  ===============================================================================================================
-/**
- * Creates a new empty model.
- *
- * @returns New model empty.
- */
-function New() {
-    return new gs_json__WEBPACK_IMPORTED_MODULE_0__["Model"]();
-}
-//  ===============================================================================================================
-//  Model Functions ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a new model and populates the model with data.
- *
- * @param model_data The model data in gs-json format.
- * @returns New model if successful, null if unsuccessful or on error.
- */
-function FromData(model_data) {
-    if (typeof model_data == 'string') {
-        return new gs_json__WEBPACK_IMPORTED_MODULE_0__["Model"](JSON.parse(model_data));
-    }
-    else {
-        return new gs_json__WEBPACK_IMPORTED_MODULE_0__["Model"](model_data);
-    }
-}
-/**
- * Merges the second model into the first model. The geometry, attribues, and groups are all merged.
- * If the models contain contain groups with the same names, then the groups will be merged.
- *
- * @param model1 The model to merge into.
- * @param model2 The model to merge.
- * @returns The merged model.
- */
-function merge(model1, model2) {
-    model1.merge(model2);
-    return model1;
-}
-/**
- * Export model as obj file. Only pline and pmeshes will be exported.
- *
- * @param model The model to export.
- * @param filepath The path to the obj file.
- * @returns True if successful.
- */
-function exportObj(model, filename) {
-    return _libs_filesys_download__WEBPACK_IMPORTED_MODULE_1__["save"](gs_json__WEBPACK_IMPORTED_MODULE_0__["exportObj"](model), filename);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/object.ts":
-/*!****************************************!*\
-  !*** ./src/app/core/modules/object.ts ***!
-  \****************************************/
-/*! exports provided: Get, Gets, GetFromGroup, move, rotate, scale, xformGcs2Lcs, xformLcs2Gcs, xformLcs2Lcs, mirror, del, unweld, addToGroup, removeFromGroup */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Gets", function() { return Gets; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetFromGroup", function() { return GetFromGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "move", function() { return move; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rotate", function() { return rotate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scale", function() { return scale; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformGcs2Lcs", function() { return xformGcs2Lcs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformLcs2Gcs", function() { return xformLcs2Gcs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformLcs2Lcs", function() { return xformLcs2Lcs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mirror", function() { return mirror; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "del", function() { return del; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unweld", function() { return unweld; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addToGroup", function() { return addToGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeFromGroup", function() { return removeFromGroup; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/**
- * Objects are a type of entity. They consist of conics, polylines, polymeshes, planes and rays.
- *
- * Objects are formed by a combination of topologies. More information can be found on the page for topo.
- */
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-
-
-
-//  ===============================================================================================================
-//  Object Get ====================================================================================================
-//  ===============================================================================================================
-/**
- * Gets an object from the model
- * @param model Model to get object from
- * @param id ID of object to get
- * @returns An object. Null if object does not exist.
- */
-function Get(model, id) {
-    var obj = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjID"](model, id);
-    switch (obj.getObjType()) {
-        case 1 /* ray */:
-            return obj;
-        case 2 /* plane */:
-            return obj;
-        case 3 /* circle */:
-            return obj;
-        case 4 /* ellipse */:
-            return obj;
-        case 100 /* polyline */:
-            return obj;
-        case 200 /* polymesh */:
-            return obj;
-        default:
-            throw new Error("Object type not found: " + obj.getObjType());
-    }
-}
-/**
- * Gets a list of objects from the model.
- * @param model Model to get objects from.
- * @param ids A point ID or list of point IDs, integer numbers. If null, then all objects are returned.
- * @returns A list of objects.
- */
-function Gets(model, ids) {
-    var e_1, _a;
-    if (ids === undefined || ids === null) {
-        return model.getGeom().getAllObjs();
-    }
-    if (!Array.isArray(ids)) {
-        ids = [ids];
-    }
-    var objs = [];
-    try {
-        for (var ids_1 = __values(ids), ids_1_1 = ids_1.next(); !ids_1_1.done; ids_1_1 = ids_1.next()) {
-            var id = ids_1_1.value;
-            var obj = Get(model, id);
-            if (obj !== null) {
-                objs.push(obj);
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (ids_1_1 && !ids_1_1.done && (_a = ids_1.return)) _a.call(ids_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return objs;
-}
-/**
- * Gets all the objects from a group.
- * @param model Model to get the objects from.
- * @param group_name The group name.
- * @returns List of objects.
- */
-function GetFromGroup(model, group_name) {
-    var group = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkGroup"](model, group_name);
-    return group.getObjs();
-}
-//  ===============================================================================================================
-//  Object Constructors ===========================================================================================
-//  ===============================================================================================================
-//  ===============================================================================================================
-//  Object Functions ==============================================================================================
-//  ===============================================================================================================
-/**
- * Moves objects by a translation vector.
- *
- * @param objs An object or a list of objects.
- * @param vector Translation vector.
- * @param copy If true, objects are copied before being moved.
- * @returns The moved objects.
- */
-function move(objs, vector, copy) {
-    if (copy === void 0) { copy = false; }
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](vector);
-    // translation matrix
-    var matrix_trn = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn.makeTranslation(vector[0], vector[1], vector[2]);
-    // copy the objs
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_trn);
-    // return either a single obj or array of objs
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Rotates object or a list of objects around an axis.
- *
- * @param objs An object or a list of objects.
- * @param origin An point on the axis, can be either a list of three numbers or a point.
- * @param axis An xyz vector along the axis.
- * @param angle The angle, in degrees, between 0 and 360.
- * @param copy If true, objects are copied before being rotated.
- * @returns The rotated objects.
- */
-function rotate(objs, origin, axis, angle, copy) {
-    if (copy === void 0) { copy = false; }
-    var _a;
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var origin_xyz;
-    if (origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        origin_xyz = origin.getPosition();
-    }
-    else {
-        origin_xyz = origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](axis);
-    var angle_rad = (angle / 180) * Math.PI;
-    // rotation matrix
-    var matrix_rot = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_rot.makeRotationAxis(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], axis)))(), angle_rad);
-    // translation matrix
-    var matrix_trn1 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn1.makeTranslation(-origin_xyz[0], -origin_xyz[1], -origin_xyz[2]);
-    var matrix_trn2 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn2.makeTranslation(origin_xyz[0], origin_xyz[1], origin_xyz[2]);
-    // copy objects
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_trn2.multiply(matrix_rot.multiply(matrix_trn1)));
-    // return the result, either single obj or array
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Scales an object or a list of objects relative to an origin point.
- * The scale factor is specified by three vales, for scaling in x, y, and z.
- * Primitive objects, such as circles and arcs, can only be scaled uniformly.
- *
- * @param objs An object or a list of objects.
- * @param origin An origin point of the scale, can be either a list of three numbers or a point.
- * @param factor The scale factor, along the x, y and z axes.
- * @param copy If true, objects are copied before being scaled.
- * @returns The scaled objects.
- */
-function scale(objs, origin, factor, copy) {
-    if (copy === void 0) { copy = false; }
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var origin_xyz;
-    if (origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        origin_xyz = origin.getPosition();
-    }
-    else {
-        origin_xyz = origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](factor);
-    // scale matrix
-    var matrix_scale = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_scale.makeScale(factor[0], factor[1], factor[2]);
-    // translation matrix
-    var matrix_trn1 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn1.makeTranslation(-origin_xyz[0], -origin_xyz[1], -origin_xyz[2]);
-    var matrix_trn2 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn2.makeTranslation(origin_xyz[0], origin_xyz[1], origin_xyz[2]);
-    // copy objects
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_trn2.multiply(matrix_scale.multiply(matrix_trn1)));
-    // return the result, either single obj or array
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Transforms an object or list of objects to a target coordinate system (CS).
- * The source CS is assumed to be the Global Coordinate System (GCS).
- * The target coordinate system is specified by an origin,
- * a vector parallel to the x axis, and a vector in the xy plane (not parallel to the x axis).
- *
- * @param objs An object or a list of objects.
- * @param target_origin The origin point of the target coordinate system, can be either a list of three numbers or a point.
- * @param target_vec_x A vector parallel to the target x axis.
- * @param target_vec A vector in the target xy plane (not paralle to the x axis).
- * @param copy If true, objects are copied before being scaled.
- * @returns The transformed objects.
- */
-function xformGcs2Lcs(objs, target_origin, target_vec_x, target_vec, copy) {
-    if (copy === void 0) { copy = false; }
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var target_origin_xyz;
-    if (target_origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        target_origin_xyz = target_origin.getPosition();
-    }
-    else {
-        target_origin_xyz = target_origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](target_origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](target_vec_x);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](target_vec);
-    // matrix to xform from source to gcs, then from gcs to target
-    var matrix_gcs_to_target = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_3__["xformMatrixFromXYZVectors"](target_origin_xyz, target_vec_x, target_vec, false);
-    // copy objects
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_gcs_to_target);
-    // return the result, either single obj or array
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Transforms an object or list of objects from a source local coordinate system (LCS)
- * to the global coordinate system (GCS).
- * The source coordinate system is specified by an origin,
- * a vector parallel to the x axis, and a vector in the xy plane (not parallel to the x axis).
- *
- * @param objs An object or a list of objects.
- * @param source_origin The origin point of the source coordinate system, can be either a list of three numbers or a point.
- * @param source_vec_x A vector parallel to the source x axis.
- * @param source_vec A vector in the source xy plane (not paralle to the x axis).
- * @param copy If true, objects are copied before being scaled.
- * @returns The transformed objects.
- */
-function xformLcs2Gcs(objs, source_origin, source_vec_x, source_vec, copy) {
-    if (copy === void 0) { copy = false; }
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var source_origin_xyz;
-    if (source_origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        source_origin_xyz = source_origin.getPosition();
-    }
-    else {
-        source_origin_xyz = source_origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](source_origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](source_vec_x);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](source_vec);
-    // matrix to xform from source to gcs, then from gcs to target
-    var matrix_source_to_gcs = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_3__["xformMatrixFromXYZVectors"](source_origin_xyz, source_vec_x, source_vec, true);
-    // copy objects
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_source_to_gcs);
-    // return the result, either single obj or array
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Transforms an object or list of objects from a source to a target local coordinate system (LCS).
- * Each coordinate system is specified by an origin,
- * a vector parallel to the x axis, and a vector in the xy plane (not parallel to the x axis).
- *
- * @param objs An object or a list of objects.
- * @param source_origin The origin point of the source coordinate system, can be either a list of three numbers or a point.
- * @param source_vec_x A vector parallel to the source x axis.
- * @param source_vec A vector in the source xy plane (not paralle to the x axis).
- * @param target_origin The origin point of the target coordinate system, can be either a list of three numbers or a point.
- * @param target_vec_x A vector parallel to the target x axis.
- * @param target_vec A vector in the target xy plane (not paralle to the x axis).
- * @param copy If true, objects are copied before being scaled.
- * @returns The transformed objects.
- */
-function xformLcs2Lcs(objs, source_origin, source_vec_x, source_vec, target_origin, target_vec_x, target_vec, copy) {
-    if (copy === void 0) { copy = false; }
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var source_origin_xyz;
-    if (source_origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        source_origin_xyz = source_origin.getPosition();
-    }
-    else {
-        source_origin_xyz = source_origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](source_origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](source_vec_x);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](source_vec);
-    var target_origin_xyz;
-    if (target_origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        target_origin_xyz = target_origin.getPosition();
-    }
-    else {
-        target_origin_xyz = target_origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](target_origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](target_vec_x);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](target_vec);
-    // matrix to xform from source to gcs, then from gcs to target
-    var matrix_source_to_gcs = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_3__["xformMatrixFromXYZVectors"](source_origin_xyz, source_vec_x, source_vec, true);
-    var matrix_gcs_to_target = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_3__["xformMatrixFromXYZVectors"](target_origin_xyz, target_vec_x, target_vec, false);
-    // copy objects
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_gcs_to_target.multiply(matrix_source_to_gcs));
-    // return the result, either single obj or array
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Mirrors an object or a list of objects in a mirror plane.
- * The plane is defined by a point and a normal vector.
- *
- * @param objs An object or a list of objects.
- * @param origin An origin point on the mirror plane, can be either a list of three numbers or a point.
- * @param normal The normal vector of the mirror plane, a list of three numbers.
- * @param copy If true, objects are copied before being scaled.
- * @returns The scaled objects.
- */
-function mirror(objs, origin, normal, copy) {
-    if (copy === void 0) { copy = false; }
-    var _a;
-    var is_array = Array.isArray(objs);
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var origin_xyz;
-    if (origin instanceof gs_json__WEBPACK_IMPORTED_MODULE_0__["Point"]) {
-        origin_xyz = origin.getPosition();
-    }
-    else {
-        origin_xyz = origin;
-        _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](origin_xyz);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkXYZ"](normal);
-    // plane normal
-    var _b = __read(new ((_a = three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]).bind.apply(_a, __spread([void 0], normal)))().normalize().toArray(), 3), a = _b[0], b = _b[1], c = _b[2];
-    // mirror matrix
-    var matrix_mirror = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_mirror.set(1 - (2 * a * a), -2 * a * b, -2 * a * c, 0, -2 * a * b, 1 - (2 * b * b), -2 * b * c, 0, -2 * a * c, -2 * b * c, 1 - (2 * c * c), 0, 0, 0, 0, 1);
-    // translation matrix
-    var matrix_trn1 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn1.makeTranslation(-origin_xyz[0], -origin_xyz[1], -origin_xyz[2]);
-    var matrix_trn2 = new three__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
-    matrix_trn2.makeTranslation(origin_xyz[0], origin_xyz[1], origin_xyz[2]);
-    // copy objects
-    if (copy) {
-        objs = model.getGeom().copyObjs(objs, true);
-    }
-    // do the xform
-    model.getGeom().xformObjs(objs, matrix_trn2.multiply(matrix_mirror.multiply(matrix_trn1)));
-    // return the result, either single obj or array
-    if (is_array) {
-        return objs;
-    }
-    return objs[0];
-}
-/**
- * Deletes object or a list of objects from the model.
- *
- * @param objs Object or list of objects to delete.
- * @param keep_points If false, points that are not used in any other objects will be deleted.
- * @returns True if all objects we successfully deleted.
- */
-function del(objs, keep_points) {
-    if (keep_points === void 0) { keep_points = false; }
-    var e_2, _a;
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var ok = true;
-    try {
-        for (var objs_1 = __values(objs), objs_1_1 = objs_1.next(); !objs_1_1.done; objs_1_1 = objs_1.next()) {
-            var obj = objs_1_1.value;
-            if (!model.getGeom().delObj(obj, keep_points)) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (objs_1_1 && !objs_1_1.done && (_a = objs_1.return)) _a.call(objs_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    return ok;
-}
-/**
- * Unwelds objects, so that thier vertices no longer share any points.
- *
- * @param objs Object or list of objects to unweld.
- * @returns A list of new points generated by the unwelding process.
- */
-function unweld(objs) {
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    return model.getGeom().unweldObjs(objs);
-}
-//  ===============================================================================================================
-//  Groups ==============================================================================================
-//  ===============================================================================================================
-/**
- * Add objects to a group.
- *
- * @param group Name of group to add to.
- * @param objs List of objects to add.
- * @returns True if all objects we successfully added.
- */
-function addToGroup(objs, group_name) {
-    var e_3, _a;
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var group = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkGroup"](model, group_name);
-    var ok = true;
-    try {
-        for (var objs_2 = __values(objs), objs_2_1 = objs_2.next(); !objs_2_1.done; objs_2_1 = objs_2.next()) {
-            var obj = objs_2_1.value;
-            if (!group.addObj(obj)) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (objs_2_1 && !objs_2_1.done && (_a = objs_2.return)) _a.call(objs_2);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-    return ok;
-}
-/**
- * Remove object from a group.
- *
- * @param group Name of group to add to.
- * @param objs List of object to remove.
- * @returns True if all objects we successfully removed.
- */
-function removeFromGroup(objs, group_name) {
-    var e_4, _a;
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkObjList"](objs, 1);
-    var group = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_2__["checkGroup"](model, group_name);
-    var ok = true;
-    try {
-        for (var objs_3 = __values(objs), objs_3_1 = objs_3.next(); !objs_3_1.done; objs_3_1 = objs_3.next()) {
-            var obj = objs_3_1.value;
-            if (!group.removeObj(obj)) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-    finally {
-        try {
-            if (objs_3_1 && !objs_3_1.done && (_a = objs_3.return)) _a.call(objs_3);
-        }
-        finally { if (e_4) throw e_4.error; }
-    }
-    return ok;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/output.ts":
-/*!****************************************!*\
-  !*** ./src/app/core/modules/output.ts ***!
-  \****************************************/
-/*! exports provided: Output */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Output", function() { return Output; });
-var Output;
-(function (Output) {
-    function return_value(__model__, index) {
-        if (index > __model__.length)
-            return __model__;
-        return __model__[index].value;
-    }
-    Output.return_value = return_value;
-})(Output || (Output = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/plane.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/plane.ts ***!
-  \***************************************/
-/*! exports provided: Get, Copy, CopyToModel, FromOriginVectors, FromOriginXY, FromOriginYZ, FromOriginZX, FromOriginPoints, FromCircle */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CopyToModel", function() { return CopyToModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginVectors", function() { return FromOriginVectors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginXY", function() { return FromOriginXY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginYZ", function() { return FromOriginYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginZX", function() { return FromOriginZX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginPoints", function() { return FromOriginPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromCircle", function() { return FromCircle; });
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/**
- * Function for working with planes.
- */
-
-
-//  ===============================================================================================================
-//  Plane Get =====================================================================================================
-//  ===============================================================================================================
-/**
- * Gets a plane from the model based on an ID number.
- * In the viewer, the object label can display (it starts with 'o'), which contains the ID.
- * For example, if the label is "o123", then the ID is the number 123.
- *
- * @param model Model to get plane from.
- * @param id ID number of plane.
- * @returns The plane object.
- */
-function Get(model, id) {
-    var obj = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkObjID"](model, id, 2 /* plane */);
-    return obj;
-}
-/**
- * Create a copy of an existing plane.
- *
- * @param plane The plane object to copy.
- * @param copy_attribs If true, attributes are copied to the new plane.
- * @returns A new plane object.
- */
-function Copy(plane, copy_attribs) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkObj"](plane, 2 /* plane */);
-    return plane.copy(copy_attribs);
-}
-/**
- * Copies a plane from one model into another model.
- *
- * @param model The model to copy to.
- * @param plane The plane object to copy.
- * @returns The copied plane object in the model.
- */
-function CopyToModel(model, plane) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkObj"](plane, 2 /* plane */);
-    if (plane.getModel() === model) {
-        throw new Error("Error: plane is already in model.");
-    }
-    return model.getGeom().copyPlaneFromModel(plane);
-}
-//  ===============================================================================================================
-//  Plane Constructors ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a plane object from an origin point and two vectors.
- *
- * @param origin Point object, the origin of plane.
- * @param vec_x XYZ vector, the x-axis of plane.
- * @param vec XYZ vector, a vector in the plane. (This vector must not be co-dir with vec_x.)
- * @returns New plane object.
- */
-function FromOriginVectors(origin, vec_x, vec) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](vec_x);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](vec);
-    return model.getGeom().addPlane(origin, vec_x, vec);
-}
-/**
- * Creates a plane object from an origin point, parallel to the WCS XY plane .
- *
- * @param origin Point object, the origin of plane.
- * @returns New plane object.
- */
-function FromOriginXY(origin) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](origin);
-    return model.getGeom().addPlane(origin, [1, 0, 0], [0, 1, 0]);
-}
-/**
- * Creates a plane object from an origin point, parallel to the WCS YZ plane .
- *
- * @param origin Point object, the origin of plane.
- * @returns New plane object.
- */
-function FromOriginYZ(origin) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](origin);
-    return model.getGeom().addPlane(origin, [0, 1, 0], [0, 0, 1]);
-}
-/**
- * Creates a plane object from an origin point, parallel to the WCS ZX plane .
- *
- * @param origin Point object, the origin of plane.
- * @returns New plane object.
- */
-function FromOriginZX(origin) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](origin);
-    return model.getGeom().addPlane(origin, [0, 0, 1], [1, 0, 0]);
-}
-/**
- * Creates a plane from an origin point and two other points on the plane.
- *
- * @param origin Point object, the origin of plane.
- * @param point1 Point object, a point on the plane. This will be used to define the plane X axis.
- * @param point2 Point object, a point on the plane.
- * @returns New plane object.
- */
-function FromOriginPoints(origin, point1, point2) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point2);
-    if (point1.getModel() !== model) {
-        throw new Error("Points need to be in the same model");
-    }
-    if (point2.getModel() !== model) {
-        throw new Error("Points need to be in the same model");
-    }
-    // create the plane
-    var vec_x = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](origin, point1).toArray();
-    var vec = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](origin, point2).toArray();
-    var plane = model.getGeom().addPlane(origin, vec_x, vec);
-    // return the new plane
-    return plane;
-}
-/**
- * Creates a plane from a circle. The plane will have the same origin and orientation as the circle.
- *
- * @param circle The circle to create a plane from.
- * @returns New plane object.
- */
-function FromCircle(circle) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkObj"](circle, 3 /* circle */);
-    var vectors = circle.getAxes();
-    return model.getGeom().addPlane(circle.getOrigin(), vectors[0], vectors[1]);
-}
-//  ===============================================================================================================
-//  Plane Functions ===============================================================================================
-//  ===============================================================================================================
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/pline.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/pline.ts ***!
-  \***************************************/
-/*! exports provided: Get, Copy, CopyToModel, FromPoints, FromCircle, From2Points, isClosed, setIsClosed, numEdges, numVertices, getPoints, getEndPoints, evalParam, divideMaxLength, divide, join, explode, extract, extrude, loft, pipe */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CopyToModel", function() { return CopyToModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromPoints", function() { return FromPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromCircle", function() { return FromCircle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "From2Points", function() { return From2Points; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isClosed", function() { return isClosed; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setIsClosed", function() { return setIsClosed; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numEdges", function() { return numEdges; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numVertices", function() { return numVertices; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPoints", function() { return getPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEndPoints", function() { return getEndPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "evalParam", function() { return evalParam; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "divideMaxLength", function() { return divideMaxLength; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "divide", function() { return divide; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "join", function() { return join; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "explode", function() { return explode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extract", function() { return extract; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extrude", function() { return extrude; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loft", function() { return loft; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pipe", function() { return pipe; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./libs/poly/poly */ "./src/app/core/modules/libs/poly/poly.ts");
-/* harmony import */ var _libs_poly_polylinePipe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./libs/poly/polylinePipe */ "./src/app/core/modules/libs/poly/polylinePipe.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/* harmony import */ var _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./libs/arr/arr */ "./src/app/core/modules/libs/arr/arr.ts");
-/**
- * Functions for working with polylines.
- */
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
-
-
-
-
-
-//  ===============================================================================================================
-//  Pline Get and Copy ============================================================================================
-//  ===============================================================================================================
-/**
- * Gets a polyline from the model based on an ID number.
- * In the viewer, the object label can display (it starts with 'o'), which contains the ID.
- * For example, if the label is "o123", then the ID is the number 123.
- *
- * @param model Model to get polyline object from.
- * @param id ID number of polyline object.
- * @returns Polyline object.
- */
-function Get(model, id) {
-    var obj = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjID"](model, id, 100 /* polyline */);
-    return obj;
-}
-/**
- * Create a copy of a polyline.
- *
- * @param polyline The polyline to copy.
- * @param copy_attribs If true, attributes are copied to the new circle.
- * @returns Polyline object.
- */
-function Copy(polyline, copy_attribs) {
-    if (copy_attribs === void 0) { copy_attribs = true; }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](polyline, 100 /* polyline */);
-    return polyline.copy(copy_attribs);
-}
-/**
- * Copies a polyline from one model into another model.
- *
- * @param model The model to copy to.
- * @param polyline The polyline object to copy.
- * @returns The copied polyline object in the model.
- */
-function CopyToModel(model, polyline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](polyline, 100 /* polyline */);
-    if (polyline.getModel() === model) {
-        throw new Error("Error: polyline is already in model.");
-    }
-    //return model.getGeom().copyPolylineFromModel(polyline);
-    throw new Error("Function not implemented yet...");
-}
-//  ===============================================================================================================
-//  Pline Constructors ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a polyline by joining a list of points
- *
- * Straight line segments are cerated between every two points.
- *
- * @param points A list of points.
- * @param is_closed if true,
- *      creates a closed polyline object by joining the last point to the first point.
- * @returns Polyline object.
- */
-function FromPoints(points, is_closed) {
-    if (is_closed === void 0) { is_closed = false; }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPointList"](points, 2);
-    return model.getGeom().addPolyline(points, is_closed);
-}
-/**
- * Create a polyline by dividing a circle or arc into straight line segments.
- *
- * If it is a circle, then a a closed polyline is returned.
- *
- * @param circle Circle or circular arc to construct polyline from.
- * @param segments Number of segments in resulting polyline.
- * @returns Polyline object.
- */
-function FromCircle(circle, segments) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](circle, 3 /* circle */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNum"](segments);
-    var m = circle.getModel();
-    var points = circle.equiPoints(segments + 1);
-    return m.getGeom().addPolyline(points, circle.isClosed());
-}
-/**
- * Create a polyline with a single straight line segment, connecting two points.
- *
- * @param start Start point of line
- * @param end End point of line.
- * @returns Polyline object.
- */
-function From2Points(start, end) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](start);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPoint"](end);
-    return this.FromPoints([start, end], false);
-}
-//  ===============================================================================================================
-//  Pline Simple Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- * Checks if the polyline is closed.
- *
- * @param pline Polyline object.
- * @return True if the polyline is closed.
- */
-function isClosed(pline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    return pline.isClosed();
-}
-/**
- * Sets the polyline to be open or closed.
- *
- * @param pline Polyline object.
- * @param is_closed True for closed, false for open.
- * @return True if the value was changed, false otherwise.
- */
-function setIsClosed(pline, is_closed) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    if (pline.isClosed() === is_closed) {
-        return false;
-    }
-    pline.setIsClosed(is_closed);
-    return true;
-}
-/**
- * Get the number of edges in the polyline.
- *
- * @param pline Polyline object.
- * @return The number of edges.
- */
-function numEdges(pline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    return pline.numEdges();
-}
-/**
- * Get the number of vertices in the polyline.
- *
- * @param pline Polyline object.
- * @return The number of vertices.
- */
-function numVertices(pline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    return pline.numVertices();
-}
-/**
- * Get all points in a polyline in sequence order.
- *
- * @param pline Polyline object.
- * @return A list of points.
- */
-function getPoints(pline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    return pline.getPointsArr();
-}
-/**
- * Get the start and end points of a polyline.
- *
- * @param pline Polyline object.
- * @return A list with two points, or null if the polyline is closed.
- */
-function getEndPoints(pline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    if (pline.isClosed()) {
-        return null;
-    }
-    var points = pline.getPointsArr();
-    return [points[0], points[points.length - 1]];
-}
-/**
- * Returns a point by evaluating the position along a polyline.
- * The position is specified by a t parameter that starts at 0 and ends at 1.
- * If the polyline is closed, 0 and 1 will have the same position.
- *
- * @param pline Polyline to evaluate.
- * @param t Parameter to evaluate (0 is the start of the polyline, 1 is the end of the polyline)
- * @returns Point.
- */
-function evalParam(pline, t) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNum"](t);
-    var points = pline.getPointsArr();
-    if (pline.isClosed()) {
-        points.push(points[0]);
-    }
-    return _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__["pointsEvaluate"](points, t);
-}
-//  ===============================================================================================================
-//  Pline Modelling Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- * Divides a polyline. Each edge of the polyline is divided into different numbers of segments.
- * The number of segments for each edge is calculated by dividing the edge length by max_lenth,
- * and then rounding up to the nearest integer.
- *
- * The original polyline is not modified.
- *
- * @param pline The polyline to divide.
- * @param max_length The target maximum length of the segment,
- * may either be a single number or an list of numbers. If it is an list, then
- * the list length must be equal to the number of edges.
- * @returns A new polyline with subdivided edges.
- */
-function divideMaxLength(pline, max_length) {
-    var _a, _b, e_1, _c;
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    var num_edges = pline.numEdges();
-    if (!Array.isArray(max_length)) {
-        max_length = _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__["Arr"].make(num_edges, max_length);
-    }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkNumListLength"](max_length, num_edges);
-    // get points
-    var old_points = pline.getPointsArr();
-    if (pline.isClosed()) {
-        old_points.push(old_points[0]);
-    }
-    // create array to store new points
-    var new_points = [];
-    // loop through and add points
-    for (var i = 0; i < old_points.length - 1; i++) {
-        new_points.push(old_points[i]);
-        var vp1 = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], old_points[i].getPosition())))();
-        var vp2 = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], old_points[i + 1].getPosition())))();
-        var num_segments = Math.ceil(vp1.distanceTo(vp2) / max_length[i]);
-        var vpoints = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["interpVPoints"](vp1, vp2, num_segments - 1);
-        try {
-            for (var vpoints_1 = __values(vpoints), vpoints_1_1 = vpoints_1.next(); !vpoints_1_1.done; vpoints_1_1 = vpoints_1.next()) {
-                var vpoint = vpoints_1_1.value;
-                var new_point = model.getGeom().addPoint(vpoint.toArray());
-                new_points.push(new_point);
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (vpoints_1_1 && !vpoints_1_1.done && (_c = vpoints_1.return)) _c.call(vpoints_1);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-    }
-    // add last point if pline is open
-    if (!pline.isClosed()) {
-        new_points.push(old_points[old_points.length - 1]);
-    }
-    // create the new polyline and return it
-    return model.getGeom().addPolyline(new_points, pline.isClosed());
-}
-/**
- * Divides a polyline. Each edge of the polyline is divided into the same number of segments.
- * The original polyline is not modified.
- *
- * @param pline The polyline to divide.
- * @param num_segements The number of segments to create.
- * This may either be a single number or an list of numbers.
- * If it is an list, then the list length must be equal to the number of edges.
- * @returns A new polyline with subdivided edges.
- */
-function divide(pline, num_segments) {
-    var _a, _b, e_2, _c;
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    if (!Array.isArray(num_segments)) {
-        num_segments = _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__["Arr"].make(pline.numEdges(), num_segments);
-    }
-    var num_edges = pline.numEdges();
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNums"](num_segments);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkNumListLength"](num_segments, num_edges);
-    // get points
-    var old_points = pline.getPointsArr();
-    if (pline.isClosed()) {
-        old_points.push(old_points[0]);
-    }
-    // create array to store new points
-    var new_points = [];
-    // loop through and add points
-    for (var i = 0; i < old_points.length - 1; i++) {
-        new_points.push(old_points[i]);
-        var vp1 = new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], old_points[i].getPosition())))();
-        var vp2 = new ((_b = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_b, __spread([void 0], old_points[i + 1].getPosition())))();
-        var vpoints = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["interpVPoints"](vp1, vp2, num_segments[i] - 1);
-        try {
-            for (var vpoints_2 = __values(vpoints), vpoints_2_1 = vpoints_2.next(); !vpoints_2_1.done; vpoints_2_1 = vpoints_2.next()) {
-                var vpoint = vpoints_2_1.value;
-                var new_point = model.getGeom().addPoint(vpoint.toArray());
-                new_points.push(new_point);
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (vpoints_2_1 && !vpoints_2_1.done && (_c = vpoints_2.return)) _c.call(vpoints_2);
-            }
-            finally { if (e_2) throw e_2.error; }
-        }
-    }
-    // add last point if pline is open
-    if (!pline.isClosed()) {
-        new_points.push(old_points[old_points.length - 1]);
-    }
-    // create the new polyline and return it
-    return model.getGeom().addPolyline(new_points, pline.isClosed());
-}
-/**
- * Joins polylines with shared end points. The original polylines are deleted.
- *
- * @param plines List of polylines to join.
- * @returns List of polyline objects.
- */
-function join(plines) {
-    var e_3, _a, e_4, _b, e_5, _c;
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjList"](plines, 2, 100 /* polyline */);
-    var geom = model.getGeom();
-    // create an array of array of points
-    var point_ids_arrays = [];
-    try {
-        for (var plines_1 = __values(plines), plines_1_1 = plines_1.next(); !plines_1_1.done; plines_1_1 = plines_1.next()) {
-            var pline = plines_1_1.value;
-            var points = pline.getPointsArr();
-            var start_end = [points[0].getID(), points[points.length - 1].getID()];
-            if (start_end[1] < start_end[0]) {
-                points.reverse();
-            }
-            point_ids_arrays.push(points.map(function (p) { return p.getID(); }));
-        }
-    }
-    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-    finally {
-        try {
-            if (plines_1_1 && !plines_1_1.done && (_a = plines_1.return)) _a.call(plines_1);
-        }
-        finally { if (e_3) throw e_3.error; }
-    }
-    point_ids_arrays.sort();
-    // create disjoint set
-    var disjoint_sets = [];
-    disjoint_sets.push([point_ids_arrays[0]]);
-    point_ids_arrays.splice(0, 1);
-    var max = 0;
-    while (point_ids_arrays.length > 0 && max < 100) {
-        max++;
-        var tried_all = false;
-        var last_disjoint_set = disjoint_sets[disjoint_sets.length - 1];
-        var last_point_ids = last_disjoint_set[last_disjoint_set.length - 1];
-        var current_start = last_disjoint_set[0][0];
-        var current_end = last_point_ids[last_point_ids.length - 1];
-        tried_all = true;
-        for (var i = 0; i < point_ids_arrays.length; i++) {
-            var point_ids = point_ids_arrays[i];
-            var point_ids_start = point_ids[0];
-            var point_ids_end = point_ids[point_ids.length - 1];
-            if (current_end === point_ids_start) {
-                tried_all = false;
-                last_disjoint_set.push(point_ids);
-                current_end = last_point_ids[last_point_ids.length - 1];
-                point_ids_arrays.splice(i, 1);
-                break;
-            }
-            else if (current_start === point_ids_end) {
-                tried_all = false;
-                last_disjoint_set.unshift(point_ids);
-                current_start = last_disjoint_set[0][0];
-                point_ids_arrays.splice(i, 1);
-                break;
-            }
-            else if (current_end === point_ids_end) {
-                tried_all = false;
-                last_disjoint_set.push(point_ids.reverse());
-                current_end = last_point_ids[last_point_ids.length - 1];
-                point_ids_arrays.splice(i, 1);
-                break;
-            }
-            else if (current_start === point_ids_start) {
-                tried_all = false;
-                last_disjoint_set.unshift(point_ids.reverse());
-                current_start = last_disjoint_set[0][0];
-                point_ids_arrays.splice(i, 1);
-                break;
-            }
-        }
-        if (tried_all || (current_start === current_end)) {
-            disjoint_sets.push([point_ids_arrays[0]]);
-            point_ids_arrays.splice(0, 1);
-        }
-    }
-    // create polylines
-    var new_plines = [];
-    try {
-        for (var disjoint_sets_1 = __values(disjoint_sets), disjoint_sets_1_1 = disjoint_sets_1.next(); !disjoint_sets_1_1.done; disjoint_sets_1_1 = disjoint_sets_1.next()) {
-            var disjoint_set = disjoint_sets_1_1.value;
-            var points = [];
-            try {
-                for (var disjoint_set_1 = __values(disjoint_set), disjoint_set_1_1 = disjoint_set_1.next(); !disjoint_set_1_1.done; disjoint_set_1_1 = disjoint_set_1.next()) {
-                    var point_ids = disjoint_set_1_1.value;
-                    for (var i = 0; i < point_ids.length - 1; i++) {
-                        points.push(geom.getPoint(point_ids[i]));
-                    }
-                }
-            }
-            catch (e_5_1) { e_5 = { error: e_5_1 }; }
-            finally {
-                try {
-                    if (disjoint_set_1_1 && !disjoint_set_1_1.done && (_c = disjoint_set_1.return)) _c.call(disjoint_set_1);
-                }
-                finally { if (e_5) throw e_5.error; }
-            }
-            var start = disjoint_set[0][0];
-            var last_array = disjoint_set[disjoint_set.length - 1];
-            var end = last_array[last_array.length - 1];
-            if (start === end) {
-                new_plines.push(geom.addPolyline(points, true));
-            }
-            else {
-                points.push(geom.getPoint(end));
-                new_plines.push(geom.addPolyline(points, false));
-            }
-        }
-    }
-    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-    finally {
-        try {
-            if (disjoint_sets_1_1 && !disjoint_sets_1_1.done && (_b = disjoint_sets_1.return)) _b.call(disjoint_sets_1);
-        }
-        finally { if (e_4) throw e_4.error; }
-    }
-    // delete the old polylines
-    geom.delObjs(plines, true);
-    // return the new plines
-    return new_plines;
-}
-/**
- * Explodes a polyline into smaller polylines, each with only one segment.
- * The original polyline is not modified.
- *
- * @param pline Polyline to explode.
- * @returns List of polylines objects.
- */
-function explode(pline) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    return this.extract(pline, _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__["Arr"].makeSeq(pline.numEdges()));
-}
-/**
- * Creates new polyline by extracting line segments from an existing polyline.
- * The original polyline is not modified.
- *
- * The individual segments are no joined.
- *
- * @param pline Polyline to extract segments from
- * @param segment_index Index numbers of polyline segments to extract
- * @returns List of new polylines created from extract
- */
-function extract(pline, segment_index) {
-    var e_6, _a;
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNums"](segment_index);
-    // do the extraction
-    var m = pline.getModel();
-    var plines = [];
-    var points = pline.getPointsArr();
-    if (pline.isClosed()) {
-        points.push(points[0]);
-    }
-    try {
-        for (var segment_index_1 = __values(segment_index), segment_index_1_1 = segment_index_1.next(); !segment_index_1_1.done; segment_index_1_1 = segment_index_1.next()) {
-            var i = segment_index_1_1.value;
-            if (i >= points.length - 1) {
-                throw new Error("Segment index exceeds polyline length.");
-            }
-            plines.push(m.getGeom().addPolyline([points[i], points[i + 1]], false));
-        }
-    }
-    catch (e_6_1) { e_6 = { error: e_6_1 }; }
-    finally {
-        try {
-            if (segment_index_1_1 && !segment_index_1_1.done && (_a = segment_index_1.return)) _a.call(segment_index_1);
-        }
-        finally { if (e_6) throw e_6.error; }
-    }
-    return plines;
-}
-/**
- * Create a new polymesh by extruding a polyline by a specified vector.
- * The original polyline is not modified.
- *
- * New points are created by translating the existing points by the specified vector.
- * Four-sided faces are the created between the original and new points.
- * The faces are joined to create a polymesh.
- *
- * If cap is true, input pline and moved pline are used as edges to create two polygons. The polygones are
- * joined to the polymesh.
- *
- * @param pline Polyline to extrude.
- * @param vector Vector describing direction and distance of extrusion.
- * @param cap Closes polymesh by creating a polygon on each end of the extrusion if true.
- * @returns Polymesh object.
- */
-function extrude(pline, vector, cap) {
-    if (cap === void 0) { cap = false; }
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkXYZ"](vector);
-    // do the extrude
-    var m = pline.getModel();
-    var g = m.getGeom();
-    var points1 = pline.getPointsArr();
-    var points2 = points1.map(function (p) { return p.copy(); });
-    _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["movePointsAddXYZ"](points2, vector);
-    var mesh_points = _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__["pointsLoft"]([points1, points2], pline.isClosed());
-    if (cap) {
-        mesh_points.push(points1.reverse());
-        mesh_points.push(points2);
-    }
-    var pmesh = m.getGeom().addPolymesh(mesh_points);
-    return pmesh;
-}
-/**
- * Create a new polymesh by lofting a list of polylines with equal numbers of segments.
- * The original polylines are not modified.
- *
- * Four-sided faces are the created between the points of consecutive polylines.
- * The faces are joined to create a polymesh.
- *
- * Throws an error if polylines do not have the same number of segments
- *
- * @param plines List of polylines to loft (in order).
- * @param is_closed Closes polymesh by lofting back to first polyline if true.
- * @returns Polymesh object.
- */
-function loft(plines, is_closed) {
-    if (is_closed === void 0) { is_closed = false; }
-    var m = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjList"](plines, 2, 100 /* polyline */);
-    var g = m.getGeom();
-    // get data
-    if (is_closed) {
-        plines.push(plines[0]);
-    }
-    var num_points = plines[0].numVertices();
-    var num_plines = plines.length;
-    var plines_closed = plines[0].isClosed();
-    // get points
-    var points = [];
-    for (var i = 0; i < num_plines; i++) {
-        if (plines[i].numVertices() !== num_points) {
-            throw new Error("Plines do not have equal numbers of points.");
-        }
-        if (plines[i].isClosed() !== plines_closed) {
-            throw new Error("Plines must all be either open or closed.");
-        }
-        points.push(plines[i].getPointsArr());
-    }
-    // make polymesh from points and return it
-    return g.addPolymesh(_libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__["pointsLoft"](points, plines_closed));
-}
-/**
- * Create a new polymesh by piping a polyline.
- *
- * @param polyline Polyline to pipe.
- * @param radius The radius of the pipe.
- * @param segments The number of polygon segments around the cicumference of the pipe.
- * @returns Polymesh object.
- */
-function pipe(pline, radius, segments) {
-    var m = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    // make polymesh
-    return _libs_poly_polylinePipe__WEBPACK_IMPORTED_MODULE_3__["pipe"](pline, radius, segments);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/pmesh.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/pmesh.ts ***!
-  \***************************************/
-/*! exports provided: Get, Copy, CopyToModel, FromPoints, FromPline, TriStripFromPoints, isClosed, numFaces, numWires, numEdges, numVertices, getPoints, extrude, explode, extractFaces, extractWires */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CopyToModel", function() { return CopyToModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromPoints", function() { return FromPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromPline", function() { return FromPline; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TriStripFromPoints", function() { return TriStripFromPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isClosed", function() { return isClosed; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numFaces", function() { return numFaces; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numWires", function() { return numWires; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numEdges", function() { return numEdges; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numVertices", function() { return numVertices; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPoints", function() { return getPoints; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extrude", function() { return extrude; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "explode", function() { return explode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractFaces", function() { return extractFaces; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractWires", function() { return extractWires; });
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./libs/poly/poly */ "./src/app/core/modules/libs/poly/poly.ts");
-/* harmony import */ var _utils_dev__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_utils_dev */ "./src/app/core/modules/_utils_dev.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/* harmony import */ var _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./libs/arr/arr */ "./src/app/core/modules/libs/arr/arr.ts");
-/**
- * Functions for working with polymehes.
- */
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-/**
- * Polymeshes are geometric objects that can have multiple faces and multiple closed wires.
- * Faces define the surfaces in the polymesh. They can have three or more vertices,
- * they can be concave or convex, and planar or non-planar.
- * Wires define the naked edges, i.e. edges without any neighbours.
- * The wires in a polymesh are calculated automatically based on the connectivity between the faces.
- * The edges are straight line segments joining two vertices.
- * The polymesh can be either a closed or an open. A closed polymesh has no wires.
- */
-
-
-
-
-
-
-//  ===============================================================================================================
-//  Pmesh Get =====================================================================================================
-//  ===============================================================================================================
-/**
- * Gets a polymesh from the model based on an ID number.
- * In the viewer, the object label can display (it starts with 'o'), which contains the ID.
- * For example, if the label is "o123", then the ID is the number 123.
- *
- * @param model Model to get polymesh from.
- * @param id ID number of polymesh.
- * @returns Polymesh object.
- */
-function Get(model, id) {
-    var obj = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjID"](model, id, 200 /* polymesh */);
-    return obj;
-}
-/**
- * Create a copy of a polymesh.
- *
- * @param polymesh The polymesh to copy.
- * @param copy_attribs If true, attributes are copied to the new circle.
- * @returns Polymesh object.
- */
-function Copy(polymesh, copy_attribs) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](polymesh, 200 /* polymesh */);
-    return polymesh.copy(copy_attribs);
-}
-/**
- * Copies a polymesh from one model into another model.
- *
- * @param model The model to copy to.
- * @param polymesh The polymesh object to copy.
- * @returns The copied polymesh object in the model.
- */
-function CopyToModel(model, polymesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](polymesh, 200 /* polymesh */);
-    if (polymesh.getModel() === model) {
-        throw new Error("Error: polymesh is already in model.");
-    }
-    //return model.getGeom().copyPolymeshFromModel(polymesh);
-    throw new Error("Function not implemented yet.");
-}
-//  ===============================================================================================================
-//  Pmesh Constructors ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a polymesh from a list of lists of face corner points.
- * For example [[p1, p2, p3], [p3, p2, p4]] would create a polymesh with two triangular faces.
- * In this example, the two faces share points p2 and p3.
- *
- * @param points List of lists of face corner points.
- * @returns Polymesh object.
- */
-function FromPoints(points) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPointNestedList"](points, 1, 3);
-    return model.getGeom().addPolymesh(points);
-}
-/**
- * Creates a polymesh from a polyline. The polymesh will have a single face.
- *
- * @param pline Polyline object to create the polymesh from.
- * @returns Polymesh object with single face.
- */
-function FromPline(pline) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    return model.getGeom().addPolymesh([pline.getPointsArr()]);
-}
-/**
- * Creates a triangulated mesh from two lists of points.
- * For example [[p1, p2, p3], [p4, p5, p6]] would create a polymesh with four triangular faces.
- * The triangles would be as follows: [p1, p2, p4], [p5, p4, p1], [p2, p3, p5], [p6, p5, p3].
- * In this example, the two faces share points p2 and p3.
- *
- * @param points1 The first list of points.
- * @param points2 The second list of points.
- * @returns Polymesh object.
- */
-function TriStripFromPoints(points1, points2) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPointList"](points1, 2);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPointList"](points2, 2);
-    // sort, shortest list first
-    var points = [];
-    if (points1.length < points2.length) {
-        points[0] = points1;
-        points[1] = points2;
-    }
-    else {
-        points[0] = points2;
-        points[1] = points1;
-    }
-    // create quads, the split into two triangles along shortest diagonal
-    var tri_points = [];
-    for (var i = 0; i < points[0].length - 1; i++) {
-        var p0 = points[0][i];
-        var p1 = points[0][i + 1];
-        var p2 = points[1][i + 1];
-        var p3 = points[1][i];
-        if (_libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["distSquPointToPoint"](p1, p3) < _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["distSquPointToPoint"](p0, p2)) {
-            tri_points.push([p0, p1, p3]);
-            tri_points.push([p1, p2, p3]);
-        }
-        else {
-            tri_points.push([p0, p1, p2]);
-            tri_points.push([p0, p2, p3]);
-        }
-    }
-    // add triangles for the remainder
-    for (var i = points[0].length - 1; i < points[1].length - 1; i++) {
-        var p0 = points[1][i + 1];
-        var p1 = points[1][i];
-        var p2 = points[0][points[0].length - 1];
-        tri_points.push([p0, p1, p2]);
-    }
-    // generate mesh and return
-    return model.getGeom().addPolymesh(tri_points);
-}
-//  ===============================================================================================================
-//  Pmesh Simple Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- * Checks if the polymesh is closed.
- *
- * @param pmesh Polymesh object.
- * @return True if the polymesh is closed.
- */
-function isClosed(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return pmesh.numWires() === 0;
-}
-/**
- * Get the number of faces in a polymesh.
- *
- * @param pmesh Polymesh object.
- * @return The number of faces.
- */
-function numFaces(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return pmesh.numFaces();
-}
-/**
- * Get the number of wires in a polymesh.
- *
- * @param pmesh Polymesh object.
- * @return The number of wires.
- */
-function numWires(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return pmesh.numWires();
-}
-/**
- * Get the number of edges in a polymesh, for both the wires and the faces.
- *
- * @param pmesh Polymesh object.
- * @return List of two numbers, number of wire edges and number of face edges.
- */
-function numEdges(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return [pmesh.numWireEdges(), pmesh.numFaceEdges()];
-}
-/**
- * Get the number of vertices in the polymesh, for both the wires and the faces.
- *
- * @param pmesh Polymesh object.
- * @return List of two numbers, number of wire vertices and number of face vertices.
- */
-function numVertices(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return [pmesh.numWireVertices(), pmesh.numFaceVertices()];
-}
-/**
- * Get all points in a polymesh. The sequence of points is in face order.
- *
- * @param pmesh Polymesh object.
- * @return List of points.
- */
-function getPoints(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__["Arr"].flatten(pmesh.getPoints(gs_json__WEBPACK_IMPORTED_MODULE_0__["EGeomType"].faces));
-}
-//  ===============================================================================================================
-//  Pmesh Modelling Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- * Create a new polymesh by extruding an existing polymesh by a specified vector.
- * The original polymesh is not modified.
- *
- * New points are created by translating the existing points by the specified vector.
- * Top and bottom faces are created.
- * Four-sided faces are the created between the original and new points.
- * The faces are joined to create a polymesh.
- *
- * @param pmesh Polymesh to extrude.
- * @param vector The vector defining the extrusion length and direction.
- * @returns A polymesh if successful, null if unsuccessful or on error.
- */
-function extrude(pmesh, vector) {
-    // check args
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkXYZ"](vector);
-    // make a copy
-    var pmesh1_points = pmesh.getPoints();
-    var pmesh2_points = _utils_dev__WEBPACK_IMPORTED_MODULE_3__["copyObjPoints"](pmesh, false);
-    _libs_threex_threex__WEBPACK_IMPORTED_MODULE_1__["movePointsAddXYZ"](_libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__["Arr"].flatten(pmesh2_points), vector);
-    // create the sides
-    var sides = _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__["pointsLoftLoop"]([pmesh1_points[0], pmesh2_points[0]], true);
-    // combine everything
-    var pmesh_points = __spread(pmesh1_points[1], pmesh2_points[1], sides);
-    // return the new polymesh
-    return model.getGeom().addPolymesh(pmesh_points);
-}
-/**
- * Explodes a polymesh into smaller polymeshes, each with only one face.
- * The original polymesh is not modified.
- *
- * @param pmesh Polymesh to explode.
- * @returns List of polymeshes.
- */
-function explode(pmesh) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    return this.extractFaces(pmesh, _libs_arr_arr__WEBPACK_IMPORTED_MODULE_5__["Arr"].makeSeq(pmesh.numFaces()));
-}
-/**
- * Creates new set of polymeshes by extracting faces from an existing polymesh.
- * The original polymesh is not modified.
- *
- * The individual polymeshes are not joined.
- *
- * @param pmesh Polymesh to extract faces from
- * @param face_index Index numbers of polymesh faces to extract.
- * @returns List of new polymeshes.
- */
-function extractFaces(pmesh, face_index) {
-    var e_1, _a;
-    var m = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNums"](face_index);
-    // do the extraction
-    var new_pmeshes = [];
-    var faces = pmesh.getFaces();
-    try {
-        for (var face_index_1 = __values(face_index), face_index_1_1 = face_index_1.next(); !face_index_1_1.done; face_index_1_1 = face_index_1.next()) {
-            var i = face_index_1_1.value;
-            if (i >= faces.length) {
-                throw new Error("Face index exceeds the number of faces.");
-            }
-            var points = faces[i].getVertices().map(function (v) { return v.getPoint(); });
-            new_pmeshes.push(m.getGeom().addPolymesh([points]));
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (face_index_1_1 && !face_index_1_1.done && (_a = face_index_1.return)) _a.call(face_index_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return new_pmeshes;
-}
-/**
- * Creates new set of polylines by extracting wires from an existing polymesh.
- * The original polymesh is not modified.
- *
- * Wires are the naked edges of a polymesh. They are always closed loops.
- *
- * @param pmesh Polymesh to extract wires from.
- * @param wire_index Index numbers of polymesh wires to extract.
- * @returns List of new polylines.
- */
-function extractWires(pmesh, wire_index) {
-    var e_2, _a;
-    var m = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pmesh, 200 /* polymesh */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkPosNums"](wire_index);
-    // do the extraction
-    var new_plines = [];
-    var wires = pmesh.getWires();
-    try {
-        for (var wire_index_1 = __values(wire_index), wire_index_1_1 = wire_index_1.next(); !wire_index_1_1.done; wire_index_1_1 = wire_index_1.next()) {
-            var i = wire_index_1_1.value;
-            if (i >= wires.length) {
-                throw new Error("Face index exceeds the number of faces.");
-            }
-            var points = wires[i].getVertices().map(function (v) { return v.getPoint(); });
-            new_plines.push(m.getGeom().addPolyline(points, true));
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (wire_index_1_1 && !wire_index_1_1.done && (_a = wire_index_1.return)) _a.call(wire_index_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    return new_plines;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/point.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/point.ts ***!
-  \***************************************/
-/*! exports provided: Get, Gets, GetFromGroup, GetFromObjs, Copy, CopyToModel, FromXYZ, FromXYZs, FromPointsMean, move, rotate, scale, del, getXYZ, setXYZ, mergeByTol, merge, addToGroup, removeFromGroup */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Gets", function() { return Gets; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetFromGroup", function() { return GetFromGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetFromObjs", function() { return GetFromObjs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CopyToModel", function() { return CopyToModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromXYZ", function() { return FromXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromXYZs", function() { return FromXYZs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromPointsMean", function() { return FromPointsMean; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "move", function() { return move; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rotate", function() { return rotate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scale", function() { return scale; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "del", function() { return del; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getXYZ", function() { return getXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setXYZ", function() { return setXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeByTol", function() { return mergeByTol; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return merge; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addToGroup", function() { return addToGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeFromGroup", function() { return removeFromGroup; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/**
- * Function for working with points.
- */
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
-
-//  ===============================================================================================================
-//  Point Get Copy ================================================================================================
-//  ===============================================================================================================
-/**
- * Gets a point from a model.
- *
- * @param model Model to get point from.
- * @param id ID of point to get.
- * @returns Point.
- */
-function Get(model, id) {
-    var point = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointID"](model, id);
-    return point;
-}
-/**
- * Gets a list of points from the model.
- *
- * @param model Model to get points from.
- * @param ids A point ID or list of point IDs, integer numbers. If null, then all points are returned.
- * @returns A list of points.
- */
-function Gets(model, ids) {
-    var e_1, _a;
-    if (ids === undefined || ids === null) {
-        return model.getGeom().getAllPoints();
-    }
-    if (!Array.isArray(ids)) {
-        ids = [ids];
-    }
-    var points = [];
-    try {
-        for (var ids_1 = __values(ids), ids_1_1 = ids_1.next(); !ids_1_1.done; ids_1_1 = ids_1.next()) {
-            var id = ids_1_1.value;
-            var point = Get(model, id);
-            if (point !== null) {
-                points.push(point);
-            }
-        }
-    }
-    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-    finally {
-        try {
-            if (ids_1_1 && !ids_1_1.done && (_a = ids_1.return)) _a.call(ids_1);
-        }
-        finally { if (e_1) throw e_1.error; }
-    }
-    return points;
-}
-/**
- * Gets all the points from a group.
- *
- * @param model Model to get the points from.
- * @param group_name The group name.
- * @returns List of points.
- */
-function GetFromGroup(model, group_name) {
-    var group = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkGroup"](model, group_name);
-    return group.getPoints();
-}
-/**
- * Gets a list of unique points for a list of objects.
- *
- * @param objs An object or list of objects.
- * @returns List of points.
- */
-function GetFromObjs(objs) {
-    var e_2, _a, e_3, _b;
-    // TODO error checking of args
-    if (!Array.isArray(objs)) {
-        objs = [objs];
-    }
-    var points_map = new Map();
-    var obj_points = [];
-    try {
-        for (var objs_1 = __values(objs), objs_1_1 = objs_1.next(); !objs_1_1.done; objs_1_1 = objs_1.next()) {
-            var obj = objs_1_1.value;
-            try {
-                for (var _c = __values(obj.getPointsArr()), _d = _c.next(); !_d.done; _d = _c.next()) {
-                    var point = _d.value;
-                    points_map.set(point.getID(), point);
-                }
-            }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
-            finally {
-                try {
-                    if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
-                }
-                finally { if (e_3) throw e_3.error; }
-            }
-        }
-    }
-    catch (e_2_1) { e_2 = { error: e_2_1 }; }
-    finally {
-        try {
-            if (objs_1_1 && !objs_1_1.done && (_a = objs_1.return)) _a.call(objs_1);
-        }
-        finally { if (e_2) throw e_2.error; }
-    }
-    return Array.from(points_map.values());
-}
-/**
- * Copy a point within a model.
- *
- * @param point Point to copy.
- * @returns New point.
- */
-function Copy(point) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point);
-    return model.getGeom().addPoint(point.getPosition());
-}
-/**
- * Copy a point from one model into another model.
- *
- * @param model The model to copy to.
- * @param plane The plane object to copy.
- * @returns The copied plane object in the model.
- */
-function CopyToModel(model, point) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point);
-    // check it is not already in the model
-    if (point.getModel() === model) {
-        throw new Error("Error: point is already in model.");
-    }
-    // copy circle and return it
-    return model.getGeom().addPoint(point.getPosition());
-}
-//  ===============================================================================================================
-//  Point Constructors ============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a point from XYZ coordinates.
- *
- * @param __model__ Model to add points to.
- * @param xyz XYZ coordinates, as a list of three numbers.
- * @returns New point if successful, null if unsuccessful or on error.
- */
-function FromXYZ(__model__, xyz) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](xyz);
-    return __model__.getGeom().addPoint(xyz);
-}
-/**
- * Creates a list of points from a list of X, Y and Z coordinates.
- * Points are returned in list order.
- *
- * @param __model__ Model to add points to.
- * @param xyzs A list XYZ coordinates, as a list of lists of three numbers.
- * @returns New list of points if successful, null if unsuccessful or on error
- */
-function FromXYZs(__model__, xyzs) {
-    var e_4, _a;
-    var points = [];
-    try {
-        for (var _b = __values(xyzs), _c = _b.next(); !_c.done; _c = _b.next()) {
-            var xyz = _c.value;
-            _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](xyz);
-            points.push(__model__.getGeom().addPoint(xyz));
-        }
-    }
-    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-    finally {
-        try {
-            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-        }
-        finally { if (e_4) throw e_4.error; }
-    }
-    return points;
-}
-/**
- * Creates a point that is at the center of a cluster of points.
- *
- * @param points List of points.
- * @returns New point if successful, null if unsuccessful or on error.
- */
-function FromPointsMean(points) {
-    var e_5, _a;
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 2);
-    var xyz = [0, 0, 0];
-    try {
-        for (var points_1 = __values(points), points_1_1 = points_1.next(); !points_1_1.done; points_1_1 = points_1.next()) {
-            var point = points_1_1.value;
-            var pos = point.getPosition();
-            xyz[0] += pos[0];
-            xyz[1] += pos[1];
-            xyz[2] += pos[2];
-        }
-    }
-    catch (e_5_1) { e_5 = { error: e_5_1 }; }
-    finally {
-        try {
-            if (points_1_1 && !points_1_1.done && (_a = points_1.return)) _a.call(points_1);
-        }
-        finally { if (e_5) throw e_5.error; }
-    }
-    return model.getGeom().addPoint([xyz[0] / points.length, xyz[1] / points.length, xyz[2] / points.length]);
-}
-//  ===============================================================================================================
-//  Point Functions ============================================================================================
-//  ===============================================================================================================
-/**
- * Moves a point or a list of points by a translation vector.
- *
- * @param points A point or a list of points.
- * @param vector Translation vector.
- * @param copy If true, points are copied before being moved.
- * @returns The moved points.
- */
-function move(points, vector, copy) {
-    if (copy === void 0) { copy = false; }
-    var is_array = Array.isArray(points);
-    if (!Array.isArray(points)) {
-        points = [points];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](vector);
-    // translation matrix
-    var matrix_trn = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_trn.makeTranslation(vector[0], vector[1], vector[2]);
-    // copy points
-    if (copy) {
-        points = model.getGeom().copyPoints(points, true);
-    }
-    // do the xform
-    model.getGeom().xformPoints(points, matrix_trn);
-    // return either a single point or array of points
-    if (is_array) {
-        return points;
-    }
-    return points[0];
-}
-/**
- * Rotates a point or a list of points around an axis.
- *
- * @param points A point or a list of points.
- * @param origin An xyz point on the axis.
- * @param axis An xyz vector along the axis.
- * @param angle The angle, in degrees, between 0 and 360.
- * @param copy If true, points are copied before being rotated.
- * @returns The rotated points.
- */
-function rotate(points, origin, axis, angle, copy) {
-    if (copy === void 0) { copy = false; }
-    var _a;
-    // check args
-    var is_array = Array.isArray(points);
-    if (!Array.isArray(points)) {
-        points = [points];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](axis);
-    var angle_rad = (angle / 180) * Math.PI;
-    // rotation matrix
-    var matrix_rot = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_rot.makeRotationAxis(new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, __spread([void 0], axis)))(), angle_rad);
-    // translation matrix
-    var matrix_trn1 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_trn1.makeTranslation(-origin[0], -origin[1], -origin[2]);
-    var matrix_trn2 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_trn2.makeTranslation(origin[0], origin[1], origin[2]);
-    // copy points
-    if (copy) {
-        points = model.getGeom().copyPoints(points, true);
-    }
-    // do the xform
-    model.getGeom().xformPoints(points, matrix_trn2.multiply(matrix_rot.multiply(matrix_trn1)));
-    // return either a single point or array of points
-    if (is_array) {
-        return points;
-    }
-    return points[0];
-}
-/**
- * Scales a point or a list of points around an origin.
- *
- * @param points A point or a list of points.
- * @param origin An xyz origin point of the scale.
- * @param factor The scale factor, along the x, y and z axes.
- * @param copy If true, points are copied before being scaled.
- * @returns The scaled points.
- */
-function scale(points, origin, factor, copy) {
-    if (copy === void 0) { copy = false; }
-    // check args
-    var is_array = Array.isArray(points);
-    if (!Array.isArray(points)) {
-        points = [points];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 1);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](origin);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](factor);
-    // scale matrix
-    var matrix_scale = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_scale.makeScale(factor[0], factor[1], factor[2]);
-    // translation matrix
-    var matrix_trn1 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_trn1.makeTranslation(-origin[0], -origin[1], -origin[2]);
-    var matrix_trn2 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
-    matrix_trn2.makeTranslation(origin[0], origin[1], origin[2]);
-    // copy points
-    if (copy) {
-        points = model.getGeom().copyPoints(points, true);
-    }
-    // do the xform
-    model.getGeom().xformPoints(points, matrix_trn2.multiply(matrix_scale.multiply(matrix_trn1)));
-    // return either a single point or array of points
-    if (is_array) {
-        return points;
-    }
-    return points[0];
-}
-/**
- * Deletes a point or a list of points from the model.
- *
- * @param points Point or list of points to delete.
- * @returns True if successful
- */
-function del(points) {
-    var e_6, _a;
-    if (!Array.isArray(points)) {
-        points = [points];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 1);
-    var ok = true;
-    try {
-        for (var points_2 = __values(points), points_2_1 = points_2.next(); !points_2_1.done; points_2_1 = points_2.next()) {
-            var point = points_2_1.value;
-            if (!point.exists()) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointNotExist"]();
-            }
-            if (point.getModel() !== model) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointInOtherModel"]();
-            }
-            if (!model.getGeom().delPoint(point)) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_6_1) { e_6 = { error: e_6_1 }; }
-    finally {
-        try {
-            if (points_2_1 && !points_2_1.done && (_a = points_2.return)) _a.call(points_2);
-        }
-        finally { if (e_6) throw e_6.error; }
-    }
-    return ok;
-}
-/**
- * Get the XYZ coordinates of the point.
- *
- * @param point Point to get coordinates from.
- * @returns The XYZ coordinates if successful, null if unsuccessful or on error.
- */
-function getXYZ(point) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point);
-    return point.getPosition();
-}
-/**
- * Set the XYZ coordinates of the point.
- *
- * @param point Point to set coorinates for.
- * @param xyz The new XYZ coordinates, as a list of three numbers.
- * @returns The old XYZ coordinates if successful, null if unsuccessful or on error.
- */
-function setXYZ(point, xyz) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPoint"](point);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkXYZ"](xyz);
-    return point.setPosition(xyz);
-}
-/**
- * Merges point or a list of points in the model.
- *
- * @param points Point or list of points to delete.
- * @returns True if successful, false otherwise.
- */
-function mergeByTol(points, tolerance) {
-    var e_7, _a;
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 2);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPosNum"](tolerance);
-    try {
-        for (var points_3 = __values(points), points_3_1 = points_3.next(); !points_3_1.done; points_3_1 = points_3.next()) {
-            var point = points_3_1.value;
-            if (point.getModel() !== model) {
-                throw new Error("Points must all be in same model.");
-            }
-            if (!point.exists()) {
-                throw new Error("Point has been deleted.");
-            }
-        }
-    }
-    catch (e_7_1) { e_7 = { error: e_7_1 }; }
-    finally {
-        try {
-            if (points_3_1 && !points_3_1.done && (_a = points_3.return)) _a.call(points_3);
-        }
-        finally { if (e_7) throw e_7.error; }
-    }
-    return model.getGeom().mergePoints(points, tolerance);
-}
-/**
- * Merges a cluster of points into a single point.
- * The cluster of points are deletetd and replaced by one new point located at the center of the cluster.
- * All objects in the model that are using those points will be updated.
- *
- * @param points Cluster of points to merge.
- * @returns New point if successful, null if unsuccessful or on error.
- */
-function merge(points) {
-    var e_8, _a;
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 2);
-    try {
-        for (var points_4 = __values(points), points_4_1 = points_4.next(); !points_4_1.done; points_4_1 = points_4.next()) {
-            var point = points_4_1.value;
-            if (point.getModel() !== model) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointInOtherModel"]();
-            }
-            if (!point.exists()) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointNotExist"]();
-            }
-        }
-    }
-    catch (e_8_1) { e_8 = { error: e_8_1 }; }
-    finally {
-        try {
-            if (points_4_1 && !points_4_1.done && (_a = points_4.return)) _a.call(points_4);
-        }
-        finally { if (e_8) throw e_8.error; }
-    }
-    return model.getGeom().mergePoints(points)[0];
-}
-//  ===============================================================================================================
-//  Groups ==============================================================================================
-//  ===============================================================================================================
-/**
- * Add points to a group.
- *
- * @param points List of points to add.
- * @param group_name Name of group to add to.
- * @returns True if all points were successfully added.
- */
-function addToGroup(points, group_name) {
-    var e_9, _a;
-    if (!Array.isArray(points)) {
-        points = [points];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 1);
-    var group = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkGroup"](model, group_name);
-    var ok = true;
-    try {
-        for (var points_5 = __values(points), points_5_1 = points_5.next(); !points_5_1.done; points_5_1 = points_5.next()) {
-            var point = points_5_1.value;
-            if (!point.exists()) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointNotExist"]();
-            }
-            if (point.getModel() !== model) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointInOtherModel"]();
-            }
-            if (!group.addPoint(point)) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_9_1) { e_9 = { error: e_9_1 }; }
-    finally {
-        try {
-            if (points_5_1 && !points_5_1.done && (_a = points_5.return)) _a.call(points_5);
-        }
-        finally { if (e_9) throw e_9.error; }
-    }
-    return ok;
-}
-/**
- * Remove points from a group.
- *
- * @param group Name of group to remove from.
- * @param objs List of point to remove.
- * @returns True if all points we successfully removed.
- */
-function removeFromGroup(points, group_name) {
-    var e_10, _a;
-    if (!Array.isArray(points)) {
-        points = [points];
-    }
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkPointList"](points, 1);
-    var group = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["checkGroup"](model, group_name);
-    var ok = true;
-    try {
-        for (var points_6 = __values(points), points_6_1 = points_6.next(); !points_6_1.done; points_6_1 = points_6.next()) {
-            var point = points_6_1.value;
-            if (!point.exists()) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointNotExist"]();
-            }
-            if (point.getModel() !== model) {
-                _error_msgs_dev__WEBPACK_IMPORTED_MODULE_1__["pointInOtherModel"]();
-            }
-            if (!group.removePoint(point)) {
-                ok = false;
-            }
-        }
-    }
-    catch (e_10_1) { e_10 = { error: e_10_1 }; }
-    finally {
-        try {
-            if (points_6_1 && !points_6_1.done && (_a = points_6.return)) _a.call(points_6);
-        }
-        finally { if (e_10) throw e_10.error; }
-    }
-    return ok;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/query.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/query.ts ***!
-  \***************************************/
-/*! exports provided: Query */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Query", function() { return Query; });
-/**
- * Query functions check if an entity fufils certain conditions.
- */
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-//  ===============================================================================================================
-//  Query Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- *
- */
-var x = "temp";
-var Query;
-(function (Query) {
-    function set(__model__, indices, statement) {
-        var e_1, _a, e_2, _b;
-        var properties = statement.split('&');
-        properties = properties.map(function (prop) {
-            var property = prop.trim().substring(1).split('=');
-            property[0] = property[0].trim();
-            property[1] = property[1].trim();
-            property[1] = property[1].substring(1, property[1].length - 1).trim();
-            return property;
-        });
-        try {
-            for (var indices_1 = __values(indices), indices_1_1 = indices_1.next(); !indices_1_1.done; indices_1_1 = indices_1.next()) {
-                var index = indices_1_1.value;
-                if (index > __model__.length) {
-                    return;
-                }
-                try {
-                    for (var properties_1 = __values(properties), properties_1_1 = properties_1.next(); !properties_1_1.done; properties_1_1 = properties_1.next()) {
-                        var property = properties_1_1.value;
-                        __model__[index]["properties"][property[0]] = property[1];
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (properties_1_1 && !properties_1_1.done && (_b = properties_1.return)) _b.call(properties_1);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (indices_1_1 && !indices_1_1.done && (_a = indices_1.return)) _a.call(indices_1);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-    }
-    Query.set = set;
-    function get(__model__, statement) {
-        var property = statement.substring(1);
-        if (property.indexOf('==') != -1) {
-            property = property.split('==');
-            property[0] = property[0].trim();
-            property[1] = property[1].trim();
-            property[1] = property[1].substring(1, property[1].length - 1).trim();
-            var result = [];
-            for (var i = 0; i < __model__.length; i++) {
-                if (__model__[i]["properties"][property[0]] == property[1]) {
-                    result.push(i);
-                }
-            }
-            return result;
-        }
-        else if (property.indexOf('!=') != -1) {
-            property = property.split('!=');
-            property[0] = property[0].trim();
-            property[1] = property[1].trim();
-            property[1] = property[1].substring(1, property[1].length - 1).trim();
-            var result = [];
-            for (var i = 0; i < __model__.length; i++) {
-                if (__model__[i]["properties"][property[0]] != property[1]) {
-                    result.push(i);
-                }
-            }
-            return result;
-            /*
-            } else if (property.indexOf('>=') != -1) {
-                property = property.split('>=');
-                property[1] =  property[1].substring(1,property[1].length-1)
-        
-                let result = [];
-                
-                for (let i = 0; i < __model__.length; i++){
-                    if (__model__[i]["properties"][property[0]] >= property[1]){
-                        result.push(i)
-                    }
-                }
-                return result
-            } else if (property.indexOf('<=') != -1) {
-                property = property.split('<=');
-                property[1] =  property[1].substring(1,property[1].length-1)
-        
-                let result = [];
-                
-                for (let i = 0; i < __model__.length; i++){
-                    if (__model__[i]["properties"][property[0]] <= property[1]){
-                        result.push(i)
-                    }
-                }
-                return result
-            */
-        }
-    }
-    Query.get = get;
-})(Query || (Query = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/ray.ts":
-/*!*************************************!*\
-  !*** ./src/app/core/modules/ray.ts ***!
-  \*************************************/
-/*! exports provided: Get, Copy, CopyToModel, FromOriginVector */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Get", function() { return Get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Copy", function() { return Copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CopyToModel", function() { return CopyToModel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FromOriginVector", function() { return FromOriginVector; });
-/**
- * Rays are a type of object.
- *
- * Rays are imaginary lines that stretch infinitely along an axis and are defined by a single vector.
- */
-//  ===============================================================================================================
-//  Ray Get =======================================================================================================
-//  ===============================================================================================================
-/**
- * Gets a ray from the model based on an index number
- * @param model Model to get ray from
- * @param id Index number of ray
- * @returns Ray object if successful
- */
-function Get(model, id) {
-    // check args
-    var obj = model.getGeom().getObj(id);
-    if (obj === undefined) {
-        return null;
-    }
-    if (obj.getObjType() !== 1 /* ray */) {
-        throw new Error("Object is not a ray. Object type is: " + obj.getObjType());
-    }
-    // return the ray
-    return obj;
-}
-/**
- * Create a copy of a ray.
- *
- * @param ray The ray to copy.
- * @returns A new ray.
- */
-function Copy(ray, copy_attribs) {
-    // check args
-    if (!ray.exists()) {
-        throw new Error("ray has been deleted.");
-    }
-    // copy and return
-    return ray.copy(copy_attribs);
-}
-/**
- * Copies a ray from one model into another model.
- *
- * @param ray The ray object to copy.
- * @returns The ray object in the model.
- */
-function CopyToModel(model, ray) {
-    // check args
-    if (!ray.exists()) {
-        throw new Error("Error: ray has been deleted.");
-    }
-    // check it is not already in the model
-    if (ray.getModel() === model) {
-        throw new Error("Error: ray is already in model.");
-    }
-    // copy circle and return it
-    return model.getGeom().copyRayFromModel(ray);
-}
-//  ===============================================================================================================
-//  Ray Constructors ==============================================================================================
-//  ===============================================================================================================
-/**
- * Creates a ray from an origin point and one direction vector describing its direction
- * @param origin 3D point to use as origin of plane
- * @param vector Direction vector describing direction of ray
- * @returns New ray if successful, null if unsuccessful or on error
- */
-function FromOriginVector(origin, vector) {
-    // check args
-    if (!origin.exists()) {
-        throw new Error("Arg origin has been deleted.");
-    }
-    // create the new ray and return
-    return origin.getGeom().addRay(origin, vector);
-}
-//  ===============================================================================================================
-//  Ray Functions =================================================================================================
-//  ===============================================================================================================
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/split.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/split.ts ***!
-  \***************************************/
-/*! exports provided: circleCircle2D, polylinePlane3D, polylinePolyline2D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "circleCircle2D", function() { return circleCircle2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "polylinePlane3D", function() { return polylinePlane3D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "polylinePolyline2D", function() { return polylinePolyline2D; });
-/* harmony import */ var _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/threex/threex */ "./src/app/core/modules/libs/threex/threex.ts");
-/* harmony import */ var _libs_conics_circles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/conics/circles */ "./src/app/core/modules/libs/conics/circles.ts");
-/* harmony import */ var _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./libs/poly/poly */ "./src/app/core/modules/libs/poly/poly.ts");
-/* harmony import */ var _libs_poly_polylinePlane__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./libs/poly/polylinePlane */ "./src/app/core/modules/libs/poly/polylinePlane.ts");
-/* harmony import */ var _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_error_msgs_dev */ "./src/app/core/modules/_error_msgs_dev.ts");
-/**
- * Functions for splitting geometric objects that insersect with one another.
- */
-
-
-
-
-
-//  ===============================================================================================================
-//  Split Constructors ============================================================================================
-//  ===============================================================================================================
-//  ===============================================================================================================
-//  Split Functions ===============================================================================================
-//  ===============================================================================================================
-/**
- * Splits two co-planar circles.
- * If an intersection is found, then new arcs will be generated and the old circles will be deleted.
- * Returns null if circles are not co-planar.
- * Returns null if circles do not intersect.
- *
- * @param circle1 Circle object, the circle to split.
- * @param circle2 Circle object.
- * @returns Four circle objects (arcs) if successful, null if no intersection was found.
- */
-function circleCircle2D(circle1, circle2) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjList"]([circle1, circle2], 2, 3 /* circle */);
-    var geom = model.getGeom();
-    // do intersection
-    var points = _libs_conics_circles__WEBPACK_IMPORTED_MODULE_1__["isectCircleCircle2D"](circle1, circle2);
-    if (points === null) {
-        return null;
-    }
-    if (points.length !== 2) {
-        return null;
-    }
-    var circle1_origin = circle1.getOrigin();
-    var circle2_origin = circle2.getOrigin();
-    // get the 2 intersection points in the right order
-    var order_pt0 = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](circle1_origin, points[0]);
-    var order_pt1 = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](circle1_origin, points[1]);
-    var angle_check = order_pt0.angleTo(order_pt1) * 180 / Math.PI;
-    if (angle_check > 180) {
-        points = [points[1], points[0]];
-    }
-    // arc 1 vectors
-    var vec1_x = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](circle1_origin, points[1]);
-    var vec1_2nd_x = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](circle1_origin, points[0]);
-    var vec1_y = (_libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["orthoVectors"](vec1_x, vec1_2nd_x).normalize())
-        .multiplyScalar(vec1_x.length());
-    var vec1_2nd_y = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["orthoVectors"](vec1_2nd_x, vec1_x).normalize()
-        .multiplyScalar(-vec1_2nd_x.length());
-    // arc 1 angle
-    var angle1 = vec1_x.angleTo(vec1_2nd_x) * 180 / Math.PI;
-    // arc 1 a
-    var vec1_x_xyz = vec1_x.toArray();
-    var vec1_y_xyz = vec1_y.toArray();
-    var arc1_a = geom.addCircle(circle1_origin, vec1_x_xyz, vec1_y_xyz, [0, angle1]);
-    // arc 1 b
-    var vec1_2nd_x_xyz = vec1_2nd_x.toArray();
-    var vec1_2nd_y_xyz = vec1_2nd_y.toArray();
-    var arc1_b = geom.addCircle(circle1_origin, vec1_2nd_x_xyz, vec1_2nd_y_xyz, [0, (360 - angle1)]);
-    // arc 2 vectors
-    var vec2_x = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](circle2_origin, points[0]);
-    var vec2_2nd_x = _libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["vectorFromPointsAtoB"](circle2_origin, points[1]);
-    var vec2_y = (_libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["orthoVectors"](vec2_x, vec2_2nd_x).normalize())
-        .multiplyScalar(vec2_x.length());
-    var vec2_2nd_y = (_libs_threex_threex__WEBPACK_IMPORTED_MODULE_0__["orthoVectors"](vec2_2nd_x, vec2_x).normalize())
-        .multiplyScalar(-vec2_x.length());
-    // arc 2 angle
-    var angle2 = vec2_x.angleTo(vec2_2nd_x) * 180 / Math.PI;
-    // arc 2 a
-    var vec2_x_xyz = vec2_x.toArray();
-    var vec2_y_xyz = vec2_y.toArray();
-    var arc2_a = geom.addCircle(circle2_origin, vec2_x_xyz, vec2_y_xyz, [0, angle2]);
-    // arc 2 b
-    var vec2_2nd_x_xyz = vec2_2nd_x.toArray();
-    var vec2_2nd_y_xyz = vec2_2nd_y.toArray();
-    var arc2_b = geom.addCircle(circle2_origin, vec2_2nd_x_xyz, vec2_2nd_y_xyz, [0, (360 - angle2)]);
-    // delete the old circles
-    geom.delObj(circle1, false);
-    geom.delObj(circle2, false);
-    // return arcs
-    return [arc1_b, arc1_a, arc2_a, arc2_b];
-}
-/**
- * Splits a polyine by a plane.
- * If intersection are found, then new polylines will be generated and the old polyline will be deleted.
- * If no intersections are found, then null is return and the old polyline remains unchanged.
- *
- * @param pline Polyline
- * @param plane Plane
- * @returns List of polylines.
- */
-function polylinePlane3D(pline, plane) {
-    var model = _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](pline, 100 /* polyline */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObj"](plane, 2 /* plane */);
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjsSameModel"]([pline, plane]);
-    var result = _libs_poly_polylinePlane__WEBPACK_IMPORTED_MODULE_3__["splitPolylinePlane3D"](pline, plane);
-    if (result !== null) {
-        model.getGeom().delObj(pline, false);
-    }
-    return result;
-}
-/**
- * Finds the intersection points between two coplanar polylines, and splits the polylines at those points.
- * If intersections are found, then new polylines will be generated and the old polyline will be deleted.
- * If no intersections are found, then null is return and the old polyline remains unchanged.
- *
- * @param pline1 The first polyline.
- * @param pline2 The second polylne.
- * @returns List of list of polylines. The first list containts the pieces from the first polyline.
- * The secbd list, the pieces from the second polyline.
- */
-function polylinePolyline2D(pline1, pline2) {
-    _error_msgs_dev__WEBPACK_IMPORTED_MODULE_4__["checkObjList"]([pline1, pline2], 2, 100 /* polyline */);
-    return _libs_poly_poly__WEBPACK_IMPORTED_MODULE_2__["_splitPolylinePolyline2D"](pline1, pline2);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/string.ts":
-/*!****************************************!*\
-  !*** ./src/app/core/modules/string.ts ***!
-  \****************************************/
-/*! exports provided: startsWith, endsWith, includes, len, replace, search, split, substring */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startsWith", function() { return startsWith; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "endsWith", function() { return endsWith; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "includes", function() { return includes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "len", function() { return len; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "replace", function() { return replace; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "search", function() { return search; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "split", function() { return split; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "substring", function() { return substring; });
-/**
- * The <i>String</i> module provides a set of functions for working with strings.
- * Strings are a data type for representing text, consisting of a sequence of characters.<br/>
- *
- * When instantiating a string, use double quotes as follows: <code>"This is some text."</code>.<br/>
- *
- * Regular expressions can be used to search for character matches in strings.
- */
-//  ===============================================================================================================
-//  String functions ==============================================================================================
-//  ===============================================================================================================
-/**
- * Checks if a string starts with the specified start string.
- *
- * @param str String to check.
- * @param start_str Start tring.
- * @returns True if str starts with search_str, false otherwise.
- *
- * <h3>Example:</h3>
- * <code>
- * string = "Orange"<br/>
- * result = String.startsWith(string,"Or")<br/>
- * </code>
- * <br/>Expected value of result is true.
- */
-function startsWith(str, start_str) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    if (start_str === undefined) {
-        throw new Error("Invalid arg: start_str must be defined.");
-    }
-    return str.startsWith(start_str);
-}
-/**
- * Checks if a string ends with a specified end string.
- *
- * @param str String to check.
- * @param end_str End string.
- * @returns True if str ends with search_str, false otherwise.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * result = String.endsWith(string,"ge")<br/></code>
- * <br/>Expected value of result is true.
- */
-function endsWith(str, end_str) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    if (end_str === undefined) {
-        throw new Error("Invalid arg: end_str must be defined.");
-    }
-    return str.endsWith(end_str);
-}
-/**
- * Checks if a string contains a specified search string.
- *
- * @param str String to search.
- * @param search_str Sub-string to search for.
- * @returns True if str contains search_str, false otherwise.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * incl = String.includes(string,"an")<br/></code>
- * <br/>Expected value of incl is true.
- */
-function includes(str, search_str) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    if (search_str === undefined) {
-        throw new Error("Invalid arg: search_str must be defined.");
-    }
-    return str.includes(search_str);
-}
-/**
- * Returns the number of characters in a string.
- *
- * @param str String to find length of.
- * @returns Length of string.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * length = String.len(string)<br/></code>
- * <br/>Expected value of length is 6.
- */
-function len(str) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    return str.length;
-}
-/**
- * Searches for and replaces the specified search string in a string.
- * The search string can also be a regular expression.
- *
- * @param str String.
- * @param search_str Sub-string or regular expression to search for.
- * @param new_str Replacement string.
- * @returns New string with replaced characters.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * newString = String.Replace(string,"O","Ar")<br/></code>
- * <br/>Expected value of newString is "Arrange".
- */
-function replace(str, search_str, new_str) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    if (search_str === undefined) {
-        throw new Error("Invalid arg: search_str must be defined.");
-    }
-    if (new_str === undefined) {
-        throw new Error("Invalid arg: new_str must be defined.");
-    }
-    return str.replace(search_str, new_str);
-}
-/**
- * Returns the position index of the first occurance of the specified search string within a string.
- * If the specified sub-string cannot be found, then returns -1.
- *
- * @param str String to check.
- * @param search_str Sub-string or regular expression to search for.
- * @returns Number that represents position of search_str in str.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * search = String.search(string,"e")<br/></code>
- * <br/>Expected value of search is 5.
- */
-function search(str, search_str) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    if (search_str === undefined) {
-        throw new Error("Invalid arg: search_str must be defined.");
-    }
-    return str.search(search_str);
-}
-/**
- * Splits a string into a list of substrings using a specified separator string.
- *
- * @param str String.
- * @param separator String of characters used to split string.
- * @returns List of substrings.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * split = String.split(string,"a")<br/></code>
- * <br/>Expected value of split is ["Or","nge"].
- */
-function split(str, separator) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    if (separator === undefined) {
-        throw new Error("Invalid arg: separator must be defined.");
-    }
-    return str.split(separator);
-}
-/**
- * Extracts characters in a string between two specified indices and returns it as a new string.
- * Start index is inclusive and end index is exclusive.
- *
- * @param str String.
- * @param start Zero-based index to start extracting characters (inclusive).
- * @param end Zero-based index to stop extracting characters (exclusive).
- * @returns New string with extracted characters.
- *
- * <h3>Example:</h3>
- * <code>string = "Orange"<br/>
- * substring = String.substring(string,1,4)<br/></code>
- * <br/>Expected value of ends is "ran".
- */
-function substring(str, start, end) {
-    if (str === undefined) {
-        throw new Error("Invalid arg: str must be defined.");
-    }
-    return str.substring(start, end);
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/topo.ts":
-/*!**************************************!*\
-  !*** ./src/app/core/modules/topo.ts ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * Topology are sub-components within each object that are connected together.<br/>
- * Topology consists of vertices, edges, wires and faces.<br/>
- */
-//  ===============================================================================================================
-//  Topo Constructors =============================================================================================
-//  ===============================================================================================================
-//  ===============================================================================================================
-//  Topo Functions ================================================================================================
-//  ===============================================================================================================
-/**
- *
- */
-var x = "temp";
+//./old/ray./old/query./old/string./old/topo
 
 
 /***/ }),
@@ -8723,7 +694,7 @@ var ViewerService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='viewer-container'>  \r\n    <div class='container__header'>\r\n        <div class=\"tab\">\r\n            <button class='btn-tab' \r\n            [class.active]='view.name == activeView.name'\r\n            *ngFor='let view of Viewers;' \r\n            (click)='updateView(view)'>\r\n            {{view.name}}\r\n            </button>\r\n        </div>\r\n    </div>\r\n\r\n    <ng-container #vc></ng-container>\r\n</div>"
+module.exports = "<div class='viewer-container'>  \r\n    <div class='container__header'>\r\n        <div class=\"tab\">\r\n            <button class='btn-tab' \r\n            [class.active]='view.name == activeView.name'\r\n            *ngFor='let view of Viewers;' \r\n            (click)='updateView(view)'>\r\n            {{view.name}}\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div class='content__panel'>\r\n        <ng-container #vc></ng-container>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -8734,7 +705,7 @@ module.exports = "<div class='viewer-container'>  \r\n    <div class='container_
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".viewer-container {\n  height: 100%; }\n\n.container__header {\n  flex: 0 1 auto;\n  min-height: 35px;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  padding: 0px 0px 0px 15px;\n  background-color: #ccc;\n  border-bottom: 3px solid #eeeeee;\n  line-height: 35px;\n  font-size: 18px;\n  font-weight: 600;\n  text-align: center; }\n\nbutton.btn {\n  margin: 10px;\n  font-size: 14px;\n  line-height: 18px;\n  border: 2px solid gray;\n  border-radius: 4px;\n  padding: 2px 10px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n/* tab styling */\n\n.tab {\n  border: 2px;\n  overflow: hidden;\n  background-color: #ccc; }\n\n.tab button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: inherit;\n  color: #505050;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 8px 10px;\n  transition: 0.3s;\n  font-size: 14px; }\n\n.tab button:hover {\n  color: blue; }\n\n.tab button.active {\n  background-color: #ccc;\n  color: #000096;\n  font-weight: 600;\n  border-color: #222 !important; }\n"
+module.exports = ".viewer-container {\n  display: block;\n  height: 100%;\n  overflow: hidden; }\n\n.container__header {\n  flex: 0 1 auto;\n  height: 35px;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  padding: 0px 0px 0px 15px;\n  background-color: #ccc;\n  border-bottom: 3px solid #eeeeee;\n  line-height: 35px;\n  font-size: 18px;\n  font-weight: 600;\n  text-align: center; }\n\n.content__panel {\n  background-color: gainsboro;\n  width: 97%;\n  height: 93%;\n  overflow: auto; }\n\nbutton.btn {\n  margin: 10px;\n  font-size: 14px;\n  line-height: 18px;\n  border: 2px solid gray;\n  border-radius: 4px;\n  padding: 2px 10px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n/* tab styling */\n\n.tab {\n  border: 2px;\n  overflow: hidden;\n  background-color: #ccc; }\n\n.tab button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: inherit;\n  color: #505050;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 8px 10px;\n  transition: 0.3s;\n  font-size: 14px; }\n\n.tab button:hover {\n  color: blue; }\n\n.tab button.active {\n  background-color: #ccc;\n  color: #000096;\n  font-weight: 600;\n  border-color: #222 !important; }\n"
 
 /***/ }),
 
@@ -8759,16 +730,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 var ViewerContainerComponent = /** @class */ (function () {
@@ -8783,20 +744,10 @@ var ViewerContainerComponent = /** @class */ (function () {
         this.updateView(this.activeView);
     };
     ViewerContainerComponent.prototype.ngOnDestroy = function () {
-        var e_1, _a;
         console.log('onDestroy');
-        try {
-            for (var _b = __values(this.views), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var view = _c.value;
-                view.destroy();
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (var _i = 0, _a = this.views; _i < _a.length; _i++) {
+            var view = _a[_i];
+            view.destroy();
         }
     };
     ViewerContainerComponent.prototype.ngOnChanges = function () {
@@ -8806,9 +757,8 @@ var ViewerContainerComponent = /** @class */ (function () {
         var component = view.component;
         var factory = this.r.resolveComponentFactory(component);
         var componentRef = factory.create(this.injector);
-        componentRef.instance["node"] = this.node;
-        if (view.name == 'mobius-cesium') {
-            componentRef.instance["mode"] = 'editor';
+        if (view.name != 'Console') {
+            componentRef.instance["data"] = this.data;
         }
         return componentRef;
     };
@@ -8826,10 +776,12 @@ var ViewerContainerComponent = /** @class */ (function () {
     ViewerContainerComponent.prototype.updateValue = function () {
         try {
             var componentRef = this.views[this.activeView.name];
-            componentRef.instance["node"] = this.node;
+            if (this.activeView.name != 'Console') {
+                componentRef.instance["data"] = this.data;
+            }
         }
         catch (ex) {
-            console.log("Active View not defined");
+            //console.log(`Active View not defined`);
         }
     };
     __decorate([
@@ -8839,7 +791,7 @@ var ViewerContainerComponent = /** @class */ (function () {
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], ViewerContainerComponent.prototype, "node", void 0);
+    ], ViewerContainerComponent.prototype, "data", void 0);
     ViewerContainerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'mviewer',
@@ -8882,26 +834,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 
 
 
@@ -8929,7 +861,7 @@ var MobiusViewerModule = /** @class */ (function () {
                 _viewers_gs_viewer_gs_viewer_module__WEBPACK_IMPORTED_MODULE_5__["GSViewer"],
                 _viewers_mobius_cesium_mobius_cesium_module__WEBPACK_IMPORTED_MODULE_6__["MobiusCesium"],
             ],
-            entryComponents: __spread(_viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"]),
+            entryComponents: _viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
             providers: []
         }),
         __metadata("design:paramtypes", [])
@@ -8959,9 +891,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//import { procedureHelpComponent } from './viewers/procedure-help.component';
 var VIEWER_ARR = [
     _viewers__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"],
     _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__["ConsoleViewerComponent"],
+    //procedureHelpComponent,
     //JSONViewerComponent, 
     //ThreeViewerComponent
     // Step-2: Add Component here
@@ -9000,18 +934,20 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var ConsoleViewerComponent = /** @class */ (function () {
     function ConsoleViewerComponent() {
-        console.log("Console Viewer Created");
-        this.consoleText = console.log.bind(console);
     }
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], ConsoleViewerComponent.prototype, "node", void 0);
+    ConsoleViewerComponent.prototype.ngOnInit = function () {
+        // @ts-ignore
+        this.text = console.logs.join('\n---------------------------------------------------------\n');
+    };
+    ConsoleViewerComponent.prototype.ngDoCheck = function () {
+        // @ts-ignore
+        this.text = console.logs.join('\n---------------------------------------------------------\n');
+    };
     ConsoleViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'console-viewer',
-            template: "<h3></h3>\n             <div>{{ consoleText || \"\" }}</div>",
-            styles: []
+            template: "<textarea>{{ text || \"\" }}</textarea>",
+            styles: ["\n  :host{\n    height: 100%;\n    width: 100%;\n  }\n  textarea{\n    height: 99%;\n    width: 99%;\n    overflow: auto;\n    resize: none;\n    background-color: rgb(220,220,220);\n    text-color: rgb(80,80,80);\n    border: none;\n  }"]
         }),
         __metadata("design:paramtypes", [])
     ], ConsoleViewerComponent);
@@ -9401,29 +1337,18 @@ var GSViewerComponent = /** @class */ (function () {
             this.dataService.setGsModel(data);
         }
         catch (ex) {
-            this.text = '';
-            this.data = undefined;
+            this.modelData = undefined;
             console.error("Error generating model");
         }
     };
     GSViewerComponent.prototype.ngOnInit = function () {
-        if (this.node.type == 'output') {
-            this.data = this.node.input.value;
-        }
-        else {
-            this.data = this.node.output.value;
-        }
-        this.setModel(this.data);
+        this.modelData = this.data;
+        this.setModel(this.modelData);
     };
     GSViewerComponent.prototype.ngDoCheck = function () {
-        if (!this.node)
-            return;
-        var val = this.node.output.value;
-        if (this.node.type == 'output')
-            val = this.node.input.value;
-        if (this.data !== val) {
-            this.data = val;
-            this.setModel(this.data);
+        if (this.modelData !== this.data) {
+            this.modelData = this.data;
+            this.setModel(this.modelData);
         }
     };
     GSViewerComponent.prototype.leaflet = function () {
@@ -9432,7 +1357,7 @@ var GSViewerComponent = /** @class */ (function () {
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], GSViewerComponent.prototype, "node", void 0);
+    ], GSViewerComponent.prototype, "data", void 0);
     GSViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'gs-viewer',
@@ -12943,16 +4868,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 var DataService = /** @class */ (function () {
@@ -13082,7 +4997,6 @@ var DataService = /** @class */ (function () {
     };
     //convert json to ViData(editor version) to store every thing in setting
     DataService.prototype.getValue = function (model) {
-        var e_1, _a;
         if (model !== undefined) {
             var propertyName = Object.keys(model["features"][0].properties);
             var feature_instance_1 = model["features"][0];
@@ -13092,23 +5006,14 @@ var DataService = /** @class */ (function () {
             });
             if (model["features"].length > 1) {
                 for (var i = 1; i < model["features"].length; i++) {
-                    try {
-                        for (var _b = __values(Object.keys(model["features"][i].properties)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                            var properties = _c.value;
-                            if (propertyName.indexOf(String(properties)) < 0) {
-                                propertyName.push(properties);
-                                if (typeof (model["features"][i].properties[properties]) === "number") {
-                                    _HeightKeys.push(properties);
-                                }
+                    for (var _i = 0, _a = Object.keys(model["features"][i].properties); _i < _a.length; _i++) {
+                        var properties = _a[_i];
+                        if (propertyName.indexOf(String(properties)) < 0) {
+                            propertyName.push(properties);
+                            if (typeof (model["features"][i].properties[properties]) === "number") {
+                                _HeightKeys.push(properties);
                             }
                         }
-                    }
-                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                    finally {
-                        try {
-                            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                        }
-                        finally { if (e_1) throw e_1.error; }
                     }
                 }
             }
@@ -13130,62 +5035,52 @@ var DataService = /** @class */ (function () {
             var _indexArr_1 = [];
             var self_1 = this;
             promise.then(function (dataSource) {
-                var e_2, _a;
                 var entities = dataSource.entities.values;
-                try {
-                    for (var entities_1 = __values(entities), entities_1_1 = entities_1.next(); !entities_1_1.done; entities_1_1 = entities_1.next()) {
-                        var entity = entities_1_1.value;
-                        if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
-                            if (entity.properties[_HeightValue_1] !== undefined) {
-                                if (entity.properties[_HeightValue_1]._value !== " ") {
-                                    if (_Heighttexts_1.length === 0) {
-                                        _Heighttexts_1[0] = entity.properties[_HeightValue_1]._value;
-                                    }
-                                    else {
-                                        if (_Heighttexts_1.indexOf(entity.properties[_HeightValue_1]._value) === -1) {
-                                            _Heighttexts_1.push(entity.properties[_HeightValue_1]._value);
-                                        }
+                for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                    var entity = entities_1[_i];
+                    if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
+                        if (entity.properties[_HeightValue_1] !== undefined) {
+                            if (entity.properties[_HeightValue_1]._value !== " ") {
+                                if (_Heighttexts_1.length === 0) {
+                                    _Heighttexts_1[0] = entity.properties[_HeightValue_1]._value;
+                                }
+                                else {
+                                    if (_Heighttexts_1.indexOf(entity.properties[_HeightValue_1]._value) === -1) {
+                                        _Heighttexts_1.push(entity.properties[_HeightValue_1]._value);
                                     }
                                 }
                             }
-                            if (entity.properties[_ColorValue_1] !== undefined) {
-                                if (entity.properties[_ColorValue_1]._value !== " ") {
-                                    if (_Colortexts_1.length === 0) {
-                                        _Colortexts_1[0] = entity.properties[_ColorValue_1]._value;
-                                    }
-                                    else {
-                                        if (_Colortexts_1.indexOf(entity.properties[_ColorValue_1]._value) === -1) {
-                                            _Colortexts_1.push(entity.properties[_ColorValue_1]._value);
-                                        }
+                        }
+                        if (entity.properties[_ColorValue_1] !== undefined) {
+                            if (entity.properties[_ColorValue_1]._value !== " ") {
+                                if (_Colortexts_1.length === 0) {
+                                    _Colortexts_1[0] = entity.properties[_ColorValue_1]._value;
+                                }
+                                else {
+                                    if (_Colortexts_1.indexOf(entity.properties[_ColorValue_1]._value) === -1) {
+                                        _Colortexts_1.push(entity.properties[_ColorValue_1]._value);
                                     }
                                 }
                             }
-                            _indexArr_1.push(entities.indexOf(entity));
                         }
-                        else {
-                            entity.polygon.height = entity.properties["HEIGHT"];
-                            entity.polygon.extrudedHeight = entity.properties["EXTRUDEDHEIGHT"];
-                            var ColorValue = entity.properties["COLOR"]._value;
-                            entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
-                        }
-                        if (entity.polygon !== undefined) {
-                            entity.polygon.outlineColor = Cesium.Color.Black;
-                        }
-                        if (entity.billboard !== undefined) {
-                            entity.billboard = undefined;
-                            entity.point = new Cesium.PointGraphics({
-                                color: Cesium.Color.BLUE,
-                                pixelSize: 10,
-                            });
-                        }
+                        _indexArr_1.push(entities.indexOf(entity));
                     }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (entities_1_1 && !entities_1_1.done && (_a = entities_1.return)) _a.call(entities_1);
+                    else {
+                        entity.polygon.height = entity.properties["HEIGHT"];
+                        entity.polygon.extrudedHeight = entity.properties["EXTRUDEDHEIGHT"];
+                        var ColorValue = entity.properties["COLOR"]._value;
+                        entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
                     }
-                    finally { if (e_2) throw e_2.error; }
+                    if (entity.polygon !== undefined) {
+                        entity.polygon.outlineColor = Cesium.Color.Black;
+                    }
+                    if (entity.billboard !== undefined) {
+                        entity.billboard = undefined;
+                        entity.point = new Cesium.PointGraphics({
+                            color: Cesium.Color.BLUE,
+                            pixelSize: 10,
+                        });
+                    }
                 }
             });
             var _MinColor = Math.min.apply(Math, _Colortexts_1);
@@ -13203,7 +5098,6 @@ var DataService = /** @class */ (function () {
     };
     //convert geojson to PuData(publish version)
     DataService.prototype.LoadJSONData = function () {
-        var e_3, _a, e_4, _b, e_5, _c;
         if (this._jsonModel !== undefined && this._jsonModel["cesium"] !== undefined) {
             var cesiumData = this._jsonModel["cesium"];
             var _ColorDescr = void 0;
@@ -13229,18 +5123,9 @@ var DataService = /** @class */ (function () {
                     _ColorDescr = cesiumData["colour"]["descr"];
                 }
                 if (cesiumData["colour"]["attribs"] !== undefined) {
-                    try {
-                        for (var _d = __values(cesiumData["colour"]["attribs"]), _e = _d.next(); !_e.done; _e = _d.next()) {
-                            var data = _e.value;
-                            _propertyNames.push(data["name"]);
-                        }
-                    }
-                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-                    finally {
-                        try {
-                            if (_e && !_e.done && (_a = _d.return)) _a.call(_d);
-                        }
-                        finally { if (e_3) throw e_3.error; }
+                    for (var _i = 0, _a = cesiumData["colour"]["attribs"]; _i < _a.length; _i++) {
+                        var data = _a[_i];
+                        _propertyNames.push(data["name"]);
                     }
                     _ColorValue_2 = _propertyNames[0];
                     _MinColor = cesiumData["colour"]["attribs"][0]["min"];
@@ -13258,18 +5143,9 @@ var DataService = /** @class */ (function () {
                     _HeightDescr = cesiumData["extrude"]["descr"];
                 }
                 if (cesiumData["extrude"]["attribs"] !== undefined) {
-                    try {
-                        for (var _f = __values(cesiumData["extrude"]["attribs"]), _g = _f.next(); !_g.done; _g = _f.next()) {
-                            var data = _g.value;
-                            _HeightKey.push(data["name"]);
-                        }
-                    }
-                    catch (e_4_1) { e_4 = { error: e_4_1 }; }
-                    finally {
-                        try {
-                            if (_g && !_g.done && (_b = _f.return)) _b.call(_f);
-                        }
-                        finally { if (e_4) throw e_4.error; }
+                    for (var _b = 0, _c = cesiumData["extrude"]["attribs"]; _b < _c.length; _b++) {
+                        var data = _c[_b];
+                        _HeightKey.push(data["name"]);
                     }
                     _HeightValue_2 = _HeightKey[0];
                     _MinHeight = cesiumData["extrude"]["attribs"][0]["min"];
@@ -13299,54 +5175,44 @@ var DataService = /** @class */ (function () {
             var _Colortexts_2 = [];
             var self_2 = this;
             promise.then(function (dataSource) {
-                var e_6, _a;
                 var entities = dataSource.entities.values;
-                try {
-                    for (var entities_2 = __values(entities), entities_2_1 = entities_2.next(); !entities_2_1.done; entities_2_1 = entities_2.next()) {
-                        var entity = entities_2_1.value;
-                        if (entity.properties[_HeightValue_2] !== undefined) {
-                            if (entity.properties[_HeightValue_2]._value !== " ") {
-                                if (_Heighttexts_2.length === 0) {
-                                    _Heighttexts_2[0] = entity.properties[_HeightValue_2]._value;
-                                }
-                                else {
-                                    if (_Heighttexts_2.indexOf(entity.properties[_HeightValue_2]._value) === -1) {
-                                        _Heighttexts_2.push(entity.properties[_HeightValue_2]._value);
-                                    }
+                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                    var entity = entities_2[_i];
+                    if (entity.properties[_HeightValue_2] !== undefined) {
+                        if (entity.properties[_HeightValue_2]._value !== " ") {
+                            if (_Heighttexts_2.length === 0) {
+                                _Heighttexts_2[0] = entity.properties[_HeightValue_2]._value;
+                            }
+                            else {
+                                if (_Heighttexts_2.indexOf(entity.properties[_HeightValue_2]._value) === -1) {
+                                    _Heighttexts_2.push(entity.properties[_HeightValue_2]._value);
                                 }
                             }
                         }
-                        if (entity.properties[_ColorValue_2] !== undefined) {
-                            if (entity.properties[_ColorValue_2]._value !== " ") {
-                                if (_Colortexts_2.length === 0) {
-                                    _Colortexts_2[0] = entity.properties[_ColorValue_2]._value;
-                                }
-                                else {
-                                    if (_Colortexts_2.indexOf(entity.properties[_ColorValue_2]._value) === -1) {
-                                        _Colortexts_2.push(entity.properties[_ColorValue_2]._value);
-                                    }
+                    }
+                    if (entity.properties[_ColorValue_2] !== undefined) {
+                        if (entity.properties[_ColorValue_2]._value !== " ") {
+                            if (_Colortexts_2.length === 0) {
+                                _Colortexts_2[0] = entity.properties[_ColorValue_2]._value;
+                            }
+                            else {
+                                if (_Colortexts_2.indexOf(entity.properties[_ColorValue_2]._value) === -1) {
+                                    _Colortexts_2.push(entity.properties[_ColorValue_2]._value);
                                 }
                             }
                         }
-                        if (entity.polygon !== undefined) {
-                            entity.polygon.outlineColor = Cesium.Color.Black;
-                        }
-                        if (entity.billboard !== undefined) {
-                            entity.billboard = undefined;
-                            entity.point = new Cesium.PointGraphics({
-                                color: Cesium.Color.BLUE,
-                                pixelSize: 10,
-                            });
-                        }
-                        _indexArr_2.push(entities.indexOf(entity));
                     }
-                }
-                catch (e_6_1) { e_6 = { error: e_6_1 }; }
-                finally {
-                    try {
-                        if (entities_2_1 && !entities_2_1.done && (_a = entities_2.return)) _a.call(entities_2);
+                    if (entity.polygon !== undefined) {
+                        entity.polygon.outlineColor = Cesium.Color.Black;
                     }
-                    finally { if (e_6) throw e_6.error; }
+                    if (entity.billboard !== undefined) {
+                        entity.billboard = undefined;
+                        entity.point = new Cesium.PointGraphics({
+                            color: Cesium.Color.BLUE,
+                            pixelSize: 10,
+                        });
+                    }
+                    _indexArr_2.push(entities.indexOf(entity));
                 }
             });
             if (cesiumData["filters"] !== undefined) {
@@ -13355,52 +5221,43 @@ var DataService = /** @class */ (function () {
                 this._Filter = [];
                 this._HideNum = [];
                 if (_filters !== undefined && _filters.length !== 0) {
-                    try {
-                        for (var _filters_1 = __values(_filters), _filters_1_1 = _filters_1.next(); !_filters_1_1.done; _filters_1_1 = _filters_1.next()) {
-                            var _filter = _filters_1_1.value;
-                            if (this._HideNum.length === 0) {
-                                this._HideNum[0] = "0";
-                                lastnumber = this._HideNum[0];
-                            }
-                            else {
-                                for (var j = 0; j < this._HideNum.length + 1; j++) {
-                                    if (this._HideNum.indexOf(String(j)) === -1) {
-                                        this._HideNum.push(String(j));
-                                        lastnumber = String(j);
-                                        break;
-                                    }
+                    for (var _d = 0, _filters_1 = _filters; _d < _filters_1.length; _d++) {
+                        var _filter = _filters_1[_d];
+                        if (this._HideNum.length === 0) {
+                            this._HideNum[0] = "0";
+                            lastnumber = this._HideNum[0];
+                        }
+                        else {
+                            for (var j = 0; j < this._HideNum.length + 1; j++) {
+                                if (this._HideNum.indexOf(String(j)) === -1) {
+                                    this._HideNum.push(String(j));
+                                    lastnumber = String(j);
+                                    break;
                                 }
-                            }
-                            if (_filter["name"] !== undefined) {
-                                var _propertyname = _filter["name"];
-                                var _relation = Number(_filter["relation"]);
-                                var _text = _filter["value"];
-                                var _descr = _filter["descr"];
-                                var _HideType = void 0;
-                                var _texts = void 0;
-                                if (typeof (_text) === "number") {
-                                    _HideType = "number";
-                                    _texts = this.Initial(_propertyname);
-                                }
-                                else if (typeof (_text) === "string") {
-                                    _HideType = "category";
-                                    _texts = this.Initial(_propertyname);
-                                    _texts = ["None"].concat(_texts);
-                                }
-                                this._Filter.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber,
-                                    HeightHide: _propertyname, type: _HideType, Category: _texts,
-                                    CategaryHide: _text, descr: _descr, RelaHide: _relation,
-                                    textHide: _text, HideMax: Math.ceil(Math.max.apply(Math, _texts)),
-                                    HideMin: Math.floor(Math.min.apply(Math, _texts) * 100) / 100, Disabletext: null });
                             }
                         }
-                    }
-                    catch (e_5_1) { e_5 = { error: e_5_1 }; }
-                    finally {
-                        try {
-                            if (_filters_1_1 && !_filters_1_1.done && (_c = _filters_1.return)) _c.call(_filters_1);
+                        if (_filter["name"] !== undefined) {
+                            var _propertyname = _filter["name"];
+                            var _relation = Number(_filter["relation"]);
+                            var _text = _filter["value"];
+                            var _descr = _filter["descr"];
+                            var _HideType = void 0;
+                            var _texts = void 0;
+                            if (typeof (_text) === "number") {
+                                _HideType = "number";
+                                _texts = this.Initial(_propertyname);
+                            }
+                            else if (typeof (_text) === "string") {
+                                _HideType = "category";
+                                _texts = this.Initial(_propertyname);
+                                _texts = ["None"].concat(_texts);
+                            }
+                            this._Filter.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber,
+                                HeightHide: _propertyname, type: _HideType, Category: _texts,
+                                CategaryHide: _text, descr: _descr, RelaHide: _relation,
+                                textHide: _text, HideMax: Math.ceil(Math.max.apply(Math, _texts)),
+                                HideMin: Math.floor(Math.min.apply(Math, _texts) * 100) / 100, Disabletext: null });
                         }
-                        finally { if (e_5) throw e_5.error; }
                     }
                 }
             }
@@ -13417,31 +5274,21 @@ var DataService = /** @class */ (function () {
         var promise = this.getcesiumpromise();
         var self = this;
         promise.then(function (dataSource) {
-            var e_7, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_3 = __values(entities), entities_3_1 = entities_3.next(); !entities_3_1.done; entities_3_1 = entities_3.next()) {
-                    var entity = entities_3_1.value;
-                    if (entity.properties[_HideValue] !== undefined) {
-                        if (entity.properties[_HideValue]._value !== " ") {
-                            if (texts.length === 0) {
-                                texts[0] = entity.properties[_HideValue]._value;
-                            }
-                            else {
-                                if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
-                                    texts.push(entity.properties[_HideValue]._value);
-                                }
+            for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
+                var entity = entities_3[_i];
+                if (entity.properties[_HideValue] !== undefined) {
+                    if (entity.properties[_HideValue]._value !== " ") {
+                        if (texts.length === 0) {
+                            texts[0] = entity.properties[_HideValue]._value;
+                        }
+                        else {
+                            if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
+                                texts.push(entity.properties[_HideValue]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_7_1) { e_7 = { error: e_7_1 }; }
-            finally {
-                try {
-                    if (entities_3_1 && !entities_3_1.done && (_a = entities_3.return)) _a.call(entities_3);
-                }
-                finally { if (e_7) throw e_7.error; }
             }
         });
         return texts;
@@ -13801,16 +5648,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 var SelectComponent = /** @class */ (function (_super) {
@@ -13833,34 +5670,24 @@ var SelectComponent = /** @class */ (function (_super) {
     };
     //check whether ID is changed or not and show in  Select tab
     SelectComponent.prototype.ngDoCheck = function () {
-        var e_1, _a;
         if (this.viewer !== undefined && this.dataService.get_SelectedEntity() !== undefined && this.mode === "editor") {
             if (this.ID !== this.dataService.get_SelectedEntity()._id) {
                 var _Property = void 0;
                 this.ID = this.dataService.get_SelectedEntity()._id;
                 this._Properties = [];
-                try {
-                    for (var _b = __values(this.dataArr["ColorProperty"]), _c = _b.next(); !_c.done; _c = _b.next()) {
-                        var _ColorPro = _c.value;
-                        if (_ColorPro !== "None") {
-                            _Property = [];
-                            _Property.Name = _ColorPro;
-                            if (this.dataService.get_SelectedEntity().properties[_Property.Name] !== undefined) {
-                                _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
-                            }
-                            else {
-                                _Property.Value = ' ';
-                            }
-                            this._Properties.push(_Property);
+                for (var _i = 0, _a = this.dataArr["ColorProperty"]; _i < _a.length; _i++) {
+                    var _ColorPro = _a[_i];
+                    if (_ColorPro !== "None") {
+                        _Property = [];
+                        _Property.Name = _ColorPro;
+                        if (this.dataService.get_SelectedEntity().properties[_Property.Name] !== undefined) {
+                            _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
                         }
+                        else {
+                            _Property.Value = ' ';
+                        }
+                        this._Properties.push(_Property);
                     }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                    }
-                    finally { if (e_1) throw e_1.error; }
                 }
             }
         }
@@ -13932,16 +5759,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
 };
 
 
@@ -14068,39 +5885,19 @@ var DisplayComponent = /** @class */ (function (_super) {
         var promise = this.dataService.getcesiumpromise();
         if (this._Shadow === true) {
             promise.then(function (dataSource) {
-                var e_1, _a;
                 var entities = dataSource.entities.values;
-                try {
-                    for (var entities_1 = __values(entities), entities_1_1 = entities_1.next(); !entities_1_1.done; entities_1_1 = entities_1.next()) {
-                        var entity = entities_1_1.value;
-                        entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (entities_1_1 && !entities_1_1.done && (_a = entities_1.return)) _a.call(entities_1);
-                    }
-                    finally { if (e_1) throw e_1.error; }
+                for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                    var entity = entities_1[_i];
+                    entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
                 }
             });
         }
         else {
             promise.then(function (dataSource) {
-                var e_2, _a;
                 var entities = dataSource.entities.values;
-                try {
-                    for (var entities_2 = __values(entities), entities_2_1 = entities_2.next(); !entities_2_1.done; entities_2_1 = entities_2.next()) {
-                        var entity = entities_2_1.value;
-                        entity.polygon.shadows = undefined;
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (entities_2_1 && !entities_2_1.done && (_a = entities_2.return)) _a.call(entities_2);
-                    }
-                    finally { if (e_2) throw e_2.error; }
+                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                    var entity = entities_2[_i];
+                    entity.polygon.shadows = undefined;
                 }
             });
         }
@@ -14189,16 +5986,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
 };
 
 
@@ -14307,55 +6094,35 @@ var PublishComponent = /** @class */ (function (_super) {
     };
     //change color property in publish version
     PublishComponent.prototype.onChangeColor = function (value) {
-        var e_1, _a;
         var data = this.dataService.getGsModel()["cesium"]["colour"]["attribs"];
         this.dataArr["ColorKey"] = value;
-        try {
-            for (var data_1 = __values(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
-                var _data = data_1_1.value;
-                if (_data["name"] === value) {
-                    this.dataArr["ColorMin"] = _data["min"];
-                    this.dataArr["ColorMax"] = _data["max"];
-                    this.dataArr["ColorInvert"] = _data["invert"];
-                }
+        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+            var _data = data_1[_i];
+            if (_data["name"] === value) {
+                this.dataArr["ColorMin"] = _data["min"];
+                this.dataArr["ColorMax"] = _data["max"];
+                this.dataArr["ColorInvert"] = _data["invert"];
             }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (data_1_1 && !data_1_1.done && (_a = data_1.return)) _a.call(data_1);
-            }
-            finally { if (e_1) throw e_1.error; }
         }
         var promise = this.dataService.getcesiumpromise();
         var _Colortexts = [];
         var self = this;
         promise.then(function (dataSource) {
-            var e_2, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_1 = __values(entities), entities_1_1 = entities_1.next(); !entities_1_1.done; entities_1_1 = entities_1.next()) {
-                    var entity = entities_1_1.value;
-                    if (entity.properties[value] !== undefined) {
-                        if (entity.properties[value]._value !== " ") {
-                            if (_Colortexts.length === 0) {
-                                _Colortexts[0] = entity.properties[value]._value;
-                            }
-                            else {
-                                if (_Colortexts.indexOf(entity.properties[value]._value) === -1) {
-                                    _Colortexts.push(entity.properties[value]._value);
-                                }
+            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                var entity = entities_1[_i];
+                if (entity.properties[value] !== undefined) {
+                    if (entity.properties[value]._value !== " ") {
+                        if (_Colortexts.length === 0) {
+                            _Colortexts[0] = entity.properties[value]._value;
+                        }
+                        else {
+                            if (_Colortexts.indexOf(entity.properties[value]._value) === -1) {
+                                _Colortexts.push(entity.properties[value]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
-            finally {
-                try {
-                    if (entities_1_1 && !entities_1_1.done && (_a = entities_1.return)) _a.call(entities_1);
-                }
-                finally { if (e_2) throw e_2.error; }
             }
         });
         this.dataArr["ColorText"] = _Colortexts.sort();
@@ -14364,57 +6131,37 @@ var PublishComponent = /** @class */ (function (_super) {
     };
     //change extrudeheight property in publish version
     PublishComponent.prototype.onChangeHeight = function (value) {
-        var e_3, _a;
         var data = this.dataService.getGsModel()["cesium"]["extrude"]["attribs"];
         this.dataArr["ExtrudeKey"] = value;
-        try {
-            for (var data_2 = __values(data), data_2_1 = data_2.next(); !data_2_1.done; data_2_1 = data_2.next()) {
-                var _data = data_2_1.value;
-                if (_data["name"] === value) {
-                    this.dataArr["ExtrudeMin"] = _data["min"];
-                    this.dataArr["ExtrudeMax"] = _data["max"];
-                    this.dataArr["HeightChart"] = _data["line"];
-                    this.dataArr["Invert"] = _data["invert"];
-                    this.dataArr["Scale"] = _data["scale"];
-                }
+        for (var _i = 0, data_2 = data; _i < data_2.length; _i++) {
+            var _data = data_2[_i];
+            if (_data["name"] === value) {
+                this.dataArr["ExtrudeMin"] = _data["min"];
+                this.dataArr["ExtrudeMax"] = _data["max"];
+                this.dataArr["HeightChart"] = _data["line"];
+                this.dataArr["Invert"] = _data["invert"];
+                this.dataArr["Scale"] = _data["scale"];
             }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (data_2_1 && !data_2_1.done && (_a = data_2.return)) _a.call(data_2);
-            }
-            finally { if (e_3) throw e_3.error; }
         }
         var promise = this.dataService.getcesiumpromise();
         var _Heighttexts = [];
         var self = this;
         promise.then(function (dataSource) {
-            var e_4, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_2 = __values(entities), entities_2_1 = entities_2.next(); !entities_2_1.done; entities_2_1 = entities_2.next()) {
-                    var entity = entities_2_1.value;
-                    if (entity.properties[value] !== undefined) {
-                        if (entity.properties[value]._value !== " ") {
-                            if (_Heighttexts.length === 0) {
-                                _Heighttexts[0] = entity.properties[value]._value;
-                            }
-                            else {
-                                if (_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
-                                    _Heighttexts.push(entity.properties[value]._value);
-                                }
+            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                var entity = entities_2[_i];
+                if (entity.properties[value] !== undefined) {
+                    if (entity.properties[value]._value !== " ") {
+                        if (_Heighttexts.length === 0) {
+                            _Heighttexts[0] = entity.properties[value]._value;
+                        }
+                        else {
+                            if (_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
+                                _Heighttexts.push(entity.properties[value]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
-            finally {
-                try {
-                    if (entities_2_1 && !entities_2_1.done && (_a = entities_2.return)) _a.call(entities_2);
-                }
-                finally { if (e_4) throw e_4.error; }
             }
         });
         this.dataArr["ExtrudeText"] = _Heighttexts.sort();
@@ -14498,16 +6245,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
 };
 
 
@@ -14593,77 +6330,30 @@ var SettingComponent = /** @class */ (function (_super) {
         }
         var self = this;
         promise.then(function (dataSource) {
-            var e_1, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var _indexArr_1 = __values(_indexArr), _indexArr_1_1 = _indexArr_1.next(); !_indexArr_1_1.done; _indexArr_1_1 = _indexArr_1.next()) {
-                    var i = _indexArr_1_1.value;
-                    var entity = entities[i];
-                    var _CheckHide = void 0;
-                    if (entity.polygon !== undefined) {
-                        if (_Filter.length !== 0) {
-                            _CheckHide = self.Hide(_Filter, entity, _HeightChart);
-                            if (_CheckHide === true) {
-                                if (entity.polygon !== undefined) {
-                                    entity.polygon.extrudedHeight = 0;
-                                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                    if (_HeightChart === true) {
-                                        if (entity.polyline !== undefined) {
-                                            entity.polyline.show = false;
-                                        }
-                                    }
-                                }
-                                if (entity.polyline !== undefined) {
-                                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                }
-                            }
-                        }
-                        if (_Filter.length === 0 || _CheckHide === false) {
-                            if (_ColorKey !== "None") {
-                                if (typeof (_ColorText[0]) === "number") {
-                                    self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
-                                }
-                                else {
-                                    self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
-                                }
-                            }
-                            else {
-                                entity.polygon.material = Cesium.Color.DARKGREY;
-                            }
-                            if (_ExtrudeKey !== "None") {
-                                if (_HeightChart === false) {
-                                    entity.polyline = undefined;
-                                    if (entity.properties[_ExtrudeKey] !== undefined) {
-                                        entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale;
-                                    }
-                                    else {
-                                        entity.polygon.extrudedHeight = 0;
-                                    }
-                                }
-                                else {
-                                    entity.polygon.extrudedHeight = 0;
-                                    var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-                                    var radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius / 100), 10);
-                                    var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
-                                        cartesianToCartographic(center).longitude).toFixed(10);
-                                    var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
-                                        latitude).toFixed(10);
-                                    entity.polyline = new Cesium.PolylineGraphics({
-                                        positions: new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString, latitudeString, 0, longitudeString,
-                                            latitudeString, self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale]),
-                                        width: radius,
-                                        material: entity.polygon.material,
-                                        show: true,
-                                    });
-                                }
-                            }
-                            else {
-                                entity.polyline = undefined;
+            for (var _i = 0, _indexArr_1 = _indexArr; _i < _indexArr_1.length; _i++) {
+                var i = _indexArr_1[_i];
+                var entity = entities[i];
+                var _CheckHide = void 0;
+                if (entity.polygon !== undefined) {
+                    if (_Filter.length !== 0) {
+                        _CheckHide = self.Hide(_Filter, entity, _HeightChart);
+                        if (_CheckHide === true) {
+                            if (entity.polygon !== undefined) {
                                 entity.polygon.extrudedHeight = 0;
+                                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                                if (_HeightChart === true) {
+                                    if (entity.polyline !== undefined) {
+                                        entity.polyline.show = false;
+                                    }
+                                }
+                            }
+                            if (entity.polyline !== undefined) {
+                                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                             }
                         }
                     }
-                    else if (entity.polyline !== undefined) {
+                    if (_Filter.length === 0 || _CheckHide === false) {
                         if (_ColorKey !== "None") {
                             if (typeof (_ColorText[0]) === "number") {
                                 self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
@@ -14673,61 +6363,88 @@ var SettingComponent = /** @class */ (function (_super) {
                             }
                         }
                         else {
-                            entity.polyline.material = Cesium.Color.DARKGREY;
+                            entity.polygon.material = Cesium.Color.DARKGREY;
                         }
-                    }
-                    else if (entity.point !== undefined) {
-                        if (_ColorKey !== "None") {
-                            if (typeof (_ColorText[0]) === "number") {
-                                self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                        if (_ExtrudeKey !== "None") {
+                            if (_HeightChart === false) {
+                                entity.polyline = undefined;
+                                if (entity.properties[_ExtrudeKey] !== undefined) {
+                                    entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale;
+                                }
+                                else {
+                                    entity.polygon.extrudedHeight = 0;
+                                }
                             }
                             else {
-                                self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                                entity.polygon.extrudedHeight = 0;
+                                var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+                                var radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius / 100), 10);
+                                var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                    cartesianToCartographic(center).longitude).toFixed(10);
+                                var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                    latitude).toFixed(10);
+                                entity.polyline = new Cesium.PolylineGraphics({
+                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString, latitudeString, 0, longitudeString,
+                                        latitudeString, self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale]),
+                                    width: radius,
+                                    material: entity.polygon.material,
+                                    show: true,
+                                });
                             }
                         }
                         else {
-                            entity.point.color = Cesium.Color.DARKGREY;
+                            entity.polyline = undefined;
+                            entity.polygon.extrudedHeight = 0;
                         }
                     }
                 }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_indexArr_1_1 && !_indexArr_1_1.done && (_a = _indexArr_1.return)) _a.call(_indexArr_1);
+                else if (entity.polyline !== undefined) {
+                    if (_ColorKey !== "None") {
+                        if (typeof (_ColorText[0]) === "number") {
+                            self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                        }
+                        else {
+                            self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                        }
+                    }
+                    else {
+                        entity.polyline.material = Cesium.Color.DARKGREY;
+                    }
                 }
-                finally { if (e_1) throw e_1.error; }
+                else if (entity.point !== undefined) {
+                    if (_ColorKey !== "None") {
+                        if (typeof (_ColorText[0]) === "number") {
+                            self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                        }
+                        else {
+                            self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                        }
+                    }
+                    else {
+                        entity.point.color = Cesium.Color.DARKGREY;
+                    }
+                }
             }
         });
     };
     //check whether entity should be hided or not
     SettingComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
-        var e_2, _a;
         var _CheckHide = false;
-        try {
-            for (var _Filter_1 = __values(_Filter), _Filter_1_1 = _Filter_1.next(); !_Filter_1_1.done; _Filter_1_1 = _Filter_1.next()) {
-                var filter = _Filter_1_1.value;
-                var value = entity.properties[filter.HeightHide]._value;
-                if (value !== undefined) {
-                    if (typeof (value) === "number") {
-                        if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
-                            _CheckHide = true;
-                        }
+        for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
+            var filter = _Filter_1[_i];
+            var value = entity.properties[filter.HeightHide]._value;
+            if (value !== undefined) {
+                if (typeof (value) === "number") {
+                    if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
+                        _CheckHide = true;
                     }
-                    else if (typeof (value) === "string") {
-                        if (this._compareCat(value, filter.CategaryHide, Number(filter.RelaHide))) {
-                            _CheckHide = true;
-                        }
+                }
+                else if (typeof (value) === "string") {
+                    if (this._compareCat(value, filter.CategaryHide, Number(filter.RelaHide))) {
+                        _CheckHide = true;
                     }
                 }
             }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (_Filter_1_1 && !_Filter_1_1.done && (_a = _Filter_1.return)) _a.call(_Filter_1);
-            }
-            finally { if (e_2) throw e_2.error; }
         }
         return _CheckHide;
     };
@@ -14913,16 +6630,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 var DataComponent = /** @class */ (function (_super) {
@@ -14975,31 +6682,21 @@ var DataComponent = /** @class */ (function (_super) {
         var _Colortexts = [];
         var self = this;
         promise.then(function (dataSource) {
-            var e_1, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_1 = __values(entities), entities_1_1 = entities_1.next(); !entities_1_1.done; entities_1_1 = entities_1.next()) {
-                    var entity = entities_1_1.value;
-                    if (entity.properties[value] !== undefined) {
-                        if (entity.properties[value]._value !== " ") {
-                            if (_Colortexts.length === 0) {
-                                _Colortexts[0] = entity.properties[value]._value;
-                            }
-                            else {
-                                if (_Colortexts.indexOf(entity.properties[value]._value) === -1) {
-                                    _Colortexts.push(entity.properties[value]._value);
-                                }
+            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                var entity = entities_1[_i];
+                if (entity.properties[value] !== undefined) {
+                    if (entity.properties[value]._value !== " ") {
+                        if (_Colortexts.length === 0) {
+                            _Colortexts[0] = entity.properties[value]._value;
+                        }
+                        else {
+                            if (_Colortexts.indexOf(entity.properties[value]._value) === -1) {
+                                _Colortexts.push(entity.properties[value]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (entities_1_1 && !entities_1_1.done && (_a = entities_1.return)) _a.call(entities_1);
-                }
-                finally { if (e_1) throw e_1.error; }
             }
         });
         this.dataArr["ColorMin"] = Math.min.apply(Math, _Colortexts);
@@ -15033,31 +6730,21 @@ var DataComponent = /** @class */ (function (_super) {
         var _Heighttexts = [];
         var self = this;
         promise.then(function (dataSource) {
-            var e_2, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_2 = __values(entities), entities_2_1 = entities_2.next(); !entities_2_1.done; entities_2_1 = entities_2.next()) {
-                    var entity = entities_2_1.value;
-                    if (entity.properties[value] !== undefined) {
-                        if (entity.properties[value]._value !== " ") {
-                            if (_Heighttexts.length === 0) {
-                                _Heighttexts[0] = entity.properties[value]._value;
-                            }
-                            else {
-                                if (_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
-                                    _Heighttexts.push(entity.properties[value]._value);
-                                }
+            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                var entity = entities_2[_i];
+                if (entity.properties[value] !== undefined) {
+                    if (entity.properties[value]._value !== " ") {
+                        if (_Heighttexts.length === 0) {
+                            _Heighttexts[0] = entity.properties[value]._value;
+                        }
+                        else {
+                            if (_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
+                                _Heighttexts.push(entity.properties[value]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
-            finally {
-                try {
-                    if (entities_2_1 && !entities_2_1.done && (_a = entities_2.return)) _a.call(entities_2);
-                }
-                finally { if (e_2) throw e_2.error; }
             }
         });
         this.dataArr["ExtrudeMin"] = Math.min.apply(Math, _Heighttexts);
@@ -15215,31 +6902,21 @@ var DataComponent = /** @class */ (function (_super) {
         var promise = this.dataService.getcesiumpromise();
         var self = this;
         promise.then(function (dataSource) {
-            var e_3, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_3 = __values(entities), entities_3_1 = entities_3.next(); !entities_3_1.done; entities_3_1 = entities_3.next()) {
-                    var entity = entities_3_1.value;
-                    if (entity.properties[HeightHide] !== undefined) {
-                        if (entity.properties[HeightHide]._value !== " ") {
-                            if (texts.length === 0) {
-                                texts[0] = entity.properties[HeightHide]._value;
-                            }
-                            else {
-                                if (texts.indexOf(entity.properties[HeightHide]._value) === -1) {
-                                    texts.push(entity.properties[HeightHide]._value);
-                                }
+            for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
+                var entity = entities_3[_i];
+                if (entity.properties[HeightHide] !== undefined) {
+                    if (entity.properties[HeightHide]._value !== " ") {
+                        if (texts.length === 0) {
+                            texts[0] = entity.properties[HeightHide]._value;
+                        }
+                        else {
+                            if (texts.indexOf(entity.properties[HeightHide]._value) === -1) {
+                                texts.push(entity.properties[HeightHide]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
-            finally {
-                try {
-                    if (entities_3_1 && !entities_3_1.done && (_a = entities_3.return)) _a.call(entities_3);
-                }
-                finally { if (e_3) throw e_3.error; }
             }
         });
         this._Filter[index].HideMax = Math.ceil(Math.max.apply(Math, texts));
@@ -15272,31 +6949,21 @@ var DataComponent = /** @class */ (function (_super) {
         var promise = this.dataService.getcesiumpromise();
         var self = this;
         promise.then(function (dataSource) {
-            var e_4, _a;
             var entities = dataSource.entities.values;
-            try {
-                for (var entities_4 = __values(entities), entities_4_1 = entities_4.next(); !entities_4_1.done; entities_4_1 = entities_4.next()) {
-                    var entity = entities_4_1.value;
-                    if (entity.properties[_HideValue] !== undefined) {
-                        if (entity.properties[_HideValue]._value !== " ") {
-                            if (texts.length === 0) {
-                                texts[0] = entity.properties[_HideValue]._value;
-                            }
-                            else {
-                                if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
-                                    texts.push(entity.properties[_HideValue]._value);
-                                }
+            for (var _i = 0, entities_4 = entities; _i < entities_4.length; _i++) {
+                var entity = entities_4[_i];
+                if (entity.properties[_HideValue] !== undefined) {
+                    if (entity.properties[_HideValue]._value !== " ") {
+                        if (texts.length === 0) {
+                            texts[0] = entity.properties[_HideValue]._value;
+                        }
+                        else {
+                            if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
+                                texts.push(entity.properties[_HideValue]._value);
                             }
                         }
                     }
                 }
-            }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
-            finally {
-                try {
-                    if (entities_4_1 && !entities_4_1.done && (_a = entities_4.return)) _a.call(entities_4);
-                }
-                finally { if (e_4) throw e_4.error; }
             }
         });
         return texts;
@@ -15370,16 +7037,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
 };
 
 
@@ -15657,32 +7314,22 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     //check the selected building  color before
     ViewerComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
-        var e_1, _a;
         var _CheckHide = false;
-        try {
-            for (var _Filter_1 = __values(_Filter), _Filter_1_1 = _Filter_1.next(); !_Filter_1_1.done; _Filter_1_1 = _Filter_1.next()) {
-                var filter = _Filter_1_1.value;
-                var value = entity.properties[filter.HeightHide]._value;
-                if (value !== undefined) {
-                    if (typeof (value) === "number") {
-                        if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
-                            _CheckHide = true;
-                        }
+        for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
+            var filter = _Filter_1[_i];
+            var value = entity.properties[filter.HeightHide]._value;
+            if (value !== undefined) {
+                if (typeof (value) === "number") {
+                    if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
+                        _CheckHide = true;
                     }
-                    else if (typeof (value) === "string") {
-                        if (this._compareCat(value, filter.CategaryHide, Number(filter.RelaHide))) {
-                            _CheckHide = true;
-                        }
+                }
+                else if (typeof (value) === "string") {
+                    if (this._compareCat(value, filter.CategaryHide, Number(filter.RelaHide))) {
+                        _CheckHide = true;
                     }
                 }
             }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_Filter_1_1 && !_Filter_1_1.done && (_a = _Filter_1.return)) _a.call(_Filter_1);
-            }
-            finally { if (e_1) throw e_1.error; }
         }
         return _CheckHide;
     };
@@ -15780,7 +7427,6 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     //in viewer mode,set some attibutes to show
     ViewerComponent.prototype.showAttribs = function (event) {
-        var e_2, _a;
         var viewer = this.dataService.getViewer();
         if (this.data !== undefined && this.mode === "viewer") {
             if (this.data["cesium"] !== undefined) {
@@ -15789,18 +7435,9 @@ var ViewerComponent = /** @class */ (function (_super) {
                         var pickup = viewer.scene.pick(new Cesium.Cartesian2(event.clientX, event.clientY));
                         this.pickupArrs = [];
                         this.pickupArrs.push({ name: "ID", data: pickup.id.id });
-                        try {
-                            for (var _b = __values(this.data["cesium"].select), _c = _b.next(); !_c.done; _c = _b.next()) {
-                                var _propertyName = _c.value;
-                                this.pickupArrs.push({ name: _propertyName, data: this.dataService.get_SelectedEntity().properties[_propertyName]._value });
-                            }
-                        }
-                        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                        finally {
-                            try {
-                                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                            }
-                            finally { if (e_2) throw e_2.error; }
+                        for (var _i = 0, _a = this.data["cesium"].select; _i < _a.length; _i++) {
+                            var _propertyName = _a[_i];
+                            this.pickupArrs.push({ name: _propertyName, data: this.dataService.get_SelectedEntity().properties[_propertyName]._value });
                         }
                         var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
                         viewer.container.appendChild(nameOverlay);
@@ -15870,7 +7507,6 @@ var FileUtils = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TextViewerComponent", function() { return TextViewerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -15881,68 +7517,56 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-
+//import { gsConstructor } from '@modules';
 var TextViewerComponent = /** @class */ (function () {
     function TextViewerComponent() {
-        console.log("Text Viewer Created");
+        //console.log(`Text Viewer Created`); 
     }
     TextViewerComponent.prototype.ngOnInit = function () {
-        if (!this.node) {
-            this.output = "no-value";
+        if (typeof this.data === 'number' || this.data === undefined) {
+            this.output = this.data;
         }
-        else if (typeof this.node.output.value === 'number' || this.node.output.value === undefined) {
-            this.output = this.node.output.value;
+        else if (typeof this.data === 'string') {
+            this.output = '"' + this.data + '"';
         }
-        else if (typeof this.node.output.value === 'string') {
-            this.output = '"' + this.node.output.value + '"';
+        else if (this.data.constructor === [].constructor) {
+            this.output = JSON.stringify(this.data);
         }
-        else if (this.node.output.value.constructor === [].constructor) {
-            this.output = JSON.stringify(this.node.output.value);
-        }
-        else if (this.node.output.value.constructor === {}.constructor) {
-            this.output = JSON.stringify(this.node.output.value);
-        }
-        else if (this.node.output.value.constructor === _modules__WEBPACK_IMPORTED_MODULE_1__["gsConstructor"]) {
-            this.output = this.node.output.value.toJSON();
+        else if (this.data.constructor === {}.constructor) {
+            this.output = JSON.stringify(this.data);
         }
         else {
-            console.log('Unknown output type:', this.node.output.value);
-            this.output = this.node.output.value;
+            console.log('Unknown output type:', this.data);
+            this.output = this.data;
         }
     };
     TextViewerComponent.prototype.ngDoCheck = function () {
-        if (!this.node) {
-            this.output = "no-value";
+        if (typeof this.data === 'number' || this.data === undefined) {
+            this.output = this.data;
         }
-        else if (typeof this.node.output.value === 'number' || this.node.output.value === undefined) {
-            this.output = this.node.output.value;
+        else if (typeof this.data === 'string') {
+            this.output = '"' + this.data + '"';
         }
-        else if (typeof this.node.output.value === 'string') {
-            this.output = '"' + this.node.output.value + '"';
+        else if (this.data.constructor === [].constructor) {
+            this.output = JSON.stringify(this.data);
         }
-        else if (this.node.output.value.constructor === [].constructor) {
-            this.output = JSON.stringify(this.node.output.value);
-        }
-        else if (this.node.output.value.constructor === {}.constructor) {
-            this.output = JSON.stringify(this.node.output.value);
-        }
-        else if (this.node.output.value.constructor === _modules__WEBPACK_IMPORTED_MODULE_1__["gsConstructor"]) {
-            this.output = JSON.stringify(this.node.output.value.toJSON());
+        else if (this.data.constructor === {}.constructor) {
+            this.output = JSON.stringify(this.data);
         }
         else {
-            console.log('Unknown output type:', this.node.output.value);
-            this.output = this.node.output.value;
+            console.log('Unknown output type:', this.data);
+            this.output = this.data;
         }
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], TextViewerComponent.prototype, "node", void 0);
+    ], TextViewerComponent.prototype, "data", void 0);
     TextViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'text-viewer',
-            template: "<br><div>{{ output || \"no-value\" }}</div>",
-            styles: []
+            template: "<textarea>{{ output || \"no-value\" }}</textarea>",
+            styles: ["\n  :host{\n    height: 100%;\n    width: 100%;\n  }\n  textarea{\n    height: 99%;\n    width: 99%;\n    overflow: auto;\n    resize: none;\n    background-color: rgb(220,220,220);\n    text-color: rgb(80,80,80);\n    border: none;\n    font-family: arial;\n  }"]
         }),
         __metadata("design:paramtypes", [])
     ], TextViewerComponent);
@@ -15960,7 +7584,7 @@ var TextViewerComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--the main line-->\r\n<svg:polyline \r\nid=\"main-edge\" \r\nclass = \"edge\" \r\n[class.selected] = \"edge.selected\"\r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 9) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 29) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 24)\" \r\n/>\r\n\r\n<!--a wider invisible line to make the wire easier to click-->\r\n<svg:polyline \r\nid=\"invisible-edge\" \r\nclass = \"inviEdge\" \r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 15) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 29) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 10)\" \r\n(click)='select($event)'/>\r\n    \r\n\r\n"
+module.exports = "<!--the main line-->\r\n<svg:polyline \r\nid=\"main-edge\" \r\nclass = \"edge\" \r\n[class.selected] = \"edge.selected\"\r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 8) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 16) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 22)\" \r\n/>\r\n\r\n<!--a wider invisible line to make the wire easier to click-->\r\n<svg:polyline \r\nid=\"invisible-edge\" \r\nclass = \"inviEdge\" \r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 15) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 12)\" \r\n(click)='select($event)'/>\r\n    \r\n\r\n"
 
 /***/ }),
 
@@ -16095,16 +7719,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 
@@ -16124,14 +7738,65 @@ var FlowchartComponent = /** @class */ (function () {
         this.keydownListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'keydown');
         this.copyListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'copy');
         this.pasteListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'paste');
+        this.listenerActive = false;
         // constants for offset positions of input/output port relative to the node's position
         this.inputOffset = [50, -8];
         this.outputOffset = [50, 88];
     }
+    FlowchartComponent_1 = FlowchartComponent;
     FlowchartComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.canvas = document.getElementById("svg-canvas");
         var bRect = this.canvas.getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
+        // copy: copy node
+        this.copySub = this.copyListener.subscribe(function (val) {
+            if (!_this.listenerActive)
+                return;
+            var node = _this.data.nodes[_this.data.meta.selected_nodes[0]];
+            if (node.type != 'start' && node.type != 'end') {
+                console.log('copied node:', node);
+                var cp = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](node));
+                _this.copied = circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](cp);
+            }
+        });
+        // paste: paste copied node
+        this.pasteSub = this.pasteListener.subscribe(function (val) {
+            if (!_this.listenerActive)
+                return;
+            if (_this.copied) {
+                event.preventDefault();
+                var newNode = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](_this.copied);
+                var pt = _this.canvas.createSVGPoint();
+                pt.x = 20;
+                pt.y = 100;
+                var svgP = void 0;
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                if (isFirefox) {
+                    var ctm = _this.canvas.getScreenCTM();
+                    var bRect_1 = _this.canvas.getBoundingClientRect();
+                    ctm.a = ctm.a * _this.zoom;
+                    ctm.d = ctm.d * _this.zoom;
+                    ctm.e = bRect_1.x;
+                    ctm.f = bRect_1.y;
+                    svgP = pt.matrixTransform(ctm.inverse());
+                }
+                else {
+                    svgP = pt.matrixTransform(_this.canvas.getScreenCTM().inverse());
+                }
+                _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].updateNode(newNode, svgP);
+                _this.data.nodes.push(newNode);
+                console.log('pasting node:', newNode);
+            }
+        });
+        // delete: delete selected edge(s)
+        this.keydownSub = this.keydownListener.subscribe(function (val) {
+            if (!_this.listenerActive)
+                return;
+            if (val.key == 'Delete') {
+                _this.deleteSelectedEdges();
+            }
+        });
     };
     /*
     handle event received from node component
@@ -16236,55 +7901,11 @@ var FlowchartComponent = /** @class */ (function () {
     };
     // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
     FlowchartComponent.prototype.activateKeyEvent = function () {
-        var _this = this;
-        // copy: copy node
-        this.copySub = this.copyListener.subscribe(function (val) {
-            var node = _this.data.nodes[_this.data.meta.selected_nodes[0]];
-            if (node.type != 'start' && node.type != 'end') {
-                console.log('copied node:', node);
-                var cp = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](node));
-                _this.copied = circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](cp);
-            }
-        });
-        // paste: paste copied node
-        this.pasteSub = this.pasteListener.subscribe(function (val) {
-            if (_this.copied) {
-                event.preventDefault();
-                var newNode = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](_this.copied);
-                var pt = _this.canvas.createSVGPoint();
-                pt.x = 20;
-                pt.y = 100;
-                var svgP = void 0;
-                var isFirefox = typeof InstallTrigger !== 'undefined';
-                if (isFirefox) {
-                    var ctm = _this.canvas.getScreenCTM();
-                    var bRect = _this.canvas.getBoundingClientRect();
-                    ctm.a = ctm.a * _this.zoom;
-                    ctm.d = ctm.d * _this.zoom;
-                    ctm.e = bRect.x;
-                    ctm.f = bRect.y;
-                    svgP = pt.matrixTransform(ctm.inverse());
-                }
-                else {
-                    svgP = pt.matrixTransform(_this.canvas.getScreenCTM().inverse());
-                }
-                _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].updateNode(newNode, svgP);
-                _this.data.nodes.push(newNode);
-                console.log('pasting node:', newNode);
-            }
-        });
-        // delete: delete selected edge(s)
-        this.keydownSub = this.keydownListener.subscribe(function (val) {
-            if (val.key == 'Delete') {
-                _this.deleteSelectedEdges();
-            }
-        });
+        this.listenerActive = true;
     };
     // deactivate the event listeners when the mouse exit the svg component
     FlowchartComponent.prototype.deactivateKeyEvent = function () {
-        this.copySub.unsubscribe();
-        this.pasteSub.unsubscribe();
-        this.keydownSub.unsubscribe();
+        this.listenerActive = false;
     };
     // delete selected node
     FlowchartComponent.prototype.deleteSelectedNodes = function () {
@@ -16300,7 +7921,7 @@ var FlowchartComponent = /** @class */ (function () {
             while (edge_index < this.data.edges.length) {
                 var tbrEdge = this.data.edges[edge_index];
                 if (tbrEdge.target.parentNode == node || tbrEdge.source.parentNode == node) {
-                    this.deleteEdge(edge_index);
+                    this.deleteEdge(edge_index, node.id);
                     continue;
                 }
                 edge_index += 1;
@@ -16310,7 +7931,8 @@ var FlowchartComponent = /** @class */ (function () {
         }
     };
     // delete an edge with a known index
-    FlowchartComponent.prototype.deleteEdge = function (edge_index) {
+    FlowchartComponent.prototype.deleteEdge = function (edge_index, deletedNode) {
+        if (deletedNode === void 0) { deletedNode = undefined; }
         var tbrEdge = this.data.edges[edge_index];
         // remove the edge from the target node's list of edges
         for (var i in this.data.edges) {
@@ -16326,32 +7948,27 @@ var FlowchartComponent = /** @class */ (function () {
                 break;
             }
         }
+        if (tbrEdge.target.parentNode.input.edges.length == 0 && deletedNode !== tbrEdge.target.parentNode.id) {
+            FlowchartComponent_1.disableNode(tbrEdge.target.parentNode);
+        }
+        else {
+            FlowchartComponent_1.enableNode(tbrEdge.target.parentNode);
+        }
         // remove the edge from the general list of edges
         this.data.edges.splice(edge_index, 1);
         this.data.ordered = false;
     };
     // delete all the selected edges
     FlowchartComponent.prototype.deleteSelectedEdges = function () {
-        var e_1, _a;
         this.selectedEdge.sort().reverse();
-        try {
-            for (var _b = __values(this.selectedEdge), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var edge_index = _c.value;
-                this.deleteEdge(edge_index);
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
+            var edge_index = _a[_i];
+            this.deleteEdge(edge_index);
         }
         this.selectedEdge = [];
     };
     // select an edge
     FlowchartComponent.prototype.selectEdge = function (event, edge_index) {
-        var e_2, _a;
         // if ctrl is pressed, add the edge into the list of selected edges
         if (event == 'ctrl') {
             this.selectedEdge.push(edge_index);
@@ -16359,18 +7976,9 @@ var FlowchartComponent = /** @class */ (function () {
         }
         else if (event == 'single' || (event === false && this.selectedEdge.length > 1)) {
             if (this.selectedEdge.length > 0) {
-                try {
-                    for (var _b = __values(this.selectedEdge), _c = _b.next(); !_c.done; _c = _b.next()) {
-                        var e = _c.value;
-                        this.data.edges[e].selected = false;
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                    }
-                    finally { if (e_2) throw e_2.error; }
+                for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
+                    var e = _a[_i];
+                    this.data.edges[e].selected = false;
                 }
             }
             this.selectedEdge = [edge_index];
@@ -16387,33 +7995,23 @@ var FlowchartComponent = /** @class */ (function () {
     };
     // focus view onto the flowchart
     FlowchartComponent.prototype.focusFlowchart = function () {
-        var e_3, _a;
         // find the frame of the flowchart: frame = [minX, minY, maxX, maxY]
         var frame = [this.data.nodes[0].position.x, this.data.nodes[0].position.y,
             this.data.nodes[0].position.x, this.data.nodes[0].position.y];
-        try {
-            for (var _b = __values(this.data.nodes), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var node = _c.value;
-                if (node.position.x < frame[0]) {
-                    frame[0] = node.position.x;
-                }
-                else if (node.position.x > frame[2]) {
-                    frame[2] = node.position.x;
-                }
-                if (node.position.y < frame[1]) {
-                    frame[1] = node.position.y;
-                }
-                else if (node.position.y > frame[3]) {
-                    frame[3] = node.position.y;
-                }
+        for (var _i = 0, _a = this.data.nodes; _i < _a.length; _i++) {
+            var node = _a[_i];
+            if (node.position.x < frame[0]) {
+                frame[0] = node.position.x;
             }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+            else if (node.position.x > frame[2]) {
+                frame[2] = node.position.x;
             }
-            finally { if (e_3) throw e_3.error; }
+            if (node.position.y < frame[1]) {
+                frame[1] = node.position.y;
+            }
+            else if (node.position.y > frame[3]) {
+                frame[3] = node.position.y;
+            }
         }
         frame[2] += 100;
         frame[3] += 80;
@@ -16565,7 +8163,6 @@ var FlowchartComponent = /** @class */ (function () {
         }
     };
     FlowchartComponent.prototype.handleMouseUp = function (event) {
-        var e_4, _a, e_5, _b;
         this.element = undefined;
         // drop port --> create new edge if drop position is within 15px of an input/output port
         if (this.isDown == 3) {
@@ -16592,61 +8189,69 @@ var FlowchartComponent = /** @class */ (function () {
             tempLine.setAttribute('y1', '0');
             tempLine.setAttribute('x2', '0');
             tempLine.setAttribute('y2', '0');
-            try {
-                // go through all of the nodes' input/output ports
-                for (var _c = __values(this.data.nodes), _d = _c.next(); !_d.done; _d = _c.next()) {
-                    var n = _d.value;
-                    var pPos;
-                    // find the node's corresponding port and its position
-                    if (this.startType == 'input') {
-                        if (this.edge.target.parentNode == n || n.type == 'end')
-                            continue;
-                        this.edge.source = n.output;
-                        pPos = [n.position.x + this.outputOffset[0], n.position.y + this.outputOffset[1]];
-                    }
-                    else {
-                        if (this.edge.source.parentNode == n || n.type == 'start')
-                            continue;
-                        this.edge.target = n.input;
-                        pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
-                    }
-                    // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                    if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25)
+            // go through all of the nodes' input/output ports
+            for (var _i = 0, _a = this.data.nodes; _i < _a.length; _i++) {
+                var n = _a[_i];
+                var pPos;
+                // find the node's corresponding port and its position
+                if (this.startType == 'input') {
+                    if (this.edge.target.parentNode == n || n.type == 'end')
                         continue;
-                    try {
-                        // if there is already an existing edge with the same source and target as the new edge, return
-                        for (var _e = __values(this.data.edges), _f = _e.next(); !_f.done; _f = _e.next()) {
-                            var edge = _f.value;
-                            if (edge.target == this.edge.target && edge.source == this.edge.source) {
-                                this.isDown = 0;
-                                return;
-                            }
-                        }
-                    }
-                    catch (e_5_1) { e_5 = { error: e_5_1 }; }
-                    finally {
-                        try {
-                            if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
-                        }
-                        finally { if (e_5) throw e_5.error; }
-                    }
-                    this.edge.target.edges.push(this.edge);
-                    this.edge.source.edges.push(this.edge);
-                    this.data.edges.push(this.edge);
-                    this.data.ordered = false;
-                    break;
+                    this.edge.source = n.output;
+                    pPos = [n.position.x + this.outputOffset[0], n.position.y + this.outputOffset[1]];
                 }
-            }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
-            finally {
-                try {
-                    if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+                else {
+                    if (this.edge.source.parentNode == n || n.type == 'start')
+                        continue;
+                    this.edge.target = n.input;
+                    pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
                 }
-                finally { if (e_4) throw e_4.error; }
+                // if the distance between the port's position and the dropped position is bigger than 15px, continue
+                if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25)
+                    continue;
+                // if there is already an existing edge with the same source and target as the new edge, return
+                for (var _b = 0, _c = this.data.edges; _b < _c.length; _b++) {
+                    var edge = _c[_b];
+                    if (edge.target == this.edge.target && edge.source == this.edge.source) {
+                        this.isDown = 0;
+                        return;
+                    }
+                }
+                this.edge.target.edges.push(this.edge);
+                this.edge.source.edges.push(this.edge);
+                this.data.edges.push(this.edge);
+                this.data.ordered = false;
+                if (this.edge.source.parentNode.enabled) {
+                    FlowchartComponent_1.enableNode(this.edge.target.parentNode);
+                }
+                else {
+                    FlowchartComponent_1.disableNode(this.edge.target.parentNode);
+                }
+                break;
             }
         }
         this.isDown = 0;
     };
+    FlowchartComponent.enableNode = function (node) {
+        for (var _i = 0, _a = node.input.edges; _i < _a.length; _i++) {
+            var edge = _a[_i];
+            if (!edge.source.parentNode.enabled)
+                return;
+        }
+        node.enabled = true;
+        for (var _b = 0, _c = node.output.edges; _b < _c.length; _b++) {
+            var edge = _c[_b];
+            FlowchartComponent_1.enableNode(edge.target.parentNode);
+        }
+    };
+    FlowchartComponent.disableNode = function (node) {
+        node.enabled = false;
+        for (var _i = 0, _a = node.output.edges; _i < _a.length; _i++) {
+            var edge = _a[_i];
+            FlowchartComponent_1.disableNode(edge.target.parentNode);
+        }
+    };
+    var FlowchartComponent_1;
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
@@ -16655,7 +8260,7 @@ var FlowchartComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], FlowchartComponent.prototype, "switch", void 0);
-    FlowchartComponent = __decorate([
+    FlowchartComponent = FlowchartComponent_1 = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'flowchart',
             template: __webpack_require__(/*! ./flowchart.component.html */ "./src/app/ngFlowchart-svg/flowchart.component.html"),
@@ -16778,7 +8383,7 @@ var ACTIONS;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
+module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
 
 /***/ }),
 
@@ -16789,7 +8394,7 @@ module.exports = "<!-- svg group for the selectable and draggable area of normal
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/*\r\n$color-main: #2D4885;\r\n$color-accent: #50ABB9;\r\n$color-muted: #88D4DD;\r\n$color-text-accent: #DC772F;\r\n*/\n.node {\n  fill: #fafafa;\n  stroke-width: 2px;\n  stroke: #505050;\n  stroke-opacity: 1;\n  stroke-linecap: round;\n  stroke-linejoin: round; }\n.node.node--disabled {\n    stroke: #505050;\n    stroke-opacity: 0.5;\n    fill-opacity: 0.5; }\n.node.node--selected {\n    stroke: #000096; }\n.node.node--error {\n    stroke: red; }\n.textdiv {\n  text-align: center;\n  width: 94px; }\n.foreignObject {\n  width: 100;\n  height: 80; }\ntextarea {\n  font-family: sans-serif;\n  background: transparent;\n  display: inline-block;\n  border: none;\n  font-size: 14px;\n  width: 100%;\n  height: 70px;\n  font-weight: 600;\n  text-align: center;\n  vertical-align: middle;\n  resize: none;\n  overflow: hidden;\n  color: #505050; }\ntextarea.selected {\n    color: #000096; }\n.textarea_startend {\n  font-size: 14px;\n  font-weight: 600;\n  color: #505050;\n  height: 20px;\n  pointer-events: none; }\n.inputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n.outputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n"
+module.exports = "/*\r\n$color-main: #2D4885;\r\n$color-accent: #50ABB9;\r\n$color-muted: #88D4DD;\r\n$color-text-accent: #DC772F;\r\n*/\n.node {\n  fill: #fafafa;\n  stroke-width: 2px;\n  stroke: #505050;\n  stroke-opacity: 1;\n  stroke-linecap: round;\n  stroke-linejoin: round; }\n.node.node--disabled {\n    stroke-opacity: 0.5;\n    fill-opacity: 0.5; }\n.node.node--selected {\n    stroke: #000096; }\n.node.node--error {\n    stroke: red; }\n.textdiv {\n  text-align: center;\n  width: 94px; }\n.foreignObject {\n  width: 100;\n  height: 80; }\ntextarea {\n  font-family: sans-serif;\n  background: transparent;\n  display: inline-block;\n  border: none;\n  font-size: 14px;\n  width: 100%;\n  height: 70px;\n  font-weight: 600;\n  text-align: center;\n  vertical-align: middle;\n  resize: none;\n  overflow: hidden;\n  color: #505050; }\ntextarea.selected {\n    color: #000096; }\ntextarea.disabled {\n    opacity: 0.5; }\n.textarea_startend {\n  font-size: 14px;\n  font-weight: 600;\n  color: #505050;\n  height: 20px;\n  pointer-events: none; }\n.inputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n.outputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n"
 
 /***/ }),
 
@@ -17127,118 +8732,89 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 
 
+var AsyncFunction = Object.getPrototypeOf(function () {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}).constructor;
 var ExecuteComponent = /** @class */ (function () {
     function ExecuteComponent() {
     }
     ExecuteComponent.prototype.execute = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var e_1, _a, e_2, _b, e_3, _c, _d, _e, node, funcStrings, _f, _g, func, _h, _j, e_2_1, _k, _l, node, e_3_1;
-            return __generator(this, function (_m) {
-                switch (_m.label) {
-                    case 0:
-                        this.globalVars = '';
-                        try {
-                            // reset input of all nodes except start
-                            for (_d = __values(this.flowchart.nodes), _e = _d.next(); !_e.done; _e = _d.next()) {
-                                node = _e.value;
-                                if (node.type != 'start') {
-                                    if (node.input.edges) {
-                                        node.input.value = undefined;
+            var p;
+            var _this = this;
+            return __generator(this, function (_a) {
+                p = new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
+                    var _i, _a, node, funcStrings, _b, _c, func, _d, _e, _f, _g, node;
+                    return __generator(this, function (_h) {
+                        switch (_h.label) {
+                            case 0:
+                                this.globalVars = '';
+                                // @ts-ignore
+                                console.logs = [];
+                                // reset input of all nodes except start
+                                for (_i = 0, _a = this.flowchart.nodes; _i < _a.length; _i++) {
+                                    node = _a[_i];
+                                    if (node.type != 'start') {
+                                        if (node.input.edges) {
+                                            node.input.value = undefined;
+                                        }
                                     }
                                 }
-                            }
+                                // order the flowchart
+                                if (!this.flowchart.ordered) {
+                                    _models_flowchart__WEBPACK_IMPORTED_MODULE_1__["FlowchartUtils"].orderNodes(this.flowchart);
+                                }
+                                funcStrings = {};
+                                _b = 0, _c = this.flowchart.functions;
+                                _h.label = 1;
+                            case 1:
+                                if (!(_b < _c.length)) return [3 /*break*/, 4];
+                                func = _c[_b];
+                                _d = funcStrings;
+                                _e = func.name;
+                                return [4 /*yield*/, _models_code__WEBPACK_IMPORTED_MODULE_2__["CodeUtils"].getFunctionString(func)];
+                            case 2:
+                                _d[_e] = _h.sent();
+                                _h.label = 3;
+                            case 3:
+                                _b++;
+                                return [3 /*break*/, 1];
+                            case 4:
+                                _f = 0, _g = this.flowchart.nodes;
+                                _h.label = 5;
+                            case 5:
+                                if (!(_f < _g.length)) return [3 /*break*/, 8];
+                                node = _g[_f];
+                                if (!node.enabled) {
+                                    node.output.value = undefined;
+                                    return [3 /*break*/, 7];
+                                }
+                                return [4 /*yield*/, this.executeNode(node, funcStrings)];
+                            case 6:
+                                _h.sent();
+                                _h.label = 7;
+                            case 7:
+                                _f++;
+                                return [3 /*break*/, 5];
+                            case 8:
+                                resolve('');
+                                return [2 /*return*/];
                         }
-                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                        finally {
-                            try {
-                                if (_e && !_e.done && (_a = _d.return)) _a.call(_d);
-                            }
-                            finally { if (e_1) throw e_1.error; }
-                        }
-                        // order the flowchart
-                        if (!this.flowchart.ordered) {
-                            _models_flowchart__WEBPACK_IMPORTED_MODULE_1__["FlowchartUtils"].orderNodes(this.flowchart);
-                        }
-                        funcStrings = {};
-                        _m.label = 1;
-                    case 1:
-                        _m.trys.push([1, 6, 7, 8]);
-                        _f = __values(this.flowchart.functions), _g = _f.next();
-                        _m.label = 2;
-                    case 2:
-                        if (!!_g.done) return [3 /*break*/, 5];
-                        func = _g.value;
-                        _h = funcStrings;
-                        _j = func.name;
-                        return [4 /*yield*/, _models_code__WEBPACK_IMPORTED_MODULE_2__["CodeUtils"].getFunctionString(func)];
-                    case 3:
-                        _h[_j] = _m.sent();
-                        _m.label = 4;
-                    case 4:
-                        _g = _f.next();
-                        return [3 /*break*/, 2];
-                    case 5: return [3 /*break*/, 8];
-                    case 6:
-                        e_2_1 = _m.sent();
-                        e_2 = { error: e_2_1 };
-                        return [3 /*break*/, 8];
-                    case 7:
-                        try {
-                            if (_g && !_g.done && (_b = _f.return)) _b.call(_f);
-                        }
-                        finally { if (e_2) throw e_2.error; }
-                        return [7 /*endfinally*/];
-                    case 8:
-                        _m.trys.push([8, 13, 14, 15]);
-                        _k = __values(this.flowchart.nodes), _l = _k.next();
-                        _m.label = 9;
-                    case 9:
-                        if (!!_l.done) return [3 /*break*/, 12];
-                        node = _l.value;
-                        if (!node.enabled) {
-                            node.output.value = undefined;
-                            return [3 /*break*/, 11];
-                        }
-                        return [4 /*yield*/, this.executeNode(node, funcStrings)];
-                    case 10:
-                        _m.sent();
-                        _m.label = 11;
-                    case 11:
-                        _l = _k.next();
-                        return [3 /*break*/, 9];
-                    case 12: return [3 /*break*/, 15];
-                    case 13:
-                        e_3_1 = _m.sent();
-                        e_3 = { error: e_3_1 };
-                        return [3 /*break*/, 15];
-                    case 14:
-                        try {
-                            if (_l && !_l.done && (_c = _k.return)) _c.call(_k);
-                        }
-                        finally { if (e_3) throw e_3.error; }
-                        return [7 /*endfinally*/];
-                    case 15: return [2 /*return*/];
-                }
+                    });
+                }); });
+                return [2 /*return*/, p];
             });
         });
     };
     ExecuteComponent.prototype.executeNode = function (node, funcStrings) {
         return __awaiter(this, void 0, void 0, function () {
-            var params, fnString, hasFunctions, funcName, mergeString, fn, result, constant, ex_1, prodWithError_1, markError_1, error;
+            var params, fnString, hasFunctions, funcName, mergeString, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -17261,13 +8837,14 @@ var ExecuteComponent = /** @class */ (function () {
                             mergeString = _models_code__WEBPACK_IMPORTED_MODULE_2__["CodeUtils"].mergeInputs.toString();
                             fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) + '\n\n' + fnString;
                         }
-                        console.log("/*    " + node.name.toUpperCase() + "    */\n\n" + fnString);
+                        console.log(" ______________________________________________________________\n            \n/*    " + node.name.toUpperCase() + "    */\n            \n" + fnString + "--------------------------\n");
                         fn = new Function('__modules__', '__params__', fnString);
                         result = fn(_modules__WEBPACK_IMPORTED_MODULE_3__, params);
                         node.output.value = result;
                         if (node.type == 'start') {
                             for (constant in params["constants"]) {
-                                this.globalVars += "const " + constant + " = " + params["constants"][constant] + ";\n";
+                                constString = JSON.stringify(params["constants"][constant]);
+                                this.globalVars += "const " + constant + " = " + constString + ";\n";
                             }
                             this.globalVars += '\n';
                         }
@@ -17587,16 +9164,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 
@@ -17606,71 +9173,34 @@ var SaveFileComponent = /** @class */ (function () {
     }
     // todo: save file
     SaveFileComponent.prototype.download = function () {
-        var e_1, _a, e_2, _b, e_3, _c, e_4, _d;
         if (!this.file.flowchart.ordered) {
             _models_flowchart__WEBPACK_IMPORTED_MODULE_3__["FlowchartUtils"].orderNodes(this.file.flowchart);
         }
         var savedfile = circular_json__WEBPACK_IMPORTED_MODULE_2__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](this.file));
-        try {
-            for (var _e = __values(savedfile.flowchart.nodes), _f = _e.next(); !_f.done; _f = _e.next()) {
-                var node = _f.value;
-                if (node.input.hasOwnProperty('value')) {
-                    node.input.value = undefined;
-                }
-                if (node.output.hasOwnProperty('value')) {
-                    node.output.value = undefined;
-                }
-                try {
-                    for (var _g = __values(node.state.procedure), _h = _g.next(); !_h.done; _h = _g.next()) {
-                        var prod = _h.value;
-                        prod.selected = false;
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (_h && !_h.done && (_b = _g.return)) _b.call(_g);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
-                node.state.procedure = [];
+        for (var _i = 0, _a = savedfile.flowchart.nodes; _i < _a.length; _i++) {
+            var node = _a[_i];
+            if (node.input.hasOwnProperty('value')) {
+                node.input.value = undefined;
             }
+            if (node.output.hasOwnProperty('value')) {
+                node.output.value = undefined;
+            }
+            for (var _b = 0, _c = node.state.procedure; _b < _c.length; _b++) {
+                var prod = _c[_b];
+                prod.selected = false;
+            }
+            node.state.procedure = [];
         }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_f && !_f.done && (_a = _e.return)) _a.call(_e);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-        try {
-            // **** need to modify this when changing the input's constant function: 
-            // **** this part resets the value of the last argument of the function when saving the file
-            for (var _j = __values(savedfile.flowchart.nodes[0].procedure), _k = _j.next(); !_k.done; _k = _j.next()) {
-                var prod = _k.value;
-                prod.args[prod.argCount - 1].value = undefined;
-            }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (_k && !_k.done && (_c = _j.return)) _c.call(_j);
-            }
-            finally { if (e_3) throw e_3.error; }
+        // **** need to modify this when changing the input's constant function: 
+        // **** this part resets the value of the last argument of the function when saving the file
+        for (var _d = 0, _e = savedfile.flowchart.nodes[0].procedure; _d < _e.length; _d++) {
+            var prod = _e[_d];
+            prod.args[prod.argCount - 1].value = undefined;
         }
         savedfile.flowchart.meta.selected_nodes = [0];
-        try {
-            for (var _l = __values(savedfile.flowchart.edges), _m = _l.next(); !_m.done; _m = _l.next()) {
-                var edge = _m.value;
-                edge.selected = false;
-            }
-        }
-        catch (e_4_1) { e_4 = { error: e_4_1 }; }
-        finally {
-            try {
-                if (_m && !_m.done && (_d = _l.return)) _d.call(_l);
-            }
-            finally { if (e_4) throw e_4.error; }
+        for (var _f = 0, _g = savedfile.flowchart.edges; _f < _g.length; _f++) {
+            var edge = _g[_f];
+            edge.selected = false;
         }
         savedfile.name = savedfile.flowchart.name;
         var fileString = circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](savedfile);
@@ -18059,7 +9589,7 @@ var procedureInputViewerComponent = /** @class */ (function () {
     }
     procedureInputViewerComponent.prototype.editOptions = function () { };
     procedureInputViewerComponent.prototype.onFileChange = function (event) {
-        this.prod.args[this.prod.args.length - 1] = event.target.files[0];
+        this.prod.args[this.prod.argCount - 1].value = event.target.files[0];
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -18124,16 +9654,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ModuleAware", function() { return ModuleAware; });
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
+//import * as doc from '@assets/typedoc-json/doc.json';
+var doc = __webpack_require__(/*! @assets/typedoc-json/doc.json */ "./src/assets/typedoc-json/doc.json");
 
 // todo: bug fix for defaults
 function extract_params(func) {
@@ -18158,8 +9680,69 @@ function extract_params(func) {
     }
     return [final_result, hasReturn];
 }
+function extract_docs() {
+    var docs = {};
+    for (var _i = 0, _a = doc.children; _i < _a.length; _i++) {
+        var mod = _a[_i];
+        if (mod.name.substr(1, 1) == '_' || mod.name == '"index"') {
+            continue;
+        }
+        var modName = mod.name.substr(1, mod.name.length - 2);
+        var moduleDoc = {};
+        for (var _b = 0, _c = mod.children; _b < _c.length; _b++) {
+            var func = _c[_b];
+            var fn = {};
+            fn["name"] = func.name;
+            fn["description"] = func["signatures"][0].comment.shortText;
+            if (func["signatures"][0].comment.tags) {
+                for (var _d = 0, _e = func["signatures"][0].comment.tags; _d < _e.length; _d++) {
+                    var fnTag = _e[_d];
+                    if (fnTag.tag == 'summary')
+                        fn["summary"] = fnTag.text;
+                }
+            }
+            fn["returns"] = func["signatures"][0].comment.returns;
+            if (fn["returns"])
+                fn["returns"] = fn["returns"].trim();
+            fn["parameters"] = [];
+            if (func["signatures"][0].parameters) {
+                for (var _f = 0, _g = func["signatures"][0].parameters; _f < _g.length; _f++) {
+                    var param = _g[_f];
+                    var namecheck = true;
+                    for (var systemVarName in _modules__WEBPACK_IMPORTED_MODULE_0__["_parameterTypes"]) {
+                        if (param.name == _modules__WEBPACK_IMPORTED_MODULE_0__["_parameterTypes"][systemVarName]) {
+                            namecheck = false;
+                            break;
+                        }
+                    }
+                    if (!namecheck)
+                        continue;
+                    var pr = {};
+                    pr["name"] = param.name;
+                    pr["description"] = param.comment.shortText || param.comment.text;
+                    if (param.type.type == 'array') {
+                        pr["type"] = param.type.elementType.name + "[]";
+                    }
+                    else if (param.type.type == "intrinsic") {
+                        pr["type"] = param.type.name;
+                    }
+                    else {
+                        /**
+                         * TODO: Update param type here
+                         */
+                        console.log('param type requires updating:', param.type);
+                        pr["type"] = param.type.type;
+                    }
+                    fn["parameters"].push(pr);
+                }
+            }
+            moduleDoc[func.name] = fn;
+        }
+        docs[modName] = moduleDoc;
+    }
+    return docs;
+}
 function ModuleAware(constructor) {
-    var e_1, _a;
     var module_list = [];
     for (var m_name in _modules__WEBPACK_IMPORTED_MODULE_0__) {
         if (m_name[0] == '_' || m_name == 'gs' || m_name == 'gsConstructor') {
@@ -18168,30 +9751,22 @@ function ModuleAware(constructor) {
         var modObj = {};
         modObj.module = m_name;
         modObj.functions = [];
-        try {
-            for (var _b = __values(Object.keys(_modules__WEBPACK_IMPORTED_MODULE_0__[m_name])), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var fn_name = _c.value;
-                var func = _modules__WEBPACK_IMPORTED_MODULE_0__[m_name][fn_name];
-                var fnObj = {};
-                fnObj.module = m_name;
-                fnObj.name = fn_name;
-                fnObj.argCount = func.length;
-                var args = extract_params(func);
-                fnObj.args = args[0];
-                fnObj.hasReturn = args[1];
-                modObj.functions.push(fnObj);
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (var _i = 0, _a = Object.keys(_modules__WEBPACK_IMPORTED_MODULE_0__[m_name]); _i < _a.length; _i++) {
+            var fn_name = _a[_i];
+            var func = _modules__WEBPACK_IMPORTED_MODULE_0__[m_name][fn_name];
+            var fnObj = {};
+            fnObj.module = m_name;
+            fnObj.name = fn_name;
+            fnObj.argCount = func.length;
+            var args = extract_params(func);
+            fnObj.args = args[0];
+            fnObj.hasReturn = args[1];
+            modObj.functions.push(fnObj);
         }
         module_list.push(modObj);
     }
     constructor.prototype.Modules = module_list;
+    constructor.prototype.ModulesDoc = extract_docs();
 }
 
 
@@ -18468,11 +10043,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CodeUtils", function() { return CodeUtils; });
 /* harmony import */ var _models_procedure__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @models/procedure */ "./src/app/shared/models/procedure/index.ts");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _models_port__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/port */ "./src/app/shared/models/port/index.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -18509,17 +10083,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-
 
 
 
@@ -18529,184 +10092,211 @@ var CodeUtils = /** @class */ (function () {
     function CodeUtils() {
     }
     CodeUtils.getProcedureCode = function (prod, existingVars, addProdArr) {
-        var e_1, _a, e_2, _b, e_3, _c, e_4, _d, e_5, _e;
-        if (prod.enabled === false)
-            return '';
-        prod.hasError = false;
-        var codeStr = [];
-        var args = prod.args;
-        var prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
-        if (addProdArr && prod.type != _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Else && prod.type != _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Elseif) {
-            codeStr.push("__params__.currentProcedure[0] = \"" + prod.ID + "\";");
-        }
-        switch (prod.type) {
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Variable:
-                if (args[0].value.indexOf('__params__') != -1 || args[1].value.indexOf('__params__') != -1)
-                    throw new Error("Unexpected Identifier");
-                codeStr.push("" + prefix + args[0].value + " = " + args[1].value + ";");
-                if (prefix === 'let ') {
-                    existingVars.push(args[0].value);
+        return __awaiter(this, void 0, void 0, function () {
+            var codeStr, args, prefix, _a, argVals, _loop_1, _i, _b, arg, argValues, fnCall, argsVals, fn, _c, _d, p, _e, _f;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
+                    case 0:
+                        if (prod.enabled === false)
+                            return [2 /*return*/, ''];
+                        prod.hasError = false;
+                        codeStr = [];
+                        args = prod.args;
+                        prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
+                        codeStr.push('');
+                        if (addProdArr && prod.type != _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Else && prod.type != _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Elseif) {
+                            codeStr.push("__params__.currentProcedure[0] = \"" + prod.ID + "\";");
+                        }
+                        _a = prod.type;
+                        switch (_a) {
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Variable: return [3 /*break*/, 1];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].If: return [3 /*break*/, 2];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Else: return [3 /*break*/, 3];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Elseif: return [3 /*break*/, 4];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Foreach: return [3 /*break*/, 5];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].While: return [3 /*break*/, 6];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Break: return [3 /*break*/, 7];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Continue: return [3 /*break*/, 8];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Function: return [3 /*break*/, 9];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Imported: return [3 /*break*/, 15];
+                        }
+                        return [3 /*break*/, 16];
+                    case 1:
+                        if (args[0].value.indexOf('__params__') != -1 || args[1].value.indexOf('__params__') != -1)
+                            throw new Error("Unexpected Identifier");
+                        codeStr.push("" + prefix + args[0].value + " = " + args[1].value + ";");
+                        if (prefix === 'let ') {
+                            existingVars.push(args[0].value);
+                        }
+                        return [3 /*break*/, 16];
+                    case 2:
+                        if (args[0].value.indexOf('__params__') != -1)
+                            throw new Error("Unexpected Identifier");
+                        codeStr.push("if (" + args[0].value + "){");
+                        return [3 /*break*/, 16];
+                    case 3:
+                        codeStr.push("else {");
+                        return [3 /*break*/, 16];
+                    case 4:
+                        if (args[0].value.indexOf('__params__') != -1)
+                            throw new Error("Unexpected Identifier");
+                        codeStr.push("else if(" + args[0].value + "){");
+                        return [3 /*break*/, 16];
+                    case 5:
+                        //codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
+                        if (args[0].value.indexOf('__params__') != -1)
+                            throw new Error("Unexpected Identifier");
+                        codeStr.push("for (" + prefix + " " + args[0].value + " of " + args[1].value + "){");
+                        return [3 /*break*/, 16];
+                    case 6:
+                        if (args[0].value.indexOf('__params__') != -1)
+                            throw new Error("Unexpected Identifier");
+                        codeStr.push("while (" + args[0].value + "){");
+                        return [3 /*break*/, 16];
+                    case 7:
+                        codeStr.push("break;");
+                        return [3 /*break*/, 16];
+                    case 8:
+                        codeStr.push("continue;");
+                        return [3 /*break*/, 16];
+                    case 9:
+                        argVals = [];
+                        _loop_1 = function (arg) {
+                            var val, p, p;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        if (!(arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].input)) return [3 /*break*/, 5];
+                                        val = arg.value || arg.default;
+                                        if (!(prod.meta.inputMode == _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].URL)) return [3 /*break*/, 2];
+                                        p = new Promise(function (resolve) {
+                                            var request = new XMLHttpRequest();
+                                            request.open('GET', arg.value || arg.default);
+                                            request.onload = function () {
+                                                resolve(request.responseText);
+                                            };
+                                            request.send();
+                                        });
+                                        return [4 /*yield*/, p];
+                                    case 1:
+                                        val = _a.sent();
+                                        return [3 /*break*/, 4];
+                                    case 2:
+                                        if (!(prod.meta.inputMode == _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].File)) return [3 /*break*/, 4];
+                                        p = new Promise(function (resolve) {
+                                            var reader = new FileReader();
+                                            reader.onload = function () {
+                                                resolve(reader.result);
+                                            };
+                                            reader.readAsText(arg.value || arg.default);
+                                        });
+                                        return [4 /*yield*/, p];
+                                    case 3:
+                                        val = _a.sent();
+                                        return [3 /*break*/, 4];
+                                    case 4:
+                                        argVals.push(val);
+                                        return [2 /*return*/, "continue"];
+                                    case 5:
+                                        if (arg.value && arg.value.indexOf('__params__') != -1)
+                                            throw new Error("Unexpected Identifier");
+                                        if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].constList) {
+                                            argVals.push("__params__.constants");
+                                            return [2 /*return*/, "continue"];
+                                        }
+                                        ;
+                                        if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].model) {
+                                            argVals.push("__params__.model");
+                                            return [2 /*return*/, "continue"];
+                                        }
+                                        if (arg.value && arg.value.substring(0, 1) == '@') {
+                                            if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT') {
+                                                argVals.push('"' + arg.value.replace(/"/g, "'") + '"');
+                                                return [2 /*return*/, "continue"];
+                                            }
+                                            argVals.push('__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, "'") + '" )');
+                                            return [2 /*return*/, "continue"];
+                                        }
+                                        //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
+                                        argVals.push(arg.value);
+                                        return [2 /*return*/];
+                                }
+                            });
+                        };
+                        _i = 0, _b = args.slice(1);
+                        _g.label = 10;
+                    case 10:
+                        if (!(_i < _b.length)) return [3 /*break*/, 13];
+                        arg = _b[_i];
+                        return [5 /*yield**/, _loop_1(arg)];
+                    case 11:
+                        _g.sent();
+                        _g.label = 12;
+                    case 12:
+                        _i++;
+                        return [3 /*break*/, 10];
+                    case 13:
+                        argValues = argVals.join(',');
+                        return [4 /*yield*/, argValues];
+                    case 14:
+                        _g.sent();
+                        fnCall = "__modules__." + prod.meta.module + "." + prod.meta.name + "( " + argValues + " )";
+                        if (prod.meta.module.toUpperCase() == 'OUTPUT') {
+                            codeStr.push("return " + fnCall + ";");
+                        }
+                        else if (args[0].name == '__none__') {
+                            codeStr.push(fnCall + ";");
+                        }
+                        else {
+                            codeStr.push("" + prefix + args[0].value + " = " + fnCall + ";");
+                            if (prefix === 'let ') {
+                                existingVars.push(args[0].value);
+                            }
+                        }
+                        return [3 /*break*/, 16];
+                    case 15:
+                        argsVals = args.slice(1).map(function (arg) { return arg.value; }).join(',');
+                        fn = prod.meta.name + "(__params__, " + argsVals + " )";
+                        codeStr.push("" + prefix + args[0].value + " = " + fn + ";");
+                        if (prefix === 'let ') {
+                            existingVars.push(args[0].value);
+                        }
+                        return [3 /*break*/, 16];
+                    case 16:
+                        if (!prod.children) return [3 /*break*/, 21];
+                        _c = 0, _d = prod.children;
+                        _g.label = 17;
+                    case 17:
+                        if (!(_c < _d.length)) return [3 /*break*/, 20];
+                        p = _d[_c];
+                        _f = (_e = codeStr).push;
+                        return [4 /*yield*/, CodeUtils.getProcedureCode(p, existingVars, addProdArr)];
+                    case 18:
+                        _f.apply(_e, [_g.sent()]);
+                        _g.label = 19;
+                    case 19:
+                        _c++;
+                        return [3 /*break*/, 17];
+                    case 20:
+                        codeStr.push("}");
+                        _g.label = 21;
+                    case 21:
+                        if (prod.print) {
+                            codeStr.push("console.log('" + prod.args[0].value + ": '+ " + prod.args[0].value + ");");
+                            //codeStr.push(`wait(5000);`);
+                        }
+                        return [2 /*return*/, codeStr.join('\n')];
                 }
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].If:
-                if (args[0].value.indexOf('__params__') != -1)
-                    throw new Error("Unexpected Identifier");
-                codeStr.push("if (" + args[0].value + "){");
-                try {
-                    for (var _f = __values(prod.children), _g = _f.next(); !_g.done; _g = _f.next()) {
-                        var p = _g.value;
-                        codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_g && !_g.done && (_a = _f.return)) _a.call(_f);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-                codeStr.push("}");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Else:
-                codeStr.push("else {");
-                try {
-                    for (var _h = __values(prod.children), _j = _h.next(); !_j.done; _j = _h.next()) {
-                        var p = _j.value;
-                        codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (_j && !_j.done && (_b = _h.return)) _b.call(_h);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
-                codeStr.push("}");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Elseif:
-                if (args[0].value.indexOf('__params__') != -1)
-                    throw new Error("Unexpected Identifier");
-                codeStr.push("else if(" + args[0].value + "){");
-                try {
-                    for (var _k = __values(prod.children), _l = _k.next(); !_l.done; _l = _k.next()) {
-                        var p = _l.value;
-                        codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                    }
-                }
-                catch (e_3_1) { e_3 = { error: e_3_1 }; }
-                finally {
-                    try {
-                        if (_l && !_l.done && (_c = _k.return)) _c.call(_k);
-                    }
-                    finally { if (e_3) throw e_3.error; }
-                }
-                codeStr.push("}");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Foreach:
-                //codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
-                if (args[0].value.indexOf('__params__') != -1)
-                    throw new Error("Unexpected Identifier");
-                codeStr.push("for (" + prefix + " " + args[0].value + " of " + args[1].value + "){");
-                try {
-                    for (var _m = __values(prod.children), _o = _m.next(); !_o.done; _o = _m.next()) {
-                        var p = _o.value;
-                        codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                    }
-                }
-                catch (e_4_1) { e_4 = { error: e_4_1 }; }
-                finally {
-                    try {
-                        if (_o && !_o.done && (_d = _m.return)) _d.call(_m);
-                    }
-                    finally { if (e_4) throw e_4.error; }
-                }
-                codeStr.push("}");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].While:
-                if (args[0].value.indexOf('__params__') != -1)
-                    throw new Error("Unexpected Identifier");
-                codeStr.push("while (" + args[0].value + "){");
-                try {
-                    for (var _p = __values(prod.children), _q = _p.next(); !_q.done; _q = _p.next()) {
-                        var p = _q.value;
-                        codeStr.push(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
-                    }
-                }
-                catch (e_5_1) { e_5 = { error: e_5_1 }; }
-                finally {
-                    try {
-                        if (_q && !_q.done && (_e = _p.return)) _e.call(_p);
-                    }
-                    finally { if (e_5) throw e_5.error; }
-                }
-                codeStr.push("}");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Break:
-                codeStr.push("break;");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Continue:
-                codeStr.push("continue;");
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Function:
-                var argValues = args.slice(1).map(function (arg) {
-                    // if __params__ is present in the value of the argument, throw unexpected identifier
-                    if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].input) {
-                        console.log(arg.value, arg.default);
-                        var val = arg.value || arg.default;
-                        return val;
-                    }
-                    ;
-                    if (arg.value && arg.value.indexOf('__params__') != -1)
-                        throw new Error("Unexpected Identifier");
-                    if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].constList)
-                        return "__params__.constants";
-                    if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].model)
-                        return "__params__.model";
-                    if (arg.value && arg.value.substring(0, 1) == '@') {
-                        if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT')
-                            return '"' + arg.value.replace(/"/g, "'") + '"';
-                        return '__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, "'") + '" )';
-                    }
-                    //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
-                    return arg.value;
-                }).join(',');
-                var fnCall = "__modules__." + prod.meta.module + "." + prod.meta.name + "( " + argValues + " )";
-                if (prod.meta.module.toUpperCase() == 'OUTPUT') {
-                    codeStr.push("return " + fnCall + ";");
-                }
-                else if (args[0].name == '__none__') {
-                    codeStr.push(fnCall + ";");
-                }
-                else {
-                    codeStr.push("" + prefix + args[0].value + " = " + fnCall + ";");
-                    if (prefix === 'let ') {
-                        existingVars.push(args[0].value);
-                    }
-                }
-                break;
-            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Imported:
-                //('args: ',args)
-                var argsVals = args.slice(1).map(function (arg) { return arg.value; }).join(',');
-                var fn = prod.meta.name + "( " + argsVals + " )";
-                codeStr.push("" + prefix + args[0].value + " = " + fn + ";");
-                if (prefix === 'let ') {
-                    existingVars.push(args[0].value);
-                }
-                break;
-        }
-        if (prod.print) {
-            codeStr.push("console.log('" + prod.args[0].value + ":'," + prod.args[0].value + ")");
-        }
-        return codeStr.join('\n');
+            });
+        });
     };
     CodeUtils.loadFile = function (f) {
-        var stream = rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"].create(function (observer) {
+        var stream = rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"].create(function (observer) {
             var request = new XMLHttpRequest();
             request.open('GET', f.download_url);
             request.onload = function () {
                 if (request.status === 200) {
-                    var f_1 = circular_json__WEBPACK_IMPORTED_MODULE_2__["parse"](request.responseText);
+                    var f_1 = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](request.responseText);
                     observer.next(f_1);
                     observer.complete();
                 }
@@ -18724,50 +10314,58 @@ var CodeUtils = /** @class */ (function () {
         });
     };
     CodeUtils.mergeInputs = function (models) {
-        var e_6, _a;
-        var result = new gs_json__WEBPACK_IMPORTED_MODULE_3__["Model"]();
-        try {
-            for (var models_1 = __values(models), models_1_1 = models_1.next(); !models_1_1.done; models_1_1 = models_1.next()) {
-                var model = models_1_1.value;
-                if (!model || model.constructor != _modules__WEBPACK_IMPORTED_MODULE_4__["gsConstructor"])
-                    continue;
-                result.merge(model);
-            }
-        }
-        catch (e_6_1) { e_6 = { error: e_6_1 }; }
-        finally {
-            try {
-                if (models_1_1 && !models_1_1.done && (_a = models_1.return)) _a.call(models_1);
-            }
-            finally { if (e_6) throw e_6.error; }
+        var result = _modules__WEBPACK_IMPORTED_MODULE_4__["functions"].__new__();
+        for (var _i = 0, models_1 = models; _i < models_1.length; _i++) {
+            var model = models_1[_i];
+            _modules__WEBPACK_IMPORTED_MODULE_4__["functions"].__merge__(result, model);
         }
         return result;
     };
     CodeUtils.getInputValue = function (inp, node) {
-        return __awaiter(this, void 0, void 0, function () {
-            var input;
-            return __generator(this, function (_a) {
-                if (node.type == 'start' || inp.edges.length == 0) {
-                    input = new gs_json__WEBPACK_IMPORTED_MODULE_3__["Model"]();
-                }
-                else {
-                    input = CodeUtils.mergeInputs(inp.edges.map(function (edge) { return edge.source.value; }));
-                    /*
-                    if (input.constructor === gsConstructor) {
-                        input = `new __MODULES__.gs.Model(${input.toJSON()})`
-                    } else {
-                        // do nothing
+        var input;
+        if (node.type == 'start' || inp.edges.length == 0) {
+            input = _modules__WEBPACK_IMPORTED_MODULE_4__["functions"].__new__();
+            /*
+            if (inp.meta.mode == InputType.URL){
+                const p = new Promise((resolve) => {
+                    let request = new XMLHttpRequest();
+                    request.open('GET', inp.value || inp.default);
+                    request.onload = () => {
+                        resolve(request.responseText);
                     }
-                    */
-                }
-                return [2 /*return*/, input];
-            });
-        });
+                    request.send();
+                });
+                input = await p;
+            } else if (inp.meta.mode == InputType.File) {
+                const p = new Promise((resolve) => {
+                    let reader = new FileReader();
+                    reader.onload = function(){
+                        resolve(reader.result)
+                    }
+                    reader.readAsText(inp.value || inp.default)
+                });
+                input = await p;
+            } else {
+                input = inp.value || inp.default;
+            }
+            */
+        }
+        else {
+            input = CodeUtils.mergeInputs(inp.edges.map(function (edge) { return edge.source.value; }));
+            /*
+            if (input.constructor === gsConstructor) {
+                input = `new __MODULES__.gs.Model(${input.toJSON()})`
+            } else {
+                // do nothing
+            }
+            */
+        }
+        return input;
     };
     CodeUtils.getNodeCode = function (node, addProdArr) {
         if (addProdArr === void 0) { addProdArr = false; }
         return __awaiter(this, void 0, void 0, function () {
-            var e_7, _a, codeStr, varsDefined, input, _b, _c, prod;
+            var codeStr, varsDefined, input, _i, _a, prod, _b, _c;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -18784,48 +10382,46 @@ var CodeUtils = /** @class */ (function () {
                         if (node.type == 'start') {
                             codeStr.push('__params__.constants = {};\n');
                         }
-                        try {
-                            // procedure
-                            for (_b = __values(node.procedure), _c = _b.next(); !_c.done; _c = _b.next()) {
-                                prod = _c.value;
-                                codeStr.push(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr));
-                            }
-                        }
-                        catch (e_7_1) { e_7 = { error: e_7_1 }; }
-                        finally {
-                            try {
-                                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                            }
-                            finally { if (e_7) throw e_7.error; }
-                        }
+                        _i = 0, _a = node.procedure;
+                        _d.label = 3;
+                    case 3:
+                        if (!(_i < _a.length)) return [3 /*break*/, 6];
+                        prod = _a[_i];
+                        _c = (_b = codeStr).push;
+                        return [4 /*yield*/, CodeUtils.getProcedureCode(prod, varsDefined, addProdArr)];
+                    case 4:
+                        _c.apply(_b, [_d.sent()]);
+                        _d.label = 5;
+                    case 5:
+                        _i++;
+                        return [3 /*break*/, 3];
+                    case 6:
                         ;
                         if (node.type == 'end' && node.procedure.length > 0) {
                             return [2 /*return*/, "{\n" + codeStr.join('\n') + "\n}"];
                         }
-                        return [2 /*return*/, "{\n" + codeStr.join('\n') + "\nreturn __params__.model;\n}"];
+                        return [2 /*return*/, "\n" + codeStr.join('\n') + "\n\nreturn __params__.model;\n"];
                 }
             });
         });
     };
     CodeUtils.getFunctionString = function (func) {
         return __awaiter(this, void 0, void 0, function () {
-            var e_8, _a, fullCode, fnCode, _b, _c, node, code, e_8_1;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var fullCode, fnCode, _i, _a, node, code, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         fullCode = '';
-                        fnCode = "function " + func.name + "(" + func.args.map(function (arg) { return arg.name; }).join(',') + "){\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":{}};\n";
-                        _d.label = 1;
+                        fnCode = "function " + func.name + "(__mainParams__," + func.args.map(function (arg) { return arg.name; }).join(',') + "){\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":__modules__.Model.New()};\n";
+                        _i = 0, _a = func.module.nodes;
+                        _c.label = 1;
                     case 1:
-                        _d.trys.push([1, 6, 7, 8]);
-                        _b = __values(func.module.nodes), _c = _b.next();
-                        _d.label = 2;
-                    case 2:
-                        if (!!_c.done) return [3 /*break*/, 5];
-                        node = _c.value;
+                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                        node = _a[_i];
+                        _b = '{';
                         return [4 /*yield*/, CodeUtils.getNodeCode(node, false)];
-                    case 3:
-                        code = _d.sent();
+                    case 2:
+                        code = _b + (_c.sent()) + '}';
                         fullCode += "function " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ")" + code + "\n\n";
                         if (node.type === 'start') {
                             //fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
@@ -18850,24 +10446,14 @@ var CodeUtils = /** @class */ (function () {
             
                         */
                         if (node.type === 'end') {
+                            fnCode += "\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n";
                             fnCode += "return result_" + node.id + ";\n";
                         }
-                        _d.label = 4;
+                        _c.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
                     case 4:
-                        _c = _b.next();
-                        return [3 /*break*/, 2];
-                    case 5: return [3 /*break*/, 8];
-                    case 6:
-                        e_8_1 = _d.sent();
-                        e_8 = { error: e_8_1 };
-                        return [3 /*break*/, 8];
-                    case 7:
-                        try {
-                            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                        }
-                        finally { if (e_8) throw e_8.error; }
-                        return [7 /*endfinally*/];
-                    case 8:
                         fnCode += '}\n\n';
                         fullCode += fnCode;
                         //console.log(fullCode)
@@ -18935,16 +10521,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FlowchartUtils", function() { return FlowchartUtils; });
 /* harmony import */ var _models_node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @models/node */ "./src/app/shared/models/node/index.ts");
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 var FlowchartUtils = /** @class */ (function () {
     function FlowchartUtils() {
@@ -18965,7 +10541,6 @@ var FlowchartUtils = /** @class */ (function () {
         return flw;
     };
     FlowchartUtils.checkNode = function (nodeOrder, node, enabled) {
-        var e_1, _a, e_2, _b;
         if (node.hasExecuted) {
             return;
         }
@@ -18973,75 +10548,38 @@ var FlowchartUtils = /** @class */ (function () {
             nodeOrder.push(node);
         }
         else {
-            try {
-                for (var _c = __values(node.input.edges), _d = _c.next(); !_d.done; _d = _c.next()) {
-                    var edge = _d.value;
-                    if (!edge.source.parentNode.hasExecuted) {
-                        return;
-                    }
+            for (var _i = 0, _a = node.input.edges; _i < _a.length; _i++) {
+                var edge = _a[_i];
+                if (!edge.source.parentNode.hasExecuted) {
+                    return;
                 }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-                }
-                finally { if (e_1) throw e_1.error; }
             }
             nodeOrder.push(node);
         }
         node.hasExecuted = true;
         node.enabled = enabled;
-        try {
-            for (var _e = __values(node.output.edges), _f = _e.next(); !_f.done; _f = _e.next()) {
-                var edge = _f.value;
-                FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode, enabled);
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
-            }
-            finally { if (e_2) throw e_2.error; }
+        for (var _b = 0, _c = node.output.edges; _b < _c.length; _b++) {
+            var edge = _c[_b];
+            FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode, enabled);
         }
     };
     FlowchartUtils.orderNodes = function (flw) {
-        var e_3, _a, e_4, _b;
         var startNode = undefined;
-        try {
-            for (var _c = __values(flw.nodes), _d = _c.next(); !_d.done; _d = _c.next()) {
-                var node = _d.value;
-                if (node.type === 'start') {
-                    startNode = node;
-                }
-                node.hasExecuted = false;
+        for (var _i = 0, _a = flw.nodes; _i < _a.length; _i++) {
+            var node = _a[_i];
+            if (node.type === 'start') {
+                startNode = node;
             }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-            }
-            finally { if (e_3) throw e_3.error; }
+            node.hasExecuted = false;
         }
         var nodeOrder = [];
         FlowchartUtils.checkNode(nodeOrder, startNode, true);
         if (nodeOrder.length < flw.nodes.length) {
-            try {
-                for (var _e = __values(flw.nodes), _f = _e.next(); !_f.done; _f = _e.next()) {
-                    var node = _f.value;
-                    if (node.type != 'start' && node.input.edges.length == 0) {
-                        FlowchartUtils.checkNode(nodeOrder, node, false);
-                    }
+            for (var _b = 0, _c = flw.nodes; _b < _c.length; _b++) {
+                var node = _c[_b];
+                if (node.type != 'start' && node.input.edges.length == 0) {
+                    FlowchartUtils.checkNode(nodeOrder, node, false);
                 }
-            }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
-            finally {
-                try {
-                    if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
-                }
-                finally { if (e_4) throw e_4.error; }
             }
         }
         flw.nodes = nodeOrder;
@@ -19103,36 +10641,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
 /* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @utils */ "./src/app/shared/utils/index.ts");
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
-var __read = (undefined && undefined.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (undefined && undefined.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 
 
 
@@ -19145,7 +10653,7 @@ var NodeUtils = /** @class */ (function () {
             name: "Node",
             id: _utils__WEBPACK_IMPORTED_MODULE_3__["IdGenerator"].getNodeID(),
             position: { x: 0, y: 0 },
-            enabled: true,
+            enabled: false,
             type: '',
             procedure: [],
             state: {
@@ -19163,6 +10671,7 @@ var NodeUtils = /** @class */ (function () {
     ;
     NodeUtils.getStartNode = function () {
         var node = NodeUtils.getNewNode();
+        node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
         node.position = { x: 400, y: 0 };
@@ -19178,56 +10687,35 @@ var NodeUtils = /** @class */ (function () {
     };
     ;
     NodeUtils.deselect_procedure = function (node) {
-        var e_1, _a;
-        try {
-            for (var _b = __values(node.state.procedure), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var prod = _c.value;
-                prod.selected = false;
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (var _i = 0, _a = node.state.procedure; _i < _a.length; _i++) {
+            var prod = _a[_i];
+            prod.selected = false;
         }
         node.state.procedure = [];
     };
     NodeUtils.rearrangeSelected = function (prodList, tempList, prods) {
-        var e_2, _a;
-        try {
-            for (var prods_1 = __values(prods), prods_1_1 = prods_1.next(); !prods_1_1.done; prods_1_1 = prods_1.next()) {
-                var pr = prods_1_1.value;
-                if (!pr.selected) {
-                    if (pr.children)
-                        NodeUtils.rearrangeSelected(prodList, tempList, pr.children);
-                    continue;
-                }
-                ;
-                var i = 0;
-                while (i < tempList.length) {
-                    if (tempList[i] === pr) {
-                        prodList.push(pr);
-                        tempList.splice(i, 1);
-                        break;
-                    }
-                    i += 1;
-                }
+        for (var _i = 0, prods_1 = prods; _i < prods_1.length; _i++) {
+            var pr = prods_1[_i];
+            if (!pr.selected) {
                 if (pr.children)
                     NodeUtils.rearrangeSelected(prodList, tempList, pr.children);
+                continue;
             }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (prods_1_1 && !prods_1_1.done && (_a = prods_1.return)) _a.call(prods_1);
+            ;
+            var i = 0;
+            while (i < tempList.length) {
+                if (tempList[i] === pr) {
+                    prodList.push(pr);
+                    tempList.splice(i, 1);
+                    break;
+                }
+                i += 1;
             }
-            finally { if (e_2) throw e_2.error; }
+            if (pr.children)
+                NodeUtils.rearrangeSelected(prodList, tempList, pr.children);
         }
     };
     NodeUtils.select_procedure = function (node, procedure, ctrl) {
-        var e_3, _a;
         if (!procedure) {
             return;
         }
@@ -19253,18 +10741,9 @@ var NodeUtils = /** @class */ (function () {
         }
         else {
             var sel = procedure.selected;
-            try {
-                for (var _b = __values(node.state.procedure), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var prod = _c.value;
-                    prod.selected = false;
-                }
-            }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                }
-                finally { if (e_3) throw e_3.error; }
+            for (var _i = 0, _a = node.state.procedure; _i < _a.length; _i++) {
+                var prod = _a[_i];
+                prod.selected = false;
             }
             if (sel && node.state.procedure.length === 1 && node.state.procedure[0] === procedure) {
                 node.state.procedure = [];
@@ -19356,12 +10835,12 @@ var NodeUtils = /** @class */ (function () {
                 if (node.type == 'start') {
                     data.args[data.argCount - 1].value = undefined;
                 }
-                prod.args = __spread([returnArg], data.args);
+                prod.args = [returnArg].concat(data.args);
                 break;
             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Imported:
                 prod.meta = { module: data.module, name: data.name, inputMode: _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].SimpleInput };
                 prod.argCount = data.argCount + 1;
-                prod.args = __spread([{ name: 'var_name', value: undefined, default: undefined }], data.args);
+                prod.args = [{ name: 'var_name', value: undefined, default: undefined }].concat(data.args);
                 break;
         }
     };
@@ -19889,7 +11368,7 @@ var procedureInputEditorComponent = /** @class */ (function () {
     }
     procedureInputEditorComponent.prototype.editOptions = function () { };
     procedureInputEditorComponent.prototype.onFileChange = function (event) {
-        this.prod.args[this.prod.args.length - 1] = event.target.files[0];
+        this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -19921,7 +11400,7 @@ var procedureInputEditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.selected\"\r\n    [class.error]=\"data.hasError\"\r\n    [class.disabled]=\"!data.enabled\"\r\n    [ngSwitch]=\"data.type\"\r\n    (click)='emitSelect($event, data)'>\r\n    <div class='container--item' >\r\n        <!-- Variable Assignment Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Variable\">\r\n            <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}>  \r\n            = \r\n            <input class='input--arg'\r\n                [(ngModel)]='data.args[1].value'\r\n                name='data.args[1].name'\r\n                placeholder={{data.args[1].name}}\r\n                size=\"1\"\r\n                size={{data.args[1].value?.length||data.args[1].name.length}}>  \r\n            </div>\r\n\r\n        <!-- IF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.If\">\r\n            <div class='function-text'>\r\n                If\r\n            </div>\r\n            ( <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}>  \r\n                    )\r\n\r\n        </div>\r\n\r\n        <!-- ELSEIF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Elseif\">\r\n            <div class='function-text'>\r\n                Else if\r\n            </div>\r\n            \r\n        \r\n        ( <input class='input--arg'\r\n                (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                [(ngModel)]='data.args[0].value'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}\r\n                size={{data.args[0].value?.length||data.args[0].name.length}}>  \r\n                )\r\n        </div>\r\n\r\n        <!-- ELSE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Else\">\r\n            <div class='function-text'>\r\n                Else\r\n            </div>\r\n        </div>\r\n\r\n        <!-- BREAK Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Break\">\r\n            <div class='function-text'>\r\n                Break\r\n            </div>\r\n        </div>\r\n\r\n        <!-- CONTINUE Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Continue\">\r\n            <div class='function-text'>\r\n                Continue\r\n            </div>\r\n        </div>\r\n\r\n\r\n    <!-- FOREACH Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Foreach\">\r\n                <div class='function-text'>\r\n                    For\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}>  \r\n                <div class='function-text'>\r\n                    in\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[1].value'\r\n                    name='data.args[1].name'\r\n                    placeholder={{data.args[1].name}}\r\n                    size={{data.args[1].value?.length||data.args[1].name.length}}>  \r\n                    \r\n        </div>\r\n\r\n        <!-- WHILE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.While\">\r\n            <div class='function-text'>\r\n                While\r\n            </div>\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}>  \r\n\r\n        </div>\r\n        \r\n        <!-- Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Function\">\r\n            <ng-container *ngIf=\"data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'\">\r\n                <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)'\r\n                placeholder={{data.args[0].name}}>  \r\n                = \r\n\r\n            </ng-container>\r\n            <div class='function-text'>{{data.meta.module}}.{{data.meta.name}} </div>\r\n\r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <!--\r\n                <input *ngIf=\"p.name.toUpperCase() !== '__MODEL__'; else text_template\" \r\n                \r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)' \r\n                [(ngModel)]='p.value' \r\n                placeholder={{p.name}}>    \r\n                \r\n                <ng-template #text_template>\r\n                    model,\r\n                </ng-template>\r\n                -->\r\n\r\n                <input *ngIf=\"p.name.indexOf('__') == -1\" \r\n                        class='input--arg' \r\n                        (cut)='stopProp($event)' \r\n                        (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.value?.length||p.name.length}}>    \r\n                \r\n                <!--\r\n\r\n                <ng-template #model_template>\r\n                    <ng-container *ngIf=\"p.name == model; else params_template\">\r\n                        model,\r\n                    </ng-container>\r\n                </ng-template>\r\n                <ng-template #params_template>\r\n                    <ng-container *ngIf=\"p.name == constList;\">\r\n                        const_list,\r\n                    </ng-container>\r\n                </ng-template>\r\n                -->\r\n\r\n            </ng-container>\r\n\r\n        </div>\r\n\r\n        <!-- Imported Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Imported\">\r\n            <input class='input--var'\r\n                    [ngModel]='data.args[0].value'\r\n                    (ngModelChange)='data.args[0].value=varMod($event)'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    placeholder={{data.args[0].name}}>  \r\n            = \r\n            <div class='function-text'>{{data.meta.name}} </div> \r\n            \r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <input class='input--arg' \r\n                        (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.value?.length||p.name.length}}>    \r\n            </ng-container>\r\n            \r\n\r\n        </div>\r\n\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)=\"emitDelete()\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <!-- Disable button-->\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n        <!-- Print button-->\r\n        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title=\"Print Result In Console\" [class.highlighted]='data.print' (click)='markPrint()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>print</mat-icon>\r\n        </button>\r\n        <!-- help button-->\r\n        <button class='btn' mat-icon-button title=\"Help\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>help</mat-icon>\r\n        </button>\r\n    </div>\r\n    <!-- list of child procedures (if the procedure has children) -->\r\n    <div *ngIf=\"data?.children\" class='container--nested'>\r\n        <procedure-item \r\n            *ngFor=\"let line of data?.children; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)='selectChild($event, line)'\r\n            (delete)='deleteChild(idx)'></procedure-item>\r\n    </div>\r\n\r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.selected\"\r\n    [class.error]=\"data.hasError\"\r\n    [class.disabled]=\"!data.enabled\"\r\n    [ngSwitch]=\"data.type\"\r\n    (click)='emitSelect($event, data)'>\r\n    <div class='container--item' >\r\n        <!-- Variable Assignment Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Variable\">\r\n            <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}>  \r\n            = \r\n            <input class='input--arg'\r\n                [(ngModel)]='data.args[1].value'\r\n                name='data.args[1].name'\r\n                placeholder={{data.args[1].name}}\r\n                size = {{data.args[1].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n            </div>\r\n\r\n        <!-- IF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.If\">\r\n            <div class='function-text'>\r\n                If\r\n            </div>\r\n            ( <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    )\r\n\r\n        </div>\r\n\r\n        <!-- ELSEIF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Elseif\">\r\n            <div class='function-text'>\r\n                Else if\r\n            </div>\r\n            \r\n        \r\n        ( <input class='input--arg'\r\n                (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                [(ngModel)]='data.args[0].value'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}\r\n                size={{data.args[0].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n                )\r\n        </div>\r\n\r\n        <!-- ELSE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Else\">\r\n            <div class='function-text'>\r\n                Else\r\n            </div>\r\n        </div>\r\n\r\n        <!-- BREAK Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Break\">\r\n            <div class='function-text'>\r\n                Break\r\n            </div>\r\n        </div>\r\n\r\n        <!-- CONTINUE Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Continue\">\r\n            <div class='function-text'>\r\n                Continue\r\n            </div>\r\n        </div>\r\n\r\n\r\n    <!-- FOREACH Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Foreach\">\r\n                <div class='function-text'>\r\n                    For\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                <div class='function-text'>\r\n                    in\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[1].value'\r\n                    name='data.args[1].name'\r\n                    placeholder={{data.args[1].name}}\r\n                    size={{data.args[1].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    \r\n        </div>\r\n\r\n        <!-- WHILE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.While\">\r\n            <div class='function-text'>\r\n                While\r\n            </div>\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n\r\n        </div>\r\n        \r\n        <!-- Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Function\">\r\n            <ng-container *ngIf=\"data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'\">\r\n                <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)'\r\n                placeholder={{data.args[0].name}}>  \r\n                = \r\n\r\n            </ng-container>\r\n            <div class='function-text'>{{data.meta.module}}.{{data.meta.name}} </div>\r\n\r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <!--\r\n                <input *ngIf=\"p.name.toUpperCase() !== '__MODEL__'; else text_template\" \r\n                \r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)' \r\n                [(ngModel)]='p.value' \r\n                placeholder={{p.name}}>    \r\n                \r\n                <ng-template #text_template>\r\n                    model,\r\n                </ng-template>\r\n                -->\r\n\r\n                <input *ngIf=\"p.name.indexOf('__') == -1\" \r\n                        class='input--arg' \r\n                        (cut)='stopProp($event)' \r\n                        (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n                \r\n                <!--\r\n\r\n                <ng-template #model_template>\r\n                    <ng-container *ngIf=\"p.name == model; else params_template\">\r\n                        model,\r\n                    </ng-container>\r\n                </ng-template>\r\n                <ng-template #params_template>\r\n                    <ng-container *ngIf=\"p.name == constList;\">\r\n                        const_list,\r\n                    </ng-container>\r\n                </ng-template>\r\n                -->\r\n\r\n            </ng-container>\r\n\r\n        </div>\r\n\r\n        <!-- Imported Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Imported\">\r\n            <input class='input--var'\r\n                    [ngModel]='data.args[0].value'\r\n                    (ngModelChange)='data.args[0].value=varMod($event)'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    placeholder={{data.args[0].name}}>  \r\n            = \r\n            <div class='function-text'>{{data.meta.name}} </div> \r\n            \r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <input class='input--arg' \r\n                        (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n            </ng-container>\r\n            \r\n\r\n        </div>\r\n\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)=\"emitDelete()\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <!-- Disable button-->\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n        <!-- Print button-->\r\n        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title=\"Print Result In Console\" [class.highlighted]='data.print' (click)='markPrint()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>print</mat-icon>\r\n        </button>\r\n        <!-- help button-->\r\n        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title=\"Help\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>help</mat-icon>\r\n        </button>\r\n    </div>\r\n    <!-- list of child procedures (if the procedure has children) -->\r\n    <div *ngIf=\"data?.children\" class='container--nested'>\r\n        <procedure-item \r\n            *ngFor=\"let line of data?.children; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)='selectChild($event, line)'\r\n            (delete)='deleteChild(idx)'></procedure-item>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -19932,7 +11411,7 @@ module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.s
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container--nested {\n  padding-left: 0px; }\n\n.container--line {\n  margin: 8px 0px 8px 10px;\n  padding: 2px 0px 2px 2px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  color: #505050;\n  min-height: 22px;\n  opacity: 1; }\n\n.container--line.disabled {\n    opacity: 0.5; }\n\n.container--line.selected {\n    border: 1px solid #000096;\n    background-color: gainsboro; }\n\n.container--line.error {\n    border: 1px solid red; }\n\n.container--item {\n  margin: none;\n  padding: none;\n  border: none; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  float: right;\n  background-color: transparent;\n  border: none;\n  display: none;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.container--item:hover .btn {\n  display: block; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.line--item {\n  display: inline-block;\n  color: #505050; }\n\n/*\r\n.hasChildren::before{\r\n    content: '\\25B6';\r\n    position: absolute;\r\n    left: 3px;\r\n    font-size: 8px;\r\n}\r\n*/\n\n.input--var {\n  width: 70px;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-right: 5px; }\n\n.input--arg {\n  resize: horizontal;\n  min-width: 1px;\n  max-width: 300px;\n  width: auto;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px; }\n\ninput:focus {\n  border: 1px solid #000096; }\n\n.function-text {\n  display: inline-block;\n  white-space: normal;\n  font-style: italic;\n  color: #be8c1e;\n  font-weight: 600; }\n"
+module.exports = ".container--nested {\n  padding-left: 0px; }\n\n.container--line {\n  margin: 8px 0px 2px 10px;\n  padding: 2px 0px 2px 2px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  color: #505050;\n  min-height: 22px;\n  opacity: 1; }\n\n.container--line.disabled {\n    opacity: 0.5; }\n\n.container--line.selected {\n    border: 1px solid #000096;\n    background-color: gainsboro; }\n\n.container--line.error {\n    border: 1px solid red; }\n\n.container--item {\n  margin: none;\n  padding: none;\n  border: none; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  float: right;\n  background-color: transparent;\n  border: none;\n  display: none;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.container--item:hover .btn {\n  display: block; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.line--item {\n  display: inline-block;\n  color: #505050; }\n\n/*\r\n.hasChildren::before{\r\n    content: '\\25B6';\r\n    position: absolute;\r\n    left: 3px;\r\n    font-size: 8px;\r\n}\r\n*/\n\n.input--var {\n  width: 70px;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-right: 5px; }\n\n.input--arg {\n  resize: horizontal;\n  min-width: 1px;\n  max-width: 300px;\n  width: auto;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px; }\n\ninput:focus {\n  border: 1px solid #000096; }\n\n.function-text {\n  display: inline-block;\n  white-space: normal;\n  font-style: italic;\n  color: #be8c1e;\n  font-weight: 600; }\n"
 
 /***/ }),
 
@@ -19963,6 +11442,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext("2d");
+ctx.font = "14px Arial";
 var ProcedureItemComponent = /** @class */ (function () {
     function ProcedureItemComponent() {
         this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
@@ -19999,6 +11481,9 @@ var ProcedureItemComponent = /** @class */ (function () {
     ProcedureItemComponent.prototype.canBePrinted = function () {
         return (this.data.argCount > 0 && this.data.args[0].name == 'var_name');
     };
+    ProcedureItemComponent.prototype.haveHelpText = function () {
+        return (this.data.type == _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Function || this.data.type == _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Imported);
+    };
     // stopPropagation to prevent cut/paste with input box focused
     ProcedureItemComponent.prototype.stopProp = function (event) {
         event.stopPropagation();
@@ -20010,6 +11495,10 @@ var ProcedureItemComponent = /** @class */ (function () {
         var str = event.trim();
         str = str.replace(/ /g, "_");
         return str;
+    };
+    ProcedureItemComponent.prototype.updateInputSize = function (event) {
+        var val = event.target.value || event.target.placeholder;
+        event.target.style.width = ctx.measureText(val).width + 10 + 'px';
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -20053,7 +11542,7 @@ var ProcedureItemComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n    <ul class='toolset__basic'>\r\n        <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n            <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"'\r\n                (click)='add(ProcedureTypes[type])'> \r\n                {{type}}\r\n            </li>\r\n        </ng-container>\r\n    </ul>\r\n    \r\n    <!--\r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'>\r\n                <h3>{{ mod.module }}</h3>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n    <div class='toolset__functions'>\r\n        <section>\r\n            <h3>Imported</h3>\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} \r\n                    <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                        <mat-icon class='remove-icon'>close</mat-icon>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n        </section>\r\n        <br>\r\n        <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n        <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\">\r\n            <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n        </button>\r\n    </div>\r\n    -->\r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} \r\n                    <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                        <mat-icon class='remove-icon'>close</mat-icon>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    \r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n    <ul class='toolset__basic'>\r\n        <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n            <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"'\r\n            class='tooltip'\r\n            (click)='add(ProcedureTypes[type])'> \r\n                {{type}}\r\n                <!--\r\n                <span class=\"tooltiptext\">\r\n                    <p class='funcDesc'>{{type}}</p>\r\n                </span>\r\n                -->\r\n            </li>\r\n        </ng-container>\r\n    </ul>\r\n    \r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <div class='tooltip' *ngFor='let fn of mod.functions'>\r\n                    <li \r\n                    (click)='add_function(fn)'> \r\n                        {{fn.name}} \r\n                    </li>\r\n                    <span class=\"tooltiptext\" *ngIf='ModulesDoc[mod.module] && ModulesDoc[mod.module][fn.name]'>\r\n                        <p class='funcDesc'>{{ModulesDoc[mod.module][fn.name].summary||ModulesDoc[mod.module][fn.name].description}}</p>\r\n                        <p *ngIf='ModulesDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                        <p class='paramP' *ngFor='let param of ModulesDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                        <p *ngIf='ModulesDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModulesDoc[mod.module][fn.name].returns}}</p>\r\n                    </span>\r\n                </div>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} \r\n                    <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                        <mat-icon class='remove-icon'>close</mat-icon>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    \r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -20064,7 +11553,7 @@ module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic func
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  width: 100%;\n  background-color: #efefef; }\n\nul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n  padding-left: 15px; }\n\nul li {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    margin: 0px;\n    padding: 0px;\n    color: #505050;\n    font-size: 12px;\n    line-height: 18px; }\n\n.remove-btn {\n  background-color: transparent;\n  border: none;\n  height: 13px;\n  float: right; }\n\n.remove-btn .remove-icon {\n    font-size: 11px;\n    height: 11px;\n    color: #505050; }\n\n.add-btn {\n  background-color: transparent;\n  border: none;\n  float: left;\n  padding: 6px;\n  transition: 0.4s; }\n\n.add-btn :hover {\n    background-color: gainsboro; }\n\n.add-btn .add-icon {\n    float: left;\n    color: #505050; }\n\n.accordion {\n  background-color: gainsboro;\n  color: #505050;\n  cursor: pointer;\n  width: 100%;\n  padding: 8px 8px 8px 8px;\n  border: none;\n  display: block;\n  text-align: left;\n  outline: none;\n  font-size: 12px;\n  transition: 0.4s;\n  font-weight: 550; }\n\n.active, .accordion:hover {\n  background-color: #ccc; }\n\n.panel {\n  width: inherit;\n  padding: 0px 10px 0px 0px;\n  display: none;\n  background-color: #efefef;\n  overflow: hidden; }\n"
+module.exports = ":host {\n  width: 100%;\n  background-color: #efefef; }\n\nul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n  padding-left: 15px; }\n\nul li {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    margin: 0px;\n    padding: 0px;\n    color: #505050;\n    font-size: 12px;\n    line-height: 18px; }\n\n.remove-btn {\n  background-color: transparent;\n  border: none;\n  height: 13px;\n  float: right; }\n\n.remove-btn .remove-icon {\n    font-size: 11px;\n    height: 11px;\n    color: #505050; }\n\n.add-btn {\n  background-color: transparent;\n  border: none;\n  float: left;\n  padding: 6px;\n  transition: 0.4s; }\n\n.add-btn :hover {\n    background-color: gainsboro; }\n\n.add-btn .add-icon {\n    float: left;\n    color: #505050; }\n\n.accordion {\n  background-color: gainsboro;\n  color: #505050;\n  cursor: pointer;\n  width: 100%;\n  padding: 8px 8px 8px 8px;\n  border: none;\n  display: block;\n  text-align: left;\n  outline: none;\n  font-size: 12px;\n  transition: 0.4s;\n  font-weight: 550; }\n\n.active, .accordion:hover {\n  background-color: #ccc; }\n\n.panel {\n  width: inherit;\n  padding: 0px 10px 0px 0px;\n  display: none;\n  background-color: #efefef;\n  overflow: hidden; }\n\n.tooltip {\n  display: block; }\n\n/* Tooltip text */\n\n.tooltip .tooltiptext {\n  min-width: 50px;\n  max-width: 500px;\n  background-color: #efefef;\n  border: 1px solid #ccc;\n  color: #505050;\n  pointer-events: none;\n  padding: 0px 10px 0px 10px;\n  opacity: 0;\n  position: absolute;\n  z-index: 1; }\n\n.tooltip .tooltiptext p {\n    font-family: sans-serif; }\n\n.tooltip .tooltiptext p.funcDesc {\n      font-weight: 600; }\n\n.tooltip .tooltiptext p.paramP {\n      padding-left: 5px; }\n\n.tooltip .tooltiptext p.paramP ::before {\n        display: inline-block;\n        content: '';\n        border-radius: 0.25rem;\n        height: 0.25rem;\n        width: 0.25rem;\n        margin: 0rem 0.3rem 0.15rem 0rem;\n        background-color: #505050; }\n\n.tooltip .tooltiptext p span {\n      font-style: italic; }\n\n/* Show the tooltip text when you mouse over the tooltip container */\n\n.tooltip:hover .tooltiptext {\n  transition-delay: 1s;\n  transition-duration: 0.3s;\n  opacity: 1; }\n"
 
 /***/ }),
 
@@ -20082,7 +11571,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_procedure__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/procedure */ "./src/app/shared/models/procedure/index.ts");
 /* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
 /* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
+/* harmony import */ var _shared_decorators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @shared/decorators */ "./src/app/shared/decorators/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20127,16 +11616,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 
 
@@ -20147,11 +11626,9 @@ var ToolsetComponent = /** @class */ (function () {
         this.select = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.imported = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.Modules = ToolsetComponent_1.ModuleAware();
         this.ProcedureTypes = _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"];
         this.ProcedureTypesArr = keys.slice(keys.length / 2);
     }
-    ToolsetComponent_1 = ToolsetComponent;
     // add selected basic function as a new procedure
     ToolsetComponent.prototype.add = function (type) {
         this.select.emit({ type: type, data: undefined });
@@ -20186,7 +11663,6 @@ var ToolsetComponent = /** @class */ (function () {
                         p = new Promise(function (resolve) {
                             var reader = new FileReader();
                             reader.onload = function () {
-                                var e_1, _a;
                                 // parse the flowchart
                                 var fl = circular_json__WEBPACK_IMPORTED_MODULE_2__["parse"](reader.result.toString()).flowchart;
                                 // create function
@@ -20215,18 +11691,9 @@ var ToolsetComponent = /** @class */ (function () {
                                 }
                                 // add func and all the imported functions of the imported flowchart to funcs
                                 funcs.push(func);
-                                try {
-                                    for (var _b = __values(fl.functions), _c = _b.next(); !_c.done; _c = _b.next()) {
-                                        var i = _c.value;
-                                        funcs.push(i);
-                                    }
-                                }
-                                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                                finally {
-                                    try {
-                                        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                                    }
-                                    finally { if (e_1) throw e_1.error; }
+                                for (var _i = 0, _a = fl.functions; _i < _a.length; _i++) {
+                                    var i = _a[_i];
+                                    funcs.push(i);
                                 }
                                 resolve(funcs);
                             };
@@ -20254,7 +11721,6 @@ var ToolsetComponent = /** @class */ (function () {
         //var acc = document.getElementsByClassName("accordion");
         acc.classList.toggle("active");
         var panel = acc.nextElementSibling;
-        console.log(panel);
         if (panel.style.display === "block") {
             panel.style.display = "none";
         }
@@ -20262,64 +11728,6 @@ var ToolsetComponent = /** @class */ (function () {
             panel.style.display = "block";
         }
     };
-    // todo: bug fix for defaults
-    ToolsetComponent.extract_params = function (func) {
-        var fnStr = func.toString().replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg, '');
-        var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).split(","); //.match( /([^\s,]+)/g);
-        if (result === null || result[0] == "") {
-            result = [];
-        }
-        var final_result = result.map(function (r) {
-            r = r.trim();
-            var r_value = r.split("=");
-            if (r_value.length == 1) {
-                return { name: r_value[0].trim(), value: undefined, default: 0 };
-            }
-            else {
-                return { name: r_value[0].trim(), value: undefined, default: 0 };
-            }
-        });
-        var hasReturn = true;
-        if (fnStr.indexOf("return") === -1 || fnStr.indexOf("return;") !== -1) {
-            hasReturn = false;
-        }
-        return [final_result, hasReturn];
-    };
-    ToolsetComponent.ModuleAware = function () {
-        var e_2, _a;
-        var module_list = [];
-        for (var m_name in _modules__WEBPACK_IMPORTED_MODULE_3__) {
-            if (m_name[0] == '_')
-                continue;
-            var modObj = {};
-            modObj.module = m_name;
-            modObj.functions = [];
-            try {
-                for (var _b = __values(Object.keys(_modules__WEBPACK_IMPORTED_MODULE_3__[m_name])), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var fn_name = _c.value;
-                    var func = _modules__WEBPACK_IMPORTED_MODULE_3__[m_name][fn_name];
-                    var fnObj = {};
-                    fnObj.module = m_name;
-                    fnObj.name = fn_name;
-                    fnObj.argCount = func.length;
-                    var args = ToolsetComponent_1.extract_params(func);
-                    fnObj.args = args[0];
-                    fnObj.hasReturn = args[1];
-                    modObj.functions.push(fnObj);
-                }
-            }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                }
-                finally { if (e_2) throw e_2.error; }
-            }
-            module_list.push(modObj);
-        }
-        return module_list;
-    };
-    var ToolsetComponent_1;
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
@@ -20344,7 +11752,8 @@ var ToolsetComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Boolean)
     ], ToolsetComponent.prototype, "hasProd", void 0);
-    ToolsetComponent = ToolsetComponent_1 = __decorate([
+    ToolsetComponent = __decorate([
+        _shared_decorators__WEBPACK_IMPORTED_MODULE_3__["ModuleAware"],
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'toolset',
             template: __webpack_require__(/*! ./toolset.component.html */ "./src/app/views/view-editor/toolset/toolset.component.html"),
@@ -20377,7 +11786,7 @@ module.exports = "<h2>{{node?.name}}</h2>\r\n\r\n<div class='container--editor' 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container--editor {\n  display: block;\n  height: 95%;\n  width: 100%; }\n\n.container__heading {\n  display: block;\n  text-align: center;\n  width: 98%; }\n\nh2 {\n  color: #505050;\n  text-align: left;\n  width: 100%;\n  font-size: 12px;\n  line-height: 14px;\n  font-weight: 600;\n  padding-left: 15px; }\n\nhr {\n  border-top: 2px solid #efefef; }\n\n.container__content {\n  display: inline-flex;\n  width: 100%;\n  min-height: 95%;\n  overflow: inherit; }\n\n.container--toolset {\n  display: inline-flex;\n  width: 20%; }\n\n.container--procedure {\n  display: block;\n  width: 76%;\n  bottom: 10px;\n  background-color: #fafafa;\n  padding: none; }\n\nhr {\n  border-top: 2px solid #efefef;\n  width: 100%; }\n\n/*\r\n$header-height: 45px;\r\n\r\n.container{\r\n    position: relative;\r\n    overflow: auto;\r\n    margin: 10px 10px;\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n        \r\n    h1, h2, h3, h4, h5, h6, p{\r\n        margin: 0px;\r\n        padding: 0px;\r\n    }\r\n\r\n    .container__header{\r\n        flex: 0 1 auto;\r\n        min-height: $header-height;\r\n\r\n        display: flex;\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n\r\n        padding: 0px 0px 0px 15px;\r\n\r\n        background-color: #3F4651;\r\n        color: #E7BF00;\r\n        \r\n        line-height: $header-height;\r\n        text-transform: uppercase;\r\n    \r\n        font-size: 18px;\r\n        font-weight: 600;\r\n        text-align: center;\r\n    }\r\n\r\n    .container__content{\r\n        flex-grow: 1;\r\n        height: 0px;\r\n        border: 2px solid #3F4651;\r\n        overflow: auto;\r\n\r\n        split{\r\n            height: 100%;\r\n        }\r\n    }\r\n\r\n    .container__footer{\r\n        text-align: center;\r\n        font-size: 12px;\r\n        line-height: 18px;\r\n\r\n        background-color: #3F4651;\r\n        color: #E7BF00;\r\n    }\r\n}\r\n\r\n\r\n.content__panel{\r\n    height: 100%; \r\n    overflow: auto;\r\n\r\n    //padding: 10px 15px;\r\n}\r\n*/\n"
+module.exports = ".container--editor {\n  display: block;\n  height: 95%;\n  width: 100%; }\n\n.container__heading {\n  display: block;\n  text-align: center;\n  width: 98%; }\n\nh2 {\n  color: #505050;\n  text-align: left;\n  width: 100%;\n  font-size: 12px;\n  line-height: 14px;\n  font-weight: 600;\n  padding-left: 15px; }\n\nhr {\n  border-top: 2px solid #efefef; }\n\n.container__content {\n  display: inline-flex;\n  width: 100%;\n  min-height: 95%;\n  overflow: inherit; }\n\n.container--toolset {\n  display: inline-flex;\n  width: 20%; }\n\n.container--procedure {\n  display: block;\n  width: 80%;\n  bottom: 10px;\n  background-color: #fafafa;\n  padding: none; }\n\nhr {\n  border-top: 2px solid #efefef;\n  width: 100%; }\n\n/*\r\n$header-height: 45px;\r\n\r\n.container{\r\n    position: relative;\r\n    overflow: auto;\r\n    margin: 10px 10px;\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n        \r\n    h1, h2, h3, h4, h5, h6, p{\r\n        margin: 0px;\r\n        padding: 0px;\r\n    }\r\n\r\n    .container__header{\r\n        flex: 0 1 auto;\r\n        min-height: $header-height;\r\n\r\n        display: flex;\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n\r\n        padding: 0px 0px 0px 15px;\r\n\r\n        background-color: #3F4651;\r\n        color: #E7BF00;\r\n        \r\n        line-height: $header-height;\r\n        text-transform: uppercase;\r\n    \r\n        font-size: 18px;\r\n        font-weight: 600;\r\n        text-align: center;\r\n    }\r\n\r\n    .container__content{\r\n        flex-grow: 1;\r\n        height: 0px;\r\n        border: 2px solid #3F4651;\r\n        overflow: auto;\r\n\r\n        split{\r\n            height: 100%;\r\n        }\r\n    }\r\n\r\n    .container__footer{\r\n        text-align: center;\r\n        font-size: 12px;\r\n        line-height: 18px;\r\n\r\n        background-color: #3F4651;\r\n        color: #E7BF00;\r\n    }\r\n}\r\n\r\n\r\n.content__panel{\r\n    height: 100%; \r\n    overflow: auto;\r\n\r\n    //padding: 10px 15px;\r\n}\r\n*/\n"
 
 /***/ }),
 
@@ -20401,16 +11810,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
 };
 
 
@@ -20442,40 +11841,30 @@ var ViewEditorComponent = /** @class */ (function () {
     };
     // cut selected procedures
     ViewEditorComponent.prototype.cutProd = function (event) {
-        var e_1, _a;
         if (!this.copyCheck || document.activeElement.nodeName == "INPUT")
             return;
         console.log('cutting', this.node.state.procedure);
         this.copiedProd = this.node.state.procedure;
         var parentArray;
-        try {
-            for (var _b = __values(this.copiedProd), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var prod = _c.value;
-                if (prod.parent) {
-                    parentArray = prod.parent.children;
-                }
-                else
-                    parentArray = this.node.procedure;
-                for (var i = 0; i < parentArray.length; i++) {
-                    if (parentArray[i] === prod) {
-                        parentArray.splice(i, 1);
-                        break;
-                    }
+        for (var _i = 0, _a = this.copiedProd; _i < _a.length; _i++) {
+            var prod = _a[_i];
+            if (prod.parent) {
+                parentArray = prod.parent.children;
+            }
+            else
+                parentArray = this.node.procedure;
+            for (var i = 0; i < parentArray.length; i++) {
+                if (parentArray[i] === prod) {
+                    parentArray.splice(i, 1);
+                    break;
                 }
             }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
         }
         _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.node);
     };
     // paste copied procedures
     ViewEditorComponent.prototype.pasteProd = function (event) {
-        if (this.copyCheck && document.activeElement.nodeName.toUpperCase() != "INPUT") {
+        if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() != "INPUT") {
             var pastingPlace = this.node.state.procedure[0];
             if (pastingPlace === undefined) {
                 for (var i = 0; i < this.copiedProd.length; i++) {
@@ -20516,19 +11905,9 @@ var ViewEditorComponent = /** @class */ (function () {
     };
     // import a flowchart as function
     ViewEditorComponent.prototype.importFunction = function (event) {
-        var e_2, _a;
-        try {
-            for (var event_1 = __values(event), event_1_1 = event_1.next(); !event_1_1.done; event_1_1 = event_1.next()) {
-                var func = event_1_1.value;
-                this.flowchart.functions.push(func);
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (event_1_1 && !event_1_1.done && (_a = event_1.return)) _a.call(event_1);
-            }
-            finally { if (e_2) throw e_2.error; }
+        for (var _i = 0, event_1 = event; _i < event_1.length; _i++) {
+            var func = event_1[_i];
+            this.flowchart.functions.push(func);
         }
     };
     // delete an imported function
@@ -20686,16 +12065,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __values = (undefined && undefined.__values) || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 
 var ViewPublishComponent = /** @class */ (function () {
     function ViewPublishComponent() {
@@ -20706,20 +12075,10 @@ var ViewPublishComponent = /** @class */ (function () {
         }
     };
     ViewPublishComponent.prototype.getEndNode = function () {
-        var e_1, _a;
-        try {
-            for (var _b = __values(this.flowchart.nodes), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var node = _c.value;
-                if (node.type == 'end')
-                    return node;
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
+        for (var _i = 0, _a = this.flowchart.nodes; _i < _a.length; _i++) {
+            var node = _a[_i];
+            if (node.type == 'end')
+                return node;
         }
     };
     __decorate([
@@ -20792,6 +12151,17 @@ var ViewPublishModule = /** @class */ (function () {
 }());
 
 
+
+/***/ }),
+
+/***/ "./src/assets/typedoc-json/doc.json":
+/*!******************************************!*\
+  !*** ./src/assets/typedoc-json/doc.json ***!
+  \******************************************/
+/*! exports provided: id, name, kind, flags, children, groups, default */
+/***/ (function(module) {
+
+module.exports = {"id":0,"name":"mobius-parametric-modeller","kind":0,"flags":{},"children":[{"id":23,"name":"\"_parameterTypes\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts","children":[{"id":24,"name":"_parameterTypes","kind":2097152,"kindString":"Object literal","flags":{"isExported":true,"isConst":true},"children":[{"id":25,"name":"constList","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":2,"character":13}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__constList__\""},{"id":27,"name":"input","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":4,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__input__\""},{"id":29,"name":"merge","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":6,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__megre__\""},{"id":26,"name":"model","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":3,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__model__\""},{"id":28,"name":"new","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":5,"character":7}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__new__\""}],"groups":[{"title":"Variables","kind":32,"children":[25,27,29,26,28]}],"sources":[{"fileName":"_parameterTypes.ts","line":1,"character":28}],"type":{"type":"intrinsic","name":"object"}}],"groups":[{"title":"Object literals","kind":2097152,"children":[24]}],"sources":[{"fileName":"_parameterTypes.ts","line":1,"character":0}]},{"id":1,"name":"\"functions\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/functions.ts","comment":{"shortText":"Functions for working with gs-json models.\nModels are datastructures that contain geometric entities with attributes."},"children":[{"id":4,"name":"__merge__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":5,"name":"__merge__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Merges the second model into the first model. The geometry, attribues, and groups are all merged.\nIf the models contain contain groups with the same names, then the groups will be merged.","returns":"The merged model.\n"},"parameters":[{"id":6,"name":"model1","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model to merge into."},"type":{"type":"intrinsic","name":"any"}},{"id":7,"name":"model2","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model to merge."},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":44,"character":25}]},{"id":2,"name":"__new__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":3,"name":"__new__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Creates a new empty model.","returns":"New model empty.\n"},"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":15,"character":23}]},{"id":8,"name":"addData","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":9,"name":"addData","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Creates a new model and populates the model with data.","returns":"New model if successful, null if unsuccessful or on error.\n"},"parameters":[{"id":10,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"intrinsic","name":"any"}},{"id":11,"name":"model_data","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model data in gs-json format."},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":59,"character":23}]}],"groups":[{"title":"Functions","kind":64,"children":[4,2,8]}],"sources":[{"fileName":"functions.ts","line":1,"character":0}]},{"id":30,"name":"\"index\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/index.ts","sources":[{"fileName":"index.ts","line":1,"character":0}]},{"id":12,"name":"\"input\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/input.ts","children":[{"id":13,"name":"declare_constant","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":14,"name":"declare_constant","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Declare a new constant for the input node","returns":"Void\n","tags":[{"tag":"summary","text":"Declare new constant\n"}]},"parameters":[{"id":15,"name":"__constList__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"List of constants to be added."},"type":{"type":"reference","name":"JSON"}},{"id":16,"name":"const_name","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"Name of the constant."},"type":{"type":"intrinsic","name":"string"}},{"id":17,"name":"__input__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"Value of the constant.\n"},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"input.ts","line":11,"character":32}]}],"groups":[{"title":"Functions","kind":64,"children":[13]}],"sources":[{"fileName":"input.ts","line":1,"character":0}]},{"id":18,"name":"\"output\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/output.ts","children":[{"id":19,"name":"return_value","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":20,"name":"return_value","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Return certain value from the model for the flowchart's end node","returns":"Value\n","tags":[{"tag":"summary","text":"Return a specific value"}]},"parameters":[{"id":21,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"Model of the node."},"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}}},{"id":22,"name":"index","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"Index of the value to be returned."},"type":{"type":"intrinsic","name":"number"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"output.ts","line":9,"character":28}]}],"groups":[{"title":"Functions","kind":64,"children":[19]}],"sources":[{"fileName":"output.ts","line":1,"character":0}]}],"groups":[{"title":"External modules","kind":1,"children":[23,1,30,12,18]}]};
 
 /***/ }),
 

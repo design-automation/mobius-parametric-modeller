@@ -4,7 +4,7 @@
  *
  * @returns {any[]} Empty new model
  */
-export function New(): any[] {
+export function __new__(): any[] {
     return [];
 }
 
@@ -17,7 +17,7 @@ export function New(): any[] {
  *
  * @returns {any[]} Merged model
  */
-export function Merge(model1, model2): any[] {
+export function __merge__(model1, model2): any[] {
     for (const j of model2) {
         let existing = false;
         for (const i of model1) {
@@ -30,6 +30,14 @@ export function Merge(model1, model2): any[] {
         }
     }
     return model1;
+}
+
+export function __preprocess__(__model__) {
+    return;
+}
+
+export function __postprocess__(__model__) {
+    return;
 }
 
 /**

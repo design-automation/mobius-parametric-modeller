@@ -187,9 +187,9 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any {
-        const result = Model.New();
+        const result = _parameterTypes['newFn']();
         for (const model of models) {
-            Model.Merge(result, model);
+            _parameterTypes['mergeFn'](result, model);
         }
         return result;
     }
@@ -199,7 +199,7 @@ export class CodeUtils {
     static getInputValue(inp: IPortInput, node: INode): Promise<string> {
         let input: any;
         if (node.type === 'start' || inp.edges.length === 0) {
-            input = Model.New();
+            input = Model.__new__();
         } else {
             input = CodeUtils.mergeInputs(inp.edges.map(edge => edge.source.value));
             /*
@@ -245,13 +245,15 @@ function wait(ms){
         `)
         */
 
-
+        codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
         for (const prod of node.procedure) {
             codeStr.push(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
             return `{\n${codeStr.join('\n')}\n}`;
+        } else {
+            codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
         }
 
 

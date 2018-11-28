@@ -5,13 +5,13 @@ import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
 
 import * as Modules from '@modules';
+import { _parameterTypes } from '@modules';
 
-const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
-const mergeInputsFunc = `
+export const mergeInputsFunc = `
 function mergeInputs(models){
-    let result = __modules__.Model.New();
+    let result = __modules__.${_parameterTypes.new}();
     for (let model of models){
-        __modules__.Model.Merge(result, model);
+        __modules__.${_parameterTypes.merge}(result, model);
     }
     return result;
 }

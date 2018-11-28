@@ -102,7 +102,7 @@ export function __new__(): model {
  *
  * @param model The model to preprocess.
  */
-export function __preprocess__(model: model): void {
+export function __preprocess__(__model__: model): void {
     // TODO
 }
 
@@ -111,7 +111,7 @@ export function __preprocess__(model: model): void {
  *
  * @param model The model to postprocess.
  */
-export function __postprocess__(model: model): void {
+export function __postprocess__(__model__: model): void {
     // TODO
     // Remove all the undefined values for the arrays
 }
@@ -136,27 +136,26 @@ export function __merge__(model1: model, model2: model): void {
 
     // Add triangles from model2 to model1
     const new_triangles: triangle[] = model2.topology.triangles.map(t => t.map( p => p + num_positions) as triangle);
-    model2.topology.triangles.concat( new_triangles );
+    model1.topology.triangles = model1.topology.triangles.concat( new_triangles );
 
     // Add vertices from model2 to model1
     const new_vertices: vertex[] = model2.topology.vertices.map(p => p + num_positions as vertex);
-    model2.topology.vertices.concat( new_vertices );
+    model1.topology.vertices = model1.topology.vertices.concat( new_vertices );
 
     // Add edges from model2 to model1
     const new_edges: edge[] = model2.topology.edges.map(e => e.map( v => v + num_vertices) as edge);
-    model2.topology.edges.concat( new_edges );
+    model1.topology.edges = model1.topology.edges.concat( new_edges );
 
     // Add wires from model2 to model1
     const new_wires: wire[] = model2.topology.wires.map(w => w.map( e => e + num_edges) as wire);
-    model2.topology.wires.concat( new_wires );
+    model1.topology.wires = model1.topology.wires.concat( new_wires );
 
     // Add faces from model2 to model1
     const new_faces: face[] = model2.topology.faces.map(f => [
         f[0].map( w => w + num_wires),
         f[1].map( t => t + num_triangles)
     ] as face);
-    model2.topology.faces.concat( new_faces );
-
+    model1.topology.faces = model1.topology.faces.concat( new_faces );
     // Add collections from model2 to model1
     const new_collections: collection[] = model2.topology.collections.map(c => [
         c[0] + num_collections,
@@ -164,7 +163,7 @@ export function __merge__(model1: model, model2: model): void {
         c[2].map( w => w + num_wires),
         c[3].map( f => f + num_faces)
     ] as collection);
-    model2.topology.collections.concat( new_collections );
+    model1.topology.collections = model1.topology.collections.concat( new_collections );
 
     // Add  attributes from model2 to model1
     _addKeysValues(model1.attributes.positions, model2.attributes.positions);

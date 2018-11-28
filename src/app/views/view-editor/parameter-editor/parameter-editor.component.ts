@@ -8,7 +8,7 @@ import { IFlowchart } from '@models/flowchart';
   templateUrl: './parameter-editor.component.html',
   styleUrls: ['./parameter-editor.component.scss']
 })
-export class ParameterEditorComponent{
+export class ParameterEditorComponent {
     @Input() node: INode;
     @Input() flowchart: IFlowchart;
     /*

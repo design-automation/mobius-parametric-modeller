@@ -25,7 +25,7 @@ $title-background: #ccc;
 $text-color: rgb(80,80,80);
 $selected-color: rgb(0,0,150);
 $function-text-color: rgb(190, 140, 30);
-$separator: rgb(239,239,239);  
+$separator: rgb(239,239,239);
 
 :host{
   height: 100%;
@@ -48,7 +48,7 @@ p{
 
 .paramP{
   padding-left: 5px;
-  
+
 }
 
 span{
@@ -58,10 +58,10 @@ span{
 
 `]
 })
-export class procedureHelpComponent{
-    @Input() output; 
+export class procedureHelpComponent {
+    @Input() output;
 
-    constructor(){ 
+    constructor() {
     }
 
     ngOnInit() {

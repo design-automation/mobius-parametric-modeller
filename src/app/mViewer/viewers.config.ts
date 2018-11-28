@@ -1,15 +1,15 @@
-import { IView } from './view.interface'; 
+import { IView } from './view.interface';
 // Step-1: Add new ViewerComponet here
 import { TextViewerComponent } from './viewers';
 import { ConsoleViewerComponent } from './viewers/console-viewer.component';
 import { procedureHelpComponent } from './viewers/procedure-help.component';
 
 export const VIEWER_ARR = [
-    TextViewerComponent, 
-    ConsoleViewerComponent, 
+    TextViewerComponent,
+    ConsoleViewerComponent,
     procedureHelpComponent,
-    //JSONViewerComponent, 
-    //ThreeViewerComponent
+    // JSONViewerComponent,
+    // ThreeViewerComponent
     // Step-2: Add Component here
 ];
 

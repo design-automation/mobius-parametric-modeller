@@ -1,24 +1,24 @@
 //
 //
 // The flowchart is the basic datastructure in Mobius - it is essentially a linked-list.
-// It also 
+// It also
 //
 
 import { INode } from '@models/node';
 import { IEdge } from '@models/edge';
 import { IFunction } from '@models/procedure';
 
-export interface IFlowchart{
-	name: string;
-	description: string;
-	language: string;
+export interface IFlowchart {
+    name: string;
+    description: string;
+    language: string;
 
-	nodes: INode[];
-	edges: IEdge[];
-	functions: IFunction[];
-	ordered: boolean;
+    nodes: INode[];
+    edges: IEdge[];
+    functions: IFunction[];
+    ordered: boolean;
 
-	meta: {
-		selected_nodes: number[];
-	}
-};
+    meta: {
+        selected_nodes: number[];
+    };
+}

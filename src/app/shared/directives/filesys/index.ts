@@ -1,1 +1,1 @@
-export * from './mobfile-reader.directive'; 
+export * from './mobfile-reader.directive';

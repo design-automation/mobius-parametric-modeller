@@ -7,16 +7,16 @@ import * as circularJSON from 'circular-json';
   selector: 'file-load',
   template:  `<button id='loadfile' class='btn' onclick="document.getElementById('file-input').click();">Load</button>
               <input id="file-input" type="file" name="name" (change)="sendloadfile()" style=" display: none;" />`,
-  styles: [ 
-            `            
-            button.btn{ 
+  styles: [
+            `
+            button.btn{
                 margin: 0px 0px 0px 0px;
                 font-size: 10px;
                 line-height: 12px;
                 border: 2px solid gray;
                 border-radius: 4px;
                 padding: 2px 5px;
-                background-color: #3F4651; 
+                background-color: #3F4651;
                 color: #E7BF00;
                 font-weight: 600;
                 text-transform: uppercase;
@@ -29,36 +29,36 @@ import * as circularJSON from 'circular-json';
              `
           ]
 })
-export class LoadFileComponent{
+export class LoadFileComponent {
 
     @Output() loaded = new EventEmitter();
-    
-    
-    sendloadfile(){
-        let selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
-        let stream = Observable.create(observer => {
-            let reader = new FileReader();
+
+
+    sendloadfile() {
+        const selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
+        const stream = Observable.create(observer => {
+            const reader = new FileReader();
             reader.onloadend = () => {
-                //if (typeof reader.result === 'string') {}
-                let f = circularJSON.parse(<string>reader.result);
+                // if (typeof reader.result === 'string') {}
+                const f = circularJSON.parse(<string>reader.result);
                 const file: IMobius = {
                     name: f.name,
-                    author: f.author, 
+                    author: f.author,
                     flowchart: f.flowchart,
                     last_updated: f.last_updated,
                     version: f.version
-                }
+                };
                 observer.next(file);
                 observer.complete();
-                }
+                };
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
             this.loaded.emit(circularJSON.stringify(loadeddata));
         });
-        (<HTMLInputElement>document.getElementById('file-input')).value = "";
+        (<HTMLInputElement>document.getElementById('file-input')).value = '';
     }
-    
+
 
     //   @ViewChild('fileInput') fileInput: ElementRef;
     //   openPicker(): void{

@@ -6,17 +6,17 @@ import { ProcedureTypesAware, ModuleDocAware } from '@shared/decorators';
 import { _parameterTypes} from '@modules';
 
 const canvas = document.createElement('canvas');
-const ctx = canvas.getContext("2d");
-ctx.font = "14px Arial";        
+const ctx = canvas.getContext('2d');
+ctx.font = '14px Arial';
 
 @ProcedureTypesAware
 @ModuleDocAware
 @Component({
     selector: 'procedure-item',
-    templateUrl: './procedure-item.component.html', 
+    templateUrl: './procedure-item.component.html',
     styleUrls: ['procedure-item.component.scss']
 })
-export class ProcedureItemComponent{
+export class ProcedureItemComponent {
     @Input() data: IProcedure;
     @Output() delete = new EventEmitter();
     @Output() select = new EventEmitter();
@@ -29,72 +29,72 @@ export class ProcedureItemComponent{
     ProcedureTypes = ProcedureTypes;
 
     // delete this procedure
-    emitDelete(): void{
+    emitDelete(): void {
         this.delete.emit();
     }
 
     // select this procedure
-    emitSelect(event, procedure: IProcedure){
+    emitSelect(event, procedure: IProcedure) {
         event.stopPropagation();
-        this.select.emit({"ctrl":event.ctrlKey, "prod":procedure});
+        this.select.emit({'ctrl': event.ctrlKey, 'prod': procedure});
     }
 
     // delete child procedure (after receiving emitDelete from child procedure)
-    deleteChild(index: number): void{
+    deleteChild(index: number): void {
         this.data.children.splice(index, 1);
     }
 
     // select child procedure (after receiving emitSelect from child procedure)
-    selectChild(event, procedure: IProcedure){
+    selectChild(event, procedure: IProcedure) {
         this.select.emit(event);
     }
 
-    markPrint(){
+    markPrint() {
         this.data.print = !this.data.print;
     }
 
-    markDisabled(){
+    markDisabled() {
         this.data.enabled = !this.data.enabled;
     }
 
-    canBePrinted(){
-        return (this.data.argCount > 0 && this.data.args[0].name == 'var_name')
+    canBePrinted() {
+        return (this.data.argCount > 0 && this.data.args[0].name == 'var_name');
     }
 
-    haveHelpText(){
-        return (this.data.type == ProcedureTypes.Function || this.data.type ==  ProcedureTypes.Imported)
+    haveHelpText() {
+        return (this.data.type == ProcedureTypes.Function || this.data.type ==  ProcedureTypes.Imported);
     }
 
-    emitHelpText($event){
+    emitHelpText($event) {
         if ($event) {
-            this.helpText.emit($event)
+            this.helpText.emit($event);
             return;
         }
-        try{
+        try {
             // @ts-ignore
-            this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name])
-        } catch(ex) {
-            this.helpText.emit('error')
+            this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+        } catch (ex) {
+            this.helpText.emit('error');
         }
-        
+
     }
 
     // stopPropagation to prevent cut/paste with input box focused
-    stopProp(event):void{
+    stopProp(event): void {
         event.stopPropagation();
     }
 
     // modify input: replace space " " with underscore "_"
-    varMod(event){
-        if(!event) return event;
+    varMod(event) {
+        if (!event) { return event; }
         let str = event.trim();
-        str = str.replace(/ /g,"_");
+        str = str.replace(/ /g, '_');
         return str;
     }
 
 
-    updateInputSize(event){
-        let val = event.target.value||event.target.placeholder;
+    updateInputSize(event) {
+        const val = event.target.value || event.target.placeholder;
         event.target.style.width = ctx.measureText(val).width + 10 + 'px';
     }
 }

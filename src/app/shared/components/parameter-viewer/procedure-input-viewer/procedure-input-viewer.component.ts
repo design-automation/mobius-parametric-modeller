@@ -7,18 +7,18 @@ import { InputType } from '@models/port';
   templateUrl: './procedure-input-viewer.component.html',
   styleUrls: ['./procedure-input-viewer.component.scss']
 })
-export class procedureInputViewerComponent{
+export class procedureInputViewerComponent {
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();
     PortTypes = InputType;
-    
-    constructor(){ }
 
-    editOptions(): void{ }
+    constructor() { }
 
-    onFileChange(event){
-      this.prod.args[this.prod.argCount-1].value = event.target.files[0];
+    editOptions(): void { }
+
+    onFileChange(event) {
+      this.prod.args[this.prod.argCount - 1].value = event.target.files[0];
     }
 
 }

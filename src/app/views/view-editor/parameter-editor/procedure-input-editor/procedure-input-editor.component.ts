@@ -8,20 +8,20 @@ const keys = Object.keys(InputType);
   templateUrl: './procedure-input-editor.component.html',
   styleUrls: ['./procedure-input-editor.component.scss']
 })
-export class procedureInputEditorComponent{
+export class procedureInputEditorComponent {
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();
 
     PortTypes = InputType;
     PortTypesArr = keys.slice(keys.length / 2);
-    
-    constructor(){ }
 
-    editOptions(): void{ }
+    constructor() { }
 
-    onFileChange(event){
-      this.prod.args[this.prod.argCount-1].default = event.target.files[0];
+    editOptions(): void { }
+
+    onFileChange(event) {
+      this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
     }
 
 }

@@ -1,942 +1,942 @@
 {
-	"id": 0,
-	"name": "mobius-core",
-	"kind": 0,
-	"flags": {},
-	"children": [
-		{
-			"id": 20,
-			"name": "\"Input\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Input.ts",
-			"children": [
-				{
-					"id": 21,
-					"name": "declare_constant",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 22,
-							"name": "declare_constant",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Declare a new constant for the input node",
-								"returns": "Void\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Declare new constant\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 23,
-									"name": "__constList__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "List of constants to be added."
-									},
-									"type": {
-										"type": "reference",
-										"name": "JSON"
-									}
-								},
-								{
-									"id": 24,
-									"name": "const_name",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Name of the constant."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								},
-								{
-									"id": 25,
-									"name": "__input__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Value of the constant.\n"
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Input.ts",
-							"line": 11,
-							"character": 32
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Functions",
-					"kind": 64,
-					"children": [
-						21
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "Input.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
-			"id": 1,
-			"name": "\"Model\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Model.ts",
-			"children": [
-				{
-					"id": 4,
-					"name": "Merge",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 5,
-							"name": "Merge",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Merge two models, first model will be modified",
-								"returns": "Merged model\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Merge two models\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 6,
-									"name": "model1",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "First model to be merged, will be modified to become the merged model after execution of the function"
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								},
-								{
-									"id": 7,
-									"name": "model2",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Second model to be merged, unchanged after execution of the function\n"
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Model.ts",
-							"line": 20,
-							"character": 21
-						}
-					]
-				},
-				{
-					"id": 2,
-					"name": "New",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 3,
-							"name": "New",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Create a new model",
-								"returns": "Empty new model\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "New model\n"
-									}
-								]
-							},
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Model.ts",
-							"line": 7,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 12,
-					"name": "get",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 13,
-							"name": "get",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Get a value from the model with a list of indices",
-								"returns": "Value\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Get a specific value\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 14,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Model of the node."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "JSON"
-										}
-									}
-								},
-								{
-									"id": 15,
-									"name": "indices",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List of indices of the values to be retrieved from the model.\n"
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "number"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "any"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Model.ts",
-							"line": 68,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 16,
-					"name": "remove",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 17,
-							"name": "remove",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Remove certain value from the model with a list of indices",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Remove a specific value\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 18,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Model of the node."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "JSON"
-										}
-									}
-								},
-								{
-									"id": 19,
-									"name": "indices",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List of indices of the values to be removed from the model.\n"
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "number"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Model.ts",
-							"line": 87,
-							"character": 22
-						}
-					]
-				},
-				{
-					"id": 8,
-					"name": "set",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 9,
-							"name": "set",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Register a value in the model",
-								"returns": "Index of the set value\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Set a value\n"
-									},
-									{
-										"tag": "test",
-										"text": "test1"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 10,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Model of the node."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 11,
-									"name": "var_value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Value to be set.\n"
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "number"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Model.ts",
-							"line": 45,
-							"character": 19
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Functions",
-					"kind": 64,
-					"children": [
-						4,
-						2,
-						12,
-						16,
-						8
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "Model.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
-			"id": 36,
-			"name": "\"Output\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Output.ts",
-			"children": [
-				{
-					"id": 37,
-					"name": "return_value",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 38,
-							"name": "return_value",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Return certain value from the model for the flowchart's end node",
-								"returns": "Value\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Return a specific value"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 39,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Model of the node."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 40,
-									"name": "index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Index of the value to be returned."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "any"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Output.ts",
-							"line": 9,
-							"character": 28
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Functions",
-					"kind": 64,
-					"children": [
-						37
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "Output.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
-			"id": 26,
-			"name": "\"Query\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Query.ts",
-			"children": [
-				{
-					"id": 32,
-					"name": "get",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 33,
-							"name": "get",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Get a list of indices of the values that have certain properties",
-								"returns": "List of indices\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Get indices of values"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 34,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Model of the node."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "JSON"
-										}
-									}
-								},
-								{
-									"id": 35,
-									"name": "statement",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Properties to be added to the value."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "number"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Query.ts",
-							"line": 36,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 27,
-					"name": "set",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 28,
-							"name": "set",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Assign properties to a certain value in the model",
-								"returns": "Void\n",
-								"tags": [
-									{
-										"tag": "summary",
-										"text": "Assign a property"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 29,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"shortText": "Model of the node."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 30,
-									"name": "indices",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Indices of the value to set properties with."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "number"
-										}
-									}
-								},
-								{
-									"id": 31,
-									"name": "statement",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Properties to be added to the value."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "Query.ts",
-							"line": 10,
-							"character": 19
-						}
-					]
-				}
-			],
-			"groups": [
-				{
-					"title": "Functions",
-					"kind": 64,
-					"children": [
-						32,
-						27
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "Query.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
-			"id": 41,
-			"name": "\"_parameterTypes\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/_parameterTypes.ts",
-			"children": [
-				{
-					"id": 42,
-					"name": "_parameterTypes",
-					"kind": 2097152,
-					"kindString": "Object literal",
-					"flags": {
-						"isExported": true,
-						"isConst": true
-					},
-					"children": [
-						{
-							"id": 43,
-							"name": "constList",
-							"kind": 32,
-							"kindString": "Variable",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "_parameterTypes.ts",
-									"line": 2,
-									"character": 13
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							},
-							"defaultValue": "\"__constList__\""
-						},
-						{
-							"id": 45,
-							"name": "input",
-							"kind": 32,
-							"kindString": "Variable",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "_parameterTypes.ts",
-									"line": 4,
-									"character": 9
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							},
-							"defaultValue": "\"__input__\""
-						},
-						{
-							"id": 44,
-							"name": "model",
-							"kind": 32,
-							"kindString": "Variable",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "_parameterTypes.ts",
-									"line": 3,
-									"character": 9
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							},
-							"defaultValue": "\"__model__\""
-						}
-					],
-					"groups": [
-						{
-							"title": "Variables",
-							"kind": 32,
-							"children": [
-								43,
-								45,
-								44
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "_parameterTypes.ts",
-							"line": 1,
-							"character": 28
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "object"
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Object literals",
-					"kind": 2097152,
-					"children": [
-						42
-					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "_parameterTypes.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		},
-		{
-			"id": 46,
-			"name": "\"index\"",
-			"kind": 1,
-			"kindString": "External module",
-			"flags": {
-				"isExported": true
-			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/index.ts",
-			"sources": [
-				{
-					"fileName": "index.ts",
-					"line": 1,
-					"character": 0
-				}
-			]
-		}
-	],
-	"groups": [
-		{
-			"title": "External modules",
-			"kind": 1,
-			"children": [
-				20,
-				1,
-				36,
-				26,
-				41,
-				46
-			]
-		}
-	]
+    "id": 0,
+    "name": "mobius-core",
+    "kind": 0,
+    "flags": {},
+    "children": [
+        {
+            "id": 20,
+            "name": "\"Input\"",
+            "kind": 1,
+            "kindString": "External module",
+            "flags": {
+                "isExported": true
+            },
+            "originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Input.ts",
+            "children": [
+                {
+                    "id": 21,
+                    "name": "declare_constant",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 22,
+                            "name": "declare_constant",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Declare a new constant for the input node",
+                                "returns": "Void\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Declare new constant\n"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 23,
+                                    "name": "__constList__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "List of constants to be added."
+                                    },
+                                    "type": {
+                                        "type": "reference",
+                                        "name": "JSON"
+                                    }
+                                },
+                                {
+                                    "id": 24,
+                                    "name": "const_name",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Name of the constant."
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "string"
+                                    }
+                                },
+                                {
+                                    "id": 25,
+                                    "name": "__input__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Value of the constant.\n"
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "any"
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "void"
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Input.ts",
+                            "line": 11,
+                            "character": 32
+                        }
+                    ]
+                }
+            ],
+            "groups": [
+                {
+                    "title": "Functions",
+                    "kind": 64,
+                    "children": [
+                        21
+                    ]
+                }
+            ],
+            "sources": [
+                {
+                    "fileName": "Input.ts",
+                    "line": 1,
+                    "character": 0
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "name": "\"Model\"",
+            "kind": 1,
+            "kindString": "External module",
+            "flags": {
+                "isExported": true
+            },
+            "originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Model.ts",
+            "children": [
+                {
+                    "id": 4,
+                    "name": "Merge",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 5,
+                            "name": "Merge",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Merge two models, first model will be modified",
+                                "returns": "Merged model\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Merge two models\n"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 6,
+                                    "name": "model1",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "First model to be merged, will be modified to become the merged model after execution of the function"
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "any"
+                                    }
+                                },
+                                {
+                                    "id": 7,
+                                    "name": "model2",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Second model to be merged, unchanged after execution of the function\n"
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "any"
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "array",
+                                "elementType": {
+                                    "type": "intrinsic",
+                                    "name": "any"
+                                }
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Model.ts",
+                            "line": 20,
+                            "character": 21
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "New",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 3,
+                            "name": "New",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Create a new model",
+                                "returns": "Empty new model\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "New model\n"
+                                    }
+                                ]
+                            },
+                            "type": {
+                                "type": "array",
+                                "elementType": {
+                                    "type": "intrinsic",
+                                    "name": "any"
+                                }
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Model.ts",
+                            "line": 7,
+                            "character": 19
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "name": "get",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 13,
+                            "name": "get",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Get a value from the model with a list of indices",
+                                "returns": "Value\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Get a specific value\n"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 14,
+                                    "name": "__model__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Model of the node."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "reference",
+                                            "name": "JSON"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 15,
+                                    "name": "indices",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "List of indices of the values to be retrieved from the model.\n"
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "intrinsic",
+                                            "name": "number"
+                                        }
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "any"
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Model.ts",
+                            "line": 68,
+                            "character": 19
+                        }
+                    ]
+                },
+                {
+                    "id": 16,
+                    "name": "remove",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 17,
+                            "name": "remove",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Remove certain value from the model with a list of indices",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Remove a specific value\n"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 18,
+                                    "name": "__model__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Model of the node."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "reference",
+                                            "name": "JSON"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 19,
+                                    "name": "indices",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "List of indices of the values to be removed from the model.\n"
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "intrinsic",
+                                            "name": "number"
+                                        }
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "void"
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Model.ts",
+                            "line": 87,
+                            "character": 22
+                        }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "name": "set",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 9,
+                            "name": "set",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Register a value in the model",
+                                "returns": "Index of the set value\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Set a value\n"
+                                    },
+                                    {
+                                        "tag": "test",
+                                        "text": "test1"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 10,
+                                    "name": "__model__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Model of the node."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "intrinsic",
+                                            "name": "any"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 11,
+                                    "name": "var_value",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Value to be set.\n"
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "any"
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "array",
+                                "elementType": {
+                                    "type": "intrinsic",
+                                    "name": "number"
+                                }
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Model.ts",
+                            "line": 45,
+                            "character": 19
+                        }
+                    ]
+                }
+            ],
+            "groups": [
+                {
+                    "title": "Functions",
+                    "kind": 64,
+                    "children": [
+                        4,
+                        2,
+                        12,
+                        16,
+                        8
+                    ]
+                }
+            ],
+            "sources": [
+                {
+                    "fileName": "Model.ts",
+                    "line": 1,
+                    "character": 0
+                }
+            ]
+        },
+        {
+            "id": 36,
+            "name": "\"Output\"",
+            "kind": 1,
+            "kindString": "External module",
+            "flags": {
+                "isExported": true
+            },
+            "originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Output.ts",
+            "children": [
+                {
+                    "id": 37,
+                    "name": "return_value",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 38,
+                            "name": "return_value",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Return certain value from the model for the flowchart's end node",
+                                "returns": "Value\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Return a specific value"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 39,
+                                    "name": "__model__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Model of the node."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "intrinsic",
+                                            "name": "any"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 40,
+                                    "name": "index",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Index of the value to be returned."
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "number"
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "any"
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Output.ts",
+                            "line": 9,
+                            "character": 28
+                        }
+                    ]
+                }
+            ],
+            "groups": [
+                {
+                    "title": "Functions",
+                    "kind": 64,
+                    "children": [
+                        37
+                    ]
+                }
+            ],
+            "sources": [
+                {
+                    "fileName": "Output.ts",
+                    "line": 1,
+                    "character": 0
+                }
+            ]
+        },
+        {
+            "id": 26,
+            "name": "\"Query\"",
+            "kind": 1,
+            "kindString": "External module",
+            "flags": {
+                "isExported": true
+            },
+            "originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/Query.ts",
+            "children": [
+                {
+                    "id": 32,
+                    "name": "get",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 33,
+                            "name": "get",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Get a list of indices of the values that have certain properties",
+                                "returns": "List of indices\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Get indices of values"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 34,
+                                    "name": "__model__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Model of the node."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "reference",
+                                            "name": "JSON"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 35,
+                                    "name": "statement",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Properties to be added to the value."
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "string"
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "array",
+                                "elementType": {
+                                    "type": "intrinsic",
+                                    "name": "number"
+                                }
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Query.ts",
+                            "line": 36,
+                            "character": 19
+                        }
+                    ]
+                },
+                {
+                    "id": 27,
+                    "name": "set",
+                    "kind": 64,
+                    "kindString": "Function",
+                    "flags": {
+                        "isExported": true
+                    },
+                    "signatures": [
+                        {
+                            "id": 28,
+                            "name": "set",
+                            "kind": 4096,
+                            "kindString": "Call signature",
+                            "flags": {},
+                            "comment": {
+                                "shortText": "Assign properties to a certain value in the model",
+                                "returns": "Void\n",
+                                "tags": [
+                                    {
+                                        "tag": "summary",
+                                        "text": "Assign a property"
+                                    }
+                                ]
+                            },
+                            "parameters": [
+                                {
+                                    "id": 29,
+                                    "name": "__model__",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "shortText": "Model of the node."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "intrinsic",
+                                            "name": "any"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 30,
+                                    "name": "indices",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Indices of the value to set properties with."
+                                    },
+                                    "type": {
+                                        "type": "array",
+                                        "elementType": {
+                                            "type": "intrinsic",
+                                            "name": "number"
+                                        }
+                                    }
+                                },
+                                {
+                                    "id": 31,
+                                    "name": "statement",
+                                    "kind": 32768,
+                                    "kindString": "Parameter",
+                                    "flags": {},
+                                    "comment": {
+                                        "text": "Properties to be added to the value."
+                                    },
+                                    "type": {
+                                        "type": "intrinsic",
+                                        "name": "string"
+                                    }
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "void"
+                            }
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "Query.ts",
+                            "line": 10,
+                            "character": 19
+                        }
+                    ]
+                }
+            ],
+            "groups": [
+                {
+                    "title": "Functions",
+                    "kind": 64,
+                    "children": [
+                        32,
+                        27
+                    ]
+                }
+            ],
+            "sources": [
+                {
+                    "fileName": "Query.ts",
+                    "line": 1,
+                    "character": 0
+                }
+            ]
+        },
+        {
+            "id": 41,
+            "name": "\"_parameterTypes\"",
+            "kind": 1,
+            "kindString": "External module",
+            "flags": {
+                "isExported": true
+            },
+            "originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/_parameterTypes.ts",
+            "children": [
+                {
+                    "id": 42,
+                    "name": "_parameterTypes",
+                    "kind": 2097152,
+                    "kindString": "Object literal",
+                    "flags": {
+                        "isExported": true,
+                        "isConst": true
+                    },
+                    "children": [
+                        {
+                            "id": 43,
+                            "name": "constList",
+                            "kind": 32,
+                            "kindString": "Variable",
+                            "flags": {
+                                "isExported": true
+                            },
+                            "sources": [
+                                {
+                                    "fileName": "_parameterTypes.ts",
+                                    "line": 2,
+                                    "character": 13
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "string"
+                            },
+                            "defaultValue": "\"__constList__\""
+                        },
+                        {
+                            "id": 45,
+                            "name": "input",
+                            "kind": 32,
+                            "kindString": "Variable",
+                            "flags": {
+                                "isExported": true
+                            },
+                            "sources": [
+                                {
+                                    "fileName": "_parameterTypes.ts",
+                                    "line": 4,
+                                    "character": 9
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "string"
+                            },
+                            "defaultValue": "\"__input__\""
+                        },
+                        {
+                            "id": 44,
+                            "name": "model",
+                            "kind": 32,
+                            "kindString": "Variable",
+                            "flags": {
+                                "isExported": true
+                            },
+                            "sources": [
+                                {
+                                    "fileName": "_parameterTypes.ts",
+                                    "line": 3,
+                                    "character": 9
+                                }
+                            ],
+                            "type": {
+                                "type": "intrinsic",
+                                "name": "string"
+                            },
+                            "defaultValue": "\"__model__\""
+                        }
+                    ],
+                    "groups": [
+                        {
+                            "title": "Variables",
+                            "kind": 32,
+                            "children": [
+                                43,
+                                45,
+                                44
+                            ]
+                        }
+                    ],
+                    "sources": [
+                        {
+                            "fileName": "_parameterTypes.ts",
+                            "line": 1,
+                            "character": 28
+                        }
+                    ],
+                    "type": {
+                        "type": "intrinsic",
+                        "name": "object"
+                    }
+                }
+            ],
+            "groups": [
+                {
+                    "title": "Object literals",
+                    "kind": 2097152,
+                    "children": [
+                        42
+                    ]
+                }
+            ],
+            "sources": [
+                {
+                    "fileName": "_parameterTypes.ts",
+                    "line": 1,
+                    "character": 0
+                }
+            ]
+        },
+        {
+            "id": 46,
+            "name": "\"index\"",
+            "kind": 1,
+            "kindString": "External module",
+            "flags": {
+                "isExported": true
+            },
+            "originalName": "C:/Users/akibdpt/Documents/Angular/mobius-core/src/app/core/modules/index.ts",
+            "sources": [
+                {
+                    "fileName": "index.ts",
+                    "line": 1,
+                    "character": 0
+                }
+            ]
+        }
+    ],
+    "groups": [
+        {
+            "title": "External modules",
+            "kind": 1,
+            "children": [
+                20,
+                1,
+                36,
+                26,
+                41,
+                46
+            ]
+        }
+    ]
 }

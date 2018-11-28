@@ -1,17 +1,17 @@
-export enum PortType{
-    Input, 
+export enum PortType {
+    Input,
     Output
 }
 
-export enum InputType{
-    SimpleInput, 
-    Slider, 
+export enum InputType {
+    SimpleInput,
+    Slider,
     Checkbox,
-    URL, 
+    URL,
     File
 }
 
-export enum OutputType{
-    Text, 
+export enum OutputType {
+    Text,
     Code
 }

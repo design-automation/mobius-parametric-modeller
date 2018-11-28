@@ -1,1 +1,1 @@
-export * from './GUID'
+export * from './GUID';

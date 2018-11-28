@@ -1,26 +1,26 @@
 .viewer{
-	
-	.container{
-		display: flex; 
-		flex-direction: row; 
-		height: 100%;
+    
+    .container{
+        display: flex; 
+        flex-direction: row; 
+        height: 100%;
 
-		.sidebar{
-			//width: 250px; 
-			//border-right: 4px solid #A9BCEC; //todo: change
-			z-index: 100;
-		}
+        .sidebar{
+            //width: 250px; 
+            //border-right: 4px solid #A9BCEC; //todo: change
+            z-index: 100;
+        }
 
-		.view-container{
-			box-sizing: border-box;
-			height: 100%;
-			width: 100%;
-			padding-bottom: $header-height;
-			overflow: auto;
-		}
-	}
+        .view-container{
+            box-sizing: border-box;
+            height: 100%;
+            width: 100%;
+            padding-bottom: $header-height;
+            overflow: auto;
+        }
+    }
 
-/* 	width: 100%; 
+/*     width: 100%; 
 overflow: auto;
 
 padding: 0px;
@@ -28,36 +28,36 @@ margin: 0px;
 
 .header{
 
-	display: flex; 
-	flex-direction: row; 
-	justify-content: space-between;
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between;
 
-	position: relative;
-	font-size: 14px; 
-	font-weight: 600; 
-	line-height: $header-height;
-	text-transform: uppercase;
-	letter-spacing: 1.5px;
-	height: $header-height;
+    position: relative;
+    font-size: 14px; 
+    font-weight: 600; 
+    line-height: $header-height;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    height: $header-height;
 
-	color: #ADADAD;
+    color: #ADADAD;
 
-	.btn-group{
-		height: $header-height; 
+    .btn-group{
+        height: $header-height; 
 
-		button{
-			width: 0.9*$header-height; 
-			height: 0.9*$header-height; 
-			margin: 0px;
-			border: 1px solid #B4B1B1;
-			box-shadow: none;
+        button{
+            width: 0.9*$header-height; 
+            height: 0.9*$header-height; 
+            margin: 0px;
+            border: 1px solid #B4B1B1;
+            box-shadow: none;
 
-			&:focus{
-				
-			}
-		}
-		
-	}
+            &:focus{
+                
+            }
+        }
+        
+    }
 
 }
 
@@ -65,9 +65,9 @@ margin: 0px;
 }
 
 button{
-	&:focus{
-		
-	}
+    &:focus{
+        
+    }
 } */
 
 }

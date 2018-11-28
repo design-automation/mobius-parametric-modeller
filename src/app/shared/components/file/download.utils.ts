@@ -1,7 +1,7 @@
 
-export class downloadUtils{
-    
-    static downloadFile(fileName: string, fileContent: Blob){
+export class downloadUtils {
+
+    static downloadFile(fileName: string, fileContent: Blob) {
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(fileContent, fileName);
         } else {

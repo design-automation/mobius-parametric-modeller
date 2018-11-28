@@ -1,5 +1,5 @@
-export interface IView{
-    name: string, 
-    icon: string,
-    component: any
+export interface IView {
+    name: string;
+    icon: string;
+    component: any;
 }

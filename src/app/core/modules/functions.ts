@@ -177,7 +177,7 @@ export function __merge__(model1: model, model2: model): void {
 }
 
 /*
- * Helper function that adds attributes
+ * Helper function that adds attributes from model2 to model1.
  */
 function _addAttribs(attribs1: attrib[], attribs2:attrib[], size1: number): void {
     const attribs_map: Map<string, number> = new Map();
@@ -187,7 +187,7 @@ function _addAttribs(attribs1: attrib[], attribs2:attrib[], size1: number): void
     attribs2.forEach(attrib2 => {
         const attrib1 = attribs_map[attrib2.name + attrib2.data_type + attrib2.data_length];
         if (attrib1 === undefined) {
-            attrib2.values = Array(size1).fill(undefined).concat(attrib2.values);
+            attrib2.keys = Array(size1).fill(-1).concat(attrib2.keys);
             attribs1.push( attrib2 );
         } else{
             _addKeysValues(attrib1, attrib2);

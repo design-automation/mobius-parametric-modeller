@@ -13,7 +13,7 @@ export abstract class NodeUtils{
             name: "Node", 
             id: IdGenerator.getNodeID(),
             position: {x: 0, y: 0}, 
-            enabled: true,
+            enabled: false,
             type: '',
             procedure: [],
             state: {
@@ -32,6 +32,7 @@ export abstract class NodeUtils{
 
     static getStartNode(): INode{
         let node = NodeUtils.getNewNode();
+        node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
         node.position= {x: 400, y: 0};

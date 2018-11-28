@@ -17,8 +17,8 @@
                 [(ngModel)]='data.args[1].value'
                 name='data.args[1].name'
                 placeholder={{data.args[1].name}}
-                size="1"
-                size={{data.args[1].value?.length||data.args[1].name.length}}>  
+                size = {{data.args[1].name.length}}
+                (input)='updateInputSize($event)'>  
             </div>
 
         <!-- IF Template -->
@@ -31,7 +31,8 @@
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
-                    size={{data.args[0].value?.length||data.args[0].name.length}}>  
+                    size={{data.args[0].name.length}}
+                    (input)='updateInputSize($event)'>  
                     )
 
         </div>
@@ -48,7 +49,8 @@
                 [(ngModel)]='data.args[0].value'
                 name='data.args[0].name'
                 placeholder={{data.args[0].name}}
-                size={{data.args[0].value?.length||data.args[0].name.length}}>  
+                size={{data.args[0].name.length}}
+                (input)='updateInputSize($event)'>  
                 )
         </div>
 
@@ -84,7 +86,8 @@
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
-                    size={{data.args[0].value?.length||data.args[0].name.length}}>  
+                    size={{data.args[0].name.length}}
+                    (input)='updateInputSize($event)'>  
                 <div class='function-text'>
                     in
                 </div>
@@ -93,7 +96,8 @@
                     [(ngModel)]='data.args[1].value'
                     name='data.args[1].name'
                     placeholder={{data.args[1].name}}
-                    size={{data.args[1].value?.length||data.args[1].name.length}}>  
+                    size={{data.args[1].name.length}}
+                    (input)='updateInputSize($event)'>  
                     
         </div>
 
@@ -107,7 +111,8 @@
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
-                    size={{data.args[0].value?.length||data.args[0].name.length}}>  
+                    size={{data.args[0].name.length}}
+                    (input)='updateInputSize($event)'>  
 
         </div>
         
@@ -145,7 +150,8 @@
                         (paste)='stopProp($event)' 
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
-                        size={{p.value?.length||p.name.length}}>    
+                        size={{p.name.length}}
+                        (input)='updateInputSize($event)'>    
                 
                 <!--
 
@@ -180,7 +186,8 @@
                         (cut)='stopProp($event)' (paste)='stopProp($event)' 
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
-                        size={{p.value?.length||p.name.length}}>    
+                        size={{p.name.length}}
+                        (input)='updateInputSize($event)'>    
             </ng-container>
             
 
@@ -200,7 +207,7 @@
             <mat-icon class='icon'>print</mat-icon>
         </button>
         <!-- help button-->
-        <button class='btn' mat-icon-button title="Help" tabindex="-1">
+        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1">
             <mat-icon class='icon'>help</mat-icon>
         </button>
     </div>
@@ -215,4 +222,3 @@
 
 
 </div>
-

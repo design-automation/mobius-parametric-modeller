@@ -67,7 +67,7 @@ export class ViewEditorComponent{
 
     // paste copied procedures
     pasteProd(event){
-      if (this.copyCheck && document.activeElement.nodeName.toUpperCase() != "INPUT"){
+      if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() != "INPUT"){
         const pastingPlace = this.node.state.procedure[0];
         if (pastingPlace === undefined){
           for (let i = 0; i< this.copiedProd.length; i++){

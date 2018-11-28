@@ -8,7 +8,7 @@ import { IEdge } from '@models/edge';
 
 import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
-import { fromEvent, Observable, Subscriber  } from 'rxjs';
+import { fromEvent } from 'rxjs';
 
 declare const InstallTrigger: any;
 
@@ -47,6 +47,7 @@ export class FlowchartComponent{
   private keydownListener = fromEvent(document, 'keydown');
   private copyListener = fromEvent(document, 'copy');
   private pasteListener = fromEvent(document, 'paste');
+  private listenerActive = false;
 
   // position of the current canvas view relative to the full svg canvas
   private offset;
@@ -59,6 +60,56 @@ export class FlowchartComponent{
     this.canvas = <HTMLElement>document.getElementById("svg-canvas");
     let bRect = <DOMRect>this.canvas.getBoundingClientRect();
     this.offset = [bRect.left, bRect.top]
+
+    // copy: copy node
+    this.copySub = this.copyListener.subscribe(val => {
+      if (!this.listenerActive) return
+      const node = this.data.nodes[this.data.meta.selected_nodes[0]];
+      if (node.type != 'start' && node.type != 'end'){
+        console.log('copied node:', node);
+        let cp = circularJSON.parse(circularJSON.stringify(node));
+        this.copied = circularJSON.stringify(cp);
+      }
+    })
+
+    // paste: paste copied node
+    this.pasteSub = this.pasteListener.subscribe(val =>{
+      if (!this.listenerActive) return
+      if (this.copied){
+        event.preventDefault();
+        let newNode = <INode>circularJSON.parse(this.copied);
+        var pt = this.canvas.createSVGPoint();
+        pt.x = 20;
+        pt.y = 100;
+
+        let svgP: any;
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox){
+          let ctm = this.canvas.getScreenCTM()
+          let bRect = this.canvas.getBoundingClientRect()
+          ctm.a = ctm.a * this.zoom
+          ctm.d = ctm.d * this.zoom
+          ctm.e = bRect.x
+          ctm.f = bRect.y
+          svgP = pt.matrixTransform(ctm.inverse());
+        } else {
+          svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        }
+
+        NodeUtils.updateNode(newNode, svgP);
+        this.data.nodes.push(newNode);
+        console.log('pasting node:', newNode);
+      }
+    })
+
+    // delete: delete selected edge(s)
+    this.keydownSub = this.keydownListener.subscribe(val =>{
+      if (!this.listenerActive) return
+      if ((<KeyboardEvent> val).key == 'Delete'){
+        this.deleteSelectedEdges();
+      }
+    })
+
   }
 
   /*
@@ -180,59 +231,12 @@ export class FlowchartComponent{
 
   // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
   activateKeyEvent(): void{
-
-    // copy: copy node
-    this.copySub = this.copyListener.subscribe(val => {
-      const node = this.data.nodes[this.data.meta.selected_nodes[0]];
-      if (node.type != 'start' && node.type != 'end'){
-        console.log('copied node:', node);
-        let cp = circularJSON.parse(circularJSON.stringify(node));
-        this.copied = circularJSON.stringify(cp);
-      }
-    })
-
-    // paste: paste copied node
-    this.pasteSub = this.pasteListener.subscribe(val =>{
-      if (this.copied){
-        event.preventDefault();
-        let newNode = <INode>circularJSON.parse(this.copied);
-        var pt = this.canvas.createSVGPoint();
-        pt.x = 20;
-        pt.y = 100;
-
-        let svgP: any;
-        var isFirefox = typeof InstallTrigger !== 'undefined';
-        if (isFirefox){
-          let ctm = this.canvas.getScreenCTM()
-          let bRect = this.canvas.getBoundingClientRect()
-          ctm.a = ctm.a * this.zoom
-          ctm.d = ctm.d * this.zoom
-          ctm.e = bRect.x
-          ctm.f = bRect.y
-          svgP = pt.matrixTransform(ctm.inverse());
-        } else {
-          svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-        }
-
-        NodeUtils.updateNode(newNode, svgP);
-        this.data.nodes.push(newNode);
-        console.log('pasting node:', newNode);
-      }
-    })
-
-    // delete: delete selected edge(s)
-    this.keydownSub = this.keydownListener.subscribe(val =>{
-      if ((<KeyboardEvent> val).key == 'Delete'){
-        this.deleteSelectedEdges();
-      }
-    })
+    this.listenerActive = true
   }
 
   // deactivate the event listeners when the mouse exit the svg component
   deactivateKeyEvent(): void{
-    this.copySub.unsubscribe();
-    this.pasteSub.unsubscribe();
-    this.keydownSub.unsubscribe();
+    this.listenerActive = false
   }
 
   // delete selected node
@@ -251,7 +255,7 @@ export class FlowchartComponent{
       while (edge_index < this.data.edges.length){
         let tbrEdge = this.data.edges[edge_index];
         if (tbrEdge.target.parentNode == node || tbrEdge.source.parentNode == node){
-          this.deleteEdge(edge_index)
+          this.deleteEdge(edge_index, node.id)
           continue;
         }
         edge_index += 1;
@@ -263,7 +267,7 @@ export class FlowchartComponent{
   }
 
   // delete an edge with a known index
-  deleteEdge(edge_index){
+  deleteEdge(edge_index, deletedNode = undefined){
     let tbrEdge = this.data.edges[edge_index];
 
     // remove the edge from the target node's list of edges
@@ -280,6 +284,12 @@ export class FlowchartComponent{
         tbrEdge.source.edges.splice(Number(i), 1);
         break;
       }
+    }
+    
+    if (tbrEdge.target.parentNode.input.edges.length == 0 && deletedNode !== tbrEdge.target.parentNode.id){
+      FlowchartComponent.disableNode(tbrEdge.target.parentNode);
+    } else {
+      FlowchartComponent.enableNode(tbrEdge.target.parentNode);
     }
 
     // remove the edge from the general list of edges
@@ -568,14 +578,34 @@ export class FlowchartComponent{
         this.edge.source.edges.push(this.edge);
         this.data.edges.push(this.edge);
         this.data.ordered = false;  
+        if (this.edge.source.parentNode.enabled){
+          FlowchartComponent.enableNode(this.edge.target.parentNode);
+        } else {
+          FlowchartComponent.disableNode(this.edge.target.parentNode);
+        }
         break;
       }
     }
     this.isDown = 0;
   }
 
+  static enableNode(node: INode){
+    for (let edge of node.input.edges){
+      if (!edge.source.parentNode.enabled) return
+    }
+    node.enabled = true;
+    for (let edge of node.output.edges){
+      FlowchartComponent.enableNode(edge.target.parentNode);
+    }
+  }
+  
 
-
+  static disableNode(node: INode){
+    node.enabled = false;
+    for (let edge of node.output.edges){
+      FlowchartComponent.disableNode(edge.target.parentNode);
+    }
+  }
 
 }
 

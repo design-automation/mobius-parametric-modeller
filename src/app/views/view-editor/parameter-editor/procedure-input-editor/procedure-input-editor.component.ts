@@ -8,7 +8,7 @@ const keys = Object.keys(InputType);
   templateUrl: './procedure-input-editor.component.html',
   styleUrls: ['./procedure-input-editor.component.scss']
 })
-export class procedureInputEditorComponent {
+export class ProcedureInputEditorComponent {
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();

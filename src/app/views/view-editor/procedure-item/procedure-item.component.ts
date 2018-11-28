@@ -58,11 +58,11 @@ export class ProcedureItemComponent {
     }
 
     canBePrinted() {
-        return (this.data.argCount > 0 && this.data.args[0].name == 'var_name');
+        return (this.data.argCount > 0 && this.data.args[0].name === 'var_name');
     }
 
     haveHelpText() {
-        return (this.data.type == ProcedureTypes.Function || this.data.type ==  ProcedureTypes.Imported);
+        return (this.data.type === ProcedureTypes.Function || this.data.type ===  ProcedureTypes.Imported);
     }
 
     emitHelpText($event) {

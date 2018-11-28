@@ -68,7 +68,7 @@ export class ExecuteComponent {
 
             // reset input of all nodes except start
             for (const node of this.flowchart.nodes) {
-                if (node.type != 'start') {
+                if (node.type !== 'start') {
                     if (node.input.edges) {
                         node.input.value = undefined;
                     }
@@ -149,8 +149,10 @@ export class ExecuteComponent {
             // add the imported functions code
             let hasFunctions = false;
             for (const funcName in funcStrings) {
-                fnString = funcStrings[funcName] + fnString;
-                hasFunctions = true;
+                if (funcStrings.hasOwnProperty(funcName)) {
+                    fnString = funcStrings[funcName] + fnString;
+                    hasFunctions = true;
+                }
             }
             if (hasFunctions) {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
@@ -164,10 +166,12 @@ export class ExecuteComponent {
             // execute the function
             const result = fn(Modules, params);
             node.output.value = result;
-            if (node.type == 'start') {
+            if (node.type === 'start') {
                 for (const constant in params['constants']) {
-                    const constString = JSON.stringify(params['constants'][constant]);
-                    this.globalVars += `const ${constant} = ${constString};\n`;
+                    if (params['constants'].hasOwnProperty(constant)) {
+                        const constString = JSON.stringify(params['constants'][constant]);
+                        this.globalVars += `const ${constant} = ${constString};\n`;
+                    }
                 }
                 this.globalVars += '\n';
             }
@@ -179,7 +183,7 @@ export class ExecuteComponent {
             // Unexpected token
             const prodWithError: string = params['currentProcedure'][0];
             const markError = function(prod: IProcedure, id: string) {
-                if (prod['ID'] && id && prod['ID'] == id) {
+                if (prod['ID'] && id && prod['ID'] === id) {
                     prod.hasError = true;
                 }
                 if (prod.hasOwnProperty('children')) {
@@ -188,9 +192,9 @@ export class ExecuteComponent {
                     });
                 }
             };
-            if (prodWithError != '') {
+            if (prodWithError !== '') {
                 node.procedure.map(function(prod: IProcedure) {
-                    if (prod['ID'] == prodWithError) {
+                    if (prod['ID'] === prodWithError) {
                         prod.hasError = true;
                     }
                     if (prod.hasOwnProperty('children')) {
@@ -202,7 +206,8 @@ export class ExecuteComponent {
             }
             let error: Error;
             if (ex.toString().indexOf('Unexpected identifier') > -1) {
-                error = new Error('Unexpected Identifier error. Did you declare everything? Check that your strings are enclosed in quotes (")');
+                error = new Error('Unexpected Identifier error. Did you declare everything?' +
+                    'Check that your strings are enclosed in quotes (")');
             } else if (ex.toString().indexOf('Unexpected token') > -1) {
                 error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
             } else {

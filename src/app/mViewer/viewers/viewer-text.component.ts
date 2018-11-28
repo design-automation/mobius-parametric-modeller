@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, DoCheck } from '@angular/core';
 
 @Component({
   selector: 'text-viewer',
@@ -19,7 +19,7 @@ import { Component, Input } from '@angular/core';
     font-family: arial;
   }`]
 })
-export class TextViewerComponent {
+export class TextViewerComponent implements OnInit, DoCheck {
     @Input() data;
     output: string;
 

@@ -23,7 +23,7 @@ import { AddNodeComponent } from './components/add-components/add_node.component
 import { AddInputComponent } from './components/add-components/add_input.component';
 import { ParameterViewerComponent } from './components/parameter-viewer/parameter-viewer.component';
 import { InputPortViewerComponent } from './components/parameter-viewer/input-port-viewer/input-port-viewer.component';
-import { procedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
+import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
 import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
@@ -39,7 +39,7 @@ import { AutogrowDirective } from './directives/textarea';
             NavigationComponent,
             HeaderComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
-            ParameterViewerComponent,  InputPortViewerComponent, procedureInputViewerComponent,
+            ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent
         ],
     imports: [

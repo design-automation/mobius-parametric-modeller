@@ -1,6 +1,6 @@
 import { Component, Input} from '@angular/core';
 import { IMobius } from '@models/mobius';
-import { downloadUtils } from './download.utils';
+import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
 
@@ -69,7 +69,7 @@ export class SaveFileComponent {
         const fileString = circularJSON.stringify(savedfile);
         const fname = `${savedfile.flowchart.name.replace(/\ /g, '_')}.mob`;
         const blob = new Blob([fileString], {type: 'application/json'});
-        downloadUtils.downloadFile(fname, blob);
+        DownloadUtils.downloadFile(fname, blob);
 
     }
 

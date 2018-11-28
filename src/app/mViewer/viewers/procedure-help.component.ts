@@ -58,13 +58,10 @@ span{
 
 `]
 })
-export class procedureHelpComponent {
+export class ProcedureHelpComponent {
     @Input() output;
 
     constructor() {
-    }
-
-    ngOnInit() {
     }
 
 

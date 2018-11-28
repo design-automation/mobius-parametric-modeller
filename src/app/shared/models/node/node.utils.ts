@@ -127,7 +127,7 @@ export abstract class NodeUtils {
                 }
                 for (const index in list) {
                     if (list[index].selected) {
-                        list.splice(parseInt(index) + 1, 0, prod);
+                        list.splice(parseInt(index, 10) + 1, 0, prod);
                         break;
                     }
                 }
@@ -155,7 +155,9 @@ export abstract class NodeUtils {
         switch (prod.type) {
             case ProcedureTypes.Variable:
                 prod.argCount = 2;
-                prod.args = [ {name: 'var_name', value: undefined, default: undefined}, {name: 'value', value: undefined, default: undefined} ];
+                prod.args = [
+                    {name: 'var_name', value: undefined, default: undefined},
+                    {name: 'value', value: undefined, default: undefined} ];
                 break;
 
             case ProcedureTypes.Foreach:
@@ -201,7 +203,7 @@ export abstract class NodeUtils {
 
                 // --UNSTABLE--
                 // changing the value of the last argument of all functions in input node to be undefined
-                if (node.type == 'start') {
+                if (node.type === 'start') {
                     data.args[data.argCount - 1].value = undefined;
                 }
 

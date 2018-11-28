@@ -56,7 +56,4 @@ export class EdgeComponent {
         this.delete.emit();
     }
 
-    ngOnInit() {
-    }
-
 }

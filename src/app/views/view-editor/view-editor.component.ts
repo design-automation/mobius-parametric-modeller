@@ -47,7 +47,7 @@ export class ViewEditorComponent {
 
     // cut selected procedures
     cutProd(event) {
-      if (!this.copyCheck || document.activeElement.nodeName == 'INPUT') { return; }
+      if (!this.copyCheck || document.activeElement.nodeName === 'INPUT') { return; }
       console.log('cutting', this.node.state.procedure);
       this.copiedProd = this.node.state.procedure;
       let parentArray;
@@ -68,7 +68,7 @@ export class ViewEditorComponent {
 
     // paste copied procedures
     pasteProd(event) {
-      if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() != 'INPUT') {
+      if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() !== 'INPUT') {
         const pastingPlace = this.node.state.procedure[0];
         if (pastingPlace === undefined) {
           for (let i = 0; i < this.copiedProd.length; i++) {
@@ -119,7 +119,7 @@ export class ViewEditorComponent {
     // delete an imported function
     deleteFunction(event) {
         for (let i = 0; i < this.flowchart.functions.length; i++) {
-            if (this.flowchart.functions[i] == event) {
+            if (this.flowchart.functions[i] === event) {
                 this.flowchart.functions.splice(i, 1);
                 break;
             }

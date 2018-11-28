@@ -21,13 +21,15 @@ export class CodeUtils {
         const args = prod.args;
         const prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
         codeStr.push('');
-        if (addProdArr && prod.type != ProcedureTypes.Else && prod.type != ProcedureTypes.Elseif) {
+        if (addProdArr && prod.type !== ProcedureTypes.Else && prod.type !== ProcedureTypes.Elseif) {
             codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
         }
 
         switch ( prod.type ) {
             case ProcedureTypes.Variable:
-                if (args[0].value.indexOf('__params__') != -1 || args[1].value.indexOf('__params__') != -1) { throw new Error('Unexpected Identifier'); }
+                if (args[0].value.indexOf('__params__') !== -1 || args[1].value.indexOf('__params__') !== -1) {
+                    throw new Error('Unexpected Identifier');
+                }
                 codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
                 if (prefix === 'let ') {
                     existingVars.push(args[0].value);
@@ -35,7 +37,7 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.If:
-                if (args[0].value.indexOf('__params__') != -1) { throw new Error('Unexpected Identifier'); }
+                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
                 codeStr.push(`if (${args[0].value}){`);
                 break;
 
@@ -44,18 +46,18 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Elseif:
-                if (args[0].value.indexOf('__params__') != -1) { throw new Error('Unexpected Identifier'); }
+                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
                 codeStr.push(`else if(${args[0].value}){`);
                 break;
 
             case ProcedureTypes.Foreach:
                 // codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
-                if (args[0].value.indexOf('__params__') != -1) { throw new Error('Unexpected Identifier'); }
+                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
                 codeStr.push(`for (${prefix} ${args[0].value} of ${args[1].value}){`);
                 break;
 
             case ProcedureTypes.While:
-                if (args[0].value.indexOf('__params__') != -1) { throw new Error('Unexpected Identifier'); }
+                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
                 codeStr.push(`while (${args[0].value}){`);
                 break;
 
@@ -70,9 +72,9 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
-                    if (arg.name == _parameterTypes.input) {
+                    if (arg.name === _parameterTypes.input) {
                         let val = arg.value || arg.default;
-                        if (prod.meta.inputMode == InputType.URL) {
+                        if (prod.meta.inputMode === InputType.URL) {
                             const p = new Promise((resolve) => {
                                 const request = new XMLHttpRequest();
                                 request.open('GET', arg.value || arg.default);
@@ -82,7 +84,7 @@ export class CodeUtils {
                                 request.send();
                             });
                             val = await p;
-                        } else if (prod.meta.inputMode == InputType.File) {
+                        } else if (prod.meta.inputMode === InputType.File) {
                             const p = new Promise((resolve) => {
                                 const reader = new FileReader();
                                 reader.onload = function() {
@@ -95,17 +97,19 @@ export class CodeUtils {
                         argVals.push(val);
                         continue;
                     }
-                    if (arg.value && arg.value.indexOf('__params__') != -1) { throw new Error('Unexpected Identifier'); }
-                    if (arg.name == _parameterTypes.constList) {
+                    if (arg.value && arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                    if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
                     }
-                    if (arg.name == _parameterTypes.model) {
+                    if (arg.name === _parameterTypes.model) {
                         argVals.push('__params__.model');
                         continue;
                     }
-                    if (arg.value && arg.value.substring(0, 1) == '@') {
-                        if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT') {
+                    if (arg.value && arg.value.substring(0, 1) === '@') {
+                        if (prod.meta.module.toUpperCase() === 'QUERY'
+                            && prod.meta.name.toUpperCase() === 'SET'
+                            && arg.name.toUpperCase() === 'STATEMENT') {
                             argVals.push('"' + arg.value.replace(/"/g, '\'') + '"');
                             continue;
                         }
@@ -119,9 +123,9 @@ export class CodeUtils {
                 const argValues = argVals.join(',');
                 await argValues;
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
-                if ( prod.meta.module.toUpperCase() == 'OUTPUT') {
+                if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
                     codeStr.push(`return ${fnCall};`);
-                } else if (args[0].name == '__none__') {
+                } else if (args[0].name === '__none__') {
                     codeStr.push(`${fnCall};`);
                 } else {
                     codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
@@ -163,8 +167,8 @@ export class CodeUtils {
           request.open('GET', f.download_url);
           request.onload = () => {
               if (request.status === 200) {
-                  const f = circularJSON.parse(request.responseText);
-                  observer.next(f);
+                  const fl = circularJSON.parse(request.responseText);
+                  observer.next(fl);
                   observer.complete();
               } else {
                   observer.error('error happened');
@@ -194,7 +198,7 @@ export class CodeUtils {
 
     static getInputValue(inp: IPortInput, node: INode): Promise<string> {
         let input: any;
-        if (node.type == 'start' || inp.edges.length == 0) {
+        if (node.type === 'start' || inp.edges.length === 0) {
             input = Model.New();
         } else {
             input = CodeUtils.mergeInputs(inp.edges.map(edge => edge.source.value));
@@ -225,7 +229,7 @@ export class CodeUtils {
             node.input.value = input;
         }
 
-        if (node.type == 'start') {
+        if (node.type === 'start') {
             codeStr.push('__params__.constants = {};\n');
         }
 
@@ -246,7 +250,7 @@ function wait(ms){
         for (const prod of node.procedure) {
             codeStr.push(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
-        if (node.type == 'end' && node.procedure.length > 0) {
+        if (node.type === 'end' && node.procedure.length > 0) {
             return `{\n${codeStr.join('\n')}\n}`;
         }
 
@@ -262,15 +266,20 @@ function wait(ms){
 
     static async getFunctionString(func: IFunction): Promise<string> {
         let fullCode = '';
-        // let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
-        let fnCode = `function ${func.name}(__mainParams__,${func.args.map(arg => arg.name).join(',')}){\nvar merged;\nlet __params__={"currentProcedure": [''],"model":__modules__.Model.New()};\n`;
+        /*
+        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')})` +
+        `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
+        */
+        let fnCode = `function ${func.name}(__mainParams__,${func.args.map(arg => arg.name).join(',')})` +
+        `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":__modules__.Model.New()};\n`;
+
         for (const node of func.module.nodes) {
             const code = '{' + await CodeUtils.getNodeCode(node, false) + '}';
             fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')})` + code + `\n\n`;
             if (node.type === 'start') {
                 // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
                 fnCode += `let result_${node.id} = __params__.model;\n`;
-            } else if (node.input.edges.length == 1) {
+            } else if (node.input.edges.length === 1) {
                 fnCode += `__params__.model = JSON.parse(JSON.stringify(result_${node.input.edges[0].source.parentNode.id}));\n`;
                 fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')});\n`;
             } else {

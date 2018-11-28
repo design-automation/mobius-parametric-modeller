@@ -53,7 +53,7 @@ export class FlowchartUtils {
         FlowchartUtils.checkNode(nodeOrder, startNode, true);
         if (nodeOrder.length < flw.nodes.length) {
             for (const node of flw.nodes) {
-                if (node.type != 'start' && node.input.edges.length == 0) {
+                if (node.type !== 'start' && node.input.edges.length === 0) {
                     FlowchartUtils.checkNode(nodeOrder, node, false);
                 }
             }

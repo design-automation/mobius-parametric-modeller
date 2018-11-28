@@ -1,5 +1,5 @@
 
-export class downloadUtils {
+export class DownloadUtils {
 
     static downloadFile(fileName: string, fileContent: Blob) {
         if (window.navigator.msSaveOrOpenBlob) {

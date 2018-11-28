@@ -7,7 +7,7 @@ import { InputType } from '@models/port';
   templateUrl: './procedure-input-viewer.component.html',
   styleUrls: ['./procedure-input-viewer.component.scss']
 })
-export class procedureInputViewerComponent {
+export class ProcedureInputViewerComponent {
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();

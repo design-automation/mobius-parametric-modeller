@@ -41,14 +41,14 @@ export class NodeComponent {
     check if the input port of the node is draggable --> false only for start node, true otherwise
     */
     inputDraggable(): boolean {
-        return !(this.node.type == 'start');
+        return !(this.node.type === 'start');
     }
 
     /*
     check if the output port of the node is draggable --> false only for end node, true otherwise
     */
     outputDraggable(): boolean {
-        return !(this.node.type == 'end');
+        return !(this.node.type === 'end');
     }
 
     /*
@@ -68,7 +68,7 @@ export class NodeComponent {
         event.stopPropagation();
         let pos = this.node.position;
         let data: any;
-        if (portType == 'input') {
+        if (portType === 'input') {
             data = this.node.input;
             pos = [pos.x + this.inputOffset[0], pos.y + this.inputOffset[1]];
         } else {

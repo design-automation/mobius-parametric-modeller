@@ -1,7 +1,7 @@
 import { ProcedureTypes } from './types';
 import { IArgument } from '@models/code';
 
-export interface IProcedure{
+export interface IProcedure {
     type: ProcedureTypes;
     ID: string;
 
@@ -12,23 +12,23 @@ export interface IProcedure{
     args: IArgument[];
 
     meta: { name: string, module: string, inputMode: number};
-    
+
     print: boolean;
     enabled: boolean;
     selected: boolean;
     hasError: boolean;
 }
 
-export interface IModule{
+export interface IModule {
     module: string;
-    functions: IFunction[]
+    functions: IFunction[];
 }
 
-export interface IFunction{
-    module: any,
-    name: string, 
-    argCount: number,
-    hasReturn: boolean,
+export interface IFunction {
+    module: any;
+    name: string;
+    argCount: number;
+    hasReturn: boolean;
     args: IArgument[];
 }
 

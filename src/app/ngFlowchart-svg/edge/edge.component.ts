@@ -14,14 +14,14 @@ import { IEdge } from '@models/edge';
         opacity: 1;
         pointer-events: stroke;
         marker-end: url(#arrow);
-    }  
+    }
     .inviEdge{
         fill: none;
         stroke: gray;
         stroke-width: 30px;
         opacity: 0;
         pointer-events: stroke;
-    }  
+    }
     .selected{
         stroke: rgb(0, 0, 150);
         opacity: 1;
@@ -30,7 +30,7 @@ import { IEdge } from '@models/edge';
     }
   `]
 })
-export class EdgeComponent{
+export class EdgeComponent {
 
     @ViewChild('canvas') canvas: ElementRef;
     @Input() edge: IEdge;
@@ -41,23 +41,19 @@ export class EdgeComponent{
     @Output() selected = new EventEmitter();
 
     // select a wire
-    select(event){
+    select(event) {
         event.preventDefault();
         event.stopPropagation();
-        if(this.edge.selected){
-            this.selected.emit(event.ctrlKey);        
+        if (this.edge.selected) {
+            this.selected.emit(event.ctrlKey);
         } else {
-            if (event.ctrlKey) this.selected.emit('ctrl');
-            else this.selected.emit('single');
+            if (event.ctrlKey) { this.selected.emit('ctrl'); } else { this.selected.emit('single'); }
         }
     }
 
     // delete a wire
-    deleteEdge(){ 
-        this.delete.emit()
-    }
-
-    ngOnInit() {
+    deleteEdge() {
+        this.delete.emit();
     }
 
 }

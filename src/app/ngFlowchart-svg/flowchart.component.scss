@@ -4,408 +4,408 @@ $text-color: rgb(80,80,80);
 
 .container{
     position: relative;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-	.svgCanvas{
+    .svgCanvas{
 
-		.temp-wire{
-			stroke: $text-color;
-			stroke-width: 2px;
-			stroke-dasharray: 10 15;
-			opacity: 0.5;
-		}
-	}
-	
+        .temp-wire{
+            stroke: $text-color;
+            stroke-width: 2px;
+            stroke-dasharray: 10 15;
+            opacity: 0.5;
+        }
+    }
+    
 }
 
 .transform--container{
-	position: absolute;
+    position: absolute;
     width: 100%;
-	//height: 90%;
+    //height: 90%;
     //width: 2048px;
-	//height: 1024px;
+    //height: 1024px;
     transition: transform 0.1s;
-	//transition-timing-function: ease-in-out;
-	//overflow: hidden;
-	//border: 1px solid black;
+    //transition-timing-function: ease-in-out;
+    //overflow: hidden;
+    //border: 1px solid black;
 
 }
 
 
 split-area{
-	overflow: auto !important;
+    overflow: auto !important;
 }
 
 input{
-	border: none;
+    border: none;
 }
 
 input:focus{
-	border-bottom: 1px dashed gray;
+    border-bottom: 1px dashed gray;
 }
 
 
 #flowchart__name{
-	margin: 0 auto;
-	font-size: 14px;
-	line-height: 28px;
-	font-weight: bold;
-	color: $color2;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 28px;
+    font-weight: bold;
+    color: $color2;
 }
 
 .button-row {
-	position: absolute; 
-	top: 0px; 
-	left: 10px;
+    position: absolute; 
+    top: 0px; 
+    left: 10px;
 
-	button{
-		color: rgb(80,80,80);
-		width: 28px;
-	}
+    button{
+        color: rgb(80,80,80);
+        width: 28px;
+    }
 }
 
 .resetViewer-button{
-	position: absolute; 
-	top: 0px; 
-	right: 0px;
-	color: rgb(80,80,80);
+    position: absolute; 
+    top: 0px; 
+    right: 0px;
+    color: rgb(80,80,80);
 }
 
 .viewer{
 
-	@extend .viewer;
+    @extend .viewer;
 
-	position: relative;
+    position: relative;
 
-	height: 100%; 
-	width: 100%;
+    height: 100%; 
+    width: 100%;
 
-	display: flex;
-	flex-direction: column;
-	background-image: repeating-linear-gradient(0deg,transparent,transparent 70px,$color3 70px,$color3 71px),repeating-linear-gradient(-90deg,transparent,transparent 70px,$color3 70px,$color3 71px);
-	background-size: 71px 71px;
-	background-color: white;
+    display: flex;
+    flex-direction: column;
+    background-image: repeating-linear-gradient(0deg,transparent,transparent 70px,$color3 70px,$color3 71px),repeating-linear-gradient(-90deg,transparent,transparent 70px,$color3 70px,$color3 71px);
+    background-size: 71px 71px;
+    background-color: white;
 
-	box-sizing: border-box;
-	height: 100%;
-	width: 100%;
-	padding-bottom: $header-height;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    padding-bottom: $header-height;
 
-	.container{
-		position: absolute;
+    .container{
+        position: absolute;
 
-		height: 100%;
-		overflow: hidden;
+        height: 100%;
+        overflow: hidden;
 
-		.disabled{
-				color: $color2;
-			&:hover{
-				color: $color2 !important;
-			}
-		}
+        .disabled{
+                color: $color2;
+            &:hover{
+                color: $color2 !important;
+            }
+        }
 
-		.sidebar{
-			font-size: $fsize2;
-			background-color: $color3;
-			color: $color1;
-			white-space: nowrap;
-			overflow-x: hidden !important;
-			//overflow-y: auto !important;
-			section{
-				padding-left: $default-side-padding;
-				padding-bottom: $default-side-padding/3;
-				padding-top: $default-side-padding/3;
-				border-bottom: 1px solid $color2;
+        .sidebar{
+            font-size: $fsize2;
+            background-color: $color3;
+            color: $color1;
+            white-space: nowrap;
+            overflow-x: hidden !important;
+            //overflow-y: auto !important;
+            section{
+                padding-left: $default-side-padding;
+                padding-bottom: $default-side-padding/3;
+                padding-top: $default-side-padding/3;
+                border-bottom: 1px solid $color2;
 
-				div{
-					cursor: pointer;
+                div{
+                    cursor: pointer;
 
-					&:hover{
-						color: $color4;
-					}
-				}
-
-
-			}
-		}
-
-	}
-
-	.content-wrapper{
-		position: relative;
-		height: 100%;
-		width: 100%;
-		transform-origin: top left;
-	}
-
-	.info-container{
-		padding: 0px 30px; 
-		display: flex; 
-		flex-direction: row;
-		justify-content: space-between;
-
-		.info{
-			display: flex; 
-			flex-direction: column;
-
-			.label{
-				font-size: 12px;
-				font-weight: 100;
-				color: $color5;
-			}
-
-			.value{
-				color: $color1;
-				font-size: 11px;
-				font-weight: 600;
-			}
-			
-			.action{
-				cursor: pointer;
-				font-size: 11px;
-				color: $color2;
-			}
-		}
-	}
-
-	.graph-container{
-		position: absolute; 
-		//top: 0px; 
-		//left: 0px; 
-		height: 100%; 
-		width: 100%;
-		//box-sizing: content-box !important;
-		//overflow: auto !important;
-		
-		transform-origin: top left;
-
-		#graph-edges{
-			background-color: transparent;
-			z-index: 1000;
-
-			#temporary-edge{
-				.hidden{
-					display: none;
-				}
-			}
-		}
-
-		#graph-nodes{
-			background-color: transparent;
-			overflow: hidden;
-			z-index: 1000;
-		}
-	}
-	.info-container{
-		position: absolute;
-		right: 0;
-		bottom: 0;
-		.label, .value{
-			margin-right: 5px;
-			font-weight: normal !important;
-		}
-	}
-	
-	.node-container{
-		position: relative;
-	
-		.node{
-			position: absolute;
-			transform-origin: top left;
-			z-index: 3;
-			margin: 0px;
-			color: $color1;
-
-			    &.hidden{
-			    	display: none;
-			    }
-
-				.btn-container{
-				   position: absolute;
-				   right: -30px;
-
-				   display: flex; 
-				   flex-direction: column; 
-				   justify-content: space-between;
-
-					height: 60px + 20px + 20px;
-
-				   .btn-group{
-				   		position: relative;
-				   		display: flex; 
-				   		flex-direction: column;
-				   		justify-content: center;
-				   	    
-						background: none;
-						
-						.action-button{
-							position: relative;
-							width: 25px;
-							height: 24px;
-							cursor: pointer;
-							font-size: 9px;
-							text-align: center;
-
-							.material-icons{
-								font-size: 18px;
-								line-height: 24px;
-								color: $color2;
-							}
-
-							&:hover{
-								.mat-icon{
-									color: $color4;
-								}
-								color: white;
-							}
-						}
-				   }
-				}
-
-				.node-body{
-					display: flex; 
-					flex-direction: column;
-					justify-content: center;
-
-					position: relative;
-					min-height: 30px;
-					min-width: 70px;
-					width: auto;
-					border: 1px solid $color1;
-					background-color: rgba(255, 255, 255, 0.7);
-					cursor: move;
-
-					&.disabled{
-						opacity: 0.4;
-					}
-
-					&.selected{
-						border-color: green;
-					}
-
-					&.library{
-						border-color: $color1;
-						border-style: solid;
-					}
-
-					&.error{
-						background-color: $pcolor1;
-					}
-
-					&.function{
-						background-color: yellow; 
-						border: 1px dashed green;
-					}
-
-					.node-name{
-						font-family: sans-serif; 
-						font-size: $fsize2;
-						border-bottom: 1px solid $color1; 
-						text-align: center;
-						background-color: $color3;
-
-						input{
-							background-color: inherit;
-							border: 0px;
-							color: $color1;
-							text-align: center;
-						}
-
-						&.selected{
-							background-color: $color2;
-							input{
-								color: white;
-								font-weight: bold;
-
-								&:focus{
-									color: $color1;
-									background-color: $color4;
-								}
-							}
-						}
-					}
-
-					.port-container{
-
-						display: flex; 
-						flex-direction: column;
-
-						margin-top: 10px; 
-						margin-bottom: 10px;
-
-						.divider{
-							height: 2px; 
-							width: 100%; 
-							background-color: $color2;
-						}
-
-						.port{
-							display: flex; 
-							flex-direction: row;
-							margin: 5px 0px;
+                    &:hover{
+                        color: $color4;
+                    }
+                }
 
 
-							&.hidden{
-								display: none;
-							}
+            }
+        }
 
-							.port-grip{
-								width: $port-size; 
-								height: $port-size; 
-								border-radius: 50%;
-								background-color: $color3;
-								border: 1px solid $color1;
-								cursor: pointer;
+    }
 
-								&.isFunction{
-									border-style: dashed;
-									background-color: gray;
-									border-radius: 0px;
-								}
+    .content-wrapper{
+        position: relative;
+        height: 100%;
+        width: 100%;
+        transform-origin: top left;
+    }
 
-								&.selected{
-									border: 2px solid $color2;
-									background-color: $color4;
-								}
+    .info-container{
+        padding: 0px 30px; 
+        display: flex; 
+        flex-direction: row;
+        justify-content: space-between;
 
-								&:hover{
-									background-color: $color4;
-								}
+        .info{
+            display: flex; 
+            flex-direction: column;
 
-							}
-							.port-name{
-								font-size: $fsize2;
-								margin: 0px 5px; 
+            .label{
+                font-size: 12px;
+                font-weight: 100;
+                color: $color5;
+            }
 
-								&.isFunction{
-									color: black;
-									font-size: 0.8*$fsize2;
-								}
+            .value{
+                color: $color1;
+                font-size: 11px;
+                font-weight: 600;
+            }
+            
+            .action{
+                cursor: pointer;
+                font-size: 11px;
+                color: $color2;
+            }
+        }
+    }
 
-							}
+    .graph-container{
+        position: absolute; 
+        //top: 0px; 
+        //left: 0px; 
+        height: 100%; 
+        width: 100%;
+        //box-sizing: content-box !important;
+        //overflow: auto !important;
+        
+        transform-origin: top left;
 
-							&.input{
-								justify-content: flex-start;
-								margin-left: -$port-size/2;
-							}
+        #graph-edges{
+            background-color: transparent;
+            z-index: 1000;
 
-							&.output{
-								justify-content: flex-end;
-								margin-right: -$port-size/2;
-							}
-						}
-						
+            #temporary-edge{
+                .hidden{
+                    display: none;
+                }
+            }
+        }
 
-					}
-				}
+        #graph-nodes{
+            background-color: transparent;
+            overflow: hidden;
+            z-index: 1000;
+        }
+    }
+    .info-container{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        .label, .value{
+            margin-right: 5px;
+            font-weight: normal !important;
+        }
+    }
+    
+    .node-container{
+        position: relative;
+    
+        .node{
+            position: absolute;
+            transform-origin: top left;
+            z-index: 3;
+            margin: 0px;
+            color: $color1;
 
-			&:active{
-				cursor: none;
-			}
-		}
-	}
-	
+                &.hidden{
+                    display: none;
+                }
+
+                .btn-container{
+                   position: absolute;
+                   right: -30px;
+
+                   display: flex; 
+                   flex-direction: column; 
+                   justify-content: space-between;
+
+                    height: 60px + 20px + 20px;
+
+                   .btn-group{
+                           position: relative;
+                           display: flex; 
+                           flex-direction: column;
+                           justify-content: center;
+                           
+                        background: none;
+                        
+                        .action-button{
+                            position: relative;
+                            width: 25px;
+                            height: 24px;
+                            cursor: pointer;
+                            font-size: 9px;
+                            text-align: center;
+
+                            .material-icons{
+                                font-size: 18px;
+                                line-height: 24px;
+                                color: $color2;
+                            }
+
+                            &:hover{
+                                .mat-icon{
+                                    color: $color4;
+                                }
+                                color: white;
+                            }
+                        }
+                   }
+                }
+
+                .node-body{
+                    display: flex; 
+                    flex-direction: column;
+                    justify-content: center;
+
+                    position: relative;
+                    min-height: 30px;
+                    min-width: 70px;
+                    width: auto;
+                    border: 1px solid $color1;
+                    background-color: rgba(255, 255, 255, 0.7);
+                    cursor: move;
+
+                    &.disabled{
+                        opacity: 0.4;
+                    }
+
+                    &.selected{
+                        border-color: green;
+                    }
+
+                    &.library{
+                        border-color: $color1;
+                        border-style: solid;
+                    }
+
+                    &.error{
+                        background-color: $pcolor1;
+                    }
+
+                    &.function{
+                        background-color: yellow; 
+                        border: 1px dashed green;
+                    }
+
+                    .node-name{
+                        font-family: sans-serif; 
+                        font-size: $fsize2;
+                        border-bottom: 1px solid $color1; 
+                        text-align: center;
+                        background-color: $color3;
+
+                        input{
+                            background-color: inherit;
+                            border: 0px;
+                            color: $color1;
+                            text-align: center;
+                        }
+
+                        &.selected{
+                            background-color: $color2;
+                            input{
+                                color: white;
+                                font-weight: bold;
+
+                                &:focus{
+                                    color: $color1;
+                                    background-color: $color4;
+                                }
+                            }
+                        }
+                    }
+
+                    .port-container{
+
+                        display: flex; 
+                        flex-direction: column;
+
+                        margin-top: 10px; 
+                        margin-bottom: 10px;
+
+                        .divider{
+                            height: 2px; 
+                            width: 100%; 
+                            background-color: $color2;
+                        }
+
+                        .port{
+                            display: flex; 
+                            flex-direction: row;
+                            margin: 5px 0px;
+
+
+                            &.hidden{
+                                display: none;
+                            }
+
+                            .port-grip{
+                                width: $port-size; 
+                                height: $port-size; 
+                                border-radius: 50%;
+                                background-color: $color3;
+                                border: 1px solid $color1;
+                                cursor: pointer;
+
+                                &.isFunction{
+                                    border-style: dashed;
+                                    background-color: gray;
+                                    border-radius: 0px;
+                                }
+
+                                &.selected{
+                                    border: 2px solid $color2;
+                                    background-color: $color4;
+                                }
+
+                                &:hover{
+                                    background-color: $color4;
+                                }
+
+                            }
+                            .port-name{
+                                font-size: $fsize2;
+                                margin: 0px 5px; 
+
+                                &.isFunction{
+                                    color: black;
+                                    font-size: 0.8*$fsize2;
+                                }
+
+                            }
+
+                            &.input{
+                                justify-content: flex-start;
+                                margin-left: -$port-size/2;
+                            }
+
+                            &.output{
+                                justify-content: flex-end;
+                                margin-right: -$port-size/2;
+                            }
+                        }
+                        
+
+                    }
+                }
+
+            &:active{
+                cursor: none;
+            }
+        }
+    }
+    
 }
 

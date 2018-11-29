@@ -7,11 +7,11 @@ import { IFlowchart } from '@models/flowchart';
   template:  `<button (click)='addNode()'>AddNode</button>`,
   styles: [ ]
 })
-export class AddNodeComponent{
-    
-    @Input() flowchart: IFlowchart; 
-    constructor(){}
+export class AddNodeComponent {
 
-    addNode(): void{  this.flowchart.nodes.push(NodeUtils.getNewNode());}
+    @Input() flowchart: IFlowchart;
+    constructor() {}
+
+    addNode(): void {  this.flowchart.nodes.push(NodeUtils.getNewNode()); }
 
 }

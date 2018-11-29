@@ -7,22 +7,22 @@ import { INode } from '@models/node';
   templateUrl: './view-publish.component.html',
   styleUrls: ['./view-publish.component.scss']
 })
-export class ViewPublishComponent{
+export class ViewPublishComponent {
     @Input() flowchart: IFlowchart;
 
-    constructor(){}
+    constructor() {}
 
-    selectNode(node_index: number): void{  
-      if( typeof(node_index) == 'number' ){
-          this.flowchart.meta.selected_nodes = [node_index];  
+    selectNode(node_index: number): void {
+      if ( typeof(node_index) === 'number' ) {
+          this.flowchart.meta.selected_nodes = [node_index];
       }
     }
 
     getEndNode(): INode {
-      for (let node of this.flowchart.nodes){
-        if (node.type == 'end') return node;
+      for (const node of this.flowchart.nodes) {
+        if (node.type === 'end') { return node; }
       }
     }
-    
+
 }
 

@@ -10,13 +10,13 @@ import { EdgeComponent } from './edge/edge.component';
 
 @NgModule({
   declarations: [
-    FlowchartComponent, 
-    NodeComponent, 
+    FlowchartComponent,
+    NodeComponent,
     EdgeComponent,
   ],
   exports: [ FlowchartComponent ],
   imports: [ CommonModule,
-             FormsModule, 
+             FormsModule,
              MatIconModule,
              MatButtonModule ],
   entryComponents: [ ],

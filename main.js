@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horizontal\">\r\n        <as-split-area size=\"50\" >\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='activeView==\"publish\"' (click)='updateView(\"publish\")'>Publish</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"flowchart\"' (click)='updateView(\"flowchart\")'>Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new (create)='updateFile($event)'></file-new>\r\n                    <file-save [file]='file'></file-save>\r\n                    <file-load (loaded)='updateFile($event)'></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute [flowchart]='flowchart'></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Reset Flowchart to Default\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>Reset</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <ng-container #vc></ng-container>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area size=\"50\">\r\n            <!-- mViewer panel -->\r\n            <div class='content__viewer' >\r\n                <mviewer [data]='viewerData()'></mviewer>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n\r\n    </as-split>\r\n\r\n</div>\r\n\r\n"
+module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horizontal\">\r\n        <as-split-area size=\"50\" >\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='activeView==\"gallery\"' (click)='updateView(\"gallery\")'>Gallery</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"publish\"' (click)='updateView(\"publish\")'>Publish</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"flowchart\"' (click)='updateView(\"flowchart\")'>Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new (create)='updateFile($event)'></file-new>\r\n                    <file-save [file]='dataService.file'></file-save>\r\n                    <file-load (loaded)='updateFile($event)'></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute [flowchart]='dataService.flowchart'></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Reset Flowchart to Default\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>Reset</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <ng-container #vc></ng-container>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area size=\"50\">\r\n            <!-- mViewer panel -->\r\n            <div class='content__viewer' >\r\n                <mviewer [data]='viewerData()' [helpView]='helpView'></mviewer>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n\r\n    </as-split>\r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -96,21 +96,18 @@ var AppComponent = /** @class */ (function () {
         this.r = r;
         this.views = [];
         this.Viewers = {
-            "editor": _views__WEBPACK_IMPORTED_MODULE_1__["ViewEditorComponent"],
-            "publish": _views__WEBPACK_IMPORTED_MODULE_1__["ViewPublishComponent"],
-            "flowchart": _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_4__["FlowchartComponent"] // src/ngFlowchart-svg/
+            'gallery': _views__WEBPACK_IMPORTED_MODULE_1__["ViewGalleryComponent"],
+            'publish': _views__WEBPACK_IMPORTED_MODULE_1__["ViewPublishComponent"],
+            'flowchart': _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_4__["FlowchartComponent"],
+            'editor': _views__WEBPACK_IMPORTED_MODULE_1__["ViewEditorComponent"] // src/views/view-editor/
         };
-        this.file = dataService.file;
-        this.flowchart = dataService.flowchart;
     }
     AppComponent.prototype.ngOnInit = function () {
-        this.activeView = "flowchart";
-        this.updateView("flowchart");
+        this.activeView = 'gallery';
+        this.updateView('gallery');
     };
     AppComponent.prototype.updateFile = function (event) {
         this.dataService.file = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](event);
-        this.file = this.dataService.file;
-        this.flowchart = this.dataService.flowchart;
         this.updateValue();
     };
     AppComponent.prototype.createView = function (view) {
@@ -118,52 +115,53 @@ var AppComponent = /** @class */ (function () {
         var component = this.Viewers[view];
         var factory = this.r.resolveComponentFactory(component);
         var componentRef = factory.create(this.injector);
-        if (view == "flowchart") {
-            componentRef.instance["data"] = this.flowchart;
-            componentRef.instance["switch"].subscribe(function (data) { return _this.updateView(data); });
+        if (view === 'flowchart') {
+            componentRef.instance['switch'].subscribe(function (data) { return _this.updateView(data); });
         }
-        else if (view == "editor") {
-            componentRef.instance["flowchart"] = this.flowchart;
-            componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
+        else if (view === 'editor') {
+            componentRef.instance['helpText'].subscribe(function (data) { return _this.helpView = data; });
         }
-        else if (view == "publish") {
-            componentRef.instance["flowchart"] = this.flowchart;
+        else if (view === 'gallery') {
+            componentRef.instance['switch'].subscribe(function (data) { return _this.updateView(data); });
+            // componentRef.instance['dataservice'] = this.dataService;
         }
         return componentRef;
     };
     AppComponent.prototype.updateView = function (view) {
         this.activeView = view;
-        if (this.views[view] == undefined) {
+        if (this.views[view] === undefined) {
             this.views[view] = this.createView(view);
         }
-        else
-            this.updateValue();
+        // this.updateValue();
         this.vc.detach();
         this.vc.insert(this.views[view].hostView);
     };
     AppComponent.prototype.updateValue = function () {
         for (var view in this.Viewers) {
-            if (!this.views[view])
+            if (!this.views[view]) {
                 continue;
+            }
             var componentRef = this.views[view];
-            if (view == "flowchart") {
-                componentRef.instance["data"] = this.flowchart;
+            if (view === 'flowchart') {
+                // componentRef.instance['data'] = this.dataService.flowchart;
             }
-            else if (view == "editor") {
-                componentRef.instance["flowchart"] = this.flowchart;
-                componentRef.instance["node"] = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
+            else if (view === 'editor') {
+                // componentRef.instance['flowchart'] = this.dataService.flowchart;
+                // componentRef.instance['node'] = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
             }
-            else if (view == "publish") {
-                componentRef.instance["flowchart"] = this.flowchart;
+            else if (view === 'publish') {
+                // componentRef.instance['flowchart'] = this.dataService.flowchart;
             }
         }
     };
     AppComponent.prototype.viewerData = function () {
-        var node = this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
-        if (!node)
+        var node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+        if (!node) {
             return '';
-        if (node.type == 'output')
+        }
+        if (node.type === 'output') {
             return node.input.value;
+        }
         return node.output.value;
     };
     __decorate([
@@ -218,10 +216,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-//import { AppRoutingModule } from './app-routing.module';
-
-
-
+// import { AppRoutingModule } from './app-routing.module';
 
 
 
@@ -240,9 +235,10 @@ var AppModule = /** @class */ (function () {
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_2__["BrowserAnimationsModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-                //FormsModule,
-                //AppRoutingModule,
-                //CoreModule,
+                // FormsModule,
+                // AppRoutingModule,
+                // CoreModule,
+                _views__WEBPACK_IMPORTED_MODULE_5__["ViewGalleryModule"],
                 _views__WEBPACK_IMPORTED_MODULE_5__["ViewEditorModule"],
                 _views__WEBPACK_IMPORTED_MODULE_5__["ViewPublishModule"],
                 _shared_shared_module__WEBPACK_IMPORTED_MODULE_6__["SharedModule"],
@@ -254,6 +250,7 @@ var AppModule = /** @class */ (function () {
                 _views__WEBPACK_IMPORTED_MODULE_5__["ViewEditorComponent"],
                 _views__WEBPACK_IMPORTED_MODULE_5__["ViewPublishComponent"],
                 _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_8__["FlowchartComponent"],
+                _views__WEBPACK_IMPORTED_MODULE_5__["ViewGalleryComponent"],
             ],
             providers: [_services__WEBPACK_IMPORTED_MODULE_7__["DataService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
@@ -330,14 +327,18 @@ function return_value(__model__, index) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_parameterTypes", function() { return _parameterTypes; });
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/app/core/modules/functions.ts");
+
 var _parameterTypes = {
-    constList: "__constList__",
-    model: "__model__",
-    input: "__input__",
-    new: "__new__",
-    merge: "__megre__",
-    preprocess: "__preprocess__",
-    prostprocess: "__postprocess__"
+    constList: '__constList__',
+    model: '__model__',
+    input: '__input__',
+    new: 'functions.__new__',
+    newFn: _functions__WEBPACK_IMPORTED_MODULE_0__["__new__"],
+    merge: 'functions.__merge__',
+    mergeFn: _functions__WEBPACK_IMPORTED_MODULE_0__["__merge__"],
+    preprocess: 'functions.__preprocess__',
+    postprocess: 'functions.__postprocess__'
 };
 
 
@@ -460,7 +461,7 @@ function __merge__(model1, model2) {
     model1.topology.faces = model1.topology.faces.concat(new_faces);
     // Add collections from model2 to model1
     var new_collections = model2.topology.collections.map(function (c) { return [
-        c[0] + num_collections,
+        c[0] === -1 ? -1 : c[0] + num_collections,
         c[1].map(function (v) { return v + num_vertices; }),
         c[2].map(function (w) { return w + num_wires; }),
         c[3].map(function (f) { return f + num_faces; })
@@ -476,7 +477,7 @@ function __merge__(model1, model2) {
     // No return
 }
 /*
- * Helper function that adds attributes
+ * Helper function that adds attributes from model2 to model1.
  */
 function _addAttribs(attribs1, attribs2, size1) {
     var attribs_map = new Map();
@@ -486,7 +487,7 @@ function _addAttribs(attribs1, attribs2, size1) {
     attribs2.forEach(function (attrib2) {
         var attrib1 = attribs_map[attrib2.name + attrib2.data_type + attrib2.data_length];
         if (attrib1 === undefined) {
-            attrib2.values = Array(size1).fill(undefined).concat(attrib2.values);
+            attrib2.keys = Array(size1).fill(-1).concat(attrib2.keys);
             attribs1.push(attrib2);
         }
         else {
@@ -604,15 +605,14 @@ var DataService = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(DataService.prototype, "node", {
-        get: function () { return DataService_1._data.flowchart.nodes[DataService_1._selected]; },
+        get: function () { return DataService_1._data.flowchart.nodes[DataService_1._data.flowchart.meta.selected_nodes[0]]; },
         enumerable: true,
         configurable: true
     });
-    ;
     var DataService_1;
     DataService._data = {
-        name: "default_file",
-        author: "new_user",
+        name: 'default_file',
+        author: 'new_user',
         last_updated: new Date(),
         version: 1,
         flowchart: _models_flowchart__WEBPACK_IMPORTED_MODULE_1__["FlowchartUtils"].newflowchart()
@@ -751,37 +751,53 @@ var ViewerContainerComponent = /** @class */ (function () {
         }
     };
     ViewerContainerComponent.prototype.ngOnChanges = function () {
-        this.updateValue();
+        if (this.currentHelpView !== this.helpView) {
+            var view = void 0;
+            for (var _i = 0, _a = this.Viewers; _i < _a.length; _i++) {
+                var v = _a[_i];
+                if (v.name === 'Help') {
+                    view = v;
+                }
+            }
+            this.currentHelpView = this.helpView;
+            this.updateView(view);
+        }
+        else {
+            this.updateValue();
+        }
     };
     ViewerContainerComponent.prototype.createView = function (view) {
         var component = view.component;
         var factory = this.r.resolveComponentFactory(component);
         var componentRef = factory.create(this.injector);
-        if (view.name != 'Console') {
+        /*
+        if (view.name != 'Console'){
             componentRef.instance["data"] = this.data;
         }
+        */
         return componentRef;
     };
     ViewerContainerComponent.prototype.updateView = function (view) {
         this.activeView = view;
-        if (this.views[this.activeView.name] == undefined) {
+        if (this.views[this.activeView.name] === undefined) {
             this.views[this.activeView.name] = this.createView(view);
         }
-        else {
-            this.updateValue();
-        }
+        this.updateValue();
         this.vc.detach();
         this.vc.insert(this.views[this.activeView.name].hostView);
     };
     ViewerContainerComponent.prototype.updateValue = function () {
         try {
             var componentRef = this.views[this.activeView.name];
-            if (this.activeView.name != 'Console') {
-                componentRef.instance["data"] = this.data;
+            if (this.activeView.name === 'Help') {
+                componentRef.instance['output'] = this.currentHelpView;
+            }
+            else if (this.activeView.name !== 'Console') {
+                componentRef.instance['data'] = this.data;
             }
         }
         catch (ex) {
-            //console.log(`Active View not defined`);
+            // console.log(`Active View not defined`);
         }
     };
     __decorate([
@@ -792,8 +808,13 @@ var ViewerContainerComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
     ], ViewerContainerComponent.prototype, "data", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ViewerContainerComponent.prototype, "helpView", void 0);
     ViewerContainerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            // tslint:disable-next-line:component-selector
             selector: 'mviewer',
             template: __webpack_require__(/*! ./mobius-viewer.component.html */ "./src/app/mViewer/mobius-viewer.component.html"),
             styles: [__webpack_require__(/*! ./mobius-viewer.component.scss */ "./src/app/mViewer/mobius-viewer.component.scss")]
@@ -822,9 +843,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _mobius_viewer_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mobius-viewer.component */ "./src/app/mViewer/mobius-viewer.component.ts");
 /* harmony import */ var _viewers_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./viewers.config */ "./src/app/mViewer/viewers.config.ts");
-/* harmony import */ var _viewers_gs_viewer_gs_viewer_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./viewers/gs-viewer/gs-viewer.module */ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.module.ts");
+/* harmony import */ var _viewers_gsviewer_gsviewer_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./viewers/gsviewer/gsviewer.module */ "./src/app/mViewer/viewers/gsviewer/gsviewer.module.ts");
 /* harmony import */ var _viewers_mobius_cesium_mobius_cesium_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./viewers/mobius-cesium/mobius-cesium.module */ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.module.ts");
 /* harmony import */ var _viewers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./viewers */ "./src/app/mViewer/viewers/index.ts");
+/* harmony import */ var _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./viewers/procedure-help.component */ "./src/app/mViewer/viewers/procedure-help.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -834,6 +856,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -854,11 +877,12 @@ var MobiusViewerModule = /** @class */ (function () {
                 _mobius_viewer_component__WEBPACK_IMPORTED_MODULE_3__["ViewerContainerComponent"],
                 _viewers__WEBPACK_IMPORTED_MODULE_7__["TextViewerComponent"],
                 _viewers__WEBPACK_IMPORTED_MODULE_7__["ConsoleViewerComponent"],
+                _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_8__["ProcedureHelpComponent"],
             ],
             exports: [_mobius_viewer_component__WEBPACK_IMPORTED_MODULE_3__["ViewerContainerComponent"]],
             imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
-                _viewers_gs_viewer_gs_viewer_module__WEBPACK_IMPORTED_MODULE_5__["GSViewer"],
+                _viewers_gsviewer_gsviewer_module__WEBPACK_IMPORTED_MODULE_5__["GSViewer"],
                 _viewers_mobius_cesium_mobius_cesium_module__WEBPACK_IMPORTED_MODULE_6__["MobiusCesium"],
             ],
             entryComponents: _viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
@@ -885,27 +909,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VIEWER_ARR", function() { return VIEWER_ARR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Viewers", function() { return Viewers; });
 /* harmony import */ var _viewers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./viewers */ "./src/app/mViewer/viewers/index.ts");
-/* harmony import */ var _viewers_gs_viewer_gs_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./viewers/gs-viewer/gs-viewer.component */ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.ts");
+/* harmony import */ var _viewers_gsviewer_gsviewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./viewers/gsviewer/gsviewer.component */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts");
 /* harmony import */ var _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./viewers/console-viewer.component */ "./src/app/mViewer/viewers/console-viewer.component.ts");
+/* harmony import */ var _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./viewers/procedure-help.component */ "./src/app/mViewer/viewers/procedure-help.component.ts");
 // Step-1: Add new ViewerComponet here
 
 
 
-//import { procedureHelpComponent } from './viewers/procedure-help.component';
+
 var VIEWER_ARR = [
     _viewers__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"],
     _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__["ConsoleViewerComponent"],
-    //procedureHelpComponent,
-    //JSONViewerComponent, 
-    //ThreeViewerComponent
+    _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_3__["ProcedureHelpComponent"],
+    // JSONViewerComponent,
+    // ThreeViewerComponent
     // Step-2: Add Component here
     //CesiumViewerComponent,
-    _viewers_gs_viewer_gs_viewer_component__WEBPACK_IMPORTED_MODULE_1__["GSViewerComponent"],
+    _viewers_gsviewer_gsviewer_component__WEBPACK_IMPORTED_MODULE_1__["GSViewerComponent"],
 ];
 var Viewers = [
+    { name: 'gsviewer', icon: undefined, component: _viewers_gsviewer_gsviewer_component__WEBPACK_IMPORTED_MODULE_1__["GSViewerComponent"] },
     { name: 'Summary', icon: undefined, component: _viewers__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"] },
-    { name: 'gs-viewer', icon: undefined, component: _viewers_gs_viewer_gs_viewer_component__WEBPACK_IMPORTED_MODULE_1__["GSViewerComponent"] },
     { name: 'Console', icon: undefined, component: _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__["ConsoleViewerComponent"] },
+    { name: 'Help', icon: undefined, component: _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_3__["ProcedureHelpComponent"] },
 ];
 
 
@@ -958,17 +984,17 @@ var ConsoleViewerComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/data/DataSubscriber.ts":
-/*!******************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/data/DataSubscriber.ts ***!
-  \******************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/data/DataSubscriber.ts":
+/*!*****************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/data/DataSubscriber.ts ***!
+  \*****************************************************************/
 /*! exports provided: DataSubscriber */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSubscriber", function() { return DataSubscriber; });
-/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ "./src/app/mViewer/viewers/gs-viewer/data/data.service.ts");
+/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts");
 
 var DataSubscriber = /** @class */ (function () {
     function DataSubscriber(injector) {
@@ -989,10 +1015,10 @@ var DataSubscriber = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/data/data.service.ts":
-/*!****************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/data/data.service.ts ***!
-  \****************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts":
+/*!***************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/data/data.service.ts ***!
+  \***************************************************************/
 /*! exports provided: DataService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1002,10 +1028,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! three-orbit-controls */ "./node_modules/three-orbit-controls/index.js");
-/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(three_orbit_controls__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three-orbit-controls */ "./node_modules/three-orbit-controls/index.js");
+/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(three_orbit_controls__WEBPACK_IMPORTED_MODULE_3__);
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1015,7 +1039,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -1052,7 +1075,7 @@ var DataService = /** @class */ (function () {
         camera.lookAt(scene.position);
         camera.updateProjectionMatrix();
         // orbit controls
-        var _OC = three_orbit_controls__WEBPACK_IMPORTED_MODULE_4__(three__WEBPACK_IMPORTED_MODULE_2__);
+        var _OC = three_orbit_controls__WEBPACK_IMPORTED_MODULE_3__(three__WEBPACK_IMPORTED_MODULE_2__);
         var controls = new _OC(camera, renderer.domElement);
         controls.enableKeys = false;
         // default directional lighting
@@ -1093,15 +1116,12 @@ var DataService = /** @class */ (function () {
     //
     //  Getter and Setting for gs-model
     //
-    DataService.prototype.getGsModel = function () {
-        return this._gsModel;
+    DataService.prototype.getModel = function () {
+        return this._model;
     };
-    DataService.prototype.setGsModel = function (model) {
-        this._gsModel = model;
-        if (this._gsModel !== undefined) {
-            this.generateSceneMaps();
-        }
-        else {
+    DataService.prototype.setModel = function (model) {
+        this._model = model;
+        if (model !== undefined) {
             // remove all children from the scene
             for (var i = 0; i < this._scene.children.length; i++) {
                 if (this._scene.children[i].type === "Scene") {
@@ -1110,13 +1130,6 @@ var DataService = /** @class */ (function () {
             }
         }
         this.sendMessage("model_update");
-    };
-    DataService.prototype.generateSceneMaps = function () {
-        var scene_and_maps = gs_json__WEBPACK_IMPORTED_MODULE_3__["genThreeOptModelAndMaps"](this._gsModel);
-        this.scenemaps = scene_and_maps;
-    };
-    DataService.prototype.getscememaps = function () {
-        return this.scenemaps;
     };
     DataService.prototype.getScene = function (width, height) {
         if (width && height) {
@@ -1281,21 +1294,21 @@ var DataService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.html":
-/*!********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.html ***!
-  \********************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.html":
+/*!******************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.component.html ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"appdiv\" (mousedown)=\"leaflet()\">\r\n\t<as-split direction=\"vertical\">\r\n\t\t<as-split-area [size]=\"90\" id=\"splitcontainer\">\r\n\t\t  <div style=\"height: 100%\">\r\n\t\t    <as-split direction=\"horizontal\">\r\n\t\t      <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\">\r\n\t\t        <app-groups></app-groups>\r\n\t\t      </as-split-area>\r\n\t\t      <as-split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t        <!-- <app-viewer *ngIf=\"imVisible===false\"></app-viewer>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <app-viewer></app-viewer>\r\n\t\t      </as-split-area>\r\n\t\t    </as-split>\r\n\t\t  </div>\r\n\t\t</as-split-area>\r\n\t\t<as-split-area [size]=\"10\" id=\"splittoolwindow\">\r\n\t\t\t<app-toolwindow></app-toolwindow>\r\n\t\t</as-split-area>\r\n\t</as-split>\r\n</div>"
+module.exports = "<div id=\"appdiv\" (mousedown)=\"leaflet()\">\r\n\t<as-split direction=\"vertical\">\r\n\t\t<as-split-area [size]=\"90\" id=\"splitcontainer\">\r\n\t\t  <div style=\"height: 100%\">\r\n\t\t    <as-split direction=\"horizontal\">\r\n\t\t\t\t\t<as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\">\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      </as-split-area>\r\n\t\t      <as-split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t        <!-- <app-viewer *ngIf=\"imVisible===false\"></app-viewer>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <app-viewer></app-viewer>\r\n\t\t      </as-split-area>\r\n\t\t    </as-split>\r\n\t\t  </div>\r\n\t\t</as-split-area>\r\n\t\t<as-split-area [size]=\"10\" id=\"splittoolwindow\">\r\n\t\t\t<!-- tool window -->\r\n\t\t</as-split-area>\r\n\t</as-split>\r\n</div>"
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.scss":
-/*!********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.scss ***!
-  \********************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.scss":
+/*!******************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.component.scss ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1303,10 +1316,10 @@ module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awes
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.ts":
-/*!******************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.ts ***!
-  \******************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts":
+/*!****************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts ***!
+  \****************************************************************/
 /*! exports provided: GSViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1314,7 +1327,7 @@ module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awes
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GSViewerComponent", function() { return GSViewerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/gs-viewer/data/data.service.ts");
+/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1334,7 +1347,7 @@ var GSViewerComponent = /** @class */ (function () {
     ;
     GSViewerComponent.prototype.setModel = function (data) {
         try {
-            this.dataService.setGsModel(data);
+            this.dataService.setModel(data);
         }
         catch (ex) {
             this.modelData = undefined;
@@ -1361,8 +1374,8 @@ var GSViewerComponent = /** @class */ (function () {
     GSViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'gs-viewer',
-            template: __webpack_require__(/*! ./gs-viewer.component.html */ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.html"),
-            styles: [__webpack_require__(/*! ./gs-viewer.component.scss */ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.scss")]
+            template: __webpack_require__(/*! ./gsviewer.component.html */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.html"),
+            styles: [__webpack_require__(/*! ./gsviewer.component.scss */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.scss")]
         }),
         __metadata("design:paramtypes", [_data_data_service__WEBPACK_IMPORTED_MODULE_1__["DataService"]])
     ], GSViewerComponent);
@@ -1373,10 +1386,10 @@ var GSViewerComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.module.ts":
-/*!***************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/gs-viewer.module.ts ***!
-  \***************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.module.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.module.ts ***!
+  \*************************************************************/
 /*! exports provided: GSViewer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1387,26 +1400,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
 /* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/slider */ "./node_modules/@angular/material/esm5/slider.es5.js");
-/* harmony import */ var _gs_viewer_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./gs-viewer.component */ "./src/app/mViewer/viewers/gs-viewer/gs-viewer.component.ts");
-/* harmony import */ var _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./viewer/viewer.component */ "./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.ts");
-/* harmony import */ var _setting_setting_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setting/setting.component */ "./src/app/mViewer/viewers/gs-viewer/setting/setting.component.ts");
-/* harmony import */ var _toolwindow_toolwindow_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./toolwindow/toolwindow.component */ "./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.ts");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/gs-viewer/data/data.service.ts");
-/* harmony import */ var _toolwindow_groups_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./toolwindow/groups.component */ "./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.ts");
-/* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
-/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
-/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
-/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm5/sort.es5.js");
+/* harmony import */ var _gsviewer_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./gsviewer.component */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts");
+/* harmony import */ var _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./viewer/viewer.component */ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.ts");
+/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts");
+/* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
+/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
+/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
+/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm5/sort.es5.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-
-
 
 
 
@@ -1427,7 +1434,7 @@ var GSViewer = /** @class */ (function () {
         return {
             ngModule: GSViewer_1,
             providers: [
-                _data_data_service__WEBPACK_IMPORTED_MODULE_8__["DataService"]
+                _data_data_service__WEBPACK_IMPORTED_MODULE_6__["DataService"]
             ]
         };
     };
@@ -1437,19 +1444,16 @@ var GSViewer = /** @class */ (function () {
             imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 angular_split__WEBPACK_IMPORTED_MODULE_2__["AngularSplitModule"],
                 _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__["MatSliderModule"],
-                ngx_pagination__WEBPACK_IMPORTED_MODULE_10__["NgxPaginationModule"],
-                _angular_material_expansion__WEBPACK_IMPORTED_MODULE_11__["MatExpansionModule"],
-                _angular_material_tabs__WEBPACK_IMPORTED_MODULE_12__["MatTabsModule"],
-                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_13__["MatTooltipModule"],
-                _angular_material_sort__WEBPACK_IMPORTED_MODULE_14__["MatSortModule"]
+                ngx_pagination__WEBPACK_IMPORTED_MODULE_7__["NgxPaginationModule"],
+                _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__["MatExpansionModule"],
+                _angular_material_tabs__WEBPACK_IMPORTED_MODULE_9__["MatTabsModule"],
+                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_10__["MatTooltipModule"],
+                _angular_material_sort__WEBPACK_IMPORTED_MODULE_11__["MatSortModule"]
             ],
-            exports: [_gs_viewer_component__WEBPACK_IMPORTED_MODULE_4__["GSViewerComponent"]],
-            declarations: [_gs_viewer_component__WEBPACK_IMPORTED_MODULE_4__["GSViewerComponent"],
-                _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["ViewerComponent"],
-                _setting_setting_component__WEBPACK_IMPORTED_MODULE_6__["SettingComponent"],
-                _toolwindow_toolwindow_component__WEBPACK_IMPORTED_MODULE_7__["ToolwindowComponent"],
-                _toolwindow_groups_component__WEBPACK_IMPORTED_MODULE_9__["GroupsComponent"]],
-            providers: [_data_data_service__WEBPACK_IMPORTED_MODULE_8__["DataService"]],
+            exports: [_gsviewer_component__WEBPACK_IMPORTED_MODULE_4__["GSViewerComponent"]],
+            declarations: [_gsviewer_component__WEBPACK_IMPORTED_MODULE_4__["GSViewerComponent"],
+                _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["ViewerComponent"]],
+            providers: [_data_data_service__WEBPACK_IMPORTED_MODULE_6__["DataService"]],
         })
     ], GSViewer);
     return GSViewer;
@@ -1459,1934 +1463,10 @@ var GSViewer = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/setting/setting.component.css":
-/*!*************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/setting/setting.component.css ***!
-  \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#settingview{\r\n  position:absolute;\r\n  background-color: white;\r\n  top:0px;\r\n  right:30px;\r\n  color:#395d73;\r\n  width:400px;\r\n  height:430px;\r\n}\r\n#grid{\r\n  margin-left: 20px;\r\n  font-family:sans-serif;\r\n  margin-top:10px;\r\n}\r\n#axis{\r\n  margin-left: 30px;\r\n  font-family:sans-serif;\r\n}\r\n#shadow{\r\n  margin-left: 30px;\r\n  font-family:sans-serif;\r\n}\r\n#frame{\r\n  margin-left: 30px;\r\n  font-family:sans-serif;\r\n}\r\n#nomal{\r\n  margin-left: 20px;\r\n  font-family:sans-serif;\r\n}\r\n#point{\r\n  margin-left: 20px;\r\n  font-family:sans-serif;\r\n}\r\n#huerange{\r\n  margin-left: 41px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#satrange{\r\n  margin-left: 18px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#lirange{\r\n  margin-left: 20px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#oprange{\r\n  margin-left: 20px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#name{\r\n  font-family:sans-serif;\r\n}\r\n#redrange{\r\n  margin-left: 60px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#greenrange{\r\n  margin-left: 60px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#bluerange{\r\n  margin-left: 60px;\r\n  width: 60%;\r\n  font-family:sans-serif;\r\n}\r\n#linerange{\r\n  margin-left: 5px;\r\n  width: 50%;\r\n  font-family:sans-serif;\r\n}\r\n#pointrange{\r\n  margin-left: 3px;\r\n  width: 50%;\r\n  font-family:sans-serif;\r\n}\r\n#sizerange{\r\n  width: 50%;\r\n  font-family:sans-serif;\r\n}\r\n#centerx{\r\n  width:30px;\r\n  margin-left:10px;\r\n}\r\n#centery{\r\n  width:30px;\r\n  margin-left:10px;\r\n}\r\n#centerz{\r\n  width:30px;\r\n  margin-left:10px;\r\n}\r\n#centersize{\r\n  width:30px;\r\n  margin-left:10px;\r\n}\r\n.name{\r\n  margin-left: 10px;\r\n}\r\n.center{\r\n  margin-left: 10px;\r\n}\r\n::ng-deep .mat-accent .mat-slider-thumb {\r\n    background-color: #395d73;\r\n    font-family:sans-serif;\r\n}\r\n::ng-deep .mat-accent .mat-slider-thumb-label {\r\n    background-color: #395d73;\r\n    font-family:sans-serif;\r\n}\r\n::ng-deep .mat-accent .mat-slider-track-fill {\r\n    background-color: #395d73;\r\n    font-family:sans-serif;\r\n} "
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/setting/setting.component.html":
-/*!**************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/setting/setting.component.html ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"settingview\" (click)=\"setting($event)\">\r\n  <input id=\"grid\" #grid type=\"checkbox\" [checked]=\"gridVisible\" (click)=\"changegrid()\"> <label id=\"name\" value=\"gridVisible\">grid</label>\r\n  <input id=\"axis\"  type=\"checkbox\" [checked]=\"axisVisible\" (click)=\"changeaxis()\"> <label id=\"name\" value=\"axisVisible\">axis</label>\r\n  <input id=\"shadow\"  type=\"checkbox\" [checked]=\"shadowVisible\" (click)=\"changeshadow()\"> <label id=\"name\" value=\"shadowVisible\">shadow</label>\r\n  <input id=\"frame\"  type=\"checkbox\" [checked]=\"frameVisible\" (click)=\"changeframe()\"> <label id=\"name\" value=\"frameVisible\">frame</label><br/>\r\n  <!-- <input id=\"nomal\"  type=\"checkbox\" [checked]=\"normalVisible\" (click)=\"changenormal()\"> <label id=\"name\" value=\"nomalVisible\">nomal</label> -->\r\n  <input id=\"point\"  type=\"checkbox\" [checked]=\"pointVisible\" (click)=\"changepoint()\"> <label id=\"name\" value=\"pointVisible\">point</label><br/>\r\n  \r\n  <hr/><label class=\"name\" >Grid Center</label><br/>\r\n  <label class=\"name\" >X</label><input type=\"text\" name=\"center\" id=\"centerx\" #centerx value={{_centerx}} (change)=changecenter(centerx.value,centery.value,centerz.value,size.value)>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >Y</label><input type=\"text\" name=\"center\" #centery id=\"centery\" value={{_centery}} (change)=changecenter(centerx.value,centery.value,centerz.value,size.value)>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >Z</label><input type=\"text\" name=\"center\"  #centerz id=\"centerz\" value={{_centerz}} (change)=changecenter(centerx.value,centery.value,centerz.value,size.value)>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >Size</label><input type=\"text\" name=\"center\"  #size id=\"centersize\" value={{_centersize}} (change)=changecenter(centerx.value,centery.value,centerz.value,size.value)>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;<button (click)=\"getcenter()\">Get</button><br/>\r\n  <!--< button (click)=\"changecenter(centerx.value,centery.value,centerz.value)\">Set</button> -->\r\n  <!-- <hr/>&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >Raycaster Precision</label>&nbsp;&nbsp;<br/>-->\r\n  <label class=\"name\" >Line Precision</label>\r\n  <mat-slider class=\"slider\" name=\"range\" id=\"linerange\" min=0 max=1 step=0.01  value={{_linepre}} #linepre (change)=\"changeline(linepre.value)\" ></mat-slider><label id=\"name\" >{{linepre.value.toPrecision(2)}}</label><br/>\r\n  <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >Point Precision</label>\r\n  <mat-slider class=\"slider\" name=\"range\" id=\"pointrange\" min=0 max=1 step=0.01  value={{_pointpre}} #pointpre (change)=\"changepoint(pointpre.value)\" ></mat-slider><label id=\"name\" >{{pointpre.value.toPrecision(2)}}</label><br/> -->\r\n  <label class=\"name\" >Points Size</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\r\n  <mat-slider class=\"slider\" name=\"range\" id=\"sizerange\" min=0 max=5 step=0.1  value={{_pointsize}} #pointsize (change)=\"changepointsize(pointsize.value)\" ></mat-slider><label id=\"name\" >{{pointsize.value.toPrecision(2)}}</label><br/>\r\n\r\n  <hr/><label class=\"name\" >Hemisphere Light</label>&nbsp;&nbsp;<br/>\r\n  <label class=\"name\" >hue</label>&nbsp;&nbsp;&nbsp;\r\n  <mat-slider class=\"slider\" name=\"range\" id=\"huerange\" min=0 max=1 step=0.01  value={{hue}} #slider (change)=\"changelight(slider.value,slider1.value,slider2.value)\" ></mat-slider><label id=\"name\" >{{slider.value.toPrecision(2)}}</label><br/>\r\n  <label class=\"name\" >saturation</label>\r\n  <mat-slider name=\"range\" id=\"satrange\" min=0 max=1 step=0.01 value={{saturation}} #slider1 (change)=\"changelight(slider.value,slider1.value,slider2.value)\" ></mat-slider><label id=\"name\" >{{slider1.value.toPrecision(2)}}</label><br/>\r\n  <label class=\"name\" >lightness</label>\r\n  <mat-slider name=\"range\" id=\"lirange\" min=0 max=1 step=0.01 value={{lightness}} #slider2 (change)=\"changelight(slider.value,slider1.value,slider2.value)\" ></mat-slider><label id=\"name\" >{{slider2.value.toPrecision(2)}}</label><br/>\r\n  <!-- &nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >opacity</label>&nbsp;&nbsp;&nbsp;\r\n  <mat-slider name=\"range\" id=\"oprange\" min=0 max=1 step=0.01 value={{opacity}} #slider3 (change)=\"changeopa(slider3.value)\" ></mat-slider><label id=\"name\" >{{slider3.value.toPrecision(2)}}</label><br/> -->\r\n  <!-- <hr/>&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >Backeground Color</label>&nbsp;&nbsp;<br/>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >R</label>\r\n  <mat-slider  name=\"range\" id=\"redrange\" min=0 max=1 step=0.01  value={{red}} #slider4 (change)=\"changeback(slider4.value,slider5.value,slider6.value)\" ></mat-slider><label id=\"name\" >{{slider4.value.toPrecision(2)}}</label><br/>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >G</label>\r\n  <mat-slider name=\"range\" id=\"greenrange\" min=0 max=1 step=0.01 value={{green}} #slider5 (change)=\"changeback(slider4.value,slider5.value,slider6.value)\" ></mat-slider><label id=\"name\" >{{slider5.value.toPrecision(2)}}</label><br/>\r\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"name\" >B</label>\r\n  <mat-slider name=\"range\" id=\"bluerange\" min=0 max=1 step=0.01 value={{blue}} #slider6 (change)=\"changeback(slider4.value,slider5.value,slider6.value)\" ></mat-slider><label id=\"name\" >{{slider6.value.toPrecision(2)}}</label><br/> -->\r\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/setting/setting.component.ts":
-/*!************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/setting/setting.component.ts ***!
-  \************************************************************************/
-/*! exports provided: SettingComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SettingComponent", function() { return SettingComponent; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/data.service */ "./src/app/mViewer/viewers/gs-viewer/data/data.service.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var SettingComponent = /** @class */ (function () {
-    function SettingComponent(dataService) {
-        this.dataService = dataService;
-        // avoid manipulating the scene here
-        // shift to dataservice
-        this.scene = this.dataService.getScene();
-        this.alight = this.dataService.getalight();
-        this.hue = this.dataService.hue;
-        this.saturation = this.dataService.saturation;
-        this.lightness = this.dataService.lightness;
-        this._centerx = this.dataService.centerx;
-        this._centery = this.dataService.centery;
-        this._centerz = this.dataService.centerz;
-        this._centersize = this.dataService.centersize;
-        this.raycaster = this.dataService.getraycaster();
-        this._linepre = this.raycaster.linePrecision;
-        this._pointpre = this.raycaster.params.Points.threshold;
-        this._pointsize = this.dataService.pointsize;
-    }
-    SettingComponent.prototype.ngOnInit = function () {
-        if (this.hue == undefined) {
-            this.hue = 0;
-        }
-        else {
-            this.hue = this.dataService.hue;
-        }
-        if (this.saturation == undefined) {
-            this.saturation = 0.01;
-        }
-        else {
-            this.saturation = this.dataService.saturation;
-        }
-        if (this.lightness == undefined) {
-            this.lightness = 0.47;
-        }
-        else {
-            this.lightness = this.dataService.lightness;
-        }
-        this.gridVisible = this.dataService.grid;
-        this.axisVisible = this.dataService.axis;
-        this.shadowVisible = this.dataService.shadow;
-        this.frameVisible = this.dataService.frame;
-        this.pointVisible = this.dataService.point;
-        if (this._centerx == undefined) {
-            this._centerx = 0;
-        }
-        else {
-            this._centerx = this.dataService.centerx;
-        }
-        if (this._centery == undefined) {
-            this._centery = 0;
-        }
-        else {
-            this._centery = this.dataService.centery;
-        }
-        if (this._centerz == undefined) {
-            this._centerz = 0;
-        }
-        else {
-            this._centerz = this.dataService.centerz;
-        }
-        if (this._centersize == undefined) {
-            this._centersize = 100;
-        }
-        else {
-            this._centersize = this.dataService.centersize;
-        }
-        this.raycaster = this.dataService.getraycaster();
-        if (this._linepre == undefined) {
-            this._linepre = 0.05;
-        }
-        else {
-            this._linepre = this.raycaster.linePrecision;
-        }
-        if (this._pointpre == undefined) {
-            this._pointpre = 1;
-        }
-        else {
-            this._pointpre = this.raycaster.params.Points.threshold;
-        }
-        if (this._pointsize == undefined) {
-            this._pointsize = 1;
-        }
-        else {
-            this._pointsize = this.dataService.pointsize;
-        }
-    };
-    SettingComponent.prototype.changegrid = function () {
-        this.gridVisible = !this.gridVisible;
-        if (this.gridVisible) {
-            var gridhelper = new three__WEBPACK_IMPORTED_MODULE_0__["GridHelper"](100, 100);
-            gridhelper.name = "GridHelper";
-            var vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-            gridhelper.lookAt(vector);
-            this.scene.add(gridhelper);
-        }
-        else {
-            this.scene.remove(this.scene.getObjectByName("GridHelper"));
-        }
-        this.dataService.addgrid(this.gridVisible);
-    };
-    SettingComponent.prototype.changecenter = function (centerx, centery, centerz, centersize) {
-        if (this.gridVisible) {
-            var gridhelper = this.scene.getObjectByName("GridHelper");
-            gridhelper = new three__WEBPACK_IMPORTED_MODULE_0__["GridHelper"](centersize, centersize);
-            gridhelper.position.set(centerx, centery, centerz);
-            console.log(gridhelper);
-            this._centerx = centerx;
-            this._centery = centery;
-            this._centerz = centerz;
-            this._centersize = centersize;
-            this.dataService.getcenterx(centerx);
-            this.dataService.getcentery(centery);
-            this.dataService.getcenterz(centerz);
-            this.dataService.getcentersize(centersize);
-        }
-    };
-    SettingComponent.prototype.changeline = function (lineprecision) {
-        this._linepre = lineprecision;
-        this.raycaster.linePrecision = lineprecision;
-        this.dataService.addraycaster(this.raycaster);
-    };
-    SettingComponent.prototype.changepoint = function () {
-        this.pointVisible = !this.pointVisible;
-        var children = [];
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "Scene") {
-                for (var j = 0; j < this.scene.children[i].children.length; j++) {
-                    if (this.scene.children[i].children[j].type === "Points") {
-                        children.push(this.scene.children[i].children[j]);
-                    }
-                }
-            }
-        }
-        if (this.pointVisible) {
-            for (var i = 0; i < children.length; i++) {
-                children[i]["material"].transparent = false;
-                children[i]["material"].opacity = 1;
-            }
-        }
-        else {
-            for (var i = 0; i < children.length; i++) {
-                children[i]["material"].transparent = true;
-                children[i]["material"].opacity = 0;
-            }
-        }
-        this.dataService.addpoint(this.pointVisible);
-    };
-    SettingComponent.prototype.changepointsize = function (pointsize) {
-        this._pointsize = pointsize;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "sphereInter") {
-                var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](pointsize / 3);
-                this.scene.children[i]["geometry"] = geometry;
-            }
-            if (this.scene.children[i].name === "selects" && this.scene.children[i].type === "Points") {
-                this.scene.children[i]["material"].size = pointsize;
-            }
-        }
-        this.dataService.getpointsize(pointsize);
-    };
-    SettingComponent.prototype.changeaxis = function () {
-        this.axisVisible = !this.axisVisible;
-        if (this.axisVisible) {
-            var axishelper = new three__WEBPACK_IMPORTED_MODULE_0__["AxesHelper"](10);
-            axishelper.name = "AxisHelper";
-            this.scene.add(axishelper);
-        }
-        else {
-            this.scene.remove(this.scene.getObjectByName("AxisHelper"));
-        }
-        this.dataService.addaxis(this.axisVisible);
-    };
-    SettingComponent.prototype.changeshadow = function () {
-        this.shadowVisible = !this.shadowVisible;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "DirectionalLight") {
-                if (this.shadowVisible) {
-                    this.scene.children[i].castShadow = true;
-                }
-                else {
-                    this.scene.children[i].castShadow = false;
-                }
-            }
-        }
-        this.dataService.addshadow(this.shadowVisible);
-    };
-    SettingComponent.prototype.changelight = function (_hue, _saturation, _lightness) {
-        this.hue = _hue;
-        this.saturation = _saturation;
-        this.lightness = _lightness;
-        var alight = this.alight;
-        this.dataService.gethue(_hue);
-        this.dataService.getsaturation(_saturation);
-        this.dataService.getlightness(_lightness);
-        this.alight.color.setHSL(_hue, _saturation, _lightness);
-    };
-    SettingComponent.prototype.changeframe = function () {
-        this.frameVisible = !this.frameVisible;
-        if (this.frameVisible) {
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].type === "Scene") {
-                    if (this.scene.children[i].children[0].type === "Mesh") {
-                        this.scene.children[i].children[0].visible = false;
-                    }
-                }
-            }
-        }
-        else {
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].type === "Scene") {
-                    if (this.scene.children[i].children[0].type === "Mesh") {
-                        this.scene.children[i].children[0].visible = true;
-                    }
-                }
-            }
-        }
-        this.dataService.addframe(this.frameVisible);
-    };
-    SettingComponent.prototype.changenormal = function () {
-        this.nomalVisible = !this.nomalVisible;
-        if (this.nomalVisible) {
-            /*for(var i=0;i<this.scene.children.length;i++){
-              if(this.scene.children[i].type==="Scene"){
-                for(var j=0;j<this.scene.children[i].children.length;j++){
-                  if(this.scene.children[i].children[j].type==="Mesh"){
-                    var mesh=this.scene.children[i].children[j];
-                    var faceNormalsHelper = new THREE.FaceNormalsHelper( mesh, 10 );
-                    mesh.add( faceNormalsHelper );
-                    var verticehelper = new THREE.VertexNormalsHelper( mesh, 10 );
-                    this.scene.add(verticehelper);
-                    console.log(this.scene);
-                    //facehelper.visible=false;
-                    //this.scene.add(verticehelper);
-                  }
-                }
-              }
-            }*/
-        }
-    };
-    SettingComponent.prototype.setting = function (event) {
-        event.stopPropagation();
-    };
-    SettingComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-setting',
-            template: __webpack_require__(/*! ./setting.component.html */ "./src/app/mViewer/viewers/gs-viewer/setting/setting.component.html"),
-            styles: [__webpack_require__(/*! ./setting.component.css */ "./src/app/mViewer/viewers/gs-viewer/setting/setting.component.css")]
-        }),
-        __metadata("design:paramtypes", [_data_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"]])
-    ], SettingComponent);
-    return SettingComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.css":
-/*!***************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.css ***!
-  \***************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#setandgroup{\r\n  position: relative;\r\n  background-color: #F1F1F1 !important;\r\n  height: 100%;\r\n  width: 100%;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 12px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n#groupsview{\r\n  color:#395d73;\r\n  background-color: #F1F1F1 !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 12px !important;\r\n}\r\n#settingview{\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  background-color: #F1F1F1 !important;\r\n  font-size: 12px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n  overflow-y: hidden !important;\r\n  width: 1600px;\r\n  height: 800px;\r\n  color: #395d73;\r\n}\r\n.check{\r\n  margin-left:10px;\r\n}\r\n#GridCenter{\r\n  margin-left: 10px;\r\n  margin-top: 3px !important;\r\n  height: 8px;\r\n  vertical-align: bottom;\r\n}\r\n#centerx{\r\n  width:50px;\r\n  margin-left: 10px;\r\n/*  margin-left:25px;*/\r\n}\r\n#centery{\r\n  width:50px;\r\n  /*margin-left:25px;*/\r\n}\r\n#centerz{\r\n  width:50px;\r\n  /*margin-left:25px;*/\r\n}\r\n#centersize{\r\n  width:50px;\r\n  margin-left:9px;\r\n}\r\n.name{\r\n  width: 100%;\r\n  margin-left: 10px;\r\n  margin-top: 8px;\r\n}\r\n#slider-conainer{\r\n  align-items: center !important;\r\n  display: flex;\r\n  float: right;\r\n}\r\n/*::ng-deep .mat-accent .mat-slider-thumb {\r\n    background-color: #395d73;\r\n    font-family:sans-serif;\r\n} \r\n::ng-deep .mat-accent .mat-slider-thumb-label {\r\n    background-color: white;\r\n    color:#395d73;\r\n    font-family:sans-serif;\r\n}\r\n::ng-deep .mat-accent .mat-slider-track-fill {\r\n    background-color: #395d73;\r\n    font-family:sans-serif;\r\n}\r\n\r\n/deep/.mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb, .mat-slider-min-value.mat-slider-thumb-label-showing .mat-slider-thumb-label {\r\n    background-color: #395d73;\r\n}\r\n/*::ng-deep .mat-expansion-panel {\r\n  margin: 0px !important;\r\n  overflow: hidden !important;\r\n}\r\n/deep/ .slider {\r\n  height: 25px !important;\r\n  vertical-align: unset !important;\r\n  width: unset !important;\r\n}\r\n*/\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n.mat-slider{\r\n    width: 50px !important;\r\n}\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 3px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#395d73;\r\n}\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n}\r\n/deep/.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{\r\n  display: none !important;\r\n}\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n.mat-expansion-panel-spacing {\r\n  margin-top:0px;\r\n  margin-bottom: 0px;\r\n}\r\n.mat-expansion-panel{\r\n  background-color: #F1F1F1 !important;\r\n  border-color: #395d73;\r\n  line-height: 14px;\r\n  font-weight: bold !important;\r\n  font-size: 12px !important;\r\n  overflow: hidden !important;\r\n}\r\n#groupname{\r\n  margin-right: 0px;\r\n}\r\n.mat-header{\r\n  flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n}\r\n.mat-list-text{\r\n  cursor :pointer;\r\n  color:#f3a32a;\r\n  font-family: sans-serif;\r\n  font-size: 14px;\r\n  font-weight: 700px;\r\n  line-height: 14px;\r\n  border-top: 2px !important;\r\n  /*margin-top: 2px;*/\r\n}\r\n.mat-list-descr{\r\n  cursor :default;\r\n  color:#f3a32a;\r\n  font-family: sans-serif;\r\n  font-size: 14px;\r\n  font-weight: 700px;\r\n  line-height: 14px;\r\n  border-top: 2px !important;\r\n  margin-top: 8px;\r\n}\r\n.mat-list-text-parent{\r\n  cursor :pointer;\r\n  color:#f3a32a;\r\n  font-family: sans-serif;\r\n  font-size: 14px;\r\n  font-weight: 700px;\r\n  line-height: 14px;\r\n  border-top: 2px !important;\r\n  /*margin-top: 2px;*/\r\n}\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ccc;\r\n  /*margin: 1em 0;*/\r\n  padding: 0; \r\n  color:#395d73;\r\n  width: 100%;\r\n  background-color: #395d73;\r\n}\r\n\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.html":
-/*!****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.html ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"setandgroup\" >\r\n<mat-tab-group class=\"mat-tab-group\">\r\n  <mat-tab label=\"Groups\" >\r\n  \t<div id=\"groupsview\">\r\n\t<mat-accordion>\r\n\t  <mat-expansion-panel *ngFor=\"let group of groups\">\r\n\t\t  <mat-expansion-panel-header *ngIf=\"group.parent===null\" class=\"mat-header\">\r\n\t\t    <div class=\"mat-header\"><label id=\"groupname\">{{group.name}}</label></div>\r\n\t\t  </mat-expansion-panel-header>\r\n\t\t    <!-- <div class=\"mat-list-text-parent\"><span id=\"parent\">parent : {{group.parent}} </span></div> -->\r\n\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectpoint(group)\">point : {{group.num_point}} </span></div>\r\n\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectvertice(group)\">vertice : {{group.num_vertice}} </span></div>\r\n\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectedge(group)\">edge : {{group.num_edge}} </span></div>\r\n\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectwire(group)\">wire : {{group.num_wire}} </span></div>\r\n\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectface(group)\">face : {{group.num_face}} </span></div>\r\n\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectobject(group)\">object : {{group.num_object}} </span><hr/></div>\r\n\t\t    <div class=\"mat-list-descr\" *ngFor=\"let prop of group.props\"><span >{{prop[0]}} : {{prop[1]}} </span></div>\r\n\t\t    <div *ngIf=\"group.child!==null\" >\r\n \t\t    \t<mat-accordion>\r\n\t\t\t  \t\t<mat-expansion-panel >\r\n\t\t\t  \t\t\t<mat-expansion-panel-header ><div class=\"mat-header\"><label id=\"groupname\">{{group.child.name}}</label></div></mat-expansion-panel-header>\r\n\t\t\t  \t\t\t<div class=\"mat-list-text-parent\"><span id=\"parent\">parent : {{group.child.parent}} </span><hr></div>\r\n\t\t\t  \t\t\t<div ><span class=\"mat-list-text\" (click)=\"selectpoint(group)\">point : {{group.child.num_point}} </span></div>\r\n\t\t\t\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectvertice(group)\">vertice : {{group.child.num_vertice}} </span></div>\r\n\t\t\t\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectedge(group)\">edge : {{group.child.num_edge}} </span></div>\r\n\t\t\t\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectwire(group)\">wire : {{group.child.num_wire}} </span></div>\r\n\t\t\t\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectface(group)\">face : {{group.child.num_face}} </span></div>\r\n\t\t\t\t\t    <div ><span class=\"mat-list-text\" (click)=\"selectobject(group)\">object : {{group.child.num_object}} </span><hr/></div>\r\n\t\t\t\t\t    <div class=\"mat-list-descr\" *ngFor=\"let prop of group.child.props\"><span >{{prop[0]}} : {{prop[1]}} </span></div>\r\n \t\t\t  \t\t</mat-expansion-panel>\r\n\t\t \t\t </mat-accordion>\r\n\t\t\t</div>\r\n \t\t</mat-expansion-panel>\r\n\t</mat-accordion>\r\n\t</div>\r\n  </mat-tab>\r\n  <mat-tab label=\"Settings\" >\r\n  \t<div id=\"settingview\">\r\n  \t\t<input id=\"grid\" class=\"check\" #grid type=\"checkbox\" [checked]=\"gridVisible\" (click)=\"changegrid()\"> <label id=\"name\" value=\"gridVisible\">grid</label><br/>\r\n\t\t<input id=\"axis\" class=\"check\" type=\"checkbox\" [checked]=\"axisVisible\" (click)=\"changeaxis()\"> <label id=\"name\" value=\"axisVisible\">axis</label><br/>\r\n\t\t<input id=\"shadow\" class=\"check\"  type=\"checkbox\" [checked]=\"shadowVisible\" (click)=\"changeshadow()\"> <label id=\"name\" value=\"shadowVisible\">shadow</label><br/>\r\n\t\t<input id=\"frame\" class=\"check\" type=\"checkbox\" [checked]=\"frameVisible\" (click)=\"changeframe()\"> <label id=\"name\" value=\"frameVisible\">wireframe</label><br/>\r\n\t\t<input id=\"point\" class=\"check\" type=\"checkbox\" [checked]=\"pointVisible\" (click)=\"changepoint()\"> <label id=\"name\" value=\"pointVisible\">point</label><br/>\r\n\t\t<hr/><div  id=\"GridCenter\" >Grid Center<button (click)=\"getcenter()\" style=\"margin-left: 30px;width: 40px;height: 20px; font-family: sans-serif;font-size: 12px;\">Get</button></div><br/>\r\n\t\t<label class=\"name\" >XYZ</label><input type=\"text\" name=\"center\" id=\"centerx\" #centerx value={{_centerx}} (change)=changecenter(centerx.value,centery.value,centerz.value)><input type=\"text\" name=\"center\" #centery id=\"centery\" value={{_centery}} (change)=changecenter(centerx.value,centery.value,centerz.value)><input type=\"text\" name=\"center\"  #centerz id=\"centerz\" value={{_centerz}} (change)=changecenter(centerx.value,centery.value,centerz.value)><br/>\r\n\t\t<label class=\"name\" >Size</label><input type=\"text\" name=\"center\"  #size id=\"centersize\" value={{_centersize}} (change)=changecentersize(size.value)><br/>\r\n\t\t<hr/><div style=\"margin-left: 10px;\"><label  >Selection Settings:</label></div><!-- <br/> -->\r\n\t\t<div class=\"name\"><label >Line Precision</label></div><!-- <br/> -->\r\n  \t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class=\"name\" >Radius</label>&nbsp;<input type=\"text\" value={{_linepre}} #linetext (change)=\"changeline(linetext.value)\" style=\"width: 30px; \">&nbsp;<span>0</span>\r\n\r\n  \t\t<mat-slider class=\"slider\" name=\"range\" id=\"linerange\" min=0 max=1 step=0.01 thumbLabel=true value=\"_linepre\" #linepre (change)=\"changeline(linepre.value.toPrecision(2))\" >\r\n  \t\t</mat-slider>\r\n\r\n  \t\t<span>1</span><br/>\r\n  \t\t<div class=\"name\"><label>Points Precision</label></div><!-- <br/> -->\r\n  \t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class=\"name\" >Radius</label>&nbsp;<input type=\"text\" value={{_materialpoint}} #pointtext1 (change)=\"changeradius(pointtext1.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"sizerange\" min=0 max=5 step=0.1 thumbLabel=true value={{_materialpoint}} #pointsize1 (change)=\"changeradius(pointsize1.value.toPrecision(2))\" ></mat-slider><span>5</span><br/>\r\n  \t\t<!-- &nbsp;&nbsp;&nbsp;&nbsp;<label class=\"name\" >Selected</label>&nbsp;<input type=\"text\" value={{_pointsize}} #pointtext (change)=\"changepointsize(pointtext.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"sizerange\" min=0 max=5 step=0.1 thumbLabel=true value={{_pointsize}} #pointsize (change)=\"changepointsize(pointsize.value.toPrecision(2))\" ></mat-slider><span>5</span><br/> -->\r\n  \t\t<div class=\"name\"><label >Points Size</label></div><!-- <br/> -->\r\n  \t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class=\"name\" >Size</label>&nbsp;<input type=\"text\" value={{_pointsize}} #pointtext (change)=\"changepointsize(pointtext.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"sizerange\" min=0 max=5 step=0.1 thumbLabel=true value={{_pointsize}} #pointsize (change)=\"changepointsize(pointsize.value.toPrecision(2))\" ></mat-slider><span>5</span><br/><!-- <input type=\"text\" value={{_materialpoint}} #pointtext1 (change)=\"changematerialpoint(pointtext1.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"sizerange\" min=0 max=5 step=0.1 thumbLabel=true value={{_pointsize1}} #pointsize1 (change)=\"changematerialpoint(pointsize1.value.toPrecision(2))\" ></mat-slider><span>5</span><br/> -->\r\n  \t\t<hr/><label class=\"name\" >Hemisphere Light</label>&nbsp;&nbsp;<br/>\r\n\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class=\"name\" >Hue</label>&nbsp;\r\n\t\t<input type=\"text\" value={{hue}} #huetext (change)=\"changelight(huetext.value,slider1.value,slider2.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"huerange\" min=0 max=1 step=0.01 thumbLabel=true value={{hue}} #slider (change)=\"changelight(slider.value,slider1.value,slider2.value)\" ></mat-slider><span>1</span><br/>\r\n\t\t&nbsp;<label class=\"name\" >Saturation</label>&nbsp;\r\n\t\t<input type=\"text\" value={{saturation}} #satutext (change)=\"changelight(slider.value,satutext.value,slider2.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"satrange\" min=0 max=1 step=0.01 thumbLabel=true value={{saturation}} #slider1 (change)=\"changelight(slider.value,slider1.value,slider2.value)\" ></mat-slider><span>1</span><br/>\r\n\t\t&nbsp;&nbsp;<label class=\"name\" >Lightness</label>&nbsp;\r\n\t\t<input type=\"text\" value={{lightness}} #lighttext (change)=\"changelight(slider.value,slider1.value,lighttext.value)\" style=\"width: 30px; \">&nbsp;<span>0</span><mat-slider class=\"slider\" name=\"range\" id=\"lirange\" min=0 max=1 step=0.01 thumbLabel=true value={{lightness}} #slider2 (change)=\"changelight(slider.value,slider1.value,slider2.value)\" ></mat-slider><span>1</span><br/>\r\n  \t</div>\r\n  </mat-tab>\r\n</mat-tab-group>\r\n</div>\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.ts":
-/*!**************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.ts ***!
-  \**************************************************************************/
-/*! exports provided: GroupsComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroupsComponent", function() { return GroupsComponent; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/gs-viewer/data/DataSubscriber.ts");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_3__);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-/*import {MatTabsModule} from '@angular/material/tabs';*/
-var GroupsComponent = /** @class */ (function (_super) {
-    __extends(GroupsComponent, _super);
-    function GroupsComponent(injector, myElement) {
-        var _this = _super.call(this, injector) || this;
-        _this.scene = _this.dataService.getScene();
-        _this.renderer = _this.dataService.getRenderer();
-        _this.camera = _this.dataService.getCamera();
-        _this.myElement = myElement;
-        _this._centerx = _this.dataService.centerx;
-        _this._centery = _this.dataService.centery;
-        _this._centerz = _this.dataService.centerz;
-        _this._centersize = _this.dataService.centersize;
-        _this.raycaster = _this.dataService.getraycaster();
-        _this._pointsize = _this.dataService.pointsize;
-        _this._materialpoint = _this.dataService.pointradius;
-        _this.alight = _this.dataService.getalight();
-        _this.hue = _this.dataService.hue;
-        _this.saturation = _this.dataService.saturation;
-        _this.lightness = _this.dataService.lightness;
-        return _this;
-    }
-    GroupsComponent.prototype.ngOnInit = function () {
-        this.model = this.dataService.getGsModel();
-        this.updateModel();
-        this.gridVisible = this.dataService.grid;
-        this.axisVisible = this.dataService.axis;
-        this.shadowVisible = this.dataService.shadow;
-        this.frameVisible = this.dataService.frame;
-        this.pointVisible = this.dataService.point;
-        if (this._centerx === undefined || this._centerx === 0) {
-            this._centerx = 0;
-        }
-        else {
-            this._centerx = this.dataService.centerx;
-        }
-        if (this._centery === undefined || this._centery === 0) {
-            this._centery = 0;
-        }
-        else {
-            this._centery = this.dataService.centery;
-        }
-        if (this._centerz === undefined || this._centerz === 0) {
-            this._centerz = 0;
-        }
-        else {
-            this._centerz = this.dataService.centerz;
-        }
-        if (this._centersize === undefined || this._centersize === 100) {
-            this._centersize = 100;
-        }
-        else {
-            this._centersize = this.dataService.centersize;
-        }
-        this.raycaster = this.dataService.getraycaster();
-        if (this._linepre === undefined || this._linepre === 0.05) {
-            this._linepre = 0.05;
-        }
-        else {
-            this._linepre = this.raycaster.linePrecision;
-        }
-        if (this._pointsize === undefined || this._pointsize === 1) {
-            this._pointsize = 1;
-        }
-        else {
-            this._pointsize = this.dataService.pointsize;
-        }
-        if (this._materialpoint === undefined || this._materialpoint === 0.1) {
-            this._materialpoint = 0.1;
-        }
-        else {
-            this._materialpoint = this.dataService.pointradius;
-        }
-        if (this.hue === undefined || this.hue === 0) {
-            this.hue = 0;
-        }
-        else {
-            this.hue = this.dataService.hue;
-        }
-        if (this.saturation === undefined || this.saturation === 0.01) {
-            this.saturation = 0.01;
-        }
-        else {
-            this.saturation = this.dataService.saturation;
-        }
-        if (this.lightness == undefined || this.lightness === 0.47) {
-            this.lightness = 0.47;
-        }
-        else {
-            this.lightness = this.dataService.lightness;
-        }
-    };
-    GroupsComponent.prototype.notify = function (message) {
-        if (message == "model_update" && this.scene) {
-            this.ngOnInit();
-        }
-    };
-    GroupsComponent.prototype.updateModel = function () {
-        if (this.model !== undefined) {
-            try {
-                this.scene_and_maps = this.dataService.getscememaps();
-                this.getgroupname();
-            }
-            catch (ex) {
-                console.error("Error displaying model:", ex);
-            }
-        }
-    };
-    GroupsComponent.prototype.animate = function (self) {
-    };
-    GroupsComponent.prototype.changegrid = function () {
-        this.gridVisible = !this.gridVisible;
-        if (this.gridVisible) {
-            var gridhelper = new three__WEBPACK_IMPORTED_MODULE_0__["GridHelper"](this._centersize, 10);
-            gridhelper.name = "GridHelper";
-            var vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-            gridhelper.lookAt(vector);
-            gridhelper.position.set(this._centerx, this._centery, this._centerz);
-            this.scene.add(gridhelper);
-        }
-        else {
-            this.scene.remove(this.scene.getObjectByName("GridHelper"));
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.addgrid(this.gridVisible);
-    };
-    GroupsComponent.prototype.changepoint = function () {
-        this.pointVisible = !this.pointVisible;
-        var children = [];
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "Scene") {
-                for (var j = 0; j < this.scene.children[i].children.length; j++) {
-                    if (this.scene.children[i].children[j].type === "Points") {
-                        children.push(this.scene.children[i].children[j]);
-                    }
-                }
-            }
-        }
-        if (this.pointVisible) {
-            for (var i = 0; i < children.length; i++) {
-                children[i]["material"].transparent = false;
-                children[i]["material"].opacity = 1;
-            }
-        }
-        else {
-            for (var i = 0; i < children.length; i++) {
-                children[i]["material"].transparent = true;
-                children[i]["material"].opacity = 0;
-            }
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.addpoint(this.pointVisible);
-    };
-    GroupsComponent.prototype.changeaxis = function () {
-        this.axisVisible = !this.axisVisible;
-        if (this.axisVisible) {
-            var axishelper = new three__WEBPACK_IMPORTED_MODULE_0__["AxesHelper"](10);
-            axishelper.name = "AxisHelper";
-            this.scene.add(axishelper);
-        }
-        else {
-            this.scene.remove(this.scene.getObjectByName("AxisHelper"));
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.addaxis(this.axisVisible);
-    };
-    GroupsComponent.prototype.changeshadow = function () {
-        this.shadowVisible = !this.shadowVisible;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "DirectionalLight") {
-                if (this.shadowVisible) {
-                    this.scene.children[i].castShadow = true;
-                }
-                else {
-                    this.scene.children[i].castShadow = false;
-                }
-            }
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.addshadow(this.shadowVisible);
-    };
-    GroupsComponent.prototype.changeframe = function () {
-        this.frameVisible = !this.frameVisible;
-        if (this.frameVisible) {
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].type === "Scene") {
-                    if (this.scene.children[i].children[0].type === "Mesh") {
-                        this.scene.children[i].children[0].visible = false;
-                    }
-                }
-            }
-        }
-        else {
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].type === "Scene") {
-                    if (this.scene.children[i].children[0].type === "Mesh") {
-                        this.scene.children[i].children[0].visible = true;
-                    }
-                }
-            }
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.addframe(this.frameVisible);
-    };
-    GroupsComponent.prototype.changecenter = function (centerx, centery, centerz) {
-        if (this.gridVisible) {
-            var gridhelper = this.scene.getObjectByName("GridHelper");
-            gridhelper.position.set(centerx, centery, centerz);
-            this._centerx = centerx;
-            this._centery = centery;
-            this._centerz = centerz;
-            this.dataService.getcenterx(centerx);
-            this.dataService.getcentery(centery);
-            this.dataService.getcenterz(centerz);
-        }
-        this.renderer.render(this.scene, this.camera);
-    };
-    GroupsComponent.prototype.changecentersize = function (centersize) {
-        if (this.gridVisible) {
-            this._centersize = centersize;
-            this.scene.remove(this.scene.getObjectByName("GridHelper"));
-            var gridhelper = new three__WEBPACK_IMPORTED_MODULE_0__["GridHelper"](centersize, centersize);
-            gridhelper.name = "GridHelper";
-            var vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-            gridhelper.lookAt(vector);
-            gridhelper.position.set(this._centerx, this._centery, this._centerz);
-            this.scene.add(gridhelper);
-            this.dataService.getcentersize(centersize);
-        }
-        this.renderer.render(this.scene, this.camera);
-    };
-    GroupsComponent.prototype.getcenter = function () {
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "Scene") {
-                for (var j = 0; j < this.scene.children[i].children.length; j++) {
-                    if (this.scene.children[i].children[j].name === "All points") {
-                        var center = this.scene.children[i].children[j]["geometry"].boundingSphere.center;
-                        var radius = this.scene.children[i].children[j]["geometry"].boundingSphere.radius;
-                        var max = Math.ceil(radius + Math.max(Math.abs(center.x), Math.abs(center.y), Math.abs(center.z))) * 2;
-                        this._centerx = center.x;
-                        this._centery = center.y;
-                        this._centerz = center.z;
-                        this._centersize = max;
-                    }
-                }
-            }
-        }
-        this.scene.remove(this.scene.getObjectByName("GridHelper"));
-        var gridhelper = new three__WEBPACK_IMPORTED_MODULE_0__["GridHelper"](this._centersize, 10);
-        gridhelper.name = "GridHelper";
-        var vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
-        gridhelper.lookAt(vector);
-        gridhelper.position.set(this._centerx, this._centery, this._centerz);
-        this.scene.add(gridhelper);
-        this.dataService.getcenterx(this._centerx);
-        this.dataService.getcentery(this._centery);
-        this.dataService.getcenterz(this._centerz);
-        this.dataService.getcentersize(this._centersize);
-        this.renderer.render(this.scene, this.camera);
-    };
-    //chiange line precision
-    GroupsComponent.prototype.changeline = function (lineprecision) {
-        this._linepre = lineprecision;
-        this.raycaster = this.dataService.getraycaster();
-        this.raycaster.linePrecision = lineprecision;
-        this.dataService.addraycaster(this.raycaster);
-        if (this.dataService.SelectVisible === 'Edges' || this.dataService.SelectVisible === 'Wires') {
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].name === "sphereInter") {
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](lineprecision * 15);
-                    this.scene.children[i]["geometry"] = geometry;
-                }
-            }
-        }
-        this.renderer.render(this.scene, this.camera);
-    };
-    //change points size
-    GroupsComponent.prototype.changepointsize = function (pointsize) {
-        this._pointsize = pointsize;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "Scene") {
-                for (var j = 0; j < this.scene.children[i].children.length; j++) {
-                    if (this.scene.children[i].children[j].name === "All points") {
-                        this.scene.children[i].children[j]["material"].size = pointsize * 10;
-                    }
-                }
-            }
-            if (this.scene.children[i].name === "selects" && this.scene.children[i].type === "Points") {
-                this.scene.children[i]["material"].size = pointsize;
-            }
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.getpointsize(pointsize);
-        //this.dataService.getmaterialpoint(pointsize);
-    };
-    //change radius
-    GroupsComponent.prototype.changeradius = function (point) {
-        this._materialpoint = point;
-        if (this.dataService.SelectVisible !== 'Edges' && this.dataService.SelectVisible !== 'Wires') {
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].name === "sphereInter") {
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](point * 10);
-                    this.scene.children[i]["geometry"] = geometry;
-                }
-            }
-        }
-        this.renderer.render(this.scene, this.camera);
-        this.dataService.getradius(point);
-    };
-    GroupsComponent.prototype.changelight = function (_hue, _saturation, _lightness) {
-        this.hue = _hue;
-        this.saturation = _saturation;
-        this.lightness = _lightness;
-        var alight = this.alight;
-        this.dataService.gethue(_hue);
-        this.dataService.getsaturation(_saturation);
-        this.dataService.getlightness(_lightness);
-        this.alight.color.setHSL(_hue, _saturation, _lightness);
-        this.renderer.render(this.scene, this.camera);
-    };
-    GroupsComponent.prototype.getgroupname = function () {
-        this.groups = [];
-        var allgroup = this.model.getAllGroups();
-        for (var i = 0; i < allgroup.length; i++) {
-            var group = {};
-            group.parent = allgroup[i].getParentGroup().getName();
-            group.props = allgroup[i].getProps();
-            group.name = allgroup[i].getName();
-            group.num_point = allgroup[i].getPoints().length;
-            group.points = allgroup[i].getPoints();
-            group.num_vertice = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].vertices).length;
-            group.vertices = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].vertices);
-            group.num_edge = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].edges).length;
-            group.edges = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].edges);
-            group.num_wire = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].wires).length;
-            group.wires = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].wires);
-            group.num_face = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].faces).length;
-            group.faces = allgroup[i].getTopos(gs_json__WEBPACK_IMPORTED_MODULE_3__["EGeomType"].faces);
-            group.num_object = allgroup[i].getObjs().length;
-            group.objects = allgroup[i].getObjs();
-            group.child = null;
-            this.groups.push(group);
-        }
-        this.addchildren();
-        //this.renderer.render(this.scene, this.camera);
-    };
-    GroupsComponent.prototype.addchildren = function () {
-        for (var i = 0; i < this.groups.length; i++) {
-            if (this.groups[i].parent !== null) {
-                for (var j = 0; j < this.groups.length; j++) {
-                    if (this.groups[i].parent === this.groups[j].name) {
-                        this.groups[j].child = this.groups[i];
-                    }
-                }
-            }
-        }
-    };
-    GroupsComponent.prototype.selectpoint = function (group) {
-        if (group.point !== 0 || group.child.num_point !== 0) {
-            var pointinitial = false;
-            var grouppoints = void 0;
-            ;
-            if (group.point !== 0) {
-                grouppoints = group.points;
-                for (var j = 0; j < this.scene.children.length; j++) {
-                    for (var i = 0; i < grouppoints.length; i++) {
-                        if (grouppoints[i].getLabel() === this.scene.children[j].userData.id) {
-                            pointinitial = true;
-                            this.scene.remove(this.scene.children[j]);
-                        }
-                    }
-                }
-            }
-            if (group.child.num_point !== 0) {
-                grouppoints = group.child.points;
-                for (var j = 0; j < this.scene.children.length; j++) {
-                    for (var i = 0; i < grouppoints.length; i++) {
-                        if (grouppoints[i].getLabel() === this.scene.children[j].userData.id) {
-                            pointinitial = true;
-                            this.scene.remove(this.scene.children[j]);
-                        }
-                    }
-                }
-            }
-            if (pointinitial === false) {
-                for (var i = 0; i < grouppoints.length; i++) {
-                    var point = {};
-                    var label = grouppoints[i].getLabel();
-                    //let id:string=grouppoints[i]._id;
-                    var id = grouppoints[i].getID();
-                    var verts_xyz = grouppoints[i].getLabelCentroid();
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-                    geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](verts_xyz[0], verts_xyz[1], verts_xyz[2]));
-                    var pointsmaterial = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x00ff00, size: 2 });
-                    if (this.dataService.pointsize !== undefined) {
-                        pointsmaterial.size = this.dataService.pointsize;
-                    }
-                    var points = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, pointsmaterial);
-                    points.userData.id = label;
-                    //points["material"].needsUpdate=true;
-                    points.name = "selects";
-                    this.scene.add(points);
-                    point.label = label;
-                    point.id = id;
-                    point.label_xyz = verts_xyz;
-                    point.path = id;
-                    point.type = "All points";
-                }
-            }
-        }
-    };
-    GroupsComponent.prototype.selectvertice = function (group) {
-        if (group.vertice !== 0) {
-            var vertixinitial = false;
-            var groupvertices = group.vertices;
-            for (var j = 0; j < this.scene.children.length; j++) {
-                for (var i = 0; i < groupvertices.length; i++) {
-                    if (groupvertices[i].getLabel() === this.scene.children[j].userData.id) {
-                        vertixinitial = true;
-                        this.scene.remove(this.scene.children[j]);
-                    }
-                }
-            }
-            if (vertixinitial === false) {
-                for (var i = 0; i < groupvertices.length; i++) {
-                    var point = [];
-                    var label = groupvertices[i].getLabel();
-                    var id = groupvertices[i].getPoint().getID();
-                    var verts_xyz = groupvertices[i].getLabelCentroid();
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-                    geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](verts_xyz[0], verts_xyz[1], verts_xyz[2]));
-                    var pointsmaterial = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x00ff00, size: 2 });
-                    if (this.dataService.pointsize !== undefined) {
-                        pointsmaterial.size = this.dataService.pointsize;
-                    }
-                    var points = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, pointsmaterial);
-                    points.userData.id = label;
-                    //points["material"].needsUpdate=true;
-                    points.name = "selects";
-                    this.scene.add(points);
-                    point.label = label;
-                    point.id = id;
-                    point.label_xyz = verts_xyz;
-                    point.path = id;
-                    point.type = "All points";
-                }
-            }
-        }
-    };
-    GroupsComponent.prototype.selectedge = function (group) {
-        if (group.edge !== 0) {
-            var edgeinitial = false;
-            var groupedges = group.edges;
-            for (var j = 0; j < this.scene.children.length; j++) {
-                for (var i = 0; i < groupedges.length; i++) {
-                    if (groupedges[i].getLabel() === this.scene.children[j].userData.id) {
-                        edgeinitial = true;
-                        this.scene.remove(this.scene.children[j]);
-                    }
-                }
-            }
-            if (edgeinitial === false) {
-                for (var i = 0; i < groupedges.length; i++) {
-                    var edge = [];
-                    var label = groupedges[i].getLabel();
-                    var id = groupedges[i].getLabel();
-                    var label_xyz = groupedges[i].getLabelCentroid();
-                    var verts = groupedges[i].getVertices();
-                    var verts_xyz = verts.map(function (v) { return v.getPoint().getPosition(); });
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-                    for (var i = 0; i < verts_xyz.length; i++) {
-                        geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](verts_xyz[i][0], verts_xyz[i][1], verts_xyz[i][2]));
-                    }
-                    var material = new three__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
-                    var line = new three__WEBPACK_IMPORTED_MODULE_0__["Line"](geometry, material);
-                    line.userData.id = edge.getLabel();
-                    //line["material"].needsUpdate=true;
-                    line.name = "selects";
-                    this.scene.add(line);
-                }
-            }
-        }
-    };
-    GroupsComponent.prototype.selectwire = function (group) {
-        if (group.wire !== 0) {
-            var groupwires = group.wires;
-            var wireinitial = false;
-            for (var j = 0; j < this.scene.children.length; j++) {
-                for (var i = 0; i < groupwires.length; i++) {
-                    if (groupwires[i].getLabel() === this.scene.children[j].userData.id) {
-                        wireinitial = true;
-                        this.scene.remove(this.scene.children[j]);
-                    }
-                }
-            }
-            if (wireinitial === false) {
-                for (var i = 0; i < groupwires.length; i++) {
-                    var wire = [];
-                    var label = groupwires[i].getLabel();
-                    var label_xyz = groupwires[i].getLabelCentroid();
-                    var verts = groupwires[i].getVertices();
-                    var verts_xyz = verts.map(function (v) { return v.getPoint().getPosition(); });
-                    if (groupwires[i].isClosed()) {
-                        verts_xyz.push(verts_xyz[0]);
-                    }
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-                    for (var i = 0; i < verts_xyz.length; i++) {
-                        geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](verts_xyz[i][0], verts_xyz[i][1], verts_xyz[i][2]));
-                    }
-                    var material = new three__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
-                    var line = new three__WEBPACK_IMPORTED_MODULE_0__["Line"](geometry, material);
-                    line.userData.id = label;
-                    //line["material"].needsUpdate=true;
-                    line.name = "selects";
-                    this.scene.add(line);
-                }
-            }
-        }
-    };
-    GroupsComponent.prototype.selectface = function (group) {
-        if (group.face !== 0) {
-            var groupfaces = group.faces;
-            var faceinitial = false;
-            for (var j = 0; j < this.scene.children.length; j++) {
-                for (var i = 0; i < groupfaces.length; i++) {
-                    if (groupfaces[i].getLabel() === this.scene.children[j].userData.id) {
-                        faceinitial = true;
-                        this.scene.remove(this.scene.children[j]);
-                    }
-                }
-            }
-            if (faceinitial === false) {
-                for (var i = 0; i < groupfaces.length; i++) {
-                    var face = [];
-                    var label = groupfaces[i].getLabel();
-                    var label_xyz = face.getLabelCentroid();
-                    var verts = face.getVertices();
-                    var verts_xyz = verts.map(function (v) { return v.getPoint().getPosition(); });
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-                    for (var i = 0; i < verts_xyz.length; i++) {
-                        geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](verts_xyz[i][0], verts_xyz[i][1], verts_xyz[i][2]));
-                    }
-                    var material = new three__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"] });
-                    var line = new three__WEBPACK_IMPORTED_MODULE_0__["Line"](geometry, material);
-                    line.userData.id = face.getLabel();
-                    //line["material"].needsUpdate=true;
-                    line.name = "selects";
-                    this.scene.add(line);
-                }
-            }
-        }
-    };
-    GroupsComponent.prototype.selectobject = function (group) {
-        if (group.face !== 0) {
-            this.selectface(group);
-        }
-        else if (group.wire !== 0) {
-            this.selectwire(group);
-        }
-        else if (group.edge !== 0) {
-            this.selectedge(group);
-        }
-        else if (group.point !== 0) {
-            this.selectpoint(group);
-        }
-    };
-    GroupsComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-groups',
-            template: __webpack_require__(/*! ./groups.component.html */ "./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.html"),
-            styles: [__webpack_require__(/*! ./groups.component.css */ "./src/app/mViewer/viewers/gs-viewer/toolwindow/groups.component.css")]
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]])
-    ], GroupsComponent);
-    return GroupsComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_2__["DataSubscriber"]));
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.css":
-/*!*******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.css ***!
-  \*******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#toolwindow{\r\n  background-color:white;\r\n  font-family:sans-serif;\r\n  width: 100%;\r\n  position:relative;\r\n}\r\n#gsattri-bar{\r\n  background-color: #f1f1f1 !important;\r\n  position:relative;\r\n  display: inline-flex;\r\n  width: 100%;\r\n}\r\n#toolbar{\r\n  background-color: #f1f1f1 !important;\r\n  width: 48%;\r\n  height: 30px;\r\n  margin:0px;\r\n  overflow: hidden !important;\r\n  font-family:sans-serif;\r\n  position: relative !important;\r\n}\r\n#pagination{\r\n  width: 48%;\r\n  height: 30px;\r\n  position: relative ;\r\n  top:unset !important;\r\n  margin: 0px;\r\n  background-color: #f1f1f1 !important;\r\n}\r\n.table_ojbs{\r\n  table-layout:fixed;\r\n  overflow-x: scroll !important;\r\n  font-family:sans-serif;\r\n}\r\n.Number{\r\n  overflow:hidden; \r\n  white-space:nowrap; \r\n}\r\n#toolview{\r\n  position:relative;\r\n  margin-top: 0px;\r\n  width: 100%;\r\n  float: left;\r\n}\r\n#selectedname{\r\n  font-size: 12px;\r\n  vertical-align: middle;\r\n}\r\n#gsv-point{\r\n  margin-left:25px;\r\n}\r\n#gsv-selected{\r\n  margin-left:30px;\r\n}\r\n.gsv-toolbar{\r\n  font-size:15px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n  padding-top:1px;\r\n  padding-right: 6px;\r\n  padding-bottom: 1px;\r\n  padding-left: 6px;\r\n  align-items: flex-start;\r\n  text-align: center;\r\n  cursor: default;\r\n  color: unset;\r\n  margin-right: 0px;\r\n  margin-left: 0px;\r\n  margin-bottom: 1px;\r\n  margin-top: 1px;\r\n  box-sizing: border-box;\r\n  border-width: unset;\r\n  border-style: unset;\r\n  border-color: unset;\r\n  -o-border-image: unset;\r\n     border-image: unset;\r\n}\r\n.visible{\r\n  background-color: white !important;\r\n  color:#395d73;\r\n}\r\n.selectvisible{\r\n  background-color:  white !important;\r\n  color:#395d73;\r\n}\r\n#table{\r\n  width:100% ;\r\n  height: 15px;\r\n}\r\n#tablename{\r\n  width:100% ;\r\n  height: 15px;\r\n  color:grey;\r\n}\r\n.table_text{\r\n  width:180px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n}\r\n#numberbutton{\r\n  width:100%;\r\n  border:0;\r\n}\r\n#attrib{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n/*.selectid{\r\n  background-color:#66CCFF;\r\n}*/\r\n#select{\r\n  position: relative;\r\n  float:right;\r\n  margin-right: 30px;\r\n}\r\n.my-pagination /deep/ .ngx-pagination{\r\n  margin:0px !important;\r\n  color:black !important;\r\n  float: right;\r\n  margin-right:20px !important;\r\n}\r\n.my-pagination /deep/ .ngx-pagination .current {\r\n  margin-top:0px;\r\n  color:black;\r\n  background-color: white;\r\n}\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.html":
-/*!********************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.html ***!
-  \********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"toolwindow\">\r\n  <div id=\"gsattri-bar\" >\r\n  <div id=\"toolbar\">\r\n    <div style=\"width: 350px;position: relative;\">\r\n    <button id=\"gsv-point\" class=\"gsv-toolbar\" [class.visible]=\"Visible === 'Points'\" (click)=\"point(Visible)\"><span matTooltip=\"View Point Attributes\">P</span></button>\r\n    <button id=\"gsv-vertice\" class=\"gsv-toolbar\" [class.visible]=\"Visible === 'Vertices'\" (click)=\"vertice(Visible)\"><span matTooltip=\"View Vertice Attributes\">V</span></button>\r\n    <button id=\"gsv-edge\" class=\"gsv-toolbar\" [class.visible]=\"Visible === 'Edges'\" (click)=\"edge(Visible)\"><span matTooltip=\"View Edge Attributes\">E</span></button>\r\n    <button id=\"gsv-wire\" class=\"gsv-toolbar\" [class.visible]=\"Visible === 'Wires'\" (click)=\"wire(Visible)\"><span matTooltip=\"View Wire Attributes\">W</span></button>\r\n    <button id=\"gsv-face\" class=\"gsv-toolbar\" [class.visible]=\"Visible === 'Faces'\" (click)=\"face(Visible)\"><span matTooltip=\"View Face Attributes\">F</span></button>\r\n    <button id=\"gsv-object\" class=\"gsv-toolbar\" [class.visible]=\"Visible === 'Objs'\" (click)=\"object(Visible)\"><span matTooltip=\"View Object Attributes\">O</span></button>\r\n    <input id=\"gsv-selected\" class=\"gsv-toolbar\" type=\"checkbox\" (click)=\"changeselected()\">\r\n    <label id=\"selectedname\" value=\"selected\">Show selected only</label>\r\n  </div>\r\n  </div>\r\n  <div id=\"pagination\" >\r\n    <pagination-controls *ngIf=\"Visible === 'Points'\" class=\"my-pagination\" (pageChange)=\"p1 = $event\"></pagination-controls> \r\n    <pagination-controls *ngIf=\"Visible === 'Vertices'\" class=\"my-pagination\" (pageChange)=\"p2 = $event\"></pagination-controls> \r\n    <pagination-controls *ngIf=\"Visible === 'Edges'\" class=\"my-pagination\" (pageChange)=\"p3 = $event\"></pagination-controls> \r\n    <pagination-controls *ngIf=\"Visible === 'Wires'\" class=\"my-pagination\" (pageChange)=\"p4 = $event\"></pagination-controls> \r\n    <pagination-controls *ngIf=\"Visible === 'Faces'\" class=\"my-pagination\" (pageChange)=\"p5 = $event\"></pagination-controls>\r\n    <pagination-controls *ngIf=\"Visible === 'Objs'\" class=\"my-pagination\" (pageChange)=\"p6 = $event\"></pagination-controls>  \r\n  </div>\r\n</div>\r\n  <div id=\"toolview\">\r\n    <div *ngIf=\"Visible === 'Points'\">\r\n      <table matSort border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" (matSortChange)=\"sortData($event)\">\r\n        <tr>\r\n          <th mat-sort-header=\"id\" align=center width=\"180px\"><div class=\"table_text\" >Points ID <input type=\"checkbox\" id=\"id\" class=\"checkbox\" style=\"float:right\" [checked]=\"checkpointid\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header=\"x\" width=\"180px\" align=center><div class=\"table_text\">X<input type=\"checkbox\" style=\"float:right\" id=\"X\"  class=\"checkbox\" [checked]=\"checkX\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header=\"y\" width=\"180px\" align=center><div class=\"table_text\">Y<input type=\"checkbox\" style=\"float:right\" id=\"Y\" class=\"checkbox\" [checked]=\"checkY\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header=\"z\" width=\"180px\" align=center><div class=\"table_text\">Z<input type=\"checkbox\" style=\"float:right\" id=\"Z\" class=\"checkbox\" [checked]=\"checkZ\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header={{name}} align=center width=\"180px\" class=\"checkbox\" *ngFor=\"let name of point_name;let idx=index\"><div class=\"table_text\" >{{name}}<input type=\"checkbox\" id={{name}} style=\"float:right\" (click)=\"checkbox()\"></div></th>\r\n      <!-- </table>\r\n      <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p1 }\"> -->\r\n        <tr  *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p1 }\">\r\n          <td name=\"Number\" align=center  width=\"180px\"><div class=\"table_text\"><button width=\"180px\" id=\"numberbutton\" (click)=Onselect(datascale)>{{datascale.id}}</button></div></td>\r\n          <td width=\"180px\" align=center><div class=\"table_text\">{{datascale.x}}</div></td>\r\n          <td width=\"180px\" align=center><div class=\"table_text\">{{datascale.y}}</div></td>\r\n          <td width=\"180px\" align=center><div class=\"table_text\">{{datascale.z}}</div></td>\r\n          <td  id=\"attrib\" width=\"180px\" align=center *ngFor=\"let name of point_name; let idx=index\"><div class=\"table_text\" >{{datascale[idx]}}</div></td> \r\n        <tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"Visible === 'Vertices'\">\r\n      <table matSort border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" (matSortChange)=\"sortData($event)\">\r\n        <tr>\r\n          <th mat-sort-header=\"vertixlabel\" align=center width=\"180px\"><div class=\"table_text\">Vertices Label<input type=\"checkbox\" id=\"vertixid\" style=\"float:right\" [checked]=\"vertixid\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header=\"pointid\" align=center width=\"180px\"><div class=\"table_text\">Points ID<input type=\"checkbox\" id=\"pointid\" style=\"float:right\"  [checked]=\"pointid\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header={{name}} align=center width=\"180px\" *ngFor=\"let name of vertex_name\"><div class=\"table_text\">{{name}}<input type=\"checkbox\" id={{name}} style=\"float:right\" (click)=\"checkbox()\"></div></th>\r\n        </tr>\r\n      <!-- </table>\r\n      <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p2 }\"> -->\r\n        <tr *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p2 }\">\r\n          <td name=\"Number\" align=center  width=\"180px\"><div class=\"table_text\"><button  id=\"numberbutton\">{{datascale.vertixlabel}}</button></div></td>\r\n          <td  align=center  width=\"180px\"><div class=\"table_text\">{{datascale.pointid}}</div></td>\r\n          <td  id=\"attrib\" width=\"180px\" align=center *ngFor=\"let name of vertex_name; let idx=index\"><div sclass=\"table_text\">{{datascale[idx]}}</div></td> \r\n        </tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"Visible === 'Edges'\">\r\n      <table matSort border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" (matSortChange)=\"sortData($event)\">\r\n        <tr>\r\n          <th mat-sort-header=\"label\" align=center width=\"180px\"><div class=\"table_text\">Edge ID<input type=\"checkbox\" style=\"float:right\" id=\"edgeid\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header={{name}} align=center width=\"180px\" *ngFor=\"let name of edge_name\"><div class=\"table_text\">{{name}}<input type=\"checkbox\" style=\"float:right\" id={{name}} (click)=\"checkbox()\"></div></th> \r\n        </tr>\r\n      <!--</table>\r\n       <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p3 }\" > -->\r\n        <tr *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p3 }\">\r\n          <td name=\"Number\" align=center  width=\"180px\"><div class=\"table_text\"><button  id=\"numberbutton\">{{datascale.label}}</button></div></td>\r\n          <td  id=\"attrib\" width=\"180px\" align=center *ngFor=\"let name of edge_name; let idx=index\"><div class=\"table_text\">{{datascale[idx]}}</div></td>\r\n        </tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"Visible === 'Wires'\">\r\n      <table matSort border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" (matSortChange)=\"sortData($event)\">\r\n        <tr>\r\n          <th mat-sort-header=\"label\" align=center width=\"180px\"><div class=\"table_text\">Wire ID<input type=\"checkbox\" style=\"float:right\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header={{name}} align=center width=\"180px\" *ngFor=\"let name of wire_name\"><div class=\"table_text\">{{name}}<input type=\"checkbox\" style=\"float:right\" id={{name}} (click)=\"checkbox()\"></div></th> \r\n        </tr>\r\n      <!-- </table>\r\n      <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p4 }\" > -->\r\n        <tr *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p4 }\">\r\n          <td name=\"Number\" align=center  width=\"180px\"><div class=\"table_text\"><button  id=\"numberbutton\">{{datascale.label}}</button></div></td>\r\n          <td  id=\"attrib\" width=\"180px\" align=center *ngFor=\"let name of wire_name; let idx=index\"><div class=\"table_text\">{{datascale[idx]}}</div></td>\r\n        </tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"Visible === 'Faces'\">\r\n      <table matSort border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" (matSortChange)=\"sortData($event)\">\r\n        <tr>\r\n          <th mat-sort-header=\"label\" align=center width=\"180px\"><div class=\"table_text\">Face ID<input type=\"checkbox\" style=\"float:right\" id=\"checkface\" [checked]=\"checkface\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header={{name}} align=center width=\"180px\" *ngFor=\"let name of face_name\"><div class=\"table_text\">{{name}}<input type=\"checkbox\" style=\"float:right\" id={{name}} (click)=\"checkbox()\"></div></th> \r\n        </tr>\r\n      <!-- </table>\r\n      <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p5 }\" > -->\r\n        <tr *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p5 }\">\r\n          <td name=\"Number\" align=center  width=\"180px\"><div class=\"table_text\"><button  id=\"numberbutton\">{{datascale.label}}</button></div></td>\r\n          <td  id=\"attrib\" width=\"180px\" align=center *ngFor=\"let name of face_name; let idx=index\"><div class=\"table_text\">{{datascale[idx]}}</div></td>\r\n        </tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"Visible === 'Objs'\">\r\n      <table matSort border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" class=\"table_ojbs\" (matSortChange)=\"sortData($event)\">\r\n        <tr>\r\n          <th mat-sort-header=\"label\" name=\"Number\" align=center width=\"180px\"><div class=\"table_text\">Object ID<input type=\"checkbox\" style=\"float:right\" id=\"checkobj\" [checked]=\"checkobj\" (click)=\"checkbox()\"></div></th>\r\n          <th mat-sort-header={{name}} align=center width=\"180px\" *ngFor=\"let name of obj_name\" ><div class=\"table_text\">{{name}}<input type=\"checkbox\" style=\"float:right\" (click)=\"checkbox()\"></div></th>\r\n        </tr>\r\n      <!-- </table>\r\n      <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"  bordercolor=\"#d0d0d0\" *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p6 } \" class=\"table_ojbs\" > -->\r\n        <tr *ngFor=\"let datascale of attribute| paginate: { itemsPerPage: 50, currentPage: p6 } \">\r\n          <td name=\"Number\" align=center  width=\"180px\"><div class=\"table_text\"><button  id=\"numberbutton\">{{datascale.label}}</button></div></td>\r\n          <td  id=\"attrib\" width=\"180px\" align=center *ngFor=\"let name of obj_name; let idx=index\"><div class=\"table_text\">{{datascale[idx]}}</div></td>\r\n        </tr>\r\n      </table>\r\n    </div>\r\n  </div>\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.ts":
-/*!******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.ts ***!
-  \******************************************************************************/
-/*! exports provided: ToolwindowComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToolwindowComponent", function() { return ToolwindowComponent; });
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! gs-json */ "./node_modules/gs-json/dist2015/index.js");
-/* harmony import */ var gs_json__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(gs_json__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/gs-viewer/data/DataSubscriber.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var ToolwindowComponent = /** @class */ (function (_super) {
-    __extends(ToolwindowComponent, _super);
-    function ToolwindowComponent(injector, myElement) {
-        var _this = _super.call(this, injector) || this;
-        _this.Visible = "Objs";
-        _this.scene = _this.dataService.getScene();
-        _this.renderer = _this.dataService.getRenderer();
-        _this.camera = _this.dataService.getCamera();
-        _this.selectedVisible = false;
-        _this.attribute = [];
-        _this.selectObj = [];
-        _this.checkname = [];
-        _this.myElement = myElement;
-        return _this;
-    }
-    ToolwindowComponent.prototype.ngOnInit = function () {
-        this.model = this.dataService.getGsModel();
-        this.Visible = this.dataService.visible;
-        this.updateModel();
-    };
-    ToolwindowComponent.prototype.notify = function (message) {
-        if (message == "model_update" && this.scene) {
-            //this.updateModel();
-            this.ngOnInit();
-        }
-        this.selectObj = [];
-        for (var i = 0; i < this.dataService.selecting.length; i++) {
-            for (var n = 0; n < this.scene.children.length; n++) {
-                if (this.scene.children[n].type === "Scene") {
-                    if (this.dataService.selecting[i].uuid === this.scene.children[n].children[0].uuid) {
-                        this.selectObj.push(this.scene.children[n].children[0].parent);
-                    }
-                }
-            }
-        }
-        if (this.selectedVisible == true) {
-            if (this.Visible === "Objs")
-                this.objectcheck();
-            if (this.Visible === "Faces")
-                this.facecheck();
-            if (this.Visible === "Wires")
-                this.wirecheck();
-            if (this.Visible === "Edges")
-                this.edgecheck();
-            if (this.Visible === "Vertices")
-                this.verticecheck();
-            if (this.Visible === "Points")
-                this.pointcheck();
-        }
-    };
-    ToolwindowComponent.prototype.updateModel = function () {
-        if (this.model !== undefined) {
-            try {
-                this.scene_and_maps = this.dataService.getscememaps();
-                this.object(this.Visible);
-                this.getvertices();
-            }
-            catch (ex) {
-                console.error("Error displaying model:", ex);
-            }
-        }
-    };
-    ToolwindowComponent.prototype.getpoints = function () {
-        var attrubtepoints = [];
-        this.point_name = [];
-        if (this.scene_and_maps !== undefined) {
-            if (this.scene_and_maps.points_map !== null && this.scene_and_maps.points_map.size !== 0 && this.scene_and_maps.points_map !== undefined) {
-                var point_attribs = this.model.findAttribs(gs_json__WEBPACK_IMPORTED_MODULE_2__["EGeomType"].points);
-                if (point_attribs.length !== 0) {
-                    for (var j = 0; j < point_attribs.length; j++) {
-                        this.point_name.push(point_attribs[0].getName());
-                    }
-                }
-                for (var i = 0; i < this.scene_and_maps.points_map.size; i++) {
-                    var points = this.model.getGeom().getPoint(i);
-                    var label = points.getLabel();
-                    var verts_xyz = points.getLabelCentroid();
-                    var attributepoint = [];
-                    if (verts_xyz !== undefined) {
-                        attributepoint.id = label;
-                        attributepoint.x = verts_xyz[0];
-                        attributepoint.y = verts_xyz[1];
-                        attributepoint.z = verts_xyz[2];
-                        if (point_attribs.length !== 0) {
-                            for (var j = 0; j < point_attribs.length; j++) {
-                                attributepoint[j] = points.getAttribValue(point_attribs[j]);
-                            }
-                        }
-                        attrubtepoints.push(attributepoint);
-                    }
-                }
-            }
-        }
-        return attrubtepoints;
-    };
-    ToolwindowComponent.prototype.getvertices = function () {
-        var attributevertix = [];
-        var points = this.getpoints();
-        this.vertex_name = [];
-        if (this.scene_and_maps !== undefined) {
-            if (this.scene_and_maps.vertices_map !== null && this.scene_and_maps.vertices_map.size !== 0 && this.scene_and_maps.vertices_map !== undefined) {
-                var vertex_attribs = this.model.findAttribs(gs_json__WEBPACK_IMPORTED_MODULE_2__["EGeomType"].vertices);
-                if (vertex_attribs.length !== 0) {
-                    for (var n = 0; n < vertex_attribs.length; n++) {
-                        this.vertex_name.push(vertex_attribs[n].getName());
-                    }
-                }
-                for (var i = 0; i < this.scene_and_maps.vertices_map.size; i++) {
-                    var path = this.scene_and_maps.vertices_map.get(i);
-                    var vertices = this.model.getGeom().getTopo(path);
-                    var attributes = [];
-                    var label = vertices.getLabel();
-                    var verts_xyz = vertices.getLabelCentroid();
-                    var attributes = [];
-                    for (var j = 0; j < points.length; j++) {
-                        if (points[j].x === verts_xyz[0] && points[j].y === verts_xyz[1] && points[j].z === verts_xyz[2]) {
-                            attributes.pointid = points[j].id;
-                        }
-                    }
-                    attributes.vertixlabel = label;
-                    attributes.path = path;
-                    if (vertex_attribs.length !== 0) {
-                        for (var j = 0; j < vertex_attribs.length; j++) {
-                            //attributes[j]=vertices.getAttribValue(vertex_attribs[j]);
-                        }
-                    }
-                    attributevertix.push(attributes);
-                }
-                this.dataService.addattrvertix(attributevertix);
-            }
-        }
-        return attributevertix;
-    };
-    ToolwindowComponent.prototype.getedges = function () {
-        var attributeedge = [];
-        this.edge_name = [];
-        var edgelable = [];
-        if (this.scene_and_maps !== undefined) {
-            if (this.scene_and_maps.edges_map !== null && this.scene_and_maps.edges_map.size !== 0 && this.scene_and_maps.edges_map !== undefined) {
-                var edge_attribs = this.model.findAttribs(gs_json__WEBPACK_IMPORTED_MODULE_2__["EGeomType"].edges);
-                if (edge_attribs.length !== 0) {
-                    for (var j = 0; j < edge_attribs.length; j++) {
-                        this.edge_name.push(edge_attribs[j].getName());
-                    }
-                }
-                for (var i = 0; i < this.scene_and_maps.edges_map.size; i++) {
-                    var path = this.scene_and_maps.edges_map.get(i);
-                    var edge = this.model.getGeom().getTopo(path);
-                    var attributes = [];
-                    var label = edge.getLabel();
-                    attributes.label = label;
-                    if (edgelable.indexOf(label) === -1) {
-                        edgelable.push(label);
-                        if (edge_attribs.length !== 0) {
-                            for (var j = 0; j < edge_attribs.length; j++) {
-                                //attributes[j]=edge.getAttribValue(edge_attribs[j]);
-                            }
-                        }
-                        attributeedge.push(attributes);
-                    }
-                }
-            }
-        }
-        return attributeedge;
-    };
-    ToolwindowComponent.prototype.getwires = function () {
-        var attributewire = [];
-        this.wire_name = [];
-        var wirelabel = [];
-        if (this.scene_and_maps !== undefined) {
-            if (this.scene_and_maps.wires_map !== null && this.scene_and_maps.wires_map.size !== 0 && this.scene_and_maps.wires_map !== undefined) {
-                var wire_attribs = this.model.findAttribs(gs_json__WEBPACK_IMPORTED_MODULE_2__["EGeomType"].wires);
-                if (wire_attribs.length !== 0) {
-                    for (var j = 0; j < wire_attribs.length; j++) {
-                        this.wire_name.push(wire_attribs[j].getName());
-                    }
-                }
-                for (var i = 0; i < this.scene_and_maps.wires_map.size; i++) {
-                    var path = this.scene_and_maps.wires_map.get(i);
-                    var wire = this.model.getGeom().getTopo(path);
-                    var attributes = [];
-                    var label = wire.getLabel();
-                    attributes.label = label;
-                    if (wirelabel.indexOf(label) === -1) {
-                        wirelabel.push(label);
-                        if (wire_attribs.length !== 0) {
-                            for (var j = 0; j < wire_attribs.length; j++) {
-                                attributes[j] = wire.getAttribValue(wire_attribs[j]);
-                            }
-                        }
-                        attributewire.push(attributes);
-                    }
-                }
-            }
-        }
-        return attributewire;
-    };
-    ToolwindowComponent.prototype.getfaces = function () {
-        var attributeface = [];
-        this.face_name = [];
-        var facelabel = [];
-        if (this.scene_and_maps !== undefined) {
-            if (this.scene_and_maps.faces_map !== null && this.scene_and_maps.faces_map.size !== 0 && this.scene_and_maps.faces_map !== undefined) {
-                var face_attribs = this.model.findAttribs(gs_json__WEBPACK_IMPORTED_MODULE_2__["EGeomType"].faces);
-                if (face_attribs.length !== 0) {
-                    for (var j = 0; j < face_attribs.length; j++) {
-                        this.face_name.push(face_attribs[j].getName());
-                    }
-                }
-                for (var i = 0; i < this.scene_and_maps.faces_map.size; i++) {
-                    var path = this.scene_and_maps.faces_map.get(i);
-                    var face = this.model.getGeom().getTopo(path);
-                    var attributes = [];
-                    var label = face.getLabel();
-                    attributes.label = label;
-                    if (facelabel.indexOf(label) === -1) {
-                        facelabel.push(label);
-                        if (face_attribs.length !== 0) {
-                            for (var j = 0; j < face_attribs.length; j++) {
-                                attributes[j] = face.getAttribValue(face_attribs[j]);
-                            }
-                        }
-                        attributeface.push(attributes);
-                    }
-                }
-            }
-        }
-        return attributeface;
-    };
-    ToolwindowComponent.prototype.getoject = function () {
-        var attributeobject = [];
-        this.obj_name = [];
-        this.attrib_name = [];
-        var atrib = [];
-        if (this.scene_and_maps !== undefined) {
-            if (this.scene_and_maps.faces_map !== null && this.scene_and_maps.faces_map.size !== 0 && this.scene_and_maps.faces_map !== undefined) {
-                var obj_attribs = this.model.findAttribs(gs_json__WEBPACK_IMPORTED_MODULE_2__["EGeomType"].objs);
-                if (obj_attribs.length !== 0) {
-                    for (var j = 0; j < obj_attribs.length; j++) {
-                        this.obj_name.push(obj_attribs[j].getName());
-                        for (var i = 0; i < this.scene_and_maps.faces_map.size; i++) {
-                            var path = this.scene_and_maps.faces_map.get(i);
-                            var obj = this.model.getGeom().getObj(path.id);
-                            atrib[j] = obj.getAttribValue(obj_attribs[j]);
-                            this.attrib_name.push(atrib[j]);
-                        }
-                    }
-                }
-                for (var i = 0; i < this.scene_and_maps.faces_map.size; i++) {
-                    var path = this.scene_and_maps.faces_map.get(i);
-                    if (i === 0 || path.id !== this.scene_and_maps.faces_map.get(i - 1).id) {
-                        var attribute = [];
-                        var label = "o" + path.id;
-                        attribute.label = label;
-                        for (var j = 0; j < obj_attribs.length; j++) {
-                            var obj = this.model.getGeom().getObj(path.id);
-                            attribute[j] = obj.getAttribValue(obj_attribs[j]);
-                        }
-                        attributeobject.push(attribute);
-                    }
-                }
-            }
-        }
-        return attributeobject;
-    };
-    ToolwindowComponent.prototype.getchildren = function () {
-        var children;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name == "Scene") {
-                children = this.scene.children[i].children;
-                break;
-            }
-            if (i == this.scene.children.length - 1) {
-                return [];
-            }
-        }
-        return children;
-    };
-    ToolwindowComponent.prototype.getscenechildren = function () {
-        var scenechildren = [];
-        for (var n = 0; n < this.scene.children.length; n++) {
-            if (this.scene.children[n].type === "Scene") {
-                for (var i = 0; i < this.scene.children[n].children.length; i++) {
-                    scenechildren.push(this.scene.children[n].children[i]);
-                }
-            }
-        }
-        return scenechildren;
-    };
-    ToolwindowComponent.prototype.point = function (Visible) {
-        this.Visible = "Points";
-        this.attribute = this.getpoints();
-        if (this.selectedVisible == true) {
-            this.pointcheck();
-        }
-        if (this.dataService.checkpointid == undefined) {
-            this.dataService.checkpointid = false;
-        }
-        else {
-            this.checkpointid = this.dataService.checkpointid;
-        }
-        if (this.dataService.checkX == undefined) {
-            this.dataService.checkX = false;
-        }
-        else {
-            this.checkX = this.dataService.checkX;
-        }
-        if (this.dataService.checkY == undefined) {
-            this.dataService.checkY = false;
-        }
-        else {
-            this.checkY = this.dataService.checkY;
-        }
-        if (this.dataService.checkZ == undefined) {
-            this.dataService.checkZ = false;
-        }
-        else {
-            this.checkZ = this.dataService.checkZ;
-        }
-        this.dataService.visible = this.Visible;
-        //this.clearsprite();
-        /*this.sortedData=[];
-        for(var i=0;i<this.attribute.length;i++){
-          var datas={};
-          datas["id"]=this.attribute[i].id;
-          datas["x"]=this.attribute[i].x;
-          datas["y"]=this.attribute[i].y;
-          datas["z"]=this.attribute[i].z;
-          this.sortedData[i]=datas;
-        }*/
-    };
-    ToolwindowComponent.prototype.pointcheck = function () {
-        this.attribute = [];
-        var attributes = this.pointtovertix();
-        var points = this.getpoints();
-        for (var i = 0; i < points.length; i++) {
-            for (var j = 0; j < attributes.length; j++) {
-                if (points[i].id === attributes[j].pointid && this.attribute.indexOf(points[i]) === -1) {
-                    this.attribute.push(points[i]);
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.pointtovertix = function () {
-        var attributes = [];
-        var vertices = this.getvertices();
-        var selecting = this.dataService.getselecting();
-        var char;
-        var labels = [];
-        if (selecting.length !== 0) {
-            for (var i = 0; i < selecting.length; i++) {
-                for (var j = 0; j < vertices.length; j++) {
-                    if (selecting[i]["id"] === vertices[j].pointid && attributes.indexOf(vertices[j]) == -1) {
-                        attributes.push(vertices[j]);
-                    }
-                    if (selecting[i]["type"] === "All edges") {
-                        var edge = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var verts = edge.getVertices();
-                        for (var n = 0; n < verts.length; n++) {
-                            var label = verts[n].getLabel();
-                            if (label === vertices[j].vertixlabel && attributes.indexOf(vertices[j]) == -1) {
-                                attributes.push(vertices[j]);
-                            }
-                        }
-                    }
-                    if (selecting[i]["type"] === "All wires") {
-                        var wire = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var verts = wire.getVertices();
-                        for (var n = 0; n < verts.length; n++) {
-                            var label = verts[n].getLabel();
-                            if (label === vertices[j].vertixlabel && attributes.indexOf(vertices[j]) == -1) {
-                                attributes.push(vertices[j]);
-                            }
-                        }
-                    }
-                    if (selecting[i]["type"] === "All faces") {
-                        var face = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var verts = face.getVertices();
-                        for (var n = 0; n < verts.length; n++) {
-                            var label = verts[n].getLabel();
-                            if (label === vertices[j].vertixlabel && attributes.indexOf(vertices[j]) == -1) {
-                                attributes.push(vertices[j]);
-                            }
-                        }
-                    }
-                    if (selecting[i]["type"] === "All objs") {
-                        var face = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var faces = face.getObj().getFaces();
-                        for (var f = 0; f < faces.length; f++) {
-                            var verts = faces[f].getVertices();
-                            for (var n = 0; n < verts.length; n++) {
-                                var label = verts[n].getLabel();
-                                if (label === vertices[j].vertixlabel && this.attribute.indexOf(vertices[j]) == -1) {
-                                    attributes.push(vertices[j]);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return attributes;
-    };
-    ToolwindowComponent.prototype.vertice = function (Visible) {
-        this.Visible = "Vertices";
-        this.attribute = this.getvertices();
-        if (this.selectedVisible == true) {
-            this.verticecheck();
-        }
-        if (this.dataService.checkvertixid == undefined) {
-            this.dataService.checkvertixid = false;
-        }
-        else {
-            this.vertixid = this.dataService.checkvertixid;
-        }
-        if (this.dataService.pointid == undefined) {
-            this.dataService.pointid = false;
-        }
-        else {
-            this.pointid = this.dataService.pointid;
-        }
-        this.dataService.visible = this.Visible;
-        //this.clearsprite();
-    };
-    ToolwindowComponent.prototype.verticecheck = function () {
-        this.attribute = this.pointtovertix();
-    };
-    ToolwindowComponent.prototype.edge = function (Visible) {
-        this.Visible = "Edges";
-        this.attribute = [];
-        this.attribute = this.getedges();
-        if (this.selectedVisible == true) {
-            this.edgecheck();
-        }
-        this.dataService.visible = this.Visible;
-        //this.clearsprite();
-    };
-    ToolwindowComponent.prototype.edgecheck = function () {
-        this.attribute = [];
-        var edges = this.getedges();
-        var selecting = this.dataService.getselecting();
-        if (selecting.length !== 0) {
-            for (var i = 0; i < selecting.length; i++) {
-                for (var j = 0; j < edges.length; j++) {
-                    if (selecting[i].type === "All edges") {
-                        if (selecting[i]["id"].indexOf(edges[j].label) > -1) {
-                            this.attribute.push(edges[j]);
-                        }
-                    }
-                    if (selecting[i]["type"] === "All faces") {
-                        var face = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var verts = face.getEdges();
-                        for (var n = 0; n < verts.length; n++) {
-                            var label = verts[n].getLabel();
-                            if (label === edges[j].label && this.attribute.indexOf(edges[j]) == -1) {
-                                this.attribute.push(edges[j]);
-                            }
-                        }
-                    }
-                    if (selecting[i]["type"] === "All objs") {
-                        var face = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var faces = face.getObj().getFaces();
-                        for (var f = 0; f < faces.length; f++) {
-                            var verts = faces[f].getEdges();
-                            for (var n = 0; n < verts.length; n++) {
-                                var label = verts[n].getLabel();
-                                if (label === edges[j].label && this.attribute.indexOf(edges[j]) == -1) {
-                                    this.attribute.push(edges[j]);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.wire = function (Visible) {
-        this.Visible = "Wires";
-        this.attribute = [];
-        this.attribute = this.getwires();
-        if (this.selectedVisible == true) {
-            this.wirecheck();
-        }
-        this.dataService.visible = this.Visible;
-    };
-    ToolwindowComponent.prototype.wirecheck = function () {
-        this.attribute = [];
-        var wires = this.getwires();
-        var selecting = this.dataService.getselecting();
-        if (selecting.length !== 0) {
-            for (var i = 0; i < selecting.length; i++) {
-                for (var j = 0; j < wires.length; j++) {
-                    if (selecting[i]["id"] === wires[j].label) {
-                        this.attribute.push(wires[j]);
-                    }
-                    if (selecting[i]["type"] === "All objs") {
-                        var face = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var wireses = face.getObj().getWires();
-                        for (var w = 0; w < wireses.length; w++) {
-                            var label = wireses[w].getLabel();
-                            if (label === wires[j].label && this.attribute.indexOf(wires[j]) == -1) {
-                                this.attribute.push(wires[j]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.face = function (Visible) {
-        this.Visible = "Faces";
-        this.attribute = [];
-        this.attribute = this.getfaces();
-        if (this.selectedVisible == true) {
-            this.facecheck();
-        }
-        if (this.dataService.checkface == undefined) {
-            this.dataService.checkface = false;
-        }
-        else {
-            this.checkface = this.dataService.checkface;
-        }
-        for (var n = 0; n < this.face_name.length; n++) {
-            if (this.dataService.checkname[n] === undefined) {
-                this.dataService.checkname[n] = false;
-            }
-            /*else{
-              this.face_name[n]=this.dataService.checkname[n];
-            }*/
-        }
-    };
-    ToolwindowComponent.prototype.facecheck = function () {
-        this.attribute = [];
-        var faces = this.getfaces();
-        var selecting = this.dataService.getselecting();
-        if (selecting.length !== 0) {
-            for (var i = 0; i < selecting.length; i++) {
-                for (var j = 0; j < faces.length; j++) {
-                    if (selecting[i]["id"] === faces[j].label) {
-                        this.attribute.push(faces[j]);
-                    }
-                    if (selecting[i]["type"] === "All objs") {
-                        var face = this.model.getGeom().getTopo(selecting[i]["path"]);
-                        var faceses = face.getObj().getFaces();
-                        for (var f = 0; f < faceses.length; f++) {
-                            var label = faceses[f].getLabel();
-                            if (label === faces[j].label && this.attribute.indexOf(faces[j]) == -1) {
-                                this.attribute.push(faces[j]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.object = function (Visible) {
-        this.Visible = "Objs";
-        this.attribute = [];
-        this.attribute = this.getoject();
-        if (this.selectedVisible == true) {
-            this.objectcheck();
-        }
-        if (this.dataService.checkobj == undefined) {
-            this.dataService.checkobj = false;
-        }
-        else {
-            this.checkobj = this.dataService.checkobj;
-        }
-        this.dataService.visible = this.Visible;
-    };
-    ToolwindowComponent.prototype.objectcheck = function () {
-        this.attribute = [];
-        var object = this.getoject();
-        var selecting = this.dataService.getselecting();
-        if (selecting.length !== 0) {
-            for (var i = 0; i < selecting.length; i++) {
-                for (var j = 0; j < object.length; j++) {
-                    if (selecting[i]["id"] === object[j].label) {
-                        this.attribute.push(object[j]);
-                    }
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.changeselected = function () {
-        this.selectedVisible = !this.selectedVisible;
-        if (this.selectedVisible) {
-            if (this.Visible === "Points")
-                this.pointcheck();
-            if (this.Visible === "Vertices")
-                this.verticecheck();
-            if (this.Visible === "Edges")
-                this.edgecheck();
-            if (this.Visible === "Wires")
-                this.wirecheck();
-            if (this.Visible === "Faces")
-                this.facecheck();
-            if (this.Visible === "Objs")
-                this.objectcheck();
-        }
-        else {
-            if (this.Visible === "Points")
-                this.point(this.Visible);
-            if (this.Visible === "Vertices")
-                this.vertice(this.Visible);
-            if (this.Visible === "Edges")
-                this.edge(this.Visible);
-            if (this.Visible === "Wires")
-                this.wire(this.Visible);
-            if (this.Visible === "Faces")
-                this.face(this.Visible);
-            if (this.Visible === "Objs")
-                this.object(this.Visible);
-        }
-    };
-    ToolwindowComponent.prototype.Onselect = function (datascale) {
-        if (this.Visible === "Points") {
-            var point = [];
-            point.label = datascale.id;
-            point.id = datascale.id;
-            point.path = datascale.id;
-            point.type = "All points";
-            point.label_xyz = [datascale.x, datascale.y, datascale.z];
-            var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](point.label_xyz[0], point.label_xyz[1], point.label_xyz[2]));
-            var pointsmaterial = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x00ff00, size: 1 });
-            if (this.dataService.pointsize !== undefined) {
-                pointsmaterial.size = this.dataService.pointsize;
-            }
-            var points = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, pointsmaterial);
-            points.userData.id = point.id;
-            //points["material"].needsUpdate=true;
-            points.name = "selects";
-            this.scene.add(points);
-            this.renderer.render(this.scene, this.camera);
-            this.dataService.addclickshow(point);
-        }
-        if (this.Visible === "Vertices") {
-            var vertice = [];
-            var path = datascale.path;
-            var vertices = this.model.getGeom().getTopo(path);
-            var label = vertices.getLabel();
-            var verts_xyz = vertices.getLabelCentroid();
-            vertice.label = label;
-            vertice.id = datascale.pointid;
-            vertice.path = datascale.path;
-            vertice.type = "All points";
-            vertice.label_xyz = [verts_xyz[0], verts_xyz[1], verts_xyz[2]];
-            var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["Geometry"]();
-            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](verts_xyz[0], verts_xyz[1], verts_xyz[2]));
-            var pointsmaterial = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({ color: 0x00ff00, size: 1 });
-            if (this.dataService.pointsize !== undefined) {
-                pointsmaterial.size = this.dataService.pointsize;
-            }
-            var points = new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geometry, pointsmaterial);
-            points.userData.id = vertice.id;
-            //points["material"].needsUpdate=true;
-            points.name = "selects";
-            this.scene.add(points);
-            this.renderer.render(this.scene, this.camera);
-            this.dataService.addclickshow(vertice);
-        }
-        /*if(this.Visible==="Vertices"){
-          var vertice:any=[];
-          const path: gs.ITopoPathData=datascale.path;
-          const vertices: gs.IVertex = this.model.getGeom().getTopo(path) as gs.IVertex;
-          const label: string = vertices.getLabel();
-          const verts_xyz: gs.XYZ = vertices.getLabelCentroid();
-          vertice.label=label;
-          vertice.id=datascale.pointid;
-          vertice.path=datascale.path;
-          vertice.type="All points";
-          vertice.label_xyz=[verts_xyz[0],verts_xyz[1],verts_xyz[2]];
-          var geometry=new THREE.Geometry();
-          geometry.vertices.push(new THREE.Vector3(verts_xyz[0],verts_xyz[1],verts_xyz[2]));
-          var pointsmaterial=new THREE.PointsMaterial( { color:0x00ff00,size:1} );
-          if(this.dataService.pointsize!==undefined){
-              pointsmaterial.size=this.dataService.pointsize;
-          }
-          const points = new THREE.Points( geometry, pointsmaterial);
-          points.userData.id=vertice.id;
-          //points["material"].needsUpdate=true;
-          points.name="selects";
-          this.scene.add(points);
-          this.dataService.addclickshow(vertice);
-        }*/
-        if (this.Visible === "Edges") {
-        }
-    };
-    ToolwindowComponent.prototype.pointcheckbox = function () {
-        var index = [];
-        for (var i = 0; i < this.getpoints().length; i++) {
-            if (this.dataService.selecting.length !== 0) {
-                for (var j = 0; j < this.dataService.selecting.length; j++) {
-                    if (this.dataService.selecting[j].type === "All points") {
-                        var label = "";
-                        if (this.getpoints()[i].id === this.dataService.selecting[j]["id"]) {
-                            if (document.getElementById("X")["checked"] === true) {
-                                label = label.concat("X:", this.getpoints()[i].x, '\n');
-                            }
-                            if (document.getElementById("Y")["checked"] === true) {
-                                label = label.concat("Y:", this.getpoints()[i].y, '\n');
-                            }
-                            if (document.getElementById("Z")["checked"] === true) {
-                                label = label.concat("Z:", this.getpoints()[i].z, '\n');
-                            }
-                            for (var n = 0; n < this.point_name.length; n++) {
-                                if (document.getElementById(this.point_name[n])["checked"] == true) {
-                                    label = label.concat(this.point_name[n], ":", this.getpoints()[i][n]);
-                                }
-                            }
-                            //console.log(label);
-                            this.dataService.addlabel(label);
-                        }
-                    }
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.checkbox = function () {
-        if (this.Visible === "Points") {
-            this.dataService.addgetpoints(this.getpoints());
-            this.dataService.checkX = document.getElementById("X")["checked"];
-            this.dataService.checkY = document.getElementById("Y")["checked"];
-            this.dataService.checkZ = document.getElementById("Z")["checked"];
-            this.dataService.checkpointid = document.getElementById("id")["checked"];
-            for (var n = 0; n < this.point_name.length; n++) {
-                this.dataService.checkname[n] = document.getElementById(this.point_name[n])["checked"];
-            }
-            this.dataService.addpointname(this.point_name);
-        }
-        if (this.Visible === "Vertices") {
-            this.dataService.addgetpoints(this.getvertices());
-            this.dataService.checkvertixid = document.getElementById("vertixid")["checked"];
-            this.dataService.pointid = document.getElementById("pointid")["checked"];
-            for (var n = 0; n < this.vertex_name.length; n++) {
-                this.dataService.checkname[n] = document.getElementById(this.vertex_name[n])["checked"];
-            }
-            this.dataService.addpointname(this.vertex_name);
-        }
-        if (this.Visible === "Edges") {
-            this.dataService.addgetpoints(this.getedges());
-            this.dataService.checkedgeid = document.getElementById("edgeid")["checked"];
-            for (var n = 0; n < this.edge_name.length; n++) {
-                this.dataService.checkname[n] = document.getElementById(this.edge_name[n])["checked"];
-            }
-            this.dataService.addpointname(this.edge_name);
-        }
-        if (this.Visible === "Faces") {
-            this.dataService.addgetpoints(this.getfaces());
-            this.dataService.checkface = document.getElementById("checkface")["checked"];
-            for (var n = 0; n < this.face_name.length; n++) {
-                this.dataService.checkname[n] = document.getElementById(this.face_name[n])["checked"];
-            }
-            this.dataService.addpointname(this.face_name);
-        }
-        if (this.Visible === "Objs") {
-            this.dataService.addgetpoints(this.getoject());
-            this.dataService.checkobj = document.getElementById("checkobj")["checked"];
-            for (var n = 0; n < this.obj_name.length; n++) {
-                this.dataService.checkname[n] = document.getElementById(this.obj_name[n])["checked"];
-            }
-            this.dataService.addpointname(this.obj_name);
-        }
-    };
-    ToolwindowComponent.prototype.sortData = function (sort) {
-        var _this = this;
-        var data = this.attribute.slice();
-        if (!sort.active || sort.direction == '') {
-            this.attribute = data;
-            return;
-        }
-        if (this.Visible === "Points") {
-            this.attribute = data.sort(function (a, b) {
-                var isAsc = sort.direction == 'asc';
-                switch (sort.active) {
-                    case 'id': return _this.compareid(a.id, b.id, isAsc);
-                    case 'x': return _this.compare(+a.x, +b.x, isAsc);
-                    case 'y': return _this.compare(+a.y, +b.y, isAsc);
-                    case 'z': return _this.compare(+a.z, +b.z, isAsc);
-                    default: return 0;
-                }
-            });
-            for (var i = 0; i < this.point_name.length; i++) {
-                this.attribute = data.sort(function (a, b) {
-                    var isAsc = sort.direction == 'asc';
-                    switch (sort.active) {
-                        case _this.point_name[i]: return _this.compare(a[i], b[i], isAsc);
-                        default: return 0;
-                    }
-                });
-            }
-        }
-        if (this.Visible === "Vertices") {
-            var labelinitial = false;
-            this.attribute = data.sort(function (a, b) {
-                var isAsc = sort.direction == 'asc';
-                switch (sort.active) {
-                    case 'vertixlabel':
-                        labelinitial = true;
-                        return _this.compare(a.vertixlabel, b.vertixlabel, isAsc);
-                    case 'pointid':
-                        labelinitial = true;
-                        return _this.compareid(a.pointid, b.pointid, isAsc);
-                    default: return 0;
-                }
-            });
-            if (labelinitial === false) {
-                for (var i = 0; i < this.vertex_name.length; i++) {
-                    this.attribute = data.sort(function (a, b) {
-                        var isAsc = sort.direction == 'asc';
-                        switch (sort.active) {
-                            case _this.vertex_name[i]: return _this.compare(a[i], b[i], isAsc);
-                            default: return 0;
-                        }
-                    });
-                }
-            }
-        }
-        if (this.Visible === "Edges") {
-            this.attribute = data.sort(function (a, b) {
-                var isAsc = sort.direction == 'asc';
-                switch (sort.active) {
-                    case 'label': return _this.compare(a.label, b.label, isAsc);
-                    default: return 0;
-                }
-            });
-            for (var i = 0; i < this.edge_name.length; i++) {
-                this.attribute = data.sort(function (a, b) {
-                    var isAsc = sort.direction == 'asc';
-                    switch (sort.active) {
-                        case _this.edge_name[i]: return _this.compare(a[i], b[i], isAsc);
-                        default: return 0;
-                    }
-                });
-            }
-        }
-        if (this.Visible === "Wires") {
-            this.attribute = data.sort(function (a, b) {
-                var isAsc = sort.direction == 'asc';
-                switch (sort.active) {
-                    case 'label': return _this.compare(a.label, b.label, isAsc);
-                    default: return 0;
-                }
-            });
-            for (var i = 0; i < this.wire_name.length; i++) {
-                this.attribute = data.sort(function (a, b) {
-                    var isAsc = sort.direction == 'asc';
-                    switch (sort.active) {
-                        case _this.wire_name[i]: return _this.compare(a[i], b[i], isAsc);
-                        default: return 0;
-                    }
-                });
-            }
-        }
-        if (this.Visible === "Faces") {
-            this.attribute = data.sort(function (a, b) {
-                var isAsc = sort.direction == 'asc';
-                switch (sort.active) {
-                    case 'label': return _this.compare(a.label, b.label, isAsc);
-                    default: return 0;
-                }
-            });
-            for (var i = 0; i < this.face_name.length; i++) {
-                this.attribute = data.sort(function (a, b) {
-                    var isAsc = sort.direction == 'asc';
-                    switch (sort.active) {
-                        case _this.face_name[i]: return _this.compare(a[i], b[i], isAsc);
-                        default: return 0;
-                    }
-                });
-            }
-        }
-        if (this.Visible === "Objs") {
-            var labelinitial = false;
-            this.attribute = data.sort(function (a, b) {
-                var isAsc = sort.direction == 'asc';
-                switch (sort.active) {
-                    case 'label':
-                        labelinitial = true;
-                        return _this.compareid(a.label, b.label, isAsc);
-                    default: return 0;
-                }
-            });
-            if (labelinitial === false) {
-                for (var i = 0; i < this.obj_name.length; i++) {
-                    this.attribute = data.sort(function (a, b) {
-                        var isAsc = sort.direction == 'asc';
-                        switch (sort.active) {
-                            case _this.obj_name[i]: return _this.compare(a[i], b[i], isAsc);
-                            default: return 0;
-                        }
-                    });
-                }
-            }
-        }
-    };
-    ToolwindowComponent.prototype.compare = function (a, b, isAsc) {
-        return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-    };
-    ToolwindowComponent.prototype.compareid = function (a, b, isAsc) {
-        return (Number(a.substring(1, a.length)) < Number(b.substring(1, b.length)) ? -1 : 1) * (isAsc ? 1 : -1);
-    };
-    ToolwindowComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-toolwindow',
-            template: __webpack_require__(/*! ./toolwindow.component.html */ "./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.html"),
-            styles: [__webpack_require__(/*! ./toolwindow.component.css */ "./src/app/mViewer/viewers/gs-viewer/toolwindow/toolwindow.component.css")]
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]])
-    ], ToolwindowComponent);
-    return ToolwindowComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_3__["DataSubscriber"]));
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.css":
-/*!***********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.css ***!
-  \***********************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.css":
+/*!**********************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.css ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -3394,10 +1474,10 @@ module.exports = "#container {\r\n  position: relative;\r\n  height:100%;\r\n  w
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.html":
-/*!************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.html ***!
-  \************************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.html":
+/*!***********************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.html ***!
+  \***********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -3405,10 +1485,10 @@ module.exports = "<div id=\"container\"  \r\n    (mousemove)=\"onDocumentMouseMo
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.ts":
-/*!**********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.ts ***!
-  \**********************************************************************/
+/***/ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.ts":
+/*!*********************************************************************!*\
+  !*** ./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.ts ***!
+  \*********************************************************************/
 /*! exports provided: ViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3417,11 +1497,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewerComponent", function() { return ViewerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/gs-viewer/data/DataSubscriber.ts");
+/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/gsviewer/data/DataSubscriber.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -3614,7 +1697,7 @@ var ViewerComponent = /** @class */ (function (_super) {
     // todo: optimize
     // 
     ViewerComponent.prototype.updateModel = function () {
-        this._model = this.dataService.getGsModel();
+        this._model = this.dataService.getModel();
         if (!this._model || !this.scene) {
             console.warn("Model or Scene not defined.");
             this._modelshow = false;
@@ -3623,55 +1706,148 @@ var ViewerComponent = /** @class */ (function (_super) {
         try {
             this._updatemodel = true;
             this._modelshow = true;
-            this.scene_and_maps = this.dataService.getscememaps();
-            var scene_data = this.scene_and_maps.scene;
-            this.clearScene();
-            var loader = new three__WEBPACK_IMPORTED_MODULE_1__["ObjectLoader"]();
-            // loading data
-            var objectData = loader.parse(scene_data);
-            this.seVisible = false;
-            this.imVisible = false;
-            this.LineNo = 0;
-            // preprocessing
-            if (objectData.children !== undefined) {
-                var radius = 0;
-                for (var i = 0; i < objectData.children.length; i++) {
-                    var chd = objectData.children[i];
-                    //chd["material"].needsUpdate=true;
-                    chd["material"].transparent = true;
-                    chd["material"].blending = 1;
-                    if (chd.name === "All faces" || chd.name === "All wires" || chd.name === "All edges" || chd.name === "All vertices" ||
-                        chd.name === "Other lines" || chd.name === "All points") {
-                        chd["material"].transparent = false;
-                        chd["geometry"].computeVertexNormals();
-                        chd["geometry"].computeBoundingBox();
-                        chd["geometry"].computeBoundingSphere();
-                        if (chd.name === "All points") {
-                            this.center = chd["geometry"].boundingSphere.center;
-                        }
-                        if (chd.name === "All edges") {
-                            this.basicMat = chd["material"].color;
-                        }
-                        else if (chd.name === "Other lines") {
-                            this.basicMat = chd["material"].color;
-                        }
-                        if (chd.type === "LineSegments" && chd["geometry"].index.count !== undefined) {
-                            this.LineNo = this.LineNo + chd["geometry"].index.count;
-                        }
-                    }
-                    if (chd["geometry"] != undefined && chd["geometry"].boundingSphere.radius !== null) {
-                        if (chd["geometry"].boundingSphere.radius > radius) {
-                            radius = chd["geometry"].boundingSphere.radius;
-                            this.center = chd["geometry"].boundingSphere.center;
-                        }
-                    }
+            console.log("MODEL LOADED");
+            console.debug(this._model);
+            var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["BufferGeometry"]();
+            var normals = [];
+            var colors = [];
+            var positions = this._model.attributes.positions;
+            var positions_values_1 = positions.values;
+            var positions_keys = positions.keys;
+            var positions_1 = [];
+            positions_keys.forEach(function (v, k) {
+                positions_1.push(positions_values_1[v]);
+            });
+            var positions_flat = [].concat.apply([], positions_1);
+            var coordinates_1 = this._model.attributes.positions.filter(function (attr) { return attr.name === 'coordinates'; });
+            var triangles = this._model.topology.triangles;
+            var triangles_flat = [].concat.apply([], triangles);
+            var triangles_flat_values_1 = coordinates_1.values;
+            var triangles_flat_keys = coordinates_1.keys;
+            var triangles_flat_1 = [];
+            triangles_flat_keys.forEach(function (v, k) {
+                triangles_flat_1.push(triangles_flat_values_1[v]);
+            });
+            var triangles_flat_coords = [].concat.apply([], triangles_flat_1);
+            var vertices_1 = this._model.topology.vertices;
+            var edges = this._model.topology.edges;
+            // remove duplicated edges
+            var edges_sorted = edges.map(function (x) { return x.sort(); }).sort();
+            var edges_unique = [];
+            for (var i = 1; i < edges_sorted.length; i++) {
+                if (JSON.stringify(edges_sorted[i]) != JSON.stringify(edges_sorted[i - 1])) {
+                    edges_unique.push(edges_sorted[i]);
                 }
             }
-            // setting controls
-            this.controls.target.set(this.center.x, this.center.y, this.center.z);
+            var edges_flat = [].concat.apply([], edges);
+            var edges_flat_coords_1 = [];
+            edges_flat.forEach(function (v, k) {
+                edges_flat_coords_1.push(coordinates_1[vertices_1[v]]);
+            });
+            var attr_normal = this._model.attributes.vertices.filter(function (attr) { return attr.name === 'normal'; });
+            var normal_values_1 = attr_normal[0].values;
+            var normal_keys = attr_normal[0].keys;
+            var normals_1 = [];
+            normal_keys.forEach(function (v, k) {
+                normals_1.push(normal_values_1[v]);
+            });
+            var normals_flat = [].concat.apply([], normals_1);
+            var attr_color = this._model.attributes.vertices.filter(function (attr) { return attr.name === 'color'; });
+            var color_values_1 = attr_color[0].values;
+            var color_keys = attr_color[0].keys;
+            var colors_1 = [];
+            color_keys.forEach(function (v, k) {
+                colors_1.push(color_values_1[v]);
+            });
+            var colors_flat = [].concat.apply([], colors_1);
+            colors = [0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1];
+            for (var i_1 = 0; i_1 < coordinates_1.length; i_1++) {
+                normals.push(0, 0, 0);
+                colors.push(0, 0, 1);
+            }
+            // console.log(colors)
+            // tri
+            geometry.setIndex(triangles_flat_coords);
+            geometry.addAttribute('position', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](positions_flat, 3));
+            geometry.addAttribute('normal', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](normals_flat, 3));
+            geometry.addAttribute('color', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](colors_flat, 3));
+            var material = new three__WEBPACK_IMPORTED_MODULE_1__["MeshPhongMaterial"]({
+                specular: 0xffffff, shininess: 0,
+                side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"], vertexColors: three__WEBPACK_IMPORTED_MODULE_1__["VertexColors"],
+            });
+            var mesh = new three__WEBPACK_IMPORTED_MODULE_1__["Mesh"](geometry, material);
+            this.scene.add(mesh);
+            // lines
+            var geometry3 = new three__WEBPACK_IMPORTED_MODULE_1__["BufferGeometry"]();
+            geometry3.setIndex(edges_flat_coords_1);
+            geometry3.addAttribute('position', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](positions_flat, 3));
+            geometry3.addAttribute('normal', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](normals_flat, 3));
+            geometry3.addAttribute('color', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](colors_flat, 3));
+            var material3 = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({
+                color: 0xffffff,
+                linewidth: 1,
+                linecap: 'round',
+                linejoin: 'round' //ignored by WebGLRenderer
+            });
+            var lines = new three__WEBPACK_IMPORTED_MODULE_1__["LineSegments"](geometry3, material3);
+            this.scene.add(lines);
+            // points
+            var geometry2 = new three__WEBPACK_IMPORTED_MODULE_1__["BufferGeometry"]();
+            geometry2.addAttribute('position', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](positions_flat, 3));
+            geometry2.addAttribute('color', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](colors_flat, 3));
+            geometry2.computeBoundingSphere();
+            //
+            var material2 = new three__WEBPACK_IMPORTED_MODULE_1__["PointsMaterial"]({ size: 0.1, vertexColors: three__WEBPACK_IMPORTED_MODULE_1__["VertexColors"] });
+            var mesh2 = new three__WEBPACK_IMPORTED_MODULE_1__["Points"](geometry2, material2);
+            this.scene.add(mesh2);
+            //todo: Change to new viewer
+            // const scene_data = this._model.scene;
+            // this.clearScene();
+            // let loader = new THREE.ObjectLoader();
+            // // loading data
+            // let objectData = loader.parse( scene_data );
+            // this.seVisible=false;
+            // this.imVisible=false;
+            // this.LineNo=0;
+            // // preprocessing
+            // if( objectData.children!==undefined){
+            //   var radius=0;
+            //   for(var i=0;i< objectData.children.length;i++){
+            //     let chd = objectData.children[i];
+            //     //chd["material"].needsUpdate=true;
+            //     chd["material"].transparent=true;
+            //     chd["material"].blending=1;
+            //     if( chd.name==="All faces"||chd.name==="All wires"||chd.name==="All edges"||chd.name==="All vertices"||
+            //       chd.name==="Other lines"||chd.name==="All points"){
+            //         chd["material"].transparent=false;
+            //         chd["geometry"].computeVertexNormals();
+            //         chd["geometry"].computeBoundingBox();
+            //         chd["geometry"].computeBoundingSphere();
+            //         if(chd.name==="All points"){
+            //           this.center=chd["geometry"].boundingSphere.center;
+            //         }
+            //         if(chd.name==="All edges"){
+            //           this.basicMat=chd["material"].color;
+            //         }else if(chd.name==="Other lines"){
+            //           this.basicMat=chd["material"].color;
+            //         }
+            //         if(chd.type==="LineSegments"&&chd["geometry"].index.count!==undefined){
+            //           this.LineNo=this.LineNo+chd["geometry"].index.count;
+            //         }
+            //     }
+            //     if(chd["geometry"]!=undefined&&chd["geometry"].boundingSphere.radius!==null){
+            //       if(chd["geometry"].boundingSphere.radius>radius){
+            //         radius=chd["geometry"].boundingSphere.radius;
+            //         this.center=chd["geometry"].boundingSphere.center;
+            //       }
+            //     }
+            //   }
+            // }
+            // // setting controls
+            // this.controls.target.set(this.center.x,this.center.y,this.center.z);
             this.controls.update();
-            // adding the object to the scene
-            this.scene.add(objectData);
+            // // adding the object to the scene
+            // this.scene.add(objectData);  
             this.render(this);
             this.dataService.getpoints = [];
         }
@@ -4503,92 +2679,6 @@ var ViewerComponent = /** @class */ (function (_super) {
                     }
                 }
             }
-            /*if(this.scenechildren[0].name === "All vertices"){
-              var distance:number=intersects[ 0 ].distanceToRay;
-              var index:number=intersects[ 0 ].index;
-              for(var i=1;i<intersects.length;i++){
-                if(distance>intersects[ i ].distanceToRay){
-                  distance=intersects[ i ].distanceToRay;
-                  index=intersects[ i ].index;
-                }
-              }
-              var id:string=this._model.getGeom().getAllPoints()[index].getLabel();
-              var label:string="";
-              var getpoints:Array<any>;
-              var getpoints=this.dataService.getpoints;
-              var pointname=this.dataService.pointname;
-      
-              /*var path: gs.ITopoPathData = this.scene_and_maps.vertices_map.get(index);
-              var vertices: gs.IVertex = this._model.getGeom().getTopo(path) as gs.IVertex;
-              var id: string = "";
-              var attributevertix=this.dataService.getattrvertix();*/
-            //var vertices: gs.IVertex= this._model.getGeom().getTopo(path) as gs.IVertex;
-            //var id:string=this._model.getGeom().getAllPoints()[index].getLabel();
-            //console.log(vertices.getPoint().getPosition());
-            /*var label:string="";
-            var attributevertix=this.dataService.getattrvertix();
-            console.log(attributevertix);
-            for(var i=0;i<attributevertix.length;i++){
-              if(vertices.getLabel()===attributevertix[i].vertixlabel){
-                id=attributevertix[i].pointid;
-                label=vertices.getLabel();
-                break;
-              }
-            }
-            console.log(id);
-            if(id!==""){
-              for(var i=0;i<attributevertix.length;i++){
-                if(id===attributevertix[i].pointid){
-                  var str=attributevertix[i].vertixlabel;
-                  if(label!==str) label=label+"<br/>"+str;
-                }
-              }
-            }*/
-            /*const verts_xyz: gs.XYZ = vertices.getPoint().getPosition();//this._model.getGeom().getAllPoints()[index].getPosition();//vertices.getPoint().getPosition();
-            console.log(verts_xyz);
-            if(this.textlabels.length===0) {
-              var geometry=new THREE.Geometry();
-              geometry.vertices.push(new THREE.Vector3(verts_xyz[0],verts_xyz[1],verts_xyz[2]));
-              var pointsmaterial=new THREE.PointsMaterial( { color:0x00ff00,size:1} );
-              //pointsmaterial.sizeAttenuation=false;
-              if(this.dataService.pointsize!==undefined){
-                pointsmaterial.size=this.dataService.pointsize;
-              }
-              const points = new THREE.Points( geometry, pointsmaterial);
-              points.userData.id=id;
-              //points["material"].needsUpdate=true;
-              points.name="selects";
-              this.scene.add(points);
-              this.addTextLabel(label,verts_xyz, id,id,"All points");
-            }else{
-              for(var j=0;j<this.scene.children.length;j++){
-                if(id===this.scene.children[j].userData.id){
-                  select=true;
-                  this.scene.remove(this.scene.children[j]);
-                }
-              }
-              for(var j=0;j<this.textlabels.length;j++){
-                  if(id===this.textlabels[j]["id"]){
-                    select=true;
-                    this.removeTextLabel(this.textlabels[j]["id"]);
-                  }
-              }
-              if(select==false){
-                var geometry=new THREE.Geometry();
-                geometry.vertices.push(new THREE.Vector3(verts_xyz[0],verts_xyz[1],verts_xyz[2]));
-                var pointsmaterial=new THREE.PointsMaterial( { color:0x00ff00,size:1} );
-                if(this.dataService.pointsize!==undefined){
-                  pointsmaterial.size=this.dataService.pointsize;
-                }
-                const points = new THREE.Points( geometry, pointsmaterial);
-                points.userData.id=id;
-                //points["material"].needsUpdate=true;
-                points.name="selects";
-                this.scene.add(points);
-                this.addTextLabel(label,verts_xyz, id,id,"All points");
-              }
-            }
-          }*/
         }
         else {
             /*for(var i=0;i<this.dataService.sprite.length;i++){
@@ -4763,30 +2853,12 @@ var ViewerComponent = /** @class */ (function (_super) {
         event.stopPropagation();
         this.imVisible = !this.imVisible;
         this.dataService.imVisible = this.imVisible;
-        //console.log(this.dataService.imVisible);
-        /*for(var i=0;i<this.scene.children.length;i++){
-          if(this.scene.children[i].type!=="DirectionalLight"&&this.scene.children[i].type!=="HemisphereLight"){
-            this.scene.remove(this.scene.children[i]);
-          }
-        }*/
-        /*var mymap = L.map('map').setView([51.505, -0.09], 13);
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'your.mapbox.access.token'
-        }).addTo(mymap);*/
-        /*let map = L.map("map").setView([38, -77], 13);
-        console.log(map);
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);*/
     };
     ViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-viewer',
-            template: __webpack_require__(/*! ./viewer.component.html */ "./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.html"),
-            styles: [__webpack_require__(/*! ./viewer.component.css */ "./src/app/mViewer/viewers/gs-viewer/viewer/viewer.component.css")]
+            template: __webpack_require__(/*! ./viewer.component.html */ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.html"),
+            styles: [__webpack_require__(/*! ./viewer.component.css */ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.css")]
         }),
         __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
     ], ViewerComponent);
@@ -5630,9 +3702,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -5742,9 +3817,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -5969,9 +4047,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -6228,9 +4309,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! chroma-js */ "./node_modules/chroma-js/chroma.js");
 /* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(chroma_js__WEBPACK_IMPORTED_MODULE_2__);
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -6612,9 +4696,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -7020,9 +5107,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! chroma-js */ "./node_modules/chroma-js/chroma.js");
 /* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(chroma_js__WEBPACK_IMPORTED_MODULE_2__);
 var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -7496,6 +5586,52 @@ var FileUtils = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/mViewer/viewers/procedure-help.component.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/mViewer/viewers/procedure-help.component.ts ***!
+  \*************************************************************/
+/*! exports provided: ProcedureHelpComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProcedureHelpComponent", function() { return ProcedureHelpComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _shared_decorators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @shared/decorators */ "./src/app/shared/decorators/index.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ProcedureHelpComponent = /** @class */ (function () {
+    function ProcedureHelpComponent() {
+    }
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], ProcedureHelpComponent.prototype, "output", void 0);
+    ProcedureHelpComponent = __decorate([
+        _shared_decorators__WEBPACK_IMPORTED_MODULE_1__["ModuleDocAware"],
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'procedure-help',
+            template: "\n  <div *ngIf='output'>\n    <h2>{{output.name}}</h2>\n    <h4>Module: <span>{{output.module}}</span></h4>\n    <h5><span>Description:</span></h5>\n    <p>{{output.description}}</p>\n    <h5 *ngIf='output.parameters?.length > 0'><span>Parameters: </span></h5>\n    <p class='paramP' *ngFor='let param of output.parameters'><span>{{param.name}} - </span>{{param.description}}</p>\n    <h5 *ngIf='output.returns'>Returns:</h5>\n    <p *ngIf='output.returns'>{{output.returns}}</p>\n  </div>\n\n\n  ",
+            styles: ["\n$prod-background-color: rgb(250,250,250);\n$background-color: rgb(220,220,220);\n$title-background: #ccc;\n$text-color: rgb(80,80,80);\n$selected-color: rgb(0,0,150);\n$function-text-color: rgb(190, 140, 30);\n$separator: rgb(239,239,239);\n\n:host{\n  height: 100%;\n  width: 100%;\n}\ndiv{\n  width: 100%;\n  padding-left:10px;\n}\nh5{\n  font-weight: 700;\n  font-size: 12px;\n}\np{\n  font-family: sans-serif;\n}\n.funcDesc{\n  font-weight: 600;\n}\n\n.paramP{\n  padding-left: 5px;\n\n}\n\nspan{\n  font-weight: 550;\n  font-style: italic;\n}\n\n"]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ProcedureHelpComponent);
+    return ProcedureHelpComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/mViewer/viewers/viewer-text.component.ts":
 /*!**********************************************************!*\
   !*** ./src/app/mViewer/viewers/viewer-text.component.ts ***!
@@ -7517,10 +5653,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-//import { gsConstructor } from '@modules';
 var TextViewerComponent = /** @class */ (function () {
     function TextViewerComponent() {
-        //console.log(`Text Viewer Created`); 
+        // console.log(`Text Viewer Created`);
     }
     TextViewerComponent.prototype.ngOnInit = function () {
         if (typeof this.data === 'number' || this.data === undefined) {
@@ -7622,17 +5757,17 @@ var EdgeComponent = /** @class */ (function () {
             this.selected.emit(event.ctrlKey);
         }
         else {
-            if (event.ctrlKey)
+            if (event.ctrlKey) {
                 this.selected.emit('ctrl');
-            else
+            }
+            else {
                 this.selected.emit('single');
+            }
         }
     };
     // delete a wire
     EdgeComponent.prototype.deleteEdge = function () {
         this.delete.emit();
-    };
-    EdgeComponent.prototype.ngOnInit = function () {
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('canvas'),
@@ -7662,7 +5797,7 @@ var EdgeComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: '[edge]',
             template: __webpack_require__(/*! ./edge.component.html */ "./src/app/ngFlowchart-svg/edge/edge.component.html"),
-            styles: ["\n    .edge{\n        fill: none;\n        stroke: rgb(80, 80, 80);\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n        opacity: 1;\n        pointer-events: stroke;\n        marker-end: url(#arrow);\n    }  \n    .inviEdge{\n        fill: none;\n        stroke: gray;\n        stroke-width: 30px;\n        opacity: 0;\n        pointer-events: stroke;\n    }  \n    .selected{\n        stroke: rgb(0, 0, 150);\n        opacity: 1;\n        marker-end: url(#arrow_selected);\n\n    }\n  "]
+            styles: ["\n    .edge{\n        fill: none;\n        stroke: rgb(80, 80, 80);\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n        opacity: 1;\n        pointer-events: stroke;\n        marker-end: url(#arrow);\n    }\n    .inviEdge{\n        fill: none;\n        stroke: gray;\n        stroke-width: 30px;\n        opacity: 0;\n        pointer-events: stroke;\n    }\n    .selected{\n        stroke: rgb(0, 0, 150);\n        opacity: 1;\n        marker-end: url(#arrow_selected);\n\n    }\n  "]
         })
     ], EdgeComponent);
     return EdgeComponent;
@@ -7679,7 +5814,7 @@ var EdgeComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id = 'flowchart-main-container' class='container'>\r\n\r\n      <!-- svg component -->\r\n      <svg id=\"svg-canvas\" class = \"svgCanvas\" viewBox=\"0 0 1500 1500\" \r\n      (mousedown)='panStart($event)'\r\n      (mousemove)='handleMouseMove($event)'  \r\n      (mouseup)='handleMouseUp($event)'\r\n      (mouseenter)='activateKeyEvent()'\r\n      (mouseleave)='deactivateKeyEvent()'\r\n      (wheel)='scale($event)'\r\n      >\r\n            <!-- definitions for svg: grid patterns, arrow head for connecting wire-->\r\n            <defs>\r\n                  <!-- grid pattern -->\r\n                  <pattern id=\"smallGrid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\">\r\n                    <path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"gray\" stroke-width=\"0.5\"/>\r\n                  </pattern>\r\n                  <pattern id=\"grid\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\">\r\n                    <rect width=\"100\" height=\"100\" fill=\"url(#smallGrid)\"/>\r\n                    <path d=\"M 100 0 L 0 0 0 100\" fill=\"none\" stroke=\"gray\" stroke-width=\"1\"/>\r\n                  </pattern>\r\n\r\n                  <!-- arrow head -->\r\n                  <marker id=\"arrow\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                    <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(80, 80, 80)\" fill=\"transparent\" />\r\n                  </marker>\r\n                  <marker id=\"arrow_selected\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                        <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(0, 0, 150)\" fill=\"transparent\"  />\r\n                  </marker>\r\n            </defs>\r\n\r\n            <!-- svg frame-->\r\n            <rect width=\"100%\" height=\"100%\" fill=\"url(#grid)\" />\r\n                          \r\n\r\n            <!-- wires => edge.component -->\r\n            <g edge *ngFor=\"let edge of data.edges; let edge_index = index\" \r\n            [edge]='edge'\r\n            [inputOffset]='inputOffset'\r\n            [outputOffset]='outputOffset'\r\n            (selected)='selectEdge($event, edge_index)'\r\n            />\r\n\r\n            <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->\r\n            <line id=\"temporary-wire\" class=\"temp-wire\" x1=\"0\" y1='0' x2='0' y2='0'></line>\r\n\r\n            <!-- nodes => node.component -->\r\n            <g node *ngFor=\"let node of data.nodes; let node_index = index\" \r\n            id='flw_node_{{node_index}}'\r\n            [node]='node' \r\n            [selected]='isSelected(node_index)'\r\n            [inputOffset]='inputOffset'\r\n            [outputOffset]='outputOffset'\r\n            (action)='nodeAction($event, node_index)'\r\n            />\r\n      </svg>\r\n\r\n      <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->\r\n      <div class='button-row'>\r\n            <button mat-icon-button disableRipple='true' (click)='addNode()' title=\"Add Node\">\r\n            <mat-icon>add</mat-icon>\r\n            </button>\r\n            <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title=\"Delete Selected Node\">\r\n            <mat-icon>remove</mat-icon>\r\n            </button>\r\n            <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title=\"Delete Selected Wires\">\r\n            <mat-icon>link_off</mat-icon>\r\n            </button>\r\n      </div>\r\n\r\n      <!-- focus on flowchart button on the top right of the svg -->\r\n      <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title=\"Zoom to Fit\">\r\n            <mat-icon>control_camera</mat-icon>\r\n      </button>\r\n      \r\n\r\n</div>\r\n\r\n\r\n\r\n"
+module.exports = "<div id = 'flowchart-main-container' class='container'>\r\n\r\n    <!-- svg component -->\r\n    <svg id=\"svg-canvas\" class = \"svgCanvas\" viewBox=\"0 0 1500 1500\" \r\n    (mousedown)='panStart($event)'\r\n    (mousemove)='handleMouseMove($event)'  \r\n    (mouseup)='handleMouseUp($event)'\r\n    (mouseenter)='activateKeyEvent()'\r\n    (mouseleave)='deactivateKeyEvent()'\r\n    (wheel)='scale($event)'\r\n    >\r\n        <!-- definitions for svg: grid patterns, arrow head for connecting wire-->\r\n        <defs>\r\n            <!-- grid pattern -->\r\n            <pattern id=\"smallGrid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\">\r\n              <path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"gray\" stroke-width=\"0.5\"/>\r\n            </pattern>\r\n            <pattern id=\"grid\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\">\r\n              <rect width=\"100\" height=\"100\" fill=\"url(#smallGrid)\"/>\r\n              <path d=\"M 100 0 L 0 0 0 100\" fill=\"none\" stroke=\"gray\" stroke-width=\"1\"/>\r\n            </pattern>\r\n\r\n            <!-- arrow head -->\r\n            <marker id=\"arrow\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n              <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(80, 80, 80)\" fill=\"transparent\" />\r\n            </marker>\r\n            <marker id=\"arrow_selected\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(0, 0, 150)\" fill=\"transparent\"  />\r\n            </marker>\r\n        </defs>\r\n\r\n        <!-- svg frame-->\r\n        <rect width=\"100%\" height=\"100%\" fill=\"url(#grid)\" />\r\n                  \r\n\r\n        <!-- wires => edge.component -->\r\n        <g edge *ngFor=\"let edge of dataService.flowchart.edges; let edge_index = index\" \r\n        [edge]='edge'\r\n        [inputOffset]='inputOffset'\r\n        [outputOffset]='outputOffset'\r\n        (selected)='selectEdge($event, edge_index)'\r\n        />\r\n\r\n        <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->\r\n        <line id=\"temporary-wire\" class=\"temp-wire\" x1=\"0\" y1='0' x2='0' y2='0'></line>\r\n\r\n        <!-- nodes => node.component -->\r\n        <g node *ngFor=\"let node of dataService.flowchart.nodes; let node_index = index\" \r\n        id='flw_node_{{node_index}}'\r\n        [node]='node' \r\n        [selected]='isSelected(node_index)'\r\n        [inputOffset]='inputOffset'\r\n        [outputOffset]='outputOffset'\r\n        (action)='nodeAction($event, node_index)'\r\n        />\r\n    </svg>\r\n\r\n    <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->\r\n    <div class='button-row'>\r\n        <button mat-icon-button disableRipple='true' (click)='addNode()' title=\"Add Node\">\r\n        <mat-icon>add</mat-icon>\r\n        </button>\r\n        <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title=\"Delete Selected Node\">\r\n        <mat-icon>remove</mat-icon>\r\n        </button>\r\n        <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title=\"Delete Selected Wires\">\r\n        <mat-icon>link_off</mat-icon>\r\n        </button>\r\n    </div>\r\n\r\n    <!-- focus on flowchart button on the top right of the svg -->\r\n    <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title=\"Zoom to Fit\">\r\n        <mat-icon>control_camera</mat-icon>\r\n    </button>\r\n    \r\n\r\n</div>\r\n\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -7690,7 +5825,7 @@ module.exports = "<div id = 'flowchart-main-container' class='container'>\r\n\r\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /* \twidth: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n\tdisplay: flex; \r\n\tflex-direction: row; \r\n\tjustify-content: space-between;\r\n\r\n\tposition: relative;\r\n\tfont-size: 14px; \r\n\tfont-weight: 600; \r\n\tline-height: $header-height;\r\n\ttext-transform: uppercase;\r\n\tletter-spacing: 1.5px;\r\n\theight: $header-height;\r\n\r\n\tcolor: #ADADAD;\r\n\r\n\t.btn-group{\r\n\t\theight: $header-height; \r\n\r\n\t\tbutton{\r\n\t\t\twidth: 0.9*$header-height; \r\n\t\t\theight: 0.9*$header-height; \r\n\t\t\tmargin: 0px;\r\n\t\t\tborder: 1px solid #B4B1B1;\r\n\t\t\tbox-shadow: none;\r\n\r\n\t\t\t&:focus{\r\n\t\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t}\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n\t&:focus{\r\n\t\t\r\n\t}\r\n} */ }\n\n.viewer .container {\n    display: flex;\n    flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n\n.container .svgCanvas .temp-wire {\n    stroke: #505050;\n    stroke-width: 2px;\n    stroke-dasharray: 10 15;\n    opacity: 0.5; }\n\n.transform--container {\n  position: absolute;\n  width: 100%;\n  transition: -webkit-transform 0.1s;\n  transition: transform 0.1s;\n  transition: transform 0.1s, -webkit-transform 0.1s; }\n\nsplit-area {\n  overflow: auto !important; }\n\ninput {\n  border: none; }\n\ninput:focus {\n  border-bottom: 1px dashed gray; }\n\n#flowchart__name {\n  margin: 0 auto;\n  font-size: 14px;\n  line-height: 28px;\n  font-weight: bold;\n  color: #8AA8C0; }\n\n.button-row {\n  position: absolute;\n  top: 0px;\n  left: 10px; }\n\n.button-row button {\n    color: #505050;\n    width: 28px; }\n\n.resetViewer-button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  color: #505050; }\n\n.viewer {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px), repeating-linear-gradient(-90deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px);\n  background-size: 71px 71px;\n  background-color: white;\n  box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 30px; }\n\n.viewer .container {\n    position: absolute;\n    height: 100%;\n    overflow: hidden; }\n\n.viewer .container .disabled {\n      color: #8AA8C0; }\n\n.viewer .container .disabled:hover {\n        color: #8AA8C0 !important; }\n\n.viewer .container .sidebar {\n      font-size: 12px;\n      background-color: #F1F1F1;\n      color: #395D73;\n      white-space: nowrap;\n      overflow-x: hidden !important; }\n\n.viewer .container .sidebar section {\n        padding-left: 15px;\n        padding-bottom: 5px;\n        padding-top: 5px;\n        border-bottom: 1px solid #8AA8C0; }\n\n.viewer .container .sidebar section div {\n          cursor: pointer; }\n\n.viewer .container .sidebar section div:hover {\n            color: #F0BFA0; }\n\n.viewer .content-wrapper {\n    position: relative;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .info-container {\n    padding: 0px 30px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between; }\n\n.viewer .info-container .info {\n      display: flex;\n      flex-direction: column; }\n\n.viewer .info-container .info .label {\n        font-size: 12px;\n        font-weight: 100;\n        color: #F07A79; }\n\n.viewer .info-container .info .value {\n        color: #395D73;\n        font-size: 11px;\n        font-weight: 600; }\n\n.viewer .info-container .info .action {\n        cursor: pointer;\n        font-size: 11px;\n        color: #8AA8C0; }\n\n.viewer .graph-container {\n    position: absolute;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .graph-container #graph-edges {\n      background-color: transparent;\n      z-index: 1000; }\n\n.viewer .graph-container #graph-edges #temporary-edge .hidden {\n        display: none; }\n\n.viewer .graph-container #graph-nodes {\n      background-color: transparent;\n      overflow: hidden;\n      z-index: 1000; }\n\n.viewer .info-container {\n    position: absolute;\n    right: 0;\n    bottom: 0; }\n\n.viewer .info-container .label, .viewer .info-container .value {\n      margin-right: 5px;\n      font-weight: normal !important; }\n\n.viewer .node-container {\n    position: relative; }\n\n.viewer .node-container .node {\n      position: absolute;\n      -webkit-transform-origin: top left;\n              transform-origin: top left;\n      z-index: 3;\n      margin: 0px;\n      color: #395D73; }\n\n.viewer .node-container .node.hidden {\n        display: none; }\n\n.viewer .node-container .node .btn-container {\n        position: absolute;\n        right: -30px;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        height: 100px; }\n\n.viewer .node-container .node .btn-container .btn-group {\n          position: relative;\n          display: flex;\n          flex-direction: column;\n          justify-content: center;\n          background: none; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button {\n            position: relative;\n            width: 25px;\n            height: 24px;\n            cursor: pointer;\n            font-size: 9px;\n            text-align: center; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button .material-icons {\n              font-size: 18px;\n              line-height: 24px;\n              color: #8AA8C0; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover {\n              color: white; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover .mat-icon {\n                color: #F0BFA0; }\n\n.viewer .node-container .node .node-body {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        position: relative;\n        min-height: 30px;\n        min-width: 70px;\n        width: auto;\n        border: 1px solid #395D73;\n        background-color: rgba(255, 255, 255, 0.7);\n        cursor: move; }\n\n.viewer .node-container .node .node-body.disabled {\n          opacity: 0.4; }\n\n.viewer .node-container .node .node-body.selected {\n          border-color: green; }\n\n.viewer .node-container .node .node-body.library {\n          border-color: #395D73;\n          border-style: solid; }\n\n.viewer .node-container .node .node-body.error {\n          background-color: #E94858; }\n\n.viewer .node-container .node .node-body.function {\n          background-color: yellow;\n          border: 1px dashed green; }\n\n.viewer .node-container .node .node-body .node-name {\n          font-family: sans-serif;\n          font-size: 12px;\n          border-bottom: 1px solid #395D73;\n          text-align: center;\n          background-color: #F1F1F1; }\n\n.viewer .node-container .node .node-body .node-name input {\n            background-color: inherit;\n            border: 0px;\n            color: #395D73;\n            text-align: center; }\n\n.viewer .node-container .node .node-body .node-name.selected {\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .node-name.selected input {\n              color: white;\n              font-weight: bold; }\n\n.viewer .node-container .node .node-body .node-name.selected input:focus {\n                color: #395D73;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container {\n          display: flex;\n          flex-direction: column;\n          margin-top: 10px;\n          margin-bottom: 10px; }\n\n.viewer .node-container .node .node-body .port-container .divider {\n            height: 2px;\n            width: 100%;\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .port-container .port {\n            display: flex;\n            flex-direction: row;\n            margin: 5px 0px; }\n\n.viewer .node-container .node .node-body .port-container .port.hidden {\n              display: none; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip {\n              width: 15px;\n              height: 15px;\n              border-radius: 50%;\n              background-color: #F1F1F1;\n              border: 1px solid #395D73;\n              cursor: pointer; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.isFunction {\n                border-style: dashed;\n                background-color: gray;\n                border-radius: 0px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.selected {\n                border: 2px solid #8AA8C0;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip:hover {\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name {\n              font-size: 12px;\n              margin: 0px 5px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name.isFunction {\n                color: black;\n                font-size: 9.6px; }\n\n.viewer .node-container .node .node-body .port-container .port.input {\n              justify-content: flex-start;\n              margin-left: -7.5px; }\n\n.viewer .node-container .node .node-body .port-container .port.output {\n              justify-content: flex-end;\n              margin-right: -7.5px; }\n\n.viewer .node-container .node:active {\n        cursor: none; }\n"
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /*     width: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n    display: flex; \r\n    flex-direction: row; \r\n    justify-content: space-between;\r\n\r\n    position: relative;\r\n    font-size: 14px; \r\n    font-weight: 600; \r\n    line-height: $header-height;\r\n    text-transform: uppercase;\r\n    letter-spacing: 1.5px;\r\n    height: $header-height;\r\n\r\n    color: #ADADAD;\r\n\r\n    .btn-group{\r\n        height: $header-height; \r\n\r\n        button{\r\n            width: 0.9*$header-height; \r\n            height: 0.9*$header-height; \r\n            margin: 0px;\r\n            border: 1px solid #B4B1B1;\r\n            box-shadow: none;\r\n\r\n            &:focus{\r\n                \r\n            }\r\n        }\r\n        \r\n    }\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n    &:focus{\r\n        \r\n    }\r\n} */ }\n\n.viewer .container {\n    display: flex;\n    flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n\n.container .svgCanvas .temp-wire {\n    stroke: #505050;\n    stroke-width: 2px;\n    stroke-dasharray: 10 15;\n    opacity: 0.5; }\n\n.transform--container {\n  position: absolute;\n  width: 100%;\n  transition: -webkit-transform 0.1s;\n  transition: transform 0.1s;\n  transition: transform 0.1s, -webkit-transform 0.1s; }\n\nsplit-area {\n  overflow: auto !important; }\n\ninput {\n  border: none; }\n\ninput:focus {\n  border-bottom: 1px dashed gray; }\n\n#flowchart__name {\n  margin: 0 auto;\n  font-size: 14px;\n  line-height: 28px;\n  font-weight: bold;\n  color: #8AA8C0; }\n\n.button-row {\n  position: absolute;\n  top: 0px;\n  left: 10px; }\n\n.button-row button {\n    color: #505050;\n    width: 28px; }\n\n.resetViewer-button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  color: #505050; }\n\n.viewer {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px), repeating-linear-gradient(-90deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px);\n  background-size: 71px 71px;\n  background-color: white;\n  box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 30px; }\n\n.viewer .container {\n    position: absolute;\n    height: 100%;\n    overflow: hidden; }\n\n.viewer .container .disabled {\n      color: #8AA8C0; }\n\n.viewer .container .disabled:hover {\n        color: #8AA8C0 !important; }\n\n.viewer .container .sidebar {\n      font-size: 12px;\n      background-color: #F1F1F1;\n      color: #395D73;\n      white-space: nowrap;\n      overflow-x: hidden !important; }\n\n.viewer .container .sidebar section {\n        padding-left: 15px;\n        padding-bottom: 5px;\n        padding-top: 5px;\n        border-bottom: 1px solid #8AA8C0; }\n\n.viewer .container .sidebar section div {\n          cursor: pointer; }\n\n.viewer .container .sidebar section div:hover {\n            color: #F0BFA0; }\n\n.viewer .content-wrapper {\n    position: relative;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .info-container {\n    padding: 0px 30px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between; }\n\n.viewer .info-container .info {\n      display: flex;\n      flex-direction: column; }\n\n.viewer .info-container .info .label {\n        font-size: 12px;\n        font-weight: 100;\n        color: #F07A79; }\n\n.viewer .info-container .info .value {\n        color: #395D73;\n        font-size: 11px;\n        font-weight: 600; }\n\n.viewer .info-container .info .action {\n        cursor: pointer;\n        font-size: 11px;\n        color: #8AA8C0; }\n\n.viewer .graph-container {\n    position: absolute;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .graph-container #graph-edges {\n      background-color: transparent;\n      z-index: 1000; }\n\n.viewer .graph-container #graph-edges #temporary-edge .hidden {\n        display: none; }\n\n.viewer .graph-container #graph-nodes {\n      background-color: transparent;\n      overflow: hidden;\n      z-index: 1000; }\n\n.viewer .info-container {\n    position: absolute;\n    right: 0;\n    bottom: 0; }\n\n.viewer .info-container .label, .viewer .info-container .value {\n      margin-right: 5px;\n      font-weight: normal !important; }\n\n.viewer .node-container {\n    position: relative; }\n\n.viewer .node-container .node {\n      position: absolute;\n      -webkit-transform-origin: top left;\n              transform-origin: top left;\n      z-index: 3;\n      margin: 0px;\n      color: #395D73; }\n\n.viewer .node-container .node.hidden {\n        display: none; }\n\n.viewer .node-container .node .btn-container {\n        position: absolute;\n        right: -30px;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        height: 100px; }\n\n.viewer .node-container .node .btn-container .btn-group {\n          position: relative;\n          display: flex;\n          flex-direction: column;\n          justify-content: center;\n          background: none; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button {\n            position: relative;\n            width: 25px;\n            height: 24px;\n            cursor: pointer;\n            font-size: 9px;\n            text-align: center; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button .material-icons {\n              font-size: 18px;\n              line-height: 24px;\n              color: #8AA8C0; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover {\n              color: white; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover .mat-icon {\n                color: #F0BFA0; }\n\n.viewer .node-container .node .node-body {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        position: relative;\n        min-height: 30px;\n        min-width: 70px;\n        width: auto;\n        border: 1px solid #395D73;\n        background-color: rgba(255, 255, 255, 0.7);\n        cursor: move; }\n\n.viewer .node-container .node .node-body.disabled {\n          opacity: 0.4; }\n\n.viewer .node-container .node .node-body.selected {\n          border-color: green; }\n\n.viewer .node-container .node .node-body.library {\n          border-color: #395D73;\n          border-style: solid; }\n\n.viewer .node-container .node .node-body.error {\n          background-color: #E94858; }\n\n.viewer .node-container .node .node-body.function {\n          background-color: yellow;\n          border: 1px dashed green; }\n\n.viewer .node-container .node .node-body .node-name {\n          font-family: sans-serif;\n          font-size: 12px;\n          border-bottom: 1px solid #395D73;\n          text-align: center;\n          background-color: #F1F1F1; }\n\n.viewer .node-container .node .node-body .node-name input {\n            background-color: inherit;\n            border: 0px;\n            color: #395D73;\n            text-align: center; }\n\n.viewer .node-container .node .node-body .node-name.selected {\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .node-name.selected input {\n              color: white;\n              font-weight: bold; }\n\n.viewer .node-container .node .node-body .node-name.selected input:focus {\n                color: #395D73;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container {\n          display: flex;\n          flex-direction: column;\n          margin-top: 10px;\n          margin-bottom: 10px; }\n\n.viewer .node-container .node .node-body .port-container .divider {\n            height: 2px;\n            width: 100%;\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .port-container .port {\n            display: flex;\n            flex-direction: row;\n            margin: 5px 0px; }\n\n.viewer .node-container .node .node-body .port-container .port.hidden {\n              display: none; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip {\n              width: 15px;\n              height: 15px;\n              border-radius: 50%;\n              background-color: #F1F1F1;\n              border: 1px solid #395D73;\n              cursor: pointer; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.isFunction {\n                border-style: dashed;\n                background-color: gray;\n                border-radius: 0px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.selected {\n                border: 2px solid #8AA8C0;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip:hover {\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name {\n              font-size: 12px;\n              margin: 0px 5px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name.isFunction {\n                color: black;\n                font-size: 9.6px; }\n\n.viewer .node-container .node .node-body .port-container .port.input {\n              justify-content: flex-start;\n              margin-left: -7.5px; }\n\n.viewer .node-container .node .node-body .port-container .port.output {\n              justify-content: flex-end;\n              margin-right: -7.5px; }\n\n.viewer .node-container .node:active {\n        cursor: none; }\n"
 
 /***/ }),
 
@@ -7710,6 +5845,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
 /* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7724,8 +5860,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var FlowchartComponent = /** @class */ (function () {
-    function FlowchartComponent() {
+    function FlowchartComponent(dataService) {
+        this.dataService = dataService;
         this.switch = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.startCoords = [];
         // variable for flowchart zooming
@@ -7744,17 +5882,38 @@ var FlowchartComponent = /** @class */ (function () {
         this.outputOffset = [50, 88];
     }
     FlowchartComponent_1 = FlowchartComponent;
+    FlowchartComponent.enableNode = function (node) {
+        for (var _i = 0, _a = node.input.edges; _i < _a.length; _i++) {
+            var edge = _a[_i];
+            if (!edge.source.parentNode.enabled) {
+                return;
+            }
+        }
+        node.enabled = true;
+        for (var _b = 0, _c = node.output.edges; _b < _c.length; _b++) {
+            var edge = _c[_b];
+            FlowchartComponent_1.enableNode(edge.target.parentNode);
+        }
+    };
+    FlowchartComponent.disableNode = function (node) {
+        node.enabled = false;
+        for (var _i = 0, _a = node.output.edges; _i < _a.length; _i++) {
+            var edge = _a[_i];
+            FlowchartComponent_1.disableNode(edge.target.parentNode);
+        }
+    };
     FlowchartComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.canvas = document.getElementById("svg-canvas");
+        this.canvas = document.getElementById('svg-canvas');
         var bRect = this.canvas.getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
         // copy: copy node
         this.copySub = this.copyListener.subscribe(function (val) {
-            if (!_this.listenerActive)
+            if (!_this.listenerActive) {
                 return;
-            var node = _this.data.nodes[_this.data.meta.selected_nodes[0]];
-            if (node.type != 'start' && node.type != 'end') {
+            }
+            var node = _this.dataService.flowchart.nodes[_this.dataService.flowchart.meta.selected_nodes[0]];
+            if (node.type !== 'start' && node.type !== 'end') {
                 console.log('copied node:', node);
                 var cp = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](node));
                 _this.copied = circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](cp);
@@ -7762,8 +5921,9 @@ var FlowchartComponent = /** @class */ (function () {
         });
         // paste: paste copied node
         this.pasteSub = this.pasteListener.subscribe(function (val) {
-            if (!_this.listenerActive)
+            if (!_this.listenerActive) {
                 return;
+            }
             if (_this.copied) {
                 event.preventDefault();
                 var newNode = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](_this.copied);
@@ -7774,26 +5934,27 @@ var FlowchartComponent = /** @class */ (function () {
                 var isFirefox = typeof InstallTrigger !== 'undefined';
                 if (isFirefox) {
                     var ctm = _this.canvas.getScreenCTM();
-                    var bRect_1 = _this.canvas.getBoundingClientRect();
+                    // const bRect = this.canvas.getBoundingClientRect();
                     ctm.a = ctm.a * _this.zoom;
                     ctm.d = ctm.d * _this.zoom;
-                    ctm.e = bRect_1.x;
-                    ctm.f = bRect_1.y;
+                    ctm.e = bRect.x;
+                    ctm.f = bRect.y;
                     svgP = pt.matrixTransform(ctm.inverse());
                 }
                 else {
                     svgP = pt.matrixTransform(_this.canvas.getScreenCTM().inverse());
                 }
                 _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].updateNode(newNode, svgP);
-                _this.data.nodes.push(newNode);
+                _this.dataService.flowchart.nodes.push(newNode);
                 console.log('pasting node:', newNode);
             }
         });
         // delete: delete selected edge(s)
         this.keydownSub = this.keydownListener.subscribe(function (val) {
-            if (!_this.listenerActive)
+            if (!_this.listenerActive) {
                 return;
-            if (val.key == 'Delete') {
+            }
+            if (val.key === 'Delete') {
                 _this.deleteSelectedEdges();
             }
         });
@@ -7805,16 +5966,16 @@ var FlowchartComponent = /** @class */ (function () {
         switch (event.action) {
             // switch the viewchild of the appModule to the node's procedure view when double-click on the node
             case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].PROCEDURE:
-                this.switch.emit("editor");
+                this.switch.emit('editor');
                 this.deactivateKeyEvent();
                 break;
             // select a node
             case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].SELECT:
-                this.data.meta.selected_nodes = [node_index];
+                this.dataService.flowchart.meta.selected_nodes = [node_index];
                 break;
             // initiate dragging node
             case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].DRAGNODE:
-                this.element = this.data.nodes[node_index];
+                this.element = this.dataService.flowchart.nodes[node_index];
                 var pt = this.canvas.createSVGPoint();
                 // get current mouse position in the page
                 pt.x = event.data.pageX;
@@ -7839,7 +6000,7 @@ var FlowchartComponent = /** @class */ (function () {
                     svgP.x,
                     svgP.y
                 ];
-                if (this.startCoords[0] == NaN) {
+                if (this.startCoords[0] === NaN) {
                     this.startCoords = [0, 0];
                 }
                 // mark the dragging mode as dragNode
@@ -7850,7 +6011,7 @@ var FlowchartComponent = /** @class */ (function () {
                 // create a new edge
                 this.edge = { source: undefined, target: undefined, selected: false };
                 // assign the port to the edge's input/output accordingly
-                if (event.type == 'input') {
+                if (event.type === 'input') {
                     this.edge.target = event.data;
                 }
                 else {
@@ -7858,7 +6019,7 @@ var FlowchartComponent = /** @class */ (function () {
                 }
                 this.startType = event.type;
                 // modify the temporary-edge's coordinate
-                this.element = document.getElementById("temporary-wire");
+                this.element = document.getElementById('temporary-wire');
                 this.element.setAttribute('x1', event.position[0]);
                 this.element.setAttribute('y1', event.position[1]);
                 this.element.setAttribute('x2', event.position[0]);
@@ -7867,9 +6028,9 @@ var FlowchartComponent = /** @class */ (function () {
                 break;
         }
     };
-    // check if the node at node_index is selected 
+    // check if the node at node_index is selected
     FlowchartComponent.prototype.isSelected = function (node_index) {
-        return this.data.meta.selected_nodes.indexOf(node_index) > -1;
+        return this.dataService.flowchart.meta.selected_nodes.indexOf(node_index) > -1;
     };
     // add a new node
     FlowchartComponent.prototype.addNode = function () {
@@ -7897,7 +6058,7 @@ var FlowchartComponent = /** @class */ (function () {
         // assign the position to the new node and add it to the flowchart
         newNode.position.x = svgP.x;
         newNode.position.y = svgP.y;
-        this.data.nodes.push(newNode);
+        this.dataService.flowchart.nodes.push(newNode);
     };
     // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
     FlowchartComponent.prototype.activateKeyEvent = function () {
@@ -7910,95 +6071,96 @@ var FlowchartComponent = /** @class */ (function () {
     // delete selected node
     FlowchartComponent.prototype.deleteSelectedNodes = function () {
         // for each of the selected node
-        while (this.data.meta.selected_nodes.length > 0) {
-            var node_index = this.data.meta.selected_nodes.pop();
-            var node = this.data.nodes[node_index];
+        while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
+            var node_index = this.dataService.flowchart.meta.selected_nodes.pop();
+            var node = this.dataService.flowchart.nodes[node_index];
             // continue if the node is a start/end node
-            if (node.type == "start" || node.type == "end")
+            if (node.type === 'start' || node.type === 'end') {
                 continue;
+            }
             var edge_index = 0;
             // delete all the edges connected to the node
-            while (edge_index < this.data.edges.length) {
-                var tbrEdge = this.data.edges[edge_index];
-                if (tbrEdge.target.parentNode == node || tbrEdge.source.parentNode == node) {
+            while (edge_index < this.dataService.flowchart.edges.length) {
+                var tbrEdge = this.dataService.flowchart.edges[edge_index];
+                if (tbrEdge.target.parentNode === node || tbrEdge.source.parentNode === node) {
                     this.deleteEdge(edge_index, node.id);
                     continue;
                 }
                 edge_index += 1;
             }
             // remove the node from the flowchart
-            this.data.nodes.splice(Number(node_index), 1);
+            this.dataService.flowchart.nodes.splice(Number(node_index), 1);
         }
     };
     // delete an edge with a known index
     FlowchartComponent.prototype.deleteEdge = function (edge_index, deletedNode) {
-        if (deletedNode === void 0) { deletedNode = undefined; }
-        var tbrEdge = this.data.edges[edge_index];
+        var tbrEdge = this.dataService.flowchart.edges[edge_index];
         // remove the edge from the target node's list of edges
-        for (var i in this.data.edges) {
-            if (tbrEdge.target.edges[i] == tbrEdge) {
+        for (var i in this.dataService.flowchart.edges) {
+            if (tbrEdge.target.edges[i] === tbrEdge) {
                 tbrEdge.target.edges.splice(Number(i), 1);
                 break;
             }
         }
         // remove the edge from the source node's list of edges
         for (var i in tbrEdge.source.edges) {
-            if (tbrEdge.source.edges[i] == tbrEdge) {
+            if (tbrEdge.source.edges[i] === tbrEdge) {
                 tbrEdge.source.edges.splice(Number(i), 1);
                 break;
             }
         }
-        if (tbrEdge.target.parentNode.input.edges.length == 0 && deletedNode !== tbrEdge.target.parentNode.id) {
+        if (tbrEdge.target.parentNode.input.edges.length === 0 && deletedNode !== tbrEdge.target.parentNode.id) {
             FlowchartComponent_1.disableNode(tbrEdge.target.parentNode);
         }
         else {
             FlowchartComponent_1.enableNode(tbrEdge.target.parentNode);
         }
         // remove the edge from the general list of edges
-        this.data.edges.splice(edge_index, 1);
-        this.data.ordered = false;
+        this.dataService.flowchart.edges.splice(edge_index, 1);
+        this.dataService.flowchart.ordered = false;
     };
     // delete all the selected edges
     FlowchartComponent.prototype.deleteSelectedEdges = function () {
         this.selectedEdge.sort().reverse();
         for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
             var edge_index = _a[_i];
-            this.deleteEdge(edge_index);
+            this.deleteEdge(edge_index, undefined);
         }
         this.selectedEdge = [];
     };
     // select an edge
     FlowchartComponent.prototype.selectEdge = function (event, edge_index) {
         // if ctrl is pressed, add the edge into the list of selected edges
-        if (event == 'ctrl') {
+        if (event === 'ctrl') {
             this.selectedEdge.push(edge_index);
-            this.data.edges[edge_index].selected = true;
+            this.dataService.flowchart.edges[edge_index].selected = true;
         }
-        else if (event == 'single' || (event === false && this.selectedEdge.length > 1)) {
+        else if (event === 'single' || (event === false && this.selectedEdge.length > 1)) {
             if (this.selectedEdge.length > 0) {
                 for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
                     var e = _a[_i];
-                    this.data.edges[e].selected = false;
+                    this.dataService.flowchart.edges[e].selected = false;
                 }
             }
             this.selectedEdge = [edge_index];
-            this.data.edges[edge_index].selected = true;
+            this.dataService.flowchart.edges[edge_index].selected = true;
         }
         else {
-            this.data.edges[edge_index].selected = false;
-            for (var i = 0; i < this.selectedEdge.length; i++)
-                if (this.selectedEdge[i] == edge_index) {
+            this.dataService.flowchart.edges[edge_index].selected = false;
+            for (var i = 0; i < this.selectedEdge.length; i++) {
+                if (this.selectedEdge[i] === edge_index) {
                     this.selectedEdge.splice(i, 1);
                     break;
                 }
+            }
         }
     };
     // focus view onto the flowchart
     FlowchartComponent.prototype.focusFlowchart = function () {
         // find the frame of the flowchart: frame = [minX, minY, maxX, maxY]
-        var frame = [this.data.nodes[0].position.x, this.data.nodes[0].position.y,
-            this.data.nodes[0].position.x, this.data.nodes[0].position.y];
-        for (var _i = 0, _a = this.data.nodes; _i < _a.length; _i++) {
+        var frame = [this.dataService.flowchart.nodes[0].position.x, this.dataService.flowchart.nodes[0].position.y,
+            this.dataService.flowchart.nodes[0].position.x, this.dataService.flowchart.nodes[0].position.y];
+        for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
             var node = _a[_i];
             if (node.position.x < frame[0]) {
                 frame[0] = node.position.x;
@@ -8020,24 +6182,30 @@ var FlowchartComponent = /** @class */ (function () {
         var ctm = this.canvas.getScreenCTM();
         var zoom = bRect.width / (ctm.a * (frame[2] - frame[0]));
         var heightZoom = bRect.height / (ctm.d * (frame[3] - frame[1]));
-        if (zoom > heightZoom)
+        if (zoom > heightZoom) {
             zoom = heightZoom;
-        if (zoom > 2.5)
+        }
+        if (zoom > 2.5) {
             zoom = 2.5;
-        // calculate the difference between height and width, if height is bigger than width, centering the flowchart based on the difference
+        }
+        // calculate the difference between height and width, if height is bigger than width,
+        // centering the flowchart based on the difference
         var height_width_diff = ((frame[3] - frame[1]) - (frame[2] - frame[0])) / 2;
         if (height_width_diff > 0) {
             frame[0] -= height_width_diff;
         }
         // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
-        if (frame[0] < 0)
+        if (frame[0] < 0) {
             frame[0] = 0;
-        if (frame[1] < 0)
+        }
+        if (frame[1] < 0) {
             frame[1] = 0;
+        }
         // transform
         this.canvas.style.transition = 'transform 0ms ease-in';
         this.canvas.style.transformOrigin = 'top left';
-        this.canvas.style.transform = "matrix(" + zoom + ",0,0," + zoom + "," + -frame[0] * ctm.a * zoom / this.zoom + "," + -frame[1] * ctm.a * zoom / this.zoom + ")";
+        this.canvas.style.transform =
+            "matrix(" + zoom + ",0,0," + zoom + "," + -frame[0] * ctm.a * zoom / this.zoom + "," + -frame[1] * ctm.a * zoom / this.zoom + ")";
         this.zoom = zoom;
     };
     // scale view on mouse wheel
@@ -8063,7 +6231,7 @@ var FlowchartComponent = /** @class */ (function () {
             .translate(this.mousePos[0], this.mousePos[1])
             .scale(value)
             .translate(-this.mousePos[0], -this.mousePos[1]);
-        var transf = "matrix(" + m.a + "," + m.b + "," + m.c + "," + m.d + "," + m.e + "," + m.f + ")";
+        var transf = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
         // transform
         this.canvas.style.transition = 'transform 50ms ease-in';
         this.canvas.style.transformOrigin = "top left";
@@ -8091,12 +6259,12 @@ var FlowchartComponent = /** @class */ (function () {
             return;
             // if drag view
         }
-        else if (this.isDown == 1) {
+        else if (this.isDown === 1) {
             event.preventDefault();
             var bRect = this.canvas.getBoundingClientRect();
             var x = Number(event.clientX - this.startCoords[0]);
             var y = Number(event.clientY - this.startCoords[1]);
-            var boundingDiv = document.getElementById("flowchart-main-container").getBoundingClientRect();
+            var boundingDiv = document.getElementById('flowchart-main-container').getBoundingClientRect();
             if (x > 0 || bRect.width < boundingDiv.width) {
                 x = 0;
             }
@@ -8109,10 +6277,10 @@ var FlowchartComponent = /** @class */ (function () {
             else if (boundingDiv.height - y > bRect.height) {
                 y = boundingDiv.height - bRect.height;
             }
-            this.canvas.style.transform = "matrix(" + this.zoom + ",0,0," + this.zoom + "," + x + "," + y + ")";
+            this.canvas.style.transform = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')';
             // if drag node
         }
-        else if (this.isDown == 2) {
+        else if (this.isDown === 2) {
             var pt = this.canvas.createSVGPoint();
             pt.x = event.pageX;
             pt.y = event.pageY;
@@ -8138,7 +6306,7 @@ var FlowchartComponent = /** @class */ (function () {
             this.element.position.y -= yDiff;
             // if drag port
         }
-        else if (this.isDown == 3) {
+        else if (this.isDown === 3) {
             event.preventDefault();
             var pt = this.canvas.createSVGPoint();
             pt.x = event.pageX;
@@ -8165,7 +6333,7 @@ var FlowchartComponent = /** @class */ (function () {
     FlowchartComponent.prototype.handleMouseUp = function (event) {
         this.element = undefined;
         // drop port --> create new edge if drop position is within 15px of an input/output port
-        if (this.isDown == 3) {
+        if (this.isDown === 3) {
             var pt = this.canvas.createSVGPoint();
             pt.x = event.pageX;
             pt.y = event.pageY;
@@ -8184,43 +6352,46 @@ var FlowchartComponent = /** @class */ (function () {
                 svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
             }
             // reset temporary edge position to <(0,0),(0,0)>
-            var tempLine = document.getElementById("temporary-wire");
+            var tempLine = document.getElementById('temporary-wire');
             tempLine.setAttribute('x1', '0');
             tempLine.setAttribute('y1', '0');
             tempLine.setAttribute('x2', '0');
             tempLine.setAttribute('y2', '0');
             // go through all of the nodes' input/output ports
-            for (var _i = 0, _a = this.data.nodes; _i < _a.length; _i++) {
+            for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
                 var n = _a[_i];
-                var pPos;
+                var pPos = void 0;
                 // find the node's corresponding port and its position
-                if (this.startType == 'input') {
-                    if (this.edge.target.parentNode == n || n.type == 'end')
+                if (this.startType === 'input') {
+                    if (this.edge.target.parentNode === n || n.type === 'end') {
                         continue;
+                    }
                     this.edge.source = n.output;
                     pPos = [n.position.x + this.outputOffset[0], n.position.y + this.outputOffset[1]];
                 }
                 else {
-                    if (this.edge.source.parentNode == n || n.type == 'start')
+                    if (this.edge.source.parentNode === n || n.type === 'start') {
                         continue;
+                    }
                     this.edge.target = n.input;
                     pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
                 }
                 // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25)
+                if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25) {
                     continue;
+                }
                 // if there is already an existing edge with the same source and target as the new edge, return
-                for (var _b = 0, _c = this.data.edges; _b < _c.length; _b++) {
+                for (var _b = 0, _c = this.dataService.flowchart.edges; _b < _c.length; _b++) {
                     var edge = _c[_b];
-                    if (edge.target == this.edge.target && edge.source == this.edge.source) {
+                    if (edge.target === this.edge.target && edge.source === this.edge.source) {
                         this.isDown = 0;
                         return;
                     }
                 }
                 this.edge.target.edges.push(this.edge);
                 this.edge.source.edges.push(this.edge);
-                this.data.edges.push(this.edge);
-                this.data.ordered = false;
+                this.dataService.flowchart.edges.push(this.edge);
+                this.dataService.flowchart.ordered = false;
                 if (this.edge.source.parentNode.enabled) {
                     FlowchartComponent_1.enableNode(this.edge.target.parentNode);
                 }
@@ -8232,30 +6403,7 @@ var FlowchartComponent = /** @class */ (function () {
         }
         this.isDown = 0;
     };
-    FlowchartComponent.enableNode = function (node) {
-        for (var _i = 0, _a = node.input.edges; _i < _a.length; _i++) {
-            var edge = _a[_i];
-            if (!edge.source.parentNode.enabled)
-                return;
-        }
-        node.enabled = true;
-        for (var _b = 0, _c = node.output.edges; _b < _c.length; _b++) {
-            var edge = _c[_b];
-            FlowchartComponent_1.enableNode(edge.target.parentNode);
-        }
-    };
-    FlowchartComponent.disableNode = function (node) {
-        node.enabled = false;
-        for (var _i = 0, _a = node.output.edges; _i < _a.length; _i++) {
-            var edge = _a[_i];
-            FlowchartComponent_1.disableNode(edge.target.parentNode);
-        }
-    };
     var FlowchartComponent_1;
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], FlowchartComponent.prototype, "data", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
@@ -8265,7 +6413,8 @@ var FlowchartComponent = /** @class */ (function () {
             selector: 'flowchart',
             template: __webpack_require__(/*! ./flowchart.component.html */ "./src/app/ngFlowchart-svg/flowchart.component.html"),
             styles: [__webpack_require__(/*! ./flowchart.component.scss */ "./src/app/ngFlowchart-svg/flowchart.component.scss")]
-        })
+        }),
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_5__["DataService"]])
     ], FlowchartComponent);
     return FlowchartComponent;
 }());
@@ -8433,25 +6582,23 @@ var NodeComponent = /** @class */ (function () {
     NodeComponent.prototype.updatePosition = function (position) {
         this.node.position = position;
     };
-    ;
     /*
     select a node
     */
     NodeComponent.prototype.nodeSelect = function (event) {
         this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].SELECT });
     };
-    ;
     /*
     check if the input port of the node is draggable --> false only for start node, true otherwise
     */
     NodeComponent.prototype.inputDraggable = function () {
-        return !(this.node.type == 'start');
+        return !(this.node.type === 'start');
     };
     /*
     check if the output port of the node is draggable --> false only for end node, true otherwise
     */
     NodeComponent.prototype.outputDraggable = function () {
-        return !(this.node.type == 'end');
+        return !(this.node.type === 'end');
     };
     /*
     initiate dragging node when mousedown inside the node group
@@ -8469,7 +6616,7 @@ var NodeComponent = /** @class */ (function () {
         event.stopPropagation();
         var pos = this.node.position;
         var data;
-        if (portType == 'input') {
+        if (portType === 'input') {
             data = this.node.input;
             pos = [pos.x + this.inputOffset[0], pos.y + this.inputOffset[1]];
         }
@@ -8678,11 +6825,12 @@ var AddOutputComponent = /** @class */ (function () {
 /*!****************************************************************!*\
   !*** ./src/app/shared/components/execute/execute.component.ts ***!
   \****************************************************************/
-/*! exports provided: ExecuteComponent */
+/*! exports provided: mergeInputsFunc, ExecuteComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeInputsFunc", function() { return mergeInputsFunc; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExecuteComponent", function() { return ExecuteComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _models_flowchart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/flowchart */ "./src/app/shared/models/flowchart/index.ts");
@@ -8736,11 +6884,8 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var AsyncFunction = Object.getPrototypeOf(function () {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
-}).constructor;
+
+var mergeInputsFunc = "\nfunction mergeInputs(models){\n    let result = __modules__." + _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].new + "();\n    for (let model of models){\n        __modules__." + _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].merge + "(result, model);\n    }\n    return result;\n}\n";
 var ExecuteComponent = /** @class */ (function () {
     function ExecuteComponent() {
     }
@@ -8760,7 +6905,7 @@ var ExecuteComponent = /** @class */ (function () {
                                 // reset input of all nodes except start
                                 for (_i = 0, _a = this.flowchart.nodes; _i < _a.length; _i++) {
                                     node = _a[_i];
-                                    if (node.type != 'start') {
+                                    if (node.type !== 'start') {
                                         if (node.input.edges) {
                                             node.input.value = undefined;
                                         }
@@ -8814,11 +6959,11 @@ var ExecuteComponent = /** @class */ (function () {
     };
     ExecuteComponent.prototype.executeNode = function (node, funcStrings) {
         return __awaiter(this, void 0, void 0, function () {
-            var params, fnString, hasFunctions, funcName, mergeString, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
+            var params, fnString, hasFunctions, funcName, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        params = { "currentProcedure": [''] };
+                        params = { 'currentProcedure': [''] };
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -8827,24 +6972,27 @@ var ExecuteComponent = /** @class */ (function () {
                         fnString = _a.sent();
                         // add the constants from the start node
                         fnString = this.globalVars + fnString;
-                        params["model"] = node.input.value;
+                        params['model'] = node.input.value;
                         hasFunctions = false;
                         for (funcName in funcStrings) {
-                            fnString = funcStrings[funcName] + fnString;
-                            hasFunctions = true;
+                            if (funcStrings.hasOwnProperty(funcName)) {
+                                fnString = funcStrings[funcName] + fnString;
+                                hasFunctions = true;
+                            }
                         }
                         if (hasFunctions) {
-                            mergeString = _models_code__WEBPACK_IMPORTED_MODULE_2__["CodeUtils"].mergeInputs.toString();
-                            fnString = 'function mergeInputs' + mergeString.substring(9, mergeString.length) + '\n\n' + fnString;
+                            fnString = mergeInputsFunc + '\n\n' + fnString;
                         }
-                        console.log(" ______________________________________________________________\n            \n/*    " + node.name.toUpperCase() + "    */\n            \n" + fnString + "--------------------------\n");
+                        console.log("______________________________________________________________\n            \n/*    " + node.name.toUpperCase() + "    */\n            \n" + fnString + "--------------------------\n");
                         fn = new Function('__modules__', '__params__', fnString);
                         result = fn(_modules__WEBPACK_IMPORTED_MODULE_3__, params);
                         node.output.value = result;
-                        if (node.type == 'start') {
-                            for (constant in params["constants"]) {
-                                constString = JSON.stringify(params["constants"][constant]);
-                                this.globalVars += "const " + constant + " = " + constString + ";\n";
+                        if (node.type === 'start') {
+                            for (constant in params['constants']) {
+                                if (params['constants'].hasOwnProperty(constant)) {
+                                    constString = JSON.stringify(params['constants'][constant]);
+                                    this.globalVars += "const " + constant + " = " + constString + ";\n";
+                                }
                             }
                             this.globalVars += '\n';
                         }
@@ -8852,9 +7000,9 @@ var ExecuteComponent = /** @class */ (function () {
                     case 3:
                         ex_1 = _a.sent();
                         node.hasError = true;
-                        prodWithError_1 = params["currentProcedure"][0];
+                        prodWithError_1 = params['currentProcedure'][0];
                         markError_1 = function (prod, id) {
-                            if (prod["ID"] && id && prod["ID"] == id) {
+                            if (prod['ID'] && id && prod['ID'] === id) {
                                 prod.hasError = true;
                             }
                             if (prod.hasOwnProperty('children')) {
@@ -8863,9 +7011,9 @@ var ExecuteComponent = /** @class */ (function () {
                                 });
                             }
                         };
-                        if (prodWithError_1 != '') {
+                        if (prodWithError_1 !== '') {
                             node.procedure.map(function (prod) {
-                                if (prod["ID"] == prodWithError_1) {
+                                if (prod['ID'] === prodWithError_1) {
                                     prod.hasError = true;
                                 }
                                 if (prod.hasOwnProperty('children')) {
@@ -8876,11 +7024,12 @@ var ExecuteComponent = /** @class */ (function () {
                             });
                         }
                         error = void 0;
-                        if (ex_1.toString().indexOf("Unexpected identifier") > -1) {
-                            error = new Error("Unexpected Identifier error. Did you declare everything? Check that your strings are enclosed in quotes (\")");
+                        if (ex_1.toString().indexOf('Unexpected identifier') > -1) {
+                            error = new Error('Unexpected Identifier error. Did you declare everything?' +
+                                'Check that your strings are enclosed in quotes (")');
                         }
-                        else if (ex_1.toString().indexOf("Unexpected token") > -1) {
-                            error = new Error("Unexpected token error. Check for stray spaces or reserved keywords?");
+                        else if (ex_1.toString().indexOf('Unexpected token') > -1) {
+                            error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
                         }
                         else {
                             error = new Error(ex_1);
@@ -8906,7 +7055,7 @@ var ExecuteComponent = /** @class */ (function () {
               */
             template: "<button class=\"btn\" mat-icon-button title=\"Execute\" (click)=\"execute()\">\n    <mat-icon>play_circle_outline</mat-icon>\n    </button>\n    ",
             styles: [
-                ".btn--execute{ \n                display: inline-block;\n                vertical-align: middle;\n                font-size: 14px;\n                line-height: 18px;\n                border: 3px solid #E0C229;\n                border-radius: 4px;\n                padding: 1px 10px;\n                background-color: #E0C229; \n                color: #494D59;\n                font-weight: 600;\n                text-transform: uppercase;\n              }\n              .btn{\n                vertical-align: middle;\n                background-color: transparent; \n                border: none;\n                color: rgb(80,80,80);\n              }\n              .btn:hover{\n                color: blue;\n              }"
+                ".btn--execute{\n                display: inline-block;\n                vertical-align: middle;\n                font-size: 14px;\n                line-height: 18px;\n                border: 3px solid #E0C229;\n                border-radius: 4px;\n                padding: 1px 10px;\n                background-color: #E0C229;\n                color: #494D59;\n                font-weight: 600;\n                text-transform: uppercase;\n              }\n              .btn{\n                vertical-align: middle;\n                background-color: transparent;\n                border: none;\n                color: rgb(80,80,80);\n              }\n              .btn:hover{\n                color: blue;\n              }"
             ]
         })
     ], ExecuteComponent);
@@ -8921,16 +7070,16 @@ var ExecuteComponent = /** @class */ (function () {
 /*!**********************************************************!*\
   !*** ./src/app/shared/components/file/download.utils.ts ***!
   \**********************************************************/
-/*! exports provided: downloadUtils */
+/*! exports provided: DownloadUtils */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadUtils", function() { return downloadUtils; });
-var downloadUtils = /** @class */ (function () {
-    function downloadUtils() {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DownloadUtils", function() { return DownloadUtils; });
+var DownloadUtils = /** @class */ (function () {
+    function DownloadUtils() {
     }
-    downloadUtils.downloadFile = function (fileName, fileContent) {
+    DownloadUtils.downloadFile = function (fileName, fileContent) {
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(fileContent, fileName);
         }
@@ -8947,7 +7096,7 @@ var downloadUtils = /** @class */ (function () {
             }, 0);
         }
     };
-    return downloadUtils;
+    return DownloadUtils;
 }());
 
 
@@ -9016,7 +7165,7 @@ var LoadFileComponent = /** @class */ (function () {
         //   loadFile(url ?:string): void{
         //     let file = this.fileInput.nativeElement.files[0];
         //     if (file) {
-        //         var reader = new FileReader();
+        //         let reader = new FileReader();
         //         reader.readAsText(file, "UTF-8");
         //         let fs = this.flowchartService;
         //         reader.onload = function (evt) {
@@ -9035,7 +7184,7 @@ var LoadFileComponent = /** @class */ (function () {
         var stream = rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"].create(function (observer) {
             var reader = new FileReader();
             reader.onloadend = function () {
-                //if (typeof reader.result === 'string') {}
+                // if (typeof reader.result === 'string') {}
                 var f = circular_json__WEBPACK_IMPORTED_MODULE_2__["parse"](reader.result);
                 var file = {
                     name: f.name,
@@ -9052,7 +7201,7 @@ var LoadFileComponent = /** @class */ (function () {
         stream.subscribe(function (loadeddata) {
             _this.loaded.emit(circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](loadeddata));
         });
-        document.getElementById('file-input').value = "";
+        document.getElementById('file-input').value = '';
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
@@ -9063,7 +7212,7 @@ var LoadFileComponent = /** @class */ (function () {
             selector: 'file-load',
             template: "<button id='loadfile' class='btn' onclick=\"document.getElementById('file-input').click();\">Load</button>\n              <input id=\"file-input\" type=\"file\" name=\"name\" (change)=\"sendloadfile()\" style=\" display: none;\" />",
             styles: [
-                "            \n            button.btn{ \n                margin: 0px 0px 0px 0px;\n                font-size: 10px;\n                line-height: 12px;\n                border: 2px solid gray;\n                border-radius: 4px;\n                padding: 2px 5px;\n                background-color: #3F4651; \n                color: #E7BF00;\n                font-weight: 600;\n                text-transform: uppercase;\n             }\n            button.btn:hover{\n                background-color: gray;\n                color: white;\n            }\n\n             "
+                "\n            button.btn{\n                margin: 0px 0px 0px 0px;\n                font-size: 10px;\n                line-height: 12px;\n                border: 2px solid gray;\n                border-radius: 4px;\n                padding: 2px 5px;\n                background-color: #3F4651;\n                color: #E7BF00;\n                font-weight: 600;\n                text-transform: uppercase;\n             }\n            button.btn:hover{\n                background-color: gray;\n                color: white;\n            }\n\n             "
             ]
         })
     ], LoadFileComponent);
@@ -9106,12 +7255,13 @@ var NewFileComponent = /** @class */ (function () {
         this.create = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
     }
     NewFileComponent.prototype.sendNewFile = function () {
-        var confirmed = confirm("Resetting would delete the current flowchart. Would you like to continue?");
-        if (!confirmed)
+        var confirmed = confirm('Resetting would delete the current flowchart. Would you like to continue?');
+        if (!confirmed) {
             return;
+        }
         var file = {
-            name: "default_file.mob",
-            author: "new_user",
+            name: 'default_file.mob',
+            author: 'new_user',
             flowchart: _models_flowchart__WEBPACK_IMPORTED_MODULE_1__["FlowchartUtils"].newflowchart(),
             last_updated: new Date(),
             version: 1
@@ -9128,7 +7278,7 @@ var NewFileComponent = /** @class */ (function () {
             selector: 'file-new',
             template: "<button id='newfile' class='btn' (click)='sendNewFile()'>New</button>",
             styles: [
-                "\n            button.btn{ \n                margin: 0px 0px 0px 0px;\n                font-size: 10px;\n                line-height: 12px;\n                border: 2px solid gray;\n                border-radius: 4px;\n                padding: 2px 5px;\n                background-color: #3F4651; \n                color: #E7BF00;\n                font-weight: 600;\n                text-transform: uppercase;\n            }\n            button.btn:hover{\n                background-color: gray;\n                color: white;\n            }\n             "
+                "\n            button.btn{\n                margin: 0px 0px 0px 0px;\n                font-size: 10px;\n                line-height: 12px;\n                border: 2px solid gray;\n                border-radius: 4px;\n                padding: 2px 5px;\n                background-color: #3F4651;\n                color: #E7BF00;\n                font-weight: 600;\n                text-transform: uppercase;\n            }\n            button.btn:hover{\n                background-color: gray;\n                color: white;\n            }\n             "
             ]
         }),
         __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]])
@@ -9191,7 +7341,7 @@ var SaveFileComponent = /** @class */ (function () {
             }
             node.state.procedure = [];
         }
-        // **** need to modify this when changing the input's constant function: 
+        // **** need to modify this when changing the input's constant function:
         // **** this part resets the value of the last argument of the function when saving the file
         for (var _d = 0, _e = savedfile.flowchart.nodes[0].procedure; _d < _e.length; _d++) {
             var prod = _e[_d];
@@ -9206,7 +7356,7 @@ var SaveFileComponent = /** @class */ (function () {
         var fileString = circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](savedfile);
         var fname = savedfile.flowchart.name.replace(/\ /g, '_') + ".mob";
         var blob = new Blob([fileString], { type: 'application/json' });
-        _download_utils__WEBPACK_IMPORTED_MODULE_1__["downloadUtils"].downloadFile(fname, blob);
+        _download_utils__WEBPACK_IMPORTED_MODULE_1__["DownloadUtils"].downloadFile(fname, blob);
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -9217,7 +7367,7 @@ var SaveFileComponent = /** @class */ (function () {
             selector: 'file-save',
             template: "<button id='savefile' class='btn' (click)='download()'>Save</button>",
             styles: [
-                "\n            button.btn{ \n                margin: 0px 0px 0px 0px;\n                font-size: 10px;\n                line-height: 12px;\n                border: 2px solid gray;\n                border-radius: 4px;\n                padding: 2px 5px;\n                background-color: #3F4651; \n                color: #E7BF00;\n                font-weight: 600;\n                text-transform: uppercase;\n             }\n            button.btn:hover{\n                background-color: gray;\n                color: white;\n            }\n             "
+                "\n            button.btn{\n                margin: 0px 0px 0px 0px;\n                font-size: 10px;\n                line-height: 12px;\n                border: 2px solid gray;\n                border-radius: 4px;\n                padding: 2px 5px;\n                background-color: #3F4651;\n                color: #E7BF00;\n                font-weight: 600;\n                text-transform: uppercase;\n             }\n            button.btn:hover{\n                background-color: gray;\n                color: white;\n            }\n             "
             ]
         })
     ], SaveFileComponent);
@@ -9263,9 +7413,9 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'panel-header',
-            template: "<div class='panel__header'> \n                    <h3>{{node?.name}} // {{title}}</h3>\n              </div>",
+            template: "<div class='panel__header'>\n                    <h3>{{node?.name}} // {{title}}</h3>\n              </div>",
             styles: [
-                ".panel__header{ \n                font-weight: 600;\n                border: 2px solid #222;\n                border-radius: 4px;\n                padding: 5px;\n             }\n             h3{\n                margin: 0px;\n             }"
+                ".panel__header{\n                font-weight: 600;\n                border: 2px solid #222;\n                border-radius: 4px;\n                padding: 5px;\n             }\n             h3{\n                margin: 0px;\n             }"
             ]
         }),
         __metadata("design:paramtypes", [])
@@ -9321,7 +7471,7 @@ var NavigationComponent = /** @class */ (function () {
     NavigationComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'navigation',
-            template: "<ul class='nav'>\n                <li class='link' *ngFor='let link of _links;' \n                      [class.active]='link.path == _router.url'\n                      [routerLink]=\"link.path\" \n                      >{{link.name}}</li>\n              </ul>",
+            template: "<ul class='nav'>\n                <li class='link' *ngFor='let link of _links;'\n                      [class.active]='link.path == _router.url'\n                      [routerLink]=\"link.path\"\n                      >{{link.name}}</li>\n              </ul>",
             styles: ["\n      ul.nav{\n        margin: 0px;\n        padding: 0px;\n      }\n\n      li.link{\n        display: inline;\n        border: 2px solid gray;\n        border-radius: 4px;\n        margin: 15px 15px 15px 0px;\n        padding: 5px;\n        text-transform: uppercase;\n        font-weight: 600;\n        cursor: pointer;\n        font-size: 16px;\n      }\n\n      li.link:hover{\n        background-color: gray;\n        color: white;\n      }\n\n      .active{\n        background-color: #222;\n        color: white;\n        border-color: #222 !important;\n      }\n  "],
         }),
         __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
@@ -9563,12 +7713,12 @@ module.exports = ".container {\n  display: block;\n  margin: 5px 0px 0px 5px;\n 
 /*!***************************************************************************************************************!*\
   !*** ./src/app/shared/components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component.ts ***!
   \***************************************************************************************************************/
-/*! exports provided: procedureInputViewerComponent */
+/*! exports provided: ProcedureInputViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "procedureInputViewerComponent", function() { return procedureInputViewerComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProcedureInputViewerComponent", function() { return ProcedureInputViewerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _models_port__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/port */ "./src/app/shared/models/port/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -9582,32 +7732,32 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
-var procedureInputViewerComponent = /** @class */ (function () {
-    function procedureInputViewerComponent() {
+var ProcedureInputViewerComponent = /** @class */ (function () {
+    function ProcedureInputViewerComponent() {
         this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.PortTypes = _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"];
     }
-    procedureInputViewerComponent.prototype.editOptions = function () { };
-    procedureInputViewerComponent.prototype.onFileChange = function (event) {
+    ProcedureInputViewerComponent.prototype.editOptions = function () { };
+    ProcedureInputViewerComponent.prototype.onFileChange = function (event) {
         this.prod.args[this.prod.argCount - 1].value = event.target.files[0];
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], procedureInputViewerComponent.prototype, "prod", void 0);
+    ], ProcedureInputViewerComponent.prototype, "prod", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
-    ], procedureInputViewerComponent.prototype, "delete", void 0);
-    procedureInputViewerComponent = __decorate([
+    ], ProcedureInputViewerComponent.prototype, "delete", void 0);
+    ProcedureInputViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'procedure-input-viewer',
             template: __webpack_require__(/*! ./procedure-input-viewer.component.html */ "./src/app/shared/components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component.html"),
             styles: [__webpack_require__(/*! ./procedure-input-viewer.component.scss */ "./src/app/shared/components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component.scss")]
         }),
         __metadata("design:paramtypes", [])
-    ], procedureInputViewerComponent);
-    return procedureInputViewerComponent;
+    ], ProcedureInputViewerComponent);
+    return ProcedureInputViewerComponent;
 }());
 
 
@@ -9618,13 +7768,15 @@ var procedureInputViewerComponent = /** @class */ (function () {
 /*!********************************************!*\
   !*** ./src/app/shared/decorators/index.ts ***!
   \********************************************/
-/*! exports provided: ModuleAware, ProcedureTypesAware, ViewerTypesAware, PortTypesAware */
+/*! exports provided: ModuleAware, ModuleDocAware, ProcedureTypesAware, ViewerTypesAware, PortTypesAware */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _module_aware_decorator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./module-aware.decorator */ "./src/app/shared/decorators/module-aware.decorator.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ModuleAware", function() { return _module_aware_decorator__WEBPACK_IMPORTED_MODULE_0__["ModuleAware"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ModuleDocAware", function() { return _module_aware_decorator__WEBPACK_IMPORTED_MODULE_0__["ModuleDocAware"]; });
 
 /* harmony import */ var _prodtypes_aware_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./prodtypes-aware.decorator */ "./src/app/shared/decorators/prodtypes-aware.decorator.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ProcedureTypesAware", function() { return _prodtypes_aware_decorator__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypesAware"]; });
@@ -9641,33 +7793,37 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /***/ }),
 
 /***/ "./src/app/shared/decorators/module-aware.decorator.ts":
 /*!*************************************************************!*\
   !*** ./src/app/shared/decorators/module-aware.decorator.ts ***!
   \*************************************************************/
-/*! exports provided: ModuleAware */
+/*! exports provided: ModuleAware, ModuleDocAware */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ModuleAware", function() { return ModuleAware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ModuleDocAware", function() { return ModuleDocAware; });
 /* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
 //import * as doc from '@assets/typedoc-json/doc.json';
 var doc = __webpack_require__(/*! @assets/typedoc-json/doc.json */ "./src/assets/typedoc-json/doc.json");
 
+var docs;
+var module_list = [];
 // todo: bug fix for defaults
 function extract_params(func) {
     var fnStr = func.toString().replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg, '');
-    var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).split(","); //.match( /([^\s,]+)/g);
-    if (result === null || result[0] == "") {
+    var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).split(','); // .match( /([^\s,]+)/g);
+    if (result === null || result[0] === '') {
         result = [];
     }
     var final_result = result.map(function (r) {
         r = r.trim();
-        var r_value = r.split("=");
-        if (r_value.length == 1) {
+        var r_value = r.split('=');
+        if (r_value.length === 1) {
             return { name: r_value[0].trim(), value: undefined, default: 0 };
         }
         else {
@@ -9675,98 +7831,114 @@ function extract_params(func) {
         }
     });
     var hasReturn = true;
-    if (fnStr.indexOf("return") === -1 || fnStr.indexOf("return;") !== -1) {
+    if (fnStr.indexOf('return') === -1 || fnStr.indexOf('return;') !== -1) {
         hasReturn = false;
     }
     return [final_result, hasReturn];
 }
-function extract_docs() {
-    var docs = {};
-    for (var _i = 0, _a = doc.children; _i < _a.length; _i++) {
-        var mod = _a[_i];
-        if (mod.name.substr(1, 1) == '_' || mod.name == '"index"') {
-            continue;
-        }
-        var modName = mod.name.substr(1, mod.name.length - 2);
-        var moduleDoc = {};
-        for (var _b = 0, _c = mod.children; _b < _c.length; _b++) {
-            var func = _c[_b];
-            var fn = {};
-            fn["name"] = func.name;
-            fn["description"] = func["signatures"][0].comment.shortText;
-            if (func["signatures"][0].comment.tags) {
-                for (var _d = 0, _e = func["signatures"][0].comment.tags; _d < _e.length; _d++) {
-                    var fnTag = _e[_d];
-                    if (fnTag.tag == 'summary')
-                        fn["summary"] = fnTag.text;
-                }
-            }
-            fn["returns"] = func["signatures"][0].comment.returns;
-            if (fn["returns"])
-                fn["returns"] = fn["returns"].trim();
-            fn["parameters"] = [];
-            if (func["signatures"][0].parameters) {
-                for (var _f = 0, _g = func["signatures"][0].parameters; _f < _g.length; _f++) {
-                    var param = _g[_f];
-                    var namecheck = true;
-                    for (var systemVarName in _modules__WEBPACK_IMPORTED_MODULE_0__["_parameterTypes"]) {
-                        if (param.name == _modules__WEBPACK_IMPORTED_MODULE_0__["_parameterTypes"][systemVarName]) {
-                            namecheck = false;
-                            break;
-                        }
-                    }
-                    if (!namecheck)
-                        continue;
-                    var pr = {};
-                    pr["name"] = param.name;
-                    pr["description"] = param.comment.shortText || param.comment.text;
-                    if (param.type.type == 'array') {
-                        pr["type"] = param.type.elementType.name + "[]";
-                    }
-                    else if (param.type.type == "intrinsic") {
-                        pr["type"] = param.type.name;
-                    }
-                    else {
-                        /**
-                         * TODO: Update param type here
-                         */
-                        console.log('param type requires updating:', param.type);
-                        pr["type"] = param.type.type;
-                    }
-                    fn["parameters"].push(pr);
-                }
-            }
-            moduleDoc[func.name] = fn;
-        }
-        docs[modName] = moduleDoc;
-    }
-    return docs;
-}
 function ModuleAware(constructor) {
-    var module_list = [];
-    for (var m_name in _modules__WEBPACK_IMPORTED_MODULE_0__) {
-        if (m_name[0] == '_' || m_name == 'gs' || m_name == 'gsConstructor') {
-            continue;
+    if (module_list.length === 0) {
+        for (var m_name in _modules__WEBPACK_IMPORTED_MODULE_0__) {
+            if (m_name[0] === '_') {
+                continue;
+            }
+            var modObj = {};
+            modObj.module = m_name;
+            modObj.functions = [];
+            for (var _i = 0, _a = Object.keys(_modules__WEBPACK_IMPORTED_MODULE_0__[m_name]); _i < _a.length; _i++) {
+                var fn_name = _a[_i];
+                var func = _modules__WEBPACK_IMPORTED_MODULE_0__[m_name][fn_name];
+                var fnObj = {};
+                fnObj.module = m_name;
+                fnObj.name = fn_name;
+                fnObj.argCount = func.length;
+                var args = extract_params(func);
+                fnObj.args = args[0];
+                fnObj.hasReturn = args[1];
+                modObj.functions.push(fnObj);
+            }
+            module_list.push(modObj);
         }
-        var modObj = {};
-        modObj.module = m_name;
-        modObj.functions = [];
-        for (var _i = 0, _a = Object.keys(_modules__WEBPACK_IMPORTED_MODULE_0__[m_name]); _i < _a.length; _i++) {
-            var fn_name = _a[_i];
-            var func = _modules__WEBPACK_IMPORTED_MODULE_0__[m_name][fn_name];
-            var fnObj = {};
-            fnObj.module = m_name;
-            fnObj.name = fn_name;
-            fnObj.argCount = func.length;
-            var args = extract_params(func);
-            fnObj.args = args[0];
-            fnObj.hasReturn = args[1];
-            modObj.functions.push(fnObj);
-        }
-        module_list.push(modObj);
     }
     constructor.prototype.Modules = module_list;
-    constructor.prototype.ModulesDoc = extract_docs();
+}
+function ModuleDocAware(constructor) {
+    if (!docs) {
+        docs = {};
+        for (var _i = 0, _a = doc.children; _i < _a.length; _i++) {
+            var mod = _a[_i];
+            if (mod.name.substr(1, 1) === '_' || mod.name === '"index"') {
+                continue;
+            }
+            var modName = mod.name.substr(1, mod.name.length - 2);
+            var moduleDoc = {};
+            for (var _b = 0, _c = mod.children; _b < _c.length; _b++) {
+                var func = _c[_b];
+                var fn = {};
+                fn['name'] = func.name;
+                if (!func['signatures']) {
+                    continue;
+                }
+                if (func['signatures'][0].comment) {
+                    var cmmt = func['signatures'][0].comment;
+                    fn['description'] = cmmt.shortText;
+                    if (cmmt.tags) {
+                        for (var _d = 0, _e = cmmt.tags; _d < _e.length; _d++) {
+                            var fnTag = _e[_d];
+                            if (fnTag.tag === 'summary') {
+                                fn['summary'] = fnTag.text;
+                            }
+                        }
+                    }
+                    fn['returns'] = cmmt.returns;
+                    if (fn['returns']) {
+                        fn['returns'] = fn['returns'].trim();
+                    }
+                }
+                fn['parameters'] = [];
+                if (func['signatures'][0].parameters) {
+                    for (var _f = 0, _g = func['signatures'][0].parameters; _f < _g.length; _f++) {
+                        var param = _g[_f];
+                        var namecheck = true;
+                        for (var systemVarName in _modules__WEBPACK_IMPORTED_MODULE_0__["_parameterTypes"]) {
+                            if (param.name === _modules__WEBPACK_IMPORTED_MODULE_0__["_parameterTypes"][systemVarName]) {
+                                namecheck = false;
+                                break;
+                            }
+                        }
+                        if (!namecheck) {
+                            continue;
+                        }
+                        var pr = {};
+                        pr['name'] = param.name;
+                        if (param.comment) {
+                            pr['description'] = param.comment.shortText || param.comment.text;
+                        }
+                        if (param.type.type === 'array') {
+                            pr['type'] = param.type.elementType.name + "[]";
+                        }
+                        else if (param.type.type === 'intrinsic') {
+                            pr['type'] = param.type.name;
+                        }
+                        else if (param.type.type === 'reference') {
+                            pr['type'] = param.type.name;
+                        }
+                        else {
+                            /**
+                             * TODO: Update param type here
+                             */
+                            console.log('param type requires updating:', param.type);
+                            pr['type'] = param.type.type;
+                        }
+                        fn['parameters'].push(pr);
+                    }
+                }
+                moduleDoc[func.name] = fn;
+            }
+            docs[modName] = moduleDoc;
+        }
+    }
+    constructor.prototype.ModuleDoc = docs;
 }
 
 
@@ -9878,9 +8050,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /*
- *	Adding this to an HTML5 input element
- *	allows for the file being read to be converted into a Mobius
- *	Flowchart
+ *  Adding this to an HTML5 input element
+ *  allows for the file being read to be converted into a Mobius
+ *  Flowchart
  *
  */
 
@@ -9895,39 +8067,39 @@ var MbFileReaderDirective = /** @class */ (function () {
         var f = this.el.nativeElement.files[0];
         if (f) {
             var reader = new FileReader();
-            reader.readAsText(f, "UTF-8");
+            reader.readAsText(f, 'UTF-8');
             var ins_1 = this;
             reader.onload = function (evt) {
-                var fileString = evt.target["result"];
+                var fileString = evt.target['result'];
                 ins_1.load_flowchart_from_string(fileString);
             };
             reader.onerror = function (evt) {
-                console.log("Error reading file");
+                console.log('Error reading file');
             };
         }
     };
     //
     // Input: string
     // Output: MobiusFile DS
-    //  
+    //
     //
     MbFileReaderDirective.prototype.load_flowchart_from_string = function (fileString) {
         var _this = this;
-        var jsonData;
-        var flowchart; // IFlowchart;
+        // let jsonData: {language: string, flowchart: JSON, modules: JSON};
+        // let flowchart: any; // IFlowchart;
         try {
             var data = circular_json__WEBPACK_IMPORTED_MODULE_1__["parse"](fileString);
             this.load.emit(data);
-            // this.data.flowchart = data.flowchart; 
+            // this.data.flowchart = data.flowchart;
             // this.data.modules = data.modules;
             // this.data.language = data.language;
             // this.update_code_generator(CodeFactory.getCodeGenerator(data["language"]));
-            //TODO: this.update_modules();
-            //flowchart = FlowchartReader.read_flowchart_from_data(data["flowchart"]);
+            // TODO: this.update_modules();
+            // flowchart = FlowchartReader.read_flowchart_from_data(data["flowchart"]);
             // TODO: select a node
         }
         catch (err) {
-            console.error("Mob-file-reader error", err);
+            console.error('Mob-file-reader error', err);
         }
     };
     __decorate([
@@ -9939,14 +8111,14 @@ var MbFileReaderDirective = /** @class */ (function () {
         __metadata("design:type", Object)
     ], MbFileReaderDirective.prototype, "load", void 0);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])("change"),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])('change'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], MbFileReaderDirective.prototype, "onFileChange", null);
     MbFileReaderDirective = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Directive"])({
-            selector: "[mbFileReader]"
+            selector: '[mbFileReader]'
         }),
         __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
     ], MbFileReaderDirective);
@@ -9961,12 +8133,12 @@ var MbFileReaderDirective = /** @class */ (function () {
 /*!******************************************************************!*\
   !*** ./src/app/shared/directives/textarea/autogrow.directive.ts ***!
   \******************************************************************/
-/*! exports provided: autogrowDirective */
+/*! exports provided: AutogrowDirective */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "autogrowDirective", function() { return autogrowDirective; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AutogrowDirective", function() { return AutogrowDirective; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -9978,37 +8150,37 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-var autogrowDirective = /** @class */ (function () {
-    function autogrowDirective(el) {
+var AutogrowDirective = /** @class */ (function () {
+    function AutogrowDirective(el) {
         this.el = el;
     }
-    autogrowDirective.prototype.onKeyUp = function () {
-        this.el.nativeElement.style.height = "5px";
-        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight) + "px";
+    AutogrowDirective.prototype.onKeyUp = function () {
+        this.el.nativeElement.style.height = '5px';
+        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight) + 'px';
     };
-    autogrowDirective.prototype.onKeyDown = function () {
-        this.el.nativeElement.style.height = "5px";
-        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight) + "px";
+    AutogrowDirective.prototype.onKeyDown = function () {
+        this.el.nativeElement.style.height = '5px';
+        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight) + 'px';
     };
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])("keyup"),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])('keyup'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], autogrowDirective.prototype, "onKeyUp", null);
+    ], AutogrowDirective.prototype, "onKeyUp", null);
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])("keydown"),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])('keydown'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
-    ], autogrowDirective.prototype, "onKeyDown", null);
-    autogrowDirective = __decorate([
+    ], AutogrowDirective.prototype, "onKeyDown", null);
+    AutogrowDirective = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Directive"])({
-            selector: "[autogrow]"
+            selector: '[autogrow]'
         }),
         __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], autogrowDirective);
-    return autogrowDirective;
+    ], AutogrowDirective);
+    return AutogrowDirective;
 }());
 
 
@@ -10019,13 +8191,13 @@ var autogrowDirective = /** @class */ (function () {
 /*!*****************************************************!*\
   !*** ./src/app/shared/directives/textarea/index.ts ***!
   \*****************************************************/
-/*! exports provided: autogrowDirective */
+/*! exports provided: AutogrowDirective */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _autogrow_directive__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./autogrow.directive */ "./src/app/shared/directives/textarea/autogrow.directive.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "autogrowDirective", function() { return _autogrow_directive__WEBPACK_IMPORTED_MODULE_0__["autogrowDirective"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AutogrowDirective", function() { return _autogrow_directive__WEBPACK_IMPORTED_MODULE_0__["AutogrowDirective"]; });
 
 
 
@@ -10097,14 +8269,15 @@ var CodeUtils = /** @class */ (function () {
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
-                        if (prod.enabled === false)
+                        if (prod.enabled === false) {
                             return [2 /*return*/, ''];
+                        }
                         prod.hasError = false;
                         codeStr = [];
                         args = prod.args;
                         prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
                         codeStr.push('');
-                        if (addProdArr && prod.type != _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Else && prod.type != _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Elseif) {
+                        if (addProdArr && prod.type !== _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Else && prod.type !== _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Elseif) {
                             codeStr.push("__params__.currentProcedure[0] = \"" + prod.ID + "\";");
                         }
                         _a = prod.type;
@@ -10122,35 +8295,40 @@ var CodeUtils = /** @class */ (function () {
                         }
                         return [3 /*break*/, 16];
                     case 1:
-                        if (args[0].value.indexOf('__params__') != -1 || args[1].value.indexOf('__params__') != -1)
-                            throw new Error("Unexpected Identifier");
+                        if (args[0].value.indexOf('__params__') !== -1 || args[1].value.indexOf('__params__') !== -1) {
+                            throw new Error('Unexpected Identifier');
+                        }
                         codeStr.push("" + prefix + args[0].value + " = " + args[1].value + ";");
                         if (prefix === 'let ') {
                             existingVars.push(args[0].value);
                         }
                         return [3 /*break*/, 16];
                     case 2:
-                        if (args[0].value.indexOf('__params__') != -1)
-                            throw new Error("Unexpected Identifier");
+                        if (args[0].value.indexOf('__params__') !== -1) {
+                            throw new Error('Unexpected Identifier');
+                        }
                         codeStr.push("if (" + args[0].value + "){");
                         return [3 /*break*/, 16];
                     case 3:
                         codeStr.push("else {");
                         return [3 /*break*/, 16];
                     case 4:
-                        if (args[0].value.indexOf('__params__') != -1)
-                            throw new Error("Unexpected Identifier");
+                        if (args[0].value.indexOf('__params__') !== -1) {
+                            throw new Error('Unexpected Identifier');
+                        }
                         codeStr.push("else if(" + args[0].value + "){");
                         return [3 /*break*/, 16];
                     case 5:
-                        //codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
-                        if (args[0].value.indexOf('__params__') != -1)
-                            throw new Error("Unexpected Identifier");
+                        // codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
+                        if (args[0].value.indexOf('__params__') !== -1) {
+                            throw new Error('Unexpected Identifier');
+                        }
                         codeStr.push("for (" + prefix + " " + args[0].value + " of " + args[1].value + "){");
                         return [3 /*break*/, 16];
                     case 6:
-                        if (args[0].value.indexOf('__params__') != -1)
-                            throw new Error("Unexpected Identifier");
+                        if (args[0].value.indexOf('__params__') !== -1) {
+                            throw new Error('Unexpected Identifier');
+                        }
                         codeStr.push("while (" + args[0].value + "){");
                         return [3 /*break*/, 16];
                     case 7:
@@ -10166,9 +8344,9 @@ var CodeUtils = /** @class */ (function () {
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        if (!(arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].input)) return [3 /*break*/, 5];
+                                        if (!(arg.name === _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].input)) return [3 /*break*/, 5];
                                         val = arg.value || arg.default;
-                                        if (!(prod.meta.inputMode == _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].URL)) return [3 /*break*/, 2];
+                                        if (!(prod.meta.inputMode.toString() === _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].URL.toString())) return [3 /*break*/, 2];
                                         p = new Promise(function (resolve) {
                                             var request = new XMLHttpRequest();
                                             request.open('GET', arg.value || arg.default);
@@ -10182,7 +8360,7 @@ var CodeUtils = /** @class */ (function () {
                                         val = _a.sent();
                                         return [3 /*break*/, 4];
                                     case 2:
-                                        if (!(prod.meta.inputMode == _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].File)) return [3 /*break*/, 4];
+                                        if (!(prod.meta.inputMode.toString() === _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].File.toString())) return [3 /*break*/, 4];
                                         p = new Promise(function (resolve) {
                                             var reader = new FileReader();
                                             reader.onload = function () {
@@ -10198,26 +8376,28 @@ var CodeUtils = /** @class */ (function () {
                                         argVals.push(val);
                                         return [2 /*return*/, "continue"];
                                     case 5:
-                                        if (arg.value && arg.value.indexOf('__params__') != -1)
-                                            throw new Error("Unexpected Identifier");
-                                        if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].constList) {
-                                            argVals.push("__params__.constants");
+                                        if (arg.value && arg.value.indexOf('__params__') !== -1) {
+                                            throw new Error('Unexpected Identifier');
+                                        }
+                                        if (arg.name === _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].constList) {
+                                            argVals.push('__params__.constants');
                                             return [2 /*return*/, "continue"];
                                         }
-                                        ;
-                                        if (arg.name == _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].model) {
-                                            argVals.push("__params__.model");
+                                        if (arg.name === _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].model) {
+                                            argVals.push('__params__.model');
                                             return [2 /*return*/, "continue"];
                                         }
-                                        if (arg.value && arg.value.substring(0, 1) == '@') {
-                                            if (prod.meta.module.toUpperCase() == 'QUERY' && prod.meta.name.toUpperCase() == 'SET' && arg.name.toUpperCase() == 'STATEMENT') {
-                                                argVals.push('"' + arg.value.replace(/"/g, "'") + '"');
+                                        if (arg.value && arg.value.substring(0, 1) === '@') {
+                                            if (prod.meta.module.toUpperCase() === 'QUERY'
+                                                && prod.meta.name.toUpperCase() === 'SET'
+                                                && arg.name.toUpperCase() === 'STATEMENT') {
+                                                argVals.push('"' + arg.value.replace(/"/g, '\'') + '"');
                                                 return [2 /*return*/, "continue"];
                                             }
-                                            argVals.push('__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, "'") + '" )');
+                                            argVals.push('__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, '\'') + '" )');
                                             return [2 /*return*/, "continue"];
                                         }
-                                        //else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
+                                        // else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                                         argVals.push(arg.value);
                                         return [2 /*return*/];
                                 }
@@ -10241,10 +8421,10 @@ var CodeUtils = /** @class */ (function () {
                     case 14:
                         _g.sent();
                         fnCall = "__modules__." + prod.meta.module + "." + prod.meta.name + "( " + argValues + " )";
-                        if (prod.meta.module.toUpperCase() == 'OUTPUT') {
+                        if (prod.meta.module.toUpperCase() === 'OUTPUT') {
                             codeStr.push("return " + fnCall + ";");
                         }
-                        else if (args[0].name == '__none__') {
+                        else if (args[0].name === '__none__') {
                             codeStr.push(fnCall + ";");
                         }
                         else {
@@ -10283,7 +8463,7 @@ var CodeUtils = /** @class */ (function () {
                     case 21:
                         if (prod.print) {
                             codeStr.push("console.log('" + prod.args[0].value + ": '+ " + prod.args[0].value + ");");
-                            //codeStr.push(`wait(5000);`);
+                            // codeStr.push(`wait(5000);`);
                         }
                         return [2 /*return*/, codeStr.join('\n')];
                 }
@@ -10296,8 +8476,8 @@ var CodeUtils = /** @class */ (function () {
             request.open('GET', f.download_url);
             request.onload = function () {
                 if (request.status === 200) {
-                    var f_1 = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](request.responseText);
-                    observer.next(f_1);
+                    var fl = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](request.responseText);
+                    observer.next(fl);
                     observer.complete();
                 }
                 else {
@@ -10314,41 +8494,17 @@ var CodeUtils = /** @class */ (function () {
         });
     };
     CodeUtils.mergeInputs = function (models) {
-        var result = _modules__WEBPACK_IMPORTED_MODULE_4__["functions"].__new__();
+        var result = _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['newFn']();
         for (var _i = 0, models_1 = models; _i < models_1.length; _i++) {
             var model = models_1[_i];
-            _modules__WEBPACK_IMPORTED_MODULE_4__["functions"].__merge__(result, model);
+            _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['mergeFn'](result, model);
         }
         return result;
     };
     CodeUtils.getInputValue = function (inp, node) {
         var input;
-        if (node.type == 'start' || inp.edges.length == 0) {
-            input = _modules__WEBPACK_IMPORTED_MODULE_4__["functions"].__new__();
-            /*
-            if (inp.meta.mode == InputType.URL){
-                const p = new Promise((resolve) => {
-                    let request = new XMLHttpRequest();
-                    request.open('GET', inp.value || inp.default);
-                    request.onload = () => {
-                        resolve(request.responseText);
-                    }
-                    request.send();
-                });
-                input = await p;
-            } else if (inp.meta.mode == InputType.File) {
-                const p = new Promise((resolve) => {
-                    let reader = new FileReader();
-                    reader.onload = function(){
-                        resolve(reader.result)
-                    }
-                    reader.readAsText(inp.value || inp.default)
-                });
-                input = await p;
-            } else {
-                input = inp.value || inp.default;
-            }
-            */
+        if (node.type === 'start' || inp.edges.length === 0) {
+            input = _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['newFn']();
         }
         else {
             input = CodeUtils.mergeInputs(inp.edges.map(function (edge) { return edge.source.value; }));
@@ -10379,9 +8535,21 @@ var CodeUtils = /** @class */ (function () {
                         node.input.value = input;
                         _d.label = 2;
                     case 2:
-                        if (node.type == 'start') {
+                        if (node.type === 'start') {
                             codeStr.push('__params__.constants = {};\n');
                         }
+                        /*
+                        codeStr.push(`
+                function wait(ms){
+                     start = new Date().getTime();
+                     end = start;
+                    while(end < start + ms) {
+                        end = new Date().getTime();
+                    }
+                }
+                        `)
+                        */
+                        codeStr.push("__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].preprocess + "( __params__.model);");
                         _i = 0, _a = node.procedure;
                         _d.label = 3;
                     case 3:
@@ -10396,9 +8564,11 @@ var CodeUtils = /** @class */ (function () {
                         _i++;
                         return [3 /*break*/, 3];
                     case 6:
-                        ;
-                        if (node.type == 'end' && node.procedure.length > 0) {
+                        if (node.type === 'end' && node.procedure.length > 0) {
                             return [2 /*return*/, "{\n" + codeStr.join('\n') + "\n}"];
+                        }
+                        else {
+                            codeStr.push("__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].postprocess + "( __params__.model);");
                         }
                         return [2 /*return*/, "\n" + codeStr.join('\n') + "\n\nreturn __params__.model;\n"];
                 }
@@ -10412,7 +8582,8 @@ var CodeUtils = /** @class */ (function () {
                 switch (_c.label) {
                     case 0:
                         fullCode = '';
-                        fnCode = "function " + func.name + "(__mainParams__," + func.args.map(function (arg) { return arg.name; }).join(',') + "){\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":__modules__.Model.New()};\n";
+                        fnCode = "function " + func.name + "(__mainParams__," + func.args.map(function (arg) { return arg.name; }).join(',') + ")" +
+                            ("{\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].new + "()};\n");
                         _i = 0, _a = func.module.nodes;
                         _c.label = 1;
                     case 1:
@@ -10424,10 +8595,10 @@ var CodeUtils = /** @class */ (function () {
                         code = _b + (_c.sent()) + '}';
                         fullCode += "function " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ")" + code + "\n\n";
                         if (node.type === 'start') {
-                            //fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
+                            // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
                             fnCode += "let result_" + node.id + " = __params__.model;\n";
                         }
-                        else if (node.input.edges.length == 1) {
+                        else if (node.input.edges.length === 1) {
                             fnCode += "__params__.model = JSON.parse(JSON.stringify(result_" + node.input.edges[0].source.parentNode.id + "));\n";
                             fnCode += "let result_" + node.id + " = " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ");\n";
                         }
@@ -10456,7 +8627,7 @@ var CodeUtils = /** @class */ (function () {
                     case 4:
                         fnCode += '}\n\n';
                         fullCode += fnCode;
-                        //console.log(fullCode)
+                        // console.log(fullCode)
                         return [2 /*return*/, fullCode];
                 }
             });
@@ -10527,9 +8698,9 @@ var FlowchartUtils = /** @class */ (function () {
     }
     FlowchartUtils.newflowchart = function () {
         var flw = {
-            name: "new_flowchart",
+            name: 'new_flowchart',
             description: '',
-            language: "js",
+            language: 'js',
             meta: {
                 selected_nodes: [0]
             },
@@ -10564,7 +8735,7 @@ var FlowchartUtils = /** @class */ (function () {
         }
     };
     FlowchartUtils.orderNodes = function (flw) {
-        var startNode = undefined;
+        var startNode;
         for (var _i = 0, _a = flw.nodes; _i < _a.length; _i++) {
             var node = _a[_i];
             if (node.type === 'start') {
@@ -10577,7 +8748,7 @@ var FlowchartUtils = /** @class */ (function () {
         if (nodeOrder.length < flw.nodes.length) {
             for (var _b = 0, _c = flw.nodes; _b < _c.length; _b++) {
                 var node = _c[_b];
-                if (node.type != 'start' && node.input.edges.length == 0) {
+                if (node.type !== 'start' && node.input.edges.length === 0) {
                     FlowchartUtils.checkNode(nodeOrder, node, false);
                 }
             }
@@ -10650,7 +8821,7 @@ var NodeUtils = /** @class */ (function () {
     }
     NodeUtils.getNewNode = function () {
         var node = {
-            name: "Node",
+            name: 'Node',
             id: _utils__WEBPACK_IMPORTED_MODULE_3__["IdGenerator"].getNodeID(),
             position: { x: 0, y: 0 },
             enabled: false,
@@ -10668,7 +8839,6 @@ var NodeUtils = /** @class */ (function () {
         node.output.parentNode = node;
         return node;
     };
-    ;
     NodeUtils.getStartNode = function () {
         var node = NodeUtils.getNewNode();
         node.enabled = true;
@@ -10677,7 +8847,6 @@ var NodeUtils = /** @class */ (function () {
         node.position = { x: 400, y: 0 };
         return node;
     };
-    ;
     NodeUtils.getEndNode = function () {
         var node = NodeUtils.getNewNode();
         node.name = 'End';
@@ -10685,7 +8854,6 @@ var NodeUtils = /** @class */ (function () {
         node.position = { x: 400, y: 400 };
         return node;
     };
-    ;
     NodeUtils.deselect_procedure = function (node) {
         for (var _i = 0, _a = node.state.procedure; _i < _a.length; _i++) {
             var prod = _a[_i];
@@ -10697,11 +8865,11 @@ var NodeUtils = /** @class */ (function () {
         for (var _i = 0, prods_1 = prods; _i < prods_1.length; _i++) {
             var pr = prods_1[_i];
             if (!pr.selected) {
-                if (pr.children)
+                if (pr.children) {
                     NodeUtils.rearrangeSelected(prodList, tempList, pr.children);
+                }
                 continue;
             }
-            ;
             var i = 0;
             while (i < tempList.length) {
                 if (tempList[i] === pr) {
@@ -10711,8 +8879,9 @@ var NodeUtils = /** @class */ (function () {
                 }
                 i += 1;
             }
-            if (pr.children)
+            if (pr.children) {
                 NodeUtils.rearrangeSelected(prodList, tempList, pr.children);
+            }
         }
     };
     NodeUtils.select_procedure = function (node, procedure, ctrl) {
@@ -10761,16 +8930,17 @@ var NodeUtils = /** @class */ (function () {
                 prod.parent = node.state.procedure[0];
             }
             else {
+                var list = void 0;
                 if (node.state.procedure[0].parent) {
                     prod.parent = node.state.procedure[0].parent;
-                    var list = prod.parent.children;
+                    list = prod.parent.children;
                 }
                 else {
-                    var list = node.procedure;
+                    list = node.procedure;
                 }
                 for (var index in list) {
                     if (list[index].selected) {
-                        list.splice(parseInt(index) + 1, 0, prod);
+                        list.splice(parseInt(index, 10) + 1, 0, prod);
                         break;
                     }
                 }
@@ -10793,7 +8963,10 @@ var NodeUtils = /** @class */ (function () {
         switch (prod.type) {
             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Variable:
                 prod.argCount = 2;
-                prod.args = [{ name: 'var_name', value: undefined, default: undefined }, { name: 'value', value: undefined, default: undefined }];
+                prod.args = [
+                    { name: 'var_name', value: undefined, default: undefined },
+                    { name: 'value', value: undefined, default: undefined }
+                ];
                 break;
             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Foreach:
                 prod.argCount = 2;
@@ -10822,8 +8995,9 @@ var NodeUtils = /** @class */ (function () {
                 prod.args = [];
                 break;
             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Function:
-                if (!data)
+                if (!data) {
                     throw Error('No function data');
+                }
                 prod.meta = { module: data.module, name: data.name, inputMode: _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].SimpleInput };
                 prod.argCount = data.argCount + 1;
                 var returnArg = { name: 'var_name', value: undefined, default: undefined };
@@ -10832,7 +9006,7 @@ var NodeUtils = /** @class */ (function () {
                 }
                 // --UNSTABLE--
                 // changing the value of the last argument of all functions in input node to be undefined
-                if (node.type == 'start') {
+                if (node.type === 'start') {
                     data.args[data.argCount - 1].value = undefined;
                 }
                 prod.args = [returnArg].concat(data.args);
@@ -10933,7 +9107,6 @@ var PortUtils = /** @class */ (function () {
         };
         return inp;
     };
-    ;
     PortUtils.getNewOutput = function () {
         var oup = {
             id: _shared_utils__WEBPACK_IMPORTED_MODULE_1__["IdGenerator"].getId(),
@@ -10946,7 +9119,6 @@ var PortUtils = /** @class */ (function () {
         };
         return oup;
     };
-    ;
     return PortUtils;
 }());
 
@@ -11115,13 +9287,13 @@ var SharedModule = /** @class */ (function () {
             providers: [],
             declarations: [
                 _directives_filesys__WEBPACK_IMPORTED_MODULE_7__["MbFileReaderDirective"],
-                _directives_textarea__WEBPACK_IMPORTED_MODULE_20__["autogrowDirective"],
+                _directives_textarea__WEBPACK_IMPORTED_MODULE_20__["AutogrowDirective"],
                 _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__["ExecuteComponent"],
                 _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["PageNotFoundComponent"],
                 _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__["NavigationComponent"],
                 _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__["HeaderComponent"],
                 _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__["AddNodeComponent"], _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__["AddInputComponent"], _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__["AddOutputComponent"],
-                _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_15__["ParameterViewerComponent"], _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_16__["InputPortViewerComponent"], _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_17__["procedureInputViewerComponent"],
+                _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_15__["ParameterViewerComponent"], _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_16__["InputPortViewerComponent"], _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_17__["ProcedureInputViewerComponent"],
                 _components_file__WEBPACK_IMPORTED_MODULE_18__["NewFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["SaveFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["LoadFileComponent"]
             ],
             imports: [
@@ -11141,7 +9313,7 @@ var SharedModule = /** @class */ (function () {
                 _mViewer_mobius_viewer_module__WEBPACK_IMPORTED_MODULE_19__["MobiusViewerModule"],
                 angular_split__WEBPACK_IMPORTED_MODULE_6__["AngularSplitModule"],
                 _directives_filesys__WEBPACK_IMPORTED_MODULE_7__["MbFileReaderDirective"],
-                _directives_textarea__WEBPACK_IMPORTED_MODULE_20__["autogrowDirective"],
+                _directives_textarea__WEBPACK_IMPORTED_MODULE_20__["AutogrowDirective"],
                 _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__["ExecuteComponent"],
                 _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["PageNotFoundComponent"],
                 _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__["NavigationComponent"],
@@ -11219,25 +9391,32 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************!*\
   !*** ./src/app/views/index.ts ***!
   \********************************/
-/*! exports provided: ViewPublishModule, ViewPublishComponent, ViewEditorModule, ViewEditorComponent */
+/*! exports provided: ViewGalleryComponent, ViewGalleryModule, ViewPublishModule, ViewPublishComponent, ViewEditorModule, ViewEditorComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view-publish/view-publish.module */ "./src/app/views/view-publish/view-publish.module.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewPublishModule", function() { return _view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_0__["ViewPublishModule"]; });
+/* harmony import */ var _view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view-gallery/view-gallery.component */ "./src/app/views/view-gallery/view-gallery.component.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewGalleryComponent", function() { return _view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_0__["ViewGalleryComponent"]; });
 
-/* harmony import */ var _view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view-publish/view-publish.component */ "./src/app/views/view-publish/view-publish.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewPublishComponent", function() { return _view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_1__["ViewPublishComponent"]; });
+/* harmony import */ var _view_gallery_view_gallery_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view-gallery/view-gallery.module */ "./src/app/views/view-gallery/view-gallery.module.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewGalleryModule", function() { return _view_gallery_view_gallery_module__WEBPACK_IMPORTED_MODULE_1__["ViewGalleryModule"]; });
 
-/* harmony import */ var _view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./view-editor/view-editor.module */ "./src/app/views/view-editor/view-editor.module.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEditorModule", function() { return _view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_2__["ViewEditorModule"]; });
+/* harmony import */ var _view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./view-publish/view-publish.module */ "./src/app/views/view-publish/view-publish.module.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewPublishModule", function() { return _view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_2__["ViewPublishModule"]; });
 
-/* harmony import */ var _view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./view-editor/view-editor.component */ "./src/app/views/view-editor/view-editor.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEditorComponent", function() { return _view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_3__["ViewEditorComponent"]; });
+/* harmony import */ var _view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./view-publish/view-publish.component */ "./src/app/views/view-publish/view-publish.component.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewPublishComponent", function() { return _view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_3__["ViewPublishComponent"]; });
 
-//export * from './view-about/view-about.module';
-//export * from './view-gallery/view-gallery.module';
+/* harmony import */ var _view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./view-editor/view-editor.module */ "./src/app/views/view-editor/view-editor.module.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEditorModule", function() { return _view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_4__["ViewEditorModule"]; });
+
+/* harmony import */ var _view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./view-editor/view-editor.component */ "./src/app/views/view-editor/view-editor.component.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEditorComponent", function() { return _view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_5__["ViewEditorComponent"]; });
+
+// export * from './view-about/view-about.module';
+
+
 
 
 
@@ -11253,7 +9432,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='flowchart-info'>\r\n\t<input [(ngModel)]='flowchart.name' size={{flowchart.name?.length||1}}>\r\n\t<textarea autogrow [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr>\r\n<div class='container--input'>\r\n\t<procedure-input-editor *ngFor=\"let prod of node.procedure\" [prod]=\"prod\" ></procedure-input-editor>\r\n</div>\r\n\t\r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n\t<panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n\t<div class='container--input'>\r\n\t\t<input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n\t</div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n\t<panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n\t<div class='container--output'>\r\n\t\t<output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n\t</div>\r\n</section>\r\n-->\r\n"
+module.exports = "<div class='flowchart-info'>\r\n    <input [(ngModel)]='flowchart.name' size={{flowchart.name?.length||1}}>\r\n    <textarea autogrow [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr>\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure\" [prod]=\"prod\" ></procedure-input-editor>\r\n</div>\r\n    \r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
 
 /***/ }),
 
@@ -11340,12 +9519,12 @@ module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\
 /*!***************************************************************************************************************!*\
   !*** ./src/app/views/view-editor/parameter-editor/procedure-input-editor/procedure-input-editor.component.ts ***!
   \***************************************************************************************************************/
-/*! exports provided: procedureInputEditorComponent */
+/*! exports provided: ProcedureInputEditorComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "procedureInputEditorComponent", function() { return procedureInputEditorComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProcedureInputEditorComponent", function() { return ProcedureInputEditorComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _models_port__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/port */ "./src/app/shared/models/port/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -11360,33 +9539,33 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var keys = Object.keys(_models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"]);
-var procedureInputEditorComponent = /** @class */ (function () {
-    function procedureInputEditorComponent() {
+var ProcedureInputEditorComponent = /** @class */ (function () {
+    function ProcedureInputEditorComponent() {
         this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.PortTypes = _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"];
         this.PortTypesArr = keys.slice(keys.length / 2);
     }
-    procedureInputEditorComponent.prototype.editOptions = function () { };
-    procedureInputEditorComponent.prototype.onFileChange = function (event) {
+    ProcedureInputEditorComponent.prototype.editOptions = function () { };
+    ProcedureInputEditorComponent.prototype.onFileChange = function (event) {
         this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], procedureInputEditorComponent.prototype, "prod", void 0);
+    ], ProcedureInputEditorComponent.prototype, "prod", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
-    ], procedureInputEditorComponent.prototype, "delete", void 0);
-    procedureInputEditorComponent = __decorate([
+    ], ProcedureInputEditorComponent.prototype, "delete", void 0);
+    ProcedureInputEditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'procedure-input-editor',
             template: __webpack_require__(/*! ./procedure-input-editor.component.html */ "./src/app/views/view-editor/parameter-editor/procedure-input-editor/procedure-input-editor.component.html"),
             styles: [__webpack_require__(/*! ./procedure-input-editor.component.scss */ "./src/app/views/view-editor/parameter-editor/procedure-input-editor/procedure-input-editor.component.scss")]
         }),
         __metadata("design:paramtypes", [])
-    ], procedureInputEditorComponent);
-    return procedureInputEditorComponent;
+    ], ProcedureInputEditorComponent);
+    return ProcedureInputEditorComponent;
 }());
 
 
@@ -11400,7 +9579,7 @@ var procedureInputEditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.selected\"\r\n    [class.error]=\"data.hasError\"\r\n    [class.disabled]=\"!data.enabled\"\r\n    [ngSwitch]=\"data.type\"\r\n    (click)='emitSelect($event, data)'>\r\n    <div class='container--item' >\r\n        <!-- Variable Assignment Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Variable\">\r\n            <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}>  \r\n            = \r\n            <input class='input--arg'\r\n                [(ngModel)]='data.args[1].value'\r\n                name='data.args[1].name'\r\n                placeholder={{data.args[1].name}}\r\n                size = {{data.args[1].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n            </div>\r\n\r\n        <!-- IF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.If\">\r\n            <div class='function-text'>\r\n                If\r\n            </div>\r\n            ( <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    )\r\n\r\n        </div>\r\n\r\n        <!-- ELSEIF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Elseif\">\r\n            <div class='function-text'>\r\n                Else if\r\n            </div>\r\n            \r\n        \r\n        ( <input class='input--arg'\r\n                (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                [(ngModel)]='data.args[0].value'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}\r\n                size={{data.args[0].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n                )\r\n        </div>\r\n\r\n        <!-- ELSE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Else\">\r\n            <div class='function-text'>\r\n                Else\r\n            </div>\r\n        </div>\r\n\r\n        <!-- BREAK Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Break\">\r\n            <div class='function-text'>\r\n                Break\r\n            </div>\r\n        </div>\r\n\r\n        <!-- CONTINUE Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Continue\">\r\n            <div class='function-text'>\r\n                Continue\r\n            </div>\r\n        </div>\r\n\r\n\r\n    <!-- FOREACH Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Foreach\">\r\n                <div class='function-text'>\r\n                    For\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                <div class='function-text'>\r\n                    in\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[1].value'\r\n                    name='data.args[1].name'\r\n                    placeholder={{data.args[1].name}}\r\n                    size={{data.args[1].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    \r\n        </div>\r\n\r\n        <!-- WHILE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.While\">\r\n            <div class='function-text'>\r\n                While\r\n            </div>\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n\r\n        </div>\r\n        \r\n        <!-- Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Function\">\r\n            <ng-container *ngIf=\"data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'\">\r\n                <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)'\r\n                placeholder={{data.args[0].name}}>  \r\n                = \r\n\r\n            </ng-container>\r\n            <div class='function-text'>{{data.meta.module}}.{{data.meta.name}} </div>\r\n\r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <!--\r\n                <input *ngIf=\"p.name.toUpperCase() !== '__MODEL__'; else text_template\" \r\n                \r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)' \r\n                [(ngModel)]='p.value' \r\n                placeholder={{p.name}}>    \r\n                \r\n                <ng-template #text_template>\r\n                    model,\r\n                </ng-template>\r\n                -->\r\n\r\n                <input *ngIf=\"p.name.indexOf('__') == -1\" \r\n                        class='input--arg' \r\n                        (cut)='stopProp($event)' \r\n                        (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n                \r\n                <!--\r\n\r\n                <ng-template #model_template>\r\n                    <ng-container *ngIf=\"p.name == model; else params_template\">\r\n                        model,\r\n                    </ng-container>\r\n                </ng-template>\r\n                <ng-template #params_template>\r\n                    <ng-container *ngIf=\"p.name == constList;\">\r\n                        const_list,\r\n                    </ng-container>\r\n                </ng-template>\r\n                -->\r\n\r\n            </ng-container>\r\n\r\n        </div>\r\n\r\n        <!-- Imported Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Imported\">\r\n            <input class='input--var'\r\n                    [ngModel]='data.args[0].value'\r\n                    (ngModelChange)='data.args[0].value=varMod($event)'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    placeholder={{data.args[0].name}}>  \r\n            = \r\n            <div class='function-text'>{{data.meta.name}} </div> \r\n            \r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <input class='input--arg' \r\n                        (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n            </ng-container>\r\n            \r\n\r\n        </div>\r\n\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)=\"emitDelete()\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <!-- Disable button-->\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n        <!-- Print button-->\r\n        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title=\"Print Result In Console\" [class.highlighted]='data.print' (click)='markPrint()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>print</mat-icon>\r\n        </button>\r\n        <!-- help button-->\r\n        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title=\"Help\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>help</mat-icon>\r\n        </button>\r\n    </div>\r\n    <!-- list of child procedures (if the procedure has children) -->\r\n    <div *ngIf=\"data?.children\" class='container--nested'>\r\n        <procedure-item \r\n            *ngFor=\"let line of data?.children; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)='selectChild($event, line)'\r\n            (delete)='deleteChild(idx)'></procedure-item>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
+module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.selected\"\r\n    [class.error]=\"data.hasError\"\r\n    [class.disabled]=\"!data.enabled\"\r\n    [ngSwitch]=\"data.type\"\r\n    (click)='emitSelect($event, data)'>\r\n    <div class='container--item' >\r\n        <!-- Variable Assignment Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Variable\">\r\n            <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}>  \r\n            = \r\n            <input class='input--arg'\r\n                [(ngModel)]='data.args[1].value'\r\n                name='data.args[1].name'\r\n                placeholder={{data.args[1].name}}\r\n                size = {{data.args[1].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n            </div>\r\n\r\n        <!-- IF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.If\">\r\n            <div class='function-text'>\r\n                If\r\n            </div>\r\n            ( <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    )\r\n\r\n        </div>\r\n\r\n        <!-- ELSEIF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Elseif\">\r\n            <div class='function-text'>\r\n                Else if\r\n            </div>\r\n            \r\n        \r\n        ( <input class='input--arg'\r\n                (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                [(ngModel)]='data.args[0].value'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}\r\n                size={{data.args[0].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n                )\r\n        </div>\r\n\r\n        <!-- ELSE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Else\">\r\n            <div class='function-text'>\r\n                Else\r\n            </div>\r\n        </div>\r\n\r\n        <!-- BREAK Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Break\">\r\n            <div class='function-text'>\r\n                Break\r\n            </div>\r\n        </div>\r\n\r\n        <!-- CONTINUE Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Continue\">\r\n            <div class='function-text'>\r\n                Continue\r\n            </div>\r\n        </div>\r\n\r\n\r\n    <!-- FOREACH Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Foreach\">\r\n                <div class='function-text'>\r\n                    For\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                <div class='function-text'>\r\n                    in\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[1].value'\r\n                    name='data.args[1].name'\r\n                    placeholder={{data.args[1].name}}\r\n                    size={{data.args[1].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    \r\n        </div>\r\n\r\n        <!-- WHILE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.While\">\r\n            <div class='function-text'>\r\n                While\r\n            </div>\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n\r\n        </div>\r\n        \r\n        <!-- Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Function\">\r\n            <ng-container *ngIf=\"data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'\">\r\n                <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)'\r\n                placeholder={{data.args[0].name}}>  \r\n                = \r\n\r\n            </ng-container>\r\n            <div class='function-text'>{{data.meta.module}}.{{data.meta.name}} </div>\r\n\r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <!--\r\n                <input *ngIf=\"p.name.toUpperCase() !== '__MODEL__'; else text_template\" \r\n                \r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)' \r\n                [(ngModel)]='p.value' \r\n                placeholder={{p.name}}>    \r\n                \r\n                <ng-template #text_template>\r\n                    model,\r\n                </ng-template>\r\n                -->\r\n\r\n                <input *ngIf=\"p.name.indexOf('__') == -1\" \r\n                        class='input--arg' \r\n                        (cut)='stopProp($event)' \r\n                        (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n                \r\n                <!--\r\n\r\n                <ng-template #model_template>\r\n                    <ng-container *ngIf=\"p.name == model; else params_template\">\r\n                        model,\r\n                    </ng-container>\r\n                </ng-template>\r\n                <ng-template #params_template>\r\n                    <ng-container *ngIf=\"p.name == constList;\">\r\n                        const_list,\r\n                    </ng-container>\r\n                </ng-template>\r\n                -->\r\n\r\n            </ng-container>\r\n\r\n        </div>\r\n\r\n        <!-- Imported Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Imported\">\r\n            <input class='input--var'\r\n                    [ngModel]='data.args[0].value'\r\n                    (ngModelChange)='data.args[0].value=varMod($event)'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    placeholder={{data.args[0].name}}>  \r\n            = \r\n            <div class='function-text'>{{data.meta.name}} </div> \r\n            \r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <input class='input--arg' \r\n                        (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n            </ng-container>\r\n            \r\n\r\n        </div>\r\n\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)=\"emitDelete()\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <!-- Disable button-->\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n        <!-- Print button-->\r\n        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title=\"Print Result In Console\" [class.highlighted]='data.print' (click)='markPrint()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>print</mat-icon>\r\n        </button>\r\n        <!-- help button-->\r\n        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title=\"Help\" tabindex=\"-1\" (click)='emitHelpText(undefined)'>\r\n            <mat-icon class='icon'>help</mat-icon>\r\n        </button>\r\n    </div>\r\n    <!-- list of child procedures (if the procedure has children) -->\r\n    <div *ngIf=\"data?.children\" class='container--nested'>\r\n        <procedure-item \r\n            *ngFor=\"let line of data?.children; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)='selectChild($event, line)'\r\n            (delete)='deleteChild(idx)'\r\n            (helpText)='emitHelpText($event)'></procedure-item>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -11443,14 +9622,15 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var canvas = document.createElement('canvas');
-var ctx = canvas.getContext("2d");
-ctx.font = "14px Arial";
+var ctx = canvas.getContext('2d');
+ctx.font = '14px Arial';
 var ProcedureItemComponent = /** @class */ (function () {
     function ProcedureItemComponent() {
         this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.select = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.copied = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.pasteOn = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.helpText = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.model = _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].model;
         this.constList = _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].constList;
         this.ProcedureTypes = _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"];
@@ -11462,7 +9642,7 @@ var ProcedureItemComponent = /** @class */ (function () {
     // select this procedure
     ProcedureItemComponent.prototype.emitSelect = function (event, procedure) {
         event.stopPropagation();
-        this.select.emit({ "ctrl": event.ctrlKey, "prod": procedure });
+        this.select.emit({ 'ctrl': event.ctrlKey, 'prod': procedure });
     };
     // delete child procedure (after receiving emitDelete from child procedure)
     ProcedureItemComponent.prototype.deleteChild = function (index) {
@@ -11479,10 +9659,23 @@ var ProcedureItemComponent = /** @class */ (function () {
         this.data.enabled = !this.data.enabled;
     };
     ProcedureItemComponent.prototype.canBePrinted = function () {
-        return (this.data.argCount > 0 && this.data.args[0].name == 'var_name');
+        return (this.data.argCount > 0 && this.data.args[0].name === 'var_name');
     };
     ProcedureItemComponent.prototype.haveHelpText = function () {
-        return (this.data.type == _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Function || this.data.type == _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Imported);
+        return (this.data.type === _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Function || this.data.type === _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Imported);
+    };
+    ProcedureItemComponent.prototype.emitHelpText = function ($event) {
+        if ($event) {
+            this.helpText.emit($event);
+            return;
+        }
+        try {
+            // @ts-ignore
+            this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+        }
+        catch (ex) {
+            this.helpText.emit('error');
+        }
     };
     // stopPropagation to prevent cut/paste with input box focused
     ProcedureItemComponent.prototype.stopProp = function (event) {
@@ -11490,10 +9683,11 @@ var ProcedureItemComponent = /** @class */ (function () {
     };
     // modify input: replace space " " with underscore "_"
     ProcedureItemComponent.prototype.varMod = function (event) {
-        if (!event)
+        if (!event) {
             return event;
+        }
         var str = event.trim();
-        str = str.replace(/ /g, "_");
+        str = str.replace(/ /g, '_');
         return str;
     };
     ProcedureItemComponent.prototype.updateInputSize = function (event) {
@@ -11520,8 +9714,13 @@ var ProcedureItemComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], ProcedureItemComponent.prototype, "pasteOn", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ProcedureItemComponent.prototype, "helpText", void 0);
     ProcedureItemComponent = __decorate([
         _shared_decorators__WEBPACK_IMPORTED_MODULE_2__["ProcedureTypesAware"],
+        _shared_decorators__WEBPACK_IMPORTED_MODULE_2__["ModuleDocAware"],
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'procedure-item',
             template: __webpack_require__(/*! ./procedure-item.component.html */ "./src/app/views/view-editor/procedure-item/procedure-item.component.html"),
@@ -11542,7 +9741,7 @@ var ProcedureItemComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n    <ul class='toolset__basic'>\r\n        <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n            <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"'\r\n            class='tooltip'\r\n            (click)='add(ProcedureTypes[type])'> \r\n                {{type}}\r\n                <!--\r\n                <span class=\"tooltiptext\">\r\n                    <p class='funcDesc'>{{type}}</p>\r\n                </span>\r\n                -->\r\n            </li>\r\n        </ng-container>\r\n    </ul>\r\n    \r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <div class='tooltip' *ngFor='let fn of mod.functions'>\r\n                    <li \r\n                    (click)='add_function(fn)'> \r\n                        {{fn.name}} \r\n                    </li>\r\n                    <span class=\"tooltiptext\" *ngIf='ModulesDoc[mod.module] && ModulesDoc[mod.module][fn.name]'>\r\n                        <p class='funcDesc'>{{ModulesDoc[mod.module][fn.name].summary||ModulesDoc[mod.module][fn.name].description}}</p>\r\n                        <p *ngIf='ModulesDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                        <p class='paramP' *ngFor='let param of ModulesDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                        <p *ngIf='ModulesDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModulesDoc[mod.module][fn.name].returns}}</p>\r\n                    </span>\r\n                </div>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} \r\n                    <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                        <mat-icon class='remove-icon'>close</mat-icon>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    \r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n    <ul class='toolset__basic'>\r\n        <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n            <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"'\r\n            class='tooltip'\r\n            (click)='add(ProcedureTypes[type])'> \r\n                {{type}}\r\n                <!--\r\n                <span class=\"tooltiptext\">\r\n                    <p class='funcDesc'>{{type}}</p>\r\n                </span>\r\n                -->\r\n            </li>\r\n        </ng-container>\r\n    </ul>\r\n    \r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <ng-container *ngFor='let fn of mod.functions'>\r\n                    <div class='tooltip' *ngIf='fn.name.substring(0,1)!=\"_\"'>\r\n                        <li \r\n                        (click)='add_function(fn)'> \r\n                            {{fn.name}} \r\n                        </li>\r\n                        <span class=\"tooltiptext\" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>\r\n                            <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                            <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>\r\n                        </span>\r\n                    </div>\r\n                </ng-container>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} \r\n                    <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                        <mat-icon class='remove-icon'>close</mat-icon>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    \r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -11705,7 +9904,7 @@ var ToolsetComponent = /** @class */ (function () {
                         return [4 /*yield*/, p];
                     case 1:
                         fnc = _a.sent();
-                        document.getElementById('selectedFile').value = "";
+                        document.getElementById('selectedFile').value = '';
                         if (fnc === 'error') {
                             console.warn('Error reading file');
                             return [2 /*return*/];
@@ -11718,14 +9917,14 @@ var ToolsetComponent = /** @class */ (function () {
     };
     ToolsetComponent.prototype.toggleAccordion = function (id) {
         var acc = document.getElementById(id);
-        //var acc = document.getElementsByClassName("accordion");
-        acc.classList.toggle("active");
+        // acc = document.getElementsByClassName("accordion");
+        acc.classList.toggle('active');
         var panel = acc.nextElementSibling;
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
+        if (panel.style.display === 'block') {
+            panel.style.display = 'none';
         }
         else {
-            panel.style.display = "block";
+            panel.style.display = 'block';
         }
     };
     __decorate([
@@ -11754,6 +9953,7 @@ var ToolsetComponent = /** @class */ (function () {
     ], ToolsetComponent.prototype, "hasProd", void 0);
     ToolsetComponent = __decorate([
         _shared_decorators__WEBPACK_IMPORTED_MODULE_3__["ModuleAware"],
+        _shared_decorators__WEBPACK_IMPORTED_MODULE_3__["ModuleDocAware"],
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'toolset',
             template: __webpack_require__(/*! ./toolset.component.html */ "./src/app/views/view-editor/toolset/toolset.component.html"),
@@ -11775,7 +9975,7 @@ var ToolsetComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>{{node?.name}}</h2>\r\n\r\n<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n\r\n\t<div class='container__content'>\r\n\t\t<!-- toolset on the left side -->\r\n\t\t<div class=\"container--toolset\">\r\n\t\t\t<toolset [functions]='flowchart.functions' \r\n\t\t\t[nodeType]='node.type' \r\n\t\t\t[hasProd]='node.procedure.length>0' \r\n\t\t\t(delete)='deleteFunction($event)' \r\n\t\t\t(select)='add($event)' \r\n\t\t\t(imported)='importFunction($event)'></toolset>\r\n\t\t</div>\r\n\r\n\t\t<!-- procedure editor on the right side -->\r\n\t\t<div id='procedure' class=\"container--procedure\">\r\n\t\t\t<!-- parameter-editor only for start node -->\r\n\t\t\t<parameter-editor *ngIf=\"node.type == 'start'\" [flowchart]='flowchart' [node]='node'></parameter-editor>\r\n\r\n\t\t\t<!-- list of procedure items for all nodes -->\r\n\t\t\t<procedure-item \r\n\t\t\t*ngFor=\"let line of node?.procedure; let idx=index\" \r\n\t\t\t[data]=\"line\"\r\n\t\t\t(select)=\"selectProcedure($event,line)\"\r\n\t\t\t(delete)=\"deleteChild(idx)\"></procedure-item>\r\n\t\t\t<br>\r\n\t\t\t<br>\r\n\t\t</div>\r\n\t</div>\r\n\r\n</div>\r\n"
+module.exports = "<h2>{{dataService.node?.name}}</h2>\r\n\r\n<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n\r\n    <div class='container__content'>\r\n        <!-- toolset on the left side -->\r\n        <div class=\"container--toolset\">\r\n            <toolset [functions]='dataService.flowchart.functions' \r\n            [nodeType]='dataService.node.type' \r\n            [hasProd]='dataService.node.procedure.length>0' \r\n            (delete)='deleteFunction($event)' \r\n            (select)='add($event)' \r\n            (imported)='importFunction($event)'></toolset>\r\n        </div>\r\n\r\n        <!-- procedure editor on the right side -->\r\n        <div id='procedure' class=\"container--procedure\">\r\n            <!-- parameter-editor only for start node -->\r\n            <parameter-editor *ngIf=\"dataService.node.type == 'start'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n\r\n            <!-- list of procedure items for all nodes -->\r\n            <procedure-item \r\n            *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)=\"selectProcedure($event,line)\"\r\n            (delete)=\"deleteChild(idx)\"\r\n            (helpText)='emitHelpText($event)'></procedure-item>\r\n            <br>\r\n            <br>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -11802,6 +10002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewEditorComponent", function() { return ViewEditorComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _models_node__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/node */ "./src/app/shared/models/node/index.ts");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11813,46 +10014,56 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var ViewEditorComponent = /** @class */ (function () {
-    function ViewEditorComponent() {
+    function ViewEditorComponent(dataService) {
+        this.dataService = dataService;
+        /*
+        @Input() flowchart: IFlowchart;
+        @Input() node: INode;
+        */
         this.imported = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.delete_Function = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.helpText = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.copyCheck = false;
     }
     // add a procedure
     ViewEditorComponent.prototype.add = function (data) {
-        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].add_procedure(this.node, data.type, data.data);
+        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].add_procedure(this.dataService.node, data.type, data.data);
     };
     // delete a procedure
     ViewEditorComponent.prototype.deleteChild = function (index) {
-        this.node.procedure.splice(index, 1);
-        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.node);
+        this.dataService.node.procedure.splice(index, 1);
+        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.dataService.node);
     };
     // select a procedure
     ViewEditorComponent.prototype.selectProcedure = function (event, line) {
-        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].select_procedure(this.node, event.prod, event.ctrl || false);
+        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].select_procedure(this.dataService.node, event.prod, event.ctrl || false);
     };
     // copy selected procedures
     ViewEditorComponent.prototype.copyProd = function () {
-        if (!this.copyCheck)
+        if (!this.copyCheck) {
             return;
-        console.log('copying', this.node.state.procedure);
-        this.copiedProd = this.node.state.procedure;
+        }
+        console.log('copying', this.dataService.node.state.procedure);
+        this.copiedProd = this.dataService.node.state.procedure;
     };
     // cut selected procedures
     ViewEditorComponent.prototype.cutProd = function (event) {
-        if (!this.copyCheck || document.activeElement.nodeName == "INPUT")
+        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT') {
             return;
-        console.log('cutting', this.node.state.procedure);
-        this.copiedProd = this.node.state.procedure;
+        }
+        console.log('cutting', this.dataService.node.state.procedure);
+        this.copiedProd = this.dataService.node.state.procedure;
         var parentArray;
         for (var _i = 0, _a = this.copiedProd; _i < _a.length; _i++) {
             var prod = _a[_i];
             if (prod.parent) {
                 parentArray = prod.parent.children;
             }
-            else
-                parentArray = this.node.procedure;
+            else {
+                parentArray = this.dataService.node.procedure;
+            }
             for (var i = 0; i < parentArray.length; i++) {
                 if (parentArray[i] === prod) {
                     parentArray.splice(i, 1);
@@ -11860,39 +10071,39 @@ var ViewEditorComponent = /** @class */ (function () {
                 }
             }
         }
-        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.node);
+        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.dataService.node);
     };
     // paste copied procedures
     ViewEditorComponent.prototype.pasteProd = function (event) {
-        if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() != "INPUT") {
-            var pastingPlace = this.node.state.procedure[0];
+        if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() !== 'INPUT') {
+            var pastingPlace = this.dataService.node.state.procedure[0];
             if (pastingPlace === undefined) {
                 for (var i = 0; i < this.copiedProd.length; i++) {
                     console.log('pasting', this.copiedProd[i].ID);
-                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.node, this.copiedProd[i]);
-                    this.node.state.procedure[0].selected = false;
-                    this.node.state.procedure = [];
+                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.dataService.node, this.copiedProd[i]);
+                    this.dataService.node.state.procedure[0].selected = false;
+                    this.dataService.node.state.procedure = [];
                 }
             }
             else if (pastingPlace.children) {
                 for (var i = 0; i < this.copiedProd.length; i++) {
                     console.log('pasting', this.copiedProd[i].ID);
-                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.node, this.copiedProd[i]);
-                    this.node.state.procedure[0].selected = false;
+                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.dataService.node, this.copiedProd[i]);
+                    this.dataService.node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
-                    this.node.state.procedure = [pastingPlace];
+                    this.dataService.node.state.procedure = [pastingPlace];
                 }
             }
             else {
                 for (var i = this.copiedProd.length - 1; i >= 0; i--) {
                     console.log('pasting', this.copiedProd[i].ID);
-                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.node, this.copiedProd[i]);
-                    this.node.state.procedure[0].selected = false;
+                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.dataService.node, this.copiedProd[i]);
+                    this.dataService.node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
-                    this.node.state.procedure = [pastingPlace];
+                    this.dataService.node.state.procedure = [pastingPlace];
                 }
             }
-            //this.copiedProd = undefined;
+            // this.copiedProd = undefined;
         }
     };
     // activate copying/cutting/pasting when the mouse hovers over the procedure list
@@ -11907,26 +10118,21 @@ var ViewEditorComponent = /** @class */ (function () {
     ViewEditorComponent.prototype.importFunction = function (event) {
         for (var _i = 0, event_1 = event; _i < event_1.length; _i++) {
             var func = event_1[_i];
-            this.flowchart.functions.push(func);
+            this.dataService.flowchart.functions.push(func);
         }
     };
     // delete an imported function
     ViewEditorComponent.prototype.deleteFunction = function (event) {
-        for (var i = 0; i < this.flowchart.functions.length; i++) {
-            if (this.flowchart.functions[i] == event) {
-                this.flowchart.functions.splice(i, 1);
+        for (var i = 0; i < this.dataService.flowchart.functions.length; i++) {
+            if (this.dataService.flowchart.functions[i] === event) {
+                this.dataService.flowchart.functions.splice(i, 1);
                 break;
             }
         }
     };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], ViewEditorComponent.prototype, "flowchart", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], ViewEditorComponent.prototype, "node", void 0);
+    ViewEditorComponent.prototype.emitHelpText = function (event) {
+        this.helpText.emit(event);
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
@@ -11935,13 +10141,17 @@ var ViewEditorComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
         __metadata("design:type", Object)
     ], ViewEditorComponent.prototype, "delete_Function", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ViewEditorComponent.prototype, "helpText", void 0);
     ViewEditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'view-editor',
             template: __webpack_require__(/*! ./view-editor.component.html */ "./src/app/views/view-editor/view-editor.component.html"),
             styles: [__webpack_require__(/*! ./view-editor.component.scss */ "./src/app/views/view-editor/view-editor.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_2__["DataService"]])
     ], ViewEditorComponent);
     return ViewEditorComponent;
 }());
@@ -11997,7 +10207,7 @@ var ViewEditorModule = /** @class */ (function () {
                 _procedure_item_procedure_item_component__WEBPACK_IMPORTED_MODULE_4__["ProcedureItemComponent"],
                 _toolset_toolset_component__WEBPACK_IMPORTED_MODULE_5__["ToolsetComponent"],
                 _parameter_editor_parameter_editor_component__WEBPACK_IMPORTED_MODULE_6__["ParameterEditorComponent"],
-                _parameter_editor_procedure_input_editor_procedure_input_editor_component__WEBPACK_IMPORTED_MODULE_7__["procedureInputEditorComponent"],
+                _parameter_editor_procedure_input_editor_procedure_input_editor_component__WEBPACK_IMPORTED_MODULE_7__["ProcedureInputEditorComponent"],
             ],
             entryComponents: [],
             imports: [
@@ -12023,6 +10233,259 @@ var ViewEditorModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/views/view-gallery/simple-name.pipe.ts":
+/*!********************************************************!*\
+  !*** ./src/app/views/view-gallery/simple-name.pipe.ts ***!
+  \********************************************************/
+/*! exports provided: SimpleNamePipe */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SimpleNamePipe", function() { return SimpleNamePipe; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+/*
+ * Shortens a name to a certain length and appends "..." infront of it
+ * Usage:
+ *   value | length:number
+ * Example:
+ *   {{ "some_very_long_string" | length:7 }}
+ *   formats to: some_ve...
+*/
+var SimpleNamePipe = /** @class */ (function () {
+    function SimpleNamePipe() {
+    }
+    SimpleNamePipe.prototype.transform = function (value) {
+        if (value.endsWith('.mob')) {
+            value = value.substr(0, value.length - 4);
+        }
+        value = value.split('_').join(' ');
+        value = value.split('-').join(' ');
+        return value;
+    };
+    SimpleNamePipe = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Pipe"])({ name: 'simplename' })
+    ], SimpleNamePipe);
+    return SimpleNamePipe;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-gallery/view-gallery.component.html":
+/*!****************************************************************!*\
+  !*** ./src/app/views/view-gallery/view-gallery.component.html ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h2>Möbius Gallery</h2>\r\n<hr>\r\n<h4>Displaying {{ (allFiles | async)?.length}} projects</h4>\r\n<div class=\"container__element container__element--project-container\">\r\n    <div class=\"project-container__project\" *ngFor=\"let f of  (allFiles | async)\">\r\n        <div class=\"project__content\" (click)='loadFile(f)'>\r\n            {{ f.name | simplename }}\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n\r\n<!--\r\n<div class=\"container\">\r\n    <div class=\"container__element container__element--header\">\r\n        Möbius Gallery\r\n        <navigation></navigation>\r\n    </div>\r\n\r\n    <div class=\"container__element container__element--subheader\">\r\n        Displaying {{ (allFiles | async)?.length}} projects\r\n    </div>\r\n\r\n    <div class=\"container__element container__element--project-container\">\r\n        <div class=\"project-container__project\" *ngFor=\"let f of  (allFiles | async)\">\r\n            <div class=\"project__content\" (click)='loadFile(f)'>\r\n                {{ f.name | simplename }}\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n-->\r\n<!--\r\n<a href=\"https://github.com/design-automation/mobius-cesium\">\r\n    <img style=\"position: absolute; top: 0; right: 0; border: 0;\" src=\"https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png\" alt=\"Fork me on GitHub\">\r\n</a>\r\n-->"
+
+/***/ }),
+
+/***/ "./src/app/views/view-gallery/view-gallery.component.scss":
+/*!****************************************************************!*\
+  !*** ./src/app/views/view-gallery/view-gallery.component.scss ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".container__element {\n  padding: 0px 10% 0px 10%; }\n\n.container__element--project-container {\n  font-size: 26px;\n  line-height: 32px;\n  font-weight: 300;\n  padding-top: 30px;\n  padding-bottom: 30px;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  overflow: auto; }\n\n.project-container__project {\n  position: relative;\n  width: 25%;\n  height: 150px;\n  min-width: 200px; }\n\n.project-container__project .project__content {\n    height: 90%;\n    width: 90%;\n    font-size: 12px;\n    line-height: 24px;\n    color: #000;\n    overflow: hidden;\n    border-radius: 4px;\n    vertical-align: middle;\n    overflow-wrap: break-word;\n    word-wrap: break-word;\n    word-break: break-word;\n    border: 1px solid #bbb;\n    border-radius: 2px; }\n\n.project-container__project .project__content a {\n      display: block;\n      height: 100%;\n      margin: 10px;\n      text-decoration: none;\n      text-align: center;\n      text-transform: uppercase;\n      color: inherit;\n      font-weight: 600; }\n\n.project-container__project .project__content a:visited {\n        color: inherit; }\n\n.project-container__project .project__content:hover {\n      border-color: #222; }\n\nh2 {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 19px; }\n\nh4 {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 16px; }\n\np {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 14px; }\n\nhr {\n  border-top: 2px solid #efefef; }\n\ndiv[class^=\"container--\"] {\n  display: flex;\n  flex-direction: column;\n  margin: 10px 0px; }\n"
+
+/***/ }),
+
+/***/ "./src/app/views/view-gallery/view-gallery.component.ts":
+/*!**************************************************************!*\
+  !*** ./src/app/views/view-gallery/view-gallery.component.ts ***!
+  \**************************************************************/
+/*! exports provided: ViewGalleryComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewGalleryComponent", function() { return ViewGalleryComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _view_gallery_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./view-gallery.config */ "./src/app/views/view-gallery/view-gallery.config.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_5__);
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+// import {Router} from '@angular/router';
+
+
+var ViewGalleryComponent = /** @class */ (function () {
+    function ViewGalleryComponent(http, dataService) {
+        this.http = http;
+        this.dataService = dataService;
+        this.switch = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.allFiles = this.getFilesFromURL();
+    }
+    ViewGalleryComponent.prototype.getFilesFromURL = function () {
+        return this.http.get(_view_gallery_config__WEBPACK_IMPORTED_MODULE_2__["Constants"].GALLERY_URL, { responseType: 'json' });
+    };
+    ViewGalleryComponent.prototype.loadFile = function (fl) {
+        var _this = this;
+        var stream = rxjs__WEBPACK_IMPORTED_MODULE_3__["Observable"].create(function (observer) {
+            var request = new XMLHttpRequest();
+            request.open('GET', fl.download_url);
+            request.onload = function () {
+                if (request.status === 200) {
+                    var f = circular_json__WEBPACK_IMPORTED_MODULE_5__["parse"](request.responseText);
+                    var file = {
+                        name: f.name,
+                        author: f.author,
+                        flowchart: f.flowchart,
+                        last_updated: f.last_updated,
+                        version: f.version
+                    };
+                    observer.next(file);
+                    observer.complete();
+                }
+                else {
+                    observer.error('error happened');
+                }
+            };
+            request.onerror = function () {
+                observer.error('error happened');
+            };
+            request.send();
+        });
+        stream.subscribe(function (loadeddata) {
+            _this.dataService.file = loadeddata;
+            _this.switch.emit('publish');
+        });
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ViewGalleryComponent.prototype, "switch", void 0);
+    ViewGalleryComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'view-gallery',
+            template: __webpack_require__(/*! ./view-gallery.component.html */ "./src/app/views/view-gallery/view-gallery.component.html"),
+            styles: [__webpack_require__(/*! ./view-gallery.component.scss */ "./src/app/views/view-gallery/view-gallery.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], _services__WEBPACK_IMPORTED_MODULE_4__["DataService"]])
+    ], ViewGalleryComponent);
+    return ViewGalleryComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-gallery/view-gallery.config.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/views/view-gallery/view-gallery.config.ts ***!
+  \***********************************************************/
+/*! exports provided: Constants */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Constants", function() { return Constants; });
+var Constants = /** @class */ (function () {
+    function Constants() {
+    }
+    Object.defineProperty(Constants, "GALLERY_URL", {
+        get: function () {
+            return 'https://api.github.com/repos/design-automation/mobius-parametric-modeller/contents/src/assets/gallery?ref=master';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Constants, "FILE_URL", {
+        get: function () {
+            return 'https://raw.githubusercontent.com/design-automation/mobius-gallery/master/examples/';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Constants;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-gallery/view-gallery.module.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/views/view-gallery/view-gallery.module.ts ***!
+  \***********************************************************/
+/*! exports provided: ViewGalleryModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewGalleryModule", function() { return ViewGalleryModule; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/shared.module */ "./src/app/shared/shared.module.ts");
+/* harmony import */ var _view_gallery_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./view-gallery.component */ "./src/app/views/view-gallery/view-gallery.component.ts");
+/* harmony import */ var _simple_name_pipe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./simple-name.pipe */ "./src/app/views/view-gallery/simple-name.pipe.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var ViewGalleryModule = /** @class */ (function () {
+    function ViewGalleryModule() {
+    }
+    ViewGalleryModule = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+            declarations: [
+                _view_gallery_component__WEBPACK_IMPORTED_MODULE_3__["ViewGalleryComponent"],
+                _simple_name_pipe__WEBPACK_IMPORTED_MODULE_4__["SimpleNamePipe"]
+            ],
+            exports: [],
+            imports: [
+                _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
+                // ViewGalleryRoutingModule,
+                _shared_shared_module__WEBPACK_IMPORTED_MODULE_2__["SharedModule"]
+            ],
+            entryComponents: [],
+            providers: []
+        }),
+        __metadata("design:paramtypes", [])
+    ], ViewGalleryModule);
+    return ViewGalleryModule;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/views/view-publish/view-publish.component.html":
 /*!****************************************************************!*\
   !*** ./src/app/views/view-publish/view-publish.component.html ***!
@@ -12030,7 +10493,7 @@ var ViewEditorModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<parameter-viewer [flowchart]='flowchart' [startNode]='flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>\r\n\r\n<!--\r\n<div class='container'>\r\n\t<div class='container__content'>\r\n\t\r\n\t\t< !-- Side content__Panel: Split into three panes -- >\r\n\t\t<as-split direction=\"vertical\">\r\n\r\n\t\t\t<as-split-area size='20'>\r\n\t\t\t\t<div class='content__panel'>\r\n\t\t\t\t\t<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n\t\t\t\t</div>\r\n\t\t\t</as-split-area>\r\n\t\t\t\r\n\t\t\t< !-- \r\n\t\t\t<as-split-area size='20'>\r\n\t\t\t\t<div class='content__panel'>\r\n\t\t\t\t\t\t<flowchart [data]=\"flowchart\" (select)='selectNode($event)'></flowchart>\r\n\t\t\t\t</div>\r\n\t\t\t</as-split-area> \r\n\t\t\t-- >\r\n\t\t\r\n\t\t</as-split>\r\n\t\t\t\t\t\r\n\t</div>\r\n</div>\r\n-->\r\n<!--\r\n<div class='container'>\r\n\r\n\t<div class='container__header'>\r\n\t\tMobius Viewer\t\r\n\t\t<navigation></navigation>\r\n\t\t<execute [flowchart]='flowchart'></execute>\r\n\t</div>\r\n\r\n\t<div class='container__content'>\r\n\t\t<file-new *ngIf='!flowchart'></file-new>\r\n\r\n\t\t<as-split direction=\"horizontal\" *ngIf='flowchart'>\r\n\t\t\t<as-split-area size=\"60\">\r\n\r\n\t\t\t\t<div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>\r\n\t\t\t\t\t<mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>\r\n\t\t\t\t</div>\r\n\t\t\t</as-split-area>\r\n\t\t\t\r\n\t\t\t<as-split-area size=\"40\">\r\n\t\r\n\r\n\t\t\t\t<as-split direction=\"vertical\">\r\n\t\r\n\t\t\t\t\t\t<as-split-area size='20'>\r\n\t\t\t\t\t\t\t<div class='content__panel'>\r\n\t\t\t\t\t\t\t\t<parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</as-split-area>\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\t</as-split>\r\n\t\t\t\t\t\r\n\t\t\t</as-split-area>\r\n\t\t</as-split>\r\n\t</div>\r\n\r\n\t<div class='container__footer'>\r\n\t\tCopyright © 2018 Design Automation Lab, NUS. All Rights Reserved.\r\n\t</div>\r\n\t\r\n\t\r\n</div>\r\n-->"
+module.exports = "<parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>\r\n\r\n<!--\r\n<div class='container'>\r\n    <div class='container__content'>\r\n    \r\n        < !-- Side content__Panel: Split into three panes -- >\r\n        <as-split direction=\"vertical\">\r\n\r\n            <as-split-area size='20'>\r\n                <div class='content__panel'>\r\n                    <parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n            < !-- \r\n            <as-split-area size='20'>\r\n                <div class='content__panel'>\r\n                        <flowchart [data]=\"flowchart\" (select)='selectNode($event)'></flowchart>\r\n                </div>\r\n            </as-split-area> \r\n            -- >\r\n        \r\n        </as-split>\r\n                    \r\n    </div>\r\n</div>\r\n-->\r\n<!--\r\n<div class='container'>\r\n\r\n    <div class='container__header'>\r\n        Mobius Viewer    \r\n        <navigation></navigation>\r\n        <execute [flowchart]='flowchart'></execute>\r\n    </div>\r\n\r\n    <div class='container__content'>\r\n        <file-new *ngIf='!flowchart'></file-new>\r\n\r\n        <as-split direction=\"horizontal\" *ngIf='flowchart'>\r\n            <as-split-area size=\"60\">\r\n\r\n                <div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>\r\n                    <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n            <as-split-area size=\"40\">\r\n    \r\n\r\n                <as-split direction=\"vertical\">\r\n    \r\n                        <as-split-area size='20'>\r\n                            <div class='content__panel'>\r\n                                <parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n                            </div>\r\n                        </as-split-area>\r\n                        \r\n                    \r\n                    </as-split>\r\n                    \r\n            </as-split-area>\r\n        </as-split>\r\n    </div>\r\n\r\n    <div class='container__footer'>\r\n        Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.\r\n    </div>\r\n    \r\n    \r\n</div>\r\n-->"
 
 /***/ }),
 
@@ -12056,6 +10519,7 @@ module.exports = ".container {\n  position: relative;\n  overflow: auto;\n  heig
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewPublishComponent", function() { return ViewPublishComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12066,32 +10530,31 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var ViewPublishComponent = /** @class */ (function () {
-    function ViewPublishComponent() {
+    function ViewPublishComponent(dataService) {
+        this.dataService = dataService;
     }
     ViewPublishComponent.prototype.selectNode = function (node_index) {
-        if (typeof (node_index) == 'number') {
-            this.flowchart.meta.selected_nodes = [node_index];
+        if (typeof (node_index) === 'number') {
+            this.dataService.flowchart.meta.selected_nodes = [node_index];
         }
     };
     ViewPublishComponent.prototype.getEndNode = function () {
-        for (var _i = 0, _a = this.flowchart.nodes; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
             var node = _a[_i];
-            if (node.type == 'end')
+            if (node.type === 'end') {
                 return node;
+            }
         }
     };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], ViewPublishComponent.prototype, "flowchart", void 0);
     ViewPublishComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'view-publish',
             template: __webpack_require__(/*! ./view-publish.component.html */ "./src/app/views/view-publish/view-publish.component.html"),
             styles: [__webpack_require__(/*! ./view-publish.component.scss */ "./src/app/views/view-publish/view-publish.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["DataService"]])
     ], ViewPublishComponent);
     return ViewPublishComponent;
 }());
@@ -12161,7 +10624,7 @@ var ViewPublishModule = /** @class */ (function () {
 /*! exports provided: id, name, kind, flags, children, groups, default */
 /***/ (function(module) {
 
-module.exports = {"id":0,"name":"mobius-parametric-modeller","kind":0,"flags":{},"children":[{"id":23,"name":"\"_parameterTypes\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts","children":[{"id":24,"name":"_parameterTypes","kind":2097152,"kindString":"Object literal","flags":{"isExported":true,"isConst":true},"children":[{"id":25,"name":"constList","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":2,"character":13}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__constList__\""},{"id":27,"name":"input","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":4,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__input__\""},{"id":29,"name":"merge","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":6,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__megre__\""},{"id":26,"name":"model","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":3,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__model__\""},{"id":28,"name":"new","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":5,"character":7}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__new__\""}],"groups":[{"title":"Variables","kind":32,"children":[25,27,29,26,28]}],"sources":[{"fileName":"_parameterTypes.ts","line":1,"character":28}],"type":{"type":"intrinsic","name":"object"}}],"groups":[{"title":"Object literals","kind":2097152,"children":[24]}],"sources":[{"fileName":"_parameterTypes.ts","line":1,"character":0}]},{"id":1,"name":"\"functions\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/functions.ts","comment":{"shortText":"Functions for working with gs-json models.\nModels are datastructures that contain geometric entities with attributes."},"children":[{"id":4,"name":"__merge__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":5,"name":"__merge__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Merges the second model into the first model. The geometry, attribues, and groups are all merged.\nIf the models contain contain groups with the same names, then the groups will be merged.","returns":"The merged model.\n"},"parameters":[{"id":6,"name":"model1","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model to merge into."},"type":{"type":"intrinsic","name":"any"}},{"id":7,"name":"model2","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model to merge."},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":44,"character":25}]},{"id":2,"name":"__new__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":3,"name":"__new__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Creates a new empty model.","returns":"New model empty.\n"},"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":15,"character":23}]},{"id":8,"name":"addData","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":9,"name":"addData","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Creates a new model and populates the model with data.","returns":"New model if successful, null if unsuccessful or on error.\n"},"parameters":[{"id":10,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"intrinsic","name":"any"}},{"id":11,"name":"model_data","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model data in gs-json format."},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":59,"character":23}]}],"groups":[{"title":"Functions","kind":64,"children":[4,2,8]}],"sources":[{"fileName":"functions.ts","line":1,"character":0}]},{"id":30,"name":"\"index\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/index.ts","sources":[{"fileName":"index.ts","line":1,"character":0}]},{"id":12,"name":"\"input\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/input.ts","children":[{"id":13,"name":"declare_constant","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":14,"name":"declare_constant","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Declare a new constant for the input node","returns":"Void\n","tags":[{"tag":"summary","text":"Declare new constant\n"}]},"parameters":[{"id":15,"name":"__constList__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"List of constants to be added."},"type":{"type":"reference","name":"JSON"}},{"id":16,"name":"const_name","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"Name of the constant."},"type":{"type":"intrinsic","name":"string"}},{"id":17,"name":"__input__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"Value of the constant.\n"},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"input.ts","line":11,"character":32}]}],"groups":[{"title":"Functions","kind":64,"children":[13]}],"sources":[{"fileName":"input.ts","line":1,"character":0}]},{"id":18,"name":"\"output\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/output.ts","children":[{"id":19,"name":"return_value","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":20,"name":"return_value","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Return certain value from the model for the flowchart's end node","returns":"Value\n","tags":[{"tag":"summary","text":"Return a specific value"}]},"parameters":[{"id":21,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"Model of the node."},"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}}},{"id":22,"name":"index","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"Index of the value to be returned."},"type":{"type":"intrinsic","name":"number"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"output.ts","line":9,"character":28}]}],"groups":[{"title":"Functions","kind":64,"children":[19]}],"sources":[{"fileName":"output.ts","line":1,"character":0}]}],"groups":[{"title":"External modules","kind":1,"children":[23,1,30,12,18]}]};
+module.exports = {"id":0,"name":"mobius-parametric-modeller","kind":0,"flags":{},"children":[{"id":72,"name":"\"Input\"","kind":1,"kindString":"External module","flags":{"isExported":true,"isExternal":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/Input.ts","children":[{"id":73,"name":"declare_constant","kind":64,"kindString":"Function","flags":{"isExported":true,"isExternal":true},"signatures":[{"id":74,"name":"declare_constant","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Declare a new constant for the input node","returns":"Void\n","tags":[{"tag":"summary","text":"Declare new constant\n"}]},"parameters":[{"id":75,"name":"__constList__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"List of constants to be added."},"type":{"type":"reference","name":"JSON"}},{"id":76,"name":"const_name","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"Name of the constant."},"type":{"type":"intrinsic","name":"string"}},{"id":77,"name":"__input__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"Value of the constant.\n"},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"Input.ts","line":11,"character":32}]}],"groups":[{"title":"Functions","kind":64,"children":[73]}],"sources":[{"fileName":"Input.ts","line":1,"character":0}]},{"id":78,"name":"\"Output\"","kind":1,"kindString":"External module","flags":{"isExported":true,"isExternal":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/Output.ts","children":[{"id":79,"name":"return_value","kind":64,"kindString":"Function","flags":{"isExported":true,"isExternal":true},"signatures":[{"id":80,"name":"return_value","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Return certain value from the model for the flowchart's end node","returns":"Value\n","tags":[{"tag":"summary","text":"Return a specific value"}]},"parameters":[{"id":81,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"comment":{"shortText":"Model of the node."},"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}}},{"id":82,"name":"index","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"Index of the value to be returned."},"type":{"type":"intrinsic","name":"number"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"Output.ts","line":9,"character":28}]}],"groups":[{"title":"Functions","kind":64,"children":[79]}],"sources":[{"fileName":"Output.ts","line":1,"character":0}]},{"id":83,"name":"\"_parameterTypes\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts","children":[{"id":84,"name":"_parameterTypes","kind":2097152,"kindString":"Object literal","flags":{"isExported":true,"isConst":true},"children":[{"id":85,"name":"constList","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":4,"character":13}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__constList__\""},{"id":87,"name":"input","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":6,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__input__\""},{"id":90,"name":"merge","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":11,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"functions.__merge__\""},{"id":91,"name":"mergeFn","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":12,"character":11}],"type":{"type":"reference","name":"__merge__","id":49},"defaultValue":" __merge__"},{"id":86,"name":"model","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":5,"character":9}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"__model__\""},{"id":88,"name":"new","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":8,"character":7}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"functions.__new__\""},{"id":89,"name":"newFn","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":9,"character":9}],"type":{"type":"reference","name":"__new__","id":41},"defaultValue":" __new__"},{"id":93,"name":"postprocess","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":15,"character":15}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"functions.__postprocess__\""},{"id":92,"name":"preprocess","kind":32,"kindString":"Variable","flags":{"isExported":true},"sources":[{"fileName":"_parameterTypes.ts","line":14,"character":14}],"type":{"type":"intrinsic","name":"string"},"defaultValue":"\"functions.__preprocess__\""}],"groups":[{"title":"Variables","kind":32,"children":[85,87,90,91,86,88,89,93,92]}],"sources":[{"fileName":"_parameterTypes.ts","line":3,"character":28}],"type":{"type":"intrinsic","name":"object"}}],"groups":[{"title":"Object literals","kind":2097152,"children":[84]}],"sources":[{"fileName":"_parameterTypes.ts","line":1,"character":0}]},{"id":1,"name":"\"functions\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/functions.ts","children":[{"id":2,"name":"data_types","kind":4,"kindString":"Enumeration","flags":{},"comment":{"shortText":"Functions for working with gs-json models.\nModels are datastructures that contain geometric entities with attributes."},"children":[{"id":4,"name":"Float","kind":16,"kindString":"Enumeration member","flags":{},"sources":[{"fileName":"functions.ts","line":14,"character":9}],"defaultValue":"\"Float\""},{"id":3,"name":"Int","kind":16,"kindString":"Enumeration member","flags":{},"sources":[{"fileName":"functions.ts","line":13,"character":7}],"defaultValue":"\"Int\""},{"id":5,"name":"String","kind":16,"kindString":"Enumeration member","flags":{},"sources":[{"fileName":"functions.ts","line":15,"character":10}],"defaultValue":"\"String\""}],"groups":[{"title":"Enumeration members","kind":16,"children":[4,3,5]}],"sources":[{"fileName":"functions.ts","line":12,"character":15}]},{"id":6,"name":"attrib","kind":256,"kindString":"Interface","flags":{},"children":[{"id":9,"name":"data_length","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":32,"character":15}],"type":{"type":"intrinsic","name":"number"}},{"id":8,"name":"data_type","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":31,"character":13}],"type":{"type":"reference","name":"data_types","id":2}},{"id":10,"name":"keys","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":33,"character":8}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"number"}}},{"id":7,"name":"name","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":30,"character":8}],"type":{"type":"intrinsic","name":"string"}},{"id":11,"name":"values","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":34,"character":10}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}}}],"groups":[{"title":"Properties","kind":1024,"children":[9,8,10,7,11]}],"sources":[{"fileName":"functions.ts","line":29,"character":16}],"extendedBy":[{"type":"reference","name":"positions_attrib","id":12}]},{"id":18,"name":"model","kind":256,"kindString":"Interface","flags":{},"children":[{"id":27,"name":"attributes","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":52,"character":14}],"type":{"type":"reflection","declaration":{"id":28,"name":"__type","kind":65536,"kindString":"Type literal","flags":{},"children":[{"id":34,"name":"collections","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":58,"character":19}],"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}},{"id":31,"name":"edges","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":55,"character":13}],"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}},{"id":33,"name":"faces","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":57,"character":13}],"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}},{"id":29,"name":"positions","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":53,"character":17}],"type":{"type":"reference","name":"positions_attrib","id":12}},{"id":30,"name":"vertices","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":54,"character":16}],"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}},{"id":32,"name":"wires","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":56,"character":13}],"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}}],"groups":[{"title":"Variables","kind":32,"children":[34,31,33,29,30,32]}],"sources":[{"fileName":"functions.ts","line":52,"character":15}]}}},{"id":19,"name":"topology","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":44,"character":12}],"type":{"type":"reflection","declaration":{"id":20,"name":"__type","kind":65536,"kindString":"Type literal","flags":{},"children":[{"id":26,"name":"collections","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":50,"character":19}],"type":{"type":"array","elementType":{"type":"reference","name":"collection","id":40}}},{"id":23,"name":"edges","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":47,"character":13}],"type":{"type":"array","elementType":{"type":"reference","name":"edge","id":37}}},{"id":25,"name":"faces","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":49,"character":13}],"type":{"type":"array","elementType":{"type":"reference","name":"face","id":39}}},{"id":21,"name":"triangles","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":45,"character":17}],"type":{"type":"array","elementType":{"type":"reference","name":"triangle","id":35}}},{"id":22,"name":"vertices","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":46,"character":16}],"type":{"type":"array","elementType":{"type":"reference","name":"vertex","id":36}}},{"id":24,"name":"wires","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":48,"character":13}],"type":{"type":"array","elementType":{"type":"reference","name":"wire","id":38}}}],"groups":[{"title":"Variables","kind":32,"children":[26,23,25,21,22,24]}],"sources":[{"fileName":"functions.ts","line":44,"character":13}]}}}],"groups":[{"title":"Properties","kind":1024,"children":[27,19]}],"sources":[{"fileName":"functions.ts","line":43,"character":15}]},{"id":12,"name":"positions_attrib","kind":256,"kindString":"Interface","flags":{},"children":[{"id":15,"name":"data_length","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":40,"character":15}],"type":{"type":"unknown","name":"3"},"overwrites":{"type":"reference","name":"attrib.data_length","id":9}},{"id":14,"name":"data_type","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":39,"character":13}],"type":{"type":"reference","name":"Float","id":4},"overwrites":{"type":"reference","name":"attrib.data_type","id":8}},{"id":16,"name":"keys","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":33,"character":8}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"number"}},"inheritedFrom":{"type":"reference","name":"attrib.keys","id":10}},{"id":13,"name":"name","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":38,"character":8}],"type":{"type":"stringLiteral","value":"coordinates"},"overwrites":{"type":"reference","name":"attrib.name","id":7}},{"id":17,"name":"values","kind":1024,"kindString":"Property","flags":{},"sources":[{"fileName":"functions.ts","line":34,"character":10}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}},"inheritedFrom":{"type":"reference","name":"attrib.values","id":11}}],"groups":[{"title":"Properties","kind":1024,"children":[15,14,16,13,17]}],"sources":[{"fileName":"functions.ts","line":37,"character":26}],"extendedTypes":[{"type":"reference","name":"attrib","id":6}]},{"id":40,"name":"collection","kind":4194304,"kindString":"Type alias","flags":{},"sources":[{"fileName":"functions.ts","line":25,"character":15}],"type":{"type":"tuple","elements":[{"type":"intrinsic","name":"number"},{"type":"array","elementType":{"type":"intrinsic","name":"number"}},{"type":"array","elementType":{"type":"intrinsic","name":"number"}},{"type":"array","elementType":{"type":"intrinsic","name":"number"}}]}},{"id":37,"name":"edge","kind":4194304,"kindString":"Type alias","flags":{},"sources":[{"fileName":"functions.ts","line":22,"character":9}],"type":{"type":"tuple","elements":[{"type":"intrinsic","name":"number"},{"type":"intrinsic","name":"number"}]}},{"id":39,"name":"face","kind":4194304,"kindString":"Type alias","flags":{},"sources":[{"fileName":"functions.ts","line":24,"character":9}],"type":{"type":"tuple","elements":[{"type":"array","elementType":{"type":"intrinsic","name":"number"}},{"type":"array","elementType":{"type":"intrinsic","name":"number"}}]}},{"id":35,"name":"triangle","kind":4194304,"kindString":"Type alias","flags":{},"sources":[{"fileName":"functions.ts","line":20,"character":13}],"type":{"type":"tuple","elements":[{"type":"intrinsic","name":"number"},{"type":"intrinsic","name":"number"},{"type":"intrinsic","name":"number"}]}},{"id":36,"name":"vertex","kind":4194304,"kindString":"Type alias","flags":{},"sources":[{"fileName":"functions.ts","line":21,"character":11}],"type":{"type":"intrinsic","name":"number"}},{"id":38,"name":"wire","kind":4194304,"kindString":"Type alias","flags":{},"sources":[{"fileName":"functions.ts","line":23,"character":9}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"number"}}},{"id":49,"name":"__merge__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":50,"name":"__merge__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Merges the second model into the first model. The geometry, attribues, and groups are all merged.\nIf the models contain contain groups with the same names, then the groups will be merged."},"parameters":[{"id":51,"name":"model1","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model to merge into."},"type":{"type":"reference","name":"model","id":18}},{"id":52,"name":"model2","kind":32768,"kindString":"Parameter","flags":{},"comment":{"text":"The model to merge from    .\n"},"type":{"type":"reference","name":"model","id":18}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"functions.ts","line":126,"character":25}]},{"id":41,"name":"__new__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":42,"name":"__new__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Creates a new empty model.","returns":"New model empty.\n"},"type":{"type":"reference","name":"model","id":18}}],"sources":[{"fileName":"functions.ts","line":71,"character":23}]},{"id":46,"name":"__postprocess__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":47,"name":"__postprocess__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"A function to postprocess the model, after it enters the node."},"parameters":[{"id":48,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"reference","name":"model","id":18}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"functions.ts","line":114,"character":31}]},{"id":43,"name":"__preprocess__","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":44,"name":"__preprocess__","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"A function to preprocess the model, before it enters the node.\nIn cases where there is more than one model connected to a node,\nthe preprocess function will be called before the merge function."},"parameters":[{"id":45,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"reference","name":"model","id":18}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"functions.ts","line":105,"character":30}]},{"id":53,"name":"_addAttribs","kind":64,"kindString":"Function","flags":{},"signatures":[{"id":54,"name":"_addAttribs","kind":4096,"kindString":"Call signature","flags":{},"parameters":[{"id":55,"name":"attribs1","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}},{"id":56,"name":"attribs2","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"array","elementType":{"type":"reference","name":"attrib","id":6}}},{"id":57,"name":"size1","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"intrinsic","name":"number"}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"functions.ts","line":182,"character":20}]},{"id":58,"name":"_addKeysValues","kind":64,"kindString":"Function","flags":{},"signatures":[{"id":59,"name":"_addKeysValues","kind":4096,"kindString":"Call signature","flags":{},"parameters":[{"id":60,"name":"kv1","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"reflection","declaration":{"id":61,"name":"__type","kind":65536,"kindString":"Type literal","flags":{},"children":[{"id":62,"name":"keys","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":204,"character":34}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"number"}}},{"id":63,"name":"values","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":204,"character":51}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}}}],"groups":[{"title":"Variables","kind":32,"children":[62,63]}],"sources":[{"fileName":"functions.ts","line":204,"character":28}]}}},{"id":64,"name":"kv2","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"reflection","declaration":{"id":65,"name":"__type","kind":65536,"kindString":"Type literal","flags":{},"children":[{"id":66,"name":"keys","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":204,"character":69}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"number"}}},{"id":67,"name":"values","kind":32,"kindString":"Variable","flags":{},"sources":[{"fileName":"functions.ts","line":204,"character":86}],"type":{"type":"array","elementType":{"type":"intrinsic","name":"any"}}}],"groups":[{"title":"Variables","kind":32,"children":[66,67]}],"sources":[{"fileName":"functions.ts","line":204,"character":64}]}}}],"type":{"type":"intrinsic","name":"void"}}],"sources":[{"fileName":"functions.ts","line":204,"character":23}]},{"id":68,"name":"addData","kind":64,"kindString":"Function","flags":{"isExported":true},"signatures":[{"id":69,"name":"addData","kind":4096,"kindString":"Call signature","flags":{},"comment":{"shortText":"Creates a new model and populates the model with data.","returns":"New model if successful, null if unsuccessful or on error.\n"},"parameters":[{"id":70,"name":"__model__","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"intrinsic","name":"any"}},{"id":71,"name":"model","kind":32768,"kindString":"Parameter","flags":{},"type":{"type":"intrinsic","name":"any"}}],"type":{"type":"intrinsic","name":"any"}}],"sources":[{"fileName":"functions.ts","line":228,"character":23}]}],"groups":[{"title":"Enumerations","kind":4,"children":[2]},{"title":"Interfaces","kind":256,"children":[6,18,12]},{"title":"Type aliases","kind":4194304,"children":[40,37,39,35,36,38]},{"title":"Functions","kind":64,"children":[49,41,46,43,53,58,68]}],"sources":[{"fileName":"functions.ts","line":1,"character":0}]},{"id":94,"name":"\"index\"","kind":1,"kindString":"External module","flags":{"isExported":true},"originalName":"C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/index.ts","sources":[{"fileName":"index.ts","line":1,"character":0}]}],"groups":[{"title":"External modules","kind":1,"children":[72,78,83,1,94]}]};
 
 /***/ }),
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IModule, IFunction } from '@models/procedure';
 import { IArgument } from '@models/code';
 //import * as doc from '@assets/typedoc-json/doc.json';
-var doc = require('@assets/typedoc-json/doc.json');
+const doc = require('@assets/typedoc-json/doc.json');
 
 import * as Modules from '@modules';
 

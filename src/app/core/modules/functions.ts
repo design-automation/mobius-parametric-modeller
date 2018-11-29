@@ -7,57 +7,122 @@
 //  Enums, Types, and Interfaces
 //  ===============================================================================================================
 
-//enums
+// enums
 
-enum data_types {
-    Int = "Int",
-    Float = "Float",
-    String = "String"
+enum EAttribDataTypeStrs {
+    Int = 'Int',
+    Float = 'Float',
+    String = 'String'
 }
 
 // types
 
-type triangle = [number, number, number]; //[position, position, position]
-type vertex = number; // positions
-type edge = [number, number]; // [vertex, vertex]
-type wire = number[]; //[edge, edge,....]
-type face = [number[], number[]]; // [[wire, ....], [triangle, ...]]
-type collection = [number, number[], number[], number[]]; // [parent, [vertex, ...], [wire, ...], [face, ....]]
+type TTriangle = [number, number, number]; // [position, position, position]
+type TVertex = number; // positions
+type TEdge = [number, number]; // [vertex, vertex]
+type TWire = number[]; // [edge, edge,....]
+type TFace = [number[], number[]]; // [[wire, ....], [triangle, ...]]
+type TCollection = [number, number[], number[], number[]]; // [parent, [vertex, ...], [wire, ...], [face, ....]]
+type TAttribDataTypes = String | String[] | number | number[];
+type TAttribValuesArr = Array<[number[], TAttribDataTypes]>;
 
 // interfaces
 
-interface attrib {
+interface IAttrib {
     name: string;
-    data_type: data_types;
+    data_type: EAttribDataTypeStrs;
     data_length: number;
-    keys: number[];
-    values: any[];
+    data: TAttribValuesArr;
 }
 
-interface positions_attrib extends attrib {
-    name: "coordinates";
-    data_type: data_types.Float;
+interface IPositionsAttrib extends IAttrib {
+    name: 'coordinates';
+    data_type: EAttribDataTypeStrs.Float;
     data_length: 3;
 }
 
-interface model {
+interface IModel {
     topology: {
-        triangles: triangle[];
-        vertices: vertex[];
-        edges: edge[];
-        wires: wire[];
-        faces: face[];
-        collections: collection[];
+        triangles: TTriangle[];
+        vertices: TVertex[];
+        edges: TEdge[];
+        wires: TWire[];
+        faces: TFace[];
+        collections: TCollection[];
     };
     attributes: {
-        positions: positions_attrib;
-        vertices: attrib[];
-        edges: attrib[];
-        wires: attrib[];
-        faces: attrib[];
-        collections: attrib[];
-    }
+        positions: [IPositionsAttrib, ...Array<IAttrib>];
+        vertices: IAttrib[];
+        edges: IAttrib[];
+        wires: IAttrib[];
+        faces: IAttrib[];
+        collections: IAttrib[];
+    };
 }
+
+//  ===============================================================================================================
+//  Helper Classes
+//  ===============================================================================================================
+
+/**
+ * A bi-directional map that stores many-to-one key value mappings.
+ * Both the keys and values must be unique.
+ */
+class BiMap<V> {
+    private readonly kv_map = new Map<number, V>();
+    private readonly vk_map = new Map<V, number[]>();
+
+    constructor(data: Array<[number[], V]>) {
+        data.forEach(keys_value => {
+            this.vk_map.set(keys_value[1], keys_value[0]);
+            keys_value[0].forEach(key => this.kv_map.set(key, keys_value[1]));
+        });
+
+    }
+
+    public set(key: number, value: V): void {
+        if (!this.vk_map.has(value)) {
+            this.vk_map.set(value, [key]);
+        } else {
+            if (this.vk_map.get(value).indexOf(key) === -1) {
+                this.vk_map.get(value).push(key);
+            }
+        }
+        this.kv_map.set(key, value);
+    }
+
+    public getValue(key: number): V {
+      return this.kv_map.get(key);
+    }
+
+    public getKeys(value: V): number[] {
+      return this.vk_map.get(value);
+    }
+
+    public hasKey(key: number): boolean {
+        return this.kv_map.has(key);
+    }
+
+    public hasValue(value: V): boolean {
+        return this.vk_map.has(value);
+    }
+
+    public numKeys(): number {
+        return this.kv_map.size;
+    }
+
+    public numValues(): number {
+        return this.vk_map.size;
+    }
+
+    public getData(): Array<[V, number[]]> {
+        return Array.from(this.vk_map);
+    }
+
+    public addData(data: Array<[number[], V]>): void {
+        data.forEach( keys_value => keys_value[0].forEach( key => this.set(key, keys_value[1])));
+    }
+  }
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -68,9 +133,9 @@ interface model {
  *
  * @returns New model empty.
  */
-export function __new__(): model {
+export function __new__(): IModel {
     return {
-        topology:{
+        topology: {
             triangles: [],
             vertices: [],
             edges: [],
@@ -78,21 +143,20 @@ export function __new__(): model {
             faces: [],
             collections: []
         },
-        attributes:{
-            positions: {
-                name: "coordinates",
-                data_type: data_types.Float,
+        attributes: {
+            positions: [{
+                name: 'coordinates',
+                data_type: EAttribDataTypeStrs.Float,
                 data_length: 3,
-                keys: [],
-                values: []
-            },
+                data: []
+            }],
             vertices: [],
             edges: [],
             wires: [],
             faces: [],
             collections: []
         }
-    }
+    };
 }
 
 /**
@@ -102,7 +166,7 @@ export function __new__(): model {
  *
  * @param model The model to preprocess.
  */
-export function __preprocess__(__model__: model): void {
+export function __preprocess__(__model__: IModel): void {
     // TODO
 }
 
@@ -111,7 +175,7 @@ export function __preprocess__(__model__: model): void {
  *
  * @param model The model to postprocess.
  */
-export function __postprocess__(__model__: model): void {
+export function __postprocess__(__model__: IModel): void {
     // TODO
     // Remove all the undefined values for the arrays
 }
@@ -123,50 +187,51 @@ export function __postprocess__(__model__: model): void {
  * @param model1 The model to merge into.
  * @param model2 The model to merge from    .
  */
-export function __merge__(model1: model, model2: model): void {
+export function __merge__(model1: IModel, model2: IModel): void {
 
     // Get the lengths of data arrays in model1, required later
-    let num_positions: number = model2.attributes.positions.keys.length;
-    let num_triangles: number = model2.topology.triangles.length;
-    let num_vertices: number = model2.topology.vertices.length;
-    let num_edges: number = model2.topology.edges.length;
-    let num_wires: number = model2.topology.wires.length;
-    let num_faces: number = model2.topology.faces.length;
-    let num_collections: number = model2.topology.collections.length;
+    const poistions_data: BiMap<TAttribDataTypes> = new BiMap(model1.attributes.positions[0].data);
+    const num_positions: number = poistions_data.numKeys();
+    const num_triangles: number = model1.topology.triangles.length;
+    const num_vertices: number = model1.topology.vertices.length;
+    const num_edges: number = model1.topology.edges.length;
+    const num_wires: number = model1.topology.wires.length;
+    const num_faces: number = model1.topology.faces.length;
+    const num_collections: number = model1.topology.collections.length;
 
     // Add triangles from model2 to model1
-    const new_triangles: triangle[] = model2.topology.triangles.map(t => t.map( p => p + num_positions) as triangle);
+    const new_triangles: TTriangle[] = model2.topology.triangles.map(t => t.map( p => p + num_positions) as TTriangle);
     model1.topology.triangles = model1.topology.triangles.concat( new_triangles );
 
     // Add vertices from model2 to model1
-    const new_vertices: vertex[] = model2.topology.vertices.map(p => p + num_positions as vertex);
+    const new_vertices: TVertex[] = model2.topology.vertices.map(p => p + num_positions as TVertex);
     model1.topology.vertices = model1.topology.vertices.concat( new_vertices );
 
     // Add edges from model2 to model1
-    const new_edges: edge[] = model2.topology.edges.map(e => e.map( v => v + num_vertices) as edge);
+    const new_edges: TEdge[] = model2.topology.edges.map(e => e.map( v => v + num_vertices) as TEdge);
     model1.topology.edges = model1.topology.edges.concat( new_edges );
 
     // Add wires from model2 to model1
-    const new_wires: wire[] = model2.topology.wires.map(w => w.map( e => e + num_edges) as wire);
+    const new_wires: TWire[] = model2.topology.wires.map(w => w.map( e => e + num_edges) as TWire);
     model1.topology.wires = model1.topology.wires.concat( new_wires );
 
     // Add faces from model2 to model1
-    const new_faces: face[] = model2.topology.faces.map(f => [
+    const new_faces: TFace[] = model2.topology.faces.map(f => [
         f[0].map( w => w + num_wires),
         f[1].map( t => t + num_triangles)
-    ] as face);
+    ] as TFace);
     model1.topology.faces = model1.topology.faces.concat( new_faces );
     // Add collections from model2 to model1
-    const new_collections: collection[] = model2.topology.collections.map(c => [
+    const new_collections: TCollection[] = model2.topology.collections.map(c => [
         c[0] === -1 ? -1 : c[0] + num_collections,
         c[1].map( v => v + num_vertices),
         c[2].map( w => w + num_wires),
         c[3].map( f => f + num_faces)
-    ] as collection);
+    ] as TCollection);
     model1.topology.collections = model1.topology.collections.concat( new_collections );
 
     // Add  attributes from model2 to model1
-    _addKeysValues(model1.attributes.positions, model2.attributes.positions);
+    _addAttribs(model1.attributes.positions, model2.attributes.positions, num_positions);
     _addAttribs(model1.attributes.vertices, model2.attributes.vertices, num_vertices);
     _addAttribs(model1.attributes.edges, model2.attributes.edges, num_edges);
     _addAttribs(model1.attributes.wires, model2.attributes.wires, num_wires);
@@ -178,40 +243,25 @@ export function __merge__(model1: model, model2: model): void {
 
 /*
  * Helper function that adds attributes from model2 to model1.
+ * TODO: move this function into a seperate module
  */
-function _addAttribs(attribs1: attrib[], attribs2:attrib[], size1: number): void {
+function _addAttribs(attribs1: IAttrib[], attribs2: IAttrib[], offset: number): void {
+    // create a map of all teh existing attributes
     const attribs_map: Map<string, number> = new Map();
     attribs1.forEach((attrib, idx) => {
         attribs_map[attrib.name + attrib.data_type + attrib.data_length] = attrib;
     });
+    // for each new attribute
     attribs2.forEach(attrib2 => {
+        attrib2.data.map( item => [item[0].map(i => i + offset), item[1]]);
         const attrib1 = attribs_map[attrib2.name + attrib2.data_type + attrib2.data_length];
         if (attrib1 === undefined) {
-            attrib2.keys = Array(size1).fill(-1).concat(attrib2.keys);
             attribs1.push( attrib2 );
-        } else{
-            _addKeysValues(attrib1, attrib2);
+        } else {
+            const attrib1_data: BiMap<TAttribDataTypes> = new BiMap(attrib1.data);
+            attrib1_data.addData(attrib2.data);
+            attrib1.data = attrib1_data.getData();
         }
-    });
-}
-
-/*
- * Helper function that adds values, updates keys.
- * The values are all assumed to be unique.
- * Values are added from the values to array to the values1 array is the are unique.
- * New keys are added to the keys1 array.
- */
-function _addKeysValues(kv1: {keys:number[], values:any[]}, kv2:{keys:number[], values:any[]}): void {
-    const values_map: Map<number, number> = new Map();
-    kv2.values.forEach( (val, idx) => {
-        let idx_new: number = kv1.values.indexOf(val);
-        if (idx_new === -1){
-            idx_new = kv1.values.push(val) - 1;
-        }
-        values_map[idx] = idx_new;
-    });
-    kv2.keys.forEach( idx => {
-        kv1.keys.push(values_map[idx]);
     });
 }
 

@@ -18,8 +18,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "typedoc":"typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
-    "moduleDocs":"typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules"
+    "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
+    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules"
   },
   "private": true,
   "dependencies": {
@@ -70,7 +70,7 @@
     "node-sass": "^4.10.0",
     "protractor": "^5.3.1",
     "ts-node": "^6.0.1",
-    "tslint": "^5.9.1",
+    "tslint": "^5.11.0",
     "typescript": "^3.1.1"
   }
 }

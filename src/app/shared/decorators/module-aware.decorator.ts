@@ -75,13 +75,18 @@ export function ModuleDocAware(constructor: Function) {
             for (const func of mod.children) {
                 const fn = {};
                 fn['name'] = func.name;
-                fn['module'] = modName;
-                fn['description'] = func['signatures'][0].comment.shortText;
-                for (const fnTag of func['signatures'][0].comment.tags) {
-                    if (fnTag.tag === 'summary') { fn['summary'] = fnTag.text.trim(); }
+                if (!func['signatures']) { continue; }
+                if (func['signatures'][0].comment) {
+                    const cmmt = func['signatures'][0].comment;
+                    fn['description'] = cmmt.shortText;
+                    if (cmmt.tags) {
+                        for (const fnTag of cmmt.tags) {
+                            if (fnTag.tag === 'summary') { fn['summary'] = fnTag.text; }
+                        }
+                    }
+                    fn['returns'] = cmmt.returns;
+                    if (fn['returns']) { fn['returns'] = fn['returns'].trim(); }
                 }
-                fn['returns'] = func['signatures'][0].comment.returns;
-                if (fn['returns']) { fn['returns'] = fn['returns'].trim(); }
                 fn['parameters'] = [];
                 if (func['signatures'][0].parameters) {
                     for (const param of func['signatures'][0].parameters) {
@@ -96,10 +101,14 @@ export function ModuleDocAware(constructor: Function) {
                         const pr = {};
 
                         pr['name'] = param.name;
-                        pr['description'] = param.comment.shortText || param.comment.text;
+                        if (param.comment) {
+                            pr['description'] = param.comment.shortText || param.comment.text;
+                        }
                         if (param.type.type === 'array') {
                             pr['type'] = `${param.type.elementType.name}[]`;
                         } else if (param.type.type === 'intrinsic') {
+                            pr['type'] = param.type.name;
+                        } else if (param.type.type === 'reference') {
                             pr['type'] = param.type.name;
                         } else {
                             /**

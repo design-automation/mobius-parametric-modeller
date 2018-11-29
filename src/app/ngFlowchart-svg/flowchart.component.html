@@ -34,7 +34,7 @@
                   
 
         <!-- wires => edge.component -->
-        <g edge *ngFor="let edge of data.edges; let edge_index = index" 
+        <g edge *ngFor="let edge of dataService.flowchart.edges; let edge_index = index" 
         [edge]='edge'
         [inputOffset]='inputOffset'
         [outputOffset]='outputOffset'
@@ -45,7 +45,7 @@
         <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
 
         <!-- nodes => node.component -->
-        <g node *ngFor="let node of data.nodes; let node_index = index" 
+        <g node *ngFor="let node of dataService.flowchart.nodes; let node_index = index" 
         id='flw_node_{{node_index}}'
         [node]='node' 
         [selected]='isSelected(node_index)'

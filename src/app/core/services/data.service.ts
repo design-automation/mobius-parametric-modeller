@@ -16,17 +16,18 @@ export class DataService {
 
     private static _selected = 0;
 
-        get file() { return DataService._data; }
-        set file(data: IMobius) {
-                DataService._data = <IMobius>{
-                        name: data.name,
-                        author: data.author,
-                        flowchart: data.flowchart,
-                        last_updated: data.last_updated,
-                        version: data.version
-                };
-        }
+    get file() { return DataService._data; }
+    set file(data: IMobius) {
+            DataService._data = <IMobius>{
+                    name: data.name,
+                    author: data.author,
+                    flowchart: data.flowchart,
+                    last_updated: data.last_updated,
+                    version: data.version
+            };
+    }
 
-        get flowchart(): IFlowchart { return DataService._data.flowchart; }
-        get node(): INode { return DataService._data.flowchart.nodes[DataService._selected]; }
+    get flowchart(): IFlowchart { return DataService._data.flowchart; }
+    get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
+
 }

@@ -6,6 +6,7 @@
 
                 <!-- top left tab menu  -->
                 <div class="tab">
+                    <button class='btn-tab' [class.active]='activeView=="gallery"' (click)='updateView("gallery")'>Gallery</button>
                     <button class='btn-tab' [class.active]='activeView=="publish"' (click)='updateView("publish")'>Publish</button>
                     <button class='btn-tab' [class.active]='activeView=="flowchart"' (click)='updateView("flowchart")'>Flowchart</button>
                     <!--
@@ -24,7 +25,7 @@
                 <div class="dropmenu">
                     <!-- execute button -->
                     <div>
-                        <execute [flowchart]='flowchart'></execute>
+                        <execute [flowchart]='dataService.flowchart'></execute>
                     </div>
                     <!-- dropdown menu for new file, save file, loaf file-->
                     <div>

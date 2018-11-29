@@ -74,7 +74,7 @@ export class CodeUtils {
                 for (const arg of args.slice(1)) {
                     if (arg.name === _parameterTypes.input) {
                         let val = arg.value || arg.default;
-                        if (prod.meta.inputMode === InputType.URL) {
+                        if (prod.meta.inputMode.toString() === InputType.URL.toString() ) {
                             const p = new Promise((resolve) => {
                                 const request = new XMLHttpRequest();
                                 request.open('GET', arg.value || arg.default);
@@ -84,7 +84,7 @@ export class CodeUtils {
                                 request.send();
                             });
                             val = await p;
-                        } else if (prod.meta.inputMode === InputType.File) {
+                        } else if (prod.meta.inputMode.toString() === InputType.File.toString()) {
                             const p = new Promise((resolve) => {
                                 const reader = new FileReader();
                                 reader.onload = function() {
@@ -199,7 +199,7 @@ export class CodeUtils {
     static getInputValue(inp: IPortInput, node: INode): Promise<string> {
         let input: any;
         if (node.type === 'start' || inp.edges.length === 0) {
-            input = Model.__new__();
+            input = _parameterTypes['newFn']();
         } else {
             input = CodeUtils.mergeInputs(inp.edges.map(edge => edge.source.value));
             /*

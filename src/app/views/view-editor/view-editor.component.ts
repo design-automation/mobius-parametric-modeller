@@ -2,6 +2,7 @@ import { Component, Input, EventEmitter, Output} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
+import { DataService } from '@services';
 
 @Component({
   selector: 'view-editor',
@@ -9,8 +10,11 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
   styleUrls: ['./view-editor.component.scss']
 })
 export class ViewEditorComponent {
+    /*
     @Input() flowchart: IFlowchart;
     @Input() node: INode;
+    */
+
     @Output() imported = new EventEmitter();
     @Output() delete_Function = new EventEmitter();
     @Output() helpText = new EventEmitter();
@@ -18,43 +22,42 @@ export class ViewEditorComponent {
 
     private copyCheck = false;
 
-    constructor() {
+    constructor(private dataService: DataService) {
     }
 
     // add a procedure
     add(data: {type: ProcedureTypes, data: IFunction}): void {
-      NodeUtils.add_procedure(this.node, data.type, data.data);
+      NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
     }
-
 
     // delete a procedure
     deleteChild(index: number): void {
-      this.node.procedure.splice(index, 1);
-      NodeUtils.deselect_procedure(this.node);
+      this.dataService.node.procedure.splice(index, 1);
+      NodeUtils.deselect_procedure(this.dataService.node);
     }
 
     // select a procedure
     selectProcedure(event, line): void {
-      NodeUtils.select_procedure(this.node, event.prod, event.ctrl || false);
+      NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false);
     }
 
     // copy selected procedures
     copyProd() {
       if (!this.copyCheck) { return; }
-      console.log('copying', this.node.state.procedure);
-      this.copiedProd = this.node.state.procedure;
+      console.log('copying', this.dataService.node.state.procedure);
+      this.copiedProd = this.dataService.node.state.procedure;
     }
 
     // cut selected procedures
     cutProd(event) {
       if (!this.copyCheck || document.activeElement.nodeName === 'INPUT') { return; }
-      console.log('cutting', this.node.state.procedure);
-      this.copiedProd = this.node.state.procedure;
+      console.log('cutting', this.dataService.node.state.procedure);
+      this.copiedProd = this.dataService.node.state.procedure;
       let parentArray;
       for (const prod of this.copiedProd) {
         if (prod.parent) {
           parentArray = prod.parent.children;
-        } else { parentArray = this.node.procedure; }
+        } else { parentArray = this.dataService.node.procedure; }
 
         for (let i = 0; i < parentArray.length; i++ ) {
           if (parentArray[i] === prod) {
@@ -63,36 +66,36 @@ export class ViewEditorComponent {
           }
         }
       }
-      NodeUtils.deselect_procedure(this.node);
+      NodeUtils.deselect_procedure(this.dataService.node);
     }
 
     // paste copied procedures
     pasteProd(event) {
       if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() !== 'INPUT') {
-        const pastingPlace = this.node.state.procedure[0];
+        const pastingPlace = this.dataService.node.state.procedure[0];
         if (pastingPlace === undefined) {
           for (let i = 0; i < this.copiedProd.length; i++) {
             console.log('pasting', this.copiedProd[i].ID);
-            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
-            this.node.state.procedure[0].selected = false;
-            this.node.state.procedure = [];
+            NodeUtils.paste_procedure(this.dataService.node, this.copiedProd[i]);
+            this.dataService.node.state.procedure[0].selected = false;
+            this.dataService.node.state.procedure = [];
           }
         } else if (pastingPlace.children) {
           for (let i = 0; i < this.copiedProd.length; i++) {
             console.log('pasting', this.copiedProd[i].ID);
-            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
-            this.node.state.procedure[0].selected = false;
+            NodeUtils.paste_procedure(this.dataService.node, this.copiedProd[i]);
+            this.dataService.node.state.procedure[0].selected = false;
             pastingPlace.selected = true;
-            this.node.state.procedure = [pastingPlace];
+            this.dataService.node.state.procedure = [pastingPlace];
           }
 
         } else {
           for (let i = this.copiedProd.length - 1; i >= 0; i --) {
             console.log('pasting', this.copiedProd[i].ID);
-            NodeUtils.paste_procedure(this.node, this.copiedProd[i]);
-            this.node.state.procedure[0].selected = false;
+            NodeUtils.paste_procedure(this.dataService.node, this.copiedProd[i]);
+            this.dataService.node.state.procedure[0].selected = false;
             pastingPlace.selected = true;
-            this.node.state.procedure = [pastingPlace];
+            this.dataService.node.state.procedure = [pastingPlace];
           }
         }
         // this.copiedProd = undefined;
@@ -112,15 +115,15 @@ export class ViewEditorComponent {
     // import a flowchart as function
     importFunction(event) {
       for (const func of event) {
-        this.flowchart.functions.push(func);
+        this.dataService.flowchart.functions.push(func);
       }
     }
 
     // delete an imported function
     deleteFunction(event) {
-        for (let i = 0; i < this.flowchart.functions.length; i++) {
-            if (this.flowchart.functions[i] === event) {
-                this.flowchart.functions.splice(i, 1);
+        for (let i = 0; i < this.dataService.flowchart.functions.length; i++) {
+            if (this.dataService.flowchart.functions[i] === event) {
+                this.dataService.flowchart.functions.splice(i, 1);
                 break;
             }
         }

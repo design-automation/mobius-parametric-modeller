@@ -17,7 +17,7 @@
                 <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
                 <div style="display: none;">
                     <file-new (create)='updateFile($event)'></file-new>
-                    <file-save [file]='file'></file-save>
+                    <file-save [file]='dataService.file'></file-save>
                     <file-load (loaded)='updateFile($event)'></file-load>        
                 </div>
 

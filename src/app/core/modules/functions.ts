@@ -158,7 +158,7 @@ export function __merge__(model1: model, model2: model): void {
     model1.topology.faces = model1.topology.faces.concat( new_faces );
     // Add collections from model2 to model1
     const new_collections: collection[] = model2.topology.collections.map(c => [
-        c[0] + num_collections,
+        c[0] === -1 ? -1 : c[0] + num_collections,
         c[1].map( v => v + num_vertices),
         c[2].map( w => w + num_wires),
         c[3].map( f => f + num_faces)

@@ -66,9 +66,9 @@ export class ViewerContainerComponent implements OnChanges, OnInit, OnDestroy {
 
         if ( this.views[ this.activeView.name ] === undefined) {
             this.views[ this.activeView.name ] = this.createView(view);
-        } else{
-            this.updateValue();
         }
+
+        this.updateValue();
 
         this.vc.detach();
         this.vc.insert( this.views[ this.activeView.name ].hostView );

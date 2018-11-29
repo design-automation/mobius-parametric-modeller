@@ -3,11 +3,11 @@ import { INode } from '@models/node';
 
 @Component({
   selector: 'panel-header',
-  template:  `<div class='panel__header'> 
+  template:  `<div class='panel__header'>
                     <h3>{{node?.name}} // {{title}}</h3>
               </div>`,
-  styles: [ 
-            `.panel__header{ 
+  styles: [
+            `.panel__header{
                 font-weight: 600;
                 border: 2px solid #222;
                 border-radius: 4px;
@@ -18,10 +18,10 @@ import { INode } from '@models/node';
              }`
           ]
 })
-export class HeaderComponent{
+export class HeaderComponent {
 
-    @Input() node: INode; 
+    @Input() node: INode;
     @Input() title: string;
 
-    constructor(){}
+    constructor() {}
 }

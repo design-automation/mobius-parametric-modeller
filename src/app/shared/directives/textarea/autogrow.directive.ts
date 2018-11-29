@@ -2,22 +2,22 @@ import { Directive, ElementRef, Input, Output, HostBinding, HostListener, EventE
 import * as CircularJSON from 'circular-json';
 
 @Directive({
-	selector: "[autogrow]"
+    selector: '[autogrow]'
 })
-export class autogrowDirective { 
+export class AutogrowDirective {
 
-    constructor(private el: ElementRef){ 
-	}
-    
-	@HostListener("keyup")
-	onKeyUp() {
-        this.el.nativeElement.style.height = "5px";
-        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight)+"px";
-	}
-	
-	@HostListener("keydown")
-	onKeyDown() {
-        this.el.nativeElement.style.height = "5px";
-        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight)+"px";
-	}
+    constructor(private el: ElementRef) {
+    }
+
+    @HostListener('keyup')
+    onKeyUp() {
+        this.el.nativeElement.style.height = '5px';
+        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight) + 'px';
+    }
+
+    @HostListener('keydown')
+    onKeyDown() {
+        this.el.nativeElement.style.height = '5px';
+        this.el.nativeElement.style.height = (this.el.nativeElement.scrollHeight) + 'px';
+    }
 }

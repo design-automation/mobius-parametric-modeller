@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-//import { gsConstructor } from '@modules';
+import { Component, Input, OnInit, DoCheck } from '@angular/core';
 
 @Component({
   selector: 'text-viewer',
@@ -20,20 +19,20 @@ import { Component, Input } from '@angular/core';
     font-family: arial;
   }`]
 })
-export class TextViewerComponent{
-    @Input() data; 
-    output : string;
+export class TextViewerComponent implements OnInit, DoCheck {
+    @Input() data;
+    output: string;
 
-    constructor(){ 
-      //console.log(`Text Viewer Created`); 
+    constructor() {
+      // console.log(`Text Viewer Created`);
     }
 
    ngOnInit() {
-    if (typeof this.data === 'number' || this.data === undefined){
+    if (typeof this.data === 'number' || this.data === undefined) {
       this.output = this.data;
-    } else if (typeof this.data === 'string'){
+    } else if (typeof this.data === 'string') {
       this.output = '"' + this.data + '"';
-    } else if (this.data.constructor === [].constructor){
+    } else if (this.data.constructor === [].constructor) {
       this.output = JSON.stringify(this.data);
     } else if (this.data.constructor === {}.constructor) {
       this.output = JSON.stringify(this.data);
@@ -41,16 +40,16 @@ export class TextViewerComponent{
     console.log('Unknown output type:', this.data);
       this.output = this.data;
     }
-  
-	}
+
+  }
 
 
-	ngDoCheck(){
-    if (typeof this.data === 'number' || this.data === undefined){
+  ngDoCheck() {
+    if (typeof this.data === 'number' || this.data === undefined) {
       this.output = this.data;
-    } else if (typeof this.data === 'string'){
+    } else if (typeof this.data === 'string') {
       this.output = '"' + this.data + '"';
-    } else if (this.data.constructor === [].constructor){
+    } else if (this.data.constructor === [].constructor) {
       this.output = JSON.stringify(this.data);
     } else if (this.data.constructor === {}.constructor) {
       this.output = JSON.stringify(this.data);
@@ -58,7 +57,7 @@ export class TextViewerComponent{
       console.log('Unknown output type:', this.data);
       this.output = this.data;
     }
-	}
+  }
 
 
 

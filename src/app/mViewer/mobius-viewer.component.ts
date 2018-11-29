@@ -1,73 +1,89 @@
-import { Component, Injector, Input, 
-    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, ComponentRef } from '@angular/core';
+import { Component, Injector, Input,
+    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { INode } from '@models/node';
 import { IView , gs_default, cesium_default} from './view.interface';
 import { Viewers } from './viewers.config';
+import { EventEmitter } from 'events';
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: 'mviewer',
-    templateUrl:  'mobius-viewer.component.html',    
+    templateUrl:  'mobius-viewer.component.html',
     styleUrls: ['mobius-viewer.component.scss']
 })
-export class ViewerContainerComponent implements OnDestroy {
+export class ViewerContainerComponent implements OnChanges, OnInit, OnDestroy {
 
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
     @Input() data: any;
+    @Input() helpView: any;
+    currentHelpView: any;
 
-    constructor(private injector: Injector, private r: ComponentFactoryResolver) {}
+    constructor(private injector: Injector, private r: ComponentFactoryResolver) {
+
+    }
 
     private views = [];
     private activeView: IView;
     Viewers = Viewers;
 
-    ngOnInit(){
+    ngOnInit() {
         this.activeView = this.Viewers[0];
         this.updateView( this.activeView );
     }
 
-    ngOnDestroy(){
-        console.log('onDestroy')
-        for (let view of this.views){
+    ngOnDestroy() {
+        console.log('onDestroy');
+        for (const view of this.views) {
             view.destroy();
         }
     }
 
-    ngOnChanges(){
-        this.updateValue();
+    ngOnChanges() {
+        if (this.currentHelpView !== this.helpView) {
+            let view;
+            for (const v of this.Viewers) {
+                if (v.name === 'Help') { view = v; }
+            }
+            this.currentHelpView = this.helpView;
+            this.updateView(view);
+        } else { this.updateValue(); }
     }
 
-    createView(view: IView){
-        let component = view.component;
-        let factory = this.r.resolveComponentFactory(component);
-        let componentRef = factory.create(this.injector);
+    createView(view: IView) {
+        const component = view.component;
+        const factory = this.r.resolveComponentFactory(component);
+        const componentRef = factory.create(this.injector);
+        /*
         if (view.name != 'Console'){
             componentRef.instance["data"] = this.data;
-        } 
+        }
+        */
         return componentRef;
     }
 
-    updateView(view: IView): void{
+    updateView(view: IView): void {
         this.activeView = view;
 
-        if( this.views[ this.activeView.name ] == undefined){
+        if ( this.views[ this.activeView.name ] === undefined) {
             this.views[ this.activeView.name ] = this.createView(view);
-        } else{
-            this.updateValue();
         }
+
+        this.updateValue();
 
         this.vc.detach();
         this.vc.insert( this.views[ this.activeView.name ].hostView );
     }
 
-    updateValue(){
-        try{
-            let componentRef =  this.views[ this.activeView.name ]; 
-            if (this.activeView.name != 'Console'){
-                componentRef.instance["data"] = this.data;
-            } 
-        }
-        catch(ex){
-            //console.log(`Active View not defined`);
+    updateValue() {
+        try {
+            const componentRef =  this.views[ this.activeView.name ];
+            if (this.activeView.name === 'Help') {
+                componentRef.instance['output'] = this.currentHelpView;
+            } else if (this.activeView.name !== 'Console') {
+                componentRef.instance['data'] = this.data;
+            }
+        } catch (ex) {
+            // console.log(`Active View not defined`);
         }
     }
 }

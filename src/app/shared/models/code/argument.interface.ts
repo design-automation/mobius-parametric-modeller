@@ -1,7 +1,7 @@
-export interface IArgument{
-    name: string, 
-    default: any,
-    value: any,
-    min?: number,
-    max?: number
+export interface IArgument {
+    name: string;
+    default: any;
+    value: any;
+    min?: number;
+    max?: number;
 }

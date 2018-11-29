@@ -1,24 +1,24 @@
 import { IArgument } from '@models/code';
 import { PortType, InputType, OutputType } from './types';
 
-interface IPort extends IArgument{
+interface IPort extends IArgument {
     id: string;
-    type: PortType,
-    edges: any[],
-    parentNode: any
+    type: PortType;
+    edges: any[];
+    parentNode: any;
 }
 
-export interface IPortInput extends IPort{
-    type: PortType.Input,
+export interface IPortInput extends IPort {
+    type: PortType.Input;
     meta: {
-        mode: InputType, 
+        mode: InputType,
         opts: any
-    }
+    };
 }
 
-export interface IPortOutput extends IPort{
-    type: PortType.Output,
+export interface IPortOutput extends IPort {
+    type: PortType.Output;
     meta: {
-        mode: OutputType, 
-    }
+        mode: OutputType,
+    };
 }

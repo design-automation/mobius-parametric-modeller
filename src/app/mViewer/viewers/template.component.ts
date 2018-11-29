@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   styles: []
 })
 export class ThreeViewerComponent{
-    @Input() node; 
+    @Input() node;
 
     constructor(){ console.log(`___ Viewer Created`); }
 }

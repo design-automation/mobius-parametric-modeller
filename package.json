@@ -14,9 +14,10 @@
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-prod": "ng build --base-href=%npm_package_config_prod_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-server": "ng build --base-href='./'",
-    "build-deploy": "ng build --base-href 'https://design-automation.github.io/mobius-core/' && ngh",
+    "build-deploy": "ng build --base-href 'https://design-automation.github.io/mobius-parametric-modeller/' && ngh",
     "test": "ng test",
     "lint": "ng lint",
+    "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
     "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules"

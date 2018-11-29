@@ -19,19 +19,19 @@ import { INode } from '@models/node';
     border: none;
   }`]
 })
-export class ConsoleViewerComponent implements OnInit, DoCheck{
+export class ConsoleViewerComponent implements OnInit, DoCheck {
 
   text: string;
 
-  constructor(){ 
+  constructor() {
   }
 
-  ngOnInit(){
+  ngOnInit() {
     // @ts-ignore
     this.text = console.logs.join('\n---------------------------------------------------------\n');
   }
 
-  ngDoCheck(){
+  ngDoCheck() {
     // @ts-ignore
     this.text = console.logs.join('\n---------------------------------------------------------\n');
   }

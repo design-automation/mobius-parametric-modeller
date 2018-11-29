@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ViewerContainerComponent } from './mobius-viewer.component';
@@ -10,6 +10,7 @@ import { GSViewer } from './viewers/gsviewer/gsviewer.module';
 import {MobiusCesium} from './viewers/mobius-cesium/mobius-cesium.module';
 import { TextViewerComponent} from './viewers';
 import { ConsoleViewerComponent } from './viewers';
+import { ProcedureHelpComponent } from './viewers/procedure-help.component';
 //import { VisualiseComponent } from "./viewers/mobius-cesium/setting/visualise.component";
 //import { AttributesComponent } from "./viewers/mobius-cesium/setting/attributes.copmponent";
 
@@ -18,6 +19,7 @@ import { ConsoleViewerComponent } from './viewers';
     ViewerContainerComponent,
     TextViewerComponent,
     ConsoleViewerComponent,
+    ProcedureHelpComponent,
   ],
   exports: [ ViewerContainerComponent ],
   imports: [ CommonModule, 
@@ -31,5 +33,5 @@ import { ConsoleViewerComponent } from './viewers';
   providers: [ ]
 })
 export class MobiusViewerModule {
-    constructor () { }
+        constructor () { }
 }

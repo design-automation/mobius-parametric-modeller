@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'navigation',
   template: `<ul class='nav'>
-                <li class='link' *ngFor='let link of _links;' 
+                <li class='link' *ngFor='let link of _links;'
                       [class.active]='link.path == _router.url'
-                      [routerLink]="link.path" 
+                      [routerLink]="link.path"
                       >{{link.name}}</li>
               </ul>`,
   styles: [`
@@ -39,24 +39,24 @@ import { Router } from '@angular/router';
       }
   `],
 })
-export class NavigationComponent{
+export class NavigationComponent {
 
     _links = [
-      { path: '/about', 
+      { path: '/about',
         name: 'about'
       },
-      { path: '/gallery', 
+      { path: '/gallery',
         name: 'gallery'
       },
-      { path: '/publish', 
+      { path: '/publish',
         name: 'publish'
       },
-      { path: '/editor', 
+      { path: '/editor',
         name: 'editor'
       },
 
     ];
 
-    constructor(private _router: Router){ }
+    constructor(private _router: Router) { }
 
 }

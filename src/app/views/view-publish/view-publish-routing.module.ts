@@ -4,9 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { ViewPublishComponent } from './view-publish.component';
 
 const routes: Routes = [
-  {   
-    path: '', 
-    component: ViewPublishComponent, 
+  {
+    path: '',
+    component: ViewPublishComponent,
     children: [ ]
   }
 ];

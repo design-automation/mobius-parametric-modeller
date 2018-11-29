@@ -9,7 +9,7 @@ import { ViewPublishComponent } from './view-publish.component';
   declarations: [
     ViewPublishComponent
   ],
-  exports: [ 
+  exports: [
     ViewPublishComponent
   ],
   imports: [

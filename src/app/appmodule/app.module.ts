@@ -8,10 +8,9 @@ import { CoreModule } from '../core/core.module';
 // import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { ViewEditorModule } from '@views';
-import { ViewEditorComponent } from '@views';
-import { ViewPublishModule } from '@views';
-import { ViewPublishComponent } from '@views';
+import { ViewPublishComponent, ViewPublishModule,
+         ViewEditorComponent, ViewEditorModule,
+         ViewGalleryComponent, ViewGalleryModule } from '@views';
 import { SharedModule } from '@shared/shared.module';
 import { DataService } from '@services';
 import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
@@ -30,6 +29,7 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
         // FormsModule,
         // AppRoutingModule,
         // CoreModule,
+        ViewGalleryModule,
         ViewEditorModule,
         ViewPublishModule,
         SharedModule,
@@ -41,6 +41,7 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
         ViewEditorComponent,
         ViewPublishComponent,
         FlowchartComponent,
+        ViewGalleryComponent,
     ],
     providers: [ DataService ],
     bootstrap: [ AppComponent ]

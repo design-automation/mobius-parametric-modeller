@@ -68,7 +68,7 @@ interface IModel {
  * A bi-directional map that stores many-to-one key value mappings.
  * Both the keys and values must be unique.
  */
-class BiMap<V> {
+class BiMapManyToOne<V> {
     private readonly kv_map = new Map<number, V>();
     private readonly vk_map = new Map<V, number[]>();
 
@@ -190,7 +190,7 @@ export function __postprocess__(__model__: IModel): void {
 export function __merge__(model1: IModel, model2: IModel): void {
 
     // Get the lengths of data arrays in model1, required later
-    const poistions_data: BiMap<TAttribDataTypes> = new BiMap(model1.attributes.positions[0].data);
+    const poistions_data: BiMapManyToOne<TAttribDataTypes> = new BiMapManyToOne(model1.attributes.positions[0].data);
     const num_positions: number = poistions_data.numKeys();
     const num_triangles: number = model1.topology.triangles.length;
     const num_vertices: number = model1.topology.vertices.length;
@@ -258,7 +258,7 @@ function _addAttribs(attribs1: IAttrib[], attribs2: IAttrib[], offset: number): 
         if (attrib1 === undefined) {
             attribs1.push( attrib2 );
         } else {
-            const attrib1_data: BiMap<TAttribDataTypes> = new BiMap(attrib1.data);
+            const attrib1_data: BiMapManyToOne<TAttribDataTypes> = new BiMapManyToOne(attrib1.data);
             attrib1_data.addData(attrib2.data);
             attrib1.data = attrib1_data.getData();
         }

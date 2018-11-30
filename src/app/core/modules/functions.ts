@@ -1,5 +1,5 @@
-import * as gi from '../../../lib/geo-info/geo-info';
-import * as bm from '../../../lib/geo-info/bi-map';
+import * as gi from '../../../libs/geo-info/geo-info';
+import * as bm from '../../../libs/geo-info/bi-map';
 //  ===============================================================================================================
 //  Functions used by Mobius
 //  ===============================================================================================================
@@ -66,7 +66,7 @@ export function __postprocess__(__model__: gi.IModel): void {
 export function __merge__(model1: gi.IModel, model2: gi.IModel): void {
 
     // Get the lengths of data arrays in model1, required later
-    const poistions_data: bm.BiMapManyToOne<gi.TAttribDataTypes> = new bm.BiMapManyToOne(model1.attributes.positions[0].data);
+    const poistions_data: bm.BiMapManyToOne<gi.TAttribDataTypes> = new BiMapManyToOne.BiMapManyToOne(model1.attributes.positions[0].data);
     const num_positions: number = poistions_data.numKeys();
     const num_triangles: number = model1.topology.triangles.length;
     const num_vertices: number = model1.topology.vertices.length;
@@ -134,7 +134,7 @@ function _addAttribs(attribs1: gi.IAttrib[], attribs2: gi.IAttrib[], offset: num
         if (attrib1 === undefined) {
             attribs1.push( attrib2 );
         } else {
-            const attrib1_data: bm.BiMapManyToOne<gi.TAttribDataTypes> = new bm.BiMapManyToOne(attrib1.data);
+            const attrib1_data: bm.BiMapManyToOne<gi.TAttribDataTypes> = new BiMapManyToOne.BiMapManyToOne(attrib1.data);
             attrib1_data.addData(attrib2.data);
             attrib1.data = attrib1_data.getData();
         }

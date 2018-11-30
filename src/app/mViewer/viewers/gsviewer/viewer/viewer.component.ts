@@ -4,6 +4,7 @@ import { AngularSplitModule } from 'angular-split';
 import * as gs from "gs-json";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {NgxPaginationModule} from 'ngx-pagination';
+import * as bm from '../../../../../libs/geo-info/bi-map';
 
 @Component({
   selector: 'app-viewer',
@@ -243,15 +244,13 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     var normals = [];
     var colors = [];
     
-    const positions = this._model.attributes.positions;
-    const positions_values=positions.values;
-    const positions_keys=positions.keys;
-    let positions_ = []
-    positions_keys.forEach((v,k)=>{
-      positions_.push(positions_values[v])
+    // Convert the attribute data to a bi-map, then use it to get the position values
+    const positions_data = new bm.BiMapManyToOne<any>(this._model.attributes.positions[0].data);
+    let positions_ = [];
+    positions_data.keys().forEach(key => {
+        positions_.push(positions_data.getValue(key));
     });
     const positions_flat = [].concat(...positions_);
-
 
 
     const coordinates =this._model.attributes.positions.filter(attr=>attr.name==='coordinates');

@@ -26,6 +26,14 @@ export class BiMapManyToOne<V> {
         this.kv_map.set(key, value);
     }
 
+    public values(): Array<V> {
+        return Array.from(this.vk_map.keys());
+    }
+
+    public keys(): number[] {
+        return Array.from(this.kv_map.keys());
+    }
+
     public getValue(key: number): V {
       return this.kv_map.get(key);
     }

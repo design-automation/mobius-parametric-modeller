@@ -1,6 +1,5 @@
 import { GIModel } from '../../../libs/geo-info/GIModel';
 import { TCoords, EAttribDataTypeStrs } from '../../../libs/geo-info/json_data';
-import { ELevels } from '../../../libs/geo-info/GIAttribs';
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -13,7 +12,7 @@ import { ELevels } from '../../../libs/geo-info/GIAttribs';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs().addAttrib(ELevels.POSIS, 'coordinates', EAttribDataTypeStrs.FLOAT, 3);
+    model.attribs().addPosiAttrib('coordinates', EAttribDataTypeStrs.FLOAT, 3);
     return model;
 }
 
@@ -82,7 +81,7 @@ export function numPoints(__model__: GIModel): number {
  * @param __model__
  */
 export function numLinestrings(__model__: GIModel): number {
-    return __model__.geom().numPoints();
+    return __model__.geom().numLines();
 }
 /**
  *  Gets the number of polygons in the model.
@@ -98,7 +97,7 @@ export function numPolygons(__model__: GIModel): number {
  */
 export function addPosition(__model__: GIModel, coords: TCoords): number {
     const posi_i: number = __model__.geom().addPosition();
-    __model__.attribs().setAttribValue(ELevels.POSIS, 'coordinates', posi_i, coords);
+    __model__.attribs().setPosiAttribValue(posi_i, 'coordinates', coords);
     return posi_i;
 }
 /**

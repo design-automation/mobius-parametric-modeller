@@ -1,11 +1,11 @@
-import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData} from './json_data';
+import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoords} from './json_data';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
 
 /**
  * Enum of the 6 levels at which attribtes can be added.
  */
-export enum ELevels {
+enum ELevels {
     POSIS,
     VERTS,
     EDGES,
@@ -14,7 +14,7 @@ export enum ELevels {
     COLLS
 }
 /**
- * Class for all attribute methods.
+ * Class for attributes.
  */
 export class GIAttribs {
     private model: GIModel;
@@ -50,12 +50,12 @@ export class GIAttribs {
      * @param attribs_data The JSON data
      */
     public setData (attribs_data: IAttribsData): void {
-        attribs_data.positions.forEach( attrib => this.posis[attrib.name] = new GIAttribMap(attrib));
-        attribs_data.vertices.forEach( attrib => this.verts[attrib.name] = new GIAttribMap(attrib));
-        attribs_data.edges.forEach( attrib => this.edges[attrib.name] = new GIAttribMap(attrib));
-        attribs_data.wires.forEach( attrib => this.wires[attrib.name] = new GIAttribMap(attrib));
-        attribs_data.faces.forEach( attrib => this.faces[attrib.name] = new GIAttribMap(attrib));
-        attribs_data.collections.forEach( attrib => this.colls[attrib.name] = new GIAttribMap(attrib));
+        attribs_data.positions.forEach( attrib => this.posis.set(attrib.name, new GIAttribMap(attrib)));
+        attribs_data.vertices.forEach( attrib => this.verts.set(attrib.name, new GIAttribMap(attrib)));
+        attribs_data.edges.forEach( attrib => this.edges.set(attrib.name, new GIAttribMap(attrib)));
+        attribs_data.wires.forEach( attrib => this.wires.set(attrib.name, new GIAttribMap(attrib)));
+        attribs_data.faces.forEach( attrib => this.faces.set(attrib.name, new GIAttribMap(attrib)));
+        attribs_data.collections.forEach( attrib => this.colls.set(attrib.name, new GIAttribMap(attrib)));
     }
     /**
      * Returns one of the attribute maps.
@@ -64,7 +64,6 @@ export class GIAttribs {
     private _getLevel(level: ELevels): Map<string, GIAttribMap> {
         return [this.posis, this.verts, this.edges, this.wires, this.faces, this.colls][level];
     }
-
     /**
      * Adds data to this model from JSON data.
      * The existing data in the model is not deleted.
@@ -75,9 +74,9 @@ export class GIAttribs {
         function _addAttribsData(exist_attribs_map:  Map<string, GIAttribMap>, new_attribs_data: IAttribData[], offset: number): void {
             new_attribs_data.forEach( new_attrib_data => {
                 if (!exist_attribs_map.has(new_attrib_data.name)) {
-                    exist_attribs_map[new_attrib_data.name] = new GIAttribMap();
+                    exist_attribs_map.set(new_attrib_data.name, new GIAttribMap());
                 }
-                exist_attribs_map[new_attrib_data.name].addData(new_attrib_data, offset);
+                exist_attribs_map.get(new_attrib_data.name).addData(new_attrib_data, offset);
             });
         }
         _addAttribsData(this.posis, attribs_data.positions, this.model.geom().numPosis());
@@ -94,10 +93,11 @@ export class GIAttribs {
      * @param data_type The data type of the attribute.
      * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
-    public addAttrib(level: ELevels, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+    private _addAttrib(level: ELevels, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
         const attribs: Map<string, GIAttribMap> = this._getLevel(level);
         if (!attribs.has(name)) {
-            attribs[name] = new GIAttribMap({name: name, data_type: data_type, data_size: data_size, data: []});
+            const attrib: GIAttribMap = new GIAttribMap({name: name, data_type: data_type, data_size: data_size, data: []});
+            attribs.set(name, attrib);
         }
         return attribs[name];
     }
@@ -108,10 +108,10 @@ export class GIAttribs {
      * @param key
      * @param value
      */
-    public setAttribValue(level: ELevels, name: string, key: number, value: TAttribDataTypes): void {
+    private _setAttribValue(level: ELevels, index: number, name: string, value: TAttribDataTypes): void {
         const attribs: Map<string, GIAttribMap> = this._getLevel(level);
-        if (attribs[name] === undefined) { throw new Error('Attribute does not exist.'); }
-        attribs[name].set(key, value);
+        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
+        attribs.get(name).set(index, value);
     }
     /**
      * Gets a single attribute value.
@@ -120,9 +120,106 @@ export class GIAttribs {
      * @param key
      * @param value
      */
-    public getAttribValue(level: ELevels, name: string, key: number): TAttribDataTypes {
+    private _getAttribValue(level: ELevels, index: number, name: string): TAttribDataTypes {
         const attribs: Map<string, GIAttribMap> = this._getLevel(level);
-        if (attribs[name] === undefined) { throw new Error('Attribute does not exist.'); }
-        return attribs[name].get(key);
+        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
+        return attribs.get(name).get(index);
+    }
+    /**
+     * Get a list of all the coordinates.
+     * This returns two arrays, one with indexes, and another with values.
+     * For example, suppose the bimap contained  [  [[1,3], [2.3,4.5,6.7]],  [[0,2], [9.8,7.6,5.4]]  ].
+     * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
+     * These array can be use for building the threejs scene using typed arrays.
+     */
+    public getSeqCoords(): [number[], TCoords[]] {
+        const coords_attrib: GIAttribMap = this.posis.get('coordinates');
+        const seq_keys: number[] = coords_attrib.getSeqKeys();
+        const seq_values: TCoords[] = coords_attrib.getSeqValues() as TCoords[];
+        return [seq_keys, seq_values];
+    }
+    // ============================================================================
+    // Set an entity attrib value
+    // ============================================================================
+    public setPosiAttribValue(index: number, name: string, value: TAttribDataTypes): void {
+        this._setAttribValue(ELevels.POSIS, index, name, value);
+    }
+    public setVertAttribValue(index: number, name: string, value: TAttribDataTypes): void {
+        this._setAttribValue(ELevels.VERTS, index, name, value);
+    }
+    public setEdgeAttribValue(index: number, name: string, value: TAttribDataTypes): void {
+        this._setAttribValue(ELevels.EDGES, index, name, value);
+    }
+    public setWireAttribValue(index: number, name: string, value: TAttribDataTypes): void {
+        this._setAttribValue(ELevels.WIRES, index, name, value);
+    }
+    public setFaceAttribValue(index: number, name: string, value: TAttribDataTypes): void {
+        this._setAttribValue(ELevels.FACES, index, name, value);
+    }
+    public setCollAttribValue(index: number, name: string, value: TAttribDataTypes): void {
+        this._setAttribValue(ELevels.COLLS, index, name, value);
+    }
+    // ============================================================================
+    // Get an entity attrib value
+    // ============================================================================
+    public getPosiAttribValue(index: number, name: string): TAttribDataTypes {
+        return this._getAttribValue(ELevels.POSIS, index, name);
+    }
+    public getVertAttribValue(index: number, name: string): TAttribDataTypes {
+        return this._getAttribValue(ELevels.VERTS, index, name);
+    }
+    public getEdgeAttribValue(index: number, name: string): TAttribDataTypes {
+        return this._getAttribValue(ELevels.EDGES, index, name);
+    }
+    public getWireAttribValue(index: number, name: string): TAttribDataTypes {
+        return this._getAttribValue(ELevels.WIRES, index, name);
+    }
+    public getFaceAttribValue(index: number, name: string): TAttribDataTypes {
+        return this._getAttribValue(ELevels.FACES, index, name);
+    }
+    public getCollAttribValue(index: number, name: string): TAttribDataTypes {
+        return this._getAttribValue(ELevels.COLLS, index, name);
+    }
+   // ============================================================================
+    // Get entity attrib names
+    // ============================================================================
+    public getPosiAttribNames(): string[] {
+        return Array.from(this.posis.keys());
+    }
+    public getVertAttribNames(): string[] {
+        return Array.from(this.verts.keys());
+    }
+    public getEdgeAttribNames(): string[] {
+        return Array.from(this.edges.keys());
+    }
+    public getWireAttribNames(): string[] {
+        return Array.from(this.wires.keys());
+    }
+    public getFaceAttribNames(): string[] {
+        return Array.from(this.faces.keys());
+    }
+    public getCollAttribNames(): string[] {
+        return Array.from(this.colls.keys());
+    }
+   // ============================================================================
+    // Add an entity attrib
+    // ============================================================================
+    public addPosiAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        return this._addAttrib(ELevels.POSIS, name, data_type, data_size);
+    }
+    public addVertAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        return this._addAttrib(ELevels.VERTS, name, data_type, data_size);
+    }
+    public addEdgeAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        return this._addAttrib(ELevels.EDGES, name, data_type, data_size);
+    }
+    public addWireAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        return this._addAttrib(ELevels.WIRES, name, data_type, data_size);
+    }
+    public addFaceAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        return this._addAttrib(ELevels.FACES, name, data_type, data_size);
+    }
+    public addCollAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        return this._addAttrib(ELevels.COLLS, name, data_type, data_size);
     }
 }

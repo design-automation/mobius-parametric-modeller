@@ -5,6 +5,12 @@ import { EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './json_data'
 //  ===============================================================================================================
 /**
  * Geo-info attribute class.
+ * The attributs are stores as key-value pairs.
+ * Multiple keys point to the same values.
+ * So for example, [[1,3], "a"],[[0,4], "b"] can be converted into sequentia arrays.
+ * The sequential values would be ["a", "b"]
+ * The sequentail keys would be [1,0,,0,1] (Note the undefined value in the middle.)
+ *
  */
 export class GIAttribMap {
     private name: string;
@@ -32,6 +38,17 @@ export class GIAttribMap {
         this.bi_map = new BiMapManyToOne<TAttribDataTypes>(attrib_data.data);
     }
     /**
+     * Returns the JSON data for this attribute.
+     */
+    public getData(): IAttribData {
+        return {
+            name: this.name,
+            data_type: this.data_type,
+            data_size: this.data_size,
+            data: this.bi_map.getData()
+        };
+    }
+    /**
      * Adds data to this attribute from JSON data.
      * The existing data in the model is not deleted.
      * @param attrib_data The JSON data.
@@ -44,17 +61,6 @@ export class GIAttribMap {
         }
         attrib_data.data.map(item => [item[0].map(i => i + offset), item[1]]);
         this.bi_map.addData(attrib_data.data);
-    }
-    /**
-     * Returns the JSON data for this attribute.
-     */
-    public getData(): IAttribData {
-        return {
-            name: this.name,
-            data_type: this.data_type,
-            data_size: this.data_size,
-            data: Array.from( this.bi_map.getData() )
-        };
     }
     /**
      * Sets a single attribute value.
@@ -70,5 +76,24 @@ export class GIAttribMap {
      */
     public get(key: number): TAttribDataTypes {
         return this.bi_map.getValue(key);
+    }
+    /**
+     * Gets a list of all the attribute keys, in sequential order.
+     * The key vaues are mapped.
+     * The key value gets maped to the new list position.
+     * The key index gets mapped to the new value.
+     * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail keys would be [1,0,,0,1].
+     */
+    public getSeqKeys(): number[] {
+        const seqKeys = [];
+        this.bi_map.getData().forEach( (keys_value, index) => keys_value[0].forEach( key => seqKeys[key] = index ) );
+        return seqKeys;
+    }
+    /**
+     * Gets a list of all the attribute values, in sequential order.
+     * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail values would be ['a', 'b']
+     */
+    public getSeqValues(): TAttribDataTypes[] {
+        return this.bi_map.values();
     }
 }

@@ -4,6 +4,7 @@ import { AngularSplitModule } from 'angular-split';
 import * as gs from "gs-json";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {NgxPaginationModule} from 'ngx-pagination';
+import * as bm from '../../../../../libs/geo-info/bi-map';
 
 @Component({
   selector: 'app-viewer',
@@ -237,21 +238,31 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
       this._updatemodel=true;
       this._modelshow=true;
       console.log("MODEL LOADED")
-      console.debug(this._model)
 
       var geometry = new THREE.BufferGeometry();
     var normals = [];
     var colors = [];
-    
-    const positions = this._model.attributes.positions;
-    const positions_values=positions.values;
-    const positions_keys=positions.keys;
-    let positions_ = []
-    positions_keys.forEach((v,k)=>{
-      positions_.push(positions_values[v])
-    });
-    const positions_flat = [].concat(...positions_);
 
+    const positions = this._model.attributes.positions;
+    let positions_ = new bm.BiMapManyToOne(positions[0].data);
+
+
+    
+    console.log(positions_)
+
+    const vertices = this._model.topology.vertices;
+
+    let po = []
+    vertices.forEach(element => {
+      // po.push(positions_.getValue(element))
+      console.log(element)
+      console.log(vertices)
+    });
+
+    const positions_flat = [].concat(...po);
+
+    console.log('Position is')
+    console.log(positions_flat)
 
 
     const coordinates =this._model.attributes.positions.filter(attr=>attr.name==='coordinates');
@@ -269,7 +280,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     const triangles_flat_coords = [].concat(...triangles_flat_);
 
 
-    const vertices = this._model.topology.vertices;
+    // const vertices = this._model.topology.vertices;
     let edges = this._model.topology.edges
 
     // remove duplicated edges

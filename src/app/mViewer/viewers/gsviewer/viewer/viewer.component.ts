@@ -4,7 +4,7 @@ import { AngularSplitModule } from 'angular-split';
 import * as gs from "gs-json";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {NgxPaginationModule} from 'ngx-pagination';
-import * as bm from '../../../../../libs/geo-info/bi-map';
+import * as bm from '../../../../../libs/geo-info/BiMap';
 
 @Component({
   selector: 'app-viewer',
@@ -242,28 +242,18 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
       var geometry = new THREE.BufferGeometry();
     var normals = [];
     var colors = [];
-
-    const positions = this._model.attributes.positions;
-    let positions_ = new bm.BiMapManyToOne(positions[0].data);
-
-
     
-    console.log(positions_)
-
-    const vertices = this._model.topology.vertices;
-
-    let po = []
-    vertices.forEach(element => {
-      // po.push(positions_.getValue(element))
-      console.log(element)
-      console.log(vertices)
+    // Convert the attribute data to a bi-map, then use it to get the position values
+    const positions_data = new bm.BiMapManyToOne<any>(this._model.attributes.positions[0].data);
+    let positions_ = [];
+    positions_data.keys().forEach(key => {
+        positions_.push(positions_data.getValue(key));
     });
 
-    const positions_flat = [].concat(...po);
+    const positions_flat = [].concat(...positions_);
 
     console.log('Position is')
     console.log(positions_flat)
-
 
     const coordinates =this._model.attributes.positions.filter(attr=>attr.name==='coordinates');
 

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, DoCheck } from '@angular/core';
-
+import {functions} from '@modules';
+import * as circularJSON from 'circular-json';
 @Component({
   selector: 'text-viewer',
   template: `<textarea>{{ output || "no-value" }}</textarea>`,
@@ -37,8 +38,11 @@ export class TextViewerComponent implements OnInit, DoCheck {
     } else if (this.data.constructor === {}.constructor) {
       this.output = JSON.stringify(this.data);
     } else {
-    console.log('Unknown output type:', this.data);
-      this.output = this.data;
+        // console.log('Unknown output type:', this.data);
+        // this.output = functions.__stringify__(this.data);
+        console.log(this.data)
+        this.output = functions.__stringify__(this.data);
+
     }
 
   }
@@ -54,8 +58,9 @@ export class TextViewerComponent implements OnInit, DoCheck {
     } else if (this.data.constructor === {}.constructor) {
       this.output = JSON.stringify(this.data);
     } else {
-      console.log('Unknown output type:', this.data);
-      this.output = this.data;
+      //console.log('Unknown output type:', this.data);
+      console.log(this.data)
+      this.output = functions.__stringify__(this.data);
     }
   }
 

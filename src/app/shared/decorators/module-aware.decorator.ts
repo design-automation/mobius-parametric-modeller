@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { IModule, IFunction } from '@models/procedure';
 import { IArgument } from '@models/code';
-import * as doc from '@assets/typedoc-json/doc.json';
 
 import * as Modules from '@modules';
+
+const doc = require('@assets/typedoc-json/doc.json');
 
 let docs;
 const module_list = [];
@@ -75,6 +76,7 @@ export function ModuleDocAware(constructor: Function) {
             for (const func of mod.children) {
                 const fn = {};
                 fn['name'] = func.name;
+                fn['module'] = modName;
                 if (!func['signatures']) { continue; }
                 if (func['signatures'][0].comment) {
                     const cmmt = func['signatures'][0].comment;

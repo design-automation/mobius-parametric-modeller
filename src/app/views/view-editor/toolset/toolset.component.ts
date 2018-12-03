@@ -69,20 +69,35 @@ export class ToolsetComponent {
             reader.onload = function() {
                 // parse the flowchart
                 const fl = CircularJSON.parse(reader.result.toString()).flowchart;
-                // create function
+
+                // create function and documentation of the function
                 const funcs = [];
+                const documentation = {
+                    name: fl.name,
+                    module: 'Imported',
+                    description: fl.description,
+                    summary: fl.description,
+                    parameters: [],
+                    returns: undefined
+                };
                 const func: IFunction = <IFunction>{
-                    module: <IFlowchart>{
+                    flowchart: <IFlowchart>{
                         name: fl.name,
                         nodes: fl.nodes,
                         edges: fl.edges
                     },
-                    name: event.target.files[0].name.split('.')[0],
+                    name: fl.name,
+                    module: 'Imported',
+                    doc: documentation
                 };
 
                 // go through the nodes
                 func.argCount = fl.nodes[0].procedure.length;
                 func.args = fl.nodes[0].procedure.map(prod => {
+                    documentation.parameters.push({
+                        name: prod.args[prod.argCount - 2].value.substring(1, prod.args[prod.argCount - 2].value.length - 1),
+                        description: prod.meta.description
+                    });
                     return <IArgument>{
                         name: prod.args[prod.argCount - 2].value.substring(1, prod.args[prod.argCount - 2].value.length - 1),
                         default: prod.args[prod.argCount - 1].default,
@@ -93,6 +108,12 @@ export class ToolsetComponent {
                 });
                 if (!func.argCount) {
                     resolve('error');
+                }
+
+                for (const node of fl.nodes) {
+                    if (node.type === 'end') {
+                        if (node.procedure.length > 0) {documentation.returns = node.procedure[0].meta.description; }
+                    }
                 }
 
                 // add func and all the imported functions of the imported flowchart to funcs

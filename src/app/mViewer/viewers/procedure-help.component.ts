@@ -64,6 +64,8 @@ export class ProcedureHelpComponent {
     constructor() {
     }
 
-
+    ngAfterViewInit(){
+        console.log(this.output)
+    }
 
 }

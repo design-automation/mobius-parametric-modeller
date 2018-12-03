@@ -5,6 +5,6 @@ export class Constants {
     }
 
     public static get FILE_URL(): string {
-            return 'https://raw.githubusercontent.com/design-automation/mobius-gallery/master/examples/';
+        return 'https://raw.githubusercontent.com/design-automation/mobius-gallery/master/examples/';
     }
 }

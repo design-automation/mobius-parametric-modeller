@@ -194,7 +194,7 @@ export abstract class NodeUtils {
             case ProcedureTypes.Function:
                 if (!data) { throw Error('No function data'); }
 
-                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput, description: undefined};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: undefined, default: undefined};
                 if (!data.hasReturn) {
@@ -211,7 +211,7 @@ export abstract class NodeUtils {
                 break;
 
             case ProcedureTypes.Imported:
-                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput, description: undefined};
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, ...data.args];
                 break;

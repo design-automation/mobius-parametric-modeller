@@ -1,3 +1,12 @@
+class model {
+    private _data;
+
+    constructor(data) {
+        this._data = [data];
+    }
+
+}
+
 /**
  * Create a new model
  * @summary New model

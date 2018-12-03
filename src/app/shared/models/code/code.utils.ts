@@ -273,9 +273,9 @@ function wait(ms){
         `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
         */
         let fnCode = `function ${func.name}(__mainParams__,${func.args.map(arg => arg.name).join(',')})` +
-        `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":__modules__.Model.New()};\n`;
+        `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":__modules__.${_parameterTypes['new']}()};\n`;
 
-        for (const node of func.module.nodes) {
+        for (const node of func.flowchart.nodes) {
             const code = '{' + await CodeUtils.getNodeCode(node, false) + '}';
             fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')})` + code + `\n\n`;
             if (node.type === 'start') {

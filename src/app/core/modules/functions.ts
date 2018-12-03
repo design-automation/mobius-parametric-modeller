@@ -96,9 +96,10 @@ export function numPolygons(__model__: GIModel): number {
  * @param __model__
  * @param coords
  */
-export function addPosition(__model__: GIModel, coords: TCoords) {
+export function addPosition(__model__: GIModel, coords: TCoords): number {
     const posi_i: number = __model__.geom().addPosition();
     __model__.attribs().setAttribValue(ELevels.POSIS, 'coordinates', posi_i, coords);
+    return posi_i;
 }
 /**
  * Adds a new point to the model.

@@ -1,6 +1,7 @@
 import * as functions from './functions';
 export {functions};
-
-export * from './input';
-export * from './output';
+import * as Input from './input';
+export {Input};
+import * as Output from './output';
+export {Output};
 export * from './_parameterTypes';

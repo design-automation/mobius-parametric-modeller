@@ -4,7 +4,7 @@ import { AngularSplitModule } from 'angular-split';
 import * as gs from "gs-json";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {NgxPaginationModule} from 'ngx-pagination';
-import * as bm from '../../../../../libs/geo-info/bi-map';
+import * as bm from '../../../../../libs/geo-info/BiMap';
 
 @Component({
   selector: 'app-viewer',

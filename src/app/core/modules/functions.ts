@@ -53,7 +53,7 @@ export function __merge__(model1: GIModel, model2: GIModel): void {
  * @param __model__
  */
 export function __stringify__(__model__: GIModel): string {
-    return JSON.stringify(__model__);
+    return JSON.stringify(__model__.getData());
 }
 
 //  ===============================================================================================================

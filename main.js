@@ -264,59 +264,6 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/core/modules/Input.ts":
-/*!***************************************!*\
-  !*** ./src/app/core/modules/Input.ts ***!
-  \***************************************/
-/*! exports provided: declare_constant */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declare_constant", function() { return declare_constant; });
-/**
- * Declare a new constant for the input node
- * @summary Declare new constant
- *
- * @param {JSON} __constList__  List of constants to be added.
- * @param {string} const_name  Name of the constant.
- * @param {any} __input__  Value of the constant.
- *
- * @returns Void
- */
-function declare_constant(__constList__, const_name, __input__) {
-    __constList__[const_name] = __input__;
-}
-
-
-/***/ }),
-
-/***/ "./src/app/core/modules/Output.ts":
-/*!****************************************!*\
-  !*** ./src/app/core/modules/Output.ts ***!
-  \****************************************/
-/*! exports provided: return_value */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "return_value", function() { return return_value; });
-/**
- * Return certain value from the model for the flowchart's end node
- * @summary Return a specific value
- * @param {any[]} __model__  Model of the node.
- * @param {number} index  Index of the value to be returned.
- * @returns {any} Value
- */
-function return_value(__model__, index) {
-    if (index > __model__.length)
-        return __model__;
-    return __model__[index].value;
-}
-
-
-/***/ }),
-
 /***/ "./src/app/core/modules/_parameterTypes.ts":
 /*!*************************************************!*\
   !*** ./src/app/core/modules/_parameterTypes.ts ***!
@@ -358,20 +305,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__postprocess__", function() { return __postprocess__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__merge__", function() { return __merge__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addData", function() { return addData; });
-/**
- * Functions for working with gs-json models.
- * Models are datastructures that contain geometric entities with attributes.
- */
-//  ===============================================================================================================
-//  Enums, Types, and Interfaces
-//  ===============================================================================================================
-//enums
-var data_types;
-(function (data_types) {
-    data_types["Int"] = "Int";
-    data_types["Float"] = "Float";
-    data_types["String"] = "String";
-})(data_types || (data_types = {}));
+/* harmony import */ var _libs_geo_info_geo_info__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../libs/geo-info/geo-info */ "./src/libs/geo-info/geo-info.ts");
+/* harmony import */ var _libs_geo_info_bi_map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../libs/geo-info/bi-map */ "./src/libs/geo-info/bi-map.ts");
+
+
 //  ===============================================================================================================
 //  Functions used by Mobius
 //  ===============================================================================================================
@@ -391,13 +328,12 @@ function __new__() {
             collections: []
         },
         attributes: {
-            positions: {
-                name: "coordinates",
-                data_type: data_types.Float,
-                data_length: 3,
-                keys: [],
-                values: []
-            },
+            positions: [{
+                    name: 'coordinates',
+                    data_type: _libs_geo_info_geo_info__WEBPACK_IMPORTED_MODULE_0__["EAttribDataTypeStrs"].Float,
+                    data_length: 3,
+                    data: []
+                }],
             vertices: [],
             edges: [],
             wires: [],
@@ -434,13 +370,14 @@ function __postprocess__(__model__) {
  */
 function __merge__(model1, model2) {
     // Get the lengths of data arrays in model1, required later
-    var num_positions = model2.attributes.positions.keys.length;
-    var num_triangles = model2.topology.triangles.length;
-    var num_vertices = model2.topology.vertices.length;
-    var num_edges = model2.topology.edges.length;
-    var num_wires = model2.topology.wires.length;
-    var num_faces = model2.topology.faces.length;
-    var num_collections = model2.topology.collections.length;
+    var poistions_data = new _libs_geo_info_bi_map__WEBPACK_IMPORTED_MODULE_1__["BiMapManyToOne"](model1.attributes.positions[0].data);
+    var num_positions = poistions_data.numKeys();
+    var num_triangles = model1.topology.triangles.length;
+    var num_vertices = model1.topology.vertices.length;
+    var num_edges = model1.topology.edges.length;
+    var num_wires = model1.topology.wires.length;
+    var num_faces = model1.topology.faces.length;
+    var num_collections = model1.topology.collections.length;
     // Add triangles from model2 to model1
     var new_triangles = model2.topology.triangles.map(function (t) { return t.map(function (p) { return p + num_positions; }); });
     model1.topology.triangles = model1.topology.triangles.concat(new_triangles);
@@ -468,7 +405,7 @@ function __merge__(model1, model2) {
     ]; });
     model1.topology.collections = model1.topology.collections.concat(new_collections);
     // Add  attributes from model2 to model1
-    _addKeysValues(model1.attributes.positions, model2.attributes.positions);
+    _addAttribs(model1.attributes.positions, model2.attributes.positions, num_positions);
     _addAttribs(model1.attributes.vertices, model2.attributes.vertices, num_vertices);
     _addAttribs(model1.attributes.edges, model2.attributes.edges, num_edges);
     _addAttribs(model1.attributes.wires, model2.attributes.wires, num_wires);
@@ -478,40 +415,26 @@ function __merge__(model1, model2) {
 }
 /*
  * Helper function that adds attributes from model2 to model1.
+ * TODO: move this function into a seperate module
  */
-function _addAttribs(attribs1, attribs2, size1) {
+function _addAttribs(attribs1, attribs2, offset) {
+    // create a map of all teh existing attributes
     var attribs_map = new Map();
     attribs1.forEach(function (attrib, idx) {
         attribs_map[attrib.name + attrib.data_type + attrib.data_length] = attrib;
     });
+    // for each new attribute
     attribs2.forEach(function (attrib2) {
+        attrib2.data.map(function (item) { return [item[0].map(function (i) { return i + offset; }), item[1]]; });
         var attrib1 = attribs_map[attrib2.name + attrib2.data_type + attrib2.data_length];
         if (attrib1 === undefined) {
-            attrib2.keys = Array(size1).fill(-1).concat(attrib2.keys);
             attribs1.push(attrib2);
         }
         else {
-            _addKeysValues(attrib1, attrib2);
+            var attrib1_data = new _libs_geo_info_bi_map__WEBPACK_IMPORTED_MODULE_1__["BiMapManyToOne"](attrib1.data);
+            attrib1_data.addData(attrib2.data);
+            attrib1.data = attrib1_data.getData();
         }
-    });
-}
-/*
- * Helper function that adds values, updates keys.
- * The values are all assumed to be unique.
- * Values are added from the values to array to the values1 array is the are unique.
- * New keys are added to the keys1 array.
- */
-function _addKeysValues(kv1, kv2) {
-    var values_map = new Map();
-    kv2.values.forEach(function (val, idx) {
-        var idx_new = kv1.values.indexOf(val);
-        if (idx_new === -1) {
-            idx_new = kv1.values.push(val) - 1;
-        }
-        values_map[idx] = idx_new;
-    });
-    kv2.keys.forEach(function (idx) {
-        kv1.keys.push(values_map[idx]);
     });
 }
 //  ===============================================================================================================
@@ -534,17 +457,19 @@ function addData(__model__, model) {
 /*!***************************************!*\
   !*** ./src/app/core/modules/index.ts ***!
   \***************************************/
-/*! exports provided: functions, Input, Output, _parameterTypes */
+/*! exports provided: functions, declare_constant, return_value, _parameterTypes */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/app/core/modules/functions.ts");
 /* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "functions", function() { return _functions__WEBPACK_IMPORTED_MODULE_0__; });
-/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Input */ "./src/app/core/modules/Input.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Input", function() { return _Input__WEBPACK_IMPORTED_MODULE_1__; });
-/* harmony import */ var _Output__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Output */ "./src/app/core/modules/Output.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Output", function() { return _Output__WEBPACK_IMPORTED_MODULE_2__; });
+/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./input */ "./src/app/core/modules/input.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declare_constant", function() { return _input__WEBPACK_IMPORTED_MODULE_1__["declare_constant"]; });
+
+/* harmony import */ var _output__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./output */ "./src/app/core/modules/output.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "return_value", function() { return _output__WEBPACK_IMPORTED_MODULE_2__["return_value"]; });
+
 /* harmony import */ var _parameterTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_parameterTypes */ "./src/app/core/modules/_parameterTypes.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_parameterTypes", function() { return _parameterTypes__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"]; });
 
@@ -554,9 +479,59 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//./old/point
 
-//./old/ray./old/query./old/string./old/topo
+/***/ }),
+
+/***/ "./src/app/core/modules/input.ts":
+/*!***************************************!*\
+  !*** ./src/app/core/modules/input.ts ***!
+  \***************************************/
+/*! exports provided: declare_constant */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declare_constant", function() { return declare_constant; });
+/**
+ * Declare a new constant for the input node
+ * @summary Declare new constant
+ *
+ * @param {JSON} __constList__  List of constants to be added.
+ * @param {string} const_name  Name of the constant.
+ * @param {any} __input__  Value of the constant.
+ *
+ * @returns Void
+ */
+function declare_constant(__constList__, const_name, __input__) {
+    __constList__[const_name] = __input__;
+}
+
+
+/***/ }),
+
+/***/ "./src/app/core/modules/output.ts":
+/*!****************************************!*\
+  !*** ./src/app/core/modules/output.ts ***!
+  \****************************************/
+/*! exports provided: return_value */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "return_value", function() { return return_value; });
+/**
+* Return certain value from the model for the flowchart's end node
+ * @summary Return a specific value
+ * @param {any[]} __model__  Model of the node.
+ * @param {number} index  Index of the value to be returned.
+ * @returns {any} Value
+ */
+function return_value(__model__, index) {
+    if (index > __model__.length) {
+        return __model__;
+    }
+    return __model__[index].value;
+}
 
 
 /***/ }),
@@ -10645,6 +10620,100 @@ __webpack_require__.r(__webpack_exports__);
 var environment = {
     production: false
 };
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/bi-map.ts":
+/*!*************************************!*\
+  !*** ./src/libs/geo-info/bi-map.ts ***!
+  \*************************************/
+/*! exports provided: BiMapManyToOne */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BiMapManyToOne", function() { return BiMapManyToOne; });
+/**
+ * A bi-directional map that stores many-to-one key value mappings.
+ * Both the keys and values must be unique.
+ */
+var BiMapManyToOne = /** @class */ (function () {
+    function BiMapManyToOne(data) {
+        var _this = this;
+        this.kv_map = new Map();
+        this.vk_map = new Map();
+        data.forEach(function (keys_value) {
+            _this.vk_map.set(keys_value[1], keys_value[0]);
+            keys_value[0].forEach(function (key) { return _this.kv_map.set(key, keys_value[1]); });
+        });
+    }
+    BiMapManyToOne.prototype.set = function (key, value) {
+        if (!this.vk_map.has(value)) {
+            this.vk_map.set(value, [key]);
+        }
+        else {
+            if (this.vk_map.get(value).indexOf(key) === -1) {
+                this.vk_map.get(value).push(key);
+            }
+        }
+        this.kv_map.set(key, value);
+    };
+    BiMapManyToOne.prototype.getValue = function (key) {
+        return this.kv_map.get(key);
+    };
+    BiMapManyToOne.prototype.getKeys = function (value) {
+        return this.vk_map.get(value);
+    };
+    BiMapManyToOne.prototype.hasKey = function (key) {
+        return this.kv_map.has(key);
+    };
+    BiMapManyToOne.prototype.hasValue = function (value) {
+        return this.vk_map.has(value);
+    };
+    BiMapManyToOne.prototype.numKeys = function () {
+        return this.kv_map.size;
+    };
+    BiMapManyToOne.prototype.numValues = function () {
+        return this.vk_map.size;
+    };
+    BiMapManyToOne.prototype.getData = function () {
+        return Array.from(this.vk_map);
+    };
+    BiMapManyToOne.prototype.addData = function (data) {
+        var _this = this;
+        data.forEach(function (keys_value) { return keys_value[0].forEach(function (key) { return _this.set(key, keys_value[1]); }); });
+    };
+    return BiMapManyToOne;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/geo-info.ts":
+/*!***************************************!*\
+  !*** ./src/libs/geo-info/geo-info.ts ***!
+  \***************************************/
+/*! exports provided: EAttribDataTypeStrs */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAttribDataTypeStrs", function() { return EAttribDataTypeStrs; });
+/**
+ * Geo-info models.
+ */
+//  ===============================================================================================================
+//  Enums, Types, and Interfaces
+//  ===============================================================================================================
+// enums
+var EAttribDataTypeStrs;
+(function (EAttribDataTypeStrs) {
+    EAttribDataTypeStrs["Int"] = "Int";
+    EAttribDataTypeStrs["Float"] = "Float";
+    EAttribDataTypeStrs["String"] = "String";
+})(EAttribDataTypeStrs || (EAttribDataTypeStrs = {}));
 
 
 /***/ }),

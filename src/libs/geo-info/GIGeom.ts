@@ -45,28 +45,11 @@ export class GIGeom {
         this.model = model;
     }
     /**
-     * Sets the data in this model from JSON data.
-     * The existing data in the model is overwritten.
-     * @param geom_data The JSON data
-     */
-    public setData (geom_data: IGeomData): void {
-        this.tris = geom_data.triangles;
-        this.verts = geom_data.vertices;
-        this.edges = geom_data.edges;
-        this.wires = geom_data.wires;
-        this.faces = geom_data.faces;
-        this.points = geom_data.points;
-        this.lines = geom_data.linestrings;
-        this.pgons = geom_data.polygons;
-        this.colls = geom_data.collections;
-        this._updateRevArrays();
-        this.num_posis = this.rev_posis_verts.length;
-    }
-    /**
      * Returns the JSON data for this model.
      */
     public getData(): IGeomData {
         return {
+            num_positions: this.num_posis,
             triangles: this.tris,
             vertices: this.verts,
             edges: this.edges,
@@ -79,18 +62,79 @@ export class GIGeom {
         };
     }
     /**
+     * Adds data to this model from JSON data.
+     * The existing data in the model is not deleted.
+     * @param geom_data The JSON data
+     */
+    public addData(geom_data: IGeomData): void {
+        // get lengths before we start adding stuff
+        const num_tris: number = this.tris.length;
+        const num_verts: number = this.verts.length;
+        const num_edges: number = this.edges.length;
+        const num_wires: number = this.wires.length;
+        const num_faces: number = this.faces.length;
+        const num_points: number = this.points.length;
+        const num_lines: number = this.lines.length;
+        const num_pgons: number = this.pgons.length;
+        const num_colls: number = this.colls.length;
+        // Add triangles to model
+        const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(p => p + this.num_posis ) as TTri);
+        this.tris.push( ...new_triangles );
+        // Add vertices to model
+        const new_verts: TVert[] = geom_data.vertices.map(p => p + this.num_posis as TVert);
+        this.verts.push( ...new_verts );
+        // Add edges to model
+        const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
+        this.edges.push( ...new_edges );
+        // Add wires to model
+        const new_wires: TWire[] = geom_data.wires.map(w => w.map(e => e + num_edges) as TWire);
+        this.wires.push( ...new_wires );
+        // Add faces to model
+        const new_faces: TFace[] = geom_data.faces.map(f => [
+            f[0].map( w => w + num_wires),
+            f[1].map( t => t + num_tris)
+        ] as TFace);
+        this.faces.push( ...new_faces );
+        // Add points to model
+        const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
+        this.points.push( ...new_points );
+        // Add lines to model
+        const new_lines: TLine[] = geom_data.linestrings.map(w => w + num_wires as TLine);
+        this.lines.push( ...new_lines );
+        // Add pgons to model
+        const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
+        this.pgons.push( ...new_pgons );
+        // Add collections to model
+        const new_colls: TColl[] = geom_data.collections.map(c => [
+            c[0] === -1 ? -1 : c[0] + num_colls,
+            c[1].map( point => point + num_points),
+            c[2].map( line => line + num_lines),
+            c[3].map( pgon => pgon + num_pgons)
+        ] as TColl);
+        this.colls.push( ...new_colls );
+        // Update the reverse arrays
+        this._updateRevArrays();
+        // update the positions array
+        this.num_posis += geom_data.num_positions;
+    }
+    // ============================================================================
+    // Private methods
+    // ============================================================================
+    /**
      * Updates the rev arrays the create the reveres links.
      */
     private _updateRevArrays() {
         // positions
+        this.rev_posis_tris = [];
         this.tris.forEach( (pos_i_arr, tri_i) => {
             pos_i_arr.forEach( pos_i => {
                 if (this.rev_posis_tris[pos_i] === undefined) {
                     this.rev_posis_tris[pos_i] = [];
                 }
-                this.rev_posis_verts[pos_i].push(tri_i);
+                this.rev_posis_tris[pos_i].push(tri_i);
             });
         });
+        this.rev_posis_verts = [];
         this.verts.forEach( (pos_i, vert_i) => {
             if (this.rev_posis_verts[pos_i] === undefined) {
                 this.rev_posis_verts[pos_i] = [];
@@ -98,16 +142,20 @@ export class GIGeom {
             this.rev_posis_verts[pos_i].push(vert_i);
         });
         // edges, wires, faces
+        this.rev_verts_edges = [];
         this.edges.forEach( (vert_i_arr, edge_i) => {
             vert_i_arr.forEach( vert_i => {
                 this.rev_verts_edges[vert_i] = edge_i;
             });
         });
+        this.rev_edges_wires = [];
         this.wires.forEach( (edge_i_arr, wire_i) => {
             edge_i_arr.forEach( edge_i => {
                 this.rev_edges_wires[edge_i] = wire_i;
             });
         });
+        this.rev_wires_faces = [];
+        this.rev_tris_faces = [];
         this.faces.forEach( ([wire_i_arr, tri_i_arr], face_i) => {
             wire_i_arr.forEach( wire_i => {
                 this.rev_wires_faces[wire_i] = face_i;
@@ -117,16 +165,22 @@ export class GIGeom {
             });
         });
         // points, lines, polygons
+        this.rev_verts_points = [];
         this.points.forEach( (vert_i, point_i) => {
             this.rev_verts_points[vert_i] = point_i;
         });
+        this.rev_wires_lines = [];
         this.lines.forEach( (wire_i, line_i) => {
             this.rev_wires_lines[wire_i] = line_i;
         });
+        this.rev_faces_pgons = [];
         this.pgons.forEach( (face_i, pgon_i) => {
             this.rev_faces_pgons[face_i] = pgon_i;
         });
         // collections of points, linestrings, polygons
+        this.rev_points_colls = [];
+        this.rev_lines_colls = [];
+        this.rev_pgons_colls = [];
         this.colls.forEach( ([parent, point_i_arr, line_i_arr, pgon_i_arr], coll_i) => {
             point_i_arr.forEach( point_i => {
                 this.rev_points_colls[point_i] = coll_i;
@@ -138,61 +192,6 @@ export class GIGeom {
                 this.rev_pgons_colls[pgon_i] = coll_i;
             });
         });
-    }
-    /**
-     * Adds data to this model from JSON data.
-     * The existing data in the model is not deleted.
-     * @param geom_data The JSON data
-     */
-    public addData(geom_data: IGeomData): void {
-        // get lengths before we start adding stuff
-        const num_posis2: number = this.rev_posis_verts.length;
-        const num_tris: number = this.tris.length;
-        const num_verts: number = this.verts.length;
-        const num_edges: number = this.edges.length;
-        const num_wires: number = this.wires.length;
-        const num_faces: number = this.faces.length;
-        const num_points: number = this.points.length;
-        const num_lines: number = this.lines.length;
-        const num_pgons: number = this.pgons.length;
-        const num_colls: number = this.colls.length;
-        // Add triangles to model
-        const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(p => p + num_posis2 ) as TTri);
-        this.tris = this.tris.concat( new_triangles );
-        // Add vertices to model
-        const new_verts: TVert[] = geom_data.vertices.map(p => p + num_posis2 as TVert);
-        this.verts = this.verts.concat( new_verts );
-        // Add edges to model
-        const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
-        this.edges = this.edges.concat( new_edges );
-        // Add wires to model
-        const new_wires: TWire[] = geom_data.wires.map(w => w.map(e => e + num_edges) as TWire);
-        this.wires = this.wires.concat( new_wires );
-        // Add faces to model
-        const new_faces: TFace[] = geom_data.faces.map(f => [
-            f[0].map( w => w + num_wires),
-            f[1].map( t => t + num_tris)
-        ] as TFace);
-        this.faces = this.faces.concat( new_faces );
-        // Add points to model
-        const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
-        this.points = this.points.concat( new_points );
-        // Add lines to model
-        const new_lines: TLine[] = geom_data.linestrings.map(w => w + num_wires as TLine);
-        this.lines = this.lines.concat( new_lines );
-        // Add pgons to model
-        const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
-        this.pgons = this.pgons.concat( new_pgons );
-        // Add collections to model
-        const new_colls: TColl[] = geom_data.collections.map(c => [
-            c[0] === -1 ? -1 : c[0] + num_colls,
-            c[1].map( point => point + num_points),
-            c[2].map( line => line + num_lines),
-            c[3].map( pgon => pgon + num_pgons)
-        ] as TColl);
-        this.colls = this.colls.concat( new_colls );
-        // Update number of positions
-        this.num_posis = this.rev_posis_verts.length;
     }
     /**
      * Adds a vertex and updates the rev array.

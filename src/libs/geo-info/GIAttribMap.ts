@@ -21,17 +21,7 @@ export class GIAttribMap {
      * Creates an attribute.
      * @param attrib_data
      */
-    constructor(attrib_data?: IAttribData) {
-        if (attrib_data) {
-            this.setData(attrib_data);
-        }
-    }
-    /**
-     * Sets data in this attribute from JSON data.
-     * The existing data in the model is deleted.
-     * @param attrib_data The JSON data.
-     */
-    public setData(attrib_data: IAttribData): void {
+    constructor(attrib_data: IAttribData) {
         this.name = attrib_data.name;
         this.data_type = attrib_data.data_type;
         this.data_size = attrib_data.data_size;
@@ -59,7 +49,9 @@ export class GIAttribMap {
             this.data_size !== attrib_data.data_size) {
             throw Error('Attributes do not match.');
         }
-        attrib_data.data.map(item => [item[0].map(i => i + offset), item[1]]);
+        attrib_data.data.forEach( keys_value => {
+            keys_value[0] = keys_value[0].map(key => key + offset);
+        });
         this.bi_map.addData(attrib_data.data);
     }
     /**

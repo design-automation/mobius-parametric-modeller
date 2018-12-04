@@ -27,8 +27,8 @@ export class GIModel {
      * @param model_data The JSON data
      */
     public setData (model_data: IModelData): void {
-        this._geom.setData(model_data.geometry);
-        this._attribs.setData(model_data.attributes);
+        this._geom.addData(model_data.geometry);
+        this._attribs.addData(model_data.attributes);
     }
     /**
      * Adds data to this model from JSON data.
@@ -36,8 +36,8 @@ export class GIModel {
      * @param model_data The JSON data
      */
     public merge(model: GIModel): void {
+        this._attribs.addData(model.getAttribsData()); // must be before addGeomData()
         this._geom.addData(model.getGeomData());
-        this._attribs.addData(model.getAttribsData());
     }
     /**
      * Returns the JSON data for this model.

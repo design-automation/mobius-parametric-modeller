@@ -22,6 +22,7 @@ export type TAttribValuesArr = Array<[number[], TAttribDataTypes]>;
 // interfaces for JSON data
 
 export interface IGeomData {
+    num_positions: number;
     triangles: TTri[];
     vertices: TVert[];
     edges: TEdge[];

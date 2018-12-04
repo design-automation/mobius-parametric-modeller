@@ -1,7 +1,6 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoords} from './json_data';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-
 /**
  * Enum of the 6 levels at which attribtes can be added.
  */
@@ -45,38 +44,19 @@ export class GIAttribs {
         };
     }
     /**
-     * Sets the data in this model from JSON data.
-     * The existing data in the model is deleted.
-     * @param attribs_data The JSON data
-     */
-    public setData (attribs_data: IAttribsData): void {
-        attribs_data.positions.forEach( attrib => this.posis.set(attrib.name, new GIAttribMap(attrib)));
-        attribs_data.vertices.forEach( attrib => this.verts.set(attrib.name, new GIAttribMap(attrib)));
-        attribs_data.edges.forEach( attrib => this.edges.set(attrib.name, new GIAttribMap(attrib)));
-        attribs_data.wires.forEach( attrib => this.wires.set(attrib.name, new GIAttribMap(attrib)));
-        attribs_data.faces.forEach( attrib => this.faces.set(attrib.name, new GIAttribMap(attrib)));
-        attribs_data.collections.forEach( attrib => this.colls.set(attrib.name, new GIAttribMap(attrib)));
-    }
-    /**
-     * Returns one of the attribute maps.
-     * @param level
-     */
-    private _getLevel(level: ELevels): Map<string, GIAttribMap> {
-        return [this.posis, this.verts, this.edges, this.wires, this.faces, this.colls][level];
-    }
-    /**
      * Adds data to this model from JSON data.
      * The existing data in the model is not deleted.
-     * @param model_data The JSON data
+     * @param attribs_data The JSON data
      */
     public addData(attribs_data: IAttribsData): void {
         // Helper function to ddd attributes to model
         function _addAttribsData(exist_attribs_map:  Map<string, GIAttribMap>, new_attribs_data: IAttribData[], offset: number): void {
             new_attribs_data.forEach( new_attrib_data => {
                 if (!exist_attribs_map.has(new_attrib_data.name)) {
-                    exist_attribs_map.set(new_attrib_data.name, new GIAttribMap());
+                    exist_attribs_map.set(new_attrib_data.name, new GIAttribMap(new_attrib_data));
+                } else {
+                    exist_attribs_map.get(new_attrib_data.name).addData(new_attrib_data, offset);
                 }
-                exist_attribs_map.get(new_attrib_data.name).addData(new_attrib_data, offset);
             });
         }
         _addAttribsData(this.posis, attribs_data.positions, this.model.geom().numPosis());
@@ -85,6 +65,16 @@ export class GIAttribs {
         _addAttribsData(this.wires, attribs_data.wires, this.model.geom().numWires());
         _addAttribsData(this.faces, attribs_data.faces, this.model.geom().numFaces());
         _addAttribsData(this.colls, attribs_data.collections, this.model.geom().numColls());
+    }
+    // ============================================================================
+    // Private methods
+    // ============================================================================
+    /**
+     * Returns one of the attribute maps.
+     * @param level
+     */
+    private _getLevel(level: ELevels): Map<string, GIAttribMap> {
+        return [this.posis, this.verts, this.edges, this.wires, this.faces, this.colls][level];
     }
     /**
      * Creates a new attribte.
@@ -125,6 +115,9 @@ export class GIAttribs {
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).get(index);
     }
+    // ============================================================================
+    // Threejs
+    // ============================================================================
     /**
      * Get a list of all the coordinates.
      * This returns two arrays, one with indexes, and another with values.

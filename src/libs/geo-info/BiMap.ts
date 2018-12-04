@@ -6,8 +6,12 @@
  */
 export class BiMapManyToOne<V> {
     private readonly kv_map = new Map<number, V>();
-    private readonly vk_map = new Map<V, number[]>();
-
+    private readonly vk_map = new Map<string, number[]>();
+    /**
+     * Creates a new bi-directional many-to-one map.
+     * If the data is provided, it will be added to the map.
+     * @param data
+     */
     constructor(data?: Array<[number[], V]>) {
         if (data) {
             this.addData(data);
@@ -29,11 +33,12 @@ export class BiMapManyToOne<V> {
      * @param value
      */
     public set(key: number, value: V): void {
-        if (!this.vk_map.has(value)) {
-            this.vk_map.set(value, [key]);
+        const value_str: string = JSON.stringify(value);
+        if (!this.vk_map.has(value_str)) {
+            this.vk_map.set(value_str, [key]);
         } else {
-            if (this.vk_map.get(value).indexOf(key) === -1) {
-                this.vk_map.get(value).push(key);
+            if (this.vk_map.get(value_str).indexOf(key) === -1) {
+                this.vk_map.get(value_str).push(key);
             }
         }
         this.kv_map.set(key, value);
@@ -42,7 +47,7 @@ export class BiMapManyToOne<V> {
      * Returns an array of all values.
      */
     public values(): Array<V> {
-        return Array.from(this.vk_map.keys());
+        return Array.from(this.kv_map.values());
     }
     /**
      * Returns an array of all keys.
@@ -55,7 +60,8 @@ export class BiMapManyToOne<V> {
      * @param value
      */
     public getKeys(value: V): number[] {
-        return this.vk_map.get(value);
+        const value_str: string = JSON.stringify(value);
+        return this.vk_map.get(value_str);
     }
     /**
      * Returns the value to which this key points.
@@ -76,7 +82,8 @@ export class BiMapManyToOne<V> {
      * @param value
      */
     public hasValue(value: V): boolean {
-        return this.vk_map.has(value);
+        const value_str: string = JSON.stringify(value);
+        return this.vk_map.has(value_str);
     }
     /**
      * Total number of keys.
@@ -95,11 +102,11 @@ export class BiMapManyToOne<V> {
      * For example, [[1,3], 'a'],[[0,4], 'b']
      */
     public getData(): Array<[number[], V]> {
-        // const data: Array<[number[], V]> = [];
-        // this.vk_map.forEach( (keys, value) => {
-        //     data.push([keys, value]);
-        // });
-        // return data;
-        return Array.from(this.vk_map).map(value_keys => [value_keys[1], value_keys[0]]) as Array<[number[], V]>;
+        const data: Array<[number[], V]> = [];
+        this.vk_map.forEach( (keys, value_str) => {
+            const value = JSON.parse(value_str); // TODO This is not good <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            data.push([keys, value]);
+        });
+        return data;
     }
 }

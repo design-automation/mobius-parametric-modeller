@@ -3,21 +3,7 @@ import { Component, Input, OnInit, DoCheck } from '@angular/core';
 @Component({
   selector: 'text-viewer',
   template: `<textarea>{{ output || "no-value" }}</textarea>`,
-  styles: [`
-  :host{
-    height: 100%;
-    width: 100%;
-  }
-  textarea{
-    height: 99%;
-    width: 99%;
-    overflow: auto;
-    resize: none;
-    background-color: rgb(220,220,220);
-    text-color: rgb(80,80,80);
-    border: none;
-    font-family: arial;
-  }`]
+  styleUrls: [`general-viewer.scss`]
 })
 export class TextViewerComponent implements OnInit, DoCheck {
     @Input() data;

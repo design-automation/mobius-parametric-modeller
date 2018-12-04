@@ -419,6 +419,7 @@ export class FlowchartComponent implements OnInit {
         if (value > this.zoom) {
             this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]];
         }
+        // this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]];
 
         // find transformation matrix
         const m = this.canvas.createSVGMatrix()

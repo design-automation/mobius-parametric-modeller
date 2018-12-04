@@ -18,54 +18,12 @@ import { ModuleDocAware } from '@shared/decorators';
 
 
   `,
-  styles: [`
-$prod-background-color: rgb(250,250,250);
-$background-color: rgb(220,220,220);
-$title-background: #ccc;
-$text-color: rgb(80,80,80);
-$selected-color: rgb(0,0,150);
-$function-text-color: rgb(190, 140, 30);
-$separator: rgb(239,239,239);
-
-:host{
-  height: 100%;
-  width: 100%;
-}
-div{
-  width: 100%;
-  padding-left:10px;
-}
-h5{
-  font-weight: 700;
-  font-size: 12px;
-}
-p{
-  font-family: sans-serif;
-}
-.funcDesc{
-  font-weight: 600;
-}
-
-.paramP{
-  padding-left: 5px;
-
-}
-
-span{
-  font-weight: 550;
-  font-style: italic;
-}
-
-`]
+  styleUrls: [`general-viewer.scss`]
 })
 export class ProcedureHelpComponent {
     @Input() output;
 
     constructor() {
-    }
-
-    ngAfterViewInit(){
-        console.log(this.output)
     }
 
 }

@@ -92,6 +92,10 @@ $function-text-color: rgb(190, 140, 30);
     border: none;
     border-bottom: 1px solid $text-color;
     margin-left: 5px;
+
+    &.error{
+        border: 1px solid red;
+    }
 }
 input:focus{
     border: 1px solid $selected-color;

@@ -35,7 +35,7 @@ export abstract class NodeUtils {
         node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
-        node.position = {x: 400, y: 0};
+        node.position = {x: 700, y: 400};
         return node;
     }
 
@@ -43,7 +43,7 @@ export abstract class NodeUtils {
         const node = NodeUtils.getNewNode();
         node.name = 'End';
         node.type = 'end';
-        node.position = {x: 400, y: 400};
+        node.position = {x: 700, y: 800};
         return node;
     }
 

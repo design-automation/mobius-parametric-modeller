@@ -44,6 +44,11 @@ export class AppComponent implements OnInit {
     constructor(private dataService: DataService, private injector: Injector, private r: ComponentFactoryResolver) {
     }
 
+    @HostListener('window:beforeunload', [ '$event' ])
+    beforeUnloadHander(event) {
+        event.returnValue = true;
+    }
+
     ngOnInit() {
         this.activeView = 'gallery';
         this.updateView('gallery');

@@ -1,5 +1,5 @@
 import { GIModel } from '../../../libs/geo-info/GIModel';
-import { TCoords, EAttribDataTypeStrs } from '../../../libs/geo-info/json_data';
+import { TCoord, EAttribDataTypeStrs } from '../../../libs/geo-info/json_data';
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -95,7 +95,7 @@ export function numPolygons(__model__: GIModel): number {
  * @param __model__
  * @param coords
  */
-export function addPosition(__model__: GIModel, coords: TCoords): number {
+export function addPosition(__model__: GIModel, coords: TCoord): number {
     const posi_i: number = __model__.geom().addPosition();
     __model__.attribs().setPosiAttribValue(posi_i, 'coordinates', coords);
     return posi_i;
@@ -115,4 +115,12 @@ export function addPoint(__model__: GIModel, position: number) {
  */
 export function addLinestring(__model__: GIModel, positions: number[]) {
     return __model__.geom().addLine(positions);
+}
+/**
+ * Adds a new polygon to the model.
+ * @param __model__
+ * @param coords
+ */
+export function addPolygon(__model__: GIModel, positions: number[]) {
+    return __model__.geom().addPgon(positions);
 }

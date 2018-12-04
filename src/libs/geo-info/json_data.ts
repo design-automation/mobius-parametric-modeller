@@ -6,7 +6,7 @@ export enum EAttribDataTypeStrs {
 }
 
 // types
-export type TCoords = [number, number, number];
+export type TCoord = [number, number, number];
 export type TTri = [number, number, number]; // [position, position, position]
 export type TVert = number; // positions
 export type TEdge = [number, number]; // [vertex, vertex]

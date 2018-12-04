@@ -1,5 +1,6 @@
-import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon } from './json_data';
+import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './json_data';
 import { GIModel } from './GIModel';
+import { triangulate } from '../triangulate/triangulate';
 /**
  * Class for geometry.
  */
@@ -229,10 +230,20 @@ export class GIGeom {
     /**
      * Adds a face and updates the rev array.
      * Wires are assumed to be closed!
+     * No holes yet...
      * @param wires
      */
-    private _addFace(wires: number[], holes: number[][] = []): number {
-        throw new Error('NOT IMPLEMENTED');
+    private _addFace(wire_i: number): number {
+        // create the triangles
+        const wire_posis_i: number[] = this.wires[wire_i].map( vert_i => this.verts[vert_i] );
+        const coords: TCoord[] = wire_posis_i.map( posi_i => this.model.attribs().getPosiCoord(posi_i) );
+        const tris_corners: number[][] = triangulate(coords);
+        const tris_posis_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => wire_posis_i[corner] ) as TTri );
+        const tris_i: number[] = tris_posis_i.map(tri_posis_i => this.tris.push(tri_posis_i) - 1);
+        // create the face
+        const face: TFace = [[wire_i], tris_i];
+        const face_i: number = this.faces.push(face);
+        return face_i;
     }
     /**
      * Adds a new position to the model and returns the index to that position.
@@ -246,7 +257,9 @@ export class GIGeom {
      * @param position The position for the point.
      */
     public addPoint(position: number): number {
+        // create verts
         const vert_i = this._addVertex(position);
+        // create point
         const point_i: number = this.points.push(vert_i) - 1;
         this.rev_verts_points[vert_i] = point_i;
         return point_i;
@@ -256,6 +269,7 @@ export class GIGeom {
      * @param positions
      */
     public addLine(positions: number[], close: boolean = false): number {
+        // create verts, edges, wires
         const vert_i_arr: number[] = positions.map( position => this._addVertex(position));
         const edges_i_arr: number[] = [];
         for (let i = 0; i < vert_i_arr.length - 1; i++) {
@@ -265,6 +279,7 @@ export class GIGeom {
             edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
         }
         const wire_i: number = this._addWire(edges_i_arr, close);
+        // create line
         const line_i: number = this.lines.push(wire_i) - 1;
         this.rev_wires_lines[wire_i] = line_i;
         return line_i;
@@ -274,8 +289,20 @@ export class GIGeom {
      * @param positions
      * @param holes
      */
-    public addPolygon(positions: number[], holes: number[][] = []): number {
-        throw new Error('NOT IMPLEMENTED');
+    public addPgon(positions: number[]): number {
+        // create verts, edges, wires, faces
+        const vert_i_arr: number[] = positions.map( position => this._addVertex(position));
+        const edges_i_arr: number[] = [];
+        for (let i = 0; i < vert_i_arr.length - 1; i++) {
+            edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
+        }
+        edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
+        const wire_i: number = this._addWire(edges_i_arr, true);
+        const face_i: number = this._addFace(wire_i);
+        // create polygon
+        const pgon_i: number = this.pgons.push(face_i) - 1;
+        this.rev_faces_pgons[face_i] = pgon_i;
+        return pgon_i;
     }
     /**
      * Adds a collection and updates the rev array.

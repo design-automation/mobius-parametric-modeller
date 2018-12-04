@@ -1,4 +1,4 @@
-import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoords} from './json_data';
+import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './json_data';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
 /**
@@ -125,10 +125,10 @@ export class GIAttribs {
      * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
      * These array can be use for building the threejs scene using typed arrays.
      */
-    public getSeqCoords(): [number[], TCoords[]] {
+    public getSeqCoords(): [number[], TCoord[]] {
         const coords_attrib: GIAttribMap = this.posis.get('coordinates');
         const seq_keys: number[] = coords_attrib.getSeqKeys();
-        const seq_values: TCoords[] = coords_attrib.getSeqValues() as TCoords[];
+        const seq_values: TCoord[] = coords_attrib.getSeqValues() as TCoord[];
         return [seq_keys, seq_values];
     }
     // ============================================================================
@@ -172,6 +172,12 @@ export class GIAttribs {
     }
     public getCollAttribValue(index: number, name: string): TAttribDataTypes {
         return this._getAttribValue(ELevels.COLLS, index, name);
+    }
+    // ============================================================================
+    // Shortcut for getting coordinates
+    // ============================================================================
+    public getPosiCoord(index: number): TCoord {
+        return this._getAttribValue(ELevels.POSIS, index, 'coordinates') as TCoord;
     }
    // ============================================================================
     // Get entity attrib names

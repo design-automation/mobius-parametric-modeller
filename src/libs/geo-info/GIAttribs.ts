@@ -1,17 +1,7 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './json_data';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-/**
- * Enum of the 6 levels at which attribtes can be added.
- */
-enum ELevels {
-    POSIS,
-    VERTS,
-    EDGES,
-    WIRES,
-    FACES,
-    COLLS
-}
+
 /**
  * Class for attributes.
  */
@@ -70,13 +60,6 @@ export class GIAttribs {
     // Private methods
     // ============================================================================
     /**
-     * Returns one of the attribute maps.
-     * @param level
-     */
-    private _getLevel(level: ELevels): Map<string, GIAttribMap> {
-        return [this.posis, this.verts, this.edges, this.wires, this.faces, this.colls][level];
-    }
-    /**
      * Creates a new attribte.
      * @param level The level at which to create the attribute.
      * @param name The name of the attribute.
@@ -84,100 +67,57 @@ export class GIAttribs {
      * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
     private _addAttrib(level: ELevels, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        const attribs: Map<string, GIAttribMap> = this._getLevel(level);
+        const attribs: Map<string, GIAttribMap> = this._getLeveli(level);
         if (!attribs.has(name)) {
             const attrib: GIAttribMap = new GIAttribMap({name: name, data_type: data_type, data_size: data_size, data: []});
             attribs.set(name, attrib);
         }
         return attribs[name];
     }
-    /**
-     * Sets a single attribute value.
-     * @param level
-     * @param name
-     * @param key
-     * @param value
-     */
-    private _setAttribValue(level: ELevels, index: number, name: string, value: TAttribDataTypes): void {
-        const attribs: Map<string, GIAttribMap> = this._getLevel(level);
-        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
-        attribs.get(name).set(index, value);
-    }
-    /**
-     * Gets a single attribute value.
-     * @param level
-     * @param name
-     * @param key
-     * @param value
-     */
-    private _getAttribValue(level: ELevels, index: number, name: string): TAttribDataTypes {
-        const attribs: Map<string, GIAttribMap> = this._getLevel(level);
-        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
-        return attribs.get(name).get(index);
-    }
     // ============================================================================
-    // Threejs
+    // Break an ID string into its two components
     // ============================================================================
-    /**
-     * Get a list of all the coordinates.
-     * This returns two arrays, one with indexes, and another with values.
-     * For example, suppose the bimap contained  [  [[1,3], [2.3,4.5,6.7]],  [[0,2], [9.8,7.6,5.4]]  ].
-     * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
-     * These array can be use for building the threejs scene using typed arrays.
-     */
-    public getSeqCoords(): [number[], TCoord[]] {
-        const coords_attrib: GIAttribMap = this.posis.get('coordinates');
-        const seq_keys: number[] = coords_attrib.getSeqKeys();
-        const seq_values: TCoord[] = coords_attrib.getSeqValues() as TCoord[];
-        return [seq_keys, seq_values];
+
+    private _getLeveli(level: ELevels): Map<string, GIAttribMap> { // TODO merge these methods
+        return [this.posis, this.verts, this.edges, this.wires, this.faces, this.colls][level];
+    }
+    private _getLevel(level_str: string): Map<string, GIAttribMap> {
+        const levels = {
+            po: this.posis,
+            _v: this.verts,
+            _e: this.edges,
+            _w: this.wires,
+            _f: this.faces,
+            co: this.colls
+        };
+        return levels[level_str];
+    }
+    private _idBreak(id: string): [Map<string, GIAttribMap>, number] {
+        const level: Map<string, GIAttribMap> = this._getLevel(id.slice(0, 2));
+        const index: number = Number(id.slice(2));
+        return [level, index];
     }
     // ============================================================================
     // Set an entity attrib value
     // ============================================================================
-    public setPosiAttribValue(index: number, name: string, value: TAttribDataTypes): void {
-        this._setAttribValue(ELevels.POSIS, index, name, value);
-    }
-    public setVertAttribValue(index: number, name: string, value: TAttribDataTypes): void {
-        this._setAttribValue(ELevels.VERTS, index, name, value);
-    }
-    public setEdgeAttribValue(index: number, name: string, value: TAttribDataTypes): void {
-        this._setAttribValue(ELevels.EDGES, index, name, value);
-    }
-    public setWireAttribValue(index: number, name: string, value: TAttribDataTypes): void {
-        this._setAttribValue(ELevels.WIRES, index, name, value);
-    }
-    public setFaceAttribValue(index: number, name: string, value: TAttribDataTypes): void {
-        this._setAttribValue(ELevels.FACES, index, name, value);
-    }
-    public setCollAttribValue(index: number, name: string, value: TAttribDataTypes): void {
-        this._setAttribValue(ELevels.COLLS, index, name, value);
+    public setAttribValue(id: string, name: string, value: TAttribDataTypes): void {
+        const [attribs, index]: [Map<string, GIAttribMap>, number] = this._idBreak(id);
+        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
+        attribs.get(name).set(index, value);
     }
     // ============================================================================
     // Get an entity attrib value
     // ============================================================================
-    public getPosiAttribValue(index: number, name: string): TAttribDataTypes {
-        return this._getAttribValue(ELevels.POSIS, index, name);
-    }
-    public getVertAttribValue(index: number, name: string): TAttribDataTypes {
-        return this._getAttribValue(ELevels.VERTS, index, name);
-    }
-    public getEdgeAttribValue(index: number, name: string): TAttribDataTypes {
-        return this._getAttribValue(ELevels.EDGES, index, name);
-    }
-    public getWireAttribValue(index: number, name: string): TAttribDataTypes {
-        return this._getAttribValue(ELevels.WIRES, index, name);
-    }
-    public getFaceAttribValue(index: number, name: string): TAttribDataTypes {
-        return this._getAttribValue(ELevels.FACES, index, name);
-    }
-    public getCollAttribValue(index: number, name: string): TAttribDataTypes {
-        return this._getAttribValue(ELevels.COLLS, index, name);
+    public getAttribValue(id: string, name: string): TAttribDataTypes {
+        const [attribs, index]: [Map<string, GIAttribMap>, number] = this._idBreak(id);
+        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
+        return attribs.get(name).get(index);
     }
     // ============================================================================
     // Shortcut for getting coordinates
     // ============================================================================
     public getPosiCoord(index: number): TCoord {
-        return this._getAttribValue(ELevels.POSIS, index, 'coordinates') as TCoord;
+        return this.posis['coordinates'].get(name).get(index) as TCoord;
     }
    // ============================================================================
     // Get entity attrib names
@@ -220,5 +160,23 @@ export class GIAttribs {
     }
     public addCollAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
         return this._addAttrib(ELevels.COLLS, name, data_type, data_size);
+    }
+    // ============================================================================
+    // Threejs
+    // For methods to get the array of edges and triangles, see the geom class
+    // get3jsTris() and get3jsEdges()
+    // ============================================================================
+    /**
+     * Get a list of all the coordinates.
+     * This returns two arrays, one with indexes, and another with values.
+     * For example, suppose the bimap contained  [  [[1,3], [2.3,4.5,6.7]],  [[0,2], [9.8,7.6,5.4]]  ].
+     * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
+     * These array can be use for building the threejs scene using typed arrays.
+     */
+    public getSeqCoords(): [number[], TCoord[]] {
+        const coords_attrib: GIAttribMap = this.posis.get('coordinates');
+        const seq_keys: number[] = coords_attrib.getSeqKeys();
+        const seq_values: TCoord[] = coords_attrib.getSeqValues() as TCoord[];
+        return [seq_keys, seq_values];
     }
 }

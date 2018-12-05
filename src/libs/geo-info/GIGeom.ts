@@ -1,6 +1,7 @@
 import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './json_data';
 import { GIModel } from './GIModel';
 import { triangulate } from '../triangulate/triangulate';
+import { ELevelStr } from './GICommon';
 /**
  * Class for geometry.
  */
@@ -194,6 +195,109 @@ export class GIGeom {
             });
         });
     }
+    // ============================================================================
+    // Navigate down the hierarchy
+    // ============================================================================
+    private _navVertToPosi(vert: number): number {
+        return this.verts[vert];
+    }
+    private _navEdgeToVert(edge: number): number[] {
+        return this.edges[edge];
+    }
+    private _navWireToEdge(wire: number): number[] {
+        return this.wires[wire];
+    }
+    private _navFaceToWire(face: number): number[] {
+        return this.faces[face][0];
+    }
+    private _navFaceToTri(face: number): number[] {
+        return this.faces[face][1];
+    }
+    private _navPointToVert(point: number): number {
+        return this.points[point];
+    }
+    private _navLineToVert(line: number): number {
+        return this.lines[line];
+    }
+    private _navPgonToVert(pgon: number): number {
+        return this.pgons[pgon];
+    }
+    private _navCollToPoint(coll: number): number[] {
+        return this.colls[coll][1];
+    }
+    private _navCollToLine(coll: number): number[] {
+        return this.colls[coll][2];
+    }
+    private _navCollToPgon(coll: number): number[] {
+        return this.colls[coll][3];
+    }
+    private _navCollToColl(coll: number): number {
+        return coll[0];
+    }
+    // ============================================================================
+    // Navigate up the hierarchy
+    // ============================================================================
+    private _navPosiToVert(posi: number): number[] {
+        return this.rev_posis_verts[posi];
+    }
+    private _navPosiToTri(posi: number): number[] {
+        return this.rev_posis_tris[posi];
+    }
+    private _navTriToFace(tri: number): number {
+        return this.rev_tris_faces[tri];
+    }
+    private _navVrtToEdge(vert: number): number {
+        return this.rev_verts_edges[vert];
+    }
+    private _navEdgeToWire(edge: number): number {
+        return this.rev_edges_wires[edge];
+    }
+    private _navWireToFace(wire: number): number {
+        return this.rev_wires_faces[wire];
+    }
+    private _navVertToPoint(vert: number): number {
+        return this.rev_verts_points[vert];
+    }
+    private _navWireToLine(wire: number): number {
+        return this.rev_wires_lines[wire];
+    }
+    private _navFaceToPgon(face: number): number {
+        return this.rev_faces_pgons[face];
+    }
+    private _navPointToColl(point: number): number {
+        return this.rev_points_colls[point];
+    }
+    private _navLineToColl(line: number): number {
+        return this.rev_lines_colls[line];
+    }
+    private _navPgonToColl(pgon: number): number {
+        return this.rev_pgons_colls[pgon];
+    }
+    // ============================================================================
+    // Break an ID string into its two components
+    // ============================================================================
+    private _getLevel(level_str: string): any[] {
+        const levels = {
+            po: null,
+            _v: this.verts,
+            _e: this.edges,
+            _w: this.wires,
+            _f: this.faces,
+            pt: this.points,
+            ls: this.lines,
+            pg: this.pgons,
+            co: this.colls
+        };
+        return levels[level_str];
+    }
+    private _idBreak(id: string): [any[], number] {
+        const level: any[] = this._getLevel(id.slice(0, 2));
+        const index: number = Number(id.slice(2));
+        return [level, index];
+    }
+    // ============================================================================
+    // Create the topological entities, these methods are never public
+    // ============================================================================
     /**
      * Adds a vertex and updates the rev array.
      * @param position
@@ -245,30 +349,34 @@ export class GIGeom {
         const face_i: number = this.faces.push(face);
         return face_i;
     }
+    // ============================================================================
+    // Create geometry, all these public methods return an string id
+    // ============================================================================
     /**
      * Adds a new position to the model and returns the index to that position.
      */
-    public addPosition(): number {
+    public addPosition(): string {
         this.num_posis += 1;
-        return this.num_posis - 1;
+        const i = this.num_posis - 1;
+        return ELevelStr.POSI + i;
     }
     /**
      * Adds a new point entity to the model.
      * @param position The position for the point.
      */
-    public addPoint(position: number): number {
+    public addPoint(position: number): string {
         // create verts
         const vert_i = this._addVertex(position);
         // create point
         const point_i: number = this.points.push(vert_i) - 1;
         this.rev_verts_points[vert_i] = point_i;
-        return point_i;
+        return ELevelStr.POINT + point_i;
     }
     /**
      * Adds a new linestring entity to the model.
      * @param positions
      */
-    public addLine(positions: number[], close: boolean = false): number {
+    public addLine(positions: number[], close: boolean = false): string {
         // create verts, edges, wires
         const vert_i_arr: number[] = positions.map( position => this._addVertex(position));
         const edges_i_arr: number[] = [];
@@ -282,14 +390,14 @@ export class GIGeom {
         // create line
         const line_i: number = this.lines.push(wire_i) - 1;
         this.rev_wires_lines[wire_i] = line_i;
-        return line_i;
+        return ELevelStr.LINE + line_i;
     }
     /**
      * Adds a new polygon entity to the model.
      * @param positions
      * @param holes
      */
-    public addPgon(positions: number[]): number {
+    public addPgon(positions: number[]): string {
         // create verts, edges, wires, faces
         const vert_i_arr: number[] = positions.map( position => this._addVertex(position));
         const edges_i_arr: number[] = [];
@@ -302,7 +410,7 @@ export class GIGeom {
         // create polygon
         const pgon_i: number = this.pgons.push(face_i) - 1;
         this.rev_faces_pgons[face_i] = pgon_i;
-        return pgon_i;
+        return ELevelStr.PGON + pgon_i;
     }
     /**
      * Adds a collection and updates the rev array.
@@ -315,142 +423,41 @@ export class GIGeom {
         throw new Error('NOT IMPLEMENTED');
     }
     // ============================================================================
-    // Get entities
+    // Check if entity exists
     // ============================================================================
-    public getTri(index: number): TTri {
-        return this.tris[index];
-    }
-    public getVert(index: number): TVert {
-        return this.verts[index];
-    }
-    public getEdge(index: number): TEdge {
-        return this.edges[index];
-    }
-    public getWire(index: number): TWire {
-        return this.wires[index];
-    }
-    public getFace(index: number): TFace {
-        return this.faces[index];
-    }
-    public getPoint(index: number): TPoint {
-        return this.points[index];
-    }
-    public getLine(index: number): TLine {
-        return this.lines[index];
-    }
-    public getPgon(index: number): TPgon {
-        return this.pgons[index];
-    }
-    public getColl(index: number): TColl {
-        return this.colls[index];
+    public has(id: string): boolean {
+        const [level, index]: [any[], number] = this._idBreak(id);
+        return (level[index] !== undefined);
     }
     // ============================================================================
-    // Get arrays of entities
+    // Get arrays of entities, these retrun arrays of string IDs
     // ============================================================================
-    public getTris(): TTri[] {
-        return this.tris;
+    public getTris(): string[] {
+        return this.tris.map( (_, index) =>  ELevelStr.TRI + index );
     }
-    public getVerts(): TVert[] {
-        return this.verts;
+    public getVerts(): string[] {
+        return this.verts.map( (_, index) =>  ELevelStr.VERT + index );
     }
-    public getEdges(): TEdge[] {
-        return this.edges;
+    public getEdges(): string[] {
+        return this.edges.map( (_, index) =>  ELevelStr.EDGE + index );
     }
-    public getWires(): TWire[] {
-        return this.wires;
+    public getWires(): string[] {
+        return this.wires.map( (_, index) =>  ELevelStr.WIRE + index );
     }
-    public getFaces(): TFace[] {
-        return this.faces;
+    public getFaces(): string[] {
+        return this.faces.map( (_, index) =>  ELevelStr.FACE + index );
     }
-    public getPoints(): TPoint[] {
-        return this.points;
+    public getPoints(): string[] {
+        return this.points.map( (_, index) =>  ELevelStr.POINT + index );
     }
-    public getLines(): TLine[] {
-        return this.lines;
+    public getLines(): string[] {
+        return this.lines.map( (_, index) =>  ELevelStr.LINE + index );
     }
-    public getPgons(): TPgon[] {
-        return this.pgons;
+    public getPgons(): string[] {
+        return this.pgons.map( (_, index) =>  ELevelStr.PGON + index );
     }
-    public getColls(): TColl[] {
-        return this.colls;
-    }
-    // ============================================================================
-    // Navigate down the hierarchy
-    // ============================================================================
-    public navVertToPosi(vert: number): number {
-        return this.verts[vert];
-    }
-    public navEdgeToVert(edge: number): number[] {
-        return this.edges[edge];
-    }
-    public navWireToEdge(wire: number): number[] {
-        return this.wires[wire];
-    }
-    public navFaceToWire(face: number): number[] {
-        return this.faces[face][0];
-    }
-    public navFaceToTri(face: number): number[] {
-        return this.faces[face][1];
-    }
-    public navPointToVert(point: number): number {
-        return this.points[point];
-    }
-    public navLineToVert(line: number): number {
-        return this.lines[line];
-    }
-    public navPgonToVert(pgon: number): number {
-        return this.pgons[pgon];
-    }
-    public navCollToPoint(coll: number): number[] {
-        return this.colls[coll][1];
-    }
-    public navCollToLine(coll: number): number[] {
-        return this.colls[coll][2];
-    }
-    public navCollToPgon(coll: number): number[] {
-        return this.colls[coll][3];
-    }
-    public navCollToColl(coll: number): number {
-        return coll[0];
-    }
-    // ============================================================================
-    // Navigate up the hierarchy
-    // ============================================================================
-    public navPosiToVert(posi: number): number[] {
-        return this.rev_posis_verts[posi];
-    }
-    public navPosiToTri(posi: number): number[] {
-        return this.rev_posis_tris[posi];
-    }
-    public NavTriToFace(tri: number): number {
-        return this.rev_tris_faces[tri];
-    }
-    public navVrtToEdge(vert: number): number {
-        return this.rev_verts_edges[vert];
-    }
-    public navEdgeToWire(edge: number): number {
-        return this.rev_edges_wires[edge];
-    }
-    public navWireToFace(wire: number): number {
-        return this.rev_wires_faces[wire];
-    }
-    public navVertToPoint(vert: number): number {
-        return this.rev_verts_points[vert];
-    }
-    public navWireToLine(wire: number): number {
-        return this.rev_wires_lines[wire];
-    }
-    public navFaceToPgon(face: number): number {
-        return this.rev_faces_pgons[face];
-    }
-    public navPointToColl(point: number): number {
-        return this.rev_points_colls[point];
-    }
-    public navLineToColl(line: number): number {
-        return this.rev_lines_colls[line];
-    }
-    public navPgonToColl(pgon: number): number {
-        return this.rev_pgons_colls[pgon];
+    public getColls(): string[] {
+        return this.colls.map( (_, index) =>  ELevelStr.COLL + index );
     }
     // ============================================================================
     // Get array lengths
@@ -484,5 +491,17 @@ export class GIGeom {
     }
     public numColls(): number {
         return this.colls.length;
+    }
+    // ============================================================================
+    // ThreeJS
+    // Get arrays for threejs, these retrun arrays of indexes to positions
+    // For a method to get the array of positions, see the attrib class
+    // getSeqCoords()
+    // ============================================================================
+    public get3jsTris(): number[][] {
+        return this.tris;
+    }
+    public get3jsEdges(): number[][] {
+        return this.edges.map( edge => [this.verts[edge[0]], this.verts[edge[1]]] );
     }
 }

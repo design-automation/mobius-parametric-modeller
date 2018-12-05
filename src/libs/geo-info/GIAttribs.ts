@@ -1,18 +1,29 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './json_data';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
+import { EEntityTypeStr, idBreak } from './GICommon';
 
 /**
  * Class for attributes.
  */
 export class GIAttribs {
     private model: GIModel;
+    // maps, the key is the name, the value is the map
     private posis: Map<string, GIAttribMap> = new Map();
     private verts: Map<string, GIAttribMap> = new Map();
     private edges: Map<string, GIAttribMap> = new Map();
     private wires: Map<string, GIAttribMap> = new Map();
     private faces: Map<string, GIAttribMap> = new Map();
     private colls: Map<string, GIAttribMap> = new Map();
+    // all maps
+    private attrib_maps = {
+        po: this.posis,
+        _v: this.verts,
+        _e: this.edges,
+        _w: this.wires,
+        _f: this.faces,
+        co: this.colls
+    };
    /**
      * Creates an object to store the attribute data.
      * @param model The JSON data
@@ -61,13 +72,13 @@ export class GIAttribs {
     // ============================================================================
     /**
      * Creates a new attribte.
-     * @param level The level at which to create the attribute.
+     * @param type_str The level at which to create the attribute.
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
      * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
-    private _addAttrib(level: ELevels, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        const attribs: Map<string, GIAttribMap> = this._getLeveli(level);
+    private _addAttrib(type_str: EEntityTypeStr, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        const attribs: Map<string, GIAttribMap> = this.attrib_maps[type_str];
         if (!attribs.has(name)) {
             const attrib: GIAttribMap = new GIAttribMap({name: name, data_type: data_type, data_size: data_size, data: []});
             attribs.set(name, attrib);
@@ -75,51 +86,39 @@ export class GIAttribs {
         return attribs[name];
     }
     // ============================================================================
-    // Break an ID string into its two components
+    // Public methods
     // ============================================================================
-
-    private _getLeveli(level: ELevels): Map<string, GIAttribMap> { // TODO merge these methods
-        return [this.posis, this.verts, this.edges, this.wires, this.faces, this.colls][level];
-    }
-    private _getLevel(level_str: string): Map<string, GIAttribMap> {
-        const levels = {
-            po: this.posis,
-            _v: this.verts,
-            _e: this.edges,
-            _w: this.wires,
-            _f: this.faces,
-            co: this.colls
-        };
-        return levels[level_str];
-    }
-    private _idBreak(id: string): [Map<string, GIAttribMap>, number] {
-        const level: Map<string, GIAttribMap> = this._getLevel(id.slice(0, 2));
-        const index: number = Number(id.slice(2));
-        return [level, index];
-    }
-    // ============================================================================
-    // Set an entity attrib value
-    // ============================================================================
+    /**
+     * Set an entity attrib value
+     * @param id
+     * @param name
+     * @param value
+     */
     public setAttribValue(id: string, name: string, value: TAttribDataTypes): void {
-        const [attribs, index]: [Map<string, GIAttribMap>, number] = this._idBreak(id);
+        const [type_str, index]: [string, number] = idBreak(id);
+        const attribs: Map<string, GIAttribMap> = this.attrib_maps[type_str];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         attribs.get(name).set(index, value);
     }
-    // ============================================================================
-    // Get an entity attrib value
-    // ============================================================================
+    /**
+     * Get an entity attrib value
+     * @param id
+     * @param name
+     */
     public getAttribValue(id: string, name: string): TAttribDataTypes {
-        const [attribs, index]: [Map<string, GIAttribMap>, number] = this._idBreak(id);
+        const [type_str, index]: [string, number] = idBreak(id);
+        const attribs: Map<string, GIAttribMap> = this.attrib_maps[type_str];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).get(index);
     }
-    // ============================================================================
-    // Shortcut for getting coordinates
-    // ============================================================================
-    public getPosiCoord(index: number): TCoord {
-        return this.posis['coordinates'].get(name).get(index) as TCoord;
+    /**
+     * Shortcut for getting coordinates from a numeric index (i.e. this is not an ID)
+     * @param posi_i
+     */
+    public getPosiCoord(posi_i: number): TCoord {
+        return this.posis.get('coordinates').get(posi_i) as TCoord;
     }
-   // ============================================================================
+    // ============================================================================
     // Get entity attrib names
     // ============================================================================
     public getPosiAttribNames(): string[] {
@@ -144,22 +143,22 @@ export class GIAttribs {
     // Add an entity attrib
     // ============================================================================
     public addPosiAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(ELevels.POSIS, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.POSI, name, data_type, data_size);
     }
     public addVertAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(ELevels.VERTS, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.VERT, name, data_type, data_size);
     }
     public addEdgeAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(ELevels.EDGES, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.EDGE, name, data_type, data_size);
     }
     public addWireAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(ELevels.WIRES, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.WIRE, name, data_type, data_size);
     }
     public addFaceAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(ELevels.FACES, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.FACE, name, data_type, data_size);
     }
     public addCollAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(ELevels.COLLS, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.COLL, name, data_type, data_size);
     }
     // ============================================================================
     // Threejs

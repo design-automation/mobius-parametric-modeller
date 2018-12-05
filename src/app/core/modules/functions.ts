@@ -1,5 +1,5 @@
 import { GIModel } from '../../../libs/geo-info/GIModel';
-import { TCoord, EAttribDataTypeStrs } from '../../../libs/geo-info/json_data';
+import { IModelData, TCoord, EAttribDataTypeStrs } from '../../../libs/geo-info/json_data';
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -65,7 +65,8 @@ export function __stringify__(__model__: GIModel): string {
  * @param model_data The model data in gs-json format.
  * @returns New model if successful, null if unsuccessful or on error.
  */
-export function addData(__model__: GIModel, model: any): any {
+export function addData(__model__: GIModel, model_data: IModelData): void {
+    const model: GIModel = new GIModel(model_data);
     __merge__(__model__, model);
 }
 
@@ -95,17 +96,17 @@ export function numPolygons(__model__: GIModel): number {
  * @param __model__
  * @param coords
  */
-export function addPosition(__model__: GIModel, coords: TCoord): number {
-    const posi_i: number = __model__.geom().addPosition();
-    __model__.attribs().setPosiAttribValue(posi_i, 'coordinates', coords);
-    return posi_i;
+export function addPosition(__model__: GIModel, coords: TCoord): string {
+    const posi_id: string = __model__.geom().addPosition();
+    __model__.attribs().setAttribValue(posi_id, 'coordinates', coords);
+    return posi_id;
 }
 /**
  * Adds a new point to the model.
  * @param __model__
  * @param coords
  */
-export function addPoint(__model__: GIModel, position: number) {
+export function addPoint(__model__: GIModel, position: string): string {
     return __model__.geom().addPoint(position);
 }
 /**
@@ -113,7 +114,7 @@ export function addPoint(__model__: GIModel, position: number) {
  * @param __model__
  * @param coords
  */
-export function addLinestring(__model__: GIModel, positions: number[]) {
+export function addLinestring(__model__: GIModel, positions: string[]): string {
     return __model__.geom().addLine(positions);
 }
 /**
@@ -121,6 +122,6 @@ export function addLinestring(__model__: GIModel, positions: number[]) {
  * @param __model__
  * @param coords
  */
-export function addPolygon(__model__: GIModel, positions: number[]) {
+export function addPolygon(__model__: GIModel, positions: string[]): string {
     return __model__.geom().addPgon(positions);
 }

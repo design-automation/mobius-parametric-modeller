@@ -1,7 +1,8 @@
 import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './json_data';
 import { GIModel } from './GIModel';
+import { EEntityTypeStr, idBreak, idIndex, idIndicies } from './GICommon';
 import { triangulate } from '../triangulate/triangulate';
-import { ELevelStr } from './GICommon';
+
 /**
  * Class for geometry.
  */
@@ -39,6 +40,18 @@ export class GIGeom {
     private rev_pgons_colls: number[] = []; // 1 pgon -> 1 collection
     // collections
     private colls: TColl[] = []; // 1 collection -> many points, many polylines, many polygons
+    // all arrays
+    private geom_arrs = {
+        _t: this.tris,
+        _v: this.verts,
+        _e: this.edges,
+        _w: this.wires,
+        _f: this.faces,
+        pt: this.points,
+        ls: this.lines,
+        pg: this.pgons,
+        co: this.colls
+    };
     /**
      * Creates an object to store the geometry data.
      * @param geom_data The JSON data
@@ -274,68 +287,46 @@ export class GIGeom {
         return this.rev_pgons_colls[pgon];
     }
     // ============================================================================
-    // Break an ID string into its two components
-    // ============================================================================
-    private _getLevel(level_str: string): any[] {
-        const levels = {
-            po: null,
-            _v: this.verts,
-            _e: this.edges,
-            _w: this.wires,
-            _f: this.faces,
-            pt: this.points,
-            ls: this.lines,
-            pg: this.pgons,
-            co: this.colls
-        };
-        return levels[level_str];
-    }
-    private _idBreak(id: string): [any[], number] {
-        const level: any[] = this._getLevel(id.slice(0, 2));
-        const index: number = Number(id.slice(2));
-        return [level, index];
-    }
-    // ============================================================================
     // Create the topological entities, these methods are never public
     // ============================================================================
     /**
      * Adds a vertex and updates the rev array.
-     * @param position
+     * @param posi_i
      */
-    private _addVertex(position: number): number {
-        const vert_i: number = this.verts.push(position) - 1;
-        if (this.rev_posis_verts[position] === undefined) {
-            this.rev_posis_verts[position] = [];
+    private _addVertex(posi_i: number): number {
+        const vert_i: number = this.verts.push(posi_i) - 1;
+        if (this.rev_posis_verts[posi_i] === undefined) {
+            this.rev_posis_verts[posi_i] = [];
         }
-        this.rev_posis_verts[position].push(vert_i);
+        this.rev_posis_verts[posi_i].push(vert_i);
         return vert_i;
     }
     /**
      * Adds an edge and updates the rev array.
-     * @param vertex1
-     * @param vertex2
+     * @param vert_i1
+     * @param vert_i2
      */
-    private _addEdge(vertex1: number, vertex2: number): number {
-        const edge_i: number = this.edges.push([vertex1, vertex2]) - 1;
-        this.rev_verts_edges[vertex1] = edge_i;
-        this.rev_verts_edges[vertex2] = edge_i;
+    private _addEdge(vert_i1: number, vert_i2: number): number {
+        const edge_i: number = this.edges.push([vert_i1, vert_i2]) - 1;
+        this.rev_verts_edges[vert_i1] = edge_i;
+        this.rev_verts_edges[vert_i2] = edge_i;
         return edge_i;
     }
     /**
      * Adds a wire and updates the rev array.
      * Edges are assumed to be sequential!
-     * @param edges
+     * @param edges_i
      */
-    private _addWire(edges: number[], close: boolean = false): number {
-        const wire_i: number = this.wires.push(edges) - 1;
-        edges.forEach( edge_i => this.rev_edges_wires[edge_i] = wire_i );
+    private _addWire(edges_i: number[], close: boolean = false): number {
+        const wire_i: number = this.wires.push(edges_i) - 1;
+        edges_i.forEach( edge_i => this.rev_edges_wires[edge_i] = wire_i );
         return wire_i;
     }
     /**
      * Adds a face and updates the rev array.
      * Wires are assumed to be closed!
-     * No holes yet...
-     * @param wires
+     * No holes yet... TODO
+     * @param wire_i
      */
     private _addFace(wire_i: number): number {
         // create the triangles
@@ -350,7 +341,7 @@ export class GIGeom {
         return face_i;
     }
     // ============================================================================
-    // Create geometry, all these public methods return an string id
+    // Create geometry, all these public methods return an string ID
     // ============================================================================
     /**
      * Adds a new position to the model and returns the index to that position.
@@ -358,27 +349,29 @@ export class GIGeom {
     public addPosition(): string {
         this.num_posis += 1;
         const i = this.num_posis - 1;
-        return ELevelStr.POSI + i;
+        return EEntityTypeStr.POSI + i;
     }
     /**
      * Adds a new point entity to the model.
-     * @param position The position for the point.
+     * @param posi_id The position for the point.
      */
-    public addPoint(position: number): string {
+    public addPoint(posi_id: string): string {
+        const posi_i: number = idIndex(posi_id);
         // create verts
-        const vert_i = this._addVertex(position);
+        const vert_i = this._addVertex(posi_i);
         // create point
         const point_i: number = this.points.push(vert_i) - 1;
         this.rev_verts_points[vert_i] = point_i;
-        return ELevelStr.POINT + point_i;
+        return EEntityTypeStr.POINT + point_i;
     }
     /**
      * Adds a new linestring entity to the model.
-     * @param positions
+     * @param posis_id
      */
-    public addLine(positions: number[], close: boolean = false): string {
+    public addLine(posis_id: string[], close: boolean = false): string {
+        const posis_i: number[] = idIndicies(posis_id);
         // create verts, edges, wires
-        const vert_i_arr: number[] = positions.map( position => this._addVertex(position));
+        const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
         for (let i = 0; i < vert_i_arr.length - 1; i++) {
             edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
@@ -390,16 +383,16 @@ export class GIGeom {
         // create line
         const line_i: number = this.lines.push(wire_i) - 1;
         this.rev_wires_lines[wire_i] = line_i;
-        return ELevelStr.LINE + line_i;
+        return EEntityTypeStr.LINE + line_i;
     }
     /**
      * Adds a new polygon entity to the model.
-     * @param positions
-     * @param holes
+     * @param posis_id
      */
-    public addPgon(positions: number[]): string {
+    public addPgon(posis_id: string[]): string {
+        const posis_i: number[] = idIndicies(posis_id);
         // create verts, edges, wires, faces
-        const vert_i_arr: number[] = positions.map( position => this._addVertex(position));
+        const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
         for (let i = 0; i < vert_i_arr.length - 1; i++) {
             edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
@@ -410,54 +403,54 @@ export class GIGeom {
         // create polygon
         const pgon_i: number = this.pgons.push(face_i) - 1;
         this.rev_faces_pgons[face_i] = pgon_i;
-        return ELevelStr.PGON + pgon_i;
+        return EEntityTypeStr.PGON + pgon_i;
     }
     /**
      * Adds a collection and updates the rev array.
-     * @param parent
-     * @param points
-     * @param lines
-     * @param pgons
+     * @param parent_id
+     * @param points_id
+     * @param lines_id
+     * @param pgons_id
      */
-    private addColl(parent: number, points: number[], lines: number[], pgons: number[]): number {
+    private addColl(parent_id: number, points_id: string[], lines_id: string[], pgons_id: string[]): string {
         throw new Error('NOT IMPLEMENTED');
     }
     // ============================================================================
     // Check if entity exists
     // ============================================================================
     public has(id: string): boolean {
-        const [level, index]: [any[], number] = this._idBreak(id);
-        return (level[index] !== undefined);
+        const [type_str, index]: [string, number] = idBreak(id);
+        return (this.geom_arrs[type_str][index] !== undefined);
     }
     // ============================================================================
     // Get arrays of entities, these retrun arrays of string IDs
     // ============================================================================
     public getTris(): string[] {
-        return this.tris.map( (_, index) =>  ELevelStr.TRI + index );
+        return this.tris.map( (_, index) =>  EEntityTypeStr.TRI + index );
     }
     public getVerts(): string[] {
-        return this.verts.map( (_, index) =>  ELevelStr.VERT + index );
+        return this.verts.map( (_, index) =>  EEntityTypeStr.VERT + index );
     }
     public getEdges(): string[] {
-        return this.edges.map( (_, index) =>  ELevelStr.EDGE + index );
+        return this.edges.map( (_, index) =>  EEntityTypeStr.EDGE + index );
     }
     public getWires(): string[] {
-        return this.wires.map( (_, index) =>  ELevelStr.WIRE + index );
+        return this.wires.map( (_, index) =>  EEntityTypeStr.WIRE + index );
     }
     public getFaces(): string[] {
-        return this.faces.map( (_, index) =>  ELevelStr.FACE + index );
+        return this.faces.map( (_, index) =>  EEntityTypeStr.FACE + index );
     }
     public getPoints(): string[] {
-        return this.points.map( (_, index) =>  ELevelStr.POINT + index );
+        return this.points.map( (_, index) =>  EEntityTypeStr.POINT + index );
     }
     public getLines(): string[] {
-        return this.lines.map( (_, index) =>  ELevelStr.LINE + index );
+        return this.lines.map( (_, index) =>  EEntityTypeStr.LINE + index );
     }
     public getPgons(): string[] {
-        return this.pgons.map( (_, index) =>  ELevelStr.PGON + index );
+        return this.pgons.map( (_, index) =>  EEntityTypeStr.PGON + index );
     }
     public getColls(): string[] {
-        return this.colls.map( (_, index) =>  ELevelStr.COLL + index );
+        return this.colls.map( (_, index) =>  EEntityTypeStr.COLL + index );
     }
     // ============================================================================
     // Get array lengths

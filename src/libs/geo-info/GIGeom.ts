@@ -412,8 +412,17 @@ export class GIGeom {
      * @param lines_id
      * @param pgons_id
      */
-    private addColl(parent_id: number, points_id: string[], lines_id: string[], pgons_id: string[]): string {
-        throw new Error('NOT IMPLEMENTED');
+    private addColl(parent_id: string, points_id: string[], lines_id: string[], pgons_id: string[]): string {
+        const parent_i: number = idIndex(parent_id);
+        const points_i: number[] = idIndicies(points_id);
+        const lines_i: number[] = idIndicies(lines_id);
+        const pgons_i: number[] = idIndicies(pgons_id);
+        // create collection
+        const coll_i: number = this.colls.push([parent_i, points_i, lines_i, pgons_i]) - 1;
+        points_i.forEach( point_i => this.rev_points_colls[point_i] = coll_i);
+        lines_i.forEach( line_i => this.rev_points_colls[line_i] = coll_i);
+        pgons_i.forEach( pgon_i => this.rev_points_colls[pgon_i] = coll_i);
+        return EEntityTypeStr.COLL + coll_i;
     }
     // ============================================================================
     // Check if entity exists

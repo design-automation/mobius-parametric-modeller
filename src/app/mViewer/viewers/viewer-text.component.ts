@@ -40,7 +40,6 @@ export class TextViewerComponent implements OnInit, DoCheck {
     } else {
         // console.log('Unknown output type:', this.data);
         // this.output = functions.__stringify__(this.data);
-        console.log(this.data)
         this.output = functions.__stringify__(this.data);
 
     }
@@ -59,7 +58,6 @@ export class TextViewerComponent implements OnInit, DoCheck {
       this.output = JSON.stringify(this.data);
     } else {
       //console.log('Unknown output type:', this.data);
-      console.log(this.data)
       this.output = functions.__stringify__(this.data);
     }
   }

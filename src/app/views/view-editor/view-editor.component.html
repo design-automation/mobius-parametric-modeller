@@ -17,7 +17,7 @@
         <!-- procedure editor on the right side -->
         <div id='procedure' class="container--procedure">
             <!-- parameter-editor only for start node -->
-            <parameter-editor *ngIf="dataService.node.type == 'start'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
+            <parameter-editor *ngIf="dataService.node.type == 'start' || dataService.node.type == 'end'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
 
             <!-- list of procedure items for all nodes -->
             <procedure-item 

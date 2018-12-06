@@ -24,8 +24,6 @@ export class ProcedureItemComponent {
     @Output() pasteOn = new EventEmitter();
     @Output() helpText = new EventEmitter();
 
-    private model = _parameterTypes.model;
-    private constList = _parameterTypes.constList;
     ProcedureTypes = ProcedureTypes;
 
     // delete this procedure
@@ -71,8 +69,14 @@ export class ProcedureItemComponent {
             return;
         }
         try {
+            if (this.data.type === ProcedureTypes.Imported) {
+                this.helpText.emit(this.data.meta.name);
+                // this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+
+            } else {
             // @ts-ignore
             this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+            }
         } catch (ex) {
             this.helpText.emit('error');
         }
@@ -84,7 +88,7 @@ export class ProcedureItemComponent {
         event.stopPropagation();
     }
 
-    // modify input: replace space " " with underscore "_"
+    // modify variable input: replace space " " with underscore "_"
     varMod(event) {
         if (!event) { return event; }
         let str = event.trim();
@@ -92,9 +96,34 @@ export class ProcedureItemComponent {
         return str;
     }
 
+    // modify argument input: check if input is valid
+    argMod(event: string) {
+        return event;
+
+        console.log(event);
+        const string = event.trim();
+        if ( string.substring(0, 1) === '@' || (/^[a-zA-Z_$][0-9a-zA-Z_$]*/i).test(string)) {
+            return event;
+        }
+        try {
+            JSON.parse(string);
+        } catch (ex) {
+            console.log('.........', ex);
+            // document.activeElement.style.error = true;
+        }
+
+        return event;
+    }
+
 
     updateInputSize(event) {
         const val = event.target.value || event.target.placeholder;
         event.target.style.width = ctx.measureText(val).width + 10 + 'px';
+    }
+
+    inputSize(val) {
+        console.log(val);
+        // event.target.style.width = ctx.measureText(val).width + 10 + 'px';
+        return ctx.measureText(val).width + 10 + 'px';
     }
 }

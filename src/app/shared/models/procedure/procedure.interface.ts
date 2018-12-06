@@ -1,5 +1,6 @@
 import { ProcedureTypes } from './types';
 import { IArgument } from '@models/code';
+import { IFlowchart } from '@models/flowchart';
 
 export interface IProcedure {
     type: ProcedureTypes;
@@ -11,7 +12,7 @@ export interface IProcedure {
     argCount: number;
     args: IArgument[];
 
-    meta: { name: string, module: string, inputMode: number};
+    meta: { name: string, module: string, inputMode: number, description: string};
 
     print: boolean;
     enabled: boolean;
@@ -30,5 +31,7 @@ export interface IFunction {
     argCount: number;
     hasReturn: boolean;
     args: IArgument[];
+    flowchart?: IFlowchart;
+    doc?: any;
 }
 

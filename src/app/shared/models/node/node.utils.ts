@@ -35,7 +35,7 @@ export abstract class NodeUtils {
         node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
-        node.position = {x: 400, y: 0};
+        node.position = {x: 700, y: 400};
         return node;
     }
 
@@ -43,7 +43,7 @@ export abstract class NodeUtils {
         const node = NodeUtils.getNewNode();
         node.name = 'End';
         node.type = 'end';
-        node.position = {x: 400, y: 400};
+        node.position = {x: 700, y: 800};
         return node;
     }
 
@@ -194,7 +194,7 @@ export abstract class NodeUtils {
             case ProcedureTypes.Function:
                 if (!data) { throw Error('No function data'); }
 
-                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput, description: undefined};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: undefined, default: undefined};
                 if (!data.hasReturn) {
@@ -211,7 +211,7 @@ export abstract class NodeUtils {
                 break;
 
             case ProcedureTypes.Imported:
-                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput};
+                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput, description: undefined};
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, ...data.args];
                 break;

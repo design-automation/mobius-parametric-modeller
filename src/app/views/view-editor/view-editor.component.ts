@@ -19,6 +19,7 @@ export class ViewEditorComponent {
     @Output() delete_Function = new EventEmitter();
     @Output() helpText = new EventEmitter();
     copiedProd: IProcedure[];
+    copiedType: string;
 
     private copyCheck = false;
 
@@ -43,62 +44,71 @@ export class ViewEditorComponent {
 
     // copy selected procedures
     copyProd() {
-      if (!this.copyCheck) { return; }
-      console.log('copying', this.dataService.node.state.procedure);
-      this.copiedProd = this.dataService.node.state.procedure;
+        const node = this.dataService.node;
+        if (!this.copyCheck || node.type === 'end') { return; }
+        console.log('copying', node.state.procedure);
+        this.copiedType = node.type;
+        this.copiedProd = node.state.procedure;
     }
 
     // cut selected procedures
     cutProd(event) {
-      if (!this.copyCheck || document.activeElement.nodeName === 'INPUT') { return; }
-      console.log('cutting', this.dataService.node.state.procedure);
-      this.copiedProd = this.dataService.node.state.procedure;
-      let parentArray;
-      for (const prod of this.copiedProd) {
-        if (prod.parent) {
-          parentArray = prod.parent.children;
-        } else { parentArray = this.dataService.node.procedure; }
+        const node = this.dataService.node;
+        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.type === 'end') { return; }
+        console.log('cutting', node.state.procedure);
+        this.copiedType = node.type;
+        this.copiedProd = node.state.procedure;
+        let parentArray;
+        for (const prod of this.copiedProd) {
+            if (prod.parent) {
+                parentArray = prod.parent.children;
+            } else { parentArray = node.procedure; }
 
-        for (let i = 0; i < parentArray.length; i++ ) {
-          if (parentArray[i] === prod) {
-            parentArray.splice(i, 1);
-            break;
-          }
+            for (let i = 0; i < parentArray.length; i++ ) {
+                if (parentArray[i] === prod) {
+                    parentArray.splice(i, 1);
+                    break;
+                }
+            }
         }
-      }
-      NodeUtils.deselect_procedure(this.dataService.node);
+        NodeUtils.deselect_procedure(node);
     }
 
     // paste copied procedures
     pasteProd(event) {
-      if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() !== 'INPUT') {
-        const pastingPlace = this.dataService.node.state.procedure[0];
-        if (pastingPlace === undefined) {
-          for (let i = 0; i < this.copiedProd.length; i++) {
-            console.log('pasting', this.copiedProd[i].ID);
-            NodeUtils.paste_procedure(this.dataService.node, this.copiedProd[i]);
-            this.dataService.node.state.procedure[0].selected = false;
-            this.dataService.node.state.procedure = [];
-          }
-        } else if (pastingPlace.children) {
-          for (let i = 0; i < this.copiedProd.length; i++) {
-            console.log('pasting', this.copiedProd[i].ID);
-            NodeUtils.paste_procedure(this.dataService.node, this.copiedProd[i]);
-            this.dataService.node.state.procedure[0].selected = false;
-            pastingPlace.selected = true;
-            this.dataService.node.state.procedure = [pastingPlace];
-          }
+        const node = this.dataService.node;
+        if (this.copyCheck
+        && this.copiedProd
+        && this.copiedType === node.type
+        && document.activeElement.nodeName.toUpperCase() !== 'INPUT'
+        && document.activeElement.nodeName.toUpperCase() !== 'TEXTAREA') {
+            const pastingPlace = node.state.procedure[0];
+            if (pastingPlace === undefined) {
+            for (let i = 0; i < this.copiedProd.length; i++) {
+                console.log('pasting', this.copiedProd[i].ID);
+                NodeUtils.paste_procedure(node, this.copiedProd[i]);
+                node.state.procedure[0].selected = false;
+                node.state.procedure = [];
+            }
+            } else if (pastingPlace.children) {
+            for (let i = 0; i < this.copiedProd.length; i++) {
+                console.log('pasting', this.copiedProd[i].ID);
+                NodeUtils.paste_procedure(node, this.copiedProd[i]);
+                node.state.procedure[0].selected = false;
+                pastingPlace.selected = true;
+                node.state.procedure = [pastingPlace];
+            }
 
-        } else {
-          for (let i = this.copiedProd.length - 1; i >= 0; i --) {
-            console.log('pasting', this.copiedProd[i].ID);
-            NodeUtils.paste_procedure(this.dataService.node, this.copiedProd[i]);
-            this.dataService.node.state.procedure[0].selected = false;
-            pastingPlace.selected = true;
-            this.dataService.node.state.procedure = [pastingPlace];
-          }
-        }
-        // this.copiedProd = undefined;
+            } else {
+            for (let i = this.copiedProd.length - 1; i >= 0; i --) {
+                console.log('pasting', this.copiedProd[i].ID);
+                NodeUtils.paste_procedure(node, this.copiedProd[i]);
+                node.state.procedure[0].selected = false;
+                pastingPlace.selected = true;
+                node.state.procedure = [pastingPlace];
+            }
+            }
+            // this.copiedProd = undefined;
       }
     }
 
@@ -130,7 +140,15 @@ export class ViewEditorComponent {
     }
 
     emitHelpText(event) {
-      this.helpText.emit(event);
+        if (typeof(event) === 'string') {
+            for (const func of this.dataService.flowchart.functions) {
+                if (func.name === event) {
+                    this.helpText.emit(func.doc);
+                }
+            }
+        } else {
+            this.helpText.emit(event);
+        }
     }
 
 }

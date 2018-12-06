@@ -76,6 +76,7 @@ export function ModuleDocAware(constructor: Function) {
             for (const func of mod.children) {
                 const fn = {};
                 fn['name'] = func.name;
+                fn['module'] = modName;
                 if (!func['signatures']) { continue; }
                 if (func['signatures'][0].comment) {
                     const cmmt = func['signatures'][0].comment;

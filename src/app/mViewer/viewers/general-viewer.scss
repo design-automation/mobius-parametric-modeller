@@ -1,0 +1,37 @@
+:host{
+    height: 100%;
+    width: 100%;
+  }
+textarea{
+    height: 99%;
+    width: 99%;
+    overflow: auto;
+    resize: none;
+    font-family: sans-serif;
+    background-color: rgb(220,220,220);
+    color: rgb(80,80,80);
+    border: none;
+}
+div{
+    font-family: sans-serif;
+    color: rgb(80,80,80);
+    width: 100%;
+    padding-left:10px;
+}
+h5{
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.funcDesc{
+    font-weight: 600;
+}
+
+.paramP{
+    padding-left: 5px;
+
+}
+span{
+    font-weight: 550;
+    font-style: italic;
+}

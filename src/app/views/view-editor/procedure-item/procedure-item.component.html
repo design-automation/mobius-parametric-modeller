@@ -13,11 +13,13 @@
                 name='data.args[0].name'
                 placeholder={{data.args[0].name}}>  
             = 
-            <input class='input--arg'
-                [(ngModel)]='data.args[1].value'
+            <input 
+                class='input--arg'
+                [ngModel]='data.args[1].value'
+                (ngModelChange)='data.args[1].value=argMod($event)'
                 name='data.args[1].name'
                 placeholder={{data.args[1].name}}
-                size = {{data.args[1].name.length}}
+                size = {{data.args[1].value?.length||data.args[1].name.length}}
                 (input)='updateInputSize($event)'>  
             </div>
 
@@ -31,7 +33,7 @@
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
-                    size={{data.args[0].name.length}}
+                    size={{data.args[0].value?.length||data.args[0].name.length}}
                     (input)='updateInputSize($event)'>  
                     )
 
@@ -49,7 +51,7 @@
                 [(ngModel)]='data.args[0].value'
                 name='data.args[0].name'
                 placeholder={{data.args[0].name}}
-                size={{data.args[0].name.length}}
+                size={{data.args[0].value?.length||data.args[0].name.length}}
                 (input)='updateInputSize($event)'>  
                 )
         </div>
@@ -86,7 +88,7 @@
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
-                    size={{data.args[0].name.length}}
+                    size={{data.args[0].value?.length||data.args[0].name.length}}
                     (input)='updateInputSize($event)'>  
                 <div class='function-text'>
                     in
@@ -96,7 +98,7 @@
                     [(ngModel)]='data.args[1].value'
                     name='data.args[1].name'
                     placeholder={{data.args[1].name}}
-                    size={{data.args[1].name.length}}
+                    size={{data.args[1].value?.length||data.args[1].name.length}}
                     (input)='updateInputSize($event)'>  
                     
         </div>
@@ -111,7 +113,7 @@
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
-                    size={{data.args[0].name.length}}
+                    size={{data.args[0].value?.length||data.args[0].name.length}}
                     (input)='updateInputSize($event)'>  
 
         </div>
@@ -150,22 +152,9 @@
                         (paste)='stopProp($event)' 
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
-                        size={{p.name.length}}
+                        size={{p.value?.length||p.name.length}}
                         (input)='updateInputSize($event)'>    
                 
-                <!--
-
-                <ng-template #model_template>
-                    <ng-container *ngIf="p.name == model; else params_template">
-                        model,
-                    </ng-container>
-                </ng-template>
-                <ng-template #params_template>
-                    <ng-container *ngIf="p.name == constList;">
-                        const_list,
-                    </ng-container>
-                </ng-template>
-                -->
 
             </ng-container>
 
@@ -186,7 +175,7 @@
                         (cut)='stopProp($event)' (paste)='stopProp($event)' 
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
-                        size={{p.name.length}}
+                        size={{p.value?.length||p.name.length}}
                         (input)='updateInputSize($event)'>    
             </ng-container>
             

@@ -139,6 +139,14 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     this.camera.aspect = this.width / this.height;
     this.camera.updateProjectionMatrix();
   }
+
+  notify(message: string): void {
+    if (message === 'model_update' && this.scene) {
+
+      this.updateModel();
+    }
+  }
+
   //
   // update mode
   // todo: optimize
@@ -162,7 +170,8 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
 
     console.log(this._model);
     // Convert the attribute data to a bi-map, then use it to get the position values
-    const positions_data = new bm.BiMapManyToOne<any>(this._model._attribs.positions[0].data);
+
+    const positions_data = new bm.BiMapManyToOne<any>(this._model._attribs.posis.entries());
     const positions_ = [];
     positions_data.keys().forEach(key => {
         positions_.push(positions_data.getValue(key));

@@ -1,12 +1,12 @@
-<div class='flowchart-info'>
+<div class='flowchart-info' *ngIf="node.type=='start'">
     <input [(ngModel)]='flowchart.name' size={{flowchart.name?.length||1}}>
     <textarea autogrow [(ngModel)]='flowchart.description' placeholder="flowchart description"></textarea>
 </div>
-<hr>
+<hr *ngIf="node.type=='start'">
 <div class='container--input'>
     <procedure-input-editor *ngFor="let prod of node.procedure" [prod]="prod" ></procedure-input-editor>
 </div>
-    
+
 <!--
 <section *ngIf="node.type != 'end'">
     <panel-header [node]='node' [title]="'inputs'"></panel-header>

@@ -1,6 +1,7 @@
-import { IModelData, IGeomData, IAttribsData } from './json_data';
+import { IModelData, IGeomData, IAttribsData, TPoint } from './GIJson';
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
+import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
  */
@@ -15,7 +16,7 @@ export class GIModel {
         this._geom = new GIGeom(this);
         this._attribs = new GIAttribs(this);
         if (model_data) {
-            this.setData(model_data);
+            this.addData(model_data);
         }
     }
     // Getters and setters
@@ -26,7 +27,7 @@ export class GIModel {
      * The existing data in the model is deleted.
      * @param model_data The JSON data
      */
-    public setData (model_data: IModelData): void {
+    public addData (model_data: IModelData): void {
         this._geom.addData(model_data.geometry);
         this._attribs.addData(model_data.attributes);
     }
@@ -59,5 +60,20 @@ export class GIModel {
      */
     public getAttribsData(): IAttribsData {
         return this._attribs.getData();
+    }
+    /**
+     * Returns arrays for visualization in Threejs.
+     */
+    public get3jsData(): IThreeJS {
+        const [coords_keys, coords_values]: [number[], number[]] = this._attribs.get3jsSeqCoords();
+        const tris: number[] = this._geom.get3jsTris().map( vert_i => coords_keys[vert_i] );
+        const lines: number[] = this._geom.get3jsLines().map( vert_i => coords_keys[vert_i] );
+        const points: number[] = this._geom.get3jsPoints().map( vert_i => coords_keys[vert_i] );
+        return {
+            positions: coords_values,
+            points: points,
+            lines: lines,
+            triangles: tris
+        };
     }
 }

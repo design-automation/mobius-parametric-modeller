@@ -1,5 +1,5 @@
 import { GIModel } from '../../../libs/geo-info/GIModel';
-import { IModelData, TCoord, EAttribDataTypeStrs } from '../../../libs/geo-info/json_data';
+import { IModelData, TCoord, EAttribDataTypeStrs } from '../../../libs/geo-info/GIJson';
 
 //  ===============================================================================================================
 //  Functions used by Mobius

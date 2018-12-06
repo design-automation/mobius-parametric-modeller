@@ -19,7 +19,7 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
 
 
 @NgModule({
-        declarations: [
+    declarations: [
         AppComponent,
     ],
     imports: [

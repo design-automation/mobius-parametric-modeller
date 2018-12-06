@@ -18,12 +18,17 @@ import { ModuleDocAware } from '@shared/decorators';
 
 
   `,
-  styleUrls: [`general-viewer.scss`]
+  styleUrls: [`../general-viewer.scss`]
 })
-export class ProcedureHelpComponent {
+/**
+ * HelpViewerComponent
+ */
+export class HelpViewerComponent {
     @Input() output;
-
+    /**
+     * constructor
+     */
     constructor() {
+        // console.log(`Help Viewer Created`);
     }
-
 }

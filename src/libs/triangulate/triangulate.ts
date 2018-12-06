@@ -2,7 +2,7 @@
 import * as three from 'three';
 import * as threex from '../threex/threex';
 import * as earcut from './earcut';
-import {TCoord} from '../geo-info/json_data';
+import {TCoord} from '../geo-info/GIJson';
 import {Arr} from '../arr/arr';  // TODO remove dependence on this
 
 //  3D to 2D ======================================================================================================

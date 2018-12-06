@@ -3,7 +3,6 @@ import { IMobius } from '@models/mobius';
 import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node';
 
-
 @Injectable()
 export class DataService {
     private static _data: IMobius = {
@@ -18,13 +17,13 @@ export class DataService {
 
     get file() { return DataService._data; }
     set file(data: IMobius) {
-            DataService._data = <IMobius>{
-                    name: data.name,
-                    author: data.author,
-                    flowchart: data.flowchart,
-                    last_updated: data.last_updated,
-                    version: data.version
-            };
+        DataService._data = <IMobius>{
+            name: data.name,
+            author: data.author,
+            flowchart: data.flowchart,
+            last_updated: data.last_updated,
+            version: data.version
+        };
     }
 
     get flowchart(): IFlowchart { return DataService._data.flowchart; }

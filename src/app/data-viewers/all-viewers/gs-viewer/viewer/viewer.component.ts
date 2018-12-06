@@ -7,7 +7,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import * as bm from '../../../../../libs/geo-info/BiMap';
 
 @Component({
-  selector: 'app-viewer',
+  selector: 'viewer.component',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.css']
 })

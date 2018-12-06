@@ -1,5 +1,5 @@
 import { BiMapManyToOne } from './BiMap';
-import { EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './json_data';
+import { EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './GIJson';
 //  ===============================================================================================================
 //  Classes
 //  ===============================================================================================================

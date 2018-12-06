@@ -26,7 +26,7 @@ import { InputPortViewerComponent } from './components/parameter-viewer/input-po
 import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
-import { MobiusViewerModule } from '../mViewer/mobius-viewer.module';
+import { DataViewersContainer } from '../data-viewers/data-viewers-container.module';
 import { AutogrowDirective } from './directives/textarea';
 
 @NgModule({
@@ -47,7 +47,7 @@ import { AutogrowDirective } from './directives/textarea';
             RouterModule,
             MatSliderModule, MatCheckboxModule,
             SVGFlowchartModule,
-            MobiusViewerModule,
+            DataViewersContainer,
             AngularSplitModule,
             FormsModule,
             MatIconModule,
@@ -56,7 +56,7 @@ import { AutogrowDirective } from './directives/textarea';
     exports: [
             FormsModule,
             SVGFlowchartModule,
-            MobiusViewerModule,
+            DataViewersContainer,
             AngularSplitModule,
             MbFileReaderDirective,
             AutogrowDirective,

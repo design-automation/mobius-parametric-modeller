@@ -1,4 +1,4 @@
-import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './json_data';
+import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
 import { EEntityTypeStr, idBreak } from './GICommon';
@@ -172,10 +172,10 @@ export class GIAttribs {
      * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
      * These array can be use for building the threejs scene using typed arrays.
      */
-    public getSeqCoords(): [number[], TCoord[]] {
+    public get3jsSeqCoords(): [number[], number[]] {
         const coords_attrib: GIAttribMap = this.posis.get('coordinates');
-        const seq_keys: number[] = coords_attrib.getSeqKeys();
-        const seq_values: TCoord[] = coords_attrib.getSeqValues() as TCoord[];
-        return [seq_keys, seq_values];
+        const coords_keys: number[] = coords_attrib.getSeqKeys();
+        const coords_values: number[] = [].concat(...coords_attrib.getSeqValues());
+        return [coords_keys, coords_values];
     }
 }

@@ -1,8 +1,9 @@
-:host{
+:host {
     height: 100%;
     width: 100%;
-  }
-textarea{
+}
+
+textarea {
     height: 99%;
     width: 99%;
     overflow: auto;
@@ -12,26 +13,28 @@ textarea{
     color: rgb(80,80,80);
     border: none;
 }
-div{
+
+div {
     font-family: sans-serif;
     color: rgb(80,80,80);
     width: 100%;
     padding-left:10px;
 }
-h5{
+
+h5 {
     font-weight: 700;
     font-size: 12px;
 }
 
-.funcDesc{
+.funcDesc {
     font-weight: 600;
 }
 
-.paramP{
+.paramP {
     padding-left: 5px;
 
 }
-span{
+span {
     font-weight: 550;
     font-style: italic;
 }

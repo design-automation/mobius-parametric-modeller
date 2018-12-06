@@ -1,4 +1,4 @@
-import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './json_data';
+import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './GIJson';
 import { GIModel } from './GIModel';
 import { EEntityTypeStr, idBreak, idIndex, idIndicies } from './GICommon';
 import { triangulate } from '../triangulate/triangulate';
@@ -500,10 +500,13 @@ export class GIGeom {
     // For a method to get the array of positions, see the attrib class
     // getSeqCoords()
     // ============================================================================
-    public get3jsTris(): number[][] {
-        return this.tris;
+    public get3jsTris(): number[] {
+        return [].concat(...this.tris);
     }
-    public get3jsEdges(): number[][] {
-        return this.edges.map( edge => [this.verts[edge[0]], this.verts[edge[1]]] );
+    public get3jsLines(): number[] {
+        return [].concat(...this.edges.map( edge => [this.verts[edge[0]], this.verts[edge[1]]] ));
+    }
+    public get3jsPoints(): number[] {
+        return [].concat(...this.points.map( point => this.verts[point] ));
     }
 }

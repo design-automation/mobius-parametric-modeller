@@ -10,8 +10,12 @@ import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
 import { fromEvent } from 'rxjs';
 import { DataService } from '@services';
+// import * as svgPanZoom from 'svg-pan-zoom';
 
 declare const InstallTrigger: any;
+
+// constant for the size of the svg canvas viewbox
+const canvasSize = 1500;
 
 @Component({
     selector: 'flowchart',
@@ -24,6 +28,8 @@ export class FlowchartComponent implements OnInit {
 
     constructor(private dataService: DataService) {
     }
+
+    viewbox = `0 0 ${canvasSize} ${canvasSize}`;
 
     // general variable for mouse events
     private isDown: number;
@@ -52,7 +58,7 @@ export class FlowchartComponent implements OnInit {
     private pasteListener = fromEvent(document, 'paste');
     private listenerActive = false;
 
-    // position of the current canvas view relative to the full svg canvas
+    // position of the current canvas view relative to the top left of the page
     private offset;
 
     // constants for offset positions of input/output port relative to the node's position
@@ -79,6 +85,7 @@ export class FlowchartComponent implements OnInit {
 
     ngOnInit() {
         this.canvas = <HTMLElement>document.getElementById('svg-canvas');
+        // const panZoom = svgPanZoom(this.canvas);
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
 
@@ -183,7 +190,6 @@ export class FlowchartComponent implements OnInit {
                 if (this.startCoords[0] === NaN) {
                     this.startCoords = [0, 0];
                 }
-
                 // mark the dragging mode as dragNode
                 this.isDown = 2;
                 break;
@@ -415,21 +421,116 @@ export class FlowchartComponent implements OnInit {
             return;
         }
 
-        // if new zoom is bigger than current zoom, update the mouse position to current position
-        if (value > this.zoom) {
-            this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]];
-        }
-        // this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]];
+
+        /*
+        // VER 1: translate before and after re-scaling
+        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        const beforeX = this.mousePos[0] - bRect.x + this.offset[0];
+        const beforeY = this.mousePos[1] - bRect.y + this.offset[1];
+
+        const afterX = beforeX / value + this.mousePos[0] * (value - this.zoom);
+        const afterY = beforeY / value + this.mousePos[1] * (value - this.zoom);
 
         // find transformation matrix
         const m = this.canvas.createSVGMatrix()
-        .translate(this.mousePos[0], this.mousePos[1])
+        .translate(beforeX / this.zoom, beforeY / this.zoom)
         .scale(value)
-        .translate(-this.mousePos[0], -this.mousePos[1]);
+        .translate(-afterX, -afterY);
+
         const transf = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
+        */
+
+        /*
+        // VER 2 : transform relative to the top-left of the bounding box of the canvas and adjust based on mouse position
+
+        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        let newX = (bRect.left - this.offset[0] - this.mousePos[0] * (value - this.zoom)) / this.zoom;
+        let newY = (bRect.top - this.offset[1]  - this.mousePos[1] * (value - this.zoom)) / this.zoom;
+        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+
+        const m = this.canvas.createSVGMatrix()
+        .scale(value)
+        .translate(newX, newY);
+
+        newX = m.e;
+        newY = m.f;
+
+        if (newX > 0) {
+            newX = 0;
+        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
+            newX = boundingDiv.width - bRect.width * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
+            newY = boundingDiv.height - bRect.height * value / this.zoom;
+        }
+        if (newY > 0) { newY = 0; }
+
+
+        const transf = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
+        */
+
+        /*
+        // VER 3: transform relative to the center of the canvas
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+
+        let newX = (bRect.left - this.offset[0]) / this.zoom;
+        let newY = (bRect.top - this.offset[1] ) / this.zoom;
+
+
+        const m = this.canvas.createSVGMatrix()
+        .scale(value)
+        .translate(newX, newY);
+
+        newX = m.e - boundingDiv.width * (value - this.zoom) / (2 * this.zoom);
+        newY = m.f - boundingDiv.width * (value - this.zoom) / (2 * this.zoom);
+
+        if (newX > 0) {
+            newX = 0;
+        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
+            newX = boundingDiv.width - bRect.width * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
+            newY = boundingDiv.height - bRect.height * value / this.zoom;
+        }
+        if (newY > 0) { newY = 0; }
+        */
+
+        // VER 4: transform relative to the mouse position
+        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+
+        let newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom ;
+        let newY = ((bRect.top - this.offset[1] ) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
+
+        // snapping back the x and y coordinates if they go out of the bounding box
+        if (newX > 0) {
+            newX = 0;
+        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
+            newX = boundingDiv.width - bRect.width * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
+            newY = boundingDiv.height - bRect.height * value / this.zoom;
+        }
+        if (newY > 0) { newY = 0; }
+
+        const transf = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
 
         // transform
-        this.canvas.style.transition = 'transform 50ms ease-in';
+        this.canvas.style.transition = 'transform 0ms ease-in';
         this.canvas.style.transformOrigin = `top left`;
         this.canvas.style.transform = transf;
         this.zoom = value;
@@ -541,7 +642,6 @@ export class FlowchartComponent implements OnInit {
 
     handleMouseUp(event) {
         this.element = undefined;
-        // drop port --> create new edge if drop position is within 15px of an input/output port
         if (this.isDown === 3) {
             const pt = this.canvas.createSVGPoint();
 

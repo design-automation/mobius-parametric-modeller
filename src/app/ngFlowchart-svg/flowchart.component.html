@@ -1,12 +1,15 @@
 <div id = 'flowchart-main-container' class='container'>
+    <!--
+    -->
 
     <!-- svg component -->
-    <svg id="svg-canvas" class = "svgCanvas" viewBox="0 0 1500 1500" 
+    <svg id="svg-canvas" class = "svgCanvas" 
+    [attr.viewBox]="viewbox"
+    (mouseenter)='activateKeyEvent()'
+    (mouseleave)='deactivateKeyEvent()'
     (mousedown)='panStart($event)'
     (mousemove)='handleMouseMove($event)'  
     (mouseup)='handleMouseUp($event)'
-    (mouseenter)='activateKeyEvent()'
-    (mouseleave)='deactivateKeyEvent()'
     (wheel)='scale($event)'
     >
         <!-- definitions for svg: grid patterns, arrow head for connecting wire-->

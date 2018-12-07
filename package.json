@@ -14,7 +14,7 @@
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-prod": "ng build --base-href=%npm_package_config_prod_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-server": "ng build --base-href='./'",
-    "build-deploy": "ng build --base-href \"https://design-automation.github.io/mobius-core/\" && ngh",
+    "build-deploy": "ng build --base-href 'https://design-automation.github.io/mobius-core/' && ngh",
     "test": "ng test",
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",

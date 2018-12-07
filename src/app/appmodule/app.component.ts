@@ -14,14 +14,12 @@ console.stdlog = console.log.bind(console);
 // @ts-ignore
 console.logs = [];
 // @ts-ignore
-/*
 console.log = function() {
     // @ts-ignore
     console.logs.push(Array.from(arguments));
     // @ts-ignore
     console.stdlog.apply(console, arguments);
 };
-*/
 /*
 
 */

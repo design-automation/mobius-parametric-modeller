@@ -5,15 +5,15 @@ import { Viewers } from './data-viewers.config';
 import { INode } from '@models/node';
 import { EventEmitter } from 'events';
 
-@Component({
-    // tslint:disable-next-line:component-selector
-    selector: 'data-viewers-container.module',
-    templateUrl: 'data-viewers-container.component.html',
-    styleUrls: ['data-viewers-container.component.scss']
-})
 /**
  * A component that contains all the viewers.
  */
+@Component({
+    // tslint:disable-next-line:component-selector
+    selector: 'data-viewers-container',
+    templateUrl: 'data-viewers-container.component.html',
+    styleUrls: ['data-viewers-container.component.scss']
+})
 export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
     @Input() data: any;

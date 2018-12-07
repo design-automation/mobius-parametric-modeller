@@ -1,14 +1,14 @@
 import { Component, Input, OnInit, DoCheck } from '@angular/core';
 import {functions} from '@modules';
 
+/**
+ * TextViewerComponent
+ */
 @Component({
     selector: 'text-viewer',
     template: `<textarea>{{ output || "no-value" }}</textarea>`,
     styleUrls: [`../general-viewer.scss`]
 })
-/**
- * TextViewerComponent
- */
 export class TextViewerComponent implements OnInit, DoCheck {
     @Input() data;
     output: string;

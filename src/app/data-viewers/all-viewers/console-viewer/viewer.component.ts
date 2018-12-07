@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, DoCheck } from '@angular/core';
 
+/**
+ * ConsoleViewerComponent
+ */
 @Component({
     selector: 'console-viewer',
     template: `<textarea>{{ text || "" }}</textarea>`,
     styleUrls: [`../general-viewer.scss`]
 })
-/**
- * ConsoleViewerComponent
- */
 export class ConsoleViewerComponent implements OnInit, DoCheck {
     text: string;
     /**

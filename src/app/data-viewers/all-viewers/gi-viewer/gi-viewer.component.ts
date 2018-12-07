@@ -5,7 +5,7 @@ import { INode } from '@models/node';
 import { ThrowStmt } from '@angular/compiler';
 
 @Component({
-  selector: 'gi-viewer.module',
+  selector: 'gi-viewer',
   templateUrl: './gi-viewer.component.html',
   styleUrls: ['./gi-viewer.component.scss']
 })

@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ModuleDocAware } from '@shared/decorators';
 
+/**
+ * HelpViewerComponent
+ */
 @ModuleDocAware
 @Component({
   selector: 'procedure-help',
@@ -20,9 +23,6 @@ import { ModuleDocAware } from '@shared/decorators';
   `,
   styleUrls: [`../general-viewer.scss`]
 })
-/**
- * HelpViewerComponent
- */
 export class HelpViewerComponent {
     @Input() output;
     /**

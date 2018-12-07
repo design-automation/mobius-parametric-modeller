@@ -7,12 +7,15 @@ import { VIEWER_ARR } from './data-viewers.config';
 import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component';
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/viewer.component';
 import { HelpViewerComponent } from './all-viewers/help-viewer/viewer.component';
-// import { GIViewer } from './viewers/gi-viewer/gi-viewer.module';
+import { GIViewer } from './all-viewers/gi-viewer/gi-viewer.module';
 // import { ThreejsViewerComponent } from './viewers/gi-viewer/threejs/threejs-viewer.component';
 // import { MobiusCesium } from './viewers/cesium-viewer/mobius-cesium.module';
 // import { VisualiseComponent } from "./viewers/cesium-viewer/setting/visualise.component";
 // import { AttributesComponent } from "./viewers/cesium-viewer/setting/attributes.copmponent";
 
+/**
+ * DataViewersContainer, NgModule
+ */
 @NgModule({
     declarations: [
         DataViewersContainerComponent,
@@ -26,16 +29,13 @@ import { HelpViewerComponent } from './all-viewers/help-viewer/viewer.component'
     imports: [
         CommonModule,
         FormsModule,
-        // GIViewer,
+        GIViewer,
     ],
     entryComponents: [
         ...VIEWER_ARR
     ],
     providers: [ ]
 })
-/**
- * DataViewersContainer
- */
 export class DataViewersContainer {
     /**
      * constructor

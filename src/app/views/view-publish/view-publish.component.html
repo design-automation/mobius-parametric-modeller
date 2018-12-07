@@ -42,7 +42,7 @@
             <as-split-area size="60">
 
                 <div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>
-                    <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>
+                    <data-viewers [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></data-viewers>
                 </div>
             </as-split-area>
             

@@ -1,4 +1,4 @@
-import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './json_data';
+import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './GIJson';
 import { GIModel } from './GIModel';
 import { EEntityTypeStr, idBreak, idIndex, idIndicies } from './GICommon';
 import { triangulate } from '../triangulate/triangulate';
@@ -412,8 +412,17 @@ export class GIGeom {
      * @param lines_id
      * @param pgons_id
      */
-    private addColl(parent_id: number, points_id: string[], lines_id: string[], pgons_id: string[]): string {
-        throw new Error('NOT IMPLEMENTED');
+    private addColl(parent_id: string, points_id: string[], lines_id: string[], pgons_id: string[]): string {
+        const parent_i: number = idIndex(parent_id);
+        const points_i: number[] = idIndicies(points_id);
+        const lines_i: number[] = idIndicies(lines_id);
+        const pgons_i: number[] = idIndicies(pgons_id);
+        // create collection
+        const coll_i: number = this.colls.push([parent_i, points_i, lines_i, pgons_i]) - 1;
+        points_i.forEach( point_i => this.rev_points_colls[point_i] = coll_i);
+        lines_i.forEach( line_i => this.rev_points_colls[line_i] = coll_i);
+        pgons_i.forEach( pgon_i => this.rev_points_colls[pgon_i] = coll_i);
+        return EEntityTypeStr.COLL + coll_i;
     }
     // ============================================================================
     // Check if entity exists
@@ -491,10 +500,16 @@ export class GIGeom {
     // For a method to get the array of positions, see the attrib class
     // getSeqCoords()
     // ============================================================================
-    public get3jsTris(): number[][] {
-        return this.tris;
+    public get3jsTris(): number[] {
+        return [].concat(...this.tris);
     }
     public get3jsEdges(): number[][] {
         return this.edges.map( edge => [this.verts[edge[1]], this.verts[edge[0]]] );
+    }
+    public get3jsLines(): number[] {
+        return [].concat(...this.edges.map( edge => [this.verts[edge[0]], this.verts[edge[1]]] ));
+    }
+    public get3jsPoints(): number[] {
+        return [].concat(...this.points.map( point => this.verts[point] ));
     }
 }

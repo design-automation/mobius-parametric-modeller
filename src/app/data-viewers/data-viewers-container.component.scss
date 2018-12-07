@@ -6,7 +6,7 @@ $text-color: rgb(80,80,80);
 $selected-color: rgb(0, 0, 150);
 $hover-color: blue;
 
-.viewer-container{
+.data-viewers-container{
     display: block;
     height: 100%;
     overflow: hidden;
@@ -42,8 +42,6 @@ $hover-color: blue;
     //padding: 10px 15px;
 }
 
-
-
 button.btn{ 
     margin: 10px;
     font-size: 14px;
@@ -54,6 +52,7 @@ button.btn{
     background-color: transparent; 
     color: $text-color;
 }
+
 button.btn:hover{
     color:$hover-color;
 }

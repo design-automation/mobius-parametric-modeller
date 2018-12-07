@@ -5,7 +5,7 @@ import { IMobius } from '@models/mobius';
 import { IFlowchart } from '@models/flowchart';
 import { DataService } from '@services';
 import * as circularJSON from 'circular-json';
-import { IView } from '../mViewer/view.interface';
+import { IView } from '../data-viewers/view.interface';
 import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
 import { Observable } from 'rxjs';
 

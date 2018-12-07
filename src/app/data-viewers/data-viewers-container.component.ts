@@ -1,43 +1,54 @@
 import { Component, Injector, Input,
     ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, OnInit, OnChanges } from '@angular/core';
+import { IView } from './view.interface';
+import { Viewers } from './data-viewers.config';
 import { INode } from '@models/node';
-import { IView , gs_default, cesium_default} from './view.interface';
-import { Viewers } from './viewers.config';
 import { EventEmitter } from 'events';
 
 @Component({
     // tslint:disable-next-line:component-selector
-    selector: 'mviewer',
-    templateUrl:  'mobius-viewer.component.html',
-    styleUrls: ['mobius-viewer.component.scss']
+    selector: 'data-viewers-container.module',
+    templateUrl: 'data-viewers-container.component.html',
+    styleUrls: ['data-viewers-container.component.scss']
 })
-export class ViewerContainerComponent implements OnChanges, OnInit, OnDestroy {
-
+/**
+ * A component that contains all the viewers.
+ */
+export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
     @Input() data: any;
     @Input() helpView: any;
     currentHelpView: any;
-
-    constructor(private injector: Injector, private r: ComponentFactoryResolver) {
-
-    }
-
     private views = [];
     private activeView: IView;
     Viewers = Viewers;
-
+    /**
+     * Construct the viewer container.
+     * @param injector
+     * @param r
+     */
+    constructor(private injector: Injector, private r: ComponentFactoryResolver) {
+        // do nothing
+    }
+    /**
+     * ngOnInit
+     */
     ngOnInit() {
         this.activeView = this.Viewers[0];
         this.updateView( this.activeView );
     }
-
+    /**
+     * ngOnDestroy
+     */
     ngOnDestroy() {
         console.log('onDestroy');
         for (const view of this.views) {
             view.destroy();
         }
     }
-
+    /**
+     * ngOnChanges
+     */
     ngOnChanges() {
         if (this.currentHelpView !== this.helpView) {
             let view;
@@ -48,7 +59,10 @@ export class ViewerContainerComponent implements OnChanges, OnInit, OnDestroy {
             this.updateView(view);
         } else { this.updateValue(); }
     }
-
+    /**
+     * createView
+     * @param view
+     */
     createView(view: IView) {
         const component = view.component;
         const factory = this.r.resolveComponentFactory(component);
@@ -60,7 +74,10 @@ export class ViewerContainerComponent implements OnChanges, OnInit, OnDestroy {
         */
         return componentRef;
     }
-
+    /**
+     * updateView
+     * @param view
+     */
     updateView(view: IView): void {
         this.activeView = view;
 
@@ -73,7 +90,9 @@ export class ViewerContainerComponent implements OnChanges, OnInit, OnDestroy {
         this.vc.detach();
         this.vc.insert( this.views[ this.activeView.name ].hostView );
     }
-
+    /**
+     * updateValue
+     */
     updateValue() {
         try {
             const componentRef =  this.views[ this.activeView.name ];

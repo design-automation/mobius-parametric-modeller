@@ -1,10 +1,10 @@
-<div class='viewer-container'>  
+<div class='data-viewers-container'>  
     <div class='container__header'>
         <div class="tab">
             <button class='btn-tab' 
-            [class.active]='view.name == activeView.name'
-            *ngFor='let view of Viewers;' 
-            (click)='updateView(view)'>
+                [class.active]='view.name == activeView.name'
+                *ngFor='let view of Viewers;' 
+                (click)='updateView(view)'>
             {{view.name}}
             </button>
         </div>

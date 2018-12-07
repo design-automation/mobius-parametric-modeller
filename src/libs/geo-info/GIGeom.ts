@@ -495,6 +495,6 @@ export class GIGeom {
         return this.tris;
     }
     public get3jsEdges(): number[][] {
-        return this.edges.map( edge => [this.verts[edge[0]], this.verts[edge[1]]] );
+        return this.edges.map( edge => [this.verts[edge[1]], this.verts[edge[0]]] );
     }
 }

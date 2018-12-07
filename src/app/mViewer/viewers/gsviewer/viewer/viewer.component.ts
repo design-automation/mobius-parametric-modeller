@@ -1,7 +1,6 @@
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 import * as THREE from 'three';
 
-import * as gs from 'gs-json';
 import {DataSubscriber} from '../data/DataSubscriber';
 import {NgxPaginationModule} from 'ngx-pagination';
 import * as bm from '../../../../../libs/geo-info/BiMap';
@@ -31,13 +30,6 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
   selecting: Array<any>;
   basicMat: THREE.MeshPhongMaterial;
   selectwireMat: THREE.LineBasicMaterial;
-  scene_and_maps: {
-          scene: gs.IThreeScene,
-          faces_map: Map<number, gs.ITopoPathData>,
-          wires_map: Map<number, gs.ITopoPathData>,
-          edges_map: Map<number, gs.ITopoPathData>,
-          vertices_map: Map<number, gs.ITopoPathData>,
-          points_map: Map<number, gs.ITopoPathData>} ;
   myElement;
   scenechildren: Array<any>;
   textlabels: Array<any> = [];
@@ -164,44 +156,37 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
       console.log('MODEL LOADED');
 
       const geometry = new THREE.BufferGeometry();
-    const normals = [];
-    let colors = [];
 
 
-    console.log(this._model);
+    // console.log(this._model);
+    console.log(this._model.attribs().getSeqCoords());
     // Convert the attribute data to a bi-map, then use it to get the position values
 
-    const positions_data = new bm.BiMapManyToOne<any>(this._model._attribs.posis.entries());
-    const positions_ = [];
-    positions_data.keys().forEach(key => {
-        positions_.push(positions_data.getValue(key));
+
+    const positions_values = this._model.attribs().getSeqCoords()[1];
+    const positions_flat = [].concat(...positions_values);
+    console.log('Position:', positions_flat);
+
+    const triangles_data = this._model.geom().get3jsTris();
+    const triangles_flat = [].concat(...triangles_data);
+    console.log('Triangles:', triangles_data);
+
+
+    const positions_keys = this._model.attribs().getSeqCoords()[0];
+
+    const position_coord = [];
+    positions_keys.forEach((v, k) => {
+      position_coord.push(this._model.attribs().getPosiCoord(v));
     });
-
-    const positions_flat = [].concat(...positions_);
-
-    console.log('Position is');
-    console.log(positions_flat);
-
-    const coordinates = this._model._attribs.positions.filter(attr => attr.name === 'coordinates');
-
-    const triangles = this._model._geom.triangles;
-    const triangles_flat = [].concat(...triangles);
+    console.log('Position Coord:', position_coord);
+    const position_coord_flat = [].concat(...position_coord);
 
 
-    const triangles_flat_values = coordinates.values;
-    const triangles_flat_keys = coordinates.keys;
-    const triangles_flat_ = [];
-    triangles_flat_keys.forEach((v, k) => {
-      triangles_flat_.push(triangles_flat_values[v]);
-    });
-    const triangles_flat_coords = [].concat(...triangles_flat_);
-
-
-    // const vertices = this._model._geom.vertices;
-    const edges = this._model._geom.edges;
-
+    const edges_data = this._model.geom().get3jsEdges();
+    
+    
     // remove duplicated edges
-    const edges_sorted = edges.map(x => x.sort()).sort();
+    const edges_sorted = edges_data.map(x => x.sort()).sort();
 
     const edges_unique = [];
 
@@ -211,59 +196,41 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
         }
     }
 
-    const vertices = this._model._geom.vertices;
+    const edges_flat = [].concat(...edges_unique);
+    
 
-    const edges_flat = [].concat(...edges);
-    const edges_flat_coords = [];
+    const vertices = this._model.geom().verts;
+
+    const edges_coords = [];
     edges_flat.forEach((v, k) => {
-      edges_flat_coords.push(coordinates[vertices[v]]);
+      edges_coords.push(positions_values[vertices[v]]);
     });
 
 
-    const attr_normal = this._model._attribs.vertices.filter(attr => attr.name === 'normal');
-
-    const normal_values = attr_normal[0].values;
-    const normal_keys = attr_normal[0].keys;
-    const normals_ = [];
-    normal_keys.forEach((v, k) => {
-      normals_.push(normal_values[v]);
-    });
-    const normals_flat = [].concat(...normals_);
-
-    const attr_color = this._model._attribs.vertices.filter(attr => attr.name === 'color');
-
-    const color_values = attr_color[0].values;
-    const color_keys = attr_color[0].keys;
-    const colors_ = [];
-    color_keys.forEach((v, k) => {
-      colors_.push(color_values[v]);
-    });
-    const colors_flat = [].concat(...colors_);
+    const edges_flat_coords = [].concat(...edges_coords);
+    console.log('Edges:', edges_flat_coords);
 
 
-    colors = [0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1];
-
-    for (let i = 0; i < coordinates.length; i++ ) {
-      normals.push(0, 0, 0);
-      colors.push(0, 0, 1);
+    const normals_flat = [];
+    const colors_flat = [];
+    for (let i = 0; i < this._model.geom().numVerts(); i++ ) {
+      normals_flat.push(0, 0, 0);
+      colors_flat.push(0, 0, 1);
     }
 
 
-    // console.log(colors)
-
-
     // tri
-    geometry.setIndex( triangles_flat_coords );
-    geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions_flat, 3 ) );
-    geometry.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
-    geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-    const material = new THREE.MeshPhongMaterial( {
-      specular: 0xffffff, shininess: 0,
-      side: THREE.DoubleSide, vertexColors: THREE.VertexColors,
-      // wireframe:true
-    } );
-    const mesh = new THREE.Mesh( geometry, material );
-    this.scene.add( mesh );
+    // geometry.setIndex( positions_flat );
+    // geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions_flat, 3 ) );
+    // geometry.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
+    // geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+    // const material = new THREE.MeshPhongMaterial( {
+    //   specular: 0xffffff, shininess: 0,
+    //   side: THREE.DoubleSide, vertexColors: THREE.VertexColors,
+    //   // wireframe:true
+    // } );
+    // const mesh = new THREE.Mesh( geometry, material );
+    // this.scene.add( mesh );
 
    // lines
    const geometry3 = new THREE.BufferGeometry();

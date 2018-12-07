@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
-import { IProcedure } from '@models/procedure';
+import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { InputType } from '@models/port';
 const keys = Object.keys(InputType);
 const canvas = document.createElement('canvas');
@@ -22,7 +22,7 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        console.log(this.prod);
+        // console.log(this.prod);
     }
 
     editOptions(): void { }

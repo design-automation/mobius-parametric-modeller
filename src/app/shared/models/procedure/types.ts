@@ -8,6 +8,8 @@ export enum ProcedureTypes {
     Break,
     Continue,
     Function,
-    Imported
+    Imported,
+    Constant,
+    Return
 }
 

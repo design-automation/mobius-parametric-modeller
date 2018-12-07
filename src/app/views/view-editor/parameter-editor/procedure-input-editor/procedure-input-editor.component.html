@@ -1,4 +1,4 @@
-<div class='container container--parameter' *ngIf='prod.meta.module=="Input"'>
+<div class='container container--parameter' *ngIf='prod.meta?.module=="Input"'>
     <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||"Undefined"}}:' size='15' disabled>
 
     <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">

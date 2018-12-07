@@ -511,10 +511,10 @@ export class FlowchartComponent implements OnInit {
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
 
-        let newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom ;
-        let newY = ((bRect.top - this.offset[1] ) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
+        let newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom;
+        let newY = ((bRect.top  - this.offset[1]) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
 
-        // snapping back the x and y coordinates if they go out of the bounding box
+        // snapping back the x and y coordinates if the zoom goes out of the bounding box
         if (newX > 0) {
             newX = 0;
         } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {

@@ -16,7 +16,8 @@
       "@shared/*" : ["app/shared/*"],
       "@views" : ["app/views"],
       "@services" : ["app/core/services"],
-      "@modules" : ["app/core/modules"]
+      "@modules" : ["app/core/modules"],
+      "@libs": ["libs"]
     }
 
   },

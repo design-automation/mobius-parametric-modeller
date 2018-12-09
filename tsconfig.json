@@ -17,7 +17,7 @@
       "@utils" : ["src/app/shared/utils"],
       "@shared/*" : ["src/app/shared/*"],
       "@views" : ["src/app/views"],
-      "@mviewers": ["src/app/mobius-viewer/viewers"],
+      "@model-viewers": ["src/app/mobius-viewer/viewers"],
       "@services" : ["src/app/core/services"],
       "@modules" : ["src/app/core/modules"]
     },

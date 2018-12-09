@@ -15,7 +15,8 @@
       "@views" : ["app/views"],
       "@services" : ["app/core/services"],
       "@modules" : ["app/core/modules"],
-      "@libs": ["libs"]
+      "@libs": ["libs"],
+      "@test" : ["app/views"]
     },
   },
   "exclude": [

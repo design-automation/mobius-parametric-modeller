@@ -13,10 +13,13 @@ import { CoreModule } from '../core/core.module';
 import { SharedModule } from '@shared/shared.module';
 // import app components
 import { AppComponent } from './app.component';
-import { ViewPublishComponent, ViewPublishModule,
-         ViewEditorComponent, ViewEditorModule,
-         ViewGalleryComponent, ViewGalleryModule } from '@views';
-import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
+import { ViewPublishComponent} from '../views/view-publish/view-publish.component';
+import { ViewPublishModule} from '../views/view-publish/view-publish.module';
+import { ViewEditorComponent} from '../views/view-editor/view-editor.component';
+import { ViewEditorModule} from '../views/view-editor/view-editor.module';
+import { ViewGalleryComponent} from '../views/view-gallery/view-gallery.component';
+import { ViewGalleryModule } from '../views/view-gallery/view-gallery.module';
+import { ViewFlowchartComponent } from '../views/view-flowchart/view-flowchart.component';
 
 /**
  * AppModule, the root module for the whole app.
@@ -43,7 +46,7 @@ import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
     entryComponents: [
         ViewEditorComponent,
         ViewPublishComponent,
-        FlowchartComponent,
+        ViewFlowchartComponent,
         ViewGalleryComponent,
     ],
     providers: [ DataService ],

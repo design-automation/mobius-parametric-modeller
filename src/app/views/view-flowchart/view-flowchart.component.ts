@@ -18,11 +18,11 @@ declare const InstallTrigger: any;
 const canvasSize = 1500;
 
 @Component({
-    selector: 'flowchart',
-    templateUrl: './flowchart.component.html',
-    styleUrls: ['./flowchart.component.scss']
+    selector: 'view-flowchart',
+    templateUrl: './view-flowchart.component.html',
+    styleUrls: ['./view-flowchart.component.scss']
 })
-export class FlowchartComponent implements OnInit {
+export class ViewFlowchartComponent implements OnInit {
 
     @Output() switch = new EventEmitter();
 
@@ -71,7 +71,7 @@ export class FlowchartComponent implements OnInit {
         }
         node.enabled = true;
         for (const edge of node.output.edges) {
-            FlowchartComponent.enableNode(edge.target.parentNode);
+            ViewFlowchartComponent.enableNode(edge.target.parentNode);
         }
     }
 
@@ -79,7 +79,7 @@ export class FlowchartComponent implements OnInit {
     static disableNode(node: INode) {
         node.enabled = false;
         for (const edge of node.output.edges) {
-            FlowchartComponent.disableNode(edge.target.parentNode);
+            ViewFlowchartComponent.disableNode(edge.target.parentNode);
         }
     }
 
@@ -314,9 +314,9 @@ export class FlowchartComponent implements OnInit {
         }
 
         if (tbrEdge.target.parentNode.input.edges.length === 0 && deletedNode !== tbrEdge.target.parentNode.id) {
-            FlowchartComponent.disableNode(tbrEdge.target.parentNode);
+            ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
         } else {
-            FlowchartComponent.enableNode(tbrEdge.target.parentNode);
+            ViewFlowchartComponent.enableNode(tbrEdge.target.parentNode);
         }
 
         // remove the edge from the general list of edges
@@ -701,9 +701,9 @@ export class FlowchartComponent implements OnInit {
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
                 if (this.edge.source.parentNode.enabled) {
-                    FlowchartComponent.enableNode(this.edge.target.parentNode);
+                    ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
                 } else {
-                    FlowchartComponent.disableNode(this.edge.target.parentNode);
+                    ViewFlowchartComponent.disableNode(this.edge.target.parentNode);
                 }
                 break;
             }

@@ -1,12 +1,14 @@
 import { Component, Injector, ComponentFactoryResolver, ViewContainerRef,
     ViewChild, EventEmitter, HostListener, OnInit } from '@angular/core';
-import { ViewEditorComponent, ViewPublishComponent, ViewGalleryComponent } from '@views';
+import { ViewEditorComponent } from '../views/view-editor/view-editor.component';
+import { ViewPublishComponent } from '../views/view-publish/view-publish.component';
+import { ViewGalleryComponent } from '../views/view-gallery/view-gallery.component';
 import { IMobius } from '@models/mobius';
 import { IFlowchart } from '@models/flowchart';
 import { DataService } from '@services';
 import * as circularJSON from 'circular-json';
 import { IView } from '../model-viewers/view.interface';
-import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
+import { ViewFlowchartComponent } from '../views/view-flowchart/view-flowchart.component';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
@@ -35,7 +37,7 @@ export class AppComponent implements OnInit {
     private Viewers = {
         'gallery': ViewGalleryComponent, // src/views/view-gallery/
         'publish': ViewPublishComponent, // src/views/view-publish/
-        'flowchart': FlowchartComponent, // src/ngFlowchart-svg/
+        'flowchart': ViewFlowchartComponent, // src/views/view-flowchart/
         'editor': ViewEditorComponent    // src/views/view-editor/
     };
     activeView: string;

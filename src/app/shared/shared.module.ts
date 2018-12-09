@@ -3,17 +3,19 @@
  *  Contains all global services
  *
  */
-
+import { AngularSplitModule } from 'angular-split';
+// @angular stuff
 import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { MatSliderModule, MatCheckboxModule, MatIconModule } from '@angular/material';
-import { SVGFlowchartModule } from '../../app/ngFlowchart-svg';
-import { AngularSplitModule } from 'angular-split';
-
+// app directives
 import { MbFileReaderDirective } from './directives/filesys';
+import { AutogrowDirective } from './directives/textarea';
+// app views
+import { SVGFlowchartModule } from '../views/view-flowchart/view-flowchart.module';
+// app components
 import { ExecuteComponent } from './components/execute/execute.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -25,9 +27,8 @@ import { ParameterViewerComponent } from './components/parameter-viewer/paramete
 import { InputPortViewerComponent } from './components/parameter-viewer/input-port-viewer/input-port-viewer.component';
 import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
-
+// app model viewers
 import { DataViewersContainer } from '../model-viewers/model-viewers-container.module';
-import { AutogrowDirective } from './directives/textarea';
 
 @NgModule({
     providers: [ ],

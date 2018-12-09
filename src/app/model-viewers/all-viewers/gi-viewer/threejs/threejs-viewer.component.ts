@@ -1,7 +1,8 @@
 import * as THREE from 'three';
+import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { DataSubscriber } from '../data/DataSubscriber';
+import { DataSubscriber } from '../data/data.subscriber';
 // import @angular stuff
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 
@@ -15,150 +16,125 @@ import { Component, OnInit, Injector, ElementRef } from '@angular/core';
     styleUrls: ['./threejs-viewer.component.css']
 })
 export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
-    myElement;
-    // Viewer size
-    width: number;
-    height: number;
-    // ThreeJS objects
-    scene: THREE.Scene;
-    renderer: THREE.WebGLRenderer;
-    camera: THREE.PerspectiveCamera;
-    controls: THREE.OrbitControls;
-    raycaster: THREE.Raycaster;
-    mouse: THREE.Vector2;
-    basicMat: THREE.MeshPhongMaterial;
-    selectwireMat: THREE.LineBasicMaterial;
-    starsGeometry: THREE.Geometry = new THREE.Geometry();
-    sphere: THREE.Mesh;
-    center: THREE.Vector3;
-    // Data arrays
-    selecting: Array<any>;
-    scenechildren: Array<any>;
-    textlabels: Array<any> = [];
-    clickatt: Array<any>;
-    // Interaction and selection
-    mDownTime: number;
-    mUpTime: number;
-    seVisible = false;
-    imVisible = false;
-    SelectVisible = 'Objs';
-    settingVisible = false;
-    LineNo = 0;
-    text: string;
-    private lastChanged = undefined;
-    // The GI model to display
+    _elem;
+    // viewer size
+    _width: number;
+    _height: number;
+    // threeJS objects
+    _scene: THREE.Scene;
+    _renderer: THREE.WebGLRenderer;
+    _camera: THREE.PerspectiveCamera;
+    _controls: THREE.OrbitControls;
+    _raycaster: THREE.Raycaster;
+    _mouse: THREE.Vector2;
+    _sphere: THREE.Mesh;
+    // interaction and selection
+    _select_visible = 'Objs';
+    _text: string;
+    // number of threejs points, lines, triangles
+    _threejs_nums: [number, number, number] = [0, 0, 0];
+    // grid
+    _grid_show = true;
+    _grid_center = [0, 0, 0];
+    // the GI model to display
     _model: GIModel;
     _modelshow = true;
     _updatemodel = true;
-    // scene_and_maps: {
-    //     scene: gs.IThreeScene,
-    //     faces_map: Map<number, gs.ITopoPathData>,
-    //     wires_map: Map<number, gs.ITopoPathData>,
-    //     edges_map: Map<number, gs.ITopoPathData>,
-    //     vertices_map: Map<number, gs.ITopoPathData>,
-    //     points_map: Map<number, gs.ITopoPathData>
-    // } ;
 
     /**
      * Creates a new viewer,
      * @param injector
-     * @param myElement
+     * @param elem
      */
-    constructor(injector: Injector, myElement: ElementRef) {
+    constructor(injector: Injector, elem: ElementRef) {
         super(injector);
-        this.myElement = myElement;
+        this._elem = elem;
     }
     /**
      * Called when the viewer is initialised.
      */
     ngOnInit() {
-        const container = this.myElement.nativeElement.children.namedItem('container');
+        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         // check for container
         if (!container) {
             console.error('No container in Three Viewer');
             return;
         }
-        //
-        const width: number = container.offsetWidth; // container.clientWidth;
-        const height: number = container.offsetHeight; // container.clientHeight;
+        // size of window
+        this._width = container.offsetWidth; // container.client_width;
+        this._height = container.offsetHeight; // container.client_height;
+        // scene
+        this._scene = new THREE.Scene();
+        this._scene.background = new THREE.Color( 0xcccccc );
 
-        const scene: THREE.Scene = this.dataService.getScene(width, height);
-        const renderer: THREE.WebGLRenderer = this.dataService.getRenderer();
-        const camera: THREE.PerspectiveCamera = this.dataService.getCamera();
-        const controls: THREE.OrbitControls = this.dataService.getControls();
-        container.appendChild( renderer.domElement );
+        // renderer
+        this._renderer =  new THREE.WebGLRenderer( {antialias: true} );
+        this._renderer.setSize(this._width, this._height);
+        this._renderer.setPixelRatio( window.devicePixelRatio );
 
-        this.scene = scene;
-        this.renderer = renderer;
-        this.camera = camera;
-        this.controls = controls;
-        this.width = width;
-        this.height = height;
+        // camera settings
+        const aspect_ratio: number = this._width / this._height;
+        this._camera = new THREE.PerspectiveCamera( 50, aspect_ratio, 0.01, 1000 ); // 0.0001, 100000000 );
+        this._camera.position.y = 10;
+        this._camera.up.set(0, 0, 1);
+        this._camera.lookAt( this._scene.position );
+        this._camera.updateProjectionMatrix();
+
+        // orbit controls
+        const orbit_controls = OrbitControls(THREE);
+        this._controls = new orbit_controls( this._camera, this._renderer.domElement );
+        this._controls.enableKeys = false;
+        container.appendChild( this._renderer.domElement );
+
+        // mouse
+        this._mouse = new THREE.Vector2();
+
+        // selecting
+        this._raycaster = new THREE.Raycaster();
+        this._raycaster.linePrecision = 0.05;
+
+        // add stuff to the scene
+        this._addGrid();
+        this._addAmbientLight();
+
+        // update the model
         this.updateModel();
 
-        // todo: check and refactor what is required?
-        this.selecting = this.dataService.getselecting();  // todo: should this be in the data service??
-        this.mouse = new THREE.Vector2();
-        this.raycaster = new THREE.Raycaster();
-        this.raycaster.linePrecision = 0.05;
-        this.scenechildren = this.dataService.getscenechild();
-        this.dataService.SelectVisible = this.SelectVisible;
-
-        const geometry = new THREE.SphereGeometry( 1 );
-        const material = new THREE.MeshBasicMaterial( { color: 0x00ff00, transparent: true, opacity: 0.5 } );
-        this.sphere = new THREE.Mesh( geometry, material );
-        this.sphere.visible = false;
-        this.sphere.name = 'sphereInter';
-        this.sphere.scale.set(0.1, 0.1, 0.1);
-        this.scene.add( this.sphere );
-
+        // ??? What is heppening here?
         const self = this;
-        controls.addEventListener( 'change', function() {self.render( self); });
-
-        this.dataService.addraycaster(this.raycaster);
-        this._addGrid();
-        self.renderer.render( self.scene, self.camera );
+        this._controls.addEventListener( 'change', function() {self.render( self); });
+        self._renderer.render( self._scene, self._camera );
     }
     /**
      * TODO What is self?
      * @param self
      */
     public render(self) {
-        for (let i = 0; i < self.textlabels.length; i++) {
-            self.textlabels[i].updatePosition();
-        }
-        if (self.dataService.clickshow !== undefined && self.clickatt !== self.dataService.clickshow) {
-            self.clickatt = self.dataService.clickshow;
-            self.clickshow();
-        }
-        // self.onDocumentMouseDown();
-        self.renderer.render( self.scene, self.camera );
+        self._renderer.render( self._scene, self._camera );
     }
     /**
      * Called on window resize.
      */
     public onResize(): void {
-        const container = this.myElement.nativeElement.children.namedItem('container');
+        const container = this._elem.nativeElement.children.namedItem('container');
         /// check for container
         if (!container) {
             console.error('No container in Three Viewer');
             return;
         }
         ///
-        const width: number = container.offsetWidth;
-        const height: number = container.offsetHeight;
-        this.width = width;
-        this.height = height;
-        this.renderer.setSize(this.width, this.height);
-        this.camera.aspect = this.width / this.height;
-        this.camera.updateProjectionMatrix();
+        this._width = container.offset_width;
+        this._height = container.offset_height;
+        this._renderer.setSize(this._width, this._height);
+        this._camera.aspect = this._width / this._height;
+        this._camera.updateProjectionMatrix();
     }
     /**
      * Called on model updated.
      * @param message
      */
     public notify(message: string): void {
-        if (message === 'model_update' && this.scene) {
+        if (message === 'model_update' && this._scene) {
             this.updateModel();
         }
     }
@@ -167,7 +143,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      */
     public updateModel(): void {
         this._model = this.dataService.getModel() as GIModel;
-        if ( !this._model || !this.scene ) {
+        if ( !this._model || !this._scene ) {
             console.warn('Model or Scene not defined.');
             this._modelshow = false;
             return;
@@ -176,46 +152,75 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             this._updatemodel = true;
             this._modelshow = true;
             const threejs_data: IThreeJS = this._model.get3jsData();
-            // console.log('MODEL LOADED', this._model);
             // Create single positions buffer that will be used by all geometry
             const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
             this._addTris(threejs_data.triangles, posis_buffer);
             this._addLines(threejs_data.lines, posis_buffer);
             this._addPoints(threejs_data.points, posis_buffer);
             // Render
-            this.controls.update();
+            this._controls.update();
             this.render(this);
-            this.dataService.getpoints = [];
+            // print
+            console.log(">> this.scene >>", this._scene);
         } catch (ex) {
             console.error('Error displaying model:', ex);
             this._updatemodel = false;
-            this.text = ex;
+            this._text = ex;
         }
     }
     // ============================================================================
     // Private methods
     // ============================================================================
     /**
+     * Creates a hemisphere light
+     */
+    private _addHemisphereLight() {
+        const light: THREE.HemisphereLight = new THREE.HemisphereLight(
+            0xffffbb, // skyColor
+            0x080820, // groundColo
+            1 // intensity
+        );
+        this._scene.add( light );
+    }
+    /**
+     * Creates a hemisphere light
+     */
+    private _addAmbientLight() {
+        const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        this._scene.add( light );
+    }
+
+    /**
+     * Creates a hidden sphere sphere.... not sure why
+     */
+    private _addSphere() {
+        const geometry = new THREE.SphereGeometry( 1 );
+        const material = new THREE.MeshBasicMaterial( { color: 0x00ff00, transparent: true, opacity: 0.5 } );
+        this._sphere = new THREE.Mesh( geometry, material );
+        this._sphere.visible = false;
+        this._sphere.name = 'sphereInter';
+        this._sphere.scale.set(0.1, 0.1, 0.1);
+        this._scene.add( this._sphere );
+    }
+    /**
      * Draws a grid on the XY plane.
      */
     private _addGrid() {
-        for (let i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === 'GridHelper') {
-                        this.scene.remove(this.scene.children[i]);
-                        i = i - 1;
+        for (let i = 0; i < this._scene.children.length; i++) {
+            if (this._scene.children[i].name === 'GridHelper') {
+                this._scene.remove(this._scene.children[i]);
+                i = i - 1;
             }
         }
         // todo: change grid -> grid_value
-        if (this.dataService.grid) {
+        if (this._grid_show) {
             const gridhelper = new THREE.GridHelper( 100, 10);
             gridhelper.name = 'GridHelper';
             const vector = new THREE.Vector3(0, 1, 0);
             gridhelper.lookAt(vector);
             gridhelper.position.set(0, 0, 0);
-            this.scene.add( gridhelper);
-            this.dataService.centerx = 0;
-            this.dataService.centery = 0;
-            this.dataService.centerz = 0;
+            this._scene.add( gridhelper);
+            this._grid_center = [0, 0, 0];
         }
     }
     /**
@@ -228,11 +233,17 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.MeshPhongMaterial( {
-            specular: 0xffffff, shininess: 0,
-            side: THREE.DoubleSide, vertexColors: THREE.VertexColors,
+            specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
+            shininess: 250,
+            side: THREE.DoubleSide,
+            vertexColors: THREE.VertexColors
             // wireframe:true
         } );
-        this.scene.add( new THREE.Mesh( geom, mat) );
+        const mesh: THREE.Mesh = new THREE.Mesh( geom, mat);
+        mesh.geometry.computeBoundingSphere();
+        mesh.geometry.computeVertexNormals();
+        this._scene.add( mesh );
+        this._threejs_nums[2] = tris_i.length / 3;
     }
     /**
      * Add threejs lines to the scene
@@ -249,7 +260,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer
         } );
-        this.scene.add(new THREE.LineSegments(geom, mat) );
+        this._scene.add(new THREE.LineSegments(geom, mat) );
+        this._threejs_nums[1] = lines_i.length / 2;
     }
     /**
      * Add threejs points to the scene
@@ -264,6 +276,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             size: 0.1,
             vertexColors: THREE.VertexColors
         } );
-        this.scene.add( new THREE.Points(geom, mat) );
+        this._scene.add( new THREE.Points(geom, mat) );
+        this._threejs_nums[0] = points_i.length;
     }
 }

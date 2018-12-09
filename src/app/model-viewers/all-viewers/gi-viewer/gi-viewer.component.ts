@@ -1,8 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { INode } from '@models/node';
 // import @angular stuff
-import { Component, OnInit, Input, Injectable } from '@angular/core';
-import { ThrowStmt } from '@angular/compiler';
+import { Component, Input } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
 // import others
@@ -17,11 +15,17 @@ import { DataService } from './data/data.service';
   styleUrls: ['./gi-viewer.component.scss']
 })
 export class GIViewerComponent {
-    imVisible = false;
+    imVisible = false; // TODO what is this?
+    dataservice: DataService; // TODO why is this here?
     // model data passed to the viewer
     @Input() data: GIModel;
     modelData: GIModel;
+    /**
+     * constructor
+     * @param dataService
+     */
     constructor(private dataService: DataService) {
+        // Do nothing
     }
     /**
      * setModel Sets the model in the data service.
@@ -52,7 +56,7 @@ export class GIViewerComponent {
         }
     }
     /**
-     * leaflet ???
+     * ??? what does this do?
      */
     leaflet() {
         this.imVisible = this.dataService.imVisible;

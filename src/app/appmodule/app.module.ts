@@ -9,11 +9,11 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
 import { DataService } from '@services';
 // import app modules
 import { CoreModule } from '../core/core.module';
-// import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from '@shared/shared.module';
+// import { AppRoutingModule } from './app-routing.module';
 // import app components
 import { AppComponent } from './app.component';
-import { ViewPublishComponent} from '../views/view-publish/view-publish.component';
+import { ViewPublishComponent} from '../views/view-publish/view-publish.component'; // @views not working, not sure why?
 import { ViewPublishModule} from '../views/view-publish/view-publish.module';
 import { ViewEditorComponent} from '../views/view-editor/view-editor.component';
 import { ViewEditorModule} from '../views/view-editor/view-editor.module';

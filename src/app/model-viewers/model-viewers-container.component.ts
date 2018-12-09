@@ -1,7 +1,7 @@
 import { Component, Injector, Input,
     ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { IView } from './view.interface';
-import { Viewers } from './data-viewers.config';
+import { Viewers } from './model-viewers.config';
 import { INode } from '@models/node';
 import { EventEmitter } from 'events';
 
@@ -11,9 +11,9 @@ import { EventEmitter } from 'events';
  */
 @Component({
     // tslint:disable-next-line:component-selector
-    selector: 'data-viewers-container',
-    templateUrl: 'data-viewers-container.component.html',
-    styleUrls: ['data-viewers-container.component.scss']
+    selector: 'model-viewers-container',
+    templateUrl: 'model-viewers-container.component.html',
+    styleUrls: ['model-viewers-container.component.scss']
 })
 export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;

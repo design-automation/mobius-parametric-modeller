@@ -9,7 +9,7 @@ import { DataService } from './data/data.service';
 
 /**
  * GIViewerComponent
- * This component is used in /app/data-viewers/data-viewers-container.component.html
+ * This component is used in /app/model-viewers/model-viewers-container.component.html
  */
 @Component({
   selector: 'gi-viewer',

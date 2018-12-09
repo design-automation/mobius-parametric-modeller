@@ -26,7 +26,7 @@ import { InputPortViewerComponent } from './components/parameter-viewer/input-po
 import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 
-import { DataViewersContainer } from '../data-viewers/data-viewers-container.module';
+import { DataViewersContainer } from '../model-viewers/model-viewers-container.module';
 import { AutogrowDirective } from './directives/textarea';
 
 @NgModule({

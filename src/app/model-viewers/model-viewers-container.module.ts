@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DataViewersContainerComponent } from './data-viewers-container.component';
-import { VIEWER_ARR } from './data-viewers.config';
+import { DataViewersContainerComponent } from './model-viewers-container.component';
+import { VIEWER_ARR } from './model-viewers.config';
 // viewers
 import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component';
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/viewer.component';

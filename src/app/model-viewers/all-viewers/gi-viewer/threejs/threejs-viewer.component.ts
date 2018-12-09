@@ -7,7 +7,7 @@ import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
- * This component gets used in /app/data-viewers/all-viewers/gi-viewer/gi-viewer.component.html
+ * This component gets used in /app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html
  */
 @Component({
     selector: 'threejs-viewer',

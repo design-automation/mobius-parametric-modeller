@@ -1,17 +1,19 @@
-import { Component, OnInit, Injector, ElementRef } from '@angular/core';
-import { DataSubscriber } from '../data/DataSubscriber';
-import { GIModel } from '../../../../../libs/geo-info/GIModel';
-import { IThreeJS } from '../../../../../libs/geo-info/ThreejsJSON';
 import * as THREE from 'three';
+import { GIModel } from '@libs/geo-info/GIModel';
+import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
+import { DataSubscriber } from '../data/DataSubscriber';
+// import @angular stuff
+import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 
+/**
+ * A threejs viewer for viewing geo-info (GI) models.
+ * This component gets used in /app/data-viewers/all-viewers/gi-viewer/gi-viewer.component.html
+ */
 @Component({
-    selector: 'threejs-viewer.component',
+    selector: 'threejs-viewer',
     templateUrl: './threejs-viewer.component.html',
     styleUrls: ['./threejs-viewer.component.css']
 })
-/**
- * A threejs viewer for viewing geo-info (GI) models.
- */
 export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     myElement;
     // Viewer size

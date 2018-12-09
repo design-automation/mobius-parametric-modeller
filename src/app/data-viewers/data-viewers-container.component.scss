@@ -6,7 +6,7 @@ $text-color: rgb(80,80,80);
 $selected-color: rgb(0, 0, 150);
 $hover-color: blue;
 
-.data-viewers-container{
+.viewers-container{
     display: block;
     height: 100%;
     overflow: hidden;
@@ -20,7 +20,7 @@ $hover-color: blue;
     flex-direction: row;
     justify-content: space-between;
 
-    padding: 0px 0px 0px 15px;
+    padding: 0px 0px 0px 0px;
 
     background-color: $title-background;
     border-bottom: 3px solid $separator;
@@ -35,8 +35,8 @@ $hover-color: blue;
 
 .content__panel{
     background-color: rgb(220, 220, 220);
-    width: 97%;
-    height: 93%; 
+    width: 100%;
+    height: 100%; 
     overflow: auto;
 
     //padding: 10px 15px;

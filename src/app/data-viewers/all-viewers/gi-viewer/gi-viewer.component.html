@@ -1,21 +1,21 @@
 <div id="appdiv" (mousedown)="leaflet()">
-	<as-split direction="vertical">
-		<as-split-area [size]="90" id="splitcontainer">
+	<!-- <as-split direction="vertical"> -->
+		<!-- <as-split-area [size]="90" id="splitcontainer"> -->
 		  <div style="height: 100%">
-		    <as-split direction="horizontal">
-					<as-split-area [size]="0.5" id="splitgroups" style="overflow-x:hidden;overflow-y: auto;">
+		    <!-- <as-split direction="horizontal"> -->
+					<!-- <as-split-area [size]="0.5" id="splitgroups" style="overflow-x:hidden;overflow-y: auto;"> -->
 						<!-- group -->
-		      </as-split-area>
-		      <as-split-area [size]="99.5" id="splitviewer">
+		      <!-- </as-split-area> -->
+		      <!-- <as-split-area [size]="99.5" id="splitviewer"> -->
 		        <!-- <viewer-container *ngIf="imVisible===false"></viewer-container>
 		        <app-map *ngIf="imVisible===true"></app-map> -->
-		        <gi-viewer></gi-viewer>
-		      </as-split-area>
-		    </as-split>
+		        <threejs-viewer></threejs-viewer>
+		      <!-- </as-split-area> -->
+		    <!-- </as-split> -->
 		  </div>
-		</as-split-area>
-		<as-split-area [size]="10" id="splittoolwindow">
+		<!-- </as-split-area> -->
+		<!-- <as-split-area [size]="10" id="splittoolwindow"> -->
 			<!-- tool window -->
-		</as-split-area>
-	</as-split>
+		<!-- </as-split-area> -->
+	<!-- </as-split> -->
 </div>

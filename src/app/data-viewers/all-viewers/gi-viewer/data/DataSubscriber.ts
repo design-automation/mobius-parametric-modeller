@@ -1,7 +1,11 @@
-import { Injector } from '@angular/core';
 import { DataService } from './data.service';
 import { Subscription } from 'rxjs/Subscription';
+// import @angular stuff
+import { Injector } from '@angular/core';
 
+/**
+ * DataSubscriber
+ */
 export class DataSubscriber {
     protected dataService: DataService;
     private _subscription: Subscription;

@@ -1,10 +1,16 @@
-import { Injectable, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
-import { GIModel } from '../../../../../libs/geo-info/GIModel';
+import { GIModel } from '@libs/geo-info/GIModel';
 import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
+// import @angular stuff
+import { Injectable, ElementRef } from '@angular/core';
 
+/**
+ * DataService
+ * The data service for the Goe-Info viewer.
+ * TODO: why does this data service contain all this threejs stuff?
+ */
 @Injectable()
 export class DataService {
     private _OC: OrbitControls;

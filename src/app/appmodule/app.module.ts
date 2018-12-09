@@ -1,23 +1,26 @@
+// import @angular stuff
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
+// import app services
+import { DataService } from '@services';
+// import app modules
 import { CoreModule } from '../core/core.module';
 // import { AppRoutingModule } from './app-routing.module';
-
+import { SharedModule } from '@shared/shared.module';
+// import app components
 import { AppComponent } from './app.component';
 import { ViewPublishComponent, ViewPublishModule,
          ViewEditorComponent, ViewEditorModule,
          ViewGalleryComponent, ViewGalleryModule } from '@views';
-import { SharedModule } from '@shared/shared.module';
-import { DataService } from '@services';
 import { FlowchartComponent } from '../ngFlowchart-svg/flowchart.component';
-import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 
-
-
+/**
+ * AppModule, the root module for the whole app.
+ */
 @NgModule({
     declarations: [
         AppComponent,
@@ -26,6 +29,9 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
         // FormsModule,
         // AppRoutingModule,
         // CoreModule,
@@ -33,9 +39,6 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
         ViewEditorModule,
         ViewPublishModule,
         SharedModule,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
     ],
     entryComponents: [
         ViewEditorComponent,
@@ -46,8 +49,12 @@ import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material
     providers: [ DataService ],
     bootstrap: [ AppComponent ]
 })
-
 export class AppModule {
-        constructor () { }
+    /**
+     * constructor
+     */
+    constructor () {
+        // Do nothing
+    }
 }
 

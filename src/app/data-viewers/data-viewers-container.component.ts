@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 
 /**
  * A component that contains all the viewers.
+ * This component is used in /app/appmodule/app.component.html
  */
 @Component({
     // tslint:disable-next-line:component-selector

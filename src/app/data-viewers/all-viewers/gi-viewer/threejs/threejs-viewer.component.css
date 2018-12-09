@@ -8,7 +8,11 @@
     font-family:sans-serif;
 }
 
-#container-top-right-resize { top: 0px; right: 0px; }
+#container-top-right-resize { 
+    top: 0px; 
+    right: 0px; 
+}
+
 #shownumber{
     position: absolute;
     float: right;
@@ -192,7 +196,7 @@
 }
 
 .cursor{
-
+    
 }
 
 .selectvisible{

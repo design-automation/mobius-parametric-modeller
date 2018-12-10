@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horizontal\">\r\n        <as-split-area size=\"50\" >\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='activeView==\"gallery\"' (click)='updateView(\"gallery\")'>Gallery</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"publish\"' (click)='updateView(\"publish\")'>Publish</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"flowchart\"' (click)='updateView(\"flowchart\")'>Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new (create)='updateFile($event)'></file-new>\r\n                    <file-save [file]='dataService.file'></file-save>\r\n                    <file-load (loaded)='updateFile($event)'></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute [flowchart]='dataService.flowchart'></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Reset Flowchart to Default\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>Reset</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <ng-container #vc></ng-container>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area size=\"50\">\r\n            <!-- mViewer panel -->\r\n            <div class='content__viewer' >\r\n                <mviewer [data]='viewerData()' [helpView]='helpView'></mviewer>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n\r\n    </as-split>\r\n\r\n</div>\r\n\r\n"
+module.exports = "\r\n<div class='container'>\r\n    <as-split direction=\"horizontal\">\r\n        <as-split-area size=\"50\" >\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='activeView==\"gallery\"' (click)='updateView(\"gallery\")'>Gallery</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"publish\"' (click)='updateView(\"publish\")'>Publish</button>\r\n                    <button class='btn-tab' [class.active]='activeView==\"flowchart\"' (click)='updateView(\"flowchart\")'>Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new (create)='updateFile($event)'></file-new>\r\n                    <file-save [file]='dataService.file'></file-save>\r\n                    <file-load (loaded)='updateFile($event)'></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute [flowchart]='dataService.flowchart'></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Reset Flowchart to Default\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>Reset</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <ng-container #vc></ng-container>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area size=\"50\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -56,11 +56,13 @@ module.exports = ".container {\n  position: relative;\n  overflow: auto;\n  heig
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views */ "./src/app/views/index.ts");
-/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ngFlowchart-svg/flowchart.component */ "./src/app/ngFlowchart-svg/flowchart.component.ts");
+/* harmony import */ var _views_view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../views/view-editor/view-editor.component */ "./src/app/views/view-editor/view-editor.component.ts");
+/* harmony import */ var _views_view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../views/view-publish/view-publish.component */ "./src/app/views/view-publish/view-publish.component.ts");
+/* harmony import */ var _views_view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../views/view-gallery/view-gallery.component */ "./src/app/views/view-gallery/view-gallery.component.ts");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _views_view_flowchart_view_flowchart_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../views/view-flowchart/view-flowchart.component */ "./src/app/views/view-flowchart/view-flowchart.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -70,6 +72,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
+
 
 
 
@@ -96,18 +100,24 @@ var AppComponent = /** @class */ (function () {
         this.r = r;
         this.views = [];
         this.Viewers = {
-            'gallery': _views__WEBPACK_IMPORTED_MODULE_1__["ViewGalleryComponent"],
-            'publish': _views__WEBPACK_IMPORTED_MODULE_1__["ViewPublishComponent"],
-            'flowchart': _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_4__["FlowchartComponent"],
-            'editor': _views__WEBPACK_IMPORTED_MODULE_1__["ViewEditorComponent"] // src/views/view-editor/
+            'gallery': _views_view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_3__["ViewGalleryComponent"],
+            'publish': _views_view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_2__["ViewPublishComponent"],
+            'flowchart': _views_view_flowchart_view_flowchart_component__WEBPACK_IMPORTED_MODULE_6__["ViewFlowchartComponent"],
+            'editor': _views_view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_1__["ViewEditorComponent"] // src/views/view-editor/
         };
     }
+    /*
+    @HostListener('window:beforeunload', [ '$event' ])
+    beforeUnloadHander(event) {
+        event.returnValue = true;
+    }
+    */
     AppComponent.prototype.ngOnInit = function () {
         this.activeView = 'gallery';
         this.updateView('gallery');
     };
     AppComponent.prototype.updateFile = function (event) {
-        this.dataService.file = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](event);
+        this.dataService.file = circular_json__WEBPACK_IMPORTED_MODULE_5__["parse"](event);
         this.updateValue();
     };
     AppComponent.prototype.createView = function (view) {
@@ -174,7 +184,7 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/appmodule/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/appmodule/app.component.scss")]
         }),
-        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_2__["DataService"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]])
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_4__["DataService"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -197,12 +207,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/appmodule/app.component.ts");
-/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @views */ "./src/app/views/index.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
 /* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @shared/shared.module */ "./src/app/shared/shared.module.ts");
-/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
-/* harmony import */ var _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ngFlowchart-svg/flowchart.component */ "./src/app/ngFlowchart-svg/flowchart.component.ts");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.component */ "./src/app/appmodule/app.component.ts");
+/* harmony import */ var _views_view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../views/view-publish/view-publish.component */ "./src/app/views/view-publish/view-publish.component.ts");
+/* harmony import */ var _views_view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../views/view-publish/view-publish.module */ "./src/app/views/view-publish/view-publish.module.ts");
+/* harmony import */ var _views_view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../views/view-editor/view-editor.component */ "./src/app/views/view-editor/view-editor.component.ts");
+/* harmony import */ var _views_view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../views/view-editor/view-editor.module */ "./src/app/views/view-editor/view-editor.module.ts");
+/* harmony import */ var _views_view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../views/view-gallery/view-gallery.component */ "./src/app/views/view-gallery/view-gallery.component.ts");
+/* harmony import */ var _views_view_gallery_view_gallery_module__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../views/view-gallery/view-gallery.module */ "./src/app/views/view-gallery/view-gallery.module.ts");
+/* harmony import */ var _views_view_flowchart_view_flowchart_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../views/view-flowchart/view-flowchart.component */ "./src/app/views/view-flowchart/view-flowchart.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -212,48 +227,63 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+// import @angular stuff
 
 
+
+
+
+// import app services
 
 
 // import { AppRoutingModule } from './app-routing.module';
+// import app components
+
+ // @views not working, not sure why?
 
 
 
 
 
 
+/**
+ * AppModule, the root module for the whole app.
+ */
 var AppModule = /** @class */ (function () {
+    /**
+     * constructor
+     */
     function AppModule() {
+        // Do nothing
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
+                _app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_2__["BrowserAnimationsModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatMenuModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatIconModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatButtonModule"],
                 // FormsModule,
                 // AppRoutingModule,
                 // CoreModule,
-                _views__WEBPACK_IMPORTED_MODULE_5__["ViewGalleryModule"],
-                _views__WEBPACK_IMPORTED_MODULE_5__["ViewEditorModule"],
-                _views__WEBPACK_IMPORTED_MODULE_5__["ViewPublishModule"],
+                _views_view_gallery_view_gallery_module__WEBPACK_IMPORTED_MODULE_13__["ViewGalleryModule"],
+                _views_view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_11__["ViewEditorModule"],
+                _views_view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_9__["ViewPublishModule"],
                 _shared_shared_module__WEBPACK_IMPORTED_MODULE_6__["SharedModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatMenuModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatIconModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatButtonModule"],
             ],
             entryComponents: [
-                _views__WEBPACK_IMPORTED_MODULE_5__["ViewEditorComponent"],
-                _views__WEBPACK_IMPORTED_MODULE_5__["ViewPublishComponent"],
-                _ngFlowchart_svg_flowchart_component__WEBPACK_IMPORTED_MODULE_8__["FlowchartComponent"],
-                _views__WEBPACK_IMPORTED_MODULE_5__["ViewGalleryComponent"],
+                _views_view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_10__["ViewEditorComponent"],
+                _views_view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_8__["ViewPublishComponent"],
+                _views_view_flowchart_view_flowchart_component__WEBPACK_IMPORTED_MODULE_14__["ViewFlowchartComponent"],
+                _views_view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_12__["ViewGalleryComponent"],
             ],
-            providers: [_services__WEBPACK_IMPORTED_MODULE_7__["DataService"]],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
+            providers: [_services__WEBPACK_IMPORTED_MODULE_5__["DataService"]],
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]]
         }),
         __metadata("design:paramtypes", [])
     ], AppModule);
@@ -295,7 +325,7 @@ var _parameterTypes = {
 /*!*******************************************!*\
   !*** ./src/app/core/modules/functions.ts ***!
   \*******************************************/
-/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, addData */
+/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, __stringify__, addData, numPoints, numLinestrings, numPolygons, addPosition, addPoint, addLinestring, addPolygon */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -304,9 +334,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__preprocess__", function() { return __preprocess__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__postprocess__", function() { return __postprocess__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__merge__", function() { return __merge__; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__stringify__", function() { return __stringify__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addData", function() { return addData; });
-/* harmony import */ var _libs_geo_info_geo_info__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../libs/geo-info/geo-info */ "./src/libs/geo-info/geo-info.ts");
-/* harmony import */ var _libs_geo_info_bi_map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../libs/geo-info/bi-map */ "./src/libs/geo-info/bi-map.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numPoints", function() { return numPoints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numLinestrings", function() { return numLinestrings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numPolygons", function() { return numPolygons; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPosition", function() { return addPosition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPoint", function() { return addPoint; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLinestring", function() { return addLinestring; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPolygon", function() { return addPolygon; });
+/* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
+/* harmony import */ var _libs_geo_info_GIJson__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../libs/geo-info/GIJson */ "./src/libs/geo-info/GIJson.ts");
 
 
 //  ===============================================================================================================
@@ -318,29 +356,9 @@ __webpack_require__.r(__webpack_exports__);
  * @returns New model empty.
  */
 function __new__() {
-    return {
-        topology: {
-            triangles: [],
-            vertices: [],
-            edges: [],
-            wires: [],
-            faces: [],
-            collections: []
-        },
-        attributes: {
-            positions: [{
-                    name: 'coordinates',
-                    data_type: _libs_geo_info_geo_info__WEBPACK_IMPORTED_MODULE_0__["EAttribDataTypeStrs"].Float,
-                    data_length: 3,
-                    data: []
-                }],
-            vertices: [],
-            edges: [],
-            wires: [],
-            faces: [],
-            collections: []
-        }
-    };
+    var model = new _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__["GIModel"]();
+    model.attribs().addPosiAttrib('coordinates', _libs_geo_info_GIJson__WEBPACK_IMPORTED_MODULE_1__["EAttribDataTypeStrs"].FLOAT, 3);
+    return model;
 }
 /**
  * A function to preprocess the model, before it enters the node.
@@ -359,7 +377,7 @@ function __preprocess__(__model__) {
  */
 function __postprocess__(__model__) {
     // TODO
-    // Remove all the undefined values for the arrays
+    // Remove all undefined values for the arrays
 }
 /**
  * Merges the second model into the first model. The geometry, attribues, and groups are all merged.
@@ -369,85 +387,82 @@ function __postprocess__(__model__) {
  * @param model2 The model to merge from    .
  */
 function __merge__(model1, model2) {
-    // Get the lengths of data arrays in model1, required later
-    var poistions_data = new _libs_geo_info_bi_map__WEBPACK_IMPORTED_MODULE_1__["BiMapManyToOne"](model1.attributes.positions[0].data);
-    var num_positions = poistions_data.numKeys();
-    var num_triangles = model1.topology.triangles.length;
-    var num_vertices = model1.topology.vertices.length;
-    var num_edges = model1.topology.edges.length;
-    var num_wires = model1.topology.wires.length;
-    var num_faces = model1.topology.faces.length;
-    var num_collections = model1.topology.collections.length;
-    // Add triangles from model2 to model1
-    var new_triangles = model2.topology.triangles.map(function (t) { return t.map(function (p) { return p + num_positions; }); });
-    model1.topology.triangles = model1.topology.triangles.concat(new_triangles);
-    // Add vertices from model2 to model1
-    var new_vertices = model2.topology.vertices.map(function (p) { return p + num_positions; });
-    model1.topology.vertices = model1.topology.vertices.concat(new_vertices);
-    // Add edges from model2 to model1
-    var new_edges = model2.topology.edges.map(function (e) { return e.map(function (v) { return v + num_vertices; }); });
-    model1.topology.edges = model1.topology.edges.concat(new_edges);
-    // Add wires from model2 to model1
-    var new_wires = model2.topology.wires.map(function (w) { return w.map(function (e) { return e + num_edges; }); });
-    model1.topology.wires = model1.topology.wires.concat(new_wires);
-    // Add faces from model2 to model1
-    var new_faces = model2.topology.faces.map(function (f) { return [
-        f[0].map(function (w) { return w + num_wires; }),
-        f[1].map(function (t) { return t + num_triangles; })
-    ]; });
-    model1.topology.faces = model1.topology.faces.concat(new_faces);
-    // Add collections from model2 to model1
-    var new_collections = model2.topology.collections.map(function (c) { return [
-        c[0] === -1 ? -1 : c[0] + num_collections,
-        c[1].map(function (v) { return v + num_vertices; }),
-        c[2].map(function (w) { return w + num_wires; }),
-        c[3].map(function (f) { return f + num_faces; })
-    ]; });
-    model1.topology.collections = model1.topology.collections.concat(new_collections);
-    // Add  attributes from model2 to model1
-    _addAttribs(model1.attributes.positions, model2.attributes.positions, num_positions);
-    _addAttribs(model1.attributes.vertices, model2.attributes.vertices, num_vertices);
-    _addAttribs(model1.attributes.edges, model2.attributes.edges, num_edges);
-    _addAttribs(model1.attributes.wires, model2.attributes.wires, num_wires);
-    _addAttribs(model1.attributes.faces, model2.attributes.faces, num_faces);
-    _addAttribs(model1.attributes.collections, model2.attributes.collections, num_collections);
-    // No return
+    model1.merge(model2);
 }
-/*
- * Helper function that adds attributes from model2 to model1.
- * TODO: move this function into a seperate module
+/**
+ * Returns a string representation of this model.
+ * @param __model__
  */
-function _addAttribs(attribs1, attribs2, offset) {
-    // create a map of all teh existing attributes
-    var attribs_map = new Map();
-    attribs1.forEach(function (attrib, idx) {
-        attribs_map[attrib.name + attrib.data_type + attrib.data_length] = attrib;
-    });
-    // for each new attribute
-    attribs2.forEach(function (attrib2) {
-        attrib2.data.map(function (item) { return [item[0].map(function (i) { return i + offset; }), item[1]]; });
-        var attrib1 = attribs_map[attrib2.name + attrib2.data_type + attrib2.data_length];
-        if (attrib1 === undefined) {
-            attribs1.push(attrib2);
-        }
-        else {
-            var attrib1_data = new _libs_geo_info_bi_map__WEBPACK_IMPORTED_MODULE_1__["BiMapManyToOne"](attrib1.data);
-            attrib1_data.addData(attrib2.data);
-            attrib1.data = attrib1_data.getData();
-        }
-    });
+function __stringify__(__model__) {
+    return JSON.stringify(__model__.getData());
 }
 //  ===============================================================================================================
-//  End user functions
+//  Functions visible in the Mobius interface.
 //  ===============================================================================================================
 /**
- * Creates a new model and populates the model with data.
+ * Add new data to the model.
  *
  * @param model_data The model data in gs-json format.
  * @returns New model if successful, null if unsuccessful or on error.
  */
-function addData(__model__, model) {
-    __model__ = __merge__(__model__, model);
+function addData(__model__, model_data) {
+    var model = new _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__["GIModel"](model_data);
+    __merge__(__model__, model);
+}
+/**
+ *  Gets the number of points in the model.
+ * @param __model__
+ */
+function numPoints(__model__) {
+    return __model__.geom().numPoints();
+}
+/**
+ *  Gets the number of linestrings in the model.
+ * @param __model__
+ */
+function numLinestrings(__model__) {
+    return __model__.geom().numLines();
+}
+/**
+ *  Gets the number of polygons in the model.
+ * @param __model__
+ */
+function numPolygons(__model__) {
+    return __model__.geom().numPgons();
+}
+/**
+ * Adds a new position to the model.
+ * @param __model__
+ * @param coords
+ */
+function addPosition(__model__, coords) {
+    var posi_id = __model__.geom().addPosition();
+    __model__.attribs().setAttribValue(posi_id, 'coordinates', coords);
+    return posi_id;
+}
+/**
+ * Adds a new point to the model.
+ * @param __model__
+ * @param coords
+ */
+function addPoint(__model__, position) {
+    return __model__.geom().addPoint(position);
+}
+/**
+ * Adds a new linestring to the model.
+ * @param __model__
+ * @param coords
+ */
+function addLinestring(__model__, positions) {
+    return __model__.geom().addLine(positions);
+}
+/**
+ * Adds a new polygon to the model.
+ * @param __model__
+ * @param coords
+ */
+function addPolygon(__model__, positions) {
+    return __model__.geom().addPgon(positions);
 }
 
 
@@ -457,7 +472,7 @@ function addData(__model__, model) {
 /*!***************************************!*\
   !*** ./src/app/core/modules/index.ts ***!
   \***************************************/
-/*! exports provided: functions, declare_constant, return_value, _parameterTypes */
+/*! exports provided: functions, Input, Output, _parameterTypes */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -465,13 +480,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/app/core/modules/functions.ts");
 /* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "functions", function() { return _functions__WEBPACK_IMPORTED_MODULE_0__; });
 /* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./input */ "./src/app/core/modules/input.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declare_constant", function() { return _input__WEBPACK_IMPORTED_MODULE_1__["declare_constant"]; });
-
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Input", function() { return _input__WEBPACK_IMPORTED_MODULE_1__; });
 /* harmony import */ var _output__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./output */ "./src/app/core/modules/output.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "return_value", function() { return _output__WEBPACK_IMPORTED_MODULE_2__["return_value"]; });
-
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Output", function() { return _output__WEBPACK_IMPORTED_MODULE_2__; });
 /* harmony import */ var _parameterTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_parameterTypes */ "./src/app/core/modules/_parameterTypes.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_parameterTypes", function() { return _parameterTypes__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"]; });
+
+
 
 
 
@@ -662,260 +677,10 @@ var ViewerService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/mobius-viewer.component.html":
-/*!******************************************************!*\
-  !*** ./src/app/mViewer/mobius-viewer.component.html ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div class='viewer-container'>  \r\n    <div class='container__header'>\r\n        <div class=\"tab\">\r\n            <button class='btn-tab' \r\n            [class.active]='view.name == activeView.name'\r\n            *ngFor='let view of Viewers;' \r\n            (click)='updateView(view)'>\r\n            {{view.name}}\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div class='content__panel'>\r\n        <ng-container #vc></ng-container>\r\n    </div>\r\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/mobius-viewer.component.scss":
-/*!******************************************************!*\
-  !*** ./src/app/mViewer/mobius-viewer.component.scss ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = ".viewer-container {\n  display: block;\n  height: 100%;\n  overflow: hidden; }\n\n.container__header {\n  flex: 0 1 auto;\n  height: 35px;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  padding: 0px 0px 0px 15px;\n  background-color: #ccc;\n  border-bottom: 3px solid #eeeeee;\n  line-height: 35px;\n  font-size: 18px;\n  font-weight: 600;\n  text-align: center; }\n\n.content__panel {\n  background-color: gainsboro;\n  width: 97%;\n  height: 93%;\n  overflow: auto; }\n\nbutton.btn {\n  margin: 10px;\n  font-size: 14px;\n  line-height: 18px;\n  border: 2px solid gray;\n  border-radius: 4px;\n  padding: 2px 10px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n/* tab styling */\n\n.tab {\n  border: 2px;\n  overflow: hidden;\n  background-color: #ccc; }\n\n.tab button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: inherit;\n  color: #505050;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 8px 10px;\n  transition: 0.3s;\n  font-size: 14px; }\n\n.tab button:hover {\n  color: blue; }\n\n.tab button.active {\n  background-color: #ccc;\n  color: #000096;\n  font-weight: 600;\n  border-color: #222 !important; }\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/mobius-viewer.component.ts":
-/*!****************************************************!*\
-  !*** ./src/app/mViewer/mobius-viewer.component.ts ***!
-  \****************************************************/
-/*! exports provided: ViewerContainerComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewerContainerComponent", function() { return ViewerContainerComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _viewers_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./viewers.config */ "./src/app/mViewer/viewers.config.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var ViewerContainerComponent = /** @class */ (function () {
-    function ViewerContainerComponent(injector, r) {
-        this.injector = injector;
-        this.r = r;
-        this.views = [];
-        this.Viewers = _viewers_config__WEBPACK_IMPORTED_MODULE_1__["Viewers"];
-    }
-    ViewerContainerComponent.prototype.ngOnInit = function () {
-        this.activeView = this.Viewers[0];
-        this.updateView(this.activeView);
-    };
-    ViewerContainerComponent.prototype.ngOnDestroy = function () {
-        console.log('onDestroy');
-        for (var _i = 0, _a = this.views; _i < _a.length; _i++) {
-            var view = _a[_i];
-            view.destroy();
-        }
-    };
-    ViewerContainerComponent.prototype.ngOnChanges = function () {
-        if (this.currentHelpView !== this.helpView) {
-            var view = void 0;
-            for (var _i = 0, _a = this.Viewers; _i < _a.length; _i++) {
-                var v = _a[_i];
-                if (v.name === 'Help') {
-                    view = v;
-                }
-            }
-            this.currentHelpView = this.helpView;
-            this.updateView(view);
-        }
-        else {
-            this.updateValue();
-        }
-    };
-    ViewerContainerComponent.prototype.createView = function (view) {
-        var component = view.component;
-        var factory = this.r.resolveComponentFactory(component);
-        var componentRef = factory.create(this.injector);
-        /*
-        if (view.name != 'Console'){
-            componentRef.instance["data"] = this.data;
-        }
-        */
-        return componentRef;
-    };
-    ViewerContainerComponent.prototype.updateView = function (view) {
-        this.activeView = view;
-        if (this.views[this.activeView.name] === undefined) {
-            this.views[this.activeView.name] = this.createView(view);
-        }
-        this.updateValue();
-        this.vc.detach();
-        this.vc.insert(this.views[this.activeView.name].hostView);
-    };
-    ViewerContainerComponent.prototype.updateValue = function () {
-        try {
-            var componentRef = this.views[this.activeView.name];
-            if (this.activeView.name === 'Help') {
-                componentRef.instance['output'] = this.currentHelpView;
-            }
-            else if (this.activeView.name !== 'Console') {
-                componentRef.instance['data'] = this.data;
-            }
-        }
-        catch (ex) {
-            // console.log(`Active View not defined`);
-        }
-    };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('vc', { read: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"] }),
-        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"])
-    ], ViewerContainerComponent.prototype, "vc", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], ViewerContainerComponent.prototype, "data", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], ViewerContainerComponent.prototype, "helpView", void 0);
-    ViewerContainerComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            // tslint:disable-next-line:component-selector
-            selector: 'mviewer',
-            template: __webpack_require__(/*! ./mobius-viewer.component.html */ "./src/app/mViewer/mobius-viewer.component.html"),
-            styles: [__webpack_require__(/*! ./mobius-viewer.component.scss */ "./src/app/mViewer/mobius-viewer.component.scss")]
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]])
-    ], ViewerContainerComponent);
-    return ViewerContainerComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/mobius-viewer.module.ts":
-/*!*************************************************!*\
-  !*** ./src/app/mViewer/mobius-viewer.module.ts ***!
-  \*************************************************/
-/*! exports provided: MobiusViewerModule */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MobiusViewerModule", function() { return MobiusViewerModule; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _mobius_viewer_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mobius-viewer.component */ "./src/app/mViewer/mobius-viewer.component.ts");
-/* harmony import */ var _viewers_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./viewers.config */ "./src/app/mViewer/viewers.config.ts");
-/* harmony import */ var _viewers_gsviewer_gsviewer_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./viewers/gsviewer/gsviewer.module */ "./src/app/mViewer/viewers/gsviewer/gsviewer.module.ts");
-/* harmony import */ var _viewers_mobius_cesium_mobius_cesium_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./viewers/mobius-cesium/mobius-cesium.module */ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.module.ts");
-/* harmony import */ var _viewers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./viewers */ "./src/app/mViewer/viewers/index.ts");
-/* harmony import */ var _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./viewers/procedure-help.component */ "./src/app/mViewer/viewers/procedure-help.component.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-
-
-
-//import { VisualiseComponent } from "./viewers/mobius-cesium/setting/visualise.component";
-//import { AttributesComponent } from "./viewers/mobius-cesium/setting/attributes.copmponent";
-var MobiusViewerModule = /** @class */ (function () {
-    function MobiusViewerModule() {
-    }
-    MobiusViewerModule = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            declarations: [
-                _mobius_viewer_component__WEBPACK_IMPORTED_MODULE_3__["ViewerContainerComponent"],
-                _viewers__WEBPACK_IMPORTED_MODULE_7__["TextViewerComponent"],
-                _viewers__WEBPACK_IMPORTED_MODULE_7__["ConsoleViewerComponent"],
-                _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_8__["ProcedureHelpComponent"],
-            ],
-            exports: [_mobius_viewer_component__WEBPACK_IMPORTED_MODULE_3__["ViewerContainerComponent"]],
-            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
-                _viewers_gsviewer_gsviewer_module__WEBPACK_IMPORTED_MODULE_5__["GSViewer"],
-                _viewers_mobius_cesium_mobius_cesium_module__WEBPACK_IMPORTED_MODULE_6__["MobiusCesium"],
-            ],
-            entryComponents: _viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
-            providers: []
-        }),
-        __metadata("design:paramtypes", [])
-    ], MobiusViewerModule);
-    return MobiusViewerModule;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers.config.ts":
-/*!*******************************************!*\
-  !*** ./src/app/mViewer/viewers.config.ts ***!
-  \*******************************************/
-/*! exports provided: VIEWER_ARR, Viewers */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VIEWER_ARR", function() { return VIEWER_ARR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Viewers", function() { return Viewers; });
-/* harmony import */ var _viewers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./viewers */ "./src/app/mViewer/viewers/index.ts");
-/* harmony import */ var _viewers_gsviewer_gsviewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./viewers/gsviewer/gsviewer.component */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts");
-/* harmony import */ var _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./viewers/console-viewer.component */ "./src/app/mViewer/viewers/console-viewer.component.ts");
-/* harmony import */ var _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./viewers/procedure-help.component */ "./src/app/mViewer/viewers/procedure-help.component.ts");
-// Step-1: Add new ViewerComponet here
-
-
-
-
-var VIEWER_ARR = [
-    _viewers__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"],
-    _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__["ConsoleViewerComponent"],
-    _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_3__["ProcedureHelpComponent"],
-    // JSONViewerComponent,
-    // ThreeViewerComponent
-    // Step-2: Add Component here
-    //CesiumViewerComponent,
-    _viewers_gsviewer_gsviewer_component__WEBPACK_IMPORTED_MODULE_1__["GSViewerComponent"],
-];
-var Viewers = [
-    { name: 'gsviewer', icon: undefined, component: _viewers_gsviewer_gsviewer_component__WEBPACK_IMPORTED_MODULE_1__["GSViewerComponent"] },
-    { name: 'Summary', icon: undefined, component: _viewers__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"] },
-    { name: 'Console', icon: undefined, component: _viewers_console_viewer_component__WEBPACK_IMPORTED_MODULE_2__["ConsoleViewerComponent"] },
-    { name: 'Help', icon: undefined, component: _viewers_procedure_help_component__WEBPACK_IMPORTED_MODULE_3__["ProcedureHelpComponent"] },
-];
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/console-viewer.component.ts":
-/*!*************************************************************!*\
-  !*** ./src/app/mViewer/viewers/console-viewer.component.ts ***!
-  \*************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts":
+/*!******************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts ***!
+  \******************************************************************************/
 /*! exports provided: ConsoleViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -933,13 +698,26 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+/**
+ * ConsoleViewerComponent
+ */
 var ConsoleViewerComponent = /** @class */ (function () {
+    /**
+     * constructor
+     */
     function ConsoleViewerComponent() {
+        // console.log(`Console Viewer Created`);
     }
+    /**
+     * ngOnInit
+     */
     ConsoleViewerComponent.prototype.ngOnInit = function () {
         // @ts-ignore
         this.text = console.logs.join('\n---------------------------------------------------------\n');
     };
+    /**
+     * ngDoCheck
+     */
     ConsoleViewerComponent.prototype.ngDoCheck = function () {
         // @ts-ignore
         this.text = console.logs.join('\n---------------------------------------------------------\n');
@@ -948,7 +726,7 @@ var ConsoleViewerComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'console-viewer',
             template: "<textarea>{{ text || \"\" }}</textarea>",
-            styles: ["\n  :host{\n    height: 100%;\n    width: 100%;\n  }\n  textarea{\n    height: 99%;\n    width: 99%;\n    overflow: auto;\n    resize: none;\n    background-color: rgb(220,220,220);\n    text-color: rgb(80,80,80);\n    border: none;\n  }"]
+            styles: [__webpack_require__(/*! ../general-viewer.scss */ "./src/app/model-viewers/all-viewers/general-viewer.scss")]
         }),
         __metadata("design:paramtypes", [])
     ], ConsoleViewerComponent);
@@ -959,52 +737,29 @@ var ConsoleViewerComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gsviewer/data/DataSubscriber.ts":
-/*!*****************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/data/DataSubscriber.ts ***!
-  \*****************************************************************/
-/*! exports provided: DataSubscriber */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./src/app/model-viewers/all-viewers/general-viewer.scss":
+/*!***************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/general-viewer.scss ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSubscriber", function() { return DataSubscriber; });
-/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts");
-
-var DataSubscriber = /** @class */ (function () {
-    function DataSubscriber(injector) {
-        var _this = this;
-        this.dataService = injector.get(_data_service__WEBPACK_IMPORTED_MODULE_0__["DataService"]);
-        this._subscription = this.dataService.getMessage().subscribe(function (message) {
-            _this._message = message;
-            _this.notify(message.text);
-        });
-    }
-    DataSubscriber.prototype.notify = function (message) {
-        console.warn("Notify function not Implemented");
-    };
-    return DataSubscriber;
-}());
-
-
+module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ntextarea {\n  height: 99%;\n  width: 99%;\n  overflow: auto;\n  resize: none;\n  font-family: sans-serif;\n  background-color: gainsboro;\n  color: #505050;\n  border: none; }\n\ndiv {\n  font-family: sans-serif;\n  color: #505050;\n  width: 100%;\n  padding-left: 10px; }\n\nh5 {\n  font-weight: 700;\n  font-size: 12px; }\n\n.funcDesc {\n  font-weight: 600; }\n\n.paramP {\n  padding-left: 5px; }\n\nspan {\n  font-weight: 550;\n  font-style: italic; }\n"
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts":
-/*!***************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/data/data.service.ts ***!
-  \***************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts":
+/*!**************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts ***!
+  \**************************************************************************/
 /*! exports provided: DataService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataService", function() { return DataService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! three-orbit-controls */ "./node_modules/three-orbit-controls/index.js");
-/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(three_orbit_controls__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1015,251 +770,57 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+// import @angular stuff
 
-
-
+/**
+ * DataService
+ * The data service for the Goe-Info viewer.
+ */
 var DataService = /** @class */ (function () {
+    /**
+     * Create a data service.
+     */
     function DataService() {
-        // intializations
-        // this only runs once
         this.selecting = [];
-        this.grid = true;
-        this.scenechildren = [];
-        this.textlabels = [];
-        this.point = true;
-        this.click = false;
-        this.checkpointid = false;
-        this.checkedgeid = false;
-        this.imVisible = false;
-        // ---- 
         // Subscription Handling
-        // 
-        this.subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
-        var default_width = 1510, default_height = 720;
-        // scene
-        var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-        scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0xcccccc);
-        // renderer
-        var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({ antialias: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        // camera settings
-        var aspect_ratio = this._width / this._height;
-        var camera = new three__WEBPACK_IMPORTED_MODULE_2__["PerspectiveCamera"](50, aspect_ratio, 0.01, 1000); //0.0001, 100000000 );
-        camera.position.y = 10;
-        camera.up.set(0, 0, 1);
-        camera.lookAt(scene.position);
-        camera.updateProjectionMatrix();
-        // orbit controls
-        var _OC = three_orbit_controls__WEBPACK_IMPORTED_MODULE_3__(three__WEBPACK_IMPORTED_MODULE_2__);
-        var controls = new _OC(camera, renderer.domElement);
-        controls.enableKeys = false;
-        // default directional lighting
-        var directional_light = new three__WEBPACK_IMPORTED_MODULE_2__["DirectionalLight"](0xffffff, 0.5);
-        directional_light.castShadow = false;
-        directional_light.position.copy(camera.position);
-        controls.addEventListener('change', function () {
-            directional_light.position.copy(camera.position);
-        });
-        directional_light.target.position.set(0, 0, 0);
-        scene.add(directional_light);
-        // default ambient lighting
-        var default_hue = 0;
-        var default_saturation = 0.01;
-        var default_lightness = 0.47;
-        var hemi_light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0.5);
-        hemi_light.color.setHSL(default_hue, default_saturation, default_lightness);
-        scene.add(hemi_light);
-        this._scene = scene;
-        this._renderer = renderer;
-        this._camera = camera;
-        this._orbitControls = controls;
-        // add it to alight - what does alight do?
-        this._alight = hemi_light;
-        //this._alight.push(hemi_light);
-        this.checkname = [];
-        this.pointname = [];
+        this.subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_0__["Subject"]();
+        // Do nothing
     }
+    /**
+     * Msg
+     * @param message
+     */
     DataService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
     };
+    /**
+     * Msg
+     */
     DataService.prototype.clearMessage = function () {
         this.subject.next();
     };
+    /**
+     * Msg
+     */
     DataService.prototype.getMessage = function () {
         return this.subject.asObservable();
     };
-    //
-    //  Getter and Setting for gs-model
-    //
+    /**
+     * Get the GI Model
+     */
     DataService.prototype.getModel = function () {
         return this._model;
     };
+    /**
+     * Set the GI Model
+     * @param model
+     */
     DataService.prototype.setModel = function (model) {
         this._model = model;
-        if (model !== undefined) {
-            // remove all children from the scene
-            for (var i = 0; i < this._scene.children.length; i++) {
-                if (this._scene.children[i].type === "Scene") {
-                    this._scene.remove(this._scene.children[i]);
-                }
-            }
-        }
-        this.sendMessage("model_update");
-    };
-    DataService.prototype.getScene = function (width, height) {
-        if (width && height) {
-            this._width = width;
-            this._height = height;
-        }
-        return this._scene;
-    };
-    DataService.prototype.getRenderer = function () {
-        this._camera.aspect = this._width / this._height;
-        this._camera.updateProjectionMatrix();
-        this._renderer.setSize(this._width, this._height);
-        return this._renderer;
-    };
-    DataService.prototype.getCamera = function () {
-        return this._camera;
-    };
-    DataService.prototype.getControls = function () {
-        return this._orbitControls;
-    };
-    //
-    //
-    //
-    DataService.prototype.getalight = function () {
-        return this._alight;
-    };
-    DataService.prototype.addraycaster = function (raycaster) {
-        this.raycaster = raycaster;
-    };
-    DataService.prototype.getraycaster = function () {
-        return this.raycaster;
-    };
-    DataService.prototype.gethue = function (_hue) {
-        this.hue = _hue;
-    };
-    DataService.prototype.getsaturation = function (_saturation) {
-        this.saturation = _saturation;
-    };
-    DataService.prototype.getlightness = function (_lightness) {
-        this.lightness = _lightness;
-    };
-    DataService.prototype.getpointsize = function (pointszie) {
-        this.pointsize = pointszie;
-    };
-    DataService.prototype.getmaterialpoint = function (materialpoint) {
-        this.materialpoint = materialpoint;
-    };
-    DataService.prototype.getradius = function (point) {
-        this.pointradius = point;
-    };
-    DataService.prototype.getcenterx = function (centerx) {
-        this.centerx = centerx;
-    };
-    DataService.prototype.getcentery = function (centery) {
-        this.centery = centery;
-    };
-    DataService.prototype.getcenterz = function (centerz) {
-        this.centerz = centerz;
-    };
-    DataService.prototype.getcentersize = function (centersize) {
-        this.centersize = centersize;
-    };
-    DataService.prototype.addGeom = function (Geom) {
-        this._Geom = Geom;
-    };
-    DataService.prototype.getGeom = function () {
-        return this._Geom;
-    };
-    DataService.prototype.addscenechange = function (scenechange) {
-        this.scenechange = scenechange;
-    };
-    DataService.prototype.getscenechange = function () {
-        return this.scenechange;
-    };
-    DataService.prototype.addINTERSECTEDColor = function (INTERSECTEDColor) {
-        if (this.INTERSECTEDColor == null) {
-            this.INTERSECTEDColor = INTERSECTEDColor;
-        }
-    };
-    DataService.prototype.getINTERSECTEDColor = function () {
-        return this.INTERSECTEDColor;
-    };
-    DataService.prototype.addselecting = function (selecting) {
-        if (selecting[selecting.length - 1] == undefined) {
-            this.selecting = [];
-        }
-        this.sendMessage();
-    };
-    DataService.prototype.pushselecting = function (selecting) {
-        this.selecting.push(selecting);
-        this.sendMessage();
-    };
-    DataService.prototype.spliceselecting = function (index, number) {
-        this.selecting.splice(index, number);
-        this.sendMessage();
-    };
-    DataService.prototype.getselecting = function () {
-        return this.selecting;
-    };
-    DataService.prototype.addclickshow = function (clickshow) {
-        this.clickshow = clickshow;
-    };
-    DataService.prototype.addattrvertix = function (attributevertix) {
-        this.attributevertix = attributevertix;
-    };
-    DataService.prototype.getattrvertix = function () {
-        return this.attributevertix;
-    };
-    DataService.prototype.addgrid = function (grid) {
-        this.grid = grid;
-    };
-    DataService.prototype.addaxis = function (axis) {
-        this.axis = axis;
-    };
-    DataService.prototype.addshadow = function (shadow) {
-        this.shadow = shadow;
-    };
-    DataService.prototype.addframe = function (frame) {
-        this.frame = frame;
-    };
-    DataService.prototype.addpoint = function (point) {
-        this.point = point;
-    };
-    DataService.prototype.getSelectingIndex = function (uuid) {
-        for (var i = 0; i < this.selecting.length; i++) {
-            if (this.selecting[i].uuid == uuid) {
-                return i;
-            }
-        }
-        return -1;
-    };
-    DataService.prototype.addscenechild = function (scenechildren) {
-        this.scenechildren = scenechildren;
-        this.sendMessage();
-    };
-    DataService.prototype.getscenechild = function () {
-        this.sendMessage();
-        return this.scenechildren;
-    };
-    DataService.prototype.addlabel = function (label) {
-        this.label = label;
-        this.sendMessage();
-    };
-    DataService.prototype.getlabel = function () {
-        this.sendMessage();
-        return this.label;
-    };
-    DataService.prototype.addgetpoints = function (getpoints) {
-        this.getpoints = getpoints;
-    };
-    DataService.prototype.addpointname = function (pointname) {
-        this.pointname = pointname;
+        this.sendMessage('model_update');
     };
     DataService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
         __metadata("design:paramtypes", [])
     ], DataService);
     return DataService;
@@ -1269,1616 +830,26 @@ var DataService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.html":
-/*!******************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.component.html ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"appdiv\" (mousedown)=\"leaflet()\">\r\n\t<as-split direction=\"vertical\">\r\n\t\t<as-split-area [size]=\"90\" id=\"splitcontainer\">\r\n\t\t  <div style=\"height: 100%\">\r\n\t\t    <as-split direction=\"horizontal\">\r\n\t\t\t\t\t<as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\">\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      </as-split-area>\r\n\t\t      <as-split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t        <!-- <app-viewer *ngIf=\"imVisible===false\"></app-viewer>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <app-viewer></app-viewer>\r\n\t\t      </as-split-area>\r\n\t\t    </as-split>\r\n\t\t  </div>\r\n\t\t</as-split-area>\r\n\t\t<as-split-area [size]=\"10\" id=\"splittoolwindow\">\r\n\t\t\t<!-- tool window -->\r\n\t\t</as-split-area>\r\n\t</as-split>\r\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.scss":
-/*!******************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.component.scss ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\nhtml, body {\n  font-family: 'Open Sans', sans-serif;\n  text-align: justify;\n  margin: 0px;\n  padding: 0px; }\n#appdiv {\n  height: 95%;\n  background-color: white; }\n#splittoolwindow {\n  overflow: scroll !important; }\na {\n  text-decoration: none;\n  color: #fff;\n  text-transform: uppercase; }\n.toolbar {\n  background-color: #333; }\n.toolbar ul {\n  list-style: none;\n  overflow: hidden;\n  margin-bottom: 0px;\n  z-index: 1; }\n.toolbar div > ul > li {\n  display: inline-block;\n  float: left; }\n.toolbar div > ul > li:hover {\n  background-color: #fff; }\n.toolbar div > ul > li:hover a {\n  color: #333; }\n.toolbar div > ul > li > a {\n  font-size: 12px;\n  line-height: 20px;\n  display: block;\n  float: left;\n  padding: 0 16px; }\n/**\r\n * Carets\r\n */\n.toolbar div ul li i.icon-sort {\n  display: none; }\n.toolbar div ul li:hover i.icon-sort {\n  display: inline; }\n.toolbar div ul li:hover i.icon-caret-down {\n  display: none; }\n.toolbar .dropdown i {\n  margin: 0px; }\n.toolbar div > ul > li > a:hover {\n  background-color: #fff;\n  color: #333; }\n.dropdown {\n  float: left; }\n/**\r\n * Sub navigaton\r\n **/\n.sub {\n  min-width: 180px;\n  margin: 20px;\n  display: none;\n  position: absolute;\n  border-left: 1px solid #ebebeb;\n  border-right: 1px solid #ebebeb;\n  border-bottom: 1px solid #ebebeb; }\n.sub li a {\n  display: block;\n  background-color: #fff;\n  color: #333 !important;\n  border-left: 4px solid #fff;\n  padding: 4px 12px;\n  font-size: 12px;\n  line-height: 26px; }\n.sub li a:hover {\n  border-left: 4px solid #ff0000;\n  float: top; }\n.toolbar div > ul > li:hover .sub {\n  display: block; }\n.sub li a {\n  transition: all .5s linear;\n  overflow: hidden; }\n#toolwindow {\n  position: relative;\n  background-color: slategrey; }\n.sidebar {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  height: 100%; }\n.tool-form {\n  padding-top: 10px;\n  padding-left: 10px;\n  color: white; }\n.tool-form-heading {\n  border-bottom: 2px solid #ddd;\n  margin: 0px;\n  padding-bottom: 3px; }\n.tool-form label {\n  font-family: 'Open Sans', sans-serif;\n  font-size: 13px;\n  color: black;\n  display: block;\n  margin: 0px 0px 15px 0px; }\n.tool-form label > span {\n  width: 150px;\n  font-family: 'Open Sans', sans-serif;\n  font-size: 13px;\n  float: left;\n  padding-top: 4px;\n  padding-right: 5px; }\n.tool-form span.required {\n  color: red; }\n.tool-form .tel-number-field {\n  width: 30px;\n  text-align: center; }\n.tool-form input.input-field {\n  width: 30px; }\n.tool-form input.file-input-field {\n  border: 1px solid #ccc;\n  height: 20px;\n  display: inline-block;\n  padding: 6px 6px;\n  cursor: pointer;\n  background-color: #888888; }\n.tool-form input.input-field,\n.tool-form .tel-number-field,\n.tool-form .textarea-field,\n.tool-form .select-field {\n  height: 20px;\n  overflow: hidden;\n  width: 240px;\n  background-color: #888888;\n  border-radius: 5px;\n  color: #ffffff; }\n.tool-form .input-field:focus,\n.tool-form .tel-number-field:focus,\n.tool-form .textarea-field:focus,\n.tool-form .select-field:focus {\n  border: 1px solid #0C0; }\n.tool-form .textarea-field {\n  height: 100px;\n  width: 55%; }\n.tool-form input[type=submit],\n.tool-form input[type=button] {\n  height: 25px;\n  border: none;\n  padding: 2px 8px 2px 8px;\n  background: #444466;\n  color: #fff;\n  box-shadow: 1px 1px 4px #DADADA;\n  -moz-box-shadow: 1px 1px 4px #DADADA;\n  -webkit-box-shadow: 1px 1px 4px #DADADA;\n  border-radius: 3px;\n  -webkit-border-radius: 3px;\n  -moz-border-radius: 3px;\n  color: #ffffff; }\n.tool-form input[type=submit]:hover,\n.tool-form input[type=button]:hover {\n  background: #333377;\n  color: #fff; }\n.rightstyle {\n  width: 30px;\n  height: 100%;\n  float: right;\n  background: #FFFFFF;\n  background-repeat: repeat;\n  background-attachment: scroll;\n  overflow: auto; }\n.leftstyle {\n  background: #e6e6e6;\n  height: 100%; }\n.slider {\n  width: 0;\n  height: 0;\n  border-top: 30px solid transparent;\n  border-right: 10px solid black;\n  border-bottom: 30px solid transparent; }\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts":
-/*!****************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts ***!
-  \****************************************************************/
-/*! exports provided: GSViewerComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GSViewerComponent", function() { return GSViewerComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var GSViewerComponent = /** @class */ (function () {
-    function GSViewerComponent(dataService) {
-        this.dataService = dataService;
-        this.imVisible = false;
-    }
-    ;
-    GSViewerComponent.prototype.setModel = function (data) {
-        try {
-            this.dataService.setModel(data);
-        }
-        catch (ex) {
-            this.modelData = undefined;
-            console.error("Error generating model");
-        }
-    };
-    GSViewerComponent.prototype.ngOnInit = function () {
-        this.modelData = this.data;
-        this.setModel(this.modelData);
-    };
-    GSViewerComponent.prototype.ngDoCheck = function () {
-        if (this.modelData !== this.data) {
-            this.modelData = this.data;
-            this.setModel(this.modelData);
-        }
-    };
-    GSViewerComponent.prototype.leaflet = function () {
-        this.imVisible = this.dataService.imVisible;
-    };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], GSViewerComponent.prototype, "data", void 0);
-    GSViewerComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'gs-viewer',
-            template: __webpack_require__(/*! ./gsviewer.component.html */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.html"),
-            styles: [__webpack_require__(/*! ./gsviewer.component.scss */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.scss")]
-        }),
-        __metadata("design:paramtypes", [_data_data_service__WEBPACK_IMPORTED_MODULE_1__["DataService"]])
-    ], GSViewerComponent);
-    return GSViewerComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gsviewer/gsviewer.module.ts":
-/*!*************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/gsviewer.module.ts ***!
-  \*************************************************************/
-/*! exports provided: GSViewer */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GSViewer", function() { return GSViewer; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
-/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/slider */ "./node_modules/@angular/material/esm5/slider.es5.js");
-/* harmony import */ var _gsviewer_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./gsviewer.component */ "./src/app/mViewer/viewers/gsviewer/gsviewer.component.ts");
-/* harmony import */ var _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./viewer/viewer.component */ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.ts");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/gsviewer/data/data.service.ts");
-/* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
-/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
-/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
-/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm5/sort.es5.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-var GSViewer = /** @class */ (function () {
-    function GSViewer() {
-    }
-    GSViewer_1 = GSViewer;
-    GSViewer.forRoot = function () {
-        return {
-            ngModule: GSViewer_1,
-            providers: [
-                _data_data_service__WEBPACK_IMPORTED_MODULE_6__["DataService"]
-            ]
-        };
-    };
-    var GSViewer_1;
-    GSViewer = GSViewer_1 = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
-                angular_split__WEBPACK_IMPORTED_MODULE_2__["AngularSplitModule"],
-                _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__["MatSliderModule"],
-                ngx_pagination__WEBPACK_IMPORTED_MODULE_7__["NgxPaginationModule"],
-                _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__["MatExpansionModule"],
-                _angular_material_tabs__WEBPACK_IMPORTED_MODULE_9__["MatTabsModule"],
-                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_10__["MatTooltipModule"],
-                _angular_material_sort__WEBPACK_IMPORTED_MODULE_11__["MatSortModule"]
-            ],
-            exports: [_gsviewer_component__WEBPACK_IMPORTED_MODULE_4__["GSViewerComponent"]],
-            declarations: [_gsviewer_component__WEBPACK_IMPORTED_MODULE_4__["GSViewerComponent"],
-                _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["ViewerComponent"]],
-            providers: [_data_data_service__WEBPACK_IMPORTED_MODULE_6__["DataService"]],
-        })
-    ], GSViewer);
-    return GSViewer;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.css":
-/*!**********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.css ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#container {\r\n  position: relative;\r\n  height:100%;\r\n  width: 100%;\r\n  margin:0px;\r\n  overflow: hidden;\r\n  color: white;\r\n  font-family:sans-serif;\r\n}\r\n#container-top-right-resize { top: 0px; right: 0px; }\r\n#shownumber{\r\n  position: absolute;\r\n  float: right;\r\n  color:black;\r\n  right: 0px;\r\n  width: 115px;\r\n  bottom: 0px;\r\n  color:#395d73;\r\n  font-family:sans-serif;\r\n}\r\n/*#rotating{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:15px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  top: 0px;\r\n  background-color:transparent;\r\n  border:0;\r\n}\r\n\r\n#paning{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:15px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  top: 25px;\r\n  background-color:transparent;\r\n  border:0;\r\n}\r\n\r\n#zooming{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:15px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 50px;\r\n  background-color:transparent;\r\n  border:0;\r\n}*/\r\n/*#imagery{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:14px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 10px;\r\n  background-color:transparent;\r\n  border:0;\r\n}*/\r\n#zoomingfit{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:14px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 10px;\r\n  background-color:transparent;\r\n  border:0;\r\n}\r\n#selecting{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:14px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 35px;\r\n  background-color:transparent;\r\n  border:0;\r\n}\r\n#points{\r\n  width: 30px;\r\n  height: 25px;\r\n  font:14px bolder;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 70px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n}\r\n#vertices{\r\n  width: 30px;\r\n  height: 25px;\r\n  font:14px bolder;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 95px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n}\r\n#edges{\r\n  width: 30px;\r\n  height: 25px;\r\n  font:14px bolder;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 120px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n}\r\n#wires{\r\n  width: 30px;\r\n  height: 25px;\r\n  font:14px bolder;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 145px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n}\r\n#faces{\r\n  width: 30px;\r\n  height: 25px;\r\n  font:14px bolder;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 170px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n}\r\n#objects{\r\n  width: 30px;\r\n  height: 25px;\r\n  font:14px bolder;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  margin-top: 195px;\r\n  background-color:transparent;\r\n  border:0;\r\n  font-family:sans-serif;\r\n}\r\n#setting{\r\n  width: 30px;\r\n  height: 25px;\r\n  font-size:14px;\r\n  right:0px; \r\n  text-align:center;\r\n  position: absolute;\r\n  top: 10px;\r\n  background-color:transparent;\r\n  border:0;\r\n}\r\n.selected{\r\n  color: grey;\r\n\r\n}\r\n.visible{\r\n  color: grey;\r\n}\r\n.cursor {\r\n\r\n}\r\n.selectvisible{\r\n  background-color:  white !important;\r\n  color:#395d73;\r\n}"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.html":
-/*!***********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.html ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"container\"  \r\n    (mousemove)=\"onDocumentMouseMove($event)\" \r\n    (mousedown)=\"mousedown($event)\"\r\n    (mouseup)=\"mouseup($event)\"\r\n    (click)=\"render(this)\"\r\n\t\t(click)=\"onDocumentMouseDown($event)\">\r\n    <div *ngIf=\"_updatemodel === false\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Error displaying model:{{text}}</div>\r\n    <div *ngIf=\"_modelshow === false\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Model or Scene not defined.</div>\r\n\r\n\r\n    <!-- (mousemove)=\"requestanimate()\" \r\n    (click)=\"requestanimate()\" -->\r\n\r\n    <!-- (window:resize)=\"onResize($event)\" -->\r\n\r\n\t\r\n  \t\t<!-- <button id=\"rotating\" \r\n  \t\t\t[class.visible]=\"Visible === 'rotate'\" \r\n  \t\t\t(click)=\"rotate()\">\r\n  \t\t\t<i class=\"fa fa-refresh\"></i>\r\n  \t\t</button>\r\n\r\n  \t\t<button id=\"paning\"  \r\n  \t\t\t[class.visible]=\"Visible === 'pan'\" \r\n  \t\t\t(click)=\"pan()\">\r\n  \t\t\t<i class=\"fa fa-hand-paper-o\"></i>\r\n  \t\t</button>\r\n\r\n  \t\t<button id=\"zooming\"  \r\n  \t\t\t[class.visible]=\"Visible === 'zoom'\" \r\n  \t\t\t(click)=\"Visible='zoom'\">\r\n  \t\t\t<i class=\"fa fa-search\"></i>\r\n  \t\t</button>-->\r\n  \t\t\r\n  \t\t<button id=\"zoomingfit\"  \r\n  \t\t\t[class.visible]=\"Visible === 'zoomfit'\" \r\n  \t\t\t(click)=\"zoomfit()\">\r\n  \t\t\t<span matTooltip=\"zoom to fit\"><i class=\"fa fa-arrows-alt\"></i></span>\r\n  \t\t</button> \r\n  \t\t\r\n  \t\t<!-- <button id=\"selecting\" [class.visible]=\"Visible === 'select'\" (click)= \"select($event, Visible)\" ><i class=\"fa fa-mouse-pointer\"></i></button> -->\r\n  \t\t\r\n  \t\t<!-- <button id=\"setting\" [class.selected]=\"settingVisible\" (click)= \"setting(settingVisible)\"><i class=\"fa fa-cog\"></i></button> -->\r\n\r\n      <button id=\"selecting\" [class.selected]=\"seVisible\" (click)= \"select(seVisible)\" ><span matTooltip=\"select\"><i class=\"fa fa-mouse-pointer\"></i></span></button>\r\n      <div id=\"shownumber\">\r\n        <tr>\r\n        <td  align=left style=\"width: 60px;\">Triangles&nbsp;&nbsp;</td>\r\n        <td  align=left style=\"width: 10px;\">{{renderer.info.render.faces}}</td>\r\n        </tr>\r\n        <tr>\r\n        <td  align=left style=\"width: 60px;\">Lines</td>\r\n        <td  align=left style=\"width: 10px;\">{{LineNo}}</td>\r\n        </tr>\r\n      </div>\r\n\r\n      <!-- <button id=\"imagery\"  \r\n        [class.selected]=\"imVisible\" (click)=\"leaflet()\">I\r\n      </button> -->\r\n      \t\r\n      \t<!--setting-->\r\n      \t\r\n \t\t<!-- <app-setting *ngIf=\"settingVisible == true\"></app-setting> -->\r\n    <div *ngIf=\"seVisible == true\">\r\n        <button id=\"points\" [class.selectvisible]=\"SelectVisible === 'Points'\" (click)=\"pointselect(SelectVisible)\"><span matTooltip=\"Select Points\">P</span></button>\r\n        <button id=\"vertices\" [class.selectvisible]=\"SelectVisible === 'Vertices'\" (click)=\"verticeselect(SelectVisible)\"><span matTooltip=\"Select Vertices\">V</span></button>\r\n        <button id=\"edges\" [class.selectvisible]=\"SelectVisible === 'Edges'\" (click)=\"edgeselect(SelectVisible)\"><span matTooltip=\"Select Edges\">E</span></button>\r\n        <button id=\"wires\" [class.selectvisible]=\"SelectVisible === 'Wires'\" (click)=\"wireselect(SelectVisible)\"><span matTooltip=\"Select Wires\">W</span></button>\r\n        <button id=\"faces\" [class.selectvisible]=\"SelectVisible === 'Faces'\" (click)=\"faceselect(SelectVisible)\"><span matTooltip=\"Select Faces\">F</span></button>\r\n        <button id=\"objects\" [class.selectvisible]=\"SelectVisible === 'Objs'\" (click)=\"objectselect(SelectVisible)\"><span matTooltip=\"Select Objects\">O</span></button>\r\n      </div>\r\n</div>\r\n\r\n\r\n\t\r\n\r\n\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.ts":
-/*!*********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.ts ***!
-  \*********************************************************************/
-/*! exports provided: ViewerComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewerComponent", function() { return ViewerComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/gsviewer/data/DataSubscriber.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var ViewerComponent = /** @class */ (function (_super) {
-    __extends(ViewerComponent, _super);
-    function ViewerComponent(injector, myElement) {
-        var _this = _super.call(this, injector) || this;
-        _this.textlabels = [];
-        _this.starsGeometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-        _this.seVisible = false;
-        _this.imVisible = false;
-        _this.SelectVisible = 'Objs';
-        _this.settingVisible = false;
-        _this.LineNo = 0;
-        _this._updatemodel = true;
-        _this._modelshow = true;
-        _this.lastChanged = undefined;
-        _this.myElement = myElement;
-        return _this;
-    }
-    ViewerComponent.prototype.ngOnInit = function () {
-        var container = this.myElement.nativeElement.children.namedItem("container");
-        /// check for container
-        if (!container) {
-            console.error("No container in Three Viewer");
-            return;
-        }
-        ///
-        var width = container.offsetWidth; //container.clientWidth;
-        var height = container.offsetHeight; //container.clientHeight;
-        var scene = this.dataService.getScene(width, height);
-        var renderer = this.dataService.getRenderer();
-        var camera = this.dataService.getCamera();
-        var controls = this.dataService.getControls();
-        container.appendChild(renderer.domElement);
-        this.scene = scene;
-        this.renderer = renderer;
-        this.camera = camera;
-        this.controls = controls;
-        this.width = width;
-        this.height = height;
-        this.updateModel();
-        // todo: check and refactor what is required?
-        this.selecting = this.dataService.getselecting(); // todo: should this be in the data service??
-        this.mouse = new three__WEBPACK_IMPORTED_MODULE_1__["Vector2"]();
-        this.raycaster = new three__WEBPACK_IMPORTED_MODULE_1__["Raycaster"]();
-        this.raycaster.linePrecision = 0.05;
-        this.scenechildren = this.dataService.getscenechild();
-        this.dataService.SelectVisible = this.SelectVisible;
-        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["SphereGeometry"](1);
-        var material = new three__WEBPACK_IMPORTED_MODULE_1__["MeshBasicMaterial"]({ color: 0x00ff00, transparent: true, opacity: 0.5 });
-        this.sphere = new three__WEBPACK_IMPORTED_MODULE_1__["Mesh"](geometry, material);
-        this.sphere.visible = false;
-        this.sphere.name = "sphereInter";
-        this.sphere.scale.set(0.1, 0.1, 0.1);
-        this.scene.add(this.sphere);
-        var self = this;
-        controls.addEventListener('change', function () { self.render(self); });
-        for (var i = 0; i < this.getchildren().length; i++) {
-            this.getchildren()[i]["material"].transparent = false;
-        }
-        this.dataService.addraycaster(this.raycaster);
-        this.addgrid();
-        self.renderer.render(self.scene, self.camera);
-    };
-    //
-    //  checks if the data service has a data and calls update function for the viewer
-    //
-    ViewerComponent.prototype.notify = function (message) {
-        if (message == "model_update" && this.scene) {
-            this.updateModel();
-        }
-    };
-    ViewerComponent.prototype.animate = function (self) {
-        self.raycaster.setFromCamera(self.mouse, self.camera);
-        self.scenechildren = self.dataService.getscenechild();
-        var intersects = self.raycaster.intersectObjects(self.scenechildren);
-        for (var i = 0; i < self.scenechildren.length; i++) {
-            var currObj = self.scenechildren[i];
-            if (self.dataService.getSelectingIndex(currObj.uuid) < 0) {
-                if (intersects[0] != undefined && intersects[0].object.uuid == currObj.uuid) {
-                    self.sphere.visible = true;
-                    self.sphere.position.copy(intersects[0].point);
-                }
-                else {
-                    self.sphere.visible = false;
-                }
-            }
-        }
-        for (var i = 0; i < self.textlabels.length; i++) {
-            self.textlabels[i].updatePosition();
-        }
-        if (self.dataService.clickshow !== undefined && self.clickatt !== self.dataService.clickshow) {
-            self.clickatt = self.dataService.clickshow;
-            self.clickshow();
-        }
-        self.renderer.render(self.scene, self.camera);
-    };
-    ViewerComponent.prototype.render = function (self) {
-        for (var i = 0; i < self.textlabels.length; i++) {
-            self.textlabels[i].updatePosition();
-        }
-        if (self.dataService.clickshow !== undefined && self.clickatt !== self.dataService.clickshow) {
-            self.clickatt = self.dataService.clickshow;
-            self.clickshow();
-        }
-        //self.onDocumentMouseDown();
-        self.renderer.render(self.scene, self.camera);
-    };
-    /// clears all children from the scene
-    ViewerComponent.prototype.clearScene = function () {
-        /// remove children from scene
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "Scene") {
-                this.scene.remove(this.scene.children[i]);
-                i = i - 1;
-            }
-            if (this.scene.children[i].name == "selects") {
-                this.scene.remove(this.scene.children[i]);
-                i = i - 1;
-            }
-        }
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name == "selects") {
-                this.scene.remove(this.scene.children[i]);
-                i = i - 1;
-            }
-        }
-        for (var i = 0; i < this.textlabels.length; i++) {
-            this.removeTextLabel(this.textlabels[i]["id"]);
-            i = i - 1;
-        }
-    };
-    ViewerComponent.prototype.ngDoCheck = function () {
-        var container = this.myElement.nativeElement.children.namedItem("container");
-        var width = container.offsetWidth;
-        var height = container.offsetHeight;
-        // this is when dimensions change
-        if (width !== this.width || height !== this.height) {
-            // compute time difference from last changed
-            var nowTime = Date.now();
-            var difference = this.lastChanged - nowTime;
-            if (Math.abs(difference) < 400) {
-                // do nothing
-                // dimensions still changing
-                //console.log("Threshold too low: " + Math.abs(difference) + "ms");
-            }
-            else {
-                //console.log("Threshold matched: " + Math.abs(difference) + "ms");
-                this.onResize();
-            }
-            // add dimension change script
-            this.lastChanged = Date.now();
-        }
-    };
-    // TODO Refactor
-    ViewerComponent.prototype.onResize = function () {
-        var container = this.myElement.nativeElement.children.namedItem("container");
-        /// check for container
-        if (!container) {
-            console.error("No container in Three Viewer");
-            return;
-        }
-        ///
-        var width = container.offsetWidth;
-        var height = container.offsetHeight;
-        this.width = width;
-        this.height = height;
-        this.renderer.setSize(this.width, this.height);
-        this.camera.aspect = this.width / this.height;
-        this.camera.updateProjectionMatrix();
-    };
-    //
-    // update mode
-    // todo: optimize
-    // 
-    ViewerComponent.prototype.updateModel = function () {
-        this._model = this.dataService.getModel();
-        if (!this._model || !this.scene) {
-            console.warn("Model or Scene not defined.");
-            this._modelshow = false;
-            return;
-        }
-        try {
-            this._updatemodel = true;
-            this._modelshow = true;
-            console.log("MODEL LOADED");
-            console.debug(this._model);
-            var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["BufferGeometry"]();
-            var normals = [];
-            var colors = [];
-            var positions = this._model.attributes.positions;
-            var positions_values_1 = positions.values;
-            var positions_keys = positions.keys;
-            var positions_1 = [];
-            positions_keys.forEach(function (v, k) {
-                positions_1.push(positions_values_1[v]);
-            });
-            var positions_flat = [].concat.apply([], positions_1);
-            var coordinates_1 = this._model.attributes.positions.filter(function (attr) { return attr.name === 'coordinates'; });
-            var triangles = this._model.topology.triangles;
-            var triangles_flat = [].concat.apply([], triangles);
-            var triangles_flat_values_1 = coordinates_1.values;
-            var triangles_flat_keys = coordinates_1.keys;
-            var triangles_flat_1 = [];
-            triangles_flat_keys.forEach(function (v, k) {
-                triangles_flat_1.push(triangles_flat_values_1[v]);
-            });
-            var triangles_flat_coords = [].concat.apply([], triangles_flat_1);
-            var vertices_1 = this._model.topology.vertices;
-            var edges = this._model.topology.edges;
-            // remove duplicated edges
-            var edges_sorted = edges.map(function (x) { return x.sort(); }).sort();
-            var edges_unique = [];
-            for (var i = 1; i < edges_sorted.length; i++) {
-                if (JSON.stringify(edges_sorted[i]) != JSON.stringify(edges_sorted[i - 1])) {
-                    edges_unique.push(edges_sorted[i]);
-                }
-            }
-            var edges_flat = [].concat.apply([], edges);
-            var edges_flat_coords_1 = [];
-            edges_flat.forEach(function (v, k) {
-                edges_flat_coords_1.push(coordinates_1[vertices_1[v]]);
-            });
-            var attr_normal = this._model.attributes.vertices.filter(function (attr) { return attr.name === 'normal'; });
-            var normal_values_1 = attr_normal[0].values;
-            var normal_keys = attr_normal[0].keys;
-            var normals_1 = [];
-            normal_keys.forEach(function (v, k) {
-                normals_1.push(normal_values_1[v]);
-            });
-            var normals_flat = [].concat.apply([], normals_1);
-            var attr_color = this._model.attributes.vertices.filter(function (attr) { return attr.name === 'color'; });
-            var color_values_1 = attr_color[0].values;
-            var color_keys = attr_color[0].keys;
-            var colors_1 = [];
-            color_keys.forEach(function (v, k) {
-                colors_1.push(color_values_1[v]);
-            });
-            var colors_flat = [].concat.apply([], colors_1);
-            colors = [0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1];
-            for (var i_1 = 0; i_1 < coordinates_1.length; i_1++) {
-                normals.push(0, 0, 0);
-                colors.push(0, 0, 1);
-            }
-            // console.log(colors)
-            // tri
-            geometry.setIndex(triangles_flat_coords);
-            geometry.addAttribute('position', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](positions_flat, 3));
-            geometry.addAttribute('normal', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](normals_flat, 3));
-            geometry.addAttribute('color', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](colors_flat, 3));
-            var material = new three__WEBPACK_IMPORTED_MODULE_1__["MeshPhongMaterial"]({
-                specular: 0xffffff, shininess: 0,
-                side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"], vertexColors: three__WEBPACK_IMPORTED_MODULE_1__["VertexColors"],
-            });
-            var mesh = new three__WEBPACK_IMPORTED_MODULE_1__["Mesh"](geometry, material);
-            this.scene.add(mesh);
-            // lines
-            var geometry3 = new three__WEBPACK_IMPORTED_MODULE_1__["BufferGeometry"]();
-            geometry3.setIndex(edges_flat_coords_1);
-            geometry3.addAttribute('position', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](positions_flat, 3));
-            geometry3.addAttribute('normal', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](normals_flat, 3));
-            geometry3.addAttribute('color', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](colors_flat, 3));
-            var material3 = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({
-                color: 0xffffff,
-                linewidth: 1,
-                linecap: 'round',
-                linejoin: 'round' //ignored by WebGLRenderer
-            });
-            var lines = new three__WEBPACK_IMPORTED_MODULE_1__["LineSegments"](geometry3, material3);
-            this.scene.add(lines);
-            // points
-            var geometry2 = new three__WEBPACK_IMPORTED_MODULE_1__["BufferGeometry"]();
-            geometry2.addAttribute('position', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](positions_flat, 3));
-            geometry2.addAttribute('color', new three__WEBPACK_IMPORTED_MODULE_1__["Float32BufferAttribute"](colors_flat, 3));
-            geometry2.computeBoundingSphere();
-            //
-            var material2 = new three__WEBPACK_IMPORTED_MODULE_1__["PointsMaterial"]({ size: 0.1, vertexColors: three__WEBPACK_IMPORTED_MODULE_1__["VertexColors"] });
-            var mesh2 = new three__WEBPACK_IMPORTED_MODULE_1__["Points"](geometry2, material2);
-            this.scene.add(mesh2);
-            //todo: Change to new viewer
-            // const scene_data = this._model.scene;
-            // this.clearScene();
-            // let loader = new THREE.ObjectLoader();
-            // // loading data
-            // let objectData = loader.parse( scene_data );
-            // this.seVisible=false;
-            // this.imVisible=false;
-            // this.LineNo=0;
-            // // preprocessing
-            // if( objectData.children!==undefined){
-            //   var radius=0;
-            //   for(var i=0;i< objectData.children.length;i++){
-            //     let chd = objectData.children[i];
-            //     //chd["material"].needsUpdate=true;
-            //     chd["material"].transparent=true;
-            //     chd["material"].blending=1;
-            //     if( chd.name==="All faces"||chd.name==="All wires"||chd.name==="All edges"||chd.name==="All vertices"||
-            //       chd.name==="Other lines"||chd.name==="All points"){
-            //         chd["material"].transparent=false;
-            //         chd["geometry"].computeVertexNormals();
-            //         chd["geometry"].computeBoundingBox();
-            //         chd["geometry"].computeBoundingSphere();
-            //         if(chd.name==="All points"){
-            //           this.center=chd["geometry"].boundingSphere.center;
-            //         }
-            //         if(chd.name==="All edges"){
-            //           this.basicMat=chd["material"].color;
-            //         }else if(chd.name==="Other lines"){
-            //           this.basicMat=chd["material"].color;
-            //         }
-            //         if(chd.type==="LineSegments"&&chd["geometry"].index.count!==undefined){
-            //           this.LineNo=this.LineNo+chd["geometry"].index.count;
-            //         }
-            //     }
-            //     if(chd["geometry"]!=undefined&&chd["geometry"].boundingSphere.radius!==null){
-            //       if(chd["geometry"].boundingSphere.radius>radius){
-            //         radius=chd["geometry"].boundingSphere.radius;
-            //         this.center=chd["geometry"].boundingSphere.center;
-            //       }
-            //     }
-            //   }
-            // }
-            // // setting controls
-            // this.controls.target.set(this.center.x,this.center.y,this.center.z);
-            this.controls.update();
-            // // adding the object to the scene
-            // this.scene.add(objectData);  
-            this.render(this);
-            this.dataService.getpoints = [];
-        }
-        catch (ex) {
-            console.error("Error displaying model:", ex);
-            this._updatemodel = false;
-            this.text = ex;
-        }
-    };
-    ViewerComponent.prototype.getMaterial = function (name) {
-        var canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 256;
-        var context = canvas.getContext('2d');
-        context.textAlign = "center";
-        context.fillText(name, canvas.width / 2, canvas.height / 2);
-        context.font = "Bold  100px sans-serif";
-        var texture = new three__WEBPACK_IMPORTED_MODULE_1__["Texture"](canvas);
-        //texture.needsUpdate = true;
-        var spriteMaterial = new three__WEBPACK_IMPORTED_MODULE_1__["SpriteMaterial"]({ map: texture, color: 0xffffff });
-        return spriteMaterial;
-    };
-    ViewerComponent.prototype.getchildren = function () {
-        var children;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name == "Scene") {
-                children = this.scene.children[i].children;
-                break;
-            }
-            if (i == this.scene.children.length - 1) {
-                return [];
-            }
-        }
-        return children;
-    };
-    ViewerComponent.prototype.clickshow = function () {
-        var label = this.clickatt["label"];
-        var id = this.clickatt["id"];
-        var label_xyz = this.clickatt["label_xyz"];
-        var path = this.clickatt["path"];
-        this.addTextLabel(label, label_xyz, id, path, "All points");
-    };
-    ViewerComponent.prototype.select = function (seVisible) {
-        event.stopPropagation();
-        this.seVisible = !this.seVisible;
-        if (this.seVisible) {
-            if (this.SelectVisible === "Objs")
-                this.objectselect(this.SelectVisible);
-            if (this.SelectVisible === "Faces")
-                this.faceselect(this.SelectVisible);
-            if (this.SelectVisible === "Edges")
-                this.edgeselect(this.SelectVisible);
-            if (this.SelectVisible === "Vertices")
-                this.verticeselect(this.SelectVisible);
-            if (this.SelectVisible === "Points")
-                this.pointselect(this.SelectVisible);
-            for (var i = 0; i < this.getchildren().length; i++) {
-                this.getchildren()[i]["material"].transparent = true;
-            }
-        }
-        else {
-            for (var i = 0; i < this.getchildren().length; i++) {
-                this.getchildren()[i]["material"].transparent = false;
-                if (this.getchildren()[i].name == "All edges") {
-                    this.getchildren()[i]["material"].color = this.basicMat;
-                }
-                else if (this.getchildren()[i].name == "Other lines") {
-                    this.getchildren()[i]["material"].color = this.basicMat;
-                }
-            }
-        }
-    };
-    ViewerComponent.prototype.objectselect = function (SelectVisible) {
-        event.stopPropagation();
-        this.SelectVisible = "Objs";
-        this.dataService.visible = "Objs";
-        document.getElementById("gsv-object").style.color = null;
-        document.getElementById("gsv-face").style.color = null;
-        document.getElementById("gsv-wire").style.color = null;
-        document.getElementById("gsv-edge").style.color = null;
-        document.getElementById("gsv-vertice").style.color = null;
-        var scenechildren = [];
-        var children = this.getchildren();
-        var objsvisibel = true;
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].name === "All objs" || children[i].name === "All faces") {
-                if (children[i]["geometry"].attributes.position.array.length !== 0) {
-                    children[i]["material"].opacity = 0.3;
-                    children[i].name = "All objs";
-                    scenechildren.push(children[i]);
-                }
-                else {
-                    objsvisibel = false;
-                }
-            }
-            if (children[i].name === "All wires") {
-                if (objsvisibel === true) {
-                    children[i]["material"].opacity = 0;
-                }
-                else {
-                    children[i]["material"].opacity = 0.6;
-                    scenechildren.push(children[i]);
-                }
-            }
-            if (children[i].name === "All edges" || children[i].name === "Other lines") {
-                children[i]["material"].opacity = 0.1;
-                children[i]["material"].color = this.basicMat;
-            }
-            if (children[i].name === "All vertices")
-                children[i]["material"].opacity = 0;
-        }
-        this.dataService.addscenechild(scenechildren);
-        this.dataService.SelectVisible = this.SelectVisible;
-    };
-    ViewerComponent.prototype.faceselect = function (SelectVisible) {
-        event.stopPropagation();
-        this.SelectVisible = "Faces";
-        this.dataService.visible = "Faces";
-        document.getElementById("gsv-object").style.color = "grey";
-        document.getElementById("gsv-face").style.color = null;
-        document.getElementById("gsv-wire").style.color = null;
-        document.getElementById("gsv-edge").style.color = null;
-        document.getElementById("gsv-vertice").style.color = null;
-        var scenechildren = [];
-        var children = this.getchildren();
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].name === "All wires")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All edges" || children[i].name === "Other lines") {
-                children[i]["material"].opacity = 0.1;
-                children[i]["material"].color = this.basicMat;
-            }
-            if (children[i].name === "All vertices")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All objs" || children[i].name === "All faces") {
-                children[i]["material"].opacity = 0.3;
-                children[i].name = "All faces";
-                scenechildren.push(children[i]);
-            }
-        }
-        this.dataService.addscenechild(scenechildren);
-        this.dataService.SelectVisible = this.SelectVisible;
-    };
-    ViewerComponent.prototype.wireselect = function (SelectVisible) {
-        event.stopPropagation();
-        this.SelectVisible = "Wires";
-        var lineprecision = this.raycaster.linePrecision;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "sphereInter") {
-                var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["SphereGeometry"](lineprecision * 2);
-                this.scene.children[i]["geometry"] = geometry;
-                this.renderer.render(this.scene, this.camera);
-            }
-        }
-        document.getElementById("gsv-object").style.color = "grey";
-        document.getElementById("gsv-face").style.color = "grey";
-        document.getElementById("gsv-wire").style.color = null;
-        document.getElementById("gsv-edge").style.color = null;
-        document.getElementById("gsv-vertice").style.color = null;
-        var scenechildren = [];
-        var children = this.getchildren();
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].name === "All objs" || children[i].name === "All faces")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All edges" || children[i].name === "Other lines") {
-                children[i]["material"].opacity = 0.1;
-                children[i]["material"].color = this.basicMat;
-            }
-            if (children[i].name === "All vertices")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All wires") {
-                children[i]["material"].opacity = 0.6;
-                scenechildren.push(children[i]);
-            }
-        }
-        this.dataService.addscenechild(scenechildren);
-        this.dataService.SelectVisible = this.SelectVisible;
-    };
-    ViewerComponent.prototype.edgeselect = function (SelectVisible) {
-        event.stopPropagation();
-        this.SelectVisible = "Edges";
-        var lineprecision = this.raycaster.linePrecision;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "sphereInter") {
-                var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["SphereGeometry"](lineprecision * 15);
-                this.scene.children[i]["geometry"] = geometry;
-                this.renderer.render(this.scene, this.camera);
-            }
-        }
-        document.getElementById("gsv-object").style.color = "grey";
-        document.getElementById("gsv-face").style.color = "grey";
-        document.getElementById("gsv-wire").style.color = "grey";
-        document.getElementById("gsv-edge").style.color = null;
-        document.getElementById("gsv-vertice").style.color = null;
-        var scenechildren = [];
-        var children = this.getchildren();
-        var edgevisible = true;
-        for (var i = 0; i < children.length; i++) {
-            children[i]["material"].transparent = true;
-            if (children[i].name === "All edges" || children[i].name === "Other lines") {
-                if (children[i].name === "All edges") {
-                    if (children[i]["geometry"].attributes.position.array.length !== 0) {
-                        children[i]["material"].opacity = 0.3;
-                        children[i]["material"].color = new three__WEBPACK_IMPORTED_MODULE_1__["Color"](255, 255, 0);
-                        scenechildren.push(children[i]);
-                    }
-                    else {
-                        edgevisible = false;
-                    }
-                }
-                else {
-                    if (children[i]["geometry"].attributes.position.array.length !== 0) {
-                        children[i]["material"].opacity = 0.3;
-                        children[i]["material"].color = new three__WEBPACK_IMPORTED_MODULE_1__["Color"](255, 255, 0);
-                        scenechildren.push(children[i]);
-                    }
-                }
-            }
-            if (children[i].name === "All objs" || children[i].name === "All faces")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All wires")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All vertices")
-                children[i]["material"].opacity = 0.1;
-        }
-        this.dataService.addscenechild(scenechildren);
-        this.dataService.SelectVisible = this.SelectVisible;
-    };
-    ViewerComponent.prototype.verticeselect = function (SelectVisible) {
-        event.stopPropagation();
-        this.SelectVisible = "Vertices";
-        var pointradius = this.dataService.pointradius;
-        ;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "sphereInter") {
-                var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["SphereGeometry"](pointradius * 10);
-                this.scene.children[i]["geometry"] = geometry;
-                this.renderer.render(this.scene, this.camera);
-            }
-        }
-        document.getElementById("gsv-object").style.color = "grey";
-        document.getElementById("gsv-face").style.color = "grey";
-        document.getElementById("gsv-wire").style.color = "grey";
-        document.getElementById("gsv-edge").style.color = "grey";
-        document.getElementById("gsv-vertice").style.color = null;
-        var scenechildren = [];
-        var children = this.getchildren();
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].name === "All objs" || children[i].name === "All faces")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All wires")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All edges" || children[i].name === "Other lines") {
-                children[i]["material"].opacity = 0.1;
-                children[i]["material"].color = this.basicMat;
-            }
-            /*if(children[i].name==="All vertices"){
-              scenechildren.push(children[i]);
-            }*/
-            if (children[i].name === "All points") {
-                scenechildren.push(children[i]);
-                children[i]["material"].opacity = 1;
-            }
-        }
-        this.dataService.addscenechild(scenechildren);
-        this.dataService.SelectVisible = this.SelectVisible;
-    };
-    ViewerComponent.prototype.pointselect = function (SelectVisible) {
-        /*event.stopPropagation();
-        this.verticeselect("Vertices");
-        this.SelectVisible="Points";
-        this.dataService.SelectVisible=this.SelectVisible;*/
-        event.stopPropagation();
-        this.SelectVisible = "Points";
-        var pointradius = this.dataService.pointradius;
-        ;
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "sphereInter") {
-                var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["SphereGeometry"](pointradius * 10);
-                this.scene.children[i]["geometry"] = geometry;
-                this.renderer.render(this.scene, this.camera);
-            }
-        }
-        document.getElementById("gsv-object").style.color = "grey";
-        document.getElementById("gsv-face").style.color = "grey";
-        document.getElementById("gsv-wire").style.color = "grey";
-        document.getElementById("gsv-edge").style.color = "grey";
-        document.getElementById("gsv-vertice").style.color = null;
-        var scenechildren = [];
-        var children = this.getchildren();
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].name === "All objs" || children[i].name === "All faces")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All wires")
-                children[i]["material"].opacity = 0.1;
-            if (children[i].name === "All edges" || children[i].name === "Other lines") {
-                children[i]["material"].opacity = 0.1;
-                children[i]["material"].color = this.basicMat;
-            }
-            if (children[i].name === "All vertices") {
-                children[i]["material"].opacity = 1;
-            }
-            if (children[i].name === "All points") {
-                scenechildren.push(children[i]);
-            }
-        }
-        this.dataService.addscenechild(scenechildren);
-        this.dataService.SelectVisible = this.SelectVisible;
-    };
-    //
-    //  events
-    //
-    ViewerComponent.prototype.mousedown = function ($event) {
-        this.animate(this);
-        this.mDownTime = (new Date()).getTime();
-    };
-    ViewerComponent.prototype.mouseup = function ($event) {
-        this.mUpTime = (new Date()).getTime();
-    };
-    ViewerComponent.prototype.onDocumentMouseMove = function (event) {
-        //this.onResize();
-        if (this.seVisible === true) {
-            this.animate(this);
-            this.mouse.x = (event.offsetX / this.width) * 2 - 1;
-            this.mouse.y = -(event.offsetY / this.height) * 2 + 1;
-        }
-        else {
-            this.render(this);
-        }
-    };
-    ViewerComponent.prototype.addgrid = function () {
-        for (var i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].name === "GridHelper") {
-                this.scene.remove(this.scene.children[i]);
-                i = i - 1;
-            }
-        }
-        // todo: change grid -> grid_value
-        if (this.dataService.grid) {
-            var gridhelper = new three__WEBPACK_IMPORTED_MODULE_1__["GridHelper"](100, 10);
-            gridhelper.name = "GridHelper";
-            var vector = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](0, 1, 0);
-            gridhelper.lookAt(vector);
-            gridhelper.position.set(0, 0, 0);
-            this.scene.add(gridhelper);
-            this.dataService.centerx = 0;
-            this.dataService.centery = 0;
-            this.dataService.centerz = 0;
-        }
-    };
-    /// selects object from three.js scene
-    ViewerComponent.prototype.onDocumentMouseDown = function (event) {
-        var threshold;
-        if (this.seVisible === true) {
-            threshold = 100;
-        }
-        else {
-            threshold = 0.1;
-        }
-        if (Math.abs(this.mDownTime - this.mUpTime) > threshold) {
-            this.mDownTime = 0;
-            this.mUpTime = 0;
-            return;
-        }
-        var selectedObj, intersects;
-        var select = false;
-        this.scenechildren = this.dataService.getscenechild();
-        this.raycaster.setFromCamera(this.mouse, this.camera);
-        intersects = this.raycaster.intersectObjects(this.scenechildren);
-        if (intersects.length > 0) {
-            selectedObj = intersects[0].object;
-            if (this.scenechildren[0].name === "All objs") {
-                var index_1 = Math.floor(intersects[0].faceIndex);
-                var path_1 = this.scene_and_maps.faces_map.get(index_1);
-                var face = this._model.getGeom().getTopo(path_1);
-                var label = "";
-                var id_1 = "o" + path_1.id;
-                var getpoints;
-                var getpoints = this.dataService.getpoints;
-                var pointname = this.dataService.pointname;
-                if (getpoints !== undefined && getpoints.length !== 0) {
-                    for (var i = 0; i < getpoints.length; i++) {
-                        if (id_1 === getpoints[i].label) {
-                            if (this.dataService.checkobj === true)
-                                label = id_1;
-                            for (var n = 0; n < pointname.length; n++) {
-                                if (this.dataService.checkname[n] === true) {
-                                    label = label.concat('<br/>', pointname[n], ":", getpoints[i][n]);
-                                }
-                            }
-                        }
-                    }
-                }
-                var label_xyz = face.getLabelCentroid();
-                var faces = face.getObj().getFaces();
-                if (this.textlabels.length === 0) {
-                    for (var n = 0; n < faces.length; n++) {
-                        var verts = faces[n].getVertices();
-                        var verts_xyz = verts.map(function (v) { return v.getPoint().getPosition(); });
-                        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                        for (var i = 0; i < verts_xyz.length; i++) {
-                            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz[i][0], verts_xyz[i][1], verts_xyz[i][2]));
-                        }
-                        /*if(verts.length===4){
-                          geometry.faces.push(new THREE.Face3(0,2,1));
-                          geometry.faces.push(new THREE.Face3(0,3,2));
-                        }else if(verts.length===3){
-                          geometry.faces.push(new THREE.Face3(0,2,1));
-                        }
-                        var mesh=new THREE.Mesh( geometry, new THREE.MeshPhongMaterial( { color:0x00ff00,side:THREE.DoubleSide} ));
-                        mesh["geometry"].computeVertexNormals();
-                        mesh.userData.id=label;
-                        mesh.name="selects";
-                        this.scene.add(mesh);*/
-                        var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                        var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                        line.userData.id = id_1;
-                        //line["material"].needsUpdate=true;
-                        line.name = "selects";
-                        this.scene.add(line);
-                    }
-                    this.addTextLabel(label, label_xyz, label, path_1, "All objs");
-                }
-                else {
-                    for (var j = 0; j < this.scene.children.length; j++) {
-                        if (id_1 === this.scene.children[j].userData.id) {
-                            select = true;
-                            this.scene.remove(this.scene.children[j]);
-                            j = j - 1;
-                        }
-                    }
-                    for (var j = 0; j < this.textlabels.length; j++) {
-                        if (id_1 === this.textlabels[j]["id"]) {
-                            select = true;
-                            this.removeTextLabel(this.textlabels[j]["id"]);
-                            j = j - 1;
-                        }
-                    }
-                    if (select == false) {
-                        for (var n = 0; n < faces.length; n++) {
-                            var verts = faces[n].getVertices();
-                            var verts_xyz = verts.map(function (v) { return v.getPoint().getPosition(); });
-                            var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                            for (var i = 0; i < verts_xyz.length; i++) {
-                                geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz[i][0], verts_xyz[i][1], verts_xyz[i][2]));
-                            }
-                            var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                            var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                            line.userData.id = id_1;
-                            //line["material"].needsUpdate=true;
-                            line.name = "selects";
-                            this.scene.add(line);
-                        }
-                        this.addTextLabel(label, label_xyz, id_1, path_1, "All objs");
-                    }
-                }
-            }
-            if (this.scenechildren[0].name === "All faces") {
-                var index_2 = Math.floor(intersects[0].faceIndex);
-                var path_2 = this.scene_and_maps.faces_map.get(index_2);
-                var face = this._model.getGeom().getTopo(path_2);
-                var label = "";
-                var getpoints;
-                var getpoints = this.dataService.getpoints;
-                var pointname = this.dataService.pointname;
-                if (getpoints !== undefined && getpoints.length !== 0) {
-                    for (var i = 0; i < getpoints.length; i++) {
-                        if (face.getLabel() === getpoints[i].label) {
-                            for (var n = 0; n < pointname.length; n++) {
-                                if (this.dataService.checkface === true)
-                                    label = face.getLabel();
-                                if (this.dataService.checkname[n] === true) {
-                                    label = label.concat('<br/>', pointname[n], ":", getpoints[i][n]);
-                                }
-                            }
-                        }
-                    }
-                }
-                var label_xyz = face.getLabelCentroid();
-                var verts_1 = face.getVertices();
-                var verts_xyz_1 = verts_1.map(function (v) { return v.getPoint().getPosition(); });
-                if (this.textlabels.length === 0) {
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                    for (var i = 0; i < verts_xyz_1.length; i++) {
-                        geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_1[i][0], verts_xyz_1[i][1], verts_xyz_1[i][2]));
-                    }
-                    var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                    var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                    line.userData.id = face.getLabel();
-                    //line["material"].needsUpdate=true;
-                    line.name = "selects";
-                    this.scene.add(line);
-                    this.addTextLabel(label, label_xyz, face.getLabel(), path_2, "All faces");
-                }
-                else {
-                    for (var j = 0; j < this.scene.children.length; j++) {
-                        if (face.getLabel() === this.scene.children[j].userData.id) {
-                            select = true;
-                            this.scene.remove(this.scene.children[j]);
-                        }
-                    }
-                    for (var j = 0; j < this.textlabels.length; j++) {
-                        if (face.getLabel() === this.textlabels[j]["id"]) {
-                            select = true;
-                            this.removeTextLabel(this.textlabels[j]["id"]);
-                        }
-                    }
-                    if (select == false) {
-                        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                        for (var i = 0; i < verts_xyz_1.length; i++) {
-                            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_1[i][0], verts_xyz_1[i][1], verts_xyz_1[i][2]));
-                        }
-                        var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                        var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                        line.userData.id = face.getLabel();
-                        //line["material"].needsUpdate=true;
-                        line.name = "selects";
-                        this.scene.add(line);
-                        this.addTextLabel(label, label_xyz, face.getLabel(), path_2, "All faces");
-                    }
-                }
-            }
-            if (this.scenechildren[0].name == "All wires") {
-                var index_3 = Math.floor(intersects[0].index / 2);
-                var path_3 = this.scene_and_maps.wires_map.get(index_3);
-                var wire = this._model.getGeom().getTopo(path_3);
-                var label_1 = wire.getLabel();
-                var label_xyz = wire.getLabelCentroid();
-                var verts_2 = wire.getVertices();
-                var verts_xyz_2 = verts_2.map(function (v) { return v.getPoint().getPosition(); });
-                if (wire.isClosed()) {
-                    verts_xyz_2.push(verts_xyz_2[0]);
-                }
-                if (this.textlabels.length === 0) {
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                    for (var i = 0; i < verts_xyz_2.length; i++) {
-                        geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_2[i][0], verts_xyz_2[i][1], verts_xyz_2[i][2]));
-                    }
-                    var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                    var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                    line.userData.id = label_1;
-                    //line["material"].needsUpdate=true;
-                    line.name = "selects";
-                    this.scene.add(line);
-                    this.addTextLabel(label_1, label_xyz, label_1, path_3, "All wires");
-                }
-                else {
-                    for (var j = 0; j < this.scene.children.length; j++) {
-                        if (label_1 === this.scene.children[j].userData.id) {
-                            select = true;
-                            this.scene.remove(this.scene.children[j]);
-                        }
-                    }
-                    for (var j = 0; j < this.textlabels.length; j++) {
-                        if (label_1 === this.textlabels[j]["id"]) {
-                            select = true;
-                            this.removeTextLabel(this.textlabels[j]["id"]);
-                        }
-                    }
-                    if (select == false) {
-                        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                        for (var i = 0; i < verts_xyz_2.length; i++) {
-                            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_2[i][0], verts_xyz_2[i][1], verts_xyz_2[i][2]));
-                        }
-                        var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                        var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                        line.userData.id = label_1;
-                        //line["material"].needsUpdate=true;
-                        line.name = "selects";
-                        this.scene.add(line);
-                        this.addTextLabel(label_1, label_xyz, label_1, path_3, "All wires");
-                    }
-                }
-            }
-            if (this.scenechildren[0].name == "All edges") {
-                var label = "";
-                var index = Math.floor(intersects[0].index / 2);
-                if (this.scene_and_maps.edges_map !== null && (index < this.scene_and_maps.edges_map.size || index === this.scene_and_maps.edges_map.size)) {
-                    var path = this.scene_and_maps.edges_map.get(index);
-                    var edge = this._model.getGeom().getTopo(path);
-                    var id = edge.getLabel();
-                    var label_show = id;
-                    for (var i = 1; i < intersects.length; i++) {
-                        if (intersects[0].distance === intersects[i].distance) {
-                            index = Math.floor(intersects[i].index / 2);
-                            path = this.scene_and_maps.edges_map.get(index);
-                            edge = this._model.getGeom().getTopo(path);
-                            id = edge.getLabel();
-                            if (label_show !== id)
-                                label_show = label_show + "<br/>" + id;
-                        }
-                    }
-                    var getpoints;
-                    var getpoints = this.dataService.getpoints;
-                    var pointname = this.dataService.pointname;
-                    if (getpoints !== undefined && getpoints.length !== 0) {
-                        for (var i = 0; i < getpoints.length; i++) {
-                            if (edge.getLabel() === getpoints[i].label) {
-                                if (this.dataService.checkedgeid === true) {
-                                    label = label_show;
-                                }
-                                for (var n = 0; n < pointname.length; n++) {
-                                    if (this.dataService.checkname[n] === true) {
-                                        label = label.concat('<br/>', pointname[n], ":", getpoints[i][n]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    var label_xyz = edge.getLabelCentroid();
-                    var verts_3 = edge.getVertices();
-                    var verts_xyz_3 = verts_3.map(function (v) { return v.getPoint().getPosition(); });
-                    if (this.textlabels.length === 0) {
-                        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                        for (var i = 0; i < verts_xyz_3.length; i++) {
-                            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_3[i][0], verts_xyz_3[i][1], verts_xyz_3[i][2]));
-                        }
-                        var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                        var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                        line.userData.id = edge.getLabel();
-                        //line["material"].needsUpdate=true;
-                        line.name = "selects";
-                        this.scene.add(line);
-                        this.addTextLabel(label, label_xyz, edge.getLabel(), path, "All edges");
-                    }
-                    else {
-                        for (var j = 0; j < this.scene.children.length; j++) {
-                            if (edge.getLabel() === this.scene.children[j].userData.id) {
-                                select = true;
-                                this.scene.remove(this.scene.children[j]);
-                            }
-                        }
-                        for (var j = 0; j < this.textlabels.length; j++) {
-                            if (edge.getLabel() === this.textlabels[j]["id"]) {
-                                select = true;
-                                this.removeTextLabel(this.textlabels[j]["id"]);
-                            }
-                        }
-                        if (select == false) {
-                            var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                            for (var i = 0; i < verts_xyz_3.length; i++) {
-                                geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_3[i][0], verts_xyz_3[i][1], verts_xyz_3[i][2]));
-                            }
-                            var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                            var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                            line.userData.id = edge.getLabel();
-                            line.name = "selects";
-                            this.scene.add(line);
-                            this.addTextLabel(label, label_xyz, edge.getLabel(), path, "All edges");
-                        }
-                    }
-                }
-            }
-            else if (this.scenechildren[0].name == "Other lines") {
-                var label = "";
-                var index = Math.floor(intersects[0].index / 2);
-                if (this.scene_and_maps.edges_map !== null && (index < this.scene_and_maps.edges_map.size || index === this.scene_and_maps.edges_map.size)) {
-                    var path = this.scene_and_maps.edges_map.get(index);
-                    var edge = this._model.getGeom().getTopo(path);
-                    var id = edge.getLabel();
-                    label = id;
-                    for (var i = 1; i < intersects.length; i++) {
-                        if (intersects[0].distance === intersects[i].distance) {
-                            index = Math.floor(intersects[i].index / 2);
-                            path = this.scene_and_maps.edges_map.get(index);
-                            edge = this._model.getGeom().getTopo(path);
-                            id = edge.getLabel();
-                            if (label !== id)
-                                label = label + "<br/>" + id;
-                        }
-                    }
-                    var label_xyz = edge.getLabelCentroid();
-                    var verts_4 = edge.getVertices();
-                    var verts_xyz_4 = verts_4.map(function (v) { return v.getPoint().getPosition(); });
-                    if (this.textlabels.length === 0) {
-                        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                        for (var i = 0; i < verts_xyz_4.length; i++) {
-                            geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_4[i][0], verts_xyz_4[i][1], verts_xyz_4[i][2]));
-                        }
-                        var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                        var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                        line.userData.id = label;
-                        //line["material"].needsUpdate=true;
-                        line.name = "selects";
-                        this.scene.add(line);
-                        this.addTextLabel(label, label_xyz, label, path, "Other lines");
-                    }
-                    else {
-                        for (var j = 0; j < this.scene.children.length; j++) {
-                            if (label === this.scene.children[j].userData.id) {
-                                select = true;
-                                this.scene.remove(this.scene.children[j]);
-                            }
-                        }
-                        for (var j = 0; j < this.textlabels.length; j++) {
-                            if (label === this.textlabels[j]["id"]) {
-                                select = true;
-                                this.removeTextLabel(this.textlabels[j]["id"]);
-                            }
-                        }
-                        if (select == false) {
-                            var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                            for (var i = 0; i < verts_xyz_4.length; i++) {
-                                geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_4[i][0], verts_xyz_4[i][1], verts_xyz_4[i][2]));
-                            }
-                            var material = new three__WEBPACK_IMPORTED_MODULE_1__["LineBasicMaterial"]({ color: 0x00ff00, side: three__WEBPACK_IMPORTED_MODULE_1__["DoubleSide"] });
-                            var line = new three__WEBPACK_IMPORTED_MODULE_1__["Line"](geometry, material);
-                            line.userData.id = label;
-                            line.name = "selects";
-                            this.scene.add(line);
-                            this.addTextLabel(label, label_xyz, label, path, "Other lines");
-                        }
-                    }
-                }
-            }
-            if (this.scenechildren[0].name === "All points") {
-                var distance = intersects[0].distanceToRay;
-                var index = intersects[0].index;
-                for (var i = 1; i < intersects.length; i++) {
-                    if (distance > intersects[i].distanceToRay) {
-                        distance = intersects[i].distanceToRay;
-                        index = intersects[i].index;
-                    }
-                }
-                var attributevertix = this.dataService.getattrvertix();
-                var id = this._model.getGeom().getAllPoints()[index].getLabel();
-                var label = "";
-                var getpoints;
-                var getpoints = this.dataService.getpoints;
-                var pointname = this.dataService.pointname;
-                if (this.SelectVisible === "Points") {
-                    if (getpoints !== undefined && getpoints.length !== 0) {
-                        for (var i = 0; i < getpoints.length; i++) {
-                            if (id === getpoints[i].id) {
-                                if (this.dataService.checkpointid === true) {
-                                    label = id;
-                                    for (var j = 1; j < intersects.length; j++) {
-                                        if (intersects[0].distance === intersects[j].distance) {
-                                            var index = intersects[j].index;
-                                            var id = this._model.getGeom().getAllPoints()[index].getLabel();
-                                            if (label !== id)
-                                                label = label + "<br/>" + id;
-                                        }
-                                    }
-                                }
-                                if (this.dataService.checkX === true)
-                                    label = label.concat('<br/>', "X:", getpoints[i].x);
-                                if (this.dataService.checkY === true)
-                                    label = label.concat('<br/>', "Y:", getpoints[i].y);
-                                if (this.dataService.checkZ === true)
-                                    label = label.concat('<br/>', "Z:", getpoints[i].z);
-                                for (var n = 0; n < pointname.length; n++) {
-                                    if (this.dataService.checkname[n] === true) {
-                                        label = label.concat('<br/>', pointname[n], ":", getpoints[i][n]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (this.SelectVisible === "Vertices") {
-                    var pointid = "";
-                    if (getpoints !== undefined && getpoints.length !== 0) {
-                        for (var i = 0; i < attributevertix.length; i++) {
-                            if (id === attributevertix[i].pointid) {
-                                pointid = id;
-                                if (this.dataService.checkvertixid === true) {
-                                    if (label === "")
-                                        label = attributevertix[i].vertixlabel;
-                                    else {
-                                        label = label + "<br/>" + attributevertix[i].vertixlabel;
-                                    }
-                                }
-                            }
-                        }
-                        if (this.dataService.pointid === true) {
-                            if (pointid !== "") {
-                                if (label === "")
-                                    label = id;
-                                else {
-                                    label = label + "<br/>" + id;
-                                }
-                            }
-                        }
-                    }
-                }
-                var verts_xyz_5 = this._model.getGeom().getAllPoints()[index].getPosition(); //vertices.getPoint().getPosition();
-                if (this.textlabels.length === 0) {
-                    var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                    geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_5[0], verts_xyz_5[1], verts_xyz_5[2]));
-                    var pointsmaterial = new three__WEBPACK_IMPORTED_MODULE_1__["PointsMaterial"]({ color: 0x00ff00, size: 1 });
-                    //pointsmaterial.sizeAttenuation=false;
-                    if (this.dataService.pointsize !== undefined) {
-                        pointsmaterial.size = this.dataService.pointsize;
-                    }
-                    var points = new three__WEBPACK_IMPORTED_MODULE_1__["Points"](geometry, pointsmaterial);
-                    points.userData.id = id;
-                    //points["material"].needsUpdate=true;
-                    points.name = "selects";
-                    this.scene.add(points);
-                    this.addTextLabel(label, verts_xyz_5, id, id, "All points");
-                }
-                else {
-                    for (var j = 0; j < this.scene.children.length; j++) {
-                        if (id === this.scene.children[j].userData.id) {
-                            select = true;
-                            this.scene.remove(this.scene.children[j]);
-                        }
-                    }
-                    for (var j = 0; j < this.textlabels.length; j++) {
-                        if (id === this.textlabels[j]["id"]) {
-                            select = true;
-                            this.removeTextLabel(this.textlabels[j]["id"]);
-                        }
-                    }
-                    if (select == false) {
-                        var geometry = new three__WEBPACK_IMPORTED_MODULE_1__["Geometry"]();
-                        geometry.vertices.push(new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](verts_xyz_5[0], verts_xyz_5[1], verts_xyz_5[2]));
-                        var pointsmaterial = new three__WEBPACK_IMPORTED_MODULE_1__["PointsMaterial"]({ color: 0x00ff00, size: 1 });
-                        if (this.dataService.pointsize !== undefined) {
-                            pointsmaterial.size = this.dataService.pointsize;
-                        }
-                        var points = new three__WEBPACK_IMPORTED_MODULE_1__["Points"](geometry, pointsmaterial);
-                        points.userData.id = id;
-                        //points["material"].needsUpdate=true;
-                        points.name = "selects";
-                        this.scene.add(points);
-                        this.addTextLabel(label, verts_xyz_5, id, id, "All points");
-                    }
-                }
-            }
-        }
-        else {
-            /*for(var i=0;i<this.dataService.sprite.length;i++){
-              this.dataService.sprite[i].visible=false;
-            }*/
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].name == "selects") {
-                    this.scene.remove(this.scene.children[i]);
-                    i = i - 1;
-                }
-            }
-            for (var i = 0; i < this.textlabels.length; i++) {
-                this.removeTextLabel(this.textlabels[i]["id"]);
-                i = i - 1;
-            }
-        }
-    };
-    //To add text labels just provide label text, label position[x,y,z] and its id
-    ViewerComponent.prototype.addTextLabel = function (label, label_xyz, id, path, type) {
-        var container = this.myElement.nativeElement.children.namedItem("container");
-        var star = this.creatStarGeometry(label_xyz);
-        var textLabel = this.createTextLabel(label, star, id, path, type);
-        this.starsGeometry.vertices.push(star);
-        this.textlabels.push(textLabel);
-        this.dataService.pushselecting(textLabel);
-        container.appendChild(textLabel.element);
-    };
-    //To remove text labels just provide its id
-    ViewerComponent.prototype.removeTextLabel = function (id) {
-        var i = 0;
-        for (i = 0; i < this.textlabels.length; i++) {
-            if (this.textlabels[i].id == id) {
-                var container = this.myElement.nativeElement.children.namedItem("container");
-                container.removeChild(this.textlabels[i].element);
-                var index = this.starsGeometry.vertices.indexOf(this.textlabels[i].parent);
-                if (index !== -1) {
-                    this.starsGeometry.vertices.splice(index, 1);
-                }
-                break;
-            }
-        }
-        if (i < this.textlabels.length) {
-            this.textlabels.splice(i, 1);
-            this.dataService.spliceselecting(i, 1);
-        }
-    };
-    ViewerComponent.prototype.creatStarGeometry = function (label_xyz) {
-        var star = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-        star.x = label_xyz[0];
-        star.y = label_xyz[1];
-        star.z = label_xyz[2];
-        return star;
-    };
-    ViewerComponent.prototype.createTextLabel = function (label, star, id, path, type) {
-        var div = this.createLabelDiv();
-        var self = this;
-        var textLabel = {
-            id: id,
-            path: path,
-            element: div,
-            parent: false,
-            type: type,
-            position: new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](0, 0, 0),
-            setHTML: function (html) {
-                this.element.innerHTML = html;
-            },
-            setParent: function (threejsobj) {
-                this.parent = threejsobj;
-            },
-            updatePosition: function () {
-                if (parent) {
-                    //this.position.copy(this.parent);
-                    this.position.copy(this.parent);
-                }
-                var coords2d = this.get2DCoords(this.position, self.camera);
-                this.element.style.left = coords2d.x + 'px';
-                this.element.style.top = coords2d.y + 'px';
-            },
-            get2DCoords: function (position, camera) {
-                var vector = position.project(camera);
-                vector.x = (vector.x + 1) / 2 * self.width;
-                vector.y = -(vector.y - 1) / 2 * self.height;
-                return vector;
-            }
-        };
-        textLabel.setHTML(label);
-        textLabel.setParent(star);
-        return textLabel;
-    };
-    ViewerComponent.prototype.createLabelDiv = function () {
-        var div = document.createElement("div");
-        div.style.color = '#00f';
-        div.style.fontFamily = '"Fira Mono", Monaco, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace';
-        div.style.margin = '-5px 0 0 15px';
-        div.style.pointerEvents = 'none';
-        div.style.position = 'absolute';
-        div.style.width = '100';
-        div.style.height = '100';
-        div.style.top = '-1000';
-        div.style.left = '-1000';
-        div.style.textShadow = "0px 0px 3px white";
-        div.style.color = "black";
-        return div;
-    };
-    ViewerComponent.prototype.zoomfit = function () {
-        event.stopPropagation();
-        if (this.dataService.selecting.length === 0) {
-            var obj = new three__WEBPACK_IMPORTED_MODULE_1__["Object3D"]();
-            for (var i = 0; i < this.getchildren().length; i++) {
-                obj.children.push(this.getchildren()[i]);
-            }
-            var boxHelper = new three__WEBPACK_IMPORTED_MODULE_1__["BoxHelper"](obj);
-            boxHelper["geometry"].computeBoundingBox();
-            boxHelper["geometry"].computeBoundingSphere();
-            var boundingSphere = boxHelper["geometry"].boundingSphere;
-            var center = boundingSphere.center;
-            var radius = boundingSphere.radius;
-            var fov = this.camera.fov * (Math.PI / 180);
-            var vec_centre_to_pos = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-            vec_centre_to_pos.subVectors(this.camera.position, center);
-            var tmp_vec = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](Math.abs(radius / Math.sin(fov / 2) / 2), Math.abs(radius / Math.sin(fov / 2) / 2), Math.abs(radius / Math.sin(fov / 2) / 2));
-            vec_centre_to_pos.setLength(tmp_vec.length());
-            var perspectiveNewPos = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-            perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-            var newLookAt = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](center.x, center.y, center.z);
-            this.camera.position.copy(perspectiveNewPos);
-            this.camera.lookAt(newLookAt);
-            this.camera.updateProjectionMatrix();
-            this.controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
-            this.controls.update();
-        }
-        else {
-            var box = this.selectbox();
-            var center = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](box["geometry"].boundingSphere.center.x, box["geometry"].boundingSphere.center.y, box["geometry"].boundingSphere.center.z);
-            var radius = box["geometry"].boundingSphere.radius;
-            if (radius === 0)
-                radius = 1;
-            var fov = this.camera.fov * (Math.PI / 180);
-            var vec_centre_to_pos = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-            vec_centre_to_pos.subVectors(this.camera.position, center);
-            var tmp_vec = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](Math.abs(radius / Math.sin(fov / 2)), Math.abs(radius / Math.sin(fov / 2)), Math.abs(radius / Math.sin(fov / 2)));
-            vec_centre_to_pos.setLength(tmp_vec.length());
-            var perspectiveNewPos = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-            perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-            var newLookAt = new three__WEBPACK_IMPORTED_MODULE_1__["Vector3"](center.x, center.y, center.z);
-            this.camera.position.copy(perspectiveNewPos);
-            this.camera.lookAt(newLookAt);
-            this.camera.updateProjectionMatrix();
-            this.controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
-            this.controls.update();
-        }
-    };
-    ViewerComponent.prototype.selectbox = function () {
-        if (this.dataService.selecting.length !== 0) {
-            var select = new three__WEBPACK_IMPORTED_MODULE_1__["Object3D"]();
-            for (var i = 0; i < this.scene.children.length; i++) {
-                if (this.scene.children[i].name === "selects") {
-                    select.children.push(this.scene.children[i]);
-                }
-            }
-            var box = new three__WEBPACK_IMPORTED_MODULE_1__["BoxHelper"](select);
-            box["geometry"].computeBoundingBox();
-            box["geometry"].computeBoundingSphere();
-            return box;
-        }
-    };
-    ViewerComponent.prototype.setting = function (settingVisible) {
-        event.stopPropagation();
-        this.settingVisible = !this.settingVisible;
-    };
-    ViewerComponent.prototype.leaflet = function () {
-        event.stopPropagation();
-        this.imVisible = !this.imVisible;
-        this.dataService.imVisible = this.imVisible;
-    };
-    ViewerComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'app-viewer',
-            template: __webpack_require__(/*! ./viewer.component.html */ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.html"),
-            styles: [__webpack_require__(/*! ./viewer.component.css */ "./src/app/mViewer/viewers/gsviewer/viewer/viewer.component.css")]
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], ViewerComponent);
-    return ViewerComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_2__["DataSubscriber"]));
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/index.ts":
-/*!******************************************!*\
-  !*** ./src/app/mViewer/viewers/index.ts ***!
-  \******************************************/
-/*! exports provided: ConsoleViewerComponent, TextViewerComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _viewer_text_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./viewer-text.component */ "./src/app/mViewer/viewers/viewer-text.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TextViewerComponent", function() { return _viewer_text_component__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"]; });
-
-/* harmony import */ var _console_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./console-viewer.component */ "./src/app/mViewer/viewers/console-viewer.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ConsoleViewerComponent", function() { return _console_viewer_component__WEBPACK_IMPORTED_MODULE_1__["ConsoleViewerComponent"]; });
-
-
-
-//export * from './template.component';
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts":
-/*!**********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts ***!
-  \**********************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.subscriber.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/data/data.subscriber.ts ***!
+  \*****************************************************************************/
 /*! exports provided: DataSubscriber */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSubscriber", function() { return DataSubscriber; });
-/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ "./src/app/mViewer/viewers/mobius-cesium/data/data.service.ts");
+/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts");
 
+/**
+ * DataSubscriber
+ */
 var DataSubscriber = /** @class */ (function () {
+    /**
+     * Constructs a new data subscriber.
+     * @param injector
+     */
     function DataSubscriber(injector) {
         var _this = this;
         this.dataService = injector.get(_data_service__WEBPACK_IMPORTED_MODULE_0__["DataService"]);
@@ -2887,8 +858,12 @@ var DataSubscriber = /** @class */ (function () {
             _this.notify(message.text);
         });
     }
+    /**
+     * TODO
+     * @param message
+     */
     DataSubscriber.prototype.notify = function (message) {
-        console.warn("Notify function not Implemented");
+        console.warn('Notify function not Implemented');
     };
     return DataSubscriber;
 }());
@@ -2897,569 +872,41 @@ var DataSubscriber = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/mobius-cesium/data/data.service.ts":
-/*!********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/data/data.service.ts ***!
-  \********************************************************************/
-/*! exports provided: DataService */
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html":
+/*!******************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div id=\"appdiv\" (mousedown)=\"leaflet()\">\r\n\t<!-- <as-split direction=\"vertical\"> -->\r\n\t\t<!-- <as-split-area [size]=\"90\" id=\"splitcontainer\"> -->\r\n\t\t  <div style=\"height: 100%\">\r\n\t\t    <!-- <as-split direction=\"horizontal\"> -->\r\n\t\t\t\t\t<!-- <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\"> -->\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t      <!-- <as-split-area [size]=\"99.5\" id=\"splitviewer\"> -->\r\n\t\t        <!-- <viewer-container *ngIf=\"imVisible===false\"></viewer-container>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <threejs-viewer></threejs-viewer>\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t    <!-- </as-split> -->\r\n\t\t  </div>\r\n\t\t<!-- </as-split-area> -->\r\n\t\t<!-- <as-split-area [size]=\"10\" id=\"splittoolwindow\"> -->\r\n\t\t\t<!-- tool window -->\r\n\t\t<!-- </as-split-area> -->\r\n\t<!-- </as-split> -->\r\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.scss":
+/*!******************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.scss ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\nhtml, body {\n  font-family: 'Open Sans', sans-serif;\n  text-align: justify;\n  margin: 0px;\n  padding: 0px; }\n#appdiv {\n  height: 95%;\n  background-color: white; }\n#splittoolwindow {\n  overflow: scroll !important; }\na {\n  text-decoration: none;\n  color: #fff;\n  text-transform: uppercase; }\n.toolbar {\n  background-color: #333; }\n.toolbar ul {\n  list-style: none;\n  overflow: hidden;\n  margin-bottom: 0px;\n  z-index: 1; }\n.toolbar div > ul > li {\n  display: inline-block;\n  float: left; }\n.toolbar div > ul > li:hover {\n  background-color: #fff; }\n.toolbar div > ul > li:hover a {\n  color: #333; }\n.toolbar div > ul > li > a {\n  font-size: 12px;\n  line-height: 20px;\n  display: block;\n  float: left;\n  padding: 0 16px; }\n/**\r\n * Carets\r\n */\n.toolbar div ul li i.icon-sort {\n  display: none; }\n.toolbar div ul li:hover i.icon-sort {\n  display: inline; }\n.toolbar div ul li:hover i.icon-caret-down {\n  display: none; }\n.toolbar .dropdown i {\n  margin: 0px; }\n.toolbar div > ul > li > a:hover {\n  background-color: #fff;\n  color: #333; }\n.dropdown {\n  float: left; }\n/**\r\n * Sub navigaton\r\n **/\n.sub {\n  min-width: 180px;\n  margin: 20px;\n  display: none;\n  position: absolute;\n  border-left: 1px solid #ebebeb;\n  border-right: 1px solid #ebebeb;\n  border-bottom: 1px solid #ebebeb; }\n.sub li a {\n  display: block;\n  background-color: #fff;\n  color: #333 !important;\n  border-left: 4px solid #fff;\n  padding: 4px 12px;\n  font-size: 12px;\n  line-height: 26px; }\n.sub li a:hover {\n  border-left: 4px solid #ff0000;\n  float: top; }\n.toolbar div > ul > li:hover .sub {\n  display: block; }\n.sub li a {\n  transition: all .5s linear;\n  overflow: hidden; }\n#toolwindow {\n  position: relative;\n  background-color: slategrey; }\n.sidebar {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  height: 100%; }\n.tool-form {\n  padding-top: 10px;\n  padding-left: 10px;\n  color: white; }\n.tool-form-heading {\n  border-bottom: 2px solid #ddd;\n  margin: 0px;\n  padding-bottom: 3px; }\n.tool-form label {\n  font-family: 'Open Sans', sans-serif;\n  font-size: 13px;\n  color: black;\n  display: block;\n  margin: 0px 0px 15px 0px; }\n.tool-form label > span {\n  width: 150px;\n  font-family: 'Open Sans', sans-serif;\n  font-size: 13px;\n  float: left;\n  padding-top: 4px;\n  padding-right: 5px; }\n.tool-form span.required {\n  color: red; }\n.tool-form .tel-number-field {\n  width: 30px;\n  text-align: center; }\n.tool-form input.input-field {\n  width: 30px; }\n.tool-form input.file-input-field {\n  border: 1px solid #ccc;\n  height: 20px;\n  display: inline-block;\n  padding: 6px 6px;\n  cursor: pointer;\n  background-color: #888888; }\n.tool-form input.input-field,\n.tool-form .tel-number-field,\n.tool-form .textarea-field,\n.tool-form .select-field {\n  height: 20px;\n  overflow: hidden;\n  width: 240px;\n  background-color: #888888;\n  border-radius: 5px;\n  color: #ffffff; }\n.tool-form .input-field:focus,\n.tool-form .tel-number-field:focus,\n.tool-form .textarea-field:focus,\n.tool-form .select-field:focus {\n  border: 1px solid #0C0; }\n.tool-form .textarea-field {\n  height: 100px;\n  width: 55%; }\n.tool-form input[type=submit],\n.tool-form input[type=button] {\n  height: 25px;\n  border: none;\n  padding: 2px 8px 2px 8px;\n  background: #444466;\n  color: #fff;\n  box-shadow: 1px 1px 4px #DADADA;\n  -moz-box-shadow: 1px 1px 4px #DADADA;\n  -webkit-box-shadow: 1px 1px 4px #DADADA;\n  border-radius: 3px;\n  -webkit-border-radius: 3px;\n  -moz-border-radius: 3px;\n  color: #ffffff; }\n.tool-form input[type=submit]:hover,\n.tool-form input[type=button]:hover {\n  background: #333377;\n  color: #fff; }\n.rightstyle {\n  width: 30px;\n  height: 100%;\n  float: right;\n  background: #FFFFFF;\n  background-repeat: repeat;\n  background-attachment: scroll;\n  overflow: auto; }\n.leftstyle {\n  background: #e6e6e6;\n  height: 100%; }\n.slider {\n  width: 0;\n  height: 0;\n  border-top: 30px solid transparent;\n  border-right: 10px solid black;\n  border-bottom: 30px solid transparent; }\n"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts":
+/*!****************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts ***!
+  \****************************************************************************/
+/*! exports provided: GIViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataService", function() { return DataService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-var DataService = /** @class */ (function () {
-    function DataService() {
-        this.subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
-    }
-    DataService.prototype.sendMessage = function (message) {
-        this.subject.next({ text: message });
-    };
-    DataService.prototype.clearMessage = function () {
-        this.subject.next();
-    };
-    DataService.prototype.getMessage = function () {
-        return this.subject.asObservable();
-    };
-    //get geojson
-    DataService.prototype.getGsModel = function () {
-        return this._jsonModel;
-    };
-    //set mode 
-    DataService.prototype.setMode = function (mode) {
-        this.mode = mode;
-    };
-    //set new json file
-    DataService.prototype.setGsModel = function (model) {
-        delete this._jsonModel;
-        var json = this._jsonModel;
-        this._jsonModel = model;
-        if (this._jsonModel !== undefined) {
-            this.clearAll();
-        }
-        this.sendMessage("model_update");
-    };
-    //before loading geojson, clear all for last geojson
-    DataService.prototype.clearAll = function () {
-        delete this.hideElementArr;
-        delete this._HideNum;
-        delete this._ViData;
-        delete this._PuData;
-        delete this._index;
-        delete this._Filter;
-    };
-    //get viewer
-    DataService.prototype.getViewer = function () {
-        return this.viewer;
-    };
-    //set viewer
-    DataService.prototype.setViewer = function (_viewer) {
-        this.viewer = _viewer;
-    };
-    //get selected entity
-    DataService.prototype.get_SelectedEntity = function () {
-        return this._SelectedEntity;
-    };
-    //set selected entity
-    DataService.prototype.set_SelectedEntity = function (_SelectedEntity) {
-        this._SelectedEntity = _SelectedEntity;
-    };
-    //get promise
-    DataService.prototype.getcesiumpromise = function () {
-        return this.cesiumpromise;
-    };
-    //set promise
-    DataService.prototype.setcesiumpromise = function (cesiumpromise) {
-        delete this.cesiumpromise;
-        this.cesiumpromise = cesiumpromise;
-    };
-    // get filter array
-    DataService.prototype.gethideElementArr = function () {
-        return this.hideElementArr;
-    };
-    //get filter number
-    DataService.prototype.get_HideNum = function () {
-        return this._HideNum;
-    };
-    //get mode
-    DataService.prototype.getmode = function () {
-        return this.mode;
-    };
-    //get index after changing select, data, display, publish
-    DataService.prototype.get_index = function () {
-        return this._index;
-    };
-    //set index after changing select, data, display, publish
-    DataService.prototype.set_index = function (_index) {
-        this._index = _index;
-    };
-    //set sun true/false in Display
-    DataService.prototype.set_Sun = function (_Sun) {
-        this._Sun = _Sun;
-    };
-    //get sun true/false in Display
-    DataService.prototype.get_Sun = function () {
-        return this._Sun;
-    };
-    //set shadow true/false in Display
-    DataService.prototype.set_Shadow = function (_Shadow) {
-        this._Shadow = _Shadow;
-    };
-    //get shadow true/false in Display
-    DataService.prototype.get_Shadow = function () {
-        return this._Shadow;
-    };
-    //set date in Display
-    DataService.prototype.set_Date = function (_Date) {
-        this._Date = _Date;
-    };
-    //get date in Display
-    DataService.prototype.get_Date = function () {
-        return this._Date;
-    };
-    //set UTC in Display
-    DataService.prototype.set_UTC = function (_UTC) {
-        this._UTC = _UTC;
-    };
-    //get UTC in Display
-    DataService.prototype.get_UTC = function () {
-        return this._UTC;
-    };
-    //set imagery in Display
-    DataService.prototype.set_Imagery = function (_Imagery) {
-        this._Imagery = _Imagery;
-    };
-    //get imagery in Display
-    DataService.prototype.get_Imagery = function () {
-        return this._Imagery;
-    };
-    //convert json to ViData(editor version) to store every thing in setting
-    DataService.prototype.getValue = function (model) {
-        if (model !== undefined) {
-            var propertyName = Object.keys(model["features"][0].properties);
-            var feature_instance_1 = model["features"][0];
-            var _HeightKeys = propertyName.filter(function (prop_name) {
-                var value = feature_instance_1.properties[prop_name];
-                return (typeof (value) === "number");
-            });
-            if (model["features"].length > 1) {
-                for (var i = 1; i < model["features"].length; i++) {
-                    for (var _i = 0, _a = Object.keys(model["features"][i].properties); _i < _a.length; _i++) {
-                        var properties = _a[_i];
-                        if (propertyName.indexOf(String(properties)) < 0) {
-                            propertyName.push(properties);
-                            if (typeof (model["features"][i].properties[properties]) === "number") {
-                                _HeightKeys.push(properties);
-                            }
-                        }
-                    }
-                }
-            }
-            propertyName.sort();
-            propertyName.unshift("None");
-            var propertyNames = propertyName.filter(function (value) {
-                return value != 'TYPE' && value != 'COLOR' && value != 'HEIGHT' && value != 'EXTRUDEDHEIGHT';
-            });
-            var _ColorValue_1 = propertyNames[0];
-            var _HeightKey = _HeightKeys.filter(function (value) {
-                return value != 'TYPE' && value != 'COLOR' && value != 'HEIGHT' && value != 'EXTRUDEDHEIGHT';
-            });
-            _HeightKey.sort();
-            _HeightKey.unshift("None");
-            var _HeightValue_1 = _HeightKey[0];
-            var promise = this.cesiumpromise;
-            var _Heighttexts_1 = [];
-            var _Colortexts_1 = [];
-            var _indexArr_1 = [];
-            var self_1 = this;
-            promise.then(function (dataSource) {
-                var entities = dataSource.entities.values;
-                for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-                    var entity = entities_1[_i];
-                    if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
-                        if (entity.properties[_HeightValue_1] !== undefined) {
-                            if (entity.properties[_HeightValue_1]._value !== " ") {
-                                if (_Heighttexts_1.length === 0) {
-                                    _Heighttexts_1[0] = entity.properties[_HeightValue_1]._value;
-                                }
-                                else {
-                                    if (_Heighttexts_1.indexOf(entity.properties[_HeightValue_1]._value) === -1) {
-                                        _Heighttexts_1.push(entity.properties[_HeightValue_1]._value);
-                                    }
-                                }
-                            }
-                        }
-                        if (entity.properties[_ColorValue_1] !== undefined) {
-                            if (entity.properties[_ColorValue_1]._value !== " ") {
-                                if (_Colortexts_1.length === 0) {
-                                    _Colortexts_1[0] = entity.properties[_ColorValue_1]._value;
-                                }
-                                else {
-                                    if (_Colortexts_1.indexOf(entity.properties[_ColorValue_1]._value) === -1) {
-                                        _Colortexts_1.push(entity.properties[_ColorValue_1]._value);
-                                    }
-                                }
-                            }
-                        }
-                        _indexArr_1.push(entities.indexOf(entity));
-                    }
-                    else {
-                        entity.polygon.height = entity.properties["HEIGHT"];
-                        entity.polygon.extrudedHeight = entity.properties["EXTRUDEDHEIGHT"];
-                        var ColorValue = entity.properties["COLOR"]._value;
-                        entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
-                    }
-                    if (entity.polygon !== undefined) {
-                        entity.polygon.outlineColor = Cesium.Color.Black;
-                    }
-                    if (entity.billboard !== undefined) {
-                        entity.billboard = undefined;
-                        entity.point = new Cesium.PointGraphics({
-                            color: Cesium.Color.BLUE,
-                            pixelSize: 10,
-                        });
-                    }
-                }
-            });
-            var _MinColor = Math.min.apply(Math, _Colortexts_1);
-            var _MaxColor = Math.max.apply(Math, _Colortexts_1);
-            var _MinHeight = Math.min.apply(Math, _Heighttexts_1);
-            var _MaxHeight = Math.max.apply(Math, _Heighttexts_1);
-            var _Filter = [];
-            var _HideNum = [];
-            this.getViData(propertyNames, _Colortexts_1.sort(), _ColorValue_1, _MinColor, _MaxColor, false, _HeightKey, _Heighttexts_1.sort(), _HeightValue_1, _MinHeight, _MaxHeight, 1, false, false, _Filter, _HideNum, _indexArr_1);
-        }
-    };
-    //get ViData(editor version)
-    DataService.prototype.get_ViData = function () {
-        return this._ViData;
-    };
-    //convert geojson to PuData(publish version)
-    DataService.prototype.LoadJSONData = function () {
-        if (this._jsonModel !== undefined && this._jsonModel["cesium"] !== undefined) {
-            var cesiumData = this._jsonModel["cesium"];
-            var _ColorDescr = void 0;
-            var _ColorValue_2;
-            var _MinColor = void 0;
-            var _MaxColor = void 0;
-            var _ColorInvert = void 0;
-            var _HeightDescr = void 0;
-            var _HeightKey = [];
-            var _HeightValue_2;
-            var _MinHeight = void 0;
-            var _MaxHeight = void 0;
-            var _HeightInvert = void 0;
-            var _HeightScale = void 0;
-            var _HeightLine = void 0;
-            var _filters = void 0;
-            var _ceisumData = [];
-            var _propertyNames = [];
-            var _HideNum = [];
-            var _indexArr_2 = [];
-            if (cesiumData["colour"] !== undefined) {
-                if (cesiumData["colour"]["descr"] !== undefined) {
-                    _ColorDescr = cesiumData["colour"]["descr"];
-                }
-                if (cesiumData["colour"]["attribs"] !== undefined) {
-                    for (var _i = 0, _a = cesiumData["colour"]["attribs"]; _i < _a.length; _i++) {
-                        var data = _a[_i];
-                        _propertyNames.push(data["name"]);
-                    }
-                    _ColorValue_2 = _propertyNames[0];
-                    _MinColor = cesiumData["colour"]["attribs"][0]["min"];
-                    _MaxColor = cesiumData["colour"]["attribs"][0]["max"];
-                    if (cesiumData["colour"]["attribs"][0]["invert"] === true) {
-                        _ColorInvert = true;
-                    }
-                    else {
-                        _ColorInvert = false;
-                    }
-                }
-            }
-            if (cesiumData["extrude"] !== undefined) {
-                if (cesiumData["extrude"]["descr"] !== undefined) {
-                    _HeightDescr = cesiumData["extrude"]["descr"];
-                }
-                if (cesiumData["extrude"]["attribs"] !== undefined) {
-                    for (var _b = 0, _c = cesiumData["extrude"]["attribs"]; _b < _c.length; _b++) {
-                        var data = _c[_b];
-                        _HeightKey.push(data["name"]);
-                    }
-                    _HeightValue_2 = _HeightKey[0];
-                    _MinHeight = cesiumData["extrude"]["attribs"][0]["min"];
-                    _MaxHeight = cesiumData["extrude"]["attribs"][0]["max"];
-                    if (cesiumData["extrude"]["attribs"][0]["invert"] === true) {
-                        _HeightInvert = true;
-                    }
-                    else {
-                        _HeightInvert = false;
-                    }
-                    if (cesiumData["extrude"]["attribs"][0]["line"] === true) {
-                        _HeightLine = true;
-                    }
-                    else {
-                        _HeightLine = false;
-                    }
-                    if (cesiumData["extrude"]["attribs"][0]["scale"] !== undefined) {
-                        _HeightScale = cesiumData["extrude"]["attribs"][0]["scale"];
-                    }
-                    else {
-                        _HeightScale = 1;
-                    }
-                }
-            }
-            var promise = this.cesiumpromise;
-            var _Heighttexts_2 = [];
-            var _Colortexts_2 = [];
-            var self_2 = this;
-            promise.then(function (dataSource) {
-                var entities = dataSource.entities.values;
-                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                    var entity = entities_2[_i];
-                    if (entity.properties[_HeightValue_2] !== undefined) {
-                        if (entity.properties[_HeightValue_2]._value !== " ") {
-                            if (_Heighttexts_2.length === 0) {
-                                _Heighttexts_2[0] = entity.properties[_HeightValue_2]._value;
-                            }
-                            else {
-                                if (_Heighttexts_2.indexOf(entity.properties[_HeightValue_2]._value) === -1) {
-                                    _Heighttexts_2.push(entity.properties[_HeightValue_2]._value);
-                                }
-                            }
-                        }
-                    }
-                    if (entity.properties[_ColorValue_2] !== undefined) {
-                        if (entity.properties[_ColorValue_2]._value !== " ") {
-                            if (_Colortexts_2.length === 0) {
-                                _Colortexts_2[0] = entity.properties[_ColorValue_2]._value;
-                            }
-                            else {
-                                if (_Colortexts_2.indexOf(entity.properties[_ColorValue_2]._value) === -1) {
-                                    _Colortexts_2.push(entity.properties[_ColorValue_2]._value);
-                                }
-                            }
-                        }
-                    }
-                    if (entity.polygon !== undefined) {
-                        entity.polygon.outlineColor = Cesium.Color.Black;
-                    }
-                    if (entity.billboard !== undefined) {
-                        entity.billboard = undefined;
-                        entity.point = new Cesium.PointGraphics({
-                            color: Cesium.Color.BLUE,
-                            pixelSize: 10,
-                        });
-                    }
-                    _indexArr_2.push(entities.indexOf(entity));
-                }
-            });
-            if (cesiumData["filters"] !== undefined) {
-                _filters = cesiumData["filters"];
-                var lastnumber = void 0;
-                this._Filter = [];
-                this._HideNum = [];
-                if (_filters !== undefined && _filters.length !== 0) {
-                    for (var _d = 0, _filters_1 = _filters; _d < _filters_1.length; _d++) {
-                        var _filter = _filters_1[_d];
-                        if (this._HideNum.length === 0) {
-                            this._HideNum[0] = "0";
-                            lastnumber = this._HideNum[0];
-                        }
-                        else {
-                            for (var j = 0; j < this._HideNum.length + 1; j++) {
-                                if (this._HideNum.indexOf(String(j)) === -1) {
-                                    this._HideNum.push(String(j));
-                                    lastnumber = String(j);
-                                    break;
-                                }
-                            }
-                        }
-                        if (_filter["name"] !== undefined) {
-                            var _propertyname = _filter["name"];
-                            var _relation = Number(_filter["relation"]);
-                            var _text = _filter["value"];
-                            var _descr = _filter["descr"];
-                            var _HideType = void 0;
-                            var _texts = void 0;
-                            if (typeof (_text) === "number") {
-                                _HideType = "number";
-                                _texts = this.Initial(_propertyname);
-                            }
-                            else if (typeof (_text) === "string") {
-                                _HideType = "category";
-                                _texts = this.Initial(_propertyname);
-                                _texts = ["None"].concat(_texts);
-                            }
-                            this._Filter.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber,
-                                HeightHide: _propertyname, type: _HideType, Category: _texts,
-                                CategaryHide: _text, descr: _descr, RelaHide: _relation,
-                                textHide: _text, HideMax: Math.ceil(Math.max.apply(Math, _texts)),
-                                HideMin: Math.floor(Math.min.apply(Math, _texts) * 100) / 100, Disabletext: null });
-                        }
-                    }
-                }
-            }
-            else {
-                this._Filter = [];
-                this._HideNum = [];
-            }
-            this.getPuData(_ColorDescr, _propertyNames, _Colortexts_2.sort(), _ColorValue_2, _MinColor, _MaxColor, _ColorInvert, _HeightDescr, _HeightKey, _Heighttexts_2.sort(), _HeightValue_2, _MinHeight, _MaxHeight, _HeightScale, _HeightInvert, _HeightLine, this._Filter, this._HideNum, _indexArr_2);
-        }
-    };
-    //get text for the certain property
-    DataService.prototype.Initial = function (_HideValue) {
-        var texts = [];
-        var promise = this.getcesiumpromise();
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
-                var entity = entities_3[_i];
-                if (entity.properties[_HideValue] !== undefined) {
-                    if (entity.properties[_HideValue]._value !== " ") {
-                        if (texts.length === 0) {
-                            texts[0] = entity.properties[_HideValue]._value;
-                        }
-                        else {
-                            if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
-                                texts.push(entity.properties[_HideValue]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        return texts;
-    };
-    //get PuData
-    DataService.prototype.get_PuData = function () {
-        return this._PuData;
-    };
-    //// ------------------- Settings
-    /*
-     * to set visualize settings
-     *
-     */
-    /*
-     *  _PuData : Object with properties .... <todo>
-     */
-    DataService.prototype.set_PuData = function (_PuData) {
-        this._PuData = _PuData;
-    };
-    /*
-     *  _ViData : Object with properties .... <todo>
-     */
-    DataService.prototype.set_ViData = function (_ViData) {
-        this._ViData = _ViData;
-    };
-    /*
-    _ColorProperty: collect all property names,
-    _ColorText: collect all values under _ColorKey,
-    _ColorKey: Select color property name in Data tab,
-    _ColorMin: minimum value of Color property in Data tab,
-    _ColorMax: maximum value of Color property in Data tab,
-    _ColorInvert: color invert is true or false,
-    _ExtrudeProperty: collect all property names that whose values are number,
-    _ExtrudeText: collect all values under _ExturdeValue,
-    _ExturdeValue: Select Extrude property name in Data tab,
-    _ExtrudeMin: minimum value of Extrude property in Data tab,
-    _ExtrudeMax: maximum value of Extrude property in Data tab,
-    _Scale: extrude height scale,
-    _Invert: extrude height invert is true or false,
-    _HeightChart: it will show height chart or not,
-    _Filter: collect filters,
-    _HideNum: collect filter id numbers,
-    _indexArr: collect entity number whose "TYPE" is not static
-    */
-    DataService.prototype.getViData = function (_ColorProperty, _ColorText, _ColorKey, _ColorMin, _ColorMax, _ColorInvert, _ExtrudeProperty, _ExtrudeText, _ExturdeValue, _ExtrudeMin, _ExtrudeMax, _Scale, _Invert, _HeightChart, _Filter, _HideNum, _indexArr) {
-        this._ViData = { ColorProperty: _ColorProperty, ColorText: _ColorText, ColorKey: _ColorKey,
-            ColorMin: _ColorMin, ColorMax: _ColorMax, ColorInvert: _ColorInvert,
-            ExtrudeProperty: _ExtrudeProperty, ExtrudeText: _ExtrudeText, ExtrudeKey: _ExturdeValue,
-            ExtrudeMin: _ExtrudeMin, ExtrudeMax: _ExtrudeMax, Scale: _Scale, Invert: _Invert,
-            HeightChart: _HeightChart, Filter: _Filter, HideNum: _HideNum, indexArr: _indexArr };
-    };
-    /*
-    _ColorDescr: description of Color property,
-    _ColorProperty: collect all property names,
-    _ColorText: collect all values under _ColorKey,
-    _ColorKey: Select color property name in Data tab,
-    _ColorMin: minimum value of Color property in Data tab,
-    _ColorMax: maximum value of Color property in Data tab,
-    _ColorInvert: color invert is true or false,
-    _ExtrudeDescr: description of extrude height property,
-    _ExtrudeProperty: collect all property names that whose values are number,
-    _ExtrudeText: collect all values under _ExturdeValue,
-    _ExturdeValue: Select Extrude property name in Data tab,
-    _ExtrudeMin: minimum value of Extrude property in Data tab,
-    _ExtrudeMax: maximum value of Extrude property in Data tab,
-    _Scale: extrude height scale,
-    _Invert: extrude height invert is true or false,
-    _HeightChart: it will show height chart or not,
-    _Filter: collect filters,
-    _HideNum: collect filter id numbers,
-    _indexArr: collect entity number whose "TYPE" is not static
-     */
-    DataService.prototype.getPuData = function (_ColorDescr, _ColorProperty, _ColorText, _ColorKey, _ColorMin, _ColorMax, _ColorInvert, _ExtrudeDescr, _ExtrudeProperty, _ExtrudeText, _ExturdeValue, _ExtrudeMin, _ExtrudeMax, _Scale, _Invert, _HeightChart, _Filter, _HideNum, _indexArr) {
-        this._PuData = { ColorDescr: _ColorDescr, ColorProperty: _ColorProperty, ColorText: _ColorText,
-            ColorKey: _ColorKey, ColorMin: _ColorMin, ColorMax: _ColorMax, ColorInvert: _ColorInvert,
-            ExtrudeDescr: _ExtrudeDescr, ExtrudeProperty: _ExtrudeProperty, ExtrudeText: _ExtrudeText,
-            ExtrudeKey: _ExturdeValue, ExtrudeMin: _ExtrudeMin, ExtrudeMax: _ExtrudeMax,
-            Scale: _Scale, Invert: _Invert, HeightChart: _HeightChart, Filter: _Filter, HideNum: _HideNum, indexArr: _indexArr };
-    };
-    DataService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])()
-    ], DataService);
-    return DataService;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.html":
-/*!****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.html ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<cesium-viewer></cesium-viewer>\r\n\t<div id=\"Toggle\" (click)=\"toggleSlider()\" ><span style=\"vertical-align: middle;\">▹</span></div>\r\n\t<div id=\"slide-nav\"  [@slide_in_out]=\"slider_state\" style=\"position: absolute;z-index: 101;top:0px;height: 100%\">\r\n  \t\t<app-setting-cesium ></app-setting-cesium>\r\n\t</div>\r\n\r\n</div>\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.scss":
-/*!****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.scss ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\n#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n#button {\n  position: absolute;\n  z-index: 99; }\n#Toggle {\n  position: absolute;\n  top: calc(50% - 30px);\n  z-index: 200;\n  width: 30px;\n  height: 70px;\n  border-top: 1px solid gray;\n  border-right: 1px solid gray;\n  border-bottom: 1px solid gray;\n  background-color: rgba(20, 20, 20, 0.5);\n  color: #ddd;\n  text-align: center;\n  font-size: 32px;\n  line-height: 70px;\n  cursor: pointer; }\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.ts":
-/*!**************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.ts ***!
-  \**************************************************************************/
-/*! exports provided: MobiuscesiumComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MobiuscesiumComponent", function() { return MobiuscesiumComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/mobius-cesium/data/data.service.ts");
-/* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIViewerComponent", function() { return GIViewerComponent; });
+/* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./data/data.service */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3470,117 +917,101 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+// import @angular stuff
 
+// import app services
 
-var defaultText = "{\n  \"type\": \"FeatureCollection\",\n  \"name\": \"default\",\n  \"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"0\" } },\n  \"features\": [\n  { \"type\": \"Feature\", \"properties\": { \"OBJECTID\": 1, \"OID_1\": 0, \"INC_CRC\": \"593E775CE158CC1F\", \"FMEL_UPD_D\": \"2014/06/23\", \"X_ADDR\": 26044.8109, \"Y_ADDR\": 48171.43, \"SHAPE_Leng\": 298.85929234299999, \"SHAPE_Area\": 1070.8993405900001 }, \"geometry\": { \"type\": \"MultiPolygon\", \"coordinates\": [] } }\n  ]\n  }";
-var MobiuscesiumComponent = /** @class */ (function () {
-    function MobiuscesiumComponent(dataService) {
+// import others
+/**
+ * GIViewerComponent
+ * This component is used in /app/model-viewers/model-viewers-container.component.html
+ */
+var GIViewerComponent = /** @class */ (function () {
+    /**
+     * constructor
+     * @param dataService
+     */
+    function GIViewerComponent(dataService) {
         this.dataService = dataService;
-        //create slider to switch setting
-        this.slider_state = "slide_out";
+        this.imVisible = false; // TODO what is this?
+        // Do nothing
     }
-    ;
-    //pass data to dataService
-    MobiuscesiumComponent.prototype.setModel = function (data) {
+    /**
+     * setModel Sets the model in the data service.
+     * @param data
+     */
+    GIViewerComponent.prototype.setModel = function (data) {
         try {
-            this.dataService.setGsModel(data);
+            this.dataService.setModel(data);
         }
         catch (ex) {
-            this.text = '';
-            this.data = undefined;
+            this.modelData = undefined;
+            console.error('Error generating model');
         }
     };
-    //pass data to dataService
-    MobiuscesiumComponent.prototype.ngOnInit = function () {
-        this.text = this.node.output.value;
-        this.data = JSON.parse(this.text || defaultText);
-        this.setModel(this.data);
-        this.dataService.setMode(this.mode);
-        // console.log(this.data);
+    /**
+     * ngOnInit
+     */
+    GIViewerComponent.prototype.ngOnInit = function () {
+        this.modelData = this.data;
+        this.setModel(this.modelData);
     };
-    MobiuscesiumComponent.prototype.ngDoCheck = function () {
-        if (this.text !== this.node.output.value) {
-            this.text = this.node.output.value;
-            this.data = JSON.parse(this.text || defaultText);
-            this.setModel(this.data);
-            // console.log("data changed");
-            // console.log("mode:", this.mode);
+    /**
+     * ngDoCheck
+     */
+    GIViewerComponent.prototype.ngDoCheck = function () {
+        if (this.modelData !== this.data) {
+            this.modelData = this.data;
+            this.setModel(this.modelData);
         }
     };
-    MobiuscesiumComponent.prototype.toggleSlider = function () {
-        // do something to change the animation_state variable
-        this.slider_state = this.slider_state === "slide_out" ? "slide_in" : "slide_out";
-        var toggle = document.getElementById("Toggle");
-        if (this.slider_state === "slide_out") {
-            toggle.style.left = "0px";
-            toggle.innerHTML = "▹";
-        }
-        else if (this.slider_state === "slide_in") {
-            toggle.style.left = "280px";
-            toggle.innerHTML = "◃";
-        }
+    /**
+     * ??? what does this do?
+     */
+    GIViewerComponent.prototype.leaflet = function () {
+        this.imVisible = this.dataService.imVisible;
     };
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], MobiuscesiumComponent.prototype, "node", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", String)
-    ], MobiuscesiumComponent.prototype, "mode", void 0);
-    MobiuscesiumComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "mobius-cesium",
-            template: __webpack_require__(/*! ./mobius-cesium.component.html */ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.html"),
-            styles: [__webpack_require__(/*! ./mobius-cesium.component.scss */ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.scss")],
-            animations: [
-                Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["trigger"])("slide_in_out", [
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["state"])("slide_in", Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["style"])({
-                        width: "280px",
-                    })),
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["state"])("slide_out", Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["style"])({
-                        width: "0px"
-                        // css styles when the element is in slide_out
-                    })),
-                    // animation effect when transitioning from one state to another
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["transition"])("slide_in <=> slide_out", Object(_angular_animations__WEBPACK_IMPORTED_MODULE_2__["animate"])(300))
-                ]),
-            ],
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        __metadata("design:type", _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__["GIModel"])
+    ], GIViewerComponent.prototype, "data", void 0);
+    GIViewerComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'gi-viewer',
+            template: __webpack_require__(/*! ./gi-viewer.component.html */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html"),
+            styles: [__webpack_require__(/*! ./gi-viewer.component.scss */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.scss")]
         }),
-        __metadata("design:paramtypes", [_data_data_service__WEBPACK_IMPORTED_MODULE_1__["DataService"]])
-    ], MobiuscesiumComponent);
-    return MobiuscesiumComponent;
+        __metadata("design:paramtypes", [_data_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"]])
+    ], GIViewerComponent);
+    return GIViewerComponent;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.module.ts":
-/*!***********************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.module.ts ***!
-  \***********************************************************************/
-/*! exports provided: MobiusCesium */
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts":
+/*!*************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts ***!
+  \*************************************************************************/
+/*! exports provided: GIViewer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MobiusCesium", function() { return MobiusCesium; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var _mobius_cesium_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mobius-cesium.component */ "./src/app/mViewer/viewers/mobius-cesium/mobius-cesium.component.ts");
-/* harmony import */ var _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./viewer/viewer.component */ "./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.ts");
-/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./data/data.service */ "./src/app/mViewer/viewers/mobius-cesium/data/data.service.ts");
-/* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
-/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
-/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/slider */ "./node_modules/@angular/material/esm5/slider.es5.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _setting_setting_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./setting/setting.component */ "./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.ts");
-/* harmony import */ var _setting_visualise_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./setting/visualise.component */ "./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.ts");
-/* harmony import */ var _setting_attributes_copmponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./setting/attributes.copmponent */ "./src/app/mViewer/viewers/mobius-cesium/setting/attributes.copmponent.ts");
-/* harmony import */ var _setting_publish_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./setting/publish.component */ "./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.ts");
-/* harmony import */ var _setting_display_copmponent__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./setting/display.copmponent */ "./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIViewer", function() { return GIViewer; });
+/* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
+/* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/slider */ "./node_modules/@angular/material/esm5/slider.es5.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
+/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm5/sort.es5.js");
+/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
+/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./data/data.service */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts");
+/* harmony import */ var _gi_viewer_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
+/* harmony import */ var _threejs_threejs_viewer_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./threejs/threejs-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3589,6 +1020,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 
 
+// import @angular stuff
 
 
 
@@ -3596,86 +1028,96 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+// import app service
+
+// import app components
 
 
-
-
-
-
-var MobiusCesium = /** @class */ (function () {
-    function MobiusCesium() {
+/**
+ * GIViewer
+ * A viewer for Geo-Info models.
+ */
+var GIViewer = /** @class */ (function () {
+    function GIViewer() {
     }
-    MobiusCesium_1 = MobiusCesium;
-    MobiusCesium.forRoot = function () {
+    GIViewer_1 = GIViewer;
+    GIViewer.forRoot = function () {
         return {
-            ngModule: MobiusCesium_1,
+            ngModule: GIViewer_1,
             providers: [
-                _data_data_service__WEBPACK_IMPORTED_MODULE_4__["DataService"],
-            ],
+                _data_data_service__WEBPACK_IMPORTED_MODULE_9__["DataService"]
+            ]
         };
     };
-    var MobiusCesium_1;
-    MobiusCesium = MobiusCesium_1 = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
-                angular_split__WEBPACK_IMPORTED_MODULE_5__["AngularSplitModule"],
-                _angular_material_tabs__WEBPACK_IMPORTED_MODULE_6__["MatTabsModule"],
-                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_7__["MatTooltipModule"],
-                _angular_material_slider__WEBPACK_IMPORTED_MODULE_8__["MatSliderModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_9__["FormsModule"]
+    var GIViewer_1;
+    GIViewer = GIViewer_1 = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
+            declarations: [
+                _gi_viewer_component__WEBPACK_IMPORTED_MODULE_10__["GIViewerComponent"],
+                _threejs_threejs_viewer_component__WEBPACK_IMPORTED_MODULE_11__["ThreejsViewerComponent"],
             ],
-            exports: [_mobius_cesium_component__WEBPACK_IMPORTED_MODULE_2__["MobiuscesiumComponent"]],
-            declarations: [_mobius_cesium_component__WEBPACK_IMPORTED_MODULE_2__["MobiuscesiumComponent"],
-                _viewer_viewer_component__WEBPACK_IMPORTED_MODULE_3__["ViewerComponent"],
-                _setting_setting_component__WEBPACK_IMPORTED_MODULE_10__["SettingComponent"],
-                _setting_visualise_component__WEBPACK_IMPORTED_MODULE_11__["DataComponent"],
-                _setting_attributes_copmponent__WEBPACK_IMPORTED_MODULE_12__["SelectComponent"],
-                _setting_publish_component__WEBPACK_IMPORTED_MODULE_13__["PublishComponent"],
-                _setting_display_copmponent__WEBPACK_IMPORTED_MODULE_14__["DisplayComponent"]],
-            providers: [_data_data_service__WEBPACK_IMPORTED_MODULE_4__["DataService"]],
+            exports: [
+                _gi_viewer_component__WEBPACK_IMPORTED_MODULE_10__["GIViewerComponent"],
+            ],
+            imports: [
+                _angular_common__WEBPACK_IMPORTED_MODULE_4__["CommonModule"],
+                angular_split__WEBPACK_IMPORTED_MODULE_0__["AngularSplitModule"],
+                _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__["MatSliderModule"],
+                ngx_pagination__WEBPACK_IMPORTED_MODULE_1__["NgxPaginationModule"],
+                _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__["MatExpansionModule"],
+                _angular_material_tabs__WEBPACK_IMPORTED_MODULE_5__["MatTabsModule"],
+                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_6__["MatTooltipModule"],
+                _angular_material_sort__WEBPACK_IMPORTED_MODULE_7__["MatSortModule"],
+            ],
+            providers: [
+                _data_data_service__WEBPACK_IMPORTED_MODULE_9__["DataService"],
+            ],
         })
-    ], MobiusCesium);
-    return MobiusCesium;
+    ], GIViewer);
+    return GIViewer;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/attributes.component.css":
-/*!********************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/attributes.component.css ***!
-  \********************************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.css":
+/*!******************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.css ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#D3D3D3 !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-labels{\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n/deep/.mat-header{\r\n  flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n/deep/.mat-tab-body-wrapper{\r\n  height:100% !important;\r\n\r\n}\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #8AA8C0 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n/deep/.mat-slider-thumb{\r\n  width: 5px !important;\r\n  right: -5px !important;\r\n}\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #F0BFA0 !important;\r\n}\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n/deep/.mat-slider-track-background{\r\n  background-color: #D3D3D3 !important;\r\n}\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #D3D3D3;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: transparent;\r\n}\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  color: #D3D3D3;\r\n  background: transparent;\r\n}\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  /*opacity: 0.8;*/\r\n  color: #8AA8C0;\r\n  border: 1px solid #8AA8C0;\r\n}\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #D3D3D3 !important;\r\n  padding: 0; \r\n  color:#D3D3D3 !important;\r\n  width: 100%;\r\n  background-color: #D3D3D3 !important;\r\n}\r\n\r\n"
+module.exports = "#threejs-container {\r\n    position: relative;\r\n    height: 100%;\r\n    width: 100%;\r\n    margin:0px;\r\n    overflow: hidden;\r\n    color: white;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#container-top-right-resize { \r\n    top: 0px; \r\n    right: 0px; \r\n}\r\n\r\n#shownumber{\r\n    position: absolute;\r\n    float: right;\r\n    color:black;\r\n    right: 0px;\r\n    width: 115px;\r\n    bottom: 0px;\r\n    color:#395d73;\r\n    font-family:sans-serif;\r\n}\r\n\r\n/*#rotating{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 0px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#paning{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 25px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#zooming{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 50px;\r\n    background-color:transparent;\r\n    border:0;\r\n}*/\r\n\r\n/*#imagery{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:14px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 10px;\r\n    background-color:transparent;\r\n    border:0;\r\n}*/\r\n\r\n#zoomingfit{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:14px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 10px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#selecting{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:14px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 35px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#points{\r\n    width: 30px;\r\n    height: 25px;\r\n    font:14px bolder;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 70px;\r\n    background-color:transparent;\r\n    border:0;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#vertices{\r\n    width: 30px;\r\n    height: 25px;\r\n    font:14px bolder;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 95px;\r\n    background-color:transparent;\r\n    border:0;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#edges{\r\n    width: 30px;\r\n    height: 25px;\r\n    font:14px bolder;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 120px;\r\n    background-color:transparent;\r\n    border:0;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#wires{\r\n    width: 30px;\r\n    height: 25px;\r\n    font:14px bolder;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 145px;\r\n    background-color:transparent;\r\n    border:0;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#faces{\r\n    width: 30px;\r\n    height: 25px;\r\n    font:14px bolder;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 170px;\r\n    background-color:transparent;\r\n    border:0;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#objects{\r\n    width: 30px;\r\n    height: 25px;\r\n    font:14px bolder;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 195px;\r\n    background-color:transparent;\r\n    border:0;\r\n    font-family:sans-serif;\r\n}\r\n\r\n#setting{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:14px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 10px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n.selected{\r\n    color: grey;\r\n\r\n}\r\n\r\n.visible{\r\n    color: grey;\r\n}\r\n\r\n.cursor{\r\n    \r\n}\r\n\r\n.selectvisible{\r\n    background-color:  white !important;\r\n    color:#395d73;\r\n}\r\n"
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/attributes.component.html":
-/*!*********************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/attributes.component.html ***!
-  \*********************************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.html":
+/*!*******************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.html ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr >\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 135px;\"><div style=\"width: 135px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 135px\"><div matTooltip={{ID}} style=\"width: 135px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr *ngFor=\"let Property of _Properties\">\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#D3D3D3 ;width: 135px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 135px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Name}}</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#D3D3D3 ;width: 135px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 135px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Value}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n</div>\r\n  "
+module.exports = "<div id=\"threejs-container\"  \r\n    (click)=\"render(this)\">\r\n    <div *ngIf=\"_updatemodel === false\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Error displaying model:{{text}}</div>\r\n    <div *ngIf=\"_modelshow === false\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Model or Scene not defined.</div>\r\n\r\n    <button id=\"zoomingfit\"  \r\n        [class.visible]=\"Visible === 'zoomfit'\" \r\n        (click)=\"zoomfit()\">\r\n        <span matTooltip=\"zoom to fit\"><i class=\"fa fa-arrows-alt\"></i></span>\r\n    </button> \r\n    \r\n    <!-- <button id=\"selecting\" [class.visible]=\"Visible === 'select'\" (click)= \"select($event, Visible)\" ><i class=\"fa fa-mouse-pointer\"></i></button> -->\r\n    <!-- <button id=\"setting\" [class.selected]=\"settingVisible\" (click)= \"setting(settingVisible)\"><i class=\"fa fa-cog\"></i></button> -->\r\n\r\n    <button id=\"selecting\" [class.selected]=\"seVisible\" (click)= \"select(seVisible)\" ><span matTooltip=\"select\"><i class=\"fa fa-mouse-pointer\"></i></span></button>\r\n    <div id=\"shownumber\">\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Triangles&nbsp;&nbsp;</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[2]}}</td>\r\n        </tr>\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Lines</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[1]}}</td>\r\n        </tr>\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Points&nbsp;&nbsp;</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[0]}}</td>\r\n        </tr>\r\n    </div>\r\n\r\n    <!-- <button id=\"imagery\"  \r\n        [class.selected]=\"imVisible\" (click)=\"leaflet()\">I\r\n        </button> -->\r\n    <!--setting-->\r\n    \r\n    <!-- <app-setting *ngIf=\"settingVisible == true\"></app-setting> -->\r\n    <div *ngIf=\"seVisible == true\">\r\n        <button id=\"points\" [class.selectvisible]=\"SelectVisible === 'Points'\"><span matTooltip=\"Select Points\">P</span></button>\r\n        <button id=\"vertices\" [class.selectvisible]=\"SelectVisible === 'Vertices'\"><span matTooltip=\"Select Vertices\">V</span></button>\r\n        <button id=\"edges\" [class.selectvisible]=\"SelectVisible === 'Edges'\"><span matTooltip=\"Select Edges\">E</span></button>\r\n        <button id=\"wires\" [class.selectvisible]=\"SelectVisible === 'Wires'\"><span matTooltip=\"Select Wires\">W</span></button>\r\n        <button id=\"faces\" [class.selectvisible]=\"SelectVisible === 'Faces'\"><span matTooltip=\"Select Faces\">F</span></button>\r\n        <button id=\"objects\" [class.selectvisible]=\"SelectVisible === 'Objs'\"><span matTooltip=\"Select Objects\">O</span></button>\r\n      </div>\r\n</div>\r\n"
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/attributes.copmponent.ts":
-/*!********************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/attributes.copmponent.ts ***!
-  \********************************************************************************/
-/*! exports provided: SelectComponent */
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.ts":
+/*!*****************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.ts ***!
+  \*****************************************************************************************/
+/*! exports provided: ThreejsViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectComponent", function() { return SelectComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ThreejsViewerComponent", function() { return ThreejsViewerComponent; });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three-orbit-controls */ "./node_modules/three-orbit-controls/index.js");
+/* harmony import */ var three_orbit_controls__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(three_orbit_controls__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _data_data_subscriber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/data.subscriber */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.subscriber.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3700,1877 +1142,279 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
-var SelectComponent = /** @class */ (function (_super) {
-    __extends(SelectComponent, _super);
-    function SelectComponent(injector, myElement) {
-        return _super.call(this, injector) || this;
-    }
-    SelectComponent.prototype.ngOnInit = function () {
-        this.data = this.dataService.getGsModel();
-        this.mode = this.dataService.getmode();
-        this.viewer = this.dataService.getViewer();
-        this.dataArr = this.dataService.get_ViData();
-    };
-    SelectComponent.prototype.notify = function (message) {
-        if (message === "model_update") {
-            this.data = this.dataService.getGsModel();
-            this.mode = this.dataService.getmode();
-            this.dataArr = this.dataService.get_ViData();
-        }
-    };
-    //check whether ID is changed or not and show in  Select tab
-    SelectComponent.prototype.ngDoCheck = function () {
-        if (this.viewer !== undefined && this.dataService.get_SelectedEntity() !== undefined && this.mode === "editor") {
-            if (this.ID !== this.dataService.get_SelectedEntity()._id) {
-                var _Property = void 0;
-                this.ID = this.dataService.get_SelectedEntity()._id;
-                this._Properties = [];
-                for (var _i = 0, _a = this.dataArr["ColorProperty"]; _i < _a.length; _i++) {
-                    var _ColorPro = _a[_i];
-                    if (_ColorPro !== "None") {
-                        _Property = [];
-                        _Property.Name = _ColorPro;
-                        if (this.dataService.get_SelectedEntity().properties[_Property.Name] !== undefined) {
-                            _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
-                        }
-                        else {
-                            _Property.Value = ' ';
-                        }
-                        this._Properties.push(_Property);
-                    }
-                }
-            }
-        }
-    };
-    SelectComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "app-select",
-            template: __webpack_require__(/*! ./attributes.component.html */ "./src/app/mViewer/viewers/mobius-cesium/setting/attributes.component.html"),
-            styles: [__webpack_require__(/*! ./attributes.component.css */ "./src/app/mViewer/viewers/mobius-cesium/setting/attributes.component.css")],
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], SelectComponent);
-    return SelectComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__["DataSubscriber"]));
 
+// import @angular stuff
 
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.css":
-/*!******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.css ***!
-  \******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/*/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#D3D3D3 !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-labels{\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n/deep/.mat-tab-body-wrapper{\r\n  height:100% !important;\r\n\r\n}\r\n\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #8AA8C0 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n/deep/.mat-slider-thumb{\r\n  width: 5px !important;\r\n  right: -5px !important;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #F0BFA0 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n/deep/.mat-slider-track-background{\r\n  background-color: #D3D3D3 !important;\r\n}\r\n.mat-slider{\r\n    width: 150px !important;\r\n}*/\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #D3D3D3;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: transparent;\r\n}\r\n\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  color: #D3D3D3;\r\n  background: transparent;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  /*opacity: 0.8;*/\r\n  color: #8AA8C0;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #D3D3D3 !important;\r\n  padding: 0; \r\n  color:#D3D3D3 !important;\r\n  width: 100%;\r\n  background-color: #D3D3D3 !important;\r\n}\r\n\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.html":
-/*!*******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.html ***!
-  \*******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"DisplayView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeImagery($event.target.value)\" [ngModel]=\"_Imagery\">\r\n          <option class=\"cesium-option\"  *ngFor=\"let Imagery of _ImageryList\" value={{Imagery}}>{{Imagery}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n    </table>\r\n    <hr>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Sun</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Sun\" (click)=\"changeSun()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Shadows</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Shadow\" (click)=\"changeShadow()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Date</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_Date}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate($event.target.value,_UTC)\"></th></tr>  \r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">UTC</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_UTC}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate(_Date,$event.target.value)\"></th></tr>  \r\n    </table>\r\n    \r\n</div>\r\n  "
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.ts":
-/*!*****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.ts ***!
-  \*****************************************************************************/
-/*! exports provided: DisplayComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DisplayComponent", function() { return DisplayComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var DisplayComponent = /** @class */ (function (_super) {
-    __extends(DisplayComponent, _super);
-    function DisplayComponent(injector, myElement) {
-        return _super.call(this, injector) || this;
-    }
-    DisplayComponent.prototype.ngOnInit = function () {
-        this.data = this.dataService.getGsModel();
-        this._ImageryList = ["Disable", "Stamen Toner", "Stamen Toner(Lite)", "Terrain(Standard)", "Terrain(Background)",
-            "OpenStreetMap", "Earth at Night", "Natural Earth\u00a0II", "Blue Marble"];
-        if (this._Imagery === undefined) {
-            this._Imagery = this._ImageryList[3];
-            this.onChangeImagery(this._Imagery);
-        }
-        else {
-            this._Imagery = this.dataService.get_Imagery();
-        }
-        if (this._Sun === undefined) {
-            this._Sun = false;
-            this.dataService.set_Sun(this._Sun);
-        }
-        else {
-            this._Sun = this.dataService.get_Sun();
-        }
-        if (this._Shadow === undefined) {
-            this._Shadow = false;
-            this.dataService.set_Shadow(this._Shadow);
-        }
-        else {
-            this._Shadow = this.dataService.get_Shadow();
-        }
-        this._UTC = +8;
-        this.dataService.set_UTC(this._UTC);
-        if (this._Date === undefined) {
-            var today = new Date();
-            var year = today.getFullYear();
-            var month = String(today.getMonth() + 1).padStart(2, "0");
-            var day = String(today.getDate()).padStart(2, "0");
-            this._Date = year + "-" + month + "-" + day;
-        }
-        else {
-            this._Date = this.dataService.get_Date();
-            this.changeDate(this._Date, this._UTC);
-        }
-        this.dataService.set_Date(this._Date);
-    };
-    DisplayComponent.prototype.notify = function (message) {
-    };
-    //chanage imagery in Display tab
-    DisplayComponent.prototype.onChangeImagery = function (_Imagery) {
-        this._Imagery = _Imagery;
-        this.dataService.set_Imagery(_Imagery);
-        var layers = this.dataService.getViewer().scene.imageryLayers;
-        if (_Imagery === this._ImageryList[0]) {
-            layers.removeAll();
-            this.dataService.getViewer().scene.globe.baseColor = Cesium.Color.GRAY;
-        }
-        else if (_Imagery === this._ImageryList[1]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(Cesium.createOpenStreetMapImageryProvider({
-                url: "https://stamen-tiles.a.ssl.fastly.net/toner/"
-            }));
-        }
-        else if (_Imagery === this._ImageryList[2]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(Cesium.createOpenStreetMapImageryProvider({
-                url: "https://stamen-tiles.a.ssl.fastly.net/toner-lite/"
-            }));
-        }
-        else if (_Imagery === this._ImageryList[3]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(Cesium.createOpenStreetMapImageryProvider({
-                url: "https://stamen-tiles.a.ssl.fastly.net/terrain/"
-            }));
-        }
-        else if (_Imagery === this._ImageryList[4]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(Cesium.createOpenStreetMapImageryProvider({
-                url: "https://stamen-tiles.a.ssl.fastly.net/terrain-background/"
-            }));
-        }
-        else if (_Imagery === this._ImageryList[5]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(Cesium.createOpenStreetMapImageryProvider({
-                url: "https://a.tile.openstreetmap.org/"
-            }));
-        }
-        else if (_Imagery === this._ImageryList[6]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3812 }));
-        }
-        else if (_Imagery === this._ImageryList[7]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(Cesium.createTileMapServiceImageryProvider({
-                url: Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
-            }));
-        }
-        else if (_Imagery === this._ImageryList[8]) {
-            layers.removeAll();
-            var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3845 }));
-        }
-    };
-    //change sun
-    DisplayComponent.prototype.changeSun = function () {
-        var viewer = this.dataService.getViewer();
-        this._Sun = !this._Sun;
-        if (this._Sun === true) {
-            viewer.terrainShadows = Cesium.ShadowMode.ENABLED;
-            viewer.scene.globe.enableLighting = true;
-            viewer.scene.sun.show = true;
-        }
-        else {
-            viewer.terrainShadows = undefined;
-            viewer.scene.globe.enableLighting = false;
-            viewer.scene.sun.show = false;
-        }
-        this.dataService.set_Sun(this._Sun);
-    };
-    //change shadow
-    DisplayComponent.prototype.changeShadow = function () {
-        this._Shadow = !this._Shadow;
-        var promise = this.dataService.getcesiumpromise();
-        if (this._Shadow === true) {
-            promise.then(function (dataSource) {
-                var entities = dataSource.entities.values;
-                for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-                    var entity = entities_1[_i];
-                    entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
-                }
-            });
-        }
-        else {
-            promise.then(function (dataSource) {
-                var entities = dataSource.entities.values;
-                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                    var entity = entities_2[_i];
-                    entity.polygon.shadows = undefined;
-                }
-            });
-        }
-        this.dataService.set_Shadow(this._Shadow);
-    };
-    //change date
-    DisplayComponent.prototype.changeDate = function (_Date, _UTC) {
-        this._Date = _Date;
-        this._UTC = _UTC;
-        var viewer = this.dataService.getViewer();
-        var now = new Cesium.JulianDate.fromIso8601(this._Date);
-        var tomorrow = now.clone();
-        tomorrow.dayNumber = tomorrow.dayNumber + 1;
-        viewer.clock.currentTime = Cesium.JulianDate.addHours(now, this._UTC, now);
-        viewer.clock.startTime = now.clone();
-        viewer.clock.stopTime = tomorrow.clone();
-        viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
-        this.dataService.set_Date(this._Date);
-        this.dataService.set_UTC(this._UTC);
-        viewer.timeline.updateFromClock();
-    };
-    DisplayComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "app-display",
-            template: __webpack_require__(/*! ./display.copmponent.html */ "./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.html"),
-            styles: [__webpack_require__(/*! ./display.copmponent.css */ "./src/app/mViewer/viewers/mobius-cesium/setting/display.copmponent.css")],
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], DisplayComponent);
-    return DisplayComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__["DataSubscriber"]));
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.css":
-/*!*****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.css ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#publishwindow{\r\n  position: relative;\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#D3D3D3 !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 16px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #8AA8C0 !important;\r\n    cursor: -webkit-grab;\r\n    padding: 0px;\r\n    height: 24px;\r\n    /*min-width: 50px;*/\r\n    flex-grow: 1;\r\n    touch-action: none;\r\n    -webkit-user-select: none;\r\n       -moz-user-select: none;\r\n        -ms-user-select: none;\r\n            user-select: none;\r\n    -webkit-user-drag: none;\r\n    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\r\n}\r\n\r\n/deep/.mat-slider-thumb{\r\n  width: 5px !important;\r\n  right: -5px !important;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #F0BFA0 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-track-background{\r\n  background-color: #D3D3D3 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 100%;\r\n    display: inline-block;\r\n    position: relative;\r\n    box-sizing: border-box;\r\n    outline: 0;\r\n    vertical-align: middle;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #D3D3D3;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: transparent;\r\n}\r\n\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  color: #D3D3D3;\r\n  background: transparent;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  /*opacity: 0.8;*/\r\n  color: #8AA8C0;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #D3D3D3 !important;\r\n  padding: 0; \r\n  color:#D3D3D3 !important;\r\n  width: 100%;\r\n  background-color: #D3D3D3 !important;\r\n}\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.html":
-/*!******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.html ***!
-  \******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"publish\" style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\r\n<div id=\"publishwindow\" *ngIf=\"dataArr!==undefined\">\r\n        <div *ngIf=\"_ColorKey!==undefined\">\r\n        <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 280px\" *ngIf=\"_ColorDescr!==undefined\"><div style=\"color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;font-size:14px;line-height:16px;\">{{_ColorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Color&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"_ColorKey\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of _ColorProperty\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n    </div>\r\n    <div *ngIf=\"_ExtrudeKey!==undefined\">\r\n        <hr>\r\n          <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 280px\" *ngIf=\"_ExtrudeDescr!==undefined\"><div style=\"color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;font-size:14px;line-height:16px;\">{{_ExtrudeDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Extrude&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"_ExtrudeKey\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of _ExtrudeProperty\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:40px;height: 25px;\"><div style=\"width: 40px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Min&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:40px;\"><div style=\"width: 40px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"_ExtrudeMin!==undefined\">{{_ExtrudeMin}}</div></th></tr>\r\n\r\n          <tr><th style=\"width:40px;\"><div style=\"width: 40px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Max&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"_ExtrudeMax!==undefined\">{{_ExtrudeMax}}</div></th></tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"_Filter!==undefined\">\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of _Filter;\" id={{item.divid}}>\r\n      <table>\r\n        <tr >\r\n          <th style=\"width:280px;height: 25px;\"><div style=\"color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;font-size:14px;line-height:16px;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th style=\"max-width: 80px;height: 25px;\"><div matTooltip={{item.HeightHide}} style=\"max-width: 80px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:20px;height: 25px;\">\r\n          <div style=\"width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:30px;height: 25px;\">\r\n          <div style=\"width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:80px;color:#395D73 !important;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:80px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:20px;height: 22px;\" id={{item.id}}><input type=\"checkbox\" id={{item.id}} checked=\"checked\" (click)=\"Disable(item.id)\" style=\"width:20px;height: 22px;cursor:pointer;\"></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"max-width: 30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#D3D3D3 !important;text-align: left;max-width: 30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:200px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:200px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"max-width: 30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#D3D3D3 !important;max-width: 30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      <div>\r\n      <button style=\"color:#D3D3D3;border:2px solid #8AA8C0;background-color: transparent;cursor:pointer;\" (click)=\"reset()\">Reset</button></div>\r\n      </div>\r\n</div>\r\n\r\n  "
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.ts":
-/*!****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.ts ***!
-  \****************************************************************************/
-/*! exports provided: PublishComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PublishComponent", function() { return PublishComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var PublishComponent = /** @class */ (function (_super) {
-    __extends(PublishComponent, _super);
-    function PublishComponent(injector, myElement) {
+/**
+ * A threejs viewer for viewing geo-info (GI) models.
+ * This component gets used in /app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html
+ */
+var ThreejsViewerComponent = /** @class */ (function (_super) {
+    __extends(ThreejsViewerComponent, _super);
+    /**
+     * Creates a new viewer,
+     * @param injector
+     * @param elem
+     */
+    function ThreejsViewerComponent(injector, elem) {
         var _this = _super.call(this, injector) || this;
-        _this._CheckDisable = false;
+        // interaction and selection
+        _this._select_visible = 'Objs';
+        // number of threejs points, lines, triangles
+        _this._threejs_nums = [0, 0, 0];
+        // grid
+        _this._grid_show = true;
+        _this._grid_center = [0, 0, 0];
+        _this._modelshow = true;
+        _this._updatemodel = true;
+        _this._elem = elem;
         return _this;
     }
-    PublishComponent.prototype.ngOnInit = function () {
-        this.mode = this.dataService.getmode();
-        this.dataArr = this.dataService.get_PuData();
-        if (this.dataArr !== undefined) {
-            this.LoadData();
+    /**
+     * Called when the viewer is initialised.
+     */
+    ThreejsViewerComponent.prototype.ngOnInit = function () {
+        var container = this._elem.nativeElement.children.namedItem('threejs-container');
+        // check for container
+        if (!container) {
+            console.error('No container in Three Viewer');
+            return;
         }
-    };
-    PublishComponent.prototype.notify = function (message) {
-        if (message === "model_update") {
-            try {
-                this.dataArr = this.dataService.get_PuData();
-                if (this.dataArr !== undefined) {
-                    this.LoadData();
-                }
-            }
-            catch (ex) {
-                console.log(ex);
-            }
-        }
-    };
-    //load data in publish version
-    PublishComponent.prototype.LoadData = function () {
-        this._ColorDescr = this.dataArr["ColorDescr"];
-        this._ColorProperty = this.dataArr["ColorProperty"];
-        this._ColorKey = this.dataArr["ColorKey"];
-        this._ColorMax = this.dataArr["ColorMax"];
-        this._ColorMin = this.dataArr["ColorMin"];
-        this._ColorInvert = this.dataArr["ColorInvert"];
-        this._ExtrudeDescr = this.dataArr["ExtrudeDescr"];
-        this._ExtrudeProperty = this.dataArr["ExtrudeProperty"];
-        this._ExtrudeKey = this.dataArr["ExtrudeKey"];
-        this._ExtrudeMax = this.dataArr["ExtrudeMax"];
-        this._ExtrudeMin = this.dataArr["ExtrudeMin"];
-        this._HeightChart = this.dataArr["HeightChart"];
-        this._Invert = this.dataArr["Invert"];
-        this._Scale = this.dataArr["Scale"];
-        this._HideNum = this.dataArr["HideNum"];
-        this._Filter = this.dataArr["Filter"];
-    };
-    //disable button in publish version
-    PublishComponent.prototype.Disable = function (event) {
-        var index = this._HideNum.indexOf(event);
-        var divid = String("addHide".concat(String(event)));
-        var addHide = document.getElementById(divid);
-        if (this._Filter[index].Disabletext === null) {
-            this._CheckDisable = false;
-        }
-        else {
-            this._CheckDisable = true;
-        }
-        if (this._CheckDisable === false) {
-            if (this._Filter[index].type === "number") {
-                var textHide = this._Filter[index].textHide;
-                this._Filter[index].Disabletext = Number(textHide);
-                if (this._Filter[index].RelaHide === "0" || this._Filter[index].RelaHide === 0) {
-                    this._Filter[index].textHide = this._Filter[index].HideMin;
-                }
-                if (this._Filter[index].RelaHide === "1" || this._Filter[index].RelaHide === 1) {
-                    this._Filter[index].textHide = this._Filter[index].HideMax;
-                }
-            }
-            else if (this._Filter[index].type === "category") {
-                var textHide = this._Filter[index].RelaHide;
-                this._Filter[index].Disabletext = Number(textHide);
-                this._Filter[index].RelaHide = 0;
-            }
-        }
-        else {
-            if (this._Filter[index].type === "number") {
-                this._Filter[index].textHide = this._Filter[index].Disabletext;
-                this._Filter[index].Disabletext = null;
-            }
-            else if (this._Filter[index].type === "category") {
-                this._Filter[index].RelaHide = this._Filter[index].Disabletext;
-                this._Filter[index].Disabletext = null;
-            }
-        }
-        this.dataArr["Filter"] = this._Filter;
-        this.dataArr["HideNum"] = this._HideNum;
-        this.dataService.set_PuData(this.dataArr);
-    };
-    //change category in filter
-    PublishComponent.prototype.ChangeCategory = function (categary, id, type) {
-        var _index = this._HideNum.indexOf(id);
-        if (type === 1) {
-            this._Filter[_index].CategaryHide = categary;
-        }
-        if (type === 0) {
-            this._Filter[_index].RelaHide = Number(categary);
-        }
-    };
-    //change text in filter
-    PublishComponent.prototype.Changetext = function (value, id) {
-        var _index = this._HideNum.indexOf(id);
-        this._Filter[_index].textHide = value;
-    };
-    //change color property in publish version
-    PublishComponent.prototype.onChangeColor = function (value) {
-        var data = this.dataService.getGsModel()["cesium"]["colour"]["attribs"];
-        this.dataArr["ColorKey"] = value;
-        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-            var _data = data_1[_i];
-            if (_data["name"] === value) {
-                this.dataArr["ColorMin"] = _data["min"];
-                this.dataArr["ColorMax"] = _data["max"];
-                this.dataArr["ColorInvert"] = _data["invert"];
-            }
-        }
-        var promise = this.dataService.getcesiumpromise();
-        var _Colortexts = [];
+        // size of window
+        this._width = container.offsetWidth; // container.client_width;
+        this._height = container.offsetHeight; // container.client_height;
+        // scene
+        this._scene = new three__WEBPACK_IMPORTED_MODULE_0__["Scene"]();
+        this._scene.background = new three__WEBPACK_IMPORTED_MODULE_0__["Color"](0xcccccc);
+        // renderer
+        this._renderer = new three__WEBPACK_IMPORTED_MODULE_0__["WebGLRenderer"]({ antialias: true });
+        this._renderer.setSize(this._width, this._height);
+        this._renderer.setPixelRatio(window.devicePixelRatio);
+        // camera settings
+        var aspect_ratio = this._width / this._height;
+        this._camera = new three__WEBPACK_IMPORTED_MODULE_0__["PerspectiveCamera"](50, aspect_ratio, 0.01, 1000); // 0.0001, 100000000 );
+        this._camera.position.y = 10;
+        this._camera.up.set(0, 0, 1);
+        this._camera.lookAt(this._scene.position);
+        this._camera.updateProjectionMatrix();
+        // orbit controls
+        var orbit_controls = three_orbit_controls__WEBPACK_IMPORTED_MODULE_1__(three__WEBPACK_IMPORTED_MODULE_0__);
+        this._controls = new orbit_controls(this._camera, this._renderer.domElement);
+        this._controls.enableKeys = false;
+        container.appendChild(this._renderer.domElement);
+        // mouse
+        this._mouse = new three__WEBPACK_IMPORTED_MODULE_0__["Vector2"]();
+        // selecting
+        this._raycaster = new three__WEBPACK_IMPORTED_MODULE_0__["Raycaster"]();
+        this._raycaster.linePrecision = 0.05;
+        // add stuff to the scene
+        this._addGrid();
+        this._addAmbientLight();
+        // update the model
+        this.updateModel();
+        // ??? What is heppening here?
         var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-                var entity = entities_1[_i];
-                if (entity.properties[value] !== undefined) {
-                    if (entity.properties[value]._value !== " ") {
-                        if (_Colortexts.length === 0) {
-                            _Colortexts[0] = entity.properties[value]._value;
-                        }
-                        else {
-                            if (_Colortexts.indexOf(entity.properties[value]._value) === -1) {
-                                _Colortexts.push(entity.properties[value]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        this.dataArr["ColorText"] = _Colortexts.sort();
-        this.dataService.set_PuData(this.dataArr);
-        this.LoadData();
+        this._controls.addEventListener('change', function () { self.render(self); });
+        self._renderer.render(self._scene, self._camera);
     };
-    //change extrudeheight property in publish version
-    PublishComponent.prototype.onChangeHeight = function (value) {
-        var data = this.dataService.getGsModel()["cesium"]["extrude"]["attribs"];
-        this.dataArr["ExtrudeKey"] = value;
-        for (var _i = 0, data_2 = data; _i < data_2.length; _i++) {
-            var _data = data_2[_i];
-            if (_data["name"] === value) {
-                this.dataArr["ExtrudeMin"] = _data["min"];
-                this.dataArr["ExtrudeMax"] = _data["max"];
-                this.dataArr["HeightChart"] = _data["line"];
-                this.dataArr["Invert"] = _data["invert"];
-                this.dataArr["Scale"] = _data["scale"];
-            }
+    /**
+     * TODO What is self?
+     * @param self
+     */
+    ThreejsViewerComponent.prototype.render = function (self) {
+        self._renderer.render(self._scene, self._camera);
+    };
+    /**
+     * Called on window resize.
+     */
+    ThreejsViewerComponent.prototype.onResize = function () {
+        var container = this._elem.nativeElement.children.namedItem('container');
+        /// check for container
+        if (!container) {
+            console.error('No container in Three Viewer');
+            return;
         }
-        var promise = this.dataService.getcesiumpromise();
-        var _Heighttexts = [];
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                var entity = entities_2[_i];
-                if (entity.properties[value] !== undefined) {
-                    if (entity.properties[value]._value !== " ") {
-                        if (_Heighttexts.length === 0) {
-                            _Heighttexts[0] = entity.properties[value]._value;
-                        }
-                        else {
-                            if (_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
-                                _Heighttexts.push(entity.properties[value]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        this.dataArr["ExtrudeText"] = _Heighttexts.sort();
-        this.dataService.set_PuData(this.dataArr);
-        this.LoadData();
+        ///
+        this._width = container.offset_width;
+        this._height = container.offset_height;
+        this._renderer.setSize(this._width, this._height);
+        this._camera.aspect = this._width / this._height;
+        this._camera.updateProjectionMatrix();
     };
-    //reset button to load again
-    PublishComponent.prototype.reset = function () {
-        this.dataService.LoadJSONData();
-        this.dataArr = this.dataService.get_PuData();
-        if (this.dataArr !== undefined) {
-            this.LoadData();
+    /**
+     * Called on model updated.
+     * @param message
+     */
+    ThreejsViewerComponent.prototype.notify = function (message) {
+        if (message === 'model_update' && this._scene) {
+            this.updateModel();
         }
     };
-    PublishComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "app-publish",
-            template: __webpack_require__(/*! ./publish.component.html */ "./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.html"),
-            styles: [__webpack_require__(/*! ./publish.component.css */ "./src/app/mViewer/viewers/mobius-cesium/setting/publish.component.css")],
+    /**
+     * Update the model in the viewer.
+     */
+    ThreejsViewerComponent.prototype.updateModel = function () {
+        this._model = this.dataService.getModel();
+        if (!this._model || !this._scene) {
+            console.warn('Model or Scene not defined.');
+            this._modelshow = false;
+            return;
+        }
+        try {
+            this._updatemodel = true;
+            this._modelshow = true;
+            var threejs_data = this._model.get3jsData();
+            // Create single positions buffer that will be used by all geometry
+            var posis_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.positions, 3);
+            this._addTris(threejs_data.triangles, posis_buffer);
+            this._addLines(threejs_data.lines, posis_buffer);
+            this._addPoints(threejs_data.points, posis_buffer);
+            // Render
+            this._controls.update();
+            this.render(this);
+            // print
+            console.log(">> this.scene >>", this._scene);
+        }
+        catch (ex) {
+            console.error('Error displaying model:', ex);
+            this._updatemodel = false;
+            this._text = ex;
+        }
+    };
+    // ============================================================================
+    // Private methods
+    // ============================================================================
+    /**
+     * Creates a hemisphere light
+     */
+    ThreejsViewerComponent.prototype._addHemisphereLight = function () {
+        var light = new three__WEBPACK_IMPORTED_MODULE_0__["HemisphereLight"](0xffffbb, // skyColor
+        0x080820, // groundColo
+        1 // intensity
+        );
+        this._scene.add(light);
+    };
+    /**
+     * Creates a hemisphere light
+     */
+    ThreejsViewerComponent.prototype._addAmbientLight = function () {
+        var light = new three__WEBPACK_IMPORTED_MODULE_0__["AmbientLight"](0x404040); // soft white light
+        this._scene.add(light);
+    };
+    /**
+     * Creates a hidden sphere sphere.... not sure why
+     */
+    ThreejsViewerComponent.prototype._addSphere = function () {
+        var geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](1);
+        var material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshBasicMaterial"]({ color: 0x00ff00, transparent: true, opacity: 0.5 });
+        this._sphere = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+        this._sphere.visible = false;
+        this._sphere.name = 'sphereInter';
+        this._sphere.scale.set(0.1, 0.1, 0.1);
+        this._scene.add(this._sphere);
+    };
+    /**
+     * Draws a grid on the XY plane.
+     */
+    ThreejsViewerComponent.prototype._addGrid = function () {
+        for (var i = 0; i < this._scene.children.length; i++) {
+            if (this._scene.children[i].name === 'GridHelper') {
+                this._scene.remove(this._scene.children[i]);
+                i = i - 1;
+            }
+        }
+        // todo: change grid -> grid_value
+        if (this._grid_show) {
+            var gridhelper = new three__WEBPACK_IMPORTED_MODULE_0__["GridHelper"](100, 10);
+            gridhelper.name = 'GridHelper';
+            var vector = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"](0, 1, 0);
+            gridhelper.lookAt(vector);
+            gridhelper.position.set(0, 0, 0);
+            this._scene.add(gridhelper);
+            this._grid_center = [0, 0, 0];
+        }
+    };
+    /**
+     * Add threejs triangles to the scene
+     */
+    ThreejsViewerComponent.prototype._addTris = function (tris_i, posis_buffer) {
+        var geom = new three__WEBPACK_IMPORTED_MODULE_0__["BufferGeometry"]();
+        geom.setIndex(tris_i);
+        geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
+        // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        var mat = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({
+            specular: new three__WEBPACK_IMPORTED_MODULE_0__["Color"]('rgb(255, 0, 0)'),
+            shininess: 250,
+            side: three__WEBPACK_IMPORTED_MODULE_0__["DoubleSide"],
+            vertexColors: three__WEBPACK_IMPORTED_MODULE_0__["VertexColors"]
+            // wireframe:true
+        });
+        var mesh = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geom, mat);
+        mesh.geometry.computeBoundingSphere();
+        mesh.geometry.computeVertexNormals();
+        this._scene.add(mesh);
+        this._threejs_nums[2] = tris_i.length / 3;
+    };
+    /**
+     * Add threejs lines to the scene
+     */
+    ThreejsViewerComponent.prototype._addLines = function (lines_i, posis_buffer) {
+        var geom = new three__WEBPACK_IMPORTED_MODULE_0__["BufferGeometry"]();
+        geom.setIndex(lines_i);
+        geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
+        // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        var mat = new three__WEBPACK_IMPORTED_MODULE_0__["LineBasicMaterial"]({
+            color: 0xffffff,
+            linewidth: 1,
+            linecap: 'round',
+            linejoin: 'round' // ignored by WebGLRenderer
+        });
+        this._scene.add(new three__WEBPACK_IMPORTED_MODULE_0__["LineSegments"](geom, mat));
+        this._threejs_nums[1] = lines_i.length / 2;
+    };
+    /**
+     * Add threejs points to the scene
+     */
+    ThreejsViewerComponent.prototype._addPoints = function (points_i, posis_buffer) {
+        var geom = new three__WEBPACK_IMPORTED_MODULE_0__["BufferGeometry"]();
+        geom.setIndex(points_i);
+        geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        // geom.computeBoundingSphere();
+        var mat = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({
+            size: 0.1,
+            vertexColors: three__WEBPACK_IMPORTED_MODULE_0__["VertexColors"]
+        });
+        this._scene.add(new three__WEBPACK_IMPORTED_MODULE_0__["Points"](geom, mat));
+        this._threejs_nums[0] = points_i.length;
+    };
+    ThreejsViewerComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+            selector: 'threejs-viewer',
+            template: __webpack_require__(/*! ./threejs-viewer.component.html */ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.html"),
+            styles: [__webpack_require__(/*! ./threejs-viewer.component.css */ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.css")]
         }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], PublishComponent);
-    return PublishComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__["DataSubscriber"]));
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_3__["ElementRef"]])
+    ], ThreejsViewerComponent);
+    return ThreejsViewerComponent;
+}(_data_data_subscriber__WEBPACK_IMPORTED_MODULE_2__["DataSubscriber"]));
 
 
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.css":
-/*!*****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.css ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#setting{\r\n  position: relative;\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#D3D3D3 !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n  border-right: 1px solid gray;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#D3D3D3 !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n\r\n/deep/.mat-tab-body-wrapper{\r\n  height:100% !important;\r\n\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #8AA8C0 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-thumb{\r\n  width: 5px !important;\r\n  right: -5px !important;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #F0BFA0 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-track-background{\r\n  background-color: #D3D3D3 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.html":
-/*!******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.html ***!
-  \******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"setting\" >\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\" (selectedTabChange)=\"changedata($event.index)\" *ngIf=\"mode==='editor'\" >\r\n    <mat-tab label=\"&nbsp;Select&nbsp;\">\r\n      <app-select></app-select>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Data&nbsp;\" >\r\n      <app-data (change)=\"LoadViewer()\" (click)=\"LoadViewer()\"></app-data>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Display&nbsp;\" >\r\n      <app-display></app-display>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <app-publish  (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n    <app-publish *ngIf=\"mode==='viewer'\" (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.ts":
-/*!****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.ts ***!
-  \****************************************************************************/
-/*! exports provided: SettingComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SettingComponent", function() { return SettingComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
-/* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! chroma-js */ "./node_modules/chroma-js/chroma.js");
-/* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(chroma_js__WEBPACK_IMPORTED_MODULE_2__);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var SettingComponent = /** @class */ (function (_super) {
-    __extends(SettingComponent, _super);
-    function SettingComponent(injector, myElement) {
-        return _super.call(this, injector) || this;
-    }
-    //get data and mode
-    SettingComponent.prototype.ngOnInit = function () {
-        this.data = this.dataService.getGsModel();
-        this.mode = this.dataService.getmode();
-        if (this.mode === "viewer") {
-            this.changedata(3);
-        }
-        else if (this.mode === "editor") {
-            this.changedata(1);
-        }
-    };
-    //change data and load new data
-    SettingComponent.prototype.notify = function (message) {
-        if (message === "model_update") {
-            this.data = this.dataService.getGsModel();
-            this.mode = this.dataService.getmode();
-            try {
-                if (this.data !== undefined && this.data["features"] !== undefined) {
-                    if (this.mode === "viewer") {
-                        this.changedata(3);
-                    }
-                    else if (this.mode === "editor") {
-                        this.changedata(1);
-                    }
-                }
-            }
-            catch (ex) {
-                console.log(ex);
-            }
-        }
-    };
-    //change index from editor version to publish version
-    SettingComponent.prototype.changedata = function (id) {
-        this.dataService.set_index(id);
-        if (id === 1) {
-            this.dataArr = this.dataService.get_ViData();
-        }
-        else if (id === 3) {
-            this.dataArr = this.dataService.get_PuData();
-        }
-        if (this.dataArr !== undefined) {
-            this.LoadViewer();
-        }
-    };
-    //reset button to reset everthing in publish version
-    SettingComponent.prototype.Reset = function () {
-        this.dataArr = this.dataService.get_PuData();
-    };
-    //change color and extrudeHeight of entity
-    SettingComponent.prototype.LoadViewer = function () {
-        var promise = this.dataService.getcesiumpromise();
-        var _ColorKey = this.dataArr["ColorKey"];
-        var _ColorMax = this.dataArr["ColorMax"];
-        var _ColorMin = this.dataArr["ColorMin"];
-        var _ColorText = this.dataArr["ColorText"];
-        var _ColorInvert = this.dataArr["ColorInvert"];
-        var _ExtrudeKey = this.dataArr["ExtrudeKey"];
-        var _ExtrudeMax = this.dataArr["ExtrudeMax"];
-        var _ExtrudeMin = this.dataArr["ExtrudeMin"];
-        var _HeightChart = this.dataArr["HeightChart"];
-        var _Invert = this.dataArr["Invert"];
-        var _Scale = this.dataArr["Scale"];
-        var _indexArr = this.dataArr["indexArr"];
-        var _Filter;
-        if (this.dataArr["Filter"] !== undefined && this.dataArr["Filter"].length !== 0) {
-            _Filter = this.dataArr["Filter"];
-        }
-        else {
-            _Filter = [];
-        }
-        var _ChromaScale = chroma_js__WEBPACK_IMPORTED_MODULE_2__["scale"]("SPECTRAL");
-        if (_ColorInvert === true) {
-            _ChromaScale = chroma_js__WEBPACK_IMPORTED_MODULE_2__["scale"]("SPECTRAL").domain([1, 0]);
-        }
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, _indexArr_1 = _indexArr; _i < _indexArr_1.length; _i++) {
-                var i = _indexArr_1[_i];
-                var entity = entities[i];
-                var _CheckHide = void 0;
-                if (entity.polygon !== undefined) {
-                    if (_Filter.length !== 0) {
-                        _CheckHide = self.Hide(_Filter, entity, _HeightChart);
-                        if (_CheckHide === true) {
-                            if (entity.polygon !== undefined) {
-                                entity.polygon.extrudedHeight = 0;
-                                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                if (_HeightChart === true) {
-                                    if (entity.polyline !== undefined) {
-                                        entity.polyline.show = false;
-                                    }
-                                }
-                            }
-                            if (entity.polyline !== undefined) {
-                                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                            }
-                        }
-                    }
-                    if (_Filter.length === 0 || _CheckHide === false) {
-                        if (_ColorKey !== "None") {
-                            if (typeof (_ColorText[0]) === "number") {
-                                self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
-                            }
-                            else {
-                                self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
-                            }
-                        }
-                        else {
-                            entity.polygon.material = Cesium.Color.DARKGREY;
-                        }
-                        if (_ExtrudeKey !== "None") {
-                            if (_HeightChart === false) {
-                                entity.polyline = undefined;
-                                if (entity.properties[_ExtrudeKey] !== undefined) {
-                                    entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale;
-                                }
-                                else {
-                                    entity.polygon.extrudedHeight = 0;
-                                }
-                            }
-                            else {
-                                entity.polygon.extrudedHeight = 0;
-                                var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-                                var radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius / 100), 10);
-                                var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
-                                    cartesianToCartographic(center).longitude).toFixed(10);
-                                var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
-                                    latitude).toFixed(10);
-                                entity.polyline = new Cesium.PolylineGraphics({
-                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString, latitudeString, 0, longitudeString,
-                                        latitudeString, self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale]),
-                                    width: radius,
-                                    material: entity.polygon.material,
-                                    show: true,
-                                });
-                            }
-                        }
-                        else {
-                            entity.polyline = undefined;
-                            entity.polygon.extrudedHeight = 0;
-                        }
-                    }
-                }
-                else if (entity.polyline !== undefined) {
-                    if (_ColorKey !== "None") {
-                        if (typeof (_ColorText[0]) === "number") {
-                            self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
-                        }
-                        else {
-                            self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
-                        }
-                    }
-                    else {
-                        entity.polyline.material = Cesium.Color.DARKGREY;
-                    }
-                }
-                else if (entity.point !== undefined) {
-                    if (_ColorKey !== "None") {
-                        if (typeof (_ColorText[0]) === "number") {
-                            self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
-                        }
-                        else {
-                            self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
-                        }
-                    }
-                    else {
-                        entity.point.color = Cesium.Color.DARKGREY;
-                    }
-                }
-            }
-        });
-    };
-    //check whether entity should be hided or not
-    SettingComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
-        var _CheckHide = false;
-        for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
-            var filter = _Filter_1[_i];
-            var value = entity.properties[filter.HeightHide]._value;
-            if (value !== undefined) {
-                if (typeof (value) === "number") {
-                    if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
-                        _CheckHide = true;
-                    }
-                }
-                else if (typeof (value) === "string") {
-                    if (this._compareCat(value, filter.CategaryHide, Number(filter.RelaHide))) {
-                        _CheckHide = true;
-                    }
-                }
-            }
-        }
-        return _CheckHide;
-    };
-    SettingComponent.prototype._compare = function (value, slider, relation) {
-        switch (relation) {
-            case 0:
-                return value < slider;
-            case 1:
-                return value > slider;
-            case 2:
-                return value !== slider;
-        }
-    };
-    SettingComponent.prototype._compareCat = function (value, _Categary, relation) {
-        switch (relation) {
-            case 0:
-                return value === undefined;
-            case 1:
-                return value !== _Categary;
-            case 2:
-                return value === _Categary;
-        }
-    };
-    //caculate the extrudeHeight of entity
-    SettingComponent.prototype.ExtrudeHeight = function (value, _ExtrudeMax, _ExtrudeMin, _Invert) {
-        var diff;
-        if (_ExtrudeMin < 0) {
-            diff = Math.abs(_ExtrudeMin);
-        }
-        else {
-            diff = 0;
-        }
-        if (value > _ExtrudeMax) {
-            value = _ExtrudeMax;
-        }
-        if (value < _ExtrudeMin) {
-            value = _ExtrudeMin;
-        }
-        switch (_Invert) {
-            case true:
-                return _ExtrudeMax - value;
-            case false:
-                return value;
-        }
-    };
-    SettingComponent.prototype.colorByNum = function (entity, max, min, _ColorKey, _ChromaScale) {
-        if (entity.properties[_ColorKey] !== undefined) {
-            var texts = entity.properties[_ColorKey]._value;
-            var rgb = _ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
-            if (entity.polygon !== undefined) {
-                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-            }
-            if (entity.polyline !== undefined) {
-                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                entity.polyline.material.color.setValue(newColor);
-            }
-            if (entity.point !== undefined) {
-                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                entity.point.color = newColor;
-            }
-        }
-        else {
-            if (entity.polygon !== undefined) {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.polyline !== undefined) {
-                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.point !== undefined) {
-                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-        }
-    };
-    SettingComponent.prototype.colorByCat = function (entity, _ColorText, _ColorKey, _ChromaScale) {
-        if (entity.properties[_ColorKey] !== undefined) {
-            var initial = false;
-            for (var j = 0; j < _ColorText.length; j++) {
-                if (entity.properties[_ColorKey]._value === _ColorText[j]) {
-                    var rgb = _ChromaScale(1 - (j / _ColorText.length));
-                    if (entity.polygon !== undefined) {
-                        entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
-                    }
-                    if (entity.polyline !== undefined) {
-                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        entity.polyline.material.color.setValue(newColor);
-                    }
-                    if (entity.point !== undefined) {
-                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        entity.point.color = newColor;
-                    }
-                    initial = true;
-                }
-            }
-            if (initial === false) {
-                if (entity.polygon !== undefined) {
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-                if (entity.polyline !== undefined) {
-                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-                if (entity.point !== undefined) {
-                    entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        }
-        else {
-            if (entity.polygon !== undefined) {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.polyline !== undefined) {
-                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.point !== undefined) {
-                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-        }
-    };
-    SettingComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "app-setting-cesium",
-            template: __webpack_require__(/*! ./setting.component.html */ "./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.html"),
-            styles: [__webpack_require__(/*! ./setting.component.css */ "./src/app/mViewer/viewers/mobius-cesium/setting/setting.component.css")],
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], SettingComponent);
-    return SettingComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__["DataSubscriber"]));
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.css":
-/*!*******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.css ***!
-  \*******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "#SettingView{\r\n  position: relative;\r\n  padding:0px;\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#D3D3D3 !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n  background-color: rgba(20,20,20,0.9);\r\n  overflow-y:overlay;\r\n}\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#D3D3D3 !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n/deep/.mat-tab-labels{\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n/deep/.mat-header{\r\n  flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: rgba(20,20,20,0.9) !important;\r\n}\r\n/deep/.mat-tab-body-wrapper{\r\n  height:100% !important;\r\n\r\n}\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #8AA8C0 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n/deep/.mat-slider-thumb{\r\n  width: 5px !important;\r\n  right: -5px !important;\r\n}\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #F0BFA0 !important;\r\n}\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #8AA8C0 !important;\r\n    font-size: 12px !important;\r\n}\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #8AA8C0 !important;\r\n}\r\n/deep/.mat-slider-track-background{\r\n  background-color: #D3D3D3 !important;\r\n}\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #D3D3D3;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: transparent;\r\n}\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  fill: #8AA8C0;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  color: #D3D3D3;\r\n  background: transparent;\r\n}\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  /*opacity: 0.8;*/\r\n  color: #8AA8C0;\r\n  border: 1px solid #8AA8C0;\r\n}\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #D3D3D3 !important;\r\n  padding: 0; \r\n  color:#D3D3D3 !important;\r\n  width: 100%;\r\n  background-color: #8AA8C0 !important;\r\n}\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.html":
-/*!********************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.html ***!
-  \********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"SettingView\" >\r\n    <table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"_ColorKey\">\r\n          <option class=\"cesium-option\"  *ngFor=\"let ColorName of _ColorProperty\" value={{ColorName}}>{{ColorName}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n      </table>\r\n      <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_ColorMin}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n      </table>\r\n      <table >\r\n      <tr ><th style=\"width:80px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{_ColorMax}} style=\"width: 80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n  </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_ColorInvert\" (click)=\"changeColorInvert()\"></div></th></tr>\r\n    </table>\r\n    <hr>\r\n      <table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Extrude</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"_ExtrudeKey\">\r\n           <option class=\"cesium-option\"  *ngFor=\"let Height of _ExtrudeProperty\" value={{Height}}>{{Height}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_ExtrudeMin}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n      </table>\r\n      <table >\r\n      <tr ><th style=\"width:80px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{_ExtrudeMax}} style=\"width: 80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n  </table>\r\n   <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\" value={{_Scale}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;\" (change)=\"changescale($event.target.value)\" ></th></tr>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Invert\" (click)=\"changeopp()\"></div></th></tr>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_HeightChart\" (click)=\"changeExtrude();\"></div></th></tr>  \r\n  </table>\r\n  <hr>\r\n  <table>\r\n    <tr>\r\n    <th class=\"colorkey\" style=\"width: 75px;height: 25px;\"><div class=\"Hide\" style=\"width: 75px;height: 25;color:#D3D3D3 !important;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#D3D3D3;border:1px solid #8AA8C0;width: 75px;height: 25px;background-color: transparent;cursor:pointer;\" (click)=\"addHide()\"></div></th>\r\n    <th style=\"width:20px;height: 22px;\"><div style=\"width:20px;height: 22px;margin-left: 10px\">\r\n      <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n         <option class=\"cesium-option\"  *ngFor=\"let ColorName of _ColorProperty\" value={{ColorName}}>{{ColorName}}</option>\r\n      </select></div></th>\r\n    </tr>\r\n  </table>\r\n  <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n    <div *ngFor=\"let item of _Filter;\" id={{item.divid}}>\r\n  <table>\r\n    <tr ><th style=\"width:85px;height: 22px;\"><div style=\"width:85px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n    <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 22px;\"><div style=\"width:40px;height: 22px;\">\r\n      <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 22px;\">\r\n         <option class=\"cesium-option\" value=0>></option>\r\n         <option class=\"cesium-option\" value=1><</option>\r\n         <option class=\"cesium-option\" value=2>=</option>\r\n      </select></div></th>\r\n      <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 22px;\"><div style=\"width:40px;height: 22px;\">\r\n      <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 22px;\">\r\n        <option class=\"cesium-option\" value=0>none</option>\r\n        <option class=\"cesium-option\" value=1>=</option>\r\n        <option class=\"cesium-option\" value=2>!=</option>\r\n      </select></div></th>\r\n      <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;\"></th>\r\n      <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 22px;\"><div style=\"width:73px;height: 22px;\">\r\n      <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 22px;\">\r\n        <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n      </select></div></th>\r\n    <th style=\"width:20px;height: 22px;\" id={{item.id}}><span id={{item.id}} (click)=\"deleteHide(item.id)\" style=\"width:20px;height: 22px;cursor:pointer;\"><i class=\"material-icons\" style=\"color:#D3D3D3;font-size:16px\">delete</i></span></th>\r\n    <th style=\"width:20px;height: 25px;\" id={{item.id}}><input type=\"checkbox\" id={{item.id}} checked=\"checked\" (click)=\"Disable(item.id)\" tyle=\"width:20px;height: 25px;cursor:pointer;\"></th></tr>\r\n  </table>\r\n  <table>\r\n    <tr>\r\n    <th *ngIf=\"item.type === 'number'\" style=\"width:50px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;\">{{item.HideMin}}</div></th>\r\n    <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 22px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n    </mat-slider></div></th>\r\n    <th *ngIf=\"item.type === 'number'\" style=\"width:50px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n  </table><hr>\r\n    </div>\r\n  </div>\r\n  </div>\r\n  "
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.ts":
-/*!******************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.ts ***!
-  \******************************************************************************/
-/*! exports provided: DataComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataComponent", function() { return DataComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var DataComponent = /** @class */ (function (_super) {
-    __extends(DataComponent, _super);
-    function DataComponent(injector, myElement) {
-        var _this = _super.call(this, injector) || this;
-        _this._CheckDisable = true;
-        return _this;
-    }
-    DataComponent.prototype.ngOnInit = function () {
-        this.dataArr = this.dataService.get_ViData();
-        if (this.dataArr !== undefined) {
-            this.LoadData();
-        }
-    };
-    DataComponent.prototype.notify = function (message) {
-        if (message === "model_update") {
-            try {
-                this.dataArr = this.dataService.get_ViData();
-                if (this.dataArr !== undefined) {
-                    this.LoadData();
-                }
-            }
-            catch (ex) {
-                console.log(ex);
-            }
-        }
-    };
-    //load data
-    DataComponent.prototype.LoadData = function () {
-        this._ColorProperty = this.dataArr["ColorProperty"];
-        this._ColorKey = this.dataArr["ColorKey"];
-        this._ColorMax = this.dataArr["ColorMax"];
-        this._ColorMin = this.dataArr["ColorMin"];
-        this._ColorInvert = this.dataArr["ColorInvert"];
-        this._ExtrudeProperty = this.dataArr["ExtrudeProperty"];
-        this._ExtrudeKey = this.dataArr["ExtrudeKey"];
-        this._ExtrudeMax = this.dataArr["ExtrudeMax"];
-        this._ExtrudeMin = this.dataArr["ExtrudeMin"];
-        this._HeightChart = this.dataArr["HeightChart"];
-        this._Invert = this.dataArr["Invert"];
-        this._Scale = this.dataArr["Scale"];
-        this._Filter = this.dataArr["Filter"];
-        this._HideNum = this.dataArr["HideNum"];
-    };
-    //change color property in editor version
-    DataComponent.prototype.onChangeColor = function (value) {
-        this.dataArr["ColorKey"] = value;
-        var promise = this.dataService.getcesiumpromise();
-        var _Colortexts = [];
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-                var entity = entities_1[_i];
-                if (entity.properties[value] !== undefined) {
-                    if (entity.properties[value]._value !== " ") {
-                        if (_Colortexts.length === 0) {
-                            _Colortexts[0] = entity.properties[value]._value;
-                        }
-                        else {
-                            if (_Colortexts.indexOf(entity.properties[value]._value) === -1) {
-                                _Colortexts.push(entity.properties[value]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        this.dataArr["ColorMin"] = Math.min.apply(Math, _Colortexts);
-        this.dataArr["ColorMax"] = Math.max.apply(Math, _Colortexts);
-        this.dataArr["ColorText"] = _Colortexts.sort();
-        this.dataService.set_ViData(this.dataArr);
-        this.LoadData();
-    };
-    //change color min in editor version
-    DataComponent.prototype.changeColorMin = function (_Min) {
-        this.dataArr["ColorMin"] = Number(_Min);
-        this._ColorMin = this.dataArr["ColorMin"];
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change color max in editor version
-    DataComponent.prototype.changeColorMax = function (_Max) {
-        this.dataArr["ColorMax"] = Number(_Max);
-        this._ColorMax = this.dataArr["ColorMax"];
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change color invert in editor version
-    DataComponent.prototype.changeColorInvert = function () {
-        this._ColorInvert = !this._ColorInvert;
-        this.dataArr["ColorInvert"] = this._ColorInvert;
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change extrudeheight property in editor version
-    DataComponent.prototype.onChangeHeight = function (value) {
-        this.dataArr["ExtrudeKey"] = value;
-        var promise = this.dataService.getcesiumpromise();
-        var _Heighttexts = [];
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                var entity = entities_2[_i];
-                if (entity.properties[value] !== undefined) {
-                    if (entity.properties[value]._value !== " ") {
-                        if (_Heighttexts.length === 0) {
-                            _Heighttexts[0] = entity.properties[value]._value;
-                        }
-                        else {
-                            if (_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
-                                _Heighttexts.push(entity.properties[value]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        this.dataArr["ExtrudeMin"] = Math.min.apply(Math, _Heighttexts);
-        this.dataArr["ExtrudeMax"] = Math.max.apply(Math, _Heighttexts);
-        this.dataArr["ExtrudeText"] = _Heighttexts.sort();
-        this.dataService.set_ViData(this.dataArr);
-        this.LoadData();
-    };
-    //change extrudeheight min in editor version
-    DataComponent.prototype.changeHeightMin = function (_Min) {
-        this.dataArr["ExtrudeMin"] = Number(_Min);
-        this._ExtrudeMin = this.dataArr["ExtrudeMin"];
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change extrudeHeight max in editor version
-    DataComponent.prototype.changeHeightMax = function (_Max) {
-        this.dataArr["ExtrudeMax"] = Number(_Max);
-        this._ExtrudeMax = this.dataArr["ExtrudeMax"];
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change scale in editor version
-    DataComponent.prototype.changescale = function (_ScaleValue) {
-        this.dataArr["Scale"] = Number(_ScaleValue);
-        this._Scale = this.dataArr["Scale"];
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change extrudeheight invert in editor version
-    DataComponent.prototype.changeopp = function () {
-        this._Invert = !this._Invert;
-        this.dataArr["Invert"] = this._Invert;
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change heightChart in editor version
-    DataComponent.prototype.changeExtrude = function () {
-        this._HeightChart = !this._HeightChart;
-        this.dataArr["HeightChart"] = this._HeightChart;
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //add filter in editor version
-    DataComponent.prototype.addHide = function () {
-        var lastnumber;
-        if (this.dataArr["HideNum"] !== undefined) {
-            this._HideNum = this.dataArr["HideNum"];
-            this._Filter = this.dataArr["Filter"];
-        }
-        if (this._HideNum === null || this._HideNum.length === 0) {
-            this._HideNum[0] = "0";
-            lastnumber = this._HideNum[0];
-        }
-        else {
-            for (var i = 0; i < this._HideNum.length + 1; i++) {
-                if (this._HideNum.indexOf(String(i)) === -1) {
-                    this._HideNum.push(String(i));
-                    lastnumber = String(i);
-                    break;
-                }
-            }
-        }
-        if (this._HideValue === undefined) {
-            this._HideValue = this._ColorProperty[0];
-        }
-        var texts = this.Initial(this._HideValue);
-        var _HideType;
-        if (typeof (texts[0]) === "number") {
-            _HideType = "number";
-        }
-        else if (typeof (texts[0]) === "string") {
-            _HideType = "category";
-        }
-        this._Filter.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber,
-            HeightHide: this._HideValue, type: _HideType, Category: texts, CategaryHide: texts[0],
-            RelaHide: 0, textHide: Math.round(Math.min.apply(Math, texts) * 100) / 100,
-            HideMax: Math.ceil(Math.max.apply(Math, texts)),
-            HideMin: Math.round(Math.min.apply(Math, texts) * 100) / 100, Disabletext: null });
-        this.dataArr["Filter"] = this._Filter;
-        this.dataArr["HideNum"] = this._HideNum;
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //delete filter in editor version
-    DataComponent.prototype.deleteHide = function (event) {
-        var index = this._HideNum.indexOf(event);
-        var divid = String("addHide".concat(String(event)));
-        var addHide = document.getElementById(divid);
-        var hidecontainer = document.getElementsByClassName("hide-container")[0];
-        hidecontainer.removeChild(addHide);
-        if (this._Filter[index].type === "number") {
-            if (this._Filter[index].RelaHide === "0" || this._Filter[index].RelaHide === 0) {
-                this._Filter[index].textHide = this._Filter[index].HideMin;
-            }
-            if (this._Filter[index].RelaHide === "1" || this._Filter[index].RelaHide === 1) {
-                this._Filter[index].textHide = this._Filter[index].HideMax;
-            }
-        }
-        else if (this._Filter[index].type === "category") {
-            this._Filter[index].RelaHide = 0;
-        }
-        this._Filter.splice(index, 1);
-        this._HideNum.splice(index, 1);
-        this.dataArr["Filter"] = this._Filter;
-        this.dataArr["HideNum"] = this._HideNum;
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change disable button in filter
-    DataComponent.prototype.Disable = function (event) {
-        var index = this._HideNum.indexOf(event);
-        var divid = String("addHide".concat(String(event)));
-        var addHide = document.getElementById(divid);
-        if (this._Filter[index].Disabletext === null) {
-            this._CheckDisable = false;
-        }
-        else {
-            this._CheckDisable = true;
-        }
-        if (this._CheckDisable === false) {
-            if (this._Filter[index].type === "number") {
-                var textHide = this._Filter[index].textHide;
-                this._Filter[index].Disabletext = Number(textHide);
-                if (this._Filter[index].RelaHide === "0" || this._Filter[index].RelaHide === 0) {
-                    this._Filter[index].textHide = this._Filter[index].HideMin;
-                }
-                if (this._Filter[index].RelaHide === "1" || this._Filter[index].RelaHide === 1) {
-                    this._Filter[index].textHide = this._Filter[index].HideMax;
-                }
-            }
-            else if (this._Filter[index].type === "category") {
-                var textHide = this._Filter[index].RelaHide;
-                this._Filter[index].Disabletext = Number(textHide);
-                this._Filter[index].RelaHide = 0;
-            }
-        }
-        else {
-            if (this._Filter[index].type === "number") {
-                this._Filter[index].textHide = this._Filter[index].Disabletext;
-                this._Filter[index].Disabletext = null;
-            }
-            else if (this._Filter[index].type === "category") {
-                this._Filter[index].RelaHide = this._Filter[index].Disabletext;
-                this._Filter[index].Disabletext = null;
-            }
-        }
-        this.dataArr["Filter"] = this._Filter;
-        this.dataArr["HideNum"] = this._HideNum;
-        this.dataService.set_ViData(this.dataArr);
-    };
-    //change height slider in filter
-    DataComponent.prototype.ChangeHeight = function (_HeightHide) {
-        this._HideValue = _HeightHide;
-    };
-    //change relation in filter
-    DataComponent.prototype.Changerelation = function (_RelaHide, id) {
-        var index = this._HideNum.indexOf(id);
-        var HeightHide = this._Filter[index].HeightHide;
-        this._Filter[index].RelaHide = _RelaHide;
-        var texts = [];
-        var promise = this.dataService.getcesiumpromise();
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
-                var entity = entities_3[_i];
-                if (entity.properties[HeightHide] !== undefined) {
-                    if (entity.properties[HeightHide]._value !== " ") {
-                        if (texts.length === 0) {
-                            texts[0] = entity.properties[HeightHide]._value;
-                        }
-                        else {
-                            if (texts.indexOf(entity.properties[HeightHide]._value) === -1) {
-                                texts.push(entity.properties[HeightHide]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        this._Filter[index].HideMax = Math.ceil(Math.max.apply(Math, texts));
-        this._Filter[index].HideMin = Math.round(Math.min.apply(Math, texts) * 100) / 100;
-        if (_RelaHide === "0" || _RelaHide === 0) {
-            this._Filter[index].textHide = this._Filter[index].HideMin;
-        }
-        if (_RelaHide === "1" || _RelaHide === 1) {
-            this._Filter[index].textHide = this._Filter[index].HideMax;
-        }
-    };
-    //change category in filter
-    DataComponent.prototype.ChangeCategory = function (categary, id, type) {
-        var index = this._HideNum.indexOf(id);
-        if (type === 1) {
-            this._Filter[index].CategaryHide = categary;
-        }
-        if (type === 0) {
-            this._Filter[index].RelaHide = Number(categary);
-        }
-    };
-    //change text in filter
-    DataComponent.prototype.Changetext = function (value, id) {
-        var index = this._HideNum.indexOf(id);
-        this._Filter[index].textHide = value;
-    };
-    //get text according to property
-    DataComponent.prototype.Initial = function (_HideValue) {
-        var texts = [];
-        var promise = this.dataService.getcesiumpromise();
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_4 = entities; _i < entities_4.length; _i++) {
-                var entity = entities_4[_i];
-                if (entity.properties[_HideValue] !== undefined) {
-                    if (entity.properties[_HideValue]._value !== " ") {
-                        if (texts.length === 0) {
-                            texts[0] = entity.properties[_HideValue]._value;
-                        }
-                        else {
-                            if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
-                                texts.push(entity.properties[_HideValue]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        return texts;
-    };
-    DataComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "app-data",
-            template: __webpack_require__(/*! ./visualise.component.html */ "./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.html"),
-            styles: [__webpack_require__(/*! ./visualise.component.css */ "./src/app/mViewer/viewers/mobius-cesium/setting/visualise.component.css")],
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], DataComponent);
-    return DataComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__["DataSubscriber"]));
-
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.css":
+/***/ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts":
 /*!***************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.css ***!
+  !*** ./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts ***!
   \***************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "body{\r\n  background: red;\r\n}\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n#ColorBar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 7%;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n#ColorKey{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 2%;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n#Download{\r\n  z-index: 99;\r\n  top: 5px;\r\n  position: absolute;\r\n  right: 120px;\r\n  width: 32px;\r\n  height: 32px;\r\n  font-size: 16px;\r\n  box-sizing: border-box;\r\n  border-radius: 14%;\r\n  padding: 0;\r\n  vertical-align: middle;\r\n}\r\n\r\n"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.html":
-/*!****************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.html ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event)\" (mousemove)=\"Colortext();\">\r\n  <button class=\"cesium-button cesium-button-toolbar\" (click)=\"save_geojson()\" id=\"Download\"><i class=\"fa fa-download\"></i></button>\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th>\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of _Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"_Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of _Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"_CatNumtexts!==undefined\" >\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n      <tr >\r\n        <th *ngFor=\"let cattext of _CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n      </tr>\r\n    </table>\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n      <tr>\r\n        <th  *ngFor=\"let cattext of _CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n      </tr>\r\n    </table>\r\n  </div>\r\n  <div *ngIf=\"mode==='viewer'\" id=\"ColorKey\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;text-align:center;color:white;text-shadow: 0px 0px 3px black;\" >\r\n      <tr>\r\n        <th  style=\"width: 40%;\" ><div>Color:&nbsp;{{_ColorKey}}</div></th>\r\n        <th  style=\"width: 40%;\" ><div>Extrude:&nbsp;{{_ExtrudeKey}}</div></th>\r\n      </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n        \r\n     </div>\r\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.ts":
-/*!**************************************************************************!*\
-  !*** ./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.ts ***!
-  \**************************************************************************/
-/*! exports provided: ViewerComponent */
+/*! exports provided: HelpViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewerComponent", function() { return ViewerComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/DataSubscriber */ "./src/app/mViewer/viewers/mobius-cesium/data/DataSubscriber.ts");
-/* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! chroma-js */ "./node_modules/chroma-js/chroma.js");
-/* harmony import */ var chroma_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(chroma_js__WEBPACK_IMPORTED_MODULE_2__);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-// import * as d3 from "d3-array";
-
-var ViewerComponent = /** @class */ (function (_super) {
-    __extends(ViewerComponent, _super);
-    function ViewerComponent(injector, myElement) {
-        var _this = _super.call(this, injector) || this;
-        _this.selectEntity = null;
-        _this.myElement = myElement;
-        return _this;
-    }
-    ViewerComponent.prototype.ngOnInit = function () {
-        //pass mode to dataService
-        this.mode = this.dataService.getmode();
-        if (this.dataService.getViewer() === undefined) {
-            this.CreateViewer();
-        }
-        //pass data to dataService
-        this.data = this.dataService.getGsModel();
-        //load data
-        this.LoadData(this.data);
-    };
-    ViewerComponent.prototype.notify = function (message) {
-        if (message === "model_update") {
-            this.data = this.dataService.getGsModel();
-            try {
-                if (this.dataService.getViewer() === undefined) {
-                    this.CreateViewer();
-                }
-                this.LoadData(this.data);
-            }
-            catch (ex) {
-                console.log(ex);
-            }
-        }
-    };
-    //create cesium viewer and change home button funciton
-    ViewerComponent.prototype.CreateViewer = function () {
-        var viewer = new Cesium.Viewer("cesiumContainer", {
-            infoBox: false,
-            showRenderLoopErrors: false,
-            orderIndependentTranslucency: false,
-            baseLayerPicker: false,
-            fullscreenButton: false,
-            automaticallyTrackDataSourceClocks: false,
-            animation: false,
-            shadows: true,
-            scene3DOnly: true,
-        });
-        viewer.scene.imageryLayers.removeAll();
-        viewer.scene.globe.baseColor = Cesium.Color.GRAY;
-        document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
-        var self = this;
-        viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
-            e.cancel = true;
-            viewer.zoomTo(self.dataService.getcesiumpromise());
-        });
-        this.dataService.setViewer(viewer);
-    };
-    //Cesium geoJson to load data and check mode
-    ViewerComponent.prototype.LoadData = function (data) {
-        if (this.data !== undefined) {
-            //get viewer from dataService and remove the last dataSources
-            var viewer = this.dataService.getViewer();
-            viewer.dataSources.removeAll({ destroy: true });
-            //load geojson and add geojson to dataSources
-            this.data = data;
-            var promise = Cesium.GeoJsonDataSource.load(this.data);
-            viewer.dataSources.add(promise);
-            //check whether show colorbar or not
-            promise.then(function (dataSource) {
-                var entities = dataSource.entities.values;
-                var self = this;
-                if (entities[0].polygon !== undefined) {
-                    self._ShowColorBar = true;
-                }
-                else {
-                    self._ShowColorBar = false;
-                }
-            });
-            // pass promise to dataService
-            this.dataService.setcesiumpromise(promise);
-            //check the mode and load different data
-            if (this.mode === "editor") {
-                this.dataService.getValue(this.data);
-                this.dataService.LoadJSONData();
-                this.dataArr = this.dataService.get_ViData();
-                this._index = 1;
-            }
-            if (this.mode === "viewer") {
-                this.dataService.LoadJSONData();
-                this.dataArr = this.dataService.get_PuData();
-                this._index = 3;
-            }
-            viewer.zoomTo(promise);
-            this.Colortext();
-        }
-    };
-    //create color bar and text at bottom of viewer
-    ViewerComponent.prototype.Colortext = function () {
-        if (this.dataArr !== undefined) {
-            if (this._index !== this.dataService.get_index()) {
-                this._index = this.dataService.get_index();
-                if (this._index === 1) {
-                    this.dataArr = this.dataService.get_ViData();
-                }
-                else if (this._index === 3) {
-                    this.dataArr = this.dataService.get_PuData();
-                }
-            }
-            var propertyname = this.dataArr["ColorKey"];
-            var texts = this.dataArr["ColorText"].sort();
-            var _Max = this.dataArr["ColorMax"];
-            var _Min = this.dataArr["ColorMin"];
-            if (this.mode === "viewer") {
-                this._ColorKey = this.dataArr["ColorKey"];
-                this._ExtrudeKey = this.dataArr["ExtrudeKey"];
-            }
-            this.texts = undefined;
-            this._Cattexts = [];
-            this._CatNumtexts = [];
-            var _ColorKey = void 0;
-            var _ChromaScale = chroma_js__WEBPACK_IMPORTED_MODULE_2__["scale"]("SPECTRAL");
-            if (this.dataArr["ColorInvert"] === true) {
-                _ChromaScale = chroma_js__WEBPACK_IMPORTED_MODULE_2__["scale"]("SPECTRAL").domain([1, 0]);
-            }
-            this._Colorbar = [];
-            for (var i = 79; i > -1; i--) {
-                this._Colorbar.push(_ChromaScale(i / 80));
-            }
-            if (typeof (texts[0]) === "number") {
-                this.texts = [Number(_Min.toFixed(2))];
-                for (var i = 1; i < 10; i++) {
-                    this.texts.push(Number((_Min + (_Max - _Min) * (i / 10)).toFixed(2)));
-                }
-                this.texts.push(Number(_Max.toFixed(2)));
-                for (var i = 0; i < this.texts.length; i++) {
-                    if (this.texts[i] / 1000000000 > 1) {
-                        this.texts[i] = String(Number((this.texts[i] / 1000000000).toFixed(3))).concat("B");
-                    }
-                    else if (this.texts[i] / 1000000 > 1) {
-                        this.texts[i] = String(Number((this.texts[i] / 1000000).toFixed(3))).concat("M");
-                    }
-                    else if (this.texts[i] / 1000 > 1) {
-                        this.texts[i] = String(Number(((this.texts[i] / 1000)).toFixed(3))).concat("K");
-                    }
-                }
-            }
-            if (typeof (texts[0]) === "string") {
-                if (texts.length <= 12) {
-                    for (var j = 0; j < texts.length; j++) {
-                        _ColorKey = [];
-                        _ColorKey.text = texts[j];
-                        _ColorKey.color = _ChromaScale(1 - (j / texts.length));
-                        this._Cattexts.push(_ColorKey);
-                    }
-                }
-                else {
-                    for (var j = 0; j < this._Colorbar.length; j++) {
-                        _ColorKey = [];
-                        if (j === 0) {
-                            _ColorKey.text = texts[j];
-                        }
-                        else if (j === this._Colorbar.length - 1) {
-                            if (texts[texts.length - 1] !== null) {
-                                _ColorKey.text = texts[texts.length - 1];
-                            }
-                            else {
-                                _ColorKey.text = texts[texts.length - 2];
-                            }
-                        }
-                        else {
-                            _ColorKey.text = null;
-                        }
-                        _ColorKey.color = this._Colorbar[j];
-                        this._CatNumtexts.push(_ColorKey);
-                    }
-                }
-            }
-        }
-        if (this._ShowColorBar === false) {
-            this._Cattexts = undefined;
-            this._Colorbar = undefined;
-        }
-    };
-    //click building to select and  pass whole entity to dataService
-    ViewerComponent.prototype.select = function () {
-        event.stopPropagation();
-        var viewer = this.dataService.getViewer(); //this.viewer;
-        if (this.dataArr !== undefined) {
-            if (this.selectEntity !== undefined && this.selectEntity !== null) {
-                this.ColorSelect(this.selectEntity);
-            }
-            if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
-                this.dataService.set_SelectedEntity(viewer.selectedEntity);
-                var material = void 0;
-                if (viewer.selectedEntity.polygon !== undefined) {
-                    material = viewer.selectedEntity.polygon.material;
-                    viewer.selectedEntity.polygon.material = Cesium.Color.WHITE;
-                }
-                if (viewer.selectedEntity.polyline !== undefined) {
-                    material = viewer.selectedEntity.polyline.material;
-                    viewer.selectedEntity.polyline.material = Cesium.Color.WHITE;
-                }
-                this.selectEntity = viewer.selectedEntity;
-                this.material = material;
-            }
-            else {
-                this.dataService.set_SelectedEntity(undefined);
-                this.selectEntity = undefined;
-                this.material = undefined;
-            }
-        }
-    };
-    //if unselect the building, it will show the color before
-    ViewerComponent.prototype.ColorSelect = function (entity) {
-        var promise = this.dataService.getcesiumpromise();
-        var _ColorKey = this.dataArr["ColorKey"];
-        var _ColorMax = this.dataArr["ColorMax"];
-        var _ColorMin = this.dataArr["ColorMin"];
-        var _ColorText = this.dataArr["ColorText"];
-        var _ColorInvert = this.dataArr["ColorInvert"];
-        var _ExtrudeKey = this.dataArr["ExtrudeKey"];
-        var _ExtrudeMax = this.dataArr["ExtrudeMax"];
-        var _ExtrudeMin = this.dataArr["ExtrudeMin"];
-        var _HeightChart = this.dataArr["HeightChart"];
-        var _Invert = this.dataArr["Invert"];
-        var _Scale = this.dataArr["Scale"];
-        var _Filter = this.dataArr["Filter"];
-        var _ChromaScale = chroma_js__WEBPACK_IMPORTED_MODULE_2__["scale"]("SPECTRAL");
-        if (_ColorInvert === true) {
-            _ChromaScale = chroma_js__WEBPACK_IMPORTED_MODULE_2__["scale"]("SPECTRAL").domain([1, 0]);
-        }
-        var _CheckHide;
-        if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
-            if (_Filter.length !== 0) {
-                _CheckHide = this.Hide(_Filter, entity, _HeightChart);
-                if (_CheckHide === true) {
-                    if (entity.polygon !== undefined) {
-                        entity.polygon.extrudedHeight = 0;
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        if (_HeightChart === true) {
-                            if (entity.polyline !== undefined) {
-                                entity.polyline.show = false;
-                            }
-                        }
-                    }
-                    if (entity.polyline !== undefined) {
-                        entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    }
-                }
-            }
-            if (_Filter.length === 0 || _CheckHide === false) {
-                if (_ColorKey !== "None") {
-                    if (typeof (_ColorText[0]) === "number") {
-                        this.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
-                    }
-                    else {
-                        this.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
-                    }
-                }
-                else {
-                    entity.polygon.material = Cesium.Color.DARKGREY;
-                }
-            }
-        }
-        else {
-            entity.polygon.height = entity.properties["HEIGHT"];
-            entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
-            var ColorValue = entity.properties["COLOR"]._value;
-            entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
-        }
-    };
-    //check the selected building  color before
-    ViewerComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
-        var _CheckHide = false;
-        for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
-            var filter = _Filter_1[_i];
-            var value = entity.properties[filter.HeightHide]._value;
-            if (value !== undefined) {
-                if (typeof (value) === "number") {
-                    if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
-                        _CheckHide = true;
-                    }
-                }
-                else if (typeof (value) === "string") {
-                    if (this._compareCat(value, filter.CategaryHide, Number(filter.RelaHide))) {
-                        _CheckHide = true;
-                    }
-                }
-            }
-        }
-        return _CheckHide;
-    };
-    ViewerComponent.prototype._compare = function (value, slider, relation) {
-        switch (relation) {
-            case 0:
-                return value < slider;
-            case 1:
-                return value > slider;
-            case 2:
-                return value !== slider;
-        }
-    };
-    ViewerComponent.prototype._compareCat = function (value, _Categary, relation) {
-        switch (relation) {
-            case 0:
-                return value === undefined;
-            case 1:
-                return value !== _Categary;
-            case 2:
-                return value === _Categary;
-        }
-    };
-    ViewerComponent.prototype.colorByNum = function (entity, max, min, _ColorKey, _ChromaScale) {
-        if (entity.properties[_ColorKey] !== undefined) {
-            var texts = entity.properties[_ColorKey]._value;
-            var rgb = _ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
-            if (entity.polygon !== undefined) {
-                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-            }
-            if (entity.polyline !== undefined) {
-                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                entity.polyline.material.color.setValue(newColor);
-            }
-            if (entity.point !== undefined) {
-                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                entity.point.color = newColor;
-            }
-        }
-        else {
-            if (entity.polygon !== undefined) {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.polyline !== undefined) {
-                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.point !== undefined) {
-                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-        }
-    };
-    ViewerComponent.prototype.colorByCat = function (entity, _ColorText, _ColorKey, _ChromaScale) {
-        if (entity.properties[_ColorKey] !== undefined) {
-            var initial = false;
-            for (var j = 0; j < _ColorText.length; j++) {
-                if (entity.properties[_ColorKey]._value === _ColorText[j]) {
-                    var rgb = _ChromaScale(1 - (j / _ColorText.length));
-                    if (entity.polygon !== undefined) {
-                        entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
-                    }
-                    if (entity.polyline !== undefined) {
-                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        entity.polyline.material.color.setValue(newColor);
-                    }
-                    if (entity.point !== undefined) {
-                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        entity.point.color = newColor;
-                    }
-                    initial = true;
-                }
-            }
-            if (initial === false) {
-                if (entity.polygon !== undefined) {
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-                if (entity.polyline !== undefined) {
-                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-                if (entity.point !== undefined) {
-                    entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
-            }
-        }
-        else {
-            if (entity.polygon !== undefined) {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.polyline !== undefined) {
-                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-            if (entity.point !== undefined) {
-                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }
-        }
-    };
-    //in viewer mode,set some attibutes to show
-    ViewerComponent.prototype.showAttribs = function (event) {
-        var viewer = this.dataService.getViewer();
-        if (this.data !== undefined && this.mode === "viewer") {
-            if (this.data["cesium"] !== undefined) {
-                if (this.data["cesium"].select !== undefined) {
-                    if (viewer.selectedEntity !== undefined) {
-                        var pickup = viewer.scene.pick(new Cesium.Cartesian2(event.clientX, event.clientY));
-                        this.pickupArrs = [];
-                        this.pickupArrs.push({ name: "ID", data: pickup.id.id });
-                        for (var _i = 0, _a = this.data["cesium"].select; _i < _a.length; _i++) {
-                            var _propertyName = _a[_i];
-                            this.pickupArrs.push({ name: _propertyName, data: this.dataService.get_SelectedEntity().properties[_propertyName]._value });
-                        }
-                        var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
-                        viewer.container.appendChild(nameOverlay);
-                        nameOverlay.style.bottom = viewer.canvas.clientHeight - event.clientY + "px";
-                        nameOverlay.style.left = event.clientX + "px";
-                        nameOverlay.style.display = "block";
-                    }
-                    else {
-                        document.getElementById("cesium-infoBox-defaultTable").style.display = "none";
-                    }
-                }
-            }
-        }
-    };
-    // save the geojson
-    ViewerComponent.prototype.save_geojson = function () {
-        var fileString = JSON.stringify(this.data);
-        var blob = new Blob([fileString], { type: 'application/json' });
-        FileUtils.downloadContent(blob, "output.geojson");
-    };
-    ViewerComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: "cesium-viewer",
-            template: __webpack_require__(/*! ./viewer.component.html */ "./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.html"),
-            styles: [__webpack_require__(/*! ./viewer.component.css */ "./src/app/mViewer/viewers/mobius-cesium/viewer/viewer.component.css")],
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"]])
-    ], ViewerComponent);
-    return ViewerComponent;
-}(_data_DataSubscriber__WEBPACK_IMPORTED_MODULE_1__["DataSubscriber"]));
-
-//download geojson
-var FileUtils = /** @class */ (function () {
-    function FileUtils() {
-    }
-    FileUtils.downloadContent = function (blob, filename) {
-        if (window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, filename);
-        }
-        else {
-            var a_1 = document.createElement('a');
-            document.body.appendChild(a_1);
-            var url_1 = window.URL.createObjectURL(blob);
-            a_1.href = url_1;
-            a_1.download = filename;
-            a_1.click();
-            setTimeout(function () {
-                window.URL.revokeObjectURL(url_1);
-                document.body.removeChild(a_1);
-            }, 0);
-        }
-    };
-    return FileUtils;
-}());
-
-
-/***/ }),
-
-/***/ "./src/app/mViewer/viewers/procedure-help.component.ts":
-/*!*************************************************************!*\
-  !*** ./src/app/mViewer/viewers/procedure-help.component.ts ***!
-  \*************************************************************/
-/*! exports provided: ProcedureHelpComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProcedureHelpComponent", function() { return ProcedureHelpComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HelpViewerComponent", function() { return HelpViewerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _shared_decorators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @shared/decorators */ "./src/app/shared/decorators/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
@@ -5584,33 +1428,40 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
-var ProcedureHelpComponent = /** @class */ (function () {
-    function ProcedureHelpComponent() {
+/**
+ * HelpViewerComponent
+ */
+var HelpViewerComponent = /** @class */ (function () {
+    /**
+     * constructor
+     */
+    function HelpViewerComponent() {
+        // console.log(`Help Viewer Created`);
     }
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], ProcedureHelpComponent.prototype, "output", void 0);
-    ProcedureHelpComponent = __decorate([
+    ], HelpViewerComponent.prototype, "output", void 0);
+    HelpViewerComponent = __decorate([
         _shared_decorators__WEBPACK_IMPORTED_MODULE_1__["ModuleDocAware"],
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'procedure-help',
             template: "\n  <div *ngIf='output'>\n    <h2>{{output.name}}</h2>\n    <h4>Module: <span>{{output.module}}</span></h4>\n    <h5><span>Description:</span></h5>\n    <p>{{output.description}}</p>\n    <h5 *ngIf='output.parameters?.length > 0'><span>Parameters: </span></h5>\n    <p class='paramP' *ngFor='let param of output.parameters'><span>{{param.name}} - </span>{{param.description}}</p>\n    <h5 *ngIf='output.returns'>Returns:</h5>\n    <p *ngIf='output.returns'>{{output.returns}}</p>\n  </div>\n\n\n  ",
-            styles: ["\n$prod-background-color: rgb(250,250,250);\n$background-color: rgb(220,220,220);\n$title-background: #ccc;\n$text-color: rgb(80,80,80);\n$selected-color: rgb(0,0,150);\n$function-text-color: rgb(190, 140, 30);\n$separator: rgb(239,239,239);\n\n:host{\n  height: 100%;\n  width: 100%;\n}\ndiv{\n  width: 100%;\n  padding-left:10px;\n}\nh5{\n  font-weight: 700;\n  font-size: 12px;\n}\np{\n  font-family: sans-serif;\n}\n.funcDesc{\n  font-weight: 600;\n}\n\n.paramP{\n  padding-left: 5px;\n\n}\n\nspan{\n  font-weight: 550;\n  font-style: italic;\n}\n\n"]
+            styles: [__webpack_require__(/*! ../general-viewer.scss */ "./src/app/model-viewers/all-viewers/general-viewer.scss")]
         }),
         __metadata("design:paramtypes", [])
-    ], ProcedureHelpComponent);
-    return ProcedureHelpComponent;
+    ], HelpViewerComponent);
+    return HelpViewerComponent;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/app/mViewer/viewers/viewer-text.component.ts":
-/*!**********************************************************!*\
-  !*** ./src/app/mViewer/viewers/viewer-text.component.ts ***!
-  \**********************************************************/
+/***/ "./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts":
+/*!***************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts ***!
+  \***************************************************************************/
 /*! exports provided: TextViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5618,6 +1469,7 @@ var ProcedureHelpComponent = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TextViewerComponent", function() { return TextViewerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5628,10 +1480,20 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+/**
+ * TextViewerComponent
+ */
 var TextViewerComponent = /** @class */ (function () {
+    /**
+     * constructor
+     */
     function TextViewerComponent() {
         // console.log(`Text Viewer Created`);
     }
+    /**
+     * ngOnInit
+     */
     TextViewerComponent.prototype.ngOnInit = function () {
         if (typeof this.data === 'number' || this.data === undefined) {
             this.output = this.data;
@@ -5646,10 +1508,14 @@ var TextViewerComponent = /** @class */ (function () {
             this.output = JSON.stringify(this.data);
         }
         else {
-            console.log('Unknown output type:', this.data);
-            this.output = this.data;
+            // console.log('Unknown output type:', this.data);
+            // this.output = functions.__stringify__(this.data);
+            this.output = _modules__WEBPACK_IMPORTED_MODULE_1__["functions"].__stringify__(this.data);
         }
     };
+    /**
+     * ngDoCheck
+     */
     TextViewerComponent.prototype.ngDoCheck = function () {
         if (typeof this.data === 'number' || this.data === undefined) {
             this.output = this.data;
@@ -5664,8 +1530,8 @@ var TextViewerComponent = /** @class */ (function () {
             this.output = JSON.stringify(this.data);
         }
         else {
-            console.log('Unknown output type:', this.data);
-            this.output = this.data;
+            // console.log('Unknown output type:', this.data);
+            this.output = _modules__WEBPACK_IMPORTED_MODULE_1__["functions"].__stringify__(this.data);
         }
     };
     __decorate([
@@ -5676,7 +1542,7 @@ var TextViewerComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'text-viewer',
             template: "<textarea>{{ output || \"no-value\" }}</textarea>",
-            styles: ["\n  :host{\n    height: 100%;\n    width: 100%;\n  }\n  textarea{\n    height: 99%;\n    width: 99%;\n    overflow: auto;\n    resize: none;\n    background-color: rgb(220,220,220);\n    text-color: rgb(80,80,80);\n    border: none;\n    font-family: arial;\n  }"]
+            styles: [__webpack_require__(/*! ../general-viewer.scss */ "./src/app/model-viewers/all-viewers/general-viewer.scss")]
         }),
         __metadata("design:paramtypes", [])
     ], TextViewerComponent);
@@ -5687,140 +1553,40 @@ var TextViewerComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/ngFlowchart-svg/edge/edge.component.html":
-/*!**********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/edge/edge.component.html ***!
-  \**********************************************************/
+/***/ "./src/app/model-viewers/model-viewers-container.component.html":
+/*!**********************************************************************!*\
+  !*** ./src/app/model-viewers/model-viewers-container.component.html ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--the main line-->\r\n<svg:polyline \r\nid=\"main-edge\" \r\nclass = \"edge\" \r\n[class.selected] = \"edge.selected\"\r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 8) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 16) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 22)\" \r\n/>\r\n\r\n<!--a wider invisible line to make the wire easier to click-->\r\n<svg:polyline \r\nid=\"invisible-edge\" \r\nclass = \"inviEdge\" \r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 15) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 12)\" \r\n(click)='select($event)'/>\r\n    \r\n\r\n"
+module.exports = "<div class='viewers-container'>  \r\n    <div class='container__header'>\r\n        <div class=\"tab\">\r\n            <button class='btn-tab' \r\n                [class.active]='view.name == activeView.name'\r\n                *ngFor='let view of Viewers;' \r\n                (click)='updateView(view)'>\r\n            {{view.name}}\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div class='content__panel'>\r\n        <ng-container #vc></ng-container>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
-/***/ "./src/app/ngFlowchart-svg/edge/edge.component.ts":
-/*!********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/edge/edge.component.ts ***!
-  \********************************************************/
-/*! exports provided: EdgeComponent */
+/***/ "./src/app/model-viewers/model-viewers-container.component.scss":
+/*!**********************************************************************!*\
+  !*** ./src/app/model-viewers/model-viewers-container.component.scss ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".viewers-container {\n  display: block;\n  height: 100%;\n  overflow: hidden; }\n\n.container__header {\n  flex: 0 1 auto;\n  height: 35px;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  padding: 0px 0px 0px 0px;\n  background-color: #ccc;\n  border-bottom: 3px solid #eeeeee;\n  line-height: 35px;\n  font-size: 18px;\n  font-weight: 600;\n  text-align: center; }\n\n.content__panel {\n  background-color: gainsboro;\n  width: 100%;\n  height: 100%;\n  overflow: auto; }\n\nbutton.btn {\n  margin: 10px;\n  font-size: 14px;\n  line-height: 18px;\n  border: 2px solid gray;\n  border-radius: 4px;\n  padding: 2px 10px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n/* tab styling */\n\n.tab {\n  border: 2px;\n  overflow: hidden;\n  background-color: #ccc; }\n\n.tab button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: inherit;\n  color: #505050;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 8px 10px;\n  transition: 0.3s;\n  font-size: 14px; }\n\n.tab button:hover {\n  color: blue; }\n\n.tab button.active {\n  background-color: #ccc;\n  color: #000096;\n  font-weight: 600;\n  border-color: #222 !important; }\n"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/model-viewers-container.component.ts":
+/*!********************************************************************!*\
+  !*** ./src/app/model-viewers/model-viewers-container.component.ts ***!
+  \********************************************************************/
+/*! exports provided: DataViewersContainerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EdgeComponent", function() { return EdgeComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataViewersContainerComponent", function() { return DataViewersContainerComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var EdgeComponent = /** @class */ (function () {
-    function EdgeComponent() {
-        this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.selected = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-    }
-    // select a wire
-    EdgeComponent.prototype.select = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        if (this.edge.selected) {
-            this.selected.emit(event.ctrlKey);
-        }
-        else {
-            if (event.ctrlKey) {
-                this.selected.emit('ctrl');
-            }
-            else {
-                this.selected.emit('single');
-            }
-        }
-    };
-    // delete a wire
-    EdgeComponent.prototype.deleteEdge = function () {
-        this.delete.emit();
-    };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('canvas'),
-        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
-    ], EdgeComponent.prototype, "canvas", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], EdgeComponent.prototype, "edge", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], EdgeComponent.prototype, "inputOffset", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], EdgeComponent.prototype, "outputOffset", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
-        __metadata("design:type", Object)
-    ], EdgeComponent.prototype, "delete", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
-        __metadata("design:type", Object)
-    ], EdgeComponent.prototype, "selected", void 0);
-    EdgeComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: '[edge]',
-            template: __webpack_require__(/*! ./edge.component.html */ "./src/app/ngFlowchart-svg/edge/edge.component.html"),
-            styles: ["\n    .edge{\n        fill: none;\n        stroke: rgb(80, 80, 80);\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n        opacity: 1;\n        pointer-events: stroke;\n        marker-end: url(#arrow);\n    }\n    .inviEdge{\n        fill: none;\n        stroke: gray;\n        stroke-width: 30px;\n        opacity: 0;\n        pointer-events: stroke;\n    }\n    .selected{\n        stroke: rgb(0, 0, 150);\n        opacity: 1;\n        marker-end: url(#arrow_selected);\n\n    }\n  "]
-        })
-    ], EdgeComponent);
-    return EdgeComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/flowchart.component.html":
-/*!**********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/flowchart.component.html ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div id = 'flowchart-main-container' class='container'>\r\n\r\n    <!-- svg component -->\r\n    <svg id=\"svg-canvas\" class = \"svgCanvas\" viewBox=\"0 0 1500 1500\" \r\n    (mousedown)='panStart($event)'\r\n    (mousemove)='handleMouseMove($event)'  \r\n    (mouseup)='handleMouseUp($event)'\r\n    (mouseenter)='activateKeyEvent()'\r\n    (mouseleave)='deactivateKeyEvent()'\r\n    (wheel)='scale($event)'\r\n    >\r\n        <!-- definitions for svg: grid patterns, arrow head for connecting wire-->\r\n        <defs>\r\n            <!-- grid pattern -->\r\n            <pattern id=\"smallGrid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\">\r\n              <path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"gray\" stroke-width=\"0.5\"/>\r\n            </pattern>\r\n            <pattern id=\"grid\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\">\r\n              <rect width=\"100\" height=\"100\" fill=\"url(#smallGrid)\"/>\r\n              <path d=\"M 100 0 L 0 0 0 100\" fill=\"none\" stroke=\"gray\" stroke-width=\"1\"/>\r\n            </pattern>\r\n\r\n            <!-- arrow head -->\r\n            <marker id=\"arrow\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n              <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(80, 80, 80)\" fill=\"transparent\" />\r\n            </marker>\r\n            <marker id=\"arrow_selected\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(0, 0, 150)\" fill=\"transparent\"  />\r\n            </marker>\r\n        </defs>\r\n\r\n        <!-- svg frame-->\r\n        <rect width=\"100%\" height=\"100%\" fill=\"url(#grid)\" />\r\n                  \r\n\r\n        <!-- wires => edge.component -->\r\n        <g edge *ngFor=\"let edge of dataService.flowchart.edges; let edge_index = index\" \r\n        [edge]='edge'\r\n        [inputOffset]='inputOffset'\r\n        [outputOffset]='outputOffset'\r\n        (selected)='selectEdge($event, edge_index)'\r\n        />\r\n\r\n        <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->\r\n        <line id=\"temporary-wire\" class=\"temp-wire\" x1=\"0\" y1='0' x2='0' y2='0'></line>\r\n\r\n        <!-- nodes => node.component -->\r\n        <g node *ngFor=\"let node of dataService.flowchart.nodes; let node_index = index\" \r\n        id='flw_node_{{node_index}}'\r\n        [node]='node' \r\n        [selected]='isSelected(node_index)'\r\n        [inputOffset]='inputOffset'\r\n        [outputOffset]='outputOffset'\r\n        (action)='nodeAction($event, node_index)'\r\n        />\r\n    </svg>\r\n\r\n    <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->\r\n    <div class='button-row'>\r\n        <button mat-icon-button disableRipple='true' (click)='addNode()' title=\"Add Node\">\r\n        <mat-icon>add</mat-icon>\r\n        </button>\r\n        <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title=\"Delete Selected Node\">\r\n        <mat-icon>remove</mat-icon>\r\n        </button>\r\n        <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title=\"Delete Selected Wires\">\r\n        <mat-icon>link_off</mat-icon>\r\n        </button>\r\n    </div>\r\n\r\n    <!-- focus on flowchart button on the top right of the svg -->\r\n    <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title=\"Zoom to Fit\">\r\n        <mat-icon>control_camera</mat-icon>\r\n    </button>\r\n    \r\n\r\n</div>\r\n\r\n\r\n\r\n"
-
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/flowchart.component.scss":
-/*!**********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/flowchart.component.scss ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /*     width: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n    display: flex; \r\n    flex-direction: row; \r\n    justify-content: space-between;\r\n\r\n    position: relative;\r\n    font-size: 14px; \r\n    font-weight: 600; \r\n    line-height: $header-height;\r\n    text-transform: uppercase;\r\n    letter-spacing: 1.5px;\r\n    height: $header-height;\r\n\r\n    color: #ADADAD;\r\n\r\n    .btn-group{\r\n        height: $header-height; \r\n\r\n        button{\r\n            width: 0.9*$header-height; \r\n            height: 0.9*$header-height; \r\n            margin: 0px;\r\n            border: 1px solid #B4B1B1;\r\n            box-shadow: none;\r\n\r\n            &:focus{\r\n                \r\n            }\r\n        }\r\n        \r\n    }\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n    &:focus{\r\n        \r\n    }\r\n} */ }\n\n.viewer .container {\n    display: flex;\n    flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n\n.container .svgCanvas .temp-wire {\n    stroke: #505050;\n    stroke-width: 2px;\n    stroke-dasharray: 10 15;\n    opacity: 0.5; }\n\n.transform--container {\n  position: absolute;\n  width: 100%;\n  transition: -webkit-transform 0.1s;\n  transition: transform 0.1s;\n  transition: transform 0.1s, -webkit-transform 0.1s; }\n\nsplit-area {\n  overflow: auto !important; }\n\ninput {\n  border: none; }\n\ninput:focus {\n  border-bottom: 1px dashed gray; }\n\n#flowchart__name {\n  margin: 0 auto;\n  font-size: 14px;\n  line-height: 28px;\n  font-weight: bold;\n  color: #8AA8C0; }\n\n.button-row {\n  position: absolute;\n  top: 0px;\n  left: 10px; }\n\n.button-row button {\n    color: #505050;\n    width: 28px; }\n\n.resetViewer-button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  color: #505050; }\n\n.viewer {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px), repeating-linear-gradient(-90deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px);\n  background-size: 71px 71px;\n  background-color: white;\n  box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 30px; }\n\n.viewer .container {\n    position: absolute;\n    height: 100%;\n    overflow: hidden; }\n\n.viewer .container .disabled {\n      color: #8AA8C0; }\n\n.viewer .container .disabled:hover {\n        color: #8AA8C0 !important; }\n\n.viewer .container .sidebar {\n      font-size: 12px;\n      background-color: #F1F1F1;\n      color: #395D73;\n      white-space: nowrap;\n      overflow-x: hidden !important; }\n\n.viewer .container .sidebar section {\n        padding-left: 15px;\n        padding-bottom: 5px;\n        padding-top: 5px;\n        border-bottom: 1px solid #8AA8C0; }\n\n.viewer .container .sidebar section div {\n          cursor: pointer; }\n\n.viewer .container .sidebar section div:hover {\n            color: #F0BFA0; }\n\n.viewer .content-wrapper {\n    position: relative;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .info-container {\n    padding: 0px 30px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between; }\n\n.viewer .info-container .info {\n      display: flex;\n      flex-direction: column; }\n\n.viewer .info-container .info .label {\n        font-size: 12px;\n        font-weight: 100;\n        color: #F07A79; }\n\n.viewer .info-container .info .value {\n        color: #395D73;\n        font-size: 11px;\n        font-weight: 600; }\n\n.viewer .info-container .info .action {\n        cursor: pointer;\n        font-size: 11px;\n        color: #8AA8C0; }\n\n.viewer .graph-container {\n    position: absolute;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .graph-container #graph-edges {\n      background-color: transparent;\n      z-index: 1000; }\n\n.viewer .graph-container #graph-edges #temporary-edge .hidden {\n        display: none; }\n\n.viewer .graph-container #graph-nodes {\n      background-color: transparent;\n      overflow: hidden;\n      z-index: 1000; }\n\n.viewer .info-container {\n    position: absolute;\n    right: 0;\n    bottom: 0; }\n\n.viewer .info-container .label, .viewer .info-container .value {\n      margin-right: 5px;\n      font-weight: normal !important; }\n\n.viewer .node-container {\n    position: relative; }\n\n.viewer .node-container .node {\n      position: absolute;\n      -webkit-transform-origin: top left;\n              transform-origin: top left;\n      z-index: 3;\n      margin: 0px;\n      color: #395D73; }\n\n.viewer .node-container .node.hidden {\n        display: none; }\n\n.viewer .node-container .node .btn-container {\n        position: absolute;\n        right: -30px;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        height: 100px; }\n\n.viewer .node-container .node .btn-container .btn-group {\n          position: relative;\n          display: flex;\n          flex-direction: column;\n          justify-content: center;\n          background: none; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button {\n            position: relative;\n            width: 25px;\n            height: 24px;\n            cursor: pointer;\n            font-size: 9px;\n            text-align: center; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button .material-icons {\n              font-size: 18px;\n              line-height: 24px;\n              color: #8AA8C0; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover {\n              color: white; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover .mat-icon {\n                color: #F0BFA0; }\n\n.viewer .node-container .node .node-body {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        position: relative;\n        min-height: 30px;\n        min-width: 70px;\n        width: auto;\n        border: 1px solid #395D73;\n        background-color: rgba(255, 255, 255, 0.7);\n        cursor: move; }\n\n.viewer .node-container .node .node-body.disabled {\n          opacity: 0.4; }\n\n.viewer .node-container .node .node-body.selected {\n          border-color: green; }\n\n.viewer .node-container .node .node-body.library {\n          border-color: #395D73;\n          border-style: solid; }\n\n.viewer .node-container .node .node-body.error {\n          background-color: #E94858; }\n\n.viewer .node-container .node .node-body.function {\n          background-color: yellow;\n          border: 1px dashed green; }\n\n.viewer .node-container .node .node-body .node-name {\n          font-family: sans-serif;\n          font-size: 12px;\n          border-bottom: 1px solid #395D73;\n          text-align: center;\n          background-color: #F1F1F1; }\n\n.viewer .node-container .node .node-body .node-name input {\n            background-color: inherit;\n            border: 0px;\n            color: #395D73;\n            text-align: center; }\n\n.viewer .node-container .node .node-body .node-name.selected {\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .node-name.selected input {\n              color: white;\n              font-weight: bold; }\n\n.viewer .node-container .node .node-body .node-name.selected input:focus {\n                color: #395D73;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container {\n          display: flex;\n          flex-direction: column;\n          margin-top: 10px;\n          margin-bottom: 10px; }\n\n.viewer .node-container .node .node-body .port-container .divider {\n            height: 2px;\n            width: 100%;\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .port-container .port {\n            display: flex;\n            flex-direction: row;\n            margin: 5px 0px; }\n\n.viewer .node-container .node .node-body .port-container .port.hidden {\n              display: none; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip {\n              width: 15px;\n              height: 15px;\n              border-radius: 50%;\n              background-color: #F1F1F1;\n              border: 1px solid #395D73;\n              cursor: pointer; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.isFunction {\n                border-style: dashed;\n                background-color: gray;\n                border-radius: 0px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.selected {\n                border: 2px solid #8AA8C0;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip:hover {\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name {\n              font-size: 12px;\n              margin: 0px 5px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name.isFunction {\n                color: black;\n                font-size: 9.6px; }\n\n.viewer .node-container .node .node-body .port-container .port.input {\n              justify-content: flex-start;\n              margin-left: -7.5px; }\n\n.viewer .node-container .node .node-body .port-container .port.output {\n              justify-content: flex-end;\n              margin-right: -7.5px; }\n\n.viewer .node-container .node:active {\n        cursor: none; }\n"
-
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/flowchart.component.ts":
-/*!********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/flowchart.component.ts ***!
-  \********************************************************/
-/*! exports provided: FlowchartComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FlowchartComponent", function() { return FlowchartComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _models_node__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/node */ "./src/app/shared/models/node/index.ts");
-/* harmony import */ var _node_node_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node/node.actions */ "./src/app/ngFlowchart-svg/node/node.actions.ts");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
+/* harmony import */ var _model_viewers_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./model-viewers.config */ "./src/app/model-viewers/model-viewers.config.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5832,589 +1598,151 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
-
-
-
-
-var FlowchartComponent = /** @class */ (function () {
-    function FlowchartComponent(dataService) {
-        this.dataService = dataService;
-        this.switch = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.startCoords = [];
-        // variable for flowchart zooming
-        this.mousePos = [0, 0];
-        this.zoom = 1;
-        // variable for edge
-        this.edge = { source: undefined, target: undefined, selected: false };
-        this.selectedEdge = [];
-        // listener for events, only activated when the mouse is hovering over the svg component
-        this.keydownListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'keydown');
-        this.copyListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'copy');
-        this.pasteListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'paste');
-        this.listenerActive = false;
-        // constants for offset positions of input/output port relative to the node's position
-        this.inputOffset = [50, -8];
-        this.outputOffset = [50, 88];
+/**
+ * A component that contains all the viewers.
+ * This component is used in /app/appmodule/app.component.html
+ */
+var DataViewersContainerComponent = /** @class */ (function () {
+    /**
+     * Construct the viewer container.
+     * @param injector
+     * @param r
+     */
+    function DataViewersContainerComponent(injector, r) {
+        this.injector = injector;
+        this.r = r;
+        this.views = [];
+        this.Viewers = _model_viewers_config__WEBPACK_IMPORTED_MODULE_1__["Viewers"];
+        // do nothing
     }
-    FlowchartComponent_1 = FlowchartComponent;
-    FlowchartComponent.enableNode = function (node) {
-        for (var _i = 0, _a = node.input.edges; _i < _a.length; _i++) {
-            var edge = _a[_i];
-            if (!edge.source.parentNode.enabled) {
-                return;
-            }
-        }
-        node.enabled = true;
-        for (var _b = 0, _c = node.output.edges; _b < _c.length; _b++) {
-            var edge = _c[_b];
-            FlowchartComponent_1.enableNode(edge.target.parentNode);
-        }
+    /**
+     * ngOnInit
+     */
+    DataViewersContainerComponent.prototype.ngOnInit = function () {
+        this.activeView = this.Viewers[0];
+        this.updateView(this.activeView);
     };
-    FlowchartComponent.disableNode = function (node) {
-        node.enabled = false;
-        for (var _i = 0, _a = node.output.edges; _i < _a.length; _i++) {
-            var edge = _a[_i];
-            FlowchartComponent_1.disableNode(edge.target.parentNode);
+    /**
+     * ngOnDestroy
+     */
+    DataViewersContainerComponent.prototype.ngOnDestroy = function () {
+        console.log('onDestroy');
+        for (var _i = 0, _a = this.views; _i < _a.length; _i++) {
+            var view = _a[_i];
+            view.destroy();
         }
     };
-    FlowchartComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.canvas = document.getElementById('svg-canvas');
-        var bRect = this.canvas.getBoundingClientRect();
-        this.offset = [bRect.left, bRect.top];
-        // copy: copy node
-        this.copySub = this.copyListener.subscribe(function (val) {
-            if (!_this.listenerActive) {
-                return;
+    /**
+     * ngOnChanges
+     */
+    DataViewersContainerComponent.prototype.ngOnChanges = function () {
+        if (this.currentHelpView !== this.helpView) {
+            var view = void 0;
+            for (var _i = 0, _a = this.Viewers; _i < _a.length; _i++) {
+                var v = _a[_i];
+                if (v.name === 'Help') {
+                    view = v;
+                }
             }
-            var node = _this.dataService.flowchart.nodes[_this.dataService.flowchart.meta.selected_nodes[0]];
-            if (node.type !== 'start' && node.type !== 'end') {
-                console.log('copied node:', node);
-                var cp = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](node));
-                _this.copied = circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](cp);
-            }
-        });
-        // paste: paste copied node
-        this.pasteSub = this.pasteListener.subscribe(function (val) {
-            if (!_this.listenerActive) {
-                return;
-            }
-            if (_this.copied) {
-                event.preventDefault();
-                var newNode = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](_this.copied);
-                var pt = _this.canvas.createSVGPoint();
-                pt.x = 20;
-                pt.y = 100;
-                var svgP = void 0;
-                var isFirefox = typeof InstallTrigger !== 'undefined';
-                if (isFirefox) {
-                    var ctm = _this.canvas.getScreenCTM();
-                    // const bRect = this.canvas.getBoundingClientRect();
-                    ctm.a = ctm.a * _this.zoom;
-                    ctm.d = ctm.d * _this.zoom;
-                    ctm.e = bRect.x;
-                    ctm.f = bRect.y;
-                    svgP = pt.matrixTransform(ctm.inverse());
-                }
-                else {
-                    svgP = pt.matrixTransform(_this.canvas.getScreenCTM().inverse());
-                }
-                _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].updateNode(newNode, svgP);
-                _this.dataService.flowchart.nodes.push(newNode);
-                console.log('pasting node:', newNode);
-            }
-        });
-        // delete: delete selected edge(s)
-        this.keydownSub = this.keydownListener.subscribe(function (val) {
-            if (!_this.listenerActive) {
-                return;
-            }
-            if (val.key === 'Delete') {
-                _this.deleteSelectedEdges();
-            }
-        });
-    };
-    /*
-    handle event received from node component
-    */
-    FlowchartComponent.prototype.nodeAction = function (event, node_index) {
-        switch (event.action) {
-            // switch the viewchild of the appModule to the node's procedure view when double-click on the node
-            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].PROCEDURE:
-                this.switch.emit('editor');
-                this.deactivateKeyEvent();
-                break;
-            // select a node
-            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].SELECT:
-                this.dataService.flowchart.meta.selected_nodes = [node_index];
-                break;
-            // initiate dragging node
-            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].DRAGNODE:
-                this.element = this.dataService.flowchart.nodes[node_index];
-                var pt = this.canvas.createSVGPoint();
-                // get current mouse position in the page
-                pt.x = event.data.pageX;
-                pt.y = event.data.pageY;
-                // convert mouse position to svg position (special procedure for firefox)
-                var svgP = void 0;
-                var isFirefox = typeof InstallTrigger !== 'undefined';
-                if (isFirefox) {
-                    var ctm = this.canvas.getScreenCTM();
-                    var bRect = this.canvas.getBoundingClientRect();
-                    ctm.a = ctm.a * this.zoom;
-                    ctm.d = ctm.d * this.zoom;
-                    ctm.e = bRect.x;
-                    ctm.f = bRect.y;
-                    svgP = pt.matrixTransform(ctm.inverse());
-                }
-                else {
-                    svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                }
-                // save the svg position as startCoords
-                this.startCoords = [
-                    svgP.x,
-                    svgP.y
-                ];
-                if (this.startCoords[0] === NaN) {
-                    this.startCoords = [0, 0];
-                }
-                // mark the dragging mode as dragNode
-                this.isDown = 2;
-                break;
-            // initiate dragging input/output port
-            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].DRAGPORT:
-                // create a new edge
-                this.edge = { source: undefined, target: undefined, selected: false };
-                // assign the port to the edge's input/output accordingly
-                if (event.type === 'input') {
-                    this.edge.target = event.data;
-                }
-                else {
-                    this.edge.source = event.data;
-                }
-                this.startType = event.type;
-                // modify the temporary-edge's coordinate
-                this.element = document.getElementById('temporary-wire');
-                this.element.setAttribute('x1', event.position[0]);
-                this.element.setAttribute('y1', event.position[1]);
-                this.element.setAttribute('x2', event.position[0]);
-                this.element.setAttribute('y2', event.position[1]);
-                this.isDown = 3;
-                break;
-        }
-    };
-    // check if the node at node_index is selected
-    FlowchartComponent.prototype.isSelected = function (node_index) {
-        return this.dataService.flowchart.meta.selected_nodes.indexOf(node_index) > -1;
-    };
-    // add a new node
-    FlowchartComponent.prototype.addNode = function () {
-        // create a new node
-        var newNode = _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].getNewNode();
-        // the new node's position would be (20,100) relative to the current view
-        var pt = this.canvas.createSVGPoint();
-        pt.x = 20;
-        pt.y = 100;
-        // convert the position to svg position
-        var svgP;
-        var isFirefox = typeof InstallTrigger !== 'undefined';
-        if (isFirefox) {
-            var ctm = this.canvas.getScreenCTM();
-            var bRect = this.canvas.getBoundingClientRect();
-            ctm.a = ctm.a * this.zoom;
-            ctm.d = ctm.d * this.zoom;
-            ctm.e = bRect.x;
-            ctm.f = bRect.y;
-            svgP = pt.matrixTransform(ctm.inverse());
+            this.currentHelpView = this.helpView;
+            this.updateView(view);
         }
         else {
-            svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-        }
-        // assign the position to the new node and add it to the flowchart
-        newNode.position.x = svgP.x;
-        newNode.position.y = svgP.y;
-        this.dataService.flowchart.nodes.push(newNode);
-    };
-    // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
-    FlowchartComponent.prototype.activateKeyEvent = function () {
-        this.listenerActive = true;
-    };
-    // deactivate the event listeners when the mouse exit the svg component
-    FlowchartComponent.prototype.deactivateKeyEvent = function () {
-        this.listenerActive = false;
-    };
-    // delete selected node
-    FlowchartComponent.prototype.deleteSelectedNodes = function () {
-        // for each of the selected node
-        while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
-            var node_index = this.dataService.flowchart.meta.selected_nodes.pop();
-            var node = this.dataService.flowchart.nodes[node_index];
-            // continue if the node is a start/end node
-            if (node.type === 'start' || node.type === 'end') {
-                continue;
-            }
-            var edge_index = 0;
-            // delete all the edges connected to the node
-            while (edge_index < this.dataService.flowchart.edges.length) {
-                var tbrEdge = this.dataService.flowchart.edges[edge_index];
-                if (tbrEdge.target.parentNode === node || tbrEdge.source.parentNode === node) {
-                    this.deleteEdge(edge_index, node.id);
-                    continue;
-                }
-                edge_index += 1;
-            }
-            // remove the node from the flowchart
-            this.dataService.flowchart.nodes.splice(Number(node_index), 1);
+            this.updateValue();
         }
     };
-    // delete an edge with a known index
-    FlowchartComponent.prototype.deleteEdge = function (edge_index, deletedNode) {
-        var tbrEdge = this.dataService.flowchart.edges[edge_index];
-        // remove the edge from the target node's list of edges
-        for (var i in this.dataService.flowchart.edges) {
-            if (tbrEdge.target.edges[i] === tbrEdge) {
-                tbrEdge.target.edges.splice(Number(i), 1);
-                break;
-            }
+    /**
+     * createView
+     * @param view
+     */
+    DataViewersContainerComponent.prototype.createView = function (view) {
+        var component = view.component;
+        var factory = this.r.resolveComponentFactory(component);
+        var componentRef = factory.create(this.injector);
+        /*
+        if (view.name != 'Console'){
+            componentRef.instance["data"] = this.data;
         }
-        // remove the edge from the source node's list of edges
-        for (var i in tbrEdge.source.edges) {
-            if (tbrEdge.source.edges[i] === tbrEdge) {
-                tbrEdge.source.edges.splice(Number(i), 1);
-                break;
-            }
-        }
-        if (tbrEdge.target.parentNode.input.edges.length === 0 && deletedNode !== tbrEdge.target.parentNode.id) {
-            FlowchartComponent_1.disableNode(tbrEdge.target.parentNode);
-        }
-        else {
-            FlowchartComponent_1.enableNode(tbrEdge.target.parentNode);
-        }
-        // remove the edge from the general list of edges
-        this.dataService.flowchart.edges.splice(edge_index, 1);
-        this.dataService.flowchart.ordered = false;
+        */
+        return componentRef;
     };
-    // delete all the selected edges
-    FlowchartComponent.prototype.deleteSelectedEdges = function () {
-        this.selectedEdge.sort().reverse();
-        for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
-            var edge_index = _a[_i];
-            this.deleteEdge(edge_index, undefined);
+    /**
+     * updateView
+     * @param view
+     */
+    DataViewersContainerComponent.prototype.updateView = function (view) {
+        this.activeView = view;
+        if (this.views[this.activeView.name] === undefined) {
+            this.views[this.activeView.name] = this.createView(view);
         }
-        this.selectedEdge = [];
+        this.updateValue();
+        this.vc.detach();
+        this.vc.insert(this.views[this.activeView.name].hostView);
     };
-    // select an edge
-    FlowchartComponent.prototype.selectEdge = function (event, edge_index) {
-        // if ctrl is pressed, add the edge into the list of selected edges
-        if (event === 'ctrl') {
-            this.selectedEdge.push(edge_index);
-            this.dataService.flowchart.edges[edge_index].selected = true;
-        }
-        else if (event === 'single' || (event === false && this.selectedEdge.length > 1)) {
-            if (this.selectedEdge.length > 0) {
-                for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
-                    var e = _a[_i];
-                    this.dataService.flowchart.edges[e].selected = false;
-                }
+    /**
+     * updateValue
+     */
+    DataViewersContainerComponent.prototype.updateValue = function () {
+        try {
+            var componentRef = this.views[this.activeView.name];
+            if (this.activeView.name === 'Help') {
+                componentRef.instance['output'] = this.currentHelpView;
             }
-            this.selectedEdge = [edge_index];
-            this.dataService.flowchart.edges[edge_index].selected = true;
-        }
-        else {
-            this.dataService.flowchart.edges[edge_index].selected = false;
-            for (var i = 0; i < this.selectedEdge.length; i++) {
-                if (this.selectedEdge[i] === edge_index) {
-                    this.selectedEdge.splice(i, 1);
-                    break;
-                }
+            else if (this.activeView.name !== 'Console') {
+                componentRef.instance['data'] = this.data;
             }
+        }
+        catch (ex) {
+            // console.log(`Active View not defined`);
         }
     };
-    // focus view onto the flowchart
-    FlowchartComponent.prototype.focusFlowchart = function () {
-        // find the frame of the flowchart: frame = [minX, minY, maxX, maxY]
-        var frame = [this.dataService.flowchart.nodes[0].position.x, this.dataService.flowchart.nodes[0].position.y,
-            this.dataService.flowchart.nodes[0].position.x, this.dataService.flowchart.nodes[0].position.y];
-        for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
-            var node = _a[_i];
-            if (node.position.x < frame[0]) {
-                frame[0] = node.position.x;
-            }
-            else if (node.position.x > frame[2]) {
-                frame[2] = node.position.x;
-            }
-            if (node.position.y < frame[1]) {
-                frame[1] = node.position.y;
-            }
-            else if (node.position.y > frame[3]) {
-                frame[3] = node.position.y;
-            }
-        }
-        frame[2] += 100;
-        frame[3] += 80;
-        // calculate the zoom to fit the whole flowchart
-        var bRect = this.canvas.getBoundingClientRect();
-        var ctm = this.canvas.getScreenCTM();
-        var zoom = bRect.width / (ctm.a * (frame[2] - frame[0]));
-        var heightZoom = bRect.height / (ctm.d * (frame[3] - frame[1]));
-        if (zoom > heightZoom) {
-            zoom = heightZoom;
-        }
-        if (zoom > 2.5) {
-            zoom = 2.5;
-        }
-        // calculate the difference between height and width, if height is bigger than width,
-        // centering the flowchart based on the difference
-        var height_width_diff = ((frame[3] - frame[1]) - (frame[2] - frame[0])) / 2;
-        if (height_width_diff > 0) {
-            frame[0] -= height_width_diff;
-        }
-        // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
-        if (frame[0] < 0) {
-            frame[0] = 0;
-        }
-        if (frame[1] < 0) {
-            frame[1] = 0;
-        }
-        // transform
-        this.canvas.style.transition = 'transform 0ms ease-in';
-        this.canvas.style.transformOrigin = 'top left';
-        this.canvas.style.transform =
-            "matrix(" + zoom + ",0,0," + zoom + "," + -frame[0] * ctm.a * zoom / this.zoom + "," + -frame[1] * ctm.a * zoom / this.zoom + ")";
-        this.zoom = zoom;
-    };
-    // scale view on mouse wheel
-    FlowchartComponent.prototype.scale = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        // calculate new zoom value
-        var scaleFactor = 0.1;
-        var value = this.zoom - (Math.sign(event.deltaY)) * scaleFactor;
-        // limit the zoom value to be between 1 and 2.5
-        if (value >= 1 && value <= 2.5) {
-            value = Number((value).toPrecision(5));
-        }
-        else {
-            return;
-        }
-        // if new zoom is bigger than current zoom, update the mouse position to current position
-        if (value > this.zoom) {
-            this.mousePos = [event.clientX - this.offset[0], event.clientY - this.offset[1]];
-        }
-        // find transformation matrix
-        var m = this.canvas.createSVGMatrix()
-            .translate(this.mousePos[0], this.mousePos[1])
-            .scale(value)
-            .translate(-this.mousePos[0], -this.mousePos[1]);
-        var transf = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
-        // transform
-        this.canvas.style.transition = 'transform 50ms ease-in';
-        this.canvas.style.transformOrigin = "top left";
-        this.canvas.style.transform = transf;
-        this.zoom = value;
-    };
-    // initiate dragging the view window
-    FlowchartComponent.prototype.panStart = function (event) {
-        event.preventDefault();
-        this.canvas.style.transition = 'transform 0ms linear';
-        this.canvas.style.transformOrigin = "top left";
-        var bRect = this.canvas.getBoundingClientRect();
-        // set start coords to current view window position
-        this.startCoords = [
-            event.clientX - (bRect.left - this.offset[0]),
-            event.clientY - (bRect.top - this.offset[1])
-        ];
-        // set drag mode to drag view
-        this.isDown = 1;
-    };
-    // handle mouse move for dragging view/node/port
-    FlowchartComponent.prototype.handleMouseMove = function (event) {
-        // return if no dragging initiated
-        if (!this.isDown) {
-            return;
-            // if drag view
-        }
-        else if (this.isDown === 1) {
-            event.preventDefault();
-            var bRect = this.canvas.getBoundingClientRect();
-            var x = Number(event.clientX - this.startCoords[0]);
-            var y = Number(event.clientY - this.startCoords[1]);
-            var boundingDiv = document.getElementById('flowchart-main-container').getBoundingClientRect();
-            if (x > 0 || bRect.width < boundingDiv.width) {
-                x = 0;
-            }
-            else if (boundingDiv.width - x > bRect.width) {
-                x = boundingDiv.width - bRect.width;
-            }
-            if (y > 0 || bRect.height < boundingDiv.height) {
-                y = 0;
-            }
-            else if (boundingDiv.height - y > bRect.height) {
-                y = boundingDiv.height - bRect.height;
-            }
-            this.canvas.style.transform = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')';
-            // if drag node
-        }
-        else if (this.isDown === 2) {
-            var pt = this.canvas.createSVGPoint();
-            pt.x = event.pageX;
-            pt.y = event.pageY;
-            var svgP = void 0;
-            var isFirefox = typeof InstallTrigger !== 'undefined';
-            if (isFirefox) {
-                var ctm = this.canvas.getScreenCTM();
-                var bRect = this.canvas.getBoundingClientRect();
-                ctm.a = ctm.a * this.zoom;
-                ctm.d = ctm.d * this.zoom;
-                ctm.e = bRect.x;
-                ctm.f = bRect.y;
-                svgP = pt.matrixTransform(ctm.inverse());
-            }
-            else {
-                svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-            }
-            var xDiff = this.startCoords[0] - svgP.x;
-            var yDiff = this.startCoords[1] - svgP.y;
-            this.startCoords[0] = svgP.x;
-            this.startCoords[1] = svgP.y;
-            this.element.position.x -= xDiff;
-            this.element.position.y -= yDiff;
-            // if drag port
-        }
-        else if (this.isDown === 3) {
-            event.preventDefault();
-            var pt = this.canvas.createSVGPoint();
-            pt.x = event.pageX;
-            pt.y = event.pageY;
-            var isFirefox = typeof InstallTrigger !== 'undefined';
-            if (isFirefox) {
-                var ctm = this.canvas.getScreenCTM();
-                var bRect = this.canvas.getBoundingClientRect();
-                ctm.a = ctm.a * this.zoom;
-                ctm.d = ctm.d * this.zoom;
-                ctm.e = bRect.x;
-                ctm.f = bRect.y;
-                var svgP = pt.matrixTransform(ctm.inverse());
-                this.element.setAttribute('x2', svgP.x);
-                this.element.setAttribute('y2', svgP.y);
-            }
-            else {
-                var svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                this.element.setAttribute('x2', svgP.x);
-                this.element.setAttribute('y2', svgP.y);
-            }
-        }
-    };
-    FlowchartComponent.prototype.handleMouseUp = function (event) {
-        this.element = undefined;
-        // drop port --> create new edge if drop position is within 15px of an input/output port
-        if (this.isDown === 3) {
-            var pt = this.canvas.createSVGPoint();
-            pt.x = event.pageX;
-            pt.y = event.pageY;
-            var svgP = void 0;
-            var isFirefox = typeof InstallTrigger !== 'undefined';
-            if (isFirefox) {
-                var ctm = this.canvas.getScreenCTM();
-                var bRect = this.canvas.getBoundingClientRect();
-                ctm.a = ctm.a * this.zoom;
-                ctm.d = ctm.d * this.zoom;
-                ctm.e = bRect.x;
-                ctm.f = bRect.y;
-                svgP = pt.matrixTransform(ctm.inverse());
-            }
-            else {
-                svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-            }
-            // reset temporary edge position to <(0,0),(0,0)>
-            var tempLine = document.getElementById('temporary-wire');
-            tempLine.setAttribute('x1', '0');
-            tempLine.setAttribute('y1', '0');
-            tempLine.setAttribute('x2', '0');
-            tempLine.setAttribute('y2', '0');
-            // go through all of the nodes' input/output ports
-            for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
-                var n = _a[_i];
-                var pPos = void 0;
-                // find the node's corresponding port and its position
-                if (this.startType === 'input') {
-                    if (this.edge.target.parentNode === n || n.type === 'end') {
-                        continue;
-                    }
-                    this.edge.source = n.output;
-                    pPos = [n.position.x + this.outputOffset[0], n.position.y + this.outputOffset[1]];
-                }
-                else {
-                    if (this.edge.source.parentNode === n || n.type === 'start') {
-                        continue;
-                    }
-                    this.edge.target = n.input;
-                    pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
-                }
-                // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25) {
-                    continue;
-                }
-                // if there is already an existing edge with the same source and target as the new edge, return
-                for (var _b = 0, _c = this.dataService.flowchart.edges; _b < _c.length; _b++) {
-                    var edge = _c[_b];
-                    if (edge.target === this.edge.target && edge.source === this.edge.source) {
-                        this.isDown = 0;
-                        return;
-                    }
-                }
-                this.edge.target.edges.push(this.edge);
-                this.edge.source.edges.push(this.edge);
-                this.dataService.flowchart.edges.push(this.edge);
-                this.dataService.flowchart.ordered = false;
-                if (this.edge.source.parentNode.enabled) {
-                    FlowchartComponent_1.enableNode(this.edge.target.parentNode);
-                }
-                else {
-                    FlowchartComponent_1.disableNode(this.edge.target.parentNode);
-                }
-                break;
-            }
-        }
-        this.isDown = 0;
-    };
-    var FlowchartComponent_1;
     __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('vc', { read: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"] }),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewContainerRef"])
+    ], DataViewersContainerComponent.prototype, "vc", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
-    ], FlowchartComponent.prototype, "switch", void 0);
-    FlowchartComponent = FlowchartComponent_1 = __decorate([
+    ], DataViewersContainerComponent.prototype, "data", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], DataViewersContainerComponent.prototype, "helpView", void 0);
+    DataViewersContainerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'flowchart',
-            template: __webpack_require__(/*! ./flowchart.component.html */ "./src/app/ngFlowchart-svg/flowchart.component.html"),
-            styles: [__webpack_require__(/*! ./flowchart.component.scss */ "./src/app/ngFlowchart-svg/flowchart.component.scss")]
+            // tslint:disable-next-line:component-selector
+            selector: 'model-viewers-container',
+            template: __webpack_require__(/*! ./model-viewers-container.component.html */ "./src/app/model-viewers/model-viewers-container.component.html"),
+            styles: [__webpack_require__(/*! ./model-viewers-container.component.scss */ "./src/app/model-viewers/model-viewers-container.component.scss")]
         }),
-        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_5__["DataService"]])
-    ], FlowchartComponent);
-    return FlowchartComponent;
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"]])
+    ], DataViewersContainerComponent);
+    return DataViewersContainerComponent;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/app/ngFlowchart-svg/flowchart.module.ts":
-/*!*****************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/flowchart.module.ts ***!
-  \*****************************************************/
-/*! exports provided: SVGFlowchartModule */
+/***/ "./src/app/model-viewers/model-viewers-container.module.ts":
+/*!*****************************************************************!*\
+  !*** ./src/app/model-viewers/model-viewers-container.module.ts ***!
+  \*****************************************************************/
+/*! exports provided: DataViewersContainer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SVGFlowchartModule", function() { return SVGFlowchartModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataViewersContainer", function() { return DataViewersContainer; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _flowchart_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./flowchart.component */ "./src/app/ngFlowchart-svg/flowchart.component.ts");
-/* harmony import */ var _node_node_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node/node.component */ "./src/app/ngFlowchart-svg/node/node.component.ts");
-/* harmony import */ var _edge_edge_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./edge/edge.component */ "./src/app/ngFlowchart-svg/edge/edge.component.ts");
+/* harmony import */ var _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./model-viewers-container.component */ "./src/app/model-viewers/model-viewers-container.component.ts");
+/* harmony import */ var _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model-viewers.config */ "./src/app/model-viewers/model-viewers.config.ts");
+/* harmony import */ var _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./all-viewers/text-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.module */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -6429,221 +1757,87 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+// viewers
 
 
-var SVGFlowchartModule = /** @class */ (function () {
-    function SVGFlowchartModule() {
+
+
+// import { ThreejsViewerComponent } from './viewers/gi-viewer/threejs/threejs-viewer.component';
+// import { MobiusCesium } from './viewers/cesium-viewer/mobius-cesium.module';
+// import { VisualiseComponent } from "./viewers/cesium-viewer/setting/visualise.component";
+// import { AttributesComponent } from "./viewers/cesium-viewer/setting/attributes.copmponent";
+/**
+ * DataViewersContainer, NgModule
+ */
+var DataViewersContainer = /** @class */ (function () {
+    /**
+     * constructor
+     */
+    function DataViewersContainer() {
+        // do nothing
     }
-    SVGFlowchartModule = __decorate([
+    DataViewersContainer = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             declarations: [
-                _flowchart_component__WEBPACK_IMPORTED_MODULE_4__["FlowchartComponent"],
-                _node_node_component__WEBPACK_IMPORTED_MODULE_5__["NodeComponent"],
-                _edge_edge_component__WEBPACK_IMPORTED_MODULE_6__["EdgeComponent"],
+                _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__["DataViewersContainerComponent"],
+                _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["TextViewerComponent"],
+                _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__["ConsoleViewerComponent"],
+                _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_7__["HelpViewerComponent"],
             ],
-            exports: [_flowchart_component__WEBPACK_IMPORTED_MODULE_4__["FlowchartComponent"]],
-            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
+            exports: [
+                _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__["DataViewersContainerComponent"]
+            ],
+            imports: [
+                _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatIconModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatButtonModule"]],
-            entryComponents: [],
+                _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_8__["GIViewer"],
+            ],
+            entryComponents: _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
             providers: []
         }),
         __metadata("design:paramtypes", [])
-    ], SVGFlowchartModule);
-    return SVGFlowchartModule;
+    ], DataViewersContainer);
+    return DataViewersContainer;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/app/ngFlowchart-svg/index.ts":
-/*!******************************************!*\
-  !*** ./src/app/ngFlowchart-svg/index.ts ***!
-  \******************************************/
-/*! exports provided: SVGFlowchartModule */
+/***/ "./src/app/model-viewers/model-viewers.config.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/model-viewers/model-viewers.config.ts ***!
+  \*******************************************************/
+/*! exports provided: VIEWER_ARR, Viewers */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _flowchart_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./flowchart.module */ "./src/app/ngFlowchart-svg/flowchart.module.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SVGFlowchartModule", function() { return _flowchart_module__WEBPACK_IMPORTED_MODULE_0__["SVGFlowchartModule"]; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VIEWER_ARR", function() { return VIEWER_ARR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Viewers", function() { return Viewers; });
+/* harmony import */ var _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./all-viewers/text-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
+// Step-1: Add new ViewerComponet here
 
 
 
 
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/node/node.actions.ts":
-/*!******************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/node/node.actions.ts ***!
-  \******************************************************/
-/*! exports provided: ACTIONS */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTIONS", function() { return ACTIONS; });
-var ACTIONS;
-(function (ACTIONS) {
-    ACTIONS[ACTIONS["SELECT"] = 0] = "SELECT";
-    ACTIONS[ACTIONS["DELETE"] = 1] = "DELETE";
-    ACTIONS[ACTIONS["COPY"] = 2] = "COPY";
-    ACTIONS[ACTIONS["CONNECT"] = 3] = "CONNECT";
-    ACTIONS[ACTIONS["DRAGNODE"] = 4] = "DRAGNODE";
-    ACTIONS[ACTIONS["DROPPORT"] = 5] = "DROPPORT";
-    ACTIONS[ACTIONS["DRAGPORT"] = 6] = "DRAGPORT";
-    ACTIONS[ACTIONS["PROCEDURE"] = 7] = "PROCEDURE";
-})(ACTIONS || (ACTIONS = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/node/node.component.html":
-/*!**********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/node/node.component.html ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
-
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/node/node.component.scss":
-/*!**********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/node/node.component.scss ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "/*\r\n$color-main: #2D4885;\r\n$color-accent: #50ABB9;\r\n$color-muted: #88D4DD;\r\n$color-text-accent: #DC772F;\r\n*/\n.node {\n  fill: #fafafa;\n  stroke-width: 2px;\n  stroke: #505050;\n  stroke-opacity: 1;\n  stroke-linecap: round;\n  stroke-linejoin: round; }\n.node.node--disabled {\n    stroke-opacity: 0.5;\n    fill-opacity: 0.5; }\n.node.node--selected {\n    stroke: #000096; }\n.node.node--error {\n    stroke: red; }\n.textdiv {\n  text-align: center;\n  width: 94px; }\n.foreignObject {\n  width: 100;\n  height: 80; }\ntextarea {\n  font-family: sans-serif;\n  background: transparent;\n  display: inline-block;\n  border: none;\n  font-size: 14px;\n  width: 100%;\n  height: 70px;\n  font-weight: 600;\n  text-align: center;\n  vertical-align: middle;\n  resize: none;\n  overflow: hidden;\n  color: #505050; }\ntextarea.selected {\n    color: #000096; }\ntextarea.disabled {\n    opacity: 0.5; }\n.textarea_startend {\n  font-size: 14px;\n  font-weight: 600;\n  color: #505050;\n  height: 20px;\n  pointer-events: none; }\n.inputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n.outputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n"
-
-/***/ }),
-
-/***/ "./src/app/ngFlowchart-svg/node/node.component.ts":
-/*!********************************************************!*\
-  !*** ./src/app/ngFlowchart-svg/node/node.component.ts ***!
-  \********************************************************/
-/*! exports provided: NodeComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeComponent", function() { return NodeComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _node_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node.actions */ "./src/app/ngFlowchart-svg/node/node.actions.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var NodeComponent = /** @class */ (function () {
-    function NodeComponent() {
-        this.action = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.last = [0, 0];
-        this.isDown = false;
-    }
-    /*
-    update the position of the node
-    */
-    NodeComponent.prototype.updatePosition = function (position) {
-        this.node.position = position;
-    };
-    /*
-    select a node
-    */
-    NodeComponent.prototype.nodeSelect = function (event) {
-        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].SELECT });
-    };
-    /*
-    check if the input port of the node is draggable --> false only for start node, true otherwise
-    */
-    NodeComponent.prototype.inputDraggable = function () {
-        return !(this.node.type === 'start');
-    };
-    /*
-    check if the output port of the node is draggable --> false only for end node, true otherwise
-    */
-    NodeComponent.prototype.outputDraggable = function () {
-        return !(this.node.type === 'end');
-    };
-    /*
-    initiate dragging node when mousedown inside the node group
-    */
-    NodeComponent.prototype.startDragNode = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].DRAGNODE, data: event });
-    };
-    /*
-    initiate dragging port when mousedown inside the port (inside the invisible stroke of the port)
-    */
-    NodeComponent.prototype.startDragPort = function (event, portType) {
-        event.preventDefault();
-        event.stopPropagation();
-        var pos = this.node.position;
-        var data;
-        if (portType === 'input') {
-            data = this.node.input;
-            pos = [pos.x + this.inputOffset[0], pos.y + this.inputOffset[1]];
-        }
-        else {
-            data = this.node.output;
-            pos = [pos.x + this.outputOffset[0], pos.y + this.outputOffset[1]];
-        }
-        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].DRAGPORT, data: data, position: pos, type: portType });
-    };
-    /*
-    focus on the description of the node when mouse down inside the node
-    ** no stopPropagation to allow propagation to startDragNode --> node can still be dragged
-    */
-    NodeComponent.prototype.focusText = function (event) {
-        document.getElementById(this.node.id).focus();
-    };
-    /*
-    switch the viewchild of the appModule to the node's procedure view when double-click on the node
-    */
-    NodeComponent.prototype.switchToProcedure = function (event) {
-        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].PROCEDURE });
-    };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], NodeComponent.prototype, "node", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Boolean)
-    ], NodeComponent.prototype, "selected", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], NodeComponent.prototype, "inputOffset", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], NodeComponent.prototype, "outputOffset", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
-        __metadata("design:type", Object)
-    ], NodeComponent.prototype, "action", void 0);
-    NodeComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: '[node]',
-            template: __webpack_require__(/*! ./node.component.html */ "./src/app/ngFlowchart-svg/node/node.component.html"),
-            styles: [__webpack_require__(/*! ./node.component.scss */ "./src/app/ngFlowchart-svg/node/node.component.scss")]
-        })
-    ], NodeComponent);
-    return NodeComponent;
-}());
-
+var VIEWER_ARR = [
+    // Step-2: Add Component here
+    _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"],
+    _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["ConsoleViewerComponent"],
+    _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_2__["HelpViewerComponent"],
+    _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_3__["GIViewerComponent"],
+];
+var Viewers = [
+    // Step-3: Add Viewer Definition here: name, icon and component
+    { name: 'Summary', icon: undefined, component: _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"] },
+    { name: 'Console', icon: undefined, component: _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["ConsoleViewerComponent"] },
+    { name: 'Help', icon: undefined, component: _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_2__["HelpViewerComponent"] },
+    { name: '3D Viewer', icon: undefined, component: _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_3__["GIViewerComponent"] },
+];
 
 
 /***/ }),
@@ -6974,6 +2168,7 @@ var ExecuteComponent = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         ex_1 = _a.sent();
+                        // throw ex;
                         node.hasError = true;
                         prodWithError_1 = params['currentProcedure'][0];
                         markError_1 = function (prod, id) {
@@ -7009,6 +2204,9 @@ var ExecuteComponent = /** @class */ (function () {
                         else {
                             error = new Error(ex_1);
                         }
+                        // @ts-ignore
+                        console.logs = [];
+                        console.log(error);
                         throw error;
                     case 4: return [2 /*return*/];
                 }
@@ -7115,8 +2313,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadFileComponent", function() { return LoadFileComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
-/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _shared_models_procedure__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/models/procedure */ "./src/app/shared/models/procedure/index.ts");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7126,6 +2326,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
+
 
 
 
@@ -7159,8 +2361,28 @@ var LoadFileComponent = /** @class */ (function () {
         var stream = rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"].create(function (observer) {
             var reader = new FileReader();
             reader.onloadend = function () {
+                function checkMissingProd(prodList) {
+                    var check = true;
+                    for (var _i = 0, prodList_1 = prodList; _i < prodList_1.length; _i++) {
+                        var prod = prodList_1[_i];
+                        if (prod.children) {
+                            if (!checkMissingProd(prod.children)) {
+                                check = false;
+                            }
+                        }
+                        prod.hasError = false;
+                        if (prod.type !== _shared_models_procedure__WEBPACK_IMPORTED_MODULE_2__["ProcedureTypes"].Function) {
+                            continue;
+                        }
+                        if (!_modules__WEBPACK_IMPORTED_MODULE_4__[prod.meta.module] || !_modules__WEBPACK_IMPORTED_MODULE_4__[prod.meta.module][prod.meta.name]) {
+                            prod.hasError = true;
+                            check = false;
+                        }
+                    }
+                    return check;
+                }
                 // if (typeof reader.result === 'string') {}
-                var f = circular_json__WEBPACK_IMPORTED_MODULE_2__["parse"](reader.result);
+                var f = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](reader.result);
                 var file = {
                     name: f.name,
                     author: f.author,
@@ -7168,13 +2390,24 @@ var LoadFileComponent = /** @class */ (function () {
                     last_updated: f.last_updated,
                     version: f.version
                 };
+                var hasError = false;
+                for (var _i = 0, _a = file.flowchart.nodes; _i < _a.length; _i++) {
+                    var node = _a[_i];
+                    if (!checkMissingProd(node.procedure)) {
+                        node.hasError = true;
+                        hasError = true;
+                    }
+                }
+                if (hasError) {
+                    alert('The flowchart contains functions that does not exist in the current version of Mobius');
+                }
                 observer.next(file);
                 observer.complete();
             };
             reader.readAsText(selectedFile);
         });
         stream.subscribe(function (loadeddata) {
-            _this.loaded.emit(circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](loadeddata));
+            _this.loaded.emit(circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](loadeddata));
         });
         document.getElementById('file-input').value = '';
     };
@@ -7851,6 +3084,7 @@ function ModuleDocAware(constructor) {
                 var func = _c[_b];
                 var fn = {};
                 fn['name'] = func.name;
+                fn['module'] = modName;
                 if (!func['signatures']) {
                     continue;
                 }
@@ -8240,7 +3474,7 @@ var CodeUtils = /** @class */ (function () {
     }
     CodeUtils.getProcedureCode = function (prod, existingVars, addProdArr) {
         return __awaiter(this, void 0, void 0, function () {
-            var codeStr, args, prefix, _a, argVals, _loop_1, _i, _b, arg, argValues, fnCall, argsVals, fn, _c, _d, p, _e, _f;
+            var codeStr, args, prefix, _a, constName, argVals, _loop_1, _i, _b, arg, argValues, fnCall, argsVals, fn, _c, _d, p, _e, _f;
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
@@ -8265,10 +3499,12 @@ var CodeUtils = /** @class */ (function () {
                             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].While: return [3 /*break*/, 6];
                             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Break: return [3 /*break*/, 7];
                             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Continue: return [3 /*break*/, 8];
-                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Function: return [3 /*break*/, 9];
-                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Imported: return [3 /*break*/, 15];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Constant: return [3 /*break*/, 9];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Return: return [3 /*break*/, 10];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Function: return [3 /*break*/, 11];
+                            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Imported: return [3 /*break*/, 17];
                         }
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 1:
                         if (args[0].value.indexOf('__params__') !== -1 || args[1].value.indexOf('__params__') !== -1) {
                             throw new Error('Unexpected Identifier');
@@ -8277,42 +3513,53 @@ var CodeUtils = /** @class */ (function () {
                         if (prefix === 'let ') {
                             existingVars.push(args[0].value);
                         }
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 2:
                         if (args[0].value.indexOf('__params__') !== -1) {
                             throw new Error('Unexpected Identifier');
                         }
                         codeStr.push("if (" + args[0].value + "){");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 3:
                         codeStr.push("else {");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 4:
                         if (args[0].value.indexOf('__params__') !== -1) {
                             throw new Error('Unexpected Identifier');
                         }
                         codeStr.push("else if(" + args[0].value + "){");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 5:
                         // codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
                         if (args[0].value.indexOf('__params__') !== -1) {
                             throw new Error('Unexpected Identifier');
                         }
                         codeStr.push("for (" + prefix + " " + args[0].value + " of " + args[1].value + "){");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 6:
                         if (args[0].value.indexOf('__params__') !== -1) {
                             throw new Error('Unexpected Identifier');
                         }
                         codeStr.push("while (" + args[0].value + "){");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 7:
                         codeStr.push("break;");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 8:
                         codeStr.push("continue;");
-                        return [3 /*break*/, 16];
+                        return [3 /*break*/, 18];
                     case 9:
+                        constName = args[0].value;
+                        if (args[0].value.substring(0, 1) === '"' || args[0].value.substring(0, 1) === '\'') {
+                            constName = args[0].value.substring(1, args[0].value.length - 1);
+                        }
+                        codeStr.push("__params__['constants']['" + constName + "'] = " + (args[1].value || args[1].default) + ";");
+                        return [3 /*break*/, 18];
+                    case 10:
+                        codeStr.push("if (" + args[0].value + " > __params__['model'].length) { return __params__['model']; }");
+                        codeStr.push("return __params__['model'][" + args[0].value + "].value;");
+                        return [3 /*break*/, 18];
+                    case 11:
                         argVals = [];
                         _loop_1 = function (arg) {
                             var val, p, p;
@@ -8379,21 +3626,21 @@ var CodeUtils = /** @class */ (function () {
                             });
                         };
                         _i = 0, _b = args.slice(1);
-                        _g.label = 10;
-                    case 10:
-                        if (!(_i < _b.length)) return [3 /*break*/, 13];
-                        arg = _b[_i];
-                        return [5 /*yield**/, _loop_1(arg)];
-                    case 11:
-                        _g.sent();
                         _g.label = 12;
                     case 12:
-                        _i++;
-                        return [3 /*break*/, 10];
+                        if (!(_i < _b.length)) return [3 /*break*/, 15];
+                        arg = _b[_i];
+                        return [5 /*yield**/, _loop_1(arg)];
                     case 13:
+                        _g.sent();
+                        _g.label = 14;
+                    case 14:
+                        _i++;
+                        return [3 /*break*/, 12];
+                    case 15:
                         argValues = argVals.join(',');
                         return [4 /*yield*/, argValues];
-                    case 14:
+                    case 16:
                         _g.sent();
                         fnCall = "__modules__." + prod.meta.module + "." + prod.meta.name + "( " + argValues + " )";
                         if (prod.meta.module.toUpperCase() === 'OUTPUT') {
@@ -8408,34 +3655,34 @@ var CodeUtils = /** @class */ (function () {
                                 existingVars.push(args[0].value);
                             }
                         }
-                        return [3 /*break*/, 16];
-                    case 15:
+                        return [3 /*break*/, 18];
+                    case 17:
                         argsVals = args.slice(1).map(function (arg) { return arg.value; }).join(',');
                         fn = prod.meta.name + "(__params__, " + argsVals + " )";
                         codeStr.push("" + prefix + args[0].value + " = " + fn + ";");
                         if (prefix === 'let ') {
                             existingVars.push(args[0].value);
                         }
-                        return [3 /*break*/, 16];
-                    case 16:
-                        if (!prod.children) return [3 /*break*/, 21];
+                        return [3 /*break*/, 18];
+                    case 18:
+                        if (!prod.children) return [3 /*break*/, 23];
                         _c = 0, _d = prod.children;
-                        _g.label = 17;
-                    case 17:
-                        if (!(_c < _d.length)) return [3 /*break*/, 20];
+                        _g.label = 19;
+                    case 19:
+                        if (!(_c < _d.length)) return [3 /*break*/, 22];
                         p = _d[_c];
                         _f = (_e = codeStr).push;
                         return [4 /*yield*/, CodeUtils.getProcedureCode(p, existingVars, addProdArr)];
-                    case 18:
-                        _f.apply(_e, [_g.sent()]);
-                        _g.label = 19;
-                    case 19:
-                        _c++;
-                        return [3 /*break*/, 17];
                     case 20:
-                        codeStr.push("}");
+                        _f.apply(_e, [_g.sent()]);
                         _g.label = 21;
                     case 21:
+                        _c++;
+                        return [3 /*break*/, 19];
+                    case 22:
+                        codeStr.push("}");
+                        _g.label = 23;
+                    case 23:
                         if (prod.print) {
                             codeStr.push("console.log('" + prod.args[0].value + ": '+ " + prod.args[0].value + ");");
                             // codeStr.push(`wait(5000);`);
@@ -8558,8 +3805,8 @@ var CodeUtils = /** @class */ (function () {
                     case 0:
                         fullCode = '';
                         fnCode = "function " + func.name + "(__mainParams__," + func.args.map(function (arg) { return arg.name; }).join(',') + ")" +
-                            ("{\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"].new + "()};\n");
-                        _i = 0, _a = func.module.nodes;
+                            ("{\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['new'] + "()};\n");
+                        _i = 0, _a = func.flowchart.nodes;
                         _c.label = 1;
                     case 1:
                         if (!(_i < _a.length)) return [3 /*break*/, 4];
@@ -8819,14 +4066,14 @@ var NodeUtils = /** @class */ (function () {
         node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
-        node.position = { x: 400, y: 0 };
+        node.position = { x: 700, y: 400 };
         return node;
     };
     NodeUtils.getEndNode = function () {
         var node = NodeUtils.getNewNode();
         node.name = 'End';
         node.type = 'end';
-        node.position = { x: 400, y: 400 };
+        node.position = { x: 700, y: 800 };
         return node;
     };
     NodeUtils.deselect_procedure = function (node) {
@@ -8969,25 +4216,33 @@ var NodeUtils = /** @class */ (function () {
                 prod.argCount = 0;
                 prod.args = [];
                 break;
+            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Constant:
+                prod.argCount = 2;
+                prod.meta = { module: 'Input', name: 'Constant', inputMode: _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].SimpleInput, description: undefined };
+                prod.args = [
+                    { name: 'const_name', value: undefined, default: 0 },
+                    { name: '__input__', value: undefined, default: 0 }
+                ];
+                break;
+            case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Return:
+                prod.meta = { module: 'Output', name: 'Return', description: undefined };
+                prod.argCount = 1;
+                prod.args = [{ name: 'index', value: undefined, default: 0 }];
+                break;
             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Function:
                 if (!data) {
                     throw Error('No function data');
                 }
-                prod.meta = { module: data.module, name: data.name, inputMode: _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].SimpleInput };
+                prod.meta = { module: data.module, name: data.name };
                 prod.argCount = data.argCount + 1;
                 var returnArg = { name: 'var_name', value: undefined, default: undefined };
                 if (!data.hasReturn) {
                     returnArg = { name: '__none__', value: undefined, default: undefined };
                 }
-                // --UNSTABLE--
-                // changing the value of the last argument of all functions in input node to be undefined
-                if (node.type === 'start') {
-                    data.args[data.argCount - 1].value = undefined;
-                }
                 prod.args = [returnArg].concat(data.args);
                 break;
             case _models_procedure__WEBPACK_IMPORTED_MODULE_0__["ProcedureTypes"].Imported:
-                prod.meta = { module: data.module, name: data.name, inputMode: _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"].SimpleInput };
+                prod.meta = { module: data.module, name: data.name };
                 prod.argCount = data.argCount + 1;
                 prod.args = [{ name: 'var_name', value: undefined, default: undefined }].concat(data.args);
                 break;
@@ -9174,6 +4429,8 @@ var ProcedureTypes;
     ProcedureTypes[ProcedureTypes["Continue"] = 7] = "Continue";
     ProcedureTypes[ProcedureTypes["Function"] = 8] = "Function";
     ProcedureTypes[ProcedureTypes["Imported"] = 9] = "Imported";
+    ProcedureTypes[ProcedureTypes["Constant"] = 10] = "Constant";
+    ProcedureTypes[ProcedureTypes["Return"] = 11] = "Return";
 })(ProcedureTypes || (ProcedureTypes = {}));
 
 
@@ -9189,32 +4446,27 @@ var ProcedureTypes;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SharedModule", function() { return SharedModule; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _app_ngFlowchart_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../app/ngFlowchart-svg */ "./src/app/ngFlowchart-svg/index.ts");
-/* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
-/* harmony import */ var _directives_filesys__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./directives/filesys */ "./src/app/shared/directives/filesys/index.ts");
-/* harmony import */ var _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/execute/execute.component */ "./src/app/shared/components/execute/execute.component.ts");
-/* harmony import */ var _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/not-found/not-found.component */ "./src/app/shared/components/not-found/not-found.component.ts");
-/* harmony import */ var _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/navigation/navigation.component */ "./src/app/shared/components/navigation/navigation.component.ts");
-/* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/shared/components/header/header.component.ts");
-/* harmony import */ var _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/add-components/add_output.component */ "./src/app/shared/components/add-components/add_output.component.ts");
-/* harmony import */ var _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/add-components/add_node.component */ "./src/app/shared/components/add-components/add_node.component.ts");
-/* harmony import */ var _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/add-components/add_input.component */ "./src/app/shared/components/add-components/add_input.component.ts");
-/* harmony import */ var _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/parameter-viewer/parameter-viewer.component */ "./src/app/shared/components/parameter-viewer/parameter-viewer.component.ts");
-/* harmony import */ var _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/parameter-viewer/input-port-viewer/input-port-viewer.component */ "./src/app/shared/components/parameter-viewer/input-port-viewer/input-port-viewer.component.ts");
-/* harmony import */ var _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component */ "./src/app/shared/components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component.ts");
-/* harmony import */ var _components_file__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/file */ "./src/app/shared/components/file/index.ts");
-/* harmony import */ var _mViewer_mobius_viewer_module__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../mViewer/mobius-viewer.module */ "./src/app/mViewer/mobius-viewer.module.ts");
-/* harmony import */ var _directives_textarea__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./directives/textarea */ "./src/app/shared/directives/textarea/index.ts");
-/*
- *  This module is to be imported ONLY by the AppModule
- *  Contains all global services
- *
- */
+/* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _directives_filesys__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./directives/filesys */ "./src/app/shared/directives/filesys/index.ts");
+/* harmony import */ var _directives_textarea__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./directives/textarea */ "./src/app/shared/directives/textarea/index.ts");
+/* harmony import */ var _views_view_flowchart_view_flowchart_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../views/view-flowchart/view-flowchart.module */ "./src/app/views/view-flowchart/view-flowchart.module.ts");
+/* harmony import */ var _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/execute/execute.component */ "./src/app/shared/components/execute/execute.component.ts");
+/* harmony import */ var _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/not-found/not-found.component */ "./src/app/shared/components/not-found/not-found.component.ts");
+/* harmony import */ var _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/navigation/navigation.component */ "./src/app/shared/components/navigation/navigation.component.ts");
+/* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/shared/components/header/header.component.ts");
+/* harmony import */ var _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/add-components/add_output.component */ "./src/app/shared/components/add-components/add_output.component.ts");
+/* harmony import */ var _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/add-components/add_node.component */ "./src/app/shared/components/add-components/add_node.component.ts");
+/* harmony import */ var _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/add-components/add_input.component */ "./src/app/shared/components/add-components/add_input.component.ts");
+/* harmony import */ var _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/parameter-viewer/parameter-viewer.component */ "./src/app/shared/components/parameter-viewer/parameter-viewer.component.ts");
+/* harmony import */ var _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/parameter-viewer/input-port-viewer/input-port-viewer.component */ "./src/app/shared/components/parameter-viewer/input-port-viewer/input-port-viewer.component.ts");
+/* harmony import */ var _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component */ "./src/app/shared/components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component.ts");
+/* harmony import */ var _components_file__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/file */ "./src/app/shared/components/file/index.ts");
+/* harmony import */ var _model_viewers_model_viewers_container_module__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../model-viewers/model-viewers-container.module */ "./src/app/model-viewers/model-viewers-container.module.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9227,6 +4479,24 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var __param = (undefined && undefined.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+/*
+ *  This module is to be imported ONLY by the AppModule
+ *  Contains all global services
+ *
+ */
+
+// @angular stuff
+
+
+
+
+
+// app directives
+
+
+// app views
+
+// app components
 
 
 
@@ -9238,15 +4508,7 @@ var __param = (undefined && undefined.__param) || function (paramIndex, decorato
 
 
 
-
-
-
-
-
-
-
-
-
+// app model viewers
 
 var SharedModule = /** @class */ (function () {
     function SharedModule(shared) {
@@ -9258,49 +4520,49 @@ var SharedModule = /** @class */ (function () {
         */
     }
     SharedModule = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
             providers: [],
             declarations: [
-                _directives_filesys__WEBPACK_IMPORTED_MODULE_7__["MbFileReaderDirective"],
-                _directives_textarea__WEBPACK_IMPORTED_MODULE_20__["AutogrowDirective"],
-                _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__["ExecuteComponent"],
-                _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["PageNotFoundComponent"],
-                _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__["NavigationComponent"],
-                _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__["HeaderComponent"],
-                _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__["AddNodeComponent"], _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__["AddInputComponent"], _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__["AddOutputComponent"],
-                _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_15__["ParameterViewerComponent"], _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_16__["InputPortViewerComponent"], _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_17__["ProcedureInputViewerComponent"],
-                _components_file__WEBPACK_IMPORTED_MODULE_18__["NewFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["SaveFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["LoadFileComponent"]
+                _directives_filesys__WEBPACK_IMPORTED_MODULE_6__["MbFileReaderDirective"],
+                _directives_textarea__WEBPACK_IMPORTED_MODULE_7__["AutogrowDirective"],
+                _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_9__["ExecuteComponent"],
+                _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_10__["PageNotFoundComponent"],
+                _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_11__["NavigationComponent"],
+                _components_header_header_component__WEBPACK_IMPORTED_MODULE_12__["HeaderComponent"],
+                _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_14__["AddNodeComponent"], _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_15__["AddInputComponent"], _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_13__["AddOutputComponent"],
+                _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_16__["ParameterViewerComponent"], _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_17__["InputPortViewerComponent"], _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_18__["ProcedureInputViewerComponent"],
+                _components_file__WEBPACK_IMPORTED_MODULE_19__["NewFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_19__["SaveFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_19__["LoadFileComponent"]
             ],
             imports: [
-                _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
-                _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatSliderModule"], _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatCheckboxModule"],
-                _app_ngFlowchart_svg__WEBPACK_IMPORTED_MODULE_5__["SVGFlowchartModule"],
-                _mViewer_mobius_viewer_module__WEBPACK_IMPORTED_MODULE_19__["MobiusViewerModule"],
-                angular_split__WEBPACK_IMPORTED_MODULE_6__["AngularSplitModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatIconModule"],
+                _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
+                _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatSliderModule"], _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatCheckboxModule"],
+                _views_view_flowchart_view_flowchart_module__WEBPACK_IMPORTED_MODULE_8__["SVGFlowchartModule"],
+                _model_viewers_model_viewers_container_module__WEBPACK_IMPORTED_MODULE_20__["DataViewersContainer"],
+                angular_split__WEBPACK_IMPORTED_MODULE_0__["AngularSplitModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatIconModule"],
             ],
             entryComponents: [],
             exports: [
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
-                _app_ngFlowchart_svg__WEBPACK_IMPORTED_MODULE_5__["SVGFlowchartModule"],
-                _mViewer_mobius_viewer_module__WEBPACK_IMPORTED_MODULE_19__["MobiusViewerModule"],
-                angular_split__WEBPACK_IMPORTED_MODULE_6__["AngularSplitModule"],
-                _directives_filesys__WEBPACK_IMPORTED_MODULE_7__["MbFileReaderDirective"],
-                _directives_textarea__WEBPACK_IMPORTED_MODULE_20__["AutogrowDirective"],
-                _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__["ExecuteComponent"],
-                _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["PageNotFoundComponent"],
-                _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__["NavigationComponent"],
-                _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__["HeaderComponent"],
-                _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__["AddNodeComponent"],
-                _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__["AddInputComponent"],
-                _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__["AddOutputComponent"],
-                _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_15__["ParameterViewerComponent"],
-                _components_file__WEBPACK_IMPORTED_MODULE_18__["NewFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["SaveFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["LoadFileComponent"]
+                _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
+                _views_view_flowchart_view_flowchart_module__WEBPACK_IMPORTED_MODULE_8__["SVGFlowchartModule"],
+                _model_viewers_model_viewers_container_module__WEBPACK_IMPORTED_MODULE_20__["DataViewersContainer"],
+                angular_split__WEBPACK_IMPORTED_MODULE_0__["AngularSplitModule"],
+                _directives_filesys__WEBPACK_IMPORTED_MODULE_6__["MbFileReaderDirective"],
+                _directives_textarea__WEBPACK_IMPORTED_MODULE_7__["AutogrowDirective"],
+                _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_9__["ExecuteComponent"],
+                _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_10__["PageNotFoundComponent"],
+                _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_11__["NavigationComponent"],
+                _components_header_header_component__WEBPACK_IMPORTED_MODULE_12__["HeaderComponent"],
+                _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_14__["AddNodeComponent"],
+                _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_15__["AddInputComponent"],
+                _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_13__["AddOutputComponent"],
+                _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_16__["ParameterViewerComponent"],
+                _components_file__WEBPACK_IMPORTED_MODULE_19__["NewFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_19__["SaveFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_19__["LoadFileComponent"]
             ]
         }),
-        __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Optional"])()), __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["SkipSelf"])()),
+        __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Optional"])()), __param(0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["SkipSelf"])()),
         __metadata("design:paramtypes", [SharedModule])
     ], SharedModule);
     return SharedModule;
@@ -9362,44 +4624,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/app/views/index.ts":
-/*!********************************!*\
-  !*** ./src/app/views/index.ts ***!
-  \********************************/
-/*! exports provided: ViewGalleryComponent, ViewGalleryModule, ViewPublishModule, ViewPublishComponent, ViewEditorModule, ViewEditorComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view-gallery/view-gallery.component */ "./src/app/views/view-gallery/view-gallery.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewGalleryComponent", function() { return _view_gallery_view_gallery_component__WEBPACK_IMPORTED_MODULE_0__["ViewGalleryComponent"]; });
-
-/* harmony import */ var _view_gallery_view_gallery_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view-gallery/view-gallery.module */ "./src/app/views/view-gallery/view-gallery.module.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewGalleryModule", function() { return _view_gallery_view_gallery_module__WEBPACK_IMPORTED_MODULE_1__["ViewGalleryModule"]; });
-
-/* harmony import */ var _view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./view-publish/view-publish.module */ "./src/app/views/view-publish/view-publish.module.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewPublishModule", function() { return _view_publish_view_publish_module__WEBPACK_IMPORTED_MODULE_2__["ViewPublishModule"]; });
-
-/* harmony import */ var _view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./view-publish/view-publish.component */ "./src/app/views/view-publish/view-publish.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewPublishComponent", function() { return _view_publish_view_publish_component__WEBPACK_IMPORTED_MODULE_3__["ViewPublishComponent"]; });
-
-/* harmony import */ var _view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./view-editor/view-editor.module */ "./src/app/views/view-editor/view-editor.module.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEditorModule", function() { return _view_editor_view_editor_module__WEBPACK_IMPORTED_MODULE_4__["ViewEditorModule"]; });
-
-/* harmony import */ var _view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./view-editor/view-editor.component */ "./src/app/views/view-editor/view-editor.component.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEditorComponent", function() { return _view_editor_view_editor_component__WEBPACK_IMPORTED_MODULE_5__["ViewEditorComponent"]; });
-
-// export * from './view-about/view-about.module';
-
-
-
-
-
-
-
-
-/***/ }),
-
 /***/ "./src/app/views/view-editor/parameter-editor/parameter-editor.component.html":
 /*!************************************************************************************!*\
   !*** ./src/app/views/view-editor/parameter-editor/parameter-editor.component.html ***!
@@ -9407,7 +4631,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='flowchart-info'>\r\n    <input [(ngModel)]='flowchart.name' size={{flowchart.name?.length||1}}>\r\n    <textarea autogrow [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr>\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure\" [prod]=\"prod\" ></procedure-input-editor>\r\n</div>\r\n    \r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
+module.exports = "<div class='flowchart-info' *ngIf=\"node.type=='start'\">\r\n    <input [(ngModel)]='flowchart.name' size={{flowchart.name?.length||1}}>\r\n    <textarea autogrow [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr *ngIf=\"node.type=='start'\">\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure\" [prod]=\"prod\" ></procedure-input-editor>\r\n</div>\r\n\r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
 
 /***/ }),
 
@@ -9475,7 +4699,7 @@ var ParameterEditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container container--parameter'>\r\n    <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||\"Undefined\"}}:' size='15' disabled>\r\n\r\n    <select name={{prod.ID}}_type [(ngModel)]=\"prod.meta.inputMode\" tabindex=\"-1\">\r\n        <option \r\n            *ngFor=\"let ptype of PortTypesArr\" \r\n            [value]=\"PortTypes[ptype]\" \r\n            [selected]=\"prod.meta.inputMode == ptype\">{{ptype}}</option>\r\n    </select>\r\n    <ng-container [ngSwitch]=\"prod.meta.inputMode\" >\r\n        <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' size={{prod.args[prod.argCount-1].default.length||13}}>\r\n\r\n        <div class='div--slider' *ngSwitchCase=\"PortTypes.Slider\">\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min' size={{prod.args[prod.argCount-1].min?.length||1}}>\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max' size={{prod.args[prod.argCount-1].max?.length||1}}>\r\n            <mat-slider\r\n                [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                thumbLabel\r\n                tickInterval=\"auto\"\r\n                min={{prod.args[prod.argCount-1].min||0}}\r\n                max={{prod.args[prod.argCount-1].max||100}}></mat-slider>\r\n            <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default' size={{prod.args[prod.argCount-1].default?.length||1}} disabled>\r\n\r\n        </div>\r\n        <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n        <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'>\r\n        <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n    </ng-container>\r\n\r\n    \r\n    <!--\r\n    <div class='parameter__name' [ngSwitch]=\"prod.meta.mode\">\r\n        <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default Value'>\r\n        <div *ngSwitchCase=\"PortTypes.Slider\">\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].default' value='prod.args[prod.argCount-1].default' disabled>\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"range\" >\r\n        </div>\r\n        <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n        <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'>\r\n        <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n    </div>\r\n\r\n    <select name={{prod.name}}_type *ngIf=\"prod.parentNode.type=='start'\"  [(ngModel)]=\"prod.meta.mode\">\r\n        <option \r\n            *ngFor=\"let ptype of PortTypesArr\" \r\n            [value]=\"PortTypes[ptype]\" \r\n            [selected]=\"prod.meta.mode == ptype\">{{ptype}}</option>\r\n    </select>\r\n    -->\r\n\r\n</div>\r\n\r\n"
+module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.module==\"Input\"'>\r\n    <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||\"Undefined\"}}:' size='15' disabled>\r\n\r\n    <select name={{prod.ID}}_type [(ngModel)]=\"prod.meta.inputMode\" tabindex=\"-1\">\r\n        <option \r\n            *ngFor=\"let ptype of PortTypesArr\" \r\n            [value]=\"PortTypes[ptype]\" \r\n            [selected]=\"prod.meta.inputMode == ptype\">{{ptype}}</option>\r\n    </select>\r\n    <ng-container [ngSwitch]=\"prod.meta.inputMode\" >\r\n        <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' \r\n        (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].default.length||13}}>\r\n\r\n        <div class='div--slider' *ngSwitchCase=\"PortTypes.Slider\">\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min'\r\n            (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].min?.length||1}}>\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max'\r\n            (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].max?.length||1}}>\r\n            <mat-slider\r\n                [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                thumbLabel\r\n                tickInterval=\"auto\"\r\n                min={{prod.args[prod.argCount-1].min||0}}\r\n                max={{prod.args[prod.argCount-1].max||100}}></mat-slider>\r\n            <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default'\r\n            (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].default?.length||1}} disabled>\r\n\r\n        </div>\r\n        <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n        <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'>\r\n        <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n    </ng-container>\r\n    <div>\r\n        <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'\r\n        (input)='updateInputSize($event)' size={{prod.meta.description?.length||20}}>\r\n    </div>\r\n\r\n</div>\r\n<div class='container container--parameter' *ngIf='prod.meta.module==\"Output\"'>\r\n    <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'\r\n    (input)='updateInputSize($event)' size={{prod.meta.description?.length||20}}>\r\n</div>"
 
 /***/ }),
 
@@ -9486,7 +4710,7 @@ module.exports = "<div class='container container--parameter'>\r\n    <input [cl
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  color: #505050;\n  vertical-align: bottom;\n  padding-bottom: 5px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  width: 100%; }\n\nselect {\n  color: #505050;\n  background-color: #fafafa;\n  border: 1px solid #505050; }\n\ninput {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.slider-val {\n  color: #505050;\n  resize: horizontal;\n  size: 2;\n  min-width: 1px;\n  max-width: 300px;\n  width: 20px; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\n.div--slider {\n  display: inline-flex;\n  flex-direction: row; }\n\n.parameter__name {\n  width: 100px;\n  height: auto;\n  word-wrap: break-word; }\n\nmat-slider {\n  width: 300px; }\n"
+module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  color: #505050;\n  vertical-align: bottom;\n  padding-bottom: 5px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  width: 100%; }\n\nselect {\n  color: #505050;\n  background-color: #fafafa;\n  border: 1px solid #505050; }\n\ninput {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.slider-val {\n  color: #505050;\n  resize: horizontal;\n  size: 2;\n  min-width: 1px;\n  max-width: 300px;\n  width: 20px; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\n.div--slider {\n  display: inline-flex;\n  flex-direction: row; }\n\n.inp--desc {\n  font-size: 12px;\n  padding-top: 5px;\n  max-width: 700px; }\n\n.parameter__name {\n  width: 100px;\n  height: auto;\n  word-wrap: break-word; }\n\nmat-slider {\n  width: 300px; }\n"
 
 /***/ }),
 
@@ -9514,24 +4738,29 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var keys = Object.keys(_models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"]);
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext('2d');
+ctx.font = '14px Arial';
 var ProcedureInputEditorComponent = /** @class */ (function () {
     function ProcedureInputEditorComponent() {
-        this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.PortTypes = _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"];
         this.PortTypesArr = keys.slice(keys.length / 2);
     }
+    ProcedureInputEditorComponent.prototype.ngAfterViewInit = function () {
+        // console.log(this.prod);
+    };
     ProcedureInputEditorComponent.prototype.editOptions = function () { };
     ProcedureInputEditorComponent.prototype.onFileChange = function (event) {
         this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
+    };
+    ProcedureInputEditorComponent.prototype.updateInputSize = function (event) {
+        var val = event.target.value || event.target.placeholder;
+        event.target.style.width = ctx.measureText(val).width + 10 + 'px';
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
     ], ProcedureInputEditorComponent.prototype, "prod", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
-        __metadata("design:type", Object)
-    ], ProcedureInputEditorComponent.prototype, "delete", void 0);
     ProcedureInputEditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'procedure-input-editor',
@@ -9554,7 +4783,7 @@ var ProcedureInputEditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.selected\"\r\n    [class.error]=\"data.hasError\"\r\n    [class.disabled]=\"!data.enabled\"\r\n    [ngSwitch]=\"data.type\"\r\n    (click)='emitSelect($event, data)'>\r\n    <div class='container--item' >\r\n        <!-- Variable Assignment Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Variable\">\r\n            <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}>  \r\n            = \r\n            <input class='input--arg'\r\n                [(ngModel)]='data.args[1].value'\r\n                name='data.args[1].name'\r\n                placeholder={{data.args[1].name}}\r\n                size = {{data.args[1].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n            </div>\r\n\r\n        <!-- IF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.If\">\r\n            <div class='function-text'>\r\n                If\r\n            </div>\r\n            ( <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    )\r\n\r\n        </div>\r\n\r\n        <!-- ELSEIF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Elseif\">\r\n            <div class='function-text'>\r\n                Else if\r\n            </div>\r\n            \r\n        \r\n        ( <input class='input--arg'\r\n                (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                [(ngModel)]='data.args[0].value'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}\r\n                size={{data.args[0].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n                )\r\n        </div>\r\n\r\n        <!-- ELSE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Else\">\r\n            <div class='function-text'>\r\n                Else\r\n            </div>\r\n        </div>\r\n\r\n        <!-- BREAK Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Break\">\r\n            <div class='function-text'>\r\n                Break\r\n            </div>\r\n        </div>\r\n\r\n        <!-- CONTINUE Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Continue\">\r\n            <div class='function-text'>\r\n                Continue\r\n            </div>\r\n        </div>\r\n\r\n\r\n    <!-- FOREACH Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Foreach\">\r\n                <div class='function-text'>\r\n                    For\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                <div class='function-text'>\r\n                    in\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[1].value'\r\n                    name='data.args[1].name'\r\n                    placeholder={{data.args[1].name}}\r\n                    size={{data.args[1].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    \r\n        </div>\r\n\r\n        <!-- WHILE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.While\">\r\n            <div class='function-text'>\r\n                While\r\n            </div>\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n\r\n        </div>\r\n        \r\n        <!-- Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Function\">\r\n            <ng-container *ngIf=\"data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'\">\r\n                <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)'\r\n                placeholder={{data.args[0].name}}>  \r\n                = \r\n\r\n            </ng-container>\r\n            <div class='function-text'>{{data.meta.module}}.{{data.meta.name}} </div>\r\n\r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <!--\r\n                <input *ngIf=\"p.name.toUpperCase() !== '__MODEL__'; else text_template\" \r\n                \r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)' \r\n                [(ngModel)]='p.value' \r\n                placeholder={{p.name}}>    \r\n                \r\n                <ng-template #text_template>\r\n                    model,\r\n                </ng-template>\r\n                -->\r\n\r\n                <input *ngIf=\"p.name.indexOf('__') == -1\" \r\n                        class='input--arg' \r\n                        (cut)='stopProp($event)' \r\n                        (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n                \r\n                <!--\r\n\r\n                <ng-template #model_template>\r\n                    <ng-container *ngIf=\"p.name == model; else params_template\">\r\n                        model,\r\n                    </ng-container>\r\n                </ng-template>\r\n                <ng-template #params_template>\r\n                    <ng-container *ngIf=\"p.name == constList;\">\r\n                        const_list,\r\n                    </ng-container>\r\n                </ng-template>\r\n                -->\r\n\r\n            </ng-container>\r\n\r\n        </div>\r\n\r\n        <!-- Imported Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Imported\">\r\n            <input class='input--var'\r\n                    [ngModel]='data.args[0].value'\r\n                    (ngModelChange)='data.args[0].value=varMod($event)'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    placeholder={{data.args[0].name}}>  \r\n            = \r\n            <div class='function-text'>{{data.meta.name}} </div> \r\n            \r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <input class='input--arg' \r\n                        (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n            </ng-container>\r\n            \r\n\r\n        </div>\r\n\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)=\"emitDelete()\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <!-- Disable button-->\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n        <!-- Print button-->\r\n        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title=\"Print Result In Console\" [class.highlighted]='data.print' (click)='markPrint()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>print</mat-icon>\r\n        </button>\r\n        <!-- help button-->\r\n        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title=\"Help\" tabindex=\"-1\" (click)='emitHelpText(undefined)'>\r\n            <mat-icon class='icon'>help</mat-icon>\r\n        </button>\r\n    </div>\r\n    <!-- list of child procedures (if the procedure has children) -->\r\n    <div *ngIf=\"data?.children\" class='container--nested'>\r\n        <procedure-item \r\n            *ngFor=\"let line of data?.children; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)='selectChild($event, line)'\r\n            (delete)='deleteChild(idx)'\r\n            (helpText)='emitHelpText($event)'></procedure-item>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
+module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.selected\"\r\n    [class.error]=\"data.hasError\"\r\n    [class.disabled]=\"!data.enabled\"\r\n    [ngSwitch]=\"data.type\"\r\n    (click)='emitSelect($event, data)'>\r\n    <div class='container--item' >\r\n        <!-- Variable Assignment Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Variable\">\r\n            <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}>  \r\n            = \r\n            <input \r\n                class='input--arg'\r\n                [ngModel]='data.args[1].value'\r\n                (ngModelChange)='data.args[1].value=argMod($event)'\r\n                name='data.args[1].name'\r\n                placeholder={{data.args[1].name}}\r\n                size = {{data.args[1].value?.length||data.args[1].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n            </div>\r\n\r\n        <!-- IF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.If\">\r\n            <div class='function-text'>\r\n                If\r\n            </div>\r\n            ( <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    )\r\n\r\n        </div>\r\n\r\n        <!-- ELSEIF Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Elseif\">\r\n            <div class='function-text'>\r\n                Else if\r\n            </div>\r\n            \r\n        \r\n        ( <input class='input--arg'\r\n                (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                [(ngModel)]='data.args[0].value'\r\n                name='data.args[0].name'\r\n                placeholder={{data.args[0].name}}\r\n                size={{data.args[0].value?.length||data.args[0].name.length}}\r\n                (input)='updateInputSize($event)'>  \r\n                )\r\n        </div>\r\n\r\n        <!-- ELSE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Else\">\r\n            <div class='function-text'>\r\n                Else\r\n            </div>\r\n        </div>\r\n\r\n        <!-- BREAK Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Break\">\r\n            <div class='function-text'>\r\n                Break\r\n            </div>\r\n        </div>\r\n\r\n        <!-- CONTINUE Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Continue\">\r\n            <div class='function-text'>\r\n                Continue\r\n            </div>\r\n        </div>\r\n\r\n\r\n    <!-- FOREACH Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.Foreach\">\r\n                <div class='function-text'>\r\n                    For\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                <div class='function-text'>\r\n                    in\r\n                </div>\r\n                <input class='input--arg'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[1].value'\r\n                    name='data.args[1].name'\r\n                    placeholder={{data.args[1].name}}\r\n                    size={{data.args[1].value?.length||data.args[1].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n                    \r\n        </div>\r\n\r\n        <!-- WHILE Template -->\r\n        <div class='line--item hasChildren' *ngSwitchCase=\"ProcedureTypes.While\">\r\n            <div class='function-text'>\r\n                While\r\n            </div>\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n\r\n        </div>\r\n\r\n        <!-- Constant (Only visible in start node) Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Constant\">\r\n            <div class='function-text'>Constant</div>\r\n\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n\r\n        </div>\r\n        \r\n        <!-- Return (Only visible in End node) Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Return\">\r\n            <div class='function-text'>Return</div>\r\n\r\n            <input class='input--arg' \r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    [(ngModel)]='data.args[0].value'\r\n                    name='data.args[0].name'\r\n                    placeholder={{data.args[0].name}}\r\n                    size={{data.args[0].value?.length||data.args[0].name.length}}\r\n                    (input)='updateInputSize($event)'>  \r\n        </div>\r\n        \r\n\r\n        \r\n        <!-- Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Function\">\r\n            <ng-container *ngIf=\"data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'\">\r\n                <input class='input--var'\r\n                [ngModel]='data.args[0].value'\r\n                (ngModelChange)='data.args[0].value=varMod($event)'\r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)'\r\n                placeholder={{data.args[0].name}}>  \r\n                = \r\n\r\n            </ng-container>\r\n            <div class='function-text'>{{data.meta.module}}.{{data.meta.name}} </div>\r\n\r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <!--\r\n                <input *ngIf=\"p.name.toUpperCase() !== '__MODEL__'; else text_template\" \r\n                \r\n                (cut)='stopProp($event)' \r\n                (paste)='stopProp($event)' \r\n                [(ngModel)]='p.value' \r\n                placeholder={{p.name}}>    \r\n                \r\n                <ng-template #text_template>\r\n                    model,\r\n                </ng-template>\r\n                -->\r\n\r\n                <input *ngIf=\"p.name.indexOf('__') == -1\" \r\n                        class='input--arg' \r\n                        (cut)='stopProp($event)' \r\n                        (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.value?.length||p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n                \r\n\r\n            </ng-container>\r\n\r\n        </div>\r\n\r\n        <!-- Imported Function Template -->\r\n        <div class='line--item' *ngSwitchCase=\"ProcedureTypes.Imported\">\r\n            <input class='input--var'\r\n                    [ngModel]='data.args[0].value'\r\n                    (ngModelChange)='data.args[0].value=varMod($event)'\r\n                    (cut)='stopProp($event)' (paste)='stopProp($event)'\r\n                    placeholder={{data.args[0].name}}>  \r\n            = \r\n            <div class='function-text'>{{data.meta.name}} </div> \r\n            \r\n            <ng-container *ngFor='let p of data.args.slice(1);let i=index'>\r\n                <input class='input--arg' \r\n                        (cut)='stopProp($event)' (paste)='stopProp($event)' \r\n                        [(ngModel)]='p.value' \r\n                        placeholder={{p.name}}\r\n                        size={{p.value?.length||p.name.length}}\r\n                        (input)='updateInputSize($event)'>    \r\n            </ng-container>\r\n            \r\n\r\n        </div>\r\n\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)=\"emitDelete()\" tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <!-- Disable button-->\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n        <!-- Print button-->\r\n        <button *ngIf='canBePrinted()' class='btn' mat-icon-button title=\"Print Result In Console\" [class.highlighted]='data.print' (click)='markPrint()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>print</mat-icon>\r\n        </button>\r\n        <!-- help button-->\r\n        <button *ngIf='haveHelpText()' class='btn' mat-icon-button title=\"Help\" tabindex=\"-1\" (click)='emitHelpText(undefined)'>\r\n            <mat-icon class='icon'>help</mat-icon>\r\n        </button>\r\n    </div>\r\n    <!-- list of child procedures (if the procedure has children) -->\r\n    <div *ngIf=\"data?.children\" class='container--nested'>\r\n        <procedure-item \r\n            *ngFor=\"let line of data?.children; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)='selectChild($event, line)'\r\n            (delete)='deleteChild(idx)'\r\n            (helpText)='emitHelpText($event)'></procedure-item>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -9565,7 +4794,7 @@ module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.s
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container--nested {\n  padding-left: 0px; }\n\n.container--line {\n  margin: 8px 0px 2px 10px;\n  padding: 2px 0px 2px 2px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  color: #505050;\n  min-height: 22px;\n  opacity: 1; }\n\n.container--line.disabled {\n    opacity: 0.5; }\n\n.container--line.selected {\n    border: 1px solid #000096;\n    background-color: gainsboro; }\n\n.container--line.error {\n    border: 1px solid red; }\n\n.container--item {\n  margin: none;\n  padding: none;\n  border: none; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  float: right;\n  background-color: transparent;\n  border: none;\n  display: none;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.container--item:hover .btn {\n  display: block; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.line--item {\n  display: inline-block;\n  color: #505050; }\n\n/*\r\n.hasChildren::before{\r\n    content: '\\25B6';\r\n    position: absolute;\r\n    left: 3px;\r\n    font-size: 8px;\r\n}\r\n*/\n\n.input--var {\n  width: 70px;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-right: 5px; }\n\n.input--arg {\n  resize: horizontal;\n  min-width: 1px;\n  max-width: 300px;\n  width: auto;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px; }\n\ninput:focus {\n  border: 1px solid #000096; }\n\n.function-text {\n  display: inline-block;\n  white-space: normal;\n  font-style: italic;\n  color: #be8c1e;\n  font-weight: 600; }\n"
+module.exports = ".container--nested {\n  padding-left: 0px; }\n\n.container--line {\n  margin: 8px 0px 2px 10px;\n  padding: 2px 0px 2px 2px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  color: #505050;\n  min-height: 22px;\n  opacity: 1; }\n\n.container--line.disabled {\n    opacity: 0.5; }\n\n.container--line.selected {\n    border: 1px solid #000096;\n    background-color: gainsboro; }\n\n.container--line.error {\n    border: 1px solid red; }\n\n.container--item {\n  margin: none;\n  padding: none;\n  border: none; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  float: right;\n  background-color: transparent;\n  border: none;\n  display: none;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.container--item:hover .btn {\n  display: block; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.line--item {\n  display: inline-block;\n  color: #505050; }\n\n/*\r\n.hasChildren::before{\r\n    content: '\\25B6';\r\n    position: absolute;\r\n    left: 3px;\r\n    font-size: 8px;\r\n}\r\n*/\n\n.input--var {\n  width: 70px;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-right: 5px; }\n\n.input--arg {\n  resize: horizontal;\n  min-width: 1px;\n  max-width: 300px;\n  width: auto;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px; }\n\n.input--arg.error {\n    border: 1px solid red; }\n\ninput:focus {\n  border: 1px solid #000096; }\n\n.function-text {\n  display: inline-block;\n  white-space: normal;\n  font-style: italic;\n  color: #be8c1e;\n  font-weight: 600; }\n"
 
 /***/ }),
 
@@ -9582,7 +4811,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _models_procedure__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/procedure */ "./src/app/shared/models/procedure/index.ts");
 /* harmony import */ var _shared_decorators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @shared/decorators */ "./src/app/shared/decorators/index.ts");
-/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9592,7 +4820,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -9606,8 +4833,6 @@ var ProcedureItemComponent = /** @class */ (function () {
         this.copied = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.pasteOn = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.helpText = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.model = _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].model;
-        this.constList = _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].constList;
         this.ProcedureTypes = _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"];
     }
     // delete this procedure
@@ -9645,8 +4870,14 @@ var ProcedureItemComponent = /** @class */ (function () {
             return;
         }
         try {
-            // @ts-ignore
-            this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+            if (this.data.type === _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"].Imported) {
+                this.helpText.emit(this.data.meta.name);
+                // this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+            }
+            else {
+                // @ts-ignore
+                this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+            }
         }
         catch (ex) {
             this.helpText.emit('error');
@@ -9656,7 +4887,7 @@ var ProcedureItemComponent = /** @class */ (function () {
     ProcedureItemComponent.prototype.stopProp = function (event) {
         event.stopPropagation();
     };
-    // modify input: replace space " " with underscore "_"
+    // modify variable input: replace space " " with underscore "_"
     ProcedureItemComponent.prototype.varMod = function (event) {
         if (!event) {
             return event;
@@ -9665,9 +4896,31 @@ var ProcedureItemComponent = /** @class */ (function () {
         str = str.replace(/ /g, '_');
         return str;
     };
+    // modify argument input: check if input is valid
+    ProcedureItemComponent.prototype.argMod = function (event) {
+        return event;
+        console.log(event);
+        var string = event.trim();
+        if (string.substring(0, 1) === '@' || (/^[a-zA-Z_$][0-9a-zA-Z_$]*/i).test(string)) {
+            return event;
+        }
+        try {
+            JSON.parse(string);
+        }
+        catch (ex) {
+            console.log('.........', ex);
+            // document.activeElement.style.error = true;
+        }
+        return event;
+    };
     ProcedureItemComponent.prototype.updateInputSize = function (event) {
         var val = event.target.value || event.target.placeholder;
         event.target.style.width = ctx.measureText(val).width + 10 + 'px';
+    };
+    ProcedureItemComponent.prototype.inputSize = function (val) {
+        console.log(val);
+        // event.target.style.width = ctx.measureText(val).width + 10 + 'px';
+        return ctx.measureText(val).width + 10 + 'px';
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -9716,7 +4969,7 @@ var ProcedureItemComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n    <ul class='toolset__basic'>\r\n        <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n            <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"'\r\n            class='tooltip'\r\n            (click)='add(ProcedureTypes[type])'> \r\n                {{type}}\r\n                <!--\r\n                <span class=\"tooltiptext\">\r\n                    <p class='funcDesc'>{{type}}</p>\r\n                </span>\r\n                -->\r\n            </li>\r\n        </ng-container>\r\n    </ul>\r\n    \r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <ng-container *ngFor='let fn of mod.functions'>\r\n                    <div class='tooltip' *ngIf='fn.name.substring(0,1)!=\"_\"'>\r\n                        <li \r\n                        (click)='add_function(fn)'> \r\n                            {{fn.name}} \r\n                        </li>\r\n                        <span class=\"tooltiptext\" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>\r\n                            <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                            <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>\r\n                        </span>\r\n                    </div>\r\n                </ng-container>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <li *ngFor='let fn of functions' (click)='add_imported_function(fn)'> {{fn.name}} \r\n                    <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                        <mat-icon class='remove-icon'>close</mat-icon>\r\n                    </button>\r\n                </li>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    \r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <!-- <h3>{{ mod.module }}</h3> -->\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n    <ul class='toolset__basic'>\r\n        <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n            <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"\r\n            && type.toUpperCase() !== \"CONSTANT\" && type.toUpperCase() !== \"RETURN\"'\r\n            class='tooltip'\r\n            (click)='add(ProcedureTypes[type])'> \r\n                {{type}}\r\n                <!--\r\n                <span class=\"tooltiptext\">\r\n                    <p class='funcDesc'>{{type}}</p>\r\n                </span>\r\n                -->\r\n            </li>\r\n        </ng-container>\r\n    </ul>\r\n    \r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <ng-container *ngFor='let fn of mod.functions'>\r\n                    <div class='tooltip' *ngIf='fn.name.substring(0,1)!=\"_\"'>\r\n                        <li \r\n                        (click)='add_function(fn)'> \r\n                            {{fn.name}} \r\n                        </li>\r\n                        <span class=\"tooltiptext\" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>\r\n                            <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                            <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>\r\n                        </span>\r\n                    </div>\r\n                </ng-container>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <div class='tooltip' *ngFor='let fn of functions'>\r\n                    <li (click)='add_imported_function(fn)'> {{fn.name}} \r\n                        <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                            <mat-icon class='remove-icon'>close</mat-icon>\r\n                        </button>\r\n                    </li>\r\n                    <span class=\"tooltiptext\">\r\n                        <p class='funcDesc'>{{fn.doc.description}}</p>\r\n                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>\r\n                        <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                        <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>\r\n                    </span>\r\n                </div>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let type of ProcedureTypesArr' >\r\n            <div *ngIf='type.toUpperCase() == \"CONSTANT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        <!--\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        -->\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <!--\r\n        <section *ngFor='let type of ProcedureTypesArr' >\r\n            <div *ngIf='type.toUpperCase() == \"RETURN\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        -->\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -9839,19 +5092,33 @@ var ToolsetComponent = /** @class */ (function () {
                             reader.onload = function () {
                                 // parse the flowchart
                                 var fl = circular_json__WEBPACK_IMPORTED_MODULE_2__["parse"](reader.result.toString()).flowchart;
-                                // create function
+                                // create function and documentation of the function
                                 var funcs = [];
+                                var documentation = {
+                                    name: fl.name,
+                                    module: 'Imported',
+                                    description: fl.description,
+                                    summary: fl.description,
+                                    parameters: [],
+                                    returns: undefined
+                                };
                                 var func = {
-                                    module: {
+                                    flowchart: {
                                         name: fl.name,
                                         nodes: fl.nodes,
                                         edges: fl.edges
                                     },
-                                    name: event.target.files[0].name.split('.')[0],
+                                    name: fl.name,
+                                    module: 'Imported',
+                                    doc: documentation
                                 };
                                 // go through the nodes
                                 func.argCount = fl.nodes[0].procedure.length;
                                 func.args = fl.nodes[0].procedure.map(function (prod) {
+                                    documentation.parameters.push({
+                                        name: prod.args[prod.argCount - 2].value.substring(1, prod.args[prod.argCount - 2].value.length - 1),
+                                        description: prod.meta.description
+                                    });
                                     return {
                                         name: prod.args[prod.argCount - 2].value.substring(1, prod.args[prod.argCount - 2].value.length - 1),
                                         default: prod.args[prod.argCount - 1].default,
@@ -9863,10 +5130,18 @@ var ToolsetComponent = /** @class */ (function () {
                                 if (!func.argCount) {
                                     resolve('error');
                                 }
+                                for (var _i = 0, _a = fl.nodes; _i < _a.length; _i++) {
+                                    var node = _a[_i];
+                                    if (node.type === 'end') {
+                                        if (node.procedure.length > 0) {
+                                            documentation.returns = node.procedure[0].meta.description;
+                                        }
+                                    }
+                                }
                                 // add func and all the imported functions of the imported flowchart to funcs
                                 funcs.push(func);
-                                for (var _i = 0, _a = fl.functions; _i < _a.length; _i++) {
-                                    var i = _a[_i];
+                                for (var _b = 0, _c = fl.functions; _b < _c.length; _b++) {
+                                    var i = _c[_b];
                                     funcs.push(i);
                                 }
                                 resolve(funcs);
@@ -9950,7 +5225,7 @@ var ToolsetComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>{{dataService.node?.name}}</h2>\r\n\r\n<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n\r\n    <div class='container__content'>\r\n        <!-- toolset on the left side -->\r\n        <div class=\"container--toolset\">\r\n            <toolset [functions]='dataService.flowchart.functions' \r\n            [nodeType]='dataService.node.type' \r\n            [hasProd]='dataService.node.procedure.length>0' \r\n            (delete)='deleteFunction($event)' \r\n            (select)='add($event)' \r\n            (imported)='importFunction($event)'></toolset>\r\n        </div>\r\n\r\n        <!-- procedure editor on the right side -->\r\n        <div id='procedure' class=\"container--procedure\">\r\n            <!-- parameter-editor only for start node -->\r\n            <parameter-editor *ngIf=\"dataService.node.type == 'start'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n\r\n            <!-- list of procedure items for all nodes -->\r\n            <procedure-item \r\n            *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)=\"selectProcedure($event,line)\"\r\n            (delete)=\"deleteChild(idx)\"\r\n            (helpText)='emitHelpText($event)'></procedure-item>\r\n            <br>\r\n            <br>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<h2>{{dataService.node?.name}}</h2>\r\n\r\n<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n\r\n    <div class='container__content'>\r\n        <!-- toolset on the left side -->\r\n        <div class=\"container--toolset\">\r\n            <toolset [functions]='dataService.flowchart.functions' \r\n            [nodeType]='dataService.node.type' \r\n            [hasProd]='dataService.node.procedure.length>0' \r\n            (delete)='deleteFunction($event)' \r\n            (select)='add($event)' \r\n            (imported)='importFunction($event)'></toolset>\r\n        </div>\r\n\r\n        <!-- procedure editor on the right side -->\r\n        <div id='procedure' class=\"container--procedure\">\r\n            <!-- parameter-editor only for start node -->\r\n            <parameter-editor *ngIf=\"dataService.node.type == 'start' || dataService.node.type == 'end'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n\r\n            <!-- list of procedure items for all nodes -->\r\n            <procedure-item \r\n            *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n            [data]=\"line\"\r\n            (select)=\"selectProcedure($event,line)\"\r\n            (delete)=\"deleteChild(idx)\"\r\n            (helpText)='emitHelpText($event)'></procedure-item>\r\n            <br>\r\n            <br>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -10017,19 +5292,23 @@ var ViewEditorComponent = /** @class */ (function () {
     };
     // copy selected procedures
     ViewEditorComponent.prototype.copyProd = function () {
-        if (!this.copyCheck) {
+        var node = this.dataService.node;
+        if (!this.copyCheck || node.type === 'end') {
             return;
         }
-        console.log('copying', this.dataService.node.state.procedure);
-        this.copiedProd = this.dataService.node.state.procedure;
+        console.log('copying', node.state.procedure);
+        this.copiedType = node.type;
+        this.copiedProd = node.state.procedure;
     };
     // cut selected procedures
     ViewEditorComponent.prototype.cutProd = function (event) {
-        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT') {
+        var node = this.dataService.node;
+        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.type === 'end') {
             return;
         }
-        console.log('cutting', this.dataService.node.state.procedure);
-        this.copiedProd = this.dataService.node.state.procedure;
+        console.log('cutting', node.state.procedure);
+        this.copiedType = node.type;
+        this.copiedProd = node.state.procedure;
         var parentArray;
         for (var _i = 0, _a = this.copiedProd; _i < _a.length; _i++) {
             var prod = _a[_i];
@@ -10037,7 +5316,7 @@ var ViewEditorComponent = /** @class */ (function () {
                 parentArray = prod.parent.children;
             }
             else {
-                parentArray = this.dataService.node.procedure;
+                parentArray = node.procedure;
             }
             for (var i = 0; i < parentArray.length; i++) {
                 if (parentArray[i] === prod) {
@@ -10046,36 +5325,41 @@ var ViewEditorComponent = /** @class */ (function () {
                 }
             }
         }
-        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.dataService.node);
+        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(node);
     };
     // paste copied procedures
     ViewEditorComponent.prototype.pasteProd = function (event) {
-        if (this.copyCheck && this.copiedProd && document.activeElement.nodeName.toUpperCase() !== 'INPUT') {
-            var pastingPlace = this.dataService.node.state.procedure[0];
+        var node = this.dataService.node;
+        if (this.copyCheck
+            && this.copiedProd
+            && this.copiedType === node.type
+            && document.activeElement.nodeName.toUpperCase() !== 'INPUT'
+            && document.activeElement.nodeName.toUpperCase() !== 'TEXTAREA') {
+            var pastingPlace = node.state.procedure[0];
             if (pastingPlace === undefined) {
                 for (var i = 0; i < this.copiedProd.length; i++) {
                     console.log('pasting', this.copiedProd[i].ID);
-                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.dataService.node, this.copiedProd[i]);
-                    this.dataService.node.state.procedure[0].selected = false;
-                    this.dataService.node.state.procedure = [];
+                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(node, this.copiedProd[i]);
+                    node.state.procedure[0].selected = false;
+                    node.state.procedure = [];
                 }
             }
             else if (pastingPlace.children) {
                 for (var i = 0; i < this.copiedProd.length; i++) {
                     console.log('pasting', this.copiedProd[i].ID);
-                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.dataService.node, this.copiedProd[i]);
-                    this.dataService.node.state.procedure[0].selected = false;
+                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(node, this.copiedProd[i]);
+                    node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
-                    this.dataService.node.state.procedure = [pastingPlace];
+                    node.state.procedure = [pastingPlace];
                 }
             }
             else {
                 for (var i = this.copiedProd.length - 1; i >= 0; i--) {
                     console.log('pasting', this.copiedProd[i].ID);
-                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(this.dataService.node, this.copiedProd[i]);
-                    this.dataService.node.state.procedure[0].selected = false;
+                    _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(node, this.copiedProd[i]);
+                    node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
-                    this.dataService.node.state.procedure = [pastingPlace];
+                    node.state.procedure = [pastingPlace];
                 }
             }
             // this.copiedProd = undefined;
@@ -10106,7 +5390,17 @@ var ViewEditorComponent = /** @class */ (function () {
         }
     };
     ViewEditorComponent.prototype.emitHelpText = function (event) {
-        this.helpText.emit(event);
+        if (typeof (event) === 'string') {
+            for (var _i = 0, _a = this.dataService.flowchart.functions; _i < _a.length; _i++) {
+                var func = _a[_i];
+                if (func.name === event) {
+                    this.helpText.emit(func.doc);
+                }
+            }
+        }
+        else {
+            this.helpText.emit(event);
+        }
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
@@ -10202,6 +5496,1051 @@ var ViewEditorModule = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], ViewEditorModule);
     return ViewEditorModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/edge/edge.component.html":
+/*!***************************************************************!*\
+  !*** ./src/app/views/view-flowchart/edge/edge.component.html ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!--the main line-->\r\n<svg:polyline \r\nid=\"main-edge\" \r\nclass = \"edge\" \r\n[class.selected] = \"edge.selected\"\r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 8) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 16) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 22)\" \r\n/>\r\n\r\n<!--a wider invisible line to make the wire easier to click-->\r\n<svg:polyline \r\nid=\"invisible-edge\" \r\nclass = \"inviEdge\" \r\n[attr.points] = \"(edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1]+ 15) + ' ' +\r\n\r\n                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +\r\n                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +\r\n\r\n                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +\r\n                    (edge.target.parentNode.position.y + inputOffset[1] - 12)\" \r\n(click)='select($event)'/>\r\n    \r\n\r\n"
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/edge/edge.component.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/views/view-flowchart/edge/edge.component.ts ***!
+  \*************************************************************/
+/*! exports provided: EdgeComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EdgeComponent", function() { return EdgeComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var EdgeComponent = /** @class */ (function () {
+    function EdgeComponent() {
+        this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.selected = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+    }
+    // select a wire
+    EdgeComponent.prototype.select = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (this.edge.selected) {
+            this.selected.emit(event.ctrlKey);
+        }
+        else {
+            if (event.ctrlKey) {
+                this.selected.emit('ctrl');
+            }
+            else {
+                this.selected.emit('single');
+            }
+        }
+    };
+    // delete a wire
+    EdgeComponent.prototype.deleteEdge = function () {
+        this.delete.emit();
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('canvas'),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ElementRef"])
+    ], EdgeComponent.prototype, "canvas", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], EdgeComponent.prototype, "edge", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], EdgeComponent.prototype, "inputOffset", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], EdgeComponent.prototype, "outputOffset", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], EdgeComponent.prototype, "delete", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], EdgeComponent.prototype, "selected", void 0);
+    EdgeComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: '[edge]',
+            template: __webpack_require__(/*! ./edge.component.html */ "./src/app/views/view-flowchart/edge/edge.component.html"),
+            styles: ["\n    .edge{\n        fill: none;\n        stroke: rgb(80, 80, 80);\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n        opacity: 1;\n        pointer-events: stroke;\n        marker-end: url(#arrow);\n    }\n    .inviEdge{\n        fill: none;\n        stroke: gray;\n        stroke-width: 30px;\n        opacity: 0;\n        pointer-events: stroke;\n    }\n    .selected{\n        stroke: rgb(0, 0, 150);\n        opacity: 1;\n        marker-end: url(#arrow_selected);\n\n    }\n  "]
+        })
+    ], EdgeComponent);
+    return EdgeComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/node/node.actions.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/views/view-flowchart/node/node.actions.ts ***!
+  \***********************************************************/
+/*! exports provided: ACTIONS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTIONS", function() { return ACTIONS; });
+var ACTIONS;
+(function (ACTIONS) {
+    ACTIONS[ACTIONS["SELECT"] = 0] = "SELECT";
+    ACTIONS[ACTIONS["DELETE"] = 1] = "DELETE";
+    ACTIONS[ACTIONS["COPY"] = 2] = "COPY";
+    ACTIONS[ACTIONS["CONNECT"] = 3] = "CONNECT";
+    ACTIONS[ACTIONS["DRAGNODE"] = 4] = "DRAGNODE";
+    ACTIONS[ACTIONS["DROPPORT"] = 5] = "DROPPORT";
+    ACTIONS[ACTIONS["DRAGPORT"] = 6] = "DRAGPORT";
+    ACTIONS[ACTIONS["PROCEDURE"] = 7] = "PROCEDURE";
+})(ACTIONS || (ACTIONS = {}));
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/node/node.component.html":
+/*!***************************************************************!*\
+  !*** ./src/app/views/view-flowchart/node/node.component.html ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/node/node.component.scss":
+/*!***************************************************************!*\
+  !*** ./src/app/views/view-flowchart/node/node.component.scss ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/*\r\n$color-main: #2D4885;\r\n$color-accent: #50ABB9;\r\n$color-muted: #88D4DD;\r\n$color-text-accent: #DC772F;\r\n*/\n.node {\n  fill: #fafafa;\n  stroke-width: 2px;\n  stroke: #505050;\n  stroke-opacity: 1;\n  stroke-linecap: round;\n  stroke-linejoin: round; }\n.node.node--disabled {\n    stroke-opacity: 0.5;\n    fill-opacity: 0.5; }\n.node.node--selected {\n    stroke: #000096; }\n.node.node--error {\n    stroke: red; }\n.textdiv {\n  text-align: center;\n  width: 94px; }\n.foreignObject {\n  width: 100;\n  height: 80; }\ntextarea {\n  font-family: sans-serif;\n  background: transparent;\n  display: inline-block;\n  border: none;\n  font-size: 14px;\n  width: 100%;\n  height: 70px;\n  font-weight: 600;\n  text-align: center;\n  vertical-align: middle;\n  resize: none;\n  overflow: hidden;\n  color: #505050; }\ntextarea.selected {\n    color: #000096; }\ntextarea.disabled {\n    opacity: 0.5; }\n.textarea_startend {\n  font-size: 14px;\n  font-weight: 600;\n  color: #505050;\n  height: 20px;\n  pointer-events: none; }\n.inputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n.outputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n"
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/node/node.component.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/views/view-flowchart/node/node.component.ts ***!
+  \*************************************************************/
+/*! exports provided: NodeComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeComponent", function() { return NodeComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _node_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node.actions */ "./src/app/views/view-flowchart/node/node.actions.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NodeComponent = /** @class */ (function () {
+    function NodeComponent() {
+        this.action = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.last = [0, 0];
+        this.isDown = false;
+    }
+    /*
+    update the position of the node
+    */
+    NodeComponent.prototype.updatePosition = function (position) {
+        this.node.position = position;
+    };
+    /*
+    select a node
+    */
+    NodeComponent.prototype.nodeSelect = function (event) {
+        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].SELECT });
+    };
+    /*
+    check if the input port of the node is draggable --> false only for start node, true otherwise
+    */
+    NodeComponent.prototype.inputDraggable = function () {
+        return !(this.node.type === 'start');
+    };
+    /*
+    check if the output port of the node is draggable --> false only for end node, true otherwise
+    */
+    NodeComponent.prototype.outputDraggable = function () {
+        return !(this.node.type === 'end');
+    };
+    /*
+    initiate dragging node when mousedown inside the node group
+    */
+    NodeComponent.prototype.startDragNode = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].DRAGNODE, data: event });
+    };
+    /*
+    initiate dragging port when mousedown inside the port (inside the invisible stroke of the port)
+    */
+    NodeComponent.prototype.startDragPort = function (event, portType) {
+        event.preventDefault();
+        event.stopPropagation();
+        var pos = this.node.position;
+        var data;
+        if (portType === 'input') {
+            data = this.node.input;
+            pos = [pos.x + this.inputOffset[0], pos.y + this.inputOffset[1]];
+        }
+        else {
+            data = this.node.output;
+            pos = [pos.x + this.outputOffset[0], pos.y + this.outputOffset[1]];
+        }
+        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].DRAGPORT, data: data, position: pos, type: portType });
+    };
+    /*
+    focus on the description of the node when mouse down inside the node
+    ** no stopPropagation to allow propagation to startDragNode --> node can still be dragged
+    */
+    NodeComponent.prototype.focusText = function (event) {
+        document.getElementById(this.node.id).focus();
+    };
+    /*
+    switch the viewchild of the appModule to the node's procedure view when double-click on the node
+    */
+    NodeComponent.prototype.switchToProcedure = function (event) {
+        this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].PROCEDURE });
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], NodeComponent.prototype, "node", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], NodeComponent.prototype, "selected", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], NodeComponent.prototype, "inputOffset", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], NodeComponent.prototype, "outputOffset", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], NodeComponent.prototype, "action", void 0);
+    NodeComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: '[node]',
+            template: __webpack_require__(/*! ./node.component.html */ "./src/app/views/view-flowchart/node/node.component.html"),
+            styles: [__webpack_require__(/*! ./node.component.scss */ "./src/app/views/view-flowchart/node/node.component.scss")]
+        })
+    ], NodeComponent);
+    return NodeComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/view-flowchart.component.html":
+/*!********************************************************************!*\
+  !*** ./src/app/views/view-flowchart/view-flowchart.component.html ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div id = 'flowchart-main-container' class='container'>\r\n    <!--\r\n    -->\r\n\r\n    <!-- svg component -->\r\n    <svg id=\"svg-canvas\" class = \"svgCanvas\" \r\n    [attr.viewBox]=\"viewbox\"\r\n    (mouseenter)='activateKeyEvent()'\r\n    (mouseleave)='deactivateKeyEvent()'\r\n    (mousedown)='panStart($event)'\r\n    (mousemove)='handleMouseMove($event)'  \r\n    (mouseup)='handleMouseUp($event)'\r\n    (wheel)='scale($event)'\r\n    >\r\n        <!-- definitions for svg: grid patterns, arrow head for connecting wire-->\r\n        <defs>\r\n            <!-- grid pattern -->\r\n            <pattern id=\"smallGrid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\">\r\n              <path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"gray\" stroke-width=\"0.5\"/>\r\n            </pattern>\r\n            <pattern id=\"grid\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\">\r\n              <rect width=\"100\" height=\"100\" fill=\"url(#smallGrid)\"/>\r\n              <path d=\"M 100 0 L 0 0 0 100\" fill=\"none\" stroke=\"gray\" stroke-width=\"1\"/>\r\n            </pattern>\r\n\r\n            <!-- arrow head -->\r\n            <marker id=\"arrow\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n              <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(80, 80, 80)\" fill=\"transparent\" />\r\n            </marker>\r\n            <marker id=\"arrow_selected\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(0, 0, 150)\" fill=\"transparent\"  />\r\n            </marker>\r\n        </defs>\r\n\r\n        <!-- svg frame-->\r\n        <rect width=\"100%\" height=\"100%\" fill=\"url(#grid)\" />\r\n                  \r\n\r\n        <!-- wires => edge.component -->\r\n        <g edge *ngFor=\"let edge of dataService.flowchart.edges; let edge_index = index\" \r\n        [edge]='edge'\r\n        [inputOffset]='inputOffset'\r\n        [outputOffset]='outputOffset'\r\n        (selected)='selectEdge($event, edge_index)'\r\n        />\r\n\r\n        <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->\r\n        <line id=\"temporary-wire\" class=\"temp-wire\" x1=\"0\" y1='0' x2='0' y2='0'></line>\r\n\r\n        <!-- nodes => node.component -->\r\n        <g node *ngFor=\"let node of dataService.flowchart.nodes; let node_index = index\" \r\n        id='flw_node_{{node_index}}'\r\n        [node]='node' \r\n        [selected]='isSelected(node_index)'\r\n        [inputOffset]='inputOffset'\r\n        [outputOffset]='outputOffset'\r\n        (action)='nodeAction($event, node_index)'\r\n        />\r\n    </svg>\r\n\r\n    <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->\r\n    <div class='button-row'>\r\n        <button mat-icon-button disableRipple='true' (click)='addNode()' title=\"Add Node\">\r\n        <mat-icon>add</mat-icon>\r\n        </button>\r\n        <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title=\"Delete Selected Node\">\r\n        <mat-icon>remove</mat-icon>\r\n        </button>\r\n        <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title=\"Delete Selected Wires\">\r\n        <mat-icon>link_off</mat-icon>\r\n        </button>\r\n    </div>\r\n\r\n    <!-- focus on flowchart button on the top right of the svg -->\r\n    <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title=\"Zoom to Fit\">\r\n        <mat-icon>control_camera</mat-icon>\r\n    </button>\r\n    \r\n\r\n</div>\r\n\r\n\r\n\r\n"
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/view-flowchart.component.scss":
+/*!********************************************************************!*\
+  !*** ./src/app/views/view-flowchart/view-flowchart.component.scss ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /*     width: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n    display: flex; \r\n    flex-direction: row; \r\n    justify-content: space-between;\r\n\r\n    position: relative;\r\n    font-size: 14px; \r\n    font-weight: 600; \r\n    line-height: $header-height;\r\n    text-transform: uppercase;\r\n    letter-spacing: 1.5px;\r\n    height: $header-height;\r\n\r\n    color: #ADADAD;\r\n\r\n    .btn-group{\r\n        height: $header-height; \r\n\r\n        button{\r\n            width: 0.9*$header-height; \r\n            height: 0.9*$header-height; \r\n            margin: 0px;\r\n            border: 1px solid #B4B1B1;\r\n            box-shadow: none;\r\n\r\n            &:focus{\r\n                \r\n            }\r\n        }\r\n        \r\n    }\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n    &:focus{\r\n        \r\n    }\r\n} */ }\n\n.viewer .container {\n    display: flex;\n    flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n\n.container .svgCanvas .temp-wire {\n    stroke: #505050;\n    stroke-width: 2px;\n    stroke-dasharray: 10 15;\n    opacity: 0.5; }\n\n.transform--container {\n  position: absolute;\n  width: 100%;\n  transition: -webkit-transform 0.1s;\n  transition: transform 0.1s;\n  transition: transform 0.1s, -webkit-transform 0.1s; }\n\nsplit-area {\n  overflow: auto !important; }\n\ninput {\n  border: none; }\n\ninput:focus {\n  border-bottom: 1px dashed gray; }\n\n#flowchart__name {\n  margin: 0 auto;\n  font-size: 14px;\n  line-height: 28px;\n  font-weight: bold;\n  color: #8AA8C0; }\n\n.button-row {\n  position: absolute;\n  top: 0px;\n  left: 10px; }\n\n.button-row button {\n    color: #505050;\n    width: 28px; }\n\n.resetViewer-button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  color: #505050; }\n\n.viewer {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px), repeating-linear-gradient(-90deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px);\n  background-size: 71px 71px;\n  background-color: white;\n  box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 30px; }\n\n.viewer .container {\n    position: absolute;\n    height: 100%;\n    overflow: hidden; }\n\n.viewer .container .disabled {\n      color: #8AA8C0; }\n\n.viewer .container .disabled:hover {\n        color: #8AA8C0 !important; }\n\n.viewer .container .sidebar {\n      font-size: 12px;\n      background-color: #F1F1F1;\n      color: #395D73;\n      white-space: nowrap;\n      overflow-x: hidden !important; }\n\n.viewer .container .sidebar section {\n        padding-left: 15px;\n        padding-bottom: 5px;\n        padding-top: 5px;\n        border-bottom: 1px solid #8AA8C0; }\n\n.viewer .container .sidebar section div {\n          cursor: pointer; }\n\n.viewer .container .sidebar section div:hover {\n            color: #F0BFA0; }\n\n.viewer .content-wrapper {\n    position: relative;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .info-container {\n    padding: 0px 30px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between; }\n\n.viewer .info-container .info {\n      display: flex;\n      flex-direction: column; }\n\n.viewer .info-container .info .label {\n        font-size: 12px;\n        font-weight: 100;\n        color: #F07A79; }\n\n.viewer .info-container .info .value {\n        color: #395D73;\n        font-size: 11px;\n        font-weight: 600; }\n\n.viewer .info-container .info .action {\n        cursor: pointer;\n        font-size: 11px;\n        color: #8AA8C0; }\n\n.viewer .graph-container {\n    position: absolute;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .graph-container #graph-edges {\n      background-color: transparent;\n      z-index: 1000; }\n\n.viewer .graph-container #graph-edges #temporary-edge .hidden {\n        display: none; }\n\n.viewer .graph-container #graph-nodes {\n      background-color: transparent;\n      overflow: hidden;\n      z-index: 1000; }\n\n.viewer .info-container {\n    position: absolute;\n    right: 0;\n    bottom: 0; }\n\n.viewer .info-container .label, .viewer .info-container .value {\n      margin-right: 5px;\n      font-weight: normal !important; }\n\n.viewer .node-container {\n    position: relative; }\n\n.viewer .node-container .node {\n      position: absolute;\n      -webkit-transform-origin: top left;\n              transform-origin: top left;\n      z-index: 3;\n      margin: 0px;\n      color: #395D73; }\n\n.viewer .node-container .node.hidden {\n        display: none; }\n\n.viewer .node-container .node .btn-container {\n        position: absolute;\n        right: -30px;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        height: 100px; }\n\n.viewer .node-container .node .btn-container .btn-group {\n          position: relative;\n          display: flex;\n          flex-direction: column;\n          justify-content: center;\n          background: none; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button {\n            position: relative;\n            width: 25px;\n            height: 24px;\n            cursor: pointer;\n            font-size: 9px;\n            text-align: center; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button .material-icons {\n              font-size: 18px;\n              line-height: 24px;\n              color: #8AA8C0; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover {\n              color: white; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover .mat-icon {\n                color: #F0BFA0; }\n\n.viewer .node-container .node .node-body {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        position: relative;\n        min-height: 30px;\n        min-width: 70px;\n        width: auto;\n        border: 1px solid #395D73;\n        background-color: rgba(255, 255, 255, 0.7);\n        cursor: move; }\n\n.viewer .node-container .node .node-body.disabled {\n          opacity: 0.4; }\n\n.viewer .node-container .node .node-body.selected {\n          border-color: green; }\n\n.viewer .node-container .node .node-body.library {\n          border-color: #395D73;\n          border-style: solid; }\n\n.viewer .node-container .node .node-body.error {\n          background-color: #E94858; }\n\n.viewer .node-container .node .node-body.function {\n          background-color: yellow;\n          border: 1px dashed green; }\n\n.viewer .node-container .node .node-body .node-name {\n          font-family: sans-serif;\n          font-size: 12px;\n          border-bottom: 1px solid #395D73;\n          text-align: center;\n          background-color: #F1F1F1; }\n\n.viewer .node-container .node .node-body .node-name input {\n            background-color: inherit;\n            border: 0px;\n            color: #395D73;\n            text-align: center; }\n\n.viewer .node-container .node .node-body .node-name.selected {\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .node-name.selected input {\n              color: white;\n              font-weight: bold; }\n\n.viewer .node-container .node .node-body .node-name.selected input:focus {\n                color: #395D73;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container {\n          display: flex;\n          flex-direction: column;\n          margin-top: 10px;\n          margin-bottom: 10px; }\n\n.viewer .node-container .node .node-body .port-container .divider {\n            height: 2px;\n            width: 100%;\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .port-container .port {\n            display: flex;\n            flex-direction: row;\n            margin: 5px 0px; }\n\n.viewer .node-container .node .node-body .port-container .port.hidden {\n              display: none; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip {\n              width: 15px;\n              height: 15px;\n              border-radius: 50%;\n              background-color: #F1F1F1;\n              border: 1px solid #395D73;\n              cursor: pointer; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.isFunction {\n                border-style: dashed;\n                background-color: gray;\n                border-radius: 0px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.selected {\n                border: 2px solid #8AA8C0;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip:hover {\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name {\n              font-size: 12px;\n              margin: 0px 5px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name.isFunction {\n                color: black;\n                font-size: 9.6px; }\n\n.viewer .node-container .node .node-body .port-container .port.input {\n              justify-content: flex-start;\n              margin-left: -7.5px; }\n\n.viewer .node-container .node .node-body .port-container .port.output {\n              justify-content: flex-end;\n              margin-right: -7.5px; }\n\n.viewer .node-container .node:active {\n        cursor: none; }\n"
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/view-flowchart.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/views/view-flowchart/view-flowchart.component.ts ***!
+  \******************************************************************/
+/*! exports provided: ViewFlowchartComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewFlowchartComponent", function() { return ViewFlowchartComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _models_node__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/node */ "./src/app/shared/models/node/index.ts");
+/* harmony import */ var _node_node_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node/node.actions */ "./src/app/views/view-flowchart/node/node.actions.ts");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! circular-json */ "./node_modules/circular-json/build/circular-json.node.js");
+/* harmony import */ var circular_json__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(circular_json__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+// constant for the size of the svg canvas viewbox
+var canvasSize = 1500;
+var ViewFlowchartComponent = /** @class */ (function () {
+    function ViewFlowchartComponent(dataService) {
+        this.dataService = dataService;
+        this.switch = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.viewbox = "0 0 " + canvasSize + " " + canvasSize;
+        this.startCoords = [];
+        // variable for flowchart zooming
+        this.mousePos = [0, 0];
+        this.zoom = 1;
+        // variable for edge
+        this.edge = { source: undefined, target: undefined, selected: false };
+        this.selectedEdge = [];
+        // listener for events, only activated when the mouse is hovering over the svg component
+        this.keydownListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'keydown');
+        this.copyListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'copy');
+        this.pasteListener = Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["fromEvent"])(document, 'paste');
+        this.listenerActive = false;
+        // constants for offset positions of input/output port relative to the node's position
+        this.inputOffset = [50, -8];
+        this.outputOffset = [50, 88];
+    }
+    ViewFlowchartComponent_1 = ViewFlowchartComponent;
+    ViewFlowchartComponent.enableNode = function (node) {
+        for (var _i = 0, _a = node.input.edges; _i < _a.length; _i++) {
+            var edge = _a[_i];
+            if (!edge.source.parentNode.enabled) {
+                return;
+            }
+        }
+        node.enabled = true;
+        for (var _b = 0, _c = node.output.edges; _b < _c.length; _b++) {
+            var edge = _c[_b];
+            ViewFlowchartComponent_1.enableNode(edge.target.parentNode);
+        }
+    };
+    ViewFlowchartComponent.disableNode = function (node) {
+        node.enabled = false;
+        for (var _i = 0, _a = node.output.edges; _i < _a.length; _i++) {
+            var edge = _a[_i];
+            ViewFlowchartComponent_1.disableNode(edge.target.parentNode);
+        }
+    };
+    ViewFlowchartComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.canvas = document.getElementById('svg-canvas');
+        // const panZoom = svgPanZoom(this.canvas);
+        var bRect = this.canvas.getBoundingClientRect();
+        this.offset = [bRect.left, bRect.top];
+        // copy: copy node
+        this.copySub = this.copyListener.subscribe(function (val) {
+            if (!_this.listenerActive) {
+                return;
+            }
+            var node = _this.dataService.flowchart.nodes[_this.dataService.flowchart.meta.selected_nodes[0]];
+            if (node.type !== 'start' && node.type !== 'end') {
+                console.log('copied node:', node);
+                var cp = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](node));
+                _this.copied = circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](cp);
+            }
+        });
+        // paste: paste copied node
+        this.pasteSub = this.pasteListener.subscribe(function (val) {
+            if (!_this.listenerActive) {
+                return;
+            }
+            if (_this.copied) {
+                event.preventDefault();
+                var newNode = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](_this.copied);
+                var pt = _this.canvas.createSVGPoint();
+                pt.x = 20;
+                pt.y = 100;
+                var svgP = void 0;
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                if (isFirefox) {
+                    var ctm = _this.canvas.getScreenCTM();
+                    // const bRect = this.canvas.getBoundingClientRect();
+                    ctm.a = ctm.a * _this.zoom;
+                    ctm.d = ctm.d * _this.zoom;
+                    ctm.e = bRect.x;
+                    ctm.f = bRect.y;
+                    svgP = pt.matrixTransform(ctm.inverse());
+                }
+                else {
+                    svgP = pt.matrixTransform(_this.canvas.getScreenCTM().inverse());
+                }
+                _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].updateNode(newNode, svgP);
+                _this.dataService.flowchart.nodes.push(newNode);
+                console.log('pasting node:', newNode);
+            }
+        });
+        // delete: delete selected edge(s)
+        this.keydownSub = this.keydownListener.subscribe(function (val) {
+            if (!_this.listenerActive) {
+                return;
+            }
+            if (val.key === 'Delete') {
+                _this.deleteSelectedEdges();
+            }
+        });
+    };
+    /*
+    handle event received from node component
+    */
+    ViewFlowchartComponent.prototype.nodeAction = function (event, node_index) {
+        switch (event.action) {
+            // switch the viewchild of the appModule to the node's procedure view when double-click on the node
+            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].PROCEDURE:
+                this.switch.emit('editor');
+                this.deactivateKeyEvent();
+                break;
+            // select a node
+            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].SELECT:
+                this.dataService.flowchart.meta.selected_nodes = [node_index];
+                break;
+            // initiate dragging node
+            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].DRAGNODE:
+                this.element = this.dataService.flowchart.nodes[node_index];
+                var pt = this.canvas.createSVGPoint();
+                // get current mouse position in the page
+                pt.x = event.data.pageX;
+                pt.y = event.data.pageY;
+                // convert mouse position to svg position (special procedure for firefox)
+                var svgP = void 0;
+                var isFirefox = typeof InstallTrigger !== 'undefined';
+                if (isFirefox) {
+                    var ctm = this.canvas.getScreenCTM();
+                    var bRect = this.canvas.getBoundingClientRect();
+                    ctm.a = ctm.a * this.zoom;
+                    ctm.d = ctm.d * this.zoom;
+                    ctm.e = bRect.x;
+                    ctm.f = bRect.y;
+                    svgP = pt.matrixTransform(ctm.inverse());
+                }
+                else {
+                    svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+                }
+                // save the svg position as startCoords
+                this.startCoords = [
+                    svgP.x,
+                    svgP.y
+                ];
+                if (this.startCoords[0] === NaN) {
+                    this.startCoords = [0, 0];
+                }
+                // mark the dragging mode as dragNode
+                this.isDown = 2;
+                break;
+            // initiate dragging input/output port
+            case _node_node_actions__WEBPACK_IMPORTED_MODULE_2__["ACTIONS"].DRAGPORT:
+                // create a new edge
+                this.edge = { source: undefined, target: undefined, selected: false };
+                // assign the port to the edge's input/output accordingly
+                if (event.type === 'input') {
+                    this.edge.target = event.data;
+                }
+                else {
+                    this.edge.source = event.data;
+                }
+                this.startType = event.type;
+                // modify the temporary-edge's coordinate
+                this.element = document.getElementById('temporary-wire');
+                this.element.setAttribute('x1', event.position[0]);
+                this.element.setAttribute('y1', event.position[1]);
+                this.element.setAttribute('x2', event.position[0]);
+                this.element.setAttribute('y2', event.position[1]);
+                this.isDown = 3;
+                break;
+        }
+    };
+    // check if the node at node_index is selected
+    ViewFlowchartComponent.prototype.isSelected = function (node_index) {
+        return this.dataService.flowchart.meta.selected_nodes.indexOf(node_index) > -1;
+    };
+    // add a new node
+    ViewFlowchartComponent.prototype.addNode = function () {
+        // create a new node
+        var newNode = _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].getNewNode();
+        // the new node's position would be (20,100) relative to the current view
+        var pt = this.canvas.createSVGPoint();
+        pt.x = 20;
+        pt.y = 100;
+        // convert the position to svg position
+        var svgP;
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox) {
+            var ctm = this.canvas.getScreenCTM();
+            var bRect = this.canvas.getBoundingClientRect();
+            ctm.a = ctm.a * this.zoom;
+            ctm.d = ctm.d * this.zoom;
+            ctm.e = bRect.x;
+            ctm.f = bRect.y;
+            svgP = pt.matrixTransform(ctm.inverse());
+        }
+        else {
+            svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        }
+        // assign the position to the new node and add it to the flowchart
+        newNode.position.x = svgP.x;
+        newNode.position.y = svgP.y;
+        this.dataService.flowchart.nodes.push(newNode);
+    };
+    // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
+    ViewFlowchartComponent.prototype.activateKeyEvent = function () {
+        this.listenerActive = true;
+    };
+    // deactivate the event listeners when the mouse exit the svg component
+    ViewFlowchartComponent.prototype.deactivateKeyEvent = function () {
+        this.listenerActive = false;
+    };
+    // delete selected node
+    ViewFlowchartComponent.prototype.deleteSelectedNodes = function () {
+        // for each of the selected node
+        while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
+            var node_index = this.dataService.flowchart.meta.selected_nodes.pop();
+            var node = this.dataService.flowchart.nodes[node_index];
+            // continue if the node is a start/end node
+            if (node.type === 'start' || node.type === 'end') {
+                continue;
+            }
+            var edge_index = 0;
+            // delete all the edges connected to the node
+            while (edge_index < this.dataService.flowchart.edges.length) {
+                var tbrEdge = this.dataService.flowchart.edges[edge_index];
+                if (tbrEdge.target.parentNode === node || tbrEdge.source.parentNode === node) {
+                    this.deleteEdge(edge_index, node.id);
+                    continue;
+                }
+                edge_index += 1;
+            }
+            // remove the node from the flowchart
+            this.dataService.flowchart.nodes.splice(Number(node_index), 1);
+        }
+    };
+    // delete an edge with a known index
+    ViewFlowchartComponent.prototype.deleteEdge = function (edge_index, deletedNode) {
+        var tbrEdge = this.dataService.flowchart.edges[edge_index];
+        // remove the edge from the target node's list of edges
+        for (var i in this.dataService.flowchart.edges) {
+            if (tbrEdge.target.edges[i] === tbrEdge) {
+                tbrEdge.target.edges.splice(Number(i), 1);
+                break;
+            }
+        }
+        // remove the edge from the source node's list of edges
+        for (var i in tbrEdge.source.edges) {
+            if (tbrEdge.source.edges[i] === tbrEdge) {
+                tbrEdge.source.edges.splice(Number(i), 1);
+                break;
+            }
+        }
+        if (tbrEdge.target.parentNode.input.edges.length === 0 && deletedNode !== tbrEdge.target.parentNode.id) {
+            ViewFlowchartComponent_1.disableNode(tbrEdge.target.parentNode);
+        }
+        else {
+            ViewFlowchartComponent_1.enableNode(tbrEdge.target.parentNode);
+        }
+        // remove the edge from the general list of edges
+        this.dataService.flowchart.edges.splice(edge_index, 1);
+        this.dataService.flowchart.ordered = false;
+    };
+    // delete all the selected edges
+    ViewFlowchartComponent.prototype.deleteSelectedEdges = function () {
+        this.selectedEdge.sort().reverse();
+        for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
+            var edge_index = _a[_i];
+            this.deleteEdge(edge_index, undefined);
+        }
+        this.selectedEdge = [];
+    };
+    // select an edge
+    ViewFlowchartComponent.prototype.selectEdge = function (event, edge_index) {
+        // if ctrl is pressed, add the edge into the list of selected edges
+        if (event === 'ctrl') {
+            this.selectedEdge.push(edge_index);
+            this.dataService.flowchart.edges[edge_index].selected = true;
+        }
+        else if (event === 'single' || (event === false && this.selectedEdge.length > 1)) {
+            if (this.selectedEdge.length > 0) {
+                for (var _i = 0, _a = this.selectedEdge; _i < _a.length; _i++) {
+                    var e = _a[_i];
+                    this.dataService.flowchart.edges[e].selected = false;
+                }
+            }
+            this.selectedEdge = [edge_index];
+            this.dataService.flowchart.edges[edge_index].selected = true;
+        }
+        else {
+            this.dataService.flowchart.edges[edge_index].selected = false;
+            for (var i = 0; i < this.selectedEdge.length; i++) {
+                if (this.selectedEdge[i] === edge_index) {
+                    this.selectedEdge.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    };
+    // focus view onto the flowchart
+    ViewFlowchartComponent.prototype.focusFlowchart = function () {
+        // find the frame of the flowchart: frame = [minX, minY, maxX, maxY]
+        var frame = [this.dataService.flowchart.nodes[0].position.x, this.dataService.flowchart.nodes[0].position.y,
+            this.dataService.flowchart.nodes[0].position.x, this.dataService.flowchart.nodes[0].position.y];
+        for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
+            var node = _a[_i];
+            if (node.position.x < frame[0]) {
+                frame[0] = node.position.x;
+            }
+            else if (node.position.x > frame[2]) {
+                frame[2] = node.position.x;
+            }
+            if (node.position.y < frame[1]) {
+                frame[1] = node.position.y;
+            }
+            else if (node.position.y > frame[3]) {
+                frame[3] = node.position.y;
+            }
+        }
+        frame[2] += 100;
+        frame[3] += 80;
+        // calculate the zoom to fit the whole flowchart
+        var bRect = this.canvas.getBoundingClientRect();
+        var ctm = this.canvas.getScreenCTM();
+        var zoom = bRect.width / (ctm.a * (frame[2] - frame[0]));
+        var heightZoom = bRect.height / (ctm.d * (frame[3] - frame[1]));
+        if (zoom > heightZoom) {
+            zoom = heightZoom;
+        }
+        if (zoom > 2.5) {
+            zoom = 2.5;
+        }
+        // calculate the difference between height and width, if height is bigger than width,
+        // centering the flowchart based on the difference
+        var height_width_diff = ((frame[3] - frame[1]) - (frame[2] - frame[0])) / 2;
+        if (height_width_diff > 0) {
+            frame[0] -= height_width_diff;
+        }
+        // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
+        if (frame[0] < 0) {
+            frame[0] = 0;
+        }
+        if (frame[1] < 0) {
+            frame[1] = 0;
+        }
+        // transform
+        this.canvas.style.transition = 'transform 0ms ease-in';
+        this.canvas.style.transformOrigin = 'top left';
+        this.canvas.style.transform =
+            "matrix(" + zoom + ",0,0," + zoom + "," + -frame[0] * ctm.a * zoom / this.zoom + "," + -frame[1] * ctm.a * zoom / this.zoom + ")";
+        this.zoom = zoom;
+    };
+    // scale view on mouse wheel
+    ViewFlowchartComponent.prototype.scale = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        // calculate new zoom value
+        var scaleFactor = 0.1;
+        var value = this.zoom - (Math.sign(event.deltaY)) * scaleFactor;
+        // limit the zoom value to be between 1 and 2.5
+        if (value >= 1 && value <= 2.5) {
+            value = Number((value).toPrecision(5));
+        }
+        else {
+            return;
+        }
+        /*
+        // VER 1: translate before and after re-scaling
+        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        const beforeX = this.mousePos[0] - bRect.x + this.offset[0];
+        const beforeY = this.mousePos[1] - bRect.y + this.offset[1];
+
+        const afterX = beforeX / value + this.mousePos[0] * (value - this.zoom);
+        const afterY = beforeY / value + this.mousePos[1] * (value - this.zoom);
+
+        // find transformation matrix
+        const m = this.canvas.createSVGMatrix()
+        .translate(beforeX / this.zoom, beforeY / this.zoom)
+        .scale(value)
+        .translate(-afterX, -afterY);
+
+        const transf = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
+        */
+        /*
+        // VER 2 : transform relative to the top-left of the bounding box of the canvas and adjust based on mouse position
+
+        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        let newX = (bRect.left - this.offset[0] - this.mousePos[0] * (value - this.zoom)) / this.zoom;
+        let newY = (bRect.top - this.offset[1]  - this.mousePos[1] * (value - this.zoom)) / this.zoom;
+        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+
+        const m = this.canvas.createSVGMatrix()
+        .scale(value)
+        .translate(newX, newY);
+
+        newX = m.e;
+        newY = m.f;
+
+        if (newX > 0) {
+            newX = 0;
+        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
+            newX = boundingDiv.width - bRect.width * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
+            newY = boundingDiv.height - bRect.height * value / this.zoom;
+        }
+        if (newY > 0) { newY = 0; }
+
+
+        const transf = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
+        */
+        /*
+        // VER 3: transform relative to the center of the canvas
+
+        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+
+        let newX = (bRect.left - this.offset[0]) / this.zoom;
+        let newY = (bRect.top - this.offset[1] ) / this.zoom;
+
+
+        const m = this.canvas.createSVGMatrix()
+        .scale(value)
+        .translate(newX, newY);
+
+        newX = m.e - boundingDiv.width * (value - this.zoom) / (2 * this.zoom);
+        newY = m.f - boundingDiv.width * (value - this.zoom) / (2 * this.zoom);
+
+        if (newX > 0) {
+            newX = 0;
+        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
+            newX = boundingDiv.width - bRect.width * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
+            newY = boundingDiv.height - bRect.height * value / this.zoom;
+        }
+        if (newY > 0) { newY = 0; }
+        */
+        // VER 4: transform relative to the mouse position
+        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+        var bRect = this.canvas.getBoundingClientRect();
+        var boundingDiv = document.getElementById('flowchart-main-container').getBoundingClientRect();
+        var newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom;
+        var newY = ((bRect.top - this.offset[1]) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
+        // snapping back the x and y coordinates if the zoom goes out of the bounding box
+        if (newX > 0) {
+            newX = 0;
+        }
+        else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
+            newX = boundingDiv.width - bRect.width * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        }
+        else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
+            newY = boundingDiv.height - bRect.height * value / this.zoom;
+        }
+        if (newY > 0) {
+            newY = 0;
+        }
+        var transf = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
+        // transform
+        this.canvas.style.transition = 'transform 0ms ease-in';
+        this.canvas.style.transformOrigin = "top left";
+        this.canvas.style.transform = transf;
+        this.zoom = value;
+    };
+    // initiate dragging the view window
+    ViewFlowchartComponent.prototype.panStart = function (event) {
+        event.preventDefault();
+        this.canvas.style.transition = 'transform 0ms linear';
+        this.canvas.style.transformOrigin = "top left";
+        var bRect = this.canvas.getBoundingClientRect();
+        // set start coords to current view window position
+        this.startCoords = [
+            event.clientX - (bRect.left - this.offset[0]),
+            event.clientY - (bRect.top - this.offset[1])
+        ];
+        // set drag mode to drag view
+        this.isDown = 1;
+    };
+    // handle mouse move for dragging view/node/port
+    ViewFlowchartComponent.prototype.handleMouseMove = function (event) {
+        // return if no dragging initiated
+        if (!this.isDown) {
+            return;
+            // if drag view
+        }
+        else if (this.isDown === 1) {
+            event.preventDefault();
+            var bRect = this.canvas.getBoundingClientRect();
+            var x = Number(event.clientX - this.startCoords[0]);
+            var y = Number(event.clientY - this.startCoords[1]);
+            var boundingDiv = document.getElementById('flowchart-main-container').getBoundingClientRect();
+            if (x > 0 || bRect.width < boundingDiv.width) {
+                x = 0;
+            }
+            else if (boundingDiv.width - x > bRect.width) {
+                x = boundingDiv.width - bRect.width;
+            }
+            if (y > 0 || bRect.height < boundingDiv.height) {
+                y = 0;
+            }
+            else if (boundingDiv.height - y > bRect.height) {
+                y = boundingDiv.height - bRect.height;
+            }
+            this.canvas.style.transform = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')';
+            // if drag node
+        }
+        else if (this.isDown === 2) {
+            var pt = this.canvas.createSVGPoint();
+            pt.x = event.pageX;
+            pt.y = event.pageY;
+            var svgP = void 0;
+            var isFirefox = typeof InstallTrigger !== 'undefined';
+            if (isFirefox) {
+                var ctm = this.canvas.getScreenCTM();
+                var bRect = this.canvas.getBoundingClientRect();
+                ctm.a = ctm.a * this.zoom;
+                ctm.d = ctm.d * this.zoom;
+                ctm.e = bRect.x;
+                ctm.f = bRect.y;
+                svgP = pt.matrixTransform(ctm.inverse());
+            }
+            else {
+                svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+            }
+            var xDiff = this.startCoords[0] - svgP.x;
+            var yDiff = this.startCoords[1] - svgP.y;
+            this.startCoords[0] = svgP.x;
+            this.startCoords[1] = svgP.y;
+            this.element.position.x -= xDiff;
+            this.element.position.y -= yDiff;
+            // if drag port
+        }
+        else if (this.isDown === 3) {
+            event.preventDefault();
+            var pt = this.canvas.createSVGPoint();
+            pt.x = event.pageX;
+            pt.y = event.pageY;
+            var isFirefox = typeof InstallTrigger !== 'undefined';
+            if (isFirefox) {
+                var ctm = this.canvas.getScreenCTM();
+                var bRect = this.canvas.getBoundingClientRect();
+                ctm.a = ctm.a * this.zoom;
+                ctm.d = ctm.d * this.zoom;
+                ctm.e = bRect.x;
+                ctm.f = bRect.y;
+                var svgP = pt.matrixTransform(ctm.inverse());
+                this.element.setAttribute('x2', svgP.x);
+                this.element.setAttribute('y2', svgP.y);
+            }
+            else {
+                var svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+                this.element.setAttribute('x2', svgP.x);
+                this.element.setAttribute('y2', svgP.y);
+            }
+        }
+    };
+    ViewFlowchartComponent.prototype.handleMouseUp = function (event) {
+        this.element = undefined;
+        if (this.isDown === 3) {
+            var pt = this.canvas.createSVGPoint();
+            pt.x = event.pageX;
+            pt.y = event.pageY;
+            var svgP = void 0;
+            var isFirefox = typeof InstallTrigger !== 'undefined';
+            if (isFirefox) {
+                var ctm = this.canvas.getScreenCTM();
+                var bRect = this.canvas.getBoundingClientRect();
+                ctm.a = ctm.a * this.zoom;
+                ctm.d = ctm.d * this.zoom;
+                ctm.e = bRect.x;
+                ctm.f = bRect.y;
+                svgP = pt.matrixTransform(ctm.inverse());
+            }
+            else {
+                svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+            }
+            // reset temporary edge position to <(0,0),(0,0)>
+            var tempLine = document.getElementById('temporary-wire');
+            tempLine.setAttribute('x1', '0');
+            tempLine.setAttribute('y1', '0');
+            tempLine.setAttribute('x2', '0');
+            tempLine.setAttribute('y2', '0');
+            // go through all of the nodes' input/output ports
+            for (var _i = 0, _a = this.dataService.flowchart.nodes; _i < _a.length; _i++) {
+                var n = _a[_i];
+                var pPos = void 0;
+                // find the node's corresponding port and its position
+                if (this.startType === 'input') {
+                    if (this.edge.target.parentNode === n || n.type === 'end') {
+                        continue;
+                    }
+                    this.edge.source = n.output;
+                    pPos = [n.position.x + this.outputOffset[0], n.position.y + this.outputOffset[1]];
+                }
+                else {
+                    if (this.edge.source.parentNode === n || n.type === 'start') {
+                        continue;
+                    }
+                    this.edge.target = n.input;
+                    pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
+                }
+                // if the distance between the port's position and the dropped position is bigger than 15px, continue
+                if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25) {
+                    continue;
+                }
+                // if there is already an existing edge with the same source and target as the new edge, return
+                for (var _b = 0, _c = this.dataService.flowchart.edges; _b < _c.length; _b++) {
+                    var edge = _c[_b];
+                    if (edge.target === this.edge.target && edge.source === this.edge.source) {
+                        this.isDown = 0;
+                        return;
+                    }
+                }
+                this.edge.target.edges.push(this.edge);
+                this.edge.source.edges.push(this.edge);
+                this.dataService.flowchart.edges.push(this.edge);
+                this.dataService.flowchart.ordered = false;
+                if (this.edge.source.parentNode.enabled) {
+                    ViewFlowchartComponent_1.enableNode(this.edge.target.parentNode);
+                }
+                else {
+                    ViewFlowchartComponent_1.disableNode(this.edge.target.parentNode);
+                }
+                break;
+            }
+        }
+        this.isDown = 0;
+    };
+    var ViewFlowchartComponent_1;
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ViewFlowchartComponent.prototype, "switch", void 0);
+    ViewFlowchartComponent = ViewFlowchartComponent_1 = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'view-flowchart',
+            template: __webpack_require__(/*! ./view-flowchart.component.html */ "./src/app/views/view-flowchart/view-flowchart.component.html"),
+            styles: [__webpack_require__(/*! ./view-flowchart.component.scss */ "./src/app/views/view-flowchart/view-flowchart.component.scss")]
+        }),
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_5__["DataService"]])
+    ], ViewFlowchartComponent);
+    return ViewFlowchartComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/views/view-flowchart/view-flowchart.module.ts":
+/*!***************************************************************!*\
+  !*** ./src/app/views/view-flowchart/view-flowchart.module.ts ***!
+  \***************************************************************/
+/*! exports provided: SVGFlowchartModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SVGFlowchartModule", function() { return SVGFlowchartModule; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _view_flowchart_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./view-flowchart.component */ "./src/app/views/view-flowchart/view-flowchart.component.ts");
+/* harmony import */ var _node_node_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node/node.component */ "./src/app/views/view-flowchart/node/node.component.ts");
+/* harmony import */ var _edge_edge_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./edge/edge.component */ "./src/app/views/view-flowchart/edge/edge.component.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+// import @angular stuff
+
+
+
+
+// import app components
+
+
+
+/**
+ * SVGFlowchartModule
+ */
+var SVGFlowchartModule = /** @class */ (function () {
+    function SVGFlowchartModule() {
+    }
+    SVGFlowchartModule = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+            declarations: [
+                _view_flowchart_component__WEBPACK_IMPORTED_MODULE_4__["ViewFlowchartComponent"],
+                _node_node_component__WEBPACK_IMPORTED_MODULE_5__["NodeComponent"],
+                _edge_edge_component__WEBPACK_IMPORTED_MODULE_6__["EdgeComponent"],
+            ],
+            exports: [_view_flowchart_component__WEBPACK_IMPORTED_MODULE_4__["ViewFlowchartComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatIconModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatButtonModule"]],
+            entryComponents: [],
+            providers: []
+        }),
+        __metadata("design:paramtypes", [])
+    ], SVGFlowchartModule);
+    return SVGFlowchartModule;
 }());
 
 
@@ -10468,7 +6807,7 @@ var ViewGalleryModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>\r\n\r\n<!--\r\n<div class='container'>\r\n    <div class='container__content'>\r\n    \r\n        < !-- Side content__Panel: Split into three panes -- >\r\n        <as-split direction=\"vertical\">\r\n\r\n            <as-split-area size='20'>\r\n                <div class='content__panel'>\r\n                    <parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n            < !-- \r\n            <as-split-area size='20'>\r\n                <div class='content__panel'>\r\n                        <flowchart [data]=\"flowchart\" (select)='selectNode($event)'></flowchart>\r\n                </div>\r\n            </as-split-area> \r\n            -- >\r\n        \r\n        </as-split>\r\n                    \r\n    </div>\r\n</div>\r\n-->\r\n<!--\r\n<div class='container'>\r\n\r\n    <div class='container__header'>\r\n        Mobius Viewer    \r\n        <navigation></navigation>\r\n        <execute [flowchart]='flowchart'></execute>\r\n    </div>\r\n\r\n    <div class='container__content'>\r\n        <file-new *ngIf='!flowchart'></file-new>\r\n\r\n        <as-split direction=\"horizontal\" *ngIf='flowchart'>\r\n            <as-split-area size=\"60\">\r\n\r\n                <div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>\r\n                    <mviewer [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></mviewer>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n            <as-split-area size=\"40\">\r\n    \r\n\r\n                <as-split direction=\"vertical\">\r\n    \r\n                        <as-split-area size='20'>\r\n                            <div class='content__panel'>\r\n                                <parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n                            </div>\r\n                        </as-split-area>\r\n                        \r\n                    \r\n                    </as-split>\r\n                    \r\n            </as-split-area>\r\n        </as-split>\r\n    </div>\r\n\r\n    <div class='container__footer'>\r\n        Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.\r\n    </div>\r\n    \r\n    \r\n</div>\r\n-->"
+module.exports = "<parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>\r\n\r\n<!--\r\n<div class='container'>\r\n    <div class='container__content'>\r\n    \r\n        < !-- Side content__Panel: Split into three panes -- >\r\n        <as-split direction=\"vertical\">\r\n\r\n            <as-split-area size='20'>\r\n                <div class='content__panel'>\r\n                    <parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n            < !-- \r\n            <as-split-area size='20'>\r\n                <div class='content__panel'>\r\n                        <view-flowchart [data]=\"flowchart\" (select)='selectNode($event)'></view-flowchart>\r\n                </div>\r\n            </as-split-area> \r\n            -- >\r\n        \r\n        </as-split>\r\n                    \r\n    </div>\r\n</div>\r\n-->\r\n<!--\r\n<div class='container'>\r\n\r\n    <div class='container__header'>\r\n        Mobius Viewer    \r\n        <navigation></navigation>\r\n        <execute [flowchart]='flowchart'></execute>\r\n    </div>\r\n\r\n    <div class='container__content'>\r\n        <file-new *ngIf='!flowchart'></file-new>\r\n\r\n        <as-split direction=\"horizontal\" *ngIf='flowchart'>\r\n            <as-split-area size=\"60\">\r\n\r\n                <div class='content__panel' *ngIf='flowchart.meta.selected_nodes[0] !== undefined'>\r\n                    <model-viewers [node]='flowchart.nodes[flowchart.meta.selected_nodes[0]]'></model-viewers>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n            <as-split-area size=\"40\">\r\n    \r\n\r\n                <as-split direction=\"vertical\">\r\n    \r\n                        <as-split-area size='20'>\r\n                            <div class='content__panel'>\r\n                                <parameter-viewer [node]='flowchart.nodes[0]'></parameter-viewer>\r\n                            </div>\r\n                        </as-split-area>\r\n                        \r\n                    \r\n                    </as-split>\r\n                    \r\n            </as-split-area>\r\n        </as-split>\r\n    </div>\r\n\r\n    <div class='container__footer'>\r\n        Copyright © 2018 Design Automation Lab, NUS. All Rights Reserved.\r\n    </div>\r\n    \r\n    \r\n</div>\r\n-->"
 
 /***/ }),
 
@@ -10624,10 +6963,220 @@ var environment = {
 
 /***/ }),
 
-/***/ "./src/libs/geo-info/bi-map.ts":
-/*!*************************************!*\
-  !*** ./src/libs/geo-info/bi-map.ts ***!
-  \*************************************/
+/***/ "./src/libs/arr/arr.ts":
+/*!*****************************!*\
+  !*** ./src/libs/arr/arr.ts ***!
+  \*****************************/
+/*! exports provided: Arr */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Arr", function() { return Arr; });
+/**
+ * A set of static methods for working with arrays of simple types.
+ * The arrays can be nested, but they do not contain any objects.
+ */
+var Arr = /** @class */ (function () {
+    function Arr() {
+    }
+    /**
+     * Make an array of numbers. All elements in the array will have the same value.
+     * @param length The length of the new array. If length is 0, then an empty array is returned.
+     * @param value The values in the array.
+     * @returns The resulting array.
+     */
+    Arr.make = function (length, value) {
+        if (length === 0) {
+            return [];
+        }
+        return Array.apply(0, new Array(length)).map(function (v, i) { return value; });
+    };
+    /**
+     * Make an array of numbers. All elements in the array will be a numerical sequence, 0, 1, 2, 3....
+     * @param length  The length of the new array. If length is 0, then an empty array is returned.
+     * @returns The resulting array.
+     */
+    Arr.makeSeq = function (length) {
+        if (length === 0) {
+            return [];
+        }
+        return Array.apply(0, new Array(length)).map(function (v, i) { return i; });
+    };
+    /**
+     * Check if two nD arrays are equal (i.e. that all elements in the array are equal, ===.).
+     * If the arrays are unequal in length, false is returned.
+     * Elements in the array can have any value.
+     * @param arr1 The first value.
+     * @param arr2 The second values.
+     * @returns True or false.
+     */
+    Arr.equal = function (arr1, arr2) {
+        if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
+            return arr1 === arr2;
+        }
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+        for (var i = 0; i < arr1.length; i++) {
+            if (!this.equal(arr1[i], arr2[i])) {
+                return false;
+            }
+        }
+        return true;
+    };
+    /**
+     * Find the position of the first occurrence of a specified value in an array.
+     * The value can be an array (which is not the case for Array.indexOf()).
+     * If the value is not found or is undefined, return -1.
+     * If the array is null or undefined, return -1.
+     * @param value The value, can be a value or a 1D array of values.
+     * @returns The index in the array of the first occurance of the value.
+     */
+    Arr.indexOf = function (arr, value) {
+        if (!Array.isArray(arr)) {
+            throw new Error('First argument must be a array.');
+        }
+        if (!Array.isArray(value)) {
+            return arr.indexOf(value);
+        }
+        for (var i = 0; i < arr.length; i++) {
+            if (Array.isArray(arr[i]) && this.equal(value, arr[i])) {
+                return i;
+            }
+        }
+        return -1;
+    };
+    /**
+     * Replace all occurrences of a specified value in an array.
+     * The input array is changed.
+     * The value can be an array.
+     * If the value is not found or is undefined, return -1.
+     * @param old_value The old value to replace.
+     * @param new_value The new value.
+     * @param arr The array.
+     */
+    Arr.replace = function (arr, old_value, new_value) {
+        if (!Array.isArray(arr)) {
+            throw new Error('First argument must be a array.');
+        }
+        for (var i = 0; i < arr.length; i++) {
+            if (this.equal(arr[i], old_value)) {
+                arr[i] = new_value;
+            }
+        }
+    };
+    /**
+     * Take an nD array and flattens it.
+     * A new array is returned. The input array remains unchanged.
+     * For example, [1, 2, [3, 4], [5, 6]] will become [1, 2, 3, 4, 5, 6].
+     * If the input array is undefined, an empty array is returned.
+     * @param arr The multidimensional array to flatten.
+     * @returns A new 1D array.
+     */
+    Arr.flatten = function (arr, depth) {
+        if (arr === undefined) {
+            return [];
+        }
+        return arr.reduce(function (flat, toFlatten) {
+            if (depth === undefined) {
+                return flat.concat(Array.isArray(toFlatten) ? Arr.flatten(toFlatten) : toFlatten);
+            }
+            else {
+                return flat.concat((Array.isArray(toFlatten) && (depth !== 0)) ?
+                    Arr.flatten(toFlatten, depth - 1) : toFlatten);
+            }
+        }, []);
+    };
+    /**
+     * Make a copy of an nD array.
+     * If the input is not an array, then just return the same thing.
+     * A new array is returned. The input array remains unchanged.
+     * If the input array is undefined, an empty array is returned.
+     * If the input is s sparse array, then the output will alos be a sparse array.
+     * @param arr The nD array to copy.
+     * @returns The new nD array.
+     */
+    Arr.deepCopy = function (arr) {
+        if (arr === undefined) {
+            return [];
+        }
+        if (!Array.isArray(arr)) {
+            return arr;
+        }
+        var arr2 = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (Array.isArray(arr[i])) {
+                arr2[i] = (Arr.deepCopy(arr[i]));
+            }
+            else {
+                if (arr[i] !== undefined) {
+                    arr2[i] = (arr[i]);
+                }
+            }
+        }
+        return arr2;
+    };
+    /**
+     * Fills an nD array with new values (all the same value).
+     * The input array is changed.
+     * If the input array is undefined, an empty array is returned.
+     * The input can be a sparse array.
+     * @param arr The nD array to fill.
+     * @param value The value to insert into the array.
+     */
+    Arr.deepFill = function (arr, value) {
+        if (arr === undefined) {
+            return;
+        }
+        for (var i = 0; i < arr.length; i++) {
+            if (Array.isArray(arr[i])) {
+                Arr.deepFill(arr[i], value);
+            }
+            else {
+                if (arr[i] !== undefined) {
+                    arr[i] = value;
+                }
+            }
+        }
+    };
+    /**
+     * Counts the number of values in an nD array .
+     * The input array remains unchanged.
+     * If the input array is undefined, 0 is returned.
+     * The input can be a sparse array. Undefined values are ignored.
+     * For example, for [1, 2, , , 3], the count will be 3.
+     * @param arr The nD array to count.
+     * @return The number of elements in the nD array.
+     */
+    Arr.deepCount = function (arr) {
+        if (arr === undefined) {
+            return 0;
+        }
+        var a = 0;
+        for (var i in arr) {
+            if (Array.isArray(arr[i])) {
+                a = a + Arr.deepCount(arr[i]);
+            }
+            else {
+                if (arr[i] !== undefined) {
+                    a = a + 1;
+                }
+            }
+        }
+        return a;
+    };
+    return Arr;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/BiMap.ts":
+/*!************************************!*\
+  !*** ./src/libs/geo-info/BiMap.ts ***!
+  \************************************/
 /*! exports provided: BiMapManyToOne */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -10636,53 +7185,116 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BiMapManyToOne", function() { return BiMapManyToOne; });
 /**
  * A bi-directional map that stores many-to-one key value mappings.
+ * Multiple keys point to the same value.
  * Both the keys and values must be unique.
+ * The keys are integers, the values can be any type.
  */
 var BiMapManyToOne = /** @class */ (function () {
+    /**
+     * Creates a new bi-directional many-to-one map.
+     * If the data is provided, it will be added to the map.
+     * @param data
+     */
     function BiMapManyToOne(data) {
-        var _this = this;
         this.kv_map = new Map();
         this.vk_map = new Map();
-        data.forEach(function (keys_value) {
-            _this.vk_map.set(keys_value[1], keys_value[0]);
-            keys_value[0].forEach(function (key) { return _this.kv_map.set(key, keys_value[1]); });
-        });
+        if (data) {
+            this.addData(data);
+        }
     }
+    /**
+     * Populate the data in this map with an array.
+     * For example, [[1,3], 'a'],[[0,4], 'b']
+     * @param data
+     */
+    BiMapManyToOne.prototype.addData = function (data) {
+        var _this = this;
+        data.forEach(function (keys_value) {
+            keys_value[0].forEach(function (key) { return _this.set(key, keys_value[1]); });
+        });
+    };
+    /**
+     * Set a single key-value pair.
+     * @param key
+     * @param value
+     */
     BiMapManyToOne.prototype.set = function (key, value) {
-        if (!this.vk_map.has(value)) {
-            this.vk_map.set(value, [key]);
+        var value_str = JSON.stringify(value);
+        if (!this.vk_map.has(value_str)) {
+            this.vk_map.set(value_str, [key]);
         }
         else {
-            if (this.vk_map.get(value).indexOf(key) === -1) {
-                this.vk_map.get(value).push(key);
+            if (this.vk_map.get(value_str).indexOf(key) === -1) {
+                this.vk_map.get(value_str).push(key);
             }
         }
         this.kv_map.set(key, value);
     };
+    /**
+     * Returns an array of all values.
+     */
+    BiMapManyToOne.prototype.values = function () {
+        return Array.from(this.kv_map.values());
+    };
+    /**
+     * Returns an array of all keys.
+     */
+    BiMapManyToOne.prototype.keys = function () {
+        return Array.from(this.kv_map.keys());
+    };
+    /**
+     * Returns an array of keys that point to this value.
+     * @param value
+     */
+    BiMapManyToOne.prototype.getKeys = function (value) {
+        var value_str = JSON.stringify(value);
+        return this.vk_map.get(value_str);
+    };
+    /**
+     * Returns the value to which this key points.
+     * @param key
+     */
     BiMapManyToOne.prototype.getValue = function (key) {
         return this.kv_map.get(key);
     };
-    BiMapManyToOne.prototype.getKeys = function (value) {
-        return this.vk_map.get(value);
-    };
+    /**
+     * Returns true if the map contains the key.
+     * @param key
+     */
     BiMapManyToOne.prototype.hasKey = function (key) {
         return this.kv_map.has(key);
     };
+    /**
+     * Returns true if the map contains the value.
+     * @param value
+     */
     BiMapManyToOne.prototype.hasValue = function (value) {
-        return this.vk_map.has(value);
+        var value_str = JSON.stringify(value);
+        return this.vk_map.has(value_str);
     };
+    /**
+     * Total number of keys.
+     */
     BiMapManyToOne.prototype.numKeys = function () {
         return this.kv_map.size;
     };
+    /**
+     * Total number of values.
+     */
     BiMapManyToOne.prototype.numValues = function () {
         return this.vk_map.size;
     };
+    /**
+     * Return a a data array.
+     * For example, [[1,3], 'a'],[[0,4], 'b']
+     */
     BiMapManyToOne.prototype.getData = function () {
-        return Array.from(this.vk_map);
-    };
-    BiMapManyToOne.prototype.addData = function (data) {
-        var _this = this;
-        data.forEach(function (keys_value) { return keys_value[0].forEach(function (key) { return _this.set(key, keys_value[1]); }); });
+        var data = [];
+        this.vk_map.forEach(function (keys, value_str) {
+            var value = JSON.parse(value_str); // TODO This is not good <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            data.push([keys, value]);
+        });
+        return data;
     };
     return BiMapManyToOne;
 }());
@@ -10691,29 +7303,1705 @@ var BiMapManyToOne = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/libs/geo-info/geo-info.ts":
+/***/ "./src/libs/geo-info/GIAttribMap.ts":
+/*!******************************************!*\
+  !*** ./src/libs/geo-info/GIAttribMap.ts ***!
+  \******************************************/
+/*! exports provided: GIAttribMap */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIAttribMap", function() { return GIAttribMap; });
+/* harmony import */ var _BiMap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BiMap */ "./src/libs/geo-info/BiMap.ts");
+
+//  ===============================================================================================================
+//  Classes
+//  ===============================================================================================================
+/**
+ * Geo-info attribute class.
+ * The attributs are stores as key-value pairs.
+ * Multiple keys point to the same values.
+ * So for example, [[1,3], "a"],[[0,4], "b"] can be converted into sequentia arrays.
+ * The sequential values would be ["a", "b"]
+ * The sequentail keys would be [1,0,,0,1] (Note the undefined value in the middle.)
+ *
+ */
+var GIAttribMap = /** @class */ (function () {
+    /**
+     * Creates an attribute.
+     * @param attrib_data
+     */
+    function GIAttribMap(attrib_data) {
+        this.name = attrib_data.name;
+        this.data_type = attrib_data.data_type;
+        this.data_size = attrib_data.data_size;
+        this.bi_map = new _BiMap__WEBPACK_IMPORTED_MODULE_0__["BiMapManyToOne"](attrib_data.data);
+    }
+    /**
+     * Returns the JSON data for this attribute.
+     */
+    GIAttribMap.prototype.getData = function () {
+        return {
+            name: this.name,
+            data_type: this.data_type,
+            data_size: this.data_size,
+            data: this.bi_map.getData()
+        };
+    };
+    /**
+     * Adds data to this attribute from JSON data.
+     * The existing data in the model is not deleted.
+     * @param attrib_data The JSON data.
+     */
+    GIAttribMap.prototype.addData = function (attrib_data, offset) {
+        if (this.name !== attrib_data.name ||
+            this.data_type !== attrib_data.data_type ||
+            this.data_size !== attrib_data.data_size) {
+            throw Error('Attributes do not match.');
+        }
+        attrib_data.data.forEach(function (keys_value) {
+            keys_value[0] = keys_value[0].map(function (key) { return key + offset; });
+        });
+        this.bi_map.addData(attrib_data.data);
+    };
+    /**
+     * Sets a single attribute value.
+     * @param key
+     * @param value
+     */
+    GIAttribMap.prototype.set = function (key, value) {
+        this.bi_map.set(key, value);
+    };
+    /**
+     * Gets a single attribute value.
+     * @param key
+     */
+    GIAttribMap.prototype.get = function (key) {
+        return this.bi_map.getValue(key);
+    };
+    /**
+     * Gets a list of all the attribute keys, in sequential order.
+     * The key vaues are mapped.
+     * The key value gets maped to the new list position.
+     * The key index gets mapped to the new value.
+     * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail keys would be [1,0,,0,1].
+     */
+    GIAttribMap.prototype.getSeqKeys = function () {
+        var seqKeys = [];
+        this.bi_map.getData().forEach(function (keys_value, index) { return keys_value[0].forEach(function (key) { return seqKeys[key] = index; }); });
+        return seqKeys;
+    };
+    /**
+     * Gets a list of all the attribute values, in sequential order.
+     * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail values would be ['a', 'b']
+     */
+    GIAttribMap.prototype.getSeqValues = function () {
+        return this.bi_map.values();
+    };
+    return GIAttribMap;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/GIAttribs.ts":
+/*!****************************************!*\
+  !*** ./src/libs/geo-info/GIAttribs.ts ***!
+  \****************************************/
+/*! exports provided: GIAttribs */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIAttribs", function() { return GIAttribs; });
+/* harmony import */ var _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GIAttribMap */ "./src/libs/geo-info/GIAttribMap.ts");
+/* harmony import */ var _GICommon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GICommon */ "./src/libs/geo-info/GICommon.ts");
+
+
+/**
+ * Class for attributes.
+ */
+var GIAttribs = /** @class */ (function () {
+    /**
+      * Creates an object to store the attribute data.
+      * @param model The JSON data
+      */
+    function GIAttribs(model) {
+        // maps, the key is the name, the value is the map
+        this.posis = new Map();
+        this.verts = new Map();
+        this.edges = new Map();
+        this.wires = new Map();
+        this.faces = new Map();
+        this.colls = new Map();
+        // all maps
+        this.attrib_maps = {
+            po: this.posis,
+            _v: this.verts,
+            _e: this.edges,
+            _w: this.wires,
+            _f: this.faces,
+            co: this.colls
+        };
+        this.model = model;
+    }
+    /**
+     * Returns the JSON data for this model.
+     */
+    GIAttribs.prototype.getData = function () {
+        return {
+            positions: Array.from(this.posis.values()).map(function (attrib) { return attrib.getData(); }),
+            vertices: Array.from(this.verts.values()).map(function (attrib) { return attrib.getData(); }),
+            edges: Array.from(this.edges.values()).map(function (attrib) { return attrib.getData(); }),
+            wires: Array.from(this.wires.values()).map(function (attrib) { return attrib.getData(); }),
+            faces: Array.from(this.faces.values()).map(function (attrib) { return attrib.getData(); }),
+            collections: Array.from(this.colls.values()).map(function (attrib) { return attrib.getData(); })
+        };
+    };
+    /**
+     * Adds data to this model from JSON data.
+     * The existing data in the model is not deleted.
+     * @param attribs_data The JSON data
+     */
+    GIAttribs.prototype.addData = function (attribs_data) {
+        // Helper function to ddd attributes to model
+        function _addAttribsData(exist_attribs_map, new_attribs_data, offset) {
+            new_attribs_data.forEach(function (new_attrib_data) {
+                if (!exist_attribs_map.has(new_attrib_data.name)) {
+                    exist_attribs_map.set(new_attrib_data.name, new _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__["GIAttribMap"](new_attrib_data));
+                }
+                else {
+                    exist_attribs_map.get(new_attrib_data.name).addData(new_attrib_data, offset);
+                }
+            });
+        }
+        _addAttribsData(this.posis, attribs_data.positions, this.model.geom().numPosis());
+        _addAttribsData(this.verts, attribs_data.vertices, this.model.geom().numVerts());
+        _addAttribsData(this.edges, attribs_data.edges, this.model.geom().numEdges());
+        _addAttribsData(this.wires, attribs_data.wires, this.model.geom().numWires());
+        _addAttribsData(this.faces, attribs_data.faces, this.model.geom().numFaces());
+        _addAttribsData(this.colls, attribs_data.collections, this.model.geom().numColls());
+    };
+    // ============================================================================
+    // Private methods
+    // ============================================================================
+    /**
+     * Creates a new attribte.
+     * @param type_str The level at which to create the attribute.
+     * @param name The name of the attribute.
+     * @param data_type The data type of the attribute.
+     * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
+     */
+    GIAttribs.prototype._addAttrib = function (type_str, name, data_type, data_size) {
+        var attribs = this.attrib_maps[type_str];
+        if (!attribs.has(name)) {
+            var attrib = new _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__["GIAttribMap"]({ name: name, data_type: data_type, data_size: data_size, data: [] });
+            attribs.set(name, attrib);
+        }
+        return attribs[name];
+    };
+    // ============================================================================
+    // Public methods
+    // ============================================================================
+    /**
+     * Set an entity attrib value
+     * @param id
+     * @param name
+     * @param value
+     */
+    GIAttribs.prototype.setAttribValue = function (id, name, value) {
+        var _a = Object(_GICommon__WEBPACK_IMPORTED_MODULE_1__["idBreak"])(id), type_str = _a[0], index = _a[1];
+        var attribs = this.attrib_maps[type_str];
+        if (attribs.get(name) === undefined) {
+            throw new Error('Attribute does not exist.');
+        }
+        attribs.get(name).set(index, value);
+    };
+    /**
+     * Get an entity attrib value
+     * @param id
+     * @param name
+     */
+    GIAttribs.prototype.getAttribValue = function (id, name) {
+        var _a = Object(_GICommon__WEBPACK_IMPORTED_MODULE_1__["idBreak"])(id), type_str = _a[0], index = _a[1];
+        var attribs = this.attrib_maps[type_str];
+        if (attribs.get(name) === undefined) {
+            throw new Error('Attribute does not exist.');
+        }
+        return attribs.get(name).get(index);
+    };
+    /**
+     * Shortcut for getting coordinates from a numeric index (i.e. this is not an ID)
+     * @param posi_i
+     */
+    GIAttribs.prototype.getPosiCoord = function (posi_i) {
+        return this.posis.get('coordinates').get(posi_i);
+    };
+    // ============================================================================
+    // Get entity attrib names
+    // ============================================================================
+    GIAttribs.prototype.getPosiAttribNames = function () {
+        return Array.from(this.posis.keys());
+    };
+    GIAttribs.prototype.getVertAttribNames = function () {
+        return Array.from(this.verts.keys());
+    };
+    GIAttribs.prototype.getEdgeAttribNames = function () {
+        return Array.from(this.edges.keys());
+    };
+    GIAttribs.prototype.getWireAttribNames = function () {
+        return Array.from(this.wires.keys());
+    };
+    GIAttribs.prototype.getFaceAttribNames = function () {
+        return Array.from(this.faces.keys());
+    };
+    GIAttribs.prototype.getCollAttribNames = function () {
+        return Array.from(this.colls.keys());
+    };
+    // ============================================================================
+    // Add an entity attrib
+    // ============================================================================
+    GIAttribs.prototype.addPosiAttrib = function (name, data_type, data_size) {
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].POSI, name, data_type, data_size);
+    };
+    GIAttribs.prototype.addVertAttrib = function (name, data_type, data_size) {
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].VERT, name, data_type, data_size);
+    };
+    GIAttribs.prototype.addEdgeAttrib = function (name, data_type, data_size) {
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].EDGE, name, data_type, data_size);
+    };
+    GIAttribs.prototype.addWireAttrib = function (name, data_type, data_size) {
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].WIRE, name, data_type, data_size);
+    };
+    GIAttribs.prototype.addFaceAttrib = function (name, data_type, data_size) {
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].FACE, name, data_type, data_size);
+    };
+    GIAttribs.prototype.addCollAttrib = function (name, data_type, data_size) {
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].COLL, name, data_type, data_size);
+    };
+    // ============================================================================
+    // Threejs
+    // For methods to get the array of edges and triangles, see the geom class
+    // get3jsTris() and get3jsEdges()
+    // ============================================================================
+    /**
+     * Get a list of all the coordinates.
+     * This returns two arrays, one with indexes, and another with values.
+     * For example, suppose the bimap contained  [  [[1,3], [2.3,4.5,6.7]],  [[0,2], [9.8,7.6,5.4]]  ].
+     * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
+     * These array can be use for building the threejs scene using typed arrays.
+     */
+    GIAttribs.prototype.get3jsSeqCoords = function () {
+        var coords_attrib = this.posis.get('coordinates');
+        var coords_keys = coords_attrib.getSeqKeys();
+        var coords_values = [].concat.apply([], coords_attrib.getSeqValues());
+        return [coords_keys, coords_values];
+    };
+    return GIAttribs;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/GICommon.ts":
 /*!***************************************!*\
-  !*** ./src/libs/geo-info/geo-info.ts ***!
+  !*** ./src/libs/geo-info/GICommon.ts ***!
   \***************************************/
+/*! exports provided: EEntityTypeStr, idBreak, idIndex, idIndicies, idEntityTypeStr */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EEntityTypeStr", function() { return EEntityTypeStr; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idBreak", function() { return idBreak; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idIndex", function() { return idIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idIndicies", function() { return idIndicies; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idEntityTypeStr", function() { return idEntityTypeStr; });
+// Enum
+var EEntityTypeStr;
+(function (EEntityTypeStr) {
+    EEntityTypeStr["POSI"] = "po";
+    EEntityTypeStr["TRI"] = "_t";
+    EEntityTypeStr["VERT"] = "_v";
+    EEntityTypeStr["EDGE"] = "_e";
+    EEntityTypeStr["WIRE"] = "_w";
+    EEntityTypeStr["FACE"] = "_f";
+    EEntityTypeStr["POINT"] = "pt";
+    EEntityTypeStr["LINE"] = "ls";
+    EEntityTypeStr["PGON"] = "pg";
+    EEntityTypeStr["COLL"] = "co";
+})(EEntityTypeStr || (EEntityTypeStr = {}));
+// ============================================================================
+// Each entity in the model can be accessed using an ID string.
+// Below are functions for breaking ID strings into the component parts
+// IDs start with two characters followed by numeric digits.
+// For example '_v22' is vertex number 22.
+// ============================================================================
+function idBreak(id) {
+    return [idEntityTypeStr(id), idIndex(id)];
+}
+function idIndex(id) {
+    return Number(id.slice(2));
+}
+function idIndicies(ids) {
+    return ids.map(function (id) { return Number(id.slice(2)); });
+}
+function idEntityTypeStr(id) {
+    return id.slice(0, 2);
+}
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/GIGeom.ts":
+/*!*************************************!*\
+  !*** ./src/libs/geo-info/GIGeom.ts ***!
+  \*************************************/
+/*! exports provided: GIGeom */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIGeom", function() { return GIGeom; });
+/* harmony import */ var _GICommon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GICommon */ "./src/libs/geo-info/GICommon.ts");
+/* harmony import */ var _triangulate_triangulate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../triangulate/triangulate */ "./src/libs/triangulate/triangulate.ts");
+
+
+/**
+ * Class for geometry.
+ */
+var GIGeom = /** @class */ (function () {
+    /**
+     * Creates an object to store the geometry data.
+     * @param geom_data The JSON data
+     */
+    function GIGeom(model) {
+        // positions
+        this.num_posis = 0; // The total number of positions in the model.
+        this.rev_posis_verts = []; // 1 position -> many vertices
+        this.rev_posis_tris = []; // 1 position -> many triangles
+        // triangles
+        this.tris = []; // many triangles -> 1 position
+        this.rev_tris_faces = []; // 1 triangle -> 1 face
+        // vertices
+        this.verts = []; // many vertices -> 1 position
+        this.rev_verts_edges = []; // 1 vertex -> 1 edge
+        this.rev_verts_points = []; // 1 vertex -> 1 point
+        // edges
+        this.edges = []; // 1 edge -> 2 vertices
+        this.rev_edges_wires = []; // 1 edge -> 1 wire
+        // wires
+        this.wires = []; // 1 wire -> many edges
+        this.rev_wires_faces = []; // 1 wire -> 1 face
+        this.rev_wires_lines = []; // 1 wire -> 1 line
+        // faces
+        this.faces = []; // 1 face -> many wires
+        this.rev_faces_pgons = []; // 1 face -> 1 pgon
+        // points
+        this.points = []; // 1 point -> 1 vertex
+        this.rev_points_colls = []; // 1 point -> 1 collection
+        // polylines
+        this.lines = []; // 1 polyline -> 1 wire
+        this.rev_lines_colls = []; // 1 line -> 1 collection
+        // polygons
+        this.pgons = []; // 1 polygon -> 1 face
+        this.rev_pgons_colls = []; // 1 pgon -> 1 collection
+        // collections
+        this.colls = []; // 1 collection -> many points, many polylines, many polygons
+        // all arrays
+        this.geom_arrs = {
+            _t: this.tris,
+            _v: this.verts,
+            _e: this.edges,
+            _w: this.wires,
+            _f: this.faces,
+            pt: this.points,
+            ls: this.lines,
+            pg: this.pgons,
+            co: this.colls
+        };
+        this.model = model;
+    }
+    /**
+     * Returns the JSON data for this model.
+     */
+    GIGeom.prototype.getData = function () {
+        return {
+            num_positions: this.num_posis,
+            triangles: this.tris,
+            vertices: this.verts,
+            edges: this.edges,
+            wires: this.wires,
+            faces: this.faces,
+            points: this.points,
+            linestrings: this.lines,
+            polygons: this.pgons,
+            collections: this.colls
+        };
+    };
+    /**
+     * Adds data to this model from JSON data.
+     * The existing data in the model is not deleted.
+     * @param geom_data The JSON data
+     */
+    GIGeom.prototype.addData = function (geom_data) {
+        var _this = this;
+        var _a, _b, _c, _d, _g, _h, _j, _k, _l;
+        // get lengths before we start adding stuff
+        var num_tris = this.tris.length;
+        var num_verts = this.verts.length;
+        var num_edges = this.edges.length;
+        var num_wires = this.wires.length;
+        var num_faces = this.faces.length;
+        var num_points = this.points.length;
+        var num_lines = this.lines.length;
+        var num_pgons = this.pgons.length;
+        var num_colls = this.colls.length;
+        // Add triangles to model
+        var new_triangles = geom_data.triangles.map(function (t) { return t.map(function (p) { return p + _this.num_posis; }); });
+        (_a = this.tris).push.apply(_a, new_triangles);
+        // Add vertices to model
+        var new_verts = geom_data.vertices.map(function (p) { return p + _this.num_posis; });
+        (_b = this.verts).push.apply(_b, new_verts);
+        // Add edges to model
+        var new_edges = geom_data.edges.map(function (e) { return e.map(function (v) { return v + num_verts; }); });
+        (_c = this.edges).push.apply(_c, new_edges);
+        // Add wires to model
+        var new_wires = geom_data.wires.map(function (w) { return w.map(function (e) { return e + num_edges; }); });
+        (_d = this.wires).push.apply(_d, new_wires);
+        // Add faces to model
+        var new_faces = geom_data.faces.map(function (f) { return [
+            f[0].map(function (w) { return w + num_wires; }),
+            f[1].map(function (t) { return t + num_tris; })
+        ]; });
+        (_g = this.faces).push.apply(_g, new_faces);
+        // Add points to model
+        var new_points = geom_data.points.map(function (v) { return v + num_verts; });
+        (_h = this.points).push.apply(_h, new_points);
+        // Add lines to model
+        var new_lines = geom_data.linestrings.map(function (w) { return w + num_wires; });
+        (_j = this.lines).push.apply(_j, new_lines);
+        // Add pgons to model
+        var new_pgons = geom_data.polygons.map(function (f) { return f + num_faces; });
+        (_k = this.pgons).push.apply(_k, new_pgons);
+        // Add collections to model
+        var new_colls = geom_data.collections.map(function (c) { return [
+            c[0] === -1 ? -1 : c[0] + num_colls,
+            c[1].map(function (point) { return point + num_points; }),
+            c[2].map(function (line) { return line + num_lines; }),
+            c[3].map(function (pgon) { return pgon + num_pgons; })
+        ]; });
+        (_l = this.colls).push.apply(_l, new_colls);
+        // Update the reverse arrays
+        this._updateRevArrays();
+        // update the positions array
+        this.num_posis += geom_data.num_positions;
+    };
+    // ============================================================================
+    // Private methods
+    // ============================================================================
+    /**
+     * Updates the rev arrays the create the reveres links.
+     */
+    GIGeom.prototype._updateRevArrays = function () {
+        var _this = this;
+        // positions
+        this.rev_posis_tris = [];
+        this.tris.forEach(function (pos_i_arr, tri_i) {
+            pos_i_arr.forEach(function (pos_i) {
+                if (_this.rev_posis_tris[pos_i] === undefined) {
+                    _this.rev_posis_tris[pos_i] = [];
+                }
+                _this.rev_posis_tris[pos_i].push(tri_i);
+            });
+        });
+        this.rev_posis_verts = [];
+        this.verts.forEach(function (pos_i, vert_i) {
+            if (_this.rev_posis_verts[pos_i] === undefined) {
+                _this.rev_posis_verts[pos_i] = [];
+            }
+            _this.rev_posis_verts[pos_i].push(vert_i);
+        });
+        // edges, wires, faces
+        this.rev_verts_edges = [];
+        this.edges.forEach(function (vert_i_arr, edge_i) {
+            vert_i_arr.forEach(function (vert_i) {
+                _this.rev_verts_edges[vert_i] = edge_i;
+            });
+        });
+        this.rev_edges_wires = [];
+        this.wires.forEach(function (edge_i_arr, wire_i) {
+            edge_i_arr.forEach(function (edge_i) {
+                _this.rev_edges_wires[edge_i] = wire_i;
+            });
+        });
+        this.rev_wires_faces = [];
+        this.rev_tris_faces = [];
+        this.faces.forEach(function (_a, face_i) {
+            var wire_i_arr = _a[0], tri_i_arr = _a[1];
+            wire_i_arr.forEach(function (wire_i) {
+                _this.rev_wires_faces[wire_i] = face_i;
+            });
+            tri_i_arr.forEach(function (tri_i) {
+                _this.rev_tris_faces[tri_i] = face_i;
+            });
+        });
+        // points, lines, polygons
+        this.rev_verts_points = [];
+        this.points.forEach(function (vert_i, point_i) {
+            _this.rev_verts_points[vert_i] = point_i;
+        });
+        this.rev_wires_lines = [];
+        this.lines.forEach(function (wire_i, line_i) {
+            _this.rev_wires_lines[wire_i] = line_i;
+        });
+        this.rev_faces_pgons = [];
+        this.pgons.forEach(function (face_i, pgon_i) {
+            _this.rev_faces_pgons[face_i] = pgon_i;
+        });
+        // collections of points, linestrings, polygons
+        this.rev_points_colls = [];
+        this.rev_lines_colls = [];
+        this.rev_pgons_colls = [];
+        this.colls.forEach(function (_a, coll_i) {
+            var parent = _a[0], point_i_arr = _a[1], line_i_arr = _a[2], pgon_i_arr = _a[3];
+            point_i_arr.forEach(function (point_i) {
+                _this.rev_points_colls[point_i] = coll_i;
+            });
+            line_i_arr.forEach(function (line_i) {
+                _this.rev_lines_colls[line_i] = coll_i;
+            });
+            pgon_i_arr.forEach(function (pgon_i) {
+                _this.rev_pgons_colls[pgon_i] = coll_i;
+            });
+        });
+    };
+    // ============================================================================
+    // Navigate down the hierarchy
+    // ============================================================================
+    GIGeom.prototype._navVertToPosi = function (vert) {
+        return this.verts[vert];
+    };
+    GIGeom.prototype._navEdgeToVert = function (edge) {
+        return this.edges[edge];
+    };
+    GIGeom.prototype._navWireToEdge = function (wire) {
+        return this.wires[wire];
+    };
+    GIGeom.prototype._navFaceToWire = function (face) {
+        return this.faces[face][0];
+    };
+    GIGeom.prototype._navFaceToTri = function (face) {
+        return this.faces[face][1];
+    };
+    GIGeom.prototype._navPointToVert = function (point) {
+        return this.points[point];
+    };
+    GIGeom.prototype._navLineToVert = function (line) {
+        return this.lines[line];
+    };
+    GIGeom.prototype._navPgonToVert = function (pgon) {
+        return this.pgons[pgon];
+    };
+    GIGeom.prototype._navCollToPoint = function (coll) {
+        return this.colls[coll][1];
+    };
+    GIGeom.prototype._navCollToLine = function (coll) {
+        return this.colls[coll][2];
+    };
+    GIGeom.prototype._navCollToPgon = function (coll) {
+        return this.colls[coll][3];
+    };
+    GIGeom.prototype._navCollToColl = function (coll) {
+        return coll[0];
+    };
+    // ============================================================================
+    // Navigate up the hierarchy
+    // ============================================================================
+    GIGeom.prototype._navPosiToVert = function (posi) {
+        return this.rev_posis_verts[posi];
+    };
+    GIGeom.prototype._navPosiToTri = function (posi) {
+        return this.rev_posis_tris[posi];
+    };
+    GIGeom.prototype._navTriToFace = function (tri) {
+        return this.rev_tris_faces[tri];
+    };
+    GIGeom.prototype._navVrtToEdge = function (vert) {
+        return this.rev_verts_edges[vert];
+    };
+    GIGeom.prototype._navEdgeToWire = function (edge) {
+        return this.rev_edges_wires[edge];
+    };
+    GIGeom.prototype._navWireToFace = function (wire) {
+        return this.rev_wires_faces[wire];
+    };
+    GIGeom.prototype._navVertToPoint = function (vert) {
+        return this.rev_verts_points[vert];
+    };
+    GIGeom.prototype._navWireToLine = function (wire) {
+        return this.rev_wires_lines[wire];
+    };
+    GIGeom.prototype._navFaceToPgon = function (face) {
+        return this.rev_faces_pgons[face];
+    };
+    GIGeom.prototype._navPointToColl = function (point) {
+        return this.rev_points_colls[point];
+    };
+    GIGeom.prototype._navLineToColl = function (line) {
+        return this.rev_lines_colls[line];
+    };
+    GIGeom.prototype._navPgonToColl = function (pgon) {
+        return this.rev_pgons_colls[pgon];
+    };
+    // ============================================================================
+    // Create the topological entities, these methods are never public
+    // ============================================================================
+    /**
+     * Adds a vertex and updates the rev array.
+     * @param posi_i
+     */
+    GIGeom.prototype._addVertex = function (posi_i) {
+        var vert_i = this.verts.push(posi_i) - 1;
+        if (this.rev_posis_verts[posi_i] === undefined) {
+            this.rev_posis_verts[posi_i] = [];
+        }
+        this.rev_posis_verts[posi_i].push(vert_i);
+        return vert_i;
+    };
+    /**
+     * Adds an edge and updates the rev array.
+     * @param vert_i1
+     * @param vert_i2
+     */
+    GIGeom.prototype._addEdge = function (vert_i1, vert_i2) {
+        var edge_i = this.edges.push([vert_i1, vert_i2]) - 1;
+        this.rev_verts_edges[vert_i1] = edge_i;
+        this.rev_verts_edges[vert_i2] = edge_i;
+        return edge_i;
+    };
+    /**
+     * Adds a wire and updates the rev array.
+     * Edges are assumed to be sequential!
+     * @param edges_i
+     */
+    GIGeom.prototype._addWire = function (edges_i, close) {
+        var _this = this;
+        if (close === void 0) { close = false; }
+        var wire_i = this.wires.push(edges_i) - 1;
+        edges_i.forEach(function (edge_i) { return _this.rev_edges_wires[edge_i] = wire_i; });
+        return wire_i;
+    };
+    /**
+     * Adds a face and updates the rev array.
+     * Wires are assumed to be closed!
+     * No holes yet... TODO
+     * @param wire_i
+     */
+    GIGeom.prototype._addFace = function (wire_i) {
+        var _this = this;
+        // create the triangles
+        var wire_posis_i = this.wires[wire_i].map(function (vert_i) { return _this.verts[vert_i]; });
+        var coords = wire_posis_i.map(function (posi_i) { return _this.model.attribs().getPosiCoord(posi_i); });
+        var tris_corners = Object(_triangulate_triangulate__WEBPACK_IMPORTED_MODULE_1__["triangulate"])(coords);
+        var tris_posis_i = tris_corners.map(function (tri_corners) { return tri_corners.map(function (corner) { return wire_posis_i[corner]; }); });
+        var tris_i = tris_posis_i.map(function (tri_posis_i) { return _this.tris.push(tri_posis_i) - 1; });
+        // create the face
+        var face = [[wire_i], tris_i];
+        var face_i = this.faces.push(face);
+        return face_i;
+    };
+    // ============================================================================
+    // Create geometry, all these public methods return an string ID
+    // ============================================================================
+    /**
+     * Adds a new position to the model and returns the index to that position.
+     */
+    GIGeom.prototype.addPosition = function () {
+        this.num_posis += 1;
+        var i = this.num_posis - 1;
+        return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POSI + i;
+    };
+    /**
+     * Adds a new point entity to the model.
+     * @param posi_id The position for the point.
+     */
+    GIGeom.prototype.addPoint = function (posi_id) {
+        var posi_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndex"])(posi_id);
+        // create verts
+        var vert_i = this._addVertex(posi_i);
+        // create point
+        var point_i = this.points.push(vert_i) - 1;
+        this.rev_verts_points[vert_i] = point_i;
+        return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POINT + point_i;
+    };
+    /**
+     * Adds a new linestring entity to the model.
+     * @param posis_id
+     */
+    GIGeom.prototype.addLine = function (posis_id, close) {
+        var _this = this;
+        if (close === void 0) { close = false; }
+        var posis_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(posis_id);
+        // create verts, edges, wires
+        var vert_i_arr = posis_i.map(function (posi_i) { return _this._addVertex(posi_i); });
+        var edges_i_arr = [];
+        for (var i = 0; i < vert_i_arr.length - 1; i++) {
+            edges_i_arr.push(this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
+        }
+        if (close) {
+            edges_i_arr.push(this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
+        }
+        var wire_i = this._addWire(edges_i_arr, close);
+        // create line
+        var line_i = this.lines.push(wire_i) - 1;
+        this.rev_wires_lines[wire_i] = line_i;
+        return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].LINE + line_i;
+    };
+    /**
+     * Adds a new polygon entity to the model.
+     * @param posis_id
+     */
+    GIGeom.prototype.addPgon = function (posis_id) {
+        var _this = this;
+        var posis_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(posis_id);
+        // create verts, edges, wires, faces
+        var vert_i_arr = posis_i.map(function (posi_i) { return _this._addVertex(posi_i); });
+        var edges_i_arr = [];
+        for (var i = 0; i < vert_i_arr.length - 1; i++) {
+            edges_i_arr.push(this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
+        }
+        edges_i_arr.push(this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
+        var wire_i = this._addWire(edges_i_arr, true);
+        var face_i = this._addFace(wire_i);
+        // create polygon
+        var pgon_i = this.pgons.push(face_i) - 1;
+        this.rev_faces_pgons[face_i] = pgon_i;
+        return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].PGON + pgon_i;
+    };
+    /**
+     * Adds a collection and updates the rev array.
+     * @param parent_id
+     * @param points_id
+     * @param lines_id
+     * @param pgons_id
+     */
+    GIGeom.prototype.addColl = function (parent_id, points_id, lines_id, pgons_id) {
+        var _this = this;
+        var parent_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndex"])(parent_id);
+        var points_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(points_id);
+        var lines_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(lines_id);
+        var pgons_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(pgons_id);
+        // create collection
+        var coll_i = this.colls.push([parent_i, points_i, lines_i, pgons_i]) - 1;
+        points_i.forEach(function (point_i) { return _this.rev_points_colls[point_i] = coll_i; });
+        lines_i.forEach(function (line_i) { return _this.rev_points_colls[line_i] = coll_i; });
+        pgons_i.forEach(function (pgon_i) { return _this.rev_points_colls[pgon_i] = coll_i; });
+        return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].COLL + coll_i;
+    };
+    // ============================================================================
+    // Check if entity exists
+    // ============================================================================
+    GIGeom.prototype.has = function (id) {
+        var _a = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idBreak"])(id), type_str = _a[0], index = _a[1];
+        return (this.geom_arrs[type_str][index] !== undefined);
+    };
+    // ============================================================================
+    // Get arrays of entities, these retrun arrays of string IDs
+    // ============================================================================
+    GIGeom.prototype.getTris = function () {
+        return this.tris.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].TRI + index; });
+    };
+    GIGeom.prototype.getVerts = function () {
+        return this.verts.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].VERT + index; });
+    };
+    GIGeom.prototype.getEdges = function () {
+        return this.edges.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].EDGE + index; });
+    };
+    GIGeom.prototype.getWires = function () {
+        return this.wires.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].WIRE + index; });
+    };
+    GIGeom.prototype.getFaces = function () {
+        return this.faces.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].FACE + index; });
+    };
+    GIGeom.prototype.getPoints = function () {
+        return this.points.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POINT + index; });
+    };
+    GIGeom.prototype.getLines = function () {
+        return this.lines.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].LINE + index; });
+    };
+    GIGeom.prototype.getPgons = function () {
+        return this.pgons.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].PGON + index; });
+    };
+    GIGeom.prototype.getColls = function () {
+        return this.colls.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].COLL + index; });
+    };
+    // ============================================================================
+    // Get array lengths
+    // ============================================================================
+    GIGeom.prototype.numPosis = function () {
+        return this.num_posis;
+    };
+    GIGeom.prototype.numVerts = function () {
+        return this.verts.length;
+    };
+    GIGeom.prototype.numEdges = function () {
+        return this.edges.length;
+    };
+    GIGeom.prototype.numWires = function () {
+        return this.wires.length;
+    };
+    GIGeom.prototype.numFaces = function () {
+        return this.faces.length;
+    };
+    GIGeom.prototype.numCollections = function () {
+        return this.colls.length;
+    };
+    GIGeom.prototype.numPoints = function () {
+        return this.points.length;
+    };
+    GIGeom.prototype.numLines = function () {
+        return this.lines.length;
+    };
+    GIGeom.prototype.numPgons = function () {
+        return this.pgons.length;
+    };
+    GIGeom.prototype.numColls = function () {
+        return this.colls.length;
+    };
+    // ============================================================================
+    // ThreeJS
+    // Get arrays for threejs, these retrun arrays of indexes to positions
+    // For a method to get the array of positions, see the attrib class
+    // getSeqCoords()
+    // ============================================================================
+    GIGeom.prototype.get3jsTris = function () {
+        return [].concat.apply([], this.tris);
+    };
+    GIGeom.prototype.get3jsEdges = function () {
+        var _this = this;
+        return this.edges.map(function (edge) { return [_this.verts[edge[1]], _this.verts[edge[0]]]; });
+    };
+    GIGeom.prototype.get3jsLines = function () {
+        var _this = this;
+        return [].concat.apply([], this.edges.map(function (edge) { return [_this.verts[edge[0]], _this.verts[edge[1]]]; }));
+    };
+    GIGeom.prototype.get3jsPoints = function () {
+        var _this = this;
+        return [].concat.apply([], this.points.map(function (point) { return _this.verts[point]; }));
+    };
+    return GIGeom;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/GIJson.ts":
+/*!*************************************!*\
+  !*** ./src/libs/geo-info/GIJson.ts ***!
+  \*************************************/
 /*! exports provided: EAttribDataTypeStrs */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAttribDataTypeStrs", function() { return EAttribDataTypeStrs; });
-/**
- * Geo-info models.
- */
-//  ===============================================================================================================
-//  Enums, Types, and Interfaces
-//  ===============================================================================================================
 // enums
 var EAttribDataTypeStrs;
 (function (EAttribDataTypeStrs) {
-    EAttribDataTypeStrs["Int"] = "Int";
-    EAttribDataTypeStrs["Float"] = "Float";
-    EAttribDataTypeStrs["String"] = "String";
+    EAttribDataTypeStrs["INT"] = "Int";
+    EAttribDataTypeStrs["FLOAT"] = "Float";
+    EAttribDataTypeStrs["STRING"] = "String";
 })(EAttribDataTypeStrs || (EAttribDataTypeStrs = {}));
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/GIModel.ts":
+/*!**************************************!*\
+  !*** ./src/libs/geo-info/GIModel.ts ***!
+  \**************************************/
+/*! exports provided: GIModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIModel", function() { return GIModel; });
+/* harmony import */ var _GIGeom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GIGeom */ "./src/libs/geo-info/GIGeom.ts");
+/* harmony import */ var _GIAttribs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GIAttribs */ "./src/libs/geo-info/GIAttribs.ts");
+
+
+/**
+ * Geo-info model class.
+ */
+var GIModel = /** @class */ (function () {
+    /**
+     * Creates a model.
+     * @param model_data The JSON data
+     */
+    function GIModel(model_data) {
+        this._geom = new _GIGeom__WEBPACK_IMPORTED_MODULE_0__["GIGeom"](this);
+        this._attribs = new _GIAttribs__WEBPACK_IMPORTED_MODULE_1__["GIAttribs"](this);
+        if (model_data) {
+            this.addData(model_data);
+        }
+    }
+    // Getters and setters
+    GIModel.prototype.geom = function () { return this._geom; };
+    GIModel.prototype.attribs = function () { return this._attribs; };
+    /**
+     * Sets the data in this model from JSON data.
+     * The existing data in the model is deleted.
+     * @param model_data The JSON data
+     */
+    GIModel.prototype.addData = function (model_data) {
+        this._geom.addData(model_data.geometry);
+        this._attribs.addData(model_data.attributes);
+    };
+    /**
+     * Adds data to this model from JSON data.
+     * The existing data in the model is not deleted.
+     * @param model_data The JSON data
+     */
+    GIModel.prototype.merge = function (model) {
+        this._attribs.addData(model.getAttribsData()); // must be before addGeomData()
+        this._geom.addData(model.getGeomData());
+    };
+    /**
+     * Returns the JSON data for this model.
+     */
+    GIModel.prototype.getData = function () {
+        return {
+            geometry: this._geom.getData(),
+            attributes: this._attribs.getData()
+        };
+    };
+    /**
+     * Returns the JSON data for the geometry in this model.
+     */
+    GIModel.prototype.getGeomData = function () {
+        return this._geom.getData();
+    };
+    /**
+     * Returns the JSON data for the attributes in this model.
+     */
+    GIModel.prototype.getAttribsData = function () {
+        return this._attribs.getData();
+    };
+    /**
+     * Returns arrays for visualization in Threejs.
+     */
+    GIModel.prototype.get3jsData = function () {
+        var _a = this._attribs.get3jsSeqCoords(), coords_keys = _a[0], coords_values = _a[1];
+        var tris = this._geom.get3jsTris().map(function (vert_i) { return coords_keys[vert_i]; });
+        var lines = this._geom.get3jsLines().map(function (vert_i) { return coords_keys[vert_i]; });
+        var points = this._geom.get3jsPoints().map(function (vert_i) { return coords_keys[vert_i]; });
+        return {
+            positions: coords_values,
+            points: points,
+            lines: lines,
+            triangles: tris
+        };
+    };
+    return GIModel;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/threex/threex.ts":
+/*!***********************************!*\
+  !*** ./src/libs/threex/threex.ts ***!
+  \***********************************/
+/*! exports provided: multVectorMatrix, xformMatrix, matrixInv, subVectors, addVectors, crossVectors */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "multVectorMatrix", function() { return multVectorMatrix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "xformMatrix", function() { return xformMatrix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "matrixInv", function() { return matrixInv; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subVectors", function() { return subVectors; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addVectors", function() { return addVectors; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "crossVectors", function() { return crossVectors; });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+
+var EPS = 1e-6;
+/**
+ * Utility functions for threejs.
+ */
+// Matrices ======================================================================================================
+function multVectorMatrix(v, m) {
+    var v2 = v.clone();
+    v2.applyMatrix4(m);
+    return v2;
+}
+function xformMatrix(o, x, y, z) {
+    x.normalize();
+    y.normalize();
+    z.normalize();
+    var m1 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
+    var o_neg = o.clone().negate();
+    m1.setPosition(o_neg);
+    var m2 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
+    m2.makeBasis(x, y, z);
+    m2.getInverse(m2);
+    var m3 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
+    m3.multiplyMatrices(m2, m1);
+    return m3;
+}
+function matrixInv(m) {
+    var m2 = new three__WEBPACK_IMPORTED_MODULE_0__["Matrix4"]();
+    return m2.getInverse(m);
+}
+//  Vectors =======================================================================================================
+function subVectors(v1, v2, norm) {
+    if (norm === void 0) { norm = false; }
+    var v3 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+    v3.subVectors(v1, v2);
+    if (norm) {
+        v3.normalize();
+    }
+    return v3;
+}
+function addVectors(v1, v2, norm) {
+    if (norm === void 0) { norm = false; }
+    var v3 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+    v3.addVectors(v1, v2);
+    if (norm) {
+        v3.normalize();
+    }
+    return v3;
+}
+function crossVectors(v1, v2, norm) {
+    if (norm === void 0) { norm = false; }
+    var v3 = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+    v3.crossVectors(v1, v2);
+    if (norm) {
+        v3.normalize();
+    }
+    return v3;
+}
+
+
+/***/ }),
+
+/***/ "./src/libs/triangulate/earcut.ts":
+/*!****************************************!*\
+  !*** ./src/libs/triangulate/earcut.ts ***!
+  \****************************************/
+/*! exports provided: Earcut */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Earcut", function() { return Earcut; });
+/**
+ * @author Mugen87 / https://github.com/Mugen87
+ * Port from https://github.com/mapbox/earcut (v2.1.2)
+ */
+var Earcut = {
+    triangulate: function (data, holeIndices, dim) {
+        dim = dim || 2;
+        var hasHoles = holeIndices && holeIndices.length;
+        var outerLen = hasHoles ? holeIndices[0] * dim : data.length;
+        var outerNode = linkedList(data, 0, outerLen, dim, true);
+        var triangles = [];
+        if (!outerNode) {
+            return triangles;
+        }
+        var minX, minY, maxX, maxY, x, y, invSize;
+        if (hasHoles) {
+            outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
+        }
+        // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
+        if (data.length > 80 * dim) {
+            minX = maxX = data[0];
+            minY = maxY = data[1];
+            for (var i = dim; i < outerLen; i += dim) {
+                x = data[i];
+                y = data[i + 1];
+                if (x < minX) {
+                    minX = x;
+                }
+                if (y < minY) {
+                    minY = y;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                if (y > maxY) {
+                    maxY = y;
+                }
+            }
+            // minX, minY and invSize are later used to transform coords into integers for z-order calculation
+            invSize = Math.max(maxX - minX, maxY - minY);
+            invSize = invSize !== 0 ? 1 / invSize : 0;
+        }
+        earcutLinked(outerNode, triangles, dim, minX, minY, invSize);
+        return triangles;
+    }
+};
+// create a circular doubly linked list from polygon points in the specified winding order
+function linkedList(data, start, end, dim, clockwise) {
+    var i, last;
+    if (clockwise === (signedArea(data, start, end, dim) > 0)) {
+        for (i = start; i < end; i += dim) {
+            last = insertNode(i, data[i], data[i + 1], last);
+        }
+    }
+    else {
+        for (i = end - dim; i >= start; i -= dim) {
+            last = insertNode(i, data[i], data[i + 1], last);
+        }
+    }
+    if (last && equals(last, last.next)) {
+        removeNode(last);
+        last = last.next;
+    }
+    return last;
+}
+// eliminate colinear or duplicate points
+function filterPoints(start, end) {
+    if (!start) {
+        return start;
+    }
+    if (!end) {
+        end = start;
+    }
+    var p = start, again;
+    do {
+        again = false;
+        if (!p.steiner && (equals(p, p.next) || area(p.prev, p, p.next) === 0)) {
+            removeNode(p);
+            p = end = p.prev;
+            if (p === p.next) {
+                break;
+            }
+            again = true;
+        }
+        else {
+            p = p.next;
+        }
+    } while (again || p !== end);
+    return end;
+}
+// main ear slicing loop which triangulates a polygon (given as a linked list)
+function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
+    if (!ear) {
+        return;
+    }
+    // interlink polygon nodes in z-order
+    if (!pass && invSize) {
+        indexCurve(ear, minX, minY, invSize);
+    }
+    var stop = ear, prev, next;
+    // iterate through ears, slicing them one by one
+    while (ear.prev !== ear.next) {
+        prev = ear.prev;
+        next = ear.next;
+        if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
+            // cut off the triangle
+            triangles.push(prev.i / dim);
+            triangles.push(ear.i / dim);
+            triangles.push(next.i / dim);
+            removeNode(ear);
+            // skipping the next vertice leads to less sliver triangles
+            ear = next.next;
+            stop = next.next;
+            continue;
+        }
+        ear = next;
+        // if we looped through the whole remaining polygon and can't find any more ears
+        if (ear === stop) {
+            // try filtering points and slicing again
+            if (!pass) {
+                earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
+                // if this didn't work, try curing all small self-intersections locally
+            }
+            else if (pass === 1) {
+                ear = cureLocalIntersections(ear, triangles, dim);
+                earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
+                // as a last resort, try splitting the remaining polygon into two
+            }
+            else if (pass === 2) {
+                splitEarcut(ear, triangles, dim, minX, minY, invSize);
+            }
+            break;
+        }
+    }
+}
+// check whether a polygon node forms a valid ear with adjacent nodes
+function isEar(ear) {
+    var a = ear.prev, b = ear, c = ear.next;
+    if (area(a, b, c) >= 0) {
+        return false;
+    } // reflex, can't be an ear
+    // now make sure we don't have other points inside the potential ear
+    var p = ear.next.next;
+    while (p !== ear.prev) {
+        if (pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0) {
+            return false;
+        }
+        p = p.next;
+    }
+    return true;
+}
+function isEarHashed(ear, minX, minY, invSize) {
+    var a = ear.prev, b = ear, c = ear.next;
+    if (area(a, b, c) >= 0) {
+        return false;
+    } // reflex, can't be an ear
+    // triangle bbox; min & max are calculated like this for speed
+    var minTX = a.x < b.x ? (a.x < c.x ? a.x : c.x) : (b.x < c.x ? b.x : c.x), minTY = a.y < b.y ? (a.y < c.y ? a.y : c.y) : (b.y < c.y ? b.y : c.y), maxTX = a.x > b.x ? (a.x > c.x ? a.x : c.x) : (b.x > c.x ? b.x : c.x), maxTY = a.y > b.y ? (a.y > c.y ? a.y : c.y) : (b.y > c.y ? b.y : c.y);
+    // z-order range for the current triangle bbox;
+    var minZ = zOrder(minTX, minTY, minX, minY, invSize), maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
+    // first look for points inside the triangle in increasing z-order
+    var p = ear.nextZ;
+    while (p && p.z <= maxZ) {
+        if (p !== ear.prev && p !== ear.next &&
+            pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) &&
+            area(p.prev, p, p.next) >= 0) {
+            return false;
+        }
+        p = p.nextZ;
+    }
+    // then look for points in decreasing z-order
+    p = ear.prevZ;
+    while (p && p.z >= minZ) {
+        if (p !== ear.prev && p !== ear.next &&
+            pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) &&
+            area(p.prev, p, p.next) >= 0) {
+            return false;
+        }
+        p = p.prevZ;
+    }
+    return true;
+}
+// go through all polygon nodes and cure small local self-intersections
+function cureLocalIntersections(start, triangles, dim) {
+    var p = start;
+    do {
+        var a = p.prev, b = p.next.next;
+        if (!equals(a, b) && intersects(a, p, p.next, b) && locallyInside(a, b) && locallyInside(b, a)) {
+            triangles.push(a.i / dim);
+            triangles.push(p.i / dim);
+            triangles.push(b.i / dim);
+            // remove two nodes involved
+            removeNode(p);
+            removeNode(p.next);
+            p = start = b;
+        }
+        p = p.next;
+    } while (p !== start);
+    return p;
+}
+// try splitting polygon into two and triangulate them independently
+function splitEarcut(start, triangles, dim, minX, minY, invSize) {
+    // look for a valid diagonal that divides the polygon into two
+    var a = start;
+    do {
+        var b = a.next.next;
+        while (b !== a.prev) {
+            if (a.i !== b.i && isValidDiagonal(a, b)) {
+                // split the polygon in two by the diagonal
+                var c = splitPolygon(a, b);
+                // filter colinear points around the cuts
+                a = filterPoints(a, a.next);
+                c = filterPoints(c, c.next);
+                // run earcut on each half
+                earcutLinked(a, triangles, dim, minX, minY, invSize);
+                earcutLinked(c, triangles, dim, minX, minY, invSize);
+                return;
+            }
+            b = b.next;
+        }
+        a = a.next;
+    } while (a !== start);
+}
+// link every hole into the outer loop, producing a single-ring polygon without holes
+function eliminateHoles(data, holeIndices, outerNode, dim) {
+    var queue = [], i, len, start, end, list;
+    for (i = 0, len = holeIndices.length; i < len; i++) {
+        start = holeIndices[i] * dim;
+        end = i < len - 1 ? holeIndices[i + 1] * dim : data.length;
+        list = linkedList(data, start, end, dim, false);
+        if (list === list.next) {
+            list.steiner = true;
+        }
+        queue.push(getLeftmost(list));
+    }
+    queue.sort(compareX);
+    // process holes from left to right
+    for (i = 0; i < queue.length; i++) {
+        eliminateHole(queue[i], outerNode);
+        outerNode = filterPoints(outerNode, outerNode.next);
+    }
+    return outerNode;
+}
+function compareX(a, b) {
+    return a.x - b.x;
+}
+// find a bridge between vertices that connects hole with an outer ring and and link it
+function eliminateHole(hole, outerNode) {
+    outerNode = findHoleBridge(hole, outerNode);
+    if (outerNode) {
+        var b = splitPolygon(outerNode, hole);
+        filterPoints(b, b.next);
+    }
+}
+// David Eberly's algorithm for finding a bridge between hole and outer polygon
+function findHoleBridge(hole, outerNode) {
+    var p = outerNode;
+    var hx = hole.x;
+    var hy = hole.y;
+    var qx = -Infinity;
+    var m;
+    // find a segment intersected by a ray from the hole's leftmost point to the left;
+    // segment's endpoint with lesser x will be potential connection point
+    do {
+        if (hy <= p.y && hy >= p.next.y && p.next.y !== p.y) {
+            var x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
+            if (x <= hx && x > qx) {
+                qx = x;
+                if (x === hx) {
+                    if (hy === p.y) {
+                        return p;
+                    }
+                    if (hy === p.next.y) {
+                        return p.next;
+                    }
+                }
+                m = p.x < p.next.x ? p : p.next;
+            }
+        }
+        p = p.next;
+    } while (p !== outerNode);
+    if (!m) {
+        return null;
+    }
+    if (hx === qx) {
+        return m.prev;
+    } // hole touches outer segment; pick lower endpoint
+    // look for points inside the triangle of hole point, segment intersection and endpoint;
+    // if there are no points found, we have a valid connection;
+    // otherwise choose the point of the minimum angle with the ray as connection point
+    var stop = m;
+    var mx = m.x;
+    var my = m.y;
+    var tanMin = Infinity;
+    var tan;
+    p = m.next;
+    while (p !== stop) {
+        if (hx >= p.x && p.x >= mx && hx !== p.x &&
+            pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+            tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
+            if ((tan < tanMin || (tan === tanMin && p.x > m.x)) && locallyInside(p, hole)) {
+                m = p;
+                tanMin = tan;
+            }
+        }
+        p = p.next;
+    }
+    return m;
+}
+// interlink polygon nodes in z-order
+function indexCurve(start, minX, minY, invSize) {
+    var p = start;
+    do {
+        if (p.z === null) {
+            p.z = zOrder(p.x, p.y, minX, minY, invSize);
+        }
+        p.prevZ = p.prev;
+        p.nextZ = p.next;
+        p = p.next;
+    } while (p !== start);
+    p.prevZ.nextZ = null;
+    p.prevZ = null;
+    sortLinked(p);
+}
+// Simon Tatham's linked list merge sort algorithm
+// http://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
+function sortLinked(list) {
+    var i, p, q, e, tail, numMerges, pSize, qSize, inSize = 1;
+    do {
+        p = list;
+        list = null;
+        tail = null;
+        numMerges = 0;
+        while (p) {
+            numMerges++;
+            q = p;
+            pSize = 0;
+            for (i = 0; i < inSize; i++) {
+                pSize++;
+                q = q.nextZ;
+                if (!q) {
+                    break;
+                }
+            }
+            qSize = inSize;
+            while (pSize > 0 || (qSize > 0 && q)) {
+                if (pSize !== 0 && (qSize === 0 || !q || p.z <= q.z)) {
+                    e = p;
+                    p = p.nextZ;
+                    pSize--;
+                }
+                else {
+                    e = q;
+                    q = q.nextZ;
+                    qSize--;
+                }
+                if (tail) {
+                    tail.nextZ = e;
+                }
+                else {
+                    list = e;
+                }
+                e.prevZ = tail;
+                tail = e;
+            }
+            p = q;
+        }
+        tail.nextZ = null;
+        inSize *= 2;
+    } while (numMerges > 1);
+    return list;
+}
+// z-order of a point given coords and inverse of the longer side of data bbox
+function zOrder(x, y, minX, minY, invSize) {
+    // coords are transformed into non-negative 15-bit integer range
+    x = 32767 * (x - minX) * invSize;
+    y = 32767 * (y - minY) * invSize;
+    x = (x | (x << 8)) & 0x00FF00FF;
+    x = (x | (x << 4)) & 0x0F0F0F0F;
+    x = (x | (x << 2)) & 0x33333333;
+    x = (x | (x << 1)) & 0x55555555;
+    y = (y | (y << 8)) & 0x00FF00FF;
+    y = (y | (y << 4)) & 0x0F0F0F0F;
+    y = (y | (y << 2)) & 0x33333333;
+    y = (y | (y << 1)) & 0x55555555;
+    return x | (y << 1);
+}
+// find the leftmost node of a polygon ring
+function getLeftmost(start) {
+    var p = start, leftmost = start;
+    do {
+        if (p.x < leftmost.x) {
+            leftmost = p;
+        }
+        p = p.next;
+    } while (p !== start);
+    return leftmost;
+}
+// check if a point lies within a convex triangle
+function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
+    return (cx - px) * (ay - py) - (ax - px) * (cy - py) >= 0 &&
+        (ax - px) * (by - py) - (bx - px) * (ay - py) >= 0 &&
+        (bx - px) * (cy - py) - (cx - px) * (by - py) >= 0;
+}
+// check if a diagonal between two polygon nodes is valid (lies in polygon interior)
+function isValidDiagonal(a, b) {
+    return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) &&
+        locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b);
+}
+// signed area of a triangle
+function area(p, q, r) {
+    return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+}
+// check if two points are equal
+function equals(p1, p2) {
+    return p1.x === p2.x && p1.y === p2.y;
+}
+// check if two segments intersect
+function intersects(p1, q1, p2, q2) {
+    if ((equals(p1, q1) && equals(p2, q2)) ||
+        (equals(p1, q2) && equals(p2, q1))) {
+        return true;
+    }
+    return area(p1, q1, p2) > 0 !== area(p1, q1, q2) > 0 &&
+        area(p2, q2, p1) > 0 !== area(p2, q2, q1) > 0;
+}
+// check if a polygon diagonal intersects any polygon segments
+function intersectsPolygon(a, b) {
+    var p = a;
+    do {
+        if (p.i !== a.i && p.next.i !== a.i && p.i !== b.i && p.next.i !== b.i &&
+            intersects(p, p.next, a, b)) {
+            return true;
+        }
+        p = p.next;
+    } while (p !== a);
+    return false;
+}
+// check if a polygon diagonal is locally inside the polygon
+function locallyInside(a, b) {
+    return area(a.prev, a, a.next) < 0 ?
+        area(a, b, a.next) >= 0 && area(a, a.prev, b) >= 0 :
+        area(a, b, a.prev) < 0 || area(a, a.next, b) < 0;
+}
+// check if the middle point of a polygon diagonal is inside the polygon
+function middleInside(a, b) {
+    var p = a;
+    var inside = false;
+    var px = (a.x + b.x) / 2;
+    var py = (a.y + b.y) / 2;
+    do {
+        if (((p.y > py) !== (p.next.y > py)) && p.next.y !== p.y &&
+            (px < (p.next.x - p.x) * (py - p.y) / (p.next.y - p.y) + p.x)) {
+            inside = !inside;
+        }
+        p = p.next;
+    } while (p !== a);
+    return inside;
+}
+// link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
+// if one belongs to the outer ring and another to a hole, it merges it into a single ring
+function splitPolygon(a, b) {
+    var a2 = new Node(a.i, a.x, a.y), b2 = new Node(b.i, b.x, b.y), an = a.next, bp = b.prev;
+    a.next = b;
+    b.prev = a;
+    a2.next = an;
+    an.prev = a2;
+    b2.next = a2;
+    a2.prev = b2;
+    bp.next = b2;
+    b2.prev = bp;
+    return b2;
+}
+// create a node and optionally link it with previous one (in a circular doubly linked list)
+function insertNode(i, x, y, last) {
+    var p = new Node(i, x, y);
+    if (!last) {
+        p.prev = p;
+        p.next = p;
+    }
+    else {
+        p.next = last.next;
+        p.prev = last;
+        last.next.prev = p;
+        last.next = p;
+    }
+    return p;
+}
+function removeNode(p) {
+    p.next.prev = p.prev;
+    p.prev.next = p.next;
+    if (p.prevZ) {
+        p.prevZ.nextZ = p.nextZ;
+    }
+    if (p.nextZ) {
+        p.nextZ.prevZ = p.prevZ;
+    }
+}
+function Node(i, x, y) {
+    // vertice index in coordinates array
+    this.i = i;
+    // vertex coordinates
+    this.x = x;
+    this.y = y;
+    // previous and next vertice nodes in a polygon ring
+    this.prev = null;
+    this.next = null;
+    // z-order curve value
+    this.z = null;
+    // previous and next nodes in z-order
+    this.prevZ = null;
+    this.nextZ = null;
+    // indicates whether this is a steiner point
+    this.steiner = false;
+}
+function signedArea(data, start, end, dim) {
+    var sum = 0;
+    for (var i = start, j = end - dim; i < end; i += dim) {
+        sum += (data[j] - data[i]) * (data[i + 1] + data[j + 1]);
+        j = i;
+    }
+    return sum;
+}
+
+
+
+/***/ }),
+
+/***/ "./src/libs/triangulate/triangulate.ts":
+/*!*********************************************!*\
+  !*** ./src/libs/triangulate/triangulate.ts ***!
+  \*********************************************/
+/*! exports provided: triangulate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "triangulate", function() { return triangulate; });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var _threex_threex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../threex/threex */ "./src/libs/threex/threex.ts");
+/* harmony import */ var _earcut__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./earcut */ "./src/libs/triangulate/earcut.ts");
+/* harmony import */ var _arr_arr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../arr/arr */ "./src/libs/arr/arr.ts");
+
+
+
+ // TODO remove dependence on this
+//  3D to 2D ======================================================================================================
+/**
+ * Function to transform a set of vertices in 3d space onto the xy plane.
+ * This function assumes that the vertices are co-planar.
+ * Returns a set of three Vectors that represent points on the xy plane.
+ */
+function _makeVertices2D(points) {
+    var o = new three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+    for (var _i = 0, points_1 = points; _i < points_1.length; _i++) {
+        var v = points_1[_i];
+        o.add(v);
+    }
+    o.divideScalar(points.length);
+    var vx;
+    var vz;
+    var got_vx = false;
+    for (var i = 0; i < points.length; i++) {
+        if (!got_vx) {
+            vx = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](points[i], o).normalize();
+            if (vx.lengthSq() !== 0) {
+                got_vx = true;
+            }
+        }
+        else {
+            vz = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](vx, _threex_threex__WEBPACK_IMPORTED_MODULE_1__["subVectors"](points[i], o).normalize()).normalize();
+            if (vz.lengthSq() !== 0) {
+                break;
+            }
+        }
+        if (i === points.length - 1) {
+            return null;
+        }
+    }
+    var vy = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["crossVectors"](vz, vx);
+    var m = _threex_threex__WEBPACK_IMPORTED_MODULE_1__["xformMatrix"](o, vx, vy, vz);
+    var points_2d = points.map(function (v) { return _threex_threex__WEBPACK_IMPORTED_MODULE_1__["multVectorMatrix"](v, m); });
+    return points_2d;
+}
+/**
+ * Triangulates a polygon
+ * @param coords
+ */
+function triangulate(coords) {
+    var vects = _makeVertices2D(coords.map(function (coord) {
+        var _a;
+        return new ((_a = three__WEBPACK_IMPORTED_MODULE_0__["Vector3"]).bind.apply(_a, [void 0].concat(coord)))();
+    }));
+    var flat_vert_xys = _arr_arr__WEBPACK_IMPORTED_MODULE_3__["Arr"].flatten(vects.map(function (v) { return [v.x, v.y]; })); // TODO remove dependency
+    var flat_tris_i = _earcut__WEBPACK_IMPORTED_MODULE_2__["Earcut"].triangulate(flat_vert_xys);
+    var tris_i = [];
+    for (var i = 0; i < flat_tris_i.length; i += 3) {
+        tris_i.push([flat_tris_i[i], flat_tris_i[i + 1], flat_tris_i[i + 2]]);
+    }
+    return tris_i;
+}
 
 
 /***/ }),

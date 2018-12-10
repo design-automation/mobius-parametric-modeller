@@ -13,13 +13,10 @@ import { SharedModule } from '@shared/shared.module';
 // import { AppRoutingModule } from './app-routing.module';
 // import app components
 import { AppComponent } from './app.component';
-import { ViewPublishComponent} from '../views/view-publish/view-publish.component'; // @views not working, not sure why?
-import { ViewPublishModule} from '../views/view-publish/view-publish.module';
-import { ViewEditorComponent} from '../views/view-editor/view-editor.component';
-import { ViewEditorModule} from '../views/view-editor/view-editor.module';
-import { ViewGalleryComponent} from '../views/view-gallery/view-gallery.component';
-import { ViewGalleryModule } from '../views/view-gallery/view-gallery.module';
-import { ViewFlowchartComponent } from '../views/view-flowchart/view-flowchart.component';
+import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
+    ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
+    ViewFlowchartComponent} from '@views';
+
 
 /**
  * AppModule, the root module for the whole app.
@@ -40,12 +37,12 @@ import { ViewFlowchartComponent } from '../views/view-flowchart/view-flowchart.c
         // CoreModule,
         ViewGalleryModule,
         ViewEditorModule,
-        ViewPublishModule,
+        ViewDashboardModule,
         SharedModule,
     ],
     entryComponents: [
         ViewEditorComponent,
-        ViewPublishComponent,
+        ViewDashboardComponent,
         ViewFlowchartComponent,
         ViewGalleryComponent,
     ],

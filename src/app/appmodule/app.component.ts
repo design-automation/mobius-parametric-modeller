@@ -1,7 +1,7 @@
 import { Component, Injector, ComponentFactoryResolver, ViewContainerRef,
     ViewChild, EventEmitter, HostListener, OnInit } from '@angular/core';
 import { ViewEditorComponent } from '../views/view-editor/view-editor.component';
-import { ViewPublishComponent } from '../views/view-publish/view-publish.component';
+import { ViewDashboardComponent } from '../views/view-dashboard/view-dashboard.component';
 import { ViewGalleryComponent } from '../views/view-gallery/view-gallery.component';
 import { IMobius } from '@models/mobius';
 import { IFlowchart } from '@models/flowchart';
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     private views = [];
     private Viewers = {
         'gallery': ViewGalleryComponent, // src/views/view-gallery/
-        'publish': ViewPublishComponent, // src/views/view-publish/
+        'dashboard': ViewDashboardComponent, // src/views/view-dashboard/
         'flowchart': ViewFlowchartComponent, // src/views/view-flowchart/
         'editor': ViewEditorComponent    // src/views/view-editor/
     };
@@ -61,6 +61,16 @@ export class AppComponent implements OnInit {
 
     updateFile(event: string) {
         this.dataService.file = circularJSON.parse(event);
+        const fc = this.dataService.file.flowchart;
+        if (this.dataService.node.type !== 'end'){
+            for (let i = 0; i< fc.nodes.length; i++){
+                if (fc.nodes[i].type == 'end'){
+                    fc.meta.selected_nodes = [i]
+                    break;
+                }
+            }
+        }
+        document.getElementById('executeButton').click();
         this.updateValue();
     }
 
@@ -94,15 +104,17 @@ export class AppComponent implements OnInit {
     updateValue() {
         for (const view in this.Viewers) {
             if (!this.views[view]) { continue; }
+            /*
             const componentRef =    this.views[ view ];
             if (view === 'flowchart') {
                 // componentRef.instance['data'] = this.dataService.flowchart;
             } else if (view === 'editor') {
                 // componentRef.instance['flowchart'] = this.dataService.flowchart;
                 // componentRef.instance['node'] = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-            } else if (view === 'publish') {
+            } else if (view === 'dashboard') {
                 // componentRef.instance['flowchart'] = this.dataService.flowchart;
             }
+            */
 
         }
     }

@@ -2,12 +2,12 @@
 import { RouterModule, Routes }    from '@angular/router';
 import { Component } from '@angular/core';
 
-import { ViewAboutModule, ViewGalleryModule, ViewPublishModule, ViewEditorModule } from '@views';
+import { ViewAboutModule, ViewGalleryModule, ViewDashboardModule, ViewEditorModule } from '@views';
 
 const appRoutes: Routes = [
     { path: 'about', loadChildren: () => ViewAboutModule },
     { path: 'gallery', loadChildren: () => ViewGalleryModule },
-    { path: 'publish', loadChildren: () => ViewPublishModule },
+    { path: 'dashboard', loadChildren: () => ViewDashboardModule },
     { path: 'editor', loadChildren: () => ViewEditorModule },
     { path: '',     redirectTo: '/about', pathMatch: 'full' },
     { path: '**', component: ViewAboutModule }

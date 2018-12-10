@@ -7,7 +7,7 @@
                 <!-- top left tab menu  -->
                 <div class="tab">
                     <button class='btn-tab' [class.active]='activeView=="gallery"' (click)='updateView("gallery")'>Gallery</button>
-                    <button class='btn-tab' [class.active]='activeView=="publish"' (click)='updateView("publish")'>Publish</button>
+                    <button class='btn-tab' [class.active]='activeView=="dashboard"' (click)='updateView("dashboard")'>Dashboard</button>
                     <button class='btn-tab' [class.active]='activeView=="flowchart"' (click)='updateView("flowchart")'>Flowchart</button>
                     <!--
                     <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
@@ -25,7 +25,7 @@
                 <div class="dropmenu">
                     <!-- execute button -->
                     <div>
-                        <execute [flowchart]='dataService.flowchart'></execute>
+                        <execute></execute>
                     </div>
                     <!-- dropdown menu for new file, save file, loaf file-->
                     <div>
@@ -34,9 +34,9 @@
                         </button>
                         <mat-menu #menu="matMenu">
                             <button  mat-menu-item onclick="document.getElementById('newfile').click();"
-                            title="Reset Flowchart to Default">
+                            title="Create New Flowchart">
                                 <mat-icon>rotate_left</mat-icon>
-                                <span>Reset</span>
+                                <span>New File</span>
                             </button>
                             <button mat-menu-item onclick="document.getElementById('savefile').click();"
                             title="Save Flowchart File to Computer">

@@ -96,6 +96,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         // add stuff to the scene
         this._addGrid();
         this._addAmbientLight();
+        this._addDirectionalLight();
 
         // update the model
         this.updateModel();
@@ -153,15 +154,31 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             this._modelshow = true;
             const threejs_data: IThreeJS = this._model.get3jsData();
             // Create single positions buffer that will be used by all geometry
+            const vertices = this._model.getAttribsData().vertices;
+            const normals = vertices.filter(attr => attr.name === 'normal')[0];
+            const colors = vertices.filter(attr => attr.name === 'color')[0];
+
+            const normal_data = [];
+            if ( normals !== undefined ) {
+                normals.data.forEach(n => normal_data.push(n[1]));
+            }
+            const normals_flat = [].concat(...normal_data);
+
+            const color_data = [];
+            if ( colors !== undefined ) {
+                colors.data.forEach(n => normal_data.push(n[1]));
+            }
+            const colors_flat = [].concat(...color_data);
+
             const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
-            this._addTris(threejs_data.triangles, posis_buffer);
+            this._addTris(threejs_data.triangles, posis_buffer, normals_flat, colors_flat);
             this._addLines(threejs_data.lines, posis_buffer);
             this._addPoints(threejs_data.points, posis_buffer);
             // Render
             this._controls.update();
             this.render(this);
             // print
-            console.log(">> this.scene >>", this._scene);
+            console.log('>> this.scene >>', this._scene);
         } catch (ex) {
             console.error('Error displaying model:', ex);
             this._updatemodel = false;
@@ -187,6 +204,13 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      */
     private _addAmbientLight() {
         const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+        this._scene.add( light );
+    }
+
+    // Creates a Directional Light
+    private _addDirectionalLight() {
+        const light = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        light.position.set( 0, 0, 1 ).normalize();
         this._scene.add( light );
     }
 
@@ -226,19 +250,20 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     /**
      * Add threejs triangles to the scene
      */
-    private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute): void {
+    private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute, normals: number[], colors: number[]): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( tris_i );
         geom.addAttribute( 'position',  posis_buffer);
-        // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
-        // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals, 3 ) );
+        geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
         const mat = new THREE.MeshPhongMaterial( {
-            specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
-            shininess: 250,
+            // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
+            specular: 0xffffff,
+            shininess: 0, // 250
             side: THREE.DoubleSide,
-            vertexColors: THREE.VertexColors
-            // wireframe:true
-        } );
+            vertexColors: THREE.VertexColors,
+            // wireframe: true
+        });
         const mesh: THREE.Mesh = new THREE.Mesh( geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();

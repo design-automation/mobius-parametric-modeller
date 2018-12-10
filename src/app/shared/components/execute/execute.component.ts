@@ -177,7 +177,7 @@ export class ExecuteComponent {
                 this.globalVars += '\n';
             }
         } catch (ex) {
-            throw ex;
+            // throw ex;
             node.hasError = true;
             // console.warn(`${node.name} errored`);
 
@@ -215,6 +215,9 @@ export class ExecuteComponent {
             } else {
                  error = new Error(ex);
             }
+            // @ts-ignore
+            console.logs = [];
+            console.log(error);
             throw error;
 
         }

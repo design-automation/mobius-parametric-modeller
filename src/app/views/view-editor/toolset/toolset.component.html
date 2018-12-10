@@ -2,7 +2,8 @@
     <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     <ul class='toolset__basic'>
         <ng-container *ngFor="let type of ProcedureTypesArr">
-            <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"'
+            <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"
+            && type.toUpperCase() !== "CONSTANT" && type.toUpperCase() !== "RETURN"'
             class='tooltip'
             (click)='add(ProcedureTypes[type])'> 
                 {{type}}
@@ -73,25 +74,40 @@
 
 <!-- functions for input nodes -->
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'start'">
-    
     <div class='toolset__functions'>
+        <section *ngFor='let type of ProcedureTypesArr' >
+            <div *ngIf='type.toUpperCase() == "CONSTANT"'>
+                <ul class='toolset__functions--subset'>
+                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>
+                </ul>
+            </div>
+        </section>
+        <!--
         <section *ngFor='let mod of Modules' >
             <div *ngIf='mod.module.toUpperCase() == "INPUT"'>
-                <!-- <h3>{{ mod.module }}</h3> -->
                 <ul class='toolset__functions--subset'>
                     <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
                 </ul>
             </div>
         </section>
+        -->
     </div>
 </div>
 
 <!-- functions for output nodes -->
 <div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
     <div class='toolset__functions' *ngIf="hasProd===false">
+        <!--
+        <section *ngFor='let type of ProcedureTypesArr' >
+            <div *ngIf='type.toUpperCase() == "RETURN"'>
+                <ul class='toolset__functions--subset'>
+                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>
+                </ul>
+            </div>
+        </section>
+        -->
         <section *ngFor='let mod of Modules' >
             <div *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
-                <!-- <h3>{{ mod.module }}</h3> -->
                 <ul class='toolset__functions--subset'>
                     <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
                 </ul>

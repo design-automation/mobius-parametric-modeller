@@ -1,7 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { Observable } from 'rxjs';
+import { ProcedureTypes } from '@shared/models/procedure';
 import * as circularJSON from 'circular-json';
+import * as funcs from '@modules';
 
 @Component({
   selector: 'file-load',
@@ -39,6 +41,23 @@ export class LoadFileComponent {
         const stream = Observable.create(observer => {
             const reader = new FileReader();
             reader.onloadend = () => {
+                function checkMissingProd(prodList: any[]) {
+                    let check = true;
+                    for (const prod of prodList) {
+                        if (prod.children) {
+                            if (!checkMissingProd(prod.children)) {
+                                check = false;
+                            }
+                        }
+                        prod.hasError = false;
+                        if (prod.type !== ProcedureTypes.Function) { continue; }
+                        if (!funcs[prod.meta.module] || !funcs[prod.meta.module][prod.meta.name]) {
+                            prod.hasError = true;
+                            check = false;
+                        }
+                    }
+                    return check;
+                }
                 // if (typeof reader.result === 'string') {}
                 const f = circularJSON.parse(<string>reader.result);
                 const file: IMobius = {
@@ -48,6 +67,16 @@ export class LoadFileComponent {
                     last_updated: f.last_updated,
                     version: f.version
                 };
+                let hasError = false;
+                for (const node of file.flowchart.nodes) {
+                    if (!checkMissingProd(node.procedure)) {
+                        node.hasError = true;
+                        hasError = true;
+                    }
+                }
+                if (hasError) {
+                    alert('The flowchart contains functions that does not exist in the current version of Mobius');
+                }
                 observer.next(file);
                 observer.complete();
                 };

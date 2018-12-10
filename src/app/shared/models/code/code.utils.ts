@@ -69,6 +69,20 @@ export class CodeUtils {
                 codeStr.push(`continue;`);
                 break;
 
+            case ProcedureTypes.Constant:
+                let constName = args[0].value;
+                if (args[0].value.substring(0, 1) === '"' || args[0].value.substring(0, 1) === '\'') {
+                    constName = args[0].value.substring(1, args[0].value.length - 1);
+                }
+                codeStr.push(`__params__['constants']['${constName}'] = ${args[1].value || args[1].default};`);
+                break;
+
+            case ProcedureTypes.Return:
+                codeStr.push(`if (${args[0].value} > __params__['model'].length) { return __params__['model']; }`);
+                codeStr.push(`return __params__['model'][${args[0].value}].value;`);
+                break;
+
+
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {

@@ -117,6 +117,35 @@
                     (input)='updateInputSize($event)'>  
 
         </div>
+
+        <!-- Constant (Only visible in start node) Template -->
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.Constant">
+            <div class='function-text'>Constant</div>
+
+            <input class='input--arg' 
+                    (cut)='stopProp($event)' (paste)='stopProp($event)'
+                    [(ngModel)]='data.args[0].value'
+                    name='data.args[0].name'
+                    placeholder={{data.args[0].name}}
+                    size={{data.args[0].value?.length||data.args[0].name.length}}
+                    (input)='updateInputSize($event)'>  
+
+        </div>
+        
+        <!-- Return (Only visible in End node) Template -->
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.Return">
+            <div class='function-text'>Return</div>
+
+            <input class='input--arg' 
+                    (cut)='stopProp($event)' (paste)='stopProp($event)'
+                    [(ngModel)]='data.args[0].value'
+                    name='data.args[0].name'
+                    placeholder={{data.args[0].name}}
+                    size={{data.args[0].value?.length||data.args[0].name.length}}
+                    (input)='updateInputSize($event)'>  
+        </div>
+        
+
         
         <!-- Function Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Function">

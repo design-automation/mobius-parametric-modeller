@@ -12,7 +12,7 @@ export interface IProcedure {
     argCount: number;
     args: IArgument[];
 
-    meta: { name: string, module: string, inputMode: number, description: string};
+    meta: { name: string, module: string, inputMode?: number, description?: string};
 
     print: boolean;
     enabled: boolean;

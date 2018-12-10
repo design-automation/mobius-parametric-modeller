@@ -191,27 +191,35 @@ export abstract class NodeUtils {
                 prod.args = [];
                 break;
 
+            case ProcedureTypes.Constant:
+                prod.argCount = 2;
+                prod.meta = { module: 'Input', name: 'Constant', inputMode: InputType.SimpleInput, description: undefined};
+                prod.args = [
+                    {name: 'const_name', value: undefined, default: 0},
+                    {name: '__input__', value: undefined, default: 0} ];
+                break;
+
+            case ProcedureTypes.Return:
+                prod.meta = { module: 'Output', name: 'Return', description: undefined};
+                prod.argCount = 1;
+                prod.args = [ {name: 'index', value: undefined, default: 0} ];
+                break;
+
             case ProcedureTypes.Function:
                 if (!data) { throw Error('No function data'); }
 
-                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput, description: undefined};
+                prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: undefined, default: undefined};
                 if (!data.hasReturn) {
                     returnArg = {name: '__none__', value: undefined, default: undefined};
                 }
 
-                // --UNSTABLE--
-                // changing the value of the last argument of all functions in input node to be undefined
-                if (node.type === 'start') {
-                    data.args[data.argCount - 1].value = undefined;
-                }
-
                 prod.args = [ returnArg, ...data.args];
                 break;
 
             case ProcedureTypes.Imported:
-                prod.meta = { module: data.module, name: data.name, inputMode: InputType.SimpleInput, description: undefined};
+                prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, ...data.args];
                 break;

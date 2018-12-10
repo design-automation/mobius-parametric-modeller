@@ -122,8 +122,6 @@ export class ProcedureItemComponent {
     }
 
     inputSize(val) {
-        console.log(val);
-        // event.target.style.width = ctx.measureText(val).width + 10 + 'px';
         return ctx.measureText(val).width + 10 + 'px';
     }
 }

@@ -21,7 +21,7 @@ import { ModuleDocAware } from '@shared/decorators';
 
 
   `,
-  styleUrls: [`../general-viewer.scss`]
+  styleUrls: ['../general-viewer.scss']
 })
 export class HelpViewerComponent {
     @Input() output;

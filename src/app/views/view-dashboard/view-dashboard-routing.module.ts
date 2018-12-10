@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ViewPublishComponent } from './view-publish.component';
+import { ViewDashboardComponent } from './view-dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ViewPublishComponent,
+    component: ViewDashboardComponent,
     children: [ ]
   }
 ];
@@ -16,4 +16,4 @@ const routes: Routes = [
   imports: [ RouterModule.forChild(routes) ],
   exports: [ RouterModule ]
 })
-export class ViewPublishRoutingModule { }
+export class ViewDashboardRoutingModule { }

@@ -4,11 +4,11 @@ import { INode } from '@models/node';
 import { DataService } from '@services';
 
 @Component({
-  selector: 'view-publish',
-  templateUrl: './view-publish.component.html',
-  styleUrls: ['./view-publish.component.scss']
+  selector: 'view-dashboard',
+  templateUrl: './view-dashboard.component.html',
+  styleUrls: ['./view-dashboard.component.scss']
 })
-export class ViewPublishComponent {
+export class ViewDashboardComponent {
 
     constructor(private dataService: DataService) {}
 

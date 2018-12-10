@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '@shared/shared.module';
-import { ViewPublishRoutingModule } from './view-publish-routing.module';
-import { ViewPublishComponent } from './view-publish.component';
+import { ViewDashboardRoutingModule } from './view-dashboard-routing.module';
+import { ViewDashboardComponent } from './view-dashboard.component';
 
 @NgModule({
   declarations: [
-    ViewPublishComponent
+    ViewDashboardComponent
   ],
   exports: [
-    ViewPublishComponent
+    ViewDashboardComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +19,6 @@ import { ViewPublishComponent } from './view-publish.component';
   entryComponents: [ ],
   providers: [ ]
 })
-export class ViewPublishModule {
+export class ViewDashboardModule {
     constructor () { }
 }

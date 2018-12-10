@@ -31,6 +31,7 @@ $separator: rgb(239,239,239);
 input{
     color: $text-color;
     background-color: $background-color;
+    max-width: 96%;
     border: none;
     border-bottom: 1px solid $text-color;
     margin-left: 5px;

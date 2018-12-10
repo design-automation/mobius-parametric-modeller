@@ -7,6 +7,7 @@ import { IProcedure } from '@models/procedure';
 import * as Modules from '@modules';
 import * as gs from 'gs-json'
 import { _parameterTypes } from '@modules';
+import { DataService } from '@services';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -26,7 +27,7 @@ function mergeInputs(models){
                 Execute
              </button>`,
     */
-   template: `<button class="btn" mat-icon-button title="Execute" (click)="execute()">
+   template: `<button id='executeButton' class="btn" mat-icon-button title="Execute" (click)="execute()">
     <mat-icon>play_circle_outline</mat-icon>
     </button>
     `,
@@ -57,8 +58,9 @@ function mergeInputs(models){
 })
 export class ExecuteComponent {
 
-    @Input() flowchart: IFlowchart;
     private globalVars: string;
+
+    constructor(private dataService: DataService){}
 
     async execute(): Promise<any> {
         const p = new Promise(async (resolve) => {
@@ -68,7 +70,7 @@ export class ExecuteComponent {
             console.logs = [];
 
             // reset input of all nodes except start
-            for (const node of this.flowchart.nodes) {
+            for (const node of this.dataService.flowchart.nodes) {
                 if (node.type !== 'start') {
                     if (node.input.edges) {
                         node.input.value = undefined;
@@ -77,18 +79,18 @@ export class ExecuteComponent {
             }
 
             // order the flowchart
-            if (!this.flowchart.ordered) {
-                FlowchartUtils.orderNodes(this.flowchart);
+            if (!this.dataService.flowchart.ordered) {
+                FlowchartUtils.orderNodes(this.dataService.flowchart);
             }
 
             // get the string of all imported functions
             const funcStrings = {};
-            for (const func of this.flowchart.functions) {
+            for (const func of this.dataService.flowchart.functions) {
                 funcStrings[func.name] = await CodeUtils.getFunctionString(func);
             }
 
             // execute each node
-            for (const node of this.flowchart.nodes) {
+            for (const node of this.dataService.flowchart.nodes) {
                 if (!node.enabled) {
                     node.output.value = undefined;
                     continue;
@@ -107,7 +109,7 @@ export class ExecuteComponent {
         //console.logs = []
 
         // reset input of all nodes except start
-        for (let node of this.flowchart.nodes){
+        for (let node of this.dataService.flowchart.nodes){
             if (node.type != 'start'){
                 if (node.input.edges){
                     node.input.value = undefined;
@@ -116,18 +118,18 @@ export class ExecuteComponent {
         }
 
         // order the flowchart
-        if (!this.flowchart.ordered){
-            FlowchartUtils.orderNodes(this.flowchart);
+        if (!this.dataService.flowchart.ordered){
+            FlowchartUtils.orderNodes(this.dataService.flowchart);
         }
 
         // get the string of all imported functions
         let funcStrings = {};
-        for (let func of this.flowchart.functions){
+        for (let func of this.dataService.flowchart.functions){
             funcStrings[func.name] = await CodeUtils.getFunctionString(func);
         }
 
         // execute each node
-        for (let node of this.flowchart.nodes){
+        for (let node of this.dataService.flowchart.nodes){
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;

@@ -10,12 +10,12 @@ import { ACTIONS } from './node/node.actions';
 import * as circularJSON from 'circular-json';
 import { fromEvent } from 'rxjs';
 import { DataService } from '@services';
-// import * as svgPanZoom from 'svg-pan-zoom';
+
+// import size of the canvas
+import { canvasSize } from '@models/flowchart';
 
 declare const InstallTrigger: any;
 
-// constant for the size of the svg canvas viewbox
-const canvasSize = 1500;
 
 @Component({
     selector: 'view-flowchart',
@@ -39,7 +39,10 @@ export class ViewFlowchartComponent implements OnInit {
 
     // variable for flowchart zooming
     private mousePos = [0, 0];
-    private zoom = 1;
+    private zoom = 10;
+    private minZoom = 5;
+    private maxZoom = 25;
+    private zoomFactor = 1;
 
     // variable for edge
     private edge: IEdge = { source: undefined, target: undefined, selected: false };
@@ -87,7 +90,18 @@ export class ViewFlowchartComponent implements OnInit {
         this.canvas = <HTMLElement>document.getElementById('svg-canvas');
         // const panZoom = svgPanZoom(this.canvas);
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
+
+        // transform
+        const transf = 'matrix(' + this.zoom + ', 0, 0,' + this.zoom + ', -' + boundingDiv.width * this.zoom / 2 + ', -' + boundingDiv.width * this.zoom / 2 + ')';
+        this.canvas.style.transition = 'transform 0ms ease-in';
+        this.canvas.style.transformOrigin = `top left`;
+        this.canvas.style.transform = transf;
+        const ctm = <SVGMatrix>this.canvas.getScreenCTM();
+        console.log(ctm)
+        console.log(bRect)
+        console.log(boundingDiv)
 
         // copy: copy node
         this.copySub = this.copyListener.subscribe(val => {
@@ -383,7 +397,8 @@ export class ViewFlowchartComponent implements OnInit {
         let zoom = bRect.width / (ctm.a * (frame[2] - frame[0]));
         const heightZoom = bRect.height / (ctm.d * (frame[3] - frame[1]));
         if (zoom > heightZoom) { zoom = heightZoom; }
-        if (zoom > 2.5) { zoom = 2.5; }
+        if (zoom > this.maxZoom) { zoom = this.maxZoom; }
+        else if (zoom < this.minZoom) { zoom = this.minZoom; }
 
         // calculate the difference between height and width, if height is bigger than width,
         // centering the flowchart based on the difference
@@ -411,11 +426,10 @@ export class ViewFlowchartComponent implements OnInit {
         event.stopPropagation();
 
         // calculate new zoom value
-        const scaleFactor = 0.1;
-        let value: number = this.zoom    - (Math.sign(event.deltaY)) * scaleFactor;
+        let value: number = this.zoom - (Math.sign(event.deltaY)) * this.zoomFactor;
 
         // limit the zoom value to be between 1 and 2.5
-        if (value >= 1 && value <= 2.5) {
+        if (value >= this.minZoom && value <= this.maxZoom) {
             value = Number( (value).toPrecision(5) );
         } else {
             return;
@@ -687,7 +701,7 @@ export class ViewFlowchartComponent implements OnInit {
                 }
 
                 // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                if (Math.abs(pPos[0] - svgP.x) > 25 || Math.abs(pPos[1] - svgP.y) > 25 ) { continue; }
+                if (Math.abs(pPos[0] - svgP.x) > this.maxZoom || Math.abs(pPos[1] - svgP.y) > this.maxZoom ) { continue; }
 
                 // if there is already an existing edge with the same source and target as the new edge, return
                 for (const edge of this.dataService.flowchart.edges) {

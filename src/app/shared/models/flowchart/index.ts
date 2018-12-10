@@ -1,2 +1,2 @@
-export { IFlowchart } from './flowchart.interface';
+export { IFlowchart, canvasSize } from './flowchart.interface';
 export { FlowchartUtils } from './flowchart.utils';

@@ -19,8 +19,7 @@
                 (ngModelChange)='data.args[1].value=argMod($event)'
                 name='data.args[1].name'
                 placeholder={{data.args[1].name}}
-                size = {{data.args[1].value?.length||data.args[1].name.length}}
-                (input)='updateInputSize($event)'>  
+                [attr.width] = 'inputSize(data.args[1].value || data.args[1].name)'>  
             </div>
 
         <!-- IF Template -->

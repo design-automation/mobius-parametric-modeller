@@ -22,3 +22,6 @@ export interface IFlowchart {
         selected_nodes: number[];
     };
 }
+
+export const canvasSize = 10000;
+

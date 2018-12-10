@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Input } from '@angular/core';
 import { promise } from 'protractor';
 import { IEdge } from '@models/edge';
-import { _parameterTypes, functions } from '@modules';
+import { _parameterTypes } from '@modules';
 
 
 export class CodeUtils {

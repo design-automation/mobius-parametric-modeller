@@ -177,13 +177,13 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     private _addHemisphereLight() {
         const light: THREE.HemisphereLight = new THREE.HemisphereLight(
             0xffffbb, // skyColor
-            0x080820, // groundColo
+            0x080820, // groundColor
             1 // intensity
         );
         this._scene.add( light );
     }
     /**
-     * Creates a hemisphere light
+     * Creates an ambient light
      */
     private _addAmbientLight() {
         const light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -191,7 +191,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     }
 
     /**
-     * Creates a hidden sphere sphere.... not sure why
+     * Creates a hidden sphere sphere.... not sure what this is for?
      */
     private _addSphere() {
         const geometry = new THREE.SphereGeometry( 1 );

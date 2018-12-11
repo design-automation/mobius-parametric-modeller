@@ -3,4 +3,5 @@ export interface IThreeJS {
     points: number[];
     lines: number[];
     triangles: number[];
+    normals: number[];
 }

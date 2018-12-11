@@ -178,4 +178,12 @@ export class GIAttribs {
         const coords_values: number[] = [].concat(...coords_attrib.getSeqValues());
         return [coords_keys, coords_values];
     }
+    public get3jsSeqTrisNormals(): number[] {
+        if (!this.verts.has('normal')) { return null; }
+        const normals_attrib: GIAttribMap = this.verts.get('normal');
+        const normals_keys: number[] = normals_attrib.getSeqKeys();
+        const normals_values: TAttribDataTypes[] = normals_attrib.getSeqValues();
+        const result = [].concat(...normals_keys.map(key => normals_values[key]));
+        return result;
+    }
 }

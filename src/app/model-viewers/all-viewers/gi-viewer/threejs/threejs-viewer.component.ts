@@ -154,24 +154,12 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             this._modelshow = true;
             const threejs_data: IThreeJS = this._model.get3jsData();
             // Create single positions buffer that will be used by all geometry
-            const vertices = this._model.getAttribsData().vertices;
-            const normals = vertices.filter(attr => attr.name === 'normal')[0];
-            const colors = vertices.filter(attr => attr.name === 'color')[0];
-
-            const normal_data = [];
-            if ( normals !== undefined ) {
-                normals.data.forEach(n => normal_data.push(n[1]));
-            }
-            const normals_flat = [].concat(...normal_data);
-
-            const color_data = [];
-            if ( colors !== undefined ) {
-                colors.data.forEach(n => normal_data.push(n[1]));
-            }
-            const colors_flat = [].concat(...color_data);
 
             const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
-            this._addTris(threejs_data.triangles, posis_buffer, normals_flat, colors_flat);
+            const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
+            // const colors_buffer = new THREE.Float32BufferAttribute( colors_flat, 3 );
+
+            this._addTris(threejs_data.triangles, posis_buffer, normals_buffer);
             this._addLines(threejs_data.lines, posis_buffer);
             this._addPoints(threejs_data.points, posis_buffer);
             // Render
@@ -250,12 +238,15 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     /**
      * Add threejs triangles to the scene
      */
-    private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute, normals: number[], colors: number[]): void {
+    // colors_buffer: THREE.Float32BufferAttribute
+    private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute,
+        normals_buffer: THREE.Float32BufferAttribute): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( tris_i );
         geom.addAttribute( 'position',  posis_buffer);
-        geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals, 3 ) );
-        geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+        
+        // geom.addAttribute( 'normal', normals_buffer );
+        // geom.addAttribute( 'color', colors_buffer);
         const mat = new THREE.MeshPhongMaterial( {
             // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
             specular: 0xffffff,

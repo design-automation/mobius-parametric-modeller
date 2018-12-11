@@ -86,6 +86,22 @@ export class LoadFileComponent {
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
+            if (this.dataService.node.type !== 'end') {
+                for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
+                    if (loadeddata.flowchart.nodes[i].type === 'end') {
+                        loadeddata.flowchart.meta.selected_nodes = [i];
+                        break;
+                    }
+                }
+            }
+            document.getElementById('executeButton').click();
+            const zooming = document.getElementById('zoomToFit');
+            if (zooming) {
+                zooming.click();
+                this.dataService.newFlowchart = false;
+            } else {
+                this.dataService.newFlowchart = true;
+            }
         });
         (<HTMLInputElement>document.getElementById('file-input')).value = '';
     }

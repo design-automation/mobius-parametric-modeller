@@ -36,10 +36,10 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * ngOnInit
      */
     ngOnInit() {
-        this.activeView = this.Viewers[0]; 
+        this.activeView = this.Viewers[0];
         if (this.dataService.activeView) {
-            for (let view of this.Viewers){
-                if (view.name === this.dataService.activeView){
+            for (const view of this.Viewers) {
+                if (view.name === this.dataService.activeView) {
                     this.activeView = view;
                 }
             }
@@ -60,7 +60,7 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * ngOnChanges
      */
     ngOnChanges() {
-        console.log(this.helpView)
+        console.log(this.helpView);
         if (this.currentHelpView !== this.helpView) {
             let view;
             for (const v of this.Viewers) {

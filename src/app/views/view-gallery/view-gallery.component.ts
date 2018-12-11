@@ -57,15 +57,15 @@ export class ViewGalleryComponent {
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
-            if (this.dataService.node.type !== 'end'){
-                for (let i = 0; i< loadeddata.flowchart.nodes.length; i++){
-                    if (loadeddata.flowchart.nodes[i].type == 'end'){
-                        loadeddata.flowchart.meta.selected_nodes = [i]
+            if (this.dataService.node.type !== 'end') {
+                for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
+                    if (loadeddata.flowchart.nodes[i].type === 'end') {
+                        loadeddata.flowchart.meta.selected_nodes = [i];
                         break;
                     }
                 }
             }
-            this.router.navigate(['/dashboard'])
+            this.router.navigate(['/dashboard']);
             document.getElementById('executeButton').click();
         });
     }

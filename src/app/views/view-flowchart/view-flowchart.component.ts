@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 // todo: make internal to flowchart
@@ -13,6 +13,7 @@ import { DataService } from '@services';
 
 // import size of the canvas
 import { canvasSize } from '@models/flowchart';
+import { Router } from '@angular/router';
 
 declare const InstallTrigger: any;
 
@@ -22,11 +23,11 @@ declare const InstallTrigger: any;
     templateUrl: './view-flowchart.component.html',
     styleUrls: ['./view-flowchart.component.scss']
 })
-export class ViewFlowchartComponent implements OnInit {
+export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
     @Output() switch = new EventEmitter();
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private router: Router) {
     }
 
     viewbox = `0 0 ${canvasSize} ${canvasSize}`;
@@ -93,15 +94,17 @@ export class ViewFlowchartComponent implements OnInit {
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
 
+        /*
+        */
         // transform
-        const transf = 'matrix(' + this.zoom + ', 0, 0,' + this.zoom + ', -' + boundingDiv.width * this.zoom / 2 + ', -' + boundingDiv.width * this.zoom / 2 + ')';
+        if (!this.dataService.flowchartPos){
+            this.dataService.flowchartPos = 'matrix(' + this.zoom + ', 0, 0,' + this.zoom + ', -' + boundingDiv.width * this.zoom / 2 + ', -' + boundingDiv.width * this.zoom / 2 + ')';
+        } else {
+            this.zoom = Number(this.dataService.flowchartPos.split(',')[0].split('(')[1])
+        }
         this.canvas.style.transition = 'transform 0ms ease-in';
         this.canvas.style.transformOrigin = `top left`;
-        this.canvas.style.transform = transf;
-        const ctm = <SVGMatrix>this.canvas.getScreenCTM();
-        console.log(ctm)
-        console.log(bRect)
-        console.log(boundingDiv)
+        this.canvas.style.transform = this.dataService.flowchartPos;
 
         // copy: copy node
         this.copySub = this.copyListener.subscribe(val => {
@@ -154,6 +157,13 @@ export class ViewFlowchartComponent implements OnInit {
 
     }
 
+    ngAfterViewInit(){
+        if (this.dataService.newFlowchart) {
+            this.focusFlowchart();
+            this.dataService.newFlowchart = false;
+        }
+    }
+
     /*
     handle event received from node component
     */
@@ -163,7 +173,8 @@ export class ViewFlowchartComponent implements OnInit {
 
             // switch the viewchild of the appModule to the node's procedure view when double-click on the node
             case ACTIONS.PROCEDURE:
-                this.switch.emit('editor');
+                this.router.navigate(['/editor'])
+                // this.switch.emit('editor');
                 this.deactivateKeyEvent();
                 break;
 
@@ -276,8 +287,11 @@ export class ViewFlowchartComponent implements OnInit {
     }
 
     // deactivate the event listeners when the mouse exit the svg component
-    deactivateKeyEvent(): void {
+    deactivateKeyEvent(event?: MouseEvent): void {
         this.listenerActive = false;
+        if (this.isDown){
+            this.handleMouseUp(event);
+        }
     }
 
     // delete selected node
@@ -389,7 +403,7 @@ export class ViewFlowchartComponent implements OnInit {
             }
         }
         frame[2] += 100;
-        frame[3] += 80;
+        frame[3] += 150;
 
         // calculate the zoom to fit the whole flowchart
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
@@ -412,10 +426,8 @@ export class ViewFlowchartComponent implements OnInit {
         if (frame[1] < 0) { frame[1] = 0; }
 
         // transform
-        this.canvas.style.transition = 'transform 0ms ease-in';
-        this.canvas.style.transformOrigin = 'top left';
-        this.canvas.style.transform =
-        `matrix(${zoom},0,0,${zoom},${-frame[0] * ctm.a * zoom / this.zoom},${-frame[1] * ctm.a * zoom / this.zoom})`;
+        this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${-frame[0] * ctm.a * zoom / this.zoom},${-frame[1] * ctm.a * zoom / this.zoom})`
+        this.canvas.style.transform = this.dataService.flowchartPos;
         this.zoom = zoom;
     }
 
@@ -453,7 +465,7 @@ export class ViewFlowchartComponent implements OnInit {
         .scale(value)
         .translate(-afterX, -afterY);
 
-        const transf = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
+        this.dataService.flowchartPos = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
         */
 
         /*
@@ -486,7 +498,7 @@ export class ViewFlowchartComponent implements OnInit {
         if (newY > 0) { newY = 0; }
 
 
-        const transf = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
+        this.dataService.flowchartPos = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
         */
 
         /*
@@ -541,12 +553,10 @@ export class ViewFlowchartComponent implements OnInit {
         }
         if (newY > 0) { newY = 0; }
 
-        const transf = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
+        this.dataService.flowchartPos = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
 
         // transform
-        this.canvas.style.transition = 'transform 0ms ease-in';
-        this.canvas.style.transformOrigin = `top left`;
-        this.canvas.style.transform = transf;
+        this.canvas.style.transform = this.dataService.flowchartPos;
         this.zoom = value;
     }
 
@@ -555,8 +565,6 @@ export class ViewFlowchartComponent implements OnInit {
     panStart(event: MouseEvent) {
         event.preventDefault();
 
-        this.canvas.style.transition = 'transform 0ms linear';
-        this.canvas.style.transformOrigin = `top left`;
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
 
         // set start coords to current view window position
@@ -591,7 +599,8 @@ export class ViewFlowchartComponent implements OnInit {
             } else if (boundingDiv.height - y > bRect.height) {
                 y = boundingDiv.height - bRect.height;
             }
-            this.canvas.style.transform = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')';
+            this.dataService.flowchartPos = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')'
+            this.canvas.style.transform = this.dataService.flowchartPos;
 
         // if drag node
         } else if (this.isDown === 2) {
@@ -723,6 +732,18 @@ export class ViewFlowchartComponent implements OnInit {
             }
         }
         this.isDown = 0;
+    }
+
+    newfile() {
+        document.getElementById('newfile').click();
+        this.focusFlowchart()
+    }
+    
+    viewerData(): any {
+        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+        if (!node) { return ''; }
+        if (node.type === 'output') { return node.input.value; }
+        return node.output.value;
     }
 
 }

@@ -1,8 +1,173 @@
 
 @import '~scss/globals';
+
+$padding: 40px;
 $text-color: rgb(80,80,80);
+$separator: rgb(239,239,239);
+$header-height: 35px;
+$title-background: #ccc;
+$light-background: rgb(220,220,220);
+$separator: rgb(238,238,238);
+$text-color: rgb(80,80,80);
+$selected-color: rgb(0, 0, 150);
+$hover-color: blue;
 
 .container{
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+        
+    h1, h2, h3, h4, h5, h6, p{
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .container__header{
+        flex: 0 1 auto;
+        min-height: $header-height;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        padding: 0px 0px 0px 15px;
+
+        background-color: $title-background;
+        border-bottom: 3px solid $separator;
+
+        line-height: $header-height;
+        //text-transform: uppercase;
+    
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+
+        /* tab styling */
+        .tab {
+            border: 2px ;
+            overflow: hidden;
+            background-color: $title-background;
+        }
+
+        .tab button {
+            display: inline-block;
+            vertical-align: bottom;
+            background-color: inherit;
+            color: $text-color;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 8px 10px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .tab button:hover {
+            color:$hover-color;
+        }
+
+        .tab button.active {
+            background-color: $title-background;
+            color: $selected-color;
+            font-weight: 600;
+            border-color: #222 !important;
+        }
+
+        /* dropdown menu styling */
+
+        .dropmenu {
+            display: inline-flex;
+        }
+    }
+
+    .container__content{
+        flex-grow: 1;
+        height: 0px;
+        border: 2px solid #3F4651;
+        overflow: auto;
+
+    }
+
+    .container__footer{
+        text-align: center;
+        font-size: 12px;
+        line-height: 18px;
+
+        background-color: #3F4651;
+        color: #E7BF00;
+    }
+}
+
+.content__panel{
+    background-color: rgb(220, 220, 220);
+    height: 95%; 
+    overflow: hidden auto;
+
+    //padding: 10px 15px;
+}
+
+.content__viewer{
+    background-color: rgb(220, 220, 220);
+    height: 100%; 
+    overflow: auto;
+
+    //padding: 10px 15px;
+}
+
+ul.nav{
+    margin: 0px;
+    padding: 0px;
+}
+
+li.link{
+    display: inline;
+    border: 2px solid gray;
+    border-radius: 4px;
+    margin: 5px 5px 0px 0px;
+    padding: 5px;
+    text-transform: uppercase;
+    line-height: 12px;
+
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+li.link:hover{
+    background-color: gray;
+    color: white;
+}
+
+button.btn{ 
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 0px 0px 0px;
+    font-size: 12px;
+    line-height: 10px;
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent; 
+    color: $text-color;
+}
+button.btn:hover{
+    color:$hover-color;
+}
+
+.active{
+    background-color: #222;
+    color: white;
+    border-color: #222 !important;
+}
+
+
+
+.flowchart-container{
     position: relative;
     width: 100%;
     height: 100%;
@@ -20,19 +185,6 @@ $text-color: rgb(80,80,80);
         }
     }
     
-}
-
-.transform--container{
-    position: absolute;
-    width: 100%;
-    //height: 90%;
-    //width: 2048px;
-    //height: 1024px;
-    transition: transform 0.1s;
-    //transition-timing-function: ease-in-out;
-    //overflow: hidden;
-    //border: 1px solid black;
-
 }
 
 

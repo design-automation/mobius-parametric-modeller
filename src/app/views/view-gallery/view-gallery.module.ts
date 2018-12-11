@@ -15,7 +15,7 @@ import { SimpleNamePipe } from './simple-name.pipe';
   exports: [],
   imports: [
     CommonModule,
-    // ViewGalleryRoutingModule,
+    ViewGalleryRoutingModule,
     SharedModule
   ],
   entryComponents: [ ],

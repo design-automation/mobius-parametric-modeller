@@ -3,6 +3,7 @@ import { IMobius } from '@models/mobius';
 import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
+import { DataService } from '@services';
 
 @Component({
   selector: 'file-save',
@@ -30,15 +31,17 @@ import { FlowchartUtils } from '@models/flowchart';
 })
 export class SaveFileComponent {
 
-    @Input() file: IMobius;
+    constructor(private dataService: DataService) {}
 
 
     // todo: save file
     download() {
-        if (!this.file.flowchart.ordered) {
-            FlowchartUtils.orderNodes(this.file.flowchart);
+        const f = this.dataService.file;
+
+        if (!f.flowchart.ordered) {
+            FlowchartUtils.orderNodes(f.flowchart);
         }
-        const savedfile = circularJSON.parse(circularJSON.stringify(this.file));
+        const savedfile = circularJSON.parse(circularJSON.stringify(f));
         for (const node of savedfile.flowchart.nodes) {
             if (node.input.hasOwnProperty('value')) {
                 node.input.value = undefined;

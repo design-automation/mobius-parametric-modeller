@@ -1,37 +1,79 @@
-<h2>Möbius Gallery</h2>
-<hr>
-<h4>Displaying {{ (allFiles | async)?.length}} projects</h4>
-<div class="container__element container__element--project-container">
-    <div class="project-container__project" *ngFor="let f of  (allFiles | async)">
-        <div class="project__content" (click)='loadFile(f)'>
-            {{ f.name | simplename }}
-        </div>
-    </div>
-</div>
+<div class='container'>
+    <as-split direction="horizontal">
+        <as-split-area size="50" >
+            <div class='container__header'>
 
+                <!-- top left tab menu  -->
+                <div class="tab">
+                    <button class='btn-tab' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'">Gallery</button>
+                    <button class='btn-tab' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'">Dashboard</button>
+                    <button class='btn-tab' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'">Flowchart</button>
+                    <!--
+                    <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
+                    -->
+                </div>
 
-<!--
-<div class="container">
-    <div class="container__element container__element--header">
-        Möbius Gallery
-        <navigation></navigation>
-    </div>
+                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+                <div style="display: none;">
+                    <file-new></file-new>
+                    <file-save></file-save>
+                    <file-load></file-load>        
+                </div>
 
-    <div class="container__element container__element--subheader">
-        Displaying {{ (allFiles | async)?.length}} projects
-    </div>
-
-    <div class="container__element container__element--project-container">
-        <div class="project-container__project" *ngFor="let f of  (allFiles | async)">
-            <div class="project__content" (click)='loadFile(f)'>
-                {{ f.name | simplename }}
+                <!-- top right dropdown menu -->
+                <div class="dropmenu">
+                    <!-- execute button -->
+                    <div>
+                        <execute></execute>
+                    </div>
+                    <!-- dropdown menu for new file, save file, loaf file-->
+                    <div>
+                        <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button  mat-menu-item onclick="document.getElementById('newfile').click();"
+                            title="Create New Flowchart">
+                                <mat-icon>rotate_left</mat-icon>
+                                <span>New File</span>
+                            </button>
+                            <button mat-menu-item onclick="document.getElementById('savefile').click();"
+                            title="Save Flowchart File to Computer">
+                                <mat-icon>save_alt</mat-icon>
+                                <span>Save File</span>
+                            </button>
+                            <button mat-menu-item onclick="document.getElementById('file-input').click();"
+                            title="Load Flowchart File from Computer">
+                                <mat-icon>launch</mat-icon>
+                                <span>Load File</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    
+                </div>
             </div>
-        </div>
-    </div>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+                <h2>Möbius Gallery</h2>
+                <hr>
+                <h4>Displaying {{ (allFiles | async)?.length}} projects</h4>
+                <div class="container__element container__element--project-container">
+                    <div class="project-container__project" *ngFor="let f of  (allFiles | async)">
+                        <div class="project__content" (click)='loadFile(f)'>
+                            {{ f.name | simplename }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </as-split-area>
+
+        <as-split-area size="50">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+
 </div>
--->
-<!--
-<a href="https://github.com/design-automation/mobius-cesium">
-    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
-</a>
--->

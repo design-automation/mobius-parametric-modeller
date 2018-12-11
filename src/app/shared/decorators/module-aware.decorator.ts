@@ -68,10 +68,16 @@ export function ModuleDocAware(constructor: Function) {
     if (!docs) {
         docs = {};
         for (const mod of doc.children) {
-            if (mod.name.substr(1, 1) === '_' || mod.name === '"index"') {
+            let modName = mod.name.split('/');
+            modName = modName[modName.length - 1];
+            if (modName.substr(0,1) === '"' || modName.substr(0,1) === "'"){
+                modName = modName.substr(1, modName.length - 2);
+            } else {
+                modName = modName.substr(0, modName.length - 1);
+            }
+            if (modName.substr(0, 1) === '_' || modName === 'index') {
                 continue;
             }
-            const modName = mod.name.substr(1, mod.name.length - 2);
             const moduleDoc = {};
             for (const func of mod.children) {
                 const fn = {};

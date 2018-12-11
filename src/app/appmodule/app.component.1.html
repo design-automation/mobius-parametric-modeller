@@ -1,3 +1,4 @@
+
 <div class='container'>
     <as-split direction="horizontal">
         <as-split-area size="50" >
@@ -5,9 +6,9 @@
 
                 <!-- top left tab menu  -->
                 <div class="tab">
-                    <button class='btn-tab' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'">Gallery</button>
-                    <button class='btn-tab' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'">Dashboard</button>
-                    <button class='btn-tab' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'">Flowchart</button>
+                    <button class='btn-tab' [class.active]='activeView=="gallery"' (click)='updateView("gallery")'>Gallery</button>
+                    <button class='btn-tab' [class.active]='activeView=="dashboard"' (click)='updateView("dashboard")'>Dashboard</button>
+                    <button class='btn-tab' [class.active]='activeView=="flowchart"' (click)='updateView("flowchart")'>Flowchart</button>
                     <!--
                     <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
                     -->
@@ -15,9 +16,9 @@
 
                 <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
                 <div style="display: none;">
-                    <file-new></file-new>
-                    <file-save></file-save>
-                    <file-load></file-load>        
+                    <file-new (create)='updateFile($event)'></file-new>
+                    <file-save [file]='dataService.file'></file-save>
+                    <file-load (loaded)='updateFile($event)'></file-load>        
                 </div>
 
                 <!-- top right dropdown menu -->
@@ -54,7 +55,7 @@
             </div>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>
+                <ng-container #vc></ng-container>
             </div>
         </as-split-area>
 
@@ -68,5 +69,4 @@
     </as-split>
 
 </div>
-    
 

@@ -1,83 +1,158 @@
-<div id = 'flowchart-main-container' class='container'>
-    <!--
-    -->
-
-    <!-- svg component -->
-    <svg id="svg-canvas" class = "svgCanvas" 
-    [attr.viewBox]="viewbox"
-    (mouseenter)='activateKeyEvent()'
-    (mouseleave)='deactivateKeyEvent()'
-    (mousedown)='panStart($event)'
-    (mousemove)='handleMouseMove($event)'  
-    (mouseup)='handleMouseUp($event)'
-    (wheel)='scale($event)'
-    >
-        <!-- definitions for svg: grid patterns, arrow head for connecting wire-->
-        <defs>
-            <!-- grid pattern -->
-            <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
-            </pattern>
-            <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-              <rect width="100" height="100" fill="url(#smallGrid)"/>
-              <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
-            </pattern>
-
-            <!-- arrow head -->
-            <marker id="arrow" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
-              <path d="M0,0 L0,8 L9,4 z" stroke="rgb(80, 80, 80)" fill="transparent" />
-            </marker>
-            <marker id="arrow_selected" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
-                <path d="M0,0 L0,8 L9,4 z" stroke="rgb(0, 0, 150)" fill="transparent"  />
-            </marker>
-        </defs>
-
-        <!-- svg frame-->
-        <rect width="100%" height="100%" fill="url(#grid)" />
-                  
-
-        <!-- wires => edge.component -->
-        <g edge *ngFor="let edge of dataService.flowchart.edges; let edge_index = index" 
-        [edge]='edge'
-        [inputOffset]='inputOffset'
-        [outputOffset]='outputOffset'
-        (selected)='selectEdge($event, edge_index)'
-        />
-
-        <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->
-        <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
-
-        <!-- nodes => node.component -->
-        <g node *ngFor="let node of dataService.flowchart.nodes; let node_index = index" 
-        id='flw_node_{{node_index}}'
-        [node]='node' 
-        [selected]='isSelected(node_index)'
-        [inputOffset]='inputOffset'
-        [outputOffset]='outputOffset'
-        (action)='nodeAction($event, node_index)'
-        />
-    </svg>
-
-    <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->
-    <div class='button-row'>
-        <button mat-icon-button disableRipple='true' (click)='addNode()' title="Add Node">
-        <mat-icon>add</mat-icon>
-        </button>
-        <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title="Delete Selected Node">
-        <mat-icon>remove</mat-icon>
-        </button>
-        <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title="Delete Selected Wires">
-        <mat-icon>link_off</mat-icon>
-        </button>
-    </div>
-
-    <!-- focus on flowchart button on the top right of the svg -->
-    <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
-        <mat-icon>control_camera</mat-icon>
-    </button>
+<div class='container'>
+        <as-split direction="horizontal">
+            <as-split-area size="50" >
+                <div class='container__header'>
     
-
-</div>
+                    <!-- top left tab menu  -->
+                    <div class="tab">
+                        <button class='btn-tab' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'">Gallery</button>
+                        <button class='btn-tab' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'">Dashboard</button>
+                        <button class='btn-tab' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'">Flowchart</button>
+                        <!--
+                        <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
+                        -->
+                    </div>
+    
+                    <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+                    <div style="display: none;">
+                        <file-new></file-new>
+                        <file-save></file-save>
+                        <file-load></file-load>        
+                    </div>
+    
+                    <!-- top right dropdown menu -->
+                    <div class="dropmenu">
+                        <!-- execute button -->
+                        <div>
+                            <execute></execute>
+                        </div>
+                        <!-- dropdown menu for new file, save file, loaf file-->
+                        <div>
+                            <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <!--
+                                    onclick="document.getElementById('newfile').click();"
+                                    onclick="document.getElementById('file-input').click(); "
+                                -->
+                                <button  mat-menu-item (click)='newfile()'
+                                title="Create New Flowchart">
+                                    <mat-icon>rotate_left</mat-icon>
+                                    <span>New File</span>
+                                </button>
+                                <button mat-menu-item onclick="document.getElementById('savefile').click();"
+                                title="Save Flowchart File to Computer">
+                                    <mat-icon>save_alt</mat-icon>
+                                    <span>Save File</span>
+                                </button>
+                                <button mat-menu-item onclick="document.getElementById('file-input').click();"
+                                title="Load Flowchart File from Computer">
+                                    <mat-icon>launch</mat-icon>
+                                    <span>Load File</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+                        
+                    </div>
+                </div>
+                <!-- viewchild content -->
+                <div class='content__panel'>
+                    <div id = 'flowchart-main-container' class='flowchart-container'>
+                            <!--
+                            -->
+                        
+                            <!-- svg component -->
+                            <svg id="svg-canvas" class = "svgCanvas" 
+                            [attr.viewBox]="viewbox"
+                            (mouseenter)='activateKeyEvent()'
+                            (mouseleave)='deactivateKeyEvent($event)'
+                            (mousedown)='panStart($event)'
+                            (mousemove)='handleMouseMove($event)'  
+                            (mouseup)='handleMouseUp($event)'
+                            (wheel)='scale($event)'
+                            >
+                                <!-- definitions for svg: grid patterns, arrow head for connecting wire-->
+                                <defs>
+                                    <!-- grid pattern -->
+                                    <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
+                                    </pattern>
+                                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                                        <rect width="100" height="100" fill="url(#smallGrid)"/>
+                                        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
+                                    </pattern>
+                        
+                                    <!-- arrow head -->
+                                    <marker id="arrow" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
+                                        <path d="M0,0 L0,8 L9,4 z" stroke="rgb(80, 80, 80)" fill="transparent" />
+                                    </marker>
+                                    <marker id="arrow_selected" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
+                                        <path d="M0,0 L0,8 L9,4 z" stroke="rgb(0, 0, 150)" fill="transparent"  />
+                                    </marker>
+                                </defs>
+                        
+                                <!-- svg frame-->
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                                            
+                        
+                                <!-- wires => edge.component -->
+                                <g edge *ngFor="let edge of dataService.flowchart.edges; let edge_index = index" 
+                                [edge]='edge'
+                                [inputOffset]='inputOffset'
+                                [outputOffset]='outputOffset'
+                                (selected)='selectEdge($event, edge_index)'
+                                />
+                        
+                                <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->
+                                <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
+                        
+                                <!-- nodes => node.component -->
+                                <g node *ngFor="let node of dataService.flowchart.nodes; let node_index = index" 
+                                id='flw_node_{{node_index}}'
+                                [node]='node' 
+                                [selected]='isSelected(node_index)'
+                                [inputOffset]='inputOffset'
+                                [outputOffset]='outputOffset'
+                                (action)='nodeAction($event, node_index)'
+                                />
+                            </svg>
+                        
+                            <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->
+                            <div class='button-row'>
+                                <button mat-icon-button disableRipple='true' (click)='addNode()' title="Add Node">
+                                <mat-icon>add</mat-icon>
+                                </button>
+                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title="Delete Selected Node">
+                                <mat-icon>remove</mat-icon>
+                                </button>
+                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title="Delete Selected Wires">
+                                <mat-icon>link_off</mat-icon>
+                                </button>
+                            </div>
+                        
+                            <!-- focus on flowchart button on the top right of the svg -->
+                            <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
+                                <mat-icon>control_camera</mat-icon>
+                            </button>
+                            
+                        
+                        </div>
+                            
+                </div>
+            </as-split-area>
+    
+            <as-split-area size="50">
+                <!-- data viewers panel -->
+                <div class='content__viewer' >
+                    <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>
+                </div>
+            </as-split-area>
+            
+        </as-split>
+    
+    </div>
+    
 
 
 

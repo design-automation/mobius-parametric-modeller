@@ -15,6 +15,7 @@ import { ViewDashboardComponent } from './view-dashboard.component';
   imports: [
     CommonModule,
     SharedModule,
+    ViewDashboardRoutingModule
   ],
   entryComponents: [ ],
   providers: [ ]

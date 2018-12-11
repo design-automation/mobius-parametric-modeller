@@ -4,6 +4,7 @@ import { IView } from './view.interface';
 import { Viewers } from './model-viewers.config';
 import { INode } from '@models/node';
 import { EventEmitter } from 'events';
+import { DataService } from '@services';
 
 /**
  * A component that contains all the viewers.
@@ -28,21 +29,29 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * @param injector
      * @param r
      */
-    constructor(private injector: Injector, private r: ComponentFactoryResolver) {
+    constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService) {
         // do nothing
     }
     /**
      * ngOnInit
      */
     ngOnInit() {
-        this.activeView = this.Viewers[0];
+        this.activeView = this.Viewers[0]; 
+        if (this.dataService.activeView) {
+            for (let view of this.Viewers){
+                if (view.name === this.dataService.activeView){
+                    this.activeView = view;
+                }
+            }
+        }
         this.updateView( this.activeView );
     }
     /**
      * ngOnDestroy
      */
     ngOnDestroy() {
-        console.log('onDestroy');
+        // console.log('onDestroy');
+        this.dataService.activeView = this.activeView.name;
         for (const view of this.views) {
             view.destroy();
         }
@@ -51,6 +60,7 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * ngOnChanges
      */
     ngOnChanges() {
+        console.log(this.helpView)
         if (this.currentHelpView !== this.helpView) {
             let view;
             for (const v of this.Viewers) {

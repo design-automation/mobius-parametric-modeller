@@ -1,33 +1,105 @@
-<h2>{{dataService.node?.name}}</h2>
+<div class='container'>
+    <as-split direction="horizontal">
+        <as-split-area size="50" >
+            <div class='container__header'>
 
-<div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
-(copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
+                <!-- top left tab menu  -->
+                <div class="tab">
+                    <button class='btn-tab' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'">Gallery</button>
+                    <button class='btn-tab' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'">Dashboard</button>
+                    <button class='btn-tab' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'">Flowchart</button>
+                    <!--
+                    <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
+                    -->
+                </div>
 
-    <div class='container__content'>
-        <!-- toolset on the left side -->
-        <div class="container--toolset">
-            <toolset [functions]='dataService.flowchart.functions' 
-            [nodeType]='dataService.node.type' 
-            [hasProd]='dataService.node.procedure.length>0' 
-            (delete)='deleteFunction($event)' 
-            (select)='add($event)' 
-            (imported)='importFunction($event)'></toolset>
-        </div>
+                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+                <div style="display: none;">
+                    <file-new></file-new>
+                    <file-save></file-save>
+                    <file-load></file-load>        
+                </div>
 
-        <!-- procedure editor on the right side -->
-        <div id='procedure' class="container--procedure">
-            <!-- parameter-editor only for start node -->
-            <parameter-editor *ngIf="dataService.node.type == 'start' || dataService.node.type == 'end'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
+                <!-- top right dropdown menu -->
+                <div class="dropmenu">
+                    <!-- execute button -->
+                    <div>
+                        <execute></execute>
+                    </div>
+                    <!-- dropdown menu for new file, save file, loaf file-->
+                    <div>
+                        <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button  mat-menu-item onclick="document.getElementById('newfile').click();"
+                            title="Create New Flowchart">
+                                <mat-icon>rotate_left</mat-icon>
+                                <span>New File</span>
+                            </button>
+                            <button mat-menu-item onclick="document.getElementById('savefile').click();"
+                            title="Save Flowchart File to Computer">
+                                <mat-icon>save_alt</mat-icon>
+                                <span>Save File</span>
+                            </button>
+                            <button mat-menu-item onclick="document.getElementById('file-input').click();"
+                            title="Load Flowchart File from Computer">
+                                <mat-icon>launch</mat-icon>
+                                <span>Load File</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+                <h2>{{dataService.node?.name}}</h2>
 
-            <!-- list of procedure items for all nodes -->
-            <procedure-item 
-            *ngFor="let line of dataService.node?.procedure; let idx=index" 
-            [data]="line"
-            (select)="selectProcedure($event,line)"
-            (delete)="deleteChild(idx)"
-            (helpText)='emitHelpText($event)'></procedure-item>
-            <br>
-            <br>
-        </div>
-    </div>
+                <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
+                (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
+                
+                    <div class='container__content'>
+                        <!-- toolset on the left side -->
+                        <div class="container--toolset">
+                            <toolset [functions]='dataService.flowchart.functions' 
+                            [nodeType]='dataService.node.type' 
+                            [hasProd]='dataService.node.procedure.length>0' 
+                            (delete)='deleteFunction($event)' 
+                            (select)='add($event)' 
+                            (imported)='importFunction($event)'></toolset>
+                        </div>
+                
+                        <!-- procedure editor on the right side -->
+                        <div id='procedure' class="container--procedure">
+                            <!-- parameter-editor only for start node -->
+                            <parameter-editor *ngIf="dataService.node.type == 'start' || dataService.node.type == 'end'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
+                
+                            <!-- list of procedure items for all nodes -->
+                            <procedure-item 
+                            *ngFor="let line of dataService.node?.procedure; let idx=index" 
+                            [data]="line"
+                            (select)="selectProcedure($event,line)"
+                            (delete)="deleteChild(idx)"
+                            (helpText)='updateHelpView($event)'></procedure-item>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </as-split-area>
+
+        <as-split-area size="50">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+
 </div>
+    
+
+

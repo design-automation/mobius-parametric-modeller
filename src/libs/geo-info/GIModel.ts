@@ -61,6 +61,23 @@ export class GIModel {
     public getAttribsData(): IAttribsData {
         return this._attribs.getData();
     }
+
+    public generateColors(length: number): number[] {
+        const colors = [];
+        for (let index = 0; index < length; index++) {
+            colors.push(1, 1, 1);
+        }
+        return colors;
+    }
+
+    public generateNormals(length: number): number[] {
+        const normals = [];
+        for (let index = 0; index < length; index++) {
+            normals.push(0, 0, 0);
+        }
+        return normals;
+    }
+
     /**
      * Returns arrays for visualization in Threejs.
      */
@@ -69,8 +86,11 @@ export class GIModel {
         const tris: number[] = this._geom.get3jsTris().map( vert_i => coords_keys[vert_i] );
         const lines: number[] = this._geom.get3jsLines().map( vert_i => coords_keys[vert_i] );
         const points: number[] = this._geom.get3jsPoints().map( vert_i => coords_keys[vert_i] );
-        const normals: number[] = this._attribs.get3jsSeqAttrib('normal');
-        const colors: number[] = this._attribs.get3jsSeqAttrib('color');
+        const normals: number[] = this._attribs.get3jsSeqAttrib('normal') !== null ?
+        this._attribs.get3jsSeqAttrib('normal') : this.generateNormals(this._geom.numVerts());
+        // console.log(this.generateColors(this._geom.numVerts()));
+        const colors: number[] = this._attribs.get3jsSeqAttrib('color') !== null ?
+        this._attribs.get3jsSeqAttrib('color') : this.generateColors(this._geom.numVerts());
         return {
             positions: coords_values,
             points: points,

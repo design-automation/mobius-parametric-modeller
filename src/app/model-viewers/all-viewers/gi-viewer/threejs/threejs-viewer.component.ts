@@ -97,7 +97,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
 
         // add stuff to the scene
         this._addGrid();
-        this._addAmbientLight('0xdddddd', 0.2);
+        // this._addAmbientLight('0xdddddd', 0.2);
+        this._addHemisphereLight();
         // this._addDirectionalLight();
 
         // update the model
@@ -167,6 +168,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             // Render
             this._controls.update();
             this.render(this);
+
             // print
             console.log('>> this.scene >>', this._scene);
         } catch (ex) {
@@ -259,6 +261,12 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         const mesh: THREE.Mesh = new THREE.Mesh( geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
+
+        // show vertex normals
+        const vnh = new THREE.VertexNormalsHelper( mesh, 3, 0x0000ff );
+        this._scene.add( vnh );
+
+        // add mesh to scene
         this._scene.add( mesh );
         this._threejs_nums[2] = tris_i.length / 3;
     }
@@ -272,7 +280,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial( {
-            color: 0x000000,
+            color: 0x777777,
             linewidth: 0.1,
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer

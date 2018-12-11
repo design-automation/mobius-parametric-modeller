@@ -15,7 +15,8 @@ import { SharedModule } from '@shared/shared.module';
 import { AppComponent } from './app.component';
 import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
-    ViewFlowchartComponent} from '@views';
+    ViewFlowchartComponent, ViewFlowchartModule} from '@views';
+import { AppRoutingModule } from './app-routing.module';
 
 
 /**
@@ -29,15 +30,13 @@ import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
-        // FormsModule,
-        // AppRoutingModule,
-        // CoreModule,
+        FormsModule,
+        AppRoutingModule,
+        CoreModule,
         ViewGalleryModule,
         ViewEditorModule,
         ViewDashboardModule,
+        ViewFlowchartModule,
         SharedModule,
     ],
     entryComponents: [

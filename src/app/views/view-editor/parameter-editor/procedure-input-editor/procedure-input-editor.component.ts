@@ -4,7 +4,7 @@ import { InputType } from '@models/port';
 const keys = Object.keys(InputType);
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
-ctx.font = '14px Arial';
+ctx.font = '13px Arial';
 
 @Component({
   selector: 'procedure-input-editor',

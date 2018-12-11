@@ -1,16 +1,18 @@
-/*import { NgModule }                            from '@angular/core';
+/**/
+
+import { NgModule }                            from '@angular/core';
 import { RouterModule, Routes }    from '@angular/router';
 import { Component } from '@angular/core';
 
-import { ViewAboutModule, ViewGalleryModule, ViewDashboardModule, ViewEditorModule } from '@views';
+import { ViewFlowchartModule, ViewGalleryModule, ViewDashboardModule, ViewEditorModule } from '@views';
 
 const appRoutes: Routes = [
-    { path: 'about', loadChildren: () => ViewAboutModule },
+    { path: 'flowchart', loadChildren: () => ViewFlowchartModule },
     { path: 'gallery', loadChildren: () => ViewGalleryModule },
     { path: 'dashboard', loadChildren: () => ViewDashboardModule },
     { path: 'editor', loadChildren: () => ViewEditorModule },
-    { path: '',     redirectTo: '/about', pathMatch: 'full' },
-    { path: '**', component: ViewAboutModule }
+    { path: '',     redirectTo: '/gallery', pathMatch: 'full' },
+    { path: '**', component: ViewGalleryModule }
 ];
 
 @NgModule({
@@ -25,4 +27,3 @@ const appRoutes: Routes = [
     ]
 })
 export class AppRoutingModule {}
-*/

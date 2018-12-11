@@ -3,6 +3,7 @@ import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { DataService } from '@services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'view-editor',
@@ -17,13 +18,13 @@ export class ViewEditorComponent {
 
     @Output() imported = new EventEmitter();
     @Output() delete_Function = new EventEmitter();
-    @Output() helpText = new EventEmitter();
+    helpView: any;
     copiedProd: IProcedure[];
     copiedType: string;
 
     private copyCheck = false;
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private router: Router) {
     }
 
     // add a procedure
@@ -139,16 +140,23 @@ export class ViewEditorComponent {
         }
     }
 
-    emitHelpText(event) {
+    updateHelpView(event) {
         if (typeof(event) === 'string') {
             for (const func of this.dataService.flowchart.functions) {
                 if (func.name === event) {
-                    this.helpText.emit(func.doc);
+                    this.helpView = func.doc;
                 }
             }
         } else {
-            this.helpText.emit(event);
+            this.helpView = event;
         }
+    }
+    
+    viewerData(): any {
+        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+        if (!node) { return ''; }
+        if (node.type === 'output') { return node.input.value; }
+        return node.output.value;
     }
 
 }

@@ -7,6 +7,7 @@ import { IMobius } from '@models/mobius';
 
 import { DataService } from '@services';
 import * as circularJSON from 'circular-json';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'view-gallery',
@@ -18,7 +19,7 @@ export class ViewGalleryComponent {
     private allFiles: Observable<any>;
     @Output() switch = new EventEmitter();
 
-    constructor(private http: HttpClient, private dataService: DataService) {
+    constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
         this.allFiles = this.getFilesFromURL();
     }
 
@@ -55,6 +56,7 @@ export class ViewGalleryComponent {
         });
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
+            this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end'){
                 for (let i = 0; i< loadeddata.flowchart.nodes.length; i++){
                     if (loadeddata.flowchart.nodes[i].type == 'end'){
@@ -63,9 +65,16 @@ export class ViewGalleryComponent {
                     }
                 }
             }
-            this.switch.emit('dashboard');
+            this.router.navigate(['/dashboard'])
             document.getElementById('executeButton').click();
         });
+    }
+
+    viewerData(): any {
+        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+        if (!node) { return ''; }
+        if (node.type === 'output') { return node.input.value; }
+        return node.output.value;
     }
 
 }

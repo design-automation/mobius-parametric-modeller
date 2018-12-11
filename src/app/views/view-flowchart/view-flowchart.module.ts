@@ -7,9 +7,11 @@ import { MatIconModule, MatButtonModule } from '@angular/material';
 import { ViewFlowchartComponent } from './view-flowchart.component';
 import { NodeComponent } from './node/node.component';
 import { EdgeComponent } from './edge/edge.component';
+import { SharedModule } from '@shared/shared.module';
+import { ViewFlowchartRoutingModule } from './view-flowchart-routing.module';
 
 /**
- * SVGFlowchartModule
+ * ViewFlowchartModule
  */
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { EdgeComponent } from './edge/edge.component';
     EdgeComponent,
   ],
   exports: [ ViewFlowchartComponent ],
-  imports: [ CommonModule,
-             FormsModule,
-             MatIconModule,
-             MatButtonModule ],
+  imports: [ 
+    CommonModule,
+    FormsModule,
+    SharedModule,
+    ViewFlowchartRoutingModule
+    ],
   entryComponents: [ ],
   providers: [ ]
 })
-export class SVGFlowchartModule {
+export class ViewFlowchartModule {
     constructor () { }
 }

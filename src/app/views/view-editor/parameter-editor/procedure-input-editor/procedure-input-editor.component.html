@@ -27,7 +27,7 @@
 
         </div>
         <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
-        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'>
+        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL' (input)='updateInputSize($event)'>
         <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
     </ng-container>
     <div>

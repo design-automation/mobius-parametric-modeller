@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/cor
 import { IMobius } from '@models/mobius';
 import { FlowchartUtils } from '@models/flowchart';
 import * as circularJSON from 'circular-json';
+import { DataService } from '@services';
 
 @Component({
   selector: 'file-new',
@@ -31,7 +32,7 @@ export class NewFileComponent {
 
     @Output() create = new EventEmitter();
 
-    constructor(private cdr: ChangeDetectorRef) {}
+    constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
 
     sendNewFile() {
         const confirmed = confirm('Resetting would delete the current flowchart. Would you like to continue?');
@@ -43,7 +44,8 @@ export class NewFileComponent {
             last_updated: new Date(),
             version: 1
         };
-        this.create.emit(circularJSON.stringify(file));
+        this.dataService.file = file;
+        this.dataService.newFlowchart = true;
         this.cdr.detectChanges();
     }
 }

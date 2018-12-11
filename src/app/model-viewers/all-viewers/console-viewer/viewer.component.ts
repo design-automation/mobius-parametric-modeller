@@ -21,13 +21,13 @@ export class ConsoleViewerComponent implements OnInit, DoCheck {
      */
     ngOnInit() {
         // @ts-ignore
-        this.text = console.logs.join('\n---------------------------------------------------------\n');
+        this.text = console.logs.join('\n');
     }
     /**
      * ngDoCheck
      */
     ngDoCheck() {
         // @ts-ignore
-        this.text = console.logs.join('\n---------------------------------------------------------\n');
+        this.text = console.logs.join('\n');
     }
 }

@@ -12,12 +12,12 @@ import { _parameterTypes } from '@modules';
 
 export class CodeUtils {
 
-    static async getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): Promise<string> {
-        if (prod.enabled === false) { return ''; }
+    static async getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): Promise<string[]> {
+        if (prod.enabled === false) { return ['']; }
 
         prod.hasError = false;
 
-        const codeStr: string[] = [];
+        let codeStr: string[] = [];
         const args = prod.args;
         const prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
         codeStr.push('');
@@ -71,10 +71,33 @@ export class CodeUtils {
 
             case ProcedureTypes.Constant:
                 let constName = args[0].value;
-                if (args[0].value.substring(0, 1) === '"' || args[0].value.substring(0, 1) === '\'') {
+                if (constName.substring(0, 1) === '"' || constName.substring(0, 1) === '\'') {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
-                codeStr.push(`__params__['constants']['${constName}'] = ${args[1].value || args[1].default};`);
+                
+                let val = args[1].value || args[1].default;
+                if (prod.meta.inputMode.toString() === InputType.URL.toString() ) {
+                    const p = new Promise((resolve) => {
+                        const request = new XMLHttpRequest();
+                        request.open('GET', args[1].value || args[1].default);
+                        request.onload = () => {
+                            resolve(request.responseText);
+                        };
+                        request.send();
+                    });
+                    val = await p;
+                } else if (prod.meta.inputMode.toString() === InputType.File.toString()) {
+                    const p = new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                            resolve(reader.result);
+                        };
+                        reader.readAsText(args[1].value || args[1].default);
+                    });
+                    val = await p;
+                }
+                codeStr.push(`__params__['constants']['${constName}'] = ${val};`);
+
                 break;
 
             case ProcedureTypes.Return:
@@ -161,7 +184,7 @@ export class CodeUtils {
         }
         if (prod.children) {
             for (const p of prod.children) {
-                codeStr.push(await CodeUtils.getProcedureCode(p, existingVars, addProdArr));
+                codeStr = codeStr.concat(await CodeUtils.getProcedureCode(p, existingVars, addProdArr));
             }
             codeStr.push(`}`);
         }
@@ -170,7 +193,7 @@ export class CodeUtils {
             codeStr.push(`console.log('${prod.args[0].value}: '+ ${prod.args[0].value});`);
             // codeStr.push(`wait(5000);`);
         }
-        return codeStr.join('\n');
+        return codeStr;
     }
 
 
@@ -227,9 +250,9 @@ export class CodeUtils {
         return input;
     }
 
-    public static async getNodeCode(node: INode, addProdArr = false): Promise<string> {
+    public static async getNodeCode(node: INode, addProdArr = false): Promise<string[]> {
         node.hasError = false;
-        const codeStr = [];
+        let codeStr = [];
         const varsDefined: string[] = [];
         // input initializations
         if (addProdArr) {
@@ -241,31 +264,23 @@ export class CodeUtils {
             codeStr.push('__params__.constants = {};\n');
         }
 
-        /*
-        codeStr.push(`
-function wait(ms){
-     start = new Date().getTime();
-     end = start;
-    while(end < start + ms) {
-        end = new Date().getTime();
-    }
-}
-        `)
-        */
 
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
         for (const prod of node.procedure) {
-            codeStr.push(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
+            codeStr = codeStr.concat(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
-            return `{\n${codeStr.join('\n')}\n}`;
+            codeStr.push('}')
+            return ['{'].concat(codeStr);
+            //return `{\n${codeStr.join('\n')}\n}`;
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
         }
 
-
-        return `\n${codeStr.join('\n')}\n\nreturn __params__.model;\n`;
+        codeStr.push('return __params__.model;');
+        return codeStr;
+        // return `\n${codeStr.join('\n')}\n\nreturn __params__.model;\n`;
 
 
         // return `{\n${codeStr.join('\n')}\nreturn result;\n}`;

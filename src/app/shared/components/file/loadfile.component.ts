@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ProcedureTypes } from '@shared/models/procedure';
 import * as circularJSON from 'circular-json';
 import * as funcs from '@modules';
+import { DataService } from '@services';
 
 @Component({
   selector: 'file-load',
@@ -33,7 +34,7 @@ import * as funcs from '@modules';
 })
 export class LoadFileComponent {
 
-    @Output() loaded = new EventEmitter();
+    constructor(private dataService: DataService) {}
 
 
     sendloadfile() {
@@ -83,7 +84,8 @@ export class LoadFileComponent {
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
-            this.loaded.emit(circularJSON.stringify(loadeddata));
+            this.dataService.file = loadeddata;
+            this.dataService.newFlowchart = true;
         });
         (<HTMLInputElement>document.getElementById('file-input')).value = '';
     }

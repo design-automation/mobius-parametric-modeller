@@ -143,8 +143,8 @@ export class ExecuteComponent {
         const params = {'currentProcedure': ['']};
         try {
             // get the code for the node
-            let fnString = await CodeUtils.getNodeCode(node, true);
-
+            let nodeCode = await CodeUtils.getNodeCode(node, true);
+            let fnString = nodeCode.join('\n')
             // add the constants from the start node
             fnString = this.globalVars + fnString;
             params['model'] = node.input.value;
@@ -160,10 +160,19 @@ export class ExecuteComponent {
             if (hasFunctions) {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
             }
+            console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
 
-            console.log(`______________________________________________________________
-            \n/*    ${node.name.toUpperCase()}    */
-            \n` + fnString + `--------------------------\n`);
+            for (let i of nodeCode){
+                if (i.substring(0,18)=='__params__.current'){
+                    continue;
+                }
+                if (i.length > 500){
+                    console.log(i.substring(0,500)+'...\n});\n');
+                } else{
+                    console.log(i)
+                }
+            }
+            console.log(`--------------------------\n`)
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function

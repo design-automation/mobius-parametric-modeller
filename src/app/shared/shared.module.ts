@@ -9,12 +9,10 @@ import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatSliderModule, MatCheckboxModule, MatIconModule } from '@angular/material';
+import { MatSliderModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatButtonModule, MatExpansionModule, MatSelectModule } from '@angular/material';
 // app directives
 import { MbFileReaderDirective } from './directives/filesys';
 import { AutogrowDirective } from './directives/textarea';
-// app views
-import { SVGFlowchartModule } from '../views/view-flowchart/view-flowchart.module';
 // app components
 import { ExecuteComponent } from './components/execute/execute.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
@@ -47,16 +45,22 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             CommonModule,
             RouterModule,
             MatSliderModule, MatCheckboxModule,
-            SVGFlowchartModule,
             DataViewersContainer,
             AngularSplitModule,
             FormsModule,
+            MatMenuModule,
             MatIconModule,
+            MatButtonModule,
         ],
     entryComponents: [  ],
     exports: [
             FormsModule,
-            SVGFlowchartModule,
+            MatMenuModule,
+            MatIconModule,
+            MatButtonModule,
+            MatSliderModule,
+            MatExpansionModule,
+            MatSelectModule,
             DataViewersContainer,
             AngularSplitModule,
             MbFileReaderDirective,

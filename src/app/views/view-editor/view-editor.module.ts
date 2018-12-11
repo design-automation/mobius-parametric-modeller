@@ -10,6 +10,7 @@ import { ParameterEditorComponent } from './parameter-editor/parameter-editor.co
 import { ProcedureInputEditorComponent } from './parameter-editor/procedure-input-editor/procedure-input-editor.component';
 import { _parameterTypes} from '@modules';
 import { MatSliderModule, MatIconModule, MatExpansionModule, MatButtonModule, MatSelectModule } from '@angular/material';
+import { ViewEditorRoutingModule } from './view-editor-routing.module';
 
 @NgModule({
   declarations: [
@@ -24,11 +25,7 @@ import { MatSliderModule, MatIconModule, MatExpansionModule, MatButtonModule, Ma
   imports: [
     CommonModule,
     SharedModule,
-    MatSliderModule,
-    MatIconModule,
-    MatExpansionModule,
-    MatButtonModule,
-    MatSelectModule,
+    ViewEditorRoutingModule
   ],
   exports: [
     ViewEditorComponent,

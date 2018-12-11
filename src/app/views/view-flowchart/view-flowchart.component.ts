@@ -98,10 +98,7 @@ export class ViewFlowchartComponent implements OnInit {
         this.canvas.style.transition = 'transform 0ms ease-in';
         this.canvas.style.transformOrigin = `top left`;
         this.canvas.style.transform = transf;
-        const ctm = <SVGMatrix>this.canvas.getScreenCTM();
-        console.log(ctm)
-        console.log(bRect)
-        console.log(boundingDiv)
+
 
         // copy: copy node
         this.copySub = this.copyListener.subscribe(val => {

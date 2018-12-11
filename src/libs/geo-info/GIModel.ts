@@ -62,7 +62,9 @@ export class GIModel {
     public getAttribsData(): IAttribsData {
         return this._attribs.getData();
     }
-
+    /**
+     * Generate a default color if none exists.
+     */
     private _generateColors(): number[] {
         const colors = [];
         for (let index = 0; index < this._geom.numVerts(); index++) {
@@ -70,7 +72,9 @@ export class GIModel {
         }
         return colors;
     }
-
+    /**
+     * Generate default normals if non exist.
+     */
     private _generateNormals(): number[] {
         const normals = [];
         for (let index = 0; index < this._geom.numVerts(); index++) {
@@ -78,7 +82,6 @@ export class GIModel {
         }
         return normals;
     }
-
     /**
      * Returns arrays for visualization in Threejs.
      */
@@ -95,9 +98,9 @@ export class GIModel {
             colors_values = this._generateColors();
         }
         // get the indices of the vertices for edges, points and triangles
-        const tris_verts_i: number[] = this._geom.get3jsTrisVerts();
-        const edges_verts_i: number[] = this._geom.get3jsEdgesVerts();
-        const points_verts_i: number[] = this._geom.get3jsPointsVerts();
+        const tris_verts_i: number[] = this._geom.get3jsTris();
+        const edges_verts_i: number[] = this._geom.get3jsEdges();
+        const points_verts_i: number[] = this._geom.get3jsPoints();
         // return an object containing all the data
         return {
             positions: coords_values,

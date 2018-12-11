@@ -11,7 +11,6 @@ export class GIGeom {
     // positions
     private num_posis = 0; // The total number of positions in the model.
     private rev_posis_verts: number[][] = []; // 1 position -> many vertices
-    private rev_posis_tris: number[][] = []; // 1 position -> many triangles
     // triangles
     private tris: TTri[] = []; // 1 triangles -> 3 vertices
     private rev_tris_faces: number[] = []; // 1 tri -> 1 face
@@ -141,15 +140,6 @@ export class GIGeom {
      */
     private _updateRevArrays() {
         // positions
-        this.rev_posis_tris = [];
-        this.tris.forEach( (pos_i_arr, tri_i) => {
-            pos_i_arr.forEach( pos_i => {
-                if (this.rev_posis_tris[pos_i] === undefined) {
-                    this.rev_posis_tris[pos_i] = [];
-                }
-                this.rev_posis_tris[pos_i].push(tri_i);
-            });
-        });
         this.rev_posis_verts = [];
         this.verts.forEach( (pos_i, vert_i) => {
             if (this.rev_posis_verts[pos_i] === undefined) {
@@ -157,7 +147,13 @@ export class GIGeom {
             }
             this.rev_posis_verts[pos_i].push(vert_i);
         });
-        // edges, wires, faces
+        // tris, edges, wires, faces
+        this.rev_verts_tris = [];
+        this.tris.forEach( (vert_i_arr, tri_i) => {
+            vert_i_arr.forEach( vert_i => {
+                this.rev_verts_tris[vert_i] = tri_i;
+            });
+        });
         this.rev_verts_edges = [];
         this.edges.forEach( (vert_i_arr, edge_i) => {
             vert_i_arr.forEach( vert_i => {
@@ -237,16 +233,16 @@ export class GIGeom {
         return this.pgons[pgon];
     }
     private _navCollToPoint(coll: number): number[] {
-        return this.colls[coll][1];
+        return this.colls[coll][1]; // coll points
     }
     private _navCollToLine(coll: number): number[] {
-        return this.colls[coll][2];
+        return this.colls[coll][2]; // coll lines
     }
     private _navCollToPgon(coll: number): number[] {
-        return this.colls[coll][3];
+        return this.colls[coll][3]; // coll pgons
     }
     private _navCollToColl(coll: number): number {
-        return coll[0];
+        return coll[0]; // coll parent
     }
     // ============================================================================
     // Navigate up the hierarchy
@@ -254,14 +250,14 @@ export class GIGeom {
     private _navPosiToVert(posi: number): number[] {
         return this.rev_posis_verts[posi];
     }
-    private _navPosiToTri(posi: number): number[] {
-        return this.rev_posis_tris[posi];
+    private _navVertToTri(vert: number): number {
+        return this.rev_verts_tris[vert];
+    }
+    private _navVertToEdge(vert: number): number {
+        return this.rev_verts_edges[vert];
     }
     private _navTriToFace(tri: number): number {
         return this.rev_tris_faces[tri];
-    }
-    private _navVrtToEdge(vert: number): number {
-        return this.rev_verts_edges[vert];
     }
     private _navEdgeToWire(edge: number): number {
         return this.rev_edges_wires[edge];
@@ -331,10 +327,11 @@ export class GIGeom {
      */
     private _addFace(wire_i: number): number {
         // create the triangles
-        const wire_posis_i: number[] = this.wires[wire_i].map( vert_i => this.verts[vert_i] );
-        const coords: TCoord[] = wire_posis_i.map( posi_i => this.model.attribs().getPosiCoord(posi_i) );
-        const tris_corners: number[][] = triangulate(coords);
-        const tris_posis_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => wire_posis_i[corner] ) as TTri );
+        const wire_verts_i: number[] = this._getWireVerts(wire_i);
+        const wire_posis_i: number[] = wire_verts_i.map( vert_i => this.verts[vert_i] );
+        const wire_coords: TCoord[] = wire_posis_i.map( posi_i => this.model.attribs().getPosiCoord(posi_i) );
+        const tris_corners: number[][] = triangulate(wire_coords);
+        const tris_posis_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => wire_verts_i[corner] ) as TTri );
         const tris_i: number[] = tris_posis_i.map(tri_posis_i => this.tris.push(tri_posis_i) - 1);
         // create the face
         const face: TFace = [[wire_i], tris_i];
@@ -525,6 +522,7 @@ export class GIGeom {
     // ============================================================================
     /**
      * Returns a flat list of all vertices.
+     * The indices in the list point to the sequential coordinates.
      */
     public get3jsVerts(): number[] {
         return this.verts;
@@ -532,54 +530,24 @@ export class GIGeom {
     /**
      * Returns a flat list of the sequence of verices for all the triangles.
      * This list will be assumed to be in pairs.
+     * The indices in the list point to the vertices.
      */
-    public get3jsTrisVerts(): number[] {
-        return [].concat(...this.tris.map( tri => [
-            this.verts[tri[0]], this.verts[tri[1]], this.verts[tri[2]]
-        ] ));
+    public get3jsTris(): number[] {
+        return [].concat(...this.tris);
     }
     /**
      * Returns a flat list of the sequence of verices for all the edges.
      * This list will be assumed to be in pairs.
+     * The indices in the list point to the vertices.
      */
-    public get3jsEdgesVerts(): number[] {
-        return [].concat(...this.edges.map( edge => [
-            this.verts[edge[0]], this.verts[edge[1]]
-        ] ));
+    public get3jsEdges(): number[] {
+        return [].concat(...this.edges);
     }
     /**
      * Returns a flat list of the sequence of verices for all the points.
+     * The indices in the list point to the vertices.
      */
-    public get3jsPointsVerts(): number[] {
-        return this.points.map( vert_i =>  this.verts[vert_i] );
+    public get3jsPoints(): number[] {
+        return this.points;
     }
-
-    // public get3jsEdges(): number[][] {
-    //     return this.edges.map( edge => [this.verts[edge[1]], this.verts[edge[0]]] );
-    // }
-    /**
-     * Returns a flat list of the sequence of coordinates for all the triangles.
-     * This list will be assumed to be in triplets.
-     */
-    // public get3jsTrisCoords(): number[] {
-    //     return [].concat(...this.tris);
-    // }
-    /**
-     * Returns a flat list of the sequence of verices for all the lines.
-     * If the line is closed, then the first and last points will not be the same.
-     */
-    // public get3jsLinesVerts(): number[] {
-    //     const verts_i: number[] = [];
-    //     this.lines.forEach( wire_i => verts_i.push(...this._getWireVerts(wire_i)) );
-    //     return this.verts;
-    // }
-    /**
-     * Returns a flat list of the sequence of vertices for all the polygons.
-     * If the polygon has holes, then these will also be included in the sequence as a single flat list.
-     */
-    // public get3jsPgonsVerts(): number[] {
-    //     const verts_i: number[] = [];
-    //     this.pgons.forEach( face_i => face_i[0].forEach( wire_i => verts_i.push(...this._getWireVerts(wire_i)) ) );
-    //     return this.verts;
-    // }
 }

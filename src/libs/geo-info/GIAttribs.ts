@@ -166,11 +166,8 @@ export class GIAttribs {
     // get3jsTris() and get3jsEdges()
     // ============================================================================
     /**
-     * Get a list of all the coordinates.
-     * This returns two arrays, one with indexes, and another with values.
-     * For example, suppose the bimap contained  [  [[1,3], [2.3,4.5,6.7]],  [[0,2], [9.8,7.6,5.4]]  ].
-     * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
-     * These array can be use for building the threejs scene using typed arrays.
+     * Get a flat array of all the coordinates of all the vertices.
+     * @param verts An array of vertex indicies pointing to the coordinates.
      */
     public get3jsSeqVertsCoords(verts: number[]): number[] {
         const coords_attrib: GIAttribMap = this.posis.get('coordinates');
@@ -180,6 +177,10 @@ export class GIAttribs {
         verts.forEach( coords_i => verts_cords_values.push(...coords_values[coords_keys[coords_i]] as number[]));
         return verts_cords_values;
     }
+    /**
+     * Get a flat array of attribute values for all the vertices.
+     * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
+     */
     public get3jsSeqVertsAttrib(attrib_name: string): number[] {
         if (!this.verts.has(attrib_name)) { return null; }
         const attrib_map: GIAttribMap = this.verts.get(attrib_name);

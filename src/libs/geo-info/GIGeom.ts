@@ -523,7 +523,12 @@ export class GIGeom {
     // For a method to get the array of positions, see the attrib class
     // getSeqCoords()
     // ============================================================================
-
+    /**
+     * Returns a flat list of all vertices.
+     */
+    public get3jsVerts(): number[] {
+        return this.verts;
+    }
     /**
      * Returns a flat list of the sequence of verices for all the triangles.
      * This list will be assumed to be in pairs.
@@ -548,7 +553,6 @@ export class GIGeom {
     public get3jsPointsVerts(): number[] {
         return this.points.map( vert_i =>  this.verts[vert_i] );
     }
-
 
     // public get3jsEdges(): number[][] {
     //     return this.edges.map( edge => [this.verts[edge[1]], this.verts[edge[0]]] );

@@ -62,14 +62,38 @@ export class GIModel {
     public getAttribsData(): IAttribsData {
         return this._attribs.getData();
     }
+
+    private _generateColors(): number[] {
+        const colors = [];
+        for (let index = 0; index < this._geom.numVerts(); index++) {
+            colors.push(1, 1, 1);
+        }
+        return colors;
+    }
+
+    private _generateNormals(): number[] {
+        const normals = [];
+        for (let index = 0; index < this._geom.numVerts(); index++) {
+            normals.push(0, 0, 0);
+        }
+        return normals;
+    }
+
     /**
      * Returns arrays for visualization in Threejs.
      */
     public get3jsData(): IThreeJS {
         // get the attrbs at the vertex level
-        const coords_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.COORDS);
-        const normals_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
-        const colors_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
+        const coords_values: number[] = this._attribs.get3jsSeqVertsCoords(this._geom.get3jsVerts());
+        let normals_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
+        let colors_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
+        // add normals and colours
+        if (!normals_values) {
+            normals_values = this._generateNormals();
+        }
+        if (!colors_values) {
+            colors_values = this._generateColors();
+        }
         // get the indices of the vertices for edges, points and triangles
         const tris_verts_i: number[] = this._geom.get3jsTrisVerts();
         const edges_verts_i: number[] = this._geom.get3jsEdgesVerts();
@@ -81,7 +105,7 @@ export class GIModel {
             colors: colors_values,
             point_indices: points_verts_i,
             edge_indices: edges_verts_i,
-            triangle_indices: tris_i
+            triangle_indices: tris_verts_i
         };
     }
 }

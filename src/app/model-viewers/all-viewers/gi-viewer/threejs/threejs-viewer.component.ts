@@ -97,7 +97,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
 
         // add stuff to the scene
         this._addGrid();
-        this._addAmbientLight('0xdddddd', 0.2);
+        // this._addAmbientLight('0xdddddd', 0.2);
+        this._addHemisphereLight();
         // this._addDirectionalLight();
 
         // update the model
@@ -155,18 +156,30 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             this._updatemodel = true;
             this._modelshow = true;
             const threejs_data: IThreeJS = this._model.get3jsData();
-            // Create single positions buffer that will be used by all geometry
-
+            // Create buffers that will be used by all geometry
             const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
             const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
             const colors_buffer = new THREE.Float32BufferAttribute( threejs_data.colors, 3 );
 
-            this._addTris(threejs_data.triangles, posis_buffer, normals_buffer, colors_buffer);
-            this._addLines(threejs_data.lines, posis_buffer);
-            this._addPoints(threejs_data.points, posis_buffer);
+
+            console.log("positions length", threejs_data.positions.length);
+            console.log("normals length", threejs_data.normals.length);
+            console.log("colors length", threejs_data.colors.length);
+
+            console.log("triangle_indices", threejs_data.triangle_indices);
+            console.log("triangle_indices", threejs_data.triangle_indices.length);
+            console.log("edgee_indices", threejs_data.edge_indices.length);
+            console.log("pointse_indices", threejs_data.point_indices.length);
+
+            console.log("triangle_indices max", Math.max(...threejs_data.triangle_indices));
+            this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
+            this._addLines(threejs_data.edge_indices, posis_buffer);
+            this._addPoints(threejs_data.point_indices, posis_buffer);
+            
             // Render
             this._controls.update();
             this.render(this);
+
             // print
             console.log('>> this.scene >>', this._scene);
         } catch (ex) {
@@ -240,12 +253,14 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     /**
      * Add threejs triangles to the scene
      */
-    private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute,
-        normals_buffer: THREE.Float32BufferAttribute, colors_buffer: THREE.Float32BufferAttribute): void {
+    private _addTris(tris_i: number[],
+            posis_buffer: THREE.Float32BufferAttribute,
+            normals_buffer: THREE.Float32BufferAttribute,
+            colors_buffer: THREE.Float32BufferAttribute): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( tris_i );
         geom.addAttribute( 'position',  posis_buffer);
-        // geom.addAttribute( 'normal', normals_buffer );
+        geom.addAttribute( 'normal', normals_buffer );
         geom.addAttribute( 'color', colors_buffer);
         const mat = new THREE.MeshPhongMaterial( {
             // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
@@ -254,11 +269,17 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             shininess: 0, // 250
             side: THREE.DoubleSide,
             vertexColors: THREE.VertexColors,
-            // wireframe: true
+            //wireframe: true
         });
         const mesh: THREE.Mesh = new THREE.Mesh( geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
+
+        // show vertex normals
+        const vnh = new THREE.VertexNormalsHelper( mesh, 3, 0x0000ff );
+        this._scene.add( vnh );
+
+        // add mesh to scene
         this._scene.add( mesh );
         this._threejs_nums[2] = tris_i.length / 3;
     }
@@ -272,7 +293,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial( {
-            color: 0x000000,
+            color: 0x777777,
             linewidth: 0.1,
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer

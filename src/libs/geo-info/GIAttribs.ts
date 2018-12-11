@@ -172,11 +172,13 @@ export class GIAttribs {
      * The sequentail coordinate arrays would be [  [1,0,1,0],  [[2.3,4.5,6.7],[9.8,7.6,5.4]]  ].
      * These array can be use for building the threejs scene using typed arrays.
      */
-    public get3jsSeqCoords(): [number[], number[]] {
+    public get3jsSeqVertsCoords(verts: number[]): number[] {
         const coords_attrib: GIAttribMap = this.posis.get('coordinates');
         const coords_keys: number[] = coords_attrib.getSeqKeys();
-        const coords_values: number[] = [].concat(...coords_attrib.getSeqValues());
-        return [coords_keys, coords_values];
+        const coords_values: TAttribDataTypes[] = coords_attrib.getSeqValues();
+        const verts_cords_values: number[] = [];
+        verts.forEach( coords_i => verts_cords_values.push(...coords_values[coords_keys[coords_i]] as number[]));
+        return verts_cords_values;
     }
     public get3jsSeqVertsAttrib(attrib_name: string): number[] {
         if (!this.verts.has(attrib_name)) { return null; }

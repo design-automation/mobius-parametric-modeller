@@ -11,6 +11,13 @@ export enum EEntityTypeStr {
     PGON = 'pg',
     COLL = 'co'
 }
+// Names of attributes
+export enum EAttribNames {
+    COORDS = 'coordinates',
+    NORMAL = 'normal',
+    COLOR = 'color'
+}
+
 // ============================================================================
 // Each entity in the model can be accessed using an ID string.
 // Below are functions for breaking ID strings into the component parts

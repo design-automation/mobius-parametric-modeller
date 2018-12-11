@@ -1,10 +1,10 @@
 {
     "geometry":{
         "num_positions":9,
-        "triangles":
-            [[5, 7, 8], [8, 6, 5]],
         "vertices":
             [0, 1, 2, 3, 4, 5, 7, 8, 6],
+        "triangles":
+            [[5, 6, 7], [7, 8, 5]],
         "edges":
             [[1, 2], [2, 3], [3, 4], [5, 6], [6, 7], [7, 8], [8, 5]],
         "wires":
@@ -29,32 +29,16 @@
             }
         ],
         "vertices":[
-            {
-                "name":"Cd", "data_type":"Float", "data_size":3,
-                "data":[[[0, 1, 2, 3, 4, 5, 6, 7, 8], [1.0, 0.7283259034156799, 0.3436123728752136]]]
-            },
-            {
-                "name":"N", "data_type":"Float", "data_size":3,
-                "data":[[[0, 1, 2, 3, 4], [0.0, 0.0, 0.0]], [[5, 6, 7, 8], [-0.0, -0.0, 1.0]]]
-            }
+
         ],
         "edges":[
-            {
-                "name":"position", "data_type":"String", "data_size":1,
-                "data":[[[5], "pos_8"], [[1], "pos_2"], [[2], "pos_3"], [[0], "pos_1"], [[6], "pos_6"], [[4], "pos_7"], [[3], "pos_5"]]
-            }
+
         ],
         "wires":[
-            {
-                "name":"length", "data_type":"Float", "data_size":1,
-                "data":[[[0], 16.687231063842773], [[1], 20.0]]
-            }
+
         ],
         "faces":[
-            {
-                "name":"area", "data_type":"Float", "data_size":1,
-                "data":[[[0], 25.0]]
-            }
+
         ],
         "collections":[
             {

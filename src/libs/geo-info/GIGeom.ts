@@ -13,11 +13,12 @@ export class GIGeom {
     private rev_posis_verts: number[][] = []; // 1 position -> many vertices
     private rev_posis_tris: number[][] = []; // 1 position -> many triangles
     // triangles
-    private tris: TTri[] = []; // many triangles -> 1 position
-    private rev_tris_faces: number[] = []; // 1 triangle -> 1 face
+    private tris: TTri[] = []; // 1 triangles -> 3 vertices
+    private rev_tris_faces: number[] = []; // 1 tri -> 1 face
     // vertices
     private verts: TVert[] = []; // many vertices -> 1 position
     private rev_verts_edges: number[] = []; // 1 vertex -> 1 edge
+    private rev_verts_tris: number[] = []; // 1 vertex -> 1 tri // TODO add code to update this
     private rev_verts_points: number[] = []; // 1 vertex -> 1 point
     // edges
     private edges: TEdge[] = []; // 1 edge -> 2 vertices
@@ -340,6 +341,27 @@ export class GIGeom {
         const face_i: number = this.faces.push(face);
         return face_i;
     }
+    /**
+     * Helper function to get check if wire is closed
+     */
+    private _istWireClosed(wire_i: number): boolean {
+        const edges_i: number[] = this.wires[wire_i];
+        return this.edges[edges_i[0]][0] === this.edges[edges_i[edges_i.length - 1]][1];
+    }
+    /**
+     * Helper function to get the vertices of a wire
+     * The function check is the wire is closed and returns correct number of vertices.
+     * For a cloased wire, #vertices = #edges
+     * For an open wire, #vertices = #edges + 1
+     */
+    private _getWireVerts(wire_i: number): number[] {
+        const edges_i: number[] = this.wires[wire_i];
+        const verts_i: number[] = edges_i.map(edge_i => this.edges[edge_i][0]);
+        if (this.edges[edges_i[0]][0] !== this.edges[edges_i[edges_i.length - 1]][1]) {
+            verts_i.push(this.edges[edges_i[edges_i.length - 1]][1]);
+        }
+        return verts_i;
+    }
     // ============================================================================
     // Create geometry, all these public methods return an string ID
     // ============================================================================
@@ -461,6 +483,7 @@ export class GIGeom {
     public getColls(): string[] {
         return this.colls.map( (_, index) =>  EEntityTypeStr.COLL + index );
     }
+
     // ============================================================================
     // Get array lengths
     // ============================================================================
@@ -500,16 +523,59 @@ export class GIGeom {
     // For a method to get the array of positions, see the attrib class
     // getSeqCoords()
     // ============================================================================
-    public get3jsTris(): number[] {
-        return [].concat(...this.tris);
+
+    /**
+     * Returns a flat list of the sequence of verices for all the triangles.
+     * This list will be assumed to be in pairs.
+     */
+    public get3jsTrisVerts(): number[] {
+        return [].concat(...this.tris.map( tri => [
+            this.verts[tri[0]], this.verts[tri[1]], this.verts[tri[2]]
+        ] ));
     }
-    public get3jsEdges(): number[][] {
-        return this.edges.map( edge => [this.verts[edge[1]], this.verts[edge[0]]] );
+    /**
+     * Returns a flat list of the sequence of verices for all the edges.
+     * This list will be assumed to be in pairs.
+     */
+    public get3jsEdgesVerts(): number[] {
+        return [].concat(...this.edges.map( edge => [
+            this.verts[edge[0]], this.verts[edge[1]]
+        ] ));
     }
-    public get3jsLines(): number[] {
-        return [].concat(...this.edges.map( edge => [this.verts[edge[0]], this.verts[edge[1]]] ));
+    /**
+     * Returns a flat list of the sequence of verices for all the points.
+     */
+    public get3jsPointsVerts(): number[] {
+        return this.points.map( vert_i =>  this.verts[vert_i] );
     }
-    public get3jsPoints(): number[] {
-        return [].concat(...this.points.map( point => this.verts[point] ));
-    }
+
+
+    // public get3jsEdges(): number[][] {
+    //     return this.edges.map( edge => [this.verts[edge[1]], this.verts[edge[0]]] );
+    // }
+    /**
+     * Returns a flat list of the sequence of coordinates for all the triangles.
+     * This list will be assumed to be in triplets.
+     */
+    // public get3jsTrisCoords(): number[] {
+    //     return [].concat(...this.tris);
+    // }
+    /**
+     * Returns a flat list of the sequence of verices for all the lines.
+     * If the line is closed, then the first and last points will not be the same.
+     */
+    // public get3jsLinesVerts(): number[] {
+    //     const verts_i: number[] = [];
+    //     this.lines.forEach( wire_i => verts_i.push(...this._getWireVerts(wire_i)) );
+    //     return this.verts;
+    // }
+    /**
+     * Returns a flat list of the sequence of vertices for all the polygons.
+     * If the polygon has holes, then these will also be included in the sequence as a single flat list.
+     */
+    // public get3jsPgonsVerts(): number[] {
+    //     const verts_i: number[] = [];
+    //     this.pgons.forEach( face_i => face_i[0].forEach( wire_i => verts_i.push(...this._getWireVerts(wire_i)) ) );
+    //     return this.verts;
+    // }
 }

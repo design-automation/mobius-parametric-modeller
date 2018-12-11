@@ -178,12 +178,12 @@ export class GIAttribs {
         const coords_values: number[] = [].concat(...coords_attrib.getSeqValues());
         return [coords_keys, coords_values];
     }
-    public get3jsSeqAttrib(attr: string): number[] {
-        if (!this.verts.has(attr)) { return null; }
-        const normals_attrib: GIAttribMap = this.verts.get(attr);
-        const normals_keys: number[] = normals_attrib.getSeqKeys();
-        const normals_values: TAttribDataTypes[] = normals_attrib.getSeqValues();
-        const result = [].concat(...normals_keys.map(key => normals_values[key]));
+    public get3jsSeqVertsAttrib(attrib_name: string): number[] {
+        if (!this.verts.has(attrib_name)) { return null; }
+        const attrib_map: GIAttribMap = this.verts.get(attrib_name);
+        const attrib_keys: number[] = attrib_map.getSeqKeys();
+        const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
+        const result = [].concat(...attrib_keys.map(attrib_key => attrib_values[attrib_key]));
         return result;
     }
 }

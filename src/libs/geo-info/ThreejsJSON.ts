@@ -1,8 +1,8 @@
 export interface IThreeJS {
     positions: number[];
-    points: number[];
-    lines: number[];
-    triangles: number[];
     normals: number[];
     colors: number[];
+    point_indices: number[];
+    edge_indices: number[];
+    triangle_indices: number[];
 }

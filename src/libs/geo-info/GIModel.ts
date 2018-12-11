@@ -1,6 +1,7 @@
 import { IModelData, IGeomData, IAttribsData, TPoint } from './GIJson';
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
+import { EAttribNames, EEntityTypeStr } from './GICommon';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
@@ -65,19 +66,22 @@ export class GIModel {
      * Returns arrays for visualization in Threejs.
      */
     public get3jsData(): IThreeJS {
-        const [coords_keys, coords_values]: [number[], number[]] = this._attribs.get3jsSeqCoords();
-        const tris: number[] = this._geom.get3jsTris().map( vert_i => coords_keys[vert_i] );
-        const lines: number[] = this._geom.get3jsLines().map( vert_i => coords_keys[vert_i] );
-        const points: number[] = this._geom.get3jsPoints().map( vert_i => coords_keys[vert_i] );
-        const normals: number[] = this._attribs.get3jsSeqAttrib('normal');
-        const colors: number[] = this._attribs.get3jsSeqAttrib('color');
+        // get the attrbs at the vertex level
+        const coords_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.COORDS);
+        const normals_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
+        const colors_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
+        // get the indices of the vertices for edges, points and triangles
+        const tris_verts_i: number[] = this._geom.get3jsTrisVerts();
+        const edges_verts_i: number[] = this._geom.get3jsEdgesVerts();
+        const points_verts_i: number[] = this._geom.get3jsPointsVerts();
+        // return an object containing all the data
         return {
             positions: coords_values,
-            points: points,
-            lines: lines,
-            triangles: tris,
-            normals: normals,
-            colors: colors
+            normals: normals_values,
+            colors: colors_values,
+            point_indices: points_verts_i,
+            edge_indices: edges_verts_i,
+            triangle_indices: tris_i
         };
     }
 }

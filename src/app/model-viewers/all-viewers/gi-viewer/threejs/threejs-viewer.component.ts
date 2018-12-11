@@ -75,7 +75,9 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         // camera settings
         const aspect_ratio: number = this._width / this._height;
         this._camera = new THREE.PerspectiveCamera( 50, aspect_ratio, 0.01, 1000 ); // 0.0001, 100000000 );
-        this._camera.position.y = 10;
+        this._camera.position.x = -50;
+        this._camera.position.y = -50;
+        this._camera.position.z = 50;
         this._camera.up.set(0, 0, 1);
         this._camera.lookAt( this._scene.position );
         this._camera.updateProjectionMatrix();
@@ -95,8 +97,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
 
         // add stuff to the scene
         this._addGrid();
-        this._addAmbientLight();
-        this._addDirectionalLight();
+        this._addAmbientLight('0xdddddd', 0.2);
+        // this._addDirectionalLight();
 
         // update the model
         this.updateModel();
@@ -157,9 +159,9 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
 
             const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
             const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
-            // const colors_buffer = new THREE.Float32BufferAttribute( colors_flat, 3 );
+            const colors_buffer = new THREE.Float32BufferAttribute( threejs_data.colors, 3 );
 
-            this._addTris(threejs_data.triangles, posis_buffer, normals_buffer);
+            this._addTris(threejs_data.triangles, posis_buffer, normals_buffer, colors_buffer);
             this._addLines(threejs_data.lines, posis_buffer);
             this._addPoints(threejs_data.points, posis_buffer);
             // Render
@@ -190,8 +192,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     /**
      * Creates an ambient light
      */
-    private _addAmbientLight() {
-        const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    private _addAmbientLight(color: string, intensity: number) {
+        const light = new THREE.AmbientLight( color, intensity ); // soft white light
         this._scene.add( light );
     }
 
@@ -238,18 +240,17 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
     /**
      * Add threejs triangles to the scene
      */
-    // colors_buffer: THREE.Float32BufferAttribute
     private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute,
-        normals_buffer: THREE.Float32BufferAttribute): void {
+        normals_buffer: THREE.Float32BufferAttribute, colors_buffer: THREE.Float32BufferAttribute): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( tris_i );
         geom.addAttribute( 'position',  posis_buffer);
-        
         // geom.addAttribute( 'normal', normals_buffer );
-        // geom.addAttribute( 'color', colors_buffer);
+        geom.addAttribute( 'color', colors_buffer);
         const mat = new THREE.MeshPhongMaterial( {
             // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
             specular: 0xffffff,
+            emissive: 0xdddddd,
             shininess: 0, // 250
             side: THREE.DoubleSide,
             vertexColors: THREE.VertexColors,
@@ -271,8 +272,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         // geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( normals_flat, 3 ) );
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial( {
-            color: 0xffffff,
-            linewidth: 1,
+            color: 0x000000,
+            linewidth: 0.1,
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer
         } );

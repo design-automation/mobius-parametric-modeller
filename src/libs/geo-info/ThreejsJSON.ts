@@ -4,4 +4,5 @@ export interface IThreeJS {
     lines: number[];
     triangles: number[];
     normals: number[];
+    colors: number[];
 }

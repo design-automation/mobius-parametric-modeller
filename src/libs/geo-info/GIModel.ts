@@ -69,13 +69,15 @@ export class GIModel {
         const tris: number[] = this._geom.get3jsTris().map( vert_i => coords_keys[vert_i] );
         const lines: number[] = this._geom.get3jsLines().map( vert_i => coords_keys[vert_i] );
         const points: number[] = this._geom.get3jsPoints().map( vert_i => coords_keys[vert_i] );
-        const normals: number[] = this._attribs.get3jsSeqTrisNormals();
+        const normals: number[] = this._attribs.get3jsSeqAttrib('normal');
+        const colors: number[] = this._attribs.get3jsSeqAttrib('color');
         return {
             positions: coords_values,
             points: points,
             lines: lines,
             triangles: tris,
-            normals: normals
+            normals: normals,
+            colors: colors
         };
     }
 }

@@ -160,22 +160,10 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
             const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
             const colors_buffer = new THREE.Float32BufferAttribute( threejs_data.colors, 3 );
-
-
-            console.log("positions length", threejs_data.positions.length);
-            console.log("normals length", threejs_data.normals.length);
-            console.log("colors length", threejs_data.colors.length);
-
-            console.log("triangle_indices", threejs_data.triangle_indices);
-            console.log("triangle_indices", threejs_data.triangle_indices.length);
-            console.log("edgee_indices", threejs_data.edge_indices.length);
-            console.log("pointse_indices", threejs_data.point_indices.length);
-
-            console.log("triangle_indices max", Math.max(...threejs_data.triangle_indices));
+            // Add geometry
             this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
             this._addLines(threejs_data.edge_indices, posis_buffer);
             this._addPoints(threejs_data.point_indices, posis_buffer);
-            
             // Render
             this._controls.update();
             this.render(this);
@@ -269,7 +257,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
             shininess: 0, // 250
             side: THREE.DoubleSide,
             vertexColors: THREE.VertexColors,
-            //wireframe: true
+            // wireframe: true
         });
         const mesh: THREE.Mesh = new THREE.Mesh( geom, mat);
         mesh.geometry.computeBoundingSphere();

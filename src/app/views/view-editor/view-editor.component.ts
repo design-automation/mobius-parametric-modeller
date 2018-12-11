@@ -151,7 +151,7 @@ export class ViewEditorComponent {
             this.helpView = event;
         }
     }
-    
+
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }

@@ -45,7 +45,13 @@ export class NewFileComponent {
             version: 1
         };
         this.dataService.file = file;
-        this.dataService.newFlowchart = true;
+        const zooming = document.getElementById('zoomToFit');
+        if (zooming) {
+            zooming.click();
+            this.dataService.newFlowchart = false;
+        } else {
+            this.dataService.newFlowchart = true;
+        }
         this.cdr.detectChanges();
     }
 }

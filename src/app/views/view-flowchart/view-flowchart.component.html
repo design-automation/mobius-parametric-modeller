@@ -33,10 +33,10 @@
                             </button>
                             <mat-menu #menu="matMenu">
                                 <!--
-                                    onclick="document.getElementById('newfile').click();"
+                                    
                                     onclick="document.getElementById('file-input').click(); "
                                 -->
-                                <button  mat-menu-item (click)='newfile()'
+                                <button  mat-menu-item onclick="document.getElementById('newfile').click();"
                                 title="Create New Flowchart">
                                     <mat-icon>rotate_left</mat-icon>
                                     <span>New File</span>
@@ -132,7 +132,7 @@
                             </div>
                         
                             <!-- focus on flowchart button on the top right of the svg -->
-                            <button class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
+                            <button id='zoomToFit' class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
                                 <mat-icon>control_camera</mat-icon>
                             </button>
                             

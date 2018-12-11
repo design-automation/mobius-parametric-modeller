@@ -57,9 +57,11 @@ export class SaveFileComponent {
 
         // **** need to modify this when changing the input's constant function:
         // **** this part resets the value of the last argument of the function when saving the file
+        /*
         for (const prod of savedfile.flowchart.nodes[0].procedure) {
             prod.args[prod.argCount - 1].value = undefined;
         }
+        */
 
 
         savedfile.flowchart.meta.selected_nodes = [0];

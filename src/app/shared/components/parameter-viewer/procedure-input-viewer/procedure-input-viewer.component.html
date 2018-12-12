@@ -1,6 +1,6 @@
 <div class='container'>
     <div class='container--parameter'>
-        <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||"Undefined"}}:' disabled>
+        <input [class.disabled-input]='true' [value]='displayConstName()' disabled>
         <!--
         <select name={{prod.id}}_type [(ngModel)]="prod.meta.inputMode">
             <option 

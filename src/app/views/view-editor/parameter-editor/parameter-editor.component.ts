@@ -26,21 +26,9 @@ export class ParameterEditorComponent implements AfterViewInit {
             lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
         }
 
-        textarea.style.height = lineCount * 8 + 'px';
+        textarea.style.height = lineCount * 7.2 + 'px';
     }
-    /*
-    deletePort(port, index){
-      const porttype = port.type;
 
-      if(porttype == PortType.Input && this.node.input[index] !== undefined){
-          this.node.input.splice(index, 1);
-      }
-      else if(porttype == PortType.Output && this.node.output[index] !== undefined){
-          this.node.output.splice(index, 1);
-      }
-
-    }
-    */
 }
 
 

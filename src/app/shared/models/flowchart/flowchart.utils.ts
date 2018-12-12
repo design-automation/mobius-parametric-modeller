@@ -10,10 +10,10 @@ export class FlowchartUtils {
         startNode.position = {x: canvasSize * 1.07 / 2, y: canvasSize / 2};
 
         const middleNode = NodeUtils.getNewNode();
-        middleNode.position = {x: canvasSize * 1.07 / 2, y: 250 + canvasSize / 2};
+        middleNode.position = {x: canvasSize * 1.07 / 2, y: 200 + canvasSize / 2};
 
         const endNode = NodeUtils.getEndNode();
-        endNode.position = {x: canvasSize * 1.07 / 2, y: 500 + canvasSize / 2};
+        endNode.position = {x: canvasSize * 1.07 / 2, y: 400 + canvasSize / 2};
 
         const startMid: IEdge = {
             source: startNode.output,
@@ -39,7 +39,7 @@ export class FlowchartUtils {
             description: '',
             language: 'js',
             meta: {
-                selected_nodes: [0]
+                selected_nodes: [2]
             },
             nodes: [ startNode, middleNode, endNode ],
             edges: [ startMid, midEnd ],

@@ -1,6 +1,7 @@
 <div class='flowchart-info' *ngIf="node.type=='start'">
-    <input [(ngModel)]='flowchart.name' size={{flowchart.name?.length||1}}>
-    <textarea autogrow [(ngModel)]='flowchart.description' placeholder="flowchart description"></textarea>
+    <input id='flowchart-name' [(ngModel)]='flowchart.name' placeholder="flowchart name" size={{flowchart.name?.length||12}}>
+    <textarea autogrow
+    id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder="flowchart description"></textarea>
 </div>
 <hr *ngIf="node.type=='start'">
 <div class='container--input'>

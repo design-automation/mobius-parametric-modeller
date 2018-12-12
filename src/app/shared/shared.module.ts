@@ -9,7 +9,8 @@ import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatSliderModule, MatCheckboxModule, MatIconModule, MatMenuModule, MatButtonModule, MatExpansionModule, MatSelectModule } from '@angular/material';
+import { MatSliderModule, MatCheckboxModule, MatIconModule, MatMenuModule,
+    MatButtonModule, MatExpansionModule, MatSelectModule, MatFormFieldModule } from '@angular/material';
 // app directives
 import { MbFileReaderDirective } from './directives/filesys';
 import { AutogrowDirective } from './directives/textarea';
@@ -51,6 +52,9 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             MatMenuModule,
             MatIconModule,
             MatButtonModule,
+            MatExpansionModule,
+            MatSelectModule,
+            MatFormFieldModule,
         ],
     entryComponents: [  ],
     exports: [
@@ -61,6 +65,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             MatSliderModule,
             MatExpansionModule,
             MatSelectModule,
+            MatFormFieldModule,
             DataViewersContainer,
             AngularSplitModule,
             MbFileReaderDirective,

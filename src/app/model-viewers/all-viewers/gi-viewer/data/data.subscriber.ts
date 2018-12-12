@@ -16,16 +16,16 @@ export class DataSubscriber {
      */
     constructor(injector: Injector) {
         this.dataService = injector.get(DataService);
-        this._subscription = this.dataService.getMessage().subscribe(message => {
+        this.dataService.getMessage().subscribe(message => {
             this._message = message;
-            this.notify(message.text);
+            // this.notify(message.text);
         });
     }
     /**
      * TODO
      * @param message
      */
-    notify(message: string) {
-        console.warn('Notify function not Implemented');
-    }
+    // notify(message: string) {
+    //     console.warn('Notify function not Implemented');
+    // }
 }

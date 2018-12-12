@@ -24,7 +24,7 @@ export class DataService {
      */
     constructor() {
         // Do nothing
-        console.log("CALLING constructor in DATA SERVICE");
+        console.log('CALLING constructor in DATA SERVICE');
     }
     /**
      * Msg
@@ -49,14 +49,14 @@ export class DataService {
      * Get the GI Model
      */
     getGIModel(): GIModel {
-        console.log("CALLING getModel in DATA SERVICE");
+        // console.log('CALLING getModel in DATA SERVICE');
         return this._model;
     }
     /**
      * Get the THreejs Scene
      */
     getThreejsScene(): ThreejsScene {
-        console.log("CALLING getThreejs Scene in DATA SERVICE");
+        // console.log('CALLING getThreejs Scene in DATA SERVICE');
         return this._threejs_scene;
     }
     /**
@@ -64,7 +64,7 @@ export class DataService {
      * @param model
      */
     setModel(model: GIModel) {
-        console.log("CALLING setModel in DATA SERVICE");
+        console.log('CALLING setModel in DATA SERVICE');
         this._model = model;
         this._threejs_scene = new ThreejsScene(model);
         this.sendMessage('model_update');

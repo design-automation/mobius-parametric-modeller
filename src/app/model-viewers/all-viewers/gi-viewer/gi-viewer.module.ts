@@ -8,8 +8,7 @@ import { MatTabsModule} from '@angular/material/tabs';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { MatSortModule} from '@angular/material/sort';
 import { MatExpansionModule} from '@angular/material/expansion';
-// import app service
-import { DataService } from './data/data.service';
+
 // import app components
 import { GIViewerComponent } from './gi-viewer.component';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
@@ -35,18 +34,12 @@ import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
         MatTabsModule,
         MatTooltipModule,
         MatSortModule,
-    ],
-    providers: [
-        DataService,
-    ],
+    ]
 })
 export class GIViewer {
      static forRoot(): ModuleWithProviders {
         return {
-            ngModule: GIViewer,
-            providers: [
-                DataService
-            ]
+            ngModule: GIViewer
         };
     }
 }

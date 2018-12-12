@@ -43,7 +43,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      * Called when the viewer is initialised.
      */
     ngOnInit() {
-        console.log("CALLING ngOnInit in THREEJS VIEWER");
+        // console.log('CALLING ngOnInit in THREEJS VIEWER');
         const container = this._elem.nativeElement.children.namedItem('threejs-container');
         // check for container
         if (!container) {
@@ -94,17 +94,17 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      * Called on model updated.
      * @param message
      */
-    public notify(message: string): void {
-        console.log("CALLING notify in THREEJS VIEWER");
-        if (message === 'model_update' && this._threejs_scene) {
-            this.updateModel();
-        }
-    }
+    // public notify(message: string): void {
+    //     console.log('CALLING notify in THREEJS VIEWER');
+    //     if (message === 'model_update' && this._threejs_scene) {
+    //         this.updateModel();
+    //     }
+    // }
     /**
      * Update the model in the viewer.
      */
     public updateModel(): void {
-        console.log("CALLING updateModel in THREEJS VIEWER");
+        // console.log('CALLING updateModel in THREEJS VIEWER');
         if ( !this._gi_model || !this._threejs_scene ) {
             console.warn('Model or Scene not defined.');
             this._modelshow = false;

@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 // import app services
 import { DataService } from '@services';
+import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
 // import app modules
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '@shared/shared.module';
@@ -45,7 +46,7 @@ import { AppRoutingModule } from './app-routing.module';
         ViewFlowchartComponent,
         ViewGalleryComponent,
     ],
-    providers: [ DataService ],
+    providers: [ DataService, GiViewerDataService ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

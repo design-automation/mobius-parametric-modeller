@@ -13,7 +13,7 @@ export class DataService {
         flowchart: FlowchartUtils.newflowchart()
     };
     private static _flowchartPosition: string = undefined;
-    private static _newFlowchart: boolean = true;
+    private static _newFlowchart = true;
 
     private static _activeModelView: string = undefined;
 
@@ -28,16 +28,16 @@ export class DataService {
         };
     }
 
-    get flowchartPos(){return DataService._flowchartPosition;}
-    set flowchartPos(transf: string){DataService._flowchartPosition = transf;}
+    get flowchartPos() {return DataService._flowchartPosition; }
+    set flowchartPos(transf: string) {DataService._flowchartPosition = transf; }
 
-    get newFlowchart(){return DataService._newFlowchart;}
-    set newFlowchart(check: boolean){DataService._newFlowchart = check;}
+    get newFlowchart() {return DataService._newFlowchart; }
+    set newFlowchart(check: boolean) {DataService._newFlowchart = check; }
 
-    get activeView(){return DataService._activeModelView;}
-    set activeView(view: string){DataService._activeModelView = view;}
+    get activeView() {return DataService._activeModelView; }
+    set activeView(view: string) {DataService._activeModelView = view; }
 
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
-    
+
 }

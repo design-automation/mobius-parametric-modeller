@@ -74,7 +74,7 @@ export class CodeUtils {
                 if (constName.substring(0, 1) === '"' || constName.substring(0, 1) === '\'') {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
-                
+
                 let val = args[1].value || args[1].default;
                 if (prod.meta.inputMode.toString() === InputType.URL.toString() ) {
                     const p = new Promise((resolve) => {
@@ -271,9 +271,9 @@ export class CodeUtils {
             codeStr = codeStr.concat(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
-            codeStr.push('}')
+            codeStr.push('}');
             return ['{'].concat(codeStr);
-            //return `{\n${codeStr.join('\n')}\n}`;
+            // return `{\n${codeStr.join('\n')}\n}`;
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
         }
@@ -299,7 +299,8 @@ export class CodeUtils {
         `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":__modules__.${_parameterTypes['new']}()};\n`;
 
         for (const node of func.flowchart.nodes) {
-            const code = '{' + await CodeUtils.getNodeCode(node, false) + '}';
+            let code: any = await CodeUtils.getNodeCode(node, false);
+            code = '{' + code.join('\n') + '}';
             fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')})` + code + `\n\n`;
             if (node.type === 'start') {
                 // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`

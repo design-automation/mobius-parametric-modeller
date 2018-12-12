@@ -50,10 +50,12 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * ngOnDestroy
      */
     ngOnDestroy() {
-        // console.log('onDestroy');
         this.dataService.activeView = this.activeView.name;
-        for (const view of this.views) {
-            view.destroy();
+        this.vc.clear();
+        for (const view in this.views) {
+            if (this.views[view]) {
+                this.views[view].destroy();
+            }
         }
     }
     /**

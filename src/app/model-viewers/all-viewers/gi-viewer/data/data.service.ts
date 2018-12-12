@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 import { GIModel } from '@libs/geo-info/GIModel';
+import { ThreejsScene } from './threejs-scene';
 // import @angular stuff
 import { Injectable } from '@angular/core';
 
@@ -12,6 +13,7 @@ import { Injectable } from '@angular/core';
 export class DataService {
     // GI Model
     private _model: GIModel;
+    private _threejs_scene: ThreejsScene;
     // Others
     imVisible: boolean;
     selecting: any = [];
@@ -22,6 +24,7 @@ export class DataService {
      */
     constructor() {
         // Do nothing
+        console.log("CALLING constructor in DATA SERVICE");
     }
     /**
      * Msg
@@ -45,15 +48,25 @@ export class DataService {
     /**
      * Get the GI Model
      */
-    getModel(): GIModel {
+    getGIModel(): GIModel {
+        console.log("CALLING getModel in DATA SERVICE");
         return this._model;
+    }
+    /**
+     * Get the THreejs Scene
+     */
+    getThreejsScene(): ThreejsScene {
+        console.log("CALLING getThreejs Scene in DATA SERVICE");
+        return this._threejs_scene;
     }
     /**
      * Set the GI Model
      * @param model
      */
     setModel(model: GIModel) {
+        console.log("CALLING setModel in DATA SERVICE");
         this._model = model;
+        this._threejs_scene = new ThreejsScene(model);
         this.sendMessage('model_update');
     }
 }

@@ -36,7 +36,7 @@ export class GIViewerComponent {
             this.dataService.setModel(data);
         } catch (ex) {
             this.modelData = undefined;
-            console.error('Error generating model');
+            console.error('Error generating model', ex);
         }
     }
     /**

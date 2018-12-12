@@ -453,11 +453,14 @@ export class GIGeom {
     // ============================================================================
     // Get arrays of entities, these retrun arrays of string IDs
     // ============================================================================
-    public getTris(): string[] {
-        return this.tris.map( (_, index) =>  EEntityTypeStr.TRI + index );
+    public getPosis(): string[] {
+        return Array(this.num_posis).map( (_, index) =>  EEntityTypeStr.POSI + index );
     }
     public getVerts(): string[] {
         return this.verts.map( (_, index) =>  EEntityTypeStr.VERT + index );
+    }
+    public getTris(): string[] {
+        return this.tris.map( (_, index) =>  EEntityTypeStr.TRI + index );
     }
     public getEdges(): string[] {
         return this.edges.map( (_, index) =>  EEntityTypeStr.EDGE + index );

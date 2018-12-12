@@ -125,3 +125,38 @@ export function addLinestring(__model__: GIModel, positions: string[]): string {
 export function addPolygon(__model__: GIModel, positions: string[]): string {
     return __model__.geom().addPgon(positions);
 }
+/**
+ * Gets all the positions in the model.
+ * @param __model__
+ */
+export function getPositions(__model__: GIModel): string[] {
+    return __model__.geom().getPosis();
+}
+/**
+ * Gets all the points in the model.
+ * @param __model__
+ */
+export function getPoints(__model__: GIModel): string[] {
+    return __model__.geom().getPoints();
+}
+/**
+ * Gets all the lines in the model.
+ * @param __model__
+ */
+export function getLines(__model__: GIModel): string[] {
+    return __model__.geom().getLines();
+}
+/**
+ * Gets all the points in the model.
+ * @param __model__
+ */
+export function getPolygons(__model__: GIModel): string[] {
+    return __model__.geom().getPgons();
+}
+/**
+ * Gets all the collections in the model.
+ * @param __model__
+ */
+export function getCollections(__model__: GIModel): string[] {
+    return __model__.geom().getColls();
+}

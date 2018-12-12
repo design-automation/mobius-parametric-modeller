@@ -62,7 +62,6 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * ngOnChanges
      */
     ngOnChanges() {
-        console.log(this.helpView);
         if (this.currentHelpView !== this.helpView) {
             let view;
             for (const v of this.Viewers) {

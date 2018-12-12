@@ -37,7 +37,6 @@ import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
         MatSortModule,
     ],
     providers: [
-        DataService,
     ],
 })
 export class GIViewer {
@@ -45,7 +44,6 @@ export class GIViewer {
         return {
             ngModule: GIViewer,
             providers: [
-                DataService
             ]
         };
     }

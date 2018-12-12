@@ -2,6 +2,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IProcedure } from '@models/procedure';
 import { InputType } from '@models/port';
 
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+ctx.font = '13px Arial';
+
 @Component({
   selector: 'procedure-input-viewer',
   templateUrl: './procedure-input-viewer.component.html',
@@ -31,4 +35,11 @@ export class ProcedureInputViewerComponent {
         }
         return val.replace(/_/g, ' ') + ':';
     }
+
+    inputSize(val, defaultVal) {
+        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 5; }
+        return ctx.measureText(val).width + 5;
+    }
+
+
 }

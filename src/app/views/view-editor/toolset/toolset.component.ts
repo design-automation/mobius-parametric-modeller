@@ -50,7 +50,7 @@ export class ToolsetComponent {
     // add selected imported function as a new procedure
     add_imported_function(fnData) {
         fnData.args = fnData.args.map( (arg) => {
-            return {name: arg.name, value: arg.value};
+            return {name: arg.name, value: arg.value, type: arg.type};
             });
         this.select.emit( { type: ProcedureTypes.Imported, data: fnData } );
     }
@@ -72,8 +72,9 @@ export class ToolsetComponent {
 
                 // create function and documentation of the function
                 const funcs = [];
+                const funcName = fl.name.replace(/\ /g, '_');
                 const documentation = {
-                    name: fl.name,
+                    name: funcName,
                     module: 'Imported',
                     description: fl.description,
                     summary: fl.description,
@@ -86,12 +87,11 @@ export class ToolsetComponent {
                         nodes: fl.nodes,
                         edges: fl.edges
                     },
-                    name: fl.name,
+                    name: funcName,
                     module: 'Imported',
                     doc: documentation
                 };
 
-                // go through the nodes
                 func.argCount = fl.nodes[0].procedure.length;
                 func.args = fl.nodes[0].procedure.map(prod => {
                     documentation.parameters.push({
@@ -102,14 +102,14 @@ export class ToolsetComponent {
                         name: prod.args[prod.argCount - 2].value.substring(1, prod.args[prod.argCount - 2].value.length - 1),
                         default: prod.args[prod.argCount - 1].default,
                         value: undefined,
-                        min: undefined,
-                        max: undefined
+                        type: prod.meta.inputMode,
                     };
                 });
                 if (!func.argCount) {
                     resolve('error');
                 }
 
+                // go through the nodes
                 for (const node of fl.nodes) {
                     if (node.type === 'end') {
                         if (node.procedure.length > 0) {documentation.returns = node.procedure[0].meta.description; }

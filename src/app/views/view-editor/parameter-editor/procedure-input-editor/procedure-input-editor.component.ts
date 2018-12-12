@@ -31,9 +31,9 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
       this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
     }
 
-    updateInputSize(event) {
-        const val = event.target.value || event.target.placeholder;
-        event.target.style.width = ctx.measureText(val).width + 10 + 'px';
+    inputSize(val, defaultVal) {
+        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 5; }
+        return ctx.measureText(val).width + 5;
     }
 
 }

@@ -1,15 +1,17 @@
-import { Component, Input, OnInit, DoCheck } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, AfterViewInit, AfterViewChecked } from '@angular/core';
 
 /**
  * ConsoleViewerComponent
  */
 @Component({
     selector: 'console-viewer',
-    template: `<textarea>{{ text || "" }}</textarea>`,
+    template: `<textarea id='console_textarea'>{{ text || "" }}</textarea>`,
     styleUrls: [`../general-viewer.scss`]
 })
-export class ConsoleViewerComponent implements OnInit, DoCheck {
+export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, AfterViewChecked {
     text: string;
+    scrollcheck: boolean;
+
     /**
      * constructor
      */
@@ -23,11 +25,32 @@ export class ConsoleViewerComponent implements OnInit, DoCheck {
         // @ts-ignore
         this.text = console.logs.join('\n');
     }
+
+    /**
+     * ngOnInit
+     */
+    ngAfterViewInit() {
+        const ct = document.getElementById('console_textarea');
+        ct.scrollTo(0, ct.scrollHeight);
+    }
+
     /**
      * ngDoCheck
      */
     ngDoCheck() {
         // @ts-ignore
-        this.text = console.logs.join('\n');
+        const t = console.logs.join('\n');
+        if (this.text !== t) {
+            this.text = t;
+            this.scrollcheck = true;
+        }
+    }
+
+    ngAfterViewChecked() {
+        if (this.scrollcheck) {
+            const ct = document.getElementById('console_textarea');
+            ct.scrollTo(0, ct.scrollHeight);
+            this.scrollcheck = false;
+        }
     }
 }

@@ -17,6 +17,8 @@ export class DataService {
 
     private static _activeModelView: string = undefined;
 
+    private static _splitVal = 30;
+
     get file() { return DataService._data; }
     set file(data: IMobius) {
         DataService._data = <IMobius>{
@@ -36,6 +38,9 @@ export class DataService {
 
     get activeView() {return DataService._activeModelView; }
     set activeView(view: string) {DataService._activeModelView = view; }
+
+    get splitVal() {return DataService._splitVal; }
+    set splitVal(num: number) {DataService._splitVal = num; }
 
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }

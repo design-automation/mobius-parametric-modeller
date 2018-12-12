@@ -75,27 +75,7 @@ export class CodeUtils {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
 
-                let val = args[1].value || args[1].default;
-                if (prod.meta.inputMode.toString() === InputType.URL.toString() ) {
-                    const p = new Promise((resolve) => {
-                        const request = new XMLHttpRequest();
-                        request.open('GET', args[1].value || args[1].default);
-                        request.onload = () => {
-                            resolve(request.responseText);
-                        };
-                        request.send();
-                    });
-                    val = await p;
-                } else if (prod.meta.inputMode.toString() === InputType.File.toString()) {
-                    const p = new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = function() {
-                            resolve(reader.result);
-                        };
-                        reader.readAsText(args[1].value || args[1].default);
-                    });
-                    val = await p;
-                }
+                const val = await CodeUtils.getStartInput(args[1].value || args[1].default, prod.meta.inputMode);
                 codeStr.push(`__params__['constants']['${constName}'] = ${val};`);
 
                 break;
@@ -110,28 +90,8 @@ export class CodeUtils {
                 const argVals = [];
                 for (const arg of args.slice(1)) {
                     if (arg.name === _parameterTypes.input) {
-                        let val = arg.value || arg.default;
-                        if (prod.meta.inputMode.toString() === InputType.URL.toString() ) {
-                            const p = new Promise((resolve) => {
-                                const request = new XMLHttpRequest();
-                                request.open('GET', arg.value || arg.default);
-                                request.onload = () => {
-                                    resolve(request.responseText);
-                                };
-                                request.send();
-                            });
-                            val = await p;
-                        } else if (prod.meta.inputMode.toString() === InputType.File.toString()) {
-                            const p = new Promise((resolve) => {
-                                const reader = new FileReader();
-                                reader.onload = function() {
-                                    resolve(reader.result);
-                                };
-                                reader.readAsText(arg.value || arg.default);
-                            });
-                            val = await p;
-                        } else {}
-                        argVals.push(val);
+                        const argVal = await CodeUtils.getStartInput(arg.value || arg.default, prod.meta.inputMode);
+                        argVals.push(argVal);
                         continue;
                     }
                     if (arg.value && arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
@@ -172,8 +132,16 @@ export class CodeUtils {
                 }
                 break;
             case ProcedureTypes.Imported:
-                // ('args: ',args)
-                const argsVals = args.slice(1).map((arg) => arg.value).join(',');
+                let argsVals: any = [];
+                for (let i = 1; i < args.length; i++) {
+                    const arg = args[i];
+                    // args.slice(1).map((arg) => {
+                    if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(arg.value); }
+                    const r = await CodeUtils.getStartInput(arg.value, InputType.URL);
+                    argsVals.push(r);
+                }
+                argsVals = argsVals.join(',');
+
                 const fn = `${prod.meta.name}(__params__, ${argsVals} )`;
                 codeStr.push(`${prefix}${args[0].value} = ${fn};`);
                 if (prefix === 'let ') {
@@ -196,6 +164,33 @@ export class CodeUtils {
         return codeStr;
     }
 
+    static async getStartInput(val, inputMode): Promise<any> {
+        let result: any;
+        if (inputMode.toString() === InputType.URL.toString() ) {
+            if (val.indexOf('dropbox') !== -1) {
+                val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
+            }
+            const p = new Promise((resolve) => {
+                const request = new XMLHttpRequest();
+                request.open('GET', val);
+                request.onload = () => {
+                    resolve(request.responseText);
+                };
+                request.send();
+            });
+            result = await p;
+        } else if (inputMode.toString() === InputType.File.toString()) {
+            const p = new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    resolve(reader.result);
+                };
+                reader.readAsText(val);
+            });
+            result = await p;
+        }
+        return result;
+    }
 
     static loadFile(f) {
         const stream = Observable.create(observer => {
@@ -268,6 +263,7 @@ export class CodeUtils {
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
         for (const prod of node.procedure) {
+            if (node.type === 'start' && !addProdArr) { break; }
             codeStr = codeStr.concat(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
@@ -300,7 +296,7 @@ export class CodeUtils {
 
         for (const node of func.flowchart.nodes) {
             let code: any = await CodeUtils.getNodeCode(node, false);
-            code = '{' + code.join('\n') + '}';
+            code = '{\n' + code.join('\n') + '\n}';
             fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')})` + code + `\n\n`;
             if (node.type === 'start') {
                 // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`

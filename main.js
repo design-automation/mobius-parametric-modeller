@@ -7125,11 +7125,17 @@ var ViewFlowchartComponent = /** @class */ (function () {
                 this.edge.source.edges.push(this.edge);
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
-                if (this.edge.source.parentNode.enabled) {
-                    ViewFlowchartComponent_1.enableNode(this.edge.target.parentNode);
+                try {
+                    if (this.edge.source.parentNode.enabled) {
+                        ViewFlowchartComponent_1.enableNode(this.edge.target.parentNode);
+                    }
+                    else {
+                        ViewFlowchartComponent_1.disableNode(this.edge.target.parentNode);
+                    }
                 }
-                else {
-                    ViewFlowchartComponent_1.disableNode(this.edge.target.parentNode);
+                catch (ex) {
+                    this.edge.target.parentNode.hasError = true;
+                    this.edge.source.parentNode.hasError = true;
                 }
                 break;
             }
@@ -9768,7 +9774,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! F:\Dev\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\akibdpt\Documents\Angular\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
 
 
 /***/ })

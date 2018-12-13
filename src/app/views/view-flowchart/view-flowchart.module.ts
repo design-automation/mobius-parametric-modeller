@@ -20,7 +20,7 @@ import { ViewFlowchartRoutingModule } from './view-flowchart-routing.module';
     EdgeComponent,
   ],
   exports: [ ViewFlowchartComponent ],
-  imports: [ 
+  imports: [
     CommonModule,
     FormsModule,
     SharedModule,

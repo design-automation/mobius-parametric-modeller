@@ -1,8 +1,9 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { DataSubscriber } from '../data/data.subscriber';
 // import @angular stuff
-import { Component, OnInit, DoCheck, Injector, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Injector, ElementRef, DoCheck, OnChanges, SimpleChanges } from '@angular/core';
 import { DataThreejs } from '../data/data.threejs';
+// import { IModel } from 'gs-json';
+import { DataService } from '../data/data.service';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -13,11 +14,15 @@ import { DataThreejs } from '../data/data.threejs';
     templateUrl: './threejs-viewer.component.html',
     styleUrls: ['./threejs-viewer.component.scss']
 })
-export class ThreejsViewerComponent extends DataSubscriber implements OnInit, DoCheck {
+export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
+    @Input() model: GIModel;
+
     public _elem;
     // viewer size
     public _width: number;
     public _height: number;
+    // DataService
+    protected dataService: DataService;
     // threeJS scene data
     public _data_threejs: DataThreejs;
     // the GI model to display
@@ -33,8 +38,8 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit, Do
      * @param elem
      */
     constructor(injector: Injector, elem: ElementRef) {
-        super(injector);
         this._elem = elem;
+        this.dataService = injector.get(DataService);
     }
     /**
      * Called when the viewer is initialised.
@@ -60,83 +65,76 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit, Do
         const self = this;
         this._data_threejs._controls.addEventListener( 'change', function() {self.render( self ); });
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
-        // update the model, calles getModel() from data service
-        this.updateModel();
     }
     /**
      * TODO What is "self"? why not use "this"
      * @param self
      */
     public render(self) {
-        console.log('CALLING render in THREEJS VIEWER COMPONENT');
+        // console.log('CALLING render in THREEJS VIEWER COMPONENT');
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
+
     /**
      * Called when anything changes
      */
     ngDoCheck() {
         const container = this._elem.nativeElement.children.namedItem('threejs-container');
-        const width: number = container.offsetWidth;
-        const height: number = container.offsetHeight;
-        // this is when dimensions change
-        if (width !== this._width || height !== this._height) {
-            setTimeout(() => {
-                this.onResize();
-            }, 50);
-        }
-    }
-    /**
-     * Called on window resize.
-     */
-    public onResize(): void {
-        console.log('CALLING onResize in THREEJS VIEWER COMPONENT');
-        const container = this._elem.nativeElement.children.namedItem('threejs-container');
-        /// check for container
         if (!container) {
             console.error('No container in Three Viewer');
             return;
         }
-        ///
-        this._width = container.offsetWidth;
-        this._height = container.offsetHeight;
-        this._data_threejs._camera.aspect = this._width / this._height;
-        this._data_threejs._camera.updateProjectionMatrix();
-        this._data_threejs._renderer.setSize(this._width, this._height);
-        // console.log('ASPECT:::::', this._data_threejs._camera.aspect);
-        // this.updateModel();
+        const width: number = container.offsetWidth;
+        const height: number = container.offsetHeight;
+
+        // this is when dimensions change
+        if (width !== this._width || height !== this._height) {
+            this._width = width;
+            this._height = height;
+            setTimeout(() => {
+                this._data_threejs._camera.aspect = this._width / this._height;
+                this._data_threejs._camera.updateProjectionMatrix();
+                this._data_threejs._renderer.setSize(this._width, this._height);
+                this.render(this);
+            }, 10);
+        }
     }
+
+    // receive data -> model from gi-viewer component and update model in the scene
+    ngOnChanges(changes: SimpleChanges) {
+        if ( changes['model']) {
+            if ( this.model ) {
+                this.updateModel(this.model);
+            }
+        }
+    }
+
     /**
      * Called on model updated.
      * @param message
      */
-    // public notify(message: string): void {
-    //     console.log('CALLING notify in THREEJS VIEWER');
-    //     if (message === 'model_update' && this._data_threejs) {
-    //         this.updateModel();
-    //     }
-    // }
     /**
      * Update the model in the viewer.
      */
-    public updateModel(): void {
+    public updateModel(model: GIModel): void {
+        // console log the scene
+        this._data_threejs = this.dataService.getThreejsScene();
+        // console.log('>> this.scene >>', this._data_threejs._scene);
+        // this._gi_model = this.dataService.getGIModel();
+        this._gi_model = model;
         // console.log('CALLING updateModel in THREEJS VIEWER COMPONENT');
-        if ( !this._gi_model || !this._data_threejs ) {
+        if ( !this._gi_model) {
             console.warn('Model or Scene not defined.');
             this._no_model = true;
             return;
         }
         try {
+            // add geometry to the scene
+            this._data_threejs.addGeometry(this._gi_model);
             // Set model flags
             this._model_error = false;
             this._no_model = false;
-            // set renderer size
-            this._data_threejs._renderer.setSize(this._width, this._height);
-            // set camera aspect ratio
-            this._data_threejs._camera.aspect = this._width / this._height;
-            // render the scene
             this.render(this);
-            // console log the scene
-            console.log('>> this.scene >>', this._data_threejs._scene);
         } catch (ex) {
             console.error('Error displaying model:', ex);
             this._model_error = true;

@@ -4,7 +4,7 @@ import { Component, Input, OnInit, DoCheck } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
 // import others
-
+// import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 /**
  * GIViewerComponent
  * This component is used in /app/model-viewers/model-viewers-container.component.html
@@ -15,7 +15,6 @@ import { DataService } from './data/data.service';
   styleUrls: ['./gi-viewer.component.scss']
 })
 export class GIViewerComponent implements OnInit, DoCheck {
-    imVisible = false; // TODO what is this?
     dataservice: DataService; // TODO why is this here?
     // model data passed to the viewer
     @Input() data: GIModel;
@@ -27,39 +26,37 @@ export class GIViewerComponent implements OnInit, DoCheck {
     constructor(private dataService: DataService) {
         // Do nothing
     }
+
+    /**
+     * ngOnInit
+     */
+    ngOnInit() {
+        if (this.dataService.getThreejsScene() === undefined) {
+            this.dataService.setThreejsScene(this.data);
+        }
+    }
+
+    /**
+     * ngDoCheck
+     */
+    ngDoCheck(): void {
+        // console.log('MODEL CHANGED MODEL CHANGED MODEL CHANGED');
+        // if (this.data !== this.modelData) {
+            this.setModel(this.data);
+        // }
+    }
+
     /**
      * setModel Sets the model in the data service.
      * @param data
      */
     setModel(data: GIModel): void {
         try {
-            this.dataService.setModel(data);
+            this.dataService.setGIModel(data);
+            // this.modelData = this.data;
         } catch (ex) {
-            this.modelData = undefined;
+            // this.modelData = undefined;
             console.error('Error generating model', ex);
         }
-    }
-    /**
-     * ngOnInit
-     */
-    ngOnInit() {
-        this.modelData = this.data;
-        this.setModel(this.modelData);
-        // this.dataService.newThreejsScene(this.modelData);
-    }
-    /**
-     * ngDoCheck TODO: change to ngOnChange and ngOnDestroy
-     */
-    ngDoCheck() {
-        if (this.modelData !== this.data) {
-            this.modelData = this.data;
-            this.setModel(this.modelData);
-        }
-    }
-    /**
-     * ??? what does this do?
-     */
-    leaflet() {
-        this.imVisible = this.dataService.imVisible;
     }
 }

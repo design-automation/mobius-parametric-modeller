@@ -28,7 +28,6 @@ export class DataThreejs {
      * Constructs a new data subscriber.
      */
     constructor(model: GIModel) {
-        console.log("Calling constructor in DataThreejs");
         //
         this._model = model;
         // scene
@@ -37,8 +36,9 @@ export class DataThreejs {
 
         // renderer
         this._renderer =  new THREE.WebGLRenderer( {antialias: true} );
+        // this._renderer.setClearColor(0xEEEEEE);
         this._renderer.setPixelRatio( window.devicePixelRatio );
-        this._renderer.setSize(window.innerWidth / 2, 1000);
+        this._renderer.setSize(window.innerWidth / 1.8, window.innerHeight);
 
         // camera settings
         this._camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 20000 );
@@ -63,26 +63,35 @@ export class DataThreejs {
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
 
-        // add grid and lights to the scene
-        this._addGrid();
-        this._addHemisphereLight();
-
         // add geometry to the scene
-        if (model) {
-            // add geometry
-            const threejs_data: IThreeJS = model.get3jsData();
-
-            // Create buffers that will be used by all geometry
-            const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
-            const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
-            const colors_buffer = new THREE.Float32BufferAttribute( threejs_data.colors, 3 );
-
-            // Add geometry
-            this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
-            this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
-            this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
+        if ( this._model) {
+            this.addGeometry(this._model);
+        } else {
+            // add grid and lights
+            this._addGrid();
+            this._addHemisphereLight();
+            this._addAxes();
         }
     }
+    public addGeometry(model: GIModel): void {
+        while ( this._scene.children.length > 0) {
+            this._scene.remove(this._scene.children[0]);
+        }
+        this._addGrid();
+        this._addHemisphereLight();
+        this._addAxes();
+        const threejs_data: IThreeJS = model.get3jsData();
+        // Create buffers that will be used by all geometry
+        const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
+        const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
+        const colors_buffer = new THREE.Float32BufferAttribute( threejs_data.colors, 3 );
+
+        // Add geometry
+        this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
+        this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
+        this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
+    }
+
     // ============================================================================
     // Private methods
     // ============================================================================
@@ -110,6 +119,11 @@ export class DataThreejs {
         const light = new THREE.DirectionalLight( 0xffffff, 0.5 );
         light.position.set( 0, 0, 1 ).normalize();
         this._scene.add( light );
+    }
+    // add axes
+    private _addAxes() {
+        const axesHelper = new THREE.AxesHelper( 20 );
+        this._scene.add( axesHelper );
     }
     /**
      * Draws a grid on the XY plane.
@@ -203,7 +217,7 @@ export class DataThreejs {
         geom.addAttribute( 'color', colors_buffer );
         // geom.computeBoundingSphere();
         const mat = new THREE.PointsMaterial( {
-            size: 0.1,
+            size: 1,
             vertexColors: THREE.VertexColors
         } );
 

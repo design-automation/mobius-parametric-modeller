@@ -6,7 +6,7 @@ import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 /**
  * ThreejsScene
  */
-export class ThreejsScene {
+export class DataThreejs {
     // threeJS objects
     public _scene: THREE.Scene;
     public _renderer: THREE.WebGLRenderer;
@@ -61,10 +61,11 @@ export class ThreejsScene {
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
 
-        // add stuff to the scene
+        // add grid and lights to the scene
         this._addGrid();
         this._addHemisphereLight();
 
+        // add geometry to the scene
         if (model) {
             // add geometry
             const threejs_data: IThreeJS = model.get3jsData();

@@ -1,5 +1,4 @@
-<div id="threejs-container"  
-    (click)="render(this)" (window:resize)="onResize()">
+<div id="threejs-container" (click)="render(this)" >
     <div *ngIf="_model_error" style="position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">Error displaying model:{{text}}</div>
     <div *ngIf="_no_model" style="position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">Model or Scene not defined.</div>
 

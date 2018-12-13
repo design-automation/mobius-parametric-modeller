@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataSubscriber } from '../data/data.subscriber';
 // import @angular stuff
-import { Component, OnInit, Injector, ElementRef } from '@angular/core';
+import { Component, OnInit, DoCheck, Injector, ElementRef } from '@angular/core';
 import { DataThreejs } from '../data/data.threejs';
 
 /**
@@ -13,7 +13,7 @@ import { DataThreejs } from '../data/data.threejs';
     templateUrl: './threejs-viewer.component.html',
     styleUrls: ['./threejs-viewer.component.scss']
 })
-export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
+export class ThreejsViewerComponent extends DataSubscriber implements OnInit, DoCheck {
     public _elem;
     // viewer size
     public _width: number;
@@ -71,6 +71,16 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         console.log('CALLING render in THREEJS VIEWER COMPONENT');
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
+
+    ngDoCheck() {
+        const container = this._elem.nativeElement.children.namedItem('threejs-container');
+        const width: number = container.offsetWidth;
+        const height: number = container.offsetHeight;
+        // this is when dimensions change
+        if (width !== this._width || height !== this._height) {
+            this.onResize();
+        }
+    }
     /**
      * Called on window resize.
      */
@@ -85,10 +95,11 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         ///
         this._width = container.offsetWidth;
         this._height = container.offsetHeight;
-        this.updateModel();
-        // this._data_threejs._renderer.setSize(this._width, this._height);
-        // this._data_threejs._camera.aspect = this._width / this._height;
-        // this._data_threejs._camera.updateProjectionMatrix();
+        this._data_threejs._camera.aspect = this._width / this._height;
+        this._data_threejs._camera.updateProjectionMatrix();
+        this._data_threejs._renderer.setSize(this._width, this._height);
+        console.log('ASPECT:::::', this._data_threejs._camera.aspect);
+        // this.updateModel();
     }
     /**
      * Called on model updated.

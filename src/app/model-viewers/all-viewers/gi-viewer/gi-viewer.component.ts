@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 // import @angular stuff
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, DoCheck } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
 // import others
@@ -14,7 +14,7 @@ import { DataService } from './data/data.service';
   templateUrl: './gi-viewer.component.html',
   styleUrls: ['./gi-viewer.component.scss']
 })
-export class GIViewerComponent {
+export class GIViewerComponent implements OnInit, DoCheck {
     imVisible = false; // TODO what is this?
     dataservice: DataService; // TODO why is this here?
     // model data passed to the viewer

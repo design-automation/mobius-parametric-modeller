@@ -1,4 +1,4 @@
-import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy} from '@angular/core';
+import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { ProcedureTypesAware, ModuleDocAware } from '@shared/decorators';
@@ -7,7 +7,7 @@ import { _parameterTypes} from '@modules';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
-ctx.font = '14px Arial';
+ctx.font = '13px Arial';
 
 @ProcedureTypesAware
 @ModuleDocAware
@@ -16,7 +16,7 @@ ctx.font = '14px Arial';
     templateUrl: './procedure-item.component.html',
     styleUrls: ['procedure-item.component.scss']
 })
-export class ProcedureItemComponent {
+export class ProcedureItemComponent implements AfterViewInit {
     @Input() data: IProcedure;
     @Output() delete = new EventEmitter();
     @Output() select = new EventEmitter();
@@ -25,6 +25,13 @@ export class ProcedureItemComponent {
     @Output() helpText = new EventEmitter();
 
     ProcedureTypes = ProcedureTypes;
+
+    ngAfterViewInit() {
+        const elements = document.getElementsByClassName('input--arg');
+        [].forEach.call(elements, function (el) {
+            console.log(el);
+        });
+    }
 
     // delete this procedure
     emitDelete(): void {
@@ -115,13 +122,7 @@ export class ProcedureItemComponent {
         return event;
     }
 
-
-    updateInputSize(event) {
-        const val = event.target.value || event.target.placeholder;
-        event.target.style.width = ctx.measureText(val).width + 10 + 'px';
-    }
-
     inputSize(val) {
-        return ctx.measureText(val).width + 10 + 'px';
+        return ctx.measureText(val).width + 5;
     }
 }

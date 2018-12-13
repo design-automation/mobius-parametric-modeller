@@ -1,5 +1,6 @@
 <div class='container container--parameter' *ngIf='prod.meta?.module=="Input"'>
-    <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||"Undefined"}}:' size='15' disabled>
+    <input class='input-const-name' [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||"Undefined"}}:'
+    [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined") + 10' disabled>
 
     <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
         <option 
@@ -9,13 +10,13 @@
     </select>
     <ng-container [ngSwitch]="prod.meta.inputMode" >
         <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
-        (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].default.length||13}}>
+        [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
 
         <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
             <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min'
-            (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].min?.length||1}}>
+            [style.width.px]='inputSize(prod.args[prod.argCount-1].min,"Min")'>
             <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max'
-            (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].max?.length||1}}>
+            [style.width.px]='inputSize(prod.args[prod.argCount-1].max,"Max")'>
             <mat-slider
                 [(ngModel)]='prod.args[prod.argCount-1].default'
                 thumbLabel
@@ -23,20 +24,21 @@
                 min={{prod.args[prod.argCount-1].min||0}}
                 max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
             <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default'
-            (input)='updateInputSize($event)' size={{prod.args[prod.argCount-1].default?.length||1}} disabled>
+            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"")' disabled>
 
         </div>
         <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
-        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL' (input)='updateInputSize($event)'>
+        <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
+        [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
         <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
     </ng-container>
     <div>
         <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'
-        (input)='updateInputSize($event)' size={{prod.meta.description?.length||20}}>
+        [style.width.px]='inputSize(prod.meta.description,"Constant Description")'>
     </div>
 
 </div>
 <div class='container container--parameter' *ngIf='prod.meta.module=="Output"'>
     <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'
-    (input)='updateInputSize($event)' size={{prod.meta.description?.length||20}}>
+    [style.width.px]='inputSize(prod.meta.description,"Return Description")'>
 </div>

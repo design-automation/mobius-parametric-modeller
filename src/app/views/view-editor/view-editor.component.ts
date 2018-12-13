@@ -158,5 +158,6 @@ export class ViewEditorComponent {
         if (node.type === 'output') { return node.input.value; }
         return node.output.value;
     }
+    setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
 
 }

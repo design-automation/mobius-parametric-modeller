@@ -62,7 +62,6 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
      * ngOnChanges
      */
     ngOnChanges() {
-        console.log(this.helpView);
         if (this.currentHelpView !== this.helpView) {
             let view;
             for (const v of this.Viewers) {
@@ -113,6 +112,8 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
                 componentRef.instance['output'] = this.currentHelpView;
             } else if (this.activeView.name !== 'Console') {
                 componentRef.instance['data'] = this.data;
+            } else {
+                componentRef.instance['scrollcheck'] = true;
             }
         } catch (ex) {
             // console.log(`Active View not defined`);

@@ -97,10 +97,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         /*
         */
         // transform
-        if (!this.dataService.flowchartPos){
-            this.dataService.flowchartPos = 'matrix(' + this.zoom + ', 0, 0,' + this.zoom + ', -' + boundingDiv.width * this.zoom / 2 + ', -' + boundingDiv.width * this.zoom / 2 + ')';
+        if (!this.dataService.flowchartPos) {
+            this.dataService.flowchartPos = 'matrix(' + this.zoom + ', 0, 0,' + this.zoom + ', -' +
+            boundingDiv.width * this.zoom / 2 + ', -' + boundingDiv.width * this.zoom / 2 + ')';
         } else {
-            this.zoom = Number(this.dataService.flowchartPos.split(',')[0].split('(')[1])
+            this.zoom = Number(this.dataService.flowchartPos.split(',')[0].split('(')[1]);
         }
         this.canvas.style.transition = 'transform 0ms ease-in';
         this.canvas.style.transformOrigin = `top left`;
@@ -157,7 +158,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
     }
 
-    ngAfterViewInit(){
+    ngAfterViewInit() {
         if (this.dataService.newFlowchart) {
             this.focusFlowchart();
             this.dataService.newFlowchart = false;
@@ -173,7 +174,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
             // switch the viewchild of the appModule to the node's procedure view when double-click on the node
             case ACTIONS.PROCEDURE:
-                this.router.navigate(['/editor'])
+                this.router.navigate(['/editor']);
                 // this.switch.emit('editor');
                 this.deactivateKeyEvent();
                 break;
@@ -289,7 +290,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     // deactivate the event listeners when the mouse exit the svg component
     deactivateKeyEvent(event?: MouseEvent): void {
         this.listenerActive = false;
-        if (this.isDown){
+        if (this.isDown) {
             this.handleMouseUp(event);
         }
     }
@@ -411,8 +412,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         let zoom = bRect.width / (ctm.a * (frame[2] - frame[0]));
         const heightZoom = bRect.height / (ctm.d * (frame[3] - frame[1]));
         if (zoom > heightZoom) { zoom = heightZoom; }
-        if (zoom > this.maxZoom) { zoom = this.maxZoom; }
-        else if (zoom < this.minZoom) { zoom = this.minZoom; }
+        if (zoom > this.maxZoom) { zoom = this.maxZoom; } else if (zoom < this.minZoom) { zoom = this.minZoom; }
 
         // calculate the difference between height and width, if height is bigger than width,
         // centering the flowchart based on the difference
@@ -426,7 +426,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         if (frame[1] < 0) { frame[1] = 0; }
 
         // transform
-        this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${-frame[0] * ctm.a * zoom / this.zoom},${-frame[1] * ctm.a * zoom / this.zoom})`
+        this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${-frame[0] * ctm.a *
+            zoom / this.zoom},${-frame[1] * ctm.a * zoom / this.zoom})`;
         this.canvas.style.transform = this.dataService.flowchartPos;
         this.zoom = zoom;
     }
@@ -599,7 +600,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             } else if (boundingDiv.height - y > bRect.height) {
                 y = boundingDiv.height - bRect.height;
             }
-            this.dataService.flowchartPos = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')'
+            this.dataService.flowchartPos = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')';
             this.canvas.style.transform = this.dataService.flowchartPos;
 
         // if drag node
@@ -736,15 +737,17 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
     newfile() {
         document.getElementById('newfile').click();
-        this.focusFlowchart()
+        this.focusFlowchart();
     }
-    
+
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
         if (node.type === 'output') { return node.input.value; }
         return node.output.value;
     }
+
+    setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
 
 }
 

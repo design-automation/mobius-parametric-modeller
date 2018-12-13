@@ -59,6 +59,11 @@ export class DataService {
         // console.log('CALLING getThreejs Scene in DATA SERVICE');
         return this._data_threejs;
     }
+
+    newThreejsScene(model: any) {
+        // this._threejs_scene = new ThreejsScene(model);
+    }
+
     /**
      * Set the GI Model
      * @param model

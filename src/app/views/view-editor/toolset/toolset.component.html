@@ -1,21 +1,20 @@
 <ng-container *ngIf="nodeType == ''">
     <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
-    <ul class='toolset__basic'>
-        <ng-container *ngFor="let type of ProcedureTypesArr">
-            <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"
-            && type.toUpperCase() !== "CONSTANT" && type.toUpperCase() !== "RETURN"'
-            class='tooltip'
-            (click)='add(ProcedureTypes[type])'> 
-                {{type}}
-                <!--
-                <span class="tooltiptext">
-                    <p class='funcDesc'>{{type}}</p>
-                </span>
-                -->
-            </li>
-        </ng-container>
-    </ul>
-    
+
+    <button id='basic-funcs' class="accordion" 
+    (click)='toggleAccordion("basic-funcs")' >Basic</button>
+    <div class="panel">
+        <ul class='toolset__basic'>
+            <ng-container *ngFor="let type of ProcedureTypesArr">
+                <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"
+                && type.toUpperCase() !== "CONSTANT" && type.toUpperCase() !== "RETURN"'
+                class='tooltip'
+                (click)='add(ProcedureTypes[type])'> 
+                    {{type}}
+                </li>
+            </ng-container>
+        </ul>
+    </div>
 
     <!-- functions from core.modules -->
     <ng-container *ngFor='let mod of Modules' >

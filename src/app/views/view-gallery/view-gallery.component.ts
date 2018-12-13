@@ -77,4 +77,6 @@ export class ViewGalleryComponent {
         return node.output.value;
     }
 
+    setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
+
 }

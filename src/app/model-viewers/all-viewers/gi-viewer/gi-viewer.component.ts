@@ -45,6 +45,7 @@ export class GIViewerComponent implements OnInit, DoCheck {
     ngOnInit() {
         this.modelData = this.data;
         this.setModel(this.modelData);
+        // this.dataService.newThreejsScene(this.modelData);
     }
     /**
      * ngDoCheck TODO: change to ngOnChange and ngOnDestroy

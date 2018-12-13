@@ -19,6 +19,7 @@ export class ParameterEditorComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         const textarea = document.getElementById('flowchart-desc');
+        if (!textarea) { return; }
         const desc = this.flowchart.description.split('\n');
         const textareaWidth = textarea.getBoundingClientRect().width;
         let lineCount = desc.length;
@@ -26,7 +27,7 @@ export class ParameterEditorComponent implements AfterViewInit {
             lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
         }
 
-        textarea.style.height = lineCount * 7.2 + 'px';
+        textarea.style.height = lineCount * 7.5 + 'px';
     }
 
 }

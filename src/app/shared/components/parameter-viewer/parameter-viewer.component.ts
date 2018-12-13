@@ -25,7 +25,7 @@ export class ParameterViewerComponent implements AfterViewInit {
             lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
         }
 
-        textarea.style.height = lineCount * 7.2 + 'px';
+        textarea.style.height = lineCount * 7.5 + 'px';
     }
 
     displayName() {

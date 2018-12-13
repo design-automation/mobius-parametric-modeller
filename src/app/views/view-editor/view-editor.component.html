@@ -1,6 +1,6 @@
 <div class='container'>
-    <as-split direction="horizontal">
-        <as-split-area size="dataService.splitVal()" >
+    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+        <as-split-area [size]="100 - dataService.splitVal">
             <div class='container__header'>
 
                 <!-- top left tab menu  -->
@@ -90,7 +90,7 @@
             </div>
         </as-split-area>
 
-        <as-split-area size="100 - dataService.splitVal()">
+        <as-split-area [size]="100 - dataService.splitVal">
             <!-- data viewers panel -->
             <div class='content__viewer' >
                 <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>

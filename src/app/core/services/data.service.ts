@@ -17,7 +17,7 @@ export class DataService {
 
     private static _activeModelView: string = undefined;
 
-    private static _splitVal = 30;
+    private static _splitVal = 60;
 
     get file() { return DataService._data; }
     set file(data: IMobius) {

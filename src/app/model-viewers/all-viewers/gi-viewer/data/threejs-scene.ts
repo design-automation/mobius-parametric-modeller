@@ -4,7 +4,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 
 /**
- * DataSubscriber
+ * ThreejsScene
  */
 export class ThreejsScene {
     // threeJS objects
@@ -36,12 +36,14 @@ export class ThreejsScene {
         // renderer
         this._renderer =  new THREE.WebGLRenderer( {antialias: true} );
         this._renderer.setPixelRatio( window.devicePixelRatio );
+        this._renderer.setSize(window.innerWidth / 2, 1000);
 
         // camera settings
-        this._camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
-        this._camera.position.x = -50;
-        this._camera.position.y = -50;
-        this._camera.position.z = 50;
+        this._camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 20000 );
+        this._camera.position.x = 150;
+        this._camera.position.y = 100;
+        this._camera.position.z = 70;
+        this._camera.aspect = 1;
         this._camera.up.set(0, 0, 1);
         this._camera.lookAt( this._scene.position );
         this._camera.updateProjectionMatrix();
@@ -118,7 +120,7 @@ export class ThreejsScene {
         }
         // todo: change grid -> grid_value
         if (this._grid_show) {
-            const gridhelper = new THREE.GridHelper( 100, 10);
+            const gridhelper = new THREE.GridHelper( 500, 50);
             gridhelper.name = 'GridHelper';
             const vector = new THREE.Vector3(0, 1, 0);
             gridhelper.lookAt(vector);

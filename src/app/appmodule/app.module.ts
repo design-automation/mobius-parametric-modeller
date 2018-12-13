@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 // import app services
+import { DataService } from '@services';
+import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
 // import app modules
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '@shared/shared.module';
@@ -17,8 +19,6 @@ import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewFlowchartComponent, ViewFlowchartModule} from '@views';
 import { AppRoutingModule } from './app-routing.module';
 
-import { DataService as giDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
-import { DataService } from '@services';
 
 
 /**
@@ -47,7 +47,7 @@ import { DataService } from '@services';
         ViewFlowchartComponent,
         ViewGalleryComponent,
     ],
-    providers: [ DataService, giDataService ],
+    providers: [ DataService, GiViewerDataService ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

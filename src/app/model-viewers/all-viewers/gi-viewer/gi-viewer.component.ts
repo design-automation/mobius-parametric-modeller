@@ -45,6 +45,7 @@ export class GIViewerComponent {
     ngOnInit() {
         this.modelData = this.data;
         this.setModel(this.modelData);
+        this.dataService.newThreejsScene(this.modelData);
     }
     /**
      * ngDoCheck

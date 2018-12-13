@@ -1,11 +1,8 @@
-import * as THREE from 'three';
-import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 import { DataSubscriber } from '../data/data.subscriber';
 // import @angular stuff
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
-import { ThreejsScene } from './../data/threejs-scene';
+import { DataThreejs } from '../data/data.threejs';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -14,22 +11,22 @@ import { ThreejsScene } from './../data/threejs-scene';
 @Component({
     selector: 'threejs-viewer',
     templateUrl: './threejs-viewer.component.html',
-    styleUrls: ['./threejs-viewer.component.css']
+    styleUrls: ['./threejs-viewer.component.scss']
 })
 export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
-    _elem;
+    public _elem;
     // viewer size
-    _width: number;
-    _height: number;
+    public _width: number;
+    public _height: number;
     // threeJS scene data
-    _threejs_scene: ThreejsScene;
+    public _data_threejs: DataThreejs;
     // the GI model to display
-    _gi_model: GIModel;
-    // num entities
-    _threejs_nums: [number, number, number];
-    // what are these?
-    _modelshow = true;
-    _updatemodel = true;
+    public _gi_model: GIModel;
+    // num of positions, edges, triangles in threejs
+    public _threejs_nums: [number, number, number];
+    // flags for displayinhg text in viewer, see html
+    public _no_model = false;
+    public _model_error = false;
     /**
      * Creates a new viewer,
      * @param injector
@@ -43,7 +40,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      * Called when the viewer is initialised.
      */
     ngOnInit() {
-        // console.log('CALLING ngOnInit in THREEJS VIEWER');
+        // console.log('CALLING ngOnInit in THREEJS VIEWER COMPONENT');
         const container = this._elem.nativeElement.children.namedItem('threejs-container');
         // check for container
         if (!container) {
@@ -55,14 +52,14 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
         this._height = container.offsetHeight; // container.client_height;
         // get the model and scene
         this._gi_model = this.dataService.getGIModel();
-        this._threejs_scene = this.dataService.getThreejsScene();
-        container.appendChild( this._threejs_scene._renderer.domElement );
+        this._data_threejs = this.dataService.getThreejsScene();
+        container.appendChild( this._data_threejs._renderer.domElement );
         // set the numbers of entities
-        this._threejs_nums = this._threejs_scene._threejs_nums;
-        // ??? What is heppening here?
+        this._threejs_nums = this._data_threejs._threejs_nums;
+        // ??? What is happening here?
         const self = this;
-        this._threejs_scene._controls.addEventListener( 'change', function() {self.render( self ); });
-        self._threejs_scene._renderer.render( self._threejs_scene._scene, self._threejs_scene._camera );
+        this._data_threejs._controls.addEventListener( 'change', function() {self.render( self ); });
+        self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
         // update the model, calles getModel() from data service
         this.updateModel();
     }
@@ -71,24 +68,27 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      * @param self
      */
     public render(self) {
-        self._threejs_scene._renderer.render( self._threejs_scene._scene, self._threejs_scene._camera );
+        console.log('CALLING render in THREEJS VIEWER COMPONENT');
+        self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
     /**
      * Called on window resize.
      */
     public onResize(): void {
-        const container = this._elem.nativeElement.children.namedItem('container');
+        console.log('CALLING onResize in THREEJS VIEWER COMPONENT');
+        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         /// check for container
         if (!container) {
             console.error('No container in Three Viewer');
             return;
         }
         ///
-        this._width = container.offset_width;
-        this._height = container.offset_height;
-        this._threejs_scene._renderer.setSize(this._width, this._height);
-        this._threejs_scene._camera.aspect = this._width / this._height;
-        this._threejs_scene._camera.updateProjectionMatrix();
+        this._width = container.offsetWidth;
+        this._height = container.offsetHeight;
+        this.updateModel();
+        // this._data_threejs._renderer.setSize(this._width, this._height);
+        // this._data_threejs._camera.aspect = this._width / this._height;
+        // this._data_threejs._camera.updateProjectionMatrix();
     }
     /**
      * Called on model updated.
@@ -96,7 +96,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      */
     // public notify(message: string): void {
     //     console.log('CALLING notify in THREEJS VIEWER');
-    //     if (message === 'model_update' && this._threejs_scene) {
+    //     if (message === 'model_update' && this._data_threejs) {
     //         this.updateModel();
     //     }
     // }
@@ -104,28 +104,28 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit {
      * Update the model in the viewer.
      */
     public updateModel(): void {
-        // console.log('CALLING updateModel in THREEJS VIEWER');
-        if ( !this._gi_model || !this._threejs_scene ) {
+        // console.log('CALLING updateModel in THREEJS VIEWER COMPONENT');
+        if ( !this._gi_model || !this._data_threejs ) {
             console.warn('Model or Scene not defined.');
-            this._modelshow = false;
+            this._no_model = true;
             return;
         }
         try {
-            // Model
-            this._updatemodel = true;
-            this._modelshow = true;
+            // Set model flags
+            this._model_error = false;
+            this._no_model = false;
             // set renderer size
-            this._threejs_scene._renderer.setSize(this._width, this._height);
+            this._data_threejs._renderer.setSize(this._width, this._height);
             // set camera aspect ratio
-            this._threejs_scene._camera.aspect = this._width / this._height;
-            // Render
+            this._data_threejs._camera.aspect = this._width / this._height;
+            // render the scene
             this.render(this);
-            // print
-            console.log('>> this.scene >>', this._threejs_scene._scene);
+            // console log the scene
+            console.log('>> this.scene >>', this._data_threejs._scene);
         } catch (ex) {
             console.error('Error displaying model:', ex);
-            this._updatemodel = false;
-            this._threejs_scene._text = ex;
+            this._model_error = true;
+            this._data_threejs._text = ex;
         }
     }
 }

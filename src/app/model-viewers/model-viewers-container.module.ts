@@ -19,7 +19,7 @@ import { GIViewer } from './all-viewers/gi-viewer/gi-viewer.module';
 @NgModule({
     declarations: [
         DataViewersContainerComponent,
-        TextViewerComponent,
+        // TextViewerComponent,
         ConsoleViewerComponent,
         HelpViewerComponent,
     ],

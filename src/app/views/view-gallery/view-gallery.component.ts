@@ -19,13 +19,23 @@ export class ViewGalleryComponent {
     private allFiles: Observable<any>;
     @Output() switch = new EventEmitter();
 
+    /*
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
         this.allFiles = this.getFilesFromURL();
+    }
+
+    */
+
+    constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
+        if (!this.dataService.galleryFiles) {
+            this.dataService.galleryFiles = this.getFilesFromURL();
+        }
     }
 
     getFilesFromURL(): Observable<any> {
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
     }
+
 
     loadFile(fl) {
         const stream = Observable.create(observer => {

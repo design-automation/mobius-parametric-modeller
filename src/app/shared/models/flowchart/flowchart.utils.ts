@@ -1,6 +1,5 @@
 import { IFlowchart, canvasSize } from './flowchart.interface';
 import { NodeUtils, INode } from '@models/node';
-import { NgModuleFactoryLoader } from '@angular/core';
 import { IEdge } from '@models/edge';
 
 export class FlowchartUtils {
@@ -81,10 +80,24 @@ export class FlowchartUtils {
         const nodeOrder = [];
         FlowchartUtils.checkNode(nodeOrder, startNode, true);
         if (nodeOrder.length < flw.nodes.length) {
+            /*
             for (const node of flw.nodes) {
                 if (node.type !== 'start' && node.input.edges.length === 0) {
                     FlowchartUtils.checkNode(nodeOrder, node, false);
                 }
+            }
+            */
+            for (const node of flw.nodes) {
+                let check = false;
+                for (const existingNode of nodeOrder) {
+                    if (existingNode === node) {
+                        check = true;
+                        break;
+                    }
+                }
+                if (check) { continue; }
+                node.enabled = false;
+                nodeOrder.push(node);
             }
         }
         flw.nodes = nodeOrder;

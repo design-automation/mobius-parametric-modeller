@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
-import { NgClass } from '@angular/common';
 
 // todo: make internal to flowchart
 import { IFlowchart } from '@models/flowchart';

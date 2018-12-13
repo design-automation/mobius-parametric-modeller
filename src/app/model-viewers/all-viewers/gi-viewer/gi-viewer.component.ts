@@ -47,7 +47,7 @@ export class GIViewerComponent implements OnInit, DoCheck {
         this.setModel(this.modelData);
     }
     /**
-     * ngDoCheck
+     * ngDoCheck TODO: change to ngOnChange and ngOnDestroy
      */
     ngDoCheck() {
         if (this.modelData !== this.data) {

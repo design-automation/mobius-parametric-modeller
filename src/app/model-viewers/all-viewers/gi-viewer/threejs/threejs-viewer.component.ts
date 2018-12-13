@@ -71,14 +71,18 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit, Do
         console.log('CALLING render in THREEJS VIEWER COMPONENT');
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
-
+    /**
+     * Called when anything changes
+     */
     ngDoCheck() {
         const container = this._elem.nativeElement.children.namedItem('threejs-container');
         const width: number = container.offsetWidth;
         const height: number = container.offsetHeight;
         // this is when dimensions change
         if (width !== this._width || height !== this._height) {
-            this.onResize();
+            setTimeout(() => {
+                this.onResize();
+            }, 50);
         }
     }
     /**
@@ -98,7 +102,7 @@ export class ThreejsViewerComponent extends DataSubscriber implements OnInit, Do
         this._data_threejs._camera.aspect = this._width / this._height;
         this._data_threejs._camera.updateProjectionMatrix();
         this._data_threejs._renderer.setSize(this._width, this._height);
-        console.log('ASPECT:::::', this._data_threejs._camera.aspect);
+        // console.log('ASPECT:::::', this._data_threejs._camera.aspect);
         // this.updateModel();
     }
     /**

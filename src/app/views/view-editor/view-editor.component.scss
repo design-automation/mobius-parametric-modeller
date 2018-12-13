@@ -9,7 +9,9 @@ $separator: rgb(238,238,238);
 $text-color: rgb(80,80,80);
 $selected-color: rgb(0, 0, 150);
 $hover-color: blue;
-
+as-split-area{
+    overflow: hidden !important;
+}
 .container{
     position: relative;
     overflow: auto;

@@ -657,6 +657,12 @@ var DataService = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(DataService.prototype, "galleryFiles", {
+        get: function () { return DataService_1._galleryFiles; },
+        set: function (files) { DataService_1._galleryFiles = files; },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(DataService.prototype, "splitVal", {
         get: function () { return DataService_1._splitVal; },
         set: function (num) { DataService_1._splitVal = num; },
@@ -684,6 +690,7 @@ var DataService = /** @class */ (function () {
     DataService._flowchartPosition = undefined;
     DataService._newFlowchart = true;
     DataService._activeModelView = undefined;
+    DataService._galleryFiles = undefined;
     DataService._splitVal = 55;
     DataService = DataService_1 = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])()
@@ -853,9 +860,8 @@ module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ntextarea {\n  he
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataService", function() { return DataService; });
-/* harmony import */ var rxjs_Subject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/Subject */ "./node_modules/rxjs-compat/_esm5/Subject.js");
-/* harmony import */ var _data_threejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data.threejs */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.threejs.ts");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _data_threejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.threejs */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.threejs.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -865,7 +871,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 // import @angular stuff
 
@@ -878,30 +883,25 @@ var DataService = /** @class */ (function () {
      * Create a data service.
      */
     function DataService() {
+        // Others
+        // imVisible: boolean;
         this.selecting = [];
-        // Subscription Handling
-        this.subject = new rxjs_Subject__WEBPACK_IMPORTED_MODULE_0__["Subject"]();
         // Do nothing
-        console.log('CALLING constructor in DATA SERVICE');
+        // console.log('CALLING constructor in DATA SERVICE');
     }
     /**
-     * Msg
-     * @param message
+     * Get the THreejs Scene
      */
-    DataService.prototype.sendMessage = function (message) {
-        this.subject.next({ text: message });
+    DataService.prototype.getThreejsScene = function () {
+        // console.log('CALLING getThreejs Scene in DATA SERVICE');
+        return this._data_threejs;
     };
     /**
-     * Msg
+     * Set the THreejs Scene
      */
-    DataService.prototype.clearMessage = function () {
-        this.subject.next();
-    };
-    /**
-     * Msg
-     */
-    DataService.prototype.getMessage = function () {
-        return this.subject.asObservable();
+    DataService.prototype.setThreejsScene = function (model) {
+        // console.log('CALLING setThreejsScene Scene in DATA SERVICE');
+        this._data_threejs = new _data_threejs__WEBPACK_IMPORTED_MODULE_0__["DataThreejs"](model);
     };
     /**
      * Get the GI Model
@@ -911,65 +911,20 @@ var DataService = /** @class */ (function () {
         return this._model;
     };
     /**
-     * Get the THreejs Scene
-     */
-    DataService.prototype.getThreejsScene = function () {
-        // console.log('CALLING getThreejs Scene in DATA SERVICE');
-        return this._data_threejs;
-    };
-    DataService.prototype.newThreejsScene = function (model) {
-        // this._threejs_scene = new ThreejsScene(model);
-    };
-    /**
      * Set the GI Model
      * @param model
      */
-    DataService.prototype.setModel = function (model) {
-        console.log('CALLING setModel in DATA SERVICE');
+    DataService.prototype.setGIModel = function (model) {
+        // console.log('CALLING setModel in DATA SERVICE');
+        // console.log('DATTTTTTTTTTTTTTTTTTT', model);
         this._model = model;
-        this._data_threejs = new _data_threejs__WEBPACK_IMPORTED_MODULE_1__["DataThreejs"](model);
-        this.sendMessage('model_update');
+        // this._data_threejs.UpdateModel(model);
     };
     DataService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"])(),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
         __metadata("design:paramtypes", [])
     ], DataService);
     return DataService;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.subscriber.ts":
-/*!*****************************************************************************!*\
-  !*** ./src/app/model-viewers/all-viewers/gi-viewer/data/data.subscriber.ts ***!
-  \*****************************************************************************/
-/*! exports provided: DataSubscriber */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DataSubscriber", function() { return DataSubscriber; });
-/* harmony import */ var _data_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./data.service */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts");
-
-/**
- * DataSubscriber
- */
-var DataSubscriber = /** @class */ (function () {
-    /**
-     * Constructs a new data subscriber.
-     * @param injector
-     */
-    function DataSubscriber(injector) {
-        var _this = this;
-        this.dataService = injector.get(_data_service__WEBPACK_IMPORTED_MODULE_0__["DataService"]);
-        this.dataService.getMessage().subscribe(function (message) {
-            _this._message = message;
-            // this.notify(message.text);
-        });
-    }
-    return DataSubscriber;
 }());
 
 
@@ -1006,7 +961,6 @@ var DataThreejs = /** @class */ (function () {
         // grid
         this._grid_show = true;
         this._grid_center = [0, 0, 0];
-        console.log("Calling constructor in DataThreejs");
         //
         this._model = model;
         // scene
@@ -1014,8 +968,9 @@ var DataThreejs = /** @class */ (function () {
         this._scene.background = new three__WEBPACK_IMPORTED_MODULE_0__["Color"](0xcccccc);
         // renderer
         this._renderer = new three__WEBPACK_IMPORTED_MODULE_0__["WebGLRenderer"]({ antialias: true });
+        // this._renderer.setClearColor(0xEEEEEE);
         this._renderer.setPixelRatio(window.devicePixelRatio);
-        this._renderer.setSize(window.innerWidth / 2, 1000);
+        this._renderer.setSize(window.innerWidth / 1.8, window.innerHeight);
         // camera settings
         this._camera = new three__WEBPACK_IMPORTED_MODULE_0__["PerspectiveCamera"](50, 1, 0.01, 20000);
         this._camera.position.x = 150;
@@ -1035,23 +990,34 @@ var DataThreejs = /** @class */ (function () {
         // selecting
         this._raycaster = new three__WEBPACK_IMPORTED_MODULE_0__["Raycaster"]();
         this._raycaster.linePrecision = 0.05;
-        // add grid and lights to the scene
-        this._addGrid();
-        this._addHemisphereLight();
         // add geometry to the scene
-        if (model) {
-            // add geometry
-            var threejs_data = model.get3jsData();
-            // Create buffers that will be used by all geometry
-            var posis_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.positions, 3);
-            var normals_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.normals, 3);
-            var colors_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.colors, 3);
-            // Add geometry
-            this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
-            this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
-            this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
+        if (this._model) {
+            this.addGeometry(this._model);
+        }
+        else {
+            // add grid and lights
+            this._addGrid();
+            this._addHemisphereLight();
+            this._addAxes();
         }
     }
+    DataThreejs.prototype.addGeometry = function (model) {
+        while (this._scene.children.length > 0) {
+            this._scene.remove(this._scene.children[0]);
+        }
+        this._addGrid();
+        this._addHemisphereLight();
+        this._addAxes();
+        var threejs_data = model.get3jsData();
+        // Create buffers that will be used by all geometry
+        var posis_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.positions, 3);
+        var normals_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.normals, 3);
+        var colors_buffer = new three__WEBPACK_IMPORTED_MODULE_0__["Float32BufferAttribute"](threejs_data.colors, 3);
+        // Add geometry
+        this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
+        this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
+        this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
+    };
     // ============================================================================
     // Private methods
     // ============================================================================
@@ -1077,6 +1043,11 @@ var DataThreejs = /** @class */ (function () {
         var light = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](0xffffff, 0.5);
         light.position.set(0, 0, 1).normalize();
         this._scene.add(light);
+    };
+    // add axes
+    DataThreejs.prototype._addAxes = function () {
+        var axesHelper = new three__WEBPACK_IMPORTED_MODULE_0__["AxesHelper"](20);
+        this._scene.add(axesHelper);
     };
     /**
      * Draws a grid on the XY plane.
@@ -1157,7 +1128,7 @@ var DataThreejs = /** @class */ (function () {
         geom.addAttribute('color', colors_buffer);
         // geom.computeBoundingSphere();
         var mat = new three__WEBPACK_IMPORTED_MODULE_0__["PointsMaterial"]({
-            size: 0.1,
+            size: 1,
             vertexColors: three__WEBPACK_IMPORTED_MODULE_0__["VertexColors"]
         });
         // this._geometries.push(geom);
@@ -1178,7 +1149,7 @@ var DataThreejs = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"gi-viewer-container\" (mousedown)=\"leaflet()\">\r\n    <threejs-viewer></threejs-viewer>\r\n</div>\r\n\r\n<!-- <div id=\"appdiv\" (mousedown)=\"leaflet()\"> -->\r\n\t<!-- <as-split direction=\"vertical\"> -->\r\n\t\t<!-- <as-split-area [size]=\"90\" id=\"splitcontainer\"> -->\r\n\t\t  <!-- <div style=\"height: 100%\"> -->\r\n\t\t    <!-- <as-split direction=\"horizontal\"> -->\r\n\t\t\t\t\t<!-- <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\"> -->\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t      <!-- <as-split-area [size]=\"99.5\" id=\"splitviewer\"> -->\r\n\t\t        <!-- <viewer-container *ngIf=\"imVisible===false\"></viewer-container>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <!-- <threejs-viewer></threejs-viewer> -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t    <!-- </as-split> -->\r\n\t\t  <!-- </div> -->\r\n\t\t<!-- </as-split-area> -->\r\n\t\t<!-- <as-split-area [size]=\"10\" id=\"splittoolwindow\"> -->\r\n\t\t\t<!-- tool window -->\r\n\t\t<!-- </as-split-area> -->\r\n\t<!-- </as-split> -->\r\n<!-- </div> -->"
+module.exports = "<div id=\"gi-viewer-container\">\r\n    <threejs-viewer [model]='data'></threejs-viewer>\r\n</div>\r\n\r\n<!-- <div id=\"appdiv\" (mousedown)=\"leaflet()\"> -->\r\n\t<!-- <as-split direction=\"vertical\"> -->\r\n\t\t<!-- <as-split-area [size]=\"90\" id=\"splitcontainer\"> -->\r\n\t\t  <!-- <div style=\"height: 100%\"> -->\r\n\t\t    <!-- <as-split direction=\"horizontal\"> -->\r\n\t\t\t\t\t<!-- <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\"> -->\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t      <!-- <as-split-area [size]=\"99.5\" id=\"splitviewer\"> -->\r\n\t\t        <!-- <viewer-container *ngIf=\"imVisible===false\"></viewer-container>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <!-- <threejs-viewer></threejs-viewer> -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t    <!-- </as-split> -->\r\n\t\t  <!-- </div> -->\r\n\t\t<!-- </as-split-area> -->\r\n\t\t<!-- <as-split-area [size]=\"10\" id=\"splittoolwindow\"> -->\r\n\t\t\t<!-- tool window -->\r\n\t\t<!-- </as-split-area> -->\r\n\t<!-- </as-split> -->\r\n<!-- </div> -->"
 
 /***/ }),
 
@@ -1189,7 +1160,7 @@ module.exports = "<div id=\"gi-viewer-container\" (mousedown)=\"leaflet()\">\r\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "#gi-viewer-container {\n  width: 100%;\n  height: 100%;\n  background-color: yellow;\n  overflow: hidden; }\n"
+module.exports = "#gi-viewer-container {\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n"
 
 /***/ }),
 
@@ -1221,6 +1192,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 // import app services
 
 // import others
+// import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 /**
  * GIViewerComponent
  * This component is used in /app/model-viewers/model-viewers-container.component.html
@@ -1232,44 +1204,38 @@ var GIViewerComponent = /** @class */ (function () {
      */
     function GIViewerComponent(dataService) {
         this.dataService = dataService;
-        this.imVisible = false; // TODO what is this?
         // Do nothing
     }
+    /**
+     * ngOnInit
+     */
+    GIViewerComponent.prototype.ngOnInit = function () {
+        if (this.dataService.getThreejsScene() === undefined) {
+            this.dataService.setThreejsScene(this.data);
+        }
+    };
+    /**
+     * ngDoCheck
+     */
+    GIViewerComponent.prototype.ngDoCheck = function () {
+        // console.log('MODEL CHANGED MODEL CHANGED MODEL CHANGED');
+        // if (this.data !== this.modelData) {
+        this.setModel(this.data);
+        // }
+    };
     /**
      * setModel Sets the model in the data service.
      * @param data
      */
     GIViewerComponent.prototype.setModel = function (data) {
         try {
-            this.dataService.setModel(data);
+            this.dataService.setGIModel(data);
+            // this.modelData = this.data;
         }
         catch (ex) {
-            this.modelData = undefined;
+            // this.modelData = undefined;
             console.error('Error generating model', ex);
         }
-    };
-    /**
-     * ngOnInit
-     */
-    GIViewerComponent.prototype.ngOnInit = function () {
-        this.modelData = this.data;
-        this.setModel(this.modelData);
-        // this.dataService.newThreejsScene(this.modelData);
-    };
-    /**
-     * ngDoCheck TODO: change to ngOnChange and ngOnDestroy
-     */
-    GIViewerComponent.prototype.ngDoCheck = function () {
-        if (this.modelData !== this.data) {
-            this.modelData = this.data;
-            this.setModel(this.modelData);
-        }
-    };
-    /**
-     * ??? what does this do?
-     */
-    GIViewerComponent.prototype.leaflet = function () {
-        this.imVisible = this.dataService.imVisible;
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -1404,21 +1370,9 @@ module.exports = ":host {\n  width: 100%;\n  height: 100%;\n  background-color: 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ThreejsViewerComponent", function() { return ThreejsViewerComponent; });
-/* harmony import */ var _data_data_subscriber__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data/data.subscriber */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.subscriber.ts");
+/* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/data.service */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1431,24 +1385,24 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 // import @angular stuff
 
+// import { IModel } from 'gs-json';
+
 /**
  * A threejs viewer for viewing geo-info (GI) models.
  * This component gets used in /app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html
  */
-var ThreejsViewerComponent = /** @class */ (function (_super) {
-    __extends(ThreejsViewerComponent, _super);
+var ThreejsViewerComponent = /** @class */ (function () {
     /**
      * Creates a new viewer,
      * @param injector
      * @param elem
      */
     function ThreejsViewerComponent(injector, elem) {
-        var _this = _super.call(this, injector) || this;
         // flags for displayinhg text in viewer, see html
-        _this._no_model = false;
-        _this._model_error = false;
-        _this._elem = elem;
-        return _this;
+        this._no_model = false;
+        this._model_error = false;
+        this._elem = elem;
+        this.dataService = injector.get(_data_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"]);
     }
     /**
      * Called when the viewer is initialised.
@@ -1474,15 +1428,13 @@ var ThreejsViewerComponent = /** @class */ (function (_super) {
         var self = this;
         this._data_threejs._controls.addEventListener('change', function () { self.render(self); });
         self._data_threejs._renderer.render(self._data_threejs._scene, self._data_threejs._camera);
-        // update the model, calles getModel() from data service
-        this.updateModel();
     };
     /**
      * TODO What is "self"? why not use "this"
      * @param self
      */
     ThreejsViewerComponent.prototype.render = function (self) {
-        console.log('CALLING render in THREEJS VIEWER COMPONENT');
+        // console.log('CALLING render in THREEJS VIEWER COMPONENT');
         self._data_threejs._renderer.render(self._data_threejs._scene, self._data_threejs._camera);
     };
     /**
@@ -1491,67 +1443,58 @@ var ThreejsViewerComponent = /** @class */ (function (_super) {
     ThreejsViewerComponent.prototype.ngDoCheck = function () {
         var _this = this;
         var container = this._elem.nativeElement.children.namedItem('threejs-container');
-        var width = container.offsetWidth;
-        var height = container.offsetHeight;
-        // this is when dimensions change
-        if (width !== this._width || height !== this._height) {
-            setTimeout(function () {
-                _this.onResize();
-            }, 50);
-        }
-    };
-    /**
-     * Called on window resize.
-     */
-    ThreejsViewerComponent.prototype.onResize = function () {
-        console.log('CALLING onResize in THREEJS VIEWER COMPONENT');
-        var container = this._elem.nativeElement.children.namedItem('threejs-container');
-        /// check for container
         if (!container) {
             console.error('No container in Three Viewer');
             return;
         }
-        ///
-        this._width = container.offsetWidth;
-        this._height = container.offsetHeight;
-        this._data_threejs._camera.aspect = this._width / this._height;
-        this._data_threejs._camera.updateProjectionMatrix();
-        this._data_threejs._renderer.setSize(this._width, this._height);
-        // console.log('ASPECT:::::', this._data_threejs._camera.aspect);
-        // this.updateModel();
+        var width = container.offsetWidth;
+        var height = container.offsetHeight;
+        // this is when dimensions change
+        if (width !== this._width || height !== this._height) {
+            this._width = width;
+            this._height = height;
+            setTimeout(function () {
+                _this._data_threejs._camera.aspect = _this._width / _this._height;
+                _this._data_threejs._camera.updateProjectionMatrix();
+                _this._data_threejs._renderer.setSize(_this._width, _this._height);
+                _this.render(_this);
+            }, 10);
+        }
+    };
+    // receive data -> model from gi-viewer component and update model in the scene
+    ThreejsViewerComponent.prototype.ngOnChanges = function (changes) {
+        if (changes['model']) {
+            if (this.model) {
+                this.updateModel(this.model);
+            }
+        }
     };
     /**
      * Called on model updated.
      * @param message
      */
-    // public notify(message: string): void {
-    //     console.log('CALLING notify in THREEJS VIEWER');
-    //     if (message === 'model_update' && this._data_threejs) {
-    //         this.updateModel();
-    //     }
-    // }
     /**
      * Update the model in the viewer.
      */
-    ThreejsViewerComponent.prototype.updateModel = function () {
+    ThreejsViewerComponent.prototype.updateModel = function (model) {
+        // console log the scene
+        this._data_threejs = this.dataService.getThreejsScene();
+        // console.log('>> this.scene >>', this._data_threejs._scene);
+        // this._gi_model = this.dataService.getGIModel();
+        this._gi_model = model;
         // console.log('CALLING updateModel in THREEJS VIEWER COMPONENT');
-        if (!this._gi_model || !this._data_threejs) {
+        if (!this._gi_model) {
             console.warn('Model or Scene not defined.');
             this._no_model = true;
             return;
         }
         try {
+            // add geometry to the scene
+            this._data_threejs.addGeometry(this._gi_model);
             // Set model flags
             this._model_error = false;
             this._no_model = false;
-            // set renderer size
-            this._data_threejs._renderer.setSize(this._width, this._height);
-            // set camera aspect ratio
-            this._data_threejs._camera.aspect = this._width / this._height;
-            // render the scene
             this.render(this);
-            // console log the scene
-            console.log('>> this.scene >>', this._data_threejs._scene);
         }
         catch (ex) {
             console.error('Error displaying model:', ex);
@@ -1559,6 +1502,10 @@ var ThreejsViewerComponent = /** @class */ (function (_super) {
             this._data_threejs._text = ex;
         }
     };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        __metadata("design:type", _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__["GIModel"])
+    ], ThreejsViewerComponent.prototype, "model", void 0);
     ThreejsViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'threejs-viewer',
@@ -1568,7 +1515,7 @@ var ThreejsViewerComponent = /** @class */ (function (_super) {
         __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injector"], _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"]])
     ], ThreejsViewerComponent);
     return ThreejsViewerComponent;
-}(_data_data_subscriber__WEBPACK_IMPORTED_MODULE_0__["DataSubscriber"]));
+}());
 
 
 
@@ -1621,101 +1568,6 @@ var HelpViewerComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], HelpViewerComponent);
     return HelpViewerComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts":
-/*!***************************************************************************!*\
-  !*** ./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts ***!
-  \***************************************************************************/
-/*! exports provided: TextViewerComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TextViewerComponent", function() { return TextViewerComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @modules */ "./src/app/core/modules/index.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-/**
- * TextViewerComponent
- */
-var TextViewerComponent = /** @class */ (function () {
-    /**
-     * constructor
-     */
-    function TextViewerComponent() {
-        // console.log(`Text Viewer Created`);
-    }
-    /**
-     * ngOnInit
-     */
-    TextViewerComponent.prototype.ngOnInit = function () {
-        if (typeof this.data === 'number' || this.data === undefined) {
-            this.output = this.data;
-        }
-        else if (typeof this.data === 'string') {
-            this.output = '"' + this.data + '"';
-        }
-        else if (this.data.constructor === [].constructor) {
-            this.output = JSON.stringify(this.data);
-        }
-        else if (this.data.constructor === {}.constructor) {
-            this.output = JSON.stringify(this.data);
-        }
-        else {
-            // console.log('Unknown output type:', this.data);
-            // this.output = functions.__stringify__(this.data);
-            this.output = _modules__WEBPACK_IMPORTED_MODULE_1__["Model"].__stringify__(this.data); // TODO - make this generic
-        }
-    };
-    /**
-     * ngDoCheck
-     */
-    TextViewerComponent.prototype.ngDoCheck = function () {
-        if (typeof this.data === 'number' || this.data === undefined) {
-            this.output = this.data;
-        }
-        else if (typeof this.data === 'string') {
-            this.output = '"' + this.data + '"';
-        }
-        else if (this.data.constructor === [].constructor) {
-            this.output = JSON.stringify(this.data);
-        }
-        else if (this.data.constructor === {}.constructor) {
-            this.output = JSON.stringify(this.data);
-        }
-        else {
-            // console.log('Unknown output type:', this.data);
-            this.output = _modules__WEBPACK_IMPORTED_MODULE_1__["Model"].__stringify__(this.data); // TODO - make this generic
-        }
-    };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], TextViewerComponent.prototype, "data", void 0);
-    TextViewerComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'text-viewer',
-            template: "<textarea>{{ output || \"no-value\" }}</textarea>",
-            styles: [__webpack_require__(/*! ../general-viewer.scss */ "./src/app/model-viewers/all-viewers/general-viewer.scss")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], TextViewerComponent);
-    return TextViewerComponent;
 }());
 
 
@@ -1924,10 +1776,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./model-viewers-container.component */ "./src/app/model-viewers/model-viewers-container.component.ts");
 /* harmony import */ var _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model-viewers.config */ "./src/app/model-viewers/model-viewers.config.ts");
-/* harmony import */ var _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./all-viewers/text-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.module */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts");
+/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.module */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1941,8 +1792,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
-// viewers
 
 
 
@@ -1965,9 +1814,9 @@ var DataViewersContainer = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             declarations: [
                 _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__["DataViewersContainerComponent"],
-                _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["TextViewerComponent"],
-                _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__["ConsoleViewerComponent"],
-                _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_7__["HelpViewerComponent"],
+                // TextViewerComponent,
+                _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["ConsoleViewerComponent"],
+                _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__["HelpViewerComponent"],
             ],
             exports: [
                 _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__["DataViewersContainerComponent"]
@@ -1975,7 +1824,7 @@ var DataViewersContainer = /** @class */ (function () {
             imports: [
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
-                _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_8__["GIViewer"],
+                _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_7__["GIViewer"],
             ],
             entryComponents: _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
             providers: []
@@ -2000,28 +1849,25 @@ var DataViewersContainer = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VIEWER_ARR", function() { return VIEWER_ARR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Viewers", function() { return Viewers; });
-/* harmony import */ var _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./all-viewers/text-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/text-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
-// Step-1: Add new ViewerComponet here
-
+/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
 
 
 
 var VIEWER_ARR = [
     // Step-2: Add Component here
-    _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_3__["GIViewerComponent"],
-    _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"],
-    _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["ConsoleViewerComponent"],
-    _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_2__["HelpViewerComponent"],
+    _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_2__["GIViewerComponent"],
+    // TextViewerComponent,
+    _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["ConsoleViewerComponent"],
+    _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["HelpViewerComponent"],
 ];
 var Viewers = [
     // Step-3: Add Viewer Definition here: name, icon and component
-    { name: '3D Viewer', icon: undefined, component: _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_3__["GIViewerComponent"] },
-    { name: 'Summary', icon: undefined, component: _all_viewers_text_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["TextViewerComponent"] },
-    { name: 'Console', icon: undefined, component: _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["ConsoleViewerComponent"] },
-    { name: 'Help', icon: undefined, component: _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_2__["HelpViewerComponent"] },
+    { name: '3D Viewer', icon: undefined, component: _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_2__["GIViewerComponent"] },
+    // { name: 'Summary', icon: undefined, component: TextViewerComponent },
+    { name: 'Console', icon: undefined, component: _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["ConsoleViewerComponent"] },
+    { name: 'Help', icon: undefined, component: _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["HelpViewerComponent"] },
 ];
 
 
@@ -3797,7 +3643,8 @@ var CodeUtils = /** @class */ (function () {
                             argVals.push('__params__.model');
                             return [3 /*break*/, 16];
                         }
-                        if (arg.value && arg.value.substring(0, 1) === '@') {
+                        // TODO-QUERY: update the query statement
+                        if (arg.value && arg.value.substring(0, 1) === '#') {
                             if (prod.meta.module.toUpperCase() === 'QUERY'
                                 && prod.meta.name.toUpperCase() === 'SET'
                                 && arg.name.toUpperCase() === 'STATEMENT') {
@@ -4242,11 +4089,28 @@ var FlowchartUtils = /** @class */ (function () {
         var nodeOrder = [];
         FlowchartUtils.checkNode(nodeOrder, startNode, true);
         if (nodeOrder.length < flw.nodes.length) {
-            for (var _b = 0, _c = flw.nodes; _b < _c.length; _b++) {
-                var node = _c[_b];
+            /*
+            for (const node of flw.nodes) {
                 if (node.type !== 'start' && node.input.edges.length === 0) {
                     FlowchartUtils.checkNode(nodeOrder, node, false);
                 }
+            }
+            */
+            for (var _b = 0, _c = flw.nodes; _b < _c.length; _b++) {
+                var node = _c[_b];
+                var check = false;
+                for (var _d = 0, nodeOrder_1 = nodeOrder; _d < nodeOrder_1.length; _d++) {
+                    var existingNode = nodeOrder_1[_d];
+                    if (existingNode === node) {
+                        check = true;
+                        break;
+                    }
+                }
+                if (check) {
+                    continue;
+                }
+                node.enabled = false;
+                nodeOrder.push(node);
             }
         }
         flw.nodes = nodeOrder;
@@ -6224,7 +6088,7 @@ var ACTIONS;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border -->\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
+module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n     -->\r\n\r\n    <!-- Triangle with border -->\r\n    <path class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.d]=\"'M'+node.position.x +' '+ (node.position.y + 30) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) +\r\n                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 80) + ' Z'\" \r\n        />\r\n\r\n    <!-- circles as draggable input/output ports of the node -->\r\n    <svg:circle\r\n    *ngFor=\"let prod of node.procedure; let i=index\"\r\n    r=3\r\n    [attr.cx]=\"node.position.x + (100 * (i+1) / (node.procedure.length + 1))\" \r\n    [attr.cy]=\"node.position.y + 22\"\r\n    class='inputPort'/>\r\n\r\n\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border \r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n    -->\r\n    \r\n    <!-- Triangle with border -->\r\n    <path class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.d]=\"'M'+node.position.x +' '+ (node.position.y + 50) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) +\r\n                 ' L'+ (node.position.x + 50) +' '+ node.position.y + ' Z'\" \r\n        />\r\n\r\n    <svg:circle\r\n    *ngIf=\"node.procedure.length > 0\"\r\n    r=3\r\n    [attr.cx]=\"node.position.x + 50\" \r\n    [attr.cy]=\"node.position.y + 58\"\r\n    class='inputPort'/>\r\n    \r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
 
 /***/ }),
 
@@ -7345,7 +7209,7 @@ var ViewGalleryRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <h2>Möbius Gallery</h2>\r\n                <hr>\r\n                <h4>Displaying {{ (allFiles | async)?.length}} projects</h4>\r\n                <div class=\"container__element container__element--project-container\">\r\n                    <div class=\"project-container__project\" *ngFor=\"let f of  (allFiles | async)\">\r\n                        <div class=\"project__content\" (click)='loadFile(f)'>\r\n                            {{ f.name | simplename }}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n"
+module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <h2>Möbius Gallery</h2>\r\n                <hr>\r\n                <h4>Displaying {{ (allFiles | async)?.length}} projects</h4>\r\n                <div class=\"container__element container__element--project-container\">\r\n                    <div class=\"project-container__project\" *ngFor=\"let f of  (dataService.galleryFiles | async)\">\r\n                        <div class=\"project__content\" (click)='loadFile(f)'>\r\n                            {{ f.name | simplename }}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -7396,12 +7260,20 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ViewGalleryComponent = /** @class */ (function () {
+    /*
+    constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
+        this.allFiles = this.getFilesFromURL();
+    }
+
+    */
     function ViewGalleryComponent(http, dataService, router) {
         this.http = http;
         this.dataService = dataService;
         this.router = router;
         this.switch = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.allFiles = this.getFilesFromURL();
+        if (!this.dataService.galleryFiles) {
+            this.dataService.galleryFiles = this.getFilesFromURL();
+        }
     }
     ViewGalleryComponent.prototype.getFilesFromURL = function () {
         return this.http.get(_view_gallery_config__WEBPACK_IMPORTED_MODULE_2__["Constants"].GALLERY_URL, { responseType: 'json' });
@@ -9774,7 +9646,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Dropbox\Files\Software\GitHub\design-automation\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! F:\Dev\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
 
 
 /***/ })

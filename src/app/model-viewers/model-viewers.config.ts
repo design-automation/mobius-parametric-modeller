@@ -8,7 +8,7 @@ import { GIViewerComponent } from './all-viewers/gi-viewer/gi-viewer.component';
 export const VIEWER_ARR = [
     // Step-2: Add Component here
     GIViewerComponent,
-    TextViewerComponent,
+    // TextViewerComponent,
     ConsoleViewerComponent,
     HelpViewerComponent,
     // JSONViewerComponent,
@@ -20,7 +20,7 @@ export const VIEWER_ARR = [
 export const Viewers: IView[] = [
     // Step-3: Add Viewer Definition here: name, icon and component
     { name: '3D Viewer', icon: undefined, component: GIViewerComponent },
-    { name: 'Summary', icon: undefined, component: TextViewerComponent },
+    // { name: 'Summary', icon: undefined, component: TextViewerComponent },
     { name: 'Console', icon: undefined, component: ConsoleViewerComponent },
     { name: 'Help', icon: undefined, component: HelpViewerComponent },
     // { name: 'json-viewer', icon: undefined, component: JSONViewerComponent },

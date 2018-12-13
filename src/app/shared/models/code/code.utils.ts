@@ -103,7 +103,8 @@ export class CodeUtils {
                         argVals.push('__params__.model');
                         continue;
                     }
-                    if (arg.value && arg.value.substring(0, 1) === '@') {
+                    // TODO-QUERY: update the query statement
+                    if (arg.value && arg.value.substring(0, 1) === '#') {
                         if (prod.meta.module.toUpperCase() === 'QUERY'
                             && prod.meta.name.toUpperCase() === 'SET'
                             && arg.name.toUpperCase() === 'STATEMENT') {

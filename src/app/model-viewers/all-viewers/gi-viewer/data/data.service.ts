@@ -61,7 +61,7 @@ export class DataService {
     }
 
     newThreejsScene(model: any) {
-        this._threejs_scene = new ThreejsScene(model);
+        // this._threejs_scene = new ThreejsScene(model);
     }
 
     /**

@@ -38,7 +38,7 @@
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="start"'>
 
-    <!-- ellipse with border -->
+    <!-- ellipse with border
     <ellipse class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
@@ -47,6 +47,26 @@
         [attr.rx]="40"
         [attr.ry]="30"
         />
+     -->
+
+    <!-- Triangle with border -->
+    <path class="node" 
+        [class.node--selected]='selected'
+        [class.node--error]="node.hasError"
+        [attr.d]="'M'+node.position.x +' '+ (node.position.y + 30) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) +
+                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 80) + ' Z'" 
+        />
+
+    <!-- circles as draggable input/output ports of the node -->
+    <svg:circle
+    *ngFor="let prod of node.procedure; let i=index"
+    r=3
+    [attr.cx]="node.position.x + (100 * (i+1) / (node.procedure.length + 1))" 
+    [attr.cy]="node.position.y + 22"
+    class='inputPort'/>
+
+
 
     <!-- node description inside the ellipse -->
     <svg:foreignObject 
@@ -69,7 +89,7 @@
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="end"'>
 
-    <!-- ellipse with border -->
+    <!-- ellipse with border 
     <ellipse class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
@@ -79,6 +99,24 @@
         [attr.rx]="40"
         [attr.ry]="30"
         />
+    -->
+    
+    <!-- Triangle with border -->
+    <path class="node" 
+        [class.node--selected]='selected'
+        [class.node--error]="node.hasError"
+        [attr.d]="'M'+node.position.x +' '+ (node.position.y + 50) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) +
+                 ' L'+ (node.position.x + 50) +' '+ node.position.y + ' Z'" 
+        />
+
+    <svg:circle
+    *ngIf="node.procedure.length > 0"
+    r=3
+    [attr.cx]="node.position.x + 50" 
+    [attr.cy]="node.position.y + 58"
+    class='inputPort'/>
+    
 
     <!-- node description inside the ellipse -->
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 18" 

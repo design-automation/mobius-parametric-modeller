@@ -28,6 +28,8 @@ export class DataThreejs {
      * Constructs a new data subscriber.
      */
     constructor(model: GIModel) {
+        console.log("Calling constructor in DataThreejs");
+        //
         this._model = model;
         // scene
         this._scene = new THREE.Scene();

@@ -724,10 +724,15 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 this.edge.source.edges.push(this.edge);
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
-                if (this.edge.source.parentNode.enabled) {
-                    ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
-                } else {
-                    ViewFlowchartComponent.disableNode(this.edge.target.parentNode);
+                try {
+                    if (this.edge.source.parentNode.enabled) {
+                        ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
+                    } else {
+                        ViewFlowchartComponent.disableNode(this.edge.target.parentNode);
+                    }
+                } catch (ex) {
+                    this.edge.target.parentNode.hasError = true;
+                    this.edge.source.parentNode.hasError = true;
                 }
                 break;
             }

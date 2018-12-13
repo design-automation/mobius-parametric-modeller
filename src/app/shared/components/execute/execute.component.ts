@@ -5,7 +5,6 @@ import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
 
 import * as Modules from '@modules';
-import * as gs from 'gs-json';
 import { _parameterTypes } from '@modules';
 import { DataService } from '@services';
 

@@ -1,5 +1,11 @@
 <div class='container__header'>
 
+    <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+    <div style="display: none;">
+        <file-new></file-new>
+        <file-save></file-save>
+        <file-load></file-load>
+    </div>
     
     <!-- top left dropdown menu -->
     <div class="dropmenu">
@@ -27,7 +33,7 @@
             </mat-menu>
         </div>
     </div>
-    <h5>flowchart name</h5>
+    <h5>{{getTitle()}}</h5>
 
     <!-- 5 buttons on top right-->
     <div class='button-group'>
@@ -50,11 +56,4 @@
     </div>
 
 
-</div>
-
-<!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
-<div style="display: none;">
-    <file-new></file-new>
-    <file-save></file-save>
-    <file-load></file-load>
 </div>

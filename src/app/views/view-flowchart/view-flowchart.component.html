@@ -1,7 +1,7 @@
 <div class='container'>
         <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
             <as-split-area [size]="100 - dataService.splitVal">
-                <panel-header></panel-header>
+                <panel-header [title]='dataService.flowchart.name'></panel-header>
                 <!-- viewchild content -->
                 <div class='content__panel'>
                     <div id = 'flowchart-main-container' class='flowchart-container'>
@@ -79,7 +79,7 @@
                         
                             <!-- focus on flowchart button on the top right of the svg -->
                             <button id='zoomToFit' class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
-                                <mat-icon>control_camera</mat-icon>
+                                <mat-icon svgIcon="cZoom"></mat-icon>
                             </button>
                             
                         

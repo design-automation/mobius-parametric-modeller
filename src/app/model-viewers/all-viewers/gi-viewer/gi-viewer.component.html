@@ -1,11 +1,21 @@
 <div id="gi-viewer-container">
 	<as-split direction="vertical">
-		<as-split-area [size]="80" id="three-js">
+		<as-split-area [size]="70" id="three-js">
 			<threejs-viewer [model]='data'></threejs-viewer>
 		</as-split-area>
-		<as-split-area [size]='20' id="attrib">
-			<h1>Attribute goes here</h1>
-			<attribute></attribute>
+		<as-split-area [size]='30' id="attrib">
+				<mat-tab-group animationDuration="0ms">
+					<mat-tab label="Attribute">
+						<attribute [data]='data'></attribute>
+					</mat-tab>
+					<mat-tab label="Settings">
+						<ul>
+							<ol>switch on/off normals</ol>
+							<ol>intensity of light</ol>
+							<ol>etcs...</ol>
+						</ul>
+					</mat-tab>
+				</mat-tab-group>
 		</as-split-area>
 	</as-split>
 </div>

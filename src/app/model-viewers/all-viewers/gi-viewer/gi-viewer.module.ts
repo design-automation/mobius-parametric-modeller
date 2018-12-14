@@ -6,7 +6,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule} from '@angular/material/tabs';
 import { MatTooltipModule} from '@angular/material/tooltip';
-import { MatSortModule, MatTableModule, MatPaginatorModule} from '@angular/material';
+import { MatSortModule, MatTableModule, MatPaginatorModule, MatIconModule} from '@angular/material';
 import { MatExpansionModule} from '@angular/material/expansion';
 
 // import app components
@@ -30,6 +30,7 @@ import { AttributeComponent } from './attribute/attribute.component';
         CommonModule,
         AngularSplitModule,
         MatSliderModule,
+        MatIconModule,
         NgxPaginationModule,
         MatExpansionModule,
         MatTabsModule,

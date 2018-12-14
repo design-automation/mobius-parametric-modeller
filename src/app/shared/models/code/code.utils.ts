@@ -105,6 +105,9 @@ export class CodeUtils {
                     }
                     // TODO-QUERY: update the query statement
                     if (arg.value && arg.value.substring(0, 1) === '#') {
+                        argVals.push('`' + arg.value + '`');
+                        continue;
+                        /*
                         if (prod.meta.module.toUpperCase() === 'QUERY'
                             && prod.meta.name.toUpperCase() === 'SET'
                             && arg.name.toUpperCase() === 'STATEMENT') {
@@ -113,6 +116,7 @@ export class CodeUtils {
                         }
                         argVals.push('__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, '\'') + '" )');
                         continue;
+                        */
                     }
                     // else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                     argVals.push(arg.value);

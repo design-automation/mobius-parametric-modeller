@@ -7,7 +7,7 @@ import { VIEWER_ARR } from './model-viewers.config';
 import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component';
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/viewer.component';
 import { HelpViewerComponent } from './all-viewers/help-viewer/viewer.component';
-import { GIViewer } from './all-viewers/gi-viewer/gi-viewer.module';
+import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
 // import { ThreejsViewerComponent } from './viewers/gi-viewer/threejs/threejs-viewer.component';
 // import { MobiusCesium } from './viewers/cesium-viewer/mobius-cesium.module';
 // import { VisualiseComponent } from "./viewers/cesium-viewer/setting/visualise.component";
@@ -29,7 +29,7 @@ import { GIViewer } from './all-viewers/gi-viewer/gi-viewer.module';
     imports: [
         CommonModule,
         FormsModule,
-        GIViewer,
+        GIViewerModule,
     ],
     entryComponents: [
         ...VIEWER_ARR

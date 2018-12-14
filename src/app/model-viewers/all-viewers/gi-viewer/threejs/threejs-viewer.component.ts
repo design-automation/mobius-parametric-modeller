@@ -56,7 +56,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this._width = container.offsetWidth; // container.client_width;
         this._height = container.offsetHeight; // container.client_height;
         // get the model and scene
-        this._gi_model = this.dataService.getGIModel();
+        // this._gi_model = this.dataService.getGIModel();
         this._data_threejs = this.dataService.getThreejsScene();
         container.appendChild( this._data_threejs._renderer.domElement );
         // set the numbers of entities

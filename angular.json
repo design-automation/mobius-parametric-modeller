@@ -18,7 +18,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico",
+              "src/mobius.ico",
               { "glob": "**/*", "input": "./node_modules/cesium/Build/Cesium", "output": "/assets/cesium" } 
             ],
             "styles": [

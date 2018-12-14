@@ -1,4 +1,7 @@
-<ng-container *ngIf="nodeType == ''">
+<h2>{{node.name}}</h2>
+<ng-container *ngIf="node.type == ''">
+
+
     <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
 
     <button id='basic-funcs' class="accordion" 
@@ -72,12 +75,12 @@
 </ng-container>
 
 <!-- functions for input nodes -->
-<div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'start'">
+<div id='toolset_inp' class = 'toolset' *ngIf="node.type == 'start'">
     <div class='toolset__functions'>
         <section *ngFor='let type of ProcedureTypesArr' >
             <div *ngIf='type.toUpperCase() == "CONSTANT"'>
                 <ul class='toolset__functions--subset'>
-                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>
+                    <li (click)='add(ProcedureTypes[type])'> Global Var </li>
                 </ul>
             </div>
         </section>
@@ -94,7 +97,7 @@
 </div>
 
 <!-- functions for output nodes -->
-<div id='toolset_inp' class = 'toolset' *ngIf="nodeType == 'end'">
+<div id='toolset_inp' class = 'toolset' *ngIf="node.type == 'end'">
     <div class='toolset__functions' *ngIf="hasProd===false">
         <!--
         <section *ngFor='let type of ProcedureTypesArr' >

@@ -1,0 +1,112 @@
+$padding: 40px;
+$text-color: rgb(80,80,80);
+$header-height: 35px;
+$title-background: #ccc;
+$light-background: rgb(220,220,220);
+$separator: rgb(238,238,238);
+$text-color: rgb(80,80,80);
+$selected-color: rgb(0, 0, 150);
+$hover-color: blue;
+
+h5{
+    float: left;
+    font-size: 14px;
+    font-family: sans-serif;
+    padding-top: 14px;
+    padding-left: 10px;
+    line-height: 14px;
+    margin: 0px;
+    color: $text-color;
+}
+.container__header{
+    flex: 0 1 auto;
+    min-height: $header-height;
+
+    width: 100%;
+    display: inline-block;
+    //flex-direction: row;
+    //justify-content: space-between;
+
+    padding: 0px 0px 0px 15px;
+
+    background-color: $title-background;
+    border-bottom: 3px solid $separator;
+
+    line-height: $header-height;
+    //text-transform: uppercase;
+
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+
+    /* tab styling */
+    .tab {
+        border: 2px ;
+        overflow: hidden;
+        background-color: $title-background;
+    }
+
+    .tab button {
+        display: inline-block;
+        vertical-align: bottom;
+        background-color: inherit;
+        color: $text-color;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 8px 10px;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+
+    .tab button:hover {
+        color:$hover-color;
+    }
+
+    .tab button.active {
+        background-color: $title-background;
+        color: $selected-color;
+        font-weight: 600;
+        border-color: #222 !important;
+    }
+
+    /* dropdown menu styling */
+
+    .dropmenu {
+        float: left;
+        display: inline-flex;
+    }
+}
+
+mat-icon {
+    width: 30px;
+    height: 30px;
+}
+
+button.btn{ 
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 0px 0px 0px;
+    font-size: 12px;
+    line-height: 10px;
+    height: 30px;
+    border: none;
+    border-radius: 0px;
+    background-color: transparent; 
+    color: $text-color;
+
+    &.active{
+        background-color: $separator;
+        color: $selected-color;
+        font-weight: 600;
+        border-color: #222 !important;
+    }
+}
+button.btn:hover{
+    color:$hover-color;
+}
+
+.button-group{
+    float: right;
+    padding-right: 15px;
+}

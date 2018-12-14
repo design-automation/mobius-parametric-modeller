@@ -1,6 +1,7 @@
 $text-color: rgb(80,80,80);
 $prod-background-color: rgb(250,250,250);
 $background-color: rgb(220,220,220);
+$button-color: #777;
 
 .container{
     margin: 5px 0px;
@@ -21,9 +22,21 @@ $background-color: rgb(220,220,220);
 select{
     color: $text-color;
     background-color: $prod-background-color;
-    border: 1px solid $text-color;
+    border: 0px;
+    border-left: 1px solid $background-color;
+    border-bottom: 1px solid $background-color;
+    height: 18px;
+    font-family: sans-serif;
 
-} 
+}
+
+.inline-div{
+    width: 100%;
+    display: inline-block;
+    height: 24px;
+    padding-bottom: 3px;
+}
+
 input{
     color: $text-color;
     background-color: $prod-background-color;
@@ -33,14 +46,43 @@ input{
     max-width: 95%;
     vertical-align: bottom;
 
+    font-family: sans-serif;
+
     &.disabled-input{
         border-bottom: none;
     }
 }
 
+.inp--desc{
+    font-size: 13px;
+    max-width: 95%;
+}
+
+
 .input-const-name{
     min-width: 100px;
 }
+
+.btn{
+    height: 24px;
+    width: 24px;
+    background-color: transparent;
+    border: none;
+    float: right;
+    color: $button-color;
+
+    &.highlighted{
+        background-color: rgb(255,150,150);
+    }
+}
+
+// .container:hover .btn {display: block}
+
+.icon{
+    vertical-align: top;
+    font-size: 20px;
+}
+
 
 
 .slider-val{
@@ -60,12 +102,6 @@ input{
 .div--slider{
     display: inline-flex; 
     flex-direction: row; 
-}
-
-.inp--desc{
-    font-size: 13px;
-    padding-top:5px;
-    max-width: 95%;
 }
 
 

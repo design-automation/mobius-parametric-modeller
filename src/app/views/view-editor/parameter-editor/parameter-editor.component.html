@@ -5,7 +5,7 @@
 </div>
 <hr *ngIf="node.type=='start'">
 <div class='container--input'>
-    <procedure-input-editor *ngFor="let prod of node.procedure" [prod]="prod" ></procedure-input-editor>
+    <procedure-input-editor *ngFor="let prod of node.procedure; let i = index;" [prod]="prod" (delete)='deleteProd(i)'></procedure-input-editor>
 </div>
 
 <!--

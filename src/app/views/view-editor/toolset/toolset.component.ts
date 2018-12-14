@@ -105,9 +105,11 @@ export class ToolsetComponent {
                         type: prod.meta.inputMode,
                     };
                 });
+                /*
                 if (!func.argCount) {
                     resolve('error');
                 }
+                */
 
                 // go through the nodes
                 for (const node of fl.nodes) {

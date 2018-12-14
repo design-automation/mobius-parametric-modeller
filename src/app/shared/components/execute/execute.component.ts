@@ -140,6 +140,7 @@ export class ExecuteComponent {
 
     async executeNode(node: INode, funcStrings) {
         const params = {'currentProcedure': ['']};
+        const DEBUG = false;
         try {
             // get the code for the node
             const nodeCode = await CodeUtils.getNodeCode(node, true);
@@ -161,9 +162,10 @@ export class ExecuteComponent {
             }
             // print the code
             console.log('Executing code...\n');
-            const DEBUG = false;
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
+                console.log(fnString);
+                /*
                 for (const i of nodeCode) {
                     if (i.substring(0, 18) === '__params__.current') {
                         continue;
@@ -175,6 +177,7 @@ export class ExecuteComponent {
                     }
                 }
                 console.log('--------------------------\n');
+                */
             }
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
@@ -191,7 +194,9 @@ export class ExecuteComponent {
                 this.globalVars += '\n';
             }
         } catch (ex) {
-            throw ex;
+            if (DEBUG) {
+                throw ex;
+            }
             node.hasError = true;
             // console.warn(`${node.name} errored`);
 

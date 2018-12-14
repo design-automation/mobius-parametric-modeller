@@ -23,6 +23,10 @@ export class GIModel {
     // Getters and setters
     public geom() {return this._geom; }
     public attribs() {return this._attribs; }
+
+    public getAttibs(): GIAttribs {
+        return this._attribs;
+    }
     /**
      * Sets the data in this model from JSON data.
      * The existing data in the model is deleted.

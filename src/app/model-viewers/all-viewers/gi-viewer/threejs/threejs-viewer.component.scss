@@ -9,13 +9,13 @@
 }
 
 #threejs-container {
-    // position: absolute;
+    position: relative;
     // padding:50px;
     height: 100%;
     width: 100%;
     margin:0px;
     overflow: hidden;
-    color: blue;
+    // color: blue;
     font-family:sans-serif;
 }
 
@@ -26,13 +26,11 @@
 
 #shownumber{
     position: absolute;
-    float: right;
-    color:black;
-    right: 0px;
-    width: 115px;
-    bottom: 0px;
-    color:#395d73;
-    font-family:sans-serif;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(255,255,255,0.3);
+    padding: 10px;
+    color: #2a8ac5;
 }
 
 /*#rotating{

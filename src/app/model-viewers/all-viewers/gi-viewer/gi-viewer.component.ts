@@ -1,6 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
+
 // import @angular stuff
-import { Component, Input, OnInit, NgModule } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
 // import others
@@ -16,7 +17,7 @@ import { DataService } from './data/data.service';
   styleUrls: ['./gi-viewer.component.scss'],
 })
 export class GIViewerComponent implements OnInit {
-    dataservice: DataService; // TODO why is this here?
+    dataservice: DataService;
     // model data passed to the viewer
     @Input() data: GIModel;
     modelData: GIModel;
@@ -36,16 +37,6 @@ export class GIViewerComponent implements OnInit {
             this.dataService.setThreejsScene(this.data);
         }
     }
-
-    /**
-     * ngDoCheck
-     */
-    // ngDoCheck(): void {
-    //     // console.log('MODEL CHANGED MODEL CHANGED MODEL CHANGED');
-    //     if (this.dataService.getGIModel() !== this.data) {
-    //         // this.setModel(this.data);
-    //     }
-    // }
 
     /**
      * setModel Sets the model in the data service.

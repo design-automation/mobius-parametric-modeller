@@ -173,7 +173,7 @@ export class DataThreejs {
 
         // show vertex normals
         const vnh = new THREE.VertexNormalsHelper( mesh, 3, 0x0000ff );
-        this._scene.add( vnh );
+        // this._scene.add( vnh );
 
         // this._geometries.push(geom);
         // this._meshes.push(mesh);

@@ -398,3 +398,26 @@ split-area{
     overflow-y: auto;
     height: 100%;
 }
+
+/*
+************
+** GUTTER **
+************
+*/
+
+as-split-gutter{
+    // position: absolute;
+    // top: 50%;
+    // height: 10% !important;
+    background-image: none !important;
+    background-color: $color5 !important;
+    flex-basis: 3px !important;
+}
+
+// as-split-gutter:hover{
+//     flex-basis: 11px !important;
+// }
+
+// as-split-gutter:active{
+//     flex-basis: 0px !important;
+// }

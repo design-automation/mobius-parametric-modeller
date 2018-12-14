@@ -1,7 +1,9 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, idBreak } from './GICommon';
+import { EEntityTypeStr, IQueryComponent, idBreak,  } from './GICommon';
+import { parse_query } from './GIAttribsQuery';
+import { e } from '@angular/core/src/render3';
 
 /**
  * Class for attributes.
@@ -50,7 +52,7 @@ export class GIAttribs {
      * @param attribs_data The JSON data
      */
     public addData(attribs_data: IAttribsData): void {
-        // Helper function to ddd attributes to model
+        // Helper public to ddd attributes to model
         function _addAttribsData(exist_attribs_map:  Map<string, GIAttribMap>, new_attribs_data: IAttribData[], offset: number): void {
             new_attribs_data.forEach( new_attrib_data => {
                 if (!exist_attribs_map.has(new_attrib_data.name)) {
@@ -139,7 +141,40 @@ export class GIAttribs {
     public getCollAttribNames(): string[] {
         return Array.from(this.colls.keys());
     }
-   // ============================================================================
+    // ============================================================================
+    // Query an entity attrib
+    // ============================================================================
+
+    /**
+     * Query the model using a query strings.
+     * Returns a list of IDs.
+     */
+    public queryAttribs(query_str: string): string[] {
+        const queries: IQueryComponent[][] = parse_query(query_str);
+        if (!queries) { return []; }
+        const query1: IQueryComponent = queries[0][0];
+        return this.queryAttrib(query1);
+    }
+    /**
+     * Query the model using a sequence of && and || queries.
+     * Returns a list of IDs.
+     * @param query
+     */
+    public queryAttrib(query: IQueryComponent): string[] {
+        // print the query
+        // console.log("     attrib_type" ,     query.attrib_type);
+        // console.log("     attrib_name" ,     query.attrib_name);
+        // console.log("     attrib_index" ,    query.attrib_index);
+        // console.log("     attrib_value_str", query.attrib_value_str);
+        // console.log("     operator_type" ,   query.operator_type);
+        // do the query
+        const attribs: Map<string, GIAttribMap> = this.attrib_maps[query.attrib_type];
+        if (!attribs.has(query.attrib_name)) { return []; }
+        const entities_i: number[] = attribs.get(query.attrib_name).getKeysFromValueStr(query.attrib_value_str, query.attrib_index);
+        const entities_id: string[] = entities_i.map(entity_i => query.attrib_type + entity_i);
+        return entities_id;
+    }
+    // ============================================================================
     // Add an entity attrib
     // ============================================================================
     public addPosiAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {

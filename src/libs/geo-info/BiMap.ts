@@ -64,6 +64,26 @@ export class BiMapManyToOne<V> {
         return this.vk_map.get(value_str);
     }
     /**
+     * Returns an array of keys that point to this value.
+     * @param value The string version of the value.
+     */
+    public getKeysFromValueStr(value_str: string, index: number): number[] {
+        let keys: number[];
+        if (index < 0) {
+            keys = this.vk_map.get(value_str);
+            if (!keys) { keys = []; }
+            return keys;
+        }
+        // the value has an index
+        keys = [];
+        this.values().forEach( value_from_map => {
+            if (JSON.stringify( value_from_map[index]) === value_str) {
+                keys.push(...this.getKeys(value_from_map));  // THIS IS AN UGLY HACK :(:(:( TODO...
+            }
+        });
+        return keys;
+    }
+    /**
      * Returns the value to which this key points.
      * @param key
      */
@@ -83,6 +103,13 @@ export class BiMapManyToOne<V> {
      */
     public hasValue(value: V): boolean {
         const value_str: string = JSON.stringify(value);
+        return this.vk_map.has(value_str);
+    }
+    /**
+     * Returns true if the map contains the value.
+     * @param value_str The string version of the value.
+     */
+    public hasValueStrValue(value_str: string): boolean {
         return this.vk_map.has(value_str);
     }
     /**

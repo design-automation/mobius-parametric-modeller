@@ -11,11 +11,37 @@ export enum EEntityTypeStr {
     PGON = 'pg',
     COLL = 'co'
 }
+
 // Names of attributes
 export enum EAttribNames {
     COORDS = 'coordinates',
     NORMAL = 'normal',
     COLOR = 'color'
+}
+
+/**
+ * The types of operators that can be used in a query.
+ */
+export enum EQueryOperatorTypes {
+    IS_EQUAL = '==',
+    IS_NOT_EQUAL = '!=',
+    IS_GREATER_OR_EQUAL = '>=',
+    IS_LESS_OR_EQUAL = '<=',
+    IS_GREATER = '>',
+    IS_LESS = '<',
+    EQUAL = '='
+}
+
+/**
+ * A query component.
+ * Each query can consist of multiple components.
+ */
+export interface IQueryComponent {
+    attrib_type: EEntityTypeStr;
+    attrib_name: string;
+    attrib_index: number;
+    attrib_value_str: string;
+    operator_type: EQueryOperatorTypes;
 }
 
 // ============================================================================

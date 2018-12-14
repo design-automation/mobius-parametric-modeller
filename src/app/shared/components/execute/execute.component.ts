@@ -159,19 +159,23 @@ export class ExecuteComponent {
             if (hasFunctions) {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
             }
-            console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
-
-            for (const i of nodeCode) {
-                if (i.substring(0, 18) === '__params__.current') {
-                    continue;
+            // print the code
+            console.log('Executing code...\n');
+            const DEBUG = false;
+            if (DEBUG) {
+                console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
+                for (const i of nodeCode) {
+                    if (i.substring(0, 18) === '__params__.current') {
+                        continue;
+                    }
+                    if (i.length > 500) {
+                        console.log(i.substring(0, 500) + '...\n});\n');
+                    } else {
+                        console.log(i);
+                    }
                 }
-                if (i.length > 500) {
-                    console.log(i.substring(0, 500) + '...\n});\n');
-                } else {
-                    console.log(i);
-                }
+                console.log('--------------------------\n');
             }
-            console.log(`--------------------------\n`);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function

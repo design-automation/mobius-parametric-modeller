@@ -57,6 +57,13 @@ input:focus{
     top: 0px; 
     right: 0px;
     color: rgb(80,80,80);
+    width: 40px;
+    height: 40px;
+
+    .mat-icon{
+        width: 30px;
+        height: 30px;
+    }
 }
 
 .viewer{

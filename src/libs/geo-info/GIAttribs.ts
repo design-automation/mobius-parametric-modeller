@@ -1,4 +1,4 @@
-import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord} from './GIJson';
+import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord, IGeomData, IModelData} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
 import { EEntityTypeStr, IQueryComponent, idBreak,  } from './GICommon';
@@ -8,65 +8,78 @@ import { parse_query } from './GIAttribsQuery';
  * Class for attributes.
  */
 export class GIAttribs {
-    private model: GIModel;
-    // maps, the key is the name, the value is the map
-    private posis: Map<string, GIAttribMap> = new Map();
-    private verts: Map<string, GIAttribMap> = new Map();
-    private edges: Map<string, GIAttribMap> = new Map();
-    private wires: Map<string, GIAttribMap> = new Map();
-    private faces: Map<string, GIAttribMap> = new Map();
-    private colls: Map<string, GIAttribMap> = new Map();
-    // all maps
-    private attrib_maps = {
-        po: this.posis,
-        _v: this.verts,
-        _e: this.edges,
-        _w: this.wires,
-        _f: this.faces,
-        co: this.colls
+    private _model: GIModel;
+    // maps, the key is the name, the value is the attrib map clas
+    private _posis: Map<string, GIAttribMap> = new Map();
+    private _verts: Map<string, GIAttribMap> = new Map();
+    private _edges: Map<string, GIAttribMap> = new Map();
+    private _wires: Map<string, GIAttribMap> = new Map();
+    private _faces: Map<string, GIAttribMap> = new Map();
+    private _colls: Map<string, GIAttribMap> = new Map();
+    // all attrib maps
+    private _attrib_maps = {
+        po: this._posis,
+        _v: this._verts,
+        _e: this._edges,
+        _w: this._wires,
+        _f: this._faces,
+        co: this._colls
     };
    /**
      * Creates an object to store the attribute data.
      * @param model The JSON data
      */
     constructor(model: GIModel) {
-        this.model = model;
+        this._model = model;
     }
     /**
      * Returns the JSON data for this model.
      */
     public getData(): IAttribsData {
         return {
-            positions: Array.from(this.posis.values()).map(attrib => attrib.getData()),
-            vertices: Array.from(this.verts.values()).map(attrib => attrib.getData()),
-            edges: Array.from(this.edges.values()).map(attrib => attrib.getData()),
-            wires: Array.from(this.wires.values()).map(attrib => attrib.getData()),
-            faces: Array.from(this.faces.values()).map(attrib => attrib.getData()),
-            collections: Array.from(this.colls.values()).map(attrib => attrib.getData())
+            positions: Array.from(this._posis.values()).map(attrib => attrib.getData()),
+            vertices: Array.from(this._verts.values()).map(attrib => attrib.getData()),
+            edges: Array.from(this._edges.values()).map(attrib => attrib.getData()),
+            wires: Array.from(this._wires.values()).map(attrib => attrib.getData()),
+            faces: Array.from(this._faces.values()).map(attrib => attrib.getData()),
+            collections: Array.from(this._colls.values()).map(attrib => attrib.getData())
         };
     }
     /**
      * Adds data to this model from JSON data.
      * The existing data in the model is not deleted.
-     * @param attribs_data The JSON data
+     * @param model_data The JSON data for the model.
      */
-    public addData(attribs_data: IAttribsData): void {
-        // Helper public to ddd attributes to model
-        function _addAttribsData(exist_attribs_map:  Map<string, GIAttribMap>, new_attribs_data: IAttribData[], offset: number): void {
+    public addData(model_data: IModelData): void {
+        // helper public to ddd attributes to model
+        function _addAttribData(
+                exist_attribs_maps:  Map<string, GIAttribMap>,
+                new_attribs_data: IAttribData[],
+                num_existing_entities: number,
+                num_new_entities: number): void {
+            // loop through all attributes, adding data
             new_attribs_data.forEach( new_attrib_data => {
-                if (!exist_attribs_map.has(new_attrib_data.name)) {
-                    exist_attribs_map.set(new_attrib_data.name, new GIAttribMap(new_attrib_data));
-                } else {
-                    exist_attribs_map.get(new_attrib_data.name).addData(new_attrib_data, offset);
+                if (!exist_attribs_maps.has(new_attrib_data.name)) {
+                    exist_attribs_maps.set(new_attrib_data.name, new GIAttribMap(
+                        new_attrib_data.name,
+                        new_attrib_data.data_type,
+                        new_attrib_data.data_size,
+                        num_existing_entities
+                    ));
                 }
+                exist_attribs_maps.get(new_attrib_data.name).addEntities(new_attrib_data, num_new_entities);
             });
         }
-        _addAttribsData(this.posis, attribs_data.positions, this.model.geom().numPosis());
-        _addAttribsData(this.verts, attribs_data.vertices, this.model.geom().numVerts());
-        _addAttribsData(this.edges, attribs_data.edges, this.model.geom().numEdges());
-        _addAttribsData(this.wires, attribs_data.wires, this.model.geom().numWires());
-        _addAttribsData(this.faces, attribs_data.faces, this.model.geom().numFaces());
-        _addAttribsData(this.colls, attribs_data.collections, this.model.geom().numColls());
+        // data for all the new atttributes
+        const attribs_data: IAttribsData = model_data.attributes;
+        const geom_data: IGeomData = model_data.geometry;
+        // add the attribute data
+        _addAttribData(this._posis, attribs_data.positions, this._model.geom().numPosis(), geom_data.num_positions);
+        _addAttribData(this._verts, attribs_data.vertices, this._model.geom().numVerts(), geom_data.vertices.length);
+        _addAttribData(this._edges, attribs_data.edges, this._model.geom().numEdges(), geom_data.edges.length);
+        _addAttribData(this._wires, attribs_data.wires, this._model.geom().numWires(), geom_data.wires.length);
+        _addAttribData(this._faces, attribs_data.faces, this._model.geom().numFaces(), geom_data.faces.length);
+        _addAttribData(this._colls, attribs_data.collections, this._model.geom().numColls(), geom_data.collections.length);
     }
     // ============================================================================
     // Private methods
@@ -78,10 +91,11 @@ export class GIAttribs {
      * @param data_type The data type of the attribute.
      * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
-    private _addAttrib(type_str: EEntityTypeStr, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        const attribs: Map<string, GIAttribMap> = this.attrib_maps[type_str];
+    private _addAttrib(type_str: EEntityTypeStr, name: string, data_type: EAttribDataTypeStrs,
+            data_size: number, num_entities: number): GIAttribMap {
+        const attribs: Map<string, GIAttribMap> = this._attrib_maps[type_str];
         if (!attribs.has(name)) {
-            const attrib: GIAttribMap = new GIAttribMap({name: name, data_type: data_type, data_size: data_size, data: []});
+            const attrib: GIAttribMap = new GIAttribMap(name, data_type, data_size, num_entities);
             attribs.set(name, attrib);
         }
         return attribs[name];
@@ -97,7 +111,7 @@ export class GIAttribs {
      */
     public setAttribValue(id: string, name: string, value: TAttribDataTypes): void {
         const [type_str, index]: [string, number] = idBreak(id);
-        const attribs: Map<string, GIAttribMap> = this.attrib_maps[type_str];
+        const attribs: Map<string, GIAttribMap> = this._attrib_maps[type_str];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         attribs.get(name).set(index, value);
     }
@@ -108,7 +122,7 @@ export class GIAttribs {
      */
     public getAttribValue(id: string, name: string): TAttribDataTypes {
         const [type_str, index]: [string, number] = idBreak(id);
-        const attribs: Map<string, GIAttribMap> = this.attrib_maps[type_str];
+        const attribs: Map<string, GIAttribMap> = this._attrib_maps[type_str];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).get(index);
     }
@@ -117,33 +131,32 @@ export class GIAttribs {
      * @param posi_i
      */
     public getPosiCoord(posi_i: number): TCoord {
-        return this.posis.get('coordinates').get(posi_i) as TCoord;
+        return this._posis.get('coordinates').get(posi_i) as TCoord;
     }
     // ============================================================================
     // Get entity attrib names
     // ============================================================================
     public getPosiAttribNames(): string[] {
-        return Array.from(this.posis.keys());
+        return Array.from(this._posis.keys());
     }
     public getVertAttribNames(): string[] {
-        return Array.from(this.verts.keys());
+        return Array.from(this._verts.keys());
     }
     public getEdgeAttribNames(): string[] {
-        return Array.from(this.edges.keys());
+        return Array.from(this._edges.keys());
     }
     public getWireAttribNames(): string[] {
-        return Array.from(this.wires.keys());
+        return Array.from(this._wires.keys());
     }
     public getFaceAttribNames(): string[] {
-        return Array.from(this.faces.keys());
+        return Array.from(this._faces.keys());
     }
     public getCollAttribNames(): string[] {
-        return Array.from(this.colls.keys());
+        return Array.from(this._colls.keys());
     }
     // ============================================================================
     // Query an entity attrib
     // ============================================================================
-
     /**
      * Query the model using a query strings.
      * Returns a list of IDs.
@@ -167,9 +180,13 @@ export class GIAttribs {
         // console.log("     attrib_value_str", query.attrib_value_str);
         // console.log("     operator_type" ,   query.operator_type);
         // do the query
-        const attribs: Map<string, GIAttribMap> = this.attrib_maps[query.attrib_type];
+        const attribs: Map<string, GIAttribMap> = this._attrib_maps[query.attrib_type];
         if (!attribs.has(query.attrib_name)) { return []; }
-        const entities_i: number[] = attribs.get(query.attrib_name).getKeysFromValueStr(query.attrib_value_str, query.attrib_index);
+        const entities_i: number[] = attribs.get(query.attrib_name).queryValueStr(
+            query.attrib_value_str,
+            query.operator_type,
+            query.attrib_index
+        );
         const entities_id: string[] = entities_i.map(entity_i => query.attrib_type + entity_i);
         return entities_id;
     }
@@ -177,22 +194,22 @@ export class GIAttribs {
     // Add an entity attrib
     // ============================================================================
     public addPosiAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(EEntityTypeStr.POSI, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.POSI, name, data_type, data_size, this._model.geom().numPosis());
     }
     public addVertAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(EEntityTypeStr.VERT, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.VERT, name, data_type, data_size, this._model.geom().numVerts());
     }
     public addEdgeAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(EEntityTypeStr.EDGE, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.EDGE, name, data_type, data_size, this._model.geom().numEdges());
     }
     public addWireAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(EEntityTypeStr.WIRE, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.WIRE, name, data_type, data_size, this._model.geom().numWires());
     }
     public addFaceAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(EEntityTypeStr.FACE, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.FACE, name, data_type, data_size, this._model.geom().numFaces());
     }
     public addCollAttrib(name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
-        return this._addAttrib(EEntityTypeStr.COLL, name, data_type, data_size);
+        return this._addAttrib(EEntityTypeStr.COLL, name, data_type, data_size, this._model.geom().numColls());
     }
     // ============================================================================
     // Threejs
@@ -204,7 +221,7 @@ export class GIAttribs {
      * @param verts An array of vertex indicies pointing to the coordinates.
      */
     public get3jsSeqVertsCoords(verts: number[]): number[] {
-        const coords_attrib: GIAttribMap = this.posis.get('coordinates');
+        const coords_attrib: GIAttribMap = this._posis.get('coordinates');
         const coords_keys: number[] = coords_attrib.getSeqKeys();
         const coords_values: TAttribDataTypes[] = coords_attrib.getSeqValues();
         const verts_cords_values: number[] = [];
@@ -216,8 +233,8 @@ export class GIAttribs {
      * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
      */
     public get3jsSeqVertsAttrib(attrib_name: string): number[] {
-        if (!this.verts.has(attrib_name)) { return null; }
-        const attrib_map: GIAttribMap = this.verts.get(attrib_name);
+        if (!this._verts.has(attrib_name)) { return null; }
+        const attrib_map: GIAttribMap = this._verts.get(attrib_name);
         const attrib_keys: number[] = attrib_map.getSeqKeys();
         const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
         const result = [].concat(...attrib_keys.map(attrib_key => attrib_values[attrib_key]));

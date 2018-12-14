@@ -17,6 +17,7 @@ function mergeInputs(models){
     return result;
 }
 `;
+const DEBUG = false;
 
 @Component({
   selector: 'execute',
@@ -52,6 +53,12 @@ function mergeInputs(models){
               }
               .btn:hover{
                 color: blue;
+              }
+              .mat-icon{
+                  margin-top: 5px;
+                  font-size: 30px;
+                  width:30px;
+                  height:30px;
               }`
           ]
 })
@@ -140,7 +147,6 @@ export class ExecuteComponent {
 
     async executeNode(node: INode, funcStrings) {
         const params = {'currentProcedure': ['']};
-        const DEBUG = true;
         try {
             // get the code for the node
             const nodeCode = await CodeUtils.getNodeCode(node, true);

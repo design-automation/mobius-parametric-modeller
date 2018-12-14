@@ -2,16 +2,33 @@
     <div *ngIf="_model_error" style="position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">Error displaying model:{{text}}</div>
     <div *ngIf="_no_model" style="position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">Model or Scene not defined.</div>
 
+    <!--
     <button id="zoomingfit"  
         [class.visible]="Visible === 'zoomfit'" 
         (click)="zoomfit()">
         <span matTooltip="zoom to fit"><i class="fa fa-arrows-alt"></i></span>
     </button> 
-    
+    -->
+    <button id="zoomingfit"
+        mat-icon-button
+        [class.visible]="Visible === 'zoomfit'" 
+        (click)="zoomfit()">
+        <mat-icon svgIcon="cZoom"></mat-icon>
+    </button> 
+
     <!-- <button id="selecting" [class.visible]="Visible === 'select'" (click)= "select($event, Visible)" ><i class="fa fa-mouse-pointer"></i></button> -->
     <!-- <button id="setting" [class.selected]="settingVisible" (click)= "setting(settingVisible)"><i class="fa fa-cog"></i></button> -->
-
+    <!-- 
     <button id="selecting" [class.selected]="seVisible" (click)= "select(seVisible)" ><span matTooltip="select"><i class="fa fa-mouse-pointer"></i></span></button>
+
+    -->
+    <button id="selecting" 
+        mat-icon-button
+        [class.selected]="seVisible" 
+        (click)= "select(seVisible)" >
+        <mat-icon >near_me</mat-icon>
+    </button>
+
     <div id="shownumber">
         <tr>
             <td  align=left style="width: 60px;">Triangles&nbsp;&nbsp;</td>

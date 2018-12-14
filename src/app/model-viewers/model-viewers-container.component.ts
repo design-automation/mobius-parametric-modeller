@@ -5,6 +5,8 @@ import { Viewers } from './model-viewers.config';
 import { INode } from '@models/node';
 import { EventEmitter } from 'events';
 import { DataService } from '@services';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
 /**
  * A component that contains all the viewers.

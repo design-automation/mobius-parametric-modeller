@@ -8,6 +8,8 @@ import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component'
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/viewer.component';
 import { HelpViewerComponent } from './all-viewers/help-viewer/viewer.component';
 import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
+import { SharedModule } from '@shared/shared.module';
+import { MatIconModule } from '@angular/material';
 // import { ThreejsViewerComponent } from './viewers/gi-viewer/threejs/threejs-viewer.component';
 // import { MobiusCesium } from './viewers/cesium-viewer/mobius-cesium.module';
 // import { VisualiseComponent } from "./viewers/cesium-viewer/setting/visualise.component";
@@ -30,6 +32,8 @@ import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
         CommonModule,
         FormsModule,
         GIViewerModule,
+        MatIconModule
+        // SharedModule
     ],
     entryComponents: [
         ...VIEWER_ARR

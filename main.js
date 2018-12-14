@@ -308,7 +308,7 @@ var CoreModule = /** @class */ (function () {
 /*!***************************************!*\
   !*** ./src/app/core/modules/Model.ts ***!
   \***************************************/
-/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, __stringify__, addData, numPoints, numLinestrings, numPolygons, addPosition, addPoint, addLinestring, addPolygon, getPositions, getPoints, getLines, getPolygons, getCollections */
+/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, __stringify__, __query__, addData, numPoints, numLinestrings, numPolygons, addPosition, addPoint, addLinestring, addPolygon, getPositions, getPoints, getLines, getPolygons, getCollections, query */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -318,6 +318,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__postprocess__", function() { return __postprocess__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__merge__", function() { return __merge__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__stringify__", function() { return __stringify__; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__query__", function() { return __query__; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addData", function() { return addData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numPoints", function() { return numPoints; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numLinestrings", function() { return numLinestrings; });
@@ -331,7 +332,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLines", function() { return getLines; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPolygons", function() { return getPolygons; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCollections", function() { return getCollections; });
-/* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "query", function() { return query; });
+/* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
 /* harmony import */ var _libs_geo_info_GIJson__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../libs/geo-info/GIJson */ "./src/libs/geo-info/GIJson.ts");
 
 
@@ -383,6 +385,14 @@ function __merge__(model1, model2) {
  */
 function __stringify__(__model__) {
     return JSON.stringify(__model__.getData());
+}
+/**
+ * Query entities in the model
+ * @param __model__
+ * @param query_str
+ */
+function __query__(__model__, query_str) {
+    return __model__.attribs().queryAttribs(query_str);
 }
 //  ===============================================================================================================
 //  Functions visible in the Mobius interface.
@@ -486,6 +496,14 @@ function getPolygons(__model__) {
  */
 function getCollections(__model__) {
     return __model__.geom().getColls();
+}
+/**
+ * Query
+ * @param __model__
+ * @param query_str
+ */
+function query(__model__, query_str) {
+    return __query__(__model__, query_str);
 }
 
 
@@ -850,6 +868,100 @@ module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ntextarea {\n  he
 
 /***/ }),
 
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.html":
+/*!****************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.html ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"mat-elevation-z8\">\r\n    <table mat-table [dataSource]=\"dataSource\">\r\n  \r\n      <!-- Position Column -->\r\n      <ng-container matColumnDef=\"position\">\r\n        <th mat-header-cell *matHeaderCellDef> No. </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\r\n      </ng-container>\r\n  \r\n      <!-- Name Column -->\r\n      <ng-container matColumnDef=\"name\">\r\n        <th mat-header-cell *matHeaderCellDef> Name </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.name}} </td>\r\n      </ng-container>\r\n  \r\n      <!-- Weight Column -->\r\n      <ng-container matColumnDef=\"weight\">\r\n        <th mat-header-cell *matHeaderCellDef> Weight </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.weight}} </td>\r\n      </ng-container>\r\n  \r\n      <!-- Symbol Column -->\r\n      <ng-container matColumnDef=\"symbol\">\r\n        <th mat-header-cell *matHeaderCellDef> Symbol </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.symbol}} </td>\r\n      </ng-container>\r\n  \r\n      <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n    </table>\r\n  \r\n    <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\r\n  </div>"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.scss":
+/*!****************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.scss ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "table {\n  width: 100%; }\n"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.ts":
+/*!**************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.ts ***!
+  \**************************************************************************************/
+/*! exports provided: AttributeComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AttributeComponent", function() { return AttributeComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var AttributeComponent = /** @class */ (function () {
+    function AttributeComponent() {
+        this.displayedColumns = ['position', 'name', 'weight', 'symbol'];
+        this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableDataSource"](ELEMENT_DATA);
+    }
+    AttributeComponent.prototype.ngOnInit = function () {
+        console.log(this.dataSource);
+        this.dataSource.paginator = this.paginator;
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginator"]),
+        __metadata("design:type", _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginator"])
+    ], AttributeComponent.prototype, "paginator", void 0);
+    AttributeComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'attribute',
+            template: __webpack_require__(/*! ./attribute.component.html */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.html"),
+            styles: [__webpack_require__(/*! ./attribute.component.scss */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.scss")]
+        })
+    ], AttributeComponent);
+    return AttributeComponent;
+}());
+
+var ELEMENT_DATA = [
+    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
+    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
+    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
+    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
+    { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
+    { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
+    { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
+    { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
+    { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
+    { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
+    { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
+    { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
+    { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
+    { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
+];
+
+
+/***/ }),
+
 /***/ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts":
 /*!**************************************************************************!*\
   !*** ./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts ***!
@@ -893,32 +1005,13 @@ var DataService = /** @class */ (function () {
      * Get the THreejs Scene
      */
     DataService.prototype.getThreejsScene = function () {
-        // console.log('CALLING getThreejs Scene in DATA SERVICE');
         return this._data_threejs;
     };
     /**
      * Set the THreejs Scene
      */
     DataService.prototype.setThreejsScene = function (model) {
-        // console.log('CALLING setThreejsScene Scene in DATA SERVICE');
         this._data_threejs = new _data_threejs__WEBPACK_IMPORTED_MODULE_0__["DataThreejs"](model);
-    };
-    /**
-     * Get the GI Model
-     */
-    DataService.prototype.getGIModel = function () {
-        // console.log('CALLING getModel in DATA SERVICE');
-        return this._model;
-    };
-    /**
-     * Set the GI Model
-     * @param model
-     */
-    DataService.prototype.setGIModel = function (model) {
-        // console.log('CALLING setModel in DATA SERVICE');
-        // console.log('DATTTTTTTTTTTTTTTTTTT', model);
-        this._model = model;
-        // this._data_threejs.UpdateModel(model);
     };
     DataService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
@@ -1149,7 +1242,7 @@ var DataThreejs = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"gi-viewer-container\">\r\n    <threejs-viewer [model]='data'></threejs-viewer>\r\n</div>\r\n\r\n<!-- <div id=\"appdiv\" (mousedown)=\"leaflet()\"> -->\r\n\t<!-- <as-split direction=\"vertical\"> -->\r\n\t\t<!-- <as-split-area [size]=\"90\" id=\"splitcontainer\"> -->\r\n\t\t  <!-- <div style=\"height: 100%\"> -->\r\n\t\t    <!-- <as-split direction=\"horizontal\"> -->\r\n\t\t\t\t\t<!-- <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\"> -->\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t      <!-- <as-split-area [size]=\"99.5\" id=\"splitviewer\"> -->\r\n\t\t        <!-- <viewer-container *ngIf=\"imVisible===false\"></viewer-container>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <!-- <threejs-viewer></threejs-viewer> -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t    <!-- </as-split> -->\r\n\t\t  <!-- </div> -->\r\n\t\t<!-- </as-split-area> -->\r\n\t\t<!-- <as-split-area [size]=\"10\" id=\"splittoolwindow\"> -->\r\n\t\t\t<!-- tool window -->\r\n\t\t<!-- </as-split-area> -->\r\n\t<!-- </as-split> -->\r\n<!-- </div> -->"
+module.exports = "<div id=\"gi-viewer-container\">\r\n\t<as-split direction=\"vertical\">\r\n\t\t<as-split-area [size]=\"80\" id=\"three-js\">\r\n\t\t\t<threejs-viewer [model]='data'></threejs-viewer>\r\n\t\t</as-split-area>\r\n\t\t<as-split-area [size]='20' id=\"attrib\">\r\n\t\t\t<h1>Attribute goes here</h1>\r\n\t\t\t<attribute></attribute>\r\n\t\t</as-split-area>\r\n\t</as-split>\r\n</div>\r\n\r\n<!-- <div id=\"appdiv\" (mousedown)=\"leaflet()\"> -->\r\n\t<!-- <as-split direction=\"vertical\"> -->\r\n\t\t<!-- <as-split-area [size]=\"90\" id=\"splitcontainer\"> -->\r\n\t\t  <!-- <div style=\"height: 100%\"> -->\r\n\t\t    <!-- <as-split direction=\"horizontal\"> -->\r\n\t\t\t\t\t<!-- <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\"> -->\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t      <!-- <as-split-area [size]=\"99.5\" id=\"splitviewer\"> -->\r\n\t\t        <!-- <viewer-container *ngIf=\"imVisible===false\"></viewer-container>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <!-- <threejs-viewer></threejs-viewer> -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t    <!-- </as-split> -->\r\n\t\t  <!-- </div> -->\r\n\t\t<!-- </as-split-area> -->\r\n\t\t<!-- <as-split-area [size]=\"10\" id=\"splittoolwindow\"> -->\r\n\t\t\t<!-- tool window -->\r\n\t\t<!-- </as-split-area> -->\r\n\t<!-- </as-split> -->\r\n<!-- </div> -->"
 
 /***/ }),
 
@@ -1214,29 +1307,6 @@ var GIViewerComponent = /** @class */ (function () {
             this.dataService.setThreejsScene(this.data);
         }
     };
-    /**
-     * ngDoCheck
-     */
-    GIViewerComponent.prototype.ngDoCheck = function () {
-        // console.log('MODEL CHANGED MODEL CHANGED MODEL CHANGED');
-        // if (this.data !== this.modelData) {
-        this.setModel(this.data);
-        // }
-    };
-    /**
-     * setModel Sets the model in the data service.
-     * @param data
-     */
-    GIViewerComponent.prototype.setModel = function (data) {
-        try {
-            this.dataService.setGIModel(data);
-            // this.modelData = this.data;
-        }
-        catch (ex) {
-            // this.modelData = undefined;
-            console.error('Error generating model', ex);
-        }
-    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         __metadata("design:type", _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__["GIModel"])
@@ -1245,7 +1315,7 @@ var GIViewerComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'gi-viewer',
             template: __webpack_require__(/*! ./gi-viewer.component.html */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html"),
-            styles: [__webpack_require__(/*! ./gi-viewer.component.scss */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.scss")]
+            styles: [__webpack_require__(/*! ./gi-viewer.component.scss */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.scss")],
         }),
         __metadata("design:paramtypes", [_data_data_service__WEBPACK_IMPORTED_MODULE_2__["DataService"]])
     ], GIViewerComponent);
@@ -1260,12 +1330,12 @@ var GIViewerComponent = /** @class */ (function () {
 /*!*************************************************************************!*\
   !*** ./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts ***!
   \*************************************************************************/
-/*! exports provided: GIViewer */
+/*! exports provided: GIViewerModule */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIViewer", function() { return GIViewer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIViewerModule", function() { return GIViewerModule; });
 /* harmony import */ var angular_split__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! angular-split */ "./node_modules/angular-split/fesm5/angular-split.js");
 /* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
@@ -1273,10 +1343,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
 /* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm5/sort.es5.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 /* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
 /* harmony import */ var _gi_viewer_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
 /* harmony import */ var _threejs_threejs_viewer_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./threejs/threejs-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.ts");
+/* harmony import */ var _attribute_attribute_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./attribute/attribute.component */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1296,25 +1367,27 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 // import app components
 
 
+
 /**
  * GIViewer
  * A viewer for Geo-Info models.
  */
-var GIViewer = /** @class */ (function () {
-    function GIViewer() {
+var GIViewerModule = /** @class */ (function () {
+    function GIViewerModule() {
     }
-    GIViewer_1 = GIViewer;
-    GIViewer.forRoot = function () {
+    GIViewerModule_1 = GIViewerModule;
+    GIViewerModule.forRoot = function () {
         return {
-            ngModule: GIViewer_1
+            ngModule: GIViewerModule_1
         };
     };
-    var GIViewer_1;
-    GIViewer = GIViewer_1 = __decorate([
+    var GIViewerModule_1;
+    GIViewerModule = GIViewerModule_1 = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
             declarations: [
                 _gi_viewer_component__WEBPACK_IMPORTED_MODULE_9__["GIViewerComponent"],
                 _threejs_threejs_viewer_component__WEBPACK_IMPORTED_MODULE_10__["ThreejsViewerComponent"],
+                _attribute_attribute_component__WEBPACK_IMPORTED_MODULE_11__["AttributeComponent"],
             ],
             exports: [
                 _gi_viewer_component__WEBPACK_IMPORTED_MODULE_9__["GIViewerComponent"],
@@ -1327,11 +1400,13 @@ var GIViewer = /** @class */ (function () {
                 _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__["MatExpansionModule"],
                 _angular_material_tabs__WEBPACK_IMPORTED_MODULE_5__["MatTabsModule"],
                 _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_6__["MatTooltipModule"],
-                _angular_material_sort__WEBPACK_IMPORTED_MODULE_7__["MatSortModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatSortModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatTableModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatPaginatorModule"],
             ]
         })
-    ], GIViewer);
-    return GIViewer;
+    ], GIViewerModule);
+    return GIViewerModule;
 }());
 
 
@@ -1419,7 +1494,7 @@ var ThreejsViewerComponent = /** @class */ (function () {
         this._width = container.offsetWidth; // container.client_width;
         this._height = container.offsetHeight; // container.client_height;
         // get the model and scene
-        this._gi_model = this.dataService.getGIModel();
+        // this._gi_model = this.dataService.getGIModel();
         this._data_threejs = this.dataService.getThreejsScene();
         container.appendChild(this._data_threejs._renderer.domElement);
         // set the numbers of entities
@@ -1824,7 +1899,7 @@ var DataViewersContainer = /** @class */ (function () {
             imports: [
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
-                _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_7__["GIViewer"],
+                _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_7__["GIViewerModule"],
             ],
             entryComponents: _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
             providers: []
@@ -2162,11 +2237,12 @@ var ExecuteComponent = /** @class */ (function () {
     };
     ExecuteComponent.prototype.executeNode = function (node, funcStrings) {
         return __awaiter(this, void 0, void 0, function () {
-            var params, nodeCode, fnString, hasFunctions, funcName, _i, nodeCode_1, i, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
+            var params, DEBUG, nodeCode, fnString, hasFunctions, funcName, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         params = { 'currentProcedure': [''] };
+                        DEBUG = false;
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -2187,20 +2263,25 @@ var ExecuteComponent = /** @class */ (function () {
                         if (hasFunctions) {
                             fnString = mergeInputsFunc + '\n\n' + fnString;
                         }
-                        console.log("______________________________________________________________\n/*     " + node.name.toUpperCase() + "     */\n");
-                        for (_i = 0, nodeCode_1 = nodeCode; _i < nodeCode_1.length; _i++) {
-                            i = nodeCode_1[_i];
-                            if (i.substring(0, 18) === '__params__.current') {
-                                continue;
+                        // print the code
+                        console.log('Executing code...\n');
+                        if (DEBUG) {
+                            console.log("______________________________________________________________\n/*     " + node.name.toUpperCase() + "     */\n");
+                            console.log(fnString);
+                            /*
+                            for (const i of nodeCode) {
+                                if (i.substring(0, 18) === '__params__.current') {
+                                    continue;
+                                }
+                                if (i.length > 500) {
+                                    console.log(i.substring(0, 500) + '...\n});\n');
+                                } else {
+                                    console.log(i);
+                                }
                             }
-                            if (i.length > 500) {
-                                console.log(i.substring(0, 500) + '...\n});\n');
-                            }
-                            else {
-                                console.log(i);
-                            }
+                            console.log('--------------------------\n');
+                            */
                         }
-                        console.log("--------------------------\n");
                         fn = new Function('__modules__', '__params__', fnString);
                         result = fn(_modules__WEBPACK_IMPORTED_MODULE_3__, params);
                         node.output.value = result;
@@ -2216,7 +2297,48 @@ var ExecuteComponent = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         ex_1 = _a.sent();
-                        throw ex_1;
+                        if (DEBUG) {
+                            throw ex_1;
+                        }
+                        node.hasError = true;
+                        prodWithError_1 = params['currentProcedure'][0];
+                        markError_1 = function (prod, id) {
+                            if (prod['ID'] && id && prod['ID'] === id) {
+                                prod.hasError = true;
+                            }
+                            if (prod.hasOwnProperty('children')) {
+                                prod.children.map(function (p) {
+                                    markError_1(p, id);
+                                });
+                            }
+                        };
+                        if (prodWithError_1 !== '') {
+                            node.procedure.map(function (prod) {
+                                if (prod['ID'] === prodWithError_1) {
+                                    prod.hasError = true;
+                                }
+                                if (prod.hasOwnProperty('children')) {
+                                    prod.children.map(function (p) {
+                                        markError_1(p, prodWithError_1);
+                                    });
+                                }
+                            });
+                        }
+                        error = void 0;
+                        if (ex_1.toString().indexOf('Unexpected identifier') > -1) {
+                            error = new Error('Unexpected Identifier error. Did you declare everything?' +
+                                'Check that your strings are enclosed in quotes (")');
+                        }
+                        else if (ex_1.toString().indexOf('Unexpected token') > -1) {
+                            error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
+                        }
+                        else {
+                            error = new Error(ex_1);
+                        }
+                        // @ts-ignore
+                        console.logs = [];
+                        console.log(error);
+                        throw error;
                     case 4: return [2 /*return*/];
                 }
             });
@@ -3881,8 +4003,15 @@ var CodeUtils = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         fullCode = '';
-                        fnCode = "function " + func.name + "(__mainParams__," + func.args.map(function (arg) { return arg.name; }).join(',') + ")" +
-                            ("{\nvar merged;\nlet __params__={\"currentProcedure\": [''],\"model\":__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['new'] + "()};\n");
+                        if (func.args.length === 0) {
+                            fnCode = "function " + func.name + "(__mainParams__)" +
+                                ("{\nvar merged;\nvar _newModel = __modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['new'] + "();\n")
+                                + "let __params__={\"currentProcedure\": [''],\"model\": _newModel};\n";
+                        }
+                        else {
+                            fnCode = "function " + func.name + "(__mainParams__," + func.args.map(function (arg) { return arg.name; }).join(',') + ")" +
+                                ("{\nvar merged;\nlet __params__={\"model\":__modules__." + _modules__WEBPACK_IMPORTED_MODULE_4__["_parameterTypes"]['new'] + "()};\n");
+                        }
                         _i = 0, _a = func.flowchart.nodes;
                         _b.label = 1;
                     case 1:
@@ -3892,19 +4021,34 @@ var CodeUtils = /** @class */ (function () {
                     case 2:
                         code = _b.sent();
                         code = '{\n' + code.join('\n') + '\n}';
-                        fullCode += "function " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ")" + code + "\n\n";
+                        if (func.args.length === 0) {
+                            fullCode += "function " + node.id + "(__params__)" + code + "\n\n";
+                        }
+                        else {
+                            fullCode += "function " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ")" + code + "\n\n";
+                        }
                         if (node.type === 'start') {
                             // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
                             fnCode += "let result_" + node.id + " = __params__.model;\n";
                         }
                         else if (node.input.edges.length === 1) {
-                            fnCode += "__params__.model = JSON.parse(JSON.stringify(result_" + node.input.edges[0].source.parentNode.id + "));\n";
-                            fnCode += "let result_" + node.id + " = " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ");\n";
+                            fnCode += "__params__.model = result_" + node.input.edges[0].source.parentNode.id + ";\n";
+                            if (func.args.length === 0) {
+                                fnCode += "let result_" + node.id + " = " + node.id + "(__params__);\n";
+                            }
+                            else {
+                                fnCode += "let result_" + node.id + " = " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ");\n";
+                            }
                         }
                         else {
                             fnCode += "merged = mergeInputs([" + node.input.edges.map(function (edge) { return 'result_' + edge.source.parentNode.id; }).join(',') + "]);\n";
                             fnCode += "__params__.model = merged;\n";
-                            fnCode += "let result_" + node.id + " = " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ");\n";
+                            if (func.args.length === 0) {
+                                fnCode += "let result_" + node.id + " = " + node.id + "(__params__);\n";
+                            }
+                            else {
+                                fnCode += "let result_" + node.id + " = " + node.id + "(__params__, " + func.args.map(function (arg) { return arg.name; }).join(',') + ");\n";
+                            }
                         }
                         /*
                         } else if (node.input.edges.length == 1) {
@@ -4267,7 +4411,7 @@ var NodeUtils = /** @class */ (function () {
                 node.state.procedure.push(procedure);
                 var tempArray = node.state.procedure.splice(0, node.state.procedure.length);
                 NodeUtils.rearrangeSelected(node.state.procedure, tempArray, node.procedure);
-                console.log(node.state.procedure);
+                //console.log(node.state.procedure);
             }
         }
         else {
@@ -5016,7 +5160,7 @@ var ViewDashboardModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='flowchart-info' *ngIf=\"node.type=='start'\">\r\n    <input id='flowchart-name' [(ngModel)]='flowchart.name' placeholder=\"flowchart name\" size={{flowchart.name?.length||12}}>\r\n    <textarea autogrow\r\n    id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr *ngIf=\"node.type=='start'\">\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure\" [prod]=\"prod\" ></procedure-input-editor>\r\n</div>\r\n\r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
+module.exports = "<div class='flowchart-info' *ngIf=\"node.type=='start'\">\r\n    <input id='flowchart-name' [(ngModel)]='flowchart.name' placeholder=\"flowchart name\" size={{flowchart.name?.length||12}}>\r\n    <textarea autogrow\r\n    id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr *ngIf=\"node.type=='start'\">\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure; let i = index;\" [prod]=\"prod\" (delete)='deleteProd(i)'></procedure-input-editor>\r\n</div>\r\n\r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
 
 /***/ }),
 
@@ -5042,6 +5186,7 @@ module.exports = "div[class^=\"container--\"] {\n  display: flex;\n  flex-direct
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ParameterEditorComponent", function() { return ParameterEditorComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _models_node__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @models/node */ "./src/app/shared/models/node/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5051,6 +5196,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
@@ -5071,6 +5217,10 @@ var ParameterEditorComponent = /** @class */ (function () {
             lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
         }
         textarea.style.height = lineCount * 7.5 + 'px';
+    };
+    ParameterEditorComponent.prototype.deleteProd = function (index) {
+        this.node.procedure.splice(index, 1);
+        _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.node);
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -5101,7 +5251,7 @@ var ParameterEditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.module==\"Input\"'>\r\n    <input class='input-const-name' [class.disabled-input]='true' value='{{prod.args[prod.argCount-2].value||\"Undefined\"}}:'\r\n    [style.width.px]='inputSize(prod.args[prod.argCount-2].value,\"Undefined\") + 10' disabled>\r\n\r\n    <select name={{prod.ID}}_type [(ngModel)]=\"prod.meta.inputMode\" tabindex=\"-1\">\r\n        <option \r\n            *ngFor=\"let ptype of PortTypesArr\" \r\n            [value]=\"PortTypes[ptype]\" \r\n            [selected]=\"prod.meta.inputMode == ptype\">{{ptype}}</option>\r\n    </select>\r\n    <ng-container [ngSwitch]=\"prod.meta.inputMode\" >\r\n        <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' \r\n        [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default Value\")'>\r\n\r\n        <div class='div--slider' *ngSwitchCase=\"PortTypes.Slider\">\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min'\r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].min,\"Min\")'>\r\n            <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max'\r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].max,\"Max\")'>\r\n            <mat-slider\r\n                [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                thumbLabel\r\n                tickInterval=\"auto\"\r\n                min={{prod.args[prod.argCount-1].min||0}}\r\n                max={{prod.args[prod.argCount-1].max||100}}></mat-slider>\r\n            <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default'\r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"\")' disabled>\r\n\r\n        </div>\r\n        <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n        <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'\r\n        [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default URL\")'>\r\n        <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n    </ng-container>\r\n    <div>\r\n        <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'\r\n        [style.width.px]='inputSize(prod.meta.description,\"Constant Description\")'>\r\n    </div>\r\n\r\n</div>\r\n<div class='container container--parameter' *ngIf='prod.meta.module==\"Output\"'>\r\n    <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'\r\n    [style.width.px]='inputSize(prod.meta.description,\"Return Description\")'>\r\n</div>"
+module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.module==\"Input\"'>\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Constant name:' size='13' disabled>\r\n        <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder=\"undefined\"\r\n        [style.width.px]='inputSize(prod.args[prod.argCount-2].value,\"Undefined\")'>\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)='deleteProd()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n\r\n\r\n\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Input Mode:' size='13' disabled>\r\n        <select name={{prod.ID}}_type [(ngModel)]=\"prod.meta.inputMode\" tabindex=\"-1\">\r\n            <option \r\n                *ngFor=\"let ptype of PortTypesArr\" \r\n                [value]=\"PortTypes[ptype]\" \r\n                [selected]=\"prod.meta.inputMode == ptype\">{{ptype}}</option>\r\n        </select>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Default:' size='13' disabled>\r\n        <ng-container [ngSwitch]=\"prod.meta.inputMode\" >\r\n            <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' \r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default Value\")'>\r\n\r\n            <div class='div--slider' *ngSwitchCase=\"PortTypes.Slider\">\r\n                <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].min,\"Min\")'>\r\n                <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].max,\"Max\")'>\r\n                <mat-slider\r\n                    [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                    thumbLabel\r\n                    tickInterval=\"auto\"\r\n                    min={{prod.args[prod.argCount-1].min||0}}\r\n                    max={{prod.args[prod.argCount-1].max||100}}></mat-slider>\r\n                <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"\")' disabled>\r\n\r\n            </div>\r\n            <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n            <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'\r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default URL\")'>\r\n            <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n        </ng-container>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Description:' size='13' disabled>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n            <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'\r\n            [style.width.px]='inputSize(prod.meta.description,\"Constant Description\")'>\r\n        </div>\r\n    </div>\r\n\r\n<div class='container container--parameter' *ngIf='prod.meta.module==\"Output\"'>\r\n    <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'\r\n    [style.width.px]='inputSize(prod.meta.description,\"Return Description\")'>\r\n</div>"
 
 /***/ }),
 
@@ -5112,7 +5262,7 @@ module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  color: #505050;\n  vertical-align: bottom;\n  padding-bottom: 5px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  width: 100%; }\n\nselect {\n  color: #505050;\n  background-color: #fafafa;\n  border: 1px solid #505050; }\n\ninput {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px;\n  max-width: 95%;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.input-const-name {\n  min-width: 100px; }\n\n.slider-val {\n  color: #505050;\n  resize: horizontal;\n  size: 2;\n  min-width: 1px;\n  max-width: 300px;\n  width: 20px; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\n.div--slider {\n  display: inline-flex;\n  flex-direction: row; }\n\n.inp--desc {\n  font-size: 13px;\n  padding-top: 5px;\n  max-width: 95%; }\n\n.parameter__name {\n  width: 100px;\n  height: auto;\n  word-wrap: break-word; }\n\nmat-slider {\n  width: 300px; }\n"
+module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  color: #505050;\n  vertical-align: bottom;\n  padding-bottom: 5px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  width: 100%; }\n\nselect {\n  color: #505050;\n  background-color: #fafafa;\n  border: 0px;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  height: 18px;\n  font-family: sans-serif; }\n\n.inline-div {\n  width: 100%;\n  display: inline-block;\n  height: 24px;\n  padding-bottom: 3px; }\n\ninput {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px;\n  max-width: 95%;\n  vertical-align: bottom;\n  font-family: sans-serif; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.inp--desc {\n  font-size: 13px;\n  max-width: 95%; }\n\n.input-const-name {\n  min-width: 100px; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  background-color: transparent;\n  border: none;\n  float: right;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.slider-val {\n  color: #505050;\n  resize: horizontal;\n  size: 2;\n  min-width: 1px;\n  max-width: 300px;\n  width: 20px; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\n.div--slider {\n  display: inline-flex;\n  flex-direction: row; }\n\n.parameter__name {\n  width: 100px;\n  height: auto;\n  word-wrap: break-word; }\n\nmat-slider {\n  width: 300px; }\n"
 
 /***/ }),
 
@@ -5145,6 +5295,7 @@ var ctx = canvas.getContext('2d');
 ctx.font = '13px Arial';
 var ProcedureInputEditorComponent = /** @class */ (function () {
     function ProcedureInputEditorComponent() {
+        this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.PortTypes = _models_port__WEBPACK_IMPORTED_MODULE_1__["InputType"];
         this.PortTypesArr = keys.slice(keys.length / 2);
     }
@@ -5161,10 +5312,21 @@ var ProcedureInputEditorComponent = /** @class */ (function () {
         }
         return ctx.measureText(val).width + 5;
     };
+    // delete this procedure
+    ProcedureInputEditorComponent.prototype.deleteProd = function () {
+        this.delete.emit();
+    };
+    ProcedureInputEditorComponent.prototype.markDisabled = function () {
+        this.prod.enabled = !this.prod.enabled;
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Object)
     ], ProcedureInputEditorComponent.prototype, "prod", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], ProcedureInputEditorComponent.prototype, "delete", void 0);
     ProcedureInputEditorComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'procedure-input-editor',
@@ -5530,9 +5692,11 @@ var ToolsetComponent = /** @class */ (function () {
                                         type: prod.meta.inputMode,
                                     };
                                 });
+                                /*
                                 if (!func.argCount) {
                                     resolve('error');
                                 }
+                                */
                                 // go through the nodes
                                 for (var _i = 0, _a = fl.nodes; _i < _a.length; _i++) {
                                     var node = _a[_i];
@@ -5679,7 +5843,7 @@ var ViewEditorRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <h2>{{dataService.node?.name}}</h2>\r\n\r\n                <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n                (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n                \r\n                    <div class='container__content'>\r\n                        <!-- toolset on the left side -->\r\n                        <div class=\"container--toolset\">\r\n                            <toolset [functions]='dataService.flowchart.functions' \r\n                            [nodeType]='dataService.node.type' \r\n                            [hasProd]='dataService.node.procedure.length>0' \r\n                            (delete)='deleteFunction($event)' \r\n                            (select)='add($event)' \r\n                            (imported)='importFunction($event)'></toolset>\r\n                        </div>\r\n                \r\n                        <!-- procedure editor on the right side -->\r\n                        <div id='procedure' class=\"container--procedure\">\r\n                            <!-- parameter-editor only for start node -->\r\n                            <parameter-editor *ngIf=\"dataService.node.type == 'start' || dataService.node.type == 'end'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n                \r\n                            <!-- list of procedure items for all nodes -->\r\n                            <procedure-item \r\n                            *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n                            [data]=\"line\"\r\n                            (select)=\"selectProcedure($event,line)\"\r\n                            (delete)=\"deleteChild(idx)\"\r\n                            (helpText)='updateHelpView($event)'></procedure-item>\r\n                            <br>\r\n                            <br>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n    \r\n\r\n\r\n"
+module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <h2>{{dataService.node?.name}}</h2>\r\n\r\n                <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n                (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n                \r\n                    <div class='container__content'>\r\n                        <!-- toolset on the left side -->\r\n                        <div class=\"container--toolset\">\r\n                            <toolset [functions]='dataService.flowchart.functions' \r\n                            [nodeType]='dataService.node.type' \r\n                            [hasProd]='dataService.node.procedure.length>0' \r\n                            (delete)='deleteFunction($event)' \r\n                            (select)='add($event)' \r\n                            (imported)='importFunction($event)'></toolset>\r\n                        </div>\r\n                \r\n                        <!-- procedure editor on the right side -->\r\n                        <div id='procedure' class=\"container--procedure\">\r\n                            <!-- parameter-editor only for start/end node -->\r\n                            <parameter-editor *ngIf=\"dataService.node.type == 'start' || dataService.node.type == 'end'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n                            <ng-container *ngIf=\"dataService.node.type != 'start'\">\r\n                                <!-- list of procedure items for all nodes -->\r\n                                <procedure-item \r\n                                *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n                                [data]=\"line\"\r\n                                (select)=\"selectProcedure($event,line)\"\r\n                                (delete)=\"deleteChild(idx)\"\r\n                                (helpText)='updateHelpView($event)'></procedure-item>\r\n                                <br>\r\n                                <br>\r\n                            </ng-container>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n    \r\n\r\n\r\n"
 
 /***/ }),
 
@@ -7762,6 +7926,29 @@ var BiMapManyToOne = /** @class */ (function () {
         return this.vk_map.get(value_str);
     };
     /**
+     * Returns an array of keys that point to this value.
+     * @param value The string version of the value.
+     */
+    BiMapManyToOne.prototype.getKeysFromValueStr = function (value_str, index) {
+        var _this = this;
+        var keys;
+        if (index < 0) {
+            keys = this.vk_map.get(value_str);
+            if (!keys) {
+                keys = [];
+            }
+            return keys;
+        }
+        // the value has an index
+        keys = [];
+        this.values().forEach(function (value_from_map) {
+            if (JSON.stringify(value_from_map[index]) === value_str) {
+                keys.push.apply(keys, _this.getKeys(value_from_map)); // THIS IS AN UGLY HACK :(:(:( TODO...
+            }
+        });
+        return keys;
+    };
+    /**
      * Returns the value to which this key points.
      * @param key
      */
@@ -7781,6 +7968,13 @@ var BiMapManyToOne = /** @class */ (function () {
      */
     BiMapManyToOne.prototype.hasValue = function (value) {
         var value_str = JSON.stringify(value);
+        return this.vk_map.has(value_str);
+    };
+    /**
+     * Returns true if the map contains the value.
+     * @param value_str The string version of the value.
+     */
+    BiMapManyToOne.prototype.hasValueStrValue = function (value_str) {
         return this.vk_map.has(value_str);
     };
     /**
@@ -7892,6 +8086,14 @@ var GIAttribMap = /** @class */ (function () {
         return this.bi_map.getValue(key);
     };
     /**
+     * Gets an array of keys, all of which have the same value.
+     * @param value_str The string version of the value.
+     * @param index
+     */
+    GIAttribMap.prototype.getKeysFromValueStr = function (value_str, index) {
+        return this.bi_map.getKeysFromValueStr(value_str, index);
+    };
+    /**
      * Gets a list of all the attribute keys, in sequential order.
      * The key vaues are mapped.
      * The key value gets maped to the new list position.
@@ -7929,6 +8131,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIAttribs", function() { return GIAttribs; });
 /* harmony import */ var _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GIAttribMap */ "./src/libs/geo-info/GIAttribMap.ts");
 /* harmony import */ var _GICommon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GICommon */ "./src/libs/geo-info/GICommon.ts");
+/* harmony import */ var _GIAttribsQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GIAttribsQuery */ "./src/libs/geo-info/GIAttribsQuery.ts");
+
 
 
 /**
@@ -7977,7 +8181,7 @@ var GIAttribs = /** @class */ (function () {
      * @param attribs_data The JSON data
      */
     GIAttribs.prototype.addData = function (attribs_data) {
-        // Helper function to ddd attributes to model
+        // Helper public to ddd attributes to model
         function _addAttribsData(exist_attribs_map, new_attribs_data, offset) {
             new_attribs_data.forEach(function (new_attrib_data) {
                 if (!exist_attribs_map.has(new_attrib_data.name)) {
@@ -8072,6 +8276,42 @@ var GIAttribs = /** @class */ (function () {
         return Array.from(this.colls.keys());
     };
     // ============================================================================
+    // Query an entity attrib
+    // ============================================================================
+    /**
+     * Query the model using a query strings.
+     * Returns a list of IDs.
+     */
+    GIAttribs.prototype.queryAttribs = function (query_str) {
+        var queries = Object(_GIAttribsQuery__WEBPACK_IMPORTED_MODULE_2__["parse_query"])(query_str);
+        if (!queries) {
+            return [];
+        }
+        var query1 = queries[0][0];
+        return this.queryAttrib(query1);
+    };
+    /**
+     * Query the model using a sequence of && and || queries.
+     * Returns a list of IDs.
+     * @param query
+     */
+    GIAttribs.prototype.queryAttrib = function (query) {
+        // print the query
+        // console.log("     attrib_type" ,     query.attrib_type);
+        // console.log("     attrib_name" ,     query.attrib_name);
+        // console.log("     attrib_index" ,    query.attrib_index);
+        // console.log("     attrib_value_str", query.attrib_value_str);
+        // console.log("     operator_type" ,   query.operator_type);
+        // do the query
+        var attribs = this.attrib_maps[query.attrib_type];
+        if (!attribs.has(query.attrib_name)) {
+            return [];
+        }
+        var entities_i = attribs.get(query.attrib_name).getKeysFromValueStr(query.attrib_value_str, query.attrib_index);
+        var entities_id = entities_i.map(function (entity_i) { return query.attrib_type + entity_i; });
+        return entities_id;
+    };
+    // ============================================================================
     // Add an entity attrib
     // ============================================================================
     GIAttribs.prototype.addPosiAttrib = function (name, data_type, data_size) {
@@ -8130,17 +8370,141 @@ var GIAttribs = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/libs/geo-info/GIAttribsQuery.ts":
+/*!*********************************************!*\
+  !*** ./src/libs/geo-info/GIAttribsQuery.ts ***!
+  \*********************************************/
+/*! exports provided: parse_query */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse_query", function() { return parse_query; });
+/* harmony import */ var _GICommon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GICommon */ "./src/libs/geo-info/GICommon.ts");
+
+/**
+ * Parse the attribute value. Handles sting with quotes, e.g. 'this' and "that".
+ * Remove quotes from value string
+ */
+function _parse_value_str(value_str) {
+    var first_char = value_str.slice(0, 1);
+    if (first_char === '\'' || first_char === '"') {
+        return value_str.slice(1, -1);
+    }
+    return value_str;
+}
+/**
+ * Parese the attribute name. Handles names with indexes, e.g. 'name[2]'
+ * Split the name into the string name and the numeric index
+ */
+function _parse_name_str(value_str) {
+    var last_char = value_str.slice(-1);
+    if (last_char === ']') {
+        var _a = value_str.slice(0, -1).split('['), name_str = _a[0], index_str = _a[1];
+        var index = Number(index_str);
+        if (isNaN(index)) {
+            throw new Error('Bad query');
+        }
+        return [name_str, index];
+    }
+    return [value_str, null];
+}
+/**
+ * Parse a query component string.
+ */
+function _parse_query_component(query_component) {
+    var attrib_name_str = '';
+    var attrib_value_str = '';
+    var operator_type = null;
+    var attrib_type = null;
+    // split the query at the @ sign
+    var _a = query_component.split('@'), attrib_type_str = _a[0], attrib_name_value_str = _a[1];
+    if (!attrib_name_value_str) {
+        throw new Error('Bad query.');
+    }
+    // get the attrib_type
+    for (var _i = 0, _b = Object.keys(_GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"]); _i < _b.length; _i++) {
+        var key = _b[_i];
+        if (attrib_type_str === _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"][key]) {
+            attrib_type = _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"][key];
+            break;
+        }
+    }
+    //  check
+    if (!attrib_type) {
+        throw new Error('Bad query.');
+    }
+    // split the attrib_name_value_str based on operator, ==, !=, etc...
+    for (var _c = 0, _d = Object.keys(_GICommon__WEBPACK_IMPORTED_MODULE_0__["EQueryOperatorTypes"]); _c < _d.length; _c++) {
+        var key = _d[_c];
+        var split_query = attrib_name_value_str.split(_GICommon__WEBPACK_IMPORTED_MODULE_0__["EQueryOperatorTypes"][key]);
+        if (split_query.length === 2) {
+            attrib_name_str = split_query[0];
+            attrib_value_str = split_query[1];
+            operator_type = _GICommon__WEBPACK_IMPORTED_MODULE_0__["EQueryOperatorTypes"][key];
+            break;
+        }
+    }
+    // check
+    if (!attrib_name_str) {
+        throw new Error('Bad query.');
+    }
+    if (!attrib_value_str) {
+        throw new Error('Bad query.');
+    }
+    if (!operator_type) {
+        throw new Error('Bad query.');
+    }
+    // parse the name
+    var attrib_name_index = _parse_name_str(attrib_name_str);
+    var attrib_name = attrib_name_index[0];
+    var attrib_index = attrib_name_index[1];
+    if (attrib_index === undefined) {
+        attrib_index = -1;
+    }
+    // parse the value
+    attrib_value_str = _parse_value_str(attrib_value_str);
+    // return the data for the query component as an object
+    return {
+        attrib_type: attrib_type,
+        attrib_name: attrib_name,
+        attrib_index: attrib_index,
+        attrib_value_str: attrib_value_str,
+        operator_type: operator_type
+    };
+}
+/**
+ * Parse a query string.
+ */
+function parse_query(query_str) {
+    if (!query_str.startsWith('#')) {
+        throw new Error('Bad query.');
+    }
+    var query_str_clean = query_str.replace(/\s/g, '').slice(1);
+    var and_query_strs = query_str_clean.split('&&');
+    var query_list = [];
+    and_query_strs.forEach(function (and_query_str) {
+        var or_query_strs = and_query_str.split('||');
+        query_list.push(or_query_strs.map(function (or_query_str) { return _parse_query_component(or_query_str); }));
+    });
+    return query_list;
+}
+
+
+/***/ }),
+
 /***/ "./src/libs/geo-info/GICommon.ts":
 /*!***************************************!*\
   !*** ./src/libs/geo-info/GICommon.ts ***!
   \***************************************/
-/*! exports provided: EEntityTypeStr, EAttribNames, idBreak, idIndex, idIndicies, idEntityTypeStr */
+/*! exports provided: EEntityTypeStr, EAttribNames, EQueryOperatorTypes, idBreak, idIndex, idIndicies, idEntityTypeStr */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EEntityTypeStr", function() { return EEntityTypeStr; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAttribNames", function() { return EAttribNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EQueryOperatorTypes", function() { return EQueryOperatorTypes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idBreak", function() { return idBreak; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idIndex", function() { return idIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "idIndicies", function() { return idIndicies; });
@@ -8166,6 +8530,19 @@ var EAttribNames;
     EAttribNames["NORMAL"] = "normal";
     EAttribNames["COLOR"] = "color";
 })(EAttribNames || (EAttribNames = {}));
+/**
+ * The types of operators that can be used in a query.
+ */
+var EQueryOperatorTypes;
+(function (EQueryOperatorTypes) {
+    EQueryOperatorTypes["IS_EQUAL"] = "==";
+    EQueryOperatorTypes["IS_NOT_EQUAL"] = "!=";
+    EQueryOperatorTypes["IS_GREATER_OR_EQUAL"] = ">=";
+    EQueryOperatorTypes["IS_LESS_OR_EQUAL"] = "<=";
+    EQueryOperatorTypes["IS_GREATER"] = ">";
+    EQueryOperatorTypes["IS_LESS"] = "<";
+    EQueryOperatorTypes["EQUAL"] = "=";
+})(EQueryOperatorTypes || (EQueryOperatorTypes = {}));
 // ============================================================================
 // Each entity in the model can be accessed using an ID string.
 // Below are functions for breaking ID strings into the component parts
@@ -9646,7 +10023,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! F:\Dev\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\akibdpt\Documents\Angular\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
 
 
 /***/ })

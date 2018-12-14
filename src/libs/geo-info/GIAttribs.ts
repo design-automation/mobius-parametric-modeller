@@ -159,7 +159,7 @@ export class GIAttribs {
     // ============================================================================
     /**
      * Query the model using a query strings.
-     * Returns a list of IDs.
+     * Returns a list of string IDs of entities in the model.
      */
     public queryAttribs(query_str: string): string[] {
         const queries: IQueryComponent[][] = parse_query(query_str);
@@ -169,7 +169,7 @@ export class GIAttribs {
     }
     /**
      * Query the model using a sequence of && and || queries.
-     * Returns a list of IDs.
+     * Returns a list of string IDs of entities in the model.
      * @param query
      */
     public queryAttrib(query: IQueryComponent): string[] {

@@ -1,5 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IModelData, TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '../../../libs/geo-info/GIJson';
+import { EEntityTypeStr } from '@libs/geo-info/GICommon';
 
 
 //  ===============================================================================================================
@@ -131,7 +132,7 @@ export function addLinestring(__model__: GIModel, positions: string[]): string {
  * @param __model__
  * @param coords
  */
-export function addPolygon(__model__: GIModel, positions: string[]): string {
+export function addPolygon(__model__: GIModel, positions: Tid[]): string {
     return __model__.geom().addPgon(positions);
 }
 /**
@@ -170,10 +171,60 @@ export function getCollections(__model__: GIModel): string[] {
     return __model__.geom().getColls();
 }
 /**
+ * Create a new attribute.
+ * @param __model__
+ * @param entity_type
+ * @enum entity_type:['a','b','c']
+ * @param name
+ * @param data_type
+ * @param data_size
+ */
+export function createAttrib(__model__: GIModel, entity_type: EEntityTypeStr,
+        name: string, data_type: EAttribDataTypeStrs, data_size: number): void {
+    switch (entity_type) {
+        case EEntityTypeStr.POSI:
+            __model__.attribs().addPosiAttrib(name, data_type, data_size);
+            break;
+        case EEntityTypeStr.VERT:
+            __model__.attribs().addVertAttrib(name, data_type, data_size);
+            break;
+        case EEntityTypeStr.EDGE:
+            __model__.attribs().addEdgeAttrib(name, data_type, data_size);
+            break;
+        case EEntityTypeStr.WIRE:
+            __model__.attribs().addWireAttrib(name, data_type, data_size);
+            break;
+        case EEntityTypeStr.FACE:
+            __model__.attribs().addFaceAttrib(name, data_type, data_size);
+            break;
+        case EEntityTypeStr.COLL:
+            __model__.attribs().addCollAttrib(name, data_type, data_size);
+            break;
+        default:
+            break;
+    }
+}
+/**
+ * Get attribute value.
+ * @param __model__
+ * @param id
+ */
+export function getAttribValue(__model__: GIModel, id: string): TAttribDataTypes {
+    return __model__.attribs().getAttribValue(id, name);
+}
+/**
+ * Set attribute value.
+ * @param __model__
+ * @param id
+ */
+export function setAttribValue(__model__: GIModel, id: string, name: string, value: TAttribDataTypes): void {
+    return __model__.attribs().setAttribValue(id, name, value);
+}
+/**
  * Query
  * @param __model__
  * @param query_str
  */
-export function query(__model__: GIModel, query_str: string): string[] {
+export function queryAttribValue(__model__: GIModel, query_str: string): string[] {
     return __query__(__model__, query_str);
 }

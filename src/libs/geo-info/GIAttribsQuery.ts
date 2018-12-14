@@ -59,8 +59,7 @@ function _parse_query_component(query_component: string): IQueryComponent {
     // parse the name
     const attrib_name_index = _parse_name_str(attrib_name_str);
     const attrib_name  = attrib_name_index[0];
-    let attrib_index  = attrib_name_index[1];
-    if (attrib_index === undefined) {attrib_index = -1; }
+    const attrib_index  = attrib_name_index[1];
     // parse the value
     attrib_value_str = _parse_value_str(attrib_value_str);
     // return the data for the query component as an object

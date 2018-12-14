@@ -1,6 +1,6 @@
 <div class='container container--parameter' *ngIf='prod.meta?.module=="Input"'>
     <div class='inline-div'>
-        <input [class.disabled-input]='true' value='Constant name:' size='13' disabled>
+        <input [class.disabled-input]='true' value='Name:' size='8' disabled>
         <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder="undefined"
         [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
 
@@ -17,7 +17,7 @@
     </div>
 
     <div class='inline-div'>
-        <input [class.disabled-input]='true' value='Input Mode:' size='13' disabled>
+        <input [class.disabled-input]='true' value='Input Mode:' size='8' disabled>
         <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
             <option 
                 *ngFor="let ptype of PortTypesArr" 
@@ -27,7 +27,7 @@
     </div>
 
     <div class='inline-div'>
-        <input [class.disabled-input]='true' value='Default:' size='13' disabled>
+        <input [class.disabled-input]='true' value='Default:' size='8' disabled>
         <ng-container [ngSwitch]="prod.meta.inputMode" >
             <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
@@ -55,7 +55,7 @@
     </div>
 
     <div class='inline-div'>
-        <input [class.disabled-input]='true' value='Description:' size='13' disabled>
+        <input [class.disabled-input]='true' value='Description:' size='8' disabled>
     </div>
 
     <div class='inline-div'>

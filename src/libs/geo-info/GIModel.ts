@@ -30,20 +30,19 @@ export class GIModel {
     /**
      * Sets the data in this model from JSON data.
      * The existing data in the model is deleted.
-     * @param model_data The JSON data
+     * @param model_data The JSON data.
      */
     public addData (model_data: IModelData): void {
+        this._attribs.addData(model_data); // warning: must be before addGeomData()
         this._geom.addData(model_data.geometry);
-        this._attribs.addData(model_data.attributes);
     }
     /**
-     * Adds data to this model from JSON data.
+     * Adds data to this model from a GI model.
      * The existing data in the model is not deleted.
-     * @param model_data The JSON data
+     * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        this._attribs.addData(model.getAttribsData()); // must be before addGeomData()
-        this._geom.addData(model.getGeomData());
+        this.addData(model.getData());
     }
     /**
      * Returns the JSON data for this model.

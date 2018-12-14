@@ -72,18 +72,19 @@
                 
                         <!-- procedure editor on the right side -->
                         <div id='procedure' class="container--procedure">
-                            <!-- parameter-editor only for start node -->
+                            <!-- parameter-editor only for start/end node -->
                             <parameter-editor *ngIf="dataService.node.type == 'start' || dataService.node.type == 'end'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
-                
-                            <!-- list of procedure items for all nodes -->
-                            <procedure-item 
-                            *ngFor="let line of dataService.node?.procedure; let idx=index" 
-                            [data]="line"
-                            (select)="selectProcedure($event,line)"
-                            (delete)="deleteChild(idx)"
-                            (helpText)='updateHelpView($event)'></procedure-item>
-                            <br>
-                            <br>
+                            <ng-container *ngIf="dataService.node.type != 'start'">
+                                <!-- list of procedure items for all nodes -->
+                                <procedure-item 
+                                *ngFor="let line of dataService.node?.procedure; let idx=index" 
+                                [data]="line"
+                                (select)="selectProcedure($event,line)"
+                                (delete)="deleteChild(idx)"
+                                (helpText)='updateHelpView($event)'></procedure-item>
+                                <br>
+                                <br>
+                            </ng-container>
                         </div>
                     </div>
                 </div>

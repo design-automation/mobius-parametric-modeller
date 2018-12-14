@@ -14,6 +14,7 @@ ctx.font = '13px Arial';
 export class ProcedureInputEditorComponent implements AfterViewInit {
 
     @Input() prod: IProcedure;
+    @Output() delete = new EventEmitter();
 
     PortTypes = InputType;
     PortTypesArr = keys.slice(keys.length / 2);
@@ -34,6 +35,15 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
     inputSize(val, defaultVal) {
         if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 5; }
         return ctx.measureText(val).width + 5;
+    }
+
+    // delete this procedure
+    deleteProd(): void {
+        this.delete.emit();
+    }
+
+    markDisabled() {
+        this.prod.enabled = !this.prod.enabled;
     }
 
 }

@@ -1,5 +1,6 @@
-import { GIModel } from '../../../libs/geo-info/GIModel';
-import { IModelData, TCoord, EAttribDataTypeStrs } from '../../../libs/geo-info/GIJson';
+import { GIModel } from '@libs/geo-info/GIModel';
+import { IModelData, TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '../../../libs/geo-info/GIJson';
+
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -55,6 +56,14 @@ export function __stringify__(__model__: GIModel): string {
     return JSON.stringify(__model__.getData());
 }
 
+/**
+ * Query entities in the model
+ * @param __model__
+ * @param query_str
+ */
+export function __query__(__model__: GIModel, query_str: string): string[] {
+    return __model__.attribs().queryAttribs(query_str);
+}
 //  ===============================================================================================================
 //  Functions visible in the Mobius interface.
 //  ===============================================================================================================
@@ -159,4 +168,12 @@ export function getPolygons(__model__: GIModel): string[] {
  */
 export function getCollections(__model__: GIModel): string[] {
     return __model__.geom().getColls();
+}
+/**
+ * Query
+ * @param __model__
+ * @param query_str
+ */
+export function query(__model__: GIModel, query_str: string): string[] {
+    return __query__(__model__, query_str);
 }

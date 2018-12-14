@@ -70,6 +70,14 @@ export class GIAttribMap {
         return this.bi_map.getValue(key);
     }
     /**
+     * Gets an array of keys, all of which have the same value.
+     * @param value_str The string version of the value.
+     * @param index
+     */
+    public getKeysFromValueStr(value_str: string, index: number): number[] {
+        return this.bi_map.getKeysFromValueStr(value_str, index);
+    }
+    /**
      * Gets a list of all the attribute keys, in sequential order.
      * The key vaues are mapped.
      * The key value gets maped to the new list position.

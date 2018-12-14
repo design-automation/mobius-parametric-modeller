@@ -10,6 +10,14 @@ $separator: rgb(239,239,239);
     background-color: $separator;
 }
 
+h2{
+    color: $text-color;
+    padding-left: 8px;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+}
+
 ul{
     list-style-type: none;
     margin: 0px;

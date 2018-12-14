@@ -230,7 +230,7 @@ span.addBtn{
 }
 
 
-.mat-input-wrapper{
+.mat-form-field-wrapper{
     font-family: 'Ubuntu Mono', monospace !important;
     padding: 0 !important;
     font-size: $fsize2 !important;
@@ -238,12 +238,12 @@ span.addBtn{
     max-width: 95%;
 }
 
-.mat-input-infix{
+.mat-form-field-infix{
     padding: 0 !important;
     border: 0 !important;
 }
 
-.mat-input-underline{
+.mat-form-field-underline{
     display: none !important;
 }
 

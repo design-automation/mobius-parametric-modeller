@@ -19,7 +19,7 @@ export class DataService {
 
     private static _galleryFiles: any = undefined;
 
-    private static _splitVal = 55;
+    private static _splitVal = 60;
 
     get file() { return DataService._data; }
     set file(data: IMobius) {

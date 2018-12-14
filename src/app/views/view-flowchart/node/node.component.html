@@ -54,8 +54,10 @@
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
         [attr.d]="'M'+node.position.x +' '+ (node.position.y + 30) +
-                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) +
-                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 80) + ' Z'" 
+                 ' L'+ node.position.x +' '+ (node.position.y + 60) +
+                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 80) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 60) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) + ' Z'" 
         />
 
     <!-- circles as draggable input/output ports of the node -->
@@ -106,8 +108,10 @@
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
         [attr.d]="'M'+node.position.x +' '+ (node.position.y + 50) +
-                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) +
-                 ' L'+ (node.position.x + 50) +' '+ node.position.y + ' Z'" 
+                 ' L' + node.position.x +' '+ (node.position.y + 20) +
+                 ' L'+ (node.position.x + 50) +' '+ node.position.y +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 20) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) + ' Z'" 
         />
 
     <svg:circle

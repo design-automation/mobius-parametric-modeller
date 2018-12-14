@@ -6,6 +6,7 @@ import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
 import * as Modules from '@modules';
 import { ModuleAware, ModuleDocAware } from '@shared/decorators';
+import { INode } from '@models/node';
 
 
 const keys = Object.keys(ProcedureTypes);
@@ -23,7 +24,7 @@ export class ToolsetComponent {
     @Output() delete = new EventEmitter();
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
-    @Input() nodeType: string;
+    @Input() node: INode;
     @Input() hasProd: boolean;
 
     ProcedureTypes = ProcedureTypes;
@@ -105,9 +106,11 @@ export class ToolsetComponent {
                         type: prod.meta.inputMode,
                     };
                 });
+                /*
                 if (!func.argCount) {
                     resolve('error');
                 }
+                */
 
                 // go through the nodes
                 for (const node of fl.nodes) {

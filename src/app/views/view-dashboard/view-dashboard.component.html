@@ -1,57 +1,7 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
         <as-split-area [size]="100 - dataService.splitVal">
-            <div class='container__header'>
-
-                <!-- top left tab menu  -->
-                <div class="tab">
-                    <button class='btn-tab' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'">Gallery</button>
-                    <button class='btn-tab' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'">Dashboard</button>
-                    <button class='btn-tab' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'">Flowchart</button>
-                    <!--
-                    <button class='btn' [class.active]='false' (click)='updateView("editor")'>Procedures</button>
-                    -->
-                </div>
-
-                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
-                <div style="display: none;">
-                    <file-new></file-new>
-                    <file-save></file-save>
-                    <file-load></file-load>        
-                </div>
-
-                <!-- top right dropdown menu -->
-                <div class="dropmenu">
-                    <!-- execute button -->
-                    <div>
-                        <execute></execute>
-                    </div>
-                    <!-- dropdown menu for new file, save file, loaf file-->
-                    <div>
-                        <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button  mat-menu-item onclick="document.getElementById('newfile').click();"
-                            title="Create New Flowchart">
-                                <mat-icon>rotate_left</mat-icon>
-                                <span>New File</span>
-                            </button>
-                            <button mat-menu-item onclick="document.getElementById('savefile').click();"
-                            title="Save Flowchart File to Computer">
-                                <mat-icon>save_alt</mat-icon>
-                                <span>Save File</span>
-                            </button>
-                            <button mat-menu-item onclick="document.getElementById('file-input').click();"
-                            title="Load Flowchart File from Computer">
-                                <mat-icon>launch</mat-icon>
-                                <span>Load File</span>
-                            </button>
-                        </mat-menu>
-                    </div>
-                    
-                </div>
-            </div>
+            <panel-header></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
                 <parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>

@@ -1,5 +1,5 @@
 import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { INode } from '@models/node';
+import { INode, NodeUtils } from '@models/node';
 import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
 import { MatTextareaAutosize } from '@angular/material';
@@ -30,6 +30,10 @@ export class ParameterEditorComponent implements AfterViewInit {
         textarea.style.height = lineCount * 7.5 + 'px';
     }
 
+    deleteProd(index: number) {
+        this.node.procedure.splice(index, 1);
+        NodeUtils.deselect_procedure(this.node);
+    }
 }
 
 

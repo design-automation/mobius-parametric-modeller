@@ -1,5 +1,13 @@
 <div id="gi-viewer-container">
-    <threejs-viewer [model]='data'></threejs-viewer>
+	<as-split direction="vertical">
+		<as-split-area [size]="80" id="three-js">
+			<threejs-viewer [model]='data'></threejs-viewer>
+		</as-split-area>
+		<as-split-area [size]='20' id="attrib">
+			<h1>Attribute goes here</h1>
+			<attribute></attribute>
+		</as-split-area>
+	</as-split>
 </div>
 
 <!-- <div id="appdiv" (mousedown)="leaflet()"> -->

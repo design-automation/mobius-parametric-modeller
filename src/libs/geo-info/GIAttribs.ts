@@ -240,4 +240,18 @@ export class GIAttribs {
         const result = [].concat(...attrib_keys.map(attrib_key => attrib_values[attrib_key]));
         return result;
     }
+
+    public getVertsCoords(attrib_name: string): GIAttribMap {
+        const coords_attrib: GIAttribMap = this._posis.get('coordinates');
+        return coords_attrib;
+    }
+
+    public getVertsAttrib(attrib_name: string) {
+        if (!this._verts.has(attrib_name)) { return null; }
+        const attrib_map: GIAttribMap = this._verts.get(attrib_name);
+        const attrib_keys: number[] = attrib_map.getSeqKeys();
+        const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
+        const result = Array.from(attrib_keys.map(attrib_key => attrib_values[attrib_key]));
+        return result;
+    }
 }

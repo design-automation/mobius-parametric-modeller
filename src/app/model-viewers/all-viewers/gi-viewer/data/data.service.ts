@@ -1,7 +1,9 @@
 import { GIModel } from '@libs/geo-info/GIModel';
+import { GICommon } from '@libs/geo-info';
 import { DataThreejs } from './data.threejs';
 // import @angular stuff
 import { Injectable } from '@angular/core';
+import { GIAttribMap } from '@libs/geo-info/GIAttribMap';
 
 /**
  * DataService
@@ -12,6 +14,7 @@ export class DataService {
     // GI Model
     // private _model: GIModel;
     private _data_threejs: DataThreejs;
+
     // Others
     // imVisible: boolean;
     selecting: any = [];
@@ -33,26 +36,8 @@ export class DataService {
     /**
      * Set the THreejs Scene
      */
-    setThreejsScene( model: GIModel ) {
+    setThreejsScene(model: GIModel) {
         this._data_threejs = new DataThreejs(model);
     }
-
-    /**
-     * Get the GI Model
-     */
-    // getGIModel(): GIModel {
-    //     // console.log('CALLING getModel in DATA SERVICE');
-    //     return this._model;
-    // }
-
-    /**
-     * Set the GI Model
-     * @param model
-     */
-    // setGIModel(model: GIModel) {
-    //     // console.log('CALLING setModel in DATA SERVICE');
-    //     // console.log('DATTTTTTTTTTTTTTTTTTT', model);
-    //     this._model = model;
-    //     // this._data_threejs.UpdateModel(model);
-    // }
 }
+

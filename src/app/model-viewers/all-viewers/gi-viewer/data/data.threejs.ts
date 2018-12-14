@@ -122,7 +122,7 @@ export class DataThreejs {
     }
     // add axes
     private _addAxes() {
-        const axesHelper = new THREE.AxisHelper( 20 );
+        const axesHelper = new THREE.AxesHelper( 20 );
         this._scene.add( axesHelper );
     }
     /**
@@ -173,7 +173,7 @@ export class DataThreejs {
 
         // show vertex normals
         const vnh = new THREE.VertexNormalsHelper( mesh, 3, 0x0000ff );
-        this._scene.add( vnh );
+        // this._scene.add( vnh );
 
         // this._geometries.push(geom);
         // this._meshes.push(mesh);

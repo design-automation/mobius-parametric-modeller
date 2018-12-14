@@ -122,7 +122,7 @@ export class DataThreejs {
     }
     // add axes
     private _addAxes() {
-        const axesHelper = new THREE.AxisHelper( 20 );
+        const axesHelper = new THREE.AxesHelper( 20 );
         this._scene.add( axesHelper );
     }
     /**

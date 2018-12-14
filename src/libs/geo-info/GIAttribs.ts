@@ -3,7 +3,6 @@ import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
 import { EEntityTypeStr, IQueryComponent, idBreak,  } from './GICommon';
 import { parse_query } from './GIAttribsQuery';
-import { e } from '@angular/core/src/render3';
 
 /**
  * Class for attributes.

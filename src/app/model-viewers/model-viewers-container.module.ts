@@ -4,11 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { DataViewersContainerComponent } from './model-viewers-container.component';
 import { VIEWER_ARR } from './model-viewers.config';
 // viewers
-import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component';
-import { ConsoleViewerComponent } from './all-viewers/console-viewer/viewer.component';
-import { HelpViewerComponent } from './all-viewers/help-viewer/viewer.component';
+import { ConsoleViewerComponent } from './all-viewers/console-viewer/console-viewer.component';
+import { HelpViewerComponent } from './all-viewers/help-viewer/help-viewer.component';
 import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
-import { SharedModule } from '@shared/shared.module';
 import { MatIconModule } from '@angular/material';
 // import { ThreejsViewerComponent } from './viewers/gi-viewer/threejs/threejs-viewer.component';
 // import { MobiusCesium } from './viewers/cesium-viewer/mobius-cesium.module';

@@ -5,8 +5,8 @@ import { Component, Input, OnInit, DoCheck, AfterViewInit, AfterViewChecked } fr
  */
 @Component({
     selector: 'console-viewer',
-    template: `<textarea id='console_textarea'>{{ text || "" }}</textarea>`,
-    styleUrls: [`../general-viewer.scss`]
+    templateUrl: './console-viewer.component.html',
+    styleUrls: ['./console-viewer.component.scss']
 })
 export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, AfterViewChecked {
     text: string;
@@ -16,7 +16,7 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * constructor
      */
     constructor() {
-        // console.log(`Console Viewer Created`);
+        // console.log('Console Viewer Created');
     }
     /**
      * ngOnInit

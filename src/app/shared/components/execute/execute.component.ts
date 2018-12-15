@@ -20,47 +20,9 @@ function mergeInputs(models){
 const DEBUG = false;
 
 @Component({
-  selector: 'execute',
-  /*
-  template: `<button class="btn--execute"
-                    (click)="execute()">
-                Execute
-             </button>`,
-    */
-   template: `<button id='executeButton' class="btn" mat-icon-button title="Execute" (click)="execute()">
-    <mat-icon>play_circle_outline</mat-icon>
-    </button>
-    `,
-  styles: [
-            `.btn--execute{
-                display: inline-block;
-                vertical-align: middle;
-                font-size: 14px;
-                line-height: 18px;
-                border: 3px solid #E0C229;
-                border-radius: 4px;
-                padding: 1px 10px;
-                background-color: #E0C229;
-                color: #494D59;
-                font-weight: 600;
-                text-transform: uppercase;
-              }
-              .btn{
-                vertical-align: middle;
-                background-color: transparent;
-                border: none;
-                color: rgb(80,80,80);
-              }
-              .btn:hover{
-                color: blue;
-              }
-              .mat-icon{
-                  margin-top: 3px;
-                  font-size: 30px;
-                  width:30px;
-                  height:30px;
-              }`
-          ]
+    selector: 'execute',
+    templateUrl: 'execute.component.html',
+    styleUrls: ['execute.component.scss']
 })
 export class ExecuteComponent {
 

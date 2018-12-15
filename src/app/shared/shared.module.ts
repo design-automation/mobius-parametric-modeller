@@ -18,7 +18,7 @@ import { AutogrowDirective } from './directives/textarea';
 import { ExecuteComponent } from './components/execute/execute.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { HeaderComponent } from './components/header/header.component';
+import { PanelHeaderComponent } from './components/header/panel-header.component';
 import { AddOutputComponent } from './components/add-components/add_output.component';
 import { AddNodeComponent } from './components/add-components/add_node.component';
 import { AddInputComponent } from './components/add-components/add_input.component';
@@ -37,7 +37,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             ExecuteComponent,
             PageNotFoundComponent,
             NavigationComponent,
-            HeaderComponent,
+            PanelHeaderComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent
@@ -73,7 +73,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             ExecuteComponent,
             PageNotFoundComponent,
             NavigationComponent,
-            HeaderComponent,
+            PanelHeaderComponent,
             AddNodeComponent,
             AddInputComponent,
             AddOutputComponent,

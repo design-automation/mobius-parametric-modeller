@@ -1,16 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { INode } from '@models/node';
 import { Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material';
-
 
 @Component({
   selector: 'panel-header',
-  templateUrl:  `header.component.html`,
-  styleUrls: [`header.component.scss`]
+  templateUrl:  'panel-header.component.html',
+  styleUrls: ['panel-header.component.scss']
 })
-export class HeaderComponent {
+export class PanelHeaderComponent {
 
     @Input() title: string;
 

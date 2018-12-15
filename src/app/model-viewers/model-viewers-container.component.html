@@ -1,24 +1,16 @@
 <div class='viewers-container'>  
-    <!--
+
     <div class='container__header'>
-        <div class="tab">
-            <button class='btn-tab' 
-                [class.active]='view.name == activeView.name'
-                *ngFor='let view of Viewers;' 
-                (click)='updateView(view)'>
-            {{view.name}}
+        <div class="header-btn-group">
+            <button class='btn' mat-icon-button *ngFor='let view of Viewers;'
+            [class.active]='view.name == activeView.name' (click)='updateView(view)' title='{{view.name}}'>
+                <mat-icon [svgIcon]='"c"+view.name'></mat-icon>
             </button>
         </div>
     </div>
-    -->
-    <div class="tab">
-        <button class='btn-tab' mat-icon-button *ngFor='let view of Viewers;'
-        [class.active]='view.name == activeView.name' (click)='updateView(view)' title='{{view.name}}'>
-            <mat-icon [svgIcon]='"c"+view.name'></mat-icon>
-        </button>
-    </div>
-    
+
     <div class='content__panel'>
         <ng-container #vc></ng-container>
     </div>
+
 </div>

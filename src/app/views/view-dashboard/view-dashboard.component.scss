@@ -1,4 +1,11 @@
-@import '~scss/globals';
+@import '~scss/viewers';
+
+.content__panel{
+    margin-top: 10px;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+}
 
 textarea{
     background-color: red;

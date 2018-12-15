@@ -1,19 +1,6 @@
-@import '~scss/variables';
-
 :host {
     height: 100%;
     width: 100%;
-}
-
-textarea {
-    height: 93%;
-    width: 99%;
-    overflow: auto;
-    resize: none;
-    font-family: sans-serif;
-    background-color: rgb(220,220,220);
-    color: rgb(80,80,80);
-    border: none;
 }
 
 div {

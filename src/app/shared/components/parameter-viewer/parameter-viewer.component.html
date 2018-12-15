@@ -1,6 +1,7 @@
-<h2>{{displayName()}}</h2>
+<!-- <h2>{{displayName()}}</h2> -->
+
 <textarea id='display-flowchart-desc' [(ngModel)]='flowchart.description' placeholder="Flowchart Description" disabled></textarea>
+
 <hr>
 
-<!-- <p>Edit the parameters of your flowchart here. These parameters are visible in the viewer when you share your flowchart.</p> -->
 <procedure-input-viewer *ngFor="let prod of startNode.procedure" [prod]="prod"></procedure-input-viewer>

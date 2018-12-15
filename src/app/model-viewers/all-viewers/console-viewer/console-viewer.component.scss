@@ -1,0 +1,16 @@
+@import '../general-viewer.scss';
+
+textarea {
+    margin-top: 40px;
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    resize: none;
+    font-family: sans-serif;
+    background-color: transparent;
+    color: rgb(80,80,80);
+    border: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

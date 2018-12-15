@@ -1,5 +1,6 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+        
         <as-split-area [size]="100 - dataService.splitVal">
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
@@ -16,7 +17,5 @@
         </as-split-area>
         
     </as-split>
-
 </div>
     
-

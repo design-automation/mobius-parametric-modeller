@@ -1,0 +1,88 @@
+$header-height: 35px;
+$light-background: rgb(220,220,220);
+$title-background: #ccc;
+$separator: rgb(238,238,238);
+$text-color: rgb(80,80,80);
+$selected-color: rgb(0, 0, 150);
+$hover-color: blue;
+
+.viewers-container{
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}
+
+.container__header{
+    flex: 0 1 auto;
+    height: $header-height;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 0px 0px 0px 0px;
+
+    background-color: $title-background;
+    border-bottom: 3px solid $separator;
+
+    line-height: $header-height;
+    //text-transform: uppercase;
+
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.content__panel{
+    background-color: rgb(220, 220, 220);
+    width: 100%;
+    height: 100%; 
+    overflow: auto;
+
+    //padding: 10px 15px;
+}
+
+button.btn:hover{
+    color:$hover-color;
+}
+
+/* tab styling */
+.tab {
+    border: 0px ;
+    position: absolute;
+    right: 0px;
+    overflow: hidden;
+    background-color: transparent;
+    z-index: 1;
+}
+
+.tab button {
+    display: inline-block;
+    vertical-align: bottom;
+    background-color: transparent;
+    color: $text-color;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0px;
+    width: 40px;
+    height: 40px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.tab button:hover {
+    color:$hover-color;
+}
+
+.tab button.active {
+    color: $selected-color;
+    font-weight: 600;
+    border-color: #222 !important;
+}
+
+mat-icon {
+    width: 30px;
+    height: 30px;
+}
+

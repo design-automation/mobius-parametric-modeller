@@ -1,0 +1,72 @@
+@import '~scss/colors';
+@import '~scss/button';
+@import '~scss/variables';
+
+.container__header{
+    display: flex;
+    background-color: transparent;
+    height: $header-height;
+    padding: 0px;
+    margin: 0px;
+
+    .header-btn-group {
+        //display: inline;
+        height: $header-height;
+        padding: 0px;
+        margin: 0px;
+        overflow: hidden;
+        background-color: transparent;
+        z-index: 1;
+    }
+    
+    #filename{
+        //display: inline-block;
+        height: $header-height;
+        font-size: 14px;
+        color: $text-color;
+        overflow: hidden;
+        background-color: transparent;
+        padding-top: 3px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: $header-height;
+    }
+}
+
+.cdk-overlay-pane {
+    top: $header-height !important;
+    .mat-menu-panel{
+        position: absolute;
+        border-radius: 0px;
+        // box-shadow: none;
+        padding: 0px;
+        left: 0px;
+        .mat-menu-content{
+            padding: 0px;
+        }
+        .mat-menu-item{
+            padding: 0px;
+        }
+    }
+}
+
+button.mat-menu-item{ // drop-down (top-bar) menu buttons
+    background-color: $color5;
+    color: $text-color;
+    // mat-icon{
+    //     color: $color4;
+    // }
+
+    height: $header-height;
+    line-height: $header-height;
+    font-size: $fsize2;
+    text-align: center;
+}
+
+button.mat-menu-item:hover{
+    background-color: $color5;
+    color: $hover-color;
+    // mat-icon{
+    //     color: $color5;
+    // }
+}

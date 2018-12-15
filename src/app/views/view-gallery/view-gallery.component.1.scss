@@ -1,15 +1,9 @@
-@import '~scss/viewers';
-
-.content__panel{
-    margin-top: 10px;
-    padding: 0px;
-    height: 100%;
-    width: 100%;
-}
+@import '~scss/globals';
 
 .container__element{
     padding: 0px 10% 0px 10%;
 }
+
 
 .container__element--project-container{
     font-size: 26px;

@@ -43,15 +43,15 @@ div[class^="container--"]{
 
 textarea{
     color: $text-color;
-    background-color: $background-color;
+    background-color: transparent;
     border:none;
-    padding: 2px 0px 0px 15px;
+    padding: 10px 0px 0px 15px;
     font-family: sans-serif;
     font-size: 12px;
     margin: 0px;
     width: 90%;
     min-height: 20px;
-    max-height: 300px;
+    //max-height: 300px;
     resize: none; 
     
 }

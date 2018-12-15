@@ -147,10 +147,6 @@ export class ExecuteComponent {
 
     async executeNode(node: INode, funcStrings) {
         const params = {'currentProcedure': ['']};
-<<<<<<< HEAD
-        const DEBUG = false;
-=======
->>>>>>> a5e1fe7dddfdd8cfe860e98d8a71a9c26dfe2f22
         try {
             // get the code for the node
             const nodeCode = await CodeUtils.getNodeCode(node, true);

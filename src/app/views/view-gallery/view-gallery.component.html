@@ -4,9 +4,6 @@
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <h2>Möbius Gallery</h2>
-                <hr>
-                <h4>Displaying {{ (allFiles | async)?.length}} projects</h4>
                 <div class="container__element container__element--project-container">
                     <div class="project-container__project" *ngFor="let f of  (dataService.galleryFiles | async)">
                         <div class="project__content" (click)='loadFile(f)'>

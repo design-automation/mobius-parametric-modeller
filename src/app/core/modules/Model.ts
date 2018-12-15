@@ -132,7 +132,7 @@ export function addLinestring(__model__: GIModel, positions: string[]): string {
  * @param __model__
  * @param coords
  */
-export function addPolygon(__model__: GIModel, positions: Tid[]): string {
+export function addPolygon(__model__: GIModel, positions: string[]): string {
     return __model__.geom().addPgon(positions);
 }
 /**

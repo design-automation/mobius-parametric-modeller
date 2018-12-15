@@ -42,17 +42,6 @@ $hover-color: blue;
     //padding: 10px 15px;
 }
 
-button.btn{ 
-    margin: 10px;
-    font-size: 14px;
-    line-height: 18px;
-    border: 2px solid gray;
-    border-radius: 4px;
-    padding: 2px 10px;
-    background-color: transparent; 
-    color: $text-color;
-}
-
 button.btn:hover{
     color:$hover-color;
 }
@@ -64,6 +53,7 @@ button.btn:hover{
     right: 0px;
     overflow: hidden;
     background-color: transparent;
+    z-index: 1;
 }
 
 .tab button {

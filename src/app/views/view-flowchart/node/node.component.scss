@@ -1,17 +1,12 @@
-/*
-$color-main: #2D4885;
-$color-accent: #50ABB9;
-$color-muted: #88D4DD;
-$color-text-accent: #DC772F;
-*/
+@import '~scss/colors';
+@import '~scss/variables';
 
-$default-padding: 2px;
-$text-color: rgb(80,80,80);
-$selected-color: rgb(0, 0, 150);
+$stroke-width: 2px;
 $error-color: red;
+
 .node{
     fill:rgb(250, 250, 250);
-    stroke-width:$default-padding;
+    stroke-width:$stroke-width;
     stroke: $text-color;
     stroke-opacity: 1;
     stroke-linecap: round;
@@ -77,13 +72,13 @@ textarea{
     stroke: transparent;
     stroke-width: 20px;
     pointer-events: all;
-    fill:rgb(80, 80, 80);
+    fill:$text-color;
     //fill:midnightblue;
 }
 .outputPort{
     stroke: transparent;
     stroke-width: 20px;
     pointer-events: all;
-    fill:rgb(80, 80, 80);
+    fill:$text-color;
     //fill: midnightblue;
 }

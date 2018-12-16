@@ -33,8 +33,8 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
     }
 
     inputSize(val, defaultVal) {
-        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 5; }
-        return ctx.measureText(val).width + 5;
+        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 2; }
+        return ctx.measureText(val).width + 2;
     }
 
     // delete this procedure

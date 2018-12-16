@@ -1,6 +1,5 @@
-$text-color: rgb(80,80,80);
-$prod-background-color: rgb(250,250,250);
-$background-color: rgb(220,220,220);
+@import '~scss/colors';
+@import '~scss/variables';
 
 div[class^="container--"]{
     display: flex; 

@@ -123,6 +123,6 @@ export class ProcedureItemComponent implements AfterViewInit {
     }
 
     inputSize(val) {
-        return ctx.measureText(val).width + 5;
+        return ctx.measureText(val).width + 2;
     }
 }

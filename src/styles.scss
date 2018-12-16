@@ -1,8 +1,9 @@
 @import './scss/colors';
+@import './scss/variables';
+@import './scss/header-button';
 
-$header-height: 40px;
-$fsize1: 15px;
-$fsize2: 12px;
+// This imports a lot of annoying angular stuff
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 html{
     position: relative;
@@ -22,13 +23,76 @@ body{
 
     width: auto;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
 
     padding: 0px;
     margin: 0px; 
 }
 
+// splitted
+
+as-split-area{
+    background-color: $color5;
+    overflow: hidden !important;
+    flex-grow: 1px !important;
+}
+
+as-split-gutter{
+    background-image: none !important;
+    background-color:$color4 !important;
+    flex-basis: 3px !important;
+}
+
+// for teh 4 views
+
+.container{
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    // left side of the split
+
+    panel-header {
+        overflow: hidden;
+        background-color: transparent;
+        height: $header-height;
+        box-sizing: border-box;
+        border: 0px;
+        width: 100%;
+    }
+
+    .content__panel{
+        margin-top: 10px;
+        padding: 0px;
+        height: 100%;
+        width: 100%;
+        background-color: transparent;
+        box-sizing: border-box;
+        border: 0px;
+        overflow: hidden;
+    }
+
+    // right side of the split
+
+    .content__viewer{
+        background-color: transparent;
+        height: 100%; 
+        overflow: auto;
+    }
+}
+
+// general styles
+
 h1, h2, h3, h4, h5, h6, p{
     margin: 0px;
     padding: 0px;
+}
+
+input, textarea, select, a { 
+    outline: none; 
 }

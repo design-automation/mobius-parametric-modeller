@@ -1,15 +1,6 @@
-@import '~scss/viewers';
+@import '~scss/colors';
+@import '~scss/variables';
 
-.content__panel{
-    margin-top: 10px;
-    padding: 0px;
-    height: 100%;
-    width: 100%;
-}
-
-split-area{
-    overflow: auto !important;
-}
 
 .flowchart-container{
     position: relative;
@@ -39,7 +30,6 @@ input{
 input:focus{
     border-bottom: 1px dashed gray;
 }
-
 
 #flowchart__name{
     margin: 0 auto;
@@ -122,11 +112,8 @@ input:focus{
                         color: $color4;
                     }
                 }
-
-
             }
         }
-
     }
 
     .content-wrapper{
@@ -402,6 +389,4 @@ input:focus{
             }
         }
     }
-    
 }
-

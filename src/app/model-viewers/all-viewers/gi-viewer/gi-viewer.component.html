@@ -4,6 +4,8 @@
 			<threejs-viewer [model]='data'></threejs-viewer>
 		</as-split-area>
 		<as-split-area [size]='30' id="attrib">
+
+				<!-- TODO: move this to attribute-viewer.component.html -->
 				<mat-tab-group animationDuration="0ms">
 					<mat-tab label="Attribute">
 						<attribute [data]='data'></attribute>
@@ -16,6 +18,8 @@
 						</ul>
 					</mat-tab>
 				</mat-tab-group>
+
+
 		</as-split-area>
 	</as-split>
 </div>

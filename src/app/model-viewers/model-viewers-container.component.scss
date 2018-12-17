@@ -40,5 +40,27 @@
     
         //padding: 10px 15px;
     }
+    button {
+        display: inline-block;
+        vertical-align: bottom;
+        background-color: transparent;
+        color: $text-color;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 0px;
+        width: 34px;
+        height: 34px;
+        transition: 0.3s;
+        font-size: 14px;
+        &:hover {
+            color:$hover-color;
+        }
+        &.active {
+            color: $selected-color;
+        }
+    }
+
 }
+
 

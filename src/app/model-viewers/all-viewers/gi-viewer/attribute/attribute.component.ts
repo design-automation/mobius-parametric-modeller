@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Injector, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { MatTableDataSource, MatTable, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon } from '@libs/geo-info';
@@ -12,11 +12,12 @@ import { GICommon } from '@libs/geo-info';
 
 export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
-  displayedColumns: string[] = ['key', 'color0', 'color1', 'color2'];
+  displayedColumns: string[] = ['key', 'v0', 'v1', 'v2'];
 
   private _data: PeriodicElement[] = [];
 
-  dataSource = new MatTableDataSource<PeriodicElement>(this._data);
+  dataSourceColor = new MatTableDataSource<PeriodicElement>(this._data);
+  dataSourceNormal = new MatTableDataSource<PeriodicElement>(this._data);
 
   protected dataService: DataService;
 
@@ -28,27 +29,38 @@ export class AttributeComponent implements OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnChanges(changes: SimpleChanges) {
-    if ( changes['data']) {
-      if ( this.data ) {
-        const colorData = this.data.getAttibs().getVertsAttrib(GICommon.EAttribNames.COLOR);
-
-        const colorDataSource = [];
-        if ( colorData ) {
-          colorData.forEach((color, index) => {
-            colorDataSource.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, color0: color[0], color1: color[1], color2: color[2]});
-          });
-          this.dataSource = new MatTableDataSource<PeriodicElement>(colorDataSource);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+    const attrData = {
+      coords: [],
+      normal: [],
+      color: [],
+    };
+    if ( changes['data'] && this.data) {
+      const AttribNames = GICommon.EAttribNames;
+      for (const attr in GICommon.EAttribNames) {
+        if (GICommon.EAttribNames.hasOwnProperty(attr)) {
+          attrData[AttribNames[attr]] = this.data.getAttibs().getVertsAttrib(AttribNames[attr]);
         }
       }
+        // const colorData = this.data.getAttibs().getVertsAttrib(GICommon.EAttribNames.COLOR);
+
+        const _colorDataArray = [];
+        if ( attrData.hasOwnProperty('color') ) {
+          attrData.color.forEach((color, index) => {
+            _colorDataArray.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, v0: color[0], v1: color[1], v2: color[2]});
+          });
+          this.dataSourceColor = new MatTableDataSource<PeriodicElement>(_colorDataArray);
+          this.dataSourceColor.paginator = this.paginator;
+          this.dataSourceColor.sort = this.sort;
+        }
+
+        const normalData = this.data.getAttibs().getVertsAttrib(GICommon.EAttribNames.NORMAL);
     }
 }
 }
 
 export interface PeriodicElement {
   key: string;
-  color0: string;
-  color1: string;
-  color2: string;
+  v0: string;
+  v1: string;
+  v2: string;
 }

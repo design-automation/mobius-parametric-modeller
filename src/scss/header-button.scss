@@ -1,7 +1,7 @@
 @import '~scss/variables';
 @import '~scss/colors';
 
-button {
+panel-header button {
     display: inline-block;
     vertical-align: bottom;
     background-color: transparent;
@@ -20,6 +20,6 @@ button:hover {
     color:$color5;
 }
 
-button.active {
+panel-header button.active {
     color: $selected-color;
 }

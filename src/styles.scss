@@ -32,15 +32,16 @@ body{
 // splitted
 
 as-split-area{
-    background-color: $color5;
+    background-color: $color6;
     overflow: hidden !important;
-    flex-grow: 1px !important;
+    flex-grow: 1 !important;
 }
 
 as-split-gutter{
     background-image: none !important;
-    background-color:$color4 !important;
-    flex-basis: 3px !important;
+    background-color:$color6 !important;
+    flex-basis: 11px !important;
+    border-right: 3px solid $color4;
 }
 
 // for teh 4 views
@@ -64,11 +65,12 @@ as-split-gutter{
         box-sizing: border-box;
         border: 0px;
         width: 100%;
+
+        position: absolute;
     }
 
     .content__panel{
-        margin-top: 10px;
-        padding: 0px;
+        // margin-top: 10px;
         height: 100%;
         width: 100%;
         background-color: transparent;

@@ -4,7 +4,8 @@
 
 .container__header{
     display: flex;
-    background-color: $color4;
+    background-color: transparent;
+    float: left;
     height: $header-height;
     padding: 0px;
     margin: 0px;
@@ -16,7 +17,7 @@
         margin: 0px;
         overflow: hidden;
         background-color: transparent;
-        z-index: 1;
+        z-index: 1;s
         .mat-icon-button{
             height: $header-height !important;
             width: $header-height !important;

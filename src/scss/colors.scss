@@ -4,9 +4,11 @@ $color2: #999999;
 $color3: #B3B3B3; 
 $color4: #CCCCCC;
 $color5: #E6E6E6;
-$color6: white;
 
-$selected-color: #373737;
+$color6: white;
+$color7: #373737;
+
+$selected-color: $color7;
 $hover-color: $color2;
 
 $pcolor1: #E94858; //pink-red

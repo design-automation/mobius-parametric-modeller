@@ -3,10 +3,6 @@ import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 import { IPortInput, InputType } from '@models/port';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
-import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
-import { promise } from 'protractor';
-import { IEdge } from '@models/edge';
 import { _parameterTypes } from '@modules';
 
 

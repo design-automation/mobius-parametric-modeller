@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
 
-// todo: make internal to flowchart
-import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { IEdge } from '@models/edge';
 
@@ -62,13 +60,14 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     private listenerActive = false;
 
     // position of the current canvas view relative to the top left of the page
-    private offset;
+    private offset: number[];
 
     // constants for offset positions of input/output port relative to the node's position
     inputOffset = [50, -8];
     outputOffset = [50, 88];
 
-    private hiddenText;
+    private history;
+
 
     static enableNode(node: INode) {
         for (const edge of node.input.edges) {
@@ -94,7 +93,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
-        this.hiddenText = document.getElementById('hiddenText');
 
         /*
         */
@@ -286,13 +284,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
         // the new node's position would be (20,100) relative to the current view
         const pt = this.canvas.createSVGPoint();
-        if (event) {
-            pt.x = event.pageX - 40;
-            pt.y = event.pageY - 35;
-        } else {
-            pt.x = 20;
-            pt.y = 100;
-        }
+
+        pt.x = event.pageX - 40;
+        pt.y = event.pageY - 35;
 
 
         // convert the position to svg position

@@ -5,6 +5,7 @@
 .container__header{
     display: flex;
     background-color: transparent;
+    float: left;
     height: $header-height;
     padding: 0px;
     margin: 0px;
@@ -16,7 +17,11 @@
         margin: 0px;
         overflow: hidden;
         background-color: transparent;
-        z-index: 1;
+        z-index: 1;s
+        .mat-icon-button{
+            height: $header-height !important;
+            width: $header-height !important;
+        }
     }
     
     #filename{
@@ -34,9 +39,11 @@
     }
 }
 
-.cdk-overlay-pane {
+.cdk-overlay-pane { // overlay menu
+    background-color: red;
     top: $header-height !important;
     .mat-menu-panel{
+        background-color: red;
         position: absolute;
         border-radius: 0px;
         // box-shadow: none;
@@ -54,10 +61,10 @@
 /*
 button.mat-menu-item{ // drop-down (top-bar) menu buttons
     background-color: $color5;
-    color: $color1;
-    // mat-icon{
-    //     color: $color4;
-    // }
+    color: $color2;
+    mat-icon{
+        color: $color2;
+    }
 
     height: $header-height;
     line-height: $header-height;
@@ -75,14 +82,23 @@ button.mat-menu-item:hover{
 */
 #dropdownMenu {
     display: none;
-    position: fixed;
-    z-index: 1;
-    background-color: $color5;
+    position: absolute;
 
+    z-index: 1;
+    background-color: $color4;
     button{
         display: inline-block;
         width: 100px;
-        
+        line-height: $header-height;
+        height: $header-height;
+        font-size: $fsize2;
+        vertical-align: middle;
+        mat-icon{
+            vertical-align: middle;
+            font-size: 20px;
+            height: 20px;
+            width: 20px;
+        }
     }
 }
 

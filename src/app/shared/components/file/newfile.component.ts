@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { FlowchartUtils } from '@models/flowchart';
-import * as circularJSON from 'circular-json';
 import { DataService } from '@services';
 
 @Component({

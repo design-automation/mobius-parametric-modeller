@@ -1,10 +1,8 @@
 import { INode } from './node.interface';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
-import { PortType, InputType, OutputType, PortUtils } from '@models/port';
-import { not } from '@angular/compiler/src/output/output_ast';
+import { InputType, PortUtils } from '@models/port';
 import * as circularJSON from 'circular-json';
 import { IdGenerator } from '@utils';
-import { templateJitUrl } from '@angular/compiler';
 
 export abstract class NodeUtils {
 

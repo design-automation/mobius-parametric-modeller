@@ -1,5 +1,4 @@
 import { Component, Input} from '@angular/core';
-import { IMobius } from '@models/mobius';
 import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';

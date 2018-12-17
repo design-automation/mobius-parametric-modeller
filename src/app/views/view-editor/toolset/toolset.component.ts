@@ -4,7 +4,6 @@ import { ProcedureTypes, IFunction, IModule } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
-import * as Modules from '@modules';
 import { ModuleAware, ModuleDocAware } from '@shared/decorators';
 import { INode } from '@models/node';
 

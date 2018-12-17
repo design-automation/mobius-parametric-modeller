@@ -1,5 +1,4 @@
 import { Directive, ElementRef, Input, Output, HostBinding, HostListener, EventEmitter } from '@angular/core';
-import * as CircularJSON from 'circular-json';
 
 @Directive({
     selector: '[autogrow]'

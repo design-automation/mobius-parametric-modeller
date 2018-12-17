@@ -25,12 +25,13 @@
     
     #filename{
         //display: inline-block;
+        cursor: pointer;
         height: $header-height;
         font-size: $fsize1;
         color: $color1;
         overflow: hidden;
         background-color: transparent;
-        padding-top: 3px;
+        padding-top: 0px;
         text-align: center;
         vertical-align: middle;
         line-height: $header-height;
@@ -56,6 +57,7 @@
     }
 }
 
+/*
 button.mat-menu-item{ // drop-down (top-bar) menu buttons
     background-color: $color5;
     color: $color2;
@@ -70,9 +72,32 @@ button.mat-menu-item{ // drop-down (top-bar) menu buttons
 }
 
 button.mat-menu-item:hover{
+<<<<<<< HEAD
     background-color: $color4;
     color: $color1;
     mat-icon{
         color: $color1;
     }
 }
+=======
+    background-color: $color5;
+    color: $color5;
+    // mat-icon{
+    //     color: $color5;
+    // }
+}
+*/
+#dropdownMenu {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    background-color: $color5;
+
+    button{
+        display: inline-block;
+        width: 100px;
+        
+    }
+}
+
+>>>>>>> 8848ccad0bb30fdc1981f645c3e0217567ca9edf

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,5 +15,32 @@ export class PanelHeaderComponent {
 
     getTitle() {
         return this.title.replace(/_/g, ' ');
+    }
+
+    openDropdownMenu(e: MouseEvent) {
+        /*
+        const dropdowns = document.getElementsByClassName('dropdown-content');
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+            }
+        }
+        */
+        const stl = document.getElementById('dropdownMenu').style;
+        if (!stl.display || stl.display === 'none') {
+            stl.display = 'block';
+            const bRect = (<Element>e.target).getBoundingClientRect();
+            stl.transform = `translate(` + bRect.left + `px, ` + bRect.height + `px)`;
+        } else {
+            stl.display = 'none';
+        }
+        e.stopPropagation();
+
+    }
+
+    @HostListener('window:click', [])
+    onWindowClick() {
+        document.getElementById('dropdownMenu').style.display = 'none';
     }
 }

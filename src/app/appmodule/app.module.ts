@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 // import app services
 import { DataService } from '@services';
 import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';

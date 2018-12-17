@@ -14,49 +14,55 @@
         <!-- <div class="dropmenu"> -->
             <!-- dropdown menu for new file, save file, loaf file-->
             <!-- <div> -->
-                <button class='btn' mat-icon-button [matMenuTriggerFor]="menu">
-                    <mat-icon svgIcon="cMenu"></mat-icon>
+                <!--
+                <button id='dropdownButton' class='btn' mat-icon-button (click)='openDropdownMenu($event)'>
+                    <mat-icon svgIcon="cMenu" id='dropdownIcon'></mat-icon>
                 </button>
-
+                -->
             <!-- </div>
         </div> -->
+                        
 
         <!-- buttons to navigate to the 4 pages -->
-        <button class='btn' mat-icon-button [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
+        <button class='btn' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
             <mat-icon svgIcon="cGallery"></mat-icon>
         </button>
-        <button class='btn' mat-icon-button [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'" title='Dashboard'>
+        <button class='btn' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'" title='Dashboard'>
             <mat-icon svgIcon="cDashboard"></mat-icon>
         </button>
-        <button class='btn' mat-icon-button [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'" title='Flowchart'>
+        <button class='btn' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'" title='Flowchart'>
             <mat-icon svgIcon="cFlowchart"></mat-icon>
         </button>
-        <button class='btn' mat-icon-button [class.active]='router.url=="/editor"' [routerLink]="'/editor'" title='Procedure'>
+        <button class='btn' [class.active]='router.url=="/editor"' [routerLink]="'/editor'" title='Procedure'>
             <mat-icon svgIcon="cEditor"></mat-icon>
         </button>
                 
         <!-- execute button -->
         <execute></execute>
+
     </div>
 
-    <div id='filename'>{{getTitle()}}</div>
-
-    <mat-menu #menu="matMenu">
-        <button  mat-menu-item onclick="document.getElementById('newfile').click();"
-        title="Create New Flowchart">
-            <mat-icon>rotate_left</mat-icon>
-            <span>New File</span>
+    <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div>
+    <div id="dropdownMenu">
+        <button onclick="document.getElementById('newfile').click();"
+        title="Create New Flowchart"> 
+            <mat-icon>rotate_left</mat-icon> 
+            New File
         </button>
-        <button mat-menu-item onclick="document.getElementById('savefile').click();"
+        <br>
+        <button onclick="document.getElementById('savefile').click();"
         title="Save Flowchart File to Computer">
             <mat-icon>save_alt</mat-icon>
-            <span>Save File</span>
+            Save File
+            
         </button>
-        <button mat-menu-item onclick="document.getElementById('file-input').click();"
+        <br>
+        <button onclick="document.getElementById('file-input').click();"
         title="Load Flowchart File from Computer">
             <mat-icon>launch</mat-icon>
-            <span>Load File</span>
+            Load File 
         </button>
-    </mat-menu>
+    </div>
+
 
 </div>

@@ -43,17 +43,20 @@ export class AttributeComponent implements OnChanges {
         return object;
       }, {});
 
-      for (const attr in vertsAttrib) {
-        if (GICommon.EAttribNames.hasOwnProperty(attr)) {
-          const attribData = this.data.getAttibs().getVertsAttrib(AttribNames[attr]);
-
-          const _DataArray = [];
-          attribData.forEach((value, index) => {
-            _DataArray.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, v0: value[0], v1: value[1], v2: value[2]});
-          });
-          this.dataSource[attr] = new MatTableDataSource<PeriodicElement>(_DataArray);
-          this.dataSource[attr].paginator = this.paginator.toArray()[this.vertAttrib.indexOf(attr)];
-          this.dataSource[attr].sort = this.sort.toArray()[this.vertAttrib.indexOf(attr)];
+      if (vertsAttrib !== null) {
+        for (const attr in vertsAttrib) {
+          if (GICommon.EAttribNames.hasOwnProperty(attr)) {
+            const attribData = this.data.getAttibs().getVertsAttrib(AttribNames[attr]);
+            if (attribData) {
+              const _DataArray = [];
+              attribData.forEach((value, index) => {
+                _DataArray.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, v0: value[0], v1: value[1], v2: value[2]});
+              });
+              this.dataSource[attr] = new MatTableDataSource<PeriodicElement>(_DataArray);
+              this.dataSource[attr].paginator = this.paginator.toArray()[this.vertAttrib.indexOf(attr)];
+              this.dataSource[attr].sort = this.sort.toArray()[this.vertAttrib.indexOf(attr)];
+            }
+          }
         }
       }
     }

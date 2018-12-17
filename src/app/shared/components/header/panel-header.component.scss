@@ -72,14 +72,6 @@ button.mat-menu-item{ // drop-down (top-bar) menu buttons
 }
 
 button.mat-menu-item:hover{
-<<<<<<< HEAD
-    background-color: $color4;
-    color: $color1;
-    mat-icon{
-        color: $color1;
-    }
-}
-=======
     background-color: $color5;
     color: $color5;
     // mat-icon{
@@ -89,15 +81,23 @@ button.mat-menu-item:hover{
 */
 #dropdownMenu {
     display: none;
-    position: fixed;
-    z-index: 1;
-    background-color: $color5;
+    position: absolute;
 
+    z-index: 1;
+    background-color: $color4;
     button{
         display: inline-block;
         width: 100px;
-        
+        line-height: $header-height;
+        height: $header-height;
+        font-size: $fsize2;
+        vertical-align: middle;
+        mat-icon{
+            vertical-align: middle;
+            font-size: 20px;
+            height: 20px;
+            width: 20px;
+        }
     }
 }
 
->>>>>>> 8848ccad0bb30fdc1981f645c3e0217567ca9edf

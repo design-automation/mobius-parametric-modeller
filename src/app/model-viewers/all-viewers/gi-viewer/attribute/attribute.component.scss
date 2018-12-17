@@ -1,6 +1,25 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
+
 table {
-    width: 100%;
+  width: 100%;
+  tr.mat-header-row{
+    height: 40px;
   }
+  tr.mat-row{
+    height: 24px;
+    .mat-cell{
+      font-size: 12px;
+    }
+  }
+}
+
+mat-paginator{
+  .mat-paginator-outer-container{
+    background: #fff;
+    .mat-paginator-container{
+      min-height: 40px;
+    }
+  }
+}

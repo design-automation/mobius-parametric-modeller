@@ -1,5 +1,5 @@
 
-button {
+panel-header button {
     display: inline-block;
     vertical-align: bottom;
     background-color: transparent;
@@ -14,11 +14,11 @@ button {
     font-size: 14px;
 }
 
-button:hover {
+panel-header button:hover {
     color:$hover-color;
 }
 
-button.active {
+panel-header button.active {
     color: $selected-color;
 }
 

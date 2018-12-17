@@ -6,7 +6,7 @@
 }
 
 .container__element--project-container{
-    font-size: 26px;
+    font-size: $fsize3;
     line-height: 32px;
     font-weight: 300;
     padding-top: 30px; 
@@ -74,7 +74,7 @@
 
 
 h2{
-    color: $color4;//$text-color;
+    color: $color4;//$color1;
     background-color: $color2;
 
     text-align: left;
@@ -84,7 +84,7 @@ h2{
 }
 
 h4{
-    color: $text-color;
+    color: $color1;
     text-align: left;
     padding-left: $small-padding;
     font-size: $fsize2;
@@ -92,7 +92,7 @@ h4{
 }
 
 p{
-    color: $text-color;
+    color: $color1;
     text-align: left;
     padding-left: $small-padding;
     font-size: $fsize2;
@@ -100,7 +100,7 @@ p{
 }
 
 hr{
-    border-top: 2px solid $separator;
+    border-top: 2px solid $color5;
     margin: 0px;
 }
 

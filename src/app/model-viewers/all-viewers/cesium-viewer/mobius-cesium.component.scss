@@ -1,5 +1,6 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
-
+@import '~scss/variables';
+@import '~scss/colors';
 @font-face{
   font-family: "FontAwesome";
 }
@@ -17,7 +18,7 @@
     font-family: sans-serif !important;
     margin: 0px !important;
   	padding: 0px !important;
-  	font-size: 14px;
+  	font-size: $fsize1;
 }
 #button{
   position:absolute;
@@ -36,7 +37,7 @@
   background-color: rgba(20, 20, 20, 0.5);
   color: #ddd;
   text-align: center;
-  font-size: 32px;
+  font-size: $fsize3;
   line-height: 70px;
   cursor: pointer;
 }

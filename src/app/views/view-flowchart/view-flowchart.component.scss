@@ -14,7 +14,7 @@
         // height: 100%;
     
         .temp-wire{
-            stroke: $text-color;
+            stroke: $color1;
             stroke-width: 2px;
             stroke-dasharray: 10 15;
             opacity: 0.5;
@@ -33,7 +33,7 @@ input:focus{
 
 #flowchart__name{
     margin: 0 auto;
-    font-size: 14px;
+    font-size: $fsize1;
     line-height: 28px;
     font-weight: bold;
     color: $color2;
@@ -134,20 +134,20 @@ input:focus{
             flex-direction: column;
 
             .label{
-                font-size: 12px;
+                font-size: $fsize2;
                 font-weight: 100;
                 color: $color5;
             }
 
             .value{
                 color: $color1;
-                font-size: 11px;
+                font-size: $fsize2;
                 font-weight: 600;
             }
             
             .action{
                 cursor: pointer;
-                font-size: 11px;
+                font-size: $fsize2;
                 color: $color2;
             }
         }
@@ -228,11 +228,11 @@ input:focus{
                             width: 25px;
                             height: 24px;
                             cursor: pointer;
-                            font-size: 9px;
+                            font-size: $fsize2;
                             text-align: center;
 
                             .material-icons{
-                                font-size: 18px;
+                                font-size: $fsize1;
                                 line-height: 24px;
                                 color: $color2;
                             }

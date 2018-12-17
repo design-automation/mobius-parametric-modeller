@@ -17,7 +17,7 @@ div[class^="container--"]{
 }
 
 input{
-    color: $text-color;
+    color: $color1;
     background-color: $prod-background-color;
     border:none;
     width: fit-content;
@@ -29,7 +29,7 @@ input{
     font-style: italic;
     min-width: 40px;
     max-width: 300px;
-    font-size: 12px;
+    font-size: $fsize2;
     vertical-align: bottom;
     &.disabled-input{
         border-bottom: none;
@@ -37,14 +37,14 @@ input{
 }
 
 textarea{
-    color: $text-color;
+    color: $color1;
     background-color: $prod-background-color;
     border:none;
     border-left: 1px solid $background-color;
     border-bottom: 1px solid $background-color;
     padding-left: 5px;
     font-family: sans-serif;
-    font-size: 12px;
+    font-size: $fsize2;
     margin: 10px 0px 5px 3px;
     width: 90%;
     resize: none; 

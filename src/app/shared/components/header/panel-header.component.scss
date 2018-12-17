@@ -22,8 +22,8 @@
     #filename{
         //display: inline-block;
         height: $header-height;
-        font-size: 14px;
-        color: $text-color;
+        font-size: $fsize1;
+        color: $color1;
         overflow: hidden;
         background-color: transparent;
         padding-top: 3px;
@@ -52,7 +52,7 @@
 
 button.mat-menu-item{ // drop-down (top-bar) menu buttons
     background-color: $color5;
-    color: $text-color;
+    color: $color1;
     // mat-icon{
     //     color: $color4;
     // }
@@ -65,7 +65,7 @@ button.mat-menu-item{ // drop-down (top-bar) menu buttons
 
 button.mat-menu-item:hover{
     background-color: $color5;
-    color: $hover-color;
+    color: $color5;
     // mat-icon{
     //     color: $color5;
     // }

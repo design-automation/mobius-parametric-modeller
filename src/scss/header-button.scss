@@ -1,9 +1,11 @@
+@import '~scss/variables';
+@import '~scss/colors';
 
 button {
     display: inline-block;
     vertical-align: bottom;
     background-color: transparent;
-    color: $text-color;
+    color: $color1;
     border: none;
     outline: none;
     cursor: pointer;
@@ -11,14 +13,13 @@ button {
     width: 34px;
     height: 34px;
     transition: 0.3s;
-    font-size: 14px;
+    font-size: $fsize1;
 }
 
 button:hover {
-    color:$hover-color;
+    color:$color5;
 }
 
 button.active {
     color: $selected-color;
 }
-

@@ -26,7 +26,7 @@
         color: $text-color;
         overflow: hidden;
         background-color: transparent;
-        padding-top: 3px;
+        padding-top: 0px;
         text-align: center;
         vertical-align: middle;
         line-height: $header-height;
@@ -50,6 +50,7 @@
     }
 }
 
+/*
 button.mat-menu-item{ // drop-down (top-bar) menu buttons
     background-color: $color5;
     color: $text-color;
@@ -70,3 +71,17 @@ button.mat-menu-item:hover{
     //     color: $color5;
     // }
 }
+*/
+#dropdownMenu {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    background-color: $color5;
+
+    button{
+        display: inline-block;
+        width: 100px;
+        
+    }
+}
+

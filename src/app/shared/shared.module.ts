@@ -49,23 +49,27 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             DataViewersContainer,
             AngularSplitModule,
             FormsModule,
-            MatMenuModule,
             MatIconModule,
+            /*
+            MatMenuModule,
             MatButtonModule,
             MatExpansionModule,
             MatSelectModule,
             MatFormFieldModule,
+            */
         ],
     entryComponents: [  ],
     exports: [
             FormsModule,
-            MatMenuModule,
             MatIconModule,
-            MatButtonModule,
             MatSliderModule,
+            /*
+            MatMenuModule,
+            MatButtonModule,
             MatExpansionModule,
             MatSelectModule,
             MatFormFieldModule,
+            */
             DataViewersContainer,
             AngularSplitModule,
             MbFileReaderDirective,

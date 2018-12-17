@@ -7,7 +7,7 @@ import { _parameterTypes} from '@modules';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
-ctx.font = '13px Arial';
+ctx.font = '11px Arial';
 
 @ProcedureTypesAware
 @ModuleDocAware

@@ -93,7 +93,7 @@ module.exports = "<router-outlet></router-outlet>"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around; }\n  .container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p {\n    margin: 0px;\n    padding: 0px; }\n  .container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n  .container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n  .container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n  .container .container__header .tab button:hover {\n      color: blue; }\n  .container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n  .container .container__header .dropmenu {\n      display: inline-flex; }\n  .container .container__content {\n    flex-grow: 1;\n    height: 0px;\n    border: 2px solid #3F4651;\n    overflow: auto; }\n  .container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n  .content__panel {\n  background-color: gainsboro;\n  height: 95%;\n  overflow: hidden auto; }\n  .content__viewer {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n  ul.nav {\n  margin: 0px;\n  padding: 0px; }\n  li.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n  li.link:hover {\n  background-color: gray;\n  color: white; }\n  button.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n  button.btn:hover {\n  color: blue; }\n  .active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n"
+module.exports = ""
 
 /***/ }),
 
@@ -109,6 +109,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @services */ "./src/app/core/services/index.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -118,6 +120,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
+
 
 
 // @ts-ignore
@@ -131,13 +135,34 @@ console.log = function () {
     // @ts-ignore
     console.stdlog.apply(console, arguments);
 };
-/*
-
-*/
+var i3D = __webpack_require__(/*! @assets/Icons/3D.svg */ "./src/assets/Icons/3D.svg");
+var cs = __webpack_require__(/*! @assets/Icons/Console.svg */ "./src/assets/Icons/Console.svg");
+var help = __webpack_require__(/*! @assets/Icons/Help.svg */ "./src/assets/Icons/Help.svg");
+var summary = __webpack_require__(/*! @assets/Icons/Summary.svg */ "./src/assets/Icons/Summary.svg");
+var zoom = __webpack_require__(/*! @assets/Icons/Zoom.svg */ "./src/assets/Icons/Zoom.svg");
+var fv = __webpack_require__(/*! @assets/Icons/Mobius favicon.svg */ "./src/assets/Icons/Mobius favicon.svg");
+var menu = __webpack_require__(/*! @assets/Icons/Three Lines Menu.svg */ "./src/assets/Icons/Three Lines Menu.svg");
+var gallery = __webpack_require__(/*! @assets/Icons/Home.svg */ "./src/assets/Icons/Home.svg");
+var dashboard = __webpack_require__(/*! @assets/Icons/Dashboard.svg */ "./src/assets/Icons/Dashboard.svg");
+var flowchart = __webpack_require__(/*! @assets/Icons/Flowchart.svg */ "./src/assets/Icons/Flowchart.svg");
+var node = __webpack_require__(/*! @assets/Icons/Node.svg */ "./src/assets/Icons/Node.svg");
 var AppComponent = /** @class */ (function () {
-    function AppComponent(dataService, injector) {
+    function AppComponent(dataService, injector, matIconRegistry, domSanitizer) {
         this.dataService = dataService;
         this.injector = injector;
+        this.matIconRegistry = matIconRegistry;
+        this.domSanitizer = domSanitizer;
+        this.matIconRegistry.addSvgIcon('c3D Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl(i3D));
+        this.matIconRegistry.addSvgIcon('cConsole', this.domSanitizer.bypassSecurityTrustResourceUrl(cs));
+        this.matIconRegistry.addSvgIcon('cHelp', this.domSanitizer.bypassSecurityTrustResourceUrl(help));
+        this.matIconRegistry.addSvgIcon('cSummary', this.domSanitizer.bypassSecurityTrustResourceUrl(summary));
+        this.matIconRegistry.addSvgIcon('cZoom', this.domSanitizer.bypassSecurityTrustResourceUrl(zoom));
+        this.matIconRegistry.addSvgIcon('cfv', this.domSanitizer.bypassSecurityTrustResourceUrl(fv));
+        this.matIconRegistry.addSvgIcon('cMenu', this.domSanitizer.bypassSecurityTrustResourceUrl(menu));
+        this.matIconRegistry.addSvgIcon('cGallery', this.domSanitizer.bypassSecurityTrustResourceUrl(gallery));
+        this.matIconRegistry.addSvgIcon('cDashboard', this.domSanitizer.bypassSecurityTrustResourceUrl(dashboard));
+        this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl(flowchart));
+        this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl(node));
     }
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -145,7 +170,8 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/appmodule/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/appmodule/app.component.scss")]
         }),
-        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["DataService"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"]])
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["DataService"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_2__["MatIconRegistry"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["DomSanitizer"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -308,7 +334,7 @@ var CoreModule = /** @class */ (function () {
 /*!***************************************!*\
   !*** ./src/app/core/modules/Model.ts ***!
   \***************************************/
-/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, __stringify__, __query__, addData, numPoints, numLinestrings, numPolygons, addPosition, addPoint, addLinestring, addPolygon, getPositions, getPoints, getLines, getPolygons, getCollections, query */
+/*! exports provided: __new__, __preprocess__, __postprocess__, __merge__, __stringify__, __query__, addData, numPoints, numLinestrings, numPolygons, addPosition, addPoint, addLinestring, addPolygon, getPositions, getPoints, getLines, getPolygons, getCollections, createAttrib, getAttribValue, setAttribValue, queryAttribValue */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -332,9 +358,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLines", function() { return getLines; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPolygons", function() { return getPolygons; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCollections", function() { return getCollections; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "query", function() { return query; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createAttrib", function() { return createAttrib; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAttribValue", function() { return getAttribValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setAttribValue", function() { return setAttribValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "queryAttribValue", function() { return queryAttribValue; });
 /* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
 /* harmony import */ var _libs_geo_info_GIJson__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../libs/geo-info/GIJson */ "./src/libs/geo-info/GIJson.ts");
+/* harmony import */ var _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @libs/geo-info/GICommon */ "./src/libs/geo-info/GICommon.ts");
+
 
 
 //  ===============================================================================================================
@@ -498,11 +529,60 @@ function getCollections(__model__) {
     return __model__.geom().getColls();
 }
 /**
+ * Create a new attribute.
+ * @param __model__
+ * @param entity_type
+ * @enum entity_type:['a','b','c']
+ * @param name
+ * @param data_type
+ * @param data_size
+ */
+function createAttrib(__model__, entity_type, name, data_type, data_size) {
+    switch (entity_type) {
+        case _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__["EEntityTypeStr"].POSI:
+            __model__.attribs().addPosiAttrib(name, data_type, data_size);
+            break;
+        case _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__["EEntityTypeStr"].VERT:
+            __model__.attribs().addVertAttrib(name, data_type, data_size);
+            break;
+        case _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__["EEntityTypeStr"].EDGE:
+            __model__.attribs().addEdgeAttrib(name, data_type, data_size);
+            break;
+        case _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__["EEntityTypeStr"].WIRE:
+            __model__.attribs().addWireAttrib(name, data_type, data_size);
+            break;
+        case _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__["EEntityTypeStr"].FACE:
+            __model__.attribs().addFaceAttrib(name, data_type, data_size);
+            break;
+        case _libs_geo_info_GICommon__WEBPACK_IMPORTED_MODULE_2__["EEntityTypeStr"].COLL:
+            __model__.attribs().addCollAttrib(name, data_type, data_size);
+            break;
+        default:
+            break;
+    }
+}
+/**
+ * Get attribute value.
+ * @param __model__
+ * @param id
+ */
+function getAttribValue(__model__, id) {
+    return __model__.attribs().getAttribValue(id, name);
+}
+/**
+ * Set attribute value.
+ * @param __model__
+ * @param id
+ */
+function setAttribValue(__model__, id, name, value) {
+    return __model__.attribs().setAttribValue(id, name, value);
+}
+/**
  * Query
  * @param __model__
  * @param query_str
  */
-function query(__model__, query_str) {
+function queryAttribValue(__model__, query_str) {
     return __query__(__model__, query_str);
 }
 
@@ -709,7 +789,7 @@ var DataService = /** @class */ (function () {
     DataService._newFlowchart = true;
     DataService._activeModelView = undefined;
     DataService._galleryFiles = undefined;
-    DataService._splitVal = 55;
+    DataService._splitVal = 60;
     DataService = DataService_1 = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])()
     ], DataService);
@@ -779,10 +859,32 @@ var ViewerService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts":
-/*!******************************************************************************!*\
-  !*** ./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts ***!
-  \******************************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.html":
+/*!****************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.html ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<textarea id='console_textarea'>{{ text || \"\" }}</textarea>"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.scss":
+/*!****************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.scss ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ndiv {\n  font-family: sans-serif;\n  color: #505050;\n  width: 100%;\n  padding-left: 10px; }\n\nh5 {\n  font-weight: 700;\n  font-size: 12px; }\n\n.funcDesc {\n  font-weight: 600; }\n\n.paramP {\n  padding-left: 5px; }\n\nspan {\n  font-weight: 550;\n  font-style: italic; }\n\ntextarea {\n  margin-top: 40px;\n  padding: 10px;\n  height: 100%;\n  width: 100%;\n  overflow: auto;\n  resize: none;\n  font-family: sans-serif;\n  background-color: transparent;\n  color: #808080;\n  border: none;\n  overflow-x: hidden;\n  overflow-y: auto; }\n"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.ts":
+/*!**************************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.ts ***!
+  \**************************************************************************************/
 /*! exports provided: ConsoleViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -808,7 +910,7 @@ var ConsoleViewerComponent = /** @class */ (function () {
      * constructor
      */
     function ConsoleViewerComponent() {
-        // console.log(`Console Viewer Created`);
+        // console.log('Console Viewer Created');
     }
     /**
      * ngOnInit
@@ -845,8 +947,8 @@ var ConsoleViewerComponent = /** @class */ (function () {
     ConsoleViewerComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'console-viewer',
-            template: "<textarea id='console_textarea'>{{ text || \"\" }}</textarea>",
-            styles: [__webpack_require__(/*! ../general-viewer.scss */ "./src/app/model-viewers/all-viewers/general-viewer.scss")]
+            template: __webpack_require__(/*! ./console-viewer.component.html */ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.html"),
+            styles: [__webpack_require__(/*! ./console-viewer.component.scss */ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.scss")]
         }),
         __metadata("design:paramtypes", [])
     ], ConsoleViewerComponent);
@@ -857,17 +959,6 @@ var ConsoleViewerComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/model-viewers/all-viewers/general-viewer.scss":
-/*!***************************************************************!*\
-  !*** ./src/app/model-viewers/all-viewers/general-viewer.scss ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ntextarea {\n  height: 93%;\n  width: 99%;\n  overflow: auto;\n  resize: none;\n  font-family: sans-serif;\n  background-color: gainsboro;\n  color: #505050;\n  border: none; }\n\ndiv {\n  font-family: sans-serif;\n  color: #505050;\n  width: 100%;\n  padding-left: 10px; }\n\nh5 {\n  font-weight: 700;\n  font-size: 12px; }\n\n.funcDesc {\n  font-weight: 600; }\n\n.paramP {\n  padding-left: 5px; }\n\nspan {\n  font-weight: 550;\n  font-style: italic; }\n"
-
-/***/ }),
-
 /***/ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.html":
 /*!****************************************************************************************!*\
   !*** ./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.html ***!
@@ -875,7 +966,7 @@ module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ntextarea {\n  he
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"mat-elevation-z8\">\r\n    <table mat-table [dataSource]=\"dataSource\">\r\n  \r\n      <!-- Position Column -->\r\n      <ng-container matColumnDef=\"position\">\r\n        <th mat-header-cell *matHeaderCellDef> No. </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.position}} </td>\r\n      </ng-container>\r\n  \r\n      <!-- Name Column -->\r\n      <ng-container matColumnDef=\"name\">\r\n        <th mat-header-cell *matHeaderCellDef> Name </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.name}} </td>\r\n      </ng-container>\r\n  \r\n      <!-- Weight Column -->\r\n      <ng-container matColumnDef=\"weight\">\r\n        <th mat-header-cell *matHeaderCellDef> Weight </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.weight}} </td>\r\n      </ng-container>\r\n  \r\n      <!-- Symbol Column -->\r\n      <ng-container matColumnDef=\"symbol\">\r\n        <th mat-header-cell *matHeaderCellDef> Symbol </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.symbol}} </td>\r\n      </ng-container>\r\n  \r\n      <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n      <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n    </table>\r\n  \r\n    <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\r\n  </div>"
+module.exports = "<mat-tab-group animationDuration=\"0ms\" [disableRipple]=\"true\">\r\n    <mat-tab label=\"Normal\">\r\n        <div class=\"mat-elevation-z8\">\r\n          <table mat-table [dataSource]=\"dataSourceNormal\" matSort>\r\n            <ng-container matColumnDef=\"key\">\r\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Key </th>\r\n              <td mat-cell *matCellDef=\"let element\"> {{element.key}} </td>\r\n            </ng-container>\r\n            <ng-container matColumnDef=\"v0\">\r\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Normal[1] </th>\r\n              <td mat-cell *matCellDef=\"let element\"> {{element.v0}} </td>\r\n            </ng-container>\r\n            <ng-container matColumnDef=\"v1\">\r\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Normal[2] </th>\r\n              <td mat-cell *matCellDef=\"let element\"> {{element.v1}} </td>\r\n            </ng-container>\r\n            <ng-container matColumnDef=\"v2\">\r\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Normal[3] </th>\r\n                <td mat-cell *matCellDef=\"let element\"> {{element.v2}} </td>\r\n            </ng-container>\r\n            <tr mat-header-row *matHeaderRowDef=\"['key', 'v0', 'v1', 'v2']\"></tr>\r\n            <tr mat-row *matRowDef=\"let row; columns: ['key', 'v0', 'v1', 'v2'];\"></tr>\r\n          </table>\r\n        \r\n          <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\r\n        </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Color\">\r\n        <div class=\"mat-elevation-z8\">\r\n          <table mat-table [dataSource]=\"dataSourceColor\" matSort>\r\n            <ng-container matColumnDef=\"key\">\r\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Key </th>\r\n              <td mat-cell *matCellDef=\"let element\"> {{element.key}} </td>\r\n            </ng-container>\r\n            <ng-container matColumnDef=\"v0\">\r\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Color[1] </th>\r\n              <td mat-cell *matCellDef=\"let element\"> {{element.v0}} </td>\r\n            </ng-container>\r\n            <ng-container matColumnDef=\"v1\">\r\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Color[2] </th>\r\n              <td mat-cell *matCellDef=\"let element\"> {{element.v1}} </td>\r\n            </ng-container>\r\n            <ng-container matColumnDef=\"v2\">\r\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Color[3] </th>\r\n                <td mat-cell *matCellDef=\"let element\"> {{element.v2}} </td>\r\n            </ng-container>\r\n            <tr mat-header-row *matHeaderRowDef=\"['key', 'v0', 'v1', 'v2']\"></tr>\r\n            <tr mat-row *matRowDef=\"let row; columns: ['key', 'v0', 'v1', 'v2'];\"></tr>\r\n          </table>\r\n        \r\n          <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\r\n        </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Settings\">\r\n      <ul>\r\n        <ol>switch on/off normals</ol>\r\n        <ol>intensity of light</ol>\r\n        <ol>etcs...</ol>\r\n      </ul>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n  "
 
 /***/ }),
 
@@ -886,7 +977,7 @@ module.exports = "<div class=\"mat-elevation-z8\">\r\n    <table mat-table [data
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "table {\n  width: 100%; }\n"
+module.exports = "table {\n  width: 100%; }\n  table tr.mat-header-row {\n    height: 40px; }\n  table tr.mat-row {\n    height: 24px; }\n  table tr.mat-row .mat-cell {\n      font-size: 12px; }\n  mat-paginator .mat-paginator-outer-container {\n  background: #fff; }\n  mat-paginator .mat-paginator-outer-container .mat-paginator-container {\n    min-height: 40px; }\n"
 
 /***/ }),
 
@@ -902,6 +993,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AttributeComponent", function() { return AttributeComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @libs/geo-info/GIModel */ "./src/libs/geo-info/GIModel.ts");
+/* harmony import */ var _data_data_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../data/data.service */ "./src/app/model-viewers/all-viewers/gi-viewer/data/data.service.ts");
+/* harmony import */ var _libs_geo_info__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @libs/geo-info */ "./src/libs/geo-info/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -913,51 +1007,112 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
+
+
 var AttributeComponent = /** @class */ (function () {
-    function AttributeComponent() {
-        this.displayedColumns = ['position', 'name', 'weight', 'symbol'];
-        this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableDataSource"](ELEMENT_DATA);
+    function AttributeComponent(injector) {
+        this.displayedColumns = ['key', 'v0', 'v1', 'v2'];
+        this._data = [];
+        this.dataSourceColor = new _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableDataSource"](this._data);
+        this.dataSourceNormal = new _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableDataSource"](this._data);
+        this.dataService = injector.get(_data_data_service__WEBPACK_IMPORTED_MODULE_3__["DataService"]);
     }
-    AttributeComponent.prototype.ngOnInit = function () {
-        console.log(this.dataSource);
-        this.dataSource.paginator = this.paginator;
+    AttributeComponent.prototype.ngOnChanges = function (changes) {
+        var attrData = {
+            coords: [],
+            normal: [],
+            color: [],
+        };
+        if (changes['data'] && this.data) {
+            var AttribNames = _libs_geo_info__WEBPACK_IMPORTED_MODULE_4__["GICommon"].EAttribNames;
+            for (var attr in _libs_geo_info__WEBPACK_IMPORTED_MODULE_4__["GICommon"].EAttribNames) {
+                if (_libs_geo_info__WEBPACK_IMPORTED_MODULE_4__["GICommon"].EAttribNames.hasOwnProperty(attr)) {
+                    attrData[AttribNames[attr]] = this.data.getAttibs().getVertsAttrib(AttribNames[attr]);
+                }
+            }
+            // const colorData = this.data.getAttibs().getVertsAttrib(GICommon.EAttribNames.COLOR);
+            var _colorDataArray_1 = [];
+            if (attrData.hasOwnProperty('color')) {
+                attrData.color.forEach(function (color, index) {
+                    _colorDataArray_1.push({ key: "" + _libs_geo_info__WEBPACK_IMPORTED_MODULE_4__["GICommon"].EEntityTypeStr.VERT + index, v0: color[0], v1: color[1], v2: color[2] });
+                });
+                this.dataSourceColor = new _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableDataSource"](_colorDataArray_1);
+                this.dataSourceColor.paginator = this.paginator;
+                this.dataSourceColor.sort = this.sort;
+            }
+            var normalData = this.data.getAttibs().getVertsAttrib(_libs_geo_info__WEBPACK_IMPORTED_MODULE_4__["GICommon"].EAttribNames.NORMAL);
+        }
     };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _libs_geo_info_GIModel__WEBPACK_IMPORTED_MODULE_2__["GIModel"])
+    ], AttributeComponent.prototype, "data", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginator"]),
         __metadata("design:type", _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginator"])
     ], AttributeComponent.prototype, "paginator", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])(_angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSort"]),
+        __metadata("design:type", _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSort"])
+    ], AttributeComponent.prototype, "sort", void 0);
     AttributeComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'attribute',
             template: __webpack_require__(/*! ./attribute.component.html */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.html"),
             styles: [__webpack_require__(/*! ./attribute.component.scss */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.scss")]
-        })
+        }),
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"]])
     ], AttributeComponent);
     return AttributeComponent;
 }());
 
-var ELEMENT_DATA = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-    { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-    { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-    { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-    { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-    { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-    { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-    { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-    { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-    { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-    { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
-];
+
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.module.ts":
+/*!***********************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.module.ts ***!
+  \***********************************************************************************/
+/*! exports provided: AttributeModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AttributeModule", function() { return AttributeModule; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var AttributeModule = /** @class */ (function () {
+    function AttributeModule() {
+    }
+    AttributeModule = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+            imports: [
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTabsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSortModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginatorModule"]
+            ],
+            exports: [
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTabsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatTableModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatSortModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_1__["MatPaginatorModule"]
+            ]
+        })
+    ], AttributeModule);
+    return AttributeModule;
+}());
+
 
 
 /***/ }),
@@ -1185,7 +1340,7 @@ var DataThreejs = /** @class */ (function () {
         mesh.geometry.computeVertexNormals();
         // show vertex normals
         var vnh = new three__WEBPACK_IMPORTED_MODULE_0__["VertexNormalsHelper"](mesh, 3, 0x0000ff);
-        this._scene.add(vnh);
+        // this._scene.add( vnh );
         // this._geometries.push(geom);
         // this._meshes.push(mesh);
         // add mesh to scene
@@ -1242,7 +1397,7 @@ var DataThreejs = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"gi-viewer-container\">\r\n\t<as-split direction=\"vertical\">\r\n\t\t<as-split-area [size]=\"80\" id=\"three-js\">\r\n\t\t\t<threejs-viewer [model]='data'></threejs-viewer>\r\n\t\t</as-split-area>\r\n\t\t<as-split-area [size]='20' id=\"attrib\">\r\n\t\t\t<h1>Attribute goes here</h1>\r\n\t\t\t<attribute></attribute>\r\n\t\t</as-split-area>\r\n\t</as-split>\r\n</div>\r\n\r\n<!-- <div id=\"appdiv\" (mousedown)=\"leaflet()\"> -->\r\n\t<!-- <as-split direction=\"vertical\"> -->\r\n\t\t<!-- <as-split-area [size]=\"90\" id=\"splitcontainer\"> -->\r\n\t\t  <!-- <div style=\"height: 100%\"> -->\r\n\t\t    <!-- <as-split direction=\"horizontal\"> -->\r\n\t\t\t\t\t<!-- <as-split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow-x:hidden;overflow-y: auto;\"> -->\r\n\t\t\t\t\t\t<!-- group -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t      <!-- <as-split-area [size]=\"99.5\" id=\"splitviewer\"> -->\r\n\t\t        <!-- <viewer-container *ngIf=\"imVisible===false\"></viewer-container>\r\n\t\t        <app-map *ngIf=\"imVisible===true\"></app-map> -->\r\n\t\t        <!-- <threejs-viewer></threejs-viewer> -->\r\n\t\t      <!-- </as-split-area> -->\r\n\t\t    <!-- </as-split> -->\r\n\t\t  <!-- </div> -->\r\n\t\t<!-- </as-split-area> -->\r\n\t\t<!-- <as-split-area [size]=\"10\" id=\"splittoolwindow\"> -->\r\n\t\t\t<!-- tool window -->\r\n\t\t<!-- </as-split-area> -->\r\n\t<!-- </as-split> -->\r\n<!-- </div> -->"
+module.exports = "<div id=\"gi-viewer-container\">\r\n\t<as-split direction=\"vertical\">\r\n\t\t<as-split-area [size]=\"70\" id=\"three-js\">\r\n\t\t\t<threejs-viewer [model]='data'></threejs-viewer>\r\n\t\t</as-split-area>\r\n\t\t<as-split-area [size]='30' id=\"attrib\">\r\n\t\t\t<attribute [data]=\"data\"></attribute>\r\n\t\t</as-split-area>\r\n\t</as-split>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1253,7 +1408,7 @@ module.exports = "<div id=\"gi-viewer-container\">\r\n\t<as-split direction=\"ve
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "#gi-viewer-container {\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n"
+module.exports = "#gi-viewer-container {\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n\n.mat-tab-group {\n  margin-bottom: 0px; }\n\nas-split-area {\n  overflow: hidden auto !important; }\n"
 
 /***/ }),
 
@@ -1341,10 +1496,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/slider */ "./node_modules/@angular/material/esm5/slider.es5.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm5/tabs.es5.js");
-/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
-/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
+/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm5/tooltip.es5.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _angular_material_expansion__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/expansion */ "./node_modules/@angular/material/esm5/expansion.es5.js");
+/* harmony import */ var _attribute_attribute_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./attribute/attribute.module */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.module.ts");
 /* harmony import */ var _gi_viewer_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
 /* harmony import */ var _threejs_threejs_viewer_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./threejs/threejs-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/threejs/threejs-viewer.component.ts");
 /* harmony import */ var _attribute_attribute_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./attribute/attribute.component */ "./src/app/model-viewers/all-viewers/gi-viewer/attribute/attribute.component.ts");
@@ -1396,13 +1551,11 @@ var GIViewerModule = /** @class */ (function () {
                 _angular_common__WEBPACK_IMPORTED_MODULE_4__["CommonModule"],
                 angular_split__WEBPACK_IMPORTED_MODULE_0__["AngularSplitModule"],
                 _angular_material_slider__WEBPACK_IMPORTED_MODULE_3__["MatSliderModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_6__["MatIconModule"],
                 ngx_pagination__WEBPACK_IMPORTED_MODULE_1__["NgxPaginationModule"],
-                _angular_material_expansion__WEBPACK_IMPORTED_MODULE_8__["MatExpansionModule"],
-                _angular_material_tabs__WEBPACK_IMPORTED_MODULE_5__["MatTabsModule"],
-                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_6__["MatTooltipModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatSortModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatTableModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_7__["MatPaginatorModule"],
+                _angular_material_expansion__WEBPACK_IMPORTED_MODULE_7__["MatExpansionModule"],
+                _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_5__["MatTooltipModule"],
+                _attribute_attribute_module__WEBPACK_IMPORTED_MODULE_8__["AttributeModule"]
             ]
         })
     ], GIViewerModule);
@@ -1420,7 +1573,7 @@ var GIViewerModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"threejs-container\" (click)=\"render(this)\" >\r\n    <div *ngIf=\"_model_error\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Error displaying model:{{text}}</div>\r\n    <div *ngIf=\"_no_model\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Model or Scene not defined.</div>\r\n\r\n    <button id=\"zoomingfit\"  \r\n        [class.visible]=\"Visible === 'zoomfit'\" \r\n        (click)=\"zoomfit()\">\r\n        <span matTooltip=\"zoom to fit\"><i class=\"fa fa-arrows-alt\"></i></span>\r\n    </button> \r\n    \r\n    <!-- <button id=\"selecting\" [class.visible]=\"Visible === 'select'\" (click)= \"select($event, Visible)\" ><i class=\"fa fa-mouse-pointer\"></i></button> -->\r\n    <!-- <button id=\"setting\" [class.selected]=\"settingVisible\" (click)= \"setting(settingVisible)\"><i class=\"fa fa-cog\"></i></button> -->\r\n\r\n    <button id=\"selecting\" [class.selected]=\"seVisible\" (click)= \"select(seVisible)\" ><span matTooltip=\"select\"><i class=\"fa fa-mouse-pointer\"></i></span></button>\r\n    <div id=\"shownumber\">\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Triangles&nbsp;&nbsp;</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[2]}}</td>\r\n        </tr>\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Lines</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[1]}}</td>\r\n        </tr>\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Points&nbsp;&nbsp;</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[0]}}</td>\r\n        </tr>\r\n    </div>\r\n\r\n    <!-- <button id=\"imagery\"  \r\n        [class.selected]=\"imVisible\" (click)=\"leaflet()\">I\r\n        </button> -->\r\n    <!--setting-->\r\n    \r\n    <!-- <app-setting *ngIf=\"settingVisible == true\"></app-setting> -->\r\n    <div *ngIf=\"seVisible == true\">\r\n        <button id=\"points\" [class.selectvisible]=\"SelectVisible === 'Points'\"><span matTooltip=\"Select Points\">P</span></button>\r\n        <button id=\"vertices\" [class.selectvisible]=\"SelectVisible === 'Vertices'\"><span matTooltip=\"Select Vertices\">V</span></button>\r\n        <button id=\"edges\" [class.selectvisible]=\"SelectVisible === 'Edges'\"><span matTooltip=\"Select Edges\">E</span></button>\r\n        <button id=\"wires\" [class.selectvisible]=\"SelectVisible === 'Wires'\"><span matTooltip=\"Select Wires\">W</span></button>\r\n        <button id=\"faces\" [class.selectvisible]=\"SelectVisible === 'Faces'\"><span matTooltip=\"Select Faces\">F</span></button>\r\n        <button id=\"objects\" [class.selectvisible]=\"SelectVisible === 'Objs'\"><span matTooltip=\"Select Objects\">O</span></button>\r\n      </div>\r\n</div>\r\n"
+module.exports = "<div id=\"threejs-container\" (click)=\"render(this)\" >\r\n    <div *ngIf=\"_model_error\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Error displaying model:{{text}}</div>\r\n    <div *ngIf=\"_no_model\" style=\"position:absolute;color:red;margin-top: 50px;left:40%;width: auto;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;\">Model or Scene not defined.</div>\r\n\r\n    <!--\r\n    <button id=\"zoomingfit\"  \r\n        [class.visible]=\"Visible === 'zoomfit'\" \r\n        (click)=\"zoomfit()\">\r\n        <span matTooltip=\"zoom to fit\"><i class=\"fa fa-arrows-alt\"></i></span>\r\n    </button> \r\n    -->\r\n    <button id=\"zoomingfit\"\r\n        mat-icon-button\r\n        [class.visible]=\"Visible === 'zoomfit'\" \r\n        (click)=\"zoomfit()\">\r\n        <mat-icon svgIcon=\"cZoom\"></mat-icon>\r\n    </button> \r\n\r\n    <!-- <button id=\"selecting\" [class.visible]=\"Visible === 'select'\" (click)= \"select($event, Visible)\" ><i class=\"fa fa-mouse-pointer\"></i></button> -->\r\n    <!-- <button id=\"setting\" [class.selected]=\"settingVisible\" (click)= \"setting(settingVisible)\"><i class=\"fa fa-cog\"></i></button> -->\r\n    <!-- \r\n    <button id=\"selecting\" [class.selected]=\"seVisible\" (click)= \"select(seVisible)\" ><span matTooltip=\"select\"><i class=\"fa fa-mouse-pointer\"></i></span></button>\r\n\r\n    -->\r\n    <button id=\"selecting\" \r\n        mat-icon-button\r\n        [class.selected]=\"seVisible\" \r\n        (click)= \"select(seVisible)\" >\r\n        <mat-icon >near_me</mat-icon>\r\n    </button>\r\n\r\n    <div id=\"shownumber\">\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Triangles&nbsp;&nbsp;</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[2]}}</td>\r\n        </tr>\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Lines</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[1]}}</td>\r\n        </tr>\r\n        <tr>\r\n            <td  align=left style=\"width: 60px;\">Points&nbsp;&nbsp;</td>\r\n            <td  align=left style=\"width: 10px;\">{{_threejs_nums[0]}}</td>\r\n        </tr>\r\n    </div>\r\n\r\n    <!-- <button id=\"imagery\"  \r\n        [class.selected]=\"imVisible\" (click)=\"leaflet()\">I\r\n        </button> -->\r\n    <!--setting-->\r\n    \r\n    <!-- <app-setting *ngIf=\"settingVisible == true\"></app-setting> -->\r\n    <div *ngIf=\"seVisible == true\">\r\n        <button id=\"points\" [class.selectvisible]=\"SelectVisible === 'Points'\"><span matTooltip=\"Select Points\">P</span></button>\r\n        <button id=\"vertices\" [class.selectvisible]=\"SelectVisible === 'Vertices'\"><span matTooltip=\"Select Vertices\">V</span></button>\r\n        <button id=\"edges\" [class.selectvisible]=\"SelectVisible === 'Edges'\"><span matTooltip=\"Select Edges\">E</span></button>\r\n        <button id=\"wires\" [class.selectvisible]=\"SelectVisible === 'Wires'\"><span matTooltip=\"Select Wires\">W</span></button>\r\n        <button id=\"faces\" [class.selectvisible]=\"SelectVisible === 'Faces'\"><span matTooltip=\"Select Faces\">F</span></button>\r\n        <button id=\"objects\" [class.selectvisible]=\"SelectVisible === 'Objs'\"><span matTooltip=\"Select Objects\">O</span></button>\r\n      </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1431,7 +1584,7 @@ module.exports = "<div id=\"threejs-container\" (click)=\"render(this)\" >\r\n  
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  width: 100%;\n  height: 100%;\n  background-color: green;\n  overflow: hidden; }\n\n#threejs-container {\n  height: 100%;\n  width: 100%;\n  margin: 0px;\n  overflow: hidden;\n  color: blue;\n  font-family: sans-serif; }\n\n#container-top-right-resize {\n  top: 0px;\n  right: 0px; }\n\n#shownumber {\n  position: absolute;\n  float: right;\n  color: black;\n  right: 0px;\n  width: 115px;\n  bottom: 0px;\n  color: #395d73;\n  font-family: sans-serif; }\n\n/*#rotating{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 0px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#paning{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 25px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#zooming{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 50px;\r\n    background-color:transparent;\r\n    border:0;\r\n}*/\n\n/*#imagery{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:14px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 10px;\r\n    background-color:transparent;\r\n    border:0;\r\n}*/\n\n#zoomingfit {\n  width: 30px;\n  height: 25px;\n  font-size: 14px;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 10px;\n  background-color: transparent;\n  border: 0; }\n\n#selecting {\n  width: 30px;\n  height: 25px;\n  font-size: 14px;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 35px;\n  background-color: transparent;\n  border: 0; }\n\n#points {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 70px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#vertices {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 95px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#edges {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 120px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#wires {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 145px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#faces {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 170px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#objects {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 195px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#setting {\n  width: 30px;\n  height: 25px;\n  font-size: 14px;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  top: 10px;\n  background-color: transparent;\n  border: 0; }\n\n.selected {\n  color: grey; }\n\n.visible {\n  color: grey; }\n\n.selectvisible {\n  background-color: white !important;\n  color: #395d73; }\n"
+module.exports = ":host {\n  width: 100%;\n  height: 100%;\n  background-color: green;\n  overflow: hidden; }\n\n#threejs-container {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  margin: 0px;\n  overflow: hidden;\n  font-family: sans-serif; }\n\n#container-top-right-resize {\n  top: 0px;\n  right: 0px; }\n\n#shownumber {\n  position: absolute;\n  bottom: 5px;\n  right: 5px;\n  background: rgba(255, 255, 255, 0.3);\n  padding: 10px;\n  color: #2a8ac5; }\n\n/*#rotating{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 0px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#paning{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    top: 25px;\r\n    background-color:transparent;\r\n    border:0;\r\n}\r\n\r\n#zooming{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:15px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 50px;\r\n    background-color:transparent;\r\n    border:0;\r\n}*/\n\n/*#imagery{\r\n    width: 30px;\r\n    height: 25px;\r\n    font-size:14px;\r\n    right:0px; \r\n    text-align:center;\r\n    position: absolute;\r\n    margin-top: 10px;\r\n    background-color:transparent;\r\n    border:0;\r\n}*/\n\n#zoomingfit {\n  width: 40px;\n  height: 40px;\n  font-size: 15px;\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  text-align: center;\n  color: #505050;\n  background-color: transparent;\n  border: 0; }\n\n#selecting {\n  width: 40px;\n  height: 40px;\n  font-size: 15px;\n  position: absolute;\n  top: 40px;\n  right: 0px;\n  text-align: center;\n  color: #505050;\n  background-color: transparent;\n  border: 0; }\n\n#points {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 70px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#vertices {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 95px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#edges {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 120px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#wires {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 145px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#faces {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 170px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#objects {\n  width: 30px;\n  height: 25px;\n  font: 14px bolder;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  margin-top: 195px;\n  background-color: transparent;\n  border: 0;\n  font-family: sans-serif; }\n\n#setting {\n  width: 30px;\n  height: 25px;\n  font-size: 15px;\n  right: 0px;\n  text-align: center;\n  position: absolute;\n  top: 10px;\n  background-color: transparent;\n  border: 0; }\n\n.selected {\n  color: grey; }\n\n.visible {\n  color: grey; }\n\n.selectvisible {\n  background-color: white !important;\n  color: #395d73; }\n"
 
 /***/ }),
 
@@ -1596,10 +1749,32 @@ var ThreejsViewerComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts":
-/*!***************************************************************************!*\
-  !*** ./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts ***!
-  \***************************************************************************/
+/***/ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.html":
+/*!**********************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.html ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div id=\"help-container\">\r\n    <div *ngIf='output'>\r\n        <h2>{{output.name}}</h2>\r\n        <h4>Module: <span>{{output.module}}</span></h4>\r\n        <h5><span>Description:</span></h5>\r\n        <p>{{output.description}}</p>\r\n        <h5 *ngIf='output.parameters?.length > 0'><span>Parameters: </span></h5>\r\n        <p class='paramP' *ngFor='let param of output.parameters'><span>{{param.name}} - </span>{{param.description}}</p>\r\n        <h5 *ngIf='output.returns'>Returns:</h5>\r\n        <p *ngIf='output.returns'>{{output.returns}}</p>\r\n    </div>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.scss":
+/*!**********************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.scss ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host {\n  height: 100%;\n  width: 100%; }\n\ndiv {\n  font-family: sans-serif;\n  color: #505050;\n  width: 100%;\n  padding-left: 10px; }\n\nh5 {\n  font-weight: 700;\n  font-size: 12px; }\n\n.funcDesc {\n  font-weight: 600; }\n\n.paramP {\n  padding-left: 5px; }\n\nspan {\n  font-weight: 550;\n  font-style: italic; }\n\n#help-container {\n  margin-top: 40px;\n  padding: 10px;\n  height: 100%;\n  width: 100%;\n  overflow: auto;\n  resize: none;\n  font-family: sans-serif;\n  background-color: transparent;\n  color: #505050;\n  border: none; }\n"
+
+/***/ }),
+
+/***/ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.ts":
+/*!********************************************************************************!*\
+  !*** ./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.ts ***!
+  \********************************************************************************/
 /*! exports provided: HelpViewerComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1636,9 +1811,9 @@ var HelpViewerComponent = /** @class */ (function () {
     HelpViewerComponent = __decorate([
         _shared_decorators__WEBPACK_IMPORTED_MODULE_1__["ModuleDocAware"],
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'procedure-help',
-            template: "\n  <div *ngIf='output'>\n    <h2>{{output.name}}</h2>\n    <h4>Module: <span>{{output.module}}</span></h4>\n    <h5><span>Description:</span></h5>\n    <p>{{output.description}}</p>\n    <h5 *ngIf='output.parameters?.length > 0'><span>Parameters: </span></h5>\n    <p class='paramP' *ngFor='let param of output.parameters'><span>{{param.name}} - </span>{{param.description}}</p>\n    <h5 *ngIf='output.returns'>Returns:</h5>\n    <p *ngIf='output.returns'>{{output.returns}}</p>\n  </div>\n\n\n  ",
-            styles: [__webpack_require__(/*! ../general-viewer.scss */ "./src/app/model-viewers/all-viewers/general-viewer.scss")]
+            selector: 'help-viewer',
+            template: __webpack_require__(/*! ./help-viewer.component.html */ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.html"),
+            styles: [__webpack_require__(/*! ./help-viewer.component.scss */ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.scss")]
         }),
         __metadata("design:paramtypes", [])
     ], HelpViewerComponent);
@@ -1656,7 +1831,7 @@ var HelpViewerComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='viewers-container'>  \r\n    <div class='container__header'>\r\n        <div class=\"tab\">\r\n            <button class='btn-tab' \r\n                [class.active]='view.name == activeView.name'\r\n                *ngFor='let view of Viewers;' \r\n                (click)='updateView(view)'>\r\n            {{view.name}}\r\n            </button>\r\n        </div>\r\n    </div>\r\n    <div class='content__panel'>\r\n        <ng-container #vc></ng-container>\r\n    </div>\r\n</div>"
+module.exports = "<div class='viewers-container'>  \r\n\r\n    <div class='container__header'>\r\n        <div class=\"header-btn-group\">\r\n            <button class='btn' mat-icon-button *ngFor='let view of Viewers;'\r\n            [class.active]='view.name == activeView.name' (click)='updateView(view)' title='{{view.name}}'>\r\n                <mat-icon [svgIcon]='\"c\"+view.name'></mat-icon>\r\n            </button>\r\n        </div>\r\n    </div>\r\n\r\n    <div class='content__panel'>\r\n        <ng-container #vc></ng-container>\r\n    </div>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -1667,7 +1842,7 @@ module.exports = "<div class='viewers-container'>  \r\n    <div class='container
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".viewers-container {\n  display: block;\n  height: 100%;\n  overflow: hidden; }\n\n.container__header {\n  flex: 0 1 auto;\n  height: 35px;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  padding: 0px 0px 0px 0px;\n  background-color: #ccc;\n  border-bottom: 3px solid #eeeeee;\n  line-height: 35px;\n  font-size: 18px;\n  font-weight: 600;\n  text-align: center; }\n\n.content__panel {\n  background-color: gainsboro;\n  width: 100%;\n  height: 100%;\n  overflow: auto; }\n\nbutton.btn {\n  margin: 10px;\n  font-size: 14px;\n  line-height: 18px;\n  border: 2px solid gray;\n  border-radius: 4px;\n  padding: 2px 10px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n/* tab styling */\n\n.tab {\n  border: 2px;\n  overflow: hidden;\n  background-color: #ccc; }\n\n.tab button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: inherit;\n  color: #505050;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 8px 10px;\n  transition: 0.3s;\n  font-size: 14px; }\n\n.tab button:hover {\n  color: blue; }\n\n.tab button.active {\n  background-color: #ccc;\n  color: #000096;\n  font-weight: 600;\n  border-color: #222 !important; }\n"
+module.exports = "panel-header button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: transparent;\n  color: #808080;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 0px;\n  width: 34px;\n  height: 34px;\n  transition: 0.3s;\n  font-size: 15px; }\n\nbutton:hover {\n  color: #E6E6E6; }\n\npanel-header button.active {\n  color: #373737; }\n\n.viewers-container {\n  position: relative;\n  display: block;\n  height: 100%;\n  overflow: hidden; }\n\n.viewers-container .container__header {\n    position: absolute;\n    left: 0;\n    top: 0;\n    display: flex;\n    background-color: transparent;\n    height: 35px;\n    padding: 0px;\n    margin: 0px; }\n\n.viewers-container .container__header .header-btn-group {\n      height: 35px;\n      padding: 0px;\n      margin: 0px;\n      overflow: hidden;\n      background-color: transparent;\n      z-index: 1; }\n\n.viewers-container .content__panel {\n    background-color: transparent;\n    width: 100%;\n    height: 100%;\n    overflow: hidden;\n    padding: 0px;\n    margin: 0px; }\n\n.viewers-container button {\n    display: inline-block;\n    vertical-align: bottom;\n    background-color: transparent;\n    color: #808080;\n    border: none;\n    outline: none;\n    cursor: pointer;\n    padding: 0px;\n    width: 34px;\n    height: 34px;\n    transition: 0.3s;\n    font-size: 14px; }\n\n.viewers-container button:hover {\n      color: #999999; }\n\n.viewers-container button.active {\n      color: #373737; }\n"
 
 /***/ }),
 
@@ -1851,9 +2026,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./model-viewers-container.component */ "./src/app/model-viewers/model-viewers-container.component.ts");
 /* harmony import */ var _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model-viewers.config */ "./src/app/model-viewers/model-viewers.config.ts");
-/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_console_viewer_console_viewer_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./all-viewers/console-viewer/console-viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.ts");
+/* harmony import */ var _all_viewers_help_viewer_help_viewer_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./all-viewers/help-viewer/help-viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.ts");
 /* harmony import */ var _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.module */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.module.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1867,6 +2043,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+// viewers
 
 
 
@@ -1890,8 +2068,8 @@ var DataViewersContainer = /** @class */ (function () {
             declarations: [
                 _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__["DataViewersContainerComponent"],
                 // TextViewerComponent,
-                _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_5__["ConsoleViewerComponent"],
-                _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_6__["HelpViewerComponent"],
+                _all_viewers_console_viewer_console_viewer_component__WEBPACK_IMPORTED_MODULE_5__["ConsoleViewerComponent"],
+                _all_viewers_help_viewer_help_viewer_component__WEBPACK_IMPORTED_MODULE_6__["HelpViewerComponent"],
             ],
             exports: [
                 _model_viewers_container_component__WEBPACK_IMPORTED_MODULE_3__["DataViewersContainerComponent"]
@@ -1900,6 +2078,8 @@ var DataViewersContainer = /** @class */ (function () {
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
                 _all_viewers_gi_viewer_gi_viewer_module__WEBPACK_IMPORTED_MODULE_7__["GIViewerModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_8__["MatIconModule"]
+                // SharedModule
             ],
             entryComponents: _model_viewers_config__WEBPACK_IMPORTED_MODULE_4__["VIEWER_ARR"].slice(),
             providers: []
@@ -1924,8 +2104,8 @@ var DataViewersContainer = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VIEWER_ARR", function() { return VIEWER_ARR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Viewers", function() { return Viewers; });
-/* harmony import */ var _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./all-viewers/console-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/viewer.component.ts");
-/* harmony import */ var _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./all-viewers/help-viewer/viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/viewer.component.ts");
+/* harmony import */ var _all_viewers_console_viewer_console_viewer_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./all-viewers/console-viewer/console-viewer.component */ "./src/app/model-viewers/all-viewers/console-viewer/console-viewer.component.ts");
+/* harmony import */ var _all_viewers_help_viewer_help_viewer_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./all-viewers/help-viewer/help-viewer.component */ "./src/app/model-viewers/all-viewers/help-viewer/help-viewer.component.ts");
 /* harmony import */ var _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./all-viewers/gi-viewer/gi-viewer.component */ "./src/app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.ts");
 
 
@@ -1933,16 +2113,14 @@ __webpack_require__.r(__webpack_exports__);
 var VIEWER_ARR = [
     // Step-2: Add Component here
     _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_2__["GIViewerComponent"],
-    // TextViewerComponent,
-    _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["ConsoleViewerComponent"],
-    _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["HelpViewerComponent"],
+    _all_viewers_console_viewer_console_viewer_component__WEBPACK_IMPORTED_MODULE_0__["ConsoleViewerComponent"],
+    _all_viewers_help_viewer_help_viewer_component__WEBPACK_IMPORTED_MODULE_1__["HelpViewerComponent"],
 ];
 var Viewers = [
     // Step-3: Add Viewer Definition here: name, icon and component
     { name: '3D Viewer', icon: undefined, component: _all_viewers_gi_viewer_gi_viewer_component__WEBPACK_IMPORTED_MODULE_2__["GIViewerComponent"] },
-    // { name: 'Summary', icon: undefined, component: TextViewerComponent },
-    { name: 'Console', icon: undefined, component: _all_viewers_console_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_0__["ConsoleViewerComponent"] },
-    { name: 'Help', icon: undefined, component: _all_viewers_help_viewer_viewer_component__WEBPACK_IMPORTED_MODULE_1__["HelpViewerComponent"] },
+    { name: 'Console', icon: undefined, component: _all_viewers_console_viewer_console_viewer_component__WEBPACK_IMPORTED_MODULE_0__["ConsoleViewerComponent"] },
+    { name: 'Help', icon: undefined, component: _all_viewers_help_viewer_help_viewer_component__WEBPACK_IMPORTED_MODULE_1__["HelpViewerComponent"] },
 ];
 
 
@@ -2096,6 +2274,28 @@ var AddOutputComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/shared/components/execute/execute.component.html":
+/*!******************************************************************!*\
+  !*** ./src/app/shared/components/execute/execute.component.html ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<button id='executeButton' class=\"btn\" mat-icon-button title=\"Execute\" (click)=\"execute()\">\r\n    <mat-icon>play_circle_outline</mat-icon>\r\n</button>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/shared/components/execute/execute.component.scss":
+/*!******************************************************************!*\
+  !*** ./src/app/shared/components/execute/execute.component.scss ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "panel-header button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: transparent;\n  color: #808080;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 0px;\n  width: 34px;\n  height: 34px;\n  transition: 0.3s;\n  font-size: 15px; }\n\nbutton:hover {\n  color: #E6E6E6; }\n\npanel-header button.active {\n  color: #373737; }\n"
+
+/***/ }),
+
 /***/ "./src/app/shared/components/execute/execute.component.ts":
 /*!****************************************************************!*\
   !*** ./src/app/shared/components/execute/execute.component.ts ***!
@@ -2163,6 +2363,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var mergeInputsFunc = "\nfunction mergeInputs(models){\n    let result = __modules__." + _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].new + "();\n    for (let model of models){\n        __modules__." + _modules__WEBPACK_IMPORTED_MODULE_3__["_parameterTypes"].merge + "(result, model);\n    }\n    return result;\n}\n";
+var DEBUG = false;
 var ExecuteComponent = /** @class */ (function () {
     function ExecuteComponent(dataService) {
         this.dataService = dataService;
@@ -2237,12 +2438,11 @@ var ExecuteComponent = /** @class */ (function () {
     };
     ExecuteComponent.prototype.executeNode = function (node, funcStrings) {
         return __awaiter(this, void 0, void 0, function () {
-            var params, DEBUG, nodeCode, fnString, hasFunctions, funcName, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
+            var params, nodeCode, fnString, hasFunctions, funcName, fn, result, constant, constString, ex_1, prodWithError_1, markError_1, error;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         params = { 'currentProcedure': [''] };
-                        DEBUG = false;
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -2347,16 +2547,8 @@ var ExecuteComponent = /** @class */ (function () {
     ExecuteComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'execute',
-            /*
-            template: `<button class="btn--execute"
-                              (click)="execute()">
-                          Execute
-                       </button>`,
-              */
-            template: "<button id='executeButton' class=\"btn\" mat-icon-button title=\"Execute\" (click)=\"execute()\">\n    <mat-icon>play_circle_outline</mat-icon>\n    </button>\n    ",
-            styles: [
-                ".btn--execute{\n                display: inline-block;\n                vertical-align: middle;\n                font-size: 14px;\n                line-height: 18px;\n                border: 3px solid #E0C229;\n                border-radius: 4px;\n                padding: 1px 10px;\n                background-color: #E0C229;\n                color: #494D59;\n                font-weight: 600;\n                text-transform: uppercase;\n              }\n              .btn{\n                vertical-align: middle;\n                background-color: transparent;\n                border: none;\n                color: rgb(80,80,80);\n              }\n              .btn:hover{\n                color: blue;\n              }"
-            ]
+            template: __webpack_require__(/*! ./execute.component.html */ "./src/app/shared/components/execute/execute.component.html"),
+            styles: [__webpack_require__(/*! ./execute.component.scss */ "./src/app/shared/components/execute/execute.component.scss")]
         }),
         __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_4__["DataService"]])
     ], ExecuteComponent);
@@ -2721,17 +2913,40 @@ var SaveFileComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/shared/components/header/header.component.ts":
-/*!**************************************************************!*\
-  !*** ./src/app/shared/components/header/header.component.ts ***!
-  \**************************************************************/
-/*! exports provided: HeaderComponent */
+/***/ "./src/app/shared/components/header/panel-header.component.html":
+/*!**********************************************************************!*\
+  !*** ./src/app/shared/components/header/panel-header.component.html ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class='container__header'>\r\n\r\n    <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n    <div style=\"display: none;\">\r\n        <file-new></file-new>\r\n        <file-save></file-save>\r\n        <file-load></file-load>\r\n    </div>\r\n\r\n    <!-- buttons -->\r\n    <div class='header-btn-group'>\r\n\r\n        <!-- top left dropdown menu -->\r\n        <!-- <div class=\"dropmenu\"> -->\r\n            <!-- dropdown menu for new file, save file, loaf file-->\r\n            <!-- <div> -->\r\n                <!--\r\n                <button id='dropdownButton' class='btn' mat-icon-button (click)='openDropdownMenu($event)'>\r\n                    <mat-icon svgIcon=\"cMenu\" id='dropdownIcon'></mat-icon>\r\n                </button>\r\n                -->\r\n            <!-- </div>\r\n        </div> -->\r\n                        \r\n\r\n        <!-- buttons to navigate to the 4 pages -->\r\n        <button class='btn' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\" title='Gallery'>\r\n            <mat-icon svgIcon=\"cGallery\"></mat-icon>\r\n        </button>\r\n        <button class='btn' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\" title='Dashboard'>\r\n            <mat-icon svgIcon=\"cDashboard\"></mat-icon>\r\n        </button>\r\n        <button class='btn' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\" title='Flowchart'>\r\n            <mat-icon svgIcon=\"cFlowchart\"></mat-icon>\r\n        </button>\r\n        <button class='btn' [class.active]='router.url==\"/editor\"' [routerLink]=\"'/editor'\" title='Procedure'>\r\n            <mat-icon svgIcon=\"cEditor\"></mat-icon>\r\n        </button>\r\n                \r\n        <!-- execute button -->\r\n        <execute></execute>\r\n\r\n    </div>\r\n\r\n    <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div>\r\n    <div id=\"dropdownMenu\">\r\n        <button onclick=\"document.getElementById('newfile').click();\"\r\n        title=\"Create New Flowchart\"> \r\n            <mat-icon>rotate_left</mat-icon> \r\n            New File\r\n        </button>\r\n        <br>\r\n        <button onclick=\"document.getElementById('savefile').click();\"\r\n        title=\"Save Flowchart File to Computer\">\r\n            <mat-icon>save_alt</mat-icon>\r\n            Save File\r\n            \r\n        </button>\r\n        <br>\r\n        <button onclick=\"document.getElementById('file-input').click();\"\r\n        title=\"Load Flowchart File from Computer\">\r\n            <mat-icon>launch</mat-icon>\r\n            Load File \r\n        </button>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/shared/components/header/panel-header.component.scss":
+/*!**********************************************************************!*\
+  !*** ./src/app/shared/components/header/panel-header.component.scss ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "panel-header button {\n  display: inline-block;\n  vertical-align: bottom;\n  background-color: transparent;\n  color: #808080;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 0px;\n  width: 34px;\n  height: 34px;\n  transition: 0.3s;\n  font-size: 15px; }\n\nbutton:hover {\n  color: #E6E6E6; }\n\npanel-header button.active {\n  color: #373737; }\n\n.container__header {\n  display: flex;\n  background-color: transparent;\n  height: 35px;\n  padding: 0px;\n  margin: 0px; }\n\n.container__header .header-btn-group {\n    height: 35px;\n    padding: 0px;\n    margin: 0px;\n    overflow: hidden;\n    background-color: transparent;\n    z-index: 1; }\n\n.container__header #filename {\n    cursor: pointer;\n    height: 35px;\n    font-size: 15px;\n    color: #808080;\n    overflow: hidden;\n    background-color: transparent;\n    padding-top: 0px;\n    text-align: center;\n    vertical-align: middle;\n    line-height: 35px; }\n\n.cdk-overlay-pane {\n  top: 35px !important; }\n\n.cdk-overlay-pane .mat-menu-panel {\n    position: absolute;\n    border-radius: 0px;\n    padding: 0px;\n    left: 0px; }\n\n.cdk-overlay-pane .mat-menu-panel .mat-menu-content {\n      padding: 0px; }\n\n.cdk-overlay-pane .mat-menu-panel .mat-menu-item {\n      padding: 0px; }\n\n/*\r\nbutton.mat-menu-item{ // drop-down (top-bar) menu buttons\r\n    background-color: $color5;\r\n    color: $color1;\r\n    // mat-icon{\r\n    //     color: $color4;\r\n    // }\r\n\r\n    height: $header-height;\r\n    line-height: $header-height;\r\n    font-size: $fsize2;\r\n    text-align: center;\r\n}\r\n\r\nbutton.mat-menu-item:hover{\r\n    background-color: $color5;\r\n    color: $color5;\r\n    // mat-icon{\r\n    //     color: $color5;\r\n    // }\r\n}\r\n*/\n\n#dropdownMenu {\n  display: none;\n  position: fixed;\n  z-index: 1;\n  background-color: #E6E6E6; }\n\n#dropdownMenu button {\n    display: inline-block;\n    width: 100px; }\n"
+
+/***/ }),
+
+/***/ "./src/app/shared/components/header/panel-header.component.ts":
+/*!********************************************************************!*\
+  !*** ./src/app/shared/components/header/panel-header.component.ts ***!
+  \********************************************************************/
+/*! exports provided: PanelHeaderComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderComponent", function() { return HeaderComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PanelHeaderComponent", function() { return PanelHeaderComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2742,28 +2957,57 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent() {
+
+var PanelHeaderComponent = /** @class */ (function () {
+    function PanelHeaderComponent(router) {
+        this.router = router;
     }
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object)
-    ], HeaderComponent.prototype, "node", void 0);
+    PanelHeaderComponent.prototype.getTitle = function () {
+        return this.title.replace(/_/g, ' ');
+    };
+    PanelHeaderComponent.prototype.openDropdownMenu = function (e) {
+        /*
+        const dropdowns = document.getElementsByClassName('dropdown-content');
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+            }
+        }
+        */
+        var stl = document.getElementById('dropdownMenu').style;
+        if (!stl.display || stl.display === 'none') {
+            stl.display = 'block';
+            var bRect = e.target.getBoundingClientRect();
+            stl.transform = "translate(" + bRect.left + "px, " + bRect.height + "px)";
+        }
+        else {
+            stl.display = 'none';
+        }
+        e.stopPropagation();
+    };
+    PanelHeaderComponent.prototype.onWindowClick = function () {
+        document.getElementById('dropdownMenu').style.display = 'none';
+    };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", String)
-    ], HeaderComponent.prototype, "title", void 0);
-    HeaderComponent = __decorate([
+    ], PanelHeaderComponent.prototype, "title", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["HostListener"])('window:click', []),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], PanelHeaderComponent.prototype, "onWindowClick", null);
+    PanelHeaderComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'panel-header',
-            template: "<div class='panel__header'>\n                    <h3>{{node?.name}} // {{title}}</h3>\n              </div>",
-            styles: [
-                ".panel__header{\n                font-weight: 600;\n                border: 2px solid #222;\n                border-radius: 4px;\n                padding: 5px;\n             }\n             h3{\n                margin: 0px;\n             }"
-            ]
+            template: __webpack_require__(/*! ./panel-header.component.html */ "./src/app/shared/components/header/panel-header.component.html"),
+            styles: [__webpack_require__(/*! ./panel-header.component.scss */ "./src/app/shared/components/header/panel-header.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
-    ], HeaderComponent);
-    return HeaderComponent;
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], PanelHeaderComponent);
+    return PanelHeaderComponent;
 }());
 
 
@@ -2965,7 +3209,7 @@ var InputPortViewerComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>{{displayName()}}</h2>\r\n<textarea id='display-flowchart-desc' [(ngModel)]='flowchart.description' placeholder=\"Flowchart Description\" disabled></textarea>\r\n<hr>\r\n\r\n<!-- <p>Edit the parameters of your flowchart here. These parameters are visible in the viewer when you share your flowchart.</p> -->\r\n<procedure-input-viewer *ngFor=\"let prod of startNode.procedure\" [prod]=\"prod\"></procedure-input-viewer>\r\n"
+module.exports = "<!-- <h2>{{displayName()}}</h2> -->\r\n\r\n<textarea id='display-flowchart-desc' [(ngModel)]='flowchart.description' placeholder=\"Flowchart Description\" disabled></textarea>\r\n\r\n<hr>\r\n\r\n<procedure-input-viewer *ngFor=\"let prod of startNode.procedure\" [prod]=\"prod\"></procedure-input-viewer>\r\n"
 
 /***/ }),
 
@@ -2976,7 +3220,7 @@ module.exports = "<h2>{{displayName()}}</h2>\r\n<textarea id='display-flowchart-
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  background-color: transparent;\n  width: auto;\n  height: auto;\n  display: flex;\n  flex-direction: column;\n  flex-wrap: wrap; }\n\nh2 {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 16px; }\n\np {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 14px; }\n\nhr {\n  border-top: 2px solid #efefef; }\n\ndiv[class^=\"container--\"] {\n  display: flex;\n  flex-direction: column;\n  margin: 10px 0px; }\n\ntextarea {\n  color: #505050;\n  background-color: gainsboro;\n  border: none;\n  padding: 2px 0px 0px 15px;\n  font-family: sans-serif;\n  font-size: 12px;\n  margin: 0px;\n  width: 90%;\n  min-height: 20px;\n  max-height: 300px;\n  resize: none; }\n"
+module.exports = ".container {\n  background-color: transparent;\n  width: auto;\n  height: auto;\n  display: flex;\n  flex-direction: column;\n  flex-wrap: wrap; }\n\nh2 {\n  color: #808080;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 16px; }\n\np {\n  color: #808080;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 14px; }\n\nhr {\n  border-top: 2px solid #E6E6E6; }\n\ndiv[class^=\"container--\"] {\n  display: flex;\n  flex-direction: column;\n  margin: 10px 0px; }\n\ntextarea {\n  color: #808080;\n  background-color: transparent;\n  border: none;\n  padding: 10px 0px 0px 15px;\n  font-family: sans-serif;\n  font-size: 12px;\n  margin: 0px;\n  width: 90%;\n  min-height: 20px;\n  resize: none; }\n"
 
 /***/ }),
 
@@ -3065,7 +3309,7 @@ module.exports = "<div class='container'>\r\n    <div class='container--paramete
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  display: block;\n  margin: 5px 0px 0px 5px;\n  width: 100%; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  bottom: 0px;\n  padding-bottom: 5px;\n  border-bottom: 1px solid #efefef;\n  border-left: 1px solid #efefef;\n  width: 100%; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\ninput {\n  color: #505050;\n  background-color: gainsboro;\n  max-width: 96%;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.input-const-name {\n  min-width: 100px; }\n\n.parameter__name {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  width: 100px; }\n\nmat-slider {\n  width: 300px; }\n"
+module.exports = ".container {\n  display: block;\n  margin: 5px 0px 0px 5px;\n  width: 100%; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  bottom: 0px;\n  padding-bottom: 5px;\n  border-bottom: 1px solid #E6E6E6;\n  border-left: 1px solid #E6E6E6;\n  width: 100%; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\ninput {\n  color: #808080;\n  background-color: gainsboro;\n  max-width: 96%;\n  border: none;\n  border-bottom: 1px solid #808080;\n  margin-left: 5px;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.input-const-name {\n  min-width: 100px; }\n\n.parameter__name {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  width: 100px; }\n\nmat-slider {\n  width: 300px; }\n"
 
 /***/ }),
 
@@ -3116,9 +3360,9 @@ var ProcedureInputViewerComponent = /** @class */ (function () {
     };
     ProcedureInputViewerComponent.prototype.inputSize = function (val, defaultVal) {
         if (val === undefined || val === '') {
-            return ctx.measureText(defaultVal).width + 5;
+            return ctx.measureText(defaultVal).width + 2;
         }
-        return ctx.measureText(val).width + 5;
+        return ctx.measureText(val).width + 2;
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -3767,14 +4011,18 @@ var CodeUtils = /** @class */ (function () {
                         }
                         // TODO-QUERY: update the query statement
                         if (arg.value && arg.value.substring(0, 1) === '#') {
+                            argVals.push('`' + arg.value + '`');
+                            return [3 /*break*/, 16];
+                            /*
                             if (prod.meta.module.toUpperCase() === 'QUERY'
                                 && prod.meta.name.toUpperCase() === 'SET'
                                 && arg.name.toUpperCase() === 'STATEMENT') {
                                 argVals.push('"' + arg.value.replace(/"/g, '\'') + '"');
-                                return [3 /*break*/, 16];
+                                continue;
                             }
                             argVals.push('__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, '\'') + '" )');
-                            return [3 /*break*/, 16];
+                            continue;
+                            */
                         }
                         // else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                         argVals.push(arg.value);
@@ -4185,7 +4433,7 @@ var FlowchartUtils = /** @class */ (function () {
         middleNode.enabled = true;
         endNode.enabled = true;
         var flw = {
-            name: 'new_flowchart',
+            name: 'Untitled',
             description: '',
             language: 'js',
             meta: {
@@ -4741,7 +4989,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/execute/execute.component */ "./src/app/shared/components/execute/execute.component.ts");
 /* harmony import */ var _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/not-found/not-found.component */ "./src/app/shared/components/not-found/not-found.component.ts");
 /* harmony import */ var _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/navigation/navigation.component */ "./src/app/shared/components/navigation/navigation.component.ts");
-/* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/shared/components/header/header.component.ts");
+/* harmony import */ var _components_header_panel_header_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/header/panel-header.component */ "./src/app/shared/components/header/panel-header.component.ts");
 /* harmony import */ var _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/add-components/add_output.component */ "./src/app/shared/components/add-components/add_output.component.ts");
 /* harmony import */ var _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/add-components/add_node.component */ "./src/app/shared/components/add-components/add_node.component.ts");
 /* harmony import */ var _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/add-components/add_input.component */ "./src/app/shared/components/add-components/add_input.component.ts");
@@ -4809,7 +5057,7 @@ var SharedModule = /** @class */ (function () {
                 _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__["ExecuteComponent"],
                 _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["PageNotFoundComponent"],
                 _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__["NavigationComponent"],
-                _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__["HeaderComponent"],
+                _components_header_panel_header_component__WEBPACK_IMPORTED_MODULE_11__["PanelHeaderComponent"],
                 _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__["AddNodeComponent"], _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__["AddInputComponent"], _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__["AddOutputComponent"],
                 _components_parameter_viewer_parameter_viewer_component__WEBPACK_IMPORTED_MODULE_15__["ParameterViewerComponent"], _components_parameter_viewer_input_port_viewer_input_port_viewer_component__WEBPACK_IMPORTED_MODULE_16__["InputPortViewerComponent"], _components_parameter_viewer_procedure_input_viewer_procedure_input_viewer_component__WEBPACK_IMPORTED_MODULE_17__["ProcedureInputViewerComponent"],
                 _components_file__WEBPACK_IMPORTED_MODULE_18__["NewFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["SaveFileComponent"], _components_file__WEBPACK_IMPORTED_MODULE_18__["LoadFileComponent"]
@@ -4821,23 +5069,20 @@ var SharedModule = /** @class */ (function () {
                 _model_viewers_model_viewers_container_module__WEBPACK_IMPORTED_MODULE_19__["DataViewersContainer"],
                 angular_split__WEBPACK_IMPORTED_MODULE_0__["AngularSplitModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatMenuModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatIconModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatButtonModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatExpansionModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatSelectModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatFormFieldModule"],
             ],
             entryComponents: [],
             exports: [
                 _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatMenuModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatIconModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatButtonModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatSliderModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatExpansionModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatSelectModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_5__["MatFormFieldModule"],
+                /*
+                MatMenuModule,
+                MatButtonModule,
+                MatExpansionModule,
+                MatSelectModule,
+                MatFormFieldModule,
+                */
                 _model_viewers_model_viewers_container_module__WEBPACK_IMPORTED_MODULE_19__["DataViewersContainer"],
                 angular_split__WEBPACK_IMPORTED_MODULE_0__["AngularSplitModule"],
                 _directives_filesys__WEBPACK_IMPORTED_MODULE_6__["MbFileReaderDirective"],
@@ -4845,7 +5090,7 @@ var SharedModule = /** @class */ (function () {
                 _components_execute_execute_component__WEBPACK_IMPORTED_MODULE_8__["ExecuteComponent"],
                 _components_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_9__["PageNotFoundComponent"],
                 _components_navigation_navigation_component__WEBPACK_IMPORTED_MODULE_10__["NavigationComponent"],
-                _components_header_header_component__WEBPACK_IMPORTED_MODULE_11__["HeaderComponent"],
+                _components_header_panel_header_component__WEBPACK_IMPORTED_MODULE_11__["PanelHeaderComponent"],
                 _components_add_components_add_node_component__WEBPACK_IMPORTED_MODULE_13__["AddNodeComponent"],
                 _components_add_components_add_input_component__WEBPACK_IMPORTED_MODULE_14__["AddInputComponent"],
                 _components_add_components_add_output_component__WEBPACK_IMPORTED_MODULE_12__["AddOutputComponent"],
@@ -5012,7 +5257,7 @@ var ViewDashboardRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n    \r\n\r\n"
+module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        \r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <panel-header [title]='dataService.flowchart.name'></panel-header>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n</div>\r\n    "
 
 /***/ }),
 
@@ -5023,7 +5268,7 @@ module.exports = "<div class='container'>\r\n    <as-split direction=\"horizonta
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "as-split-area {\n  overflow: hidden !important; }\n\n.container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around; }\n\n.container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p {\n    margin: 0px;\n    padding: 0px; }\n\n.container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n\n.container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n\n.container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n\n.container .container__header .tab button:hover {\n      color: blue; }\n\n.container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n\n.container .container__header .dropmenu {\n      display: inline-flex; }\n\n.container .container__content {\n    flex-grow: 1;\n    height: 0px;\n    border: 2px solid #3F4651;\n    overflow: auto; }\n\n.container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n\n.content__panel {\n  background-color: gainsboro;\n  height: 95%;\n  overflow: hidden auto; }\n\n.content__viewer {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n\nul.nav {\n  margin: 0px;\n  padding: 0px; }\n\nli.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n\nli.link:hover {\n  background-color: gray;\n  color: white; }\n\nbutton.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n.active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n"
+module.exports = ""
 
 /***/ }),
 
@@ -5160,7 +5405,7 @@ var ViewDashboardModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='flowchart-info' *ngIf=\"node.type=='start'\">\r\n    <input id='flowchart-name' [(ngModel)]='flowchart.name' placeholder=\"flowchart name\" size={{flowchart.name?.length||12}}>\r\n    <textarea autogrow\r\n    id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr *ngIf=\"node.type=='start'\">\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure; let i = index;\" [prod]=\"prod\" (delete)='deleteProd(i)'></procedure-input-editor>\r\n</div>\r\n\r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
+module.exports = "<div class='flowchart-info' *ngIf=\"node.type=='start'\">\r\n    <input id='flowchart-name' [(ngModel)]='flowchart.name' placeholder=\"flowchart name\" [style.width.px]='inputSize(flowchart.name||\"flowchart name\")'>\r\n    <textarea autogrow\r\n    id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder=\"flowchart description\"></textarea>\r\n</div>\r\n<hr *ngIf=\"node.type=='start'\">\r\n<div class='container--input'>\r\n    <procedure-input-editor *ngFor=\"let prod of node.procedure; let i = index;\" [prod]=\"prod\" (delete)='deleteProd(i)'></procedure-input-editor>\r\n</div>\r\n\r\n<!--\r\n<section *ngIf=\"node.type != 'end'\">\r\n    <panel-header [node]='node' [title]=\"'inputs'\"></panel-header>\r\n    <div class='container--input'>\r\n        <input-port-editor [port]=\"node?.input\" ></input-port-editor>\r\n    </div>\r\n</section>\r\n<section *ngIf=\"node.type != 'start'\">\r\n    <panel-header [node]='node' [title]=\"'output'\"></panel-header>\r\n    <div class='container--output'>\r\n        <output-port-editor [port]=\"node?.output\" ></output-port-editor>\r\n    </div>\r\n</section>\r\n-->\r\n"
 
 /***/ }),
 
@@ -5171,7 +5416,7 @@ module.exports = "<div class='flowchart-info' *ngIf=\"node.type=='start'\">\r\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "div[class^=\"container--\"] {\n  display: flex;\n  flex-direction: column;\n  padding-left: 10px;\n  margin: 0px 0px; }\n\n.flowchart-info {\n  display: -ms-grid;\n  display: grid;\n  padding-left: 10px;\n  margin: 5px 0px;\n  width: 100%; }\n\ninput {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  padding: 5px;\n  margin-left: 3px;\n  font-weight: 600;\n  font-style: italic;\n  min-width: 40px;\n  max-width: 300px;\n  font-size: 12px;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\ntextarea {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  padding-left: 5px;\n  font-family: sans-serif;\n  font-size: 12px;\n  margin: 10px 0px 5px 3px;\n  width: 90%;\n  resize: none; }\n\nhr {\n  width: inherit;\n  border-top: 2px solid gainsboro; }\n"
+module.exports = "div[class^=\"container--\"] {\n  display: flex;\n  flex-direction: column;\n  padding-left: 10px;\n  margin: 0px 0px; }\n\n.flowchart-info {\n  display: -ms-grid;\n  display: grid;\n  padding-left: 10px;\n  margin: 5px 0px;\n  width: 100%; }\n\ninput {\n  color: #808080;\n  background-color: #fafafa;\n  border: none;\n  width: -webkit-fit-content;\n  width: -moz-fit-content;\n  width: fit-content;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  padding: 5px;\n  margin-left: 3px;\n  font-weight: 600;\n  font-style: italic;\n  min-width: 40px;\n  max-width: 300px;\n  font-size: 12px;\n  vertical-align: bottom; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\ntextarea {\n  color: #808080;\n  background-color: #fafafa;\n  border: none;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  padding-left: 5px;\n  font-family: sans-serif;\n  font-size: 12px;\n  margin: 10px 0px 5px 3px;\n  width: 90%;\n  resize: none; }\n\nhr {\n  width: inherit;\n  border-top: 2px solid gainsboro; }\n"
 
 /***/ }),
 
@@ -5200,27 +5445,31 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
-ctx.font = '12px sans-serif';
 var ParameterEditorComponent = /** @class */ (function () {
     function ParameterEditorComponent() {
     }
     ParameterEditorComponent.prototype.ngAfterViewInit = function () {
+        ctx.font = '12px sans-serif';
         var textarea = document.getElementById('flowchart-desc');
         if (!textarea) {
             return;
         }
         var desc = this.flowchart.description.split('\n');
-        var textareaWidth = textarea.getBoundingClientRect().width;
-        var lineCount = desc.length;
+        var textareaWidth = textarea.getBoundingClientRect().width - 20;
+        var lineCount = 0;
         for (var _i = 0, desc_1 = desc; _i < desc_1.length; _i++) {
             var line = desc_1[_i];
             lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
         }
-        textarea.style.height = lineCount * 7.5 + 'px';
+        textarea.style.height = lineCount * 14 + 4 + 'px';
     };
     ParameterEditorComponent.prototype.deleteProd = function (index) {
         this.node.procedure.splice(index, 1);
         _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].deselect_procedure(this.node);
+    };
+    ParameterEditorComponent.prototype.inputSize = function (val) {
+        ctx.font = 'bold 12px arial';
+        return ctx.measureText(val).width + 2;
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -5251,7 +5500,7 @@ var ParameterEditorComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.module==\"Input\"'>\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Constant name:' size='13' disabled>\r\n        <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder=\"undefined\"\r\n        [style.width.px]='inputSize(prod.args[prod.argCount-2].value,\"Undefined\")'>\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)='deleteProd()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n\r\n\r\n\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Input Mode:' size='13' disabled>\r\n        <select name={{prod.ID}}_type [(ngModel)]=\"prod.meta.inputMode\" tabindex=\"-1\">\r\n            <option \r\n                *ngFor=\"let ptype of PortTypesArr\" \r\n                [value]=\"PortTypes[ptype]\" \r\n                [selected]=\"prod.meta.inputMode == ptype\">{{ptype}}</option>\r\n        </select>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Default:' size='13' disabled>\r\n        <ng-container [ngSwitch]=\"prod.meta.inputMode\" >\r\n            <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' \r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default Value\")'>\r\n\r\n            <div class='div--slider' *ngSwitchCase=\"PortTypes.Slider\">\r\n                <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].min,\"Min\")'>\r\n                <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].max,\"Max\")'>\r\n                <mat-slider\r\n                    [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                    thumbLabel\r\n                    tickInterval=\"auto\"\r\n                    min={{prod.args[prod.argCount-1].min||0}}\r\n                    max={{prod.args[prod.argCount-1].max||100}}></mat-slider>\r\n                <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"\")' disabled>\r\n\r\n            </div>\r\n            <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n            <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'\r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default URL\")'>\r\n            <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n        </ng-container>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Description:' size='13' disabled>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n            <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'\r\n            [style.width.px]='inputSize(prod.meta.description,\"Constant Description\")'>\r\n        </div>\r\n    </div>\r\n\r\n<div class='container container--parameter' *ngIf='prod.meta.module==\"Output\"'>\r\n    <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'\r\n    [style.width.px]='inputSize(prod.meta.description,\"Return Description\")'>\r\n</div>"
+module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.module==\"Input\"'>\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Name:' size='8' disabled>\r\n        <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder=\"undefined\"\r\n        [style.width.px]='inputSize(prod.args[prod.argCount-2].value,\"Undefined\")'>\r\n\r\n        <!-- delete button-->\r\n        <button class='btn' mat-icon-button title=\"Delete Procedure\" (click)='deleteProd()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>delete_outline</mat-icon>\r\n        </button>\r\n        <button class='btn' mat-icon-button title=\"Disable Procedure\" (click)='markDisabled()' tabindex=\"-1\">\r\n            <mat-icon class='icon'>tv_off</mat-icon>\r\n        </button>\r\n\r\n\r\n\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Input Mode:' size='8' disabled>\r\n        <select name={{prod.ID}}_type [(ngModel)]=\"prod.meta.inputMode\" tabindex=\"-1\">\r\n            <option \r\n                *ngFor=\"let ptype of PortTypesArr\" \r\n                [value]=\"PortTypes[ptype]\" \r\n                [selected]=\"prod.meta.inputMode == ptype\">{{ptype}}</option>\r\n        </select>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Default:' size='8' disabled>\r\n        <ng-container [ngSwitch]=\"prod.meta.inputMode\" >\r\n            <input *ngSwitchCase=\"PortTypes.SimpleInput\" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' \r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default Value\")'>\r\n\r\n            <div class='div--slider' *ngSwitchCase=\"PortTypes.Slider\">\r\n                <input [(ngModel)]='prod.args[prod.argCount-1].min' placeholder='Min'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].min,\"Min\")'>\r\n                <input [(ngModel)]='prod.args[prod.argCount-1].max' placeholder='Max'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].max,\"Max\")'>\r\n                <mat-slider\r\n                    [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                    thumbLabel\r\n                    tickInterval=\"auto\"\r\n                    min={{prod.args[prod.argCount-1].min||0}}\r\n                    max={{prod.args[prod.argCount-1].max||100}}></mat-slider>\r\n                <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].default'\r\n                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"\")' disabled>\r\n\r\n            </div>\r\n            <input *ngSwitchCase=\"PortTypes.Checkbox\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type=\"checkbox\">\r\n            <input *ngSwitchCase=\"PortTypes.URL\" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'\r\n            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,\"Default URL\")'>\r\n            <input *ngSwitchCase=\"PortTypes.File\" (change)=\"onFileChange($event)\" type=\"file\">\r\n        </ng-container>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n        <input [class.disabled-input]='true' value='Description:' size='8' disabled>\r\n    </div>\r\n\r\n    <div class='inline-div'>\r\n            <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'\r\n            [style.width.px]='inputSize(prod.meta.description,\"Constant Description\")'>\r\n        </div>\r\n    </div>\r\n\r\n<div class='container container--parameter' *ngIf='prod.meta.module==\"Output\"'>\r\n    <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'\r\n    [style.width.px]='inputSize(prod.meta.description,\"Return Description\")'>\r\n</div>"
 
 /***/ }),
 
@@ -5262,7 +5511,7 @@ module.exports = "<div class='container container--parameter' *ngIf='prod.meta?.
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  color: #505050;\n  vertical-align: bottom;\n  padding-bottom: 5px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  width: 100%; }\n\nselect {\n  color: #505050;\n  background-color: #fafafa;\n  border: 0px;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  height: 18px;\n  font-family: sans-serif; }\n\n.inline-div {\n  width: 100%;\n  display: inline-block;\n  height: 24px;\n  padding-bottom: 3px; }\n\ninput {\n  color: #505050;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #505050;\n  margin-left: 5px;\n  max-width: 95%;\n  vertical-align: bottom;\n  font-family: sans-serif; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.inp--desc {\n  font-size: 13px;\n  max-width: 95%; }\n\n.input-const-name {\n  min-width: 100px; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  background-color: transparent;\n  border: none;\n  float: right;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.slider-val {\n  color: #505050;\n  resize: horizontal;\n  size: 2;\n  min-width: 1px;\n  max-width: 300px;\n  width: 20px; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\n.div--slider {\n  display: inline-flex;\n  flex-direction: row; }\n\n.parameter__name {\n  width: 100px;\n  height: auto;\n  word-wrap: break-word; }\n\nmat-slider {\n  width: 300px; }\n"
+module.exports = ".container {\n  margin: 5px 0px; }\n\n.container--parameter {\n  display: inline-block;\n  flex-direction: row;\n  flex-wrap: wrap;\n  color: #808080;\n  vertical-align: bottom;\n  padding-bottom: 5px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  width: 100%; }\n\nselect {\n  color: #808080;\n  background-color: #fafafa;\n  border: 0px;\n  border-left: 1px solid gainsboro;\n  border-bottom: 1px solid gainsboro;\n  height: 18px;\n  font-family: sans-serif; }\n\n.inline-div {\n  width: 100%;\n  display: inline-block;\n  height: 24px;\n  padding-bottom: 3px; }\n\ninput {\n  color: #808080;\n  background-color: #fafafa;\n  border: none;\n  border-bottom: 1px solid #808080;\n  margin-left: 5px;\n  max-width: 95%;\n  vertical-align: bottom;\n  font-family: sans-serif; }\n\ninput.disabled-input {\n    border-bottom: none; }\n\n.inp--desc {\n  font-size: 12px;\n  max-width: 95%; }\n\n.input-const-name {\n  min-width: 100px; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  background-color: transparent;\n  border: none;\n  float: right;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.icon {\n  vertical-align: top;\n  font-size: 15px; }\n\n.slider-val {\n  color: #808080;\n  resize: horizontal;\n  size: 2;\n  min-width: 1px;\n  max-width: 300px;\n  width: 15px; }\n\n.container--input {\n  display: inline-flex;\n  flex-direction: row; }\n\n.div--slider {\n  display: inline-flex;\n  flex-direction: row; }\n\n.parameter__name {\n  width: 100px;\n  height: auto;\n  word-wrap: break-word; }\n\nmat-slider {\n  width: 300px; }\n"
 
 /***/ }),
 
@@ -5308,9 +5557,9 @@ var ProcedureInputEditorComponent = /** @class */ (function () {
     };
     ProcedureInputEditorComponent.prototype.inputSize = function (val, defaultVal) {
         if (val === undefined || val === '') {
-            return ctx.measureText(defaultVal).width + 5;
+            return ctx.measureText(defaultVal).width + 2;
         }
-        return ctx.measureText(val).width + 5;
+        return ctx.measureText(val).width + 2;
     };
     // delete this procedure
     ProcedureInputEditorComponent.prototype.deleteProd = function () {
@@ -5360,7 +5609,7 @@ module.exports = "<div class='container--line' \r\n    [class.selected]=\"data.s
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container--nested {\n  padding-left: 0px; }\n\n.container--line {\n  margin: 8px 0px 2px 10px;\n  padding: 2px 0px 2px 2px;\n  border-bottom: 1px solid gainsboro;\n  border-left: 1px solid gainsboro;\n  color: #505050;\n  min-height: 22px;\n  opacity: 1; }\n\n.container--line.disabled {\n    opacity: 0.5; }\n\n.container--line.selected {\n    border: 1px solid #000096;\n    background-color: gainsboro; }\n\n.container--line.error {\n    border: 1px solid red; }\n\n.container--line .input--var {\n    width: 70px;\n    background-color: #fafafa;\n    border: none;\n    border-bottom: 1px solid #505050;\n    margin-right: 5px; }\n\n.container--line .input--arg {\n    resize: horizontal;\n    min-width: 1px;\n    max-width: 300px;\n    background-color: #fafafa;\n    border: none;\n    border-bottom: 1px solid #505050;\n    margin-left: 5px; }\n\n.container--line .input--arg.error {\n      border: 1px solid red; }\n\n.container--line input:focus {\n    border: 1px solid #000096; }\n\n.container--item {\n  margin: none;\n  padding: none;\n  border: none; }\n\n.btn {\n  height: 24px;\n  width: 24px;\n  float: right;\n  background-color: transparent;\n  border: none;\n  display: none;\n  color: #777; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.container--item:hover .btn {\n  display: block; }\n\n.icon {\n  vertical-align: top;\n  font-size: 20px; }\n\n.line--item {\n  display: inline-block;\n  color: #505050; }\n\n/*\r\n.hasChildren::before{\r\n    content: '\\25B6';\r\n    position: absolute;\r\n    left: 3px;\r\n    font-size: 8px;\r\n}\r\n*/\n\n.function-text {\n  display: inline-block;\n  white-space: normal;\n  font-style: italic;\n  color: #be8c1e;\n  font-weight: 600; }\n"
+module.exports = ".container--nested {\n  padding-left: 0px; }\n\n.container--line {\n  font-size: 12px;\n  margin: 0px 2px 2px 8px;\n  padding: 0px;\n  border: 1px solid gainsboro;\n  color: #808080;\n  opacity: 1; }\n\n.container--line.disabled {\n    opacity: 0.5; }\n\n.container--line.selected {\n    border: 1px solid #373737; }\n\n.container--line.error {\n    border: 1px solid red; }\n\n.container--line .input--var {\n    font-size: 12px;\n    width: 70px;\n    background-color: white;\n    border: none;\n    margin-right: 5px;\n    border: 2px solid #E6E6E6;\n    padding-left: 2px; }\n\n.container--line .input--var.error {\n      border: 2px solid red; }\n\n.container--line .input--arg {\n    font-size: 12px;\n    resize: horizontal;\n    min-width: 10px;\n    background-color: white;\n    border: none;\n    margin-left: 5px;\n    border: 2px solid #E6E6E6;\n    padding-left: 2px; }\n\n.container--line .input--arg.error {\n      border: 2px solid red; }\n\n.container--line input:focus {\n    border: 1px solid #373737; }\n\n.container--item {\n  margin: none;\n  padding: none;\n  border: none; }\n\n.btn {\n  width: 20px;\n  float: right;\n  background-color: transparent;\n  border: none;\n  display: none;\n  color: #777;\n  overflow: hidden;\n  vertical-align: top; }\n\n.btn.highlighted {\n    background-color: #ff9696; }\n\n.container--item:hover .btn {\n  display: block; }\n\n.icon {\n  vertical-align: top;\n  width: 15px;\n  height: 15px;\n  margin: 1px;\n  font-size: 12px;\n  border: 1px solid #808080; }\n\n.line--item {\n  display: inline-block;\n  color: #808080; }\n\n/*\r\n.hasChildren::before{\r\n    content: '\\25B6';\r\n    position: absolute;\r\n    left: 3px;\r\n    font-size: 8px;\r\n}\r\n*/\n\n.function-text {\n  display: inline-block;\n  white-space: normal;\n  font-style: italic;\n  color: #be8c1e;\n  font-weight: 550; }\n"
 
 /***/ }),
 
@@ -5391,7 +5640,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var canvas = document.createElement('canvas');
 var ctx = canvas.getContext('2d');
-ctx.font = '13px Arial';
+ctx.font = '11px Arial';
 var ProcedureItemComponent = /** @class */ (function () {
     function ProcedureItemComponent() {
         this.delete = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
@@ -5401,12 +5650,6 @@ var ProcedureItemComponent = /** @class */ (function () {
         this.helpText = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.ProcedureTypes = _models_procedure__WEBPACK_IMPORTED_MODULE_1__["ProcedureTypes"];
     }
-    ProcedureItemComponent.prototype.ngAfterViewInit = function () {
-        var elements = document.getElementsByClassName('input--arg');
-        [].forEach.call(elements, function (el) {
-            console.log(el);
-        });
-    };
     // delete this procedure
     ProcedureItemComponent.prototype.emitDelete = function () {
         this.delete.emit();
@@ -5486,7 +5729,7 @@ var ProcedureItemComponent = /** @class */ (function () {
         return event;
     };
     ProcedureItemComponent.prototype.inputSize = function (val) {
-        return ctx.measureText(val).width + 5;
+        return ctx.measureText(val).width + 2;
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -5535,7 +5778,7 @@ var ProcedureItemComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n\r\n    <button id='basic-funcs' class=\"accordion\" \r\n    (click)='toggleAccordion(\"basic-funcs\")' >Basic</button>\r\n    <div class=\"panel\">\r\n        <ul class='toolset__basic'>\r\n            <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n                <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"\r\n                && type.toUpperCase() !== \"CONSTANT\" && type.toUpperCase() !== \"RETURN\"'\r\n                class='tooltip'\r\n                (click)='add(ProcedureTypes[type])'> \r\n                    {{type}}\r\n                </li>\r\n            </ng-container>\r\n        </ul>\r\n    </div>\r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <ng-container *ngFor='let fn of mod.functions'>\r\n                    <div class='tooltip' *ngIf='fn.name.substring(0,1)!=\"_\"'>\r\n                        <li \r\n                        (click)='add_function(fn)'> \r\n                            {{fn.name}} \r\n                        </li>\r\n                        <span class=\"tooltiptext\" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>\r\n                            <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                            <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>\r\n                        </span>\r\n                    </div>\r\n                </ng-container>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <div class='tooltip' *ngFor='let fn of functions'>\r\n                    <li (click)='add_imported_function(fn)'> {{fn.name}} \r\n                        <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                            <mat-icon class='remove-icon'>close</mat-icon>\r\n                        </button>\r\n                    </li>\r\n                    <span class=\"tooltiptext\">\r\n                        <p class='funcDesc'>{{fn.doc.description}}</p>\r\n                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>\r\n                        <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                        <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>\r\n                    </span>\r\n                </div>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'start'\">\r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let type of ProcedureTypesArr' >\r\n            <div *ngIf='type.toUpperCase() == \"CONSTANT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        <!--\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        -->\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"nodeType == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <!--\r\n        <section *ngFor='let type of ProcedureTypesArr' >\r\n            <div *ngIf='type.toUpperCase() == \"RETURN\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        -->\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<h2>{{node.name}}</h2>\r\n<ng-container *ngIf=\"node.type == ''\">\r\n\r\n\r\n    <!-- basic functions: variable, if, else, else if, for, while, continue, break -->\r\n\r\n    <button id='basic-funcs' class=\"accordion\" \r\n    (click)='toggleAccordion(\"basic-funcs\")' >Basic</button>\r\n    <div class=\"panel\">\r\n        <ul class='toolset__basic'>\r\n            <ng-container *ngFor=\"let type of ProcedureTypesArr\">\r\n                <li *ngIf='type.toUpperCase() !== \"FUNCTION\" && type.toUpperCase() !== \"IMPORTED\"\r\n                && type.toUpperCase() !== \"CONSTANT\" && type.toUpperCase() !== \"RETURN\"'\r\n                class='tooltip'\r\n                (click)='add(ProcedureTypes[type])'> \r\n                    {{type}}\r\n                </li>\r\n            </ng-container>\r\n        </ul>\r\n    </div>\r\n\r\n    <!-- functions from core.modules -->\r\n    <ng-container *ngFor='let mod of Modules' >\r\n\r\n        <button id='{{mod.module}}' class=\"accordion\" \r\n        *ngIf='mod.module.toUpperCase() != \"INPUT\" && mod.module.toUpperCase() != \"OUTPUT\"'\r\n        (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <ng-container *ngFor='let fn of mod.functions'>\r\n                    <div class='tooltip' *ngIf='fn.name.substring(0,1)!=\"_\"'>\r\n                        <li \r\n                        (click)='add_function(fn)'> \r\n                            {{fn.name}} \r\n                        </li>\r\n                        <span class=\"tooltiptext\" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>\r\n                            <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>\r\n                            <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                            <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>\r\n                        </span>\r\n                    </div>\r\n                </ng-container>\r\n            </ul>\r\n        </div>\r\n    </ng-container>\r\n\r\n    <!-- imported functions -->\r\n    <ng-container>\r\n        <button id='imported' class=\"accordion\" \r\n        (click)='toggleAccordion(\"imported\")' >Imported</button>\r\n        <div class=\"panel\">\r\n            <ul class='toolset__functions--subset'>\r\n                <div class='tooltip' *ngFor='let fn of functions'>\r\n                    <li (click)='add_imported_function(fn)'> {{fn.name}} \r\n                        <button class='remove-btn' (click)='delete_imported_function(fn)'>\r\n                            <mat-icon class='remove-icon'>close</mat-icon>\r\n                        </button>\r\n                    </li>\r\n                    <span class=\"tooltiptext\">\r\n                        <p class='funcDesc'>{{fn.doc.description}}</p>\r\n                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>\r\n                        <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>\r\n                        <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>\r\n                    </span>\r\n                </div>\r\n            </ul>\r\n            <br>\r\n            <input type=\"file\" id=\"selectedFile\" (change)=\"import_function($event)\" style=\"display: none;\" />\r\n            <button class='add-btn' onclick=\"document.getElementById('selectedFile').click();\" title=\"Import Function from File\">\r\n                <mat-icon class='add-icon'>open_in_browser</mat-icon>\r\n            </button>\r\n        </div>\r\n    </ng-container>\r\n</ng-container>\r\n\r\n<!-- functions for input nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"node.type == 'start'\">\r\n    <div class='toolset__functions'>\r\n        <section *ngFor='let type of ProcedureTypesArr' >\r\n            <div *ngIf='type.toUpperCase() == \"CONSTANT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li (click)='add(ProcedureTypes[type])'> Global Var </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        <!--\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"INPUT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        -->\r\n    </div>\r\n</div>\r\n\r\n<!-- functions for output nodes -->\r\n<div id='toolset_inp' class = 'toolset' *ngIf=\"node.type == 'end'\">\r\n    <div class='toolset__functions' *ngIf=\"hasProd===false\">\r\n        <!--\r\n        <section *ngFor='let type of ProcedureTypesArr' >\r\n            <div *ngIf='type.toUpperCase() == \"RETURN\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li (click)='add(ProcedureTypes[type])'> {{type}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n        -->\r\n        <section *ngFor='let mod of Modules' >\r\n            <div *ngIf='mod.module.toUpperCase() == \"OUTPUT\"'>\r\n                <ul class='toolset__functions--subset'>\r\n                    <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>\r\n                </ul>\r\n            </div>\r\n        </section>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -5546,7 +5789,7 @@ module.exports = "<ng-container *ngIf=\"nodeType == ''\">\r\n    <!-- basic func
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ":host {\n  width: 100%;\n  background-color: #efefef; }\n\nul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n  padding-left: 15px; }\n\nul li {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    margin: 0px;\n    padding: 0px;\n    color: #505050;\n    font-size: 12px;\n    line-height: 18px; }\n\n.remove-btn {\n  background-color: transparent;\n  border: none;\n  height: 13px;\n  float: right; }\n\n.remove-btn .remove-icon {\n    font-size: 11px;\n    height: 11px;\n    color: #505050; }\n\n.add-btn {\n  background-color: transparent;\n  border: none;\n  float: left;\n  padding: 6px;\n  transition: 0.4s; }\n\n.add-btn :hover {\n    background-color: gainsboro; }\n\n.add-btn .add-icon {\n    float: left;\n    color: #505050; }\n\n.accordion {\n  background-color: gainsboro;\n  color: #505050;\n  cursor: pointer;\n  width: 100%;\n  padding: 8px 8px 8px 8px;\n  border: none;\n  display: block;\n  text-align: left;\n  outline: none;\n  font-size: 12px;\n  transition: 0.4s;\n  font-weight: 550; }\n\n.active, .accordion:hover {\n  background-color: #ccc; }\n\n.panel {\n  width: inherit;\n  padding: 0px 10px 0px 0px;\n  display: none;\n  background-color: #efefef;\n  overflow: hidden; }\n\n.tooltip {\n  display: block; }\n\n/* Tooltip text */\n\n.tooltip .tooltiptext {\n  min-width: 50px;\n  max-width: 500px;\n  background-color: #efefef;\n  border: 1px solid #ccc;\n  color: #505050;\n  pointer-events: none;\n  padding: 0px 10px 0px 10px;\n  opacity: 0;\n  position: absolute;\n  z-index: 1; }\n\n.tooltip .tooltiptext p {\n    font-family: sans-serif; }\n\n.tooltip .tooltiptext p.funcDesc {\n      font-weight: 600; }\n\n.tooltip .tooltiptext p.paramP {\n      padding-left: 5px; }\n\n.tooltip .tooltiptext p.paramP ::before {\n        display: inline-block;\n        content: '';\n        border-radius: 0.25rem;\n        height: 0.25rem;\n        width: 0.25rem;\n        margin: 0rem 0.3rem 0.15rem 0rem;\n        background-color: #505050; }\n\n.tooltip .tooltiptext p span {\n      font-style: italic; }\n\n/* Show the tooltip text when you mouse over the tooltip container */\n\n.tooltip:hover .tooltiptext {\n  transition-delay: 1s;\n  transition-duration: 0.3s;\n  opacity: 1; }\n"
+module.exports = ":host {\n  overflow: hidden auto;\n  width: 100%;\n  background-color: transparent;\n  border: 1px; }\n\nh2 {\n  color: #808080;\n  padding-left: 8px;\n  padding-top: 8px;\n  padding-bottom: 8px;\n  font-family: sans-serif;\n  font-size: 12px;\n  font-weight: 550; }\n\nul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n  padding-top: 2px;\n  padding-bottom: 2px; }\n\nul li {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    margin: 0px;\n    padding: 0px;\n    padding-left: 8px;\n    color: #808080;\n    font-size: 12px;\n    line-height: 18px; }\n\n.remove-btn {\n  background-color: transparent;\n  border: none;\n  height: 13px;\n  float: right; }\n\n.remove-btn .remove-icon {\n    font-size: 12px;\n    height: 11px;\n    color: #808080; }\n\n.add-btn {\n  background-color: transparent;\n  border: none;\n  float: left;\n  padding: 6px;\n  transition: 0.4s; }\n\n.add-btn :hover {\n    background-color: gainsboro; }\n\n.add-btn .add-icon {\n    float: left;\n    color: #808080; }\n\n.accordion {\n  background-color: gainsboro;\n  color: #808080;\n  cursor: pointer;\n  width: 100%;\n  height: 24px;\n  padding: 2px 8px 2px 8px;\n  border: none;\n  display: block;\n  text-align: left;\n  outline: none;\n  font-size: 12px;\n  transition: 0.4s;\n  font-weight: 500; }\n\n.active, .accordion:hover {\n  background-color: #ccc; }\n\n.panel {\n  width: inherit;\n  padding: 0px 10px 0px 0px;\n  display: none;\n  background-color: #E6E6E6;\n  overflow: hidden; }\n\n.tooltip {\n  display: block; }\n\n/* Tooltip text */\n\n.tooltip .tooltiptext {\n  min-width: 50px;\n  background-color: #E6E6E6;\n  border: 1px solid #E6E6E6;\n  color: #808080;\n  pointer-events: none;\n  padding: 0px 10px 0px 10px;\n  opacity: 0;\n  position: absolute;\n  z-index: 1; }\n\n.tooltip .tooltiptext p {\n    font-family: sans-serif; }\n\n.tooltip .tooltiptext p.funcDesc {\n      font-weight: 600; }\n\n.tooltip .tooltiptext p.paramP {\n      padding-left: 5px; }\n\n.tooltip .tooltiptext p.paramP ::before {\n        display: inline-block;\n        content: '';\n        border-radius: 0.25rem;\n        height: 0.25rem;\n        width: 0.25rem;\n        margin: 0rem 0.3rem 0.15rem 0rem;\n        background-color: #808080; }\n\n.tooltip .tooltiptext p span {\n      font-style: italic; }\n\n/* Show the tooltip text when you mouse over the tooltip container */\n\n.tooltip:hover .tooltiptext {\n  transition-delay: 1s;\n  transition-duration: 0.3s;\n  opacity: 1; }\n"
 
 /***/ }),
 
@@ -5763,8 +6006,8 @@ var ToolsetComponent = /** @class */ (function () {
     ], ToolsetComponent.prototype, "functions", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", String)
-    ], ToolsetComponent.prototype, "nodeType", void 0);
+        __metadata("design:type", Object)
+    ], ToolsetComponent.prototype, "node", void 0);
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
         __metadata("design:type", Boolean)
@@ -5843,7 +6086,7 @@ var ViewEditorRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <h2>{{dataService.node?.name}}</h2>\r\n\r\n                <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n                (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n                \r\n                    <div class='container__content'>\r\n                        <!-- toolset on the left side -->\r\n                        <div class=\"container--toolset\">\r\n                            <toolset [functions]='dataService.flowchart.functions' \r\n                            [nodeType]='dataService.node.type' \r\n                            [hasProd]='dataService.node.procedure.length>0' \r\n                            (delete)='deleteFunction($event)' \r\n                            (select)='add($event)' \r\n                            (imported)='importFunction($event)'></toolset>\r\n                        </div>\r\n                \r\n                        <!-- procedure editor on the right side -->\r\n                        <div id='procedure' class=\"container--procedure\">\r\n                            <!-- parameter-editor only for start/end node -->\r\n                            <parameter-editor *ngIf=\"dataService.node.type == 'start' || dataService.node.type == 'end'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n                            <ng-container *ngIf=\"dataService.node.type != 'start'\">\r\n                                <!-- list of procedure items for all nodes -->\r\n                                <procedure-item \r\n                                *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n                                [data]=\"line\"\r\n                                (select)=\"selectProcedure($event,line)\"\r\n                                (delete)=\"deleteChild(idx)\"\r\n                                (helpText)='updateHelpView($event)'></procedure-item>\r\n                                <br>\r\n                                <br>\r\n                            </ng-container>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n    \r\n\r\n\r\n"
+module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <panel-header [title]='dataService.flowchart.name'></panel-header>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n\r\n                <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'\r\n                (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>\r\n                \r\n                    <div class='container__content'>\r\n                        <!-- toolset on the left side -->\r\n                        <div class=\"container--toolset\">\r\n                            <toolset [functions]='dataService.flowchart.functions' \r\n                            [node]='dataService.node' \r\n                            [hasProd]='dataService.node.procedure.length>0' \r\n                            (delete)='deleteFunction($event)' \r\n                            (select)='add($event)' \r\n                            (imported)='importFunction($event)'></toolset>\r\n                        </div>\r\n                \r\n                        <!-- procedure editor on the right side -->\r\n                        <div id='procedure' class=\"container--procedure\">\r\n                            <!-- parameter-editor only for start/end node -->\r\n                            <parameter-editor *ngIf=\"dataService.node.type == 'start' || dataService.node.type == 'end'\" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>\r\n                            <ng-container *ngIf=\"dataService.node.type != 'start'\">\r\n                                <!-- list of procedure items for all nodes -->\r\n                                <procedure-item \r\n                                *ngFor=\"let line of dataService.node?.procedure; let idx=index\" \r\n                                [data]=\"line\"\r\n                                (select)=\"selectProcedure($event,line)\"\r\n                                (delete)=\"deleteChild(idx)\"\r\n                                (helpText)='updateHelpView($event)'></procedure-item>\r\n                                <br>\r\n                                <br>\r\n                            </ng-container>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n    \r\n\r\n\r\n"
 
 /***/ }),
 
@@ -5854,7 +6097,7 @@ module.exports = "<div class='container'>\r\n    <as-split direction=\"horizonta
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "as-split-area {\n  overflow: hidden !important; }\n\n.container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around;\n  /*\r\n    .container__content{\r\n        flex-grow: 1;\r\n        height: 0px;\r\n        border: 2px solid #3F4651;\r\n        overflow: auto;\r\n\r\n    }\r\n    */ }\n\n.container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n\n.container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n\n.container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n\n.container .container__header .tab button:hover {\n      color: blue; }\n\n.container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n\n.container .container__header .dropmenu {\n      display: inline-flex; }\n\n.container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n\n.content__panel {\n  background-color: gainsboro;\n  height: 95%;\n  overflow: hidden auto; }\n\n.content__viewer {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n\nul.nav {\n  margin: 0px;\n  padding: 0px; }\n\nli.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n\nli.link:hover {\n  background-color: gray;\n  color: white; }\n\nbutton.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n.active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n\nsplit-area {\n  overflow: auto !important; }\n\n.container--editor {\n  display: block;\n  height: 95%;\n  width: 100%; }\n\n.container__heading {\n  display: block;\n  text-align: center;\n  width: 98%; }\n\nh2 {\n  color: #505050;\n  text-align: left;\n  width: 100%;\n  font-size: 12px;\n  line-height: 14px;\n  font-weight: 600;\n  padding-left: 15px; }\n\nhr {\n  border-top: 2px solid #eeeeee; }\n\n.container__content {\n  display: inline-flex;\n  width: 100%;\n  min-height: 95%;\n  overflow: inherit; }\n\n.container--toolset {\n  display: inline-flex;\n  width: 20%; }\n\n.container--procedure {\n  display: block;\n  width: 80%;\n  bottom: 10px;\n  background-color: #fafafa;\n  padding: none; }\n\nhr {\n  border-top: 2px solid #eeeeee;\n  width: 100%; }\n\n/*\r\n$header-height: 45px;\r\n\r\n.container{\r\n    position: relative;\r\n    overflow: auto;\r\n    margin: 10px 10px;\r\n\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: space-around;\r\n        \r\n    h1, h2, h3, h4, h5, h6, p{\r\n        margin: 0px;\r\n        padding: 0px;\r\n    }\r\n\r\n    .container__header{\r\n        flex: 0 1 auto;\r\n        min-height: $header-height;\r\n\r\n        display: flex;\r\n        flex-direction: row;\r\n        justify-content: space-between;\r\n\r\n        padding: 0px 0px 0px 15px;\r\n\r\n        background-color: #3F4651;\r\n        color: #E7BF00;\r\n        \r\n        line-height: $header-height;\r\n        text-transform: uppercase;\r\n    \r\n        font-size: 18px;\r\n        font-weight: 600;\r\n        text-align: center;\r\n    }\r\n\r\n    .container__content{\r\n        flex-grow: 1;\r\n        height: 0px;\r\n        border: 2px solid #3F4651;\r\n        overflow: auto;\r\n\r\n        split{\r\n            height: 100%;\r\n        }\r\n    }\r\n\r\n    .container__footer{\r\n        text-align: center;\r\n        font-size: 12px;\r\n        line-height: 18px;\r\n\r\n        background-color: #3F4651;\r\n        color: #E7BF00;\r\n    }\r\n}\r\n\r\n\r\n.content__panel{\r\n    height: 100%; \r\n    overflow: auto;\r\n\r\n    //padding: 10px 15px;\r\n}\r\n*/\n"
+module.exports = ".container--editor {\n  display: block;\n  height: 100%;\n  width: 100%; }\n\n.container__heading {\n  display: block;\n  text-align: center;\n  width: 100%; }\n\n.container__content {\n  display: inline-flex;\n  width: 100%;\n  min-height: 100%;\n  overflow: inherit; }\n\n.container--toolset {\n  display: inline-flex;\n  width: 20%;\n  background-color: #CCCCCC; }\n\n.container--procedure {\n  display: block;\n  width: 80%;\n  bottom: 10px;\n  background-color: transparent;\n  padding: none; }\n\nhr {\n  border-top: 2px solid #E6E6E6;\n  width: 100%; }\n"
 
 /***/ }),
 
@@ -6252,7 +6495,7 @@ var ACTIONS;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n     -->\r\n\r\n    <!-- Triangle with border -->\r\n    <path class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.d]=\"'M'+node.position.x +' '+ (node.position.y + 30) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) +\r\n                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 80) + ' Z'\" \r\n        />\r\n\r\n    <!-- circles as draggable input/output ports of the node -->\r\n    <svg:circle\r\n    *ngFor=\"let prod of node.procedure; let i=index\"\r\n    r=3\r\n    [attr.cx]=\"node.position.x + (100 * (i+1) / (node.procedure.length + 1))\" \r\n    [attr.cy]=\"node.position.y + 22\"\r\n    class='inputPort'/>\r\n\r\n\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border \r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n    -->\r\n    \r\n    <!-- Triangle with border -->\r\n    <path class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.d]=\"'M'+node.position.x +' '+ (node.position.y + 50) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) +\r\n                 ' L'+ (node.position.x + 50) +' '+ node.position.y + ' Z'\" \r\n        />\r\n\r\n    <svg:circle\r\n    *ngIf=\"node.procedure.length > 0\"\r\n    r=3\r\n    [attr.cx]=\"node.position.x + 50\" \r\n    [attr.cy]=\"node.position.y + 58\"\r\n    class='inputPort'/>\r\n    \r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
+module.exports = "<!-- svg group for the selectable and draggable area of normal node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"\"'>\r\n\r\n    <!-- rectangular box with border -->\r\n    <rect class=\"node\" \r\n    width=\"100\" height=\"80\"\r\n    [class.node--selected]='selected'\r\n    [class.node--error]=\"node.hasError\"\r\n    [class.node--disabled]='!node.enabled'\r\n    [attr.x]=\"node.position.x\" \r\n    [attr.y]=\"node.position.y\"\r\n    />\r\n\r\n    <!-- node description inside the rectangular box -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 3\" \r\n    width=\"100\" height = \"80\"\r\n    (mousedown)='focusText($event)'>\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                autocomplete=off \r\n                [(ngModel)]='node.name'\r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                title={{node.name}}\r\n                style=\"font-weight: 600;\"\r\n                placeholder='Description of Node'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of start node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"start\"'>\r\n\r\n    <!-- ellipse with border\r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 + 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n     -->\r\n\r\n    <!-- Triangle with border -->\r\n    <path class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.d]=\"'M'+node.position.x +' '+ (node.position.y + 30) +\r\n                 ' L'+ node.position.x +' '+ (node.position.y + 60) +\r\n                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 80) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 60) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) + ' Z'\" \r\n        />\r\n\r\n    <!-- circles as draggable input/output ports of the node -->\r\n    <svg:circle\r\n    *ngFor=\"let prod of node.procedure; let i=index\"\r\n    r=3\r\n    [attr.cx]=\"node.position.x + (100 * (i+1) / (node.procedure.length + 1))\" \r\n    [attr.cy]=\"node.position.y + 22\"\r\n    class='inputPort'/>\r\n\r\n\r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject \r\n    [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 38\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n<!-- svg group for the selectable and draggable area of end node -->\r\n<svg:g (click)='nodeSelect($event)' draggable=\"true\" \r\n(mousedown)='startDragNode($event)' \r\n(dblclick)='switchToProcedure($event)'\r\n*ngIf='node.type==\"end\"'>\r\n\r\n    <!-- ellipse with border \r\n    <ellipse class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [class.node--disabled]='!node.enabled'\r\n        [attr.cx]=\"node.position.x + inputOffset[0]\" \r\n        [attr.cy]=\"node.position.y + (inputOffset[1]+outputOffset[1])/2 - 10\"\r\n        [attr.rx]=\"40\"\r\n        [attr.ry]=\"30\"\r\n        />\r\n    -->\r\n    \r\n    <!-- Triangle with border -->\r\n    <path class=\"node\" \r\n        [class.node--selected]='selected'\r\n        [class.node--error]=\"node.hasError\"\r\n        [attr.d]=\"'M'+node.position.x +' '+ (node.position.y + 50) +\r\n                 ' L' + node.position.x +' '+ (node.position.y + 20) +\r\n                 ' L'+ (node.position.x + 50) +' '+ node.position.y +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 20) +\r\n                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) + ' Z'\" \r\n        />\r\n\r\n    <svg:circle\r\n    *ngIf=\"node.procedure.length > 0\"\r\n    r=3\r\n    [attr.cx]=\"node.position.x + 50\" \r\n    [attr.cy]=\"node.position.y + 58\"\r\n    class='inputPort'/>\r\n    \r\n\r\n    <!-- node description inside the ellipse -->\r\n    <svg:foreignObject [attr.x]=\"node.position.x\" [attr.y]=\"node.position.y + 18\" \r\n    width=\"100\" height = \"40\">\r\n        <xhtml:div class='textdiv'>\r\n            <xhtml:textarea \r\n                id={{node.id}}\r\n                class='textarea_startend'\r\n                autocomplete=off \r\n                [class.selected]='selected'\r\n                [class.disabled]='!node.enabled'\r\n                [(ngModel)]='node.name'/>  \r\n        </xhtml:div>\r\n    </svg:foreignObject>\r\n</svg:g>\r\n\r\n\r\n\r\n<!-- circles as draggable input/output ports of the node -->\r\n<svg:circle\r\nr=3\r\n[attr.cx]=\"node.position.x + inputOffset[0]\" \r\n[attr.cy]=\"node.position.y + inputOffset[1]\"\r\n*ngIf=\"inputDraggable()\" \r\nclass='inputPort'\r\nid = 'node.input.id'\r\n(mousedown)='startDragPort($event, \"input\")'/>\r\n\r\n<svg:circle *ngIf=\"outputDraggable()\" \r\nclass='outputPort'\r\nid = 'node.output.id'\r\n(mousedown)='startDragPort($event, \"output\")' \r\n[attr.cx]=\"node.position.x + outputOffset[0]\" \r\n[attr.cy]=\"node.position.y + outputOffset[1]\" \r\npointer-events=\"all\"\r\nr=3\r\nfill=\"black\"/>\r\n\r\n"
 
 /***/ }),
 
@@ -6263,7 +6506,7 @@ module.exports = "<!-- svg group for the selectable and draggable area of normal
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/*\r\n$color-main: #2D4885;\r\n$color-accent: #50ABB9;\r\n$color-muted: #88D4DD;\r\n$color-text-accent: #DC772F;\r\n*/\n.node {\n  fill: #fafafa;\n  stroke-width: 2px;\n  stroke: #505050;\n  stroke-opacity: 1;\n  stroke-linecap: round;\n  stroke-linejoin: round; }\n.node.node--disabled {\n    stroke-opacity: 0.5;\n    fill-opacity: 0.5; }\n.node.node--selected {\n    stroke: #000096; }\n.node.node--error {\n    stroke: red; }\n.textdiv {\n  text-align: center;\n  width: 94px; }\n.foreignObject {\n  width: 100;\n  height: 80; }\ntextarea {\n  font-family: sans-serif;\n  background: transparent;\n  display: inline-block;\n  border: none;\n  font-size: 14px;\n  width: 100%;\n  height: 70px;\n  font-weight: 600;\n  text-align: center;\n  vertical-align: middle;\n  resize: none;\n  overflow: hidden;\n  color: #505050; }\ntextarea.selected {\n    color: #000096; }\ntextarea.disabled {\n    opacity: 0.5; }\n.textarea_startend {\n  font-size: 14px;\n  font-weight: 600;\n  color: #505050;\n  height: 20px;\n  pointer-events: none; }\n.inputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n.outputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #505050; }\n"
+module.exports = ".node {\n  fill: #fafafa;\n  stroke-width: 2px;\n  stroke: #808080;\n  stroke-opacity: 1;\n  stroke-linecap: round;\n  stroke-linejoin: round; }\n  .node.node--disabled {\n    stroke-opacity: 0.5;\n    fill-opacity: 0.5; }\n  .node.node--selected {\n    stroke: #373737; }\n  .node.node--error {\n    stroke: red; }\n  .textdiv {\n  text-align: center;\n  width: 94px; }\n  .foreignObject {\n  width: 100;\n  height: 80; }\n  textarea {\n  font-family: sans-serif;\n  background: transparent;\n  display: inline-block;\n  border: none;\n  font-size: 15px;\n  width: 100%;\n  height: 70px;\n  font-weight: 600;\n  text-align: center;\n  vertical-align: middle;\n  resize: none;\n  overflow: hidden;\n  color: #808080; }\n  textarea.selected {\n    color: #373737; }\n  textarea.disabled {\n    opacity: 0.5; }\n  .textarea_startend {\n  font-size: 15px;\n  font-weight: 600;\n  color: #808080;\n  height: 20px;\n  pointer-events: none; }\n  .inputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #808080; }\n  .outputPort {\n  stroke: transparent;\n  stroke-width: 20px;\n  pointer-events: all;\n  fill: #808080; }\n"
 
 /***/ }),
 
@@ -6357,6 +6600,7 @@ var NodeComponent = /** @class */ (function () {
     switch the viewchild of the appModule to the node's procedure view when double-click on the node
     */
     NodeComponent.prototype.switchToProcedure = function (event) {
+        event.stopPropagation();
         this.action.emit({ action: _node_actions__WEBPACK_IMPORTED_MODULE_1__["ACTIONS"].PROCEDURE });
     };
     __decorate([
@@ -6450,7 +6694,7 @@ var ViewFlowchartRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container'>\r\n        <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n            <as-split-area [size]=\"100 - dataService.splitVal\">\r\n                <div class='container__header'>\r\n    \r\n                    <!-- top left tab menu  -->\r\n                    <div class=\"tab\">\r\n                        <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                        <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                        <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                        <!--\r\n                        <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                        -->\r\n                    </div>\r\n    \r\n                    <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                    <div style=\"display: none;\">\r\n                        <file-new></file-new>\r\n                        <file-save></file-save>\r\n                        <file-load></file-load>        \r\n                    </div>\r\n    \r\n                    <!-- top right dropdown menu -->\r\n                    <div class=\"dropmenu\">\r\n                        <!-- execute button -->\r\n                        <div>\r\n                            <execute></execute>\r\n                        </div>\r\n                        <!-- dropdown menu for new file, save file, loaf file-->\r\n                        <div>\r\n                            <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                                <mat-icon>more_vert</mat-icon>\r\n                            </button>\r\n                            <mat-menu #menu=\"matMenu\">\r\n                                <!--\r\n                                    \r\n                                    onclick=\"document.getElementById('file-input').click(); \"\r\n                                -->\r\n                                <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                                title=\"Create New Flowchart\">\r\n                                    <mat-icon>rotate_left</mat-icon>\r\n                                    <span>New File</span>\r\n                                </button>\r\n                                <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                                title=\"Save Flowchart File to Computer\">\r\n                                    <mat-icon>save_alt</mat-icon>\r\n                                    <span>Save File</span>\r\n                                </button>\r\n                                <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                                title=\"Load Flowchart File from Computer\">\r\n                                    <mat-icon>launch</mat-icon>\r\n                                    <span>Load File</span>\r\n                                </button>\r\n                            </mat-menu>\r\n                        </div>\r\n                        \r\n                    </div>\r\n                </div>\r\n                <!-- viewchild content -->\r\n                <div class='content__panel'>\r\n                    <div id = 'flowchart-main-container' class='flowchart-container'>\r\n                            <!--\r\n                            -->\r\n                        \r\n                            <!-- svg component -->\r\n                            <svg id=\"svg-canvas\" class = \"svgCanvas\" \r\n                            [attr.viewBox]=\"viewbox\"\r\n                            (mouseenter)='activateKeyEvent()'\r\n                            (mouseleave)='deactivateKeyEvent($event)'\r\n                            (mousedown)='panStart($event)'\r\n                            (mousemove)='handleMouseMove($event)'  \r\n                            (mouseup)='handleMouseUp($event)'\r\n                            (wheel)='scale($event)'\r\n                            >\r\n                                <!-- definitions for svg: grid patterns, arrow head for connecting wire-->\r\n                                <defs>\r\n                                    <!-- grid pattern -->\r\n                                    <pattern id=\"smallGrid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\">\r\n                                        <path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"gray\" stroke-width=\"0.5\"/>\r\n                                    </pattern>\r\n                                    <pattern id=\"grid\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\">\r\n                                        <rect width=\"100\" height=\"100\" fill=\"url(#smallGrid)\"/>\r\n                                        <path d=\"M 100 0 L 0 0 0 100\" fill=\"none\" stroke=\"gray\" stroke-width=\"1\"/>\r\n                                    </pattern>\r\n                        \r\n                                    <!-- arrow head -->\r\n                                    <marker id=\"arrow\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                                        <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(80, 80, 80)\" fill=\"transparent\" />\r\n                                    </marker>\r\n                                    <marker id=\"arrow_selected\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                                        <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(0, 0, 150)\" fill=\"transparent\"  />\r\n                                    </marker>\r\n                                </defs>\r\n                        \r\n                                <!-- svg frame-->\r\n                                <rect width=\"100%\" height=\"100%\" fill=\"url(#grid)\" />\r\n                                            \r\n                        \r\n                                <!-- wires => edge.component -->\r\n                                <g edge *ngFor=\"let edge of dataService.flowchart.edges; let edge_index = index\" \r\n                                [edge]='edge'\r\n                                [inputOffset]='inputOffset'\r\n                                [outputOffset]='outputOffset'\r\n                                (selected)='selectEdge($event, edge_index)'\r\n                                />\r\n                        \r\n                                <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->\r\n                                <line id=\"temporary-wire\" class=\"temp-wire\" x1=\"0\" y1='0' x2='0' y2='0'></line>\r\n                        \r\n                                <!-- nodes => node.component -->\r\n                                <g node *ngFor=\"let node of dataService.flowchart.nodes; let node_index = index\" \r\n                                id='flw_node_{{node_index}}'\r\n                                [node]='node' \r\n                                [selected]='isSelected(node_index)'\r\n                                [inputOffset]='inputOffset'\r\n                                [outputOffset]='outputOffset'\r\n                                (action)='nodeAction($event, node_index)'\r\n                                />\r\n                            </svg>\r\n                        \r\n                            <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->\r\n                            <div class='button-row'>\r\n                                <button mat-icon-button disableRipple='true' (click)='addNode()' title=\"Add Node\">\r\n                                <mat-icon>add</mat-icon>\r\n                                </button>\r\n                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title=\"Delete Selected Node\">\r\n                                <mat-icon>remove</mat-icon>\r\n                                </button>\r\n                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title=\"Delete Selected Wires\">\r\n                                <mat-icon>link_off</mat-icon>\r\n                                </button>\r\n                            </div>\r\n                        \r\n                            <!-- focus on flowchart button on the top right of the svg -->\r\n                            <button id='zoomToFit' class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title=\"Zoom to Fit\">\r\n                                <mat-icon>control_camera</mat-icon>\r\n                            </button>\r\n                            \r\n                        \r\n                        </div>\r\n                            \r\n                </div>\r\n            </as-split-area>\r\n    \r\n            <as-split-area [size]=\"dataService.splitVal\">\r\n                <!-- data viewers panel -->\r\n                <div class='content__viewer' >\r\n                    <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n        </as-split>\r\n    \r\n    </div>\r\n    \r\n\r\n\r\n\r\n"
+module.exports = "<div class='container'>\r\n        <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n            <as-split-area [size]=\"100 - dataService.splitVal\">\r\n                <panel-header [title]='dataService.flowchart.name'></panel-header>\r\n                <!-- viewchild content -->\r\n                <div class='content__panel'>\r\n                    <div id = 'flowchart-main-container' class='flowchart-container'>\r\n                            <!--\r\n                            -->\r\n                        \r\n                            <!-- svg component -->\r\n                            <svg id=\"svg-canvas\" class = \"svgCanvas\" \r\n                            [attr.viewBox]=\"viewbox\"\r\n                            (mouseenter)='activateKeyEvent()'\r\n                            (mouseleave)='deactivateKeyEvent($event)'\r\n                            (mousedown)='panStart($event)'\r\n                            (mousemove)='handleMouseMove($event)'  \r\n                            (mouseup)='handleMouseUp($event)'\r\n                            (wheel)='scale($event)'\r\n                            (dblclick)='addNode($event)'\r\n                            >\r\n                                <!-- definitions for svg: grid patterns, arrow head for connecting wire-->\r\n                                <defs>\r\n                                    <!-- grid pattern -->\r\n                                    <!-- <pattern id=\"smallGrid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\">\r\n                                        <path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"gray\" stroke-width=\"0.5\"/>\r\n                                    </pattern>\r\n                                    <pattern id=\"grid\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\">\r\n                                        <rect width=\"100\" height=\"100\" fill=\"url(#smallGrid)\"/>\r\n                                        <path d=\"M 100 0 L 0 0 0 100\" fill=\"none\" stroke=\"gray\" stroke-width=\"1\"/>\r\n                                    </pattern> -->\r\n                        \r\n                                    <!-- arrow head -->\r\n                                    <marker id=\"arrow\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                                        <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(80, 80, 80)\" fill=\"transparent\" />\r\n                                    </marker>\r\n                                    <marker id=\"arrow_selected\" markerWidth=\"30\" markerHeight=\"30\" refX=\"0\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\" viewBox=\"0 0 40 40\">\r\n                                        <path d=\"M0,0 L0,8 L9,4 z\" stroke=\"rgb(0, 0, 150)\" fill=\"transparent\"  />\r\n                                    </marker>\r\n                                </defs>\r\n                        \r\n                                <!-- svg frame-->\r\n                                <rect width=\"100%\" height=\"100%\" fill=\"url(#grid)\" />\r\n                                            \r\n                        \r\n                                <!-- wires => edge.component -->\r\n                                <g edge *ngFor=\"let edge of dataService.flowchart.edges; let edge_index = index\" \r\n                                [edge]='edge'\r\n                                [inputOffset]='inputOffset'\r\n                                [outputOffset]='outputOffset'\r\n                                (selected)='selectEdge($event, edge_index)'\r\n                                />\r\n                        \r\n                                <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->\r\n                                <line id=\"temporary-wire\" class=\"temp-wire\" x1=\"0\" y1='0' x2='0' y2='0'></line>\r\n                        \r\n                                <!-- nodes => node.component -->\r\n                                <g node *ngFor=\"let node of dataService.flowchart.nodes; let node_index = index\" \r\n                                id='flw_node_{{node_index}}'\r\n                                [node]='node' \r\n                                [selected]='isSelected(node_index)'\r\n                                [inputOffset]='inputOffset'\r\n                                [outputOffset]='outputOffset'\r\n                                (action)='nodeAction($event, node_index)'\r\n                                />\r\n                            </svg>\r\n                        \r\n                            <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->\r\n                            <div class='button-row'>\r\n                                <button mat-icon-button disableRipple='true' (click)='addNode()' title=\"Add Node\">\r\n                                <mat-icon>add</mat-icon>\r\n                                </button>\r\n                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title=\"Delete Selected Node\">\r\n                                <mat-icon>remove</mat-icon>\r\n                                </button>\r\n                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title=\"Delete Selected Wires\">\r\n                                <mat-icon>link_off</mat-icon>\r\n                                </button>\r\n                            </div>\r\n                        \r\n                            <!-- focus on flowchart button on the top right of the svg -->\r\n                            <button id='zoomToFit' class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title=\"Zoom to Fit\">\r\n                                <mat-icon svgIcon=\"cZoom\"></mat-icon>\r\n                            </button>\r\n                            \r\n                        \r\n                        </div>\r\n                            \r\n                </div>\r\n            </as-split-area>\r\n    \r\n            <as-split-area [size]=\"dataService.splitVal\">\r\n                <!-- data viewers panel -->\r\n                <div class='content__viewer' >\r\n                    <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n                </div>\r\n            </as-split-area>\r\n            \r\n        </as-split>\r\n    \r\n    </div>\r\n    \r\n\r\n\r\n\r\n"
 
 /***/ }),
 
@@ -6461,7 +6705,7 @@ module.exports = "<div class='container'>\r\n        <as-split direction=\"horiz
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".reset {\n  margin: 0px;\n  padding: 0px; }\n\n.default {\n  font-size: 12px;\n  color: #8AA8C0;\n  line-height: 150px;\n  text-align: center; }\n\n.viewer {\n  /*     width: 100%; \r\noverflow: auto;\r\n\r\npadding: 0px;\r\nmargin: 0px;\r\n\r\n.header{\r\n\r\n    display: flex; \r\n    flex-direction: row; \r\n    justify-content: space-between;\r\n\r\n    position: relative;\r\n    font-size: 14px; \r\n    font-weight: 600; \r\n    line-height: $header-height;\r\n    text-transform: uppercase;\r\n    letter-spacing: 1.5px;\r\n    height: $header-height;\r\n\r\n    color: #ADADAD;\r\n\r\n    .btn-group{\r\n        height: $header-height; \r\n\r\n        button{\r\n            width: 0.9*$header-height; \r\n            height: 0.9*$header-height; \r\n            margin: 0px;\r\n            border: 1px solid #B4B1B1;\r\n            box-shadow: none;\r\n\r\n            &:focus{\r\n                \r\n            }\r\n        }\r\n        \r\n    }\r\n\r\n}\r\n\r\n.container{\r\n}\r\n\r\nbutton{\r\n    &:focus{\r\n        \r\n    }\r\n} */ }\n\n.viewer .container {\n    display: flex;\n    flex-direction: row;\n    height: 100%; }\n\n.viewer .container .sidebar {\n      z-index: 100; }\n\n.viewer .container .view-container {\n      box-sizing: border-box;\n      height: 100%;\n      width: 100%;\n      padding-bottom: 30px;\n      overflow: auto; }\n\n.container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around; }\n\n.container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p {\n    margin: 0px;\n    padding: 0px; }\n\n.container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n\n.container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n\n.container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n\n.container .container__header .tab button:hover {\n      color: blue; }\n\n.container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n\n.container .container__header .dropmenu {\n      display: inline-flex; }\n\n.container .container__content {\n    flex-grow: 1;\n    height: 0px;\n    border: 2px solid #3F4651;\n    overflow: auto; }\n\n.container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n\n.content__panel {\n  background-color: gainsboro;\n  height: 95%;\n  overflow: hidden auto; }\n\n.content__viewer {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n\nul.nav {\n  margin: 0px;\n  padding: 0px; }\n\nli.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n\nli.link:hover {\n  background-color: gray;\n  color: white; }\n\nbutton.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n.active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n\n.flowchart-container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden; }\n\n.flowchart-container .svgCanvas .temp-wire {\n    stroke: #505050;\n    stroke-width: 2px;\n    stroke-dasharray: 10 15;\n    opacity: 0.5; }\n\nsplit-area {\n  overflow: auto !important; }\n\nas-split-area {\n  overflow: hidden !important; }\n\ninput {\n  border: none; }\n\ninput:focus {\n  border-bottom: 1px dashed gray; }\n\n#flowchart__name {\n  margin: 0 auto;\n  font-size: 14px;\n  line-height: 28px;\n  font-weight: bold;\n  color: #8AA8C0; }\n\n.button-row {\n  position: absolute;\n  top: 0px;\n  left: 10px; }\n\n.button-row button {\n    color: #505050;\n    width: 28px; }\n\n.resetViewer-button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  color: #505050; }\n\n.viewer {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  background-image: repeating-linear-gradient(0deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px), repeating-linear-gradient(-90deg, transparent, transparent 70px, #F1F1F1 70px, #F1F1F1 71px);\n  background-size: 71px 71px;\n  background-color: white;\n  box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 35px; }\n\n.viewer .container {\n    position: absolute;\n    height: 100%;\n    overflow: hidden; }\n\n.viewer .container .disabled {\n      color: #8AA8C0; }\n\n.viewer .container .disabled:hover {\n        color: #8AA8C0 !important; }\n\n.viewer .container .sidebar {\n      font-size: 12px;\n      background-color: #F1F1F1;\n      color: #395D73;\n      white-space: nowrap;\n      overflow-x: hidden !important; }\n\n.viewer .container .sidebar section {\n        padding-left: 15px;\n        padding-bottom: 5px;\n        padding-top: 5px;\n        border-bottom: 1px solid #8AA8C0; }\n\n.viewer .container .sidebar section div {\n          cursor: pointer; }\n\n.viewer .container .sidebar section div:hover {\n            color: #F0BFA0; }\n\n.viewer .content-wrapper {\n    position: relative;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .info-container {\n    padding: 0px 30px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between; }\n\n.viewer .info-container .info {\n      display: flex;\n      flex-direction: column; }\n\n.viewer .info-container .info .label {\n        font-size: 12px;\n        font-weight: 100;\n        color: #F07A79; }\n\n.viewer .info-container .info .value {\n        color: #395D73;\n        font-size: 11px;\n        font-weight: 600; }\n\n.viewer .info-container .info .action {\n        cursor: pointer;\n        font-size: 11px;\n        color: #8AA8C0; }\n\n.viewer .graph-container {\n    position: absolute;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n\n.viewer .graph-container #graph-edges {\n      background-color: transparent;\n      z-index: 1000; }\n\n.viewer .graph-container #graph-edges #temporary-edge .hidden {\n        display: none; }\n\n.viewer .graph-container #graph-nodes {\n      background-color: transparent;\n      overflow: hidden;\n      z-index: 1000; }\n\n.viewer .info-container {\n    position: absolute;\n    right: 0;\n    bottom: 0; }\n\n.viewer .info-container .label, .viewer .info-container .value {\n      margin-right: 5px;\n      font-weight: normal !important; }\n\n.viewer .node-container {\n    position: relative; }\n\n.viewer .node-container .node {\n      position: absolute;\n      -webkit-transform-origin: top left;\n              transform-origin: top left;\n      z-index: 3;\n      margin: 0px;\n      color: #395D73; }\n\n.viewer .node-container .node.hidden {\n        display: none; }\n\n.viewer .node-container .node .btn-container {\n        position: absolute;\n        right: -30px;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        height: 100px; }\n\n.viewer .node-container .node .btn-container .btn-group {\n          position: relative;\n          display: flex;\n          flex-direction: column;\n          justify-content: center;\n          background: none; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button {\n            position: relative;\n            width: 25px;\n            height: 24px;\n            cursor: pointer;\n            font-size: 9px;\n            text-align: center; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button .material-icons {\n              font-size: 18px;\n              line-height: 24px;\n              color: #8AA8C0; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover {\n              color: white; }\n\n.viewer .node-container .node .btn-container .btn-group .action-button:hover .mat-icon {\n                color: #F0BFA0; }\n\n.viewer .node-container .node .node-body {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        position: relative;\n        min-height: 30px;\n        min-width: 70px;\n        width: auto;\n        border: 1px solid #395D73;\n        background-color: rgba(255, 255, 255, 0.7);\n        cursor: move; }\n\n.viewer .node-container .node .node-body.disabled {\n          opacity: 0.4; }\n\n.viewer .node-container .node .node-body.selected {\n          border-color: green; }\n\n.viewer .node-container .node .node-body.library {\n          border-color: #395D73;\n          border-style: solid; }\n\n.viewer .node-container .node .node-body.error {\n          background-color: #E94858; }\n\n.viewer .node-container .node .node-body.function {\n          background-color: yellow;\n          border: 1px dashed green; }\n\n.viewer .node-container .node .node-body .node-name {\n          font-family: sans-serif;\n          font-size: 12px;\n          border-bottom: 1px solid #395D73;\n          text-align: center;\n          background-color: #F1F1F1; }\n\n.viewer .node-container .node .node-body .node-name input {\n            background-color: inherit;\n            border: 0px;\n            color: #395D73;\n            text-align: center; }\n\n.viewer .node-container .node .node-body .node-name.selected {\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .node-name.selected input {\n              color: white;\n              font-weight: bold; }\n\n.viewer .node-container .node .node-body .node-name.selected input:focus {\n                color: #395D73;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container {\n          display: flex;\n          flex-direction: column;\n          margin-top: 10px;\n          margin-bottom: 10px; }\n\n.viewer .node-container .node .node-body .port-container .divider {\n            height: 2px;\n            width: 100%;\n            background-color: #8AA8C0; }\n\n.viewer .node-container .node .node-body .port-container .port {\n            display: flex;\n            flex-direction: row;\n            margin: 5px 0px; }\n\n.viewer .node-container .node .node-body .port-container .port.hidden {\n              display: none; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip {\n              width: 15px;\n              height: 15px;\n              border-radius: 50%;\n              background-color: #F1F1F1;\n              border: 1px solid #395D73;\n              cursor: pointer; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.isFunction {\n                border-style: dashed;\n                background-color: gray;\n                border-radius: 0px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip.selected {\n                border: 2px solid #8AA8C0;\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-grip:hover {\n                background-color: #F0BFA0; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name {\n              font-size: 12px;\n              margin: 0px 5px; }\n\n.viewer .node-container .node .node-body .port-container .port .port-name.isFunction {\n                color: black;\n                font-size: 9.6px; }\n\n.viewer .node-container .node .node-body .port-container .port.input {\n              justify-content: flex-start;\n              margin-left: -7.5px; }\n\n.viewer .node-container .node .node-body .port-container .port.output {\n              justify-content: flex-end;\n              margin-right: -7.5px; }\n\n.viewer .node-container .node:active {\n        cursor: none; }\n"
+module.exports = ".flowchart-container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  background: transparent; }\n  .flowchart-container .svgCanvas .temp-wire {\n    stroke: #808080;\n    stroke-width: 2px;\n    stroke-dasharray: 10 15;\n    opacity: 0.5; }\n  input {\n  border: none; }\n  input:focus {\n  border-bottom: 1px dashed gray; }\n  #flowchart__name {\n  margin: 0 auto;\n  font-size: 15px;\n  line-height: 28px;\n  font-weight: bold;\n  color: #999999; }\n  .button-row {\n  position: absolute;\n  bottom: 50px;\n  left: 10px; }\n  .button-row button {\n    color: #505050;\n    width: 28px; }\n  .resetViewer-button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n  color: #505050;\n  width: 40px;\n  height: 40px; }\n  .viewer {\n  position: relative;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  background-color: transparent;\n  box-sizing: border-box;\n  height: 100%;\n  width: 100%;\n  padding-bottom: 35px; }\n  .viewer .container {\n    position: absolute;\n    height: 100%;\n    overflow: hidden; }\n  .viewer .container .disabled {\n      color: #999999; }\n  .viewer .container .disabled:hover {\n        color: #999999 !important; }\n  .viewer .container .sidebar {\n      font-size: 12px;\n      background-color: #B3B3B3;\n      color: #808080;\n      white-space: nowrap;\n      overflow-x: hidden !important; }\n  .viewer .container .sidebar section {\n        padding-left: 15px;\n        padding-bottom: 5px;\n        padding-top: 5px;\n        border-bottom: 1px solid #999999; }\n  .viewer .container .sidebar section div {\n          cursor: pointer; }\n  .viewer .container .sidebar section div:hover {\n            color: #CCCCCC; }\n  .viewer .content-wrapper {\n    position: relative;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n  .viewer .info-container {\n    padding: 0px 30px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between; }\n  .viewer .info-container .info {\n      display: flex;\n      flex-direction: column; }\n  .viewer .info-container .info .label {\n        font-size: 12px;\n        font-weight: 100;\n        color: #E6E6E6; }\n  .viewer .info-container .info .value {\n        color: #808080;\n        font-size: 12px;\n        font-weight: 600; }\n  .viewer .info-container .info .action {\n        cursor: pointer;\n        font-size: 12px;\n        color: #999999; }\n  .viewer .graph-container {\n    position: absolute;\n    height: 100%;\n    width: 100%;\n    -webkit-transform-origin: top left;\n            transform-origin: top left; }\n  .viewer .graph-container #graph-edges {\n      background-color: transparent;\n      z-index: 1000; }\n  .viewer .graph-container #graph-edges #temporary-edge .hidden {\n        display: none; }\n  .viewer .graph-container #graph-nodes {\n      background-color: transparent;\n      overflow: hidden;\n      z-index: 1000; }\n  .viewer .info-container {\n    position: absolute;\n    right: 0;\n    bottom: 0; }\n  .viewer .info-container .label, .viewer .info-container .value {\n      margin-right: 5px;\n      font-weight: normal !important; }\n  .viewer .node-container {\n    position: relative; }\n  .viewer .node-container .node {\n      position: absolute;\n      -webkit-transform-origin: top left;\n              transform-origin: top left;\n      z-index: 3;\n      margin: 0px;\n      color: #808080; }\n  .viewer .node-container .node.hidden {\n        display: none; }\n  .viewer .node-container .node .btn-container {\n        position: absolute;\n        right: -30px;\n        display: flex;\n        flex-direction: column;\n        justify-content: space-between;\n        height: 100px; }\n  .viewer .node-container .node .btn-container .btn-group {\n          position: relative;\n          display: flex;\n          flex-direction: column;\n          justify-content: center;\n          background: none; }\n  .viewer .node-container .node .btn-container .btn-group .action-button {\n            position: relative;\n            width: 25px;\n            height: 24px;\n            cursor: pointer;\n            font-size: 12px;\n            text-align: center; }\n  .viewer .node-container .node .btn-container .btn-group .action-button .material-icons {\n              font-size: 15px;\n              line-height: 24px;\n              color: #999999; }\n  .viewer .node-container .node .btn-container .btn-group .action-button:hover {\n              color: white; }\n  .viewer .node-container .node .btn-container .btn-group .action-button:hover .mat-icon {\n                color: #CCCCCC; }\n  .viewer .node-container .node .node-body {\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        position: relative;\n        min-height: 30px;\n        min-width: 70px;\n        width: auto;\n        border: 1px solid #808080;\n        background-color: rgba(255, 255, 255, 0.7);\n        cursor: move; }\n  .viewer .node-container .node .node-body.disabled {\n          opacity: 0.4; }\n  .viewer .node-container .node .node-body.selected {\n          border-color: green; }\n  .viewer .node-container .node .node-body.library {\n          border-color: #808080;\n          border-style: solid; }\n  .viewer .node-container .node .node-body.error {\n          background-color: #E94858; }\n  .viewer .node-container .node .node-body.function {\n          background-color: yellow;\n          border: 1px dashed green; }\n  .viewer .node-container .node .node-body .node-name {\n          font-family: sans-serif;\n          font-size: 12px;\n          border-bottom: 1px solid #808080;\n          text-align: center;\n          background-color: #B3B3B3; }\n  .viewer .node-container .node .node-body .node-name input {\n            background-color: inherit;\n            border: 0px;\n            color: #808080;\n            text-align: center; }\n  .viewer .node-container .node .node-body .node-name.selected {\n            background-color: #999999; }\n  .viewer .node-container .node .node-body .node-name.selected input {\n              color: white;\n              font-weight: bold; }\n  .viewer .node-container .node .node-body .node-name.selected input:focus {\n                color: #808080;\n                background-color: #CCCCCC; }\n  .viewer .node-container .node .node-body .port-container {\n          display: flex;\n          flex-direction: column;\n          margin-top: 10px;\n          margin-bottom: 10px; }\n  .viewer .node-container .node .node-body .port-container .divider {\n            height: 2px;\n            width: 100%;\n            background-color: #999999; }\n  .viewer .node-container .node .node-body .port-container .port {\n            display: flex;\n            flex-direction: row;\n            margin: 5px 0px; }\n  .viewer .node-container .node .node-body .port-container .port.hidden {\n              display: none; }\n  .viewer .node-container .node .node-body .port-container .port .port-grip {\n              width: 15px;\n              height: 15px;\n              border-radius: 50%;\n              background-color: #B3B3B3;\n              border: 1px solid #808080;\n              cursor: pointer; }\n  .viewer .node-container .node .node-body .port-container .port .port-grip.isFunction {\n                border-style: dashed;\n                background-color: gray;\n                border-radius: 0px; }\n  .viewer .node-container .node .node-body .port-container .port .port-grip.selected {\n                border: 2px solid #999999;\n                background-color: #CCCCCC; }\n  .viewer .node-container .node .node-body .port-container .port .port-grip:hover {\n                background-color: #CCCCCC; }\n  .viewer .node-container .node .node-body .port-container .port .port-name {\n              font-size: 12px;\n              margin: 0px 5px; }\n  .viewer .node-container .node .node-body .port-container .port .port-name.isFunction {\n                color: black;\n                font-size: 9.6px; }\n  .viewer .node-container .node .node-body .port-container .port.input {\n              justify-content: flex-start;\n              margin-left: -7.5px; }\n  .viewer .node-container .node .node-body .port-container .port.output {\n              justify-content: flex-end;\n              margin-right: -7.5px; }\n  .viewer .node-container .node:active {\n        cursor: none; }\n"
 
 /***/ }),
 
@@ -6701,13 +6945,19 @@ var ViewFlowchartComponent = /** @class */ (function () {
         return this.dataService.flowchart.meta.selected_nodes.indexOf(node_index) > -1;
     };
     // add a new node
-    ViewFlowchartComponent.prototype.addNode = function () {
+    ViewFlowchartComponent.prototype.addNode = function (event) {
         // create a new node
         var newNode = _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].getNewNode();
         // the new node's position would be (20,100) relative to the current view
         var pt = this.canvas.createSVGPoint();
-        pt.x = 20;
-        pt.y = 100;
+        if (event) {
+            pt.x = event.pageX - this.offset[0];
+            pt.y = event.pageY - this.offset[0];
+        }
+        else {
+            pt.x = 20;
+            pt.y = 100;
+        }
         // convert the position to svg position
         var svgP;
         var isFirefox = typeof InstallTrigger !== 'undefined';
@@ -7373,7 +7623,7 @@ var ViewGalleryRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <div class='container__header'>\r\n\r\n                <!-- top left tab menu  -->\r\n                <div class=\"tab\">\r\n                    <button class='btn-tab' [class.active]='router.url==\"/gallery\"' [routerLink]=\"'/gallery'\">Gallery</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/dashboard\"' [routerLink]=\"'/dashboard'\">Dashboard</button>\r\n                    <button class='btn-tab' [class.active]='router.url==\"/flowchart\"' [routerLink]=\"'/flowchart'\">Flowchart</button>\r\n                    <!--\r\n                    <button class='btn' [class.active]='false' (click)='updateView(\"editor\")'>Procedures</button>\r\n                    -->\r\n                </div>\r\n\r\n                <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->\r\n                <div style=\"display: none;\">\r\n                    <file-new></file-new>\r\n                    <file-save></file-save>\r\n                    <file-load></file-load>        \r\n                </div>\r\n\r\n                <!-- top right dropdown menu -->\r\n                <div class=\"dropmenu\">\r\n                    <!-- execute button -->\r\n                    <div>\r\n                        <execute></execute>\r\n                    </div>\r\n                    <!-- dropdown menu for new file, save file, loaf file-->\r\n                    <div>\r\n                        <button class='btn' mat-icon-button [matMenuTriggerFor]=\"menu\">\r\n                            <mat-icon>more_vert</mat-icon>\r\n                        </button>\r\n                        <mat-menu #menu=\"matMenu\">\r\n                            <button  mat-menu-item onclick=\"document.getElementById('newfile').click();\"\r\n                            title=\"Create New Flowchart\">\r\n                                <mat-icon>rotate_left</mat-icon>\r\n                                <span>New File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('savefile').click();\"\r\n                            title=\"Save Flowchart File to Computer\">\r\n                                <mat-icon>save_alt</mat-icon>\r\n                                <span>Save File</span>\r\n                            </button>\r\n                            <button mat-menu-item onclick=\"document.getElementById('file-input').click();\"\r\n                            title=\"Load Flowchart File from Computer\">\r\n                                <mat-icon>launch</mat-icon>\r\n                                <span>Load File</span>\r\n                            </button>\r\n                        </mat-menu>\r\n                    </div>\r\n                    \r\n                </div>\r\n            </div>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <h2>Möbius Gallery</h2>\r\n                <hr>\r\n                <h4>Displaying {{ (allFiles | async)?.length}} projects</h4>\r\n                <div class=\"container__element container__element--project-container\">\r\n                    <div class=\"project-container__project\" *ngFor=\"let f of  (dataService.galleryFiles | async)\">\r\n                        <div class=\"project__content\" (click)='loadFile(f)'>\r\n                            {{ f.name | simplename }}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n"
+module.exports = "<div class='container'>\r\n    <as-split direction=\"horizontal\" (dragEnd)='setSplit($event)'>\r\n        <as-split-area [size]=\"100 - dataService.splitVal\">\r\n            <panel-header [title]='dataService.flowchart.name'></panel-header>\r\n            <!-- viewchild content -->\r\n            <div class='content__panel'>\r\n                <div class=\"container__element container__element--project-container\">\r\n                    <div class=\"project-container__project\" *ngFor=\"let f of  (dataService.galleryFiles | async)\">\r\n                        <div class=\"project__content\" (click)='loadFile(f)'>\r\n                            {{ f.name | simplename }}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </as-split-area>\r\n\r\n        <as-split-area [size]=\"dataService.splitVal\">\r\n            <!-- data viewers panel -->\r\n            <div class='content__viewer' >\r\n                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>\r\n            </div>\r\n        </as-split-area>\r\n        \r\n    </as-split>\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -7384,7 +7634,7 @@ module.exports = "<div class='container'>\r\n    <as-split direction=\"horizonta
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "as-split-area {\n  overflow: hidden !important; }\n\n.container {\n  position: relative;\n  overflow: auto;\n  height: 100%;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around; }\n\n.container h1, .container h2, .container h3, .container h4, .container h5, .container h6, .container p {\n    margin: 0px;\n    padding: 0px; }\n\n.container .container__header {\n    flex: 0 1 auto;\n    min-height: 35px;\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding: 0px 0px 0px 15px;\n    background-color: #ccc;\n    border-bottom: 3px solid #eeeeee;\n    line-height: 35px;\n    font-size: 18px;\n    font-weight: 600;\n    text-align: center;\n    /* tab styling */\n    /* dropdown menu styling */ }\n\n.container .container__header .tab {\n      border: 2px;\n      overflow: hidden;\n      background-color: #ccc; }\n\n.container .container__header .tab button {\n      display: inline-block;\n      vertical-align: bottom;\n      background-color: inherit;\n      color: #505050;\n      border: none;\n      outline: none;\n      cursor: pointer;\n      padding: 8px 10px;\n      transition: 0.3s;\n      font-size: 14px; }\n\n.container .container__header .tab button:hover {\n      color: blue; }\n\n.container .container__header .tab button.active {\n      background-color: #ccc;\n      color: #000096;\n      font-weight: 600;\n      border-color: #222 !important; }\n\n.container .container__header .dropmenu {\n      display: inline-flex; }\n\n.container .container__content {\n    flex-grow: 1;\n    height: 0px;\n    border: 2px solid #3F4651;\n    overflow: auto; }\n\n.container .container__footer {\n    text-align: center;\n    font-size: 12px;\n    line-height: 18px;\n    background-color: #3F4651;\n    color: #E7BF00; }\n\n.content__panel {\n  background-color: gainsboro;\n  height: 95%;\n  overflow: hidden auto; }\n\n.content__viewer {\n  background-color: gainsboro;\n  height: 100%;\n  overflow: auto; }\n\nul.nav {\n  margin: 0px;\n  padding: 0px; }\n\nli.link {\n  display: inline;\n  border: 2px solid gray;\n  border-radius: 4px;\n  margin: 5px 5px 0px 0px;\n  padding: 5px;\n  text-transform: uppercase;\n  line-height: 12px;\n  font-weight: 600;\n  cursor: pointer;\n  font-size: 12px; }\n\nli.link:hover {\n  background-color: gray;\n  color: white; }\n\nbutton.btn {\n  display: inline-block;\n  vertical-align: middle;\n  margin: 0px 0px 0px 0px;\n  font-size: 12px;\n  line-height: 10px;\n  height: 30px;\n  border: none;\n  border-radius: 4px;\n  background-color: transparent;\n  color: #505050; }\n\nbutton.btn:hover {\n  color: blue; }\n\n.active {\n  background-color: #222;\n  color: white;\n  border-color: #222 !important; }\n\n.container__element {\n  padding: 0px 10% 0px 10%; }\n\n.container__element--project-container {\n  font-size: 26px;\n  line-height: 32px;\n  font-weight: 300;\n  padding-top: 30px;\n  padding-bottom: 30px;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  overflow: auto; }\n\n.project-container__project {\n  position: relative;\n  width: 25%;\n  height: 150px;\n  min-width: 200px; }\n\n.project-container__project .project__content {\n    height: 90%;\n    width: 90%;\n    font-size: 12px;\n    line-height: 24px;\n    color: #000;\n    overflow: hidden;\n    border-radius: 4px;\n    vertical-align: middle;\n    overflow-wrap: break-word;\n    word-wrap: break-word;\n    word-break: break-word;\n    border: 1px solid #bbb;\n    border-radius: 2px; }\n\n.project-container__project .project__content a {\n      display: block;\n      height: 100%;\n      margin: 10px;\n      text-decoration: none;\n      text-align: center;\n      text-transform: uppercase;\n      color: inherit;\n      font-weight: 600; }\n\n.project-container__project .project__content a:visited {\n        color: inherit; }\n\n.project-container__project .project__content:hover {\n      border-color: #222; }\n\nh2 {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 19px; }\n\nh4 {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 16px; }\n\np {\n  color: #505050;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 14px; }\n\nhr {\n  border-top: 2px solid #eeeeee; }\n"
+module.exports = ".container__element {\n  padding: 0px 10% 0px 10%; }\n\n.container__element--project-container {\n  font-size: 30px;\n  line-height: 32px;\n  font-weight: 300;\n  padding-top: 30px;\n  padding-bottom: 30px;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  overflow: auto; }\n\n.project-container__project {\n  position: relative;\n  width: 25%;\n  height: 150px;\n  min-width: 200px; }\n\n.project-container__project .project__content {\n    height: 90%;\n    width: 90%;\n    font-size: 12px;\n    line-height: 24px;\n    color: #000;\n    overflow: hidden;\n    border-radius: 4px;\n    vertical-align: middle;\n    overflow-wrap: break-word;\n    word-wrap: break-word;\n    word-break: break-word;\n    border: 1px solid #bbb;\n    border-radius: 2px; }\n\n.project-container__project .project__content a {\n      display: block;\n      height: 100%;\n      margin: 10px;\n      text-decoration: none;\n      text-align: center;\n      text-transform: uppercase;\n      color: inherit;\n      font-weight: 600; }\n\n.project-container__project .project__content a:visited {\n        color: inherit; }\n\n.project-container__project .project__content:hover {\n      border-color: #222; }\n\nh2 {\n  color: #CCCCCC;\n  background-color: #999999;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 19px; }\n\nh4 {\n  color: #808080;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 16px; }\n\np {\n  color: #808080;\n  text-align: left;\n  padding-left: 15px;\n  font-size: 12px;\n  line-height: 14px; }\n\nhr {\n  border-top: 2px solid #E6E6E6;\n  margin: 0px; }\n"
 
 /***/ }),
 
@@ -7603,6 +7853,127 @@ var ViewGalleryModule = /** @class */ (function () {
 }());
 
 
+
+/***/ }),
+
+/***/ "./src/assets/Icons/3D.svg":
+/*!*********************************!*\
+  !*** ./src/assets/Icons/3D.svg ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "3D.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Console.svg":
+/*!**************************************!*\
+  !*** ./src/assets/Icons/Console.svg ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Console.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Dashboard.svg":
+/*!****************************************!*\
+  !*** ./src/assets/Icons/Dashboard.svg ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Dashboard.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Flowchart.svg":
+/*!****************************************!*\
+  !*** ./src/assets/Icons/Flowchart.svg ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Flowchart.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Help.svg":
+/*!***********************************!*\
+  !*** ./src/assets/Icons/Help.svg ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Help.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Home.svg":
+/*!***********************************!*\
+  !*** ./src/assets/Icons/Home.svg ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Home.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Mobius favicon.svg":
+/*!*********************************************!*\
+  !*** ./src/assets/Icons/Mobius favicon.svg ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Mobius favicon.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Node.svg":
+/*!***********************************!*\
+  !*** ./src/assets/Icons/Node.svg ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Node.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Summary.svg":
+/*!**************************************!*\
+  !*** ./src/assets/Icons/Summary.svg ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Summary.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Three Lines Menu.svg":
+/*!***********************************************!*\
+  !*** ./src/assets/Icons/Three Lines Menu.svg ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Three Lines Menu.svg";
+
+/***/ }),
+
+/***/ "./src/assets/Icons/Zoom.svg":
+/*!***********************************!*\
+  !*** ./src/assets/Icons/Zoom.svg ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "Zoom.svg";
 
 /***/ }),
 
@@ -7929,24 +8300,8 @@ var BiMapManyToOne = /** @class */ (function () {
      * Returns an array of keys that point to this value.
      * @param value The string version of the value.
      */
-    BiMapManyToOne.prototype.getKeysFromValueStr = function (value_str, index) {
-        var _this = this;
-        var keys;
-        if (index < 0) {
-            keys = this.vk_map.get(value_str);
-            if (!keys) {
-                keys = [];
-            }
-            return keys;
-        }
-        // the value has an index
-        keys = [];
-        this.values().forEach(function (value_from_map) {
-            if (JSON.stringify(value_from_map[index]) === value_str) {
-                keys.push.apply(keys, _this.getKeys(value_from_map)); // THIS IS AN UGLY HACK :(:(:( TODO...
-            }
-        });
-        return keys;
+    BiMapManyToOne.prototype.getKeysFromValueStr = function (value_str) {
+        return this.vk_map.get(value_str);
     };
     /**
      * Returns the value to which this key points.
@@ -8019,12 +8374,14 @@ var BiMapManyToOne = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GIAttribMap", function() { return GIAttribMap; });
 /* harmony import */ var _BiMap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BiMap */ "./src/libs/geo-info/BiMap.ts");
+/* harmony import */ var _GICommon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GICommon */ "./src/libs/geo-info/GICommon.ts");
+
 
 //  ===============================================================================================================
 //  Classes
 //  ===============================================================================================================
 /**
- * Geo-info attribute class.
+ * Geo-info attribute class for one attribute.
  * The attributs are stores as key-value pairs.
  * Multiple keys point to the same values.
  * So for example, [[1,3], "a"],[[0,4], "b"] can be converted into sequentia arrays.
@@ -8037,38 +8394,50 @@ var GIAttribMap = /** @class */ (function () {
      * Creates an attribute.
      * @param attrib_data
      */
-    function GIAttribMap(attrib_data) {
-        this.name = attrib_data.name;
-        this.data_type = attrib_data.data_type;
-        this.data_size = attrib_data.data_size;
-        this.bi_map = new _BiMap__WEBPACK_IMPORTED_MODULE_0__["BiMapManyToOne"](attrib_data.data);
+    function GIAttribMap(name, data_type, data_size, num_entities) {
+        this._name = name;
+        this._data_type = data_type;
+        this._data_size = data_size;
+        this._bi_map = new _BiMap__WEBPACK_IMPORTED_MODULE_0__["BiMapManyToOne"]();
+        this._num_entities = num_entities;
     }
     /**
      * Returns the JSON data for this attribute.
      */
     GIAttribMap.prototype.getData = function () {
         return {
-            name: this.name,
-            data_type: this.data_type,
-            data_size: this.data_size,
-            data: this.bi_map.getData()
+            name: this._name,
+            data_type: this._data_type,
+            data_size: this._data_size,
+            data: this._bi_map.getData()
         };
     };
     /**
-     * Adds data to this attribute from JSON data.
-     * The existing data in the model is not deleted.
-     * @param attrib_data The JSON data.
+     * Returns the number of entities for this attribute .
      */
-    GIAttribMap.prototype.addData = function (attrib_data, offset) {
-        if (this.name !== attrib_data.name ||
-            this.data_type !== attrib_data.data_type ||
-            this.data_size !== attrib_data.data_size) {
+    GIAttribMap.prototype.getNumEntities = function () {
+        return this._num_entities;
+    };
+    /**
+     * Adds entities to this attribute from JSON data.
+     * The existing attribute data in the model is not deleted.
+     * @param attrib_data The JSON data for the new entities.
+     */
+    GIAttribMap.prototype.addEntities = function (attrib_data, num_entities) {
+        var _this = this;
+        if (this._name !== attrib_data.name ||
+            this._data_type !== attrib_data.data_type ||
+            this._data_size !== attrib_data.data_size) {
             throw Error('Attributes do not match.');
         }
+        // increment all the keys by the number of entities in the existing data
         attrib_data.data.forEach(function (keys_value) {
-            keys_value[0] = keys_value[0].map(function (key) { return key + offset; });
+            keys_value[0] = keys_value[0].map(function (key) { return key + _this._num_entities; });
         });
-        this.bi_map.addData(attrib_data.data);
+        // add the data with the new keys to the map
+        this._bi_map.addData(attrib_data.data);
+        // update the total number of entities
+        this._num_entities += num_entities;
     };
     /**
      * Sets a single attribute value.
@@ -8076,22 +8445,62 @@ var GIAttribMap = /** @class */ (function () {
      * @param value
      */
     GIAttribMap.prototype.set = function (key, value) {
-        this.bi_map.set(key, value);
+        this._bi_map.set(key, value);
     };
     /**
      * Gets a single attribute value.
      * @param key
      */
     GIAttribMap.prototype.get = function (key) {
-        return this.bi_map.getValue(key);
+        return this._bi_map.getValue(key);
     };
     /**
-     * Gets an array of keys, all of which have the same value.
+     * Executes a query
      * @param value_str The string version of the value.
-     * @param index
+     * @param index The index of the value
+     * @param operator The operator, ==, !=, <=, >=, etc
      */
-    GIAttribMap.prototype.getKeysFromValueStr = function (value_str, index) {
-        return this.bi_map.getKeysFromValueStr(value_str, index);
+    GIAttribMap.prototype.queryValueStr = function (value_str, operator, index) {
+        if (index === null || index === undefined) {
+            switch (operator) {
+                // ==
+                case _GICommon__WEBPACK_IMPORTED_MODULE_1__["EQueryOperatorTypes"].IS_EQUAL:
+                    return this._bi_map.getKeysFromValueStr(value_str);
+                // !=
+                case _GICommon__WEBPACK_IMPORTED_MODULE_1__["EQueryOperatorTypes"].IS_NOT_EQUAL:
+                    var keys_equal_1 = this._bi_map.getKeysFromValueStr(value_str);
+                    var keys_not_equal_1 = [];
+                    this._bi_map.keys().forEach(function (key) {
+                        if (keys_equal_1.indexOf(key) === -1) {
+                            keys_not_equal_1.push(key);
+                        }
+                    });
+                    return keys_not_equal_1;
+                // >
+                case _GICommon__WEBPACK_IMPORTED_MODULE_1__["EQueryOperatorTypes"].IS_GREATER:
+                    throw new Error('IS_GREATER Not implemented');
+                // >=
+                case _GICommon__WEBPACK_IMPORTED_MODULE_1__["EQueryOperatorTypes"].IS_GREATER_OR_EQUAL:
+                    throw new Error('IS_GREATER_OR_EQUAL Not implemented');
+                // <
+                case _GICommon__WEBPACK_IMPORTED_MODULE_1__["EQueryOperatorTypes"].IS_LESS:
+                    throw new Error('IS_LESS Not implemented');
+                // <=
+                case _GICommon__WEBPACK_IMPORTED_MODULE_1__["EQueryOperatorTypes"].IS_LESS_OR_EQUAL:
+                    throw new Error('IS_LESS_OR_EQUAL Not implemented');
+                default:
+                    throw new Error('Query operator not found.');
+            }
+        }
+        // TODO
+        // keys = [];
+        // this.values().forEach( value_from_map => {
+        //     if (JSON.stringify( value_from_map[index]) === value_str) {
+        //         keys.push(...this.getKeys(value_from_map));  // THIS IS AN UGLY HACK :(:(:( TODO...
+        //     }
+        // });
+        // return keys;
+        throw new Error('Queries with indexes not implemented');
     };
     /**
      * Gets a list of all the attribute keys, in sequential order.
@@ -8102,7 +8511,7 @@ var GIAttribMap = /** @class */ (function () {
      */
     GIAttribMap.prototype.getSeqKeys = function () {
         var seqKeys = [];
-        this.bi_map.getData().forEach(function (keys_value, index) { return keys_value[0].forEach(function (key) { return seqKeys[key] = index; }); });
+        this._bi_map.getData().forEach(function (keys_value, index) { return keys_value[0].forEach(function (key) { return seqKeys[key] = index; }); });
         return seqKeys;
     };
     /**
@@ -8110,7 +8519,7 @@ var GIAttribMap = /** @class */ (function () {
      * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail values would be ['a', 'b']
      */
     GIAttribMap.prototype.getSeqValues = function () {
-        return this.bi_map.values();
+        return this._bi_map.values();
     };
     return GIAttribMap;
 }());
@@ -8144,60 +8553,63 @@ var GIAttribs = /** @class */ (function () {
       * @param model The JSON data
       */
     function GIAttribs(model) {
-        // maps, the key is the name, the value is the map
-        this.posis = new Map();
-        this.verts = new Map();
-        this.edges = new Map();
-        this.wires = new Map();
-        this.faces = new Map();
-        this.colls = new Map();
-        // all maps
-        this.attrib_maps = {
-            po: this.posis,
-            _v: this.verts,
-            _e: this.edges,
-            _w: this.wires,
-            _f: this.faces,
-            co: this.colls
+        // maps, the key is the name, the value is the attrib map clas
+        this._posis = new Map();
+        this._verts = new Map();
+        this._edges = new Map();
+        this._wires = new Map();
+        this._faces = new Map();
+        this._colls = new Map();
+        // all attrib maps
+        this._attrib_maps = {
+            po: this._posis,
+            _v: this._verts,
+            _e: this._edges,
+            _w: this._wires,
+            _f: this._faces,
+            co: this._colls
         };
-        this.model = model;
+        this._model = model;
     }
     /**
      * Returns the JSON data for this model.
      */
     GIAttribs.prototype.getData = function () {
         return {
-            positions: Array.from(this.posis.values()).map(function (attrib) { return attrib.getData(); }),
-            vertices: Array.from(this.verts.values()).map(function (attrib) { return attrib.getData(); }),
-            edges: Array.from(this.edges.values()).map(function (attrib) { return attrib.getData(); }),
-            wires: Array.from(this.wires.values()).map(function (attrib) { return attrib.getData(); }),
-            faces: Array.from(this.faces.values()).map(function (attrib) { return attrib.getData(); }),
-            collections: Array.from(this.colls.values()).map(function (attrib) { return attrib.getData(); })
+            positions: Array.from(this._posis.values()).map(function (attrib) { return attrib.getData(); }),
+            vertices: Array.from(this._verts.values()).map(function (attrib) { return attrib.getData(); }),
+            edges: Array.from(this._edges.values()).map(function (attrib) { return attrib.getData(); }),
+            wires: Array.from(this._wires.values()).map(function (attrib) { return attrib.getData(); }),
+            faces: Array.from(this._faces.values()).map(function (attrib) { return attrib.getData(); }),
+            collections: Array.from(this._colls.values()).map(function (attrib) { return attrib.getData(); })
         };
     };
     /**
      * Adds data to this model from JSON data.
      * The existing data in the model is not deleted.
-     * @param attribs_data The JSON data
+     * @param model_data The JSON data for the model.
      */
-    GIAttribs.prototype.addData = function (attribs_data) {
-        // Helper public to ddd attributes to model
-        function _addAttribsData(exist_attribs_map, new_attribs_data, offset) {
+    GIAttribs.prototype.addData = function (model_data) {
+        // helper public to ddd attributes to model
+        function _addAttribData(exist_attribs_maps, new_attribs_data, num_existing_entities, num_new_entities) {
+            // loop through all attributes, adding data
             new_attribs_data.forEach(function (new_attrib_data) {
-                if (!exist_attribs_map.has(new_attrib_data.name)) {
-                    exist_attribs_map.set(new_attrib_data.name, new _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__["GIAttribMap"](new_attrib_data));
+                if (!exist_attribs_maps.has(new_attrib_data.name)) {
+                    exist_attribs_maps.set(new_attrib_data.name, new _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__["GIAttribMap"](new_attrib_data.name, new_attrib_data.data_type, new_attrib_data.data_size, num_existing_entities));
                 }
-                else {
-                    exist_attribs_map.get(new_attrib_data.name).addData(new_attrib_data, offset);
-                }
+                exist_attribs_maps.get(new_attrib_data.name).addEntities(new_attrib_data, num_new_entities);
             });
         }
-        _addAttribsData(this.posis, attribs_data.positions, this.model.geom().numPosis());
-        _addAttribsData(this.verts, attribs_data.vertices, this.model.geom().numVerts());
-        _addAttribsData(this.edges, attribs_data.edges, this.model.geom().numEdges());
-        _addAttribsData(this.wires, attribs_data.wires, this.model.geom().numWires());
-        _addAttribsData(this.faces, attribs_data.faces, this.model.geom().numFaces());
-        _addAttribsData(this.colls, attribs_data.collections, this.model.geom().numColls());
+        // data for all the new atttributes
+        var attribs_data = model_data.attributes;
+        var geom_data = model_data.geometry;
+        // add the attribute data
+        _addAttribData(this._posis, attribs_data.positions, this._model.geom().numPosis(), geom_data.num_positions);
+        _addAttribData(this._verts, attribs_data.vertices, this._model.geom().numVerts(), geom_data.vertices.length);
+        _addAttribData(this._edges, attribs_data.edges, this._model.geom().numEdges(), geom_data.edges.length);
+        _addAttribData(this._wires, attribs_data.wires, this._model.geom().numWires(), geom_data.wires.length);
+        _addAttribData(this._faces, attribs_data.faces, this._model.geom().numFaces(), geom_data.faces.length);
+        _addAttribData(this._colls, attribs_data.collections, this._model.geom().numColls(), geom_data.collections.length);
     };
     // ============================================================================
     // Private methods
@@ -8209,10 +8621,10 @@ var GIAttribs = /** @class */ (function () {
      * @param data_type The data type of the attribute.
      * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
-    GIAttribs.prototype._addAttrib = function (type_str, name, data_type, data_size) {
-        var attribs = this.attrib_maps[type_str];
+    GIAttribs.prototype._addAttrib = function (type_str, name, data_type, data_size, num_entities) {
+        var attribs = this._attrib_maps[type_str];
         if (!attribs.has(name)) {
-            var attrib = new _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__["GIAttribMap"]({ name: name, data_type: data_type, data_size: data_size, data: [] });
+            var attrib = new _GIAttribMap__WEBPACK_IMPORTED_MODULE_0__["GIAttribMap"](name, data_type, data_size, num_entities);
             attribs.set(name, attrib);
         }
         return attribs[name];
@@ -8228,7 +8640,7 @@ var GIAttribs = /** @class */ (function () {
      */
     GIAttribs.prototype.setAttribValue = function (id, name, value) {
         var _a = Object(_GICommon__WEBPACK_IMPORTED_MODULE_1__["idBreak"])(id), type_str = _a[0], index = _a[1];
-        var attribs = this.attrib_maps[type_str];
+        var attribs = this._attrib_maps[type_str];
         if (attribs.get(name) === undefined) {
             throw new Error('Attribute does not exist.');
         }
@@ -8241,7 +8653,7 @@ var GIAttribs = /** @class */ (function () {
      */
     GIAttribs.prototype.getAttribValue = function (id, name) {
         var _a = Object(_GICommon__WEBPACK_IMPORTED_MODULE_1__["idBreak"])(id), type_str = _a[0], index = _a[1];
-        var attribs = this.attrib_maps[type_str];
+        var attribs = this._attrib_maps[type_str];
         if (attribs.get(name) === undefined) {
             throw new Error('Attribute does not exist.');
         }
@@ -8252,35 +8664,35 @@ var GIAttribs = /** @class */ (function () {
      * @param posi_i
      */
     GIAttribs.prototype.getPosiCoord = function (posi_i) {
-        return this.posis.get('coordinates').get(posi_i);
+        return this._posis.get('coordinates').get(posi_i);
     };
     // ============================================================================
     // Get entity attrib names
     // ============================================================================
     GIAttribs.prototype.getPosiAttribNames = function () {
-        return Array.from(this.posis.keys());
+        return Array.from(this._posis.keys());
     };
     GIAttribs.prototype.getVertAttribNames = function () {
-        return Array.from(this.verts.keys());
+        return Array.from(this._verts.keys());
     };
     GIAttribs.prototype.getEdgeAttribNames = function () {
-        return Array.from(this.edges.keys());
+        return Array.from(this._edges.keys());
     };
     GIAttribs.prototype.getWireAttribNames = function () {
-        return Array.from(this.wires.keys());
+        return Array.from(this._wires.keys());
     };
     GIAttribs.prototype.getFaceAttribNames = function () {
-        return Array.from(this.faces.keys());
+        return Array.from(this._faces.keys());
     };
     GIAttribs.prototype.getCollAttribNames = function () {
-        return Array.from(this.colls.keys());
+        return Array.from(this._colls.keys());
     };
     // ============================================================================
     // Query an entity attrib
     // ============================================================================
     /**
      * Query the model using a query strings.
-     * Returns a list of IDs.
+     * Returns a list of string IDs of entities in the model.
      */
     GIAttribs.prototype.queryAttribs = function (query_str) {
         var queries = Object(_GIAttribsQuery__WEBPACK_IMPORTED_MODULE_2__["parse_query"])(query_str);
@@ -8292,7 +8704,7 @@ var GIAttribs = /** @class */ (function () {
     };
     /**
      * Query the model using a sequence of && and || queries.
-     * Returns a list of IDs.
+     * Returns a list of string IDs of entities in the model.
      * @param query
      */
     GIAttribs.prototype.queryAttrib = function (query) {
@@ -8303,11 +8715,11 @@ var GIAttribs = /** @class */ (function () {
         // console.log("     attrib_value_str", query.attrib_value_str);
         // console.log("     operator_type" ,   query.operator_type);
         // do the query
-        var attribs = this.attrib_maps[query.attrib_type];
+        var attribs = this._attrib_maps[query.attrib_type];
         if (!attribs.has(query.attrib_name)) {
             return [];
         }
-        var entities_i = attribs.get(query.attrib_name).getKeysFromValueStr(query.attrib_value_str, query.attrib_index);
+        var entities_i = attribs.get(query.attrib_name).queryValueStr(query.attrib_value_str, query.operator_type, query.attrib_index);
         var entities_id = entities_i.map(function (entity_i) { return query.attrib_type + entity_i; });
         return entities_id;
     };
@@ -8315,22 +8727,22 @@ var GIAttribs = /** @class */ (function () {
     // Add an entity attrib
     // ============================================================================
     GIAttribs.prototype.addPosiAttrib = function (name, data_type, data_size) {
-        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].POSI, name, data_type, data_size);
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].POSI, name, data_type, data_size, this._model.geom().numPosis());
     };
     GIAttribs.prototype.addVertAttrib = function (name, data_type, data_size) {
-        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].VERT, name, data_type, data_size);
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].VERT, name, data_type, data_size, this._model.geom().numVerts());
     };
     GIAttribs.prototype.addEdgeAttrib = function (name, data_type, data_size) {
-        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].EDGE, name, data_type, data_size);
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].EDGE, name, data_type, data_size, this._model.geom().numEdges());
     };
     GIAttribs.prototype.addWireAttrib = function (name, data_type, data_size) {
-        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].WIRE, name, data_type, data_size);
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].WIRE, name, data_type, data_size, this._model.geom().numWires());
     };
     GIAttribs.prototype.addFaceAttrib = function (name, data_type, data_size) {
-        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].FACE, name, data_type, data_size);
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].FACE, name, data_type, data_size, this._model.geom().numFaces());
     };
     GIAttribs.prototype.addCollAttrib = function (name, data_type, data_size) {
-        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].COLL, name, data_type, data_size);
+        return this._addAttrib(_GICommon__WEBPACK_IMPORTED_MODULE_1__["EEntityTypeStr"].COLL, name, data_type, data_size, this._model.geom().numColls());
     };
     // ============================================================================
     // Threejs
@@ -8342,7 +8754,7 @@ var GIAttribs = /** @class */ (function () {
      * @param verts An array of vertex indicies pointing to the coordinates.
      */
     GIAttribs.prototype.get3jsSeqVertsCoords = function (verts) {
-        var coords_attrib = this.posis.get('coordinates');
+        var coords_attrib = this._posis.get('coordinates');
         var coords_keys = coords_attrib.getSeqKeys();
         var coords_values = coords_attrib.getSeqValues();
         var verts_cords_values = [];
@@ -8354,13 +8766,27 @@ var GIAttribs = /** @class */ (function () {
      * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
      */
     GIAttribs.prototype.get3jsSeqVertsAttrib = function (attrib_name) {
-        if (!this.verts.has(attrib_name)) {
+        if (!this._verts.has(attrib_name)) {
             return null;
         }
-        var attrib_map = this.verts.get(attrib_name);
+        var attrib_map = this._verts.get(attrib_name);
         var attrib_keys = attrib_map.getSeqKeys();
         var attrib_values = attrib_map.getSeqValues();
         var result = [].concat.apply([], attrib_keys.map(function (attrib_key) { return attrib_values[attrib_key]; }));
+        return result;
+    };
+    GIAttribs.prototype.getVertsCoords = function (attrib_name) {
+        var coords_attrib = this._posis.get('coordinates');
+        return coords_attrib;
+    };
+    GIAttribs.prototype.getVertsAttrib = function (attrib_name) {
+        if (!this._verts.has(attrib_name)) {
+            return null;
+        }
+        var attrib_map = this._verts.get(attrib_name);
+        var attrib_keys = attrib_map.getSeqKeys();
+        var attrib_values = attrib_map.getSeqValues();
+        var result = Array.from(attrib_keys.map(function (attrib_key) { return attrib_values[attrib_key]; }));
         return result;
     };
     return GIAttribs;
@@ -8459,9 +8885,6 @@ function _parse_query_component(query_component) {
     var attrib_name_index = _parse_name_str(attrib_name_str);
     var attrib_name = attrib_name_index[0];
     var attrib_index = attrib_name_index[1];
-    if (attrib_index === undefined) {
-        attrib_index = -1;
-    }
     // parse the value
     attrib_value_str = _parse_value_str(attrib_value_str);
     // return the data for the query component as an object
@@ -8589,48 +9012,48 @@ var GIGeom = /** @class */ (function () {
      */
     function GIGeom(model) {
         // positions
-        this.num_posis = 0; // The total number of positions in the model.
-        this.rev_posis_verts = []; // 1 position -> many vertices
+        this._num_posis = 0; // The total number of positions in the model.
+        this._rev_posis_verts = []; // 1 position -> many vertices
         // triangles
-        this.tris = []; // 1 triangles -> 3 vertices
-        this.rev_tris_faces = []; // 1 tri -> 1 face
+        this._tris = []; // 1 triangles -> 3 vertices
+        this._rev_tris_faces = []; // 1 tri -> 1 face
         // vertices
-        this.verts = []; // many vertices -> 1 position
-        this.rev_verts_edges = []; // 1 vertex -> 1 edge
-        this.rev_verts_tris = []; // 1 vertex -> 1 tri // TODO add code to update this
-        this.rev_verts_points = []; // 1 vertex -> 1 point
+        this._verts = []; // many vertices -> 1 position
+        this._rev_verts_edges = []; // 1 vertex -> 1 edge
+        this._rev_verts_tris = []; // 1 vertex -> 1 tri // TODO add code to update this
+        this._rev_verts_points = []; // 1 vertex -> 1 point
         // edges
-        this.edges = []; // 1 edge -> 2 vertices
-        this.rev_edges_wires = []; // 1 edge -> 1 wire
+        this._edges = []; // 1 edge -> 2 vertices
+        this._rev_edges_wires = []; // 1 edge -> 1 wire
         // wires
-        this.wires = []; // 1 wire -> many edges
-        this.rev_wires_faces = []; // 1 wire -> 1 face
-        this.rev_wires_lines = []; // 1 wire -> 1 line
+        this._wires = []; // 1 wire -> many edges
+        this._rev_wires_faces = []; // 1 wire -> 1 face
+        this._rev_wires_lines = []; // 1 wire -> 1 line
         // faces
-        this.faces = []; // 1 face -> many wires
-        this.rev_faces_pgons = []; // 1 face -> 1 pgon
+        this._faces = []; // 1 face -> many wires
+        this._rev_faces_pgons = []; // 1 face -> 1 pgon
         // points
-        this.points = []; // 1 point -> 1 vertex
-        this.rev_points_colls = []; // 1 point -> 1 collection
+        this._points = []; // 1 point -> 1 vertex
+        this._rev_points_colls = []; // 1 point -> 1 collection
         // polylines
-        this.lines = []; // 1 polyline -> 1 wire
-        this.rev_lines_colls = []; // 1 line -> 1 collection
+        this._lines = []; // 1 polyline -> 1 wire
+        this._rev_lines_colls = []; // 1 line -> 1 collection
         // polygons
-        this.pgons = []; // 1 polygon -> 1 face
-        this.rev_pgons_colls = []; // 1 pgon -> 1 collection
+        this._pgons = []; // 1 polygon -> 1 face
+        this._rev_pgons_colls = []; // 1 pgon -> 1 collection
         // collections
-        this.colls = []; // 1 collection -> many points, many polylines, many polygons
+        this._colls = []; // 1 collection -> many points, many polylines, many polygons
         // all arrays
-        this.geom_arrs = {
-            _t: this.tris,
-            _v: this.verts,
-            _e: this.edges,
-            _w: this.wires,
-            _f: this.faces,
-            pt: this.points,
-            ls: this.lines,
-            pg: this.pgons,
-            co: this.colls
+        this._geom_arrs = {
+            _t: this._tris,
+            _v: this._verts,
+            _e: this._edges,
+            _w: this._wires,
+            _f: this._faces,
+            pt: this._points,
+            ls: this._lines,
+            pg: this._pgons,
+            co: this._colls
         };
         this.model = model;
     }
@@ -8639,16 +9062,16 @@ var GIGeom = /** @class */ (function () {
      */
     GIGeom.prototype.getData = function () {
         return {
-            num_positions: this.num_posis,
-            triangles: this.tris,
-            vertices: this.verts,
-            edges: this.edges,
-            wires: this.wires,
-            faces: this.faces,
-            points: this.points,
-            linestrings: this.lines,
-            polygons: this.pgons,
-            collections: this.colls
+            num_positions: this._num_posis,
+            triangles: this._tris,
+            vertices: this._verts,
+            edges: this._edges,
+            wires: this._wires,
+            faces: this._faces,
+            points: this._points,
+            linestrings: this._lines,
+            polygons: this._pgons,
+            collections: this._colls
         };
     };
     /**
@@ -8660,42 +9083,42 @@ var GIGeom = /** @class */ (function () {
         var _this = this;
         var _a, _b, _c, _d, _g, _h, _j, _k, _l;
         // get lengths before we start adding stuff
-        var num_tris = this.tris.length;
-        var num_verts = this.verts.length;
-        var num_edges = this.edges.length;
-        var num_wires = this.wires.length;
-        var num_faces = this.faces.length;
-        var num_points = this.points.length;
-        var num_lines = this.lines.length;
-        var num_pgons = this.pgons.length;
-        var num_colls = this.colls.length;
+        var num_tris = this._tris.length;
+        var num_verts = this._verts.length;
+        var num_edges = this._edges.length;
+        var num_wires = this._wires.length;
+        var num_faces = this._faces.length;
+        var num_points = this._points.length;
+        var num_lines = this._lines.length;
+        var num_pgons = this._pgons.length;
+        var num_colls = this._colls.length;
         // Add triangles to model
-        var new_triangles = geom_data.triangles.map(function (t) { return t.map(function (p) { return p + _this.num_posis; }); });
-        (_a = this.tris).push.apply(_a, new_triangles);
+        var new_triangles = geom_data.triangles.map(function (t) { return t.map(function (p) { return p + _this._num_posis; }); });
+        (_a = this._tris).push.apply(_a, new_triangles);
         // Add vertices to model
-        var new_verts = geom_data.vertices.map(function (p) { return p + _this.num_posis; });
-        (_b = this.verts).push.apply(_b, new_verts);
+        var new_verts = geom_data.vertices.map(function (p) { return p + _this._num_posis; });
+        (_b = this._verts).push.apply(_b, new_verts);
         // Add edges to model
         var new_edges = geom_data.edges.map(function (e) { return e.map(function (v) { return v + num_verts; }); });
-        (_c = this.edges).push.apply(_c, new_edges);
+        (_c = this._edges).push.apply(_c, new_edges);
         // Add wires to model
         var new_wires = geom_data.wires.map(function (w) { return w.map(function (e) { return e + num_edges; }); });
-        (_d = this.wires).push.apply(_d, new_wires);
+        (_d = this._wires).push.apply(_d, new_wires);
         // Add faces to model
         var new_faces = geom_data.faces.map(function (f) { return [
             f[0].map(function (w) { return w + num_wires; }),
             f[1].map(function (t) { return t + num_tris; })
         ]; });
-        (_g = this.faces).push.apply(_g, new_faces);
+        (_g = this._faces).push.apply(_g, new_faces);
         // Add points to model
         var new_points = geom_data.points.map(function (v) { return v + num_verts; });
-        (_h = this.points).push.apply(_h, new_points);
+        (_h = this._points).push.apply(_h, new_points);
         // Add lines to model
         var new_lines = geom_data.linestrings.map(function (w) { return w + num_wires; });
-        (_j = this.lines).push.apply(_j, new_lines);
+        (_j = this._lines).push.apply(_j, new_lines);
         // Add pgons to model
         var new_pgons = geom_data.polygons.map(function (f) { return f + num_faces; });
-        (_k = this.pgons).push.apply(_k, new_pgons);
+        (_k = this._pgons).push.apply(_k, new_pgons);
         // Add collections to model
         var new_colls = geom_data.collections.map(function (c) { return [
             c[0] === -1 ? -1 : c[0] + num_colls,
@@ -8703,11 +9126,11 @@ var GIGeom = /** @class */ (function () {
             c[2].map(function (line) { return line + num_lines; }),
             c[3].map(function (pgon) { return pgon + num_pgons; })
         ]; });
-        (_l = this.colls).push.apply(_l, new_colls);
+        (_l = this._colls).push.apply(_l, new_colls);
         // Update the reverse arrays
         this._updateRevArrays();
         // update the positions array
-        this.num_posis += geom_data.num_positions;
+        this._num_posis += geom_data.num_positions;
     };
     // ============================================================================
     // Private methods
@@ -8718,70 +9141,70 @@ var GIGeom = /** @class */ (function () {
     GIGeom.prototype._updateRevArrays = function () {
         var _this = this;
         // positions
-        this.rev_posis_verts = [];
-        this.verts.forEach(function (pos_i, vert_i) {
-            if (_this.rev_posis_verts[pos_i] === undefined) {
-                _this.rev_posis_verts[pos_i] = [];
+        this._rev_posis_verts = [];
+        this._verts.forEach(function (pos_i, vert_i) {
+            if (_this._rev_posis_verts[pos_i] === undefined) {
+                _this._rev_posis_verts[pos_i] = [];
             }
-            _this.rev_posis_verts[pos_i].push(vert_i);
+            _this._rev_posis_verts[pos_i].push(vert_i);
         });
         // tris, edges, wires, faces
-        this.rev_verts_tris = [];
-        this.tris.forEach(function (vert_i_arr, tri_i) {
+        this._rev_verts_tris = [];
+        this._tris.forEach(function (vert_i_arr, tri_i) {
             vert_i_arr.forEach(function (vert_i) {
-                _this.rev_verts_tris[vert_i] = tri_i;
+                _this._rev_verts_tris[vert_i] = tri_i;
             });
         });
-        this.rev_verts_edges = [];
-        this.edges.forEach(function (vert_i_arr, edge_i) {
+        this._rev_verts_edges = [];
+        this._edges.forEach(function (vert_i_arr, edge_i) {
             vert_i_arr.forEach(function (vert_i) {
-                _this.rev_verts_edges[vert_i] = edge_i;
+                _this._rev_verts_edges[vert_i] = edge_i;
             });
         });
-        this.rev_edges_wires = [];
-        this.wires.forEach(function (edge_i_arr, wire_i) {
+        this._rev_edges_wires = [];
+        this._wires.forEach(function (edge_i_arr, wire_i) {
             edge_i_arr.forEach(function (edge_i) {
-                _this.rev_edges_wires[edge_i] = wire_i;
+                _this._rev_edges_wires[edge_i] = wire_i;
             });
         });
-        this.rev_wires_faces = [];
-        this.rev_tris_faces = [];
-        this.faces.forEach(function (_a, face_i) {
+        this._rev_wires_faces = [];
+        this._rev_tris_faces = [];
+        this._faces.forEach(function (_a, face_i) {
             var wire_i_arr = _a[0], tri_i_arr = _a[1];
             wire_i_arr.forEach(function (wire_i) {
-                _this.rev_wires_faces[wire_i] = face_i;
+                _this._rev_wires_faces[wire_i] = face_i;
             });
             tri_i_arr.forEach(function (tri_i) {
-                _this.rev_tris_faces[tri_i] = face_i;
+                _this._rev_tris_faces[tri_i] = face_i;
             });
         });
         // points, lines, polygons
-        this.rev_verts_points = [];
-        this.points.forEach(function (vert_i, point_i) {
-            _this.rev_verts_points[vert_i] = point_i;
+        this._rev_verts_points = [];
+        this._points.forEach(function (vert_i, point_i) {
+            _this._rev_verts_points[vert_i] = point_i;
         });
-        this.rev_wires_lines = [];
-        this.lines.forEach(function (wire_i, line_i) {
-            _this.rev_wires_lines[wire_i] = line_i;
+        this._rev_wires_lines = [];
+        this._lines.forEach(function (wire_i, line_i) {
+            _this._rev_wires_lines[wire_i] = line_i;
         });
-        this.rev_faces_pgons = [];
-        this.pgons.forEach(function (face_i, pgon_i) {
-            _this.rev_faces_pgons[face_i] = pgon_i;
+        this._rev_faces_pgons = [];
+        this._pgons.forEach(function (face_i, pgon_i) {
+            _this._rev_faces_pgons[face_i] = pgon_i;
         });
         // collections of points, linestrings, polygons
-        this.rev_points_colls = [];
-        this.rev_lines_colls = [];
-        this.rev_pgons_colls = [];
-        this.colls.forEach(function (_a, coll_i) {
+        this._rev_points_colls = [];
+        this._rev_lines_colls = [];
+        this._rev_pgons_colls = [];
+        this._colls.forEach(function (_a, coll_i) {
             var parent = _a[0], point_i_arr = _a[1], line_i_arr = _a[2], pgon_i_arr = _a[3];
             point_i_arr.forEach(function (point_i) {
-                _this.rev_points_colls[point_i] = coll_i;
+                _this._rev_points_colls[point_i] = coll_i;
             });
             line_i_arr.forEach(function (line_i) {
-                _this.rev_lines_colls[line_i] = coll_i;
+                _this._rev_lines_colls[line_i] = coll_i;
             });
             pgon_i_arr.forEach(function (pgon_i) {
-                _this.rev_pgons_colls[pgon_i] = coll_i;
+                _this._rev_pgons_colls[pgon_i] = coll_i;
             });
         });
     };
@@ -8789,37 +9212,37 @@ var GIGeom = /** @class */ (function () {
     // Navigate down the hierarchy
     // ============================================================================
     GIGeom.prototype._navVertToPosi = function (vert) {
-        return this.verts[vert];
+        return this._verts[vert];
     };
     GIGeom.prototype._navEdgeToVert = function (edge) {
-        return this.edges[edge];
+        return this._edges[edge];
     };
     GIGeom.prototype._navWireToEdge = function (wire) {
-        return this.wires[wire];
+        return this._wires[wire];
     };
     GIGeom.prototype._navFaceToWire = function (face) {
-        return this.faces[face][0];
+        return this._faces[face][0];
     };
     GIGeom.prototype._navFaceToTri = function (face) {
-        return this.faces[face][1];
+        return this._faces[face][1];
     };
     GIGeom.prototype._navPointToVert = function (point) {
-        return this.points[point];
+        return this._points[point];
     };
     GIGeom.prototype._navLineToVert = function (line) {
-        return this.lines[line];
+        return this._lines[line];
     };
     GIGeom.prototype._navPgonToVert = function (pgon) {
-        return this.pgons[pgon];
+        return this._pgons[pgon];
     };
     GIGeom.prototype._navCollToPoint = function (coll) {
-        return this.colls[coll][1]; // coll points
+        return this._colls[coll][1]; // coll points
     };
     GIGeom.prototype._navCollToLine = function (coll) {
-        return this.colls[coll][2]; // coll lines
+        return this._colls[coll][2]; // coll lines
     };
     GIGeom.prototype._navCollToPgon = function (coll) {
-        return this.colls[coll][3]; // coll pgons
+        return this._colls[coll][3]; // coll pgons
     };
     GIGeom.prototype._navCollToColl = function (coll) {
         return coll[0]; // coll parent
@@ -8828,40 +9251,40 @@ var GIGeom = /** @class */ (function () {
     // Navigate up the hierarchy
     // ============================================================================
     GIGeom.prototype._navPosiToVert = function (posi) {
-        return this.rev_posis_verts[posi];
+        return this._rev_posis_verts[posi];
     };
     GIGeom.prototype._navVertToTri = function (vert) {
-        return this.rev_verts_tris[vert];
+        return this._rev_verts_tris[vert];
     };
     GIGeom.prototype._navVertToEdge = function (vert) {
-        return this.rev_verts_edges[vert];
+        return this._rev_verts_edges[vert];
     };
     GIGeom.prototype._navTriToFace = function (tri) {
-        return this.rev_tris_faces[tri];
+        return this._rev_tris_faces[tri];
     };
     GIGeom.prototype._navEdgeToWire = function (edge) {
-        return this.rev_edges_wires[edge];
+        return this._rev_edges_wires[edge];
     };
     GIGeom.prototype._navWireToFace = function (wire) {
-        return this.rev_wires_faces[wire];
+        return this._rev_wires_faces[wire];
     };
     GIGeom.prototype._navVertToPoint = function (vert) {
-        return this.rev_verts_points[vert];
+        return this._rev_verts_points[vert];
     };
     GIGeom.prototype._navWireToLine = function (wire) {
-        return this.rev_wires_lines[wire];
+        return this._rev_wires_lines[wire];
     };
     GIGeom.prototype._navFaceToPgon = function (face) {
-        return this.rev_faces_pgons[face];
+        return this._rev_faces_pgons[face];
     };
     GIGeom.prototype._navPointToColl = function (point) {
-        return this.rev_points_colls[point];
+        return this._rev_points_colls[point];
     };
     GIGeom.prototype._navLineToColl = function (line) {
-        return this.rev_lines_colls[line];
+        return this._rev_lines_colls[line];
     };
     GIGeom.prototype._navPgonToColl = function (pgon) {
-        return this.rev_pgons_colls[pgon];
+        return this._rev_pgons_colls[pgon];
     };
     // ============================================================================
     // Create the topological entities, these methods are never public
@@ -8871,11 +9294,11 @@ var GIGeom = /** @class */ (function () {
      * @param posi_i
      */
     GIGeom.prototype._addVertex = function (posi_i) {
-        var vert_i = this.verts.push(posi_i) - 1;
-        if (this.rev_posis_verts[posi_i] === undefined) {
-            this.rev_posis_verts[posi_i] = [];
+        var vert_i = this._verts.push(posi_i) - 1;
+        if (this._rev_posis_verts[posi_i] === undefined) {
+            this._rev_posis_verts[posi_i] = [];
         }
-        this.rev_posis_verts[posi_i].push(vert_i);
+        this._rev_posis_verts[posi_i].push(vert_i);
         return vert_i;
     };
     /**
@@ -8884,9 +9307,9 @@ var GIGeom = /** @class */ (function () {
      * @param vert_i2
      */
     GIGeom.prototype._addEdge = function (vert_i1, vert_i2) {
-        var edge_i = this.edges.push([vert_i1, vert_i2]) - 1;
-        this.rev_verts_edges[vert_i1] = edge_i;
-        this.rev_verts_edges[vert_i2] = edge_i;
+        var edge_i = this._edges.push([vert_i1, vert_i2]) - 1;
+        this._rev_verts_edges[vert_i1] = edge_i;
+        this._rev_verts_edges[vert_i2] = edge_i;
         return edge_i;
     };
     /**
@@ -8897,8 +9320,8 @@ var GIGeom = /** @class */ (function () {
     GIGeom.prototype._addWire = function (edges_i, close) {
         var _this = this;
         if (close === void 0) { close = false; }
-        var wire_i = this.wires.push(edges_i) - 1;
-        edges_i.forEach(function (edge_i) { return _this.rev_edges_wires[edge_i] = wire_i; });
+        var wire_i = this._wires.push(edges_i) - 1;
+        edges_i.forEach(function (edge_i) { return _this._rev_edges_wires[edge_i] = wire_i; });
         return wire_i;
     };
     /**
@@ -8911,22 +9334,22 @@ var GIGeom = /** @class */ (function () {
         var _this = this;
         // create the triangles
         var wire_verts_i = this._getWireVerts(wire_i);
-        var wire_posis_i = wire_verts_i.map(function (vert_i) { return _this.verts[vert_i]; });
+        var wire_posis_i = wire_verts_i.map(function (vert_i) { return _this._verts[vert_i]; });
         var wire_coords = wire_posis_i.map(function (posi_i) { return _this.model.attribs().getPosiCoord(posi_i); });
         var tris_corners = Object(_triangulate_triangulate__WEBPACK_IMPORTED_MODULE_1__["triangulate"])(wire_coords);
         var tris_posis_i = tris_corners.map(function (tri_corners) { return tri_corners.map(function (corner) { return wire_verts_i[corner]; }); });
-        var tris_i = tris_posis_i.map(function (tri_posis_i) { return _this.tris.push(tri_posis_i) - 1; });
+        var tris_i = tris_posis_i.map(function (tri_posis_i) { return _this._tris.push(tri_posis_i) - 1; });
         // create the face
         var face = [[wire_i], tris_i];
-        var face_i = this.faces.push(face);
+        var face_i = this._faces.push(face);
         return face_i;
     };
     /**
      * Helper function to get check if wire is closed
      */
     GIGeom.prototype._istWireClosed = function (wire_i) {
-        var edges_i = this.wires[wire_i];
-        return this.edges[edges_i[0]][0] === this.edges[edges_i[edges_i.length - 1]][1];
+        var edges_i = this._wires[wire_i];
+        return this._edges[edges_i[0]][0] === this._edges[edges_i[edges_i.length - 1]][1];
     };
     /**
      * Helper function to get the vertices of a wire
@@ -8936,10 +9359,10 @@ var GIGeom = /** @class */ (function () {
      */
     GIGeom.prototype._getWireVerts = function (wire_i) {
         var _this = this;
-        var edges_i = this.wires[wire_i];
-        var verts_i = edges_i.map(function (edge_i) { return _this.edges[edge_i][0]; });
-        if (this.edges[edges_i[0]][0] !== this.edges[edges_i[edges_i.length - 1]][1]) {
-            verts_i.push(this.edges[edges_i[edges_i.length - 1]][1]);
+        var edges_i = this._wires[wire_i];
+        var verts_i = edges_i.map(function (edge_i) { return _this._edges[edge_i][0]; });
+        if (this._edges[edges_i[0]][0] !== this._edges[edges_i[edges_i.length - 1]][1]) {
+            verts_i.push(this._edges[edges_i[edges_i.length - 1]][1]);
         }
         return verts_i;
     };
@@ -8950,8 +9373,8 @@ var GIGeom = /** @class */ (function () {
      * Adds a new position to the model and returns the index to that position.
      */
     GIGeom.prototype.addPosition = function () {
-        this.num_posis += 1;
-        var i = this.num_posis - 1;
+        this._num_posis += 1;
+        var i = this._num_posis - 1;
         return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POSI + i;
     };
     /**
@@ -8963,8 +9386,8 @@ var GIGeom = /** @class */ (function () {
         // create verts
         var vert_i = this._addVertex(posi_i);
         // create point
-        var point_i = this.points.push(vert_i) - 1;
-        this.rev_verts_points[vert_i] = point_i;
+        var point_i = this._points.push(vert_i) - 1;
+        this._rev_verts_points[vert_i] = point_i;
         return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POINT + point_i;
     };
     /**
@@ -8986,8 +9409,8 @@ var GIGeom = /** @class */ (function () {
         }
         var wire_i = this._addWire(edges_i_arr, close);
         // create line
-        var line_i = this.lines.push(wire_i) - 1;
-        this.rev_wires_lines[wire_i] = line_i;
+        var line_i = this._lines.push(wire_i) - 1;
+        this._rev_wires_lines[wire_i] = line_i;
         return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].LINE + line_i;
     };
     /**
@@ -9007,8 +9430,8 @@ var GIGeom = /** @class */ (function () {
         var wire_i = this._addWire(edges_i_arr, true);
         var face_i = this._addFace(wire_i);
         // create polygon
-        var pgon_i = this.pgons.push(face_i) - 1;
-        this.rev_faces_pgons[face_i] = pgon_i;
+        var pgon_i = this._pgons.push(face_i) - 1;
+        this._rev_faces_pgons[face_i] = pgon_i;
         return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].PGON + pgon_i;
     };
     /**
@@ -9025,10 +9448,10 @@ var GIGeom = /** @class */ (function () {
         var lines_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(lines_id);
         var pgons_i = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idIndicies"])(pgons_id);
         // create collection
-        var coll_i = this.colls.push([parent_i, points_i, lines_i, pgons_i]) - 1;
-        points_i.forEach(function (point_i) { return _this.rev_points_colls[point_i] = coll_i; });
-        lines_i.forEach(function (line_i) { return _this.rev_points_colls[line_i] = coll_i; });
-        pgons_i.forEach(function (pgon_i) { return _this.rev_points_colls[pgon_i] = coll_i; });
+        var coll_i = this._colls.push([parent_i, points_i, lines_i, pgons_i]) - 1;
+        points_i.forEach(function (point_i) { return _this._rev_points_colls[point_i] = coll_i; });
+        lines_i.forEach(function (line_i) { return _this._rev_points_colls[line_i] = coll_i; });
+        pgons_i.forEach(function (pgon_i) { return _this._rev_points_colls[pgon_i] = coll_i; });
         return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].COLL + coll_i;
     };
     // ============================================================================
@@ -9036,73 +9459,73 @@ var GIGeom = /** @class */ (function () {
     // ============================================================================
     GIGeom.prototype.has = function (id) {
         var _a = Object(_GICommon__WEBPACK_IMPORTED_MODULE_0__["idBreak"])(id), type_str = _a[0], index = _a[1];
-        return (this.geom_arrs[type_str][index] !== undefined);
+        return (this._geom_arrs[type_str][index] !== undefined);
     };
     // ============================================================================
     // Get arrays of entities, these retrun arrays of string IDs
     // ============================================================================
     GIGeom.prototype.getPosis = function () {
-        return Array(this.num_posis).map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POSI + index; });
+        return Array(this._num_posis).map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POSI + index; });
     };
     GIGeom.prototype.getVerts = function () {
-        return this.verts.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].VERT + index; });
+        return this._verts.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].VERT + index; });
     };
     GIGeom.prototype.getTris = function () {
-        return this.tris.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].TRI + index; });
+        return this._tris.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].TRI + index; });
     };
     GIGeom.prototype.getEdges = function () {
-        return this.edges.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].EDGE + index; });
+        return this._edges.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].EDGE + index; });
     };
     GIGeom.prototype.getWires = function () {
-        return this.wires.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].WIRE + index; });
+        return this._wires.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].WIRE + index; });
     };
     GIGeom.prototype.getFaces = function () {
-        return this.faces.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].FACE + index; });
+        return this._faces.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].FACE + index; });
     };
     GIGeom.prototype.getPoints = function () {
-        return this.points.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POINT + index; });
+        return this._points.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].POINT + index; });
     };
     GIGeom.prototype.getLines = function () {
-        return this.lines.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].LINE + index; });
+        return this._lines.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].LINE + index; });
     };
     GIGeom.prototype.getPgons = function () {
-        return this.pgons.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].PGON + index; });
+        return this._pgons.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].PGON + index; });
     };
     GIGeom.prototype.getColls = function () {
-        return this.colls.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].COLL + index; });
+        return this._colls.map(function (_, index) { return _GICommon__WEBPACK_IMPORTED_MODULE_0__["EEntityTypeStr"].COLL + index; });
     };
     // ============================================================================
     // Get array lengths
     // ============================================================================
     GIGeom.prototype.numPosis = function () {
-        return this.num_posis;
+        return this._num_posis;
     };
     GIGeom.prototype.numVerts = function () {
-        return this.verts.length;
+        return this._verts.length;
     };
     GIGeom.prototype.numEdges = function () {
-        return this.edges.length;
+        return this._edges.length;
     };
     GIGeom.prototype.numWires = function () {
-        return this.wires.length;
+        return this._wires.length;
     };
     GIGeom.prototype.numFaces = function () {
-        return this.faces.length;
+        return this._faces.length;
     };
     GIGeom.prototype.numCollections = function () {
-        return this.colls.length;
+        return this._colls.length;
     };
     GIGeom.prototype.numPoints = function () {
-        return this.points.length;
+        return this._points.length;
     };
     GIGeom.prototype.numLines = function () {
-        return this.lines.length;
+        return this._lines.length;
     };
     GIGeom.prototype.numPgons = function () {
-        return this.pgons.length;
+        return this._pgons.length;
     };
     GIGeom.prototype.numColls = function () {
-        return this.colls.length;
+        return this._colls.length;
     };
     // ============================================================================
     // ThreeJS
@@ -9115,7 +9538,7 @@ var GIGeom = /** @class */ (function () {
      * The indices in the list point to the sequential coordinates.
      */
     GIGeom.prototype.get3jsVerts = function () {
-        return this.verts;
+        return this._verts;
     };
     /**
      * Returns a flat list of the sequence of verices for all the triangles.
@@ -9123,7 +9546,7 @@ var GIGeom = /** @class */ (function () {
      * The indices in the list point to the vertices.
      */
     GIGeom.prototype.get3jsTris = function () {
-        return [].concat.apply([], this.tris);
+        return [].concat.apply([], this._tris);
     };
     /**
      * Returns a flat list of the sequence of verices for all the edges.
@@ -9131,14 +9554,14 @@ var GIGeom = /** @class */ (function () {
      * The indices in the list point to the vertices.
      */
     GIGeom.prototype.get3jsEdges = function () {
-        return [].concat.apply([], this.edges);
+        return [].concat.apply([], this._edges);
     };
     /**
      * Returns a flat list of the sequence of verices for all the points.
      * The indices in the list point to the vertices.
      */
     GIGeom.prototype.get3jsPoints = function () {
-        return this.points;
+        return this._points;
     };
     return GIGeom;
 }());
@@ -9202,23 +9625,25 @@ var GIModel = /** @class */ (function () {
     // Getters and setters
     GIModel.prototype.geom = function () { return this._geom; };
     GIModel.prototype.attribs = function () { return this._attribs; };
+    GIModel.prototype.getAttibs = function () {
+        return this._attribs;
+    };
     /**
      * Sets the data in this model from JSON data.
      * The existing data in the model is deleted.
-     * @param model_data The JSON data
+     * @param model_data The JSON data.
      */
     GIModel.prototype.addData = function (model_data) {
+        this._attribs.addData(model_data); // warning: must be before addGeomData()
         this._geom.addData(model_data.geometry);
-        this._attribs.addData(model_data.attributes);
     };
     /**
-     * Adds data to this model from JSON data.
+     * Adds data to this model from a GI model.
      * The existing data in the model is not deleted.
-     * @param model_data The JSON data
+     * @param model_data The GI model.
      */
     GIModel.prototype.merge = function (model) {
-        this._attribs.addData(model.getAttribsData()); // must be before addGeomData()
-        this._geom.addData(model.getGeomData());
+        this.addData(model.getData());
     };
     /**
      * Returns the JSON data for this model.
@@ -9292,6 +9717,29 @@ var GIModel = /** @class */ (function () {
     };
     return GIModel;
 }());
+
+
+
+/***/ }),
+
+/***/ "./src/libs/geo-info/index.ts":
+/*!************************************!*\
+  !*** ./src/libs/geo-info/index.ts ***!
+  \************************************/
+/*! exports provided: GIAttribs, GIModel, GICommon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _GIAttribs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GIAttribs */ "./src/libs/geo-info/GIAttribs.ts");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "GIAttribs", function() { return _GIAttribs__WEBPACK_IMPORTED_MODULE_0__; });
+/* harmony import */ var _GIModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GIModel */ "./src/libs/geo-info/GIModel.ts");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "GIModel", function() { return _GIModel__WEBPACK_IMPORTED_MODULE_1__; });
+/* harmony import */ var _GICommon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GICommon */ "./src/libs/geo-info/GICommon.ts");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "GICommon", function() { return _GICommon__WEBPACK_IMPORTED_MODULE_2__; });
+
+
+
 
 
 

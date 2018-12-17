@@ -33,7 +33,8 @@ export class NodeComponent {
     select a node
     */
     nodeSelect(event) {
-        this.action.emit({ action: ACTIONS.SELECT });
+        event.stopPropagation();
+        this.action.emit({ action: ACTIONS.SELECT, ctrlKey: event.ctrlKey });
     }
 
 
@@ -90,6 +91,7 @@ export class NodeComponent {
     switch the viewchild of the appModule to the node's procedure view when double-click on the node
     */
     switchToProcedure(event: Event) {
+        event.stopPropagation();
         this.action.emit({action: ACTIONS.PROCEDURE});
     }
 }

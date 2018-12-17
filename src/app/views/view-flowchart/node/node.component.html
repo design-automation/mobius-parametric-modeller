@@ -17,7 +17,7 @@
     <!-- node description inside the rectangular box -->
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 3" 
     width="100" height = "80"
-    (mousedown)='focusText($event)'>
+    >
         <xhtml:div class='textdiv'>
             <xhtml:textarea 
                 id={{node.id}}

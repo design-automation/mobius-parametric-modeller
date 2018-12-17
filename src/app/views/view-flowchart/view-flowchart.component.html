@@ -16,7 +16,9 @@
                             (mousedown)='panStart($event)'
                             (mousemove)='handleMouseMove($event)'  
                             (mouseup)='handleMouseUp($event)'
+                            (click)='deselectAll($event)'
                             (wheel)='scale($event)'
+                            (dblclick)='addNode($event)'
                             >
                                 <!-- definitions for svg: grid patterns, arrow head for connecting wire-->
                                 <defs>
@@ -64,21 +66,8 @@
                                 />
                             </svg>
                         
-                            <!-- 3 top left buttons of the svg: add Node, delete Node and delete Wire -->
-                            <div class='button-row'>
-                                <button mat-icon-button disableRipple='true' (click)='addNode()' title="Add Node">
-                                <mat-icon>add</mat-icon>
-                                </button>
-                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedNodes()' title="Delete Selected Node">
-                                <mat-icon>remove</mat-icon>
-                                </button>
-                                <button mat-icon-button disableRipple='true' (click)='deleteSelectedEdges()' title="Delete Selected Wires">
-                                <mat-icon>link_off</mat-icon>
-                                </button>
-                            </div>
-                        
                             <!-- focus on flowchart button on the top right of the svg -->
-                            <button id='zoomToFit' class='resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
+                            <button id='zoomToFit' class='btn resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
                                 <mat-icon svgIcon="cZoom"></mat-icon>
                             </button>
                             
@@ -99,6 +88,5 @@
     
     </div>
     
-
 
 

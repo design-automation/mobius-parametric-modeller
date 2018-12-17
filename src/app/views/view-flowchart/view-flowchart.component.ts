@@ -68,6 +68,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     inputOffset = [50, -8];
     outputOffset = [50, 88];
 
+    private hiddenText;
+
     static enableNode(node: INode) {
         for (const edge of node.input.edges) {
             if (!edge.source.parentNode.enabled) { return; }
@@ -92,6 +94,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
+        this.hiddenText = document.getElementById('hiddenText');
 
         /*
         */
@@ -118,12 +121,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         });
 
         // paste: paste copied node
-        this.pasteSub = this.pasteListener.subscribe(val => {
+        this.pasteSub = this.pasteListener.subscribe((val: ClipboardEvent) => {
             if (!this.listenerActive) { return; }
             if (this.copied) {
                 event.preventDefault();
                 const newNode = <INode>circularJSON.parse(this.copied);
                 const pt = this.canvas.createSVGPoint();
+                console.log('.', val);
                 pt.x = 20;
                 pt.y = 100;
 
@@ -151,7 +155,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         this.keydownSub = this.keydownListener.subscribe(val => {
             if (!this.listenerActive) { return; }
             if ((<KeyboardEvent> val).key === 'Delete') {
-                this.deleteSelectedEdges();
+                if (this.selectedEdge.length > 0) {
+                    this.deleteSelectedEdges();
+                } else {
+                    this.deleteSelectedNodes();
+                }
             }
         });
 
@@ -180,7 +188,30 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
             // select a node
             case ACTIONS.SELECT:
-                this.dataService.flowchart.meta.selected_nodes = [ node_index ];
+                const selectedNode = this.dataService.flowchart.nodes[node_index];
+                if (event.ctrlKey) {
+                    document.getElementById('executeButton').focus();
+                    const index = this.dataService.flowchart.meta.selected_nodes.indexOf(node_index);
+                    if (index === -1) {
+                        this.dataService.flowchart.meta.selected_nodes = [node_index].concat(
+                            this.dataService.flowchart.meta.selected_nodes);
+                    } else {
+                        if (this.dataService.flowchart.meta.selected_nodes.length > 1) {
+                            this.dataService.flowchart.meta.selected_nodes.splice(index, 1);
+                        }
+                    }
+                } else {
+                    if (selectedNode.type === ''
+                    && this.dataService.flowchart.meta.selected_nodes.length === 1
+                    && this.dataService.flowchart.meta.selected_nodes[0] === node_index) {
+                    const textarea = <HTMLTextAreaElement>document.getElementById(selectedNode.id);
+                    textarea.focus();
+                    textarea.select();
+                    } else {
+                        document.getElementById('executeButton').focus();
+                    }
+                    this.dataService.flowchart.meta.selected_nodes = [ node_index ];
+                }
                 break;
 
             // initiate dragging node
@@ -249,16 +280,20 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     }
 
     // add a new node
-    addNode(): void {
-
+    addNode(event?): void {
         // create a new node
         const newNode = NodeUtils.getNewNode();
 
         // the new node's position would be (20,100) relative to the current view
         const pt = this.canvas.createSVGPoint();
+        if (event) {
+            pt.x = event.pageX - 40;
+            pt.y = event.pageY - 35;
+        } else {
+            pt.x = 20;
+            pt.y = 100;
+        }
 
-        pt.x = 20;
-        pt.y = 100;
 
         // convert the position to svg position
         let svgP: any;
@@ -318,6 +353,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
             // remove the node from the flowchart
             this.dataService.flowchart.nodes.splice(Number(node_index), 1);
+        }
+        const nodes = this.dataService.flowchart.nodes;
+        for ( let i = 0; i < nodes.length; i ++ ) {
+            if (nodes[i].type === 'end') {
+                this.dataService.flowchart.meta.selected_nodes = [i];
+                break;
+            }
         }
     }
 
@@ -752,6 +794,17 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     }
 
     setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
+
+    deselectAll(e) {
+        if (e.ctrlKey) {return; }
+
+        document.getElementById('executeButton').focus();
+        this.dataService.flowchart.meta.selected_nodes.splice(1, this.dataService.flowchart.meta.selected_nodes.length - 1);
+        for (const edgeIndex of this.selectedEdge) {
+            this.dataService.flowchart.edges[edgeIndex].selected = false;
+        }
+        this.selectedEdge = [];
+    }
 
 }
 

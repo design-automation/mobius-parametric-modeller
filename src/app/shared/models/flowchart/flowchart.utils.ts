@@ -34,7 +34,7 @@ export class FlowchartUtils {
         endNode.enabled = true;
 
         const flw: IFlowchart = {
-            name: 'new_flowchart',
+            name: 'Untitled',
             description: '',
             language: 'js',
             meta: {

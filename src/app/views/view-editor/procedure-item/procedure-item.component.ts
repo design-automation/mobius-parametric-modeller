@@ -7,7 +7,7 @@ import { _parameterTypes} from '@modules';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
-ctx.font = '13px Arial';
+ctx.font = '11px Arial';
 
 @ProcedureTypesAware
 @ModuleDocAware
@@ -16,7 +16,7 @@ ctx.font = '13px Arial';
     templateUrl: './procedure-item.component.html',
     styleUrls: ['procedure-item.component.scss']
 })
-export class ProcedureItemComponent implements AfterViewInit {
+export class ProcedureItemComponent {
     @Input() data: IProcedure;
     @Output() delete = new EventEmitter();
     @Output() select = new EventEmitter();
@@ -26,12 +26,6 @@ export class ProcedureItemComponent implements AfterViewInit {
 
     ProcedureTypes = ProcedureTypes;
 
-    ngAfterViewInit() {
-        const elements = document.getElementsByClassName('input--arg');
-        [].forEach.call(elements, function (el) {
-            console.log(el);
-        });
-    }
 
     // delete this procedure
     emitDelete(): void {

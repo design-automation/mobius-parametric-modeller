@@ -1,7 +1,7 @@
-<mat-tab-group animationDuration="0ms" [disableRipple]="true">
+<mat-tab-group animationDuration="0ms" [disableRipple]="true" (selectedIndexChange)="_setDataSource($event)">
     <mat-tab label="Normal">
         <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSourceNormal" matSort>
+          <table mat-table [dataSource]="dataSource.NORMAL" matSort>
             <ng-container matColumnDef="key">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Key </th>
               <td mat-cell *matCellDef="let element"> {{element.key}} </td>
@@ -27,7 +27,7 @@
     </mat-tab>
     <mat-tab label="Color">
         <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSourceColor" matSort>
+          <table mat-table [dataSource]="dataSource.COLOR" matSort>
             <ng-container matColumnDef="key">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Key </th>
               <td mat-cell *matCellDef="let element"> {{element.key}} </td>

@@ -1,7 +1,7 @@
 .btn--execute{
     display: inline-block;
     vertical-align: middle;
-    font-size: 14px;
+    font-size: $fsize1;
     line-height: 18px;
     border: 3px solid #E0C229;
     border-radius: 4px;
@@ -22,7 +22,7 @@
 }
 .mat-icon{
     margin-top: 3px;
-    font-size: 30px;
-    width:30px;
-    height:30px;
+    font-size: $fsize3;
+    width:$fsize3;
+    height:$fsize3;
 }

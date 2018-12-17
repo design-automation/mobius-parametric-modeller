@@ -87,7 +87,7 @@
 #zoomingfit{
     width: 40px;
     height: 40px;
-    font-size:14px;
+    font-size:$fsize1;
     position: absolute;
     top:0px;
     right:0px; 
@@ -100,7 +100,7 @@
 #selecting{
     width: 40px;
     height: 40px;
-    font-size:14px;
+    font-size:$fsize1;
     position: absolute;
     top: 40px;
     right:0px; 
@@ -191,7 +191,7 @@
 #setting{
     width: 30px;
     height: 25px;
-    font-size:14px;
+    font-size:$fsize1;
     right:0px; 
     text-align:center;
     position: absolute;

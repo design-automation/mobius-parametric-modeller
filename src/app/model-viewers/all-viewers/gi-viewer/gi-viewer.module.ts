@@ -4,10 +4,12 @@ import { NgxPaginationModule} from 'ngx-pagination';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { CommonModule } from '@angular/common';
-import { MatTabsModule} from '@angular/material/tabs';
+
 import { MatTooltipModule} from '@angular/material/tooltip';
-import { MatSortModule, MatTableModule, MatPaginatorModule, MatIconModule} from '@angular/material';
+import { MatIconModule} from '@angular/material';
 import { MatExpansionModule} from '@angular/material/expansion';
+
+import { AttributeModule } from './attribute/attribute.module';
 
 // import app components
 import { GIViewerComponent } from './gi-viewer.component';
@@ -33,11 +35,8 @@ import { AttributeComponent } from './attribute/attribute.component';
         MatIconModule,
         NgxPaginationModule,
         MatExpansionModule,
-        MatTabsModule,
         MatTooltipModule,
-        MatSortModule,
-        MatTableModule,
-        MatPaginatorModule,
+        AttributeModule
     ]
 })
 export class GIViewerModule {

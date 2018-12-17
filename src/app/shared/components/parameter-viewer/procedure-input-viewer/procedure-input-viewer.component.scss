@@ -13,8 +13,8 @@
     flex-wrap: wrap;
     bottom: 0px;
     padding-bottom: 5px;
-    border-bottom: 1px solid $separator;
-    border-left: 1px solid $separator;
+    border-bottom: 1px solid $color5;
+    border-left: 1px solid $color5;
     width: 100%;
 
 }
@@ -25,11 +25,11 @@
   }
 
 input{
-    color: $text-color;
+    color: $color1;
     background-color: $background-color;
     max-width: 96%;
     border: none;
-    border-bottom: 1px solid $text-color;
+    border-bottom: 1px solid $color1;
     margin-left: 5px;
     vertical-align: bottom;
     &.disabled-input{

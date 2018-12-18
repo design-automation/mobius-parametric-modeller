@@ -2,9 +2,13 @@
 @import '~scss/variables';
 @import '~scss/header-button';
 
+:host{
+    z-index: 1;
+}
+
 .container__header{
     display: flex;
-    background-color: transparent;
+    // background-color: transparent;
     float: left;
     height: $header-height;
     padding: 0px;
@@ -16,7 +20,7 @@
         padding: 0px;
         margin: 0px;
         overflow: hidden;
-        background-color: transparent;
+        // background-color: transparent;
         z-index: 1;s
         .mat-icon-button{
             height: $header-height !important;
@@ -31,7 +35,7 @@
         font-size: $fsize1;
         color: $color1;
         overflow: hidden;
-        background-color: transparent;
+        // background-color: transparent;
         padding-top: 0px;
         text-align: center;
         vertical-align: middle;
@@ -82,7 +86,7 @@ button.mat-menu-item:hover{
 */
 #dropdownMenu {
     display: none;
-    position: absolute;
+    position: fixed;
 
     z-index: 1;
     background-color: $color4;

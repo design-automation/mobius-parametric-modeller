@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { IModule, IFunction } from '@models/procedure';
 import { IArgument } from '@models/code';
-//import * as doc from '@assets/typedoc-json/doc.json';
-const doc = require('@assets/typedoc-json/doc.json');
+import * as doc from '@assets/typedoc-json/doc.json';
+// const doc = require('@assets/typedoc-json/doc.json');
 
 import * as Modules from '@modules';
 
@@ -68,9 +68,9 @@ export function ModuleDocAware(constructor: Function) {
     if (!docs) {
         docs = {};
         for (const mod of doc.children) {
-            let modName = mod.name.split('/');
+            let modName: any = mod.name.split('/');
             modName = modName[modName.length - 1];
-            if (modName.substr(0,1) === '"' || modName.substr(0,1) === "'"){
+            if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
                 modName = modName.substr(1, modName.length - 2);
             } else {
                 modName = modName.substr(0, modName.length - 1);

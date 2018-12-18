@@ -14,17 +14,6 @@ console.log = function() {
     // @ts-ignore
     console.stdlog.apply(console, arguments);
 };
-const i3D = require('@assets/Icons/3D.svg');
-const cs = require('@assets/Icons/Console.svg');
-const help = require('@assets/Icons/Help.svg');
-const summary = require('@assets/Icons/Summary.svg');
-const zoom = require('@assets/Icons/Zoom.svg');
-const fv = require('@assets/Icons/Mobius favicon.svg');
-const menu = require('@assets/Icons/Three Lines Menu.svg');
-const gallery = require('@assets/Icons/Home.svg');
-const dashboard = require('@assets/Icons/Dashboard.svg');
-const flowchart = require('@assets/Icons/Flowchart.svg');
-const node = require('@assets/Icons/Node.svg');
 
 @Component({
     selector: 'app-root',
@@ -34,18 +23,18 @@ const node = require('@assets/Icons/Node.svg');
 export class AppComponent {
 
     constructor(private dataService: DataService, private injector: Injector,
-        private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
-        this.matIconRegistry.addSvgIcon('c3D Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl(i3D));
-        this.matIconRegistry.addSvgIcon('cConsole', this.domSanitizer.bypassSecurityTrustResourceUrl(cs));
-        this.matIconRegistry.addSvgIcon('cHelp', this.domSanitizer.bypassSecurityTrustResourceUrl(help));
-        this.matIconRegistry.addSvgIcon('cSummary', this.domSanitizer.bypassSecurityTrustResourceUrl(summary));
-        this.matIconRegistry.addSvgIcon('cZoom', this.domSanitizer.bypassSecurityTrustResourceUrl(zoom));
-        this.matIconRegistry.addSvgIcon('cfv', this.domSanitizer.bypassSecurityTrustResourceUrl(fv));
-        this.matIconRegistry.addSvgIcon('cMenu', this.domSanitizer.bypassSecurityTrustResourceUrl(menu));
-        this.matIconRegistry.addSvgIcon('cGallery', this.domSanitizer.bypassSecurityTrustResourceUrl(gallery));
-        this.matIconRegistry.addSvgIcon('cDashboard', this.domSanitizer.bypassSecurityTrustResourceUrl(dashboard));
-        this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl(flowchart));
-        this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl(node));
+    private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
+    this.matIconRegistry.addSvgIcon('c3D Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/3D.svg'));
+    this.matIconRegistry.addSvgIcon('cConsole', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Console.svg'));
+    this.matIconRegistry.addSvgIcon('cHelp', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Help.svg'));
+    this.matIconRegistry.addSvgIcon('cSummary', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Summary.svg'));
+    this.matIconRegistry.addSvgIcon('cZoom', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Zoom.svg'));
+    this.matIconRegistry.addSvgIcon('cfv', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Mobius favicon.svg'));
+    this.matIconRegistry.addSvgIcon('cMenu', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Three Lines Menu.svg'));
+    this.matIconRegistry.addSvgIcon('cGallery', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Home.svg'));
+    this.matIconRegistry.addSvgIcon('cDashboard', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Dashboard.svg'));
+    this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Flowchart.svg'));
+    this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('../../assets/Icons/Node.svg'));
     }
 
 }

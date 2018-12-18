@@ -79,11 +79,14 @@ export class ViewEditorComponent {
     // paste copied procedures
     pasteProd() {
         const node = this.dataService.node;
+        console.log(document.activeElement.nodeName);
         if (this.copyCheck
         && this.copiedProd
         && this.copiedType === node.type
-        && document.activeElement.nodeName.toUpperCase() !== 'INPUT'
-        && document.activeElement.nodeName.toUpperCase() !== 'TEXTAREA') {
+        && document.activeElement.nodeName !== 'INPUT'
+        && document.activeElement.nodeName !== 'TEXTAREA'
+        && node.type !== 'end') {
+            console.log('>>>>>>>>>>')
             const pastingPlace = node.state.procedure[0];
             if (pastingPlace === undefined) {
                 for (let i = 0; i < this.copiedProd.length; i++) {

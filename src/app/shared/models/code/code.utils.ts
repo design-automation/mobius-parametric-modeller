@@ -206,7 +206,7 @@ export class CodeUtils {
             });
             result = await p;
         }
-        return result;
+        return '`' + result + '`';
     }
 
     static loadFile(f) {

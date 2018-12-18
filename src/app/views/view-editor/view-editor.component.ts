@@ -86,7 +86,6 @@ export class ViewEditorComponent {
         && document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
         && node.type !== 'end') {
-            console.log('>>>>>>>>>>')
             const pastingPlace = node.state.procedure[0];
             if (pastingPlace === undefined) {
                 for (let i = 0; i < this.copiedProd.length; i++) {

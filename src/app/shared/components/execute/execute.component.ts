@@ -109,10 +109,11 @@ export class ExecuteComponent {
 
     async executeNode(node: INode, funcStrings) {
         const params = {'currentProcedure': ['']};
+        let fnString = '';
         try {
             // get the code for the node
             const nodeCode = await CodeUtils.getNodeCode(node, true);
-            let fnString = nodeCode.join('\n');
+            fnString = nodeCode.join('\n');
             // add the constants from the start node
             fnString = this.globalVars + fnString;
             params['model'] = node.input.value;
@@ -204,6 +205,9 @@ export class ExecuteComponent {
             }
             // @ts-ignore
             console.logs = [];
+            console.log('Error node code:');
+            console.log(fnString);
+            console.log('=============================');
             console.log(error);
             throw error;
 

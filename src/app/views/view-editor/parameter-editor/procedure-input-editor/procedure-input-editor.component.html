@@ -20,7 +20,7 @@
 
     <div class='inline-div'>
         <input [class.disabled-input]='true' value='Input Mode:' size='8' disabled>
-        <select *ngIf='prod.type == 10' name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
+        <select *ngIf='prod.type != 12' name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
             <option 
                 *ngFor="let ptype of PortTypesArr" 
                 [value]="PortTypes[ptype]" 

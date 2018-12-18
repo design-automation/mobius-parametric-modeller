@@ -10,8 +10,10 @@
     font-size: $fsize2;
     margin: 0px 2px 2px 8px;
     padding: 0px;
+    padding-left: 2px;
     //border-bottom: 1px solid red;
-    border: 1px solid red;
+    border-bottom: 1px solid $color2;
+    border-left: 1px solid $color2;
     color: $color1;
     //min-height: 22px;
     opacity: 1;
@@ -21,7 +23,8 @@
     }
 
     &.selected{
-        border: 1px solid $selected-color;
+        border-color: $selected-color;
+        background-color: $color7;
     }
     
     &.error{
@@ -54,16 +57,19 @@
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
         border: 2px solid $color5;
-        padding-left: 2px;
-    
+
         &.error{
             border: 2px solid red;
         }
     }
     input:focus{
-        border: 1px solid $selected-color;
+        border-color: $selected-color;
+        background-color: $color7;
     }
-
+    input:hover{
+        border-color: $selected-color;
+        background-color: $color7;
+    }
 }
 
 .container--item{
@@ -72,36 +78,50 @@
     border: none;
 }
 
+.btn-container{
+    display: none;
+    float: right;
+}
+
 .btn{
     //height: 100%;
-    width: 20px;
-    float: right;
+    width: $fsize1;
     background-color: transparent;
+
     border: none;
-    display: none;
     color: $button-color;
+
+    display: flex;
+    justify-content: center;
+
     overflow: hidden;
-    vertical-align: top;
+    vertical-align: center;
     &.highlighted{
         background-color: rgb(255,150,150);
     }
+    :hover{
+        color: $selected-color;
+    }
 }
 
-.container--item:hover .btn {display: block}
+.container--item:hover .btn-container {display: flex}
 //.container--item .selected .btn {display: block}
 
 .icon{
-    vertical-align: top;
-    width: 15px;
-    height: 15px;
+    vertical-align: center;
+    width: $fsize1;
+    height: $fsize1;
     margin: 1px;
     font-size: $fsize2;
-    border: 1px solid $color1;
+    // border: 1px solid $color1;
 }
 
 .line--item{
     display: inline-block;
     color: $color1;
+    input{
+        background-color: red;
+    }
 }
 
 .line--blank{

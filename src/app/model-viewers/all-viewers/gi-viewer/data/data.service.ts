@@ -40,4 +40,3 @@ export class DataService {
         this._data_threejs = new DataThreejs(model);
     }
 }
-

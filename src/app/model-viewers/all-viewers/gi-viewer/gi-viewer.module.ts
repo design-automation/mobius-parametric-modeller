@@ -26,7 +26,7 @@ import { AttributeComponent } from './attribute/attribute.component';
         AttributeComponent,
     ],
     exports: [
-        GIViewerComponent,
+        GIViewerComponent
     ],
     imports: [
         CommonModule,

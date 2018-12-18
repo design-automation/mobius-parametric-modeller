@@ -13,7 +13,16 @@ export abstract class NodeUtils {
             position: {x: 0, y: 0},
             enabled: false,
             type: '',
-            procedure: [],
+            procedure: [{type: 13, ID: '',
+                parent: undefined,
+                meta: {name: '', module: ''},
+                children: undefined,
+                argCount: 0,
+                args: [],
+                print: false,
+                enabled: true,
+                selected: false,
+                hasError: false}],
             state: {
                 procedure: [],
                 input_port: undefined,
@@ -30,6 +39,7 @@ export abstract class NodeUtils {
 
     static getStartNode(): INode {
         const node = NodeUtils.getNewNode();
+        node.procedure = [];
         node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
@@ -38,6 +48,7 @@ export abstract class NodeUtils {
 
     static getEndNode(): INode {
         const node = NodeUtils.getNewNode();
+        node.procedure = [];
         node.name = 'End';
         node.type = 'end';
         return node;
@@ -110,6 +121,20 @@ export abstract class NodeUtils {
 
     static insert_procedure(node: INode, prod: IProcedure) {
         if (node.state.procedure[0]) {
+            let list: IProcedure[];
+            if (node.state.procedure[0].parent) {
+                prod.parent = node.state.procedure[0].parent;
+                list = prod.parent.children;
+            } else {
+                list = node.procedure;
+            }
+            for (const index in list) {
+                if (list[index].selected) {
+                    list.splice(parseInt(index, 10) + 1, 0, prod);
+                    break;
+                }
+            }
+            /*
             if (node.state.procedure[0].children) {
                 node.state.procedure[0].children.push(prod);
                 prod.parent = node.state.procedure[0];
@@ -128,6 +153,7 @@ export abstract class NodeUtils {
                     }
                 }
             }
+            */
         } else {
             node.procedure.push(prod);
         }

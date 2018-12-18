@@ -20,7 +20,7 @@
                         </div>
                 
                         <!-- procedure editor on the right side -->
-                        <div id='procedure' class="container--procedure">
+                        <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
                             <!-- parameter-editor only for start/end node -->
                             <parameter-editor *ngIf="dataService.node.type == 'start' || dataService.node.type == 'end'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
                             <ng-container *ngIf="dataService.node.type != 'start'">

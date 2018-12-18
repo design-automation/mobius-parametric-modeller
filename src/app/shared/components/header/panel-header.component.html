@@ -39,29 +39,31 @@
                 
         <!-- execute button -->
         <execute></execute>
-
     </div>
 
-    <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div>
-    <div id="dropdownMenu">
-        <button onclick="document.getElementById('newfile').click();"
-        title="Create New Flowchart"> 
-            <mat-icon>rotate_left</mat-icon> 
-            New File
-        </button>
-        <br>
-        <button onclick="document.getElementById('savefile').click();"
-        title="Save Flowchart File to Computer">
-            <mat-icon>save_alt</mat-icon>
-            Save File
-            
-        </button>
-        <br>
-        <button onclick="document.getElementById('file-input').click();"
-        title="Load Flowchart File from Computer">
-            <mat-icon>launch</mat-icon>
-            Load File 
-        </button>
+    <div class='header-btn-group'>
+
+        <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div>
+        <div id="dropdownMenu">
+            <button onclick="document.getElementById('newfile').click();"
+            title="Create New Flowchart"> 
+                <mat-icon>rotate_left</mat-icon> 
+                New File
+            </button>
+            <br>
+            <button onclick="document.getElementById('savefile').click();"
+            title="Save Flowchart File to Computer">
+                <mat-icon>save_alt</mat-icon>
+                Save File
+                
+            </button>
+            <br>
+            <button onclick="document.getElementById('file-input').click();"
+            title="Load Flowchart File from Computer">
+                <mat-icon>launch</mat-icon>
+                Load File 
+            </button>
+        </div>
     </div>
 
 

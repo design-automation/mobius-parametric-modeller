@@ -125,11 +125,11 @@ export class ExecuteComponent {
                     hasFunctions = true;
                 }
             }
-            if (hasFunctions) {
+            if (hasFunctions || node.type === 'start') {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
             }
             // print the code
-            console.log('Executing code...\n');
+            console.log(`Executing node: ${node.name}\n`);
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
                 console.log(fnString);

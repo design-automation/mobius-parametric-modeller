@@ -144,6 +144,9 @@
                     >  
         </div>
         
+        <!-- Blank (always the first procedure of if/else/else if/for/while) -->
+        <div class='line--blank' *ngSwitchCase="ProcedureTypes.Blank">
+        </div>
 
         
         <!-- Function Template -->
@@ -181,9 +184,7 @@
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
                         [style.width.px]='inputSize(p.value||p.name)'
-                        >    
-                
-
+                        >
             </ng-container>
 
         </div>
@@ -211,11 +212,11 @@
 
 
         <!-- delete button-->
-        <button class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
+        <button *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
             <mat-icon class='icon'>delete_outline</mat-icon>
         </button>
         <!-- Disable button-->
-        <button class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
+        <button *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
             <mat-icon class='icon'>tv_off</mat-icon>
         </button>
         <!-- Print button-->

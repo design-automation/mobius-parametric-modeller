@@ -11,6 +11,8 @@ export const _parameterTypes = {
     merge: 'Model.__merge__', // TODO - make this genric
     mergeFn: __merge__,
 
+    addData: 'Model.addData', // TODO - make this genric
+
     preprocess: 'Model.__preprocess__', // TODO - make this genric
     postprocess: 'Model.__postprocess__' // TODO - make this genric
 };

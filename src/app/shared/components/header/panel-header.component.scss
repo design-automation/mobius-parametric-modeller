@@ -2,9 +2,6 @@
 @import '~scss/variables';
 @import '~scss/header-button';
 
-:host{
-    z-index: 1;
-}
 
 .container__header{
     display: flex;
@@ -21,7 +18,7 @@
         margin: 0px;
         overflow: hidden;
         // background-color: transparent;
-        z-index: 1;s
+        z-index: 1;
         .mat-icon-button{
             height: $header-height !important;
             width: $header-height !important;

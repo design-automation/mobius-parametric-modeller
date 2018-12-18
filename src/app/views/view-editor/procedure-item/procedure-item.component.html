@@ -28,12 +28,11 @@
                 If
             </div>
             ( <input class='input--arg'
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >  
+                    >
                     )
 
         </div>
@@ -46,7 +45,6 @@
             
         
         ( <input class='input--arg'
-                (cut)='stopProp($event)' (paste)='stopProp($event)' 
                 [(ngModel)]='data.args[0].value'
                 name='data.args[0].name'
                 placeholder={{data.args[0].name}}
@@ -83,7 +81,6 @@
                     For
                 </div>
                 <input class='input--arg'
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
@@ -93,7 +90,6 @@
                     in
                 </div>
                 <input class='input--arg'
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     [(ngModel)]='data.args[1].value'
                     name='data.args[1].name'
                     placeholder={{data.args[1].name}}
@@ -108,7 +104,6 @@
                 While
             </div>
             <input class='input--arg' 
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
@@ -122,7 +117,6 @@
             <div class='function-text'>Constant</div>
 
             <input class='input--arg' 
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
@@ -136,7 +130,6 @@
             <div class='function-text'>Return</div>
 
             <input class='input--arg' 
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
@@ -155,8 +148,6 @@
                 <input class='input--var'
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
-                (cut)='stopProp($event)' 
-                (paste)='stopProp($event)'
                 placeholder={{data.args[0].name}}>  
                 = 
 
@@ -167,8 +158,6 @@
                 <!--
                 <input *ngIf="p.name.toUpperCase() !== '__MODEL__'; else text_template" 
                 
-                (cut)='stopProp($event)' 
-                (paste)='stopProp($event)' 
                 [(ngModel)]='p.value' 
                 placeholder={{p.name}}>    
                 
@@ -179,8 +168,6 @@
 
                 <input *ngIf="p.name.indexOf('__') == -1" 
                         class='input--arg' 
-                        (cut)='stopProp($event)' 
-                        (paste)='stopProp($event)' 
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
                         [style.width.px]='inputSize(p.value||p.name)'
@@ -194,14 +181,12 @@
             <input class='input--var'
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
-                    (cut)='stopProp($event)' (paste)='stopProp($event)'
                     placeholder={{data.args[0].name}}>  
             = 
             <div class='function-text'>{{data.meta.name}} </div> 
             
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input class='input--arg' 
-                        (cut)='stopProp($event)' (paste)='stopProp($event)' 
                         [(ngModel)]='p.value' 
                         placeholder={{p.name}}
                         [style.width.px]='inputSize(p.value||p.name)'>    

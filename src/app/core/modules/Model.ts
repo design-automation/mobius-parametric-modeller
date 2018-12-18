@@ -91,7 +91,7 @@ export function numPoints(__model__: GIModel): number {
  *  Gets the number of linestrings in the model.
  * @param __model__
  */
-export function numLinestrings(__model__: GIModel): number {
+export function numPolylines(__model__: GIModel): number {
     return __model__.geom().numLines();
 }
 /**
@@ -124,7 +124,7 @@ export function addPoint(__model__: GIModel, position: string): string {
  * @param __model__
  * @param coords
  */
-export function addLinestring(__model__: GIModel, positions: string[]): string {
+export function addPolyline(__model__: GIModel, positions: string[]): string {
     return __model__.geom().addLine(positions);
 }
 /**
@@ -153,7 +153,7 @@ export function getPoints(__model__: GIModel): string[] {
  * Gets all the lines in the model.
  * @param __model__
  */
-export function getLines(__model__: GIModel): string[] {
+export function getPolylines(__model__: GIModel): string[] {
     return __model__.geom().getLines();
 }
 /**
@@ -230,10 +230,13 @@ export function queryAttribValue(__model__: GIModel, query_str: string): string[
 }
 
 /**
- * Query
+ * Save
  * @param __model__
- * @param query_str
+ * @param filename
  */
 export function save(__model__: GIModel, filename: string): boolean {
     return download( JSON.stringify(__model__.getData()), filename );
 }
+
+
+

@@ -41,10 +41,10 @@
 }
 
 .cdk-overlay-pane { // overlay menu
-    background-color: red;
+    background-color: $color4;
     top: $header-height !important;
     .mat-menu-panel{
-        background-color: red;
+        background-color: $color4;
         position: absolute;
         border-radius: 0px;
         // box-shadow: none;

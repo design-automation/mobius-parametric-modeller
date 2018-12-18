@@ -197,7 +197,6 @@ export abstract class NodeUtils {
             case ProcedureTypes.Break:
             case ProcedureTypes.Continue:
                 prod.argCount = 0;
-                this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.Constant:

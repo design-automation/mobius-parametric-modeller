@@ -96,9 +96,9 @@
 
     overflow: hidden;
     vertical-align: center;
-    &.highlighted{
-        background-color: rgb(255,150,150);
-    }
+    // &.highlighted{
+    //     background-color: red;
+    // }
     :hover{
         color: $selected-color;
     }

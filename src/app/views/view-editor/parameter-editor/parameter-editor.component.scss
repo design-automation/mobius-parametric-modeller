@@ -14,6 +14,7 @@ div[class^="container--"]{
     padding-left: 10px;
     margin: 5px 0px;
     width: 100%;
+
 }
 
 input{
@@ -21,8 +22,8 @@ input{
     // background-color: pink;
     border:none;
     width: fit-content;
-    border-left: 1px solid $color1;
-    border-bottom: 1px solid $color1;
+    // border-left: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
     padding: 5px;
     margin-left: 3px;
     font-weight: 600;
@@ -34,20 +35,26 @@ input{
     &.disabled-input{
         border-bottom: none;
     }
+    &:hover, &:focus{
+        color: $color8;
+    }
 }
 
 textarea{
     color: $color1;
     // background-color: pink;
     border:none;
-    border-left: 1px solid $color1;
-    border-bottom: 1px solid $color1;
+    // border-left: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
     padding-left: 5px;
     font-family: sans-serif;
     font-size: $fsize2;
     margin: 10px 0px 5px 3px;
     width: 90%;
     resize: none; 
+    &:hover, &:focus{
+        color: $color8;
+    }
 }
 
 hr{

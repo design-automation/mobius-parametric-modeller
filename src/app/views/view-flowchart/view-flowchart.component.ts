@@ -150,13 +150,15 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         });
 
         // delete: delete selected edge(s)
-        this.keydownSub = this.keydownListener.subscribe(val => {
+        this.keydownSub = this.keydownListener.subscribe(event => {
             if (!this.listenerActive) { return; }
-            if ((<KeyboardEvent> val).key === 'Delete') {
+            if ((<KeyboardEvent> event).key === 'Delete') {
                 if (this.selectedEdge.length > 0) {
                     this.deleteSelectedEdges();
                 } else {
-                    this.deleteSelectedNodes();
+                    if (document.activeElement.id !== this.dataService.node.id) {
+                        this.deleteSelectedNodes();
+                    }
                 }
             }
         });

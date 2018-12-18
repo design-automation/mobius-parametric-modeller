@@ -33,6 +33,7 @@ export class ViewGalleryComponent {
     }
 
     getFilesFromURL(): Observable<any> {
+        console.log('Retrieving Gallery...');
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
     }
 

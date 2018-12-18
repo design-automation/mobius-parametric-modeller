@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChildren, Injector, Input, OnChanges, SimpleChanges, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Injector, Input, OnChanges, SimpleChanges, QueryList, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon } from '@libs/geo-info';
+import { format } from 'util';
 
 @Component({
   selector: 'attribute',
@@ -10,63 +11,62 @@ import { GICommon } from '@libs/geo-info';
   styleUrls: ['./attribute.component.scss']
 })
 
-export class AttributeComponent implements OnChanges {
+export class AttributeComponent implements OnInit, OnChanges {
   @Input() data: GIModel;
   displayedColumns: string[] = ['key', 'v0', 'v1', 'v2'];
 
-  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
-  @ViewChildren(MatSort) sort = new QueryList<MatSort>();
+  @ViewChild('paginatorNormal') paginatorNormal: MatPaginator;
+  @ViewChild('paginatorColor') paginatorColor: MatPaginator;
+  @ViewChild('tableNormal', {read: MatSort}) sortNormal: MatSort;
+  @ViewChild('tableColor', {read: MatSort}) sortColor: MatSort;
 
-  private _data: PeriodicElement[] = [];
-
-  dataSource = {
-    COODS: new MatTableDataSource<PeriodicElement>(this._data),
-    COLOR: new MatTableDataSource<PeriodicElement>(this._data),
-    NORMAL: new MatTableDataSource<PeriodicElement>(this._data),
-  };
+  dataSourceColor;
+  dataSourceNormal;
 
   protected dataService: DataService;
 
   constructor(injector: Injector) {
     this.dataService = injector.get(DataService);
+    this.dataSourceColor = new MatTableDataSource<PeriodicElement>([]);
+    this.dataSourceNormal = new MatTableDataSource<PeriodicElement>([]);
   }
 
-  protected vertAttrib = ['NORMAL', 'COLOR'];
-
-  ngOnChanges(changes: SimpleChanges) {
-    if ( changes['data'] && this.data) {
-      const AttribNames = GICommon.EAttribNames;
-      const vertsAttrib = Object.keys(AttribNames).reduce((object, key) => {
-        if (this.vertAttrib.includes(key)) {
-          object[key] = AttribNames[key];
-        }
-        return object;
-      }, {});
-
-      if (vertsAttrib !== null) {
-        for (const attr in vertsAttrib) {
-          if (GICommon.EAttribNames.hasOwnProperty(attr)) {
-            const attribData = this.data.getAttibs().getVertsAttrib(AttribNames[attr]);
-            if (attribData) {
-              const _DataArray = [];
-              attribData.forEach((value, index) => {
-                _DataArray.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, v0: value[0], v1: value[1], v2: value[2]});
-              });
-              this.dataSource[attr] = new MatTableDataSource<PeriodicElement>(_DataArray);
-              this.dataSource[attr].paginator = this.paginator.toArray()[this.vertAttrib.indexOf(attr)];
-              this.dataSource[attr].sort = this.sort.toArray()[this.vertAttrib.indexOf(attr)];
-            }
-          }
-        }
-      }
+  ngOnInit() {
+    if (this.data) {
+      this.formatAttribData(this.data);
     }
   }
 
-  _setDataSource(indexNumber) {
-    setTimeout(() => {
-      !this.dataSource[this.vertAttrib[indexNumber]].paginator ?
-          this.dataSource[this.vertAttrib[indexNumber]].paginator = this.paginator : null;
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    if ( changes['data'] && this.data) {
+      this.formatAttribData(this.data);
+    }
+  }
+
+  formatAttribData(data) {
+    let propName = GICommon.EAttribNames.NORMAL;
+    const attribDataNormal = data.getAttibs().getVertsAttrib(propName);
+    const normalData = this.convertModelData(attribDataNormal);
+    this.dataSourceNormal = new MatTableDataSource<PeriodicElement>(normalData);
+    this.dataSourceNormal.paginator = this.paginatorNormal;
+    this.dataSourceNormal.sort = this.sortNormal;
+
+    propName = GICommon.EAttribNames.COLOR;
+    const attribDataColor = data.getAttibs().getVertsAttrib(propName);
+    const colorData = this.convertModelData(attribDataColor);
+    this.dataSourceColor = new MatTableDataSource<PeriodicElement>(colorData);
+    this.dataSourceColor.paginator = this.paginatorColor;
+    this.dataSourceColor.sort = this.sortColor;
+  }
+
+  convertModelData(attribData) {
+    if (attribData) {
+      const _DataArray = [];
+      attribData.forEach((value, index) => {
+        _DataArray.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, v0: value[0], v1: value[1], v2: value[2]});
+      });
+      return _DataArray;
+    }
   }
 }
 

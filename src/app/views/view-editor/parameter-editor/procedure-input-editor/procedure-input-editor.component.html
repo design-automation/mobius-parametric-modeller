@@ -1,5 +1,10 @@
 <div class='container container--parameter' *ngIf='prod.meta?.module=="Input"'>
     <div class='inline-div'>
+        <input *ngIf='prod.type == 10' [class.disabled-input]='true' value='Global Variable' size='10' disabled>
+        <input *ngIf='prod.type == 12' [class.disabled-input]='true' value='Add Data' size='5' disabled>
+    </div>
+
+    <div class='inline-div'>
         <input [class.disabled-input]='true' value='Name:' size='8' disabled>
         <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder="undefined"
         [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
@@ -11,19 +16,23 @@
         <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
             <mat-icon class='icon'>tv_off</mat-icon>
         </button>
-
-
-
     </div>
 
     <div class='inline-div'>
         <input [class.disabled-input]='true' value='Input Mode:' size='8' disabled>
-        <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
+        <select *ngIf='prod.type != 12' name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
             <option 
                 *ngFor="let ptype of PortTypesArr" 
                 [value]="PortTypes[ptype]" 
                 [selected]="prod.meta.inputMode == ptype">{{ptype}}</option>
         </select>
+        <select *ngIf='prod.type == 12' name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
+            <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
+            <option value='4' [selected]="prod.meta.inputMode == 4">File</option>
+
+        </select>
+    
+
     </div>
 
     <div class='inline-div'>

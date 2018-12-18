@@ -12,17 +12,17 @@
     color: $color1;
     vertical-align: bottom;
     padding-bottom: 5px;
-    border-bottom: 1px solid $background-color;
-    border-left: 1px solid $background-color;
+    border-bottom: 1px solid red;
+    border-left: 1px solid red;
     width: 100%;
 }
 
 select{
     color: $color1;
-    background-color: $prod-background-color;
+    background-color: pink;
     border: 0px;
-    border-left: 1px solid $background-color;
-    border-bottom: 1px solid $background-color;
+    border-left: 1px solid red;
+    border-bottom: 1px solid red;
     height: 18px;
     font-family: sans-serif;
 
@@ -37,7 +37,7 @@ select{
 
 input{
     color: $color1;
-    background-color: $prod-background-color;
+    background-color: pink;
     border:none;
     border-bottom: 1px solid $color1;
     margin-left: 5px;

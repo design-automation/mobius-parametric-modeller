@@ -13,7 +13,16 @@ export abstract class NodeUtils {
             position: {x: 0, y: 0},
             enabled: false,
             type: '',
-            procedure: [],
+            procedure: [{type: 13, ID: '',
+                parent: undefined,
+                meta: {name: '', module: ''},
+                children: undefined,
+                argCount: 0,
+                args: [],
+                print: false,
+                enabled: true,
+                selected: false,
+                hasError: false}],
             state: {
                 procedure: [],
                 input_port: undefined,
@@ -30,6 +39,7 @@ export abstract class NodeUtils {
 
     static getStartNode(): INode {
         const node = NodeUtils.getNewNode();
+        node.procedure = [];
         node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
@@ -38,6 +48,7 @@ export abstract class NodeUtils {
 
     static getEndNode(): INode {
         const node = NodeUtils.getNewNode();
+        node.procedure = [];
         node.name = 'End';
         node.type = 'end';
         return node;
@@ -92,7 +103,7 @@ export abstract class NodeUtils {
                 node.state.procedure.push(procedure);
                 const tempArray = node.state.procedure.splice(0, node.state.procedure.length);
                 NodeUtils.rearrangeSelected(node.state.procedure, tempArray, node.procedure);
-                //console.log(node.state.procedure);
+                // console.log(node.state.procedure);
             }
         } else {
             const sel = procedure.selected;
@@ -110,6 +121,20 @@ export abstract class NodeUtils {
 
     static insert_procedure(node: INode, prod: IProcedure) {
         if (node.state.procedure[0]) {
+            let list: IProcedure[];
+            if (node.state.procedure[0].parent) {
+                prod.parent = node.state.procedure[0].parent;
+                list = prod.parent.children;
+            } else {
+                list = node.procedure;
+            }
+            for (const index in list) {
+                if (list[index].selected) {
+                    list.splice(parseInt(index, 10) + 1, 0, prod);
+                    break;
+                }
+            }
+            /*
             if (node.state.procedure[0].children) {
                 node.state.procedure[0].children.push(prod);
                 prod.parent = node.state.procedure[0];
@@ -128,12 +153,26 @@ export abstract class NodeUtils {
                     }
                 }
             }
+            */
         } else {
             node.procedure.push(prod);
         }
 
     }
 
+    static initiateChildren(prod) {
+        prod.children = [
+            {type: 13, ID: '',
+            parent: prod, meta: {name: '', module: ''},
+            children: undefined,
+            argCount: 0,
+            args: [],
+            print: false,
+            enabled: true,
+            selected: false,
+            hasError: false}
+        ];
+    }
     static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ) {
         const prod: IProcedure = <IProcedure>{};
         prod.type = type;
@@ -159,41 +198,48 @@ export abstract class NodeUtils {
             case ProcedureTypes.Foreach:
                 prod.argCount = 2;
                 prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
-                prod.children = [];
+                this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.While:
                 prod.argCount = 1;
                 prod.args = [ {name: 'condition', value: undefined, default: undefined} ];
-                prod.children = [];
+                this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.If:
             case ProcedureTypes.Elseif:
                 prod.argCount = 1;
                 prod.args = [ {name: 'condition', value: undefined, default: undefined} ];
-                prod.children = [];
+                this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.Else:
                 prod.argCount = 0;
                 prod.args = [];
-                prod.children = [];
+                this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.Break:
             case ProcedureTypes.Continue:
                 prod.argCount = 0;
-                prod.args = [];
                 break;
 
             case ProcedureTypes.Constant:
                 prod.argCount = 2;
                 prod.meta = { module: 'Input', name: 'Constant', inputMode: InputType.SimpleInput, description: undefined};
                 prod.args = [
-                    {name: 'const_name', value: undefined, default: 0},
-                    {name: '__input__', value: undefined, default: 0} ];
-                break;
+                {name: 'const_name', value: undefined, default: 0},
+                {name: '__input__', value: undefined, default: 0} ];
+            break;
+
+            case ProcedureTypes.AddData:
+                prod.argCount = 2;
+                prod.meta = { module: 'Input', name: 'Constant', inputMode: InputType.SimpleInput, description: undefined};
+                prod.args = [
+                {name: 'const_name', value: undefined, default: 0},
+                {name: '__input__', value: undefined, default: 0} ];
+            break;
 
             case ProcedureTypes.Return:
                 prod.meta = { module: 'Output', name: 'Return', description: undefined};

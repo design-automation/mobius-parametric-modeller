@@ -7,7 +7,7 @@ import { _parameterTypes} from '@modules';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
-ctx.font = '11px Arial';
+ctx.font = '12px Arial';
 
 @ProcedureTypesAware
 @ModuleDocAware
@@ -86,7 +86,7 @@ export class ProcedureItemComponent {
 
     // stopPropagation to prevent cut/paste with input box focused
     stopProp(event): void {
-        event.stopPropagation();
+        // event.stopPropagation();
     }
 
     // modify variable input: replace space " " with underscore "_"

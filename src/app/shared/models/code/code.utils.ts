@@ -9,7 +9,7 @@ import { _parameterTypes } from '@modules';
 export class CodeUtils {
 
     static async getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): Promise<string[]> {
-        if (prod.enabled === false) { return ['']; }
+        if (prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
 
         prod.hasError = false;
 
@@ -76,11 +76,27 @@ export class CodeUtils {
 
                 break;
 
+            case ProcedureTypes.AddData:
+                let cst = args[0].value;
+                if (cst.substring(0, 1) === '"' || cst.substring(0, 1) === '\'') {
+                    cst = args[0].value.substring(1, args[0].value.length - 1);
+                }
+
+                const value = await CodeUtils.getStartInput(args[1].value || args[1].default, prod.meta.inputMode);
+                codeStr.push(`__params__['constants']['${cst}'] = ${value};`);
+                if (_parameterTypes.addData) {
+                    codeStr.push(`__modules__.${_parameterTypes.addData}( __params__.model, __params__.constants['${cst}']);`);
+                } else {
+                    codeStr.push(`__params__.model = mergeInputs( [__params__.model, __params__.constants['${cst}']]);`);
+                }
+
+                break;
+
+
             case ProcedureTypes.Return:
                 codeStr.push(`if (${args[0].value} > __params__['model'].length) { return __params__['model']; }`);
                 codeStr.push(`return __params__['model'][${args[0].value}].value;`);
                 break;
-
 
             case ProcedureTypes.Function:
                 const argVals = [];
@@ -190,7 +206,7 @@ export class CodeUtils {
             });
             result = await p;
         }
-        return result;
+        return '`' + result + '`';
     }
 
     static loadFile(f) {

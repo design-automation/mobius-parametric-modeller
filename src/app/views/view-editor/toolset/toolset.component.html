@@ -10,7 +10,10 @@
         <ul class='toolset__basic'>
             <ng-container *ngFor="let type of ProcedureTypesArr">
                 <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"
-                && type.toUpperCase() !== "CONSTANT" && type.toUpperCase() !== "RETURN"'
+                && type.toUpperCase() !== "CONSTANT" 
+                && type.toUpperCase() !== "RETURN"
+                && type.toUpperCase() !== "ADDDATA"
+                && type.toUpperCase() !== "BLANK"'
                 class='tooltip'
                 (click)='add(ProcedureTypes[type])'> 
                     {{type}}
@@ -81,6 +84,11 @@
             <div *ngIf='type.toUpperCase() == "CONSTANT"'>
                 <ul class='toolset__functions--subset'>
                     <li (click)='add(ProcedureTypes[type])'> Global Var </li>
+                </ul>
+            </div>
+            <div *ngIf='type.toUpperCase() == "ADDDATA"'>
+                <ul class='toolset__functions--subset'>
+                    <li (click)='add(ProcedureTypes[type])'> Add Data </li>
                 </ul>
             </div>
         </section>

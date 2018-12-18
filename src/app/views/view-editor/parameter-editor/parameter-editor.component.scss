@@ -18,11 +18,11 @@ div[class^="container--"]{
 
 input{
     color: $color1;
-    background-color: $prod-background-color;
+    // background-color: pink;
     border:none;
     width: fit-content;
-    border-left: 1px solid $background-color;
-    border-bottom: 1px solid $background-color;
+    border-left: 1px solid $color1;
+    border-bottom: 1px solid $color1;
     padding: 5px;
     margin-left: 3px;
     font-weight: 600;
@@ -38,10 +38,10 @@ input{
 
 textarea{
     color: $color1;
-    background-color: $prod-background-color;
+    // background-color: pink;
     border:none;
-    border-left: 1px solid $background-color;
-    border-bottom: 1px solid $background-color;
+    border-left: 1px solid $color1;
+    border-bottom: 1px solid $color1;
     padding-left: 5px;
     font-family: sans-serif;
     font-size: $fsize2;
@@ -52,5 +52,5 @@ textarea{
 
 hr{
     width: inherit;
-    border-top: 2px solid $background-color;
+    border-top: 2px solid $color1;
 }

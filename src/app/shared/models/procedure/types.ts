@@ -10,6 +10,8 @@ export enum ProcedureTypes {
     Function,
     Imported,
     Constant,
-    Return
+    Return,
+    AddData,
+    Blank
 }
 

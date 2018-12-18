@@ -15,11 +15,22 @@ table {
   }
 }
 
-mat-paginator{
-  .mat-paginator-outer-container{
-    background: #fff;
-    .mat-paginator-container{
-      min-height: 40px;
+/deep/ #attribTab{
+  .mat-tab-label{
+    height: 30px;
+  }
+  .mat-ink-bar{
+    background-color: #9e9e9e !important;
+  }
+
+  .mat-paginator-container{
+    min-height: 46px;
+
+    .mat-paginator-page-size-select{
+      margin-top:0 !important;
+      .mat-form-field-wrapper{
+        padding-bottom: 0.95em;
+      }
     }
   }
 }

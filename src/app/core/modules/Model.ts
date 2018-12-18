@@ -72,11 +72,11 @@ export function __query__(__model__: GIModel, query_str: string): string[] {
 /**
  * Add new data to the model.
  *
- * @param model_data The model data in gs-json format.
+ * @param model_data The model data in gs-json string format.
  * @returns New model if successful, null if unsuccessful or on error.
  */
-export function addData(__model__: GIModel, model_data: IModelData): void {
-    const model: GIModel = new GIModel(model_data);
+export function addData(__model__: GIModel, model_data: string): void {
+    const model: GIModel = new GIModel(JSON.parse(model_data));
     __merge__(__model__, model);
 }
 

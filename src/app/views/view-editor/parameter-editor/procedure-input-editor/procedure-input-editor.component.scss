@@ -12,32 +12,37 @@
     color: $color1;
     vertical-align: bottom;
     padding-bottom: 5px;
-    border-bottom: 1px solid red;
-    border-left: 1px solid red;
+    border-bottom: 1px solid $color5;
+    // border-left: 1px solid red;
+    overflow: hidden;
     width: 100%;
 }
 
 select{
     color: $color1;
-    background-color: pink;
+    background-color: transparent;
     border: 0px;
-    border-left: 1px solid red;
-    border-bottom: 1px solid red;
+    // border-left: 1px solid red;
+    // border-bottom: 1px solid red;
     height: 18px;
     font-family: sans-serif;
-
+    font-size: $fsize2;
+    &:hover, &:focus{
+        background-color: $color7;
+        color: $color8;
+    }
 }
 
 .inline-div{
     width: 100%;
     display: inline-block;
-    height: 24px;
+    height: $fsize1;
     padding-bottom: 3px;
 }
 
 input{
     color: $color1;
-    background-color: pink;
+    background-color: transparent;
     border:none;
     border-bottom: 1px solid $color1;
     margin-left: 5px;
@@ -45,9 +50,16 @@ input{
     vertical-align: bottom;
 
     font-family: sans-serif;
-
+    font-size: $fsize2;
+    &:hover, &:focus{
+        background-color: $color7;
+        color: $color8;
+    }
     &.disabled-input{
         border-bottom: none;
+        &:hover{
+            background-color: transparent;
+        }
     }
 }
 
@@ -62,15 +74,20 @@ input{
 }
 
 .btn{
-    height: 24px;
-    width: 24px;
+    height: $fsize1;
+    width: $fsize1;
+    padding: 0px;
+
     background-color: transparent;
     border: none;
     float: right;
     color: $button-color;
 
-    &.highlighted{
-        background-color: rgb(255,150,150);
+    // &.highlighted{
+    //     background-color: rgb(255,150,150);
+    // }
+    :hover{
+        color: $selected-color;
     }
 }
 
@@ -79,6 +96,8 @@ input{
 .icon{
     vertical-align: top;
     font-size: $fsize1;
+    height: $fsize1;
+    width: $fsize1;
 }
 
 

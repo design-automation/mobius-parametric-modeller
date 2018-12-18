@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IModelData, TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '../../../libs/geo-info/GIJson';
 import { EEntityTypeStr } from '@libs/geo-info/GICommon';
-
+import { download } from '@libs/filesys/download';
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -227,4 +227,13 @@ export function setAttribValue(__model__: GIModel, id: string, name: string, val
  */
 export function queryAttribValue(__model__: GIModel, query_str: string): string[] {
     return __query__(__model__, query_str);
+}
+
+/**
+ * Query
+ * @param __model__
+ * @param query_str
+ */
+export function save(__model__: GIModel, filename: string): boolean {
+    return download( JSON.stringify(__model__.getData()), filename );
 }

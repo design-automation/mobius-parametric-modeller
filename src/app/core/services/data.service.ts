@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node';
+import { IProcedure } from '@models/procedure';
 
 @Injectable()
 export class DataService {
@@ -17,9 +18,10 @@ export class DataService {
 
     private static _activeModelView: string = undefined;
 
-    private static _galleryFiles: any = undefined;
-
     private static _splitVal = 60;
+
+    private static _copiedProd: IProcedure[];
+    private static _copiedType: IProcedure[];
 
     get file() { return DataService._data; }
     set file(data: IMobius) {
@@ -41,8 +43,11 @@ export class DataService {
     get activeView() {return DataService._activeModelView; }
     set activeView(view: string) {DataService._activeModelView = view; }
 
-    get galleryFiles() {return DataService._galleryFiles; }
-    set galleryFiles(files: any) {DataService._galleryFiles = files; }
+    get copiedProd() {return DataService._copiedProd; }
+    set copiedProd(prods: any) {DataService._copiedProd = prods; }
+
+    get copiedType() {return DataService._copiedType; }
+    set copiedType(Ptype: any) {DataService._copiedType = Ptype; }
 
     get splitVal() {return DataService._splitVal; }
     set splitVal(num: number) {DataService._splitVal = num; }

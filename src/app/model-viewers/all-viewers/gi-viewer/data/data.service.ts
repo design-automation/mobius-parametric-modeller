@@ -3,8 +3,6 @@ import { GICommon } from '@libs/geo-info';
 import { DataThreejs } from './data.threejs';
 // import @angular stuff
 import { Injectable } from '@angular/core';
-import { GIAttribMap } from '@libs/geo-info/GIAttribMap';
-
 /**
  * DataService
  * The data service for the Goe-Info viewer.
@@ -14,7 +12,6 @@ export class DataService {
     // GI Model
     // private _model: GIModel;
     private _data_threejs: DataThreejs;
-
     // Others
     // imVisible: boolean;
     selecting: any = [];

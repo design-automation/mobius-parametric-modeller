@@ -16,7 +16,7 @@ import { DataService } from './data/data.service';
   templateUrl: './gi-viewer.component.html',
   styleUrls: ['./gi-viewer.component.scss'],
 })
-export class GIViewerComponent implements OnInit {
+export class GIViewerComponent implements OnInit{
     dataservice: DataService;
     // model data passed to the viewer
     @Input() data: GIModel;
@@ -26,7 +26,7 @@ export class GIViewerComponent implements OnInit {
      * @param dataService
      */
     constructor(private dataService: DataService) {
-        // Do nothing
+        //
     }
 
     /**

@@ -1,7 +1,7 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord, IGeomData, IModelData} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, IQueryComponent, idBreak,  } from './GICommon';
+import { EEntityTypeStr, EAttribNames, IQueryComponent, idBreak  } from './GICommon';
 import { parse_query } from './GIAttribsQuery';
 
 /**
@@ -223,7 +223,7 @@ export class GIAttribs {
     public get3jsSeqVertsCoords(verts: number[]): number[] {
         const coords_attrib: GIAttribMap = this._posis.get('coordinates');
         const coords_keys: number[] = coords_attrib.getSeqKeys();
-        const coords_values: TAttribDataTypes[] = coords_attrib.getSeqValues();
+        const coords_values: TAttribDataTypes[] = coords_attrib.getValues();
         const verts_cords_values: number[] = [];
         verts.forEach( coords_i => verts_cords_values.push(...coords_values[coords_keys[coords_i]] as number[]));
         return verts_cords_values;
@@ -236,22 +236,44 @@ export class GIAttribs {
         if (!this._verts.has(attrib_name)) { return null; }
         const attrib_map: GIAttribMap = this._verts.get(attrib_name);
         const attrib_keys: number[] = attrib_map.getSeqKeys();
-        const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
+        const attrib_values: TAttribDataTypes[] = attrib_map.getValues();
         const result = [].concat(...attrib_keys.map(attrib_key => attrib_values[attrib_key]));
         return result;
     }
 
-    public getVertsCoords(attrib_name: string): GIAttribMap {
-        const coords_attrib: GIAttribMap = this._posis.get('coordinates');
+    public getVertsCoords(): GIAttribMap {
+        const coords_attrib: GIAttribMap = this._posis.get(EAttribNames.COORDS);
         return coords_attrib;
     }
 
-    public getVertsAttrib(attrib_name: string) {
-        if (!this._verts.has(attrib_name)) { return null; }
-        const attrib_map: GIAttribMap = this._verts.get(attrib_name);
-        const attrib_keys: number[] = attrib_map.getSeqKeys();
-        const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
-        const result = Array.from(attrib_keys.map(attrib_key => attrib_values[attrib_key]));
-        return result;
+    public getAttribsForTable(tab: string) {
+        const _attrib_inner_maps = {
+            po: this._model.geom().numPosis(),
+            _v: this._model.geom().numVerts(),
+            _e: this._model.geom().numEdges(),
+            _w: this._model.geom().numWires(),
+            _f: this._model.geom().numFaces(),
+            co: this._model.geom().numColls()
+        };
+        const data_obj_map: Map<number, { id: string}> = new Map();
+        for (let index = 0; index < _attrib_inner_maps[tab]; index++) {
+            data_obj_map.set(index, { id: `${tab}${index}` } );
+        }
+        this._attrib_maps[tab].forEach(attr => {
+            const attrib_map: GIAttribMap = attr;
+            const result = attrib_map.getSeqValues();
+            result.forEach((value: TAttribDataTypes, index) => {
+                const n = attr.getName().toLowerCase();
+                if ( attr.getDataSize() > 1 ) {
+                    const value2 = value as any[];
+                    value2.forEach( (v, i) => {
+                        data_obj_map.get(index)[`${n}${i}`] = v;
+                    });
+                } else {
+                    data_obj_map.get(index)[`${n}`] = value;
+                }
+            });
+        });
+        return Array.from(data_obj_map.values());
     }
 }

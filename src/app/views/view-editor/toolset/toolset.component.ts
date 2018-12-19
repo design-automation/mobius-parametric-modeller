@@ -92,21 +92,24 @@ export class ToolsetComponent {
                     doc: documentation
                 };
 
-                func.argCount = fl.nodes[0].procedure.length;
-                func.args = fl.nodes[0].procedure.map(prod => {
+                func.args = [];
+                for (const prod of fl.nodes[0].procedure) {
+                    if (!prod.enabled) { continue; }
+
                     let v: string = prod.args[prod.argCount - 2].value || 'undefined';
                     if (v.substring(0, 1) === '"' || v.substring(0, 1) === '\'') { v = v.substring(1, v.length - 1); }
                     documentation.parameters.push({
                         name: v,
                         description: prod.meta.description
                     });
-                    return <IArgument>{
+                    func.args.push(<IArgument>{
                         name: v,
                         default: prod.args[prod.argCount - 1].default,
                         value: undefined,
                         type: prod.meta.inputMode,
-                    };
-                });
+                    });
+                }
+                func.argCount = func.args.length;
                 /*
                 if (!func.argCount) {
                     resolve('error');

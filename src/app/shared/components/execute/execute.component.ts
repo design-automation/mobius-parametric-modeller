@@ -200,6 +200,8 @@ export class ExecuteComponent {
                     'Check that your strings are enclosed in quotes (")');
             } else if (ex.toString().indexOf('Unexpected token') > -1) {
                 error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
+            } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
+                error = new Error('Unable to read file input. Check if all input files are valid?');
             } else {
                 error = new Error(ex);
             }

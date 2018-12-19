@@ -6,6 +6,7 @@
 }
 
 .container--parameter{
+    margin: 5px 0px;
     display: inline-block; 
     flex-direction: row; 
     flex-wrap: wrap;
@@ -16,6 +17,10 @@
     // border-left: 1px solid red;
     overflow: hidden;
     width: 100%;
+
+    &.inputDisabled{
+        opacity: 0.4;
+    }
 }
 
 select{
@@ -71,6 +76,12 @@ input{
 
 .input-const-name{
     min-width: 100px;
+}
+
+.filebtn{
+    height: 20px;
+    margin: 0px;
+    padding: 0px;
 }
 
 .btn{

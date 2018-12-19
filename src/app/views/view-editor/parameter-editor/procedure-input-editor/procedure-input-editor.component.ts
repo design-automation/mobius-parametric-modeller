@@ -28,8 +28,11 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
 
     editOptions(): void { }
 
+    openFileBrowse(id) {
+        document.getElementById(`file_${id}`).click();
+    }
     onFileChange(event) {
-      this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
+        this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
     }
 
     inputSize(val, defaultVal) {

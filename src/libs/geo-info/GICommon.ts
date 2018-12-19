@@ -1,3 +1,8 @@
+// Types
+export type TColor = [number, number, number];
+export type TNormal = [number, number, number];
+export type TUV = [number, number];
+
 // Enum
 export enum EEntityTypeStr {
     POSI = 'po',

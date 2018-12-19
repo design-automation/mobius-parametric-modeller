@@ -1,4 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
+import { exportObj } from '@libs/geo-info/export';
 import { IModelData, TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '../../../libs/geo-info/GIJson';
 import { EEntityTypeStr } from '@libs/geo-info/GICommon';
 import { download } from '@libs/filesys/download';
@@ -239,4 +240,13 @@ export function save(__model__: GIModel, filename: string): boolean {
 }
 
 
+/**
+ * Export the model in obj format.
+ * @param __model__
+ * @param filename
+ */
+export function saveObj(__model__: GIModel, filename: string): boolean {
+    const data: string = exportObj(__model__);
+    return download( data, filename );
+}
 

@@ -5,15 +5,14 @@
 
 .container__header{
     display: flex;
-    // background-color: transparent;
     float: left;
-    height: $header-height;
+    height: $header-height + 1;
     padding: 0px;
     margin: 0px;
 
     .header-btn-group {
         //display: inline;
-        height: $header-height;
+        height: $header-height + 1;
         padding: 0px;
         margin: 0px;
         overflow: hidden;
@@ -37,27 +36,30 @@
         text-align: center;
         vertical-align: middle;
         line-height: $header-height;
+        &:hover{
+            color: $selected-color;
+        }
     }
 }
 
-.cdk-overlay-pane { // overlay menu
-    background-color: $color4;
-    top: $header-height !important;
-    .mat-menu-panel{
-        background-color: $color4;
-        position: absolute;
-        border-radius: 0px;
-        // box-shadow: none;
-        padding: 0px;
-        left: 0px;
-        .mat-menu-content{
-            padding: 0px;
-        }
-        .mat-menu-item{
-            padding: 0px;
-        }
-    }
-}
+// .cdk-overlay-pane { // overlay menu
+//     background-color: $color4;
+//     top: $header-height !important;
+//     .mat-menu-panel{
+//         background-color: $color4;
+//         position: absolute;
+//         border-radius: 0px;
+//         // box-shadow: none;
+//         padding: 0px;
+//         left: 0px;
+//         .mat-menu-content{
+//             padding: 0px;
+//         }
+//         .mat-menu-item{
+//             padding: 0px;
+//         }
+//     }
+// }
 
 /*
 button.mat-menu-item{ // drop-down (top-bar) menu buttons
@@ -84,14 +86,17 @@ button.mat-menu-item:hover{
 #dropdownMenu {
     display: none;
     position: fixed;
+    transition: display 0.4s;
 
     z-index: 1;
-    background-color: $color4;
+    background-color: $color6;
+    border-left: 1px solid $color1;
+    border-bottom: 1px solid $color1;
     button{
         display: inline-block;
         width: 100px;
-        line-height: $header-height;
-        height: $header-height;
+        line-height: $fsize3;
+        height: $fsize3;
         font-size: $fsize2;
         vertical-align: middle;
         mat-icon{

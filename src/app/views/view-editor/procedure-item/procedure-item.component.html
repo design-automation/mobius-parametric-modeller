@@ -5,6 +5,26 @@
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'>
     <div class='container--item' >
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- delete button-->
+                <button *ngIf='data.type != ProcedureTypes.Blank' class='btn deletebtn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
+                    <mat-icon class='icon'>delete_outline</mat-icon>
+                </button>
+                <!-- Disable button-->
+                <button *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
+                    <mat-icon class='icon'>tv_off</mat-icon>
+                </button>
+                <!-- Print button-->
+                <button *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
+                    <mat-icon class='icon'>print</mat-icon>
+                </button>
+                <!-- help button-->
+                <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
+                    <mat-icon class='icon'>help</mat-icon>
+                </button>
+            </div>
+        </div>
         <!-- Variable Assignment Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Variable">
             <input class='input--var'
@@ -194,26 +214,6 @@
             
 
         </div>
-
-
-        <!-- delete button-->
-        <div class = "btn-container">
-            <button *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
-                <mat-icon class='icon'>delete_outline</mat-icon>
-            </button>
-            <!-- Disable button-->
-            <button *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
-                <mat-icon class='icon'>tv_off</mat-icon>
-            </button>
-            <!-- Print button-->
-            <button *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
-                <mat-icon class='icon'>print</mat-icon>
-            </button>
-            <!-- help button-->
-            <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
-                <mat-icon class='icon'>help</mat-icon>
-            </button>
-        </div>
     </div>
     <!-- list of child procedures (if the procedure has children) -->
     <div *ngIf="data?.children" class='container--nested'>
@@ -224,6 +224,4 @@
             (delete)='deleteChild(idx)'
             (helpText)='emitHelpText($event)'></procedure-item>
     </div>
-
-
 </div>

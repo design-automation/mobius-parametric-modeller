@@ -1,5 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { exportObj } from '@libs/geo-info/export';
+import { importObj } from '@libs/geo-info/import';
 import { IModelData, TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '../../../libs/geo-info/GIJson';
 import { EEntityTypeStr } from '@libs/geo-info/GICommon';
 import { download } from '@libs/filesys/download';
@@ -76,7 +77,7 @@ export function __query__(__model__: GIModel, query_str: string): string[] {
  * @param model_data The model data in gs-json string format.
  * @returns New model if successful, null if unsuccessful or on error.
  */
-export function addData(__model__: GIModel, model_data: string): void {
+export function addGiData(__model__: GIModel, model_data: string): void {
     const model: GIModel = new GIModel(JSON.parse(model_data));
     __merge__(__model__, model);
 }
@@ -126,7 +127,7 @@ export function addPoint(__model__: GIModel, position: string): string {
  * @param coords
  */
 export function addPolyline(__model__: GIModel, positions: string[]): string {
-    return __model__.geom().addLine(positions);
+    return __model__.geom().addPline(positions);
 }
 /**
  * Adds a new polygon to the model.
@@ -250,3 +251,12 @@ export function saveObj(__model__: GIModel, filename: string): boolean {
     return download( data, filename );
 }
 
+/**
+ * Import the model in obj format.
+ * @param __model__
+ * @param filename
+ */
+export function addObjData(__model__: GIModel, data: string): void {
+    const model: GIModel = importObj(data);
+    this.__merge__(__model__, model);
+}

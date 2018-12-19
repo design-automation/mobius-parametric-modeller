@@ -1,7 +1,7 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord, IGeomData, IModelData} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, IQueryComponent, idBreak,  } from './GICommon';
+import { EEntityTypeStr, IQueryComponent, idBreak, EAttribNames,  } from './GICommon';
 import { parse_query } from './GIAttribsQuery';
 
 /**
@@ -31,6 +31,7 @@ export class GIAttribs {
      */
     constructor(model: GIModel) {
         this._model = model;
+        this.addPosiAttrib(EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     }
     /**
      * Returns the JSON data for this model.

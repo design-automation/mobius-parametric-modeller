@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TUV } from './GICommon';
+import { TColor, TNormal, TTexture } from './GICommon';
 import { TCoord } from './GIJSon';
 /**
  * Export to obj

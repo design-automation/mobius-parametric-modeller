@@ -380,24 +380,40 @@ export class GIGeom {
         return EEntityTypeStr.POSI + (this._num_posis - 1);
     }
     /**
+     * Adds a new polygon entity to the model.
+     * @param posi_id
+     */
+    public addPoint(posi_id: string, close: boolean = false): string {
+        const posi_i: number = idIndex(posi_id);
+        const point_i: number = this.addPointByIndex(posi_i);
+        return EEntityTypeStr.POINT + point_i;
+    }
+    /**
      * Adds a new point entity to the model.
      * @param posi_id The position for the point.
      */
-    public addPoint(posi_id: string): string {
-        const posi_i: number = idIndex(posi_id);
+    public addPointByIndex(posi_i: number): number {
         // create verts
         const vert_i = this._addVertex(posi_i);
         // create point
         const point_i: number = this._points.push(vert_i) - 1;
         this._rev_verts_points[vert_i] = point_i;
-        return EEntityTypeStr.POINT + point_i;
+        return point_i;
     }
     /**
-     * Adds a new linestring entity to the model.
+     * Adds a new pline entity to the model.
      * @param posis_id
      */
-    public addLine(posis_id: string[], close: boolean = false): string {
+    public addPline(posis_id: string[], close: boolean = false): string {
         const posis_i: number[] = idIndicies(posis_id);
+        const pline_i: number = this.addPlineByIndex(posis_i);
+        return EEntityTypeStr.LINE + pline_i;
+    }
+    /**
+     * Adds a new pline entity to the model using numeric indicies.
+     * @param posis_id
+     */
+    public addPlineByIndex(posis_i: number[], close: boolean = false): number {
         // create verts, edges, wires
         const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
@@ -411,7 +427,7 @@ export class GIGeom {
         // create line
         const line_i: number = this._lines.push(wire_i) - 1;
         this._rev_wires_lines[wire_i] = line_i;
-        return EEntityTypeStr.LINE + line_i;
+        return line_i;
     }
     /**
      * Adds a new polygon entity to the model.
@@ -419,6 +435,14 @@ export class GIGeom {
      */
     public addPgon(posis_id: string[]): string {
         const posis_i: number[] = idIndicies(posis_id);
+        const pgon_i: number = this.addPgonByIndex(posis_i);
+        return EEntityTypeStr.PGON + pgon_i;
+    }
+    /**
+     * Adds a new polygon entity to the model using numeric indicies.
+     * @param posis_id
+     */
+    public addPgonByIndex(posis_i: number[]): number {
         // create verts, edges, wires, faces
         const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
@@ -431,7 +455,7 @@ export class GIGeom {
         // create polygon
         const pgon_i: number = this._pgons.push(face_i) - 1;
         this._rev_faces_pgons[face_i] = pgon_i;
-        return EEntityTypeStr.PGON + pgon_i;
+        return pgon_i;
     }
     /**
      * Adds a collection and updates the rev array.

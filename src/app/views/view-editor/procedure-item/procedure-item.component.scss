@@ -18,13 +18,29 @@
     //min-height: 22px;
     opacity: 1;
 
+    display: flex;
+    // white-space: nowrap;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    overflow-x: auto;
+
     &.disabled{
         opacity: 0.5;
     }
 
     &.selected{
-        border-color: $selected-color;
-        background-color: $color7;
+        border-bottom: 2px solid $selected-color;
+        border-left: 2px solid $selected-color;
+
+        // &:hover > .btn-container {
+        //     .btns{
+        //         border-bottom: 2px solid $selected-color;
+        //         border-left: 2px solid $selected-color;
+        //     }
+        // }
     }
     
     &.error{
@@ -57,6 +73,7 @@
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
         border: 2px solid $color5;
+        padding-left: 2px;
 
         &.error{
             border: 2px solid red;
@@ -70,17 +87,55 @@
         border-color: $selected-color;
         background-color: $color7;
     }
+    &:hover{
+        background-color: $color5;
+    }
 }
 
 .container--item{
     margin: none;
-    padding: none;
+    padding-bottom: 2px;
     border: none;
+    min-height: 17px;
+
+    display: inline-block;
+
+
+    white-space: nowrap;
+    overflow: hidden;
 }
 
+.container--item:hover > .btn-container{//.container--line
+    .btns{
+        display: inline-flex;
+    }
+}
+
+//.container--item .selected .btn {display: block}
+
 .btn-container{
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+}
+
+.btns{
     display: none;
-    float: right;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+
+    background-color: $color5;
+    // border-left: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
+
+    position: absolute;
+    &:hover{
+        display: inline-flex;
+    }
+    .deletebtn:hover{
+        color: red !important;
+    }
 }
 
 .btn{
@@ -99,13 +154,10 @@
     // &.highlighted{
     //     background-color: red;
     // }
-    :hover{
+    &:hover{
         color: $selected-color;
     }
 }
-
-.container--item:hover .btn-container {display: flex}
-//.container--item .selected .btn {display: block}
 
 .icon{
     vertical-align: center;
@@ -117,8 +169,8 @@
 }
 
 .line--item{
-    display: inline-block;
     color: $color1;
+    display: inline-block;
     input{
         background-color: red;
     }
@@ -127,6 +179,10 @@
 .line--blank{
     height: 8px;
     // display: inline-block;
+    &:hover{
+        background-color: $color7;
+        border-color: $selected-color;
+    }
 }
 
 
@@ -143,8 +199,9 @@
 
 .function-text{
     display: inline-block;
-    white-space: normal;
+    white-space: nowrap;
     font-style: italic;
     color: $function-text-color;
     font-weight: 550;
+    text-align: center;
 }

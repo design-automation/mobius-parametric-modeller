@@ -94,7 +94,6 @@ export class ToolsetComponent {
 
                 func.argCount = fl.nodes[0].procedure.length;
                 func.args = fl.nodes[0].procedure.map(prod => {
-
                     let v: string = prod.args[prod.argCount - 2].value || 'undefined';
                     if (v.substring(0, 1) === '"' || v.substring(0, 1) === '\'') { v = v.substring(1, v.length - 1); }
                     documentation.parameters.push({

@@ -66,23 +66,28 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Constant:
+                if (!addProdArr) {
+                    return [''];
+                }
                 let constName = args[0].value;
                 if (constName.substring(0, 1) === '"' || constName.substring(0, 1) === '\'') {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
-
-                const val = await CodeUtils.getStartInput(args[1].value || args[1].default, prod.meta.inputMode);
+                const val = await CodeUtils.getStartInput(args[1].value, args[1].default, prod.meta.inputMode);
                 codeStr.push(`__params__['constants']['${constName}'] = ${val};`);
 
                 break;
 
             case ProcedureTypes.AddData:
                 let cst = args[0].value;
+                if (!addProdArr) {
+                    return [`__modules__.${_parameterTypes.addData}( __params__.model, ${cst});`];
+                }
                 if (cst.substring(0, 1) === '"' || cst.substring(0, 1) === '\'') {
                     cst = args[0].value.substring(1, args[0].value.length - 1);
                 }
 
-                const value = await CodeUtils.getStartInput(args[1].value || args[1].default, prod.meta.inputMode);
+                const value = await CodeUtils.getStartInput(args[1].value, args[1].default, prod.meta.inputMode);
                 codeStr.push(`__params__['constants']['${cst}'] = ${value};`);
                 if (_parameterTypes.addData) {
                     codeStr.push(`__modules__.${_parameterTypes.addData}( __params__.model, __params__.constants['${cst}']);`);
@@ -102,7 +107,7 @@ export class CodeUtils {
                 const argVals = [];
                 for (const arg of args.slice(1)) {
                     if (arg.name === _parameterTypes.input) {
-                        const argVal = await CodeUtils.getStartInput(arg.value || arg.default, prod.meta.inputMode);
+                        const argVal = await CodeUtils.getStartInput(arg.value, arg.default, prod.meta.inputMode);
                         argVals.push(argVal);
                         continue;
                     }
@@ -115,7 +120,7 @@ export class CodeUtils {
                         argVals.push('__params__.model');
                         continue;
                     }
-                    // TODO-QUERY: update the query statement
+
                     if (arg.value && arg.value.substring(0, 1) === '#') {
                         argVals.push('`' + arg.value + '`');
                         continue;
@@ -134,7 +139,7 @@ export class CodeUtils {
                     argVals.push(arg.value);
 
                 }
-                const argValues = argVals.join(',');
+                const argValues = argVals.join(', ');
                 await argValues;
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
@@ -154,10 +159,10 @@ export class CodeUtils {
                     const arg = args[i];
                     // args.slice(1).map((arg) => {
                     if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(arg.value); }
-                    const r = await CodeUtils.getStartInput(arg.value, InputType.URL);
+                    const r = await CodeUtils.getStartInput(arg.value, arg.value, InputType.URL);
                     argsVals.push(r);
                 }
-                argsVals = argsVals.join(',');
+                argsVals = argsVals.join(', ');
 
                 const fn = `${prod.meta.name}(__params__, ${argsVals} )`;
                 codeStr.push(`${prefix}${args[0].value} = ${fn};`);
@@ -181,8 +186,10 @@ export class CodeUtils {
         return codeStr;
     }
 
-    static async getStartInput(val, inputMode): Promise<any> {
-        let result: any;
+    static async getStartInput(value, defaultVal, inputMode): Promise<any> {
+        let val;
+        if (value === undefined) {val = defaultVal; } else { val = value; }
+        let result = val;
         if (inputMode.toString() === InputType.URL.toString() ) {
             if (val.indexOf('dropbox') !== -1) {
                 val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
@@ -196,6 +203,7 @@ export class CodeUtils {
                 request.send();
             });
             result = await p;
+            result = '`' + result + '`';
         } else if (inputMode.toString() === InputType.File.toString()) {
             const p = new Promise((resolve) => {
                 const reader = new FileReader();
@@ -205,8 +213,9 @@ export class CodeUtils {
                 reader.readAsText(val);
             });
             result = await p;
+            result = '`' + result + '`';
         }
-        return '`' + result + '`';
+        return result;
     }
 
     static loadFile(f) {
@@ -250,7 +259,13 @@ export class CodeUtils {
         if (node.type === 'start' || inp.edges.length === 0) {
             input = _parameterTypes['newFn']();
         } else {
-            input = CodeUtils.mergeInputs(inp.edges.map(edge => edge.source.value));
+            const inputs = [];
+            for (const edge of inp.edges) {
+                if (edge.source.parentNode.enabled) {
+                    inputs.push(edge.source.value);
+                }
+            }
+            input = CodeUtils.mergeInputs(inputs);
             /*
             if (input.constructor === gsConstructor) {
                 input = `new __MODULES__.gs.Model(${input.toJSON()})`
@@ -280,7 +295,7 @@ export class CodeUtils {
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
         for (const prod of node.procedure) {
-            if (node.type === 'start' && !addProdArr) { break; }
+            // if (node.type === 'start' && !addProdArr) { break; }
             codeStr = codeStr.concat(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
@@ -305,7 +320,7 @@ export class CodeUtils {
     static async getFunctionString(func: IFunction): Promise<string> {
         let fullCode = '';
         /*
-        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(',')})` +
+        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(', ')})` +
         `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
         */
         let fnCode;
@@ -314,7 +329,7 @@ export class CodeUtils {
             `{\nvar merged;\nvar _newModel = __modules__.${_parameterTypes['new']}();\n`
             + `let __params__={"currentProcedure": [''],"model": _newModel};\n`;
         } else {
-            fnCode = `function ${func.name}(__mainParams__,${func.args.map(arg => arg.name).join(',')})` +
+            fnCode = `function ${func.name}(__mainParams__, ${func.args.map(arg => arg.name).join(', ')})` +
             `{\nvar merged;\nlet __params__={"model":__modules__.${_parameterTypes['new']}()};\n`;
         }
 
@@ -324,33 +339,37 @@ export class CodeUtils {
             if (func.args.length === 0) {
                 fullCode += `function ${node.id}(__params__)` + code + `\n\n`;
             } else {
-                fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')})` + code + `\n\n`;
+                fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')})` + code + `\n\n`;
             }
 
             if (node.type === 'start') {
                 // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
                 fnCode += `let result_${node.id} = __params__.model;\n`;
-            } else if (node.input.edges.length === 1) {
-                fnCode += `__params__.model = result_${node.input.edges[0].source.parentNode.id};\n`;
-                if (func.args.length === 0) {
-                    fnCode += `let result_${node.id} = ${node.id}(__params__);\n`;
-                } else {
-                    fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')});\n`;
-                }
             } else {
-                fnCode += `merged = mergeInputs([${node.input.edges.map((edge) => 'result_' + edge.source.parentNode.id).join(',')}]);\n`;
-                fnCode += `__params__.model = merged;\n`;
+                const activeNodes = [];
+                for (const nodeEdge of node.input.edges) {
+                    if (!nodeEdge.source.parentNode.enabled) {
+                        continue;
+                    }
+                    activeNodes.push(nodeEdge.source.parentNode.id);
+                }
+                if (activeNodes.length === 1) {
+                    fnCode += `__params__.model = result_${activeNodes};\n`;
+                } else {
+                    fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
+                    fnCode += `__params__.model = merged;\n`;
+                }
                 if (func.args.length === 0) {
                     fnCode += `let result_${node.id} = ${node.id}(__params__);\n`;
                 } else {
-                    fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(',')});\n`;
+                    fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;
                 }
             }
             /*
             } else if (node.input.edges.length == 1) {
                 fnCode += `let result_${node.id} = ${node.id}(result_${node.input.edges[0].source.parentNode.id});\n`
             } else {
-                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(',')}]);\n`;
+                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(', ')}]);\n`;
                 fnCode += `let result_${node.id} = ${node.id}(merged);\n`
 
 

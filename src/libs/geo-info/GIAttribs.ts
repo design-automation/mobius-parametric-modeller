@@ -1,7 +1,7 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord, IGeomData, IModelData} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, IQueryComponent, idBreak,  } from './GICommon';
+import { EEntityTypeStr, IQueryComponent, idBreak, EAttribNames,  } from './GICommon';
 import { parse_query } from './GIAttribsQuery';
 
 /**
@@ -31,6 +31,7 @@ export class GIAttribs {
      */
     constructor(model: GIModel) {
         this._model = model;
+        this.addPosiAttrib(EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     }
     /**
      * Returns the JSON data for this model.
@@ -126,12 +127,89 @@ export class GIAttribs {
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).get(index);
     }
+    // ============================================================================
+    // Get entity attrib from numeric index
+    // ============================================================================
     /**
-     * Shortcut for getting coordinates from a numeric index (i.e. this is not an ID)
-     * @param posi_i
+     * Get a position entity attrib value by index
+     * @param name
+     * @param index
      */
-    public getPosiCoord(posi_i: number): TCoord {
-        return this._posis.get('coordinates').get(posi_i) as TCoord;
+    public getPosiAttribValueByIndex(name: string, index: number): TAttribDataTypes {
+        const attrib: GIAttribMap = this._posis.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        return attrib.get(index);
+    }
+    /**
+     * Get a vertex entity attrib value by index
+     * @param name
+     * @param index
+     */
+    public getVertAttribValueByIndex(name: string, index: number): TAttribDataTypes {
+        const attrib: GIAttribMap = this._verts.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        return attrib.get(index);
+    }
+    /**
+     * Get an edge entity attrib value by index
+     * @param name
+     * @param index
+     */
+    public getEdgeAttribValueByIndex(name: string, index: number): TAttribDataTypes {
+        const attrib: GIAttribMap = this._edges.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        return attrib.get(index);
+    }
+    /**
+     * Get a wire entity attrib value by index
+     * @param name
+     * @param index
+     */
+    public getWireAttribValueByIndex(name: string, index: number): TAttribDataTypes {
+        const attrib: GIAttribMap = this._wires.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        return attrib.get(index);
+    }
+    /**
+     * Get a face entity attrib value by index
+     * @param name
+     * @param index
+     */
+    public getFaceAttribValueByIndex(name: string, index: number): TAttribDataTypes {
+        const attrib: GIAttribMap = this._faces.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        return attrib.get(index);
+    }
+    /**
+     * Get a collection entity attrib value by index
+     * @param name
+     * @param index
+     */
+    public getCollAttribValueByIndex(name: string, index: number): TAttribDataTypes {
+        const attrib: GIAttribMap = this._colls.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        return attrib.get(index);
+    }
+    // ============================================================================
+    // Has entity attrib
+    // ============================================================================
+    public hasPosiAttrib(name: string): boolean {
+        return this._posis.has(name);
+    }
+    public hasVertAttrib(name: string): boolean {
+        return this._verts.has(name);
+    }
+    public hasEdgeAttrib(name: string): boolean {
+        return this._edges.has(name);
+    }
+    public hasWireAttrib(name: string): boolean {
+        return this._wires.has(name);
+    }
+    public hasFaceAttrib(name: string): boolean {
+        return this._faces.has(name);
+    }
+    public hasCollAttrib(name: string): boolean {
+        return this._colls.has(name);
     }
     // ============================================================================
     // Get entity attrib names
@@ -212,6 +290,70 @@ export class GIAttribs {
         return this._addAttrib(EEntityTypeStr.COLL, name, data_type, data_size, this._model.geom().numColls());
     }
     // ============================================================================
+    // Get all values
+    // ============================================================================
+    /**
+     * Get an array of all attribute values for posis
+     * @param attrib_name
+     */
+    public getPosisAttribValues(attrib_name: string): TAttribDataTypes[]  {
+        if (!this._posis.has(attrib_name)) { return null; }
+        const attrib_map: GIAttribMap = this._posis.get(attrib_name);
+        return attrib_map.getSeqValues();
+    }
+    /**
+     * Get an array of all attribute values for verts
+     * @param attrib_name
+     */
+    public getVertsAttribValues(attrib_name: string): TAttribDataTypes[]  {
+        if (!this._verts.has(attrib_name)) { return null; }
+        const attrib_map: GIAttribMap = this._verts.get(attrib_name);
+        return attrib_map.getSeqValues();
+    }
+    // ============================================================================
+    // Shortcuts
+    // ============================================================================
+    /**
+     * Shortcut for getting a coordinate from a numeric position index (i.e. this is not an ID)
+     * @param posi_i
+     */
+    public getPosiCoordByIndex(posi_i: number): TCoord {
+        return this._posis.get('coordinates').get(posi_i) as TCoord;
+    }
+    /**
+     * Shortcut for getting all coordinates
+     * @param posi_i
+     */
+    public getPosiCoords(): TCoord[] {
+        const coords: TCoord[] = [];
+        const coords_map: GIAttribMap = this._posis.get('coordinates');
+        for (let posi_i = 0; posi_i < this._model.geom().numPosis(); posi_i++) {
+            coords.push(coords_map.get(posi_i) as TCoord);
+        }
+        return coords;
+    }
+    /**
+     * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)
+     * @param vert_i
+     */
+    public getVertCoordByIndex(vert_i: number): TCoord {
+        const posi_i: number = this._model.geom().navVertToPosi(vert_i);
+        return this._posis.get('coordinates').get(posi_i) as TCoord;
+    }
+    /**
+     * Shortcut for getting coords for all verts
+     * @param attrib_name
+     */
+    public getVertsCoords(attrib_name: string): TCoord[] {
+        const coords: TCoord[] = [];
+        const coords_map: GIAttribMap = this._posis.get('coordinates');
+        for (let vert_i = 0; vert_i < this._model.geom().numVerts(); vert_i++) {
+            const posi_i: number = this._model.geom().navVertToPosi(vert_i);
+            coords.push(coords_map.get(posi_i) as TCoord);
+        }
+        return coords;
+    }
+    // ============================================================================
     // Threejs
     // For methods to get the array of edges and triangles, see the geom class
     // get3jsTris() and get3jsEdges()
@@ -223,7 +365,7 @@ export class GIAttribs {
     public get3jsSeqVertsCoords(verts: number[]): number[] {
         const coords_attrib: GIAttribMap = this._posis.get('coordinates');
         const coords_keys: number[] = coords_attrib.getSeqKeys();
-        const coords_values: TAttribDataTypes[] = coords_attrib.getSeqValues();
+        const coords_values: TAttribDataTypes[] = coords_attrib.getValues();
         const verts_cords_values: number[] = [];
         verts.forEach( coords_i => verts_cords_values.push(...coords_values[coords_keys[coords_i]] as number[]));
         return verts_cords_values;
@@ -236,16 +378,13 @@ export class GIAttribs {
         if (!this._verts.has(attrib_name)) { return null; }
         const attrib_map: GIAttribMap = this._verts.get(attrib_name);
         const attrib_keys: number[] = attrib_map.getSeqKeys();
-        const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
+        const attrib_values: TAttribDataTypes[] = attrib_map.getValues();
         const result = [].concat(...attrib_keys.map(attrib_key => attrib_values[attrib_key]));
         return result;
     }
 
-    public getVertsCoords(attrib_name: string): GIAttribMap {
-        const coords_attrib: GIAttribMap = this._posis.get('coordinates');
-        return coords_attrib;
-    }
-
+    // TODO: remove this method
+    // It has been replaced by getVertsAttribValues()
     public getVertsAttrib(attrib_name: string) {
         if (!this._verts.has(attrib_name)) { return null; }
         const attrib_map: GIAttribMap = this._verts.get(attrib_name);

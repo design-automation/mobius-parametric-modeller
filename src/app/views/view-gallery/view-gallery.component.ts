@@ -9,6 +9,8 @@ import { DataService } from '@services';
 import * as circularJSON from 'circular-json';
 import { Router } from '@angular/router';
 
+import * as galleryUrls from '@assets/gallery/__config__.json';
+
 @Component({
   selector: 'view-gallery',
   templateUrl: './view-gallery.component.html',
@@ -16,7 +18,8 @@ import { Router } from '@angular/router';
 })
 export class ViewGalleryComponent {
 
-    private allFiles: Observable<any>;
+    // private allFiles: Observable<any>;
+    private allFiles: any;
     @Output() switch = new EventEmitter();
 
     /*
@@ -27,18 +30,20 @@ export class ViewGalleryComponent {
     */
 
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
+        this.allFiles = galleryUrls.names;
+        /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();
         }
+        */
     }
 
     getFilesFromURL(): Observable<any> {
-        console.log('Retrieving Gallery...');
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
     }
 
-
-    loadFile(fl) {
+    loadFile(fileName) {
+        const fl = { 'download_url': galleryUrls.link + fileName};
         const stream = Observable.create(observer => {
             const request = new XMLHttpRequest();
 

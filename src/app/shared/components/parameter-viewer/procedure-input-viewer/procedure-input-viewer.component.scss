@@ -3,6 +3,7 @@
 
 .container{
     display: block; 
+    height: auto;
     margin: 5px 0px 0px 5px;
     width: 100%;
 }
@@ -15,7 +16,7 @@
     padding-bottom: 5px;
     border-bottom: 1px solid $color5;
     border-left: 1px solid $color5;
-    width: 100%;
+    width: 98%;
 
 }
 

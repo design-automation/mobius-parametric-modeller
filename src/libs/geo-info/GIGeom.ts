@@ -208,80 +208,90 @@ export class GIGeom {
     // ============================================================================
     // Navigate down the hierarchy
     // ============================================================================
-    private _navVertToPosi(vert: number): number {
-        return this._verts[vert];
+    public navVertToPosi(vert_i: number): number {
+        return this._verts[vert_i];
     }
-    private _navEdgeToVert(edge: number): number[] {
-        return this._edges[edge];
+    public navEdgeToVert(edge_i: number): number[] {
+        return this._edges[edge_i];
     }
-    private _navWireToEdge(wire: number): number[] {
-        return this._wires[wire];
+    public navWireToEdge(wire_i: number): number[] {
+        return this._wires[wire_i];
     }
-    private _navFaceToWire(face: number): number[] {
-        return this._faces[face][0];
+    public navFaceToWire(face_i: number): number[] {
+        return this._faces[face_i][0];
     }
-    private _navFaceToTri(face: number): number[] {
-        return this._faces[face][1];
+    public navFaceToTri(face_i: number): number[] {
+        return this._faces[face_i][1];
     }
-    private _navPointToVert(point: number): number {
-        return this._points[point];
+    public navPointToVert(point_i: number): number {
+        return this._points[point_i];
     }
-    private _navLineToVert(line: number): number {
-        return this._lines[line];
+    public navLineToWire(line_i: number): number {
+        return this._lines[line_i];
     }
-    private _navPgonToVert(pgon: number): number {
-        return this._pgons[pgon];
+    public navPgonToFace(pgon_i: number): number {
+        return this._pgons[pgon_i];
     }
-    private _navCollToPoint(coll: number): number[] {
-        return this._colls[coll][1]; // coll points
+    public navCollToPoint(coll_i: number): number[] {
+        return this._colls[coll_i][1]; // coll points
     }
-    private _navCollToLine(coll: number): number[] {
-        return this._colls[coll][2]; // coll lines
+    public navCollToLine(coll_i: number): number[] {
+        return this._colls[coll_i][2]; // coll lines
     }
-    private _navCollToPgon(coll: number): number[] {
-        return this._colls[coll][3]; // coll pgons
+    public navCollToPgon(coll_i: number): number[] {
+        return this._colls[coll_i][3]; // coll pgons
     }
-    private _navCollToColl(coll: number): number {
-        return coll[0]; // coll parent
+    public navCollToColl(coll_i: number): number {
+        return coll_i[0]; // coll parent
+    }
+    // jump all way down to vertices
+    public navLineToVert(line_i: number): number[] {
+        const wire_i: number = this._lines[line_i];
+        return this._getWireVerts(wire_i);
+    }
+    public navPgonToVert(pgon_i: number): number[][] {
+        const face_i: number = this._pgons[pgon_i];
+        const wires_i: number[] = this._faces[face_i][0];
+        return wires_i.map( wire_i => this._getWireVerts(wire_i) );
     }
     // ============================================================================
     // Navigate up the hierarchy
     // ============================================================================
-    private _navPosiToVert(posi: number): number[] {
-        return this._rev_posis_verts[posi];
+    public navPosiToVert(posi_i: number): number[] {
+        return this._rev_posis_verts[posi_i];
     }
-    private _navVertToTri(vert: number): number {
-        return this._rev_verts_tris[vert];
+    public navVertToTri(vert_i: number): number {
+        return this._rev_verts_tris[vert_i];
     }
-    private _navVertToEdge(vert: number): number {
-        return this._rev_verts_edges[vert];
+    public navVertToEdge(vert_i: number): number {
+        return this._rev_verts_edges[vert_i];
     }
-    private _navTriToFace(tri: number): number {
-        return this._rev_tris_faces[tri];
+    public navTriToFace(tri_i: number): number {
+        return this._rev_tris_faces[tri_i];
     }
-    private _navEdgeToWire(edge: number): number {
-        return this._rev_edges_wires[edge];
+    public navEdgeToWire(edge_i: number): number {
+        return this._rev_edges_wires[edge_i];
     }
-    private _navWireToFace(wire: number): number {
-        return this._rev_wires_faces[wire];
+    public navWireToFace(wire_i: number): number {
+        return this._rev_wires_faces[wire_i];
     }
-    private _navVertToPoint(vert: number): number {
-        return this._rev_verts_points[vert];
+    public navVertToPoint(vert_i: number): number {
+        return this._rev_verts_points[vert_i];
     }
-    private _navWireToLine(wire: number): number {
-        return this._rev_wires_lines[wire];
+    public navWireToLine(wire_i: number): number {
+        return this._rev_wires_lines[wire_i];
     }
-    private _navFaceToPgon(face: number): number {
+    public navFaceToPgon(face: number): number {
         return this._rev_faces_pgons[face];
     }
-    private _navPointToColl(point: number): number {
-        return this._rev_points_colls[point];
+    public navPointToColl(point_i: number): number {
+        return this._rev_points_colls[point_i];
     }
-    private _navLineToColl(line: number): number {
-        return this._rev_lines_colls[line];
+    public navLineToColl(line_i: number): number {
+        return this._rev_lines_colls[line_i];
     }
-    private _navPgonToColl(pgon: number): number {
-        return this._rev_pgons_colls[pgon];
+    public navPgonToColl(pgon_i: number): number {
+        return this._rev_pgons_colls[pgon_i];
     }
     // ============================================================================
     // Create the topological entities, these methods are never public
@@ -329,7 +339,7 @@ export class GIGeom {
         // create the triangles
         const wire_verts_i: number[] = this._getWireVerts(wire_i);
         const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._verts[vert_i] );
-        const wire_coords: TCoord[] = wire_posis_i.map( posi_i => this.model.attribs().getPosiCoord(posi_i) );
+        const wire_coords: TCoord[] = wire_posis_i.map( posi_i => this.model.attribs().getPosiCoordByIndex(posi_i) );
         const tris_corners: number[][] = triangulate(wire_coords);
         const tris_posis_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => wire_verts_i[corner] ) as TTri );
         const tris_i: number[] = tris_posis_i.map(tri_posis_i => this._tris.push(tri_posis_i) - 1);
@@ -367,28 +377,43 @@ export class GIGeom {
      */
     public addPosition(): string {
         this._num_posis += 1;
-        const i = this._num_posis - 1;
-        return EEntityTypeStr.POSI + i;
+        return EEntityTypeStr.POSI + (this._num_posis - 1);
+    }
+    /**
+     * Adds a new polygon entity to the model.
+     * @param posi_id
+     */
+    public addPoint(posi_id: string, close: boolean = false): string {
+        const posi_i: number = idIndex(posi_id);
+        const point_i: number = this.addPointByIndex(posi_i);
+        return EEntityTypeStr.POINT + point_i;
     }
     /**
      * Adds a new point entity to the model.
      * @param posi_id The position for the point.
      */
-    public addPoint(posi_id: string): string {
-        const posi_i: number = idIndex(posi_id);
+    public addPointByIndex(posi_i: number): number {
         // create verts
         const vert_i = this._addVertex(posi_i);
         // create point
         const point_i: number = this._points.push(vert_i) - 1;
         this._rev_verts_points[vert_i] = point_i;
-        return EEntityTypeStr.POINT + point_i;
+        return point_i;
     }
     /**
-     * Adds a new linestring entity to the model.
+     * Adds a new pline entity to the model.
      * @param posis_id
      */
-    public addLine(posis_id: string[], close: boolean = false): string {
+    public addPline(posis_id: string[], close: boolean = false): string {
         const posis_i: number[] = idIndicies(posis_id);
+        const pline_i: number = this.addPlineByIndex(posis_i);
+        return EEntityTypeStr.LINE + pline_i;
+    }
+    /**
+     * Adds a new pline entity to the model using numeric indicies.
+     * @param posis_id
+     */
+    public addPlineByIndex(posis_i: number[], close: boolean = false): number {
         // create verts, edges, wires
         const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
@@ -402,7 +427,7 @@ export class GIGeom {
         // create line
         const line_i: number = this._lines.push(wire_i) - 1;
         this._rev_wires_lines[wire_i] = line_i;
-        return EEntityTypeStr.LINE + line_i;
+        return line_i;
     }
     /**
      * Adds a new polygon entity to the model.
@@ -410,6 +435,14 @@ export class GIGeom {
      */
     public addPgon(posis_id: string[]): string {
         const posis_i: number[] = idIndicies(posis_id);
+        const pgon_i: number = this.addPgonByIndex(posis_i);
+        return EEntityTypeStr.PGON + pgon_i;
+    }
+    /**
+     * Adds a new polygon entity to the model using numeric indicies.
+     * @param posis_id
+     */
+    public addPgonByIndex(posis_i: number[]): number {
         // create verts, edges, wires, faces
         const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
@@ -422,7 +455,7 @@ export class GIGeom {
         // create polygon
         const pgon_i: number = this._pgons.push(face_i) - 1;
         this._rev_faces_pgons[face_i] = pgon_i;
-        return EEntityTypeStr.PGON + pgon_i;
+        return pgon_i;
     }
     /**
      * Adds a collection and updates the rev array.
@@ -454,7 +487,7 @@ export class GIGeom {
     // Get arrays of entities, these retrun arrays of string IDs
     // ============================================================================
     public getPosis(): string[] {
-        return Array(this._num_posis).map( (_, index) =>  EEntityTypeStr.POSI + index );
+        return Array.from(Array(this._num_posis).keys()).map( (_, index) =>  EEntityTypeStr.POSI + index );
     }
     public getVerts(): string[] {
         return this._verts.map( (_, index) =>  EEntityTypeStr.VERT + index );
@@ -483,7 +516,6 @@ export class GIGeom {
     public getColls(): string[] {
         return this._colls.map( (_, index) =>  EEntityTypeStr.COLL + index );
     }
-
     // ============================================================================
     // Get array lengths
     // ============================================================================

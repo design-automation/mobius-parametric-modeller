@@ -1,15 +1,20 @@
+// Types
+export type TColor = [number, number, number];
+export type TNormal = [number, number, number];
+export type TTexture = [number, number];
+
 // Enum
 export enum EEntityTypeStr {
-    POSI = 'po',
-    TRI  = '_t',
-    VERT = '_v',
-    EDGE = '_e',
-    WIRE = '_w',
-    FACE = '_f',
+    POSI =  'po',
+    TRI  =  '_t',
+    VERT =  '_v',
+    EDGE =  '_e',
+    WIRE =  '_w',
+    FACE =  '_f',
     POINT = 'pt',
-    LINE = 'ls',
-    PGON = 'pg',
-    COLL = 'co'
+    LINE =  'ls',
+    PGON =  'pg',
+    COLL =  'co'
 }
 
 // Names of attributes

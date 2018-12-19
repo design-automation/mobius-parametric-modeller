@@ -29,7 +29,13 @@
             <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].value' type="checkbox">
             <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='{{prod.args[prod.argCount-1].default}}' 
             [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)'>
-            <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
+
+            <ng-container *ngSwitchCase="PortTypes.File" >
+                <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>
+                <input value='{{prod.args[prod.argCount-1].value?.name||"No Input"}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].value?.name||undefined,"No Input")' disabled>
+                <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" type="file">
+            </ng-container>
+
         </ng-container>
     </div>
 </div>

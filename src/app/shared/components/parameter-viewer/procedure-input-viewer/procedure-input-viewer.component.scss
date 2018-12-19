@@ -23,7 +23,14 @@
 .container--input{
     display: inline-flex; 
     flex-direction: row; 
-  }
+}
+
+.filebtn{
+    height: 20px;
+    margin: 0px;
+    padding: 0px;
+}
+
 
 input{
     color: $color1;

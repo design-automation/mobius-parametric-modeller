@@ -176,7 +176,7 @@ export class ExecuteComponent {
                 if (prod['ID'] && id && prod['ID'] === id) {
                     prod.hasError = true;
                 }
-                if (prod.hasOwnProperty('children')) {
+                if (prod.children) {
                     prod.children.map(function(p) {
                         markError(p, id);
                     });
@@ -187,7 +187,7 @@ export class ExecuteComponent {
                     if (prod['ID'] === prodWithError) {
                         prod.hasError = true;
                     }
-                    if (prod.hasOwnProperty('children')) {
+                    if (prod.children) {
                         prod.children.map(function(p) {
                             markError(p, prodWithError);
                         });
@@ -200,15 +200,20 @@ export class ExecuteComponent {
                     'Check that your strings are enclosed in quotes (")');
             } else if (ex.toString().indexOf('Unexpected token') > -1) {
                 error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
+            } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
+                error = new Error('Unable to read file input. Check if all input files are valid?');
             } else {
-                 error = new Error(ex);
+                error = new Error(ex);
             }
+            document.getElementById('Console').click();
             // @ts-ignore
             console.logs = [];
-            console.log('Error node code:');
+            console.log('=======================================');
+            console.log(error.name.toUpperCase());
+            console.log('=======================================');
+            console.log(error.message);
+            console.log('---------------\nError node code:');
             console.log(fnString);
-            console.log('=============================');
-            console.log(error);
             throw error;
 
         }

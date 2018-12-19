@@ -32,15 +32,22 @@
 }
 
 .container--procedure{
-    display: block;
+    display: in-line block;
     width: 80%;
     bottom: 10px;
     background-color: transparent;
     padding: none;
+
+    overflow: auto;
+    height: calc(100vh - 40px); // 40px === $header-height
 }
 
 hr{
     border-top: 2px solid $color5;
     width:100%;
 
+}
+
+procedure-item.ng-star-inserted{
+    max-height: 100%;
 }

@@ -41,5 +41,8 @@ export class ProcedureInputViewerComponent {
         return ctx.measureText(val).width + 2;
     }
 
+    openFileBrowse(id) {
+        document.getElementById(`file_${id}`).click();
+    }
 
 }

@@ -1,4 +1,4 @@
-<div class='container container--parameter' *ngIf='prod.meta?.module=="Input"'>
+<div class='container--parameter' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta?.module=="Input"'>
     <div class='inline-div'>
         <input *ngIf='prod.type == 10' [class.disabled-input]='true' value='Global Variable' size='10' disabled>
         <input *ngIf='prod.type == 12' [class.disabled-input]='true' value='Add Model' size='5' disabled>
@@ -61,7 +61,13 @@
             <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
             <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
-            <input *ngSwitchCase="PortTypes.File" (change)="onFileChange($event)" type="file">
+
+            <div class='div--slider' *ngSwitchCase="PortTypes.File" >
+                <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>
+                <input value='{{prod.args[prod.argCount-1].default.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].default.name,"")' disabled>
+                <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" type="file">
+            </div>
+
         </ng-container>
     </div>
 

@@ -33,7 +33,7 @@ export class GIModel {
      * @param model_data The JSON data.
      */
     public addData (model_data: IModelData): void {
-        this._attribs.addData(model_data); // warning: must be before addGeomData()
+        this._attribs.addData(model_data); // warning: must be before this._geom.addDat()
         this._geom.addData(model_data.geometry);
     }
     /**

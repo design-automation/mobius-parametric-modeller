@@ -1,7 +1,7 @@
 import { IModelData, IGeomData, IAttribsData, TPoint } from './GIJson';
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames, EEntityTypeStr } from './GICommon';
+import { EAttribNames } from './GICommon';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.

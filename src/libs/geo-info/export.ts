@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TTexture } from './GICommon';
+import { TColor, TNormal, TTexture, EAttribNames } from './GICommon';
 import { TCoord } from './GIJSon';
 /**
  * Export to obj
@@ -13,13 +13,13 @@ export function exportObj(model: GIModel): string {
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs().hasVertAttrib('color');
-    const has_normal_attrib: boolean = model.attribs().hasVertAttrib('normal');
-    const has_texture_attrib: boolean = model.attribs().hasVertAttrib('uv');
+    const has_color_attrib: boolean = model.attribs().hasVertAttrib(EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.attribs().hasVertAttrib(EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.attribs().hasVertAttrib(EAttribNames.TEXTURE);
     // positions
     if (has_color_attrib) {
         for (let vert_i = 0; vert_i < model.geom().numVerts(); vert_i++) {
-            const color: TColor = model.attribs().getVertAttribValueByIndex('color', vert_i) as TColor;
+            const color: TColor = model.attribs().getVertAttribValueByIndex(EAttribNames.COLOR, vert_i) as TColor;
             const coord: TCoord = model.attribs().getVertCoordByIndex(vert_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + color.map( c => c.toString() ).join(' ') + '\n';
         }
@@ -32,15 +32,15 @@ export function exportObj(model: GIModel): string {
     // textures, vt
     if (has_texture_attrib) {
         for (let vert_i = 0; vert_i < model.geom().numVerts(); vert_i++) {
-            const color: TColor = model.attribs().getVertAttribValueByIndex('normal', vert_i) as TColor;
-            vt_str += 'v ' + color.map( v => v.toString() ).join(' ') + '\n';
+            const texture: TTexture = model.attribs().getVertAttribValueByIndex(EAttribNames.TEXTURE, vert_i) as TTexture;
+            vt_str += 'v ' + texture.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // normals, vn
     if (has_normal_attrib) {
         for (let vert_i = 0; vert_i < model.geom().numVerts(); vert_i++) {
-            const color: TColor = model.attribs().getVertAttribValueByIndex('normal', vert_i) as TColor;
-            vn_str += 'v ' + color.map( v => v.toString() ).join(' ') + '\n';
+            const normal: TNormal = model.attribs().getVertAttribValueByIndex(EAttribNames.NORMAL, vert_i) as TNormal;
+            vn_str += 'v ' + normal.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // faces, f

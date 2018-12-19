@@ -48,7 +48,7 @@ export class GIGeom {
         _w: this._wires,
         _f: this._faces,
         pt: this._points,
-        ls: this._lines,
+        pl: this._lines,
         pg: this._pgons,
         co: this._colls
     };

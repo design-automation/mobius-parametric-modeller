@@ -18,7 +18,7 @@ export class GIAttribs {
     private _colls: Map<string, GIAttribMap> = new Map();
     // all attrib maps
     private _attrib_maps = {
-        po: this._posis,
+        ps: this._posis,
         _v: this._verts,
         _e: this._edges,
         _w: this._wires,

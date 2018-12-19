@@ -5,14 +5,14 @@ export type TTexture = [number, number];
 
 // Enum
 export enum EEntityTypeStr {
-    POSI =  'po',
+    POSI =  'ps',
     TRI  =  '_t',
     VERT =  '_v',
     EDGE =  '_e',
     WIRE =  '_w',
     FACE =  '_f',
     POINT = 'pt',
-    LINE =  'ls',
+    LINE =  'pl',
     PGON =  'pg',
     COLL =  'co'
 }
@@ -21,7 +21,8 @@ export enum EEntityTypeStr {
 export enum EAttribNames {
     COORDS = 'coordinates',
     NORMAL = 'normal',
-    COLOR = 'color'
+    COLOR = 'color',
+    TEXTURE = 'texture'
 }
 
 /**

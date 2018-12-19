@@ -15,7 +15,7 @@ export function download(data: string, filename: string): boolean {
           const uriScheme = ['data:', data_type, ','].join('');
           link.href = uriScheme + content;
           link.download = filename;
-          //FF requires the link in actual DOM
+          // FF requires the link in actual DOM
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

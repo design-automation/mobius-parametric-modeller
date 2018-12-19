@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { exportObj } from '@libs/geo-info/export';
 import { importObj } from '@libs/geo-info/import';
-import { IModelData, TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '../../../libs/geo-info/GIJson';
+import { TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '@libs/geo-info/GIJson';
 import { EEntityTypeStr } from '@libs/geo-info/GICommon';
 import { download } from '@libs/filesys/download';
 

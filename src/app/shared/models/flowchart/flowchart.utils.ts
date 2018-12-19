@@ -63,7 +63,7 @@ export class FlowchartUtils {
             nodeOrder.push(node);
         }
         node.hasExecuted = true;
-        node.enabled = enabled;
+        // node.enabled = enabled;
         for (const edge of node.output.edges) {
             FlowchartUtils.checkNode(nodeOrder, edge.target.parentNode, enabled);
         }
@@ -96,7 +96,7 @@ export class FlowchartUtils {
                     }
                 }
                 if (check) { continue; }
-                node.enabled = false;
+                // node.enabled = false;
                 nodeOrder.push(node);
             }
         }

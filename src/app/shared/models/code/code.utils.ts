@@ -182,7 +182,7 @@ export class CodeUtils {
     }
 
     static async getStartInput(val, inputMode): Promise<any> {
-        let result: any;
+        let result = val;
         if (inputMode.toString() === InputType.URL.toString() ) {
             if (val.indexOf('dropbox') !== -1) {
                 val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
@@ -196,6 +196,7 @@ export class CodeUtils {
                 request.send();
             });
             result = await p;
+            result = '`' + result + '`';
         } else if (inputMode.toString() === InputType.File.toString()) {
             const p = new Promise((resolve) => {
                 const reader = new FileReader();
@@ -205,8 +206,9 @@ export class CodeUtils {
                 reader.readAsText(val);
             });
             result = await p;
+            result = '`' + result + '`';
         }
-        return '`' + result + '`';
+        return result;
     }
 
     static loadFile(f) {
@@ -250,7 +252,13 @@ export class CodeUtils {
         if (node.type === 'start' || inp.edges.length === 0) {
             input = _parameterTypes['newFn']();
         } else {
-            input = CodeUtils.mergeInputs(inp.edges.map(edge => edge.source.value));
+            const inputs = [];
+            for (const edge of inp.edges) {
+                if (edge.source.parentNode.enabled) {
+                    inputs.push(edge.source.value);
+                }
+            }
+            input = CodeUtils.mergeInputs(inputs);
             /*
             if (input.constructor === gsConstructor) {
                 input = `new __MODULES__.gs.Model(${input.toJSON()})`

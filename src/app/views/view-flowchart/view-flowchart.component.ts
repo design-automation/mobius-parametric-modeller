@@ -379,11 +379,20 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             }
         }
 
+        tbrEdge.target.parentNode.enabled = false;
+        for (const remainingEdge of tbrEdge.target.edges) {
+            if (remainingEdge.source.parentNode.enabled) {
+                tbrEdge.target.parentNode.enabled = true;
+                break;
+            }
+        }
+        /*
         if (tbrEdge.target.parentNode.input.edges.length === 0 && deletedNode !== tbrEdge.target.parentNode.id) {
             ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
         } else {
             ViewFlowchartComponent.enableNode(tbrEdge.target.parentNode);
         }
+        */
 
         // remove the edge from the general list of edges
         this.dataService.flowchart.edges.splice(edge_index, 1);
@@ -761,6 +770,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 this.edge.source.edges.push(this.edge);
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
+
+                if (this.edge.source.parentNode.enabled) {
+                    this.edge.target.parentNode.enabled = true;
+                }
+                /*
                 try {
                     if (this.edge.source.parentNode.enabled) {
                         ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
@@ -771,6 +785,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                     this.edge.target.parentNode.hasError = true;
                     this.edge.source.parentNode.hasError = true;
                 }
+                */
                 break;
             }
         }

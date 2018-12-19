@@ -5,11 +5,21 @@
             <!-- viewchild content -->
             <div class='content__panel'>
                 <div class="container__element container__element--project-container">
+                    <!--
                     <div class="project-container__project" *ngFor="let f of  (dataService.galleryFiles | async)">
                         <div class="project__content" (click)='loadFile(f)'>
                             {{ f.name | simplename }}
                         </div>
                     </div>
+
+                    -->
+                    <div class="project-container__project" *ngFor="let f of allFiles">
+                        <div class="project__content" (click)='loadFile(f)'>
+                            {{ f | simplename }}
+                        </div>
+                    </div>
+    
+
                 </div>
             </div>
         </as-split-area>

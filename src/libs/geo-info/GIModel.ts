@@ -1,7 +1,7 @@
 import { IModelData, IGeomData, IAttribsData, TPoint } from './GIJson';
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames, EEntityTypeStr } from './GICommon';
+import { EAttribNames } from './GICommon';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
@@ -33,7 +33,7 @@ export class GIModel {
      * @param model_data The JSON data.
      */
     public addData (model_data: IModelData): void {
-        this._attribs.addData(model_data); // warning: must be before addGeomData()
+        this._attribs.addData(model_data); // warning: must be before this._geom.addDat()
         this._geom.addData(model_data.geometry);
     }
     /**

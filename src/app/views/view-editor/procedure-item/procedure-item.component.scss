@@ -96,7 +96,6 @@
     margin: none;
     padding-bottom: 2px;
     border: none;
-    min-height: 17px;
 
     display: inline-block;
 
@@ -133,9 +132,9 @@
     &:hover{
         display: inline-flex;
     }
-    .deletebtn:hover{
-        color: red !important;
-    }
+    // .deletebtn:hover{
+    //     color: red !important;
+    // }
 }
 
 .btn{
@@ -204,4 +203,5 @@
     color: $function-text-color;
     font-weight: 550;
     text-align: center;
+    min-height: 17px;
 }

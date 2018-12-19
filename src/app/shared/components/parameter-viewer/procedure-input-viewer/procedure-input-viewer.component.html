@@ -13,11 +13,12 @@
                 <mat-slider
                     [(ngModel)]='prod.args[prod.argCount-1].value'
                     thumbLabel
-                    tickInterval="auto"
+                    step={{prod.args[prod.argCount-1].step||1}}
                     min={{prod.args[prod.argCount-1].min||0}}
                     max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
                 <input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].value' 
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].value, "")' disabled>
+                placeholder='prod.args[prod.argCount-1].default'
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)' disabled>
 
 
                 <!--

@@ -70,8 +70,7 @@ export class CodeUtils {
                 if (constName.substring(0, 1) === '"' || constName.substring(0, 1) === '\'') {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
-
-                const val = await CodeUtils.getStartInput(args[1].value || args[1].default, prod.meta.inputMode);
+                const val = await CodeUtils.getStartInput(args[1].value, args[1].default, prod.meta.inputMode);
                 codeStr.push(`__params__['constants']['${constName}'] = ${val};`);
 
                 break;
@@ -82,7 +81,7 @@ export class CodeUtils {
                     cst = args[0].value.substring(1, args[0].value.length - 1);
                 }
 
-                const value = await CodeUtils.getStartInput(args[1].value || args[1].default, prod.meta.inputMode);
+                const value = await CodeUtils.getStartInput(args[1].value, args[1].default, prod.meta.inputMode);
                 codeStr.push(`__params__['constants']['${cst}'] = ${value};`);
                 if (_parameterTypes.addData) {
                     codeStr.push(`__modules__.${_parameterTypes.addData}( __params__.model, __params__.constants['${cst}']);`);
@@ -102,7 +101,7 @@ export class CodeUtils {
                 const argVals = [];
                 for (const arg of args.slice(1)) {
                     if (arg.name === _parameterTypes.input) {
-                        const argVal = await CodeUtils.getStartInput(arg.value || arg.default, prod.meta.inputMode);
+                        const argVal = await CodeUtils.getStartInput(arg.value, arg.default, prod.meta.inputMode);
                         argVals.push(argVal);
                         continue;
                     }
@@ -154,7 +153,7 @@ export class CodeUtils {
                     const arg = args[i];
                     // args.slice(1).map((arg) => {
                     if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(arg.value); }
-                    const r = await CodeUtils.getStartInput(arg.value, InputType.URL);
+                    const r = await CodeUtils.getStartInput(arg.value, arg.value, InputType.URL);
                     argsVals.push(r);
                 }
                 argsVals = argsVals.join(',');
@@ -181,7 +180,9 @@ export class CodeUtils {
         return codeStr;
     }
 
-    static async getStartInput(val, inputMode): Promise<any> {
+    static async getStartInput(value, defaultVal, inputMode): Promise<any> {
+        let val;
+        if (value === undefined) {val = defaultVal; } else { val = value; }
         let result = val;
         if (inputMode.toString() === InputType.URL.toString() ) {
             if (val.indexOf('dropbox') !== -1) {

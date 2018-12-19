@@ -4,5 +4,6 @@ export interface IArgument {
     value: any;
     min?: number;
     max?: number;
+    step?: number;
     type?: any;
 }

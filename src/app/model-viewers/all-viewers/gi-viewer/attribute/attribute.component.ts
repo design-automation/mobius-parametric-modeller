@@ -23,14 +23,7 @@ export class AttributeComponent implements AfterViewInit, OnChanges {
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
 
-  dataSource = {
-    0: new MatTableDataSource<object>(),
-    1: new MatTableDataSource<object>(),
-    2: new MatTableDataSource<object>(),
-    3: new MatTableDataSource<object>(),
-    4: new MatTableDataSource<object>(),
-    5: new MatTableDataSource<object>()
-  };
+  dataSource;
 
   protected dataService: DataService;
 
@@ -62,13 +55,13 @@ export class AttributeComponent implements AfterViewInit, OnChanges {
     const attribData = this._data.getAttibs().getAttribsForTable(tab_map[tabIndex]);
     if (attribData.length > 0) {
       this.displayedColumns = Object.keys(attribData[0]);
-      this.dataSource[tabIndex] = new MatTableDataSource<object>(attribData);
+      this.dataSource = new MatTableDataSource<object>(attribData);
     } else {
       this.displayedColumns = [];
-      this.dataSource[tabIndex] = new MatTableDataSource<object>();
+      this.dataSource = new MatTableDataSource<object>();
     }
-    this.dataSource[tabIndex].paginator = this.paginator.toArray()[tabIndex];
-    this.dataSource[tabIndex].sort = this.sort.toArray()[tabIndex];
+    this.dataSource.paginator = this.paginator.toArray()[tabIndex];
+    this.dataSource.sort = this.sort.toArray()[tabIndex];
   }
 
   _setDataSource(tabIndex) {

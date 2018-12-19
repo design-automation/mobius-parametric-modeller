@@ -389,18 +389,21 @@ export class GIAttribs {
     // }
 
     public getAttribsForTable(tab: string) {
-        const _attrib_inner_maps = {
-            po: this._model.geom().numPosis(),
-            _v: this._model.geom().numVerts(),
-            _e: this._model.geom().numEdges(),
-            _w: this._model.geom().numWires(),
-            _f: this._model.geom().numFaces(),
-            co: this._model.geom().numColls()
-        };
+        const e = EEntityTypeStr;
+        const EntityType = [e.POSI, e.VERT, e.EDGE, e.WIRE, e.FACE, e.COLL];
+        const _attrib_inner_maps = {};
+        _attrib_inner_maps[EntityType[0]] = this._model.geom().numPosis();
+        _attrib_inner_maps[EntityType[1]] = this._model.geom().numVerts();
+        _attrib_inner_maps[EntityType[2]] = this._model.geom().numEdges();
+        _attrib_inner_maps[EntityType[3]] = this._model.geom().numWires();
+        _attrib_inner_maps[EntityType[4]] = this._model.geom().numFaces();
+        _attrib_inner_maps[EntityType[5]] = this._model.geom().numColls();
+
         const data_obj_map: Map<number, { id: string}> = new Map();
         for (let index = 0; index < _attrib_inner_maps[tab]; index++) {
             data_obj_map.set(index, { id: `${tab}${index}` } );
         }
+
         this._attrib_maps[tab].forEach(attr => {
             const attrib_map: GIAttribMap = attr;
             const result = attrib_map.getSeqValues();
@@ -408,6 +411,7 @@ export class GIAttribs {
                 const n = attr.getName().toLowerCase();
                 if ( attr.getDataSize() > 1 ) {
                     const value2 = value as any[];
+                    // console.log(data_obj_map);
                     value2.forEach( (v, i) => {
                         data_obj_map.get(index)[`${n}${i}`] = v;
                     });

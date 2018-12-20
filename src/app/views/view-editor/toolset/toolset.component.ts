@@ -89,7 +89,8 @@ export class ToolsetComponent {
                     },
                     name: funcName,
                     module: 'Imported',
-                    doc: documentation
+                    doc: documentation,
+                    importedFile: reader.result.toString()
                 };
 
                 func.args = [];

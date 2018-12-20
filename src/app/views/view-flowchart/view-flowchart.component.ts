@@ -112,7 +112,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             if (!this.listenerActive) { return; }
             const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
             if (node.type !== 'start' && node.type !== 'end') {
-                console.log('copied node:', node);
+                // console.log('copied node:', node);
                 const cp = circularJSON.parse(circularJSON.stringify(node));
                 this.copied = circularJSON.stringify(cp);
             }
@@ -125,7 +125,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 event.preventDefault();
                 const newNode = <INode>circularJSON.parse(this.copied);
                 const pt = this.canvas.createSVGPoint();
-                console.log('.', val);
                 pt.x = 20;
                 pt.y = 100;
 
@@ -145,7 +144,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
                 NodeUtils.updateNode(newNode, svgP);
                 this.dataService.flowchart.nodes.push(newNode);
-                console.log('pasting node:', newNode);
+                // console.log('pasting node:', newNode);
             }
         });
 

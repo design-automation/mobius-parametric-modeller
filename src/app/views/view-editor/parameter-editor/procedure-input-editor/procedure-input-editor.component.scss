@@ -7,9 +7,10 @@
 
 .container--parameter{
     margin: 5px 0px;
-    display: inline-block; 
-    flex-direction: row; 
-    flex-wrap: wrap;
+
+    display: flex;
+    flex-flow: column nowrap;
+
     color: $color1;
     vertical-align: bottom;
     padding-bottom: 5px;
@@ -28,10 +29,11 @@ select{
     background-color: transparent;
     border: 0px;
     // border-left: 1px solid red;
-    // border-bottom: 1px solid red;
-    height: 18px;
+    border-bottom: 1px solid $color1;
+    height: $fsize1;
     font-family: sans-serif;
     font-size: $fsize2;
+
     &:hover, &:focus{
         background-color: $color7;
         color: $color8;
@@ -50,9 +52,10 @@ input{
     background-color: transparent;
     border:none;
     border-bottom: 1px solid $color1;
-    margin-left: 5px;
+    // margin-left: 5px;
     max-width: 95%;
     vertical-align: bottom;
+    padding: 0px 5px;
 
     font-family: sans-serif;
     font-size: $fsize2;
@@ -61,18 +64,14 @@ input{
         color: $color8;
     }
     &.disabled-input{
+        padding: 0px;
         border-bottom: none;
-        &:hover{
+        &:hover{ // no change
             background-color: transparent;
+            color: $color1;
         }
     }
 }
-
-.inp--desc{
-    font-size: $fsize2;
-    max-width: 95%;
-}
-
 
 .input-const-name{
     min-width: 100px;
@@ -94,15 +93,10 @@ input{
     float: right;
     color: $button-color;
 
-    // &.highlighted{
-    //     background-color: rgb(255,150,150);
-    // }
     :hover{
         color: $selected-color;
     }
 }
-
-// .container:hover .btn {display: block}
 
 .icon{
     vertical-align: top;
@@ -111,27 +105,10 @@ input{
     width: $fsize1;
 }
 
-
-
-.slider-val{
-    color: $color1;
-    resize: horizontal;
-    size: 2;
-    min-width: 1px;
-    max-width: 300px;
-    width: $fsize1;
-}
-
 .container--input{
     display: inline-flex; 
     flex-direction: row; 
-  }
-
-.div--slider{
-    display: inline-flex; 
-    flex-direction: row; 
 }
-
 
 .parameter__name{
     width: 100px;
@@ -139,6 +116,50 @@ input{
     word-wrap: break-word;
 }
 
-mat-slider {
-    width: 300px;
+.FFA{
+    height: 2*$fsize3;
+}
+
+// slider
+
+.div--slider{
+    display: flex;
+    flex-flow: column nowrap;
+
+    .input--container{
+        display:inline-flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 300px;
+        vertical-align: middle;
+        .slider-input{
+            height: $fsize1;
+            line-height:$fsize1;
+        }
+    }
+
+    .slider--container{
+        display: flex;
+        flex-grow: 1;
+        mat-slider{
+            width: 100%;
+            height: $fsize3;
+            max-width: 300px;
+            padding: 0px;
+            
+            display: inline-block;
+            position: relative;
+            box-sizing: border-box;
+            vertical-align: middle;
+        }
+    }
+}
+
+// parameter description
+
+.descr--container{
+    .inp--desc{
+        font-size: $fsize2;
+        max-width: 95%;
+    }
 }

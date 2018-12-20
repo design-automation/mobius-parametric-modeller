@@ -119,15 +119,41 @@ input, textarea, select, a {
 
 // slider
 
-.mat-slider-track-background{
-    background-color: $color4 !important;
+.mat-slider-wrapper{
+    position: relative !important;
+    top: $fsize1 !important;
 }
 
 .mat-slider-track-fill{
     background-color: $color1 !important;
 }
 
-.mat-
+.mat-slider-track-background{
+    background-color: $color4 !important;
+}
+
+.mat-slider-thumb-label-text {
+    color: $selected-color !important;
+    //background-color: $color7 !important;
+    font-size: $fsize2!important;
+}
+
+.mat-slider-thumb{
+	border-radius: 0 !important;
+	background-color: $color4 !important;
+	border: 1px solid $color1 !important;
+	width: 5px !important;
+	right: -5px !important;
+}
+
+.mat-slider-thumb-label{
+    height: 0px !important;
+    width: 0px !important;
+    top: 0px !important;
+    right: -$fsize1 !important;
+
+    background-color: $color4!important;
+}
 
 .cdk-mouse-focused{
     .mat-slider-track-fill{
@@ -135,6 +161,6 @@ input, textarea, select, a {
     }
     .mat-slider-track-background{
         background-color: $color7 !important;
-        border-bottom: 1px solid $color3;
+        border-bottom: 1px solid $color4;
     }
 }

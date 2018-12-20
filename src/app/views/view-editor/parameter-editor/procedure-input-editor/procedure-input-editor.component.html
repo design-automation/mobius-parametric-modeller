@@ -66,7 +66,7 @@
                 </div>               
             </div>
 
-            <input *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+            <input class = "chbox" *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
             <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
 

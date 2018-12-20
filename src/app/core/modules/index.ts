@@ -1,5 +1,13 @@
 import * as Model from './Model';
 export {Model};
+import * as math from './math';
+export {math};
+import * as trig from './trig';
+export {trig};
+import * as stat from './stat';
+export {stat};
+import * as list from './list';
+export {list};
 import * as Input from './input';
 export {Input};
 import * as Output from './output';

@@ -7,6 +7,8 @@ import { IArgument } from '@models/code';
 import { ModuleAware, ModuleDocAware } from '@shared/decorators';
 import { INode } from '@models/node';
 
+import * as circularJSON from 'flatted';
+import { DownloadUtils } from '@shared/components/file/download.utils';
 
 const keys = Object.keys(ProcedureTypes);
 
@@ -143,6 +145,16 @@ export class ToolsetComponent {
             return;
         }
         this.imported.emit(fnc);
+    }
+
+    downloadImported(event: MouseEvent, fnData) {
+        event.stopPropagation();
+
+        const fileString = fnData.importedFile;
+        const fname = `${fnData.name}.mob`;
+        const blob = new Blob([fileString], {type: 'application/json'});
+        DownloadUtils.downloadFile(fname, blob);
+
     }
 
     toggleAccordion(id: string) {

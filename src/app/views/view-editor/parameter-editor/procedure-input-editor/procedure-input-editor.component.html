@@ -65,14 +65,16 @@
                     max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
                 </div>               
             </div>
-
-            <input class = "chbox" *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+            <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
+                <input id = 'chbox' [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+                <label for = 'chbox'></label>
+            </div>
             <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
 
             <div class='div--slider' *ngSwitchCase="PortTypes.File" >
                 <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>
-                <input value='{{prod.args[prod.argCount-1].default.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].default.name,"")' disabled>
+                <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-1].default.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].default.name,"")' disabled>
                 <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" type="file">
             </div>
         </ng-container>

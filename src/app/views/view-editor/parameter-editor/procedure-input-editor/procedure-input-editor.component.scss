@@ -84,12 +84,6 @@ input{
     min-width: 100px;
 }
 
-.filebtn{
-    height: 20px;
-    margin: 0px;
-    padding: 0px;
-}
-
 .btn{
     height: $fsize1;
     width: $fsize1;
@@ -162,6 +156,78 @@ input{
             max-width: 300px;
             padding: 0px;
         }
+    }
+}
+
+// checkbox
+
+.div--chbox{
+    height: $fsize1;
+    width: $fsize1;
+    position: relative;
+    label{
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: $fsize1;
+        height: $fsize1;
+        
+        background-color: $color6;
+        border:1px solid $color2;
+        margin: 1px;
+
+        &:after { // check
+            position: absolute;
+            top: 4px;
+            left: 4px;
+
+            opacity: 0.2;
+            content: '';
+            
+            width: 4px;
+            height: 2px;
+            background-color: transparent;
+            
+            border: 3px solid $color8;
+            border-top: none;
+            border-right: none;      
+            transform: rotate(-45deg);
+        }
+        &:hover{
+            background-color: $color7;
+            border:2px solid rgba($selected-color,0.5);
+            margin: 0px;
+        }
+        &:hover::after {
+            border-color: rgba($selected-color,0.5);
+        }
+    }
+    input[type=checkbox]:checked + label:after {
+        opacity: 1;
+    }
+}
+
+// import file button
+
+.filebtn{
+    height: 20px;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid transparent;
+
+    background-color: $color5; /* Green */
+    color: $color1;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: $fsize2;
+    &:hover, &:active {
+        // border-color: $selected-color;
+        background-color: $color4;
+        color: $color8;
     }
 }
 

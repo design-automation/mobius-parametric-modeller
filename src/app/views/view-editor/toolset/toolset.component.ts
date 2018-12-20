@@ -196,10 +196,11 @@ export class ToolsetComponent {
 
             for (let i = 0 ; i < prods.length - 1; i++) {
                 if (prods[i].ID === this.node.state.procedure[0].ID) {
-                    if (prods[i + 1].type.toString() !== ProcedureTypes.Elseif.toString() ||
-                    prods[i + 1].type.toString() !== ProcedureTypes.Else.toString()) {
+                    if (prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString() ||
+                    prods[i + 1].type.toString() === ProcedureTypes.Else.toString()) {
                         return true;
                     }
+                    return false;
                 }
             }
             return false;
@@ -209,17 +210,40 @@ export class ToolsetComponent {
             }
             return (this.node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
             && this.node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
-        } else if (tp === 'BREAK' || tp === 'CONTINUE') {
-            let checkNode = this.node.state.procedure[0];
-            if (!checkNode) { return true; }
-            while (checkNode.parent) {
-                if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
-                checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
-                    return false;
+        } else {
+            if (this.node.state.procedure[0]) {
+                let prods: IProcedure[];
+
+                if (this.node.state.procedure[0].parent) { prods = this.node.state.procedure[0].parent.children;
+                } else { prods = this.node.procedure; }
+
+                if (this.node.state.procedure[0].type.toString() === ProcedureTypes.If.toString()
+                || this.node.state.procedure[0].type.toString() === ProcedureTypes.Elseif.toString()) {
+                    for (let i = 0 ; i < prods.length - 1; i++) {
+                        if (prods[i].ID === this.node.state.procedure[0].ID) {
+                            if (prods[i + 1].type.toString() === ProcedureTypes.Else.toString()
+                            || prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString()) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
                 }
-                checkNode = checkNode.parent;
             }
-            return true;
+
+
+            if (tp === 'BREAK' || tp === 'CONTINUE') {
+                let checkNode = this.node.state.procedure[0];
+                if (!checkNode) {return true; }
+                while (checkNode.parent) {
+                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
+                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
+                        return false;
+                    }
+                    checkNode = checkNode.parent;
+                }
+                return true;
+            }
         }
         return false;
     }

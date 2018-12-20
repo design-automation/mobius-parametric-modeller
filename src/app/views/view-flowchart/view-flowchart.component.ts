@@ -454,15 +454,20 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         // calculate the zoom to fit the whole flowchart
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
         const ctm = <SVGMatrix>this.canvas.getScreenCTM();
-        let zoom = bRect.width / (ctm.a * (frame[2] - frame[0]));
-        const heightZoom = bRect.height / (ctm.d * (frame[3] - frame[1]));
-        if (zoom > heightZoom) { zoom = heightZoom; }
-        if (zoom > this.maxZoom) { zoom = this.maxZoom; } else if (zoom < this.minZoom) { zoom = this.minZoom; }
+        let zoom = canvasSize  / (frame[2] - frame[0]);
+        const heightZoom = canvasSize / (frame[3] - frame[1]);
+
+        zoom = Math.min(zoom, heightZoom, this.maxZoom);
+        zoom = Math.max(zoom, this.minZoom);
+
 
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
-
-        frame[0] = (boundingDiv.width  - (frame[2] - frame[0]) * ctm.a * zoom / this.zoom) / 2 - frame[0] * ctm.a * zoom / this.zoom;
-        frame[1] = (boundingDiv.height - (frame[3] - frame[1]) * ctm.d * zoom / this.zoom) / 2 - frame[1] * ctm.a * zoom / this.zoom;
+        frame[0] = (boundingDiv.width  - (frame[2] + frame[0]) * ctm.a * zoom / this.zoom) / 2;
+        frame[1] = (boundingDiv.height - (frame[3] + frame[1]) * ctm.d * zoom / this.zoom) / 2;
+        /*
+        frame[0] = -( frame[0] * ctm.a * zoom / this.zoom );
+        frame[1] = -( frame[1] * ctm.a * zoom / this.zoom );
+        */
 
         // -( frame[0] * ctm.a * zoom / this.zoom )
 

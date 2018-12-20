@@ -29,6 +29,30 @@
     display: inline-flex;
     width: 20%;
     background-color: $color5;
+    height: calc(100vh - 40px); // 40px === $header-height
+    overflow: hidden;
+    toolset{
+        overflow:hidden;
+        &:hover{
+            overflow-y: auto;
+        }
+    }
+    toolset::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    toolset::-webkit-scrollbar-track {
+        background: $color5;
+    }
+    
+    toolset::-webkit-scrollbar-thumb {
+        background: $color4; 
+        border-left: 2px solid $color5;
+    }
+    
+    toolset::-webkit-scrollbar-thumb:hover {
+        background: $color2; 
+    }
 }
 
 .container--procedure{
@@ -41,7 +65,7 @@
     
     height: calc(100vh - 40px); // 40px === $header-height
     &:hover{
-        overflow: auto;
+        overflow-y: auto;
     }    
 }
 

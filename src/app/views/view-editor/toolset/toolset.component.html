@@ -9,12 +9,9 @@
     <div class="panel">
         <ul class='toolset__basic'>
             <ng-container *ngFor="let type of ProcedureTypesArr">
-                <li *ngIf='type.toUpperCase() !== "FUNCTION" && type.toUpperCase() !== "IMPORTED"
-                && type.toUpperCase() !== "CONSTANT" 
-                && type.toUpperCase() !== "RETURN"
-                && type.toUpperCase() !== "ADDDATA"
-                && type.toUpperCase() !== "BLANK"'
+                <li *ngIf='checkBasicFunc(type)'
                 class='tooltip'
+                [class.invalid]='checkInvalid(type)'
                 (click)='add(ProcedureTypes[type])'> 
                     {{type}}
                 </li>
@@ -78,6 +75,19 @@
             </button>
         </div>
     </ng-container>
+
+    <ng-container>
+        <button id='globals' class="accordion" disabled>Globals</button>
+        <div class="panel" [class.opened] = 'true'>
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let cnst of startProcedures'>
+                    {{cnst.args[cnst.argCount-2].value}}
+                </li>
+            </ul>
+        </div>
+    </ng-container>
+
+    
 </ng-container>
 
 <!-- functions for input nodes -->
@@ -109,7 +119,7 @@
 
 <!-- functions for output nodes -->
 <div id='toolset_inp' class = 'toolset' *ngIf="node.type == 'end'">
-    <div class='toolset__functions' *ngIf="hasProd===false">
+    <div class='toolset__functions' *ngIf="node.procedure.length == 0">
         <!--
         <section *ngFor='let type of ProcedureTypesArr' >
             <div *ngIf='type.toUpperCase() == "RETURN"'>

@@ -3,6 +3,7 @@ import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
 import { DataService } from '@services';
+import { InputType } from '@models/port';
 
 @Component({
   selector: 'file-save',
@@ -34,12 +35,41 @@ export class SaveFileComponent {
 
 
     // todo: save file
-    download() {
+    async download() {
         const f = this.dataService.file;
 
         if (!f.flowchart.ordered) {
             FlowchartUtils.orderNodes(f.flowchart);
         }
+
+        for (const prod of f.flowchart.nodes[0].procedure) {
+            if (prod.meta.inputMode.toString() === InputType.File.toString()) {
+                const arg = prod.args[1];
+                if (arg.value && arg.value.lastModified) {
+                    const p = new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                            resolve(reader.result);
+                        };
+                        reader.readAsText(arg.value);
+                    });
+                    window.localStorage.setItem(arg.value.name, '`' + await p + '`');
+                    arg.value = {'name': arg.value.name};
+                }
+                if (arg.default && arg.default.lastModified) {
+                    const p = new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                            resolve(reader.result);
+                        };
+                        reader.readAsText(arg.default);
+                    });
+                    window.localStorage.setItem(arg.default.name, '`' + await p + '`');
+                    arg.default = {'name': arg.default.name};
+                }
+            }
+        }
+
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
         for (const node of savedfile.flowchart.nodes) {
             if (node.input.hasOwnProperty('value')) {

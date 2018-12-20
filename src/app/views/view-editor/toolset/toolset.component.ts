@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input} from '@angular/core';
 
-import { ProcedureTypes, IFunction, IModule } from '@models/procedure';
+import { ProcedureTypes, IFunction, IModule, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
@@ -26,7 +26,7 @@ export class ToolsetComponent {
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
     @Input() node: INode;
-    @Input() hasProd: boolean;
+    @Input() startProcedures: IProcedure[];
 
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
@@ -167,6 +167,85 @@ export class ToolsetComponent {
         } else {
             panel.style.display = 'block';
         }
+    }
+
+    checkBasicFunc(type) {
+        const tp = type.toUpperCase();
+        return tp !== 'FUNCTION'
+        && tp !== 'IMPORTED'
+        && tp !== 'CONSTANT'
+        && tp !== 'RETURN'
+        && tp !== 'ADDDATA'
+        && tp !== 'BLANK';
+    }
+
+    checkInvalid(type) {
+        const tp = type.toUpperCase();
+        if (tp === 'ELSE') {
+            if (!this.node.state.procedure[0]) {
+                return true;
+            }
+            if (this.node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
+            && this.node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString()) {
+                return true;
+            }
+            let prods: IProcedure[];
+
+            if (this.node.state.procedure[0].parent) { prods = this.node.state.procedure[0].parent.children;
+            } else { prods = this.node.procedure; }
+
+            for (let i = 0 ; i < prods.length - 1; i++) {
+                if (prods[i].ID === this.node.state.procedure[0].ID) {
+                    if (prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString() ||
+                    prods[i + 1].type.toString() === ProcedureTypes.Else.toString()) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
+        } else if (tp === 'ELSEIF') {
+            if (!this.node.state.procedure[0]) {
+                return true;
+            }
+            return (this.node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
+            && this.node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
+        } else {
+            if (this.node.state.procedure[0]) {
+                let prods: IProcedure[];
+
+                if (this.node.state.procedure[0].parent) { prods = this.node.state.procedure[0].parent.children;
+                } else { prods = this.node.procedure; }
+
+                if (this.node.state.procedure[0].type.toString() === ProcedureTypes.If.toString()
+                || this.node.state.procedure[0].type.toString() === ProcedureTypes.Elseif.toString()) {
+                    for (let i = 0 ; i < prods.length - 1; i++) {
+                        if (prods[i].ID === this.node.state.procedure[0].ID) {
+                            if (prods[i + 1].type.toString() === ProcedureTypes.Else.toString()
+                            || prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString()) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            }
+
+
+            if (tp === 'BREAK' || tp === 'CONTINUE') {
+                let checkNode = this.node.state.procedure[0];
+                if (!checkNode) {return true; }
+                while (checkNode.parent) {
+                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
+                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
+                        return false;
+                    }
+                    checkNode = checkNode.parent;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
 }

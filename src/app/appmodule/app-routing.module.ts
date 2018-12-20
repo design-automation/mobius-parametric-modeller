@@ -1,7 +1,7 @@
 /**/
 
-import { NgModule }                            from '@angular/core';
-import { RouterModule, Routes }    from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { Component } from '@angular/core';
 
 import { ViewFlowchartModule, ViewGalleryModule, ViewDashboardModule, ViewEditorModule } from '@views';

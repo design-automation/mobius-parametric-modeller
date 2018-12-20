@@ -33,5 +33,6 @@ export interface IFunction {
     args: IArgument[];
     flowchart?: IFlowchart;
     doc?: any;
+    importedFile?: string;
 }
 

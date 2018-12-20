@@ -43,16 +43,19 @@ ul{
     }
 
 }
-.remove-btn{
+.importedFunc-btn{
     background-color: transparent;
     border: none;
+    width: 13px;
     height : 13px;
     float: right;
 
-    .remove-icon{
+    .importedFunc-btn-icon{
         font-size: $fsize2;
         height : 11px;
         color: $color8;
+        width: 13px;
+        height: 13px;
     }
 }
 

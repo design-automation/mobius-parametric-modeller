@@ -41,9 +41,10 @@ select{
 }
 
 .inline-div{
+    box-sizing: border-box;
     width: 100%;
     display: inline-block;
-    height: $fsize1;
+    height: $fsize1+3px;
     padding-bottom: 3px;
 }
 
@@ -52,6 +53,7 @@ input{
     background-color: transparent;
     border:none;
     border-bottom: 1px solid $color1;
+    
     // margin-left: 5px;
     max-width: 95%;
     vertical-align: bottom;
@@ -63,9 +65,14 @@ input{
         background-color: $color7;
         color: $color8;
     }
+
+    // &:focus{
+    //     border-bottom: 2px solid $selected-color;
+    // }
+
     &.disabled-input{
         padding: 0px;
-        border-bottom: none;
+        border-bottom: 0px; //2px solid transparent;
         &:hover{ // no change
             background-color: transparent;
             color: $color1;
@@ -116,8 +123,16 @@ input{
     word-wrap: break-word;
 }
 
+// global types
+
 .FFA{
     height: 2*$fsize3;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    // input:not(.disabled-input){
+    //     background-color: $color7;
+    // }
 }
 
 // slider
@@ -146,11 +161,6 @@ input{
             height: $fsize3;
             max-width: 300px;
             padding: 0px;
-            
-            display: inline-block;
-            position: relative;
-            box-sizing: border-box;
-            vertical-align: middle;
         }
     }
 }

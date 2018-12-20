@@ -1,7 +1,7 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord, IGeomData, IModelData} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, IQueryComponent, idBreak, EAttribNames,  } from './GICommon';
+import { EEntityTypeStr, EAttribNames, IQueryComponent, idBreak  } from './GICommon';
 import { parse_query } from './GIAttribsQuery';
 
 /**
@@ -383,14 +383,43 @@ export class GIAttribs {
         return result;
     }
 
-    // TODO: remove this method
-    // It has been replaced by getVertsAttribValues()
-    public getVertsAttrib(attrib_name: string) {
-        if (!this._verts.has(attrib_name)) { return null; }
-        const attrib_map: GIAttribMap = this._verts.get(attrib_name);
-        const attrib_keys: number[] = attrib_map.getSeqKeys();
-        const attrib_values: TAttribDataTypes[] = attrib_map.getSeqValues();
-        const result = Array.from(attrib_keys.map(attrib_key => attrib_values[attrib_key]));
-        return result;
+    // public getVertsCoords(): GIAttribMap {
+    //     const coords_attrib: GIAttribMap = this._posis.get(EAttribNames.COORDS);
+    //     return coords_attrib;
+    // }
+
+    public getAttribsForTable(tab: string) {
+        const e = EEntityTypeStr;
+        const EntityType = [e.POSI, e.VERT, e.EDGE, e.WIRE, e.FACE, e.COLL];
+        const _attrib_inner_maps = {};
+        _attrib_inner_maps[EntityType[0]] = this._model.geom().numPosis();
+        _attrib_inner_maps[EntityType[1]] = this._model.geom().numVerts();
+        _attrib_inner_maps[EntityType[2]] = this._model.geom().numEdges();
+        _attrib_inner_maps[EntityType[3]] = this._model.geom().numWires();
+        _attrib_inner_maps[EntityType[4]] = this._model.geom().numFaces();
+        _attrib_inner_maps[EntityType[5]] = this._model.geom().numColls();
+
+        const data_obj_map: Map<number, { id: string}> = new Map();
+        for (let index = 0; index < _attrib_inner_maps[tab]; index++) {
+            data_obj_map.set(index, { id: `${tab}${index}` } );
+        }
+
+        this._attrib_maps[tab].forEach(attr => {
+            const attrib_map: GIAttribMap = attr;
+            const result = attrib_map.getSeqValues();
+            result.forEach((value: TAttribDataTypes, index) => {
+                const n = attr.getName().toLowerCase();
+                if ( attr.getDataSize() > 1 ) {
+                    const value2 = value as any[];
+                    // console.log(data_obj_map);
+                    value2.forEach( (v, i) => {
+                        data_obj_map.get(index)[`${n}${i}`] = v;
+                    });
+                } else {
+                    data_obj_map.get(index)[`${n}`] = value;
+                }
+            });
+        });
+        return Array.from(data_obj_map.values());
     }
 }

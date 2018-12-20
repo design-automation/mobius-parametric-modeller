@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, Injector, Input, OnChanges, SimpleChanges, QueryList, AfterViewInit } from '@angular/core';
+import { Component, Injector,
+  Input, OnChanges, SimpleChanges,
+  AfterViewInit, ViewChildren,
+  QueryList } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
-import { GICommon } from '@libs/geo-info';
-import { format } from 'util';
+import { GICommon, GIAttribs } from '@libs/geo-info';
 
 @Component({
   selector: 'attribute',
@@ -11,68 +13,60 @@ import { format } from 'util';
   styleUrls: ['./attribute.component.scss']
 })
 
-export class AttributeComponent implements OnInit, OnChanges {
+export class AttributeComponent implements AfterViewInit, OnChanges {
   @Input() data: GIModel;
-  displayedColumns: string[] = ['key', 'v0', 'v1', 'v2'];
+  private _data;
 
-  @ViewChild('paginatorNormal') paginatorNormal: MatPaginator;
-  @ViewChild('paginatorColor') paginatorColor: MatPaginator;
-  @ViewChild('tableNormal', {read: MatSort}) sortNormal: MatSort;
-  @ViewChild('tableColor', {read: MatSort}) sortColor: MatSort;
+  tabs: string[] = ['Positions', 'Vetex', 'Edges', 'Wires', 'Faces', 'Collections'];
+  displayedColumns: string[] = [];
 
-  dataSourceColor;
-  dataSourceNormal;
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
+  @ViewChildren(MatSort) sort = new QueryList<MatSort>();
+
+  dataSource;
 
   protected dataService: DataService;
 
   constructor(injector: Injector) {
     this.dataService = injector.get(DataService);
-    this.dataSourceColor = new MatTableDataSource<PeriodicElement>([]);
-    this.dataSourceNormal = new MatTableDataSource<PeriodicElement>([]);
   }
 
-  ngOnInit() {
-    if (this.data) {
-      this.formatAttribData(this.data);
-    }
+  ngAfterViewInit(): void {
+    // this.dataSource.paginator = this.paginator.toArray()[tabIndex];
+    // this.dataSource.sort = this.sort.toArray()[tabIndex];
   }
-
   ngOnChanges(changes: SimpleChanges) {
     if ( changes['data'] && this.data) {
-      this.formatAttribData(this.data);
+      this._data = this.data;
+      this.generateTable(0);
     }
   }
 
-  formatAttribData(data) {
-    let propName = GICommon.EAttribNames.NORMAL;
-    const attribDataNormal = data.getAttibs().getVertsAttrib(propName);
-    const normalData = this.convertModelData(attribDataNormal);
-    this.dataSourceNormal = new MatTableDataSource<PeriodicElement>(normalData);
-    this.dataSourceNormal.paginator = this.paginatorNormal;
-    this.dataSourceNormal.sort = this.sortNormal;
-
-    propName = GICommon.EAttribNames.COLOR;
-    const attribDataColor = data.getAttibs().getVertsAttrib(propName);
-    const colorData = this.convertModelData(attribDataColor);
-    this.dataSourceColor = new MatTableDataSource<PeriodicElement>(colorData);
-    this.dataSourceColor.paginator = this.paginatorColor;
-    this.dataSourceColor.sort = this.sortColor;
-  }
-
-  convertModelData(attribData) {
-    if (attribData) {
-      const _DataArray = [];
-      attribData.forEach((value, index) => {
-        _DataArray.push({key: `${GICommon.EEntityTypeStr.VERT}${index}`, v0: value[0], v1: value[1], v2: value[2]});
-      });
-      return _DataArray;
+  generateTable(tabIndex) {
+    const EntityType = GICommon.EEntityTypeStr;
+    const tab_map = {
+      0: EntityType.POSI,
+      1: EntityType.VERT,
+      2: EntityType.EDGE,
+      3: EntityType.WIRE,
+      4: EntityType.FACE,
+      5: EntityType.COLL
+    };
+    const attribData = this._data.getAttibs().getAttribsForTable(tab_map[tabIndex]);
+    if (attribData.length > 0) {
+      this.displayedColumns = Object.keys(attribData[0]);
+      this.dataSource = new MatTableDataSource<object>(attribData);
+    } else {
+      this.displayedColumns = [];
+      this.dataSource = new MatTableDataSource<object>();
     }
+    this.dataSource.paginator = this.paginator.toArray()[tabIndex];
+    this.dataSource.sort = this.sort.toArray()[tabIndex];
   }
-}
 
-export interface PeriodicElement {
-  key: string;
-  v0: string;
-  v1: string;
-  v2: string;
+  _setDataSource(tabIndex) {
+    setTimeout(() => {
+      this.generateTable(tabIndex);
+    });
+  }
 }

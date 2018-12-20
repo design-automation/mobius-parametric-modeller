@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
+import { OnInit } from '@angular/core';
 
 /**
  * ThreejsScene
@@ -14,6 +15,7 @@ export class DataThreejs {
     public _controls: THREE.OrbitControls;
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
+    public _mesh: THREE.Mesh;
     // interaction and selection
     public _select_visible = 'Objs';
     public _text: string;
@@ -42,6 +44,7 @@ export class DataThreejs {
 
         // camera settings
         this._camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 20000 );
+        // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
         this._camera.position.x = 150;
         this._camera.position.y = 100;
         this._camera.position.z = 70;
@@ -58,7 +61,6 @@ export class DataThreejs {
 
         // mouse
         this._mouse = new THREE.Vector2();
-
         // selecting
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
@@ -73,6 +75,7 @@ export class DataThreejs {
             this._addAxes();
         }
     }
+
     public addGeometry(model: GIModel): void {
         while ( this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
@@ -167,19 +170,16 @@ export class DataThreejs {
             vertexColors: THREE.VertexColors,
             // wireframe: true
         });
-        const mesh: THREE.Mesh = new THREE.Mesh( geom, mat);
-        mesh.geometry.computeBoundingSphere();
-        mesh.geometry.computeVertexNormals();
+        this._mesh = new THREE.Mesh( geom, mat);
+        this._mesh.geometry.computeBoundingSphere();
+        this._mesh.geometry.computeVertexNormals();
 
         // show vertex normals
-        const vnh = new THREE.VertexNormalsHelper( mesh, 3, 0x0000ff );
+        const vnh = new THREE.VertexNormalsHelper( this._mesh, 3, 0x0000ff );
         // this._scene.add( vnh );
 
-        // this._geometries.push(geom);
-        // this._meshes.push(mesh);
-
         // add mesh to scene
-        this._scene.add( mesh );
+        this._scene.add( this._mesh );
         this._threejs_nums[2] = tris_i.length / 3;
     }
     /**
@@ -199,9 +199,6 @@ export class DataThreejs {
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer
         } );
-
-        // this._geometries.push(geom);
-
         this._scene.add(new THREE.LineSegments(geom, mat) );
         this._threejs_nums[1] = lines_i.length / 2;
     }
@@ -220,10 +217,48 @@ export class DataThreejs {
             size: 1,
             vertexColors: THREE.VertexColors
         } );
-
-        // this._geometries.push(geom);
-
         this._scene.add( new THREE.Points(geom, mat) );
         this._threejs_nums[0] = points_i.length;
+    }
+
+    private onWindowKeyPress(event) {
+        const keyCode = event.which;
+        const positionDelta = 70;
+        const rotationDelta = 0.1;
+        console.log('hhidhishfids');
+        switch (keyCode) {
+            case 97: // A
+                this._camera.position.x -= positionDelta;
+                break;
+            case 100: // D
+            this._camera.position.x += positionDelta;
+                break;
+            case 119: // W
+            this._camera.position.z -= positionDelta;
+                break;
+            case 115: // S
+            this._camera.position.z += positionDelta;
+                break;
+            case 113: // Q
+            this._camera.position.y += positionDelta;
+                break;
+            case 101: // E
+            this._camera.position.y -= positionDelta;
+                break;
+            case 116: // T
+            this._camera.rotation.x += rotationDelta;
+                break;
+            case 103: // G
+            this._camera.rotation.x -= rotationDelta;
+                break;
+            case 102: // F
+            this._camera.rotation.y += rotationDelta;
+                break;
+            case 104: // H
+            this._camera.rotation.y -= rotationDelta;
+                break;
+            default:
+                break;
+        }
     }
 }

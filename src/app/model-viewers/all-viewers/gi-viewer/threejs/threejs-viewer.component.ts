@@ -131,6 +131,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         try {
             // add geometry to the scene
             this._data_threejs.addGeometry(this._gi_model);
+            // document.addEventListener('mousedown', this.onDocumentMouseDown, false);
             // Set model flags
             this._model_error = false;
             this._no_model = false;
@@ -139,6 +140,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             console.error('Error displaying model:', ex);
             this._model_error = true;
             this._data_threejs._text = ex;
+        }
+    }
+
+    private onDocumentMouseDown(event) {
+        const threejs = this._data_threejs;
+        threejs._mouse.x = ( event.clientX / threejs._renderer.domElement.clientWidth ) * 2 - 1;
+        threejs._mouse.y = - ( event.clientY / threejs._renderer.domElement.clientHeight ) * 2 + 1;
+        threejs._raycaster.setFromCamera( threejs._mouse, threejs._camera );
+        const intersects = threejs._raycaster.intersectObjects([threejs._mesh]);
+        if (intersects.length > 0) {
+            console.log(intersects[0]);
+            // intersects[0].object.material.transparent = true;
+            // intersects[0].object.material.opacity = 0.1;
         }
     }
 }

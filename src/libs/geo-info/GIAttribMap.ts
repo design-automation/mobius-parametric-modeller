@@ -41,8 +41,30 @@ export class GIAttribMap {
             data: this._bi_map.getData()
         };
     }
+
     /**
-     * Returns the number of entities for this attribute .
+     * Returns the name of this attribute.
+     */
+    public getName(): string {
+        return this._name;
+    }
+
+    /**
+     * Returns the data type of this attribute.
+     */
+    public getDataType(): string {
+        return this._data_type;
+    }
+
+    /**
+     * Returns the data size of this attribute.
+     */
+    public getDataSize(): number {
+        return this._data_size;
+    }
+
+    /**
+     * Returns the number of entities for this attribute.
      */
     public getNumEntities(): number {
         return this._num_entities;
@@ -143,8 +165,8 @@ export class GIAttribMap {
         return seqKeys;
     }
     /**
-     * Gets a list of all the unique attribute values.
-     * So for example, for [[1,3], 'a'],[[0,4], 'b'], the values would be ['a', 'b']
+     * Gets a list of all the attribute values.
+     * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail values would be ['a', 'b']
      */
     public getValues(): TAttribDataTypes[] {
         return this._bi_map.values();
@@ -155,6 +177,6 @@ export class GIAttribMap {
      */
     public getSeqValues(): TAttribDataTypes[] {
         const values: TAttribDataTypes[] = this._bi_map.values();
-        return this.getSeqKeys().map(key => values[key]);
+        return this.getSeqKeys().map( key => values[key] );
     }
 }

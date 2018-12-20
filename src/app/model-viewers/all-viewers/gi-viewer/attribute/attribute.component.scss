@@ -11,13 +11,21 @@ table {
     height: 24px;
     .mat-cell{
       font-size: 12px;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
     }
+  }
+  td {
+    // max-width: 0px;
   }
 }
 
 /deep/ #attribTab{
   .mat-tab-label{
     height: 30px;
+    padding: 0 10px;
+    min-width: 120px;
   }
   .mat-ink-bar{
     background-color: #9e9e9e !important;

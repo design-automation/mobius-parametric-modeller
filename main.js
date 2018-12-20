@@ -6121,7 +6121,8 @@ var ToolsetComponent = /** @class */ (function () {
                                     },
                                     name: funcName,
                                     module: 'Imported',
-                                    doc: documentation
+                                    doc: documentation,
+                                    importedFile: reader.result.toString()
                                 };
                                 func.args = [];
                                 for (var _i = 0, _a = fl.nodes[0].procedure; _i < _a.length; _i++) {
@@ -6371,7 +6372,7 @@ var ViewEditorComponent = /** @class */ (function () {
         if (!this.copyCheck || node.type === 'end') {
             return;
         }
-        console.log('copying', node.state.procedure);
+        // console.log('copying', node.state.procedure);
         this.dataService.copiedType = node.type;
         this.dataService.copiedProd = node.state.procedure;
     };
@@ -6381,7 +6382,7 @@ var ViewEditorComponent = /** @class */ (function () {
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.type === 'end') {
             return;
         }
-        console.log('cutting', node.state.procedure);
+        // console.log('cutting', node.state.procedure);
         this.dataService.copiedType = node.type;
         this.dataService.copiedProd = node.state.procedure;
         var parentArray;
@@ -6408,7 +6409,6 @@ var ViewEditorComponent = /** @class */ (function () {
     // paste copied procedures
     ViewEditorComponent.prototype.pasteProd = function () {
         var node = this.dataService.node;
-        console.log(document.activeElement.nodeName);
         if (this.copyCheck
             && this.dataService.copiedProd
             && this.dataService.copiedType === node.type
@@ -6421,7 +6421,7 @@ var ViewEditorComponent = /** @class */ (function () {
                     if (this.dataService.copiedProd[i].type === _models_procedure__WEBPACK_IMPORTED_MODULE_2__["ProcedureTypes"].Blank) {
                         continue;
                     }
-                    console.log('pasting', this.dataService.copiedProd[i].ID);
+                    // console.log('pasting', this.dataService.copiedProd[i].ID);
                     _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(node, this.dataService.copiedProd[i]);
                     node.state.procedure[0].selected = false;
                     node.state.procedure = [];
@@ -6432,7 +6432,7 @@ var ViewEditorComponent = /** @class */ (function () {
                     if (this.dataService.copiedProd[i].type === _models_procedure__WEBPACK_IMPORTED_MODULE_2__["ProcedureTypes"].Blank) {
                         continue;
                     }
-                    console.log('pasting', this.dataService.copiedProd[i].ID);
+                    // console.log('pasting', this.dataService.copiedProd[i].ID);
                     _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(node, this.dataService.copiedProd[i]);
                     node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
@@ -6444,7 +6444,7 @@ var ViewEditorComponent = /** @class */ (function () {
                     if (this.dataService.copiedProd[i].type === _models_procedure__WEBPACK_IMPORTED_MODULE_2__["ProcedureTypes"].Blank) {
                         continue;
                     }
-                    console.log('pasting', this.dataService.copiedProd[i].ID);
+                    // console.log('pasting', this.dataService.copiedProd[i].ID);
                     _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].paste_procedure(node, this.dataService.copiedProd[i]);
                     node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
@@ -7063,7 +7063,7 @@ var ViewFlowchartComponent = /** @class */ (function () {
             }
             var node = _this.dataService.flowchart.nodes[_this.dataService.flowchart.meta.selected_nodes[0]];
             if (node.type !== 'start' && node.type !== 'end') {
-                console.log('copied node:', node);
+                // console.log('copied node:', node);
                 var cp = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](node));
                 _this.copied = circular_json__WEBPACK_IMPORTED_MODULE_3__["stringify"](cp);
             }
@@ -7077,7 +7077,6 @@ var ViewFlowchartComponent = /** @class */ (function () {
                 event.preventDefault();
                 var newNode = circular_json__WEBPACK_IMPORTED_MODULE_3__["parse"](_this.copied);
                 var pt = _this.canvas.createSVGPoint();
-                console.log('.', val);
                 pt.x = 20;
                 pt.y = 100;
                 var svgP = void 0;
@@ -7096,7 +7095,7 @@ var ViewFlowchartComponent = /** @class */ (function () {
                 }
                 _models_node__WEBPACK_IMPORTED_MODULE_1__["NodeUtils"].updateNode(newNode, svgP);
                 _this.dataService.flowchart.nodes.push(newNode);
-                console.log('pasting node:', newNode);
+                // console.log('pasting node:', newNode);
             }
         });
         // delete: delete selected edge(s)
@@ -11127,7 +11126,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Dropbox\Files\Software\GitHub\design-automation\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\akibdpt\Documents\Angular\mobius-parametric-modeller\src\main.ts */"./src/main.ts");
 
 
 /***/ })

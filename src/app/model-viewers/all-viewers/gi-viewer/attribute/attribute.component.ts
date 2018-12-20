@@ -1,7 +1,5 @@
 import { Component, Injector,
-  Input, OnChanges, SimpleChanges,
-  AfterViewInit, ViewChildren,
-  QueryList } from '@angular/core';
+  Input, OnChanges, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
@@ -13,7 +11,7 @@ import { GICommon, GIAttribs } from '@libs/geo-info';
   styleUrls: ['./attribute.component.scss']
 })
 
-export class AttributeComponent implements AfterViewInit, OnChanges {
+export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
   private _data;
 
@@ -31,14 +29,12 @@ export class AttributeComponent implements AfterViewInit, OnChanges {
     this.dataService = injector.get(DataService);
   }
 
-  ngAfterViewInit(): void {
-    // this.dataSource.paginator = this.paginator.toArray()[tabIndex];
-    // this.dataSource.sort = this.sort.toArray()[tabIndex];
-  }
   ngOnChanges(changes: SimpleChanges) {
     if ( changes['data'] && this.data) {
       this._data = this.data;
-      this.generateTable(0);
+      setTimeout(() => {
+        this.generateTable(0);
+      });
     }
   }
 

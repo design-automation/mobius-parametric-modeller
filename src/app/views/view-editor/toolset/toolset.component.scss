@@ -100,10 +100,18 @@ ul{
     display: none;
     background-color: $color5;
     overflow: hidden;
+
+    &.opened{
+        display: block;
+    }
 }
 
 .tooltip{
     display: block;
+    &.invalid{
+        opacity: 0.5;
+        pointer-events: none;
+    }
 }
 /* Tooltip text */
 .tooltip .tooltiptext {

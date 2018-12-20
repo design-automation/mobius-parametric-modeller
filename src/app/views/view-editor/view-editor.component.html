@@ -13,7 +13,7 @@
                         <div class="container--toolset">
                             <toolset [functions]='dataService.flowchart.functions' 
                             [node]='dataService.node' 
-                            [hasProd]='dataService.node.procedure.length>0' 
+                            [startProcedures]='dataService.flowchart.nodes[0].procedure'
                             (delete)='deleteFunction($event)' 
                             (select)='add($event)' 
                             (imported)='importFunction($event)'></toolset>

@@ -1,0 +1,3 @@
+# To deploy, run the following
+ng build --base-href 'https://design-automation.github.io/mobius-parametric-modeller/'
+npx ngh

@@ -98,3 +98,43 @@ h1, h2, h3, h4, h5, h6, p{
 input, textarea, select, a { 
     outline: none; 
 }
+
+// scroll bar
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: $color6; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: $color5; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $color3; 
+}
+
+// slider
+
+.mat-slider-track-background{
+    background-color: $color4 !important;
+}
+
+.mat-slider-track-fill{
+    background-color: $color1 !important;
+}
+
+.mat-
+
+.cdk-mouse-focused{
+    .mat-slider-track-fill{
+        background-color: $selected-color !important;
+    }
+    .mat-slider-track-background{
+        background-color: $color7 !important;
+        border-bottom: 1px solid $color3;
+    }
+}

@@ -1,8 +1,9 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
-
-
+// .fixed--head{
+//     position: fixed;
+// }
 
 :host{
     overflow: hidden auto;
@@ -12,13 +13,45 @@
 }
 
 h2{
+    height: $fsize3;
     color: $color8;
     padding-left: 8px;
-    padding-top: 8px;
-    padding-bottom: 8px;
     font-family: sans-serif;
+    line-height: $fsize3;
     font-size: $fsize2;
     font-weight: 550;
+}
+
+.toolset--body{
+    overflow:hidden;
+    &:hover{
+        overflow-y: auto;
+    }
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: $color5;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: $color4; 
+        border-left: 2px solid $color5;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color2; 
+    }
+}
+
+.searchBar{
+    max-width: 98%;
+    font-size: 12px;
+    padding: 0px 8px;
+    border: 0px;
+    height: $fsize1;
+    border-bottom: 5px solid $color7;
 }
 
 ul{
@@ -35,6 +68,7 @@ ul{
         padding-left: 8px;
         color: $color8;
         font-size: $fsize2;
+        height: 18px;
         line-height: 18px;
     }
     :hover{
@@ -43,6 +77,7 @@ ul{
     }
 
 }
+
 .importedFunc-btn{
     background-color: transparent;
     border: none;
@@ -56,26 +91,6 @@ ul{
         color: $color8;
         width: 13px;
         height: 13px;
-    }
-}
-
-.searchBar{
-    max-width: 98%;
-    font-size: 12px;
-}
-
-.add-btn{
-    background-color: transparent;
-    border: none;
-    float: left;
-    padding: 6px;
-    transition: 0.4s;
-    :hover{
-        background-color: $color4;
-    }
-    .add-icon{
-        float:left;
-        color: $color8;
     }
 }
 
@@ -167,4 +182,41 @@ ul{
     transition-delay: 0.5s;
     transition-duration: 0.3s;
     opacity: 1;
+}
+
+.add-btn{
+    height: 20px;
+
+    margin: 0px;
+    padding: 0px 8px;
+    border: 0px;
+
+    background-color: $color5;
+    color: $color8;
+
+    height: 18px;
+    width: 100%;
+    line-height: 18px;
+    text-align: left;
+    text-decoration: none;
+
+    font-size: $fsize2;
+    transition: 0.4s;
+    &:hover{
+        background-color: $color4;
+    }
+    // .add-icon{
+    //     float:left;
+    //     color: $color8;
+    // }
+}
+
+.divider{
+    background-color: $color3;
+    height: 8px;
+}
+
+#globals{
+    background-color: $color3;
+    font-style: italic;
 }

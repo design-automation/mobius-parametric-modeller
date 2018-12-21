@@ -131,7 +131,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         try {
             // add geometry to the scene
             this._data_threejs.addGeometry(this._gi_model);
-            // document.addEventListener('mousedown', this.onDocumentMouseDown, false);
             // Set model flags
             this._model_error = false;
             this._no_model = false;
@@ -143,16 +142,30 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    private onDocumentMouseDown(event) {
-        const threejs = this._data_threejs;
-        threejs._mouse.x = ( event.clientX / threejs._renderer.domElement.clientWidth ) * 2 - 1;
-        threejs._mouse.y = - ( event.clientY / threejs._renderer.domElement.clientHeight ) * 2 + 1;
-        threejs._raycaster.setFromCamera( threejs._mouse, threejs._camera );
-        const intersects = threejs._raycaster.intersectObjects([threejs._mesh]);
-        if (intersects.length > 0) {
-            console.log(intersects[0]);
-            // intersects[0].object.material.transparent = true;
-            // intersects[0].object.material.opacity = 0.1;
+    public onDocumentMouseUp(event) {
+        const scene = this._data_threejs;
+        if (scene.sceneObjs.length > 0) {
+            scene._mouse.x = ( event.offsetX / scene._renderer.domElement.clientWidth ) * 2 - 1;
+            scene._mouse.y = - ( event.offsetY / scene._renderer.domElement.clientHeight ) * 2 + 1;
+            scene._raycaster.setFromCamera( scene._mouse, scene._camera );
+            const intersects = scene._raycaster.intersectObjects(scene.sceneObjs);
+            if (intersects.length > 0) {
+                const tri = intersects[0];
+                // console.log('interecting', tri.object.uuid);
+                if (!scene._selecting.has(tri.faceIndex)) {
+                    const verts = this.model.geom().navTriToVert(tri.faceIndex);
+                    scene.selectObj(tri.faceIndex, this.model, verts);
+                } else {
+                    scene.unselectObj(tri.faceIndex);
+                }
+
+                const face = this.model.geom().navTriToFace(tri.faceIndex);
+                const tris = this.model.geom().navFaceToTri(face);
+                console.log(tris);
+                // scene._selectedEntity.set(tri.faceIndex, verts);
+                console.log(scene._selectedEntity);
+                this.render(this);
+            }
         }
     }
 }

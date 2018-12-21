@@ -22,7 +22,7 @@ export function Position(__model__: GIModel, coords: Txyz): TId {
  * @param __model__
  * @param position Position of point.
  * @returns New point if successful, null if unsuccessful or on error.
- * @example point1 = make.Point(position1)
+ * @example point1 = make.Point(position)
  *
  * Creates a point at position1.
  */
@@ -80,6 +80,68 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Lofts between polylines or polygons.
+ * @param __model__
+ * @param objects Polylines or polygons.
+ * @returns Lofted surface between objects.
+ * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
+ *
+ * Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.
+ */
+export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Extrudes geometry by distance (in default direction = z-axis) or by vector.
+ * - Extrusion of location produces a line;
+ * - Extrusion of line produces a polygon;
+ * - Extrusion of surface produces a list of surfaces.
+ * @param __model__
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param distance Number or vector.
+ * @returns Extrusion of geometry.
+ * @example extrusion1 = make.Extrude(point1, 10)
+ *
+ * Creates a line of length 10 in the z-direction.
+ *
+ * @example extrusion2 = make.Extrude(polygon1, [0,5,0])
+ *
+ * Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
+ */
+export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Txyz): TId[] {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Joins polylines to polylines or polygons to polygons.
+ * @param __model__
+ * @param objects Polylines or polygons.
+ * @returns New joined polyline or polygon.
+ * @example joined1 = make.Join([polyline1,polyline2])
+ *
+ * Creates a new polyline by joining polyline1 and polyline2.
+ */
+export function Join(__model__: GIModel, objects: TId[]): TId {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Divides edge by length or by number of segments.
+ * If edge is not exact multiple of length, length of last segment will be the remainder.
+ * @param __model__
+ * @param edges Edge(s) to be divided.
+ * @param divisor Length or number of segments.
+ * @param method Enum to choose which method.
+ * @example segments1 = make.Divide(edge1, 5, number)
+ *
+ * Creates a list of 5 equal segments from edge1.
+ *
+ * @example segments2 = make.Divide(edge1, 5, length)
+ *
+ * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
+ */
+export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**

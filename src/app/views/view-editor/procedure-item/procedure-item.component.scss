@@ -25,7 +25,9 @@
     flex-grow: 0;
     flex-shrink: 0;
 
-    overflow-x: auto;
+    overflow-x: hidden;
+    width: calc(100% - 15px);
+    // min-width: fit-content; // for global side scroll
 
     &.disabled{
         opacity: 0.5;
@@ -98,10 +100,14 @@
     border: none;
 
     display: inline-block;
-
+    width: 100%;
+    // min-width: fit-content; // for global side scroll
 
     white-space: nowrap;
     overflow: hidden;
+    &:hover{
+        overflow-x: auto;
+    }
 }
 
 .container--item:hover > .btn-container{//.container--line
@@ -117,9 +123,12 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-end;
+
 }
 
 .btns{
+    position: absolute;
+
     display: none;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
@@ -127,14 +136,9 @@
     background-color: $color5;
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
-
-    position: absolute;
     &:hover{
         display: inline-flex;
     }
-    // .deletebtn:hover{
-    //     color: red !important;
-    // }
 }
 
 .btn{
@@ -170,6 +174,7 @@
 .line--item{
     color: $color1;
     display: inline-block;
+    padding-right: 60px;
     input{
         background-color: red;
     }

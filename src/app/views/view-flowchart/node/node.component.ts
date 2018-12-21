@@ -56,8 +56,9 @@ export class NodeComponent {
     initiate dragging node when mousedown inside the node group
     */
     startDragNode(event: MouseEvent) {
-        event.preventDefault();
         event.stopPropagation();
+        // if (document.activeElement.tagName === 'TEXTAREA') { return; }
+        event.preventDefault();
         this.action.emit({ action: ACTIONS.DRAGNODE, data: event});
     }
 

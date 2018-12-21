@@ -1,5 +1,14 @@
-<h2>{{node.name}}</h2>
-<div *ngIf="node.type == ''" >
+<h2 title='{{dataService.node.name}}' (click)='openNodeMenu($event)'>{{dataService.node.name}}</h2>
+
+<div id="nodeMenu">
+    <div *ngFor='let nd of dataService.flowchart.nodes; let i = index;'>
+        <li (click)="changeNode(i)"> 
+            {{nd.name}}
+        </li>
+    </div>
+</div>
+
+<div *ngIf="dataService.node.type == ''" >
     <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
     <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
         <ul class='toolset__functions--subset'>
@@ -25,7 +34,7 @@
     </div>
 </div>
 <div class = "toolset--body" (mouseover)='setCurrent()'>
-    <ng-container *ngIf="node.type == ''">          
+    <ng-container *ngIf="dataService.node.type == ''">          
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     
         <button id='basic-funcs' class="accordion" 
@@ -82,7 +91,7 @@
                         </button>
                     </li>
 
-                    <div class='tooltip' *ngFor='let fn of functions'>
+                    <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
                         <li (click)='add_imported_function(fn)'> {{fn.name}} 
                             <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
                                 <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
@@ -109,7 +118,7 @@
         <button id='globals' class="accordion"  (click)='toggleAccordion("globals")'>Globals</button>
         <div class="panel">
             <ul class='toolset__functions--subset'>
-                <li *ngFor='let cnst of startProcedures' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
+                <li *ngFor='let cnst of dataService.flowchart.nodes[0].procedure' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
                     {{cnst.args[cnst.argCount-2].value}}
                 </li>
             </ul>
@@ -142,7 +151,7 @@
     </ng-container>
     
     <!-- functions for input nodes -->
-    <div id='toolset_inp' class = 'toolset' *ngIf="node.type == 'start'">
+    <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'start'">
         <div class='toolset__functions'>
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "CONSTANT"'>
@@ -169,8 +178,8 @@
     </div>
     
     <!-- functions for output nodes -->
-    <div id='toolset_inp' class = 'toolset' *ngIf="node.type == 'end'">
-        <div class='toolset__functions' *ngIf="node.procedure.length == 0">
+    <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'end'">
+        <div class='toolset__functions' *ngIf="dataService.node.procedure.length == 0">
             <!--
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "RETURN"'>

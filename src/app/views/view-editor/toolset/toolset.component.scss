@@ -20,6 +20,7 @@ h2{
     line-height: $fsize3;
     font-size: $fsize2;
     font-weight: 550;
+    cursor: pointer;
 }
 
 .toolset--body{
@@ -96,6 +97,47 @@ ul{
         width: 13px;
         height: 13px;
     }
+}
+
+#nodeMenu {
+    display: none;
+    position: fixed;
+    transition: display 0.4s;
+    top: 70px;
+
+    z-index: 1;
+    background-color: $color6;
+    border-left: 1px solid $color1;
+    border-bottom: 1px solid $color1;
+
+    button{
+        display: block;
+        min-width: 100px;
+        max-width: 200px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
+    li{
+        display: block;
+        min-width: 100px;
+        max-width: 300px;
+        overflow: hidden;
+        line-height: 20px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px 10px 0px 10px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
 }
 
 .accordion {

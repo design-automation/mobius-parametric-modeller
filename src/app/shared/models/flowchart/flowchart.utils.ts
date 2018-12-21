@@ -100,6 +100,16 @@ export class FlowchartUtils {
                 nodeOrder.push(node);
             }
         }
+        if (nodeOrder[nodeOrder.length - 1].type !== 'end') {
+            for (let i = nodeOrder.length - 2; i > 0; i--) {
+                if (nodeOrder[i].type === 'end') {
+                    const endN = nodeOrder[i];
+                    nodeOrder.splice(i, 1);
+                    nodeOrder.push(endN);
+                    break;
+                }
+            }
+        }
         flw.nodes = nodeOrder;
         flw.ordered = true;
     }

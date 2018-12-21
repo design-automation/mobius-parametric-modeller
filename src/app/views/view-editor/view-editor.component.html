@@ -11,9 +11,7 @@
                     <div class='container__content'>
                         <!-- toolset on the left side -->
                         <div class="container--toolset">
-                            <toolset [functions]='dataService.flowchart.functions' 
-                            [node]='dataService.node' 
-                            [startProcedures]='dataService.flowchart.nodes[0].procedure'
+                            <toolset 
                             (delete)='deleteFunction($event)' 
                             (selected)='add($event)' 
                             (imported)='importFunction($event)'></toolset>

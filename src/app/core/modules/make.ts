@@ -69,20 +69,17 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
     // return __model__.geom().addColl(objects);
 }
 /**
- * Adds a new plane to the model (from a location and normal vector) or (from two vectors).
+ * Adds a new plane to the model from a location and two vectors.
  * @param __model__
- * @param locationOrVector Position, point, vertex on plane; or a first vector or list of three coordinates.
- * @param vector Vector or list of three coordinates.
+ * @param location Position, point, vertex on plane
+ * @param vector1 Vector on plane or list of three coordinates defining it.
+ * @param vector2 Vector on plane or list of three coordinates defining it.
  * @returns New plane if successful, null if unsuccessful or on error.
- * @example plane1 = make.Plane(position1, vector1)
+ * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  *
- * Creates a plane with position1 on it and normal = vector1.
- *
- * @example plane2 = make.Plane(vector1,vector2)
- *
- * Creates a plane with vector1 and vector2 on it, and normal = cross product of both vectors.
+ * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function Plane(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
+export function Plane(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**

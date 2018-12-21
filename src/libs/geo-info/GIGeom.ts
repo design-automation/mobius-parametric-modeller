@@ -211,6 +211,9 @@ export class GIGeom {
     public navVertToPosi(vert_i: number): number {
         return this._verts[vert_i];
     }
+    public navTriToVert(tri_i: number): number[] {
+        return this._tris[tri_i];
+    }
     public navEdgeToVert(edge_i: number): number[] {
         return this._edges[edge_i];
     }

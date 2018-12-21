@@ -10,6 +10,7 @@ import { INode } from '@models/node';
 import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
 import {inline_expr, inline_func} from './toolset.inline';
+import { DataService } from '@services';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -28,19 +29,17 @@ export class ToolsetComponent {
     @Output() selected = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() imported = new EventEmitter();
-    @Input() functions: IFunction[];
-    @Input() node: INode;
-    @Input() startProcedures: IProcedure[];
+    // @Input() functions: IFunction[];
 
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedFunctions = [];
-    focusedInput;
+    focusedInput: any;
 
     inlineExpr = inline_expr;
     inlineFunc = inline_func;
 
-    constructor() {
+    constructor(private dataService: DataService) {
     }
 
     // add selected basic function as a new procedure
@@ -201,6 +200,22 @@ export class ToolsetComponent {
         }
     }
 
+    openNodeMenu(e: MouseEvent) {
+        const stl = document.getElementById('nodeMenu').style;
+        if (!stl.display || stl.display === 'none') {
+            stl.display = 'block';
+        } else {
+            stl.display = 'none';
+        }
+        e.stopPropagation();
+
+    }
+
+    changeNode(index: number) {
+        this.dataService.flowchart.meta.selected_nodes = [index];
+    }
+
+
     checkBasicFunc(type) {
         const tp = type.toUpperCase();
         return tp !== 'FUNCTION'
@@ -212,22 +227,23 @@ export class ToolsetComponent {
     }
 
     checkInvalid(type) {
+        const node = this.dataService.node;
         const tp = type.toUpperCase();
         if (tp === 'ELSE') {
-            if (!this.node.state.procedure[0]) {
+            if (!node.state.procedure[0]) {
                 return true;
             }
-            if (this.node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
-            && this.node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString()) {
+            if (node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
+            && node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString()) {
                 return true;
             }
             let prods: IProcedure[];
 
-            if (this.node.state.procedure[0].parent) { prods = this.node.state.procedure[0].parent.children;
-            } else { prods = this.node.procedure; }
+            if (node.state.procedure[0].parent) { prods = node.state.procedure[0].parent.children;
+            } else { prods = node.procedure; }
 
             for (let i = 0 ; i < prods.length - 1; i++) {
-                if (prods[i].ID === this.node.state.procedure[0].ID) {
+                if (prods[i].ID === node.state.procedure[0].ID) {
                     if (prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString() ||
                     prods[i + 1].type.toString() === ProcedureTypes.Else.toString()) {
                         return true;
@@ -237,22 +253,22 @@ export class ToolsetComponent {
             }
             return false;
         } else if (tp === 'ELSEIF') {
-            if (!this.node.state.procedure[0]) {
+            if (!node.state.procedure[0]) {
                 return true;
             }
-            return (this.node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
-            && this.node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
+            return (node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
+            && node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
         } else {
-            if (this.node.state.procedure[0]) {
+            if (node.state.procedure[0]) {
                 let prods: IProcedure[];
 
-                if (this.node.state.procedure[0].parent) { prods = this.node.state.procedure[0].parent.children;
-                } else { prods = this.node.procedure; }
+                if (node.state.procedure[0].parent) { prods = node.state.procedure[0].parent.children;
+                } else { prods = node.procedure; }
 
-                if (this.node.state.procedure[0].type.toString() === ProcedureTypes.If.toString()
-                || this.node.state.procedure[0].type.toString() === ProcedureTypes.Elseif.toString()) {
+                if (node.state.procedure[0].type.toString() === ProcedureTypes.If.toString()
+                || node.state.procedure[0].type.toString() === ProcedureTypes.Elseif.toString()) {
                     for (let i = 0 ; i < prods.length - 1; i++) {
-                        if (prods[i].ID === this.node.state.procedure[0].ID) {
+                        if (prods[i].ID === node.state.procedure[0].ID) {
                             if (prods[i + 1].type.toString() === ProcedureTypes.Else.toString()
                             || prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString()) {
                                 return true;
@@ -265,7 +281,7 @@ export class ToolsetComponent {
 
 
             if (tp === 'BREAK' || tp === 'CONTINUE') {
-                let checkNode = this.node.state.procedure[0];
+                let checkNode = node.state.procedure[0];
                 if (!checkNode) {return true; }
                 while (checkNode.parent) {
                     if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
@@ -313,7 +329,7 @@ export class ToolsetComponent {
                 }
             }
         }
-        for (const func of this.functions) {
+        for (const func of this.dataService.flowchart.functions) {
             if (this.searchedFunctions.length >= 10) { break; }
             if (func.name.toLowerCase().indexOf(str) !== -1) {
                 this.searchedFunctions.push({

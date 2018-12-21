@@ -1,9 +1,12 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
-// .table--container{
-//   min-height: calc(100vh - 20px); // 20px == paginator-container height;
-// }
+.table--container{
+  height: 100%;
+  overflow-y: auto;
+
+  margin-bottom: $fsize3; // paginator height
+}
 
 table {
   width: 100%;

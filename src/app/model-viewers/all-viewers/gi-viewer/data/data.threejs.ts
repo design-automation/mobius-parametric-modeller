@@ -16,7 +16,8 @@ export class DataThreejs {
     public _mouse: THREE.Vector2;
     // interaction and selection
     public _select_visible = 'Objs';
-    public _selected = new Map();
+    public _selecting = new Map();
+    public _selectedEntity = new Map();
     public _text: string;
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
@@ -97,7 +98,12 @@ export class DataThreejs {
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
     }
 
-    public selectObj(faceIndex, positions): void {
+    public selectObj(faceIndex, model: GIModel, verts): void {
+        const positions = [];
+        verts.map(vert => {
+            positions.push(model.attribs().getPosiCoordByIndex(model.geom().navVertToPosi(vert)));
+        });
+
         const geom = new THREE.Geometry();
         const v1 = new THREE.Vector3(...positions[0]);
         const v2 = new THREE.Vector3(...positions[1]);
@@ -108,12 +114,12 @@ export class DataThreejs {
         const mat = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
         const mesh = new THREE.Mesh( geom, mat);
         this._scene.add( mesh );
-        this._selected.set(faceIndex, mesh.id);
+        this._selecting.set(faceIndex, mesh.id);
     }
 
     public unselectObj(faceIndex) {
-        const removing = this._selected.get(faceIndex);
-        this._selected.delete(faceIndex);
+        const removing = this._selecting.get(faceIndex);
+        this._selecting.delete(faceIndex);
         this._scene.remove(this._scene.getObjectById(removing));
     }
 

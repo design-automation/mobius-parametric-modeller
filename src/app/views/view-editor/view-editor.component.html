@@ -15,7 +15,7 @@
                             [node]='dataService.node' 
                             [startProcedures]='dataService.flowchart.nodes[0].procedure'
                             (delete)='deleteFunction($event)' 
-                            (select)='add($event)' 
+                            (selected)='add($event)' 
                             (imported)='importFunction($event)'></toolset>
                         </div>
                 

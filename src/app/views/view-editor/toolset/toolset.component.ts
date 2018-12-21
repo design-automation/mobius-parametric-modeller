@@ -21,7 +21,7 @@ const keys = Object.keys(ProcedureTypes);
 })
 export class ToolsetComponent {
 
-    @Output() select = new EventEmitter();
+    @Output() selected = new EventEmitter();
     @Output() delete = new EventEmitter();
     @Output() imported = new EventEmitter();
     @Input() functions: IFunction[];
@@ -30,12 +30,13 @@ export class ToolsetComponent {
 
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
+    searchedFunctions = [];
 
     constructor() {}
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes): void {
-        this.select.emit( { type: type, data: undefined } );
+        this.selected.emit( { type: type, data: undefined } );
     }
 
     // add selected function from core.modules as a new procedure
@@ -46,7 +47,7 @@ export class ToolsetComponent {
             return {name: arg.name, value: arg.value, default: arg.default};
             });
 
-        this.select.emit( { type: ProcedureTypes.Function, data: fnData } );
+        this.selected.emit( { type: ProcedureTypes.Function, data: fnData } );
     }
 
     // add selected imported function as a new procedure
@@ -54,7 +55,7 @@ export class ToolsetComponent {
         fnData.args = fnData.args.map( (arg) => {
             return {name: arg.name, value: arg.value, type: arg.type};
             });
-        this.select.emit( { type: ProcedureTypes.Imported, data: fnData } );
+        this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
     }
 
     // delete imported function
@@ -248,4 +249,48 @@ export class ToolsetComponent {
         return false;
     }
 
+    searchFunction(event) {
+        const str = event.target.value.toLowerCase().replace(/ /g, '_');
+        this.searchedFunctions = [];
+        if (str.length === 0) {
+            return;
+        }
+        for (let i = 0; i < 8; i++) {
+            if (this.searchedFunctions.length >= 10) { break; }
+            if (this.ProcedureTypesArr[i].toLowerCase().indexOf(str) !== -1) {
+                this.searchedFunctions.push({
+                    'type': 'basic',
+                    'name': this.ProcedureTypesArr[i],
+                });
+            }
+        }
+
+        // @ts-ignore
+        for (const mod of this.Modules) {
+            if (this.searchedFunctions.length >= 10) { break; }
+            if (mod.module.substring(0, 1) === '_' || mod.module === 'Input' || mod.module === 'Output') {continue; }
+            for (const func of mod.functions) {
+                if (this.searchedFunctions.length >= 10) { break; }
+                if (func.name.substring(0, 1) === '_') {continue; }
+                if (func.name.toLowerCase().indexOf(str) !== -1) {
+                    this.searchedFunctions.push({
+                        'type': 'function',
+                        'name': func.name,
+                        'module': mod.module,
+                        'data': func
+                    });
+                }
+            }
+        }
+        for (const func of this.functions) {
+            if (this.searchedFunctions.length >= 10) { break; }
+            if (func.name.toLowerCase().indexOf(str) !== -1) {
+                this.searchedFunctions.push({
+                    'type': 'imported',
+                    'name': func.name,
+                    'data': func
+                });
+            }
+        }
+    }
 }

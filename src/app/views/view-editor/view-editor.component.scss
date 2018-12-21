@@ -71,7 +71,7 @@
     
     height: calc(100vh - 40px); // 40px === $header-height
     &:hover{
-        overflow-y: auto;
+        overflow:auto;
     }    
 }
 

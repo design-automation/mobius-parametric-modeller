@@ -9,9 +9,9 @@
 }
 
 table {
-  width: 100%;
+  width: 100%;  
   tr.mat-header-row{
-    height: 40px;
+    height: $fsize3;
   }
   tr.mat-row{
     height: 24px;
@@ -51,7 +51,7 @@ table {
 
   // label-headings
   .mat-tab-label{
-    height: 20px;
+    height: 36px;
     padding: 0 0 0 2px;
     min-width: 100px;
     font-size: $fsize2;

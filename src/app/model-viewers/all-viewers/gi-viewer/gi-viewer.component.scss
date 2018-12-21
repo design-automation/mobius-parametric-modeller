@@ -13,5 +13,31 @@
 }
 
 as-split-area{
+    position: relative;
     overflow: hidden auto !important;
+}
+
+#settings {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    z-index: 9999999;
+    display: inline-block;
+    vertical-align: bottom;
+    background-color: transparent;
+    color: $color1;
+    border: none;
+    outline: none;
+    padding: 0px;
+    width: 40px;
+    height: 40px;
+    transition: 0.3s;
+    font-size: 14px;
+    &:hover {
+        color:$color5;
+    }
+    &.active {
+        color: $selected-color;
+    }
 }

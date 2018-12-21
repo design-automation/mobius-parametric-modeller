@@ -1,9 +1,26 @@
 // Types
-export type TColor = [number, number, number];
-export type TNormal = [number, number, number];
+export type TPlane = [Txyz, Txyz, Txyz]; // an origin and two vectors
+export type TQuery = string;
+export type TId = string;
+export type Txyz = [number, number, number];
+export type TColor = [number, number, number]; // TODO replace with Txyz
+export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
-// Enum
+// Knife modelling operation keep
+export enum EOpKnife {
+    KEEP_ABOVE =  'keep above the plane',
+    KEEP_BELOW  =  'keep below the plane',
+    KEEP_ALL =  'keep all'
+}
+
+// Divide edge modelling operation
+export enum EOpDivide {
+    BY_NUMBER =  'divide edge by number',
+    BY_LENGTH  =  'divide edge by length'
+}
+
+// Types of entities
 export enum EEntityTypeStr {
     POSI =  'ps',
     TRI  =  '_t',
@@ -56,15 +73,15 @@ export interface IQueryComponent {
 // IDs start with two characters followed by numeric digits.
 // For example '_v22' is vertex number 22.
 // ============================================================================
-export function idBreak(id: string): [string, number] {
+export function idBreak(id: TId): [string, number] {
     return [idEntityTypeStr(id), idIndex(id)];
 }
-export function idIndex(id: string): number {
+export function idIndex(id: TId): number {
     return Number(id.slice(2));
 }
-export function idIndicies(ids: string[]): number[] {
+export function idIndicies(ids: TId[]): number[] {
     return ids.map( id => Number(id.slice(2)));
 }
-export function idEntityTypeStr(id: string): EEntityTypeStr {
+export function idEntityTypeStr(id: TId): EEntityTypeStr {
     return id.slice(0, 2) as EEntityTypeStr;
 }

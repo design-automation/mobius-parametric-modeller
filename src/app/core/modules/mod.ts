@@ -39,7 +39,7 @@ export function Scale(__model__: GIModel, positions: TId|TId[], origin: TPlane, 
     throw new Error("Not implemented."); return null;
 }
 /**
- * Rotate
+ * Mirror
  * @param __model__
  * @param positions
  * @param plane

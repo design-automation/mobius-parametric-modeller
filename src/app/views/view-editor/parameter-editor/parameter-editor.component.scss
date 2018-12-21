@@ -14,7 +14,6 @@ div[class^="container--"]{
     padding-left: 10px;
     margin: 5px 0px;
     width: 100%;
-
 }
 
 input{
@@ -52,6 +51,8 @@ textarea{
     margin: 10px 0px 5px 3px;
     width: 90%;
     resize: none; 
+    white-space: nowrap;
+    overflow: hidden;
     &:hover, &:focus{
         color: $color8;
     }

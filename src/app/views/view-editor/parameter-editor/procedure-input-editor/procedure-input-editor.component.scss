@@ -22,6 +22,10 @@
     &.inputDisabled{
         opacity: 0.4;
     }
+
+    &:hover .btns{
+        display: inline-flex;
+    }
 }
 
 select{
@@ -46,6 +50,7 @@ select{
     display: inline-block;
     height: $fsize1+3px;
     padding-bottom: 3px;
+    white-space: nowrap;
 }
 
 input{
@@ -53,6 +58,7 @@ input{
     background-color: transparent;
     border:none;
     border-bottom: 1px solid $color1;
+    margin: 0px 2px;
     
     // margin-left: 5px;
     max-width: 95%;
@@ -82,6 +88,32 @@ input{
 
 .input-const-name{
     min-width: 100px;
+}
+
+.btn-container{
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+}
+
+.btns{
+    display: none;
+    flex-flow: row-reverse nowrap;
+    justify-content: flex-end;
+    padding-right: 8px;
+    
+    background-color: $color6;
+    // border-left: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
+
+    position: absolute;
+    &:hover{
+        display: inline-flex;
+    }
+    // .deletebtn:hover{
+    //     color: red !important;
+    // }
 }
 
 .btn{
@@ -141,9 +173,16 @@ input{
         width: 100%;
         max-width: 300px;
         vertical-align: middle;
-        .slider-input{
-            height: $fsize1;
-            line-height:$fsize1;
+        padding-right: 50px;
+        .min-max{
+            white-space: nowrap;
+            .slider-input{
+                height: $fsize1;
+                line-height:$fsize1;
+            }
+            span{
+                padding: 0px 2px;
+            }
         }
     }
 
@@ -156,78 +195,6 @@ input{
             max-width: 300px;
             padding: 0px;
         }
-    }
-}
-
-// checkbox
-
-.div--chbox{
-    height: $fsize1;
-    width: $fsize1;
-    position: relative;
-    label{
-        cursor: pointer;
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        width: $fsize1;
-        height: $fsize1;
-        
-        background-color: $color6;
-        border:1px solid $color2;
-        margin: 1px;
-
-        &:after { // check
-            position: absolute;
-            top: 4px;
-            left: 4px;
-
-            opacity: 0.2;
-            content: '';
-            
-            width: 4px;
-            height: 2px;
-            background-color: transparent;
-            
-            border: 3px solid $color8;
-            border-top: none;
-            border-right: none;      
-            transform: rotate(-45deg);
-        }
-        &:hover{
-            background-color: $color7;
-            border:2px solid rgba($selected-color,0.5);
-            margin: 0px;
-        }
-        &:hover::after {
-            border-color: rgba($selected-color,0.5);
-        }
-    }
-    input[type=checkbox]:checked + label:after {
-        opacity: 1;
-    }
-}
-
-// import file button
-
-.filebtn{
-    height: 20px;
-    margin: 0px;
-    padding: 0px;
-    border: 2px solid transparent;
-
-    background-color: $color5; /* Green */
-    color: $color1;
-
-    text-align: center;
-    text-decoration: none;
-
-    font-size: $fsize2;
-    &:hover, &:active {
-        // border-color: $selected-color;
-        background-color: $color4;
-        color: $color8;
     }
 }
 

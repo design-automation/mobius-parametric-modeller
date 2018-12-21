@@ -35,7 +35,7 @@
         padding-top: 0px;
         text-align: center;
         vertical-align: middle;
-        line-height: $header-height;
+        line-height: $header-height - 5px;
         &:hover{
             color: $selected-color;
         }

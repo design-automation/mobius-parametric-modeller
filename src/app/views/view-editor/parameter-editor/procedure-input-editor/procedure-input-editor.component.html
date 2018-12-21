@@ -1,4 +1,15 @@
 <div class='container--parameter' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta?.module=="Input"'>
+    <div class = "btn-container">
+        <div class = "btns">
+            <!-- delete button-->
+            <button class='btn' mat-icon-button title="Delete Procedure" (click)='deleteProd()' tabindex="-1">
+                <mat-icon class='icon'>delete_outline</mat-icon>
+            </button>
+            <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
+                <mat-icon class='icon'>tv_off</mat-icon>
+            </button>
+        </div>
+    </div>
     <div class='inline-div'>
         <input *ngIf='prod.type == 10' [class.disabled-input]='true' value='Global Variable' size='10' disabled>
         <input *ngIf='prod.type == 12' [class.disabled-input]='true' value='Add Model' size='5' disabled>
@@ -8,14 +19,6 @@
         <input [class.disabled-input]='true' value='Name:' size='8' disabled>
         <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder="undefined"
         [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
-
-        <!-- delete button-->
-        <button class='btn' mat-icon-button title="Delete Procedure" (click)='deleteProd()' tabindex="-1">
-            <mat-icon class='icon'>delete_outline</mat-icon>
-        </button>
-        <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
-            <mat-icon class='icon'>tv_off</mat-icon>
-        </button>
     </div>
 
     <div class='inline-div'>
@@ -66,8 +69,8 @@
                 </div>               
             </div>
             <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
-                <input id = 'chbox' [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
-                <label for = 'chbox'></label>
+                <input id = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+                <label for = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default'></label>
             </div>
             <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>

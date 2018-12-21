@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TCoord } from '@libs/geo-info/GIJson';
-import { EAttribNames, TId, Txyz, TPlane} from '@libs/geo-info/GICommon';
+import { EAttribNames, TId, Txyz, TPlane, EOpDivide} from '@libs/geo-info/GICommon';
 import { __merge__ } from './_model';
 
 /**

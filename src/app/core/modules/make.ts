@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TCoord } from '@libs/geo-info/GIJson';
-import { EAttribNames, TId, Txyz, TPlane} from '@libs/geo-info/GICommon';
+import { TCoord, EAttribDataTypeStrs } from '@libs/geo-info/GIJson';
+import { EAttribNames, TId, Txyz, TPlane, isPosi, isVert, idBreak, EEntityTypeStr} from '@libs/geo-info/GICommon';
 import { __merge__ } from './_model';
 
 /**
@@ -18,8 +18,12 @@ export function Position(__model__: GIModel, coords: TCoord): TId {
  * @param __model__
  * @param coords
  */
-export function Point(__model__: GIModel, position: TId): TId {
-    return __model__.geom().addPoint(position);
+export function Point(__model__: GIModel, positions: TId|TId[]): TId {
+    for (const position of positions) {
+        const [entity_str, index] = idBreak(position);
+        const posi_i: number = __model__.geom().navAnyToPosi(EEntityTypeStr[entity_str], index)[0];
+        return __model__.geom().addPointByIndex(posi_i) + EEntityTypeStr.POINT;
+    }
 }
 /**
  * Adds a new polyline to the model.

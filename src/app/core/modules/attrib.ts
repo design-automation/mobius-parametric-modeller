@@ -16,7 +16,7 @@ export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAtt
  * @param entities
  */
 export function Set(__model__: GIModel, entities: TId|TId[], name: string, value: TAttribDataTypes): void {
-    //return __model__.attribs().setAttribValue(entities, name, value);
+    // return __model__.attribs().setAttribValue(entities, name, value);
     throw new Error("Not impemented."); return null;
 }
 /**

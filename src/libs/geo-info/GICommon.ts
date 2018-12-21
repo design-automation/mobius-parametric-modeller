@@ -47,7 +47,7 @@ export enum EEntityTypeStr {
     WIRE =  '_w',
     FACE =  '_f',
     POINT = 'pt',
-    LINE =  'pl',
+    PLINE =  'pl',
     PGON =  'pg',
     COLL =  'co'
 }
@@ -102,4 +102,31 @@ export function idIndicies(ids: TId[]): number[] {
 }
 export function idEntityTypeStr(id: TId): EEntityTypeStr {
     return id.slice(0, 2) as EEntityTypeStr;
+}
+export function isPosi(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.POSI);
+}
+export function isVert(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.VERT);
+}
+export function isEdge(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.EDGE);
+}
+export function isWire(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.WIRE);
+}
+export function isFace(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.FACE);
+}
+export function isPoint(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.POINT);
+}
+export function isPline(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.PLINE);
+}
+export function isPgon(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.PGON);
+}
+export function isColl(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.COLL);
 }

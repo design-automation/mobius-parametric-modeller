@@ -1,6 +1,6 @@
 import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './GIJson';
 import { GIModel } from './GIModel';
-import { TId, EEntityTypeStr, idBreak, idIndex, idIndicies } from './GICommon';
+import { TId, EEntityTypeStr, idBreak, idIndex, idIndicies, isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl } from './GICommon';
 import { triangulate } from '../triangulate/triangulate';
 
 /**
@@ -226,7 +226,7 @@ export class GIGeom {
     public navPointToVert(point_i: number): number {
         return this._points[point_i];
     }
-    public navLineToWire(line_i: number): number {
+    public navPlineToWire(line_i: number): number {
         return this._lines[line_i];
     }
     public navPgonToFace(pgon_i: number): number {
@@ -235,7 +235,7 @@ export class GIGeom {
     public navCollToPoint(coll_i: number): number[] {
         return this._colls[coll_i][1]; // coll points
     }
-    public navCollToLine(coll_i: number): number[] {
+    public navCollToPline(coll_i: number): number[] {
         return this._colls[coll_i][2]; // coll lines
     }
     public navCollToPgon(coll_i: number): number[] {
@@ -244,15 +244,56 @@ export class GIGeom {
     public navCollToColl(coll_i: number): number {
         return coll_i[0]; // coll parent
     }
-    // jump all way down to vertices
+    // TODO This has been replaced by navAnyToVert
     public navLineToVert(line_i: number): number[] {
         const wire_i: number = this._lines[line_i];
         return this._getWireVerts(wire_i);
     }
+    // TODO This has been replaced by navAnyToVert
     public navPgonToVert(pgon_i: number): number[][] {
         const face_i: number = this._pgons[pgon_i];
         const wires_i: number[] = this._faces[face_i][0];
         return wires_i.map( wire_i => this._getWireVerts(wire_i) );
+    }
+    /**
+     * Navigate from any level down to the vertices, (or up if coming from positions)
+     * @param id
+     */
+    public navAnyToVert(entity_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(entity_str)) {
+            return this.navPosiToVert(index);
+        } else if (isVert(entity_str)) {
+            return [index];
+        } else if (isEdge(entity_str)) {
+            return this.navEdgeToVert(index);
+        } else if (isWire(entity_str)) {
+            return this._getWireVerts(index);
+        } else if (isFace(entity_str)) {
+            return [].concat(...this.navFaceToWire(index).map(wire_i => this._getWireVerts(wire_i)));
+        } else if (isPoint(entity_str)) {
+            return  [this.navPointToVert(index)];
+        } else if (isPline(entity_str)) {
+            return this.navAnyToVert(entity_str, this.navPlineToWire(index));
+        } else if (isPgon(entity_str)) {
+            return this.navAnyToVert(entity_str, this.navPgonToFace(index));
+        } else if (isColl(entity_str)) {
+            const posis_i_points = this.navCollToPoint(index).map( point_i => this.navAnyToVert(entity_str, point_i) );
+            const posis_i_plines = this.navCollToPline(index).map( pline_i => this.navAnyToVert(entity_str, pline_i) );
+            const posis_i_pgons = this.navCollToPgon(index).map( pgon_i => this.navAnyToVert(entity_str, pgon_i) );
+            const posis_i = [posis_i_points, posis_i_plines, posis_i_pgons];
+            return [].concat(...posis_i);
+        }
+        throw new Error('Bad entity ID: ' + index);
+    }
+    /**
+     * Navigate from any level down to the positions
+     * @param id
+     */
+    public navAnyToPosi(entity_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(entity_str)) {
+            return [index];
+        }
+        return this.navAnyToVert(entity_str, index);
     }
     // ============================================================================
     // Navigate up the hierarchy
@@ -355,20 +396,6 @@ export class GIGeom {
         const edges_i: number[] = this._wires[wire_i];
         return this._edges[edges_i[0]][0] === this._edges[edges_i[edges_i.length - 1]][1];
     }
-    /**
-     * Helper function to get the vertices of a wire
-     * The function check is the wire is closed and returns correct number of vertices.
-     * For a cloased wire, #vertices = #edges
-     * For an open wire, #vertices = #edges + 1
-     */
-    private _getWireVerts(wire_i: number): number[] {
-        const edges_i: number[] = this._wires[wire_i];
-        const verts_i: number[] = edges_i.map(edge_i => this._edges[edge_i][0]);
-        if (this._edges[edges_i[0]][0] !== this._edges[edges_i[edges_i.length - 1]][1]) {
-            verts_i.push(this._edges[edges_i[edges_i.length - 1]][1]);
-        }
-        return verts_i;
-    }
     // ============================================================================
     // Create geometry, all these public methods return an string ID
     // ============================================================================
@@ -407,7 +434,7 @@ export class GIGeom {
     public addPline(posis_id: TId[], close: boolean = false): TId {
         const posis_i: number[] = idIndicies(posis_id);
         const pline_i: number = this.addPlineByIndex(posis_i);
-        return EEntityTypeStr.LINE + pline_i;
+        return EEntityTypeStr.PLINE + pline_i;
     }
     /**
      * Adds a new pline entity to the model using numeric indicies.
@@ -508,7 +535,7 @@ export class GIGeom {
         return this._points.map( (_, index) =>  EEntityTypeStr.POINT + index );
     }
     public getLines(): TId[] {
-        return this._lines.map( (_, index) =>  EEntityTypeStr.LINE + index );
+        return this._lines.map( (_, index) =>  EEntityTypeStr.PLINE + index );
     }
     public getPgons(): TId[] {
         return this._pgons.map( (_, index) =>  EEntityTypeStr.PGON + index );
@@ -549,6 +576,23 @@ export class GIGeom {
     public numColls(): number {
         return this._colls.length;
     }
+    // ============================================================================
+    // Shortcuts for overloaded functions to get arguments
+    // ============================================================================
+    /**
+     * Returns the vertices.
+     * For a cloased wire, #vertices = #edges
+     * For an open wire, #vertices = #edges + 1
+     */
+    private _getWireVerts(wire_i: number): number[] {
+        const edges_i: number[] = this._wires[wire_i];
+        const verts_i: number[] = edges_i.map(edge_i => this._edges[edge_i][0]);
+        if (this._edges[edges_i[0]][0] !== this._edges[edges_i[edges_i.length - 1]][1]) {
+            verts_i.push(this._edges[edges_i[edges_i.length - 1]][1]);
+        }
+        return verts_i;
+    }
+ 
     // ============================================================================
     // ThreeJS
     // Get arrays for threejs, these retrun arrays of indexes to positions

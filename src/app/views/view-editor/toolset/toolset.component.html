@@ -83,11 +83,14 @@
             <button id='imported' class="accordion" 
             (click)='toggleAccordion("imported")' >User</button>
             <div class="panel">
-                <button class='add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
-                        Import
-                        <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
-                </button>
                 <ul class='toolset__functions--subset'>
+                    <li class = 'user--add'>
+                        <button class = 'add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
+                                Import
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                        </button>
+                    </li>
+
                     <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
                         <li (click)='add_imported_function(fn)'> {{fn.name}} 
                             <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
@@ -105,7 +108,7 @@
                         </span>
                     </div>
                 </ul>
-                <br>
+
                 <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />  
             </div>
         </ng-container>

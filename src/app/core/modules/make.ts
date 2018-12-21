@@ -12,7 +12,7 @@ import { __merge__ } from './_model';
  *
  * Creates a position with coordinates x=1, y=2, z=3.
  */
-export function Position(__model__: GIModel, coords: TCoord): TId {
+export function Position(__model__: GIModel, coords: Txyz): TId {
     const posi_id: TId = __model__.geom().addPosition();
     __model__.attribs().setAttribValue(posi_id, EAttribNames.COORDS, coords);
     return posi_id;
@@ -69,36 +69,28 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
     // return __model__.geom().addColl(objects);
 }
 /**
- * Adds a new plane to the model from a location and normal vector.
+ * Adds a new plane to the model from a location and two vectors.
  * @param __model__
- * @param location Position, point, vertex on plane.
- * @param vector Vector or list of three coordinates.
+ * @param location Position, point, vertex on plane
+ * @param vector1 Vector on plane or list of three coordinates defining it.
+ * @param vector2 Vector on plane or list of three coordinates defining it.
  * @returns New plane if successful, null if unsuccessful or on error.
- * @example plane1 = make.Plane(location, vector)
+ * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  *
- * Creates a plane with location on it and normal = vector.
- *
- * Adds a new plane to the model from two vectors.
- * @param __model__
- * @param vector1 Vector or list of three coordinates.
- * @param vector2 Vector or list of three coordinates.
- * @returns New plane if successful, null if unsuccessful or on error.
- * @example plane2 = make.Plane(vector1,vector2)
- *
- * Creates a plane with vector1 and vector2 on it, and normal = cross product of both vectors.
+ * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function Plane(__model__: GIModel, plane: TPlane): TId {
+export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Adds a new copy to the model.
  * @param __model__
- * @param objects Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
  * @returns New copy if successful, null if unsuccessful or on error.
  * @example copy1 = make.Copy([position1,polyine1,polygon1])
  *
  * Creates a list containing a copy of the objects in sequence of input.
  */
-export function Copy(__model__: GIModel, objects: TId|TId[]): TId|TId[] {
+export function Copy(__model__: GIModel, geometry: TId|TId[]): TId|TId[] {
     throw new Error("Not implemented."); return null;
 }

@@ -2,10 +2,13 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/GICommon';
 
 /**
- * Set Position
+ * Set new coordinates of existing position
  * @param __model__
- * @param position
- * @param xyz
+ * @param position Existing position.
+ * @param xyz List of three coordinates.
+ * @example mod.SetPosition(position1, [1,2,3])
+ *
+ * position1 will have new coordinates = [1,2,3].
  */
 export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void {
     throw new Error("Not implemented."); return null;
@@ -13,54 +16,74 @@ export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void 
 /**
  * Move
  * @param __model__
- * @param positions
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param vector Vector or list of three coordinates.
+ * @example mod.Move(geometry, vector)
+ *
+ * Moves all geometry by vector.
  */
-export function Move(__model__: GIModel, positions: TId|TId[], vector: Txyz): void {
+export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Rotate
  * @param __model__
- * @param positions
- * @param origin
- * @param angle
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param origin Plane to rotate on.
+ * @param angle Angle (in radians).
+ * @example mod.Rotate(geometry, plane1, pi)
+ *
+ * Rotates geometry on plane1 by pi (i.e. 180 degrees).
  */
-export function Rotate(__model__: GIModel, positions: TId|TId[], origin: TPlane|TId, angle: number): void {
+export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Rotate
+ * Scale
  * @param __model__
- * @param positions
- * @param origin
- * @param scale
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param origin Plane to scale on.
+ * @param scale Scale factor.
+ * @example mod.Scale(geometry, plane1, 0.5)
+ *
+ * Scales geometry by 0.5 on plane1.
  */
-export function Scale(__model__: GIModel, positions: TId|TId[], origin: TPlane, scale: number): void {
+export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, scale: number): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Mirror
  * @param __model__
- * @param positions
- * @param plane
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param plane Plane to mirror across.
+ * @example mod.Mirror(geometry, plane)
+ *
+ * Mirrors geometry across the plane.
  */
-export function Mirror(__model__: GIModel, positions: TId|TId[], plane: TPlane): void {
+export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * XForm
  * @param __model__
- * @param positions
- * @param from
- * @param to
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param from Plane defining target construction plane.
+ * @param to Plane defining destination construction plane.
+ * @example mod.XForm(geometry, plane1, plane2)
+ *
+ * Transforms geometry from plane1 to plane2.
  */
-export function XForm(__model__: GIModel, positions: TId|TId[], from: TPlane, to: TPlane): void {
+export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to: TPlane): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Loft
  * @param __model__
- * @param geometry
+ * @param geometry Polylines or polygons.
+ * @returns Lofted surface between geometry.
+ * @example mod.Loft([polyline1,polyline2,polyline3])
+ *
+ * Creates a lofted surface between polyline1, polyline2 and polyline3.
  */
 export function Loft(__model__: GIModel, geometry: TId[]  ): TId[] {
     throw new Error("Not implemented."); return null;
@@ -130,7 +153,7 @@ export function Close(__model__: GIModel, polyline: TId[], close: boolean): void
  * @param lines
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    throw new Error("Not impemented."); return null;
+    throw new Error("Not implemented."); return null;
 }
 /**
  * Delete

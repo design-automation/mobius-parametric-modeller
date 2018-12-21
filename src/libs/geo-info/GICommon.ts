@@ -7,6 +7,24 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
+// Promote modelling operation
+export enum EAttribTypes {
+    POSIS =  'positions',
+    VERTS  =  'vertices',
+    EDGES = 'edges',
+    WIRES = 'wires',
+    FACES = 'faces',
+    COLLS = 'collections'
+}
+
+// Promote modelling operation
+export enum EOpPromote {
+    MEAN =  'mean',
+    MIN  =  'min',
+    MAX = 'max',
+    NONE = 'none'
+}
+
 // Knife modelling operation keep
 export enum EOpKnife {
     KEEP_ABOVE =  'keep above the plane',

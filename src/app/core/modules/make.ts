@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TCoord } from '@libs/geo-info/GIJson';
-import { EAttribNames, TId, Txyz} from '@libs/geo-info/GICommon';
+import { EAttribNames, TId, Txyz, TPlane} from '@libs/geo-info/GICommon';
 import { __merge__ } from './_model';
 
 /**
@@ -27,7 +27,7 @@ export function Point(__model__: GIModel, position: TId): TId {
  * @param positions
  */
 export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
-    throw new Error("Not impemented.");
+    throw new Error("Not impemented."); return null;
     // return __model__.geom().addPline(positions);
 }
 /**
@@ -36,7 +36,7 @@ export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
  * @param positions
  */
 export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
-    throw new Error("Not impemented.");
+    throw new Error("Not impemented."); return null;
     // return __model__.geom().addPgon(positions);
 }
 /**
@@ -45,22 +45,22 @@ export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
  * @param positions
  */
 export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
-    throw new Error("Not impemented.");
+    throw new Error("Not impemented."); return null;
     // return __model__.geom().addColl(objects);
 }
 /**
  * Adds a new plane to the model.
  * @param __model__
- * @param positions
+ * @param plane
  */
-export function Plane(__model__: GIModel, positions: TId|TId[], x_vector: Txyz, xy_vector: Txyz): TId {
-    throw new Error("Not impemented.");
+export function Plane(__model__: GIModel, plane: TPlane): TId {
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Adds a new collectiob to the model.
  * @param __model__
- * @param positions
+ * @param objects
  */
-export function Copy(__model__: GIModel, positions: TId): TId {
-    throw new Error("Not impemented.");
+export function Copy(__model__: GIModel, objects: TId|TId[]): TId|TId[] {
+    throw new Error("Not impemented."); return null;
 }

@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, Txyz } from '@libs/geo-info/GICommon';
+import { TId, TQuery, Txyz, EOpPromote, EAttribTypes } from '@libs/geo-info/GICommon';
 import { TAttribDataTypes } from '@libs/geo-info/GIJson';
 
 /**
@@ -8,22 +8,25 @@ import { TAttribDataTypes } from '@libs/geo-info/GIJson';
  * @param entities
  */
 export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Set attribute value.
  * @param __model__
- * @param entity
+ * @param entities
  */
-export function Set(__model__: GIModel, entity: TId, name: string, value: TAttribDataTypes): void {
-    return __model__.attribs().setAttribValue(entity, name, value);
+export function Set(__model__: GIModel, entities: TId|TId[], name: string, value: TAttribDataTypes): void {
+    //return __model__.attribs().setAttribValue(entities, name, value);
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Attribute promote
  * @param __model__
- * @param vertices
+ * @param from enum
+ * @param to enum
+ * @param method enum
  */
-export function Promote(__model__: GIModel, vertices: TId[]): TId[] {
+export function Promote(__model__: GIModel, from: EAttribTypes, to: EAttribTypes, method: EOpPromote): TId[] {
     throw new Error("Not implemented.");
 }
 /**
@@ -32,7 +35,7 @@ export function Promote(__model__: GIModel, vertices: TId[]): TId[] {
  * @param query
  */
 export function Query(__model__: GIModel, query: TQuery): TId[] {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * QueryNumber
@@ -40,7 +43,7 @@ export function Query(__model__: GIModel, query: TQuery): TId[] {
  * @param query
  */
 export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Gets the xyz coordinates of a set of one or more positions.
@@ -48,5 +51,5 @@ export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
  * @param positions
  */
 export function GetCoordinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }

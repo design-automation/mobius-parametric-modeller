@@ -20,8 +20,8 @@ export {isect};
 import * as mod from './mod';
 export {mod};
 
-// import * as eval from './eval';
-// export {eval};
+import * as calc from './calc';
+export {calc};
 
 import * as vec from './vec';
 export {vec};

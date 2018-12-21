@@ -6,7 +6,11 @@ import { __merge__ } from './_model';
 /**
  * Adds a new position to the model.
  * @param __model__
- * @param coords
+ * @param coords XYZ coordinates as a list of three numbers.
+ * @returns New position if successful, null if unsuccessful or on error.
+ * @example position1 = make.Position([1,2,3])
+ *
+ * Creates a position with coordinates x=1, y=2, z=3.
  */
 export function Position(__model__: GIModel, coords: TCoord): TId {
     const posi_id: TId = __model__.geom().addPosition();
@@ -40,7 +44,7 @@ export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
     // return __model__.geom().addPgon(positions);
 }
 /**
- * Adds a new collectiob to the model.
+ * Adds a new collection to the model.
  * @param __model__
  * @param positions
  */

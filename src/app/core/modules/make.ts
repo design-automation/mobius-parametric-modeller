@@ -12,7 +12,7 @@ import { __merge__ } from './_model';
  *
  * Creates a position with coordinates x=1, y=2, z=3.
  */
-export function Position(__model__: GIModel, coords: TCoord): TId {
+export function Position(__model__: GIModel, coords: Txyz): TId {
     const posi_id: TId = __model__.geom().addPosition();
     __model__.attribs().setAttribValue(posi_id, EAttribNames.COORDS, coords);
     return posi_id;
@@ -82,18 +82,18 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  *
  * Creates a plane with vector1 and vector2 on it, and normal = cross product of both vectors.
  */
-export function Plane(__model__: GIModel, locationOrVector: TId|TCoord, vector: TId|TCoord): TId {
+export function Plane(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Adds a new copy to the model.
  * @param __model__
- * @param objects Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
  * @returns New copy if successful, null if unsuccessful or on error.
  * @example copy1 = make.Copy([position1,polyine1,polygon1])
  *
  * Creates a list containing a copy of the objects in sequence of input.
  */
-export function Copy(__model__: GIModel, objects: TId|TId[]): TId|TId[] {
+export function Copy(__model__: GIModel, geometry: TId|TId[]): TId|TId[] {
     throw new Error("Not implemented."); return null;
 }

@@ -150,19 +150,22 @@ export function Unweld(__model__: GIModel, vertices: TId[]): number {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Divide edge by length
+ * Divides edge by length.
  * @param __model__
- * @param edges
- * @param divisor
+ * @param edges Edge(s) to be divided.
+ * @param divisor Length.
  * @param method Enum
  */
 export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Close polyline
+ * Closes polylines.
  * @param __model__
- * @param polyline
+ * @param polyline Polyline(s).
+ * @example mod.Close([polyline1,polyline2])
+ *
+ * If open, polylines are changed to closed.
  */
 export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): void {
     throw new Error("Not implemented."); return null;
@@ -178,7 +181,10 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
 /**
  * Deletes geometry.
  * @param __model__
- * @param geometry
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
+ * @example mod.Delete(geometry)
+ *
+ * Deletes specified geometry from model.
  */
 export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
     throw new Error("Not implemented."); return null;

@@ -35,7 +35,7 @@ export class ExecuteComponent {
             this.globalVars = '';
 
             // @ts-ignore
-            console.logs = [];
+            // console.logs = [];
 
             // reset input of all nodes except start
             for (const node of this.dataService.flowchart.nodes) {
@@ -207,7 +207,7 @@ export class ExecuteComponent {
             }
             document.getElementById('Console').click();
             // @ts-ignore
-            console.logs = [];
+            // console.logs = [];
             console.log('=======================================');
             console.log(error.name.toUpperCase());
             console.log('=======================================');

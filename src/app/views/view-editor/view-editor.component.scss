@@ -35,27 +35,30 @@
     height: calc(100vh - 40px); // 40px === $header-height
     overflow: hidden;
     toolset{
+        display: flex;
+        flex-flow: column nowrap;
+        
         overflow:hidden;
-        &:hover{
-            overflow-y: auto;
-        }
+        // &:hover{
+        //     overflow-y: auto;
+        // }
     }
-    toolset::-webkit-scrollbar {
-        width: 8px;
-    }
+    // toolset::-webkit-scrollbar {
+    //     width: 8px;
+    // }
     
-    toolset::-webkit-scrollbar-track {
-        background: $color5;
-    }
+    // toolset::-webkit-scrollbar-track {
+    //     background: $color5;
+    // }
     
-    toolset::-webkit-scrollbar-thumb {
-        background: $color4; 
-        border-left: 2px solid $color5;
-    }
+    // toolset::-webkit-scrollbar-thumb {
+    //     background: $color4; 
+    //     border-left: 2px solid $color5;
+    // }
     
-    toolset::-webkit-scrollbar-thumb:hover {
-        background: $color2; 
-    }
+    // toolset::-webkit-scrollbar-thumb:hover {
+    //     background: $color2; 
+    // }
 }
 
 .container--procedure{

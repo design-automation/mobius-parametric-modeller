@@ -4,8 +4,8 @@ import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/GICommon';
 /**
  * Set Position
  * @param __model__
- * @param position
- * @param xyz
+ * @param position Existing position.
+ * @param xyz List of three coordinates.
  */
 export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void {
     throw new Error("Not implemented."); return null;
@@ -39,7 +39,7 @@ export function Scale(__model__: GIModel, positions: TId|TId[], origin: TPlane, 
     throw new Error("Not implemented."); return null;
 }
 /**
- * Rotate
+ * Mirror
  * @param __model__
  * @param positions
  * @param plane
@@ -130,7 +130,7 @@ export function Close(__model__: GIModel, polyline: TId[], close: boolean): void
  * @param lines
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    throw new Error("Not impemented."); return null;
+    throw new Error("Not implemented."); return null;
 }
 /**
  * Delete

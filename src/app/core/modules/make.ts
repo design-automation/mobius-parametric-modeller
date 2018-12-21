@@ -22,7 +22,7 @@ export function Position(__model__: GIModel, coords: Txyz): TId {
  * @param __model__
  * @param position Position of point.
  * @returns New point if successful, null if unsuccessful or on error.
- * @example point1 = make.Point(position1)
+ * @example point1 = make.Point(position)
  *
  * Creates a point at position1.
  */

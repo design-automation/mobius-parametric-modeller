@@ -53,7 +53,7 @@ export function Area(__model__: GIModel, surface: TId|TId[]): number {
  * @param geometry List of positions, a wire, a closed polyline, a face, or a polygon.
  * @returns Vector.
  * @example normal1 = calc.Normal (geometry)
- * 
+ *
  * If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
 export function Normal(__model__: GIModel, geometry: TId[]): Txyz {

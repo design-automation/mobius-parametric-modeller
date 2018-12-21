@@ -1,5 +1,5 @@
 <h2>{{node.name}}</h2>
-<ng-container *ngIf="node.type == ''">
+<div *ngIf="node.type == ''" (mouseover)='setCurrent()'>
 
     <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
     <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
@@ -93,25 +93,25 @@
             </ul>
             <br>
             <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />
-            <button class='add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
+            <button class='add-btn' onclick="document.getElementById('selectedFile').click();" title="Import .mob File as Function">
                 <mat-icon class='add-icon'>open_in_browser</mat-icon>
             </button>
         </div>
     </ng-container>
 
     <ng-container>
-        <button id='globals' class="accordion" disabled>Globals</button>
-        <div class="panel" [class.opened] = 'true'>
+        <button id='globals' class="accordion" (click)='toggleAccordion("globals")' >Globals</button>
+        <div class="panel">
             <ul class='toolset__functions--subset'>
-                <li *ngFor='let cnst of startProcedures'>
+                <li *ngFor='let cnst of startProcedures' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
                     {{cnst.args[cnst.argCount-2].value}}
                 </li>
             </ul>
         </div>
     </ng-container>
 
-    
-</ng-container>
+</div>
+
 
 <!-- functions for input nodes -->
 <div id='toolset_inp' class = 'toolset' *ngIf="node.type == 'start'">

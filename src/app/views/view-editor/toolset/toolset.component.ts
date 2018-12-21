@@ -11,7 +11,10 @@ import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
 
 const keys = Object.keys(ProcedureTypes);
-
+const inputEvent = new Event('input', {
+    'bubbles': true,
+    'cancelable': true
+});
 @ModuleAware
 @ModuleDocAware
 @Component({
@@ -31,6 +34,7 @@ export class ToolsetComponent {
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedFunctions = [];
+    focusedInput;
 
     constructor() {}
 
@@ -56,6 +60,26 @@ export class ToolsetComponent {
             return {name: arg.name, value: arg.value, type: arg.type};
             });
         this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
+    }
+
+    setCurrent() {
+        if (document.activeElement.tagName === 'INPUT') {
+            this.focusedInput = document.activeElement;
+        } else {
+            this.focusedInput = undefined;
+        }
+    }
+
+    add_inline(string) {
+        if (!this.focusedInput) {
+            return;
+        }
+        this.focusedInput.focus();
+        console.log(this.focusedInput.ngModel);
+        this.focusedInput.value += string;
+
+        this.focusedInput.dispatchEvent(inputEvent);
+        // this.focusedInput.trigger('input');
     }
 
     // delete imported function
@@ -159,6 +183,9 @@ export class ToolsetComponent {
     }
 
     toggleAccordion(id: string) {
+        if (this.focusedInput) {
+            this.focusedInput.focus();
+        }
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
         acc.classList.toggle('active');

@@ -77,38 +77,6 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
     throw new Error("Not implemented."); return null;
 }
 /**
- * Lofts between polylines or polygons.
- * @param __model__
- * @param objects Polylines or polygons.
- * @returns Lofted surface between objects.
- * @example surface1 = mod.Loft([polyline1,polyline2,polyline3])
- *
- * Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.
- */
-export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
-    throw new Error("Not implemented."); return null;
-}
-/**
- * Extrudes geometry by distance (in default direction = z-axis) or by vector.
- * - Extrusion of location produces a line;
- * - Extrusion of line produces a polygon;
- * - Extrusion of surface produces a list of surfaces.
- * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param distance Number or vector.
- * @returns Extrusion of geometry.
- * @example extrusion1 = mod.Extrude(point1, 10)
- *
- * Creates a line of length 10 in the z-direction.
- *
- * @example extrusion2 = mod.Extrude(polygon1, [0,5,0])
- *
- * Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
- */
-export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Txyz): TId[] {
-    throw new Error("Not implemented."); return null;
-}
-/**
  * Reverses direction of objects.
  * @param __model__
  * @param objects Vector, plane, polyline, polygon.
@@ -121,59 +89,50 @@ export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Tx
  *
  * Reverses the order of vertices to reverse the direction of the polyline.
  */
-export function Reverse(__model__: GIModel, objects: TId[]): TId[] {
+export function Reverse(__model__: GIModel, objects: TId[]): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Joins polylines to polylines or polygons to polygons.
+ * Welds geometry together.
  * @param __model__
- * @param objects Polylines or polygons.
- * @returns ?
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @example mod.Weld([polyline1,polyline2])
+ *
+ * Welds both polyline1 and polyline2 together.
  */
-export function Join(__model__: GIModel, objects: TId[]): TId[] {
+export function Weld(__model__: GIModel, geometry: TId[]): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Weld
+ * Unweld geometries.
  * @param __model__
- * @param vertices
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @example mod.Unweld(polyline1,polyline2)
+ *
+ * Unwelds polyline1 from polyline2.
  */
-export function Weld(__model__: GIModel, vertices: TId[]): number {
+export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Unweld
- * @param __model__
- * @param vertices
- */
-export function Unweld(__model__: GIModel, vertices: TId[]): number {
-    throw new Error("Not implemented."); return null;
-}
-/**
- * Divides edge by length.
- * @param __model__
- * @param edges Edge(s) to be divided.
- * @param divisor Length.
- * @param method Enum
- */
-export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
-    throw new Error("Not implemented."); return null;
-}
-/**
- * Closes polylines.
+ * Closes polylines if open.
  * @param __model__
  * @param polyline Polyline(s).
  * @example mod.Close([polyline1,polyline2])
  *
- * If open, polylines are changed to closed.
+ * If open, polylines are changed to closed; if closed, nothing happens.
  */
 export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Checks if a wire or polyline is closed.
+ * Checks if polyline(s) or wire(s) are closed.
  * @param __model__
- * @param lines
+ * @param lines Polyline(s) or wire(s).
+ * @returns Boolean or list of boolean in input sequence of lines.
+ * @example mod.IsClosed([polyline1,polyline2,polyline3])
+ *
+ * Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     throw new Error("Not implemented."); return null;

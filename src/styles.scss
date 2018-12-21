@@ -123,6 +123,7 @@ input, textarea, select, a {
 .mat-slider-wrapper{
     position: relative !important;
     top: $fsize1 !important;
+    margin-right: $padding;
 }
 
 .mat-slider-track-fill{
@@ -163,5 +164,79 @@ input, textarea, select, a {
     .mat-slider-track-background{
         background-color: $color7 !important;
         border-bottom: 1px solid $color4;
+    }
+}
+
+// checkbox
+
+.div--chbox{
+    height: $fsize1;
+    width: $fsize1;
+    position: relative;
+    label{
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: $fsize1;
+        height: $fsize1;
+        
+        background-color: $color6;
+        border:1px solid $color2;
+        margin: 1px;
+
+        &:after { // check
+            position: absolute;
+            top: 4px;
+            left: 4px;
+
+            opacity: 0.2;
+            content: '';
+            
+            width: 4px;
+            height: 2px;
+            background-color: transparent;
+            
+            border: 3px solid $color8;
+            border-top: none;
+            border-right: none;      
+            transform: rotate(-45deg);
+        }
+        &:hover{
+            background-color: $color7;
+            border:2px solid rgba($selected-color,0.5);
+            margin: 0px;
+        }
+        &:hover:after {
+            border-color: rgba($selected-color,0.5);
+        }
+    }
+    input[type=checkbox]:checked + label:after {
+        opacity: 1;
+        border-color: $color8;
+    }
+}
+
+// import file button
+
+.filebtn{
+    height: 20px;
+    margin: 0px;
+    padding: 0px;
+    border: 2px solid transparent;
+
+    background-color: $color5;
+    color: $color1;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: $fsize2;
+    max-width: 300px - $padding;
+    &:hover, &:active {
+        // border-color: $selected-color;
+        background-color: $color4;
+        color: $color8;
     }
 }

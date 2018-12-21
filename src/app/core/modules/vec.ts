@@ -63,11 +63,13 @@ export function getLength(vector: Txyz): number {
 }
 
 /**
- * Calculates the angle between two vectors.
+ * Calculates the angle (in radian) between two edges, two vectors, or an edge and a vector.
  * @param __model__
- * @param vector1
- * @param vector2
+ * @param edgeorvector1 First edge or vector.
+ * @param edgeorvector2 Second edge or vector.
+ * @returns Angle (in radian).
+ * @example angle1 = calc.Angle (edgeorvector1, edgeorvector2)
  */
-export function angle(vector1: Txyz, vector2: Txyz): number {
+export function angle(edgeorvector1: Txyz, edgeorvector2: Txyz): number {
     throw new Error("Not impemented."); return null;
 }

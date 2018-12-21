@@ -17,9 +17,10 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId): nu
     throw new Error("Not impemented."); return null;
 }
 /**
- * Calculates the minimum distance between two points.
+ * Calculates the minimum distance between a location and an object, or two objects.
  * @param __model__
- * @param object1
+ * @param hello
+ * @param object1 
  * @param object2
  */
 export function MinDistance(__model__: GIModel, object1: TId, object2: TId): number {

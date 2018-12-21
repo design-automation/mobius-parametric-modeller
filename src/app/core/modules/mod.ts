@@ -2,10 +2,13 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/GICommon';
 
 /**
- * Set Position
+ * Set new coordinates of existing position
  * @param __model__
- * @param position
- * @param xyz
+ * @param position Existing position.
+ * @param xyz List of three coordinates.
+ * @example mod.SetPosition(position1, [1,2,3])
+ *
+ * position1 will have new coordinates = [1,2,3].
  */
 export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void {
     throw new Error("Not implemented."); return null;
@@ -13,33 +16,37 @@ export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void 
 /**
  * Move
  * @param __model__
- * @param positions
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param vector Vector or list of three coordinates.
+ * @example mod.Move(geometry, vector)
+ *
+ * Moves all geometry by vector.
  */
-export function Move(__model__: GIModel, positions: TId|TId[], vector: Txyz): void {
+export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Rotate
  * @param __model__
- * @param positions
+ * @param geometry
  * @param origin
  * @param angle
  */
-export function Rotate(__model__: GIModel, positions: TId|TId[], origin: TPlane|TId, angle: number): void {
+export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Rotate
+ * Scale
  * @param __model__
  * @param positions
- * @param origin
- * @param scale
+ * @param origin Plane that defines the origin position and axis.
+ * @param scale Scale factor.
  */
 export function Scale(__model__: GIModel, positions: TId|TId[], origin: TPlane, scale: number): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Rotate
+ * Mirror
  * @param __model__
  * @param positions
  * @param plane
@@ -130,7 +137,7 @@ export function Close(__model__: GIModel, polyline: TId[], close: boolean): void
  * @param lines
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    throw new Error("Not impemented."); return null;
+    throw new Error("Not implemented."); return null;
 }
 /**
  * Delete

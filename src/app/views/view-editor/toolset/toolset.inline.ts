@@ -1,5 +1,5 @@
-const inline_expr = [
-    '# @name==value'
+export const inline_expr = [
+    '# @name==value',
 ];
 
 const math = [
@@ -10,7 +10,7 @@ const str = [
     'replace()'
 ];
 
-const inline_func = [
-    math,
-    str
-]
+export const inline_func = [
+    ['math', math],
+    ['str', str]
+];

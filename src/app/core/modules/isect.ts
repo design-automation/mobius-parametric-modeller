@@ -5,7 +5,8 @@ import { __merge__ } from './_model';
 /**
  * Adds positions by intersection.
  * @param __model__
- * @param positions
+ * @param object1
+ * @param object2
  */
 export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[] {
     throw new Error("Not impemented."); return null;

@@ -46,7 +46,7 @@ h2{
 }
 
 .searchBar{
-    max-width: 98%;
+    width: 100%;
     font-size: 12px;
     padding: 0px 8px;
     border: 0px;
@@ -71,6 +71,9 @@ ul{
         height: 18px;
         line-height: 18px;
         width: 100%;
+    }
+    .user--add{
+        margin-bottom: 8px;
     }
     :hover{
         background-color: $color4;
@@ -185,11 +188,13 @@ ul{
     opacity: 1;
 }
 
+// user functions
+
 .add-btn{
     height: 20px;
 
     margin: 0px;
-    padding: 0px 8px;
+    padding: 0px;
     border: 0px;
 
     background-color: $color5;
@@ -202,10 +207,10 @@ ul{
     text-decoration: none;
 
     font-size: $fsize2;
-    transition: 0.4s;
-    &:hover{
-        background-color: $color4;
-    }
+    // transition: 0.4s;
+    // &:hover{
+    //     background-color: $color4;
+    // }
     // .add-icon{
     //     float:left;
     //     color: $color8;
@@ -216,6 +221,8 @@ ul{
     background-color: $color3;
     height: 8px;
 }
+
+// global variables
 
 #globals{
     background-color: $color3;

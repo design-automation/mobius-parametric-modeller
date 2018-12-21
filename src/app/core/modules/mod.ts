@@ -2,7 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/GICommon';
 
 /**
- * Set new coordinates of existing position
+ * Set new coordinates of existing position.
  * @param __model__
  * @param position Existing position.
  * @param xyz List of three coordinates.
@@ -14,21 +14,21 @@ export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void 
     throw new Error("Not implemented."); return null;
 }
 /**
- * Move
+ * Moves geometry by vector.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param vector Vector or list of three coordinates.
  * @example mod.Move(geometry, vector)
  *
- * Moves all geometry by vector.
+ * Moves geometry by vector.
  */
 export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Rotate
+ * Rotates geometry on plane by angle.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Plane to rotate on.
  * @param angle Angle (in radians).
  * @example mod.Rotate(geometry, plane1, pi)
@@ -39,9 +39,9 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
     throw new Error("Not implemented."); return null;
 }
 /**
- * Scale
+ * Scales geometry on plane by factor.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Plane to scale on.
  * @param scale Scale factor.
  * @example mod.Scale(geometry, plane1, 0.5)
@@ -52,9 +52,9 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TI
     throw new Error("Not implemented."); return null;
 }
 /**
- * Mirror
+ * Mirrors geometry across plane.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param plane Plane to mirror across.
  * @example mod.Mirror(geometry, plane)
  *
@@ -64,9 +64,9 @@ export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): 
     throw new Error("Not implemented."); return null;
 }
 /**
- * XForm
+ * Transforms geometry from one construction plane to another.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param from Plane defining target construction plane.
  * @param to Plane defining destination construction plane.
  * @example mod.XForm(geometry, plane1, plane2)
@@ -77,30 +77,46 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
     throw new Error("Not implemented."); return null;
 }
 /**
- * Loft
+ * Lofts between polylines or polygons.
  * @param __model__
- * @param geometry Polylines or polygons.
- * @returns Lofted surface between geometry.
- * @example mod.Loft([polyline1,polyline2,polyline3])
+ * @param objects Polylines or polygons.
+ * @returns Lofted surface between objects.
+ * @example surface1 = mod.Loft([polyline1,polyline2,polyline3])
  *
- * Creates a lofted surface between polyline1, polyline2 and polyline3.
+ * Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.
  */
-export function Loft(__model__: GIModel, geometry: TId[]  ): TId[] {
+export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Extrude
+ * Extrudes geometry by distance (in default direction = z-axis) or by vector.
+ * Extrusion of location produces a line; extrusion of line produces a polygon; extrusion of surface produces a list of surfaces.
  * @param __model__
- * @param geometry
- * @param distance number or vector
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param distance Number or vector.
+ * @returns Extrusion of geometry.
+ * @example extrusion1 = mod.Extrude(point1, 10)
+ *
+ * Creates a line of length 10 in the z-direction.
+ *
+ * @example extrusion2 = mod.Extrude(polygon1, [0,5,0])
+ *
+ * Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */
 export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Txyz): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Reverse
+ * Reverses direction of objects.
  * @param __model__
- * @param objects
+ * @param objects Vector, plane, polyline, polygon.
+ * @example mod.Reverse(plane1)
+ *
+ * Flips plane1.
+ *
+ * @example mod.Reverse(polyline1)
+ *
+ * Reverses the order of vertices to reverse the direction of the polyline.
  */
 export function Reverse(__model__: GIModel, objects: TId[]): TId[] {
     throw new Error("Not implemented."); return null;
@@ -108,7 +124,7 @@ export function Reverse(__model__: GIModel, objects: TId[]): TId[] {
 /**
  * Join
  * @param __model__
- * @param objects
+ * @param objects Polylines or polygons.
  */
 export function Join(__model__: GIModel, objects: TId[]): TId[] {
     throw new Error("Not implemented."); return null;

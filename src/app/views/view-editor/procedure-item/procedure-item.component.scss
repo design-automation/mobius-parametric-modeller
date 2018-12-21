@@ -121,7 +121,7 @@
 
 .btns{
     display: none;
-    flex-flow: row nowrap;
+    flex-flow: row-reverse nowrap;
     justify-content: flex-end;
 
     background-color: $color5;

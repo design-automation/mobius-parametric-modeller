@@ -4,20 +4,27 @@ import { TId, Txyz } from '@libs/geo-info/GICommon';
 /**
  * Calculates the distance between two points.
  * @param __model__
- * @param position1
- * @param position2
+ * @param position1 First position.
+ * @param position2 Second position.
+ * @returns Distance. Hello.
+ * @example position1 = [1,2,3]
+ * position2 = [1,2,4]
+ * distance1 = calc.Distance (position1, position2)
+ *
+ * Expected value of distance is 1.
  */
 export function Distance(__model__: GIModel, position1: TId, position2: TId): number {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
- * Calculates the minimum distance between two points.
+ * Calculates the minimum distance between a location and an object, or two objects.
  * @param __model__
- * @param object1
+ * @param hello
+ * @param object1 
  * @param object2
  */
 export function MinDistance(__model__: GIModel, object1: TId, object2: TId): number {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Calculates the area of an type of surface entity
@@ -25,7 +32,7 @@ export function MinDistance(__model__: GIModel, object1: TId, object2: TId): num
  * @param surface
  */
 export function Area(__model__: GIModel, surface: TId|TId[]): number {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Calculates the length of a linear entity.
@@ -33,7 +40,7 @@ export function Area(__model__: GIModel, surface: TId|TId[]): number {
  * @param line
  */
 export function Length(__model__: GIModel, line: TId|TId[]): number {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Calculates the normal of a set of positions assumed to be planar.
@@ -41,7 +48,7 @@ export function Length(__model__: GIModel, line: TId|TId[]): number {
  * @param positions
  */
 export function Normal(__model__: GIModel, positions: TId[]): number {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Calculates the centroid of a set of positions.
@@ -49,7 +56,7 @@ export function Normal(__model__: GIModel, positions: TId[]): number {
  * @param positions
  */
 export function Centroid(__model__: GIModel, positions: TId[]): Txyz {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * EvalTParameter
@@ -57,7 +64,7 @@ export function Centroid(__model__: GIModel, positions: TId[]): Txyz {
  * @param lines
  */
 export function ParamTToXyz(__model__: GIModel, lines: TId|TId[], t_param: number): Txyz|Txyz[] {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * CalcTParameter
@@ -65,5 +72,5 @@ export function ParamTToXyz(__model__: GIModel, lines: TId|TId[], t_param: numbe
  * @param locations
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }

@@ -69,5 +69,5 @@ export function getLength(vector: Txyz): number {
  * @param vector2
  */
 export function angle(vector1: Txyz, vector2: Txyz): number {
-    throw new Error("Not implemented");
+    throw new Error("Not impemented."); return null;
 }

@@ -5,10 +5,11 @@ import { __merge__ } from './_model';
 /**
  * Adds positions by intersection.
  * @param __model__
- * @param positions
+ * @param object1
+ * @param object2
  */
 export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[] {
-    throw new Error("Not impemented.");
+    throw new Error("Not impemented."); return null;
 }
 /**
  * Knife
@@ -16,7 +17,7 @@ export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[]
  * @param objects
  */
 export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: EOpKnife): TId[] {
-    throw new Error("Not implemented.");
+    throw new Error("Not implemented."); return null;
 }
 /**
  * Split
@@ -25,5 +26,5 @@ export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: E
  * @param objects2
  */
 export function Split(__model__: GIModel, objects1: TId[], objects2: TId[]): TId[] {
-    throw new Error("Not implemented.");
+    throw new Error("Not implemented."); return null;
 }

@@ -13,7 +13,7 @@ import { TId, Txyz } from '@libs/geo-info/GICommon';
  * @returns Vector.
  * @example vector1 = vec.SetLength (vector, length)
  * vector1 = vec.SetLength ([2,4,4], 3)
- * 
+ *
  * vector1 = [1,2,2]
  */
 export function SetLength(vector: TId|Txyz, length: number): Txyz {

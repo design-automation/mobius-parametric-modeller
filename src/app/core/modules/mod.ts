@@ -28,9 +28,12 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz):
 /**
  * Rotate
  * @param __model__
- * @param geometry
- * @param origin
- * @param angle
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param origin Plane to rotate on.
+ * @param angle Angle (in radians).
+ * @example mod.Rotate(geometry, plane1, pi)
+ *
+ * Rotates geometry on plane1 by pi (i.e. 180 degrees).
  */
 export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
     throw new Error("Not implemented."); return null;
@@ -38,36 +41,49 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
 /**
  * Scale
  * @param __model__
- * @param positions
- * @param origin Plane that defines the origin position and axis.
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param origin Plane to scale on.
  * @param scale Scale factor.
+ * @example mod.Scale(geometry, plane1, 0.5)
+ *
+ * Scales geometry by 0.5 on plane1.
  */
-export function Scale(__model__: GIModel, positions: TId|TId[], origin: TPlane, scale: number): void {
+export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, scale: number): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Mirror
  * @param __model__
- * @param positions
- * @param plane
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param plane Plane to mirror across.
+ * @example mod.Mirror(geometry, plane)
+ *
+ * Mirrors geometry across the plane.
  */
-export function Mirror(__model__: GIModel, positions: TId|TId[], plane: TPlane): void {
+export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * XForm
  * @param __model__
- * @param positions
- * @param from
- * @param to
+ * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection, or list containing these.
+ * @param from Plane defining target construction plane.
+ * @param to Plane defining destination construction plane.
+ * @example mod.XForm(geometry, plane1, plane2)
+ *
+ * Transforms geometry from plane1 to plane2.
  */
-export function XForm(__model__: GIModel, positions: TId|TId[], from: TPlane, to: TPlane): void {
+export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to: TPlane): void {
     throw new Error("Not implemented."); return null;
 }
 /**
  * Loft
  * @param __model__
- * @param geometry
+ * @param geometry Polylines or polygons.
+ * @returns Lofted surface between geometry.
+ * @example mod.Loft([polyline1,polyline2,polyline3])
+ *
+ * Creates a lofted surface between polyline1, polyline2 and polyline3.
  */
 export function Loft(__model__: GIModel, geometry: TId[]  ): TId[] {
     throw new Error("Not implemented."); return null;

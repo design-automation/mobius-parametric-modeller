@@ -79,7 +79,7 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  *
  * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function Plane(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
+export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**

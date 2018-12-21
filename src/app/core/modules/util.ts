@@ -9,7 +9,7 @@ import { __merge__ } from './_model';
 //  ===============================================================================================================
 
 /**
- * Add new data to the model.
+ * Add imported data to the model. Data must already be imported in the start node.
  *
  * @param model_data The model data in gs-json string format.
  * @returns New model if successful, null if unsuccessful or on error.

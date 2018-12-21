@@ -90,7 +90,9 @@ export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
 }
 /**
  * Extrudes geometry by distance (in default direction = z-axis) or by vector.
- * Extrusion of location produces a line; extrusion of line produces a polygon; extrusion of surface produces a list of surfaces.
+ * - Extrusion of location produces a line;
+ * - Extrusion of line produces a polygon;
+ * - Extrusion of surface produces a list of surfaces.
  * @param __model__
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param distance Number or vector.
@@ -110,6 +112,7 @@ export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Tx
  * Reverses direction of objects.
  * @param __model__
  * @param objects Vector, plane, polyline, polygon.
+ * @returns ?
  * @example mod.Reverse(plane1)
  *
  * Flips plane1.
@@ -122,9 +125,10 @@ export function Reverse(__model__: GIModel, objects: TId[]): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Join
+ * Joins polylines to polylines or polygons to polygons.
  * @param __model__
  * @param objects Polylines or polygons.
+ * @returns ?
  */
 export function Join(__model__: GIModel, objects: TId[]): TId[] {
     throw new Error("Not implemented."); return null;
@@ -160,11 +164,11 @@ export function Divide(__model__: GIModel, edges: TId[], divisor: number, method
  * @param __model__
  * @param polyline
  */
-export function Close(__model__: GIModel, polyline: TId[], close: boolean): void {
+export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): void {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Checks if a wire is closed.
+ * Checks if a wire or polyline is closed.
  * @param __model__
  * @param lines
  */
@@ -172,7 +176,7 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
     throw new Error("Not implemented."); return null;
 }
 /**
- * Delete
+ * Deletes geometry.
  * @param __model__
  * @param geometry
  */

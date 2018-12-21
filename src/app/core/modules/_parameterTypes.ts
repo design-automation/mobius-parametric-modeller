@@ -1,4 +1,4 @@
-import {__new__, __merge__} from './Model';
+import {__new__, __merge__} from './_model';
 
 export const _parameterTypes = {
     constList: '__constList__',
@@ -16,3 +16,48 @@ export const _parameterTypes = {
     preprocess: 'Model.__preprocess__', // TODO - make this genric
     postprocess: 'Model.__postprocess__' // TODO - make this genric
 };
+
+export const _varString = `
+PI = Math.PI;
+min = Math.min;
+max = Math.max;
+pow = Math.pow;
+sqrt = Math.sqrt;
+exp = Math.exp;
+log = Math.log;
+random = Math.random;
+round = Math.round;
+ceil = Math.ceil;
+floor = Math.floor;
+abs = Math.abs;
+sin = Math.sin;
+asin = Math.asin;
+sinh = Math.sinh;
+asinh = Math.asinh;
+cos = Math.cos;
+acos = Math.acos;
+cosh = Math.cosh;
+acosh = Math.acosh;
+tan = Math.tan;
+atan = Math.atan;
+tanh = Math.tanh;
+atanh = Math.atanh;
+atan2 = Math.atan2;
+boolean = __modules__._mathjs.boolean;
+number = __modules__._mathjs.number;
+string = __modules__._mathjs.string;
+mad = __modules__._mathjs.mad;
+mean = __modules__._mathjs.mean;
+median = __modules__._mathjs.median;
+mode = __modules__._mathjs.mode;
+prod = __modules__._mathjs.prod;
+std = __modules__._mathjs.std;
+var2 = __modules__._mathjs.var;
+sum = __modules__._mathjs.sum;
+hypot = __modules__._mathjs.hypot;
+norm = __modules__._mathjs.norm;
+mod = __modules__._mathjs.mod;
+square = __modules__._mathjs.square;
+cube = __modules__._mathjs.cube;
+distance = __modules__._mathjs.distance;
+`;

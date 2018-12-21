@@ -184,8 +184,6 @@ export abstract class NodeUtils {
         prod.enabled = true;
         prod.print = false;
 
-        // select the procedure
-        NodeUtils.select_procedure(node, prod, false);
 
         switch (prod.type) {
             case ProcedureTypes.Variable:
@@ -265,6 +263,12 @@ export abstract class NodeUtils {
                 prod.argCount = data.argCount + 1;
                 prod.args = [ {name: 'var_name', value: undefined, default: undefined}, ...data.args];
                 break;
+        }
+        // select the procedure
+        if (prod.children) {
+            NodeUtils.select_procedure(node, prod.children[0], false);
+        } else {
+            NodeUtils.select_procedure(node, prod, false);
         }
     }
 

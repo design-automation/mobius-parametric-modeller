@@ -1,6 +1,6 @@
 import { TTri, TVert, TEdge, TWire, TFace, TColl, IGeomData, TPoint, TLine, TPgon, TCoord } from './GIJson';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, idBreak, idIndex, idIndicies } from './GICommon';
+import { TId, EEntityTypeStr, idBreak, idIndex, idIndicies } from './GICommon';
 import { triangulate } from '../triangulate/triangulate';
 
 /**
@@ -375,7 +375,7 @@ export class GIGeom {
     /**
      * Adds a new position to the model and returns the index to that position.
      */
-    public addPosition(): string {
+    public addPosition(): TId {
         this._num_posis += 1;
         return EEntityTypeStr.POSI + (this._num_posis - 1);
     }
@@ -383,7 +383,7 @@ export class GIGeom {
      * Adds a new polygon entity to the model.
      * @param posi_id
      */
-    public addPoint(posi_id: string, close: boolean = false): string {
+    public addPoint(posi_id: TId, close: boolean = false): TId {
         const posi_i: number = idIndex(posi_id);
         const point_i: number = this.addPointByIndex(posi_i);
         return EEntityTypeStr.POINT + point_i;
@@ -404,7 +404,7 @@ export class GIGeom {
      * Adds a new pline entity to the model.
      * @param posis_id
      */
-    public addPline(posis_id: string[], close: boolean = false): string {
+    public addPline(posis_id: TId[], close: boolean = false): TId {
         const posis_i: number[] = idIndicies(posis_id);
         const pline_i: number = this.addPlineByIndex(posis_i);
         return EEntityTypeStr.LINE + pline_i;
@@ -433,7 +433,7 @@ export class GIGeom {
      * Adds a new polygon entity to the model.
      * @param posis_id
      */
-    public addPgon(posis_id: string[]): string {
+    public addPgon(posis_id: TId[]): TId {
         const posis_i: number[] = idIndicies(posis_id);
         const pgon_i: number = this.addPgonByIndex(posis_i);
         return EEntityTypeStr.PGON + pgon_i;
@@ -464,7 +464,7 @@ export class GIGeom {
      * @param lines_id
      * @param pgons_id
      */
-    private addColl(parent_id: string, points_id: string[], lines_id: string[], pgons_id: string[]): string {
+    public addColl(parent_id: string, points_id: TId[], lines_id: TId[], pgons_id: TId[]): TId {
         const parent_i: number = idIndex(parent_id);
         const points_i: number[] = idIndicies(points_id);
         const lines_i: number[] = idIndicies(lines_id);
@@ -479,41 +479,41 @@ export class GIGeom {
     // ============================================================================
     // Check if entity exists
     // ============================================================================
-    public has(id: string): boolean {
+    public has(id: TId): boolean {
         const [type_str, index]: [string, number] = idBreak(id);
         return (this._geom_arrs[type_str][index] !== undefined);
     }
     // ============================================================================
     // Get arrays of entities, these retrun arrays of string IDs
     // ============================================================================
-    public getPosis(): string[] {
+    public getPosis(): TId[] {
         return Array.from(Array(this._num_posis).keys()).map( (_, index) =>  EEntityTypeStr.POSI + index );
     }
-    public getVerts(): string[] {
+    public getVerts(): TId[] {
         return this._verts.map( (_, index) =>  EEntityTypeStr.VERT + index );
     }
-    public getTris(): string[] {
+    public getTris(): TId[] {
         return this._tris.map( (_, index) =>  EEntityTypeStr.TRI + index );
     }
-    public getEdges(): string[] {
+    public getEdges(): TId[] {
         return this._edges.map( (_, index) =>  EEntityTypeStr.EDGE + index );
     }
-    public getWires(): string[] {
+    public getWires(): TId[] {
         return this._wires.map( (_, index) =>  EEntityTypeStr.WIRE + index );
     }
-    public getFaces(): string[] {
+    public getFaces(): TId[] {
         return this._faces.map( (_, index) =>  EEntityTypeStr.FACE + index );
     }
-    public getPoints(): string[] {
+    public getPoints(): TId[] {
         return this._points.map( (_, index) =>  EEntityTypeStr.POINT + index );
     }
-    public getLines(): string[] {
+    public getLines(): TId[] {
         return this._lines.map( (_, index) =>  EEntityTypeStr.LINE + index );
     }
-    public getPgons(): string[] {
+    public getPgons(): TId[] {
         return this._pgons.map( (_, index) =>  EEntityTypeStr.PGON + index );
     }
-    public getColls(): string[] {
+    public getColls(): TId[] {
         return this._colls.map( (_, index) =>  EEntityTypeStr.COLL + index );
     }
     // ============================================================================

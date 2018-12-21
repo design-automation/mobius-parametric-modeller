@@ -1,7 +1,7 @@
 import { IAttribsData, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, TCoord, IGeomData, IModelData} from './GIJson';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, EAttribNames, IQueryComponent, idBreak  } from './GICommon';
+import { TId, EEntityTypeStr, EAttribNames, IQueryComponent, idBreak  } from './GICommon';
 import { parse_query } from './GIAttribsQuery';
 
 /**
@@ -110,7 +110,7 @@ export class GIAttribs {
      * @param name
      * @param value
      */
-    public setAttribValue(id: string, name: string, value: TAttribDataTypes): void {
+    public setAttribValue(id: TId, name: string, value: TAttribDataTypes): void {
         const [type_str, index]: [string, number] = idBreak(id);
         const attribs: Map<string, GIAttribMap> = this._attrib_maps[type_str];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
@@ -121,7 +121,7 @@ export class GIAttribs {
      * @param id
      * @param name
      */
-    public getAttribValue(id: string, name: string): TAttribDataTypes {
+    public getAttribValue(id: TId, name: string): TAttribDataTypes {
         const [type_str, index]: [string, number] = idBreak(id);
         const attribs: Map<string, GIAttribMap> = this._attrib_maps[type_str];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }

@@ -5,7 +5,7 @@ import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
 
 import * as Modules from '@modules';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes, _varString } from '@modules';
 import { DataService } from '@services';
 
 export const mergeInputsFunc = `
@@ -115,7 +115,7 @@ export class ExecuteComponent {
             const nodeCode = await CodeUtils.getNodeCode(node, true);
             fnString = nodeCode.join('\n');
             // add the constants from the start node
-            fnString = this.globalVars + fnString;
+            fnString = _varString + this.globalVars + fnString;
             params['model'] = node.input.value;
 
             // add the imported functions code

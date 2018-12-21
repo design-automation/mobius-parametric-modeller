@@ -1,5 +1,5 @@
 export const inline_expr = [
-    '# @name==value',
+    '# @name==value'
 ];
 
 const math = [

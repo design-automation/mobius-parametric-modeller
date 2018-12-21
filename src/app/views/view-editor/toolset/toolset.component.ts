@@ -9,6 +9,7 @@ import { INode } from '@models/node';
 
 import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
+import {inline_expr, inline_func} from './toolset.inline';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -36,7 +37,11 @@ export class ToolsetComponent {
     searchedFunctions = [];
     focusedInput;
 
-    constructor() {}
+    inlineExpr = inline_expr;
+    inlineFunc = inline_func;
+
+    constructor() {
+    }
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes): void {
@@ -75,7 +80,6 @@ export class ToolsetComponent {
             return;
         }
         this.focusedInput.focus();
-        console.log(this.focusedInput.ngModel);
         this.focusedInput.value += string;
 
         this.focusedInput.dispatchEvent(inputEvent);

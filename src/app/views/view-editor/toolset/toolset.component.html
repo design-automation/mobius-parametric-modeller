@@ -103,16 +103,39 @@
         <!--Divider-->
         <div class = "divider"></div>
     
-        <ng-container>
-            <button id='globals' class="accordion"  (click)='toggleAccordion("globals")'>Globals</button>
+        <button id='globals' class="accordion"  (click)='toggleAccordion("globals")'>Globals</button>
+        <div class="panel">
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let cnst of startProcedures' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
+                    {{cnst.args[cnst.argCount-2].value}}
+                </li>
+            </ul>
+        </div>
+        <button id='inlineExpr' class="accordion"  (click)='toggleAccordion("inlineExpr")'>Inline Expr</button>
+        <div class="panel">
+            <ul class='toolset__functions--subset'>
+                <li *ngFor='let expr of inlineExpr' (click)='add_inline(expr)'>
+                    {{expr}}
+                </li>
+            </ul>
+        </div>
+
+
+        <button id='inlineFunc' class="accordion" (click)='toggleAccordion("inlineFunc")'>Inline Func</button>
+        <div class="panel">
+            <ng-container *ngFor='let category of inlineFunc'>
+            <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <li *ngFor='let cnst of startProcedures' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
-                        {{cnst.args[cnst.argCount-2].value}}
+                    <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)'>
+                        {{funcString}}
                     </li>
                 </ul>
             </div>
-        </ng-container>
+            </ng-container>
+        </div>
+
+
     </ng-container>
     
     <!-- functions for input nodes -->

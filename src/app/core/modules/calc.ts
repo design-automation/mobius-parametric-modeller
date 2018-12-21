@@ -6,7 +6,7 @@ import { TId, Txyz } from '@libs/geo-info/GICommon';
  * @param __model__
  * @param position1 First position.
  * @param position2 Second position.
- * @returns Distance.
+ * @returns Distance. Hello.
  * @example position1 = [1,2,3]
  * position2 = [1,2,4]
  * distance1 = calc.Distance (position1, position2)

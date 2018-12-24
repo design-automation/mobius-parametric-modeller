@@ -19,6 +19,8 @@ export class ViewEditorComponent {
     @Output() imported = new EventEmitter();
     @Output() delete_Function = new EventEmitter();
     helpView: any;
+    notificationMessage = '';
+    notificationTrigger = true;
 
     private copyCheck = false;
 
@@ -47,10 +49,13 @@ export class ViewEditorComponent {
     // copy selected procedures
     copyProd() {
         const node = this.dataService.node;
-        if (!this.copyCheck || node.type === 'end') { return; }
+        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.type === 'end') { return; }
         // console.log('copying', node.state.procedure);
         this.dataService.copiedType = node.type;
         this.dataService.copiedProd = node.state.procedure;
+
+        this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
+        this.notificationTrigger = !this.notificationTrigger;
     }
 
     // cut selected procedures
@@ -75,6 +80,9 @@ export class ViewEditorComponent {
             }
         }
         NodeUtils.deselect_procedure(node);
+
+        this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
+        this.notificationTrigger = !this.notificationTrigger;
     }
 
     // paste copied procedures
@@ -115,7 +123,9 @@ export class ViewEditorComponent {
                 }
             }
             // this.dataService.copiedProd = undefined;
-      }
+            this.notificationMessage = `Pasted ${this.dataService.copiedProd.length} Procedures`;
+            this.notificationTrigger = !this.notificationTrigger;
+        }
     }
 
     // activate copying/cutting/pasting when the mouse hovers over the procedure list

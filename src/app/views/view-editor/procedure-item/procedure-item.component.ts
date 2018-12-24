@@ -5,9 +5,36 @@ import { ProcedureTypesAware, ModuleDocAware } from '@shared/decorators';
 
 import { _parameterTypes} from '@modules';
 
+import { inline_func } from '../toolset/toolset.inline';
+
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 ctx.font = '12px Arial';
+
+const reservedWords = [
+    'abstract', 'arguments', 'await', 'boolean',
+    'break', 'byte', 'case', 'catch',
+    'char', 'class', 'const', 'continue',
+    'debugger', 'default', 'delete', 'do',
+    'double', 'else', 'enum', 'eval',
+    'export', 'extends', 'false', 'final',
+    'finally', 'float', 'for', 'function',
+    'goto', 'if', 'implements', 'import',
+    'in', 'instanceof', 'int', 'interface',
+    'let', 'long', 'native', 'new',
+    'null', 'package', 'private', 'protected',
+    'public', 'return', 'short', 'static',
+    'super', 'switch', 'synchronized', 'this',
+    'throw', 'throws', 'transient', 'true',
+    'try', 'typeof', 'var', 'void',
+    'volatile', 'while', 'with', 'yield',
+
+    'Array', 'Date', 'hasOwnProperty', 'Infinity',
+    'isFinite', 'isNaN', 'isPrototypeOf', 'length',
+    'Math', 'NaN', 'name', 'Number', 'Object',
+    'prototype', 'String', 'toString', 'undefined', 'valueOf'
+];
+
 
 @ProcedureTypesAware
 @ModuleDocAware
@@ -25,6 +52,16 @@ export class ProcedureItemComponent {
     @Output() helpText = new EventEmitter();
 
     ProcedureTypes = ProcedureTypes;
+    invalidVar = false;
+    mathFuncs = [];
+
+    constructor() {
+        for (const funcMod of inline_func) {
+            for (const func of funcMod[1]) {
+                this.mathFuncs.push(func.split('(')[0]);
+            }
+        }
+    }
 
 
     // delete this procedure
@@ -94,6 +131,30 @@ export class ProcedureItemComponent {
         if (!event) { return event; }
         let str = event.trim();
         str = str.replace(/ /g, '_');
+        str = str.toLowerCase();
+        try {
+            if (str.substring(0, 1) === '_') {
+                this.invalidVar = true;
+                return str;
+            }
+            for (const reserved of reservedWords) {
+                if (str === reserved) {
+                    this.invalidVar = true;
+                    return str;
+                }
+            }
+            for (const funcName of this.mathFuncs) {
+                if (str === funcName) {
+                    this.invalidVar = true;
+                    return str;
+                }
+            }
+            const fn = new Function(str, ``);
+            this.invalidVar = false;
+        } catch (ex) {
+            // console.log(ex.message);
+            this.invalidVar = true;
+        }
         return str;
     }
 

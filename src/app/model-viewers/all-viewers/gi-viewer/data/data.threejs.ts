@@ -91,28 +91,33 @@ export class DataThreejs {
         const posis_buffer = new THREE.Float32BufferAttribute( threejs_data.positions, 3 );
         const normals_buffer = new THREE.Float32BufferAttribute( threejs_data.normals, 3 );
         const colors_buffer = new THREE.Float32BufferAttribute( threejs_data.colors, 3 );
-
         // Add geometry
         this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
     }
 
-    public selectObj(faceIndex, model: GIModel, verts): void {
-        const positions = [];
-        verts.map(vert => {
-            positions.push(model.attribs.query.getPosiCoordByIndex(model.geom.query.navVertToPosi(vert)));
+    public selectObjFace(faceIndex, triangle_indices, positions) {
+        const posis_buffer = new THREE.Float32BufferAttribute( positions, 3 );
+        const normals_buffer = new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 );
+        const colors_buffer = new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 );
+        const geom = new THREE.BufferGeometry();
+        geom.setIndex( triangle_indices );
+        geom.addAttribute( 'position',  posis_buffer);
+        geom.addAttribute( 'normal', normals_buffer );
+        geom.addAttribute( 'color', colors_buffer);
+        const mat = new THREE.MeshPhongMaterial( {
+            // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
+            specular: 0x000000,
+            emissive: 0xff0000,
+            shininess: 20, // 250
+            side: THREE.DoubleSide,
+            vertexColors: THREE.VertexColors,
+            // wireframe: true
         });
-
-        const geom = new THREE.Geometry();
-        const v1 = new THREE.Vector3(...positions[0]);
-        const v2 = new THREE.Vector3(...positions[1]);
-        const v3 = new THREE.Vector3(...positions[2]);
-        geom.vertices = [v1, v2, v3];
-        geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
-        geom.computeFaceNormals();
-        const mat = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
         const mesh = new THREE.Mesh( geom, mat);
+        mesh.geometry.computeBoundingSphere();
+        mesh.geometry.computeVertexNormals();
         this._scene.add( mesh );
         this._selecting.set(faceIndex, mesh.id);
     }

@@ -4,6 +4,7 @@ import { Component, OnInit, Input, Injector, ElementRef, DoCheck, OnChanges, Sim
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
 import { DataService } from '../data/data.service';
+import { EEntityTypeStr } from '@libs/geo-info/common';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -151,19 +152,28 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const intersects = scene._raycaster.intersectObjects(scene.sceneObjs);
             if (intersects.length > 0) {
                 const tri = intersects[0];
-                // console.log('interecting', tri.object.uuid);
-                if (!scene._selecting.has(tri.faceIndex)) {
-                    const verts = this.model.geom.query.navTriToVert(tri.faceIndex);
-                    scene.selectObj(tri.faceIndex, this.model, verts);
-                } else {
-                    scene.unselectObj(tri.faceIndex);
-                }
+                console.log('interecting', tri.object.uuid);
 
                 const face = this.model.geom.query.navTriToFace(tri.faceIndex);
                 const tris = this.model.geom.query.navFaceToTri(face);
-                console.log(tris);
+                const verts = tris.map(tria => this.model.geom.query.navTriToVert(tria));
+                const verts_flat = [].concat(...verts);
+
+                const tri_indices = [];
+                verts_flat.map(vert => tri_indices.push(this.model.geom.query.navVertToPosi(vert)));
+
+                const positions = this.model.attribs.query.getPosiCoords();
+                const posi_flat = [].concat(...positions);
+
+                if (!scene._selecting.has(face)) {
+                    scene.selectObjFace(face, tri_indices, posi_flat);
+                } else {
+                    scene.unselectObj(face);
+                }
+
+                // console.log(tris);
                 // scene._selectedEntity.set(tri.faceIndex, verts);
-                console.log(scene._selectedEntity);
+                // console.log(scene._selectedEntity);
                 this.render(this);
             }
         }

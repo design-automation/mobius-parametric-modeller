@@ -1,4 +1,4 @@
-import { EEntityTypeStr, TId } from "./common";
+import { EEntityTypeStr, TId } from './common';
 
 // ============================================================================
 // Each entity in the model can be accessed using an ID string.

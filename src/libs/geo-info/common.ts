@@ -1,4 +1,4 @@
-import { GIAttribMap } from "./GIAttribMap";
+import { GIAttribMap } from './GIAttribMap';
 
 // Types
 export type TPlane = [Txyz, Txyz, Txyz]; // an origin and two vectors

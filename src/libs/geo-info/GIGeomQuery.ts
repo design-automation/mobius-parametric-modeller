@@ -25,6 +25,9 @@ export class GIGeomQuery {
     public navVertToPosi(vert_i: number): number {
         return this._geom_arrays.dn_verts_posis[vert_i];
     }
+    public navTriToVert(tri_i: number): number[] {
+        return this._geom_arrays.dn_tris_verts[tri_i];
+    }
     public navEdgeToVert(edge_i: number): number[] {
         return this._geom_arrays.dn_edges_verts[edge_i];
     }

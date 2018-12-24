@@ -101,7 +101,7 @@ export class DataThreejs {
     public selectObj(faceIndex, model: GIModel, verts): void {
         const positions = [];
         verts.map(vert => {
-            positions.push(model.attribs().getPosiCoordByIndex(model.geom().navVertToPosi(vert)));
+            positions.push(model.attribs.query.getPosiCoordByIndex(model.geom.query.navVertToPosi(vert)));
         });
 
         const geom = new THREE.Geometry();

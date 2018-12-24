@@ -13,36 +13,17 @@
     position: fixed; 
     z-index: 1; 
     left: 10px; 
-    bottom: 10px;
+    bottom: 0px;
 }
 
 #notificationBox.show {
     opacity: 1;
-    transition: ease-in 0.1s; 
+    bottom: 10px;
+    transition: ease-in 0.2s; 
 }
 
 #notificationBox.hide {
     opacity: 0;
+    bottom: 0px;
     transition: ease-in 0.2s; 
-}
-
-/* Animations to fade the notificationBox in and out */
-@-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 10px; opacity: 1;}
-}
-
-@keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 10px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-    from {bottom: 10px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-    from {bottom: 10px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
 }

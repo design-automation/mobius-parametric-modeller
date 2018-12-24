@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { OnInit } from '@angular/core';
 
 /**
  * ThreejsScene
@@ -15,9 +14,10 @@ export class DataThreejs {
     public _controls: THREE.OrbitControls;
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
-    public _mesh: THREE.Mesh;
     // interaction and selection
     public _select_visible = 'Objs';
+    public _selecting = new Map();
+    public _selectedEntity = new Map();
     public _text: string;
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
@@ -26,6 +26,8 @@ export class DataThreejs {
     public _grid_center = [0, 0, 0];
     // the GI model to display
     public _model: GIModel;
+
+    public sceneObjs = [];
     /**
      * Constructs a new data subscriber.
      */
@@ -45,8 +47,8 @@ export class DataThreejs {
         // camera settings
         this._camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 20000 );
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
-        this._camera.position.x = 150;
-        this._camera.position.y = 100;
+        this._camera.position.x = 100;
+        this._camera.position.y = 50;
         this._camera.position.z = 70;
         this._camera.aspect = 1;
         this._camera.up.set(0, 0, 1);
@@ -61,9 +63,10 @@ export class DataThreejs {
 
         // mouse
         this._mouse = new THREE.Vector2();
+
         // selecting
         this._raycaster = new THREE.Raycaster();
-        this._raycaster.linePrecision = 0.05;
+        this._raycaster.linePrecision = 0.01;
 
         // add geometry to the scene
         if ( this._model) {
@@ -93,6 +96,31 @@ export class DataThreejs {
         this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
+    }
+
+    public selectObj(faceIndex, model: GIModel, verts): void {
+        const positions = [];
+        verts.map(vert => {
+            positions.push(model.attribs().getPosiCoordByIndex(model.geom().navVertToPosi(vert)));
+        });
+
+        const geom = new THREE.Geometry();
+        const v1 = new THREE.Vector3(...positions[0]);
+        const v2 = new THREE.Vector3(...positions[1]);
+        const v3 = new THREE.Vector3(...positions[2]);
+        geom.vertices = [v1, v2, v3];
+        geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
+        geom.computeFaceNormals();
+        const mat = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+        const mesh = new THREE.Mesh( geom, mat);
+        this._scene.add( mesh );
+        this._selecting.set(faceIndex, mesh.id);
+    }
+
+    public unselectObj(faceIndex) {
+        const removing = this._selecting.get(faceIndex);
+        this._selecting.delete(faceIndex);
+        this._scene.remove(this._scene.getObjectById(removing));
     }
 
     // ============================================================================
@@ -170,16 +198,16 @@ export class DataThreejs {
             vertexColors: THREE.VertexColors,
             // wireframe: true
         });
-        this._mesh = new THREE.Mesh( geom, mat);
-        this._mesh.geometry.computeBoundingSphere();
-        this._mesh.geometry.computeVertexNormals();
+        const mesh = new THREE.Mesh( geom, mat);
+        mesh.geometry.computeBoundingSphere();
+        mesh.geometry.computeVertexNormals();
 
         // show vertex normals
-        const vnh = new THREE.VertexNormalsHelper( this._mesh, 3, 0x0000ff );
+        const vnh = new THREE.VertexNormalsHelper( mesh, 3, 0x0000ff );
         // this._scene.add( vnh );
-
+        this.sceneObjs.push(mesh);
         // add mesh to scene
-        this._scene.add( this._mesh );
+        this._scene.add( mesh );
         this._threejs_nums[2] = tris_i.length / 3;
     }
     /**
@@ -199,7 +227,9 @@ export class DataThreejs {
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer
         } );
-        this._scene.add(new THREE.LineSegments(geom, mat) );
+        const line = new THREE.LineSegments(geom, mat);
+        this.sceneObjs.push(line);
+        this._scene.add(line);
         this._threejs_nums[1] = lines_i.length / 2;
     }
     /**
@@ -217,7 +247,9 @@ export class DataThreejs {
             size: 1,
             vertexColors: THREE.VertexColors
         } );
-        this._scene.add( new THREE.Points(geom, mat) );
+        const point = new THREE.Points(geom, mat);
+        this.sceneObjs.push(point);
+        this._scene.add(point);
         this._threejs_nums[0] = points_i.length;
     }
 

@@ -27,18 +27,21 @@ export class ViewEditorComponent {
 
     // add a procedure
     add(data: {type: ProcedureTypes, data: IFunction}): void {
-      NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
+        NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
     }
 
     // delete a procedure
     deleteChild(index: number): void {
-      this.dataService.node.procedure.splice(index, 1);
-      NodeUtils.deselect_procedure(this.dataService.node);
+        this.dataService.node.procedure.splice(index, 1);
+        NodeUtils.deselect_procedure(this.dataService.node);
     }
 
     // select a procedure
     selectProcedure(event, line): void {
-      NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false);
+        if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
+            return;
+        }
+        NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false);
     }
 
     // copy selected procedures
@@ -117,19 +120,19 @@ export class ViewEditorComponent {
 
     // activate copying/cutting/pasting when the mouse hovers over the procedure list
     activateCopyPaste(): void {
-      this.copyCheck = true;
+        this.copyCheck = true;
     }
 
     // deactivate copying/cutting/pasting when the mouse exit the procedure list
     deactivateCopyPaste(): void {
-      this.copyCheck = false;
+        this.copyCheck = false;
     }
 
     // import a flowchart as function
     importFunction(event) {
-      for (const func of event) {
-        this.dataService.flowchart.functions.push(func);
-      }
+        for (const func of event) {
+            this.dataService.flowchart.functions.push(func);
+        }
     }
 
     // delete an imported function

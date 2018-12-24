@@ -2,15 +2,59 @@
 @import '~scss/variables';
 @import '../general-viewer.scss';
 
+h2{
+    padding-bottom: 6px;
+}
 #help-container {
     margin-top: 40px;
-    padding: 10px;
-    height: 100%;
+    padding: 0px;
+
+    height: calc(100vh - 40px); //$header-height
     width: 100%;
+    min-width: fit-content;
+
     overflow: auto;
     resize: none;
-    font-family: sans-serif;
+
     background-color: transparent;
-    color: rgb(80,80,80);
+    color: $color8;
     border: none;
+}
+
+.container{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    box-sizing: border-box;
+
+    height: fit-content;
+    width: 100%;
+    min-width: 200px;
+    padding: $small-padding;
+}
+
+.body--container{
+    padding: 6px 0px;
+    border-top: 1px solid $color1;
+}
+
+.descr--container, .param--container, .ret--container{
+    padding: 0px;
+    margin-bottom: 6px;
+    h5{
+        span{
+            font-style: normal;
+        }
+    }
+    ul{
+        margin: 0px;
+        padding-left: $small-padding;
+        li{
+            display: flex;
+            flex-flow: row nowrap;
+            span{
+                margin-right: 2px;
+            }
+        }
+    }
 }

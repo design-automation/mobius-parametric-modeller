@@ -109,6 +109,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
         // copy: copy node
         this.copySub = this.copyListener.subscribe(val => {
+            // || document.activeElement.tagName === 'TEXTAREA'
             if (!this.listenerActive) { return; }
             const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
             if (node.type !== 'start' && node.type !== 'end') {
@@ -120,7 +121,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
         // paste: paste copied node
         this.pasteSub = this.pasteListener.subscribe((val: ClipboardEvent) => {
-            if (!this.listenerActive) { return; }
+            //
+            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA') { return; }
             if (this.copied) {
                 event.preventDefault();
                 const newNode = <INode>circularJSON.parse(this.copied);
@@ -128,19 +130,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 pt.x = 20;
                 pt.y = 100;
 
-                let svgP: any;
-                const isFirefox = typeof InstallTrigger !== 'undefined';
-                if (isFirefox) {
-                        const ctm = this.canvas.getScreenCTM();
-                        // const bRect = this.canvas.getBoundingClientRect();
-                        ctm.a = ctm.a * this.zoom;
-                        ctm.d = ctm.d * this.zoom;
-                        ctm.e = bRect.x;
-                        ctm.f = bRect.y;
-                        svgP = pt.matrixTransform(ctm.inverse());
-                } else {
-                        svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                }
+                const svgP = this.convertCoord(pt);
 
                 NodeUtils.updateNode(newNode, svgP);
                 this.dataService.flowchart.nodes.push(newNode);
@@ -161,6 +151,21 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+
+    }
+    convertCoord(pt) {
+        const isFirefox = typeof InstallTrigger !== 'undefined';
+        if (isFirefox) {
+            const ctm = this.canvas.getScreenCTM();
+            const bRect = this.canvas.getBoundingClientRect();
+            ctm.a = ctm.a * this.zoom;
+            ctm.d = ctm.d * this.zoom;
+            ctm.e = bRect.x;
+            ctm.f = bRect.y;
+            return pt.matrixTransform(ctm.inverse());
+        } else {
+            return pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+        }
 
     }
 
@@ -203,9 +208,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                     if (selectedNode.type === ''
                     && this.dataService.flowchart.meta.selected_nodes.length === 1
                     && this.dataService.flowchart.meta.selected_nodes[0] === node_index) {
-                    const textarea = <HTMLTextAreaElement>document.getElementById(selectedNode.id);
-                    textarea.focus();
-                    textarea.select();
+                        if (document.activeElement.id !== selectedNode.id) {
+                            const textarea = <HTMLTextAreaElement>document.getElementById(selectedNode.id);
+                            textarea.focus();
+                            textarea.select();
+                        }
                     } else {
                         document.getElementById('executeButton').focus();
                     }
@@ -223,19 +230,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 pt.y = event.data.pageY;
 
                 // convert mouse position to svg position (special procedure for firefox)
-                let svgP: any;
-                const isFirefox = typeof InstallTrigger !== 'undefined';
-                if (isFirefox) {
-                    const ctm = this.canvas.getScreenCTM();
-                    const bRect = this.canvas.getBoundingClientRect();
-                    ctm.a = ctm.a * this.zoom;
-                    ctm.d = ctm.d * this.zoom;
-                    ctm.e = bRect.x;
-                    ctm.f = bRect.y;
-                    svgP = pt.matrixTransform(ctm.inverse());
-                } else {
-                    svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                }
+                const svgP = this.convertCoord(pt);
 
                 // save the svg position as starTxyzs
                 this.starTxyzs = [
@@ -291,19 +286,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
 
         // convert the position to svg position
-        let svgP: any;
-        const isFirefox = typeof InstallTrigger !== 'undefined';
-        if (isFirefox) {
-            const ctm = this.canvas.getScreenCTM();
-            const bRect = this.canvas.getBoundingClientRect();
-            ctm.a = ctm.a * this.zoom;
-            ctm.d = ctm.d * this.zoom;
-            ctm.e = bRect.x;
-            ctm.f = bRect.y;
-            svgP = pt.matrixTransform(ctm.inverse());
-        } else {
-            svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-        }
+        const svgP = this.convertCoord(pt);
 
         // assign the position to the new node and add it to the flowchart
         newNode.position.x = svgP.x;
@@ -453,7 +436,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
         // calculate the zoom to fit the whole flowchart
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-        const ctm = <SVGMatrix>this.canvas.getScreenCTM();
         let zoom = canvasSize  / (frame[2] - frame[0]);
         const heightZoom = canvasSize / (frame[3] - frame[1]);
 
@@ -462,8 +444,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
 
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
-        frame[0] = (boundingDiv.width  - (frame[2] + frame[0]) * ctm.a * zoom / this.zoom) / 2;
-        frame[1] = (boundingDiv.height - (frame[3] + frame[1]) * ctm.d * zoom / this.zoom) / 2;
+        const ctm = this.zoom * boundingDiv.width / canvasSize;
+
+        let nX = (boundingDiv.width  - (frame[2] + frame[0]) * ctm * zoom / this.zoom) / 2;
+        let nY = (boundingDiv.height - (frame[3] + frame[1]) * ctm * zoom / this.zoom) / 2;
+
         /*
         frame[0] = -( frame[0] * ctm.a * zoom / this.zoom );
         frame[1] = -( frame[1] * ctm.a * zoom / this.zoom );
@@ -481,15 +466,15 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         */
 
         // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
-        if (frame[0] > 0) { frame[0] = 0; }
-        if (frame[1] > 0) { frame[1] = 0; }
+        if (nX > 0) { nX = 0; }
+        if (nY > 0) { nY = 0; }
 
         // transform
         /*
         this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${
             -frame[0] * ctm.a * zoom / this.zoom},${-frame[1] * ctm.a * zoom / this.zoom})`;
             */
-        this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${frame[0]},${frame[1]})`;
+        this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${nX},${nY})`;
         this.canvas.style.transform = this.dataService.flowchartPos;
         this.zoom = zoom;
     }
@@ -673,19 +658,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             pt.x = event.pageX;
             pt.y = event.pageY;
 
-            let svgP: any;
-            const isFirefox = typeof InstallTrigger !== 'undefined';
-            if (isFirefox) {
-                const ctm = this.canvas.getScreenCTM();
-                const bRect = this.canvas.getBoundingClientRect();
-                ctm.a = ctm.a * this.zoom;
-                ctm.d = ctm.d * this.zoom;
-                ctm.e = bRect.x;
-                ctm.f = bRect.y;
-                svgP = pt.matrixTransform(ctm.inverse());
-            } else {
-                svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-            }
+            const svgP = this.convertCoord(pt);
 
             const xDiff = this.starTxyzs[0] - svgP.x;
             const yDiff = this.starTxyzs[1] - svgP.y;
@@ -703,24 +676,10 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             pt.x = event.pageX;
             pt.y = event.pageY;
 
+            const svgP = this.convertCoord(pt);
+            this.element.setAttribute('x2', svgP.x);
+            this.element.setAttribute('y2', svgP.y);
 
-            const isFirefox = typeof InstallTrigger !== 'undefined';
-            if (isFirefox) {
-                const ctm = this.canvas.getScreenCTM();
-                const bRect = this.canvas.getBoundingClientRect();
-                ctm.a = ctm.a * this.zoom;
-                ctm.d = ctm.d * this.zoom;
-                ctm.e = bRect.x;
-                ctm.f = bRect.y;
-                const svgP = pt.matrixTransform(ctm.inverse());
-                this.element.setAttribute('x2', svgP.x);
-                this.element.setAttribute('y2', svgP.y);
-
-            } else {
-                const svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                this.element.setAttribute('x2', svgP.x);
-                this.element.setAttribute('y2', svgP.y);
-            }
 
         }
 
@@ -733,20 +692,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
             pt.x = event.pageX;
             pt.y = event.pageY;
-            let svgP: any;
+            const svgP = this.convertCoord(pt);
 
-            const isFirefox = typeof InstallTrigger !== 'undefined';
-            if (isFirefox) {
-                const ctm = this.canvas.getScreenCTM();
-                const bRect = this.canvas.getBoundingClientRect();
-                ctm.a = ctm.a * this.zoom;
-                ctm.d = ctm.d * this.zoom;
-                ctm.e = bRect.x;
-                ctm.f = bRect.y;
-                svgP = pt.matrixTransform(ctm.inverse());
-            } else {
-                svgP = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-            }
 
             // reset temporary edge position to <(0,0),(0,0)>
             const tempLine = <HTMLElement>document.getElementById('temporary-wire');

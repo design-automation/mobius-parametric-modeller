@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribNames, TId, EEntityTypeStr, Txyz} from '@libs/geo-info/common';
+import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane, EOpDivide} from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 
@@ -22,7 +22,7 @@ export function Position(__model__: GIModel, coords: Txyz): TId {
  * @param __model__
  * @param position Position of point.
  * @returns New point if successful, null if unsuccessful or on error.
- * @example point1 = make.Point(position1)
+ * @example point1 = make.Point(position)
  *
  * Creates a point at position1.
  */
@@ -73,18 +73,77 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
     // return __model__.geom.add.addColl(objects);
 }
 /**
- * Adds a new plane to the model (from a location and normal vector) or (from two vectors).
+ * Adds a new plane to the model from a location and two vectors.
  * @param __model__
- * @param locationOrVector Position, point, vertex on plane; or a first vector or list of three coordinates.
- * @param vector Vector or list of three coordinates.
+ * @param location Position, point, vertex on plane
+ * @param vector1 Vector on plane or list of three coordinates defining it.
+ * @param vector2 Vector on plane or list of three coordinates defining it.
  * @returns New plane if successful, null if unsuccessful or on error.
- * @example plane1 = make.Plane(position1, vector1)
+ * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  *
- * Creates a plane with position1 on it and normal = vector1.
+ * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
+ */
+// export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
+//     throw new Error("Not implemented."); return null;
+// }
+/**
+ * Lofts between polylines or polygons.
+ * @param __model__
+ * @param objects Polylines or polygons.
+ * @returns Lofted surface between objects.
+ * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
  *
- * @example plane2 = make.Plane(vector1,vector2)
+ * Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.
+ */
+export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Extrudes geometry by distance (in default direction = z-axis) or by vector.
+ * - Extrusion of location produces a line;
+ * - Extrusion of line produces a polygon;
+ * - Extrusion of surface produces a list of surfaces.
+ * @param __model__
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param distance Number or vector.
+ * @returns Extrusion of geometry.
+ * @example extrusion1 = make.Extrude(point1, 10)
  *
- * Creates a plane with vector1 and vector2 on it, and normal = cross product of both vectors.
+ * Creates a line of length 10 in the z-direction.
+ *
+ * @example extrusion2 = make.Extrude(polygon1, [0,5,0])
+ *
+ * Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
+ */
+export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Txyz): TId[] {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Joins polylines to polylines or polygons to polygons.
+ * @param __model__
+ * @param objects Polylines or polygons.
+ * @returns New joined polyline or polygon.
+ * @example joined1 = make.Join([polyline1,polyline2])
+ *
+ * Creates a new polyline by joining polyline1 and polyline2.
+ */
+export function Join(__model__: GIModel, objects: TId[]): TId {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * Divides edge by length or by number of segments.
+ * If edge is not exact multiple of length, length of last segment will be the remainder.
+ * @param __model__
+ * @param edges Edge(s) to be divided.
+ * @param divisor Length or number of segments.
+ * @param method Enum to choose which method.
+ * @example segments1 = make.Divide(edge1, 5, number)
+ *
+ * Creates a list of 5 equal segments from edge1.
+ *
+ * @example segments2 = make.Divide(edge1, 5, length)
+ *
+ * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
 export function PlaneVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
@@ -99,12 +158,31 @@ export function VectorVisible(__model__: GIModel, locationOrVector: TId|Txyz, ve
 /**
  * Adds a new copy to the model.
  * @param __model__
- * @param objects Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
  * @returns New copy if successful, null if unsuccessful or on error.
  * @example copy1 = make.Copy([position1,polyine1,polygon1])
  *
  * Creates a list containing a copy of the objects in sequence of input.
  */
-export function Copy(__model__: GIModel, objects: TId|TId[]): TId|TId[] {
+export function Copy(__model__: GIModel, geometry: TId|TId[]): TId|TId[] {
+    throw new Error("Not implemented."); return null;
+}
+
+/**
+ * Divides edge by length or by number of segments.
+ * If edge is not exact multiple of length, length of last segment will be the remainder.
+ * @param __model__
+ * @param edges Edge(s) to be divided.
+ * @param divisor Length or number of segments.
+ * @param method Enum to choose which method.
+ * @example segments1 = make.Divide(edge1, 5, number)
+ *
+ * Creates a list of 5 equal segments from edge1.
+ *
+ * @example segments2 = make.Divide(edge1, 5, length)
+ *
+ * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
+ */
+export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
     throw new Error("Not implemented."); return null;
 }

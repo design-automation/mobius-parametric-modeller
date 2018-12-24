@@ -1,11 +1,17 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
+.table--container{
+  height: 100%;
+  overflow-y: auto;
+
+  margin-bottom: $fsize3; // paginator height
+}
 
 table {
-  width: 100%;
+  width: 100%;  
   tr.mat-header-row{
-    height: 40px;
+    height: $fsize3;
   }
   tr.mat-row{
     height: 24px;
@@ -22,23 +28,76 @@ table {
 }
 
 /deep/ #attribTab{
+  height: 100%;
+  .mat-tab-body-wrapper{
+    background-color: $color7;
+    height: calc(100vh - 20px); // 20px == label height
+    .mat-tab-body{
+      height: 100%;
+      overflow: hidden;
+      .mat-tab-body-content{
+        height: 100%;
+        overflow: hidden;
+      }
+    }
+  }
+  // contains everything
+  .mat-elevation-z8{
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  // label-headings
   .mat-tab-label{
-    height: 30px;
-    padding: 0 10px;
-    min-width: 120px;
+    height: 36px;
+    padding: 0 0 0 2px;
+    min-width: 100px;
+    font-size: $fsize2;
+    border-bottom: 2px solid transparent;
+    transition-duration: 0.4s;
+    .mat-tab-label-content{
+      color: $color8;
+    }
+    &:hover{
+      border-color: $selected-color;
+    }
   }
   .mat-ink-bar{
-    background-color: #9e9e9e !important;
+    background-color: $selected-color;
   }
 
+  // paginator
   .mat-paginator-container{
-    min-height: 46px;
+    position: absolute;
+    bottom: 0px;
 
+    height: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    flex-shrink: 0;
+
+    .mat-paginator-page-size, .mat-paginator-range-actions{
+      height: inherit;  
+      align-items: baseline;
+      padding-right: $small-padding;
+    }
+    .mat-paginator-page-size-label, .mat-paginator-range-label{
+      white-space: nowrap;
+    }
+
+    // items/page selector
     .mat-paginator-page-size-select{
       margin-top:0 !important;
       .mat-form-field-wrapper{
         padding-bottom: 0.95em;
       }
+    }
+
+    // page change icons
+    .mat-icon-button:hover .mat-paginator-icon{
+      fill: $selected-color;
     }
   }
 }

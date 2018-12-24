@@ -3,7 +3,10 @@ export const inline_expr = [
 ];
 
 const math = [
-    'cos()'
+    'sin()',
+    'cos()',
+    'tan()',
+    'sqrt()'
 ];
 
 const str = [

@@ -20,6 +20,7 @@ h2{
     line-height: $fsize3;
     font-size: $fsize2;
     font-weight: 550;
+    cursor: pointer;
 }
 
 .toolset--body{
@@ -46,7 +47,7 @@ h2{
 }
 
 .searchBar{
-    max-width: 98%;
+    width: 100%;
     font-size: 12px;
     padding: 0px 8px;
     border: 0px;
@@ -72,6 +73,9 @@ ul{
         line-height: 18px;
         width: 100%;
     }
+    .user--add{
+        margin-bottom: 8px;
+    }
     :hover{
         background-color: $color4;
         transition: 0.4s;
@@ -93,6 +97,47 @@ ul{
         width: 13px;
         height: 13px;
     }
+}
+
+#nodeMenu {
+    display: none;
+    position: fixed;
+    transition: display 0.4s;
+    top: 70px;
+
+    z-index: 1;
+    background-color: $color6;
+    border-left: 1px solid $color1;
+    border-bottom: 1px solid $color1;
+
+    button{
+        display: block;
+        min-width: 100px;
+        max-width: 200px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
+    li{
+        display: block;
+        min-width: 100px;
+        max-width: 300px;
+        overflow: hidden;
+        line-height: 20px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px 10px 0px 10px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
 }
 
 .accordion {
@@ -185,11 +230,13 @@ ul{
     opacity: 1;
 }
 
+// user functions
+
 .add-btn{
     height: 20px;
 
     margin: 0px;
-    padding: 0px 8px;
+    padding: 0px;
     border: 0px;
 
     background-color: $color5;
@@ -202,10 +249,10 @@ ul{
     text-decoration: none;
 
     font-size: $fsize2;
-    transition: 0.4s;
-    &:hover{
-        background-color: $color4;
-    }
+    // transition: 0.4s;
+    // &:hover{
+    //     background-color: $color4;
+    // }
     // .add-icon{
     //     float:left;
     //     color: $color8;
@@ -216,6 +263,8 @@ ul{
     background-color: $color3;
     height: 8px;
 }
+
+// global variables
 
 #globals{
     background-color: $color3;

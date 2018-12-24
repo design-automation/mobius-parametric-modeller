@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz } from '@libs/geo-info/GICommon';
+import { TId, Txyz } from '@libs/geo-info/common';
 
 /**
  * Calculates the distance between two positions.

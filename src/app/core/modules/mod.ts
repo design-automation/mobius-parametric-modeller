@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz} from '@libs/geo-info/GICommon';
+import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/common';
 
 /**
  * Set new coordinates of existing position.

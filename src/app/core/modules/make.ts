@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TCoord } from '@libs/geo-info/GIJson';
-import { EAttribNames, TId, Txyz, TPlane, EOpDivide} from '@libs/geo-info/GICommon';
+import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane, EOpDivide} from '@libs/geo-info/common';
+import { idBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 
 /**
@@ -13,8 +13,8 @@ import { __merge__ } from './_model';
  * Creates a position with coordinates x=1, y=2, z=3.
  */
 export function Position(__model__: GIModel, coords: Txyz): TId {
-    const posi_id: TId = __model__.geom().addPosition();
-    __model__.attribs().setAttribValue(posi_id, EAttribNames.COORDS, coords);
+    const posi_id: TId = __model__.geom.add.addPosition();
+    __model__.attribs.add.setAttribValue(posi_id, EAttribNames.COORDS, coords);
     return posi_id;
 }
 /**
@@ -26,8 +26,12 @@ export function Position(__model__: GIModel, coords: Txyz): TId {
  *
  * Creates a point at position1.
  */
-export function Point(__model__: GIModel, position: TId): TId {
-    return __model__.geom().addPoint(position);
+export function Point(__model__: GIModel, positions: TId|TId[]): TId {
+    for (const position of positions) {
+        const [entity_str, index] = idBreak(position);
+        const posi_i: number = __model__.geom.query.navAnyToPosi(EEntityTypeStr[entity_str], index)[0];
+        return __model__.geom.add.addPointByIndex(posi_i) + EEntityTypeStr.POINT;
+    }
 }
 /**
  * Adds a new polyline to the model.
@@ -40,7 +44,7 @@ export function Point(__model__: GIModel, position: TId): TId {
  */
 export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
-    // return __model__.geom().addPline(positions);
+    // return __model__.geom.add.addPline(positions);
 }
 /**
  * Adds a new polygon to the model.
@@ -53,7 +57,7 @@ export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
  */
 export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
-    // return __model__.geom().addPgon(positions);
+    // return __model__.geom.add.addPgon(positions);
 }
 /**
  * Adds a new collection to the model.
@@ -66,7 +70,7 @@ export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
  */
 export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
-    // return __model__.geom().addColl(objects);
+    // return __model__.geom.add.addColl(objects);
 }
 /**
  * Adds a new plane to the model from a location and two vectors.
@@ -79,9 +83,9 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  *
  * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
-    throw new Error("Not implemented."); return null;
-}
+// export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
+//     throw new Error("Not implemented."); return null;
+// }
 /**
  * Lofts between polylines or polygons.
  * @param __model__
@@ -141,7 +145,14 @@ export function Join(__model__: GIModel, objects: TId[]): TId {
  *
  * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
+export function PlaneVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * VectorVisible
+ * @param __model__
+ */
+export function VectorVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**
@@ -154,5 +165,24 @@ export function Divide(__model__: GIModel, edges: TId[], divisor: number, method
  * Creates a list containing a copy of the objects in sequence of input.
  */
 export function Copy(__model__: GIModel, geometry: TId|TId[]): TId|TId[] {
+    throw new Error("Not implemented."); return null;
+}
+
+/**
+ * Divides edge by length or by number of segments.
+ * If edge is not exact multiple of length, length of last segment will be the remainder.
+ * @param __model__
+ * @param edges Edge(s) to be divided.
+ * @param divisor Length or number of segments.
+ * @param method Enum to choose which method.
+ * @example segments1 = make.Divide(edge1, 5, number)
+ *
+ * Creates a list of 5 equal segments from edge1.
+ *
+ * @example segments2 = make.Divide(edge1, 5, length)
+ *
+ * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
+ */
+export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
     throw new Error("Not implemented."); return null;
 }

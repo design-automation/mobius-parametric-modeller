@@ -31,7 +31,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
     // general variable for mouse events
     private isDown: number;
-    private startCoords = [];
+    private starTxyzs = [];
     private canvas: any;
     private element: any;
 
@@ -241,13 +241,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 // convert mouse position to svg position (special procedure for firefox)
                 const svgP = this.convertCoord(pt);
 
-                // save the svg position as startCoords
-                this.startCoords = [
+                // save the svg position as starTxyzs
+                this.starTxyzs = [
                     svgP.x,
                     svgP.y
                 ];
-                if (this.startCoords[0] === NaN) {
-                    this.startCoords = [0, 0];
+                if (this.starTxyzs[0] === NaN) {
+                    this.starTxyzs = [0, 0];
                 }
                 // mark the dragging mode as dragNode
                 this.isDown = 2;
@@ -625,7 +625,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
 
         // set start coords to current view window position
-        this.startCoords = [
+        this.starTxyzs = [
             event.clientX - (bRect.left - this.offset[0]),
             event.clientY - (bRect.top - this.offset[1])
         ];
@@ -643,8 +643,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         } else if (this.isDown === 1) {
             event.preventDefault();
             const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-            let x = Number(event.clientX - this.startCoords[0]);
-            let y = Number(event.clientY - this.startCoords[1]);
+            let x = Number(event.clientX - this.starTxyzs[0]);
+            let y = Number(event.clientY - this.starTxyzs[1]);
             const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
             if (x > 0 || bRect.width < boundingDiv.width) {
                 x = 0;
@@ -669,10 +669,10 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
             const svgP = this.convertCoord(pt);
 
-            const xDiff = this.startCoords[0] - svgP.x;
-            const yDiff = this.startCoords[1] - svgP.y;
-            this.startCoords[0] = svgP.x;
-            this.startCoords[1] = svgP.y;
+            const xDiff = this.starTxyzs[0] - svgP.x;
+            const yDiff = this.starTxyzs[1] - svgP.y;
+            this.starTxyzs[0] = svgP.x;
+            this.starTxyzs[1] = svgP.y;
 
             this.element.position.x -= xDiff;
             this.element.position.y -= yDiff;

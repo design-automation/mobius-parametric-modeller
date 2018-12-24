@@ -153,14 +153,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 const tri = intersects[0];
                 // console.log('interecting', tri.object.uuid);
                 if (!scene._selecting.has(tri.faceIndex)) {
-                    const verts = this.model.geom().navTriToVert(tri.faceIndex);
+                    const verts = this.model.geom.query.navTriToVert(tri.faceIndex);
                     scene.selectObj(tri.faceIndex, this.model, verts);
                 } else {
                     scene.unselectObj(tri.faceIndex);
                 }
 
-                const face = this.model.geom().navTriToFace(tri.faceIndex);
-                const tris = this.model.geom().navFaceToTri(face);
+                const face = this.model.geom.query.navTriToFace(tri.faceIndex);
+                const tris = this.model.geom.query.navFaceToTri(face);
                 console.log(tris);
                 // scene._selectedEntity.set(tri.faceIndex, verts);
                 console.log(scene._selectedEntity);

@@ -1,31 +1,24 @@
-import { IModelData, IGeomData, IAttribsData, TPoint } from './GIJson';
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames } from './GICommon';
+import { EAttribNames, IModelData, IGeomData, IAttribsData } from './common';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
  */
 export class GIModel {
-    private _geom: GIGeom;
-    private _attribs: GIAttribs;
+    [x: string]: any; // TODO: What is this???
+    public  geom: GIGeom;
+    public  attribs: GIAttribs;
     /**
      * Creates a model.
      * @param model_data The JSON data
      */
     constructor(model_data?: IModelData) {
-        this._geom = new GIGeom(this);
-        this._attribs = new GIAttribs(this);
+        this.geom = new GIGeom(this);
+        this.attribs = new GIAttribs(this);
         if (model_data) {
             this.addData(model_data);
         }
-    }
-    // Getters and setters
-    public geom() {return this._geom; }
-    public attribs() {return this._attribs; }
-
-    public getAttibs(): GIAttribs {
-        return this._attribs;
     }
     /**
      * Sets the data in this model from JSON data.
@@ -33,8 +26,8 @@ export class GIModel {
      * @param model_data The JSON data.
      */
     public addData (model_data: IModelData): void {
-        this._attribs.addData(model_data); // warning: must be before this._geom.addDat()
-        this._geom.addData(model_data.geometry);
+        this.attribs.add.addData(model_data); // warning: must be before this.geom.add.addDat()
+        this.geom.add.addData(model_data.geometry);
     }
     /**
      * Adds data to this model from a GI model.
@@ -49,28 +42,28 @@ export class GIModel {
      */
     public getData(): IModelData {
         return {
-            geometry: this._geom.getData(),
-            attributes: this._attribs.getData()
+            geometry: this.geom.getData(),
+            attributes: this.attribs.getData()
         };
     }
     /**
      * Returns the JSON data for the geometry in this model.
      */
     public getGeomData(): IGeomData {
-        return this._geom.getData();
+        return this.geom.getData();
     }
     /**
      * Returns the JSON data for the attributes in this model.
      */
     public getAttribsData(): IAttribsData {
-        return this._attribs.getData();
+        return this.attribs.getData();
     }
     /**
      * Generate a default color if none exists.
      */
     private _generateColors(): number[] {
         const colors = [];
-        for (let index = 0; index < this._geom.numVerts(); index++) {
+        for (let index = 0; index < this.geom.query.numVerts(); index++) {
             colors.push(1, 1, 1);
         }
         return colors;
@@ -80,7 +73,7 @@ export class GIModel {
      */
     private _generateNormals(): number[] {
         const normals = [];
-        for (let index = 0; index < this._geom.numVerts(); index++) {
+        for (let index = 0; index < this.geom.query.numVerts(); index++) {
             normals.push(0, 0, 0);
         }
         return normals;
@@ -90,9 +83,9 @@ export class GIModel {
      */
     public get3jsData(): IThreeJS {
         // get the attrbs at the vertex level
-        const coords_values: number[] = this._attribs.get3jsSeqVertsCoords(this._geom.get3jsVerts());
-        let normals_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
-        let colors_values: number[] = this._attribs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
+        const coords_values: number[] = this.attribs.threejs.get3jsSeqVertsCoords(this.geom.threejs.get3jsVerts());
+        let normals_values: number[] = this.attribs.threejs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
+        let colors_values: number[] = this.attribs.threejs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
         // add normals and colours
         if (!normals_values) {
             normals_values = this._generateNormals();
@@ -101,9 +94,9 @@ export class GIModel {
             colors_values = this._generateColors();
         }
         // get the indices of the vertices for edges, points and triangles
-        const tris_verts_i: number[] = this._geom.get3jsTris();
-        const edges_verts_i: number[] = this._geom.get3jsEdges();
-        const points_verts_i: number[] = this._geom.get3jsPoints();
+        const tris_verts_i: number[] = this.geom.threejs.get3jsTris();
+        const edges_verts_i: number[] = this.geom.threejs.get3jsEdges();
+        const points_verts_i: number[] = this.geom.threejs.get3jsPoints();
         // return an object containing all the data
         return {
             positions: coords_values,

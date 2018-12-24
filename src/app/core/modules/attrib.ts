@@ -1,6 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, Txyz, EOpPromote, EAttribTypes } from '@libs/geo-info/GICommon';
-import { TAttribDataTypes } from '@libs/geo-info/GIJson';
+import { TId, TQuery, Txyz, EOpPromote, EAttribTypes, TAttribDataTypes } from '@libs/geo-info/common';
 
 /**
  * Gets attribute value of all entities.
@@ -21,7 +20,7 @@ export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAtt
  * @example set1 = attrib.Set (entities, name, value)
  */
 export function Set(__model__: GIModel, entities: TId|TId[], name: string, value: TAttribDataTypes): void {
-    //return __model__.attribs().setAttribValue(entities, name, value);
+    // return __model__.attribs().setAttribValue(entities, name, value);
     throw new Error("Not impemented."); return null;
 }
 /**
@@ -70,6 +69,6 @@ export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
  * 
  * Expected result could be [[1,2,3],[4,5,6]].
  */
-export function GetCoordinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
+export function GeTxyzinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
     throw new Error("Not impemented."); return null;
 }

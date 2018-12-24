@@ -659,7 +659,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"name": "TCoord",
+										"name": "Txyz",
 										"id": 32
 									}
 								}
@@ -9380,7 +9380,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "TCoord",
+										"name": "Txyz",
 										"id": 32
 									}
 								}
@@ -9417,7 +9417,7 @@
 										"type": "array",
 										"elementType": {
 											"type": "reference",
-											"name": "TCoord",
+											"name": "Txyz",
 											"id": 32
 										}
 									}
@@ -9584,7 +9584,7 @@
 						},
 						{
 							"id": 780,
-							"name": "getVertCoordByIndex",
+							"name": "getVerTxyzByIndex",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
@@ -9595,7 +9595,7 @@
 							"signatures": [
 								{
 									"id": 781,
-									"name": "getVertCoordByIndex",
+									"name": "getVerTxyzByIndex",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
@@ -9620,7 +9620,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"name": "TCoord",
+										"name": "Txyz",
 										"id": 32
 									}
 								}
@@ -9727,7 +9727,7 @@
 										"type": "array",
 										"elementType": {
 											"type": "reference",
-											"name": "TCoord",
+											"name": "Txyz",
 											"id": 32
 										}
 									}
@@ -16726,7 +16726,7 @@
 				},
 				{
 					"id": 32,
-					"name": "TCoord",
+					"name": "Txyz",
 					"kind": 4194304,
 					"kindString": "Type alias",
 					"flags": {
@@ -20580,7 +20580,7 @@
 										"type": "array",
 										"elementType": {
 											"type": "reference",
-											"name": "TCoord",
+											"name": "Txyz",
 											"id": 32
 										}
 									}

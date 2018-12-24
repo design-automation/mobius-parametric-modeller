@@ -1,6 +1,5 @@
 import { BiMapManyToOne } from './BiMap';
-import { EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './GIJson';
-import { EQueryOperatorTypes } from './GICommon';
+import { EQueryOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './common';
 //  ===============================================================================================================
 //  Classes
 //  ===============================================================================================================

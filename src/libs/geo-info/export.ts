@@ -1,6 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TTexture, EAttribNames } from './GICommon';
-import { TCoord } from './GIJSon';
+import { TColor, TNormal, TTexture, EAttribNames, Txyz} from './common';
 /**
  * Export to obj
  */
@@ -13,39 +12,39 @@ export function exportObj(model: GIModel): string {
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs().hasVertAttrib(EAttribNames.COLOR);
-    const has_normal_attrib: boolean = model.attribs().hasVertAttrib(EAttribNames.NORMAL);
-    const has_texture_attrib: boolean = model.attribs().hasVertAttrib(EAttribNames.TEXTURE);
+    const has_color_attrib: boolean = model.attribs.query.hasVertAttrib(EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.attribs.query.hasVertAttrib(EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.attribs.query.hasVertAttrib(EAttribNames.TEXTURE);
     // positions
     if (has_color_attrib) {
-        for (let vert_i = 0; vert_i < model.geom().numVerts(); vert_i++) {
-            const color: TColor = model.attribs().getVertAttribValueByIndex(EAttribNames.COLOR, vert_i) as TColor;
-            const coord: TCoord = model.attribs().getVertCoordByIndex(vert_i);
+        for (let vert_i = 0; vert_i < model.geom.query.numVerts(); vert_i++) {
+            const color: TColor = model.attribs.query.getVertAttribValueByIndex(EAttribNames.COLOR, vert_i) as TColor;
+            const coord: Txyz = model.attribs.query.getVerTxyzByIndex(vert_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + color.map( c => c.toString() ).join(' ') + '\n';
         }
     } else {
-        for (let posi_i = 0; posi_i < model.geom().numPosis(); posi_i++) {
-            const coord: TCoord = model.attribs().getPosiCoordByIndex(posi_i);
+        for (let posi_i = 0; posi_i < model.geom.query.numPosis(); posi_i++) {
+            const coord: Txyz = model.attribs.query.getPosiCoordByIndex(posi_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // textures, vt
     if (has_texture_attrib) {
-        for (let vert_i = 0; vert_i < model.geom().numVerts(); vert_i++) {
-            const texture: TTexture = model.attribs().getVertAttribValueByIndex(EAttribNames.TEXTURE, vert_i) as TTexture;
+        for (let vert_i = 0; vert_i < model.geom.query.numVerts(); vert_i++) {
+            const texture: TTexture = model.attribs.query.getVertAttribValueByIndex(EAttribNames.TEXTURE, vert_i) as TTexture;
             vt_str += 'v ' + texture.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // normals, vn
     if (has_normal_attrib) {
-        for (let vert_i = 0; vert_i < model.geom().numVerts(); vert_i++) {
-            const normal: TNormal = model.attribs().getVertAttribValueByIndex(EAttribNames.NORMAL, vert_i) as TNormal;
+        for (let vert_i = 0; vert_i < model.geom.query.numVerts(); vert_i++) {
+            const normal: TNormal = model.attribs.query.getVertAttribValueByIndex(EAttribNames.NORMAL, vert_i) as TNormal;
             vn_str += 'v ' + normal.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // faces, f
-    for (let pgon_i = 0; pgon_i < model.geom().numPgons(); pgon_i++) {
-        const verts_i: number[][] = model.geom().navPgonToVert(pgon_i);
+    for (let pgon_i = 0; pgon_i < model.geom.query.numPgons(); pgon_i++) {
+        const verts_i: number[][] = model.geom.query.navPgonToVert(pgon_i);
         const verts_i_outer = verts_i[0];
         if (has_texture_attrib) {
             // TODO
@@ -56,7 +55,7 @@ export function exportObj(model: GIModel): string {
         if (has_color_attrib) {
             f_str += 'f ' + verts_i_outer.map( vert_i => (vert_i + 1).toString() ).join(' ') + '\n';
         } else {
-            f_str += 'f ' + verts_i_outer.map( vert_i => (model.geom().navVertToPosi(vert_i) + 1).toString() ).join(' ') + '\n';
+            f_str += 'f ' + verts_i_outer.map( vert_i => (model.geom.query.navVertToPosi(vert_i) + 1).toString() ).join(' ') + '\n';
         }
     }
     // polygons

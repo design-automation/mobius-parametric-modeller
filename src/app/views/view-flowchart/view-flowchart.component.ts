@@ -59,6 +59,10 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     private pasteListener = fromEvent(document, 'paste');
     private listenerActive = false;
 
+    notificationMessage = '';
+    notificationTrigger = true;
+
+
     // position of the current canvas view relative to the top left of the page
     private offset: number[];
 
@@ -116,6 +120,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 // console.log('copied node:', node);
                 const cp = circularJSON.parse(circularJSON.stringify(node));
                 this.copied = circularJSON.stringify(cp);
+
+                this.notificationMessage = `Copied Last Selected Node`;
+                this.notificationTrigger = !this.notificationTrigger;
             }
         });
 
@@ -135,6 +142,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 NodeUtils.updateNode(newNode, svgP);
                 this.dataService.flowchart.nodes.push(newNode);
                 // console.log('pasting node:', newNode);
+                this.notificationMessage = `Pasted Node`;
+                this.notificationTrigger = !this.notificationTrigger;
             }
         });
 

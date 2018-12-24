@@ -1,0 +1,48 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+#notificationBox {
+    pointer-events: none;
+    opacity: 0;
+    min-width: 250px; 
+    background-color: $color7; 
+    color: $color8; 
+    border: solid $color1 1px;
+    text-align: center;
+    padding: 16px;
+    position: fixed; 
+    z-index: 1; 
+    left: 10px; 
+    bottom: 10px;
+}
+
+#notificationBox.show {
+    opacity: 1;
+    transition: ease-in 0.1s; 
+}
+
+#notificationBox.hide {
+    opacity: 0;
+    transition: ease-in 0.2s; 
+}
+
+/* Animations to fade the notificationBox in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 10px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 10px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 10px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 10px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}

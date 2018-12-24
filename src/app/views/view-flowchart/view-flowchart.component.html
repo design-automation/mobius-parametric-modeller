@@ -1,92 +1,93 @@
 <div class='container'>
-        <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
-            <as-split-area [size]="100 - dataService.splitVal">
-                <panel-header [title]='dataService.flowchart.name'></panel-header>
-                <!-- viewchild content -->
-                <div class='content__panel'>
-                    <div id = 'flowchart-main-container' class='flowchart-container'>
-                            <!--
-                            -->
+    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+        <as-split-area [size]="100 - dataService.splitVal">
+            <panel-header [title]='dataService.flowchart.name'></panel-header>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+                <div id = 'flowchart-main-container' class='flowchart-container'>
+                        <!--
+                        -->
+                    
+                        <!-- svg component -->
+                        <svg id="svg-canvas" class = "svgCanvas" 
+                        [attr.viewBox]="viewbox"
+                        (mouseenter)='activateKeyEvent()'
+                        (mouseleave)='deactivateKeyEvent($event)'
+                        (mousedown)='panStart($event)'
+                        (mousemove)='handleMouseMove($event)'  
+                        (mouseup)='handleMouseUp($event)'
+                        (click)='deselectAll($event)'
+                        (wheel)='scale($event)'
+                        (dblclick)='addNode($event)'
+                        >
+                            <!-- definitions for svg: grid patterns, arrow head for connecting wire-->
+                            <defs>
+                                <!-- grid pattern -->
+                                <!-- <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
+                                </pattern>
+                                <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                                    <rect width="100" height="100" fill="url(#smallGrid)"/>
+                                    <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
+                                </pattern> -->
+                    
+                                <!-- arrow head -->
+                                <marker id="arrow" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
+                                    <path d="M0,0 L0,8 L9,4 z" stroke="rgb(80, 80, 80)" fill="transparent" />
+                                </marker>
+                                <marker id="arrow_selected" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
+                                    <path d="M0,0 L0,8 L9,4 z" stroke="rgb(0, 0, 150)" fill="transparent"  />
+                                </marker>
+                            </defs>
+                    
+                            <!-- svg frame-->
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                                        
+                    
+                            <!-- wires => edge.component -->
+                            <g edge *ngFor="let edge of dataService.flowchart.edges; let edge_index = index" 
+                            [edge]='edge'
+                            [inputOffset]='inputOffset'
+                            [outputOffset]='outputOffset'
+                            (selected)='selectEdge($event, edge_index)'
+                            />
+                    
+                            <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->
+                            <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
+                    
+                            <!-- nodes => node.component -->
+                            <g node *ngFor="let node of dataService.flowchart.nodes; let node_index = index" 
+                            id='flw_node_{{node_index}}'
+                            [node]='node' 
+                            [selected]='isSelected(node_index)'
+                            [inputOffset]='inputOffset'
+                            [outputOffset]='outputOffset'
+                            (action)='nodeAction($event, node_index)'
+                            />
+                        </svg>
+                    
+                        <!-- focus on flowchart button on the top right of the svg -->
+                        <button id='zoomToFit' class='btn resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
+                            <mat-icon svgIcon="cZoom"></mat-icon>
+                        </button>
                         
-                            <!-- svg component -->
-                            <svg id="svg-canvas" class = "svgCanvas" 
-                            [attr.viewBox]="viewbox"
-                            (mouseenter)='activateKeyEvent()'
-                            (mouseleave)='deactivateKeyEvent($event)'
-                            (mousedown)='panStart($event)'
-                            (mousemove)='handleMouseMove($event)'  
-                            (mouseup)='handleMouseUp($event)'
-                            (click)='deselectAll($event)'
-                            (wheel)='scale($event)'
-                            (dblclick)='addNode($event)'
-                            >
-                                <!-- definitions for svg: grid patterns, arrow head for connecting wire-->
-                                <defs>
-                                    <!-- grid pattern -->
-                                    <!-- <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="gray" stroke-width="0.5"/>
-                                    </pattern>
-                                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-                                        <rect width="100" height="100" fill="url(#smallGrid)"/>
-                                        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/>
-                                    </pattern> -->
+                    
+                    </div>
                         
-                                    <!-- arrow head -->
-                                    <marker id="arrow" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
-                                        <path d="M0,0 L0,8 L9,4 z" stroke="rgb(80, 80, 80)" fill="transparent" />
-                                    </marker>
-                                    <marker id="arrow_selected" markerWidth="30" markerHeight="30" refX="0" refY="4" orient="auto" markerUnits="strokeWidth" viewBox="0 0 40 40">
-                                        <path d="M0,0 L0,8 L9,4 z" stroke="rgb(0, 0, 150)" fill="transparent"  />
-                                    </marker>
-                                </defs>
-                        
-                                <!-- svg frame-->
-                                <rect width="100%" height="100%" fill="url(#grid)" />
-                                            
-                        
-                                <!-- wires => edge.component -->
-                                <g edge *ngFor="let edge of dataService.flowchart.edges; let edge_index = index" 
-                                [edge]='edge'
-                                [inputOffset]='inputOffset'
-                                [outputOffset]='outputOffset'
-                                (selected)='selectEdge($event, edge_index)'
-                                />
-                        
-                                <!-- temporary wire while dragging port, default position to <(0,0),(0,0)>, modified when a port is being dragged -->
-                                <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
-                        
-                                <!-- nodes => node.component -->
-                                <g node *ngFor="let node of dataService.flowchart.nodes; let node_index = index" 
-                                id='flw_node_{{node_index}}'
-                                [node]='node' 
-                                [selected]='isSelected(node_index)'
-                                [inputOffset]='inputOffset'
-                                [outputOffset]='outputOffset'
-                                (action)='nodeAction($event, node_index)'
-                                />
-                            </svg>
-                        
-                            <!-- focus on flowchart button on the top right of the svg -->
-                            <button id='zoomToFit' class='btn resetViewer-button' mat-icon-button disableRipple='true' (click)='focusFlowchart()' title="Zoom to Fit">
-                                <mat-icon svgIcon="cZoom"></mat-icon>
-                            </button>
-                            
-                        
-                        </div>
-                            
-                </div>
-            </as-split-area>
-    
-            <as-split-area [size]="dataService.splitVal">
-                <!-- data viewers panel -->
-                <div class='content__viewer' >
-                    <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>
-                </div>
-            </as-split-area>
-            
-        </as-split>
-    
-    </div>
+            </div>
+        </as-split-area>
+
+        <as-split-area [size]="dataService.splitVal">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container [data]='viewerData()' [helpView]='helpView'></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+    <notification [message]='notificationMessage' [dummyTrigger]='notificationTrigger'></notification>
+
+</div>
     
 
 

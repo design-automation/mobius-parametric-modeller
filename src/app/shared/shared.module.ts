@@ -26,6 +26,7 @@ import { ParameterViewerComponent } from './components/parameter-viewer/paramete
 import { InputPortViewerComponent } from './components/parameter-viewer/input-port-viewer/input-port-viewer.component';
 import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
+import { NotificationComponent } from './components/notification/notification.component';
 // app model viewers
 import { DataViewersContainer } from '../model-viewers/model-viewers-container.module';
 
@@ -38,6 +39,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             PageNotFoundComponent,
             NavigationComponent,
             PanelHeaderComponent,
+            NotificationComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent
@@ -82,6 +84,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             AddInputComponent,
             AddOutputComponent,
             ParameterViewerComponent,
+            NotificationComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent
     ]
 })

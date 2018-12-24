@@ -1,8 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { exportObj } from '@libs/geo-info/export';
 import { importObj } from '@libs/geo-info/import';
-import { TCoord, EAttribDataTypeStrs, TAttribDataTypes } from '@libs/geo-info/GIJson';
-import { EEntityTypeStr } from '@libs/geo-info/GICommon';
+import { EEntityTypeStr, Txyz, EAttribDataTypeStrs, TAttribDataTypes } from '@libs/geo-info/common';
 import { download } from '@libs/filesys/download';
 
 //  ===============================================================================================================
@@ -16,7 +15,7 @@ import { download } from '@libs/filesys/download';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs().addPosiAttrib('coordinates', EAttribDataTypeStrs.FLOAT, 3);
+    model.attribs.add.addPosiAttrib('coordinates', EAttribDataTypeStrs.FLOAT, 3);
     return model;
 }
 
@@ -65,7 +64,7 @@ export function __stringify__(__model__: GIModel): string {
  * @param query_str
  */
 export function __query__(__model__: GIModel, query_str: string): string[] {
-    return __model__.attribs().queryAttribs(query_str);
+    return __model__.attribs.query.queryAttribs(query_str);
 }
 //  ===============================================================================================================
 //  Functions visible in the Mobius interface.
@@ -87,30 +86,30 @@ export function addGiData(__model__: GIModel, model_data: string): void {
  * @param __model__
  */
 export function numPoints(__model__: GIModel): number {
-    return __model__.geom().numPoints();
+    return __model__.geom.query.numPoints();
 }
 /**
  *  Gets the number of linestrings in the model.
  * @param __model__
  */
 export function numPolylines(__model__: GIModel): number {
-    return __model__.geom().numLines();
+    return __model__.geom.query.numLines();
 }
 /**
  *  Gets the number of polygons in the model.
  * @param __model__
  */
 export function numPolygons(__model__: GIModel): number {
-    return __model__.geom().numPgons();
+    return __model__.geom.query.numPgons();
 }
 /**
  * Adds a new position to the model.
  * @param __model__
  * @param coords
  */
-export function addPosition(__model__: GIModel, coords: TCoord): string {
-    const posi_id: string = __model__.geom().addPosition();
-    __model__.attribs().setAttribValue(posi_id, 'coordinates', coords);
+export function addPosition(__model__: GIModel, coords: Txyz): string {
+    const posi_id: string = __model__.geom.add.addPosition();
+    __model__.attribs.add.setAttribValue(posi_id, 'coordinates', coords);
     return posi_id;
 }
 /**
@@ -119,7 +118,7 @@ export function addPosition(__model__: GIModel, coords: TCoord): string {
  * @param coords
  */
 export function addPoint(__model__: GIModel, position: string): string {
-    return __model__.geom().addPoint(position);
+    return __model__.geom.add.addPoint(position);
 }
 /**
  * Adds a new linestring to the model.
@@ -127,7 +126,7 @@ export function addPoint(__model__: GIModel, position: string): string {
  * @param coords
  */
 export function addPolyline(__model__: GIModel, positions: string[]): string {
-    return __model__.geom().addPline(positions);
+    return __model__.geom.add.addPline(positions);
 }
 /**
  * Adds a new polygon to the model.
@@ -135,42 +134,42 @@ export function addPolyline(__model__: GIModel, positions: string[]): string {
  * @param coords
  */
 export function addPolygon(__model__: GIModel, positions: string[]): string {
-    return __model__.geom().addPgon(positions);
+    return __model__.geom.add.addPgon(positions);
 }
 /**
  * Gets all the positions in the model.
  * @param __model__
  */
 export function getPositions(__model__: GIModel): string[] {
-    return __model__.geom().getPosis();
+    return __model__.geom.query.getPosis();
 }
 /**
  * Gets all the points in the model.
  * @param __model__
  */
 export function getPoints(__model__: GIModel): string[] {
-    return __model__.geom().getPoints();
+    return __model__.geom.query.getPoints();
 }
 /**
  * Gets all the lines in the model.
  * @param __model__
  */
 export function getPolylines(__model__: GIModel): string[] {
-    return __model__.geom().getLines();
+    return __model__.geom.query.getLines();
 }
 /**
  * Gets all the points in the model.
  * @param __model__
  */
 export function getPolygons(__model__: GIModel): string[] {
-    return __model__.geom().getPgons();
+    return __model__.geom.query.getPgons();
 }
 /**
  * Gets all the collections in the model.
  * @param __model__
  */
 export function getCollections(__model__: GIModel): string[] {
-    return __model__.geom().getColls();
+    return __model__.geom.query.getColls();
 }
 /**
  * Create a new attribute.
@@ -185,22 +184,22 @@ export function createAttrib(__model__: GIModel, entity_type: EEntityTypeStr,
         name: string, data_type: EAttribDataTypeStrs, data_size: number): void {
     switch (entity_type) {
         case EEntityTypeStr.POSI:
-            __model__.attribs().addPosiAttrib(name, data_type, data_size);
+            __model__.attribs.add.addPosiAttrib(name, data_type, data_size);
             break;
         case EEntityTypeStr.VERT:
-            __model__.attribs().addVertAttrib(name, data_type, data_size);
+            __model__.attribs.add.addVertAttrib(name, data_type, data_size);
             break;
         case EEntityTypeStr.EDGE:
-            __model__.attribs().addEdgeAttrib(name, data_type, data_size);
+            __model__.attribs.add.addEdgeAttrib(name, data_type, data_size);
             break;
         case EEntityTypeStr.WIRE:
-            __model__.attribs().addWireAttrib(name, data_type, data_size);
+            __model__.attribs.add.addWireAttrib(name, data_type, data_size);
             break;
         case EEntityTypeStr.FACE:
-            __model__.attribs().addFaceAttrib(name, data_type, data_size);
+            __model__.attribs.add.addFaceAttrib(name, data_type, data_size);
             break;
         case EEntityTypeStr.COLL:
-            __model__.attribs().addCollAttrib(name, data_type, data_size);
+            __model__.attribs.add.addCollAttrib(name, data_type, data_size);
             break;
         default:
             break;
@@ -212,7 +211,7 @@ export function createAttrib(__model__: GIModel, entity_type: EEntityTypeStr,
  * @param id
  */
 export function getAttribValue(__model__: GIModel, id: string): TAttribDataTypes {
-    return __model__.attribs().getAttribValue(id, name);
+    return __model__.attribs.query.getAttribValue(id, name);
 }
 /**
  * Set attribute value.
@@ -220,7 +219,7 @@ export function getAttribValue(__model__: GIModel, id: string): TAttribDataTypes
  * @param id
  */
 export function setAttribValue(__model__: GIModel, id: string, name: string, value: TAttribDataTypes): void {
-    return __model__.attribs().setAttribValue(id, name, value);
+    return __model__.attribs.add.setAttribValue(id, name, value);
 }
 /**
  * Query

@@ -1,5 +1,5 @@
 import * as mathjs from 'mathjs';
-import { Txyz } from '@libs/geo-info/GICommon';
+import { Txyz } from '@libs/geo-info/common';
 
 /**
  * Vector functions.

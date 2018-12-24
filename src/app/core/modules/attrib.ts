@@ -1,6 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, Txyz, EOpPromote, EAttribTypes } from '@libs/geo-info/GICommon';
-import { TAttribDataTypes } from '@libs/geo-info/GIJson';
+import { TId, TQuery, Txyz, EOpPromote, EAttribTypes, TAttribDataTypes } from '@libs/geo-info/common';
 
 /**
  * Get attribute value.
@@ -50,6 +49,6 @@ export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
  * @param __model__
  * @param positions
  */
-export function GetCoordinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
+export function GeTxyzinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
     throw new Error("Not impemented."); return null;
 }

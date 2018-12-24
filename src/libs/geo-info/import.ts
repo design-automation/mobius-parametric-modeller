@@ -1,6 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TTexture, EAttribNames } from './GICommon';
-import { TCoord } from './GIJSon';
+import { TNormal, TTexture, EAttribNames, Txyz } from './common';
 /**
  * Import to obj
  */
@@ -15,7 +14,7 @@ export function importObj(obj_str: string): GIModel {
         OBJ_LINE = 'l '
     }
     const obj_lines: string[] = obj_str.split(/\r?\n/);
-    const coords: TCoord[] = [];
+    const coords: Txyz[] = [];
     const normals: TNormal[] = [];
     const textures: TTexture[] = [];
     const faces: number[][][] = [];
@@ -24,7 +23,7 @@ export function importObj(obj_str: string): GIModel {
         if (obj_line.startsWith( EObjLine.OBJ_COMMENT )) {
             // Do not do anything
         } else if (obj_line.startsWith( EObjLine.OBJ_COORD )) {
-            const coord: TCoord = obj_line.split(' ').slice(1, 4).map( v => parseFloat(v) ) as TCoord;
+            const coord: Txyz = obj_line.split(' ').slice(1, 4).map( v => parseFloat(v) ) as Txyz;
             coords.push(coord);
         } else if (obj_line.startsWith( EObjLine.OBJ_TEXTURE )) {
             const normal: TNormal = obj_line.split(' ').slice(1, 4).map( v => parseFloat(v) ) as TNormal;
@@ -52,12 +51,12 @@ export function importObj(obj_str: string): GIModel {
         }
     }
     for (const coord of coords) {
-        const posi_id: string = model.geom().addPosition();
-        model.attribs().setAttribValue(posi_id, EAttribNames.COORDS, coord);
+        const posi_id: string = model.geom.add.addPosition();
+        model.attribs.add.setAttribValue(posi_id, EAttribNames.COORDS, coord);
     }
     for (const face of faces) {
         console.log(face[0]);
-        const face_i: number = model.geom().addPgonByIndex(face[0]);
+        const face_i: number = model.geom.add.addPgonByIndex(face[0]);
         // TODO: texture uv
         // TODO: normals
     }

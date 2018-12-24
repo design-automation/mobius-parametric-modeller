@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, EOpKnife } from '@libs/geo-info/GICommon';
+import { TId, TPlane, EOpKnife } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
 
 /**

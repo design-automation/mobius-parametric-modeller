@@ -2,7 +2,7 @@
 import * as three from 'three';
 import * as threex from '../threex/threex';
 import * as earcut from './earcut';
-import {TCoord} from '../geo-info/GIJson';
+import {Txyz} from '../geo-info/common';
 import {Arr} from '../arr/arr';  // TODO remove dependence on this
 
 //  3D to 2D ======================================================================================================
@@ -41,7 +41,7 @@ function _makeVertices2D(points: three.Vector3[]): three.Vector3[] {
  * Triangulates a polygon
  * @param coords
  */
-export function triangulate(coords: TCoord[]): number[][] {
+export function triangulate(coords: Txyz[]): number[][] {
     const vects: three.Vector3[] = _makeVertices2D(coords.map( coord => new three.Vector3(...coord)) );
     const flat_vert_xys: number[] = Arr.flatten(vects.map((v) => [v.x, v.y])); // TODO remove dependency
     const flat_tris_i: number[] = earcut.Earcut.triangulate(flat_vert_xys);

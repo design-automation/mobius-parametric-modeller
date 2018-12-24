@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TCoord, EAttribDataTypeStrs } from '@libs/geo-info/GIJson';
-import { EAttribNames, TId, Txyz, TPlane, isPosi, isVert, idBreak, EEntityTypeStr} from '@libs/geo-info/GICommon';
+import { EAttribNames, TId, EEntityTypeStr, Txyz} from '@libs/geo-info/common';
+import { idBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 
 /**
@@ -12,9 +12,9 @@ import { __merge__ } from './_model';
  *
  * Creates a position with coordinates x=1, y=2, z=3.
  */
-export function Position(__model__: GIModel, coords: TCoord): TId {
-    const posi_id: TId = __model__.geom().addPosition();
-    __model__.attribs().setAttribValue(posi_id, EAttribNames.COORDS, coords);
+export function Position(__model__: GIModel, coords: Txyz): TId {
+    const posi_id: TId = __model__.geom.add.addPosition();
+    __model__.attribs.add.setAttribValue(posi_id, EAttribNames.COORDS, coords);
     return posi_id;
 }
 /**
@@ -29,8 +29,8 @@ export function Position(__model__: GIModel, coords: TCoord): TId {
 export function Point(__model__: GIModel, positions: TId|TId[]): TId {
     for (const position of positions) {
         const [entity_str, index] = idBreak(position);
-        const posi_i: number = __model__.geom().navAnyToPosi(EEntityTypeStr[entity_str], index)[0];
-        return __model__.geom().addPointByIndex(posi_i) + EEntityTypeStr.POINT;
+        const posi_i: number = __model__.geom.query.navAnyToPosi(EEntityTypeStr[entity_str], index)[0];
+        return __model__.geom.add.addPointByIndex(posi_i) + EEntityTypeStr.POINT;
     }
 }
 /**
@@ -44,7 +44,7 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId {
  */
 export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
-    // return __model__.geom().addPline(positions);
+    // return __model__.geom.add.addPline(positions);
 }
 /**
  * Adds a new polygon to the model.
@@ -57,7 +57,7 @@ export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
  */
 export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
-    // return __model__.geom().addPgon(positions);
+    // return __model__.geom.add.addPgon(positions);
 }
 /**
  * Adds a new collection to the model.
@@ -70,7 +70,7 @@ export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
  */
 export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
-    // return __model__.geom().addColl(objects);
+    // return __model__.geom.add.addColl(objects);
 }
 /**
  * Adds a new plane to the model (from a location and normal vector) or (from two vectors).
@@ -86,7 +86,14 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  *
  * Creates a plane with vector1 and vector2 on it, and normal = cross product of both vectors.
  */
-export function Plane(__model__: GIModel, locationOrVector: TId|TCoord, vector: TId|TCoord): TId {
+export function PlaneVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
+    throw new Error("Not implemented."); return null;
+}
+/**
+ * VectorVisible
+ * @param __model__
+ */
+export function VectorVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**

@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz } from '@libs/geo-info/GICommon';
+import { TId, Txyz } from '@libs/geo-info/common';
 
 /**
  * Calculates the distance between two points.
@@ -20,7 +20,7 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId): nu
  * Calculates the minimum distance between a location and an object, or two objects.
  * @param __model__
  * @param hello
- * @param object1 
+ * @param object1
  * @param object2
  */
 export function MinDistance(__model__: GIModel, object1: TId, object2: TId): number {

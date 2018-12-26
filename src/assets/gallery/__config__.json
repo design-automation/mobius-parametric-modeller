@@ -1,7 +1,7 @@
 {
     "data": [
         {
-            "name": "Beginner Examples",
+            "name": "Getting Started",
             "files": [
                 "box_with_holes.mob",
                 "draw_point_line_polygon.mob",
@@ -20,7 +20,8 @@
             "name": "Test",
             "files": [
                 "box_with_holes.mob",
-                "pig_head.mob"
+                "pig_head.mob",
+                "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong.mob"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/test/"
         }

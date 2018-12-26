@@ -62,7 +62,7 @@ export class DataService {
     registerAction(action) {
         this._prevActions.push(action);
         this._nextActions = [];
-        console.log(action);
+        // console.log(action);
     }
 
     undo() {

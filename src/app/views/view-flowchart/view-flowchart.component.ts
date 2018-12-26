@@ -70,8 +70,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     inputOffset = [50, -8];
     outputOffset = [50, 88];
 
-    private history;
-
 
     static enableNode(node: INode) {
         for (const edge of node.input.edges) {
@@ -144,18 +142,94 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 // console.log('pasting node:', newNode);
                 this.notificationMessage = `Pasted Node`;
                 this.notificationTrigger = !this.notificationTrigger;
+
+                this.dataService.registerAction({'type': 'add', 'nodes': [newNode]});
             }
         });
 
         // delete: delete selected edge(s)
-        this.keydownSub = this.keydownListener.subscribe(event => {
+        this.keydownSub = this.keydownListener.subscribe((event: KeyboardEvent) => {
             if (!this.listenerActive) { return; }
-            if ((<KeyboardEvent> event).key === 'Delete') {
+            if (event.key === 'Delete') {
                 if (this.selectedEdge.length > 0) {
                     this.deleteSelectedEdges();
                 } else {
                     if (document.activeElement.id !== this.dataService.node.id) {
                         this.deleteSelectedNodes();
+                    }
+                }
+            } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
+                let act: any;
+                if (event.shiftKey) {
+                    act = this.dataService.redo();
+                } else {
+                    act = this.dataService.undo();
+                }
+                if (!act) { return; }
+                if ( (act.type === 'add') !== event.shiftKey ) {
+                    if (act.edges) {
+                        for (const tbrEdge of act.edges) {
+                            for (let i = 0; i < this.dataService.flowchart.edges.length; i++) {
+                                if (this.dataService.flowchart.edges[i] === tbrEdge) {
+                                    this.deleteEdge(i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (!act.nodes) { return; }
+                    for (const tbrNode of act.nodes) {
+                        let nodeIndex: number;
+                        for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+                            const node = this.dataService.flowchart.nodes[i];
+                            if (tbrNode.id === node.id) {
+                                nodeIndex = i;
+                                this.dataService.flowchart.nodes.splice(i, 1);
+                                break;
+                            }
+                        }
+                        let tbrSel: number;
+                        for (let j = 0; j < this.dataService.flowchart.meta.selected_nodes.length; j++) {
+                            if (tbrSel) {
+                                this.dataService.flowchart.meta.selected_nodes[j] -= 1;
+                            }
+                            if (this.dataService.flowchart.meta.selected_nodes[j] === nodeIndex) {
+                                tbrSel = nodeIndex;
+                            }
+                        }
+                        this.dataService.flowchart.meta.selected_nodes.splice(tbrSel, 1);
+                    }
+                } else {
+                    if (act.nodes) {
+                        for (const tbaNode of act.nodes) {
+                            this.dataService.flowchart.nodes.push(tbaNode);
+                        }
+                    }
+                    if (!act.edges) { return; }
+                    for (const tbaEdge of act.edges) {
+                        this.dataService.flowchart.edges.push(tbaEdge);
+                        tbaEdge.target.edges.push(tbaEdge);
+                        tbaEdge.source.edges.push(tbaEdge);
+                        tbaEdge.selected = false;
+                        if (tbaEdge.source.parentNode.enabled) {
+                            tbaEdge.target.parentNode.enabled = true;
+                        }
+                    }
+                    while (true) {
+                        let check = false;
+                        for (const node of this.dataService.flowchart.nodes) {
+                            if (node.enabled) { continue; }
+                            for (const inp of node.input.edges) {
+                                if (inp.source.parentNode.enabled) {
+                                    node.enabled = true;
+                                    check = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!check) {
+                            break;
+                        }
                     }
                 }
             }
@@ -301,6 +375,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         newNode.position.x = svgP.x;
         newNode.position.y = svgP.y;
         this.dataService.flowchart.nodes.push(newNode);
+        this.dataService.registerAction({'type': 'add', 'nodes': [newNode]});
     }
 
     // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
@@ -319,20 +394,28 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     // delete selected node
     deleteSelectedNodes() {
 
+        const deletedNodes = [];
+        const deletedEdges = [];
+        this.dataService.flowchart.meta.selected_nodes = this.dataService.flowchart.meta.selected_nodes.sort();
         // for each of the selected node
         while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
             const node_index = this.dataService.flowchart.meta.selected_nodes.pop();
             const node = this.dataService.flowchart.nodes[node_index];
-
             // continue if the node is a start/end node
             if (node.type === 'start' || node.type === 'end') { continue; }
+
+            deletedNodes.push(node);
+
             let edge_index = 0;
 
             // delete all the edges connected to the node
             while (edge_index < this.dataService.flowchart.edges.length) {
                 const tbrEdge = this.dataService.flowchart.edges[edge_index];
+
+
                 if (tbrEdge.target.parentNode === node || tbrEdge.source.parentNode === node) {
-                    this.deleteEdge(edge_index, node.id);
+                    deletedEdges.push(tbrEdge);
+                    this.deleteEdge(edge_index);
                     continue;
                 }
                 edge_index += 1;
@@ -348,10 +431,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 break;
             }
         }
+        this.dataService.registerAction({'type': 'del', 'nodes': deletedNodes, 'edges': deletedEdges});
+
+
     }
 
     // delete an edge with a known index
-    deleteEdge(edge_index, deletedNode) {
+    deleteEdge(edge_index) {
         const tbrEdge = this.dataService.flowchart.edges[edge_index];
 
         // remove the edge from the target node's list of edges
@@ -394,9 +480,12 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     // delete all the selected edges
     deleteSelectedEdges() {
         this.selectedEdge.sort().reverse();
+        const deletedEdges = [];
         for (const edge_index of this.selectedEdge) {
-            this.deleteEdge(edge_index, undefined);
+            deletedEdges.push(this.dataService.flowchart.edges[edge_index]);
+            this.deleteEdge(edge_index);
         }
+        this.dataService.registerAction({'type': 'del', 'edges': deletedEdges});
         this.selectedEdge = [];
     }
 
@@ -760,6 +849,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 */
                 break;
             }
+            this.dataService.registerAction({'type': 'add', 'edges': [this.edge]});
+
         }
         this.isDown = 0;
     }

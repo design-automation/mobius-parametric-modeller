@@ -9,8 +9,7 @@ import { __merge__ } from './_model';
  * @param coords XYZ coordinates as a list of three numbers.
  * @returns New position if successful, null if unsuccessful or on error.
  * @example position1 = make.Position([1,2,3])
- *
- * Creates a position with coordinates x=1, y=2, z=3.
+ * @example_info Creates a position with coordinates x=1, y=2, z=3.
  */
 export function Position(__model__: GIModel, coords: Txyz): TId {
     const posi_id: TId = __model__.geom.add.addPosition();
@@ -24,6 +23,7 @@ export function Position(__model__: GIModel, coords: Txyz): TId {
  * @returns New point if successful, null if unsuccessful or on error.
  * @example_info Creates a point at position1.
  * @example point1 = make.Point(position)
+ * @example_info Creates a point at position1.
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId {
     for (const position of positions) {
@@ -38,8 +38,7 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId {
  * @param positions List of positions.
  * @returns New polyline if successful, null if unsuccessful or on error.
  * @example polyline1 = make.Polyline([position1,position2,position3])
- *
- * Creates an open polyline with vertices position1, position2, position3 in sequence.
+ * @example_info Creates an open polyline with vertices position1, position2, position3 in sequence.
  */
 export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
@@ -51,8 +50,7 @@ export function Polyline(__model__: GIModel, positions: TId|TId[]): TId {
  * @param positions List of positions.
  * @returns New polygon if successful, null if unsuccessful or on error.
  * @example polygon1 = make.Polygon([position1,position2,position3])
- *
- * Creates a polygon with vertices position1, position2, position3 in sequence.
+ * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
  */
 export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
@@ -64,8 +62,7 @@ export function Polygon(__model__: GIModel, positions: TId|TId[]): TId {
  * @param objects List of points, polylines, polygons.
  * @returns New collection if successful, null if unsuccessful or on error.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
- *
- * Creates a collection containing point1, polyline1, polygon1.
+ * @example_info Creates a collection containing point1, polyline1, polygon1.
  */
 export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
     throw new Error("Not implemented."); return null;
@@ -79,8 +76,7 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  * @param vector2 Vector on plane or list of three coordinates defining it.
  * @returns New plane if successful, null if unsuccessful or on error.
  * @example plane1 = make.Plane(position1, vector1, [0,1,0])
- *
- * Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
+ * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 // export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
 //     throw new Error("Not implemented."); return null;
@@ -91,8 +87,7 @@ export function Collection(__model__: GIModel, objects: TId|TId[]): TId {
  * @param objects Polylines or polygons.
  * @returns Lofted surface between objects.
  * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
- *
- * Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.
+ * @example_info Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.
  */
 export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
     throw new Error("Not implemented."); return null;
@@ -108,6 +103,7 @@ export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
  * @returns Extrusion of geometry.
  * @example extrusion1 = make.Extrude(point1, 10)
  * @example_info Creates a line of length 10 in the z-direction.
+ *
  * @example extrusion2 = make.Extrude(polygon1, [0,5,0])
  * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */
@@ -120,8 +116,7 @@ export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Tx
  * @param objects Polylines or polygons.
  * @returns New joined polyline or polygon.
  * @example joined1 = make.Join([polyline1,polyline2])
- *
- * Creates a new polyline by joining polyline1 and polyline2.
+ * @example_info Creates a new polyline by joining polyline1 and polyline2.
  */
 export function Join(__model__: GIModel, objects: TId[]): TId {
     throw new Error("Not implemented."); return null;
@@ -134,12 +129,10 @@ export function Join(__model__: GIModel, objects: TId[]): TId {
  * @param divisor Length or number of segments.
  * @param method Enum to choose which method.
  * @example segments1 = make.Divide(edge1, 5, number)
- *
- * Creates a list of 5 equal segments from edge1.
+ * @example_info Creates a list of 5 equal segments from edge1.
  *
  * @example segments2 = make.Divide(edge1, 5, length)
- *
- * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
+ * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
 export function PlaneVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
@@ -157,8 +150,7 @@ export function VectorVisible(__model__: GIModel, locationOrVector: TId|Txyz, ve
  * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
  * @returns New copy if successful, null if unsuccessful or on error.
  * @example copy1 = make.Copy([position1,polyine1,polygon1])
- *
- * Creates a list containing a copy of the objects in sequence of input.
+ * @example_info Creates a list containing a copy of the objects in sequence of input.
  */
 export function Copy(__model__: GIModel, geometry: TId|TId[]): TId|TId[] {
     throw new Error("Not implemented."); return null;
@@ -172,12 +164,10 @@ export function Copy(__model__: GIModel, geometry: TId|TId[]): TId|TId[] {
  * @param divisor Length or number of segments.
  * @param method Enum to choose which method.
  * @example segments1 = make.Divide(edge1, 5, number)
- *
- * Creates a list of 5 equal segments from edge1.
+ * @example_info Creates a list of 5 equal segments from edge1.
  *
  * @example segments2 = make.Divide(edge1, 5, length)
- *
- * If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
+ * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
 export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
     throw new Error("Not implemented."); return null;

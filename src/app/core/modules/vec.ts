@@ -11,10 +11,8 @@ import { TId, Txyz } from '@libs/geo-info/common';
  * @param vector Vector or a list of three numbers.
  * @param length Length of the vector to be set.
  * @returns Vector.
- * @example vector1 = vec.SetLength (vector, length)
- * vector1 = vec.SetLength ([2,4,4], 3)
- *
- * vector1 = [1,2,2]
+ * @example vector1 = vec.SetLength ([2,4,4], 3)
+ * @example_info vector1 = [1,2,2]
  */
 export function SetLength(vector: TId|Txyz, length: number): Txyz {
     if (vector === undefined) { throw new Error('Invalid arg: vector must be defined.'); }
@@ -27,10 +25,8 @@ export function SetLength(vector: TId|Txyz, length: number): Txyz {
  * @param __model__
  * @param vector Vector or a list of three numbers.
  * @returns Length of the vector.
- * @example length1 = vec.GetLength (vector)
- * length1 = vec.GetLength ([1,2,2])
- *
- * length1 = 3
+ * @example length1 = vec.GetLength ([1,2,2])
+ * @example_info length1 = 3
  */
 export function GetLength(vector: TId|Txyz): number {
     if (vector === undefined) { throw new Error('Invalid arg: vector must be defined.'); }
@@ -56,7 +52,6 @@ export function Angle(edgeOrVector1: TId|Txyz, edgeOrVector2: Txyz): number {
  * @param vector2 Vector or a list of three numbers.
  * @returns The vector cross product of two vectors.
  * @example vector3 = vec.Cross(vector1, vector2)
- *
  */
 export function Cross(vector1: TId|Txyz, vector2: TId|Txyz): Txyz {
     if (vector1 === undefined) { throw new Error('Invalid arg: vector1 must be defined.'); }
@@ -71,7 +66,6 @@ export function Cross(vector1: TId|Txyz, vector2: TId|Txyz): Txyz {
  * @param vector2 Vector or a list of three numbers.
  * @returns The scalar dot product of two vectors.
  * @example vector3 = vec.Dot(vector1, vector2)
- *
  */
 export function dot(vector1: TId|Txyz, vector2: TId|Txyz): number {
     if (vector1 === undefined) { throw new Error('Invalid arg: vector1 must be defined.'); }

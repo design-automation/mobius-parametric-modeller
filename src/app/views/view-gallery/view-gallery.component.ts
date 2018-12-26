@@ -19,7 +19,7 @@ import * as galleryUrls from '@assets/gallery/__config__.json';
 export class ViewGalleryComponent {
 
     // private allFiles: Observable<any>;
-    private allFiles: any;
+    private allFiles = [];
     @Output() switch = new EventEmitter();
 
     /*
@@ -30,7 +30,7 @@ export class ViewGalleryComponent {
     */
 
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
-        this.allFiles = galleryUrls.names;
+        this.allFiles = [...galleryUrls];
         /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();
@@ -42,8 +42,8 @@ export class ViewGalleryComponent {
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
     }
 
-    loadFile(fileName) {
-        const fl = { 'download_url': galleryUrls.link + fileName};
+    loadFile(fileLink) {
+        const fl = { 'download_url': fileLink};
         const stream = Observable.create(observer => {
             const request = new XMLHttpRequest();
 

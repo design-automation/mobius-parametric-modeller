@@ -1,15 +1,27 @@
-{
-    "names": [
-        "box_with_holes.mob",
-        "draw_point_line_polygon.mob",
-        "geometry_with_attribs.mob",
-        "pig_head.mob",
-        "point_line_polygon_with_attribs.mob",
-        "point_line_polygon.mob",
-        "rubber_toy.mob",
-        "torus_with_holes.mob",
-        "two_polygons_with_holes.mob"
-    ],
+[
+    {
+        "name": "Beginner Examples",
+        "files": [
+            "box_with_holes.mob",
+            "draw_point_line_polygon.mob",
+            "geometry_with_attribs.mob",
+            "pig_head.mob",
+            "point_line_polygon_with_attribs.mob",
+            "point_line_polygon.mob",
+            "rubber_toy.mob",
+            "torus_with_holes.mob",
+            "two_polygons_with_holes.mob"
+        ],
 
-    "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/"
-}
+        "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/beginner/"
+    },
+    {
+        "name": "Test",
+        "files": [
+            "box_with_holes.mob",
+            "pig_head.mob"
+        ],
+        "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/test/"
+    }
+
+]

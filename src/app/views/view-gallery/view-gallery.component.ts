@@ -30,7 +30,7 @@ export class ViewGalleryComponent {
     */
 
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
-        this.allFiles = [...galleryUrls];
+        this.allFiles = [...galleryUrls.data];
         /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();

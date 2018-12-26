@@ -1,4 +1,4 @@
-<h2 title='{{dataService.node.name}}' (click)='openNodeMenu($event)'>{{dataService.node.name}}</h2>
+<h2 title='{{dataService.node.name}}' (click)='openNodeMenu($event)'>{{dataService.node.name}} <span>▾</span></h2>
 
 <div id="nodeMenu">
     <div *ngFor='let nd of dataService.flowchart.nodes; let i = index;'>
@@ -8,31 +8,9 @@
     </div>
 </div>
 
-<div *ngIf="dataService.node.type == ''" >
-    <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
-    <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
-        <ul class='toolset__functions--subset'>
-            <ng-container *ngFor='let fn of searchedFunctions'>
-                <li *ngIf='fn.type=="basic"'
-                class='tooltip'
-                [class.invalid]='checkInvalid(fn.name)'
-                (click)='add(ProcedureTypes[fn.name])'>
-                    {{fn.name}}
-                </li>
-                <li *ngIf='fn.type=="function"'
-                (click)='add_function(fn.data)'>
-                    {{fn.module}}.{{fn.name}}
-                </li>
-                <li *ngIf='fn.type=="imported"'
-                (click)='add_imported_function(fn.data)'>
-                    Imported.{{fn.name}}
-                </li>
+<!--Divider-->
+<div class = "divider"></div>
 
-
-            </ng-container>
-        </ul>
-    </div>
-</div>
 <div class = "toolset--body" (mouseover)='setCurrent()'>
     <ng-container *ngIf="dataService.node.type == ''">          
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
@@ -51,101 +29,156 @@
                 </ng-container>
             </ul>
         </div>
-    
-        <!-- functions from core.modules -->
-        <ng-container *ngFor='let mod of Modules' >
-    
-            <button id='{{mod.module}}' class="accordion" 
-            *ngIf='mod.module.toUpperCase() != "INPUT" && mod.module.toUpperCase() != "OUTPUT"'
-            (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
-            <div class="panel">
-                <ul class='toolset__functions--subset'>
-                    <ng-container *ngFor='let fn of mod.functions'>
-                        <div class='tooltip' *ngIf='fn.name.substring(0,1)!="_"'>
-                            <li 
-                            (click)='add_function(fn)'> 
-                                {{fn.name}} 
-                            </li>
-                            <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
-                                <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
-                                <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
-                                <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                                <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
-                            </span>
-                        </div>
-                    </ng-container>
-                </ul>
-            </div>
-        </ng-container>
-    
-        <!-- imported functions -->
-        <ng-container>
-            <button id='imported' class="accordion" 
-            (click)='toggleAccordion("imported")' >User</button>
-            <div class="panel">
-                <ul class='toolset__functions--subset'>
-                    <li class = 'user--add'>
-                        <button class = 'add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
-                                Import
-                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
-                        </button>
-                    </li>
-
-                    <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
-                        <li (click)='add_imported_function(fn)'> {{fn.name}} 
-                            <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
-                                <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
-                            </button>
-                            <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
-                                <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
-                            </button>
-                        </li>
-                        <span class="tooltiptext">
-                            <p class='funcDesc'>{{fn.doc.description}}</p>
-                            <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                            <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                            <p><span>Returns: </span></p>
-                            <p *ngIf='fn.doc.returns'>{{fn.doc.returns}}</p>
-                        </span>
-                    </div>
-                </ul>
-
-                <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />  
-            </div>
-        </ng-container>
+        
         <!--Divider-->
         <div class = "divider"></div>
-    
-        <button id='globals' class="accordion"  (click)='toggleAccordion("globals")'>Globals</button>
+        <button id='Functions' class="accordion"  (click)='toggleAccordion("Functions")'>Functions
+        </button>
         <div class="panel">
-            <ul class='toolset__functions--subset'>
-                <li *ngFor='let cnst of dataService.flowchart.nodes[0].procedure' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
-                    {{cnst.args[cnst.argCount-2].value}}
-                </li>
-            </ul>
-        </div>
-        <button id='inlineExpr' class="accordion"  (click)='toggleAccordion("inlineExpr")'>Inline Expr</button>
-        <div class="panel">
-            <ul class='toolset__functions--subset'>
-                <li *ngFor='let expr of inlineExpr' (click)='add_inline(expr)'>
-                    {{expr}}
-                </li>
-            </ul>
-        </div>
+            <!--Search Bar-->
+            <div *ngIf="dataService.node.type == ''" >
+                <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
+                <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
+                    <ul class='toolset__functions--subset'>
+                        <ng-container *ngFor='let fn of searchedFunctions'>
+                            <li *ngIf='fn.type=="function"'
+                            (click)='add_function(fn.data)'>
+                                {{fn.module}}.{{fn.name}}
+                            </li>
+                            <li *ngIf='fn.type=="imported"'
+                            (click)='add_imported_function(fn.data)'>
+                                Imported.{{fn.name}}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- functions from core.modules -->
+            <ng-container *ngFor='let mod of Modules' >
+                <button id='{{mod.module}}' class="accordion" 
+                *ngIf='mod.module.toUpperCase() != "INPUT" && mod.module.toUpperCase() != "OUTPUT"'
+                (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
+                        <ng-container *ngFor='let fn of mod.functions'>
+                            <div class='tooltip' *ngIf='fn.name.substring(0,1)!="_"'>
+                                <li 
+                                (click)='add_function(fn)'> 
+                                    {{fn.name}} 
+                                </li>
+                                <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
+                                    <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
+                                    <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
+                                    <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                                    <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
+                                </span>
+                            </div>
+                        </ng-container>
+                        <!--Divider-->
+                        <div class = "divider--in"></div>
+                    </ul>
+                </div>
+            </ng-container>
+            <!-- imported functions -->
+            <ng-container>
+                <button id='imported' class="accordion" 
+                (click)='toggleAccordion("imported")' >User</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
+                        <li class = 'user--add'>
+                            <button class = 'add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
+                                    Import
+                                    <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                            </button>
+                        </li>
 
+                        <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
+                            <li (click)='add_imported_function(fn)'> {{fn.name}} 
+                                <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
+                                    <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
+                                </button>
+                                <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
+                                    <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
+                                </button>
+                            </li>
+                            <span class="tooltiptext">
+                                <p class='funcDesc'>{{fn.doc.description}}</p>
+                                <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+                                <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                                <p><span>Returns: </span></p>
+                                <p *ngIf='fn.doc.returns'>{{fn.doc.returns}}</p>
+                            </span>
+                        </div>
+                    </ul>
 
-        <button id='inlineFunc' class="accordion" (click)='toggleAccordion("inlineFunc")'>Inline Func</button>
+                    <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />  
+                </div>
+            </ng-container>
+        </div>
+        
+        <!--Divider-->
+        <div class = "divider"></div>
+        
+        <button id='Inline' class="accordion"  (click)='toggleAccordion("Inline")'>Inline
+        </button>
         <div class="panel">
-            <ng-container *ngFor='let category of inlineFunc'>
-            <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
+            <!--Search Bar-->
+            <div *ngIf="dataService.node.type == ''" >
+                <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
+                <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
+                    <ul class='toolset__functions--subset'>
+                        <ng-container *ngFor='let fn of searchedFunctions'>
+                            <li *ngIf='fn.type=="function"'
+                            (click)='add_function(fn.data)'>
+                                {{fn.module}}.{{fn.name}}
+                            </li>
+                            <li *ngIf='fn.type=="imported"'
+                            (click)='add_imported_function(fn.data)'>
+                                Imported.{{fn.name}}
+                            </li>
+                        </ng-container>
+                    </ul>
+                </div>
+            </div>
+            <button id='globals' class="accordion"  (click)='toggleAccordion("globals")'>Globals</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)'>
-                        {{funcString}}
+                    <li *ngFor='let cnst of dataService.flowchart.nodes[0].procedure' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
+                        {{cnst.args[cnst.argCount-2].value}}
                     </li>
                 </ul>
+                <!--Divider-->
+                <div class = "divider--in"></div>
             </div>
-            </ng-container>
+
+            <button id='inlineExpr' class="accordion"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
+            <div class="panel">
+                <ul class='toolset__functions--subset'>
+                    <li *ngFor='let expr of inlineExpr' (click)='add_inline(expr)'>
+                        {{expr}}
+                    </li>
+                </ul>
+                <!--Divider-->
+                <div class = "divider--in"></div>
+            </div>
+
+
+            <!-- <button id='inlineFunc' class="accordion" (click)='toggleAccordion("inlineFunc")'>Inline Func</button>
+            <div class="panel"> -->
+                <ng-container *ngFor='let category of inlineFunc'>
+                    <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
+                    <div class="panel">
+                        <ul class='toolset__functions--subset'>
+                            <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)'>
+                                {{funcString}}
+                            </li>
+                        </ul>
+                        <!--Divider-->
+                        <div class = "divider--in"></div>
+                    </div>
+                </ng-container>
+            <!-- </div> -->
         </div>
 
 

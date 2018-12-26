@@ -59,6 +59,7 @@ ul{
     list-style-type: none;
     margin: 0px;
     padding: 0px;
+    background-color: $color5;
     //padding-top: 2px;
     //padding-bottom: 2px;
 
@@ -109,6 +110,7 @@ ul{
     background-color: $color6;
     border-left: 1px solid $color1;
     border-bottom: 1px solid $color1;
+    cursor: pointer;
 
     button{
         display: block;
@@ -136,6 +138,11 @@ ul{
         line-height: $fsize3;
         height: $fsize3;
         font-size: $fsize2;
+        
+        color: $color8;
+        &:hover{
+            color: $selected-color;
+        }
     }
 
 }
@@ -162,7 +169,7 @@ ul{
 
 .panel {
     width: inherit;
-    padding: 0px 10px 0px 0px;
+    padding: 0px;
     display: none;
     background-color: $color5;
     overflow: hidden;
@@ -265,14 +272,21 @@ ul{
     // }
 }
 
-.divider{
-    background-color: $color3;
+.divider, .divider--in{
+    background-color: $color6;
     height: 8px;
+    &:hover{
+        background-color: transparent !important;
+    }
+}
+
+.divider--in{
+    background-color: $color5;
 }
 
 // global variables
 
-#globals{
-    background-color: $color3;
-    font-style: italic;
-}
+// #globals{
+//     background-color: $color3;
+//     font-style: italic;
+// }

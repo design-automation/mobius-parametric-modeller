@@ -4,10 +4,10 @@
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{active.name}}</h3>
+                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{active.name}}<span>▾</span></h3>
                 <div id="galleryMenu">
                     <div *ngFor='let galleryName of allGalleries;'>
-                        <li (click)="switchGallery(galleryName)"> 
+                        <li (click)="switchGallery(galleryName)">
                             {{galleryName}}
                         </li>
                     </div>

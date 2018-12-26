@@ -182,9 +182,9 @@ ul{
 /* Tooltip text */
 .tooltip .tooltiptext {
     //visibility: hidden;
-    //width: 250px;
-    min-width: 50px;
-    max-width: 250px;
+    width: 250px;
+    // min-width: 50px;
+    // max-width: 250px;
 
     background-color: $color4;
     border: 1px solid $color4;

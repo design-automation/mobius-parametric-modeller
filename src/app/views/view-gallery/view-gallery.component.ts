@@ -19,7 +19,8 @@ import * as galleryUrls from '@assets/gallery/__config__.json';
 export class ViewGalleryComponent {
 
     // private allFiles: Observable<any>;
-    private allFiles = [];
+    private allGalleries = [];
+    private active;
     @Output() switch = new EventEmitter();
 
     /*
@@ -30,7 +31,8 @@ export class ViewGalleryComponent {
     */
 
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
-        this.allFiles = [...galleryUrls.data];
+        this.allGalleries = galleryUrls.data.map(gallery => gallery.name);
+        this.active = galleryUrls.data[0];
         /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();
@@ -40,6 +42,27 @@ export class ViewGalleryComponent {
 
     getFilesFromURL(): Observable<any> {
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
+    }
+
+    openGalleryMenu(e: MouseEvent) {
+        const stl = document.getElementById('galleryMenu').style;
+        if (!stl.display || stl.display === 'none') {
+            stl.display = 'block';
+        } else {
+            stl.display = 'none';
+        }
+        e.stopPropagation();
+
+    }
+
+
+    switchGallery(galleryName: string) {
+        for (const gallery of galleryUrls.data) {
+            if (gallery.name === galleryName) {
+                this.active = gallery;
+                return;
+            }
+        }
     }
 
     loadFile(fileLink) {

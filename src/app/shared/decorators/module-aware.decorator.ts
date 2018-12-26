@@ -64,6 +64,23 @@ export function ModuleAware(constructor: Function) {
     constructor.prototype.Modules = module_list;
 }
 
+function analyzeParamType(paramType) {
+    if (paramType.type === 'array') {
+        return `${paramType.elementType.name}[]`;
+    } else if (paramType.type === 'intrinsic' || paramType.type === 'reference') {
+        return paramType.name;
+    } else if (paramType.type === 'union') {
+        return paramType.types.map((tp: any) => analyzeParamType(tp)).join('||');
+    } else {
+        /**
+         * TODO: Update unrecognized param type here
+         */
+        console.log('param type requires updating:', paramType);
+        return paramType.type;
+    }
+
+}
+
 export function ModuleDocAware(constructor: Function) {
     if (!docs) {
         docs = {};
@@ -121,19 +138,7 @@ export function ModuleDocAware(constructor: Function) {
                         if (param.comment) {
                             pr['description'] = param.comment.shortText || param.comment.text;
                         }
-                        if (param.type.type === 'array') {
-                            pr['type'] = `${param.type.elementType.name}[]`;
-                        } else if (param.type.type === 'intrinsic') {
-                            pr['type'] = param.type.name;
-                        } else if (param.type.type === 'reference') {
-                            pr['type'] = param.type.name;
-                        } else {
-                            /**
-                             * TODO: Update param type here
-                             */
-                            console.log('param type requires updating:', param.type);
-                            pr['type'] = param.type.type;
-                        }
+                        pr['type'] = analyzeParamType(param.type);
                         fn['parameters'].push(pr);
                     }
                 }

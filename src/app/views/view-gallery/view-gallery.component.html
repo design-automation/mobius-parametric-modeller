@@ -4,11 +4,20 @@
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <div class = 'content--container' *ngFor="let subSection of allFiles">
-                    <h5>{{subSection.name}}</h5>
+                <div class = 'content--container'>
+                    <h3 (click)='openGalleryMenu($event)'>{{active.name}}</h3>
+                    <div id="galleryMenu">
+                        <div *ngFor='let galleryName of allGalleries;'>
+                            <li (click)="switchGallery(galleryName)"> 
+                                {{galleryName}}
+                            </li>
+                        </div>
+                    </div>
+                        
+
                     <div class="container__element container__element--project-container">
-                        <div class="project-container__project" *ngFor="let f of subSection.files">
-                            <div class="project__content" (click)='loadFile(subSection.link + f)'>
+                        <div class="project-container__project" *ngFor="let f of active.files">
+                            <div class="project__content" (click)='loadFile(active.link + f)'>
                                 <img src ='' alt = 'This is the project image'>
                                 <span class = 'project__title'>{{ f | simplename }}</span>
                             </div>

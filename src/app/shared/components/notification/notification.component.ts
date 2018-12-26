@@ -18,7 +18,6 @@ export class NotificationComponent implements AfterViewInit, OnChanges {
 
     ngAfterViewInit() {
         this.notificationBox = document.getElementById('notificationBox');
-        console.log(this.notificationBox);
     }
 
     ngOnChanges() {

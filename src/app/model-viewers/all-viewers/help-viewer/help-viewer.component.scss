@@ -50,10 +50,14 @@ h2{
         margin: 0px;
         padding-left: $small-padding;
         li{
-            display: flex;
-            flex-flow: row nowrap;
-            span{
-                margin-right: 2px;
+            display: list-item;
+            .li--item{
+                display: flex;
+                flex-flow: row nowrap;
+                padding:0px;
+                span{
+                    margin-right: 2px;
+                }
             }
         }
     }

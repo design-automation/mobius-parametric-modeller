@@ -11,7 +11,11 @@
             <div class = 'param--container'>
                 <h5 *ngIf='output.parameters?.length > 0'><span>Parameters: </span></h5>
                 <ul class='params'>
-                    <li *ngFor='let param of output.parameters'><span>{{param.name}}: </span>{{param.description}}</li>
+                    <li *ngFor='let param of output.parameters'>
+                        <div class = 'li--item'>
+                            <span>{{param.name}}: </span>{{param.description}}
+                        </div>
+                    </li>
                 </ul>
             </div>        
     

@@ -4,22 +4,23 @@
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <div class="container__element container__element--project-container">
-                    <!--
-                    <div class="project-container__project" *ngFor="let f of  (dataService.galleryFiles | async)">
-                        <div class="project__content" (click)='loadFile(f)'>
-                            {{ f.name | simplename }}
+                <div class = 'content--container'>
+                    <div class="container__element container__element--project-container">
+                        <!--
+                        <div class="project-container__project" *ngFor="let f of  (dataService.galleryFiles | async)">
+                            <div class="project__content" (click)='loadFile(f)'>
+                                {{ f.name | simplename }}
+                            </div>
                         </div>
-                    </div>
-
-                    -->
-                    <div class="project-container__project" *ngFor="let f of allFiles">
-                        <div class="project__content" (click)='loadFile(f)'>
-                            {{ f | simplename }}
-                        </div>
-                    </div>
     
-
+                        -->
+                        <div class="project-container__project" *ngFor="let f of allFiles">
+                            <div class="project__content" (click)='loadFile(f)'>
+                                <img src ='' alt = 'This is the project image'>
+                                <span class = 'project__title'>{{ f | simplename }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </as-split-area>

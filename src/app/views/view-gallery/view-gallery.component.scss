@@ -1,50 +1,85 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
-.container__element{
-    padding: 0px 10% 0px 10%;
+$tile-height: 150px;
+$tile-width: 200px;
+$scale-factor: 1.1;
+
+.content__panel{
     margin-top: $header-height;
+    margin-left: 11px; //split bar width
+
+    height: calc(100vh - 40px); //header height
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.content--container{
+    display: inline-block;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    overflow: hidden;
+    overflow-x: auto;
 }
 
 .container__element--project-container{
+    display: flex;
+    flex-flow: row nowrap;
+
+    padding: $small-padding 30px $small-padding 19px;
+
     font-size: $fsize3;
     line-height: 32px;
     font-weight: 300;
-    padding-top: 30px; 
-    padding-bottom: 30px;
 
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    width: fit-content;
+    box-sizing: border-box;
 
-    overflow: auto;
+    transition: 0.4s;
+    &:hover .project__content{
+        opacity: 0.3;
+    }
 }
 
 .project-container__project {
     position: relative;
 
-    width: 25%;
-    height: 150px;
-    min-width: 200px;
+    height: $tile-height;
+    width: $tile-width; //fixed width
+    
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
 
+    transition: 0.4s;
 
     .project__content{
         
         height: 90%;
         width: 90%;
+        
+        transition: 0.4s;
 
         font-size: $fsize2;
         line-height: 24px;
-        color: #000;
+        color: $color8;
         overflow: hidden;
-        border-radius: 4px;
-        vertical-align: middle;
+        
         overflow-wrap: break-word;
         word-wrap: break-word;
         word-break: break-word;
 
-        border: 1px solid #bbb; 
-        border-radius: 2px;
+        border: 1px solid $color1;
+        padding: 0 1px;
+
+        img{
+            height: 100%;
+            width: 100%;
+
+            transition: 0.4s;
+        }
 
         a{
             display: block;
@@ -66,11 +101,15 @@
         }
 
         &:hover{
-            border-color: #222;
+            border: 2px solid $selected-color;
+            opacity: 1;
+            padding: 0px;
+
+            img{
+                transform: scale($scale-factor);
+            }
         }
     }
-
-
 }
 
 

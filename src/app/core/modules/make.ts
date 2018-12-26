@@ -22,9 +22,8 @@ export function Position(__model__: GIModel, coords: Txyz): TId {
  * @param __model__
  * @param position Position of point.
  * @returns New point if successful, null if unsuccessful or on error.
+ * @example_info Creates a point at position1.
  * @example point1 = make.Point(position)
- *
- * Creates a point at position1.
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId {
     for (const position of positions) {
@@ -108,12 +107,9 @@ export function Loft(__model__: GIModel, objects: TId[]  ): TId[] {
  * @param distance Number or vector.
  * @returns Extrusion of geometry.
  * @example extrusion1 = make.Extrude(point1, 10)
- *
- * Creates a line of length 10 in the z-direction.
- *
+ * @example_info Creates a line of length 10 in the z-direction.
  * @example extrusion2 = make.Extrude(polygon1, [0,5,0])
- *
- * Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
+ * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */
 export function Extrude(__model__: GIModel, geometry: TId[], distance: number|Txyz): TId[] {
     throw new Error("Not implemented."); return null;

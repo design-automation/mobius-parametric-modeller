@@ -137,7 +137,6 @@ export function ModuleDocAware(constructor: Function) {
                         fn['parameters'].push(pr);
                     }
                 }
-                console.log(fn);
                 moduleDoc[func.name] = fn;
             }
             docs[modName] = moduleDoc;

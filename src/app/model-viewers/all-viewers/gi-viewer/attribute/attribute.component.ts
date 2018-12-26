@@ -54,6 +54,7 @@ export class AttributeComponent implements OnChanges {
     };
     if (this.data) {
       const attribData = this.data.attribs.threejs.getAttribsForTable(tab_map[tabIndex]);
+      console.log(attribData);
       if (attribData.length > 0) {
         this.displayedColumns = Object.keys(attribData[0]);
         this.dataSource = new MatTableDataSource<object>(attribData);

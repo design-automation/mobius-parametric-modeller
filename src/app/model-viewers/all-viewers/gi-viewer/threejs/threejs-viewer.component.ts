@@ -73,6 +73,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      */
     public render(self) {
         // console.log('CALLING render in THREEJS VIEWER COMPONENT');
+        for (let i = 0; i < this._data_threejs._textLabels.length; i++) {
+            this._data_threejs._textLabels[i].updatePosition();
+        }
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
 
@@ -143,39 +146,111 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    public onDocumentMouseUp(event) {
+    public onUserAction(event) {
+        const scene = this._data_threejs;
+        scene._mouse.x = ( event.offsetX / scene._renderer.domElement.clientWidth ) * 2 - 1;
+        scene._mouse.y = - ( event.offsetY / scene._renderer.domElement.clientHeight ) * 2 + 1;
+        if (scene._selectedEntity.size === 0) {
+            this.selectObj();
+        } else {
+            if (event.shiftKey && event.which === 1) {
+                this.selectObj();
+            }
+        }
+    }
+
+    private selectObj() {
         const scene = this._data_threejs;
         if (scene.sceneObjs.length > 0) {
-            scene._mouse.x = ( event.offsetX / scene._renderer.domElement.clientWidth ) * 2 - 1;
-            scene._mouse.y = - ( event.offsetY / scene._renderer.domElement.clientHeight ) * 2 + 1;
             scene._raycaster.setFromCamera( scene._mouse, scene._camera );
             const intersects = scene._raycaster.intersectObjects(scene.sceneObjs);
             if (intersects.length > 0) {
-                const tri = intersects[0];
-                console.log('interecting', tri.object.uuid);
-
-                const face = this.model.geom.query.navTriToFace(tri.faceIndex);
-                const tris = this.model.geom.query.navFaceToTri(face);
-                const verts = tris.map(tria => this.model.geom.query.navTriToVert(tria));
-                const verts_flat = [].concat(...verts);
-
-                const tri_indices = [];
-                verts_flat.map(vert => tri_indices.push(this.model.geom.query.navVertToPosi(vert)));
-
-                const positions = this.model.attribs.query.getPosiCoords();
-                const posi_flat = [].concat(...positions);
-
-                if (!scene._selecting.has(face)) {
-                    scene.selectObjFace(face, tri_indices, posi_flat);
-                } else {
-                    scene.unselectObj(face);
+                const intersect = intersects[0];
+                // console.log('interecting object', intersect);
+                if (intersect !== undefined) {
+                    if (intersect.object.type === 'Mesh') {
+                        this.selectFace(intersect);
+                    } else if (intersect.object.type === 'LineSegments') {
+                        this.selectLine(intersect);
+                    } else if (intersect.object.type === 'Points') {
+                        this.selectPoint(intersect);
+                    }
                 }
-
-                // console.log(tris);
-                // scene._selectedEntity.set(tri.faceIndex, verts);
-                // console.log(scene._selectedEntity);
+                console.log(scene._selectedEntity);
                 this.render(this);
             }
+        }
+    }
+
+    private selectFace(triangle) {
+        const scene = this._data_threejs;
+        const face = this.model.geom.query.navTriToFace(triangle.faceIndex);
+        const tri = this.model.geom.query.navFaceToTri(face);
+        const verts = tri.map(index => this.model.geom.query.navTriToVert(index));
+        const verts_flat = [].concat(...verts);
+
+        const tri_indices = [];
+        verts_flat.map(vert => tri_indices.push(this.model.geom.query.navVertToPosi(vert)));
+
+        const positions = this.model.attribs.query.getPosiCoords();
+        const posi_flat = [].concat(...positions);
+
+        const selecting = `f${face}`;
+        if (!scene._selecting.has(selecting)) {
+            scene.selectObjFace(selecting, tri_indices, posi_flat);
+            scene._selectedEntity.set(selecting, `${EEntityTypeStr.FACE}${face}`);
+        } else {
+            scene.unselectObj(selecting);
+            scene._selectedEntity.delete(selecting);
+        }
+    }
+
+    private selectLine(line) {
+        const scene = this._data_threejs;
+        const verts = this.model.geom.query.navEdgeToVert(line.index / 2);
+        const positions = verts.map(v => this.model.attribs.query.getVerTxyzByIndex(v));
+        const posi_flat = [].concat(...positions);
+
+        const selecting = `l${line.index / 2}`;
+        if (!scene._selecting.has(selecting)) {
+            scene.selectObjLine(selecting, posi_flat);
+            scene._selectedEntity.set(selecting, `${EEntityTypeStr.EDGE}${line.index / 2}`);
+        } else {
+            scene.unselectObj(selecting);
+            scene._selectedEntity.delete(selecting);
+        }
+    }
+
+    private selectWire(line) {
+        const scene = this._data_threejs;
+        const wire = this.model.geom.query.navEdgeToWire(line.index);
+        const edges = this.model.geom.query.navWireToEdge(wire);
+        console.log('edges edges edges', edges);
+        // const positions = verts.map(v => this.model.attribs.query.getVerTxyzByIndex(v));
+        // const posi_flat = [].concat(...positions);
+
+        // const selecting = `l${line.index / 2}`;
+        // if (!scene._selecting.has(selecting)) {
+        //     scene.selectObjLine(selecting, posi_flat);
+        //     scene._selectedEntity.set(selecting, `${EEntityTypeStr.EDGE}${line.index / 2}`);
+        // } else {
+        //     scene.unselectObj(selecting);
+        //     scene._selectedEntity.delete(selecting);
+        // }
+    }
+
+    private selectPoint(point) {
+        const scene = this._data_threejs;
+        const vert = this.model.geom.query.navPointToVert(point.index);
+        const position = this.model.attribs.query.getPosiCoordByIndex(vert);
+        const selecting = `p${point.index}`;
+        if (!scene._selecting.has(selecting)) {
+            const container = this._elem.nativeElement.children.namedItem('threejs-container');
+            scene.selectObjPoint(selecting, position, container);
+            scene._selectedEntity.set(selecting, `${EEntityTypeStr.VERT}${point.index}`);
+        } else {
+            scene.unselectObj(selecting);
+            scene._selectedEntity.delete(selecting);
         }
     }
 }

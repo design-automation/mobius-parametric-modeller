@@ -47,5 +47,9 @@ export class PanelHeaderComponent {
         if (nodeMenu) {
             document.getElementById('nodeMenu').style.display = 'none';
         }
+        const galleryMenu = document.getElementById('galleryMenu');
+        if (galleryMenu) {
+            document.getElementById('galleryMenu').style.display = 'none';
+        }
     }
 }

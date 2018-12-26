@@ -23,6 +23,9 @@ export class DataService {
     private static _copiedProd: IProcedure[];
     private static _copiedType: IProcedure[];
 
+    private _prevActions = [];
+    private _nextActions = [];
+
     get file() { return DataService._data; }
     set file(data: IMobius) {
         DataService._data = <IMobius>{
@@ -54,5 +57,32 @@ export class DataService {
 
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
+
+
+    registerAction(action) {
+        this._prevActions.push(action);
+        this._nextActions = [];
+        // console.log(action);
+    }
+
+    undo() {
+        if (this._prevActions.length === 0) {
+            return undefined;
+        }
+        const action = this._prevActions.pop();
+        this._nextActions.push(action);
+        return action;
+    }
+
+    redo() {
+        if (this._nextActions.length === 0) {
+            return undefined;
+        }
+        const action = this._nextActions.pop();
+        this._prevActions.push(action);
+        return action;
+    }
+
+
 
 }

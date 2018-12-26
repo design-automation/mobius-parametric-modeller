@@ -7,11 +7,10 @@ import { TId, Txyz } from '@libs/geo-info/common';
  * @param position1 First position.
  * @param position2 Second position.
  * @returns Distance.
- * @example position1 = [1,2,3]
- * position2 = [1,2,34]
- * distance1 = calc.Distance (position1, position2)
- *
- * Expected value of distance is 31.
+ * @example distance1 = calc.Distance (position1, position2)
+ * @example_info position1 = [0,0,0]
+ * @example_info position2 = [0,0,10]
+ * @example_info Expected value of distance is 10.
  */
 export function Distance(__model__: GIModel, position1: TId, position2: TId): number {
     throw new Error("Not impemented."); return null;
@@ -53,8 +52,7 @@ export function Area(__model__: GIModel, surface: TId|TId[]): number {
  * @param geometry List of positions, a wire, a closed polyline, a face, or a polygon.
  * @returns Vector.
  * @example normal1 = calc.Normal (geometry)
- *
- * If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
+ * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
 export function Normal(__model__: GIModel, geometry: TId[]): Txyz {
     throw new Error("Not impemented."); return null;

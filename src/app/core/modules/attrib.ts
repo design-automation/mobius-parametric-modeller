@@ -31,8 +31,7 @@ export function Set(__model__: GIModel, entities: TId|TId[], name: string, value
  * @param to Positions, vertices, edges, wires, faces or collections.
  * @param method Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
  * @returns List of attributes.
- * @example attribpro1 = attrib.Promote (name, from, to, method)
- * attribpro1 = attrib.Promote (colour, positions, faces, sum)
+ * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
  */
 export function Promote(__model__: GIModel, name: string, from: EAttribTypes, to: EAttribTypes, method: EOpPromote): TId[] {
     throw new Error("Not implemented.");
@@ -42,8 +41,7 @@ export function Promote(__model__: GIModel, name: string, from: EAttribTypes, to
  * @param __model__
  * @param query @Attributes #Entities: Position, vertex, edge, wire, face, point, polyline, polygon, collection, or a list.
  * @returns List of id.
- * @example query1 = attrib.Query (query)
- * query1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])
+ * @example query1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])
  */
 export function Query(__model__: GIModel, query: TQuery): TId[] {
     throw new Error("Not impemented."); return null;
@@ -53,8 +51,7 @@ export function Query(__model__: GIModel, query: TQuery): TId[] {
  * @param __model__
  * @param query @Attributes #Entities: Position, vertex, edge, wire, face, point, polyline, polygon, collection, or a list.
  * @returns List of number of entities.
- * @example queryNum1 = attrib.QueryNumber (query)
- * queryNum1 = attrib.QueryNumber (@Colour==Grey, #face, *normal==[0,0,1])
+ * @example queryNum1 = attrib.QueryNumber (@Colour==Grey, #face, *normal==[0,0,1])
  */
 export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
     throw new Error("Not impemented."); return null;
@@ -64,10 +61,8 @@ export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
  * @param __model__
  * @param positions List of one or more positions.
  * @returns List of one or more coordinates.
- * @example coord1 = attrib.GetCoordinates (positions)
- * coord1 = attrib.GetCoordinates ([position1, position2])
- * 
- * Expected result could be [[1,2,3],[4,5,6]].
+ * @example coord1 = attrib.GetCoordinates ([position1, position2])
+ * @example_info Expected result could be [[1,2,3],[4,5,6]].
  */
 export function GeTxyzinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
     throw new Error("Not impemented."); return null;

@@ -9,6 +9,7 @@ import { __merge__ } from './_model';
  * @param object2 Second polyline, plane or polygon.
  * @returns List of positions.
  * @example intersect1 = isect.Intersect (object1, object2)
+ * @example_info Returns a list of positions at the intersections between both objects.
  */
 export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[] {
     throw new Error("Not impemented."); return null;
@@ -20,17 +21,20 @@ export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[]
  * @param plane Knife.
  * @param keep Keep above, keep below, or keep both lists of separated points, polylines or polygons.
  * @returns List, or list of two lists, of points, polylines or polygons.
- * @example knife1 = isect.Knife (objects, plane, keep)
+ * @example knife1 = isect.Knife ([p1,p2,p3,p4,p5], plane1, keepabove)
+ * @example_info Returns [[p1,p2,p3],[p4,p5]] if p1, p2, p3 are points above the plane and p4, p5 are points below the plane.
  */
 export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: EOpKnife): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**
- * Splits a list of polylines or polygons into two lists with a polyline.
+ * Splits a polyline or polygon with a polyline.
  * @param __model__
- * @param objects A list of polylines or polygons.
+ * @param objects A list of polylines or polygons to be split.
  * @param polyline Splitter.
- * @returns List of two lists of polylines or polygons.
+ * @returns List of two lists containing polylines or polygons.
+ * @example splitresult = isect.Split (pl1, pl2)
+ * @example_info Returns [[pl1A],[pl1B]], where pl1A and pl1B are polylines resulting from the split occurring where pl1 and pl2 intersect.
  */
 export function Split(__model__: GIModel, objects1: TId[], objects2: TId[]): TId[] {
     throw new Error("Not implemented."); return null;

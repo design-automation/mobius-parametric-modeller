@@ -7,8 +7,7 @@ import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/common';
  * @param position Existing position.
  * @param xyz List of three coordinates.
  * @example mod.SetPosition(position1, [1,2,3])
- *
- * position1 will have new coordinates = [1,2,3].
+ * @example_info position1 will have new coordinates = [1,2,3].
  */
 export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void {
     throw new Error("Not implemented."); return null;
@@ -19,8 +18,7 @@ export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void 
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param vector Vector or list of three coordinates.
  * @example mod.Move(geometry, vector)
- *
- * Moves geometry by vector.
+ * @example_info Moves geometry by vector.
  */
 export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz): void {
     throw new Error("Not implemented."); return null;
@@ -32,8 +30,7 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz):
  * @param origin Plane to rotate on.
  * @param angle Angle (in radians).
  * @example mod.Rotate(geometry, plane1, pi)
- *
- * Rotates geometry on plane1 by pi (i.e. 180 degrees).
+ * @example_info Rotates geometry on plane1 by pi (i.e. 180 degrees).
  */
 export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
     throw new Error("Not implemented."); return null;
@@ -45,8 +42,7 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
  * @param origin Plane to scale on.
  * @param scale Scale factor.
  * @example mod.Scale(geometry, plane1, 0.5)
- *
- * Scales geometry by 0.5 on plane1.
+ * @example_info Scales geometry by 0.5 on plane1.
  */
 export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, scale: number): void {
     throw new Error("Not implemented."); return null;
@@ -57,8 +53,7 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TI
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param plane Plane to mirror across.
  * @example mod.Mirror(geometry, plane)
- *
- * Mirrors geometry across the plane.
+ * @example_info Mirrors geometry across the plane.
  */
 export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): void {
     throw new Error("Not implemented."); return null;
@@ -70,8 +65,7 @@ export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): 
  * @param from Plane defining target construction plane.
  * @param to Plane defining destination construction plane.
  * @example mod.XForm(geometry, plane1, plane2)
- *
- * Transforms geometry from plane1 to plane2.
+ * @example_info Transforms geometry from plane1 to plane2.
  */
 export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to: TPlane): void {
     throw new Error("Not implemented."); return null;
@@ -82,12 +76,10 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
  * @param objects Vector, plane, polyline, polygon.
  * @returns ?
  * @example mod.Reverse(plane1)
- *
- * Flips plane1.
+ * @example_info Flips plane1.
  *
  * @example mod.Reverse(polyline1)
- *
- * Reverses the order of vertices to reverse the direction of the polyline.
+ * @example_info Reverses the order of vertices to reverse the direction of the polyline.
  */
 export function Reverse(__model__: GIModel, objects: TId[]): void {
     throw new Error("Not implemented."); return null;
@@ -97,8 +89,7 @@ export function Reverse(__model__: GIModel, objects: TId[]): void {
  * @param __model__
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @example mod.Weld([polyline1,polyline2])
- *
- * Welds both polyline1 and polyline2 together.
+ * @example_info Welds both polyline1 and polyline2 together.
  */
 export function Weld(__model__: GIModel, geometry: TId[]): void {
     throw new Error("Not implemented."); return null;
@@ -108,8 +99,7 @@ export function Weld(__model__: GIModel, geometry: TId[]): void {
  * @param __model__
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @example mod.Unweld(polyline1,polyline2)
- *
- * Unwelds polyline1 from polyline2.
+ * @example_info Unwelds polyline1 from polyline2.
  */
 export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
     throw new Error("Not implemented."); return null;
@@ -119,8 +109,7 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
  * @param __model__
  * @param polyline Polyline(s).
  * @example mod.Close([polyline1,polyline2])
- *
- * If open, polylines are changed to closed; if closed, nothing happens.
+ * @example_info If open, polylines are changed to closed; if closed, nothing happens.
  */
 export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): void {
     throw new Error("Not implemented."); return null;
@@ -131,8 +120,7 @@ export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): 
  * @param lines Polyline(s) or wire(s).
  * @returns Boolean or list of boolean in input sequence of lines.
  * @example mod.IsClosed([polyline1,polyline2,polyline3])
- *
- * Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
+ * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     throw new Error("Not implemented."); return null;
@@ -142,8 +130,7 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
  * @param __model__
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @example mod.Delete(geometry)
- *
- * Deletes specified geometry from model.
+ * @example_info Deletes specified geometry from model.
  */
 export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
     throw new Error("Not implemented."); return null;

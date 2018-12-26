@@ -184,7 +184,8 @@ ul{
     //visibility: hidden;
     //width: 250px;
     min-width: 50px;
-    //max-width: 500px;
+    max-width: 250px;
+
     background-color: $color4;
     border: 1px solid $color4;
     color: $color8;
@@ -199,6 +200,8 @@ ul{
 
     p{
         font-family: sans-serif;
+        display: flex;
+        flex-flow: row nowrap;
 
         &.funcDesc{
             font-weight: 600;
@@ -220,6 +223,9 @@ ul{
         }
         span{
             font-style: italic;
+            line-height: $fsize1;
+            white-space: nowrap;
+            margin-right: 2px;
         }
     }
 }

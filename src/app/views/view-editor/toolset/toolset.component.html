@@ -104,7 +104,8 @@
                             <p class='funcDesc'>{{fn.doc.description}}</p>
                             <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
                             <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                            <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>
+                            <p><span>Returns: </span></p>
+                            <p *ngIf='fn.doc.returns'>{{fn.doc.returns}}</p>
                         </span>
                     </div>
                 </ul>

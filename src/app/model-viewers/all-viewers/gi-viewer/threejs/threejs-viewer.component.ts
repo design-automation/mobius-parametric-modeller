@@ -146,11 +146,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    public onDocumentMouseUp(event) {
+    public onUserAction(event) {
+        const scene = this._data_threejs;
+        scene._mouse.x = ( event.offsetX / scene._renderer.domElement.clientWidth ) * 2 - 1;
+        scene._mouse.y = - ( event.offsetY / scene._renderer.domElement.clientHeight ) * 2 + 1;
+        if (scene._selectedEntity.size === 0) {
+            this.selectObj();
+        } else {
+            if (event.shiftKey && event.which === 1) {
+                this.selectObj();
+            }
+        }
+    }
+
+    private selectObj() {
         const scene = this._data_threejs;
         if (scene.sceneObjs.length > 0) {
-            scene._mouse.x = ( event.offsetX / scene._renderer.domElement.clientWidth ) * 2 - 1;
-            scene._mouse.y = - ( event.offsetY / scene._renderer.domElement.clientHeight ) * 2 + 1;
             scene._raycaster.setFromCamera( scene._mouse, scene._camera );
             const intersects = scene._raycaster.intersectObjects(scene.sceneObjs);
             if (intersects.length > 0) {

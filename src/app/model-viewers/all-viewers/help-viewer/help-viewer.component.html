@@ -27,6 +27,16 @@
                 <h5 *ngIf='output.returns'>Returns:</h5>
                 <p *ngIf='output.returns'>{{output.returns}}</p>
             </div>
+
+            <div *ngIf='output.example' class = 'ret--container'>
+                <h5>Examples:</h5>
+                <div *ngFor='let ex of output.example; let i = index;'>
+                    <ul>
+                        <li>{{ex}}</li>
+                        <p *ngIf='output.example_info'>{{output.example_info[i]}}</p>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

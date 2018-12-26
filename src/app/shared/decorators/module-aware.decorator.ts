@@ -80,6 +80,7 @@ export function ModuleDocAware(constructor: Function) {
             }
             const moduleDoc = {};
             for (const func of mod.children) {
+                // console.log(func);
                 const fn = {};
                 fn['name'] = func.name;
                 fn['module'] = modName;
@@ -89,7 +90,15 @@ export function ModuleDocAware(constructor: Function) {
                     fn['description'] = cmmt.shortText;
                     if (cmmt.tags) {
                         for (const fnTag of cmmt.tags) {
-                            if (fnTag.tag === 'summary') { fn['summary'] = fnTag.text; }
+                            if (fnTag.tag === 'summary') { fn['summary'] = fnTag.text;
+                            } else {
+                                if (fn[fnTag.tag]) {
+                                    fn[fnTag.tag].push(fnTag.text);
+                                } else {
+                                    fn[fnTag.tag] = [fnTag.text];
+                                }
+
+                            }
                         }
                     }
                     fn['returns'] = cmmt.returns;
@@ -128,6 +137,7 @@ export function ModuleDocAware(constructor: Function) {
                         fn['parameters'].push(pr);
                     }
                 }
+                console.log(fn);
                 moduleDoc[func.name] = fn;
             }
             docs[modName] = moduleDoc;

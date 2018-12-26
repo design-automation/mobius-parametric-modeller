@@ -19,6 +19,8 @@ export class DataThreejs {
     public _selecting = new Map();
     public _selectedEntity = new Map();
     public _text: string;
+    // text lables
+    public _textLabels: any[];
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
@@ -66,8 +68,9 @@ export class DataThreejs {
 
         // selecting
         this._raycaster = new THREE.Raycaster();
-        this._raycaster.linePrecision = 0.01;
+        this._raycaster.linePrecision = 0.05;
 
+        this._textLabels = [];
         // add geometry to the scene
         if ( this._model) {
             this.addGeometry(this._model);
@@ -82,6 +85,8 @@ export class DataThreejs {
     public addGeometry(model: GIModel): void {
         while ( this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
+            this.sceneObjs = [];
+            this._selectedEntity.clear();
         }
         this._addGrid();
         this._addHemisphereLight();
@@ -97,15 +102,12 @@ export class DataThreejs {
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
     }
 
-    public selectObjFace(faceIndex, triangle_indices, positions) {
-        const posis_buffer = new THREE.Float32BufferAttribute( positions, 3 );
-        const normals_buffer = new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 );
-        const colors_buffer = new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 );
+    public selectObjFace(selecting, triangle_i, positions) {
         const geom = new THREE.BufferGeometry();
-        geom.setIndex( triangle_indices );
-        geom.addAttribute( 'position',  posis_buffer);
-        geom.addAttribute( 'normal', normals_buffer );
-        geom.addAttribute( 'color', colors_buffer);
+        geom.setIndex( triangle_i );
+        geom.addAttribute( 'position',  new THREE.Float32BufferAttribute( positions, 3 ));
+        geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 ) );
+        geom.addAttribute( 'color', new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 ));
         const mat = new THREE.MeshPhongMaterial( {
             // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
             specular: 0x000000,
@@ -119,12 +121,50 @@ export class DataThreejs {
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         this._scene.add( mesh );
-        this._selecting.set(faceIndex, mesh.id);
+        this._selecting.set(selecting, mesh.id);
     }
 
-    public unselectObj(faceIndex) {
-        const removing = this._selecting.get(faceIndex);
-        this._selecting.delete(faceIndex);
+    public selectObjLine(selecting, positions) {
+        const geom = new THREE.BufferGeometry();
+        geom.setIndex( [0, 1] );
+        geom.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
+        geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 ));
+        const mat = new THREE.LineBasicMaterial( {
+            color: 0xff0000,
+            linewidth: 5,
+            linecap: 'round', // ignored by WebGLRenderer
+            linejoin:  'round' // ignored by WebGLRenderer
+        } );
+        const line = new THREE.LineSegments(geom, mat);
+        this._scene.add(line);
+        this._selecting.set(selecting, line.id);
+    }
+
+    public selectObjPoint(selecting, position, container) {
+        const geom = new THREE.BufferGeometry();
+        geom.setIndex( [0] );
+        geom.addAttribute( 'position', new THREE.Float32BufferAttribute( position, 3 ) );
+        geom.addAttribute( 'color', new THREE.Float32BufferAttribute( [255, 0, 0], 3 ) );
+        geom.computeBoundingSphere();
+        const mat = new THREE.PointsMaterial( {
+            size: 1,
+            vertexColors: THREE.VertexColors
+        } );
+        const point = new THREE.Points(geom, mat);
+        this._scene.add(point);
+        this._selecting.set(selecting, point.id);
+
+        const text = this._createTextLabel(container);
+        text.setHTML(selecting);
+        text.setPosition(position);
+        text.setParent(point);
+        this._textLabels.push(text);
+        container.appendChild(text.element);
+    }
+
+    public unselectObj(selecting) {
+        const removing = this._selecting.get(selecting);
+        this._selecting.delete(selecting);
         this._scene.remove(this._scene.getObjectById(removing));
     }
 
@@ -228,7 +268,7 @@ export class DataThreejs {
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial( {
             color: 0x777777,
-            linewidth: 0.1,
+            linewidth: 1,
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer
         } );
@@ -256,6 +296,44 @@ export class DataThreejs {
         this.sceneObjs.push(point);
         this._scene.add(point);
         this._threejs_nums[0] = points_i.length;
+    }
+
+    private _createTextLabel(container) {
+        const div = document.createElement('div');
+        div.className = 'text-label';
+        div.style.position = 'absolute';
+        div.innerHTML = 'hi there!';
+        div.style.top = '-1000';
+        div.style.left = '-1000';
+        const _this = this;
+        return {
+          element: div,
+          parent: false,
+          position: new THREE.Vector3(0, 0, 0),
+          setHTML: function(html) {
+            this.element.innerHTML = html;
+          },
+          setPosition: function(position) {
+            this.position = new THREE.Vector3(...position);
+          },
+          setParent: function(threejsobj) {
+            this.parent = threejsobj;
+          },
+          updatePosition: function() {
+            if (parent) {
+                this.position.copy(this.parent.position.clone().add(this.position));
+            }
+            const coords2d = this.get2DCoords(this.position, _this._camera);
+            this.element.style.left = coords2d.x + 'px';
+            this.element.style.top = coords2d.y + 'px';
+          },
+          get2DCoords: function(position, camera) {
+            const vector = position.project(camera);
+            vector.x = (vector.x + 1) / 2 * container.offsetWidth;
+            vector.y = -(vector.y - 1) / 2 * container.offsetHeight;
+            return vector;
+          }
+        };
     }
 
     private onWindowKeyPress(event) {

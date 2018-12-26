@@ -1,6 +1,7 @@
 @import '~scss/colors';
 @import '~scss/variables';
 @import '../general-viewer.scss';
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
 h2{
     padding-bottom: 6px;
@@ -38,13 +39,14 @@ h2{
     border-top: 1px solid $color1;
 }
 
-.descr--container, .param--container, .ret--container{
+$ln-height: $fsize2 + 3px;
+
+.descr--container, .param--container, .ret--container, .exam--container{
     padding: 0px;
-    margin-bottom: 6px;
+    line-height: $ln-height;
+    margin-bottom: $ln-height/2;
     h5{
-        span{
-            font-style: normal;
-        }
+        margin-bottom: $ln-height/4;
     }
     ul{
         margin: 0px;
@@ -58,6 +60,28 @@ h2{
                 span{
                     margin-right: 2px;
                 }
+            }
+        }
+    }
+}
+
+.exam--container{
+    h5{
+        margin-top: $ln-height/4;
+    }
+    .examp{
+        padding: 0px;
+        p{
+            padding-left: $small-padding;
+        }
+        ul{
+            margin-bottom: 6px;
+            padding: 0px;
+            li{
+                display: flex;
+                border: 1px solid $color1;
+                font-family: 'Ubuntu Mono';
+                padding: 0px 0px 0px 2px;
             }
         }
     }

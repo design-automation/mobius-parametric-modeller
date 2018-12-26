@@ -4,12 +4,12 @@
         <!--<h4>Module: <span>{{output.module}}</span></h4>-->
         <div class = 'body--container'>
             <div class = 'descr--container'>
-                <h5><span>Description:</span></h5>
+                <h5>Description:</h5>
                 <p>{{output.description}}</p>
             </div>
     
             <div class = 'param--container'>
-                <h5 *ngIf='output.parameters?.length > 0'><span>Parameters: </span></h5>
+                <h5 *ngIf='output.parameters?.length > 0'>Parameters:</h5>
                 <ul class='params'>
                     <li *ngFor='let param of output.parameters'>
                         <div class = 'li--item'>
@@ -28,9 +28,9 @@
                 <p *ngIf='output.returns'>{{output.returns}}</p>
             </div>
 
-            <div *ngIf='output.example' class = 'ret--container'>
+            <div *ngIf='output.example' class = 'exam--container'>
                 <h5>Examples:</h5>
-                <div *ngFor='let ex of output.example; let i = index;'>
+                <div *ngFor='let ex of output.example; let i = index;' class = 'examp'>
                     <ul>
                         <li>{{ex}}</li>
                         <p *ngIf='output.example_info'>{{output.example_info[i]}}</p>

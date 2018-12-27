@@ -718,8 +718,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         const bRect = <DOMRect>this.canvas.getBoundingClientRect();
         // set start coords to current view window position
         this.starTxyzs = [
-            event.deltaX - (bRect.left - this.offset[0]),
-            event.deltaY - (bRect.top - this.offset[1])
+            event.clientX - (bRect.left - this.offset[0]),
+            event.clientY - (bRect.top - this.offset[1])
         ];
         // set drag mode to drag view
         this.isDown = 1;
@@ -735,8 +735,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         } else if (this.isDown === 1) {
             event.preventDefault();
             const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-            let x = Number(event.deltaX - this.starTxyzs[0]);
-            let y = Number(event.deltaY - this.starTxyzs[1]);
+            let x = Number(event.clientX - this.starTxyzs[0]);
+            let y = Number(event.clientY - this.starTxyzs[1]);
             const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
             if (x > 0 || bRect.width < boundingDiv.width) {
                 x = 0;

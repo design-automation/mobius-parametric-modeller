@@ -12,13 +12,18 @@
                         -->
                     
                         <!-- svg component -->
+                        <!--
+                        (panstart)='panStart($event)'
+                        (panmove)='handleMouseMove($event)'
+                        (panend)='handleMouseUp($event)'
+                        -->
                         <svg id="svg-canvas" class = "svgCanvas" 
                         [attr.viewBox]="viewbox"
                         (mouseenter)='activateKeyEvent()'
                         (mouseleave)='deactivateKeyEvent($event)'
-                        (panstart)='panStart($event)'
-                        (panmove)='handleMouseMove($event)'
-                        (panend)='handleMouseUp($event)'
+                        (mousedown)='panStart($event)'
+                        (mousemove)='handleMouseMove($event)'
+                        (mouseup)='handleMouseUp($event)'
                         (click)='deselectAll($event)'
                         (wheel)='scale($event)'
                         (dblclick)='addNode($event)'

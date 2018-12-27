@@ -15,7 +15,7 @@
  * @returns Index position or list of index positions containing specified value.
  * @example positions = list.indexOf(list,2,true)
  * @example_info where list = [6,2,2,7]
- * @example_info Expected value of positions is [1,2].
+ * \\n Expected value of positions is [1,2].
  */
 export function indexOf(list: any[], value: any, search_all: boolean = true): number|number[] {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }

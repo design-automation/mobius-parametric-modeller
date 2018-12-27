@@ -47,7 +47,7 @@ export function indexOf(list: any[], value: any, search_all: boolean = true): nu
  * @returns Returns true if value can be found in list, false if value cannot be found.
  * @example exists = list.includes(list,2)
  * @example_info where list = [6,2,2,7]
- * @example_info Expected value of exists is true.
+ * Expected value of exists is true.
  */
 export function includes(list: any[], value: any): boolean {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }

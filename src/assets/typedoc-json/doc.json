@@ -5131,7 +5131,7 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "where list = [6,2,2,7]\n\\\\n Expected value of positions is [1,2].\n"
+										"text": "where list = [6,2,2,7]\n\\r Expected value of positions is [1,2].\n"
 									}
 								]
 							},

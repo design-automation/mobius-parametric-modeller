@@ -4,7 +4,7 @@
 
 /**
  * Searches for a value in an list and returns the index position if found.
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value.
  *
  * Returns -1 if no items in list match specified value.
  *
@@ -15,7 +15,7 @@
  * @returns Index position or list of index positions containing specified value.
  * @example positions = list.indexOf(list,2,true)
  * @example_info where list = [6,2,2,7]
- * @example_info Expected value of positions is [1,2].
+ * Expected value of positions is [1,2].
  */
 export function indexOf(list: any[], value: any, search_all: boolean = true): number|number[] {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -38,7 +38,7 @@ export function indexOf(list: any[], value: any, search_all: boolean = true): nu
 
 /**
  * Searches for a value in an list and returns true if found.
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value.
  *
  * Returns false if no items in list match specified value.
  *
@@ -47,7 +47,7 @@ export function indexOf(list: any[], value: any, search_all: boolean = true): nu
  * @returns Returns true if value can be found in list, false if value cannot be found.
  * @example exists = list.includes(list,2)
  * @example_info where list = [6,2,2,7]
- * @example_info Expected value of exists is true.
+ * Expected value of exists is true.
  */
 export function includes(list: any[], value: any): boolean {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -67,7 +67,7 @@ export function includes(list: any[], value: any): boolean {
  * @returns Number
  * @example sum = list.massAdd(list)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of sum is 6.
+ * Expected value of sum is 6.
  */
 export function massAdd(list: number[]): number {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -82,7 +82,7 @@ export function massAdd(list: number[]): number {
  * @returns New duplicated list.
  * @example copy = list.byCopy(list)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of copy is [1,2,3].
+ * Expected value of copy is [1,2,3].
  */
 export function byCopy(list: any[]): any[] {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -97,8 +97,8 @@ export function byCopy(list: any[]): any[] {
  * @returns Combined list (list1 first, followed by list2).
  * @example newlist = list.concat(list1,list2)
  * @example_info where list1 = [1,2,3]
- * @example_info and list2 = [9,0]
- * @example_info Expected value of newlist is [1,2,3,9,0].
+ * and list2 = [9,0]
+ * Expected value of newlist is [1,2,3,9,0].
  */
 export function byConcat(list1: any[], list2: any[]): any[] {
     if (list1 === undefined) { throw new Error('Invalid arg: list1 must be defined.'); }
@@ -113,7 +113,7 @@ export function byConcat(list1: any[], list2: any[]): any[] {
  * @returns Flattened list.
  * @example flatten = list.flatten(list)
  * @example_info where list = [1,2,3,[4,5]]
- * @example_info Expected value of flatten is [1,2,3,4,5].
+ * Expected value of flatten is [1,2,3,4,5].
  */
 export function byFlatten(list: any[]): any[] {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -133,7 +133,7 @@ export function byFlatten(list: any[]): any[] {
  * @returns A new list.
  * @example result = list.slice(list,1,3)
  * @example_info where list = [1,2,3,4,5]
- * @example_info Expected value of result is [2,3].
+ * Expected value of result is [2,3].
  */
 export function bySlice(list: any[], start: number, end: number): any[] {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -181,7 +181,7 @@ function flattenDeep(list: any[]): any[] {
  * @param item Item to add.
  * @example append = list.append(list,4)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of list is [1,2,3,4].
+ * Expected value of list is [1,2,3,4].
  */
 export function append(list: any[], item: any): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -198,7 +198,7 @@ export function append(list: any[], item: any): void {
  * @param item Item to add.
  * @example append = list.appendFront(list,4)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of list is [4,1,2,3].
+ * Expected value of list is [4,1,2,3].
  */
 export function appendFront(list: any[], item: any): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -214,7 +214,7 @@ export function appendFront(list: any[], item: any): void {
  * @param index Zero-based index number of item to remove.
  * @example remove = list.removeIndex(list,1)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of remove is [1,3].
+ * Expected value of remove is [1,3].
  */
 export function removeIndex(list: any[], index: number): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -225,7 +225,7 @@ export function removeIndex(list: any[], index: number): void {
 
 /**
  * Removes items that match specified value from an list
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value
  *
  * Returns original list if no items in list match specified value.
  *
@@ -235,7 +235,7 @@ export function removeIndex(list: any[], index: number): void {
  *      false.
  * @example remove = list.removeValue(list,2,true)
  * @example_info where list = [1,2,2,3]
- * @example_info Expected value of remove is [1,3].
+ * Expected value of remove is [1,3].
  */
 export function removeValue(list: any[], value: any, remove_all: boolean = true): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -251,7 +251,7 @@ export function removeValue(list: any[], value: any, remove_all: boolean = true)
 
 /**
  * Replaces items that match specified value from an list with a new value
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value
  *
  * Returns original list if no items in list match specified value.
  *
@@ -262,7 +262,7 @@ export function removeValue(list: any[], value: any, remove_all: boolean = true)
  *      false.
  * @example replace = list.replaceValue(list,2,9,true)
  * @example_info where list = [1,2,2,3]
- * @example_info Expected value of replace is [1,9,9,3].
+ * Expected value of replace is [1,9,9,3].
  */
 export function replaceValue(list: any[], value1: any, value2: any, replace_all: boolean = true): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -284,7 +284,7 @@ export function replaceValue(list: any[], value1: any, value2: any, replace_all:
  * @returns New reversed list.
  * @example result = list.reverse(list)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of result is [3,2,1].
+ * Expected value of result is [3,2,1].
  */
 export function reverse(list: any[]): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -294,7 +294,7 @@ export function reverse(list: any[]): void {
 
 /**
  * Sorts an list of strings alphabetically
- * If items are not strings, they are treated as strings.<br/>
+ * If items are not strings, they are treated as strings.
  *
  * Items are sorted according to string Unicode code points (character by character, numbers before upper case
  * alphabets, upper case alphabets before lower case alphabets)
@@ -302,7 +302,7 @@ export function reverse(list: any[]): void {
  * @param list List to sort.
  * @example sort = list.sortAlpha(list)
  * @example_info where list = ["1","2","10","Orange","apple"]
- * @example_info Expected value of list is ["1","10","2","Orange","apple"].
+ * Expected value of list is ["1","10","2","Orange","apple"].
  */
 export function sortAlpha(list: any[]): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -317,7 +317,7 @@ export function sortAlpha(list: any[]): void {
  * @param list List to add to.
  * @example sort = list.sortNum(list)
  * @example_info where list = [56,6,48]
- * @example_info Expected value of list is [6,48,56].
+ * Expected value of list is [6,48,56].
  */
 export function sortNum(list: any[]): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -329,7 +329,7 @@ export function sortNum(list: any[]): void {
  * Adds and/or removes items to/from an list
  *
  * If no items_to_add are specified, then items are only removed.
- * If num_to_remove is 0, then items are only added.<br/>
+ * If num_to_remove is 0, then items are only added.
  *
  * @param list List to splice
  * @param index Zero-based index at which to add/remove items. (Items are added/removed after specified index)
@@ -337,7 +337,7 @@ export function sortNum(list: any[]): void {
  * @param items_to_add list of items to add.
  * @example result = list.splice(list, 1, 3, [2.2, 3.3])
  * @example_info where list = [10, 20, 30, 40, 50]
- * @example_info Expected value of result is [10, 2.2, 3.2, 50].
+ * Expected value of result is [10, 2.2, 3.2, 50].
  */
 export function splice(list: any[], index: number, num_to_remove: number, items_to_add: any[]): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }

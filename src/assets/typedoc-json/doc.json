@@ -12,7 +12,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/Model.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/Model.ts",
 			"children": [
 				{
 					"id": 1079,
@@ -1573,7 +1573,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_mathjs.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/_mathjs.ts",
 			"children": [
 				{
 					"id": 1407,
@@ -1991,7 +1991,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_model.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/_model.ts",
 			"children": [
 				{
 					"id": 1176,
@@ -2262,7 +2262,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts",
 			"children": [
 				{
 					"id": 1447,
@@ -2572,7 +2572,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/attrib.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/attrib.ts",
 			"children": [
 				{
 					"id": 1016,
@@ -2595,7 +2595,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "coord1 = attrib.GetCoordinates (positions)\ncoord1 = attrib.GetCoordinates ([position1, position2])\n\nExpected result could be [[1,2,3],[4,5,6]].\n"
+										"text": "coord1 = attrib.GetCoordinates ([position1, position2])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Expected result could be [[1,2,3],[4,5,6]].\n"
 									}
 								]
 							},
@@ -2665,7 +2669,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/attrib.ts",
-							"line": 72,
+							"line": 67,
 							"character": 28
 						}
 					]
@@ -2795,7 +2799,7 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "attribpro1 = attrib.Promote (name, from, to, method)\nattribpro1 = attrib.Promote (colour, positions, faces, sum)\n"
+										"text": "attribpro1 = attrib.Promote (colour, positions, faces, sum)\n"
 									}
 								]
 							},
@@ -2886,7 +2890,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/attrib.ts",
-							"line": 37,
+							"line": 36,
 							"character": 23
 						}
 					]
@@ -2912,7 +2916,7 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "query1 = attrib.Query (query)\nquery1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])\n"
+										"text": "query1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])\n"
 									}
 								]
 							},
@@ -2959,7 +2963,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/attrib.ts",
-							"line": 48,
+							"line": 46,
 							"character": 21
 						}
 					]
@@ -2985,7 +2989,7 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "queryNum1 = attrib.QueryNumber (query)\nqueryNum1 = attrib.QueryNumber (@Colour==Grey, #face, *normal==[0,0,1])\n"
+										"text": "queryNum1 = attrib.QueryNumber (@Colour==Grey, #face, *normal==[0,0,1])\n"
 									}
 								]
 							},
@@ -3032,7 +3036,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/attrib.ts",
-							"line": 59,
+							"line": 56,
 							"character": 27
 						}
 					]
@@ -3178,7 +3182,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/calc.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/calc.ts",
 			"children": [
 				{
 					"id": 1035,
@@ -3257,7 +3261,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 47,
+							"line": 46,
 							"character": 20
 						}
 					]
@@ -3330,7 +3334,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 69,
+							"line": 67,
 							"character": 24
 						}
 					]
@@ -3356,7 +3360,19 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "position1 = [1,2,3]\nposition2 = [1,2,34]\ndistance1 = calc.Distance (position1, position2)\n\nExpected value of distance is 31.\n"
+										"text": "distance1 = calc.Distance (position1, position2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "position1 = [0,0,0]"
+									},
+									{
+										"tag": "example_info",
+										"text": "position2 = [0,0,10]"
+									},
+									{
+										"tag": "example_info",
+										"text": "Expected value of distance is 10.\n"
 									}
 								]
 							},
@@ -3414,7 +3430,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 16,
+							"line": 15,
 							"character": 24
 						}
 					]
@@ -3496,7 +3512,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 26,
+							"line": 25,
 							"character": 22
 						}
 					]
@@ -3593,7 +3609,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 37,
+							"line": 36,
 							"character": 27
 						}
 					]
@@ -3619,7 +3635,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "normal1 = calc.Normal (geometry)\n\nIf the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.\n"
+										"text": "normal1 = calc.Normal (geometry)"
+									},
+									{
+										"tag": "example_info",
+										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.\n"
 									}
 								]
 							},
@@ -3666,7 +3686,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 59,
+							"line": 57,
 							"character": 22
 						}
 					]
@@ -3775,7 +3795,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 79,
+							"line": 77,
 							"character": 27
 						}
 					]
@@ -3909,7 +3929,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 89,
+							"line": 87,
 							"character": 27
 						}
 					]
@@ -3947,7 +3967,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/index.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/index.ts",
 			"sources": [
 				{
 					"fileName": "app/core/modules/index.ts",
@@ -3964,7 +3984,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/input.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/input.ts",
 			"children": [
 				{
 					"id": 1425,
@@ -4075,7 +4095,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/isect.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/isect.ts",
 			"children": [
 				{
 					"id": 1238,
@@ -4098,7 +4118,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "intersect1 = isect.Intersect (object1, object2)\n"
+										"text": "intersect1 = isect.Intersect (object1, object2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Returns a list of positions at the intersections between both objects.\n"
 									}
 								]
 							},
@@ -4160,7 +4184,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/isect.ts",
-							"line": 13,
+							"line": 14,
 							"character": 25
 						}
 					]
@@ -4186,7 +4210,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "knife1 = isect.Knife (objects, plane, keep)\n"
+										"text": "knife1 = isect.Knife ([p1,p2,p3,p4,p5], plane1, keepabove)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Returns [[p1,p2,p3],[p4,p5]] if p1, p2, p3 are points above the plane and p4, p5 are points below the plane.\n"
 									}
 								]
 							},
@@ -4266,7 +4294,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/isect.ts",
-							"line": 25,
+							"line": 27,
 							"character": 21
 						}
 					]
@@ -4287,8 +4315,18 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Splits a list of polylines or polygons into two lists with a polyline.",
-								"returns": "List of two lists of polylines or polygons.\n"
+								"shortText": "Splits a polyline or polygon with a polyline.",
+								"returns": "List of two lists containing polylines or polygons.",
+								"tags": [
+									{
+										"tag": "example",
+										"text": "splitresult = isect.Split (pl1, pl2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Returns [[pl1A],[pl1B]], where pl1A and pl1B are polylines resulting from the split occurring where pl1 and pl2 intersect.\n"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -4348,7 +4386,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/isect.ts",
-							"line": 35,
+							"line": 39,
 							"character": 21
 						}
 					]
@@ -4381,7 +4419,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/list.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/list.ts",
 			"comment": {
 				"shortText": "list functions that obtain and return information from an input list. Does not modify input list."
 			},
@@ -4406,7 +4444,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3]\nappend = list.append(list,4)\n\nExpected value of list is [1,2,3,4].\n"
+										"text": "append = list.append(list,4)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3]\nExpected value of list is [1,2,3,4].\n"
 									}
 								]
 							},
@@ -4452,7 +4494,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 195,
+							"line": 186,
 							"character": 22
 						}
 					]
@@ -4477,7 +4519,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3]\nappend = list.appendFront(list,4)\n\nExpected value of list is [4,1,2,3].\n"
+										"text": "append = list.appendFront(list,4)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3]\nExpected value of list is [4,1,2,3].\n"
 									}
 								]
 							},
@@ -4523,7 +4569,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 213,
+							"line": 203,
 							"character": 27
 						}
 					]
@@ -4549,7 +4595,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list1 = [1,2,3]\nlist2 = [9,0]\nnewlist = list.concat(list1,list2)\n\nExpected value of newlist is [1,2,3,9,0].\n"
+										"text": "newlist = list.concat(list1,list2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list1 = [1,2,3]\nand list2 = [9,0]\nExpected value of newlist is [1,2,3,9,0].\n"
 									}
 								]
 							},
@@ -4601,7 +4651,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 108,
+							"line": 103,
 							"character": 24
 						}
 					]
@@ -4627,7 +4677,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3]\ncopy = list.byCopy(list)\n\nExpected value of copy is [1,2,3].\n"
+										"text": "copy = list.byCopy(list)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3]\nExpected value of copy is [1,2,3].\n"
 									}
 								]
 							},
@@ -4662,7 +4716,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 91,
+							"line": 87,
 							"character": 22
 						}
 					]
@@ -4688,7 +4742,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3,[4,5]]\nflatten = list.flatten(list)</code>\n\nExpected value of flatten is [1,2,3,4,5].\n"
+										"text": "flatten = list.flatten(list)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3,[4,5]]\nExpected value of flatten is [1,2,3,4,5].\n"
 									}
 								]
 							},
@@ -4723,7 +4781,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 124,
+							"line": 118,
 							"character": 25
 						}
 					]
@@ -4749,7 +4807,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = list.range(0,5)\n\nExpected value of list is [0,1,2,3,4].\n"
+										"text": "list = list.range(0,5)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Expected value of list is [0,1,2,3,4].\n"
 									}
 								]
 							},
@@ -4795,7 +4857,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 163,
+							"line": 155,
 							"character": 23
 						}
 					]
@@ -4821,7 +4883,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3,4,5]\nresult = list.slice(list,1,3)\n\nExpected value of result is [2,3].\n"
+										"text": "result = list.slice(list,1,3)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3,4,5]\nExpected value of result is [2,3].\n"
 									}
 								]
 							},
@@ -4884,7 +4950,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 145,
+							"line": 138,
 							"character": 23
 						}
 					]
@@ -4933,7 +4999,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 176,
+							"line": 168,
 							"character": 20
 						}
 					]
@@ -4954,13 +5020,17 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Searches for a value in an list and returns true if found.\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Searches for a value in an list and returns true if found.\nItems must match both the value and type of specified value.",
 								"text": "Returns false if no items in list match specified value.\n",
 								"returns": "Returns true if value can be found in list, false if value cannot be found.",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [6,2,2,7]\nexists = list.includes(list,2)\n\nExpected value of exists is true.\n"
+										"text": "exists = list.includes(list,2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [6,2,2,7]\nExpected value of exists is true.\n"
 									}
 								]
 							},
@@ -5006,7 +5076,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 54,
+							"line": 52,
 							"character": 24
 						}
 					]
@@ -5027,13 +5097,17 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Searches for a value in an list and returns the index position if found.\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Searches for a value in an list and returns the index position if found.\nItems must match both the value and type of specified value.",
 								"text": "Returns -1 if no items in list match specified value.\n",
 								"returns": "Index position or list of index positions containing specified value.",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [6,2,2,7]\npositions = list.indexOf(list,2,true)\n\nExpected value of positions is [1,2].\n"
+										"text": "positions = list.indexOf(list,2,true)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [6,2,2,7]\nExpected value of positions is [1,2].\n"
 									}
 								]
 							},
@@ -5106,7 +5180,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 21,
+							"line": 20,
 							"character": 23
 						}
 					]
@@ -5132,7 +5206,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3]\nsum = list.massAdd(list)\n\nExpected value of sum is 6.\n"
+										"text": "sum = list.massAdd(list)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3]\nExpected value of sum is 6.\n"
 									}
 								]
 							},
@@ -5164,7 +5242,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 75,
+							"line": 72,
 							"character": 23
 						}
 					]
@@ -5189,7 +5267,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3]\nremove = list.removeIndex(list,1)\n\nExpected value of remove is [1,3].\n"
+										"text": "remove = list.removeIndex(list,1)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3]\nExpected value of remove is [1,3].\n"
 									}
 								]
 							},
@@ -5235,7 +5317,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 230,
+							"line": 219,
 							"character": 27
 						}
 					]
@@ -5256,12 +5338,16 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Removes items that match specified value from an list\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Removes items that match specified value from an list\nItems must match both the value and type of specified value",
 								"text": "Returns original list if no items in list match specified value.\n",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,2,3]\nremove = list.removeValue(list,2,true)\n\nExpected value of remove is [1,3].\n"
+										"text": "remove = list.removeValue(list,2,true)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,2,3]\nExpected value of remove is [1,3].\n"
 									}
 								]
 							},
@@ -5322,7 +5408,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 252,
+							"line": 240,
 							"character": 27
 						}
 					]
@@ -5343,12 +5429,16 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Replaces items that match specified value from an list with a new value\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Replaces items that match specified value from an list with a new value\nItems must match both the value and type of specified value",
 								"text": "Returns original list if no items in list match specified value.\n",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,2,3]\nreplace = list.replaceValue(list,2,9,true)\n\nExpected value of replace is [1,9,9,3].\n"
+										"text": "replace = list.replaceValue(list,2,9,true)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,2,3]\nExpected value of replace is [1,9,9,3].\n"
 									}
 								]
 							},
@@ -5420,7 +5510,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 280,
+							"line": 267,
 							"character": 28
 						}
 					]
@@ -5446,7 +5536,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [1,2,3]\nresult = list.reverse(list)\n\nExpected value of result is [3,2,1].\n"
+										"text": "result = list.reverse(list)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [1,2,3]\nExpected value of result is [3,2,1].\n"
 									}
 								]
 							},
@@ -5478,7 +5572,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 303,
+							"line": 289,
 							"character": 23
 						}
 					]
@@ -5499,12 +5593,16 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Sorts an list of strings alphabetically\nIf items are not strings, they are treated as strings.<br/>",
+								"shortText": "Sorts an list of strings alphabetically\nIf items are not strings, they are treated as strings.",
 								"text": "Items are sorted according to string Unicode code points (character by character, numbers before upper case\nalphabets, upper case alphabets before lower case alphabets)\n",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [\"1\",\"2\",\"10\",\"Orange\",\"apple\"]\nsort = list.sortAlpha(list)\n\nExpected value of list is [\"1\",\"10\",\"2\",\"Orange\",\"apple\"].\n"
+										"text": "sort = list.sortAlpha(list)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [\"1\",\"2\",\"10\",\"Orange\",\"apple\"]\nExpected value of list is [\"1\",\"10\",\"2\",\"Orange\",\"apple\"].\n"
 									}
 								]
 							},
@@ -5536,7 +5634,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 322,
+							"line": 307,
 							"character": 25
 						}
 					]
@@ -5561,7 +5659,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [56,6,48]\nsort = list.sortNum(list)\n\nExpected value of list is [6,48,56].\n"
+										"text": "sort = list.sortNum(list)"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [56,6,48]\nExpected value of list is [6,48,56].\n"
 									}
 								]
 							},
@@ -5593,7 +5695,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 338,
+							"line": 322,
 							"character": 23
 						}
 					]
@@ -5615,11 +5717,15 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds and/or removes items to/from an list",
-								"text": "If no items_to_add are specified, then items are only removed.\nIf num_to_remove is 0, then items are only added.<br/>\n",
+								"text": "If no items_to_add are specified, then items are only removed.\nIf num_to_remove is 0, then items are only added.\n",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "list = [10, 20, 30, 40, 50]\nresult = list.splice(list, 1, 3, [2.2, 3.3])\n\nExpected value of result is [10, 2.2, 3.2, 50].\n"
+										"text": "result = list.splice(list, 1, 3, [2.2, 3.3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "where list = [10, 20, 30, 40, 50]\nExpected value of result is [10, 2.2, 3.2, 50].\n"
 									}
 								]
 							},
@@ -5696,7 +5802,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/list.ts",
-							"line": 359,
+							"line": 342,
 							"character": 22
 						}
 					]
@@ -5744,7 +5850,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/make.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/make.ts",
 			"children": [
 				{
 					"id": 1200,
@@ -5767,7 +5873,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "collection1 = make.Collection([point1,polyine1,polygon1])\n\nCreates a collection containing point1, polyline1, polygon1.\n"
+										"text": "collection1 = make.Collection([point1,polyine1,polygon1])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a collection containing point1, polyline1, polygon1.\n"
 									}
 								]
 							},
@@ -5824,7 +5934,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 70,
+							"line": 67,
 							"character": 26
 						}
 					]
@@ -5850,7 +5960,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "copy1 = make.Copy([position1,polyine1,polygon1])\n\nCreates a list containing a copy of the objects in sequence of input.\n"
+										"text": "copy1 = make.Copy([position1,polyine1,polygon1])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a list containing a copy of the objects in sequence of input.\n"
 									}
 								]
 							},
@@ -5920,7 +6034,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 163,
+							"line": 155,
 							"character": 20
 						}
 					]
@@ -5945,11 +6059,19 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "segments1 = make.Divide(edge1, 5, number)\n\nCreates a list of 5 equal segments from edge1.\n"
+										"text": "segments1 = make.Divide(edge1, 5, number)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a list of 5 equal segments from edge1.\n"
 									},
 									{
 										"tag": "example",
-										"text": "segments2 = make.Divide(edge1, 5, length)\n\nIf edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.\n"
+										"text": "segments2 = make.Divide(edge1, 5, length)"
+									},
+									{
+										"tag": "example_info",
+										"text": "If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.\n"
 									}
 								]
 							},
@@ -6028,7 +6150,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 182,
+							"line": 172,
 							"character": 22
 						}
 					]
@@ -6058,7 +6180,7 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "Creates a line of length 10 in the z-direction."
+										"text": "Creates a line of length 10 in the z-direction.\n"
 									},
 									{
 										"tag": "example",
@@ -6140,7 +6262,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 114,
+							"line": 110,
 							"character": 23
 						}
 					]
@@ -6166,7 +6288,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "joined1 = make.Join([polyline1,polyline2])\n\nCreates a new polyline by joining polyline1 and polyline2.\n"
+										"text": "joined1 = make.Join([polyline1,polyline2])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a new polyline by joining polyline1 and polyline2.\n"
 									}
 								]
 							},
@@ -6213,7 +6339,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 126,
+							"line": 121,
 							"character": 20
 						}
 					]
@@ -6239,7 +6365,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "surface1 = make.Loft([polyline1,polyline2,polyline3])\n\nCreates collection of surfaces lofting between polyline1, polyline2 and polyline3.\n"
+										"text": "surface1 = make.Loft([polyline1,polyline2,polyline3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates collection of surfaces lofting between polyline1, polyline2 and polyline3.\n"
 									}
 								]
 							},
@@ -6289,7 +6419,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 97,
+							"line": 92,
 							"character": 20
 						}
 					]
@@ -6314,11 +6444,19 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "segments1 = make.Divide(edge1, 5, number)\n\nCreates a list of 5 equal segments from edge1.\n"
+										"text": "segments1 = make.Divide(edge1, 5, number)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a list of 5 equal segments from edge1.\n"
 									},
 									{
 										"tag": "example",
-										"text": "segments2 = make.Divide(edge1, 5, length)\n\nIf edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.\n"
+										"text": "segments2 = make.Divide(edge1, 5, length)"
+									},
+									{
+										"tag": "example_info",
+										"text": "If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.\n"
 									}
 								]
 							},
@@ -6391,7 +6529,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 144,
+							"line": 137,
 							"character": 28
 						}
 					]
@@ -6421,7 +6559,11 @@
 									},
 									{
 										"tag": "example",
-										"text": "point1 = make.Point(position)\n"
+										"text": "point1 = make.Point(position)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a point at position1.\n"
 									}
 								]
 							},
@@ -6501,7 +6643,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "polygon1 = make.Polygon([position1,position2,position3])\n\nCreates a polygon with vertices position1, position2, position3 in sequence.\n"
+										"text": "polygon1 = make.Polygon([position1,position2,position3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a polygon with vertices position1, position2, position3 in sequence.\n"
 									}
 								]
 							},
@@ -6558,7 +6704,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 57,
+							"line": 55,
 							"character": 23
 						}
 					]
@@ -6584,7 +6730,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "polyline1 = make.Polyline([position1,position2,position3])\n\nCreates an open polyline with vertices position1, position2, position3 in sequence.\n"
+										"text": "polyline1 = make.Polyline([position1,position2,position3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates an open polyline with vertices position1, position2, position3 in sequence.\n"
 									}
 								]
 							},
@@ -6641,7 +6791,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 44,
+							"line": 43,
 							"character": 24
 						}
 					]
@@ -6667,7 +6817,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "position1 = make.Position([1,2,3])\n\nCreates a position with coordinates x=1, y=2, z=3.\n"
+										"text": "position1 = make.Position([1,2,3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a position with coordinates x=1, y=2, z=3.\n"
 									}
 								]
 							},
@@ -6711,7 +6865,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 15,
+							"line": 14,
 							"character": 24
 						}
 					]
@@ -6805,7 +6959,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 151,
+							"line": 144,
 							"character": 29
 						}
 					]
@@ -6847,7 +7001,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/mod.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/mod.ts",
 			"children": [
 				{
 					"id": 1300,
@@ -6869,7 +7023,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Close([polyline1,polyline2])\n\nIf open, polylines are changed to closed; if closed, nothing happens.\n"
+										"text": "mod.Close([polyline1,polyline2])"
+									},
+									{
+										"tag": "example_info",
+										"text": "If open, polylines are changed to closed; if closed, nothing happens.\n"
 									}
 								]
 							},
@@ -6936,7 +7094,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 125,
+							"line": 114,
 							"character": 21
 						}
 					]
@@ -6961,7 +7119,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Delete(geometry)\n\nDeletes specified geometry from model.\n"
+										"text": "mod.Delete(geometry)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Deletes specified geometry from model.\n"
 									}
 								]
 							},
@@ -7017,7 +7179,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 148,
+							"line": 135,
 							"character": 22
 						}
 					]
@@ -7043,7 +7205,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.IsClosed([polyline1,polyline2,polyline3])\n\nReturns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.\n"
+										"text": "mod.IsClosed([polyline1,polyline2,polyline3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.\n"
 									}
 								]
 							},
@@ -7111,7 +7277,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 137,
+							"line": 125,
 							"character": 24
 						}
 					]
@@ -7136,7 +7302,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Mirror(geometry, plane)\n\nMirrors geometry across the plane.\n"
+										"text": "mod.Mirror(geometry, plane)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Mirrors geometry across the plane.\n"
 									}
 								]
 							},
@@ -7207,7 +7377,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 63,
+							"line": 58,
 							"character": 22
 						}
 					]
@@ -7232,7 +7402,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Move(geometry, vector)\n\nMoves geometry by vector.\n"
+										"text": "mod.Move(geometry, vector)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Moves geometry by vector.\n"
 									}
 								]
 							},
@@ -7313,7 +7487,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 25,
+							"line": 23,
 							"character": 20
 						}
 					]
@@ -7339,11 +7513,19 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Reverse(plane1)\n\nFlips plane1.\n"
+										"text": "mod.Reverse(plane1)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Flips plane1.\n"
 									},
 									{
 										"tag": "example",
-										"text": "mod.Reverse(polyline1)\n\nReverses the order of vertices to reverse the direction of the polyline.\n"
+										"text": "mod.Reverse(polyline1)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Reverses the order of vertices to reverse the direction of the polyline.\n"
 									}
 								]
 							},
@@ -7389,7 +7571,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 92,
+							"line": 84,
 							"character": 23
 						}
 					]
@@ -7414,7 +7596,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Rotate(geometry, plane1, pi)\n\nRotates geometry on plane1 by pi (i.e. 180 degrees).\n"
+										"text": "mod.Rotate(geometry, plane1, pi)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Rotates geometry on plane1 by pi (i.e. 180 degrees).\n"
 									}
 								]
 							},
@@ -7509,7 +7695,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 38,
+							"line": 35,
 							"character": 22
 						}
 					]
@@ -7534,7 +7720,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Scale(geometry, plane1, 0.5)\n\nScales geometry by 0.5 on plane1.\n"
+										"text": "mod.Scale(geometry, plane1, 0.5)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Scales geometry by 0.5 on plane1.\n"
 									}
 								]
 							},
@@ -7629,7 +7819,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 51,
+							"line": 47,
 							"character": 21
 						}
 					]
@@ -7654,7 +7844,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.SetPosition(position1, [1,2,3])\n\nposition1 will have new coordinates = [1,2,3].\n"
+										"text": "mod.SetPosition(position1, [1,2,3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "position1 will have new coordinates = [1,2,3].\n"
 									}
 								]
 							},
@@ -7712,7 +7906,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 13,
+							"line": 12,
 							"character": 27
 						}
 					]
@@ -7737,7 +7931,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Unweld(polyline1,polyline2)\n\nUnwelds polyline1 from polyline2.\n"
+										"text": "mod.Unweld(polyline1,polyline2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Unwelds polyline1 from polyline2.\n"
 									}
 								]
 							},
@@ -7793,7 +7991,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 114,
+							"line": 104,
 							"character": 22
 						}
 					]
@@ -7818,7 +8016,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Weld([polyline1,polyline2])\n\nWelds both polyline1 and polyline2 together.\n"
+										"text": "mod.Weld([polyline1,polyline2])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Welds both polyline1 and polyline2 together.\n"
 									}
 								]
 							},
@@ -7864,7 +8066,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 103,
+							"line": 94,
 							"character": 20
 						}
 					]
@@ -7889,7 +8091,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.XForm(geometry, plane1, plane2)\n\nTransforms geometry from plane1 to plane2.\n"
+										"text": "mod.XForm(geometry, plane1, plane2)"
+									},
+									{
+										"tag": "example_info",
+										"text": "Transforms geometry from plane1 to plane2.\n"
 									}
 								]
 							},
@@ -7975,7 +8181,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/mod.ts",
-							"line": 76,
+							"line": 70,
 							"character": 21
 						}
 					]
@@ -8017,7 +8223,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/output.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/output.ts",
 			"children": [
 				{
 					"id": 1431,
@@ -8117,7 +8323,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/util.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/util.ts",
 			"children": [
 				{
 					"id": 1454,
@@ -8392,7 +8598,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/vec.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/app/core/modules/vec.ts",
 			"children": [
 				{
 					"id": 1321,
@@ -8470,7 +8676,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/vec.ts",
-							"line": 48,
+							"line": 44,
 							"character": 21
 						}
 					]
@@ -8496,7 +8702,7 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "vector3 = vec.Cross(vector1, vector2)\n\n"
+										"text": "vector3 = vec.Cross(vector1, vector2)\n"
 									}
 								]
 							},
@@ -8562,7 +8768,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/vec.ts",
-							"line": 61,
+							"line": 56,
 							"character": 21
 						}
 					]
@@ -8588,7 +8794,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "length1 = vec.GetLength (vector)\nlength1 = vec.GetLength ([1,2,2])\n\nlength1 = 3\n"
+										"text": "length1 = vec.GetLength ([1,2,2])"
+									},
+									{
+										"tag": "example_info",
+										"text": "length1 = 3\n"
 									}
 								]
 							},
@@ -8628,7 +8838,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/vec.ts",
-							"line": 35,
+							"line": 31,
 							"character": 25
 						}
 					]
@@ -8654,7 +8864,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "vector1 = vec.SetLength (vector, length)\nvector1 = vec.SetLength ([2,4,4], 3)\n\nvector1 = [1,2,2]\n"
+										"text": "vector1 = vec.SetLength ([2,4,4], 3)"
+									},
+									{
+										"tag": "example_info",
+										"text": "vector1 = [1,2,2]\n"
 									}
 								]
 							},
@@ -8709,7 +8923,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/vec.ts",
-							"line": 19,
+							"line": 17,
 							"character": 25
 						}
 					]
@@ -8735,7 +8949,7 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "vector3 = vec.Dot(vector1, vector2)\n\n"
+										"text": "vector3 = vec.Dot(vector1, vector2)\n"
 									}
 								]
 							},
@@ -8800,7 +9014,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/vec.ts",
-							"line": 76,
+							"line": 70,
 							"character": 19
 						}
 					]
@@ -8836,7 +9050,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/arr/arr.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/arr/arr.ts",
 			"children": [
 				{
 					"id": 457,
@@ -9494,7 +9708,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/filesys/download.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/filesys/download.ts",
 			"children": [
 				{
 					"id": 1066,
@@ -9584,7 +9798,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/BiMap.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/BiMap.ts",
 			"children": [
 				{
 					"id": 2,
@@ -10452,7 +10666,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribMap.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIAttribMap.ts",
 			"children": [
 				{
 					"id": 45,
@@ -11288,7 +11502,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribs.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIAttribs.ts",
 			"children": [
 				{
 					"id": 674,
@@ -11789,7 +12003,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribsAdd.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIAttribsAdd.ts",
 			"children": [
 				{
 					"id": 500,
@@ -12625,7 +12839,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribsQuery.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIAttribsQuery.ts",
 			"children": [
 				{
 					"id": 585,
@@ -14154,7 +14368,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribsThreejs.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIAttribsThreejs.ts",
 			"children": [
 				{
 					"id": 553,
@@ -14536,7 +14750,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeom.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIGeom.ts",
 			"children": [
 				{
 					"id": 919,
@@ -15434,7 +15648,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeomAdd.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIGeomAdd.ts",
 			"children": [
 				{
 					"id": 692,
@@ -16548,7 +16762,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeomQuery.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIGeomQuery.ts",
 			"children": [
 				{
 					"id": 755,
@@ -18966,7 +19180,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeomThreejs.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIGeomThreejs.ts",
 			"children": [
 				{
 					"id": 902,
@@ -19325,7 +19539,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIModel.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/GIModel.ts",
 			"children": [
 				{
 					"id": 963,
@@ -19849,7 +20063,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/ThreejsJSON.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/ThreejsJSON.ts",
 			"children": [
 				{
 					"id": 955,
@@ -20055,7 +20269,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/common.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/common.ts",
 			"children": [
 				{
 					"id": 186,
@@ -23662,7 +23876,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/export.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/export.ts",
 			"children": [
 				{
 					"id": 1058,
@@ -23738,7 +23952,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/id.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/id.ts",
 			"children": [
 				{
 					"id": 236,
@@ -24367,7 +24581,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/import.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/import.ts",
 			"children": [
 				{
 					"id": 1062,
@@ -24443,7 +24657,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/query.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/geo-info/query.ts",
 			"children": [
 				{
 					"id": 575,
@@ -24673,7 +24887,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/threex/threex.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/threex/threex.ts",
 			"children": [
 				{
 					"id": 276,
@@ -25110,7 +25324,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/triangulate/earcut.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/triangulate/earcut.ts",
 			"children": [
 				{
 					"id": 445,
@@ -27124,7 +27338,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/triangulate/triangulate.ts",
+			"originalName": "C:/Users/user/Desktop/mobius/CODE/mobius-parametric-modeller/src/libs/triangulate/triangulate.ts",
 			"children": [
 				{
 					"id": 493,

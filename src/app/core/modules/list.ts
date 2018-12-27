@@ -4,7 +4,7 @@
 
 /**
  * Searches for a value in an list and returns the index position if found.
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value
  *
  * Returns -1 if no items in list match specified value.
  *
@@ -38,7 +38,7 @@ export function indexOf(list: any[], value: any, search_all: boolean = true): nu
 
 /**
  * Searches for a value in an list and returns true if found.
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value
  *
  * Returns false if no items in list match specified value.
  *
@@ -181,7 +181,7 @@ function flattenDeep(list: any[]): any[] {
  * @param item Item to add.
  * @example append = list.append(list,4)
  * @example_info where list = [1,2,3]
- * @example_info Expected value of list is [1,2,3,4].
+ * Expected value of list is [1,2,3,4].
  */
 export function append(list: any[], item: any): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
@@ -225,7 +225,7 @@ export function removeIndex(list: any[], index: number): void {
 
 /**
  * Removes items that match specified value from an list
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value
  *
  * Returns original list if no items in list match specified value.
  *
@@ -251,7 +251,7 @@ export function removeValue(list: any[], value: any, remove_all: boolean = true)
 
 /**
  * Replaces items that match specified value from an list with a new value
- * Items must match both the value and type of specified value<br/>
+ * Items must match both the value and type of specified value
  *
  * Returns original list if no items in list match specified value.
  *
@@ -294,7 +294,7 @@ export function reverse(list: any[]): void {
 
 /**
  * Sorts an list of strings alphabetically
- * If items are not strings, they are treated as strings.<br/>
+ * If items are not strings, they are treated as strings.
  *
  * Items are sorted according to string Unicode code points (character by character, numbers before upper case
  * alphabets, upper case alphabets before lower case alphabets)
@@ -329,7 +329,7 @@ export function sortNum(list: any[]): void {
  * Adds and/or removes items to/from an list
  *
  * If no items_to_add are specified, then items are only removed.
- * If num_to_remove is 0, then items are only added.<br/>
+ * If num_to_remove is 0, then items are only added.
  *
  * @param list List to splice
  * @param index Zero-based index at which to add/remove items. (Items are added/removed after specified index)

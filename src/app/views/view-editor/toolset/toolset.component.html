@@ -32,7 +32,7 @@
         
         <!--Divider-->
         <div class = "divider"></div>
-        <button id='Functions' class="accordion"  (click)='toggleAccordion("Functions")'>Functions
+        <button id='Functions' class="accordion"  (click)='toggleAccordionHead("Functions")'>Functions
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container' *ngIf="dataService.node.type == ''" >
@@ -120,7 +120,7 @@
         <!--Divider-->
         <div class = "divider"></div>
         
-        <button id='Inline' class="accordion"  (click)='toggleAccordion("Inline")'>Inline
+        <button id='Inline' class="accordion"  (click)='toggleAccordionHead("Inline")'>Inline
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container' *ngIf="dataService.node.type == ''" >

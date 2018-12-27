@@ -1,5 +1,8 @@
 <div class='container'>
-    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+    <as-split #flowchartSplit
+    direction="horizontal" 
+    (dragStart)='dragSplitStart($event)'
+    (dragEnd)='dragSplitEnd($event)'>
         <as-split-area [size]="100 - dataService.splitVal">
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
@@ -13,9 +16,9 @@
                         [attr.viewBox]="viewbox"
                         (mouseenter)='activateKeyEvent()'
                         (mouseleave)='deactivateKeyEvent($event)'
-                        (mousedown)='panStart($event)'
-                        (mousemove)='handleMouseMove($event)'  
-                        (mouseup)='handleMouseUp($event)'
+                        (panstart)='panStart($event)'
+                        (panmove)='handleMouseMove($event)'
+                        (panend)='handleMouseUp($event)'
                         (click)='deselectAll($event)'
                         (wheel)='scale($event)'
                         (dblclick)='addNode($event)'

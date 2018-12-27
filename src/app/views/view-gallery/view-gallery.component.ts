@@ -66,11 +66,10 @@ export class ViewGalleryComponent {
     }
 
     loadFile(fileLink) {
-        const fl = { 'download_url': fileLink};
         const stream = Observable.create(observer => {
             const request = new XMLHttpRequest();
 
-            request.open('GET', fl.download_url);
+            request.open('GET', fileLink + '.mob');
             request.onload = () => {
                 if (request.status === 200) {
                     const f = circularJSON.parse(request.responseText);

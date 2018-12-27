@@ -16,7 +16,7 @@
                     <div class="container__element container__element--project-container">
                         <div class="project-container__project" *ngFor="let f of active.files">
                             <div class="tile--contents" (click)='loadFile(active.link + f)'>
-                                <img src ='{{active.link + f + ".jpg"}}' alt = 'project image'>
+                                <img src ='{{active.link+"imgs/"+f+".JPG"}}' alt = 'project image'>
                             </div>
                             <span class = 'project__title'>{{ f | simplename }}</span>
                         </div>

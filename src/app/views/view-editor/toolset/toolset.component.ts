@@ -34,6 +34,7 @@ export class ToolsetComponent {
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedFunctions = [];
+    searchedInlines = [];
     focusedInput: any;
 
     inlineExpr = inline_expr;
@@ -209,7 +210,7 @@ export class ToolsetComponent {
         acc.classList.toggle('active');
         let panel = <HTMLElement>acc.nextElementSibling;
         if (panel.className !== 'panel') {
-            panel = panel.nextElementSibling;
+            panel = <HTMLElement>panel.nextElementSibling;
         }
         if (panel.style.display === 'block') {
             panel.style.display = 'none';
@@ -357,5 +358,36 @@ export class ToolsetComponent {
                 });
             }
         }
+    }
+
+    searchInline(event) {
+        const str = event.target.value.toLowerCase();
+        this.searchedInlines = [];
+        if (str.length === 0) {
+            return;
+        }
+        for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
+            if (this.searchedInlines.length >= 10) { break; }
+            const cnstString = cnst.args[cnst.argCount - 2].value;
+            if (cnstString.toLowerCase().indexOf(str) !== -1) {
+                this.searchedInlines.push(cnstString);
+            }
+        }
+        for (const expr of this.inlineExpr) {
+            if (this.searchedInlines.length >= 10) { break; }
+            if (expr.toLowerCase().indexOf(str) !== -1) {
+                this.searchedInlines.push(expr);
+            }
+        }
+        for (const category of this.inlineFunc) {
+            for (const funcString of category[1]) {
+                if (this.searchedInlines.length >= 10) { break; }
+                if (funcString.toLowerCase().indexOf(str) !== -1) {
+                    this.searchedInlines.push(funcString);
+                }
+            }
+            if (this.searchedInlines.length >= 10) { break; }
+        }
+
     }
 }

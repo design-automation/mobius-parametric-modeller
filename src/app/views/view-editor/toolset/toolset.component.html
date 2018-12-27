@@ -36,7 +36,7 @@
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container' *ngIf="dataService.node.type == ''" >
-            <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
+            <input id='searchbarFunction' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
                 <ul class='toolset__functions--subset'>
                     <ng-container *ngFor='let fn of searchedFunctions'>
@@ -124,17 +124,12 @@
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container' *ngIf="dataService.node.type == ''" >
-            <input id='searchbar' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
-            <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
+            <input id='searchbarInline' class='searchBar' placeholder='Search' (keyup)='searchInline($event)'/>
+            <div class="panel" [class.opened] = 'true' *ngIf='searchedInlines.length > 0'>
                 <ul class='toolset__functions--subset'>
-                    <ng-container *ngFor='let fn of searchedFunctions'>
-                        <li *ngIf='fn.type=="function"'
-                        (click)='add_function(fn.data)'>
-                            {{fn.module}}.{{fn.name}}
-                        </li>
-                        <li *ngIf='fn.type=="imported"'
-                        (click)='add_imported_function(fn.data)'>
-                            Imported.{{fn.name}}
+                    <ng-container *ngFor='let fnString of searchedInlines'>
+                        <li (click)='add_inline(fnString)'>
+                            {{fnString}}
                         </li>
                     </ng-container>
                 </ul>

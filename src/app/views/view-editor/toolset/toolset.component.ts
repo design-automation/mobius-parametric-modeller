@@ -192,7 +192,10 @@ export class ToolsetComponent {
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
         acc.classList.toggle('active');
-        const panel = <HTMLElement>acc.nextElementSibling;
+        let panel = <HTMLElement>acc.nextElementSibling;
+        if (panel.className !== 'panel') {
+            panel = panel.nextElementSibling;
+        }
         if (panel.style.display === 'block') {
             panel.style.display = 'none';
         } else {

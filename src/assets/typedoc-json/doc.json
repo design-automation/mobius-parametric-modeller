@@ -4448,11 +4448,7 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "where list = [1,2,3]"
-									},
-									{
-										"tag": "example_info",
-										"text": "Expected value of list is [1,2,3,4].\n"
+										"text": "where list = [1,2,3]\nExpected value of list is [1,2,3,4].\n"
 									}
 								]
 							},
@@ -5048,7 +5044,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Searches for a value in an list and returns true if found.\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Searches for a value in an list and returns true if found.\nItems must match both the value and type of specified value.",
 								"text": "Returns false if no items in list match specified value.\n",
 								"returns": "Returns true if value can be found in list, false if value cannot be found.",
 								"tags": [
@@ -5058,11 +5054,7 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "where list = [6,2,2,7]"
-									},
-									{
-										"tag": "example_info",
-										"text": "Expected value of exists is true.\n"
+										"text": "where list = [6,2,2,7]\nExpected value of exists is true.\n"
 									}
 								]
 							},
@@ -5129,7 +5121,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Searches for a value in an list and returns the index position if found.\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Searches for a value in an list and returns the index position if found.\nItems must match both the value and type of specified value.",
 								"text": "Returns -1 if no items in list match specified value.\n",
 								"returns": "Index position or list of index positions containing specified value.",
 								"tags": [
@@ -5382,7 +5374,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Removes items that match specified value from an list\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Removes items that match specified value from an list\nItems must match both the value and type of specified value",
 								"text": "Returns original list if no items in list match specified value.\n",
 								"tags": [
 									{
@@ -5477,7 +5469,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Replaces items that match specified value from an list with a new value\nItems must match both the value and type of specified value<br/>",
+								"shortText": "Replaces items that match specified value from an list with a new value\nItems must match both the value and type of specified value",
 								"text": "Returns original list if no items in list match specified value.\n",
 								"tags": [
 									{
@@ -5649,7 +5641,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Sorts an list of strings alphabetically\nIf items are not strings, they are treated as strings.<br/>",
+								"shortText": "Sorts an list of strings alphabetically\nIf items are not strings, they are treated as strings.",
 								"text": "Items are sorted according to string Unicode code points (character by character, numbers before upper case\nalphabets, upper case alphabets before lower case alphabets)\n",
 								"tags": [
 									{
@@ -5781,7 +5773,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds and/or removes items to/from an list",
-								"text": "If no items_to_add are specified, then items are only removed.\nIf num_to_remove is 0, then items are only added.<br/>\n",
+								"text": "If no items_to_add are specified, then items are only removed.\nIf num_to_remove is 0, then items are only added.\n",
 								"tags": [
 									{
 										"tag": "example",

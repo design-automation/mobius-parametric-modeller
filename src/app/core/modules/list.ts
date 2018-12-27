@@ -4,7 +4,7 @@
 
 /**
  * Searches for a value in an list and returns the index position if found.
- * Items must match both the value and type of specified value
+ * Items must match both the value and type of specified value.
  *
  * Returns -1 if no items in list match specified value.
  *
@@ -38,7 +38,7 @@ export function indexOf(list: any[], value: any, search_all: boolean = true): nu
 
 /**
  * Searches for a value in an list and returns true if found.
- * Items must match both the value and type of specified value
+ * Items must match both the value and type of specified value.
  *
  * Returns false if no items in list match specified value.
  *

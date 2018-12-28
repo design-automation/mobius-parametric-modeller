@@ -2,6 +2,7 @@
     [class.selected]="data.selected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'>
     <div class='container--item' >

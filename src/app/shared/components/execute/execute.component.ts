@@ -203,14 +203,7 @@ export class ExecuteComponent {
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
                 error = new Error('Unable to read file input. Check all start node inputs.');
             } else {
-                console.log('=======================================');
-                console.log(error.name.toUpperCase());
-                console.log('=======================================');
-                console.log(error.message);
-                console.log('---------------\nError node code:');
-                console.log(fnString);
-                throw(ex)
-                error = new Error(ex);
+                error = new Error(ex.message);
             }
             document.getElementById('Console').click();
             // @ts-ignore

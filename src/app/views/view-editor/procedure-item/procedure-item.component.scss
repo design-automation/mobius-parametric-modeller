@@ -49,6 +49,10 @@
         border: 1px solid red;
     }
 
+    &.printing{
+        background-color: blue;
+    }
+
 
     .input--var{
         font-size: $fsize2;

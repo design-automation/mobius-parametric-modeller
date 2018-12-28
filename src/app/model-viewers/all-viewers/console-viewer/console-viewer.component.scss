@@ -1,18 +1,28 @@
 @import '~scss/colors';
 @import '~scss/variables';
 @import '../general-viewer.scss';
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+
+.console-container {
+    margin-top: 40px;
+    height: calc(100vh - 40px); //$header-height
+    width: 100%;
+    padding: 0px;
+}
 
 textarea {
-    margin-top: 40px;
-    padding: 10px;
     height: 100%;
-    width: 100%;
+    width: 99%;
+    padding: 0px 10px;
     overflow: auto;
     resize: none;
-    font-family: sans-serif;
+    font-family: 'Ubuntu Mono';
+    font-size: $fsize2;
+    line-height: $fsize1;
     background-color: transparent;
     color: $color1;
     border: none;
     overflow-x: hidden;
     overflow-y: auto;
+    box-sizing: border-box;
 }

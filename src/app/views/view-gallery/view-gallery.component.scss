@@ -19,6 +19,7 @@ $scale-factor: 1.1;
 
     box-sizing: border-box;
     width: 100%;
+    margin-left: -11px;
 
     height: calc(100vh - 70px); //header height; $fsize1 tab menu height
     overflow: hidden;
@@ -29,7 +30,7 @@ $scale-factor: 1.1;
     display: flex;
     flex-flow: row wrap;
 
-    padding: $small-padding 30px $small-padding 19px;
+    padding: $small-padding 19px $small-padding 30px;
 
     font-size: $fsize3;
     line-height: 32px;

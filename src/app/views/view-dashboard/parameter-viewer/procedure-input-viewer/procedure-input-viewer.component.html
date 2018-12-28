@@ -14,7 +14,7 @@
                     placeholder='prod.args[prod.argCount-1].default'
                     [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)' disabled>-->
                     <input [(ngModel)]='prod.args[prod.argCount-1].value' 
-                    placeholder='prod.args[prod.argCount-1].default'
+                    placeholder='{{prod.args[prod.argCount-1].default}}'
                     [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)'>
                     <mat-slider
                         [(ngModel)]='prod.args[prod.argCount-1].value'
@@ -30,7 +30,7 @@
     
                 <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
                     <input id = 'chbox_{{prod.ID}}' *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].value' type="checkbox">
-                    <label for = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default'></label>
+                    <label for = 'chbox_{{prod.ID}}'></label>
                 </div>
                 
                 <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='{{prod.args[prod.argCount-1].default}}' 

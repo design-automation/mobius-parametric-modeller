@@ -20,7 +20,7 @@
         <div class="panel">
             <ul class='toolset__basic'>
                 <ng-container *ngFor="let type of ProcedureTypesArr">
-                    <li *ngIf='checkBasicFunc(type)'
+                    <li *ngIf="8 > ProcedureTypes[type]"
                     class='tooltip'
                     [class.invalid]='checkInvalid(type)'
                     (click)='add(ProcedureTypes[type])'> 
@@ -183,7 +183,12 @@
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "CONSTANT"'>
                     <ul class='toolset__functions--subset'>
-                        <li (click)='add(ProcedureTypes[type])'> Global Var </li>
+                        <li (click)='add(ProcedureTypes[type], 5)'> Constant </li>
+                        <li (click)='add(ProcedureTypes[type], 0)'> Simple Input </li>
+                        <li (click)='add(ProcedureTypes[type], 1)'> Slider </li>
+                        <li (click)='add(ProcedureTypes[type], 2)'> Checkbox </li>
+                        <li (click)='add(ProcedureTypes[type], 3)'> URL </li>
+                        <li (click)='add(ProcedureTypes[type], 4)'> File </li>
                     </ul>
                 </div>
                 <div *ngIf='type.toUpperCase() == "ADDDATA"'>

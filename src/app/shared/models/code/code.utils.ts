@@ -23,9 +23,6 @@ export class CodeUtils {
 
         switch ( prod.type ) {
             case ProcedureTypes.Variable:
-                if (args[0].value.indexOf('__params__') !== -1 || args[1].value.indexOf('__params__') !== -1) {
-                    throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
                 if (prefix === 'let ') {
                     existingVars.push(args[0].value);

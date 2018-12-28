@@ -7,11 +7,14 @@ export enum ProcedureTypes {
     While,
     Break,
     Continue,
+
     Function,
     Imported,
+
     Constant,
     Return,
+
     AddData,
-    Blank
+    Blank,
 }
 

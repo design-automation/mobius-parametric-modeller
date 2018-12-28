@@ -4,10 +4,14 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
 import { ViewDashboardRoutingModule } from './view-dashboard-routing.module';
 import { ViewDashboardComponent } from './view-dashboard.component';
+import { ParameterViewerComponent } from './parameter-viewer/parameter-viewer.component';
+import { ProcedureInputViewerComponent } from './parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 
 @NgModule({
   declarations: [
-    ViewDashboardComponent
+    ViewDashboardComponent,
+    ParameterViewerComponent,
+    ProcedureInputViewerComponent
   ],
   exports: [
     ViewDashboardComponent

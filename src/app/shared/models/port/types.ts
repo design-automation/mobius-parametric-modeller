@@ -8,7 +8,8 @@ export enum InputType {
     Slider,
     Checkbox,
     URL,
-    File
+    File,
+    Constant
 }
 
 export enum OutputType {

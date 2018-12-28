@@ -173,7 +173,7 @@ export abstract class NodeUtils {
             hasError: false}
         ];
     }
-    static add_procedure(node: INode, type: ProcedureTypes, data: IFunction ) {
+    static add_procedure(node: INode, type: ProcedureTypes, data: any) {
         const prod: IProcedure = <IProcedure>{};
         prod.type = type;
 
@@ -225,7 +225,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.Constant:
                 prod.argCount = 2;
-                prod.meta = { module: 'Input', name: 'Constant', inputMode: InputType.SimpleInput, description: undefined};
+                prod.meta = { module: 'Input', name: 'Constant', inputMode: data, description: undefined};
                 prod.args = [
                 {name: 'const_name', value: undefined, default: 0},
                 {name: '__input__', value: undefined, default: 0} ];

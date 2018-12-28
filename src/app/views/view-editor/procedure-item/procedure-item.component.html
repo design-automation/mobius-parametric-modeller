@@ -17,7 +17,7 @@
                     <mat-icon class='icon'>tv_off</mat-icon>
                 </button>
                 <!-- Print button-->
-                <button *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
+                <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
                     <mat-icon class='icon'>print</mat-icon>
                 </button>
                 <!-- help button-->

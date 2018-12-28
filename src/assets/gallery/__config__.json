@@ -4,7 +4,6 @@
             "name": "Getting Started",
             "files": [
                 "box_with_holes",
-                "draw_point_line_polygon",
                 "geometry_with_attribs",
                 "pig_head",
                 "point_line_polygon_with_attribs",

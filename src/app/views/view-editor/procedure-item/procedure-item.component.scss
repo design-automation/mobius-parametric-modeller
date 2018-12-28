@@ -66,6 +66,7 @@
                 display: flex;
                 justify-content: center;
                 color: $print-color;
+                background-color: $color6;
                 &:hover{
                     color: $selected-color;
                 }
@@ -73,6 +74,12 @@
         }
         &.selected{
             border-bottom: 2px solid $selected-color;
+        }
+        &:hover .btns{
+            background-color: $color5;
+            #print-btn{
+                background-color: $color5;
+            }
         }
     }
 
@@ -194,7 +201,7 @@
 .icon{
     vertical-align: center;
     width: $fsize1;
-    height: $fsize1;
+    height: $fsize1 + 2px;
     margin: 1px;
     font-size: $fsize2;
     // border: 1px solid $color1;

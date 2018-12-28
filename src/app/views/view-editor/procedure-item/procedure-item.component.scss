@@ -34,6 +34,10 @@
         opacity: 0.5;
     }
 
+    &.disabled .input--var, &.disabled .input--arg{
+        border: 2px solid $color5 !important;
+    }
+
     &.selected{
         border-bottom: 2px solid $selected-color;
         border-left: 2px solid $selected-color;
@@ -47,8 +51,14 @@
         // }
     }
     
-    &.error{
-        border: 1px solid $error-color;
+    &.error:not(.disabled){
+        border-bottom: 2px solid $error-color;
+        border-left: 2px solid $error-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
     }
 
     &.printing:not(.disabled){
@@ -87,14 +97,13 @@
         font-size: $fsize2;
         width: 70px;
         background-color: $color6; 
-        border: none;
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
         border: 2px solid $color5;
         padding-left: 2px;
 
         &.error{
-            border: 2px solid red;
+            border: 2px solid $error-color;
         }
     }
     
@@ -104,14 +113,13 @@
         min-width: 10px;
         //max-width: 300px;
         background-color: $color6; 
-        border: none;
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
         border: 2px solid $color5;
         padding-left: 2px;
 
         &.error{
-            border: 2px solid red;
+            border: 2px solid $error-color;
         }
     }
     input:focus{
@@ -211,9 +219,6 @@
     color: $color1;
     display: inline-block;
     padding-right: 60px;
-    input{
-        background-color: red;
-    }
 }
 
 .line--blank{

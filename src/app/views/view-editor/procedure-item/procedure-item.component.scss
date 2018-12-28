@@ -10,6 +10,7 @@
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
     padding: 0px;
+    padding-bottom: 1px;
     padding-left: 2px;
     //border-bottom: 1px solid red;
     border-bottom: 1px solid $color2;
@@ -36,7 +37,8 @@
     &.selected{
         border-bottom: 2px solid $selected-color;
         border-left: 2px solid $selected-color;
-
+        padding-bottom: 0px;
+        padding-left: 1px;
         // &:hover > .btn-container {
         //     .btns{
         //         border-bottom: 2px solid $selected-color;
@@ -46,13 +48,33 @@
     }
     
     &.error{
-        border: 1px solid red;
+        border: 1px solid $error-color;
+    }
+
+    &.printing:not(.disabled){
+        border-bottom: 2px solid $print-color;
+        border-left: 2px solid $print-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
     }
 
     &.printing{
-        background-color: blue;
+        .btns{
+            display: inline-flex;
+            background-color: transparent;
+            #print-btn{
+                display: flex;
+                justify-content: center;
+                color: $print-color;
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
     }
-
 
     .input--var{
         font-size: $fsize2;
@@ -117,6 +139,10 @@
 .container--item:hover > .btn-container{//.container--line
     .btns{
         display: inline-flex;
+        .btn{
+            display: flex;
+            justify-content: center;
+        }
     }
 }
 
@@ -153,8 +179,7 @@
     border: none;
     color: $button-color;
 
-    display: flex;
-    justify-content: center;
+    display: none;
 
     overflow: hidden;
     vertical-align: center;

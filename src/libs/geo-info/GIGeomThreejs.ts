@@ -1,6 +1,6 @@
-import { GIGeom } from "./GIGeom";
-import { IGeomArrays } from "./common";
-import { GIAttribs } from "./GIAttribs";
+import { GIGeom } from './GIGeom';
+import { IGeomArrays } from './common';
+import { GIAttribs } from './GIAttribs';
 
 /**
  * Class for geometry.
@@ -8,15 +8,14 @@ import { GIAttribs } from "./GIAttribs";
 export class GIGeomThreejs {
     private _geom: GIGeom;
     private _geom_arrays: IGeomArrays;
-    private _attribs: GIAttribs;
     /**
      * Creates an object to store the geometry data.
-     * @param geom_data The JSON data
+     * @param geom The GIGeom obect
+     * @param geom_arrays The geometry arrays
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
         this._geom_arrays = geom_arrays;
-        this._attribs = geom.model.attribs;
     }
     // ============================================================================
     // ThreeJS

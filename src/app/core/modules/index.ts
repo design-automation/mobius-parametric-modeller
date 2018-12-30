@@ -1,7 +1,10 @@
 // functions used by mobius
 
-import * as Model from './Model';
-export {Model};
+// import * as Model from './Model';
+// export {Model};
+
+import * as _model from './_model';
+export {_model};
 
 // import * as _model from './Model';
 // export {_model};
@@ -17,11 +20,14 @@ export {attrib};
 import * as isect from './isect';
 export {isect};
 
-import * as mod from './mod';
-export {mod};
+import * as modify from './modify';
+export {modify};
 
 import * as calc from './calc';
 export {calc};
+
+import * as util from './util';
+export {util};
 
 import * as vec from './vec';
 export {vec};

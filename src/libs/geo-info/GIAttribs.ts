@@ -35,7 +35,7 @@ export class GIAttribs {
         this.add = new GIAttribsAdd(model, this._attribs_maps);
         this.query = new GIAttribsQuery(model, this._attribs_maps);
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
-        this.add.addPosiAttrib(EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
+        this.add.addAttrib(EEntityTypeStr.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     }
     /**
      * Returns the JSON data for this model.

@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TNormal, TTexture, EAttribNames, Txyz } from './common';
+import { TNormal, TTexture, EAttribNames, Txyz, EEntityTypeStr } from './common';
 /**
  * Import to obj
  */
@@ -51,12 +51,12 @@ export function importObj(obj_str: string): GIModel {
         }
     }
     for (const coord of coords) {
-        const posi_id: string = model.geom.add.addPosition();
-        model.attribs.add.setAttribValue(posi_id, EAttribNames.COORDS, coord);
+        const posi_i: number = model.geom.add.addPosition();
+        model.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, coord);
     }
     for (const face of faces) {
         console.log(face[0]);
-        const face_i: number = model.geom.add.addPgonByIndex(face[0]);
+        const face_i: number = model.geom.add.addPgon(face[0]);
         // TODO: texture uv
         // TODO: normals
     }

@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TTexture, EAttribNames, Txyz} from './common';
+import { TColor, TNormal, TTexture, EAttribNames, Txyz, EEntityTypeStr} from './common';
 /**
  * Export to obj
  */
@@ -12,40 +12,41 @@ export function exportObj(model: GIModel): string {
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs.query.hasVertAttrib(EAttribNames.COLOR);
-    const has_normal_attrib: boolean = model.attribs.query.hasVertAttrib(EAttribNames.NORMAL);
-    const has_texture_attrib: boolean = model.attribs.query.hasVertAttrib(EAttribNames.TEXTURE);
+    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntityTypeStr.VERT, EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntityTypeStr.VERT, EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntityTypeStr.VERT, EAttribNames.TEXTURE);
     // positions
     if (has_color_attrib) {
         for (let vert_i = 0; vert_i < model.geom.query.numVerts(); vert_i++) {
-            const color: TColor = model.attribs.query.getVertAttribValueByIndex(EAttribNames.COLOR, vert_i) as TColor;
-            const coord: Txyz = model.attribs.query.getVerTxyzByIndex(vert_i);
+            const color: TColor = model.attribs.query.getAttribValue(EEntityTypeStr.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            const coord: Txyz = model.attribs.query.getVertCoords(vert_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + color.map( c => c.toString() ).join(' ') + '\n';
         }
     } else {
         for (let posi_i = 0; posi_i < model.geom.query.numPosis(); posi_i++) {
-            const coord: Txyz = model.attribs.query.getPosiCoordByIndex(posi_i);
+            const coord: Txyz = model.attribs.query.getPosiCoords(posi_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // textures, vt
     if (has_texture_attrib) {
         for (let vert_i = 0; vert_i < model.geom.query.numVerts(); vert_i++) {
-            const texture: TTexture = model.attribs.query.getVertAttribValueByIndex(EAttribNames.TEXTURE, vert_i) as TTexture;
+            const texture: TTexture = model.attribs.query.getAttribValue(EEntityTypeStr.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
             vt_str += 'v ' + texture.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // normals, vn
     if (has_normal_attrib) {
         for (let vert_i = 0; vert_i < model.geom.query.numVerts(); vert_i++) {
-            const normal: TNormal = model.attribs.query.getVertAttribValueByIndex(EAttribNames.NORMAL, vert_i) as TNormal;
+            const normal: TNormal = model.attribs.query.getAttribValue(EEntityTypeStr.VERT, EAttribNames.NORMAL, vert_i,) as TNormal;
             vn_str += 'v ' + normal.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // faces, f
     for (let pgon_i = 0; pgon_i < model.geom.query.numPgons(); pgon_i++) {
-        const verts_i: number[][] = model.geom.query.navPgonToVert(pgon_i);
-        const verts_i_outer = verts_i[0];
+        const verts_i_outer: number[] = model.geom.query.navAnyToVert(EEntityTypeStr.PGON, pgon_i);
+        // const verts_i_outer = verts_i[0];
+        // TODO what about holes
         if (has_texture_attrib) {
             // TODO
         }

@@ -1,5 +1,12 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz } from '@libs/geo-info/common';
+import { TId, Txyz, EEntityTypeStr } from '@libs/geo-info/common';
+import { isPline, isWire, isEdge, idBreak, isPgon, isFace } from '@libs/geo-info/id';
+import { isArray } from 'util';
+import { distance } from '@libs/geom/distance';
+import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
+import { vecsSum, vecDiv, vecsAdd, vecsSub } from '@libs/geom/vectors';
+import { triangulate } from '@libs/triangulate/triangulate';
+import { normal, area } from '@libs/geom/triangle';
 
 /**
  * Calculates the distance between two positions.
@@ -13,17 +20,43 @@ import { TId, Txyz } from '@libs/geo-info/common';
  * @example_info Expected value of distance is 10.
  */
 export function Distance(__model__: GIModel, position1: TId, position2: TId): number {
-    throw new Error("Not impemented."); return null;
+    const ps1_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position1)[1]);
+    const ps2_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position2)[1]);
+    return distance(ps1_xyz, ps2_xyz);
 }
 /**
  * Calculates the length of a line or a list of lines.
  * @param __model__
- * @param line Edge, wire or polyline.
+ * @param lines Edge, wire or polyline.
  * @returns Length.
  * @example length1 = calc.Length (line)
  */
-export function Length(__model__: GIModel, line: TId|TId[]): number {
-    throw new Error("Not impemented."); return null;
+export function Length(__model__: GIModel, lines: TId|TId[]): number {
+    if (!isArray(lines)) {
+        lines = [lines] as TId[];
+    }
+    const edges_i: number[] = [];
+    let dist = 0;
+    for (const line of lines) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(line);
+        if (isEdge(line)) {
+            edges_i.push(index);
+        } else if (isWire(line)) {
+            edges_i.push(...__model__.geom.query.navWireToEdge(index));
+        } else if (isPline(line)) {
+            const wire_i: number = __model__.geom.query.navPlineToWire(index);
+            edges_i.push(...__model__.geom.query.navWireToEdge(wire_i));
+        } else {
+            throw new Error('Entity is of wrong type. Must be a an edge, a wire or a polyline');
+        }
+        for (const edge_i of edges_i) {
+            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.EDGE, edge_i);
+            const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
+            const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+            dist += distance(xyz_0, xyz_1);
+        }
+    }
+    return dist;
 }
 /**
  * Calculates the minimum distance between a location and an object, or two objects.
@@ -39,23 +72,97 @@ export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], obj
 /**
  * Calculates the area of a surface or a list of surfaces.
  * @param __model__
- * @param surface Face or polygon.
+ * @param geometry A polygon, a face, a closed polyline, or or closed wire.
  * @returns Area.
  * @example area1 = calc.Area (surface)
  */
-export function Area(__model__: GIModel, surface: TId|TId[]): number {
-    throw new Error("Not impemented."); return null;
+export function Area(__model__: GIModel, geometry: TId): number {
+    const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
+    if (isPgon(geometry) || isFace(geometry)) {
+        // faces, these are already triangulated
+        let face_i: number = index;
+        if (isPgon(geometry)) {
+            face_i = __model__.geom.query.navPgonToFace(index);
+        }
+        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        let total_area = 0;
+        for (const tri_i of tris_i) {
+            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.TRI, tri_i);
+            const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
+            const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
+            total_area += tri_area;
+        }
+        return total_area;
+    } else if (isPline(geometry) || isWire(geometry)) {
+        // wires, these need to be triangulated
+        let wire_i: number = index;
+        if (isPline(geometry)) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        }
+        if (__model__.geom.query.istWireClosed(wire_i)) {
+            throw new Error('To calculate normals, wire must be closed');
+        }
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
+        const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
+        const tris: number[][] = triangulate(xyzs);
+        let total_area = 0;
+        for (const tri of tris) {
+            const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
+            const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2] );
+            total_area += tri_area;
+        }
+        return total_area;
+    } else {
+        throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
+    }
 }
 /**
  * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
  * @param __model__
- * @param geometry List of positions, a wire, a closed polyline, a face, or a polygon.
+ * @param geometry A polygon, a face, a closed polyline, or or closed wire.
  * @returns Vector.
  * @example normal1 = calc.Normal (geometry)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
-export function Normal(__model__: GIModel, geometry: TId[]): Txyz {
-    throw new Error("Not impemented."); return null;
+export function Normal(__model__: GIModel, geometry: TId): Txyz {
+    const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
+    if (isPgon(geometry) || isFace(geometry)) {
+        // faces, these are already triangulated
+        let face_i: number = index;
+        if (isPgon(geometry)) {
+            face_i = __model__.geom.query.navPgonToFace(index);
+        }
+        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        let normal_vec: Txyz = [0, 0, 0];
+        for (const tri_i of tris_i) {
+            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.TRI, tri_i);
+            const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
+            const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
+            normal_vec = vecsAdd(normal_vec, tri_normal);
+        }
+        return vecDiv(normal_vec, tris_i.length);
+    } else if (isPline(geometry) || isWire(geometry)) {
+        // wires, these need to be triangulated
+        let wire_i: number = index;
+        if (isPline(geometry)) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        }
+        if (__model__.geom.query.istWireClosed(wire_i)) {
+            throw new Error('To calculate normals, wire must be closed');
+        }
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
+        const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
+        const tris: number[][] = triangulate(xyzs);
+        let normal_vec: Txyz = [0, 0, 0];
+        for (const tri of tris) {
+            const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
+            const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
+            normal_vec = vecsAdd(normal_vec, tri_normal);
+        }
+        return vecDiv(normal_vec, tris.length);
+    } else {
+        throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
+    }
 }
 /**
  * Calculates the centroid of a list of any geometry.
@@ -64,18 +171,67 @@ export function Normal(__model__: GIModel, geometry: TId[]): Txyz {
  * @returns Centroid.
  * @example centroid1 = calc.Centroid (geometry)
  */
-export function Centroid(__model__: GIModel, geometry: TId[]): Txyz {
-    throw new Error("Not impemented."); return null;
+export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
+    const posis_i: number[] = [];
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+    }
+    const unique_posis_i = Array.from(new Set(posis_i));
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    return vecDiv(vecsSum(unique_xyzs), unique_xyzs.length);
 }
 /**
- * Calculates t parameter to get a location.
+ * Calculates the xyz position on a linear entity, given a t parameter.
  * @param __model__
- * @param lines List of edges, wires, or polylines.
- * @param t_param List of values between 0 to 1.
+ * @param line Edge, wire, or polyline.
+ * @param t_param A value between 0 to 1.
  * @example coord1 = calc.ParamTToXyz (lines, t_param)
  */
-export function ParamTToXyz(__model__: GIModel, lines: TId|TId[], t_param: number): Txyz|Txyz[] {
-    throw new Error("Not impemented."); return null;
+export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
+    const edges_i: number[] = [];
+    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(line);
+    if (isEdge(line)) {
+        edges_i.push(index);
+    } else if (isWire(line)) {
+        edges_i.push(...__model__.geom.query.navWireToEdge(index));
+    } else if (isPline(line)) {
+        const wire_i: number = __model__.geom.query.navPlineToWire(index);
+        edges_i.push(...__model__.geom.query.navWireToEdge(wire_i));
+    } else {
+        throw new Error('Entity is of wrong type. Must be a an edge, a wire or a polyline');
+    }
+    const num_edges: number = edges_i.length;
+    // get all the edge lengths
+    let total_dist = 0;
+    const dists: number[] = [];
+    const xyz_pairs: Txyz[][] = [];
+    for (const edge_i of edges_i) {
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.EDGE, edge_i);
+        const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
+        const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+        const dist: number = distance(xyz_0, xyz_1);
+        total_dist += dist;
+        dists.push(total_dist);
+        xyz_pairs.push([xyz_0, xyz_1]);
+    }
+    // map the t_param
+    const t_param_mapped: number = t_param * total_dist;
+    // loop through and find the point
+    for (let i = 0; i < num_edges; i++) {
+        if (t_param_mapped < dists[i]) {
+            const xyz_pair: Txyz[] = xyz_pairs[i];
+            let dist_a = 0;
+            if (i > 0) { dist_a = dists[i - 1]; }
+            const dist_b = dists[i];
+            const edge_length = dist_b - dist_a;
+            const to_t = t_param_mapped - dist_a;
+            const divisor = to_t / edge_length;
+            return vecsAdd( xyz_pair[0], vecDiv(vecsSub(xyz_pair[1], xyz_pair[0]), divisor) );
+        }
+    }
+    // t param must be 1 (or greater)
+    return xyz_pairs[num_edges - 1][1];
 }
 /**
  * Calculates a location on a line to get t parameter.

@@ -159,7 +159,7 @@ export class GIAttribMap {
      * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail keys would be [1,0,,0,1].
      */
     public getSeqKeys(): number[] {
-        const seqKeys = [];
+        const seqKeys: number[] = [];
         this._bi_map.getData().forEach( (keys_value, index) => keys_value[0].forEach( key => seqKeys[key] = index ) );
         return seqKeys;
     }
@@ -168,14 +168,16 @@ export class GIAttribMap {
      * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail values would be ['a', 'b']
      */
     public getValues(): TAttribDataTypes[] {
-        return this._bi_map.values();
+        const values: TAttribDataTypes[] = [];
+        this._bi_map.getData().forEach( (keys_value, index) => values[index] = keys_value[1]);
+        return values;
     }
     /**
      * Gets a list of all the attribute values, in sequential order.
      * So for example, for [[1,3], 'a'],[[0,4], 'b'], the sequentail values would be ['b','a',,'a','b']
      */
     public getSeqValues(): TAttribDataTypes[] {
-        const values: TAttribDataTypes[] = this._bi_map.values();
+        const values: TAttribDataTypes[] = this.getValues();
         return this.getSeqKeys().map( key => values[key] );
     }
 }

@@ -1,9 +1,9 @@
 
 import * as three from 'three';
-import * as threex from '../threex/threex';
+import * as threex from './threex';
 import * as earcut from './earcut';
 import {Txyz} from '../geo-info/common';
-import {Arr} from '../arr/arr';  // TODO remove dependence on this
+import {Arr} from './arr';  // TODO remove dependence on this
 
 //  3D to 2D ======================================================================================================
 

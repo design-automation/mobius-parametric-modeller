@@ -21,6 +21,7 @@ export class DataThreejs {
     public _text: string;
     // text lables
     public _textLabels = new Map();
+    public _font;
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
@@ -33,9 +34,7 @@ export class DataThreejs {
     /**
      * Constructs a new data subscriber.
      */
-    constructor(model: GIModel) {
-        //
-        this._model = model;
+    constructor() {
         // scene
         this._scene = new THREE.Scene();
         this._scene.background = new THREE.Color( 0xcccccc );
@@ -70,18 +69,17 @@ export class DataThreejs {
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
 
-        // add geometry to the scene
-        if ( this._model) {
-            this.addGeometry(this._model);
-        } else {
-            // add grid and lights
-            this._addGrid();
-            this._addHemisphereLight();
-            this._addAxes();
-        }
+        // text label
+        const loader = new THREE.FontLoader();
+        loader.load('./assets/OpenSans_Regular.json', (font) => this._font = font);
+
+        // add grid and lights
+        this._addGrid();
+        this._addHemisphereLight();
+        this._addAxes();
     }
 
-    public addGeometry(model: GIModel): void {
+    public addGeometry(model: GIModel, container): void {
         while ( this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
             this.sceneObjs = [];
@@ -99,6 +97,7 @@ export class DataThreejs {
         this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
+        this._addLabel();
     }
 
     public selectObjFace(selecting, triangle_i, positions, container) {
@@ -170,7 +169,7 @@ export class DataThreejs {
         label.setParent(point);
         this._textLabels.set(label.element.id, label);
         container.appendChild(label.element);
-        console.log(document.querySelectorAll('[id^=textLabel_]'));
+        localStorage.setItem('mpm_threejs_text_labels', JSON.stringify(label.element));
     }
 
     public unselectObj(selecting, container) {
@@ -311,6 +310,21 @@ export class DataThreejs {
         this.sceneObjs.push(point);
         this._scene.add(point);
         this._threejs_nums[0] = points_i.length;
+    }
+
+    private _addLabel() {
+        const textGeo = new THREE.TextGeometry( 'Hello three.js!', {
+            font: this._font,
+            size: 1,
+            height: 1,
+            curveSegments: 12,
+            bevelEnabled: false
+        } );
+        const materials = [new THREE.MeshPhongMaterial( { color: 0x000000, flatShading: true } )];
+        const mesh = new THREE.Mesh( textGeo, materials );
+        mesh.quaternion.copy(this._camera.quaternion);
+        this._scene.add( mesh );
+        this._textLabels.set(mesh.id, mesh);
     }
 
     private _createTextLabel(container, type) {

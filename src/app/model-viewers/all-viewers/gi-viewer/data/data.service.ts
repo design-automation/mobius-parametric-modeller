@@ -33,7 +33,7 @@ export class DataService {
     /**
      * Set the THreejs Scene
      */
-    setThreejsScene(model: GIModel) {
-        this._data_threejs = new DataThreejs(model);
+    setThreejsScene() {
+        this._data_threejs = new DataThreejs();
     }
 }

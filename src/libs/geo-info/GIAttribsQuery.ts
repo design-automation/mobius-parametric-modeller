@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TAttribDataTypes, IAttribsMaps, EEntStrToAttribMap, IQueryComponent, 
+import { TAttribDataTypes, IAttribsMaps, EEntStrToAttribMap, IQueryComponent,
     Txyz, EAttribNames, EEntityTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { parse_query } from './query';

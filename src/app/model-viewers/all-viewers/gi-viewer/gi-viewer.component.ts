@@ -34,7 +34,7 @@ export class GIViewerComponent implements OnInit{
      */
     ngOnInit() {
         if (this.dataService.getThreejsScene() === undefined) {
-            this.dataService.setThreejsScene(this.data);
+            this.dataService.setThreejsScene();
         }
     }
 

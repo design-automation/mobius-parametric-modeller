@@ -27,8 +27,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     protected dataService: DataService;
     // threeJS scene data
     public _data_threejs: DataThreejs;
-    // the GI model to display
-    public _gi_model: GIModel;
     // num of positions, edges, triangles in threejs
     public _threejs_nums: [number, number, number];
     // flags for displayinhg text in viewer, see html
@@ -57,8 +55,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         // size of window
         this._width = this.container.offsetWidth; // container.client_width;
         this._height = this.container.offsetHeight; // container.client_height;
-        // get the model and scene
-        // this._gi_model = this.dataService.getGIModel();
+
         this._data_threejs = this.dataService.getThreejsScene();
         this.container.appendChild( this._data_threejs._renderer.domElement );
         // set the numbers of entities
@@ -77,7 +74,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const textLabels = this._data_threejs._textLabels;
         if (textLabels.size !== 0) {
             textLabels.forEach((label) => {
-                label.updatePosition();
+                // label.updatePosition();
+                let scale = label.position.distanceTo(this._data_threejs._camera.position) / 50;
+                scale = Math.min(5, Math.max(1, scale));
+                label.scale.set(scale, scale, scale);
+                label.quaternion.copy(this._data_threejs._camera.quaternion);
             });
         }
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
@@ -124,28 +125,27 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * Update the model in the viewer.
      */
     public updateModel(model: GIModel): void {
-        // console log the scene
         this._data_threejs = this.dataService.getThreejsScene();
-        // console.log('>> this.scene >>', this._data_threejs._scene);
-        // this._gi_model = this.dataService.getGIModel();
-        this._gi_model = model;
-        // console.log('CALLING updateModel in THREEJS VIEWER COMPONENT');
-        if ( !this._gi_model) {
+        if ( !model) {
             console.warn('Model or Scene not defined.');
             this._no_model = true;
             return;
-        }
-        try {
-            // add geometry to the scene
-            this._data_threejs.addGeometry(this._gi_model);
-            // Set model flags
-            this._model_error = false;
-            this._no_model = false;
-            this.render(this);
-        } catch (ex) {
-            console.error('Error displaying model:', ex);
-            this._model_error = true;
-            this._data_threejs._text = ex;
+        } else {
+            if (model !== this._data_threejs._model) {
+                this._data_threejs._model = model;
+                try {
+                    // add geometry to the scene
+                    this._data_threejs.addGeometry(model, this.container);
+                    // Set model flags
+                    this._model_error = false;
+                    this._no_model = false;
+                    this.render(this);
+                } catch (ex) {
+                    console.error('Error displaying model:', ex);
+                    this._model_error = true;
+                    this._data_threejs._text = ex;
+                }
+            }
         }
     }
 

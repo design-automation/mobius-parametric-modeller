@@ -16,7 +16,8 @@ export class CodeUtils {
         let codeStr: string[] = [];
         const args = prod.args;
         const prefix =
-            args[0].value.indexOf('[') === -1 && args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
+            args.hasOwnProperty('0') && args[0].value && args[0].value.indexOf('[') === -1
+            && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
         codeStr.push('');
         if (addProdArr && prod.type !== ProcedureTypes.Else && prod.type !== ProcedureTypes.Elseif) {
             codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);

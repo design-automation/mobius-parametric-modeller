@@ -149,7 +149,8 @@ export class ProcedureItemComponent {
                     return str;
                 }
             }
-            const fn = new Function(str, ``);
+            const fn = new Function('', `${str}=1;`);
+            fn();
             this.invalidVar = false;
         } catch (ex) {
             // console.log(ex.message);

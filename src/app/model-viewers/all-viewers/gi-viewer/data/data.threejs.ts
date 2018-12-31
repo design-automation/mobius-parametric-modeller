@@ -20,7 +20,7 @@ export class DataThreejs {
     public _selectedEntity = new Map();
     public _text: string;
     // text lables
-    public _textLabels: any[];
+    public _textLabels = new Map();
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
@@ -70,7 +70,6 @@ export class DataThreejs {
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
 
-        this._textLabels = [];
         // add geometry to the scene
         if ( this._model) {
             this.addGeometry(this._model);
@@ -123,11 +122,11 @@ export class DataThreejs {
         this._scene.add( mesh );
         this._selecting.set(selecting, mesh.id);
 
-        const text = this._createTextLabel(container, 'face');
-        text.setHTML(selecting);
-        text.setParent(mesh);
-        this._textLabels.push(text);
-        container.appendChild(text.element);
+        const label = this._createTextLabel(container, 'face');
+        label.setHTML(selecting);
+        label.setParent(mesh);
+        this._textLabels.set(label.element.id, label);
+        container.appendChild(label.element);
     }
 
     public selectObjLine(selecting, positions, container) {
@@ -145,11 +144,11 @@ export class DataThreejs {
         this._scene.add(line);
         this._selecting.set(selecting, line.id);
 
-        const text = this._createTextLabel(container, 'line');
-        text.setHTML(selecting);
-        text.setParent(line);
-        this._textLabels.push(text);
-        container.appendChild(text.element);
+        const label = this._createTextLabel(container, 'line');
+        label.setHTML(selecting);
+        label.setParent(line);
+        this._textLabels.set(label.element.id, label);
+        container.appendChild(label.element);
     }
 
     public selectObjPoint(selecting, position, container) {
@@ -166,17 +165,22 @@ export class DataThreejs {
         this._scene.add(point);
         this._selecting.set(selecting, point.id);
 
-        const text = this._createTextLabel(container, 'point');
-        text.setHTML(selecting);
-        text.setParent(point);
-        this._textLabels.push(text);
-        container.appendChild(text.element);
+        const label = this._createTextLabel(container, 'point');
+        label.setHTML(selecting);
+        label.setParent(point);
+        this._textLabels.set(label.element.id, label);
+        container.appendChild(label.element);
+        console.log(document.querySelectorAll('[id^=textLabel_]'));
     }
 
-    public unselectObj(selecting) {
+    public unselectObj(selecting, container) {
         const removing = this._selecting.get(selecting);
         this._selecting.delete(selecting);
         this._scene.remove(this._scene.getObjectById(removing));
+        document.querySelectorAll('[id^=textLabel_]').forEach(value => {
+            container.removeChild(value);
+        });
+        this._textLabels.clear();
     }
 
     // ============================================================================
@@ -278,7 +282,7 @@ export class DataThreejs {
         geom.addAttribute( 'normal', normals_buffer);
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial( {
-            color: 0x777777,
+            color: 0x000000,
             linewidth: 1,
             linecap: 'round', // ignored by WebGLRenderer
             linejoin:  'round' // ignored by WebGLRenderer
@@ -311,6 +315,7 @@ export class DataThreejs {
 
     private _createTextLabel(container, type) {
         const div = document.createElement('div');
+        div.id = `textLabel_${this._textLabels.size}`;
         div.className = 'text-label';
         div.style.position = 'absolute';
         div.innerHTML = 'hi there!';
@@ -356,6 +361,12 @@ export class DataThreejs {
     }
 
     public onWindowKeyPress(event) {
+        const segment_str = window.location.pathname;
+        const segment_array = segment_str.split( '/' );
+        const last_segment = segment_array[segment_array.length - 1];
+        if (last_segment === 'editor') {
+            return null;
+        }
         const keyCode = event.which;
         // console.log(keyCode);
         const positionDelta = 10;

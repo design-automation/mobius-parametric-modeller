@@ -17,6 +17,7 @@ import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
     ViewFlowchartComponent, ViewFlowchartModule} from '@views';
 import { AppRoutingModule } from './app-routing.module';
+// import { WebWorkerService } from 'ngx-web-worker';
 
 
 
@@ -46,7 +47,7 @@ import { AppRoutingModule } from './app-routing.module';
         ViewFlowchartComponent,
         ViewGalleryComponent,
     ],
-    providers: [ DataService, GiViewerDataService ],
+    providers: [ DataService, GiViewerDataService],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

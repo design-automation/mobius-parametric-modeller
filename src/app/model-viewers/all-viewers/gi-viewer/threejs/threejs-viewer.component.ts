@@ -245,7 +245,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         });
         console.log('New Indices', new_indices);
         verts_flat.map(vert => tri_indices.push(this.model.geom.query.navVertToPosi(vert)));
-
+        const posi_flat = [].concat(...positions);
         console.log('positions', positions);
 
         const selecting = `f${face}`;

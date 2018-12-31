@@ -84,7 +84,14 @@ export function PositionsGrid(__model__: GIModel, origin: Txyz|TPlane,
 }
 /**
  * Adds positions in a rectangle.
- * @param __model__
+* @param __model__
+* @param origin XYZ coordinates as a list of three numbers.
+* @param size Size of rectangle. If number, assume square of that length; if list of two numbers, x and y lengths respectively.
+* @returns New positions if successful, null if unsuccessful or on error.
+* @example positions1 = make.PositionsRect([0,0,0], 10)
+* @example_info Creates a list of 4 positions, being the vertices of a 10 by 10 square.
+* @example positions1 = make.PositionsGrid([0,0,0], [10,20])
+* @example_info Creates a list of 4 positions, being the vertices of a 10 by 20 rectangle.
  */
 export function PositionsRect(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
     const xy_size: [number, number] = (isArray(size) ? size : [size, size]) as [number, number];
@@ -129,9 +136,10 @@ enum EClose {
  * Adds a new polyline to the model.
  * @param __model__
  * @param positions List of positions.
+ * @param close Enum of 'close' or 'open'.
  * @returns New polyline if successful, null if unsuccessful or on error.
- * @example polyline1 = make.Polyline([position1,position2,position3])
- * @example_info Creates an open polyline with vertices position1, position2, position3 in sequence.
+ * @example polyline1 = make.Polyline([position1,position2,position3], close)
+ * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: EClose): TId|TId[] {
     if (isArray(positions) && !isArray(positions[0])) {
@@ -187,7 +195,7 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
 /**
  * Lofts between edges.
  * @param __model__
- * @param geometry Edges (or wires, polylines or polygons).
+ * @param geometry Edges (or wires, polylines or polygons), with the same number of edges.
  * @returns Lofted polygons between edges.
  * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
  * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
@@ -224,11 +232,12 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
  * - Extrusion of surface produces a list of surfaces.
  * @param __model__
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param distance Number or vector.
+ * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
+ * @param divisions Number of divisions to divide extrusion by.
  * @returns Extrusion of geometry.
- * @example extrusion1 = make.Extrude(point1, 10)
- * @example_info Creates a line of length 10 in the z-direction.
- *
+ * @example extrusion1 = make.Extrude(point1, 10, 2)
+ * @example_info Creates a list of 2 lines of length 5 in the z-direction.
+ * If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].
  * @example extrusion2 = make.Extrude(polygon1, [0,5,0])
  * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */

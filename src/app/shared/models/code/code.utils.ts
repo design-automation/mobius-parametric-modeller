@@ -159,11 +159,12 @@ export class CodeUtils {
         }
 
         if (prod.print) {
-            codeStr.push(`console.log('${prod.args[0].value}: '+ ${prod.args[0].value});`);
+            codeStr.push(`printFunc('${prod.args[0].value}', ${prod.args[0].value});`);
             // codeStr.push(`wait(5000);`);
         }
         return codeStr;
     }
+
 
     static async getStartInput(arg, inputMode): Promise<any> {
         let val;

@@ -19,6 +19,26 @@ function mergeInputs(models){
     return result;
 }
 `;
+export const printFunc = `
+function printFunc(name, value){
+    let val;
+    if (typeof value === 'number' || value === undefined) {
+        val = value;
+    } else if (typeof value === 'string') {
+        val = '"' + value + '"';
+    } else if (value.constructor === [].constructor) {
+        val = JSON.stringify(value);
+    } else if (value.constructor === {}.constructor) {
+        val = JSON.stringify(value);
+    } else {
+        // console.log('Unknown output type:', value);
+        // this.output = functions.__stringify__(value);
+        val = value; // TODO - make this generic
+    }
+    console.log(name+': '+val);
+    return val;
+}
+`;
 const DEBUG = false;
 
 @Component({
@@ -96,7 +116,7 @@ export class ExecuteComponent {
             // get the code for the node
             const nodeCode = CodeUtils.getNodeCode(node, true);
 
-            fnString = nodeCode.join('\n');
+            fnString = printFunc + nodeCode.join('\n');
             // add the constants from the start node
             fnString = _varString + globalVars + fnString;
             params['model'] = node.input.value;

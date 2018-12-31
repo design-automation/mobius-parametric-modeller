@@ -49,8 +49,8 @@ export class DataThreejs {
         // camera settings
         this._camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 20000 );
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
-        this._camera.position.x = 100;
-        this._camera.position.y = 50;
+        this._camera.position.x = -30;
+        this._camera.position.y = -80;
         this._camera.position.z = 70;
         this._camera.aspect = 1;
         this._camera.up.set(0, 0, 1);
@@ -102,7 +102,7 @@ export class DataThreejs {
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
     }
 
-    public selectObjFace(selecting, triangle_i, positions) {
+    public selectObjFace(selecting, triangle_i, positions, container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( triangle_i );
         geom.addAttribute( 'position',  new THREE.Float32BufferAttribute( positions, 3 ));
@@ -122,9 +122,15 @@ export class DataThreejs {
         mesh.geometry.computeVertexNormals();
         this._scene.add( mesh );
         this._selecting.set(selecting, mesh.id);
+
+        const text = this._createTextLabel(container, 'face');
+        text.setHTML(selecting);
+        text.setParent(mesh);
+        this._textLabels.push(text);
+        container.appendChild(text.element);
     }
 
-    public selectObjLine(selecting, positions) {
+    public selectObjLine(selecting, positions, container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( [0, 1] );
         geom.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
@@ -138,6 +144,12 @@ export class DataThreejs {
         const line = new THREE.LineSegments(geom, mat);
         this._scene.add(line);
         this._selecting.set(selecting, line.id);
+
+        const text = this._createTextLabel(container, 'line');
+        text.setHTML(selecting);
+        text.setParent(line);
+        this._textLabels.push(text);
+        container.appendChild(text.element);
     }
 
     public selectObjPoint(selecting, position, container) {
@@ -154,9 +166,8 @@ export class DataThreejs {
         this._scene.add(point);
         this._selecting.set(selecting, point.id);
 
-        const text = this._createTextLabel(container);
+        const text = this._createTextLabel(container, 'point');
         text.setHTML(selecting);
-        text.setPosition(position);
         text.setParent(point);
         this._textLabels.push(text);
         container.appendChild(text.element);
@@ -298,7 +309,7 @@ export class DataThreejs {
         this._threejs_nums[0] = points_i.length;
     }
 
-    private _createTextLabel(container) {
+    private _createTextLabel(container, type) {
         const div = document.createElement('div');
         div.className = 'text-label';
         div.style.position = 'absolute';
@@ -313,15 +324,23 @@ export class DataThreejs {
           setHTML: function(html) {
             this.element.innerHTML = html;
           },
-          setPosition: function(position) {
-            this.position = new THREE.Vector3(...position);
-          },
           setParent: function(threejsobj) {
             this.parent = threejsobj;
           },
           updatePosition: function() {
-            if (parent) {
-                this.position.copy(this.parent.position.clone().add(this.position));
+            if (this.parent) {
+                if (type === 'point') {
+                    const center = this.parent.geometry.boundingSphere.center;
+                    this.position.copy(center);
+                } else if (type === 'line') {
+                    const p = this.parent.geometry.getAttribute('position').array;
+                    const middle = new THREE.Vector3((p[0] + p[3]) / 2, (p[1] + p[4]) / 2, (p[2] + p[5]) / 2);
+                    this.position.copy(middle);
+                } else if (type === 'face') {
+                    const center = this.parent.geometry.boundingSphere.center;
+                    // console.log('geometry center', this.parent.geometry);
+                    this.position.copy(center);
+                }
             }
             const coords2d = this.get2DCoords(this.position, _this._camera);
             this.element.style.left = coords2d.x + 'px';
@@ -336,44 +355,56 @@ export class DataThreejs {
         };
     }
 
-    private onWindowKeyPress(event) {
+    public onWindowKeyPress(event) {
         const keyCode = event.which;
-        const positionDelta = 70;
-        const rotationDelta = 0.1;
-        console.log('hhidhishfids');
+        // console.log(keyCode);
+        const positionDelta = 10;
+        const rotationDelta = 0.02;
+        const xp = this._camera.position.x;
+        const yp = this._camera.position.y;
         switch (keyCode) {
-            case 97: // A
-                this._camera.position.x -= positionDelta;
+            case 65: // A: move left
+            this._camera.position.x -= positionDelta;
                 break;
-            case 100: // D
+            case 68: // D: move right
             this._camera.position.x += positionDelta;
                 break;
-            case 119: // W
-            this._camera.position.z -= positionDelta;
-                break;
-            case 115: // S
-            this._camera.position.z += positionDelta;
-                break;
-            case 113: // Q
+            case 87: // W: move forward
             this._camera.position.y += positionDelta;
                 break;
-            case 101: // E
+            case 83: // S: move backward
             this._camera.position.y -= positionDelta;
                 break;
-            case 116: // T
+            case 90: // Z: move up
+            this._camera.position.z += positionDelta;
+                break;
+            case 88: // X: move down
+            this._camera.position.z -= positionDelta;
+                break;
+            case 81: // Q: rotate clockwise
+            this._camera.position.x = xp * Math.cos(rotationDelta) + yp * Math.sin(rotationDelta);
+            this._camera.position.y = yp * Math.cos(rotationDelta) - xp * Math.sin(rotationDelta);
+            this._camera.lookAt( this._scene.position );
+                break;
+            case 69: // E: rotate anticlockwise
+            this._camera.position.x = xp * Math.cos(rotationDelta) - yp * Math.sin(rotationDelta);
+            this._camera.position.y = yp * Math.cos(rotationDelta) + xp * Math.sin(rotationDelta);
+                this._camera.lookAt( this._scene.position );
+                break;
+            case 84: // T
             this._camera.rotation.x += rotationDelta;
                 break;
-            case 103: // G
+            case 71: // G
             this._camera.rotation.x -= rotationDelta;
                 break;
-            case 102: // F
+            case 70: // F
             this._camera.rotation.y += rotationDelta;
                 break;
-            case 104: // H
+            case 72: // H
             this._camera.rotation.y -= rotationDelta;
                 break;
             default:
-                break;
+            break;
         }
     }
 }

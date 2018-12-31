@@ -15,22 +15,22 @@ export class DataThreejs {
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
-    public _select_visible = 'Objs';
-    public _selecting = new Map();
-    public _selectedEntity = new Map();
+    public _select_visible = 'Objs'; // TODO add types
+    public _selecting = new Map();  // TODO add types
+    public _selectedEntity = new Map(); // TODO add types
     public _text: string;
     // text lables
-    public _textLabels = new Map();
-    public _font;
+    public _textLabels = new Map(); // TODO add types
+    public _font; // TODO add types
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
     public _grid_show = true;
-    public _grid_center = [0, 0, 0];
+    public _grid_center: [number, number, number] = [0, 0, 0];
     // the GI model to display
     public _model: GIModel;
 
-    public sceneObjs = [];
+    public sceneObjs = []; // TODO add types
     /**
      * Constructs a new data subscriber.
      */

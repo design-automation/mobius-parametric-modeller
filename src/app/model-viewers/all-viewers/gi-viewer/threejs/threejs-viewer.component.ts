@@ -71,16 +71,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      */
     public render(self) {
         // console.log('CALLING render in THREEJS VIEWER COMPONENT');
-        const textLabels = this._data_threejs._textLabels;
-        if (textLabels.size !== 0) {
-            textLabels.forEach((label) => {
-                // label.updatePosition();
-                let scale = label.position.distanceTo(this._data_threejs._camera.position) / 50;
-                scale = Math.min(5, Math.max(1, scale));
-                label.scale.set(scale, scale, scale);
-                label.quaternion.copy(this._data_threejs._camera.quaternion);
-            });
-        }
+        // const textLabels = this._data_threejs._textLabels;
+        // if (textLabels.size !== 0) {
+        //     textLabels.forEach( (label) => {
+        //         // label.updatePosition();
+        //         let scale = label.position.distanceTo(this._data_threejs._camera.position) / 50;
+        //         scale = Math.min(5, Math.max(1, scale));
+        //         label.scale.set(scale, scale, scale);
+        //         label.quaternion.copy(this._data_threejs._camera.quaternion);
+        //     });
+        // }
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
 

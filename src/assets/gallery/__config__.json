@@ -16,6 +16,27 @@
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/beginner/"
         },
         {
+            "name": "Create",
+            "files": [
+                "calc_area_normal",
+                "calc_distance_length",
+                "close_polyline",
+                "create_attribute",
+                "create_extrusion",
+                "create_grid",
+                "create_line_extrusion",
+                "create_loft",
+                "create_posi_extrusion",
+                "create_rectangle",
+                "create_arc",
+                "create_polygon",
+                "create_polyline",
+                "move_polyline"
+            ],
+
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/create/"
+        },
+        {
             "name": "Test",
             "files": [
                 "box_with_holes",

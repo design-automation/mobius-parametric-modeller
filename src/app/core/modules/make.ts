@@ -276,7 +276,7 @@ export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: numbe
                 pgons_id.push(EEntityTypeStr.PGON + pgon_i);
             }
         }
-        if (isDim2(ent_type_str) {
+        if (isDim2(ent_type_str)) {
             const pgon_i: number = __model__.geom.add.addPgon( new_posis_arrs_i[new_posis_arrs_i.length - 1] );
             pgons_id.push(EEntityTypeStr.PGON + pgon_i);
         }

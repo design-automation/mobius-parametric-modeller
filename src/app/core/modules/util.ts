@@ -9,7 +9,10 @@ import { __merge__ } from './_model';
  * Import data into the model. 
  *
  * @param model_data The model data in gs-json string format.
- * @returns New model if successful, null if unsuccessful or on error.
+ * @param data_type Enum of GI or OBJ.
+ * @returns void
+ * @example util.ImportData (file1, OBJ)
+ * @example_info Imports the data from file1 (defining the .obj file uploaded in 'Start' node).
  */
 export function ImportData(__model__: GIModel, model_data: string, data_type: EIODataTypes): void {
     switch (data_type) {
@@ -29,7 +32,9 @@ export function ImportData(__model__: GIModel, model_data: string, data_type: EI
 /**
  * Export data from the model.
  * @param __model__
- * @param filename
+ * @param filename Name of the file as a string.
+ * @param data_type Enum of GI or OBJ.
+ * @returns Boolean.
  */
 export function ExportData(__model__: GIModel, filename: string, data_type: EIODataTypes): boolean {
     switch (data_type) {

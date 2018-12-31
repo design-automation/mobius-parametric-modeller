@@ -8,14 +8,15 @@ import { _parameterTypes } from '@modules';
 
 export class CodeUtils {
 
-    static async getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): Promise<string[]> {
+    static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string[] {
         if (prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
 
         prod.hasError = false;
 
         let codeStr: string[] = [];
         const args = prod.args;
-        const prefix = args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
+        const prefix =
+            args[0].value.indexOf('[') === -1 && args.hasOwnProperty('0') && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
         codeStr.push('');
         if (addProdArr && prod.type !== ProcedureTypes.Else && prod.type !== ProcedureTypes.Elseif) {
             codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
@@ -70,8 +71,7 @@ export class CodeUtils {
                 if (constName.substring(0, 1) === '"' || constName.substring(0, 1) === '\'') {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
-                const val = await CodeUtils.getStartInput(args[1], prod.meta.inputMode);
-                codeStr.push(`__params__['constants']['${constName}'] = ${val};`);
+                codeStr.push(`__params__['constants']['${constName}'] = ${prod.resolvedValue};`);
 
                 break;
 
@@ -84,8 +84,7 @@ export class CodeUtils {
                     cst = args[0].value.substring(1, args[0].value.length - 1);
                 }
 
-                const value = await CodeUtils.getStartInput(args[1], prod.meta.inputMode);
-                codeStr.push(`__params__['constants']['${cst}'] = ${value};`);
+                codeStr.push(`__params__['constants']['${cst}'] = ${prod.resolvedValue};`);
                 if (_parameterTypes.addData) {
                     codeStr.push(`__modules__.${_parameterTypes.addData}( __params__.model, __params__.constants['${cst}']);`);
                 } else {
@@ -103,11 +102,6 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
-                    if (arg.name === _parameterTypes.input) {
-                        const argVal = await CodeUtils.getStartInput(arg, prod.meta.inputMode);
-                        argVals.push(argVal);
-                        continue;
-                    }
                     if (arg.value && arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
@@ -121,23 +115,11 @@ export class CodeUtils {
                     if (arg.value && arg.value.substring(0, 1) === '#') {
                         argVals.push('`' + arg.value + '`');
                         continue;
-                        /*
-                        if (prod.meta.module.toUpperCase() === 'QUERY'
-                            && prod.meta.name.toUpperCase() === 'SET'
-                            && arg.name.toUpperCase() === 'STATEMENT') {
-                            argVals.push('"' + arg.value.replace(/"/g, '\'') + '"');
-                            continue;
-                        }
-                        argVals.push('__modules__.Query.get( __params__.model,"' + arg.value.replace(/"/g, '\'') + '" )');
-                        continue;
-                        */
                     }
-                    // else if (arg.name.indexOf('__') != -1) return '"'+args[args.indexOf(arg)+1].value+'"';
                     argVals.push(arg.value);
 
                 }
                 const argValues = argVals.join(', ');
-                await argValues;
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
                     codeStr.push(`return ${fnCall};`);
@@ -156,8 +138,7 @@ export class CodeUtils {
                     const arg = args[i];
                     // args.slice(1).map((arg) => {
                     if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(arg.value); }
-                    const r = await CodeUtils.getStartInput(arg, InputType.URL);
-                    argsVals.push(r);
+                    argsVals.push(prod.resolvedValue);
                 }
                 argsVals = argsVals.join(', ');
 
@@ -171,7 +152,7 @@ export class CodeUtils {
         }
         if (prod.children) {
             for (const p of prod.children) {
-                codeStr = codeStr.concat(await CodeUtils.getProcedureCode(p, existingVars, addProdArr));
+                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
             }
             codeStr.push(`}`);
         }
@@ -288,13 +269,13 @@ export class CodeUtils {
         return input;
     }
 
-    public static async getNodeCode(node: INode, addProdArr = false): Promise<string[]> {
+    public static getNodeCode(node: INode, addProdArr = false): string[] {
         node.hasError = false;
         let codeStr = [];
         const varsDefined: string[] = [];
         // input initializations
         if (addProdArr) {
-            const input = await CodeUtils.getInputValue(node.input, node);
+            const input = CodeUtils.getInputValue(node.input, node);
             node.input.value = input;
         }
 
@@ -307,7 +288,7 @@ export class CodeUtils {
         // procedure
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !addProdArr) { break; }
-            codeStr = codeStr.concat(await CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
             codeStr.push('}');
@@ -328,7 +309,7 @@ export class CodeUtils {
 
     }
 
-    static async getFunctionString(func: IFunction): Promise<string> {
+    static getFunctionString(func: IFunction): string {
         let fullCode = '';
         /*
         let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(', ')})` +
@@ -345,7 +326,7 @@ export class CodeUtils {
         }
 
         for (const node of func.flowchart.nodes) {
-            let code: any = await CodeUtils.getNodeCode(node, false);
+            let code: any = CodeUtils.getNodeCode(node, false);
             code = '{\n' + code.join('\n') + '\n}';
             if (func.args.length === 0) {
                 fullCode += `function ${node.id}(__params__)` + code + `\n\n`;

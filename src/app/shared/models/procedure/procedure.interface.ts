@@ -18,6 +18,8 @@ export interface IProcedure {
     enabled: boolean;
     selected: boolean;
     hasError: boolean;
+
+    resolvedValue?: any;
 }
 
 export interface IModule {

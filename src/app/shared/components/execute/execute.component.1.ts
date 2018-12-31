@@ -1,14 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
-import { INode, NodeUtils } from '@models/node';
-import { IProcedure, ProcedureTypes } from '@models/procedure';
+import { INode } from '@models/node';
+import { IProcedure } from '@models/procedure';
 
 import * as Modules from '@modules';
 import { _parameterTypes, _varString } from '@modules';
 import { DataService } from '@services';
-// import { WebWorkerService } from 'ngx-web-worker';
-import { InputType } from '@models/port';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -28,77 +26,96 @@ const DEBUG = false;
 })
 export class ExecuteComponent {
 
+    private globalVars: string;
+
     constructor(private dataService: DataService) {}
 
-    async execute() {
-        // reset input of all nodes except start & resolve all async processes (file reading + get url content)
-        for (const node of this.dataService.flowchart.nodes) {
-            if (node.type !== 'start') {
-                if (node.input.edges) {
-                    node.input.value = undefined;
+    async execute(): Promise<any> {
+        const p = new Promise(async (resolve) => {
+            this.globalVars = '';
+
+            // @ts-ignore
+            // console.logs = [];
+
+            // reset input of all nodes except start
+            for (const node of this.dataService.flowchart.nodes) {
+                if (node.type !== 'start') {
+                    if (node.input.edges) {
+                        node.input.value = undefined;
+                    }
                 }
-                await this.resolveImportedUrl(node.procedure);
-            } else {
-                for (const prod of node.procedure) {
-                    prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
+            }
+
+            // order the flowchart
+            if (!this.dataService.flowchart.ordered) {
+                FlowchartUtils.orderNodes(this.dataService.flowchart);
+            }
+
+            // get the string of all imported functions
+            const funcStrings = {};
+            for (const func of this.dataService.flowchart.functions) {
+                funcStrings[func.name] = await CodeUtils.getFunctionString(func);
+            }
+
+            // execute each node
+            for (const node of this.dataService.flowchart.nodes) {
+                if (!node.enabled) {
+                    node.output.value = undefined;
+                    continue;
+                }
+                await this.executeNode(node, funcStrings);
+            }
+            resolve('');
+        });
+        return p;
+
+
+        /*
+        this.globalVars = '';
+
+        // @ts-ignore
+        //console.logs = []
+
+        // reset input of all nodes except start
+        for (let node of this.dataService.flowchart.nodes){
+            if (node.type != 'start'){
+                if (node.input.edges){
+                    node.input.value = undefined;
                 }
             }
         }
 
-
-        this.executeFlowchart(this.dataService.flowchart);
-        // this._webWorkerService.run(this.executeFlowchart, this.dataService.flowchart);
-    }
-
-    executeFlowchart(flowchart) {
-        let globalVars = '';
-
-
         // order the flowchart
-        if (!flowchart.ordered) {
-            FlowchartUtils.orderNodes(flowchart);
+        if (!this.dataService.flowchart.ordered){
+            FlowchartUtils.orderNodes(this.dataService.flowchart);
         }
 
         // get the string of all imported functions
-        const funcStrings = {};
-        for (const func of flowchart.functions) {
-            funcStrings[func.name] = CodeUtils.getFunctionString(func);
+        let funcStrings = {};
+        for (let func of this.dataService.flowchart.functions){
+            funcStrings[func.name] = await CodeUtils.getFunctionString(func);
         }
 
         // execute each node
-        for (const node of flowchart.nodes) {
+        for (let node of this.dataService.flowchart.nodes){
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
-            globalVars = this.executeNode(node, funcStrings, globalVars);
+            await this.executeNode(node, funcStrings);
         }
+        */
     }
 
-    async resolveImportedUrl(prodList: IProcedure[]) {
-        for (const prod of prodList) {
-            if (prod.type === ProcedureTypes.Imported) {
-                for (let i = 1; i < prod.args.length; i++) {
-                    const arg = prod.args[i];
-                    // args.slice(1).map((arg) => {
-                    if (arg.type.toString() !== InputType.URL.toString()) { continue; }
-                    prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
-                }
-             }
-            if (prod.children) {await this.resolveImportedUrl(prod.children); }
-        }
-    }
-
-    executeNode(node: INode, funcStrings, globalVars): string {
+    async executeNode(node: INode, funcStrings) {
         const params = {'currentProcedure': ['']};
         let fnString = '';
         try {
             // get the code for the node
-            const nodeCode = CodeUtils.getNodeCode(node, true);
-
+            const nodeCode = await CodeUtils.getNodeCode(node, true);
             fnString = nodeCode.join('\n');
             // add the constants from the start node
-            fnString = _varString + globalVars + fnString;
+            fnString = _varString + this.globalVars + fnString;
             params['model'] = node.input.value;
 
             // add the imported functions code
@@ -140,12 +157,11 @@ export class ExecuteComponent {
                 for (const constant in params['constants']) {
                     if (params['constants'].hasOwnProperty(constant)) {
                         const constString = JSON.stringify(params['constants'][constant]);
-                        globalVars += `const ${constant} = ${constString};\n`;
+                        this.globalVars += `const ${constant} = ${constString};\n`;
                     }
                 }
-                globalVars += '\n';
+                this.globalVars += '\n';
             }
-            return globalVars;
         } catch (ex) {
             if (DEBUG) {
                 throw ex;
@@ -202,6 +218,5 @@ export class ExecuteComponent {
 
         }
     }
-
 
 }

@@ -5,7 +5,6 @@ import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
 import { DataService } from '../data/data.service';
 import { EEntityTypeStr } from '@libs/geo-info/common';
-import { container } from '@angular/core/src/render3';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -19,6 +18,7 @@ import { container } from '@angular/core/src/render3';
 export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     @Input() model: GIModel;
 
+    public container = null;
     public _elem;
     // viewer size
     public _width: number;
@@ -48,19 +48,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      */
     ngOnInit() {
         // console.log('CALLING ngOnInit in THREEJS VIEWER COMPONENT');
-        const container = this._elem.nativeElement.children.namedItem('threejs-container');
+        this.container = this._elem.nativeElement.children.namedItem('threejs-container');
         // check for container
-        if (!container) {
+        if (!this.container) {
             console.error('No container in Three Viewer');
             return;
         }
         // size of window
-        this._width = container.offsetWidth; // container.client_width;
-        this._height = container.offsetHeight; // container.client_height;
+        this._width = this.container.offsetWidth; // container.client_width;
+        this._height = this.container.offsetHeight; // container.client_height;
         // get the model and scene
         // this._gi_model = this.dataService.getGIModel();
         this._data_threejs = this.dataService.getThreejsScene();
-        container.appendChild( this._data_threejs._renderer.domElement );
+        this.container.appendChild( this._data_threejs._renderer.domElement );
         // set the numbers of entities
         this._threejs_nums = this._data_threejs._threejs_nums;
         // ??? What is happening here?
@@ -74,8 +74,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      */
     public render(self) {
         // console.log('CALLING render in THREEJS VIEWER COMPONENT');
-        for (let i = 0; i < this._data_threejs._textLabels.length; i++) {
-            this._data_threejs._textLabels[i].updatePosition();
+        const textLabels = this._data_threejs._textLabels;
+        if (textLabels.size !== 0) {
+            textLabels.forEach((label) => {
+                label.updatePosition();
+            });
         }
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
@@ -84,13 +87,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * Called when anything changes
      */
     ngDoCheck() {
-        const container = this._elem.nativeElement.children.namedItem('threejs-container');
-        if (!container) {
+        if (!this.container) {
             console.error('No container in Three Viewer');
             return;
         }
-        const width: number = container.offsetWidth;
-        const height: number = container.offsetHeight;
+        const width: number = this.container.offsetWidth;
+        const height: number = this.container.offsetHeight;
 
         // this is when dimensions change
         if (width !== this._width || height !== this._height) {
@@ -197,7 +199,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const scene = this._data_threejs;
         const selectings = Array.from(scene._selecting.keys());
         for (const selecting of selectings) {
-            scene.unselectObj(selecting);
+            scene.unselectObj(selecting, this.container);
         }
         this.render(this);
         scene._selectedEntity.clear();
@@ -221,6 +223,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private selectFace(triangle) {
+        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         const scene = this._data_threejs;
         const face = this.model.geom.query.navTriToFace(triangle.faceIndex);
         const tri = this.model.geom.query.navFaceToTri(face);
@@ -250,16 +253,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
         const selecting = `f${face}`;
         if (!scene._selecting.has(selecting)) {
-            const _container = this._elem.nativeElement.children.namedItem('threejs-container');
-            scene.selectObjFace(selecting, new_indices, posi_flat, _container);
+            scene.selectObjFace(selecting, new_indices, posi_flat, container);
             scene._selectedEntity.set(selecting, `${EEntityTypeStr.FACE}${face}`);
         } else {
-            scene.unselectObj(selecting);
+            scene.unselectObj(selecting, container);
             scene._selectedEntity.delete(selecting);
         }
     }
 
     private selectLine(line) {
+        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         const scene = this._data_threejs;
         const verts = this.model.geom.query.navEdgeToVert(line.index / 2);
         const positions = verts.map(v => this.model.attribs.query.getVertCoords(v));
@@ -267,11 +270,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
         const selecting = `l${line.index / 2}`;
         if (!scene._selecting.has(selecting)) {
-            const _container = this._elem.nativeElement.children.namedItem('threejs-container');
-            scene.selectObjLine(selecting, posi_flat, _container);
+            scene.selectObjLine(selecting, posi_flat, container);
             scene._selectedEntity.set(selecting, `${EEntityTypeStr.EDGE}${line.index / 2}`);
         } else {
-            scene.unselectObj(selecting);
+            scene.unselectObj(selecting, container);
             scene._selectedEntity.delete(selecting);
         }
     }
@@ -295,16 +297,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private selectPoint(point) {
+        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         const scene = this._data_threejs;
         const vert = this.model.geom.query.navPointToVert(point.index);
         const position = this.model.attribs.query.getPosiCoords(vert);
         const selecting = `p${point.index}`;
         if (!scene._selecting.has(selecting)) {
-            const _container = this._elem.nativeElement.children.namedItem('threejs-container');
-            scene.selectObjPoint(selecting, position, _container);
+            scene.selectObjPoint(selecting, position, container);
             scene._selectedEntity.set(selecting, `${EEntityTypeStr.VERT}${point.index}`);
         } else {
-            scene.unselectObj(selecting);
+            scene.unselectObj(selecting, container);
             scene._selectedEntity.delete(selecting);
         }
     }

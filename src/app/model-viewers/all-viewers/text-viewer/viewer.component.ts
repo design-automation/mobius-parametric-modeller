@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, DoCheck } from '@angular/core';
-import { Model } from '@modules';
+import { _model } from '@modules';
 
 /**
  * TextViewerComponent
@@ -33,7 +33,7 @@ export class TextViewerComponent implements OnInit, DoCheck {
         } else {
             // console.log('Unknown output type:', this.data);
             // this.output = functions.__stringify__(this.data);
-            this.output = Model.__stringify__(this.data); // TODO - make this generic
+            this.output = _model.__stringify__(this.data); // TODO - make this generic
         }
     }
     /**
@@ -50,7 +50,7 @@ export class TextViewerComponent implements OnInit, DoCheck {
             this.output = JSON.stringify(this.data);
         } else {
             // console.log('Unknown output type:', this.data);
-            this.output = Model.__stringify__(this.data); // TODO - make this generic
+            this.output = _model.__stringify__(this.data); // TODO - make this generic
         }
     }
 }

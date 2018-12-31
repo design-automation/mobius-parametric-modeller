@@ -33,15 +33,32 @@ export class BiMapManyToOne<V> {
      * @param value
      */
     public set(key: number, value: V): void {
-        const value_str: string = JSON.stringify(value);
-        if (!this.vk_map.has(value_str)) {
-            this.vk_map.set(value_str, [key]);
+        const old_value: V = this.kv_map.get(key);
+        const old_value_str: string = JSON.stringify(old_value);
+        const new_value_str: string = JSON.stringify(value);
+        // add the key to the vk_map
+        if (!this.vk_map.has(new_value_str)) {
+            this.vk_map.set(new_value_str, [key]);
         } else {
-            if (this.vk_map.get(value_str).indexOf(key) === -1) {
-                this.vk_map.get(value_str).push(key);
+            if (this.vk_map.get(new_value_str).indexOf(key) === -1) {
+                this.vk_map.get(new_value_str).push(key);
             }
         }
+        // remove the key from the old vk_map
+        if (this.vk_map.has(old_value_str)) {
+            const keys: number[] = this.vk_map.get(old_value_str);
+            const index = keys.indexOf(key, 0);
+            if (index > -1) {
+                keys.splice(index, 1);
+            }
+            // if nothing left, then delete the whole old_value_str from map
+            if (keys.length === 0) {
+                this.vk_map.delete(old_value_str);
+            }
+        }
+        // set the kv_map
         this.kv_map.set(key, value);
+
     }
     /**
      * Returns an array of all values.

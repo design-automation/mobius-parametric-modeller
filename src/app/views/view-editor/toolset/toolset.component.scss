@@ -77,6 +77,7 @@ ul{
         height: 18px;
         line-height: 18px;
         width: 100%;
+        box-sizing: border-box;
     }
     .user--add{
         margin-bottom: 8px;
@@ -94,13 +95,17 @@ ul{
     width: 13px;
     height : 13px;
     float: right;
+    padding: 0px;
 
     .importedFunc-btn-icon{
         font-size: $fsize2;
-        height : 11px;
         color: $color8;
         width: 13px;
         height: 13px;
+    }
+
+    &:hover .importedFunc-btn-icon{
+        color: $selected-color;
     }
 }
 

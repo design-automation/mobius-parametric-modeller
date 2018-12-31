@@ -10,52 +10,44 @@ div[class^="container--"]{
 }
 
 .flowchart-info{
-    display: grid;
+    display: flex;
+    flex-flow: column nowrap;
     padding-left: 10px;
     margin: 5px 0px;
     width: 100%;
+    box-sizing: border-box;
 }
 
-input{
+textarea, #flowchart-name{
     color: $color1;
-    // background-color: pink;
-    border:none;
-    width: fit-content;
-    // border-left: 1px solid $color1;
-    // border-bottom: 1px solid $color1;
-    padding: 5px;
-    margin-left: 3px;
-    font-weight: 600;
-    font-style: italic;
-    min-width: 40px;
-    max-width: 300px;
-    font-size: $fsize2;
-    vertical-align: bottom;
-    &.disabled-input{
-        border-bottom: none;
-    }
-    &:hover, &:focus{
-        color: $color8;
-    }
-}
+    border: 2px solid $color5;
+    background-color: transparent;
 
-textarea{
-    color: $color1;
-    // background-color: pink;
-    border:none;
-    // border-left: 1px solid $color1;
-    // border-bottom: 1px solid $color1;
     padding-left: 5px;
     font-family: sans-serif;
     font-size: $fsize2;
-    margin: 10px 0px 5px 3px;
-    width: 90%;
+    max-width: 100%;
     resize: none; 
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: wrap;
+    overflow: auto;
     &:hover, &:focus{
         color: $color8;
+        border-color: $selected-color;
+        background-color: $color7;
     }
+}
+
+.input-container{
+    padding: 0px;
+    max-width: 100%;
+    padding-right: 9px;
+    box-sizing: border-box;
+}
+
+#flowchart-name{
+    margin-bottom: 8px;
+    max-width: 100%;
+    height: $fsize1;
 }
 
 hr{

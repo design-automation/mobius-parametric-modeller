@@ -1,5 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, Txyz, EOpPromote, EAttribTypes, TAttribDataTypes } from '@libs/geo-info/common';
+import { TId, TQuery, Txyz, EOpPromote, EAttribTypes, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
+import { isArray } from 'util';
+import { idBreak } from '@libs/geo-info/id';
 
 /**
  * Gets attribute value of all entities.
@@ -9,7 +11,12 @@ import { TId, TQuery, Txyz, EOpPromote, EAttribTypes, TAttribDataTypes } from '@
  * @returns Attribute value.
  */
 export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
-    throw new Error("Not impemented."); return null;
+    if (!isArray(entities)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        return __model__.attribs.query.getAttribValue(ent_type_str, name, index);
+    } else {
+        return (entities as TId[]).map( entity => Get(__model__, entity, name)) as TAttribDataTypes[];
+    }
 }
 /**
  * Sets attribute value.
@@ -20,8 +27,12 @@ export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAtt
  * @example set1 = attrib.Set (entities, name, value)
  */
 export function Set(__model__: GIModel, entities: TId|TId[], name: string, value: TAttribDataTypes): void {
-    // return __model__.attribs().setAttribValue(entities, name, value);
-    throw new Error("Not impemented."); return null;
+    if (!isArray(entities)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        __model__.attribs.add.setAttribValue(ent_type_str, index, name, value);
+    } else {
+        (entities as TId[]).map( entity => Set(__model__, entity, name, value));
+    }
 }
 /**
  * Promotes or demotes an attribute from one geometry level to another.
@@ -57,13 +68,33 @@ export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
     throw new Error("Not impemented."); return null;
 }
 /**
- * Gets the xyz coordinates of a list of one or more positions.
+ * Gets the xyz coordinates of any geometry
  * @param __model__
  * @param positions List of one or more positions.
  * @returns List of one or more coordinates.
  * @example coord1 = attrib.GetCoordinates ([position1, position2])
  * @example_info Expected result could be [[1,2,3],[4,5,6]].
  */
-export function GeTxyzinates(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
-    throw new Error("Not impemented."); return null;
+export function GetXyz(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
+    if (!isArray(positions)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
+        return __model__.attribs.query.getAttribValue(ent_type_str, EAttribNames.COORDS, index) as Txyz;
+    } else {
+        return (positions as TId[]).map( position => GetXyz(__model__, position)) as Txyz[];
+    }
+}
+/**
+ * Sets attribute value.
+ * @param __model__
+ * @param positions List of one or more positions.
+ * @param xyz List of three values.
+ * @example
+ */
+export function SetXyz(__model__: GIModel, positions: TId|TId[], xyz: Txyz): void {
+    if (!isArray(positions)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
+        __model__.attribs.add.setAttribValue(ent_type_str, index,  EAttribNames.COORDS, xyz);
+    } else {
+        (positions as TId[]).map( position => SetXyz(__model__, position, xyz));
+    }
 }

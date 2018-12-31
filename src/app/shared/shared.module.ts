@@ -22,9 +22,9 @@ import { PanelHeaderComponent } from './components/header/panel-header.component
 import { AddOutputComponent } from './components/add-components/add_output.component';
 import { AddNodeComponent } from './components/add-components/add_node.component';
 import { AddInputComponent } from './components/add-components/add_input.component';
-import { ParameterViewerComponent } from './components/parameter-viewer/parameter-viewer.component';
-import { InputPortViewerComponent } from './components/parameter-viewer/input-port-viewer/input-port-viewer.component';
-import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
+// import { ParameterViewerComponent } from './components/parameter-viewer/parameter-viewer.component';
+// import { InputPortViewerComponent } from './components/parameter-viewer/input-port-viewer/input-port-viewer.component';
+// import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './components/file';
 import { NotificationComponent } from './components/notification/notification.component';
 // app model viewers
@@ -41,7 +41,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             PanelHeaderComponent,
             NotificationComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
-            ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
+            // ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent
         ],
     imports: [
@@ -83,7 +83,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             AddNodeComponent,
             AddInputComponent,
             AddOutputComponent,
-            ParameterViewerComponent,
+            // ParameterViewerComponent,
             NotificationComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent
     ]

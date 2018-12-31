@@ -1,15 +1,14 @@
 
-import {  EEntityTypeStr, TId, IGeomArrays, EEntStrToGeomArray } from './common';
-import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, idBreak } from './id';
+import {  EEntityTypeStr, IGeomArrays, EEntStrToGeomArray, TWire, TVert, TTri,
+    TEdge, TFace, TPoint, TPline, TPgon, TColl, TPosi } from './common';
+import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, idBreak, isTri } from './id';
 import { GIGeom } from './GIGeom';
-import { GIAttribs } from './GIAttribs';
 /**
  * Class for geometry.
  */
 export class GIGeomQuery {
     private _geom: GIGeom;
     private _geom_arrays: IGeomArrays;
-    private _attribs: GIAttribs;
     /**
      * Creates an object to store the geometry data.
      * @param geom_data The JSON data
@@ -17,7 +16,6 @@ export class GIGeomQuery {
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
         this._geom_arrays = geom_arrays;
-        this._attribs = geom.model.attribs;
     }
     // ============================================================================
     // Navigate down the hierarchy
@@ -61,16 +59,37 @@ export class GIGeomQuery {
     public navCollToColl(coll_i: number): number {
         return coll_i[0]; // coll parent
     }
-    // TODO This has been replaced by navAnyToVert
-    public navLineToVert(line_i: number): number[] {
-        const wire_i: number = this._geom_arrays.dn_plines_wires[line_i];
-        return this.getWireVerts(wire_i);
-    }
-    // TODO This has been replaced by navAnyToVert
-    public navPgonToVert(pgon_i: number): number[][] {
-        const face_i: number = this._geom_arrays.dn_pgons_faces[pgon_i];
-        const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
-        return wires_i.map( wire_i => this.getWireVerts(wire_i) );
+
+    /**
+     * Navigate from any level down to the edges, (or up if coming from positions or vertices)
+     * @param id
+     */
+    public navAnyToEdge(entity_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(entity_str)) {
+            return [].concat(...this.navPosiToVert(index).map( vert_i => this.navVertToEdge(vert_i)));
+        } else if (isVert(entity_str)) {
+            return this.navVertToEdge(index);
+        } else if (isTri(entity_str)) {
+            throw new Error('Trinagles have no edges.');
+        } else if (isEdge(entity_str)) {
+            return [index];
+        } else if (isWire(entity_str)) {
+            return this.navWireToEdge(index);
+        } else if (isFace(entity_str)) {
+            return [].concat(...this.navFaceToWire(index).map(wire_i => this.navWireToEdge(wire_i)));
+        } else if (isPoint(entity_str)) {
+            throw new Error('Points have no edges.')
+        } else if (isPline(entity_str)) {
+            return this.navAnyToEdge(EEntityTypeStr.WIRE, this.navPlineToWire(index));
+        } else if (isPgon(entity_str)) {
+            return this.navAnyToEdge(EEntityTypeStr.FACE, this.navPgonToFace(index));
+        } else if (isColl(entity_str)) {
+            const edges_i_plines = this.navCollToPline(index).map( pline_i => this.navAnyToEdge(entity_str, pline_i) );
+            const edges_i_pgons = this.navCollToPgon(index).map( pgon_i => this.navAnyToEdge(entity_str, pgon_i) );
+            const edges_i = [edges_i_plines, edges_i_pgons];
+            return [].concat(...edges_i);
+        }
+        throw new Error('Bad entity ID: ' + index);
     }
     /**
      * Navigate from any level down to the vertices, (or up if coming from positions)
@@ -81,6 +100,8 @@ export class GIGeomQuery {
             return this.navPosiToVert(index);
         } else if (isVert(entity_str)) {
             return [index];
+        } else if (isTri(entity_str)) {
+            return this.navTriToVert(index);
         } else if (isEdge(entity_str)) {
             return this.navEdgeToVert(index);
         } else if (isWire(entity_str)) {
@@ -90,15 +111,15 @@ export class GIGeomQuery {
         } else if (isPoint(entity_str)) {
             return  [this.navPointToVert(index)];
         } else if (isPline(entity_str)) {
-            return this.navAnyToVert(entity_str, this.navPlineToWire(index));
+            return this.navAnyToVert(EEntityTypeStr.WIRE, this.navPlineToWire(index));
         } else if (isPgon(entity_str)) {
-            return this.navAnyToVert(entity_str, this.navPgonToFace(index));
+            return this.navAnyToVert(EEntityTypeStr.FACE, this.navPgonToFace(index));
         } else if (isColl(entity_str)) {
-            const posis_i_points = this.navCollToPoint(index).map( point_i => this.navAnyToVert(entity_str, point_i) );
-            const posis_i_plines = this.navCollToPline(index).map( pline_i => this.navAnyToVert(entity_str, pline_i) );
-            const posis_i_pgons = this.navCollToPgon(index).map( pgon_i => this.navAnyToVert(entity_str, pgon_i) );
-            const posis_i = [posis_i_points, posis_i_plines, posis_i_pgons];
-            return [].concat(...posis_i);
+            const verts_i_points = this.navCollToPoint(index).map( point_i => this.navAnyToVert(entity_str, point_i) );
+            const verts_i_plines = this.navCollToPline(index).map( pline_i => this.navAnyToVert(entity_str, pline_i) );
+            const verts_i_pgons = this.navCollToPgon(index).map( pgon_i => this.navAnyToVert(entity_str, pgon_i) );
+            const verts_i = [verts_i_points, verts_i_plines, verts_i_pgons];
+            return [].concat(...verts_i);
         }
         throw new Error('Bad entity ID: ' + index);
     }
@@ -110,18 +131,19 @@ export class GIGeomQuery {
         if (isPosi(entity_str)) {
             return [index];
         }
-        return this.navAnyToVert(entity_str, index);
+        return this.navAnyToVert(entity_str, index).map(vert_i => this.navVertToPosi(vert_i));
     }
+
     // ============================================================================
     // Navigate up the hierarchy
     // ============================================================================
     public navPosiToVert(posi_i: number): number[] {
         return this._geom_arrays.up_posis_verts[posi_i];
     }
-    public navVertToTri(vert_i: number): number {
+    public navVertToTri(vert_i: number): number[] {
         return this._geom_arrays.up_verts_tris[vert_i];
     }
-    public navVertToEdge(vert_i: number): number {
+    public navVertToEdge(vert_i: number): number[] {
         return this._geom_arrays.up_verts_edges[vert_i];
     }
     public navTriToFace(tri_i: number): number {
@@ -137,7 +159,7 @@ export class GIGeomQuery {
         return this._geom_arrays.up_verts_points[vert_i];
     }
     public navWireToLine(wire_i: number): number {
-        return this._geom_arrays.up_wires_lines[wire_i];
+        return this._geom_arrays.up_wires_plines[wire_i];
     }
     public navFaceToPgon(face: number): number {
         return this._geom_arrays.up_faces_pgons[face];
@@ -153,49 +175,50 @@ export class GIGeomQuery {
     }
     /**
      * Returns the vertices.
-     * For a cloased wire, #vertices = #edges
+     * For a closed wire, #vertices = #edges
      * For an open wire, #vertices = #edges + 1
      */
     private getWireVerts(wire_i: number): number[] {
         const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
         const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
+        // if wire is open, then add final vertex
         if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
             verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
         }
         return verts_i;
     }
     // ============================================================================
-    // Get arrays of entities, these retrun arrays of string IDs
+    // Get arrays of entities
     // ============================================================================
-    public getPosis(): TId[] {
-        return Array.from(Array(this._geom_arrays.num_posis).keys()).map( (_, index) =>  EEntityTypeStr.POSI + index );
+    public getPosis(): TPosi[] {
+        return Array.from(Array(this._geom_arrays.num_posis).keys());
     }
-    public getVerts(): TId[] {
-        return this._geom_arrays.dn_verts_posis.map( (_, index) =>  EEntityTypeStr.VERT + index );
+    public getVerts(): TVert[] {
+        return this._geom_arrays.dn_verts_posis;
     }
-    public getTris(): TId[] {
-        return this._geom_arrays.dn_tris_verts.map( (_, index) =>  EEntityTypeStr.TRI + index );
+    public getTris(): TTri[] {
+        return this._geom_arrays.dn_tris_verts;
     }
-    public getEdges(): TId[] {
-        return this._geom_arrays.dn_edges_verts.map( (_, index) =>  EEntityTypeStr.EDGE + index );
+    public getEdges(): TEdge[] {
+        return this._geom_arrays.dn_edges_verts;
     }
-    public getWires(): TId[] {
-        return this._geom_arrays.dn_wires_edges.map( (_, index) =>  EEntityTypeStr.WIRE + index );
+    public getWires(): TWire[] {
+        return this._geom_arrays.dn_wires_edges;
     }
-    public getFaces(): TId[] {
-        return this._geom_arrays.dn_faces_wirestris.map( (_, index) =>  EEntityTypeStr.FACE + index );
+    public getFaces(): TFace[] {
+        return this._geom_arrays.dn_faces_wirestris;
     }
-    public getPoints(): TId[] {
-        return this._geom_arrays.dn_points_verts.map( (_, index) =>  EEntityTypeStr.POINT + index );
+    public getPoints(): TPoint[] {
+        return this._geom_arrays.dn_points_verts;
     }
-    public getLines(): TId[] {
-        return this._geom_arrays.dn_plines_wires.map( (_, index) =>  EEntityTypeStr.PLINE + index );
+    public getLines(): TPline[] {
+        return this._geom_arrays.dn_plines_wires;
     }
-    public getPgons(): TId[] {
-        return this._geom_arrays.dn_pgons_faces.map( (_, index) =>  EEntityTypeStr.PGON + index );
+    public getPgons(): TPgon[] {
+        return this._geom_arrays.dn_pgons_faces;
     }
-    public getColls(): TId[] {
-        return this._geom_arrays.dn_colls_objs.map( (_, index) =>  EEntityTypeStr.COLL + index );
+    public getColls(): TColl[] {
+        return this._geom_arrays.dn_colls_objs;
     }
     // ============================================================================
     // Get array lengths
@@ -234,9 +257,8 @@ export class GIGeomQuery {
      * Check if an entity exists
      * @param id
      */
-    public has(id: TId): boolean {
-        const [type_str, index]: [string, number] = idBreak(id);
-        const geom_arrays_key: string = EEntStrToGeomArray[type_str];
+    public has(ent_type_str: EEntityTypeStr, index: number): boolean {
+        const geom_arrays_key: string = EEntStrToGeomArray[ent_type_str];
         return (this._geom_arrays[geom_arrays_key][index] !== undefined);
     }
     /**
@@ -244,7 +266,21 @@ export class GIGeomQuery {
      * @param wire_i
      */
     public istWireClosed(wire_i: number): boolean {
-        const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
-        return this._geom_arrays.dn_edges_verts[edges_i[0]][0] === this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1];
+        // get the wire start and end verts
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const num_edges: number = wire.length;
+        const start_edge_i: number = wire[0];
+        const end_edge_i: number = wire[num_edges - 1];
+        const start_vert_i: number = this._geom.query.navEdgeToVert(start_edge_i)[0];
+        const end_vert_i: number = this._geom.query.navEdgeToVert(end_edge_i)[1];
+        // if start and end verts are the same, then wire is closed
+        return (start_vert_i === end_vert_i);
+    }
+    /**
+     * Get the parfent of a collection.
+     * @param wire_i
+     */
+    public getCollParent(coll_i: number): number {
+        return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
 }

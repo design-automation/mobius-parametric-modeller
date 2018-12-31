@@ -44,8 +44,8 @@ export class ToolsetComponent {
     }
 
     // add selected basic function as a new procedure
-    add(type: ProcedureTypes): void {
-        this.selected.emit( { type: type, data: undefined } );
+    add(type: ProcedureTypes, data?): void {
+        this.selected.emit( { type: type, data: data } );
     }
 
     // add selected function from core.modules as a new procedure
@@ -232,17 +232,6 @@ export class ToolsetComponent {
 
     changeNode(index: number) {
         this.dataService.flowchart.meta.selected_nodes = [index];
-    }
-
-
-    checkBasicFunc(type) {
-        const tp = type.toUpperCase();
-        return tp !== 'FUNCTION'
-        && tp !== 'IMPORTED'
-        && tp !== 'CONSTANT'
-        && tp !== 'RETURN'
-        && tp !== 'ADDDATA'
-        && tp !== 'BLANK';
     }
 
     checkInvalid(type) {

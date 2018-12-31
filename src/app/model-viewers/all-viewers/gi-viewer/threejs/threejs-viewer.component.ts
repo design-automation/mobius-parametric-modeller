@@ -232,7 +232,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const tri_indices = [];
         const positions = [];
         vertP_flat.map((vert) => {
-            positions.push(this.model.attribs.query.getPosiCoords()[vert]);
+            positions.push(this.model.attribs.query.getPosiCoords[vert]);
             tri_indices.push(vert);
         });
         console.log('Tri Indices', tri_indices);
@@ -244,7 +244,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             return v - diff;
         });
         console.log('New Indices', new_indices);
-        const posi_flat = [].concat(...positions);
+        verts_flat.map(vert => tri_indices.push(this.model.geom.query.navVertToPosi(vert)));
+
         console.log('positions', positions);
 
         const selecting = `f${face}`;
@@ -261,7 +262,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private selectLine(line) {
         const scene = this._data_threejs;
         const verts = this.model.geom.query.navEdgeToVert(line.index / 2);
-        const positions = verts.map(v => this.model.attribs.query.getVerTxyzByIndex(v));
+        const positions = verts.map(v => this.model.attribs.query.getVertCoords(v));
         const posi_flat = [].concat(...positions);
 
         const selecting = `l${line.index / 2}`;
@@ -296,7 +297,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private selectPoint(point) {
         const scene = this._data_threejs;
         const vert = this.model.geom.query.navPointToVert(point.index);
-        const position = this.model.attribs.query.getPosiCoordByIndex(vert);
+        const position = this.model.attribs.query.getPosiCoords(vert);
         const selecting = `p${point.index}`;
         if (!scene._selecting.has(selecting)) {
             const _container = this._elem.nativeElement.children.namedItem('threejs-container');

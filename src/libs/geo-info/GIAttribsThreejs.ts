@@ -1,6 +1,6 @@
-import { GIModel } from "./GIModel";
-import { TAttribDataTypes, EEntityTypeStr, IAttribsMaps, EEntStrToAttribMap } from "./common";
-import { GIAttribMap } from "./GIAttribMap";
+import { GIModel } from './GIModel';
+import { TAttribDataTypes, EEntityTypeStr, IAttribsMaps, EEntStrToAttribMap, EAttribNames } from './common';
+import { GIAttribMap } from './GIAttribMap';
 
 /**
  * Class for attributes.
@@ -26,7 +26,7 @@ export class GIAttribsThreejs {
      * @param verts An array of vertex indicies pointing to the coordinates.
      */
     public get3jsSeqVertsCoords(verts: number[]): number[] {
-        const coords_attrib: GIAttribMap = this._attribs_maps.posis.get('coordinates');
+        const coords_attrib: GIAttribMap = this._attribs_maps.posis.get(EAttribNames.COORDS);
         const coords_keys: number[] = coords_attrib.getSeqKeys();
         const coords_values: TAttribDataTypes[] = coords_attrib.getValues();
         const verts_cords_values: number[] = [];

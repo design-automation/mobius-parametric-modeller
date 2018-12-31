@@ -10,6 +10,7 @@
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
     padding: 0px;
+    padding-bottom: 1px;
     padding-left: 2px;
     //border-bottom: 1px solid red;
     border-bottom: 1px solid $color2;
@@ -33,10 +34,15 @@
         opacity: 0.5;
     }
 
+    &.disabled .input--var, &.disabled .input--arg{
+        border: 2px solid $color5 !important;
+    }
+
     &.selected{
         border-bottom: 2px solid $selected-color;
         border-left: 2px solid $selected-color;
-
+        padding-bottom: 0px;
+        padding-left: 1px;
         // &:hover > .btn-container {
         //     .btns{
         //         border-bottom: 2px solid $selected-color;
@@ -45,23 +51,59 @@
         // }
     }
     
-    &.error{
-        border: 1px solid red;
+    &.error:not(.disabled){
+        border-bottom: 2px solid $error-color;
+        border-left: 2px solid $error-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
     }
 
+    &.printing:not(.disabled){
+        border-bottom: 2px solid $print-color;
+        border-left: 2px solid $print-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+    }
+
+    &.printing{
+        .btns{
+            display: inline-flex;
+            background-color: transparent;
+            #print-btn{
+                display: flex;
+                justify-content: center;
+                color: $print-color;
+                background-color: $color6;
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+        &:hover .btns{
+            background-color: $color5;
+            #print-btn{
+                background-color: $color5;
+            }
+        }
+    }
 
     .input--var{
         font-size: $fsize2;
         width: 70px;
         background-color: $color6; 
-        border: none;
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
         border: 2px solid $color5;
         padding-left: 2px;
 
         &.error{
-            border: 2px solid red;
+            border: 2px solid $error-color;
         }
     }
     
@@ -71,14 +113,13 @@
         min-width: 10px;
         //max-width: 300px;
         background-color: $color6; 
-        border: none;
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
         border: 2px solid $color5;
         padding-left: 2px;
 
         &.error{
-            border: 2px solid red;
+            border: 2px solid $error-color;
         }
     }
     input:focus{
@@ -113,6 +154,10 @@
 .container--item:hover > .btn-container{//.container--line
     .btns{
         display: inline-flex;
+        .btn{
+            display: flex;
+            justify-content: center;
+        }
     }
 }
 
@@ -149,8 +194,7 @@
     border: none;
     color: $button-color;
 
-    display: flex;
-    justify-content: center;
+    display: none;
 
     overflow: hidden;
     vertical-align: center;
@@ -165,7 +209,7 @@
 .icon{
     vertical-align: center;
     width: $fsize1;
-    height: $fsize1;
+    height: $fsize1 + 2px;
     margin: 1px;
     font-size: $fsize2;
     // border: 1px solid $color1;
@@ -175,9 +219,6 @@
     color: $color1;
     display: inline-block;
     padding-right: 60px;
-    input{
-        background-color: red;
-    }
 }
 
 .line--blank{

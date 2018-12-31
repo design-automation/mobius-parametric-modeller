@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribDataTypeStrs, TAttribDataTypes } from '@libs/geo-info/common';
+import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -12,7 +12,7 @@ import { EAttribDataTypeStrs, TAttribDataTypes } from '@libs/geo-info/common';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs.add.addPosiAttrib('coordinates', EAttribDataTypeStrs.FLOAT, 3);
+    model.attribs.add.addAttrib(EEntityTypeStr.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     return model;
 }
 

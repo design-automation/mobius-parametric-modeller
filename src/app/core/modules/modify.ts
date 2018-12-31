@@ -1,5 +1,8 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/common';
+import { isArray } from 'util';
+import { idBreak } from '@libs/geo-info/id';
+import { vecsAdd } from '@libs/geom/vectors';
 
 /**
  * Set new coordinates of existing position.
@@ -9,19 +12,33 @@ import { TId, TPlane, Txyz, EOpDivide} from '@libs/geo-info/common';
  * @example mod.SetPosition(position1, [1,2,3])
  * @example_info position1 will have new coordinates = [1,2,3].
  */
-export function SetPosition(__model__: GIModel, position: TId, xyz: Txyz): void {
-    throw new Error("Not implemented."); return null;
+export function SetPositionXyz(__model__: GIModel, position: TId, xyz: Txyz): void {
+    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(position);
+    __model__.attribs.add.setPosiCoords(index, xyz);
 }
 /**
  * Moves geometry by vector.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param vector Vector or list of three coordinates.
+ * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection.
+ * @param vector List of three values.
  * @example mod.Move(geometry, vector)
  * @example_info Moves geometry by vector.
  */
-export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz): void {
-    throw new Error("Not implemented."); return null;
+export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): void {
+    if (!isArray(geometry)) {
+        geometry = [geometry] as TId[];
+    }
+    const posis_i: number[] = [];
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+    }
+    const unique_posis_i: number[] = Array.from(new Set(posis_i));
+    for (const unique_posi_i of unique_posis_i) {
+        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+        const new_xyz: Txyz = vecsAdd(old_xyz, vector);
+        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+    }
 }
 /**
  * Rotates geometry on plane by angle.
@@ -29,8 +46,8 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: TId|Txyz):
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Plane to rotate on.
  * @param angle Angle (in radians).
- * @example mod.Rotate(geometry, plane1, pi)
- * @example_info Rotates geometry on plane1 by pi (i.e. 180 degrees).
+ * @example mod.Rotate(geometry, plane1, PI)
+ * @example_info Rotates geometry on plane1 by PI (i.e. 180 degrees).
  */
 export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
     throw new Error("Not implemented."); return null;
@@ -73,7 +90,7 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
 /**
  * Reverses direction of objects.
  * @param __model__
- * @param objects Vector, plane, polyline, polygon.
+ * @param objects polyline, polygon, wire
  * @returns ?
  * @example mod.Reverse(plane1)
  * @example_info Flips plane1.
@@ -107,12 +124,23 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
 /**
  * Closes polylines if open.
  * @param __model__
- * @param polyline Polyline(s).
+ * @param lines Polyline(s).
  * @example mod.Close([polyline1,polyline2])
  * @example_info If open, polylines are changed to closed; if closed, nothing happens.
  */
-export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): void {
-    throw new Error("Not implemented."); return null;
+export function Close(__model__: GIModel, lines: TId|TId[]): void {
+    if (!isArray(lines)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
+        let wire_i: number = index;
+        if (ent_type_str === EEntityTypeStr.PLINE) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        } else if (ent_type_str !== EEntityTypeStr.WIRE) {
+            throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
+        }
+        __model__.geom.add.closeWire(wire_i);
+    } else {
+        (lines as TId[]).map(line => Close(__model__, line));
+    }
 }
 /**
  * Checks if polyline(s) or wire(s) are closed.
@@ -123,12 +151,23 @@ export function Close(__model__: GIModel, polyline: TId|TId[], close: boolean): 
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    throw new Error("Not implemented."); return null;
+    if (!isArray(lines)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
+        let wire_i: number = index;
+        if (ent_type_str === EEntityTypeStr.PLINE) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        } else if (ent_type_str !== EEntityTypeStr.WIRE) {
+            throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
+        }
+        return __model__.geom.query.istWireClosed(wire_i);
+    } else {
+        return (lines as TId[]).map(line => IsClosed(__model__, line)) as boolean[];
+    }
 }
 /**
  * Deletes geometry.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
+ * @param geometry Position, point, polyline, polygon, collection. Can be a list.
  * @example mod.Delete(geometry)
  * @example_info Deletes specified geometry from model.
  */

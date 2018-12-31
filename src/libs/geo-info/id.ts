@@ -6,7 +6,7 @@ import { EEntityTypeStr, TId } from './common';
 // IDs start with two characters followed by numeric digits.
 // For example '_v22' is vertex number 22.
 // ============================================================================
-export function idBreak(id: TId): [string, number] {
+export function idBreak(id: TId): [EEntityTypeStr, number] {
     return [idEntityTypeStr(id), idIndex(id)];
 }
 export function idIndex(id: TId): number {
@@ -23,6 +23,9 @@ export function isPosi(id: TId): boolean {
 }
 export function isVert(id: TId): boolean {
     return id.startsWith(EEntityTypeStr.VERT);
+}
+export function isTri(id: TId): boolean {
+    return id.startsWith(EEntityTypeStr.TRI);
 }
 export function isEdge(id: TId): boolean {
     return id.startsWith(EEntityTypeStr.EDGE);
@@ -44,4 +47,21 @@ export function isPgon(id: TId): boolean {
 }
 export function isColl(id: TId): boolean {
     return id.startsWith(EEntityTypeStr.COLL);
+}
+// more general test
+export function isDim0(id: TId): boolean {
+    if (id.startsWith(EEntityTypeStr.POSI)) { return true; }
+    if (id.startsWith(EEntityTypeStr.VERT)) { return true; }
+    if (id.startsWith(EEntityTypeStr.POINT)) { return true; }
+    return false;
+}
+export function isDim1(id: TId): boolean {
+    if (id.startsWith(EEntityTypeStr.EDGE)) { return true; }
+    if (id.startsWith(EEntityTypeStr.PLINE)) { return true; }
+    return false;
+}
+export function isDim2(id: TId): boolean {
+    if (id.startsWith(EEntityTypeStr.FACE)) { return true; }
+    if (id.startsWith(EEntityTypeStr.PGON)) { return true; }
+    return false;
 }

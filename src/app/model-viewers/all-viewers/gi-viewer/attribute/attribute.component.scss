@@ -9,7 +9,9 @@
 }
 
 table {
-  width: 100%;  
+  width: 100%;
+  font-family: sans-serif;
+
   tr.mat-header-row{
     height: $fsize3;
   }
@@ -29,6 +31,7 @@ table {
 
 /deep/ #attribTab{
   height: 100%;
+
   .mat-tab-body-wrapper{
     background-color: $color7;
     height: calc(100vh - 20px); // 20px == label height
@@ -55,6 +58,8 @@ table {
     padding: 0 0 0 2px;
     min-width: 100px;
     font-size: $fsize2;
+    font-family: sans-serif;
+
     border-bottom: 2px solid transparent;
     transition-duration: 0.4s;
     .mat-tab-label-content{
@@ -78,6 +83,8 @@ table {
     flex-flow: row nowrap;
     flex-shrink: 0;
 
+    font-family: sans-serif;
+
     .mat-paginator-page-size, .mat-paginator-range-actions{
       height: inherit;  
       align-items: baseline;
@@ -92,6 +99,10 @@ table {
       margin-top:0 !important;
       .mat-form-field-wrapper{
         padding-bottom: 0.95em;
+        .mat-form-field-flex .mat-form-field-infix .mat-select .mat-select-trigger .mat-select-value{
+          font-family: sans-serif;
+          color: $color1;
+        }
       }
     }
 

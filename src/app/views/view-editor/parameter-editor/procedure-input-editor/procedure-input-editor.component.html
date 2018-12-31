@@ -11,7 +11,16 @@
         </div>
     </div>
     <div class='inline-div'>
-        <input *ngIf='prod.type == 10' [class.disabled-input]='true' value='Global Variable' size='10' disabled>
+        <ng-container *ngIf='prod.type == 10'>
+            <ng-container [ngSwitch]="prod.meta.inputMode">
+                <input *ngSwitchCase='0' [class.disabled-input]='true' value='Simple Input' size='10' disabled>
+                <input *ngSwitchCase='1' [class.disabled-input]='true' value='Slider' size='10' disabled>
+                <input *ngSwitchCase='2' [class.disabled-input]='true' value='Check Box' size='10' disabled>
+                <input *ngSwitchCase='3' [class.disabled-input]='true' value='URL' size='10' disabled>
+                <input *ngSwitchCase='4' [class.disabled-input]='true' value='File' size='10' disabled>
+                <input *ngSwitchCase='5' [class.disabled-input]='true' value='Constant' size='10' disabled>
+            </ng-container>
+        </ng-container>
         <input *ngIf='prod.type == 12' [class.disabled-input]='true' value='Add Model' size='5' disabled>
     </div>
 
@@ -21,15 +30,13 @@
         [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
     </div>
 
-    <div class='inline-div'>
+    <div class='inline-div' *ngIf='prod.type == 12'>
         <input [class.disabled-input]='true' value='Input Mode:' size='8' disabled>
-        <select *ngIf='prod.type != 12' name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
-            <option 
-                *ngFor="let ptype of PortTypesArr" 
-                [value]="PortTypes[ptype]" 
-                [selected]="prod.meta.inputMode == ptype">{{ptype}}</option>
-        </select>
-        <select *ngIf='prod.type == 12' name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
+        <!-- 
+            <input *ngIf='prod.type != 12' [class.disabled-input]='true' [value]='PortTypes[prod.meta.inputMode]'
+            [style.width.px]='inputSize(PortTypes[prod.meta.inputMode])' disabled>
+        -->
+        <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
             <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
             <option value='4' [selected]="prod.meta.inputMode == 4">File</option>
 
@@ -41,9 +48,16 @@
     <div class='FFA'>
         <input [class.disabled-input]='true' value='Default:' size='8' disabled>
         <ng-container [ngSwitch]="prod.meta.inputMode" >
+
+            <!-- Constant -->
+            <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+            [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
+
+            <!-- simpleinput -->
             <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
 
+            <!-- slider -->
             <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
                 <div class = 'input--container'>
                     <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].step' placeholder='Step'
@@ -68,13 +82,19 @@
                     max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
                 </div>               
             </div>
+
+            <!-- checkbox -->
             <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
                 <input id = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
-                <label for = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default'></label>
+                <label for = 'chbox_{{prod.ID}}'></label>
+
             </div>
+
+            <!-- URL -->
             <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
             [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
 
+            <!-- File -->
             <div class='div--slider' *ngSwitchCase="PortTypes.File" >
                 <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>
                 <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-1].default.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].default.name,"")' disabled>

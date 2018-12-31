@@ -1,7 +1,7 @@
-import { GIModel } from "./GIModel";
-import { TId, TAttribDataTypes, IAttribsMaps, EEntStrToAttribMap, IQueryComponent, Txyz } from "./common";
-import { GIAttribMap } from "./GIAttribMap";
-import { idBreak } from "./id";
+import { GIModel } from './GIModel';
+import { TAttribDataTypes, IAttribsMaps, EEntStrToAttribMap, IQueryComponent, 
+    Txyz, EAttribNames, EEntityTypeStr } from './common';
+import { GIAttribMap } from './GIAttribMap';
 import { parse_query } from './query';
 
 /**
@@ -18,127 +18,36 @@ export class GIAttribsQuery {
         this._model = model;
         this._attribs_maps = attribs_maps;
     }
-
     /**
      * Get an entity attrib value
      * @param id
      * @param name
      */
-    public getAttribValue(id: TId, name: string): TAttribDataTypes {
-        const [type_str, index]: [string, number] = idBreak(id);
-        const attribs_maps_key: string = EEntStrToAttribMap[type_str];
+    public getAttribValue(ent_type_str: EEntityTypeStr, name: string, index: number): TAttribDataTypes {
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).get(index);
     }
-    // ============================================================================
-    // Get entity attrib from numeric index
-    // ============================================================================
     /**
-     * Get a position entity attrib value by index
+     * Check if attribute exists
+     * @param ent_type_str
      * @param name
-     * @param index
      */
-    public getPosiAttribValueByIndex(name: string, index: number): TAttribDataTypes {
-        const attrib: GIAttribMap = this._attribs_maps.posis.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.get(index);
+    public hasAttrib(ent_type_str: EEntityTypeStr, name: string): boolean {
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        return attribs.has(name);
     }
     /**
-     * Get a vertex entity attrib value by index
-     * @param name
-     * @param index
+     * Get all the attribute names for an entity type
+     * @param ent_type_str
      */
-    public getVertAttribValueByIndex(name: string, index: number): TAttribDataTypes {
-        const attrib: GIAttribMap = this._attribs_maps.verts.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.get(index);
+    public getAttribNames(ent_type_str: EEntityTypeStr): string[] {
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        return Array.from(attribs.keys());
     }
-    /**
-     * Get an edge entity attrib value by index
-     * @param name
-     * @param index
-     */
-    public getEdgeAttribValueByIndex(name: string, index: number): TAttribDataTypes {
-        const attrib: GIAttribMap = this._attribs_maps.edges.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.get(index);
-    }
-    /**
-     * Get a wire entity attrib value by index
-     * @param name
-     * @param index
-     */
-    public getWireAttribValueByIndex(name: string, index: number): TAttribDataTypes {
-        const attrib: GIAttribMap = this._attribs_maps.wires.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.get(index);
-    }
-    /**
-     * Get a face entity attrib value by index
-     * @param name
-     * @param index
-     */
-    public getFaceAttribValueByIndex(name: string, index: number): TAttribDataTypes {
-        const attrib: GIAttribMap = this._attribs_maps.faces.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.get(index);
-    }
-    /**
-     * Get a collection entity attrib value by index
-     * @param name
-     * @param index
-     */
-    public getCollAttribValueByIndex(name: string, index: number): TAttribDataTypes {
-        const attrib: GIAttribMap = this._attribs_maps.colls.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.get(index);
-    }
-    // ============================================================================
-    // Has entity attrib
-    // ============================================================================
-    public hasPosiAttrib(name: string): boolean {
-        return this._attribs_maps.posis.has(name);
-    }
-    public hasVertAttrib(name: string): boolean {
-        return this._attribs_maps.verts.has(name);
-    }
-    public hasEdgeAttrib(name: string): boolean {
-        return this._attribs_maps.edges.has(name);
-    }
-    public hasWireAttrib(name: string): boolean {
-        return this._attribs_maps.wires.has(name);
-    }
-    public hasFaceAttrib(name: string): boolean {
-        return this._attribs_maps.faces.has(name);
-    }
-    public hasCollAttrib(name: string): boolean {
-        return this._attribs_maps.colls.has(name);
-    }
-    // ============================================================================
-    // Get entity attrib names
-    // ============================================================================
-    public getPosiAttribNames(): string[] {
-        return Array.from(this._attribs_maps.posis.keys());
-    }
-    public getVertAttribNames(): string[] {
-        return Array.from(this._attribs_maps.verts.keys());
-    }
-    public getEdgeAttribNames(): string[] {
-        return Array.from(this._attribs_maps.edges.keys());
-    }
-    public getWireAttribNames(): string[] {
-        return Array.from(this._attribs_maps.wires.keys());
-    }
-    public getFaceAttribNames(): string[] {
-        return Array.from(this._attribs_maps.faces.keys());
-    }
-    public getCollAttribNames(): string[] {
-        return Array.from(this._attribs_maps.colls.keys());
-    }
-    // ============================================================================
-    // Query an entity attrib
-    // ============================================================================
     /**
      * Query the model using a query strings.
      * Returns a list of string IDs of entities in the model.
@@ -195,22 +104,22 @@ export class GIAttribsQuery {
         return attrib_map.getSeqValues();
     }
     // ============================================================================
-    // Shortcuts
+    // Shortcuts for getting xyz
     // ============================================================================
     /**
      * Shortcut for getting a coordinate from a numeric position index (i.e. this is not an ID)
      * @param posi_i
      */
-    public getPosiCoordByIndex(posi_i: number): Txyz {
-        return this._attribs_maps.posis.get('coordinates').get(posi_i) as Txyz;
+    public getPosiCoords(posi_i: number): Txyz {
+        return this._attribs_maps.posis.get(EAttribNames.COORDS).get(posi_i) as Txyz;
     }
     /**
      * Shortcut for getting all coordinates
      * @param posi_i
      */
-    public getPosiCoords(): Txyz[] {
+    public getPosisCoords(): Txyz[] {
         const coords: Txyz[] = [];
-        const coords_map: GIAttribMap = this._attribs_maps.posis.get('coordinates');
+        const coords_map: GIAttribMap = this._attribs_maps.posis.get(EAttribNames.COORDS);
         for (let posi_i = 0; posi_i < this._model.geom.query.numPosis(); posi_i++) {
             coords.push(coords_map.get(posi_i) as Txyz);
         }
@@ -220,9 +129,9 @@ export class GIAttribsQuery {
      * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)
      * @param vert_i
      */
-    public getVerTxyzByIndex(vert_i: number): Txyz {
+    public getVertCoords(vert_i: number): Txyz {
         const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
-        return this._attribs_maps.posis.get('coordinates').get(posi_i) as Txyz;
+        return this._attribs_maps.posis.get(EAttribNames.COORDS).get(posi_i) as Txyz;
     }
     /**
      * Shortcut for getting coords for all verts
@@ -230,7 +139,7 @@ export class GIAttribsQuery {
      */
     public getVertsCoords(attrib_name: string): Txyz[] {
         const coords: Txyz[] = [];
-        const coords_map: GIAttribMap = this._attribs_maps.posis.get('coordinates');
+        const coords_map: GIAttribMap = this._attribs_maps.posis.get(EAttribNames.COORDS);
         for (let vert_i = 0; vert_i < this._model.geom.query.numVerts(); vert_i++) {
             const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
             coords.push(coords_map.get(posi_i) as Txyz);

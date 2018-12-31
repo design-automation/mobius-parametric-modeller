@@ -71,9 +71,9 @@ $ln-height: $fsize2 + 3px;
     }
     .examp{
         padding: 0px;
-        p{
-            padding-left: $small-padding;
-        }
+        // p{
+        //     padding-left: $small-padding;
+        // }
         ul{
             margin-bottom: 6px;
             padding: 0px;
@@ -82,6 +82,7 @@ $ln-height: $fsize2 + 3px;
                 border: 1px solid $color1;
                 font-family: 'Ubuntu Mono';
                 padding: 0px 0px 0px 2px;
+                margin: 4px 0px;
             }
         }
     }

@@ -8,6 +8,13 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
+// Import / Export data types
+export enum EIODataTypes {
+    GI,
+    OBJ
+}
+
+
 // Promote modelling operation
 export enum EAttribTypes {
     POSIS =  'positions',
@@ -97,17 +104,17 @@ export interface IGeomArrays {
     dn_wires_edges: TWire[];
     dn_faces_wirestris: TFace[];
     dn_points_verts: TPoint[];
-    dn_plines_wires: TLine[];
+    dn_plines_wires: TPline[];
     dn_pgons_faces: TPgon[];
     dn_colls_objs: TColl[];
-    up_posis_verts: number[][];
+    up_posis_verts: number[][]; // one to many
     up_tris_faces: number[];
-    up_verts_edges: number[];
-    up_verts_tris: number[];
+    up_verts_edges: number[][]; // one to two
+    up_verts_tris: number[][]; // one to many
     up_verts_points: number[];
     up_edges_wires: number[];
     up_wires_faces: number[];
-    up_wires_lines: number[];
+    up_wires_plines: number[];
     up_faces_pgons: number[];
     up_points_colls: number[];
     up_plines_colls: number[];
@@ -161,16 +168,17 @@ export enum EAttribDataTypeStrs {
 
 // types
 export type Txyz = [number, number, number];
+export type TPosi = number;
 export type TTri = [number, number, number]; // [position, position, position]
 export type TVert = number; // positions
 export type TEdge = [number, number]; // [vertex, vertex]
 export type TWire = number[]; // [edge, edge,....]
 export type TFace = [number[], number[]]; // [[wire, ....], [triangle, ...]]
 export type TPoint = number; // [vertex,....]
-export type TLine = number; // [wire,....]
+export type TPline = number; // [wire,....]
 export type TPgon = number; // [face,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
-export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TLine | TPgon | TColl;
+export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
 export type TAttribDataTypes = string | string[] | number | number[];
 export type TAttribValuesArr = Array<[number[], TAttribDataTypes]>;
 // interfaces for JSON data
@@ -183,7 +191,7 @@ export interface IGeomData {
     wires: TWire[];
     faces: TFace[];
     points: TPoint[];
-    linestrings: TLine[];
+    linestrings: TPline[];
     polygons: TPgon[];
     collections: TColl[];
 }

@@ -2,6 +2,7 @@
     [class.selected]="data.selected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'>
     <div class='container--item' >
@@ -16,7 +17,7 @@
                     <mat-icon class='icon'>tv_off</mat-icon>
                 </button>
                 <!-- Print button-->
-                <button *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
+                <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
                     <mat-icon class='icon'>print</mat-icon>
                 </button>
                 <!-- help button-->

@@ -4,5 +4,5 @@
 
 <hr>
 <ng-container *ngFor="let prod of startNode.procedure">
-    <procedure-input-viewer *ngIf="prod.enabled" [prod]="prod"></procedure-input-viewer>
+    <procedure-input-viewer *ngIf="prod.enabled && prod.meta.inputMode != 5" [prod]="prod"></procedure-input-viewer>
 </ng-container>

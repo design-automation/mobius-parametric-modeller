@@ -15,9 +15,8 @@ import { normal, area } from '@libs/geom/triangle';
  * @param position2 Second position.
  * @returns Distance.
  * @example distance1 = calc.Distance (position1, position2)
- * @example_info position1 = [0,0,0]
- * @example_info position2 = [0,0,10]
- * @example_info Expected value of distance is 10.
+ * @example_info position1 = [0,0,0], position2 = [0,0,10]
+ * Expected value of distance is 10.
  */
 export function Distance(__model__: GIModel, position1: TId, position2: TId): number {
     const ps1_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position1)[1]);
@@ -29,7 +28,7 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId): nu
  * @param __model__
  * @param lines Edge, wire or polyline.
  * @returns Length.
- * @example length1 = calc.Length (line)
+ * @example length1 = calc.Length (line1)
  */
 export function Length(__model__: GIModel, lines: TId|TId[]): number {
     if (!isArray(lines)) {
@@ -64,7 +63,10 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
  * @param locationOrObject Position, vertex, point, list of coordinates, polyline, or polygon.
  * @param object Polyline or polygon.
  * @returns Minimum distance.
- * @example mindistance1 = calc.MinDistance (locationOrObject, object)
+ * @example mindistance1 = calc.MinDistance (position1, polyline1)
+ * @example_info Calculates minimum distance between position1 and polyline1.
+ * @example mindistance2 = calc.MinDistance (polyline1, polyline2)
+ * @example_info Calculates minimum distance between polyline1 and polyline2.
  */
 export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], object: TId): number {
     throw new Error("Not impemented."); return null;
@@ -74,7 +76,7 @@ export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], obj
  * @param __model__
  * @param geometry A polygon, a face, a closed polyline, or or closed wire.
  * @returns Area.
- * @example area1 = calc.Area (surface)
+ * @example area1 = calc.Area (surface1)
  */
 export function Area(__model__: GIModel, geometry: TId): number {
     const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
@@ -186,6 +188,7 @@ export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
  * @param __model__
  * @param line Edge, wire, or polyline.
  * @param t_param A value between 0 to 1.
+ * @returns Set of coordinates.
  * @example coord1 = calc.ParamTToXyz (lines, t_param)
  */
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {

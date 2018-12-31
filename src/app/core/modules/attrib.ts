@@ -71,7 +71,7 @@ export function QueryNumber(__model__: GIModel, query: TQuery): TId[] {
  * Gets the xyz coordinates of any geometry
  * @param __model__
  * @param positions List of one or more positions.
- * @returns List of one or more coordinates.
+ * @returns List of one or more sets of coordinates.
  * @example coord1 = attrib.GetCoordinates ([position1, position2])
  * @example_info Expected result could be [[1,2,3],[4,5,6]].
  */
@@ -88,7 +88,9 @@ export function GetXyz(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
  * @param __model__
  * @param positions List of one or more positions.
  * @param xyz List of three values.
- * @example
+ * @returns Shifted position.
+ * @example newposition = attrib.SetXyz (position1, [0,0,1])
+ * @example_info Coordinates of position1 are changed to [0,0,1]. All geometry referring to position1 alters accordingly.
  */
 export function SetXyz(__model__: GIModel, positions: TId|TId[], xyz: Txyz): void {
     if (!isArray(positions)) {

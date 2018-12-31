@@ -9,6 +9,7 @@ import { vecsAdd } from '@libs/geom/vectors';
  * @param __model__
  * @param position Existing position.
  * @param xyz List of three coordinates.
+ * @returns void
  * @example mod.SetPosition(position1, [1,2,3])
  * @example_info position1 will have new coordinates = [1,2,3].
  */
@@ -21,6 +22,7 @@ export function SetPositionXyz(__model__: GIModel, position: TId, xyz: Txyz): vo
  * @param __model__
  * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection.
  * @param vector List of three values.
+ * @returns void
  * @example mod.Move(geometry, vector)
  * @example_info Moves geometry by vector.
  */
@@ -46,6 +48,7 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Plane to rotate on.
  * @param angle Angle (in radians).
+ * @returns void
  * @example mod.Rotate(geometry, plane1, PI)
  * @example_info Rotates geometry on plane1 by PI (i.e. 180 degrees).
  */
@@ -58,6 +61,7 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Plane to scale on.
  * @param scale Scale factor.
+ * @returns void
  * @example mod.Scale(geometry, plane1, 0.5)
  * @example_info Scales geometry by 0.5 on plane1.
  */
@@ -69,6 +73,7 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TI
  * @param __model__
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param plane Plane to mirror across.
+ * @returns void
  * @example mod.Mirror(geometry, plane)
  * @example_info Mirrors geometry across the plane.
  */
@@ -81,6 +86,7 @@ export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): 
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param from Plane defining target construction plane.
  * @param to Plane defining destination construction plane.
+ * @returns void
  * @example mod.XForm(geometry, plane1, plane2)
  * @example_info Transforms geometry from plane1 to plane2.
  */
@@ -91,10 +97,9 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
  * Reverses direction of objects.
  * @param __model__
  * @param objects polyline, polygon, wire
- * @returns ?
+ * @returns void
  * @example mod.Reverse(plane1)
  * @example_info Flips plane1.
- *
  * @example mod.Reverse(polyline1)
  * @example_info Reverses the order of vertices to reverse the direction of the polyline.
  */
@@ -105,6 +110,7 @@ export function Reverse(__model__: GIModel, objects: TId[]): void {
  * Welds geometry together.
  * @param __model__
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @returns void
  * @example mod.Weld([polyline1,polyline2])
  * @example_info Welds both polyline1 and polyline2 together.
  */
@@ -115,6 +121,7 @@ export function Weld(__model__: GIModel, geometry: TId[]): void {
  * Unweld geometries.
  * @param __model__
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @returns void
  * @example mod.Unweld(polyline1,polyline2)
  * @example_info Unwelds polyline1 from polyline2.
  */
@@ -125,6 +132,7 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
  * Closes polylines if open.
  * @param __model__
  * @param lines Polyline(s).
+ * @returns void
  * @example mod.Close([polyline1,polyline2])
  * @example_info If open, polylines are changed to closed; if closed, nothing happens.
  */
@@ -168,6 +176,7 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
  * Deletes geometry.
  * @param __model__
  * @param geometry Position, point, polyline, polygon, collection. Can be a list.
+ * @returns void
  * @example mod.Delete(geometry)
  * @example_info Deletes specified geometry from model.
  */

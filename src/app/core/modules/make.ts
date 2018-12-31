@@ -30,7 +30,7 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
 * @param origin XYZ coordinates as a list of three numbers.
 * @param radius Radius of circle as a number.
 * @param num_positions Number of positions distributed equally along the arc.
-* @param arc_angle Angle of arc in radians.
+* @param arc_angle Angle of arc (in radians).
 * @returns New positions if successful, null if unsuccessful or on error.
 * @example positions1 = make.PositionsArc([0,0,0], 10, 12, PI)
 * @example_info Creates a list of 12 positions distributed equally along a semicircle of radius 10.
@@ -112,7 +112,7 @@ export function PositionsRect(__model__: GIModel, origin: Txyz|TPlane, size: num
 /**
  * Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.
  * @param __model__
- * @param position Position of point.
+ * @param positions Position of point.
  * @returns New point if successful, null if unsuccessful or on error.
  * @example_info Creates a point at position1.
  * @example point1 = make.Point(position)
@@ -171,6 +171,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 /**
  * Adds a new collection to the model.
  * @param __model__
+ * @param parent_coll ???
  * @param objects List of points, polylines, polygons.
  * @returns New collection if successful, null if unsuccessful or on error.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
@@ -196,7 +197,7 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
  * Lofts between edges.
  * @param __model__
  * @param geometry Edges (or wires, polylines or polygons), with the same number of edges.
- * @returns Lofted polygons between edges.
+ * @returns Lofted polygons between edges if successful, null if unsuccessful or on error.
  * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
  * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
  */
@@ -234,11 +235,11 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
  * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
  * @param divisions Number of divisions to divide extrusion by.
- * @returns Extrusion of geometry.
+ * @returns Extrusion of geometry if successful, null if unsuccessful or on error.
  * @example extrusion1 = make.Extrude(point1, 10, 2)
- * @example_info Creates a list of 2 lines of length 5 in the z-direction.
+ * @example_info Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
  * If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].
- * @example extrusion2 = make.Extrude(polygon1, [0,5,0])
+ * @example extrusion2 = make.Extrude(polygon1, [0,5,0], 1)
  * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */
 export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
@@ -313,7 +314,7 @@ export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: numbe
  * Joins polylines to polylines or polygons to polygons.
  * @param __model__
  * @param objects Polylines or polygons.
- * @returns New joined polyline or polygon.
+ * @returns New joined polyline or polygon if successful, null if unsuccessful or on error.
  * @example joined1 = make.Join([polyline1,polyline2])
  * @example_info Creates a new polyline by joining polyline1 and polyline2.
  */
@@ -333,8 +334,10 @@ enum ECopyAttribues {
  * Adds a new copy to the model.
  * @param __model__
  * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
+ * @param copy_attributes Enum to copy attributes or to have no attributes copied.
  * @returns New copy if successful, null if unsuccessful or on error.
- * @example copy1 = make.Copy([position1,polyine1,polygon1])
+ * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
  * @example_info Creates a list containing a copy of the objects in sequence of input.
  */
 export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: ECopyPositions, copy_attributes: ECopyAttribues): TId|TId[] {
@@ -369,9 +372,9 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: EC
  * @param edges Edge(s) to be divided.
  * @param divisor Length or number of segments.
  * @param method Enum to choose which method.
+ * @returns List of segments if successful, null if unsuccessful or on error.
  * @example segments1 = make.Divide(edge1, 5, number)
  * @example_info Creates a list of 5 equal segments from edge1.
- *
  * @example segments2 = make.Divide(edge1, 5, length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
@@ -379,10 +382,13 @@ export function Divide(__model__: GIModel, edges: TId[], divisor: number, method
     throw new Error("Not implemented."); return null;
 }
 /**
- * VectorVisible
+ * Adds a visible vector to the model from a location and vector.
  * @param __model__
+ * @param origin Location of origin, or list of three coordinates
+ * @param vector Vector or list of three coordinates.
+ * @returns Visible vector from origin if successful, null if unsuccessful or on error.
  */
-export function VectorVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
+export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: TId|Txyz): TId {
     throw new Error("Not implemented."); return null;
 }
 /**

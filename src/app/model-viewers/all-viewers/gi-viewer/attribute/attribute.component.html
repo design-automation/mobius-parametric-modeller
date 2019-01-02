@@ -1,5 +1,5 @@
 <mat-tab-group animationDuration="0ms" [disableRipple]="true" id="attribTab" (selectedIndexChange)="_setDataSource($event)" [selectedIndex]="currentTab">
-  <mat-tab *ngFor="let tab of tabs; index as i" label="{{tab}}">
+  <mat-tab *ngFor="let tab of tabs" label="{{tab}}">
     <div class="mat-elevation-z8">
       <div class = "table--container">
         <table mat-table [dataSource]="dataSource" matSort>

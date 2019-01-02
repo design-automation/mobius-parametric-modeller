@@ -70,7 +70,9 @@
                                 <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
                                     <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
                                     <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
-                                    <p class='paramP' *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                                    <ng-container *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'>
+                                        <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
+                                    </ng-container>
                                     <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
                                 </span>
                             </div>

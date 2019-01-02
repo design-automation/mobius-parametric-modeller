@@ -6,6 +6,7 @@ import { ProcedureTypesAware, ModuleDocAware } from '@shared/decorators';
 import { _parameterTypes} from '@modules';
 
 import { inline_func } from '../toolset/toolset.inline';
+import * as Modules from '@modules';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -180,5 +181,34 @@ export class ProcedureItemComponent {
 
     inputSize(val) {
         return ctx.measureText(val).width + 2;
+    }
+
+    checkEnum(param, index: number): boolean {
+        try {
+            if (param.name.substring(0, 1) === '_') {
+                return false;
+            }
+            // @ts-ignore
+            const arg = this.ModuleDoc[this.data.meta.module][this.data.meta.name].parameters[index];
+            if (arg.description.toLowerCase().indexOf('enum') === -1 || !Modules[this.data.meta.module][arg.type]) {
+                return false;
+            }
+            return true;
+        } catch (ex) {
+            return false;
+        }
+    }
+
+    getEnum(index: number) {
+        // @ts-ignore
+        const enm = Modules[this.data.meta.module][this.ModuleDoc[this.data.meta.module][this.data.meta.name].parameters[index].type];
+        const enumList = [];
+        for (const i in enm) {
+            if (! enm.hasOwnProperty(i)) {
+                continue;
+            }
+            enumList.push(enm[i]);
+        }
+        return enumList;
     }
 }

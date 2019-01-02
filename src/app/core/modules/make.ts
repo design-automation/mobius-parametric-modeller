@@ -127,7 +127,7 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     }
 }
 // Enums for Polyline()
-enum EClose {
+export enum _EClose {
     CLOSE = 'close',
     OPEN = 'open'
 }
@@ -140,9 +140,9 @@ enum EClose {
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  */
-export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: EClose): TId|TId[] {
+export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
     if (isArray(positions) && !Array.isArray(positions[0])) {
-        const bool_close: boolean = (close === EClose.CLOSE);
+        const bool_close: boolean = (close === _EClose.CLOSE);
         const posis_i: number[] = idIndicies(positions as TId[]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
         return EEntityTypeStr.PLINE + pline_i;

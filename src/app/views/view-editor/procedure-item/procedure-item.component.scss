@@ -250,4 +250,8 @@
     font-weight: 550;
     text-align: center;
     min-height: 17px;
+
+    .module-name{
+        color: $selected-color;
+    }
 }

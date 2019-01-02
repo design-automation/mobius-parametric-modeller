@@ -64,6 +64,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const self = this;
         this._data_threejs._controls.addEventListener( 'change', function() {self.render( self ); });
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
+
+        if (this._data_threejs.ObjLabelMap.size !== 0) {
+            this._data_threejs.ObjLabelMap.forEach((obj, label) => {
+                this._data_threejs.createLabelforObj(this.container, obj.entity, obj.type, label);
+            });
+        }
     }
     /**
      * TODO What is "self"? why not use "this"
@@ -71,16 +77,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      */
     public render(self) {
         // console.log('CALLING render in THREEJS VIEWER COMPONENT');
-        // const textLabels = this._data_threejs._textLabels;
-        // if (textLabels.size !== 0) {
-        //     textLabels.forEach( (label) => {
-        //         // label.updatePosition();
-        //         let scale = label.position.distanceTo(this._data_threejs._camera.position) / 50;
-        //         scale = Math.min(5, Math.max(1, scale));
-        //         label.scale.set(scale, scale, scale);
-        //         label.quaternion.copy(this._data_threejs._camera.quaternion);
-        //     });
-        // }
+        const textLabels = this._data_threejs._textLabels;
+        if (textLabels.size !== 0) {
+            textLabels.forEach( (label) => {
+                label.updatePosition();
+            });
+        }
         self._data_threejs._renderer.render( self._data_threejs._scene, self._data_threejs._camera );
     }
 
@@ -201,6 +203,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         for (const selecting of selectings) {
             scene.unselectObj(selecting, this.container);
         }
+        document.querySelectorAll('[id^=textLabel_]').forEach(value => {
+            this.container.removeChild(value);
+        });
+        this._data_threejs._textLabels.clear();
         this.render(this);
         scene._selectedEntity.clear();
     }

@@ -15,7 +15,7 @@ export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[]
     throw new Error("Not impemented."); return null;
 }
 // Knife modelling operation keep
-enum EKnifeKeep {
+export enum _EKnifeKeep {
     KEEP_ABOVE =  'keep above the plane',
     KEEP_BELOW  =  'keep below the plane',
     KEEP_ALL =  'keep all'
@@ -30,7 +30,7 @@ enum EKnifeKeep {
  * @example knife1 = isect.Knife ([p1,p2,p3,p4,p5], plane1, keepabove)
  * @example_info Returns [[p1,p2,p3],[p4,p5]] if p1, p2, p3 are points above the plane and p4, p5 are points below the plane.
  */
-export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: EKnifeKeep): TId[] {
+export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: _EKnifeKeep): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**

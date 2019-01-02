@@ -4,19 +4,6 @@ import { idBreak } from '@libs/geo-info/id';
 import { vecsAdd } from '@libs/geom/vectors';
 
 /**
- * Set new coordinates of existing position.
- * @param __model__
- * @param position Existing position.
- * @param xyz List of three coordinates.
- * @returns void
- * @example mod.SetPosition(position1, [1,2,3])
- * @example_info position1 will have new coordinates = [1,2,3].
- */
-export function SetPositionXyz(__model__: GIModel, position: TId, xyz: Txyz): void {
-    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(position);
-    __model__.attribs.add.setPosiCoords(index, xyz);
-}
-/**
  * Moves geometry by vector.
  * @param __model__
  * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection.

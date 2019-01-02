@@ -7,33 +7,32 @@ import * as _check_args from './_check_args';
  * Gets attribute value of all entities.
  * @param __model__
  * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection or a list.
- * @param name Attribute name to get the value for.
+ * @param attrib_name Attribute name to get the value for.
  * @returns Attribute value.
  */
-export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
-    //_check_args.isStringArg('Get name', name);
+export function Get(__model__: GIModel, entities: TId|TId[], attrib_name: string): TAttribDataTypes|TAttribDataTypes[] {
     _check_args.isIdListArg("ccc", entities, [EEntityTypeStr.POSI, EEntityTypeStr.VERT] );
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
-        return __model__.attribs.query.getAttribValue(ent_type_str, name, index);
+        return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
     } else {
-        return (entities as TId[]).map( entity => Get(__model__, entity, name)) as TAttribDataTypes[];
+        return (entities as TId[]).map( entity => Get(__model__, entity, attrib_name)) as TAttribDataTypes[];
     }
 }
 /**
  * Sets attribute value.
  * @param __model__
  * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection, or a list.
- * @param name Attribute name to be set.
+ * @param attrib_name Attribute name to be set.
  * @param value Attribute value in string, number or as a list.
  * @example set1 = attrib.Set (entities, name, value)
  */
-export function Set(__model__: GIModel, entities: TId|TId[], name: string, value: TAttribDataTypes): void {
+export function Set(__model__: GIModel, entities: TId|TId[], attrib_name: string, value: TAttribDataTypes): void {
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
-        __model__.attribs.add.setAttribValue(ent_type_str, index, name, value);
+        __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value);
     } else {
-        (entities as TId[]).map( entity => Set(__model__, entity, name, value));
+        (entities as TId[]).map( entity => Set(__model__, entity, attrib_name, value));
     }
 }
 // Promote modelling operation
@@ -55,14 +54,14 @@ export enum _EPromoteAttribTypes {
 /**
  * Promotes or demotes an attribute from one geometry level to another.
  * @param __model__
- * @param name Attribute name to be promoted or demoted.
- * @param from Positions, vertices, edges, wires, faces or collections.
- * @param to Positions, vertices, edges, wires, faces or collections.
- * @param method Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
+ * @param attrib_names Attribute name to be promoted or demoted.
+ * @param from Enum, Positions, vertices, edges, wires, faces or collections.
+ * @param to Enum, Positions, vertices, edges, wires, faces or collections.
+ * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
  * @returns List of attributes.
  * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
  */
-export function Promote(__model__: GIModel, name: string, 
+export function Promote(__model__: GIModel, attrib_name: string,
     from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
     throw new Error("Not implemented.");
 }

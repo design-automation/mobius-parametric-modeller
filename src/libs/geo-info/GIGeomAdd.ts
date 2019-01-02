@@ -339,7 +339,7 @@ export class GIGeomAdd {
      * @param copy_attribs
      */
     public copyPosis(posis_i: number|number[], copy_attribs: boolean): number|number[] {
-        if (!isArray(posis_i)) {
+        if (!Array.isArray(posis_i)) {
             const xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(posis_i as number);
             const new_posi_i: number = this.addPosition();
             this._geom.model.attribs.add.setPosiCoords(new_posi_i, xyz);
@@ -359,7 +359,7 @@ export class GIGeomAdd {
      * @param copy_attribs
      */
     public copyObjs(ent_type_str: EEntityTypeStr, indices: number|number[], copy_posis: boolean, copy_attribs: boolean): number|number[] {
-        if (!isArray(indices)) {
+        if (!Array.isArray(indices)) {
             const original_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type_str, indices as number);
             let posis_i: number[] = original_posis_i;
             if (copy_posis) {

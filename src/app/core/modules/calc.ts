@@ -1,7 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntityTypeStr } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, idBreak, isPgon, isFace } from '@libs/geo-info/id';
-import { isArray } from 'util';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
 import { vecsSum, vecDiv, vecsAdd, vecsSub } from '@libs/geom/vectors';
@@ -31,7 +30,7 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId): nu
  * @example length1 = calc.Length (line1)
  */
 export function Length(__model__: GIModel, lines: TId|TId[]): number {
-    if (!isArray(lines)) {
+    if (!Array.isArray(lines)) {
         lines = [lines] as TId[];
     }
     const edges_i: number[] = [];

@@ -1,9 +1,8 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane, EOpDivide} from '@libs/geo-info/common';
+import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane } from '@libs/geo-info/common';
 import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { isArray } from 'util';
-import { Move } from './modify';
 import { vecsAdd, vecDiv, vecMult } from '@libs/geom/vectors';
 import { _model } from '@modules';
 
@@ -16,7 +15,7 @@ import { _model } from '@modules';
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
-    if (isArray(coords) && !isArray(coords[0])) {
+    if (isArray(coords) && !Array.isArray(coords[0])) {
         const posi_i: number = __model__.geom.add.addPosition();
         __model__.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, coords as Txyz);
         return EEntityTypeStr.POSI + posi_i;
@@ -119,7 +118,7 @@ export function PositionsRect(__model__: GIModel, origin: Txyz|TPlane, size: num
  * @example_info Creates a point at position1.
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
-    if (!isArray(positions)) {
+    if (!Array.isArray(positions)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
         const point_i: number = __model__.geom.add.addPoint(index);
         return EEntityTypeStr.POINT + point_i;
@@ -142,7 +141,7 @@ enum EClose {
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: EClose): TId|TId[] {
-    if (isArray(positions) && !isArray(positions[0])) {
+    if (isArray(positions) && !Array.isArray(positions[0])) {
         const bool_close: boolean = (close === EClose.CLOSE);
         const posis_i: number[] = idIndicies(positions as TId[]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
@@ -160,7 +159,7 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: EC
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
-    if (isArray(positions) && !isArray(positions[0])) {
+    if (isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(positions as TId[]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
         return EEntityTypeStr.PGON + pgon_i;
@@ -178,7 +177,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
  * @example_info Creates a collection containing point1, polyline1, polygon1.
  */
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
-    if (!isArray(objects)) {
+    if (!Array.isArray(objects)) {
         objects = [objects] as TId[];
     }
     const points: number[] = [];
@@ -245,7 +244,7 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
 export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
     const extrude_vec: Txyz = (isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
-    if (!isArray(geometry)) {
+    if (!Array.isArray(geometry)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
         // check if this is a collection
         if (isColl(ent_type_str)) {
@@ -342,7 +341,7 @@ enum ECopyAttribues {
  */
 export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: ECopyPositions, copy_attributes: ECopyAttribues): TId|TId[] {
     // TODO positions may be copied multiple times
-    if (!isArray(geometry)) {
+    if (!Array.isArray(geometry)) {
         const bool_copy_posis: boolean = (copy_positions === ECopyPositions.COPY_POSITIONS);
         const bool_copy_attribs: boolean = (copy_attributes === ECopyAttribues.COPY_ATTRIBUTES);
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
@@ -365,6 +364,11 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: EC
         return (geometry as TId[]).map(geom_i => Copy(__model__, geom_i, copy_positions, copy_attributes)) as TId[];
     }
 }
+// Divide edge modelling operation
+export enum EDivideMethod {
+    BY_NUMBER =  'divide edge by number',
+    BY_LENGTH  =  'divide edge by length'
+}
 /**
  * Divides edge by length or by number of segments.
  * If edge is not exact multiple of length, length of last segment will be the remainder.
@@ -378,7 +382,7 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: EC
  * @example segments2 = make.Divide(edge1, 5, length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EOpDivide): TId[] {
+export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EDivideMethod): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**

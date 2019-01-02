@@ -8,63 +8,26 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
-// Import / Export data types
-export enum EIODataTypes {
-    GI,
-    OBJ
-}
-
-
-// Promote modelling operation
-export enum EAttribTypes {
-    POSIS =  'positions',
-    VERTS  =  'vertices',
-    EDGES = 'edges',
-    WIRES = 'wires',
-    FACES = 'faces',
-    COLLS = 'collections'
-}
-
-// Promote modelling operation
-export enum EOpPromote {
-    MEAN =  'mean',
-    MIN  =  'min',
-    MAX = 'max',
-    NONE = 'none'
-}
-
-// Knife modelling operation keep
-export enum EOpKnife {
-    KEEP_ABOVE =  'keep above the plane',
-    KEEP_BELOW  =  'keep below the plane',
-    KEEP_ALL =  'keep all'
-}
-
-// Divide edge modelling operation
-export enum EOpDivide {
-    BY_NUMBER =  'divide edge by number',
-    BY_LENGTH  =  'divide edge by length'
-}
 
 // Types of entities
 export enum EEntityTypeStr {
-    POSI =  'ps',
-    TRI  =  '_t',
-    VERT =  '_v',
-    EDGE =  '_e',
-    WIRE =  '_w',
-    FACE =  '_f',
-    POINT = 'pt',
+    POSI =   'ps',
+    TRI  =   '_t',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
     PLINE =  'pl',
-    PGON =  'pg',
-    COLL =  'co'
+    PGON =   'pg',
+    COLL =   'co'
 }
 
 // Names of attributes
 export enum EAttribNames {
-    COORDS = 'coordinates',
-    NORMAL = 'normal',
-    COLOR = 'color',
+    COORDS =  'coordinates',
+    NORMAL =  'normal',
+    COLOR =   'color',
     TEXTURE = 'texture'
 }
 

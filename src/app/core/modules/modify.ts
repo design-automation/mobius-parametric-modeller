@@ -1,6 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/common';
-import { isArray } from 'util';
 import { idBreak } from '@libs/geo-info/id';
 import { vecsAdd } from '@libs/geom/vectors';
 
@@ -27,7 +26,7 @@ export function SetPositionXyz(__model__: GIModel, position: TId, xyz: Txyz): vo
  * @example_info Moves geometry by vector.
  */
 export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): void {
-    if (!isArray(geometry)) {
+    if (!Array.isArray(geometry)) {
         geometry = [geometry] as TId[];
     }
     const posis_i: number[] = [];
@@ -137,7 +136,7 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
  * @example_info If open, polylines are changed to closed; if closed, nothing happens.
  */
 export function Close(__model__: GIModel, lines: TId|TId[]): void {
-    if (!isArray(lines)) {
+    if (!Array.isArray(lines)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
         let wire_i: number = index;
         if (ent_type_str === EEntityTypeStr.PLINE) {
@@ -159,7 +158,7 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    if (!isArray(lines)) {
+    if (!Array.isArray(lines)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
         let wire_i: number = index;
         if (ent_type_str === EEntityTypeStr.PLINE) {

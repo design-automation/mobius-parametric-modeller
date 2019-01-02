@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, EOpKnife } from '@libs/geo-info/common';
+import { TId, TPlane } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
 
 /**
@@ -14,6 +14,12 @@ import { __merge__ } from './_model';
 export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[] {
     throw new Error("Not impemented."); return null;
 }
+// Knife modelling operation keep
+enum EKnifeKeep {
+    KEEP_ABOVE =  'keep above the plane',
+    KEEP_BELOW  =  'keep below the plane',
+    KEEP_ALL =  'keep all'
+}
 /**
  * Separates a list of points, polylines or polygons into two lists with a plane.
  * @param __model__
@@ -24,7 +30,7 @@ export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[]
  * @example knife1 = isect.Knife ([p1,p2,p3,p4,p5], plane1, keepabove)
  * @example_info Returns [[p1,p2,p3],[p4,p5]] if p1, p2, p3 are points above the plane and p4, p5 are points below the plane.
  */
-export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: EOpKnife): TId[] {
+export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: EKnifeKeep): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**

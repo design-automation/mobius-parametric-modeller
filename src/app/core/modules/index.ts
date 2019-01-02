@@ -14,17 +14,20 @@ export {_model};
 import * as make from './make';
 export {make};
 
-import * as attrib from './attrib';
-export {attrib};
+import * as modify from './modify';
+export {modify};
 
 import * as isect from './isect';
 export {isect};
 
-import * as modify from './modify';
-export {modify};
+import * as attrib from './attrib';
+export {attrib};
 
 import * as calc from './calc';
 export {calc};
+
+import * as query from './query';
+export {query};
 
 import * as util from './util';
 export {util};

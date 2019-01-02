@@ -11,6 +11,7 @@
 table {
   width: 100%;
   font-family: sans-serif;
+  background-color: transparent;
 
   tr.mat-header-row{
     height: $fsize3;
@@ -33,7 +34,7 @@ table {
   height: 100%;
 
   .mat-tab-body-wrapper{
-    background-color: $color7;
+    background-color: transparent;
     height: calc(100vh - 20px); // 20px == label height
     .mat-tab-body{
       height: 100%;
@@ -54,7 +55,7 @@ table {
 
   // label-headings
   .mat-tab-label{
-    height: 36px;
+    height: 20px;
     padding: 0 0 0 2px;
     min-width: 100px;
     font-size: $fsize2;
@@ -110,5 +111,16 @@ table {
     .mat-icon-button:hover .mat-paginator-icon{
       fill: $selected-color;
     }
+  }
+}
+
+/deep/ #settings.btn{
+  height: 20px;
+  width: 20px;
+  .mat-icon{
+    height: inherit;
+    width: inherit;
+    line-height: 20px;
+    font-size: 15px;
   }
 }

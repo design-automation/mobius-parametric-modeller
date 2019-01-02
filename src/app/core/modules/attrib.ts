@@ -1,6 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, Txyz, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
+import * as _check_args from './_check_args';
 
 /**
  * Gets attribute value of all entities.
@@ -10,6 +11,8 @@ import { idBreak } from '@libs/geo-info/id';
  * @returns Attribute value.
  */
 export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
+    //_check_args.isStringArg('Get name', name);
+    _check_args.isIdListArg("ccc", entities, [EEntityTypeStr.POSI, EEntityTypeStr.VERT] );
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         return __model__.attribs.query.getAttribValue(ent_type_str, name, index);

@@ -50,14 +50,12 @@
             <div class='function-text'>
                 If
             </div>
-            ( <input class='input--arg'
+            <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >
-                    )
-
         </div>
 
         <!-- ELSEIF Template -->
@@ -67,13 +65,12 @@
             </div>
             
         
-        ( <input class='input--arg'
+        <input class='input--arg'
                 [(ngModel)]='data.args[0].value'
                 name='data.args[0].name'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                 >  
-                )
         </div>
 
         <!-- ELSE Template -->

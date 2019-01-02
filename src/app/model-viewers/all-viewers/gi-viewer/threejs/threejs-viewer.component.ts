@@ -219,11 +219,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             } else if (intersect0.object.type === 'LineSegments') {
                 const intersect1 = intersects[1];
                 if (intersect1 && intersect0.distance === intersect1.distance) {
-                    this.chooseLine(intersect0, intersect1);
+                    // this.chooseLine(intersect0, intersect1);
+                    // this.selectWire(intersect0);
                 } else {
-                    this.selectLine(intersect0);
+                    // this.selectLine(intersect0);
+                    // this.selectWire(intersect0);
                 }
-                // this.selectLine(intersect);
+                this.selectLine(intersect0);
             } else if (intersect0.object.type === 'Points') {
                 const intersect1 = intersects[1];
                 const intersect2 = intersects[2];
@@ -237,6 +239,20 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private chooseLine(intersect0, intersect1) {
         this.selectLine(intersect0);
         this.selectLine(intersect1);
+    }
+
+    private selectingEntity() {
+        const tab_map = {
+            0: EEntityTypeStr.POSI,
+            1: EEntityTypeStr.VERT,
+            2: EEntityTypeStr.EDGE,
+            3: EEntityTypeStr.WIRE,
+            4: EEntityTypeStr.FACE,
+            5: EEntityTypeStr.COLL
+        };
+        if (localStorage.getItem('mpm_attrib_current_tab') != null) {
+            // this.currentTab = Number(localStorage.getItem('mpm_attrib_current_tab'));
+        }
     }
 
     private selectFace(triangle) {
@@ -267,7 +283,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private selectLine(line) {
-        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         const scene = this._data_threejs;
         const verts = this.model.geom.query.navEdgeToVert(line.index / 2);
         const positions = verts.map(v => this.model.attribs.query.getVertCoords(v));
@@ -275,43 +290,48 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
         const selecting = `l${line.index / 2}`;
         if (!scene._selecting.has(selecting)) {
-            scene.selectObjLine(selecting, posi_flat, container);
+            scene.selectObjLine(selecting, [], posi_flat, this.container);
             scene._selectedEntity.set(selecting, `${EEntityTypeStr.EDGE}${line.index / 2}`);
         } else {
-            scene.unselectObj(selecting, container);
+            scene.unselectObj(selecting, this.container);
             scene._selectedEntity.delete(selecting);
         }
     }
 
     private selectWire(line) {
         const scene = this._data_threejs;
-        const wire = this.model.geom.query.navEdgeToWire(line.index);
+        const wire = this.model.geom.query.navEdgeToWire(line.index / 2);
         const edges = this.model.geom.query.navWireToEdge(wire);
-        console.log('edges edges edges', edges);
-        // const positions = verts.map(v => this.model.attribs.query.getVerTxyzByIndex(v));
-        // const posi_flat = [].concat(...positions);
 
-        // const selecting = `l${line.index / 2}`;
-        // if (!scene._selecting.has(selecting)) {
-        //     scene.selectObjLine(selecting, posi_flat);
-        //     scene._selectedEntity.set(selecting, `${EEntityTypeStr.EDGE}${line.index / 2}`);
-        // } else {
-        //     scene.unselectObj(selecting);
-        //     scene._selectedEntity.delete(selecting);
-        // }
+        const verts = edges.map(e => this.model.geom.query.navEdgeToVert(e));
+        const verts_flat = [].concat(...[].concat(...verts));
+        const indices = [];
+        const positions = [];
+        verts_flat.map((v, i) => {
+            positions.push(this.model.attribs.query.getVertCoords(v));
+            indices.push(i);
+        });
+        const posi_flat = [].concat(...positions);
+        const selecting = `w${wire}`;
+        if (!scene._selecting.has(selecting)) {
+            scene.selectObjLine(selecting, indices, posi_flat, this.container);
+            scene._selectedEntity.set(selecting, `${EEntityTypeStr.WIRE}${wire}`);
+        } else {
+            scene.unselectObj(selecting, this.container);
+            scene._selectedEntity.delete(selecting);
+        }
     }
 
     private selectPoint(point) {
-        const container = this._elem.nativeElement.children.namedItem('threejs-container');
         const scene = this._data_threejs;
         const vert = this.model.geom.query.navPointToVert(point.index);
         const position = this.model.attribs.query.getPosiCoords(vert);
         const selecting = `p${point.index}`;
         if (!scene._selecting.has(selecting)) {
-            scene.selectObjPoint(selecting, position, container);
+            scene.selectObjPoint(selecting, position, this.container);
             scene._selectedEntity.set(selecting, `${EEntityTypeStr.VERT}${point.index}`);
         } else {
-            scene.unselectObj(selecting, container);
+            scene.unselectObj(selecting, this.container);
             scene._selectedEntity.delete(selecting);
         }
     }

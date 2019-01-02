@@ -133,9 +133,13 @@ export class DataThreejs {
         this.ObjLabelMap.set(labelText, obj);
     }
 
-    public selectObjLine(labelText, positions, container) {
+    public selectObjLine(labelText, indices, positions, container) {
         const geom = new THREE.BufferGeometry();
-        geom.setIndex( [0, 1] );
+        if (indices.length > 2) {
+            geom.setIndex( indices );
+        } else {
+            geom.setIndex( [0, 1] );
+        }
         geom.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
         geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 ));
         const mat = new THREE.LineBasicMaterial( {

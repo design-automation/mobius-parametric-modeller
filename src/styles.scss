@@ -13,7 +13,7 @@ html{
     padding: 0px;
     margin: 0px;
 
-    font-family: sans-serif;
+    font-family: sans-serif !important;
     font-size: $fsize2;
     line-height: 14px; 
 }
@@ -242,3 +242,8 @@ input, textarea, select, a {
         color: $color8;
     }
 }
+
+// angular overwrite
+// .mat-tab-label{
+//     font-family: sans-serif !important;
+// }

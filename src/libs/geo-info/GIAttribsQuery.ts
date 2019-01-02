@@ -111,7 +111,8 @@ export class GIAttribsQuery {
      * @param posi_i
      */
     public getPosiCoords(posi_i: number): Txyz {
-        return this._attribs_maps.posis.get(EAttribNames.COORDS).get(posi_i) as Txyz;
+        const result = this._attribs_maps.posis.get(EAttribNames.COORDS).get(posi_i) as Txyz;
+        return result;
     }
     /**
      * Shortcut for getting all coordinates

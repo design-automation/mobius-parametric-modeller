@@ -72,7 +72,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
     /**
-     * TODO What is "self"? why not use "this"
      * @param self
      */
     public render(self) {
@@ -179,7 +178,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         scene.onWindowKeyPress(event);
         this.render(this);
         const intersects = this.initRaycaster(event);
-
         if (intersects.length > 0) {
             if (scene._selectedEntity.size === 0) {
                 this.selectObj(intersects);
@@ -213,19 +211,32 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
 
     private selectObj(intersects) {
-        const intersect = intersects[0];
         // console.log('interecting object', intersect);
-        if (intersect !== undefined) {
-            if (intersect.object.type === 'Mesh') {
-                this.selectFace(intersect);
-            } else if (intersect.object.type === 'LineSegments') {
-                this.selectLine(intersect);
-            } else if (intersect.object.type === 'Points') {
-                this.selectPoint(intersect);
+        if (intersects.length > 0) {
+            const intersect0 = intersects[0];
+            if (intersect0.object.type === 'Mesh') {
+                this.selectFace(intersect0);
+            } else if (intersect0.object.type === 'LineSegments') {
+                const intersect1 = intersects[1];
+                if (intersect1 && intersect0.distance === intersect1.distance) {
+                    this.chooseLine(intersect0, intersect1);
+                } else {
+                    this.selectLine(intersect0);
+                }
+                // this.selectLine(intersect);
+            } else if (intersect0.object.type === 'Points') {
+                const intersect1 = intersects[1];
+                const intersect2 = intersects[2];
+                this.selectPoint(intersect0);
             }
         }
         // console.log(scene._selectedEntity);
         this.render(this);
+    }
+
+    private chooseLine(intersect0, intersect1) {
+        this.selectLine(intersect0);
+        this.selectLine(intersect1);
     }
 
     private selectFace(triangle) {
@@ -235,31 +246,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const tri = this.model.geom.query.navFaceToTri(face);
         const verts = tri.map(index => this.model.geom.query.navTriToVert(index));
         const verts_flat = [].concat(...verts);
-        const vertP = verts_flat.map(v => this.model.geom.query.navAnyToPosi(EEntityTypeStr.VERT, v));
-        console.log('verts_flat', verts_flat);
-        const vertP_flat = [].concat(...vertP);
+        const posis = verts_flat.map(v => this.model.geom.query.navAnyToPosi(EEntityTypeStr.VERT, v));
+        const posis_flat = [].concat(...posis);
         const tri_indices = [];
         const positions = [];
-        vertP_flat.map((vert) => {
-            positions.push(this.model.attribs.query.getPosiCoords[vert]);
-            tri_indices.push(vert);
+        posis_flat.map((posi, index) => {
+            positions.push(this.model.attribs.query.getPosiCoords(posi));
+            tri_indices.push(index);
         });
-        console.log('Tri Indices', tri_indices);
-        let diff = null;
-        const new_indices = tri_indices.map((v, i) => {
-            if (!diff) {
-                diff = v - i;
-            }
-            return v - diff;
-        });
-        console.log('New Indices', new_indices);
-        verts_flat.map(vert => tri_indices.push(this.model.geom.query.navVertToPosi(vert)));
         const posi_flat = [].concat(...positions);
-        console.log('positions', positions);
 
         const selecting = `f${face}`;
         if (!scene._selecting.has(selecting)) {
-            scene.selectObjFace(selecting, new_indices, posi_flat, container);
+            scene.selectObjFace(selecting, tri_indices, posi_flat, container);
             scene._selectedEntity.set(selecting, `${EEntityTypeStr.FACE}${face}`);
         } else {
             scene.unselectObj(selecting, container);

@@ -11,7 +11,7 @@ export enum _EIndexOfMethod {
  * Searches for a value in an list and returns the index position if found.
  * Items must match both the value and type of specified value.
  *
- * Returns -1 if no items in list match specified value.
+ * Returns -1 if no values in list match specified value.
  *
  * @param list List.
  * @param value Value to search for.
@@ -43,7 +43,7 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
  * Searches for a value in an list and returns true if found.
  * Items must match both the value and type of specified value.
  *
- * Returns false if no items in list match specified value.
+ * Returns false if no values in list match specified value.
  *
  * @param list List.
  * @param value Value to search for.
@@ -136,41 +136,34 @@ export function Slice(list: any[], start: number, end: number): any[] {
  * ================================================================================================
  * list functions that modify the original input list. Return void.
  */
+export enum _EAppendMethod {
+    TO_START = 'to_start',
+    TO_END = 'to_end'
+}
 /**
- * Adds one item to the end of an list
- * If item is an list, the entire list will be appended as one item.
+ * Adds one value to the end of an list
+ * If value is an list, the entire list will be appended as one value.
  *
  * @param list List to add to.
- * @param item Item to add.
- * @example append = list.append(list,4)
+ * @param value Item to add.
+ * @example append = list.append(list,4. 'at_end')
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].
  */
-export function Append(list: any[], item: any): void {
+export function Append(list: any[], value: any, method: _EAppendMethod): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (item === undefined) { throw new Error('Invalid arg: item must be defined.'); }
-    list.push(item);
+    if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
+    if (method === _EAppendMethod.TO_END) {
+        list.push(value);
+    } else {
+        list.unshift(value);
+    }
 }
 /**
- * Adds one item to the front of an list
- * If the item is an list, the entire list will be appended as one item.
+ * Removes the value at the specified index from an list
  *
- * @param list List to add to.
- * @param item Item to add.
- * @example append = list.appendFront(list,4)
- * @example_info where list = [1,2,3]
- * Expected value of list is [4,1,2,3].
- */
-export function Prepend(list: any[], item: any): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (item === undefined) { throw new Error('Invalid arg: item must be defined.'); }
-    list.unshift(item);
-}
-/**
- * Removes the item at the specified index from an list
- *
- * @param list List to remove item from.
- * @param index Zero-based index number of item to remove.
+ * @param list List to remove value from.
+ * @param index Zero-based index number of value to remove.
  * @example remove = list.removeIndex(list,1)
  * @example_info where list = [1,2,3]
  * Expected value of remove is [1,3].
@@ -185,12 +178,12 @@ export enum _ERemoveValueMethod {
     REMOVE_FIRST = 'remove_first'
 }
 /**
- * Removes items that match specified value from an list
+ * Removes values that match specified value from an list
  * Items must match both the value and type of specified value
  *
- * Returns original list if no items in list match specified value.
+ * Returns original list if no values in list match specified value.
  *
- * @param list List to remove item from.
+ * @param list List to remove value from.
  * @param value Value to search for.
  * @param method Enum, specifies whether to remove all occurances or only the first.
  * @example remove = list.removeValue(list,2,'remove_all')
@@ -208,16 +201,16 @@ export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod
     }
 }
 export enum _EReplaceValueMethod {
-    REMOVE_ALL = 'replace_all',
-    REMOVE_FIRST = 'replace_first'
+    REPLACE_ALL = 'replace_all',
+    REPLACE_FIRST = 'replace_first'
 }
 /**
- * Replaces items that match specified value from an list with a new value
+ * Replaces values that match specified value from an list with a new value
  * Items must match both the value and type of specified value
  *
- * Returns original list if no items in list match specified value.
+ * Returns original list if no values in list match specified value.
  *
- * @param list List to remove item from.
+ * @param list List to remove value from.
  * @param value Value to search for.
  * @param value2 Value to replace existing value with.
  * @param method Enum, specifies whether to replace all occurances or only the first.
@@ -232,12 +225,12 @@ export function ReplaceValue(list: any[], value1: any, value2: any, method: _ERe
     for (let i = 0 ; i < list.length ; i++) {
         if (list[i] === value1) {
             list[i] = value2;
-            if (method === _EReplaceValueMethod.REMOVE_FIRST) {break; }
+            if (method === _EReplaceValueMethod.REPLACE_FIRST) {break; }
         }
     }
 }
 /**
- * Reverses the order of items in an list and returns a new list.
+ * Reverses the order of values in an list and returns a new list.
  *
  * @param list List to reverse.
  * @returns New reversed list.
@@ -249,54 +242,67 @@ export function Reverse(list: any[]): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
     list.reverse();
 }
+export enum _ESortMethod {
+    'ALPHA' = 'alpha',
+    'NUM' = 'numeric',
+    'REV_ALPHA' = 'revrese_alpha',
+    'REV_NUM' = 'reverse_numeric',
+}
 /**
- * Sorts an list of strings alphabetically
- * If items are not strings, they are treated as strings.
+ * Sorts an list of values, either alphabetically or numerically.
  *
- * Items are sorted according to string Unicode code points (character by character, numbers before upper case
+ * For alphabetical sort, values are sorted according to string Unicode code points 
+ * (character by character, numbers before upper case
  * alphabets, upper case alphabets before lower case alphabets)
  *
  * @param list List to sort.
- * @example sort = list.sortAlpha(list)
+ * @param method Enum, specifies the sort method to use.
+ * @example sort = list.sortAlpha(list, 'alpha')
  * @example_info where list = ["1","2","10","Orange","apple"]
  * Expected value of list is ["1","10","2","Orange","apple"].
- */
-export function SortAlpha(list: any[]): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    list.sort();
-}
-/**
- * Sorts an list of numbers in ascending order
- * The list must contain numbers.
- *
- * @param list List to add to.
- * @example sort = list.sortNum(list)
+ * @example sort = list.sortNum(list, 'numeric')
  * @example_info where list = [56,6,48]
  * Expected value of list is [6,48,56].
  */
-export function SortNum(list: any[]): void {
+export function Sort(list: any[], method: _ESortMethod): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    list.sort((a, b) => a - b);
+    switch (method) {
+        case _ESortMethod.ALPHA:
+            list.sort();
+            break;
+        case _ESortMethod.REV_ALPHA:
+            list.sort().reverse();
+            break;
+        case _ESortMethod.NUM:
+            list.sort((a, b) => a - b);
+            break;
+        case _ESortMethod.REV_NUM:
+            list.sort((a, b) => a - b).reverse();
+            break;
+        default:
+            throw new Error('Sort method not recognised.');
+            break;
+    }
 }
 /**
- * Adds and/or removes items to/from an list
+ * Adds and/or removes values to/from an list
  *
- * If no items_to_add are specified, then items are only removed.
- * If num_to_remove is 0, then items are only added.
+ * If no values_to_add are specified, then values are only removed.
+ * If num_to_remove is 0, then values are only added.
  *
  * @param list List to splice
- * @param index Zero-based index at which to add/remove items. (Items are added/removed after specified index)
- * @param num_to_remove Number of items to remove.
- * @param items_to_add list of items to add.
+ * @param index Zero-based index at which to add/remove values. (Items are added/removed after specified index)
+ * @param num_to_remove Number of values to remove.
+ * @param values_to_add list of values to add.
  * @example result = list.splice(list, 1, 3, [2.2, 3.3])
  * @example_info where list = [10, 20, 30, 40, 50]
  * Expected value of result is [10, 2.2, 3.2, 50].
  */
-export function Splice(list: any[], index: number, num_to_remove: number, items_to_add: any[]): void {
+export function Splice(list: any[], index: number, num_to_remove: number, values_to_add: any[]): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
     if (index === undefined) { throw new Error('Invalid arg: index must be defined.'); }
     // const list2 = list.slice();
-    // list2.splice(index, num_to_remove, ...items_to_add);
+    // list2.splice(index, num_to_remove, ...values_to_add);
     // return list2;
-    list.splice(index, num_to_remove, ...items_to_add);
+    list.splice(index, num_to_remove, ...values_to_add);
 }

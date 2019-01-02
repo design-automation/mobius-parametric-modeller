@@ -321,11 +321,11 @@ export function Join(__model__: GIModel, objects: TId[]): TId {
     throw new Error("Not implemented."); return null;
 }
 // Enums for Copy()
-enum ECopyPositions {
+enum _ECopyPositions {
     COPY_POSITIONS = 'copy_positions',
     REUSE_POSITIONS = 'reuse_positions'
 }
-enum ECopyAttribues {
+enum _ECopyAttribues {
     COPY_ATTRIBUTES = 'copy_attributes',
     NO_ATTRIBUTES = 'no_attributes'
 }
@@ -339,11 +339,11 @@ enum ECopyAttribues {
  * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
  * @example_info Creates a list containing a copy of the objects in sequence of input.
  */
-export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: ECopyPositions, copy_attributes: ECopyAttribues): TId|TId[] {
+export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: _ECopyPositions, copy_attributes: _ECopyAttribues): TId|TId[] {
     // TODO positions may be copied multiple times
     if (!Array.isArray(geometry)) {
-        const bool_copy_posis: boolean = (copy_positions === ECopyPositions.COPY_POSITIONS);
-        const bool_copy_attribs: boolean = (copy_attributes === ECopyAttribues.COPY_ATTRIBUTES);
+        const bool_copy_posis: boolean = (copy_positions === _ECopyPositions.COPY_POSITIONS);
+        const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
         if (isColl(ent_type_str)) {
             // Make a deep copy of a collection
@@ -365,7 +365,7 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: EC
     }
 }
 // Divide edge modelling operation
-enum EDivideMethod {
+enum _EDivideMethod {
     BY_NUMBER =  'divide edge by number',
     BY_LENGTH  =  'divide edge by length'
 }
@@ -382,7 +382,7 @@ enum EDivideMethod {
  * @example segments2 = make.Divide(edge1, 5, length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: EDivideMethod): TId[] {
+export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: _EDivideMethod): TId[] {
     throw new Error("Not implemented."); return null;
 }
 /**

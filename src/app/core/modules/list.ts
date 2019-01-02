@@ -3,6 +3,10 @@
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
 
+export enum _EIndexOfMethod {
+    SEARCH_ALL = 'search_all',
+    SEARCH_FIRST = 'search_first'
+}
 /**
  * Searches for a value in an list and returns the index position if found.
  * Items must match both the value and type of specified value.
@@ -11,21 +15,20 @@
  *
  * @param list List.
  * @param value Value to search for.
- * @param search_all Returns index position for all instances of specified value if true, returns only the first
- *      instance if false.
+ * @param method Enum, specifies whether to search all occurances or only the first.
  * @returns Index position or list of index positions containing specified value.
  * @example positions = list.indexOf(list,2,true)
  * @example_info where list = [6,2,2,7]
  * Expected value of positions is [1,2].
  */
-export function IndexOf(list: any[], value: any, search_all: boolean = true): number|number[] {
+export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
     if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
     const positions = [];
     for (let i = 0 ; i < list.length; i++) {
         if (list[i] === value) {
             positions.push(i);
-            if (search_all === false) {
+            if (method === _EIndexOfMethod.SEARCH_FIRST) {
                 return i;
             }
         }
@@ -177,6 +180,10 @@ export function RemoveIndex(list: any[], index: number): void {
     if (index === undefined) { throw new Error('Invalid arg: index must be defined.'); }
     list.splice(index, 1);
 }
+export enum _ERemoveValueMethod {
+    REMOVE_ALL = 'remove_all',
+    REMOVE_FIRST = 'remove_first'
+}
 /**
  * Removes items that match specified value from an list
  * Items must match both the value and type of specified value
@@ -185,21 +192,24 @@ export function RemoveIndex(list: any[], index: number): void {
  *
  * @param list List to remove item from.
  * @param value Value to search for.
- * @param remove_all Removes all instances of specified value if true, removes only the first instance if
- *      false.
- * @example remove = list.removeValue(list,2,true)
+ * @param method Enum, specifies whether to remove all occurances or only the first.
+ * @example remove = list.removeValue(list,2,'remove_all')
  * @example_info where list = [1,2,2,3]
  * Expected value of remove is [1,3].
  */
-export function RemoveValue(list: any[], value: any, remove_all: boolean = true): void {
+export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
     if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
     for (let i = list.length - 1; i >= 0; i--) {
         if (list[i] === value) {
             list.splice(i, 1);
-            if (remove_all === false) {break; }
+            if (method === _ERemoveValueMethod.REMOVE_FIRST) {break; }
         }
     }
+}
+export enum _EReplaceValueMethod {
+    REMOVE_ALL = 'replace_all',
+    REMOVE_FIRST = 'replace_first'
 }
 /**
  * Replaces items that match specified value from an list with a new value
@@ -210,20 +220,19 @@ export function RemoveValue(list: any[], value: any, remove_all: boolean = true)
  * @param list List to remove item from.
  * @param value Value to search for.
  * @param value2 Value to replace existing value with.
- * @param replace_all Replaces all instances of specified value if true, replaces only the first instance if
- *      false.
+ * @param method Enum, specifies whether to replace all occurances or only the first.
  * @example replace = list.replaceValue(list,2,9,true)
  * @example_info where list = [1,2,2,3]
  * Expected value of replace is [1,9,9,3].
  */
-export function ReplaceValue(list: any[], value1: any, value2: any, replace_all: boolean = true): void {
+export function ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
     if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
     if (value1 === undefined) { throw new Error('Invalid arg: value1 must be defined.'); }
     if (value2 === undefined) { throw new Error('Invalid arg: value2 must be defined.'); }
     for (let i = 0 ; i < list.length ; i++) {
         if (list[i] === value1) {
             list[i] = value2;
-            if (replace_all === false) {break; }
+            if (method === _EReplaceValueMethod.REMOVE_FIRST) {break; }
         }
     }
 }

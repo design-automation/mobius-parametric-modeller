@@ -37,14 +37,14 @@ export function Set(__model__: GIModel, entities: TId|TId[], name: string, value
     }
 }
 // Promote modelling operation
-export enum EPromoteMethod {
+export enum _EPromoteMethod {
     MEAN =  'mean',
     MIN  =  'min',
     MAX = 'max',
     NONE = 'none'
 }
 // Promote modelling operation
-export enum EPromoteAttribTypes {
+export enum _EPromoteAttribTypes {
     POSIS =  'positions',
     VERTS  =  'vertices',
     EDGES = 'edges',
@@ -62,7 +62,8 @@ export enum EPromoteAttribTypes {
  * @returns List of attributes.
  * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
  */
-export function Promote(__model__: GIModel, name: string, from: EPromoteAttribTypes, to: EPromoteAttribTypes, method: EPromoteMethod): TId[] {
+export function Promote(__model__: GIModel, name: string, 
+    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
     throw new Error("Not implemented.");
 }
 /**

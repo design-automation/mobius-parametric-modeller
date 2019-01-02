@@ -54,3 +54,10 @@ hr{
     width: inherit;
     border-top: 2px solid $color1;
 }
+
+.disabled-input{
+    border: 0px;
+    margin: 0px;
+    background-color: $color6;
+    color: $color1;
+}

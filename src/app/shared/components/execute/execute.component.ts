@@ -165,6 +165,7 @@ export class ExecuteComponent {
                 }
                 globalVars += '\n';
             }
+            node.model = params['model'];
             return globalVars;
         } catch (ex) {
             if (DEBUG) {
@@ -216,8 +217,8 @@ export class ExecuteComponent {
             console.log(error.name.toUpperCase());
             console.log('=======================================');
             console.log(error.message);
-            console.log('---------------\nError node code:');
-            console.log(fnString);
+            // console.log('---------------\nError node code:');
+            // console.log(fnString);
             throw error;
 
         }

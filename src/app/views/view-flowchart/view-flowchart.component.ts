@@ -867,8 +867,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
-        if (node.type === 'output') { return node.input.value; }
-        return node.output.value;
+        // if (node.type === 'output') { return node.input.value; }
+        return node.model;
     }
 
     dragSplitStart(e) {

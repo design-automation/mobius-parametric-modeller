@@ -176,7 +176,7 @@
                 = 
 
             </ng-container>
-            <div class='function-text'><span class='module-name'>{{data.meta.module}}</span>.{{data.meta.name}} </div>
+            <div class='function-text'><span class='module-name'>{{data.meta.module}}.</span>{{data.meta.name}} </div>
 
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <!--
@@ -217,7 +217,7 @@
                     [class.error]='invalidVar'
                     placeholder={{data.args[0].name}}>  
             = 
-            <div class='function-text'>{{data.meta.name}} </div> 
+            <div class='function-text'><span class='module-name'>User.</span>{{data.meta.name}} </div> 
             
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input class='input--arg' 

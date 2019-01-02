@@ -40,6 +40,9 @@ export {list};
 import * as _mathjs from './_mathjs';
 export {_mathjs};
 
+import * as _list from './_list';
+export {_list};
+
 // input, output ports
 
 import * as Input from './input';

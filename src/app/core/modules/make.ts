@@ -365,7 +365,7 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: EC
     }
 }
 // Divide edge modelling operation
-export enum EDivideMethod {
+enum EDivideMethod {
     BY_NUMBER =  'divide edge by number',
     BY_LENGTH  =  'divide edge by length'
 }

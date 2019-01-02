@@ -83,7 +83,7 @@
             <!-- imported functions -->
             <ng-container>
                 <button id='imported' class="accordion" 
-                (click)='toggleAccordion("imported")' >User</button>
+                (click)='toggleAccordion("imported")' >user</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
                         <li class = 'user--add'>
@@ -150,7 +150,7 @@
             <button id='inlineExpr' class="accordion"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <li *ngFor='let expr of inlineExpr' (click)='add_inline(expr)'>
+                    <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)'>
                         {{expr}}
                     </li>
                 </ul>
@@ -159,8 +159,8 @@
             </div>
 
 
-            <!-- <button id='inlineFunc' class="accordion" (click)='toggleAccordion("inlineFunc")'>Inline Func</button>
-            <div class="panel"> -->
+            <button id='inlineFunc' class="accordion" (click)='toggleAccordion("inlineFunc")'>Functions</button>
+            <div class="panel">
                 <ng-container *ngFor='let category of inlineFunc'>
                     <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
                     <div class="panel">
@@ -173,7 +173,7 @@
                         <div class = "divider--in"></div>
                     </div>
                 </ng-container>
-            <!-- </div> -->
+            </div>
         </div>
     </ng-container>
     

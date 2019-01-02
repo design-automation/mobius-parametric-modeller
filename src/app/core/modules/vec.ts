@@ -67,7 +67,7 @@ export function Cross(vector1: TId|Txyz, vector2: TId|Txyz): Txyz {
  * @returns The scalar dot product of two vectors.
  * @example vector3 = vec.Dot(vector1, vector2)
  */
-export function dot(vector1: TId|Txyz, vector2: TId|Txyz): number {
+export function Dot(vector1: TId|Txyz, vector2: TId|Txyz): number {
     if (vector1 === undefined) { throw new Error('Invalid arg: vector1 must be defined.'); }
     if (vector2 === undefined) { throw new Error('Invalid arg: vector2 must be defined.'); }
     return mathjs.dot(vector1, vector2);

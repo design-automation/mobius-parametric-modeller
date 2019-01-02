@@ -86,6 +86,12 @@ export class DataThreejs {
             this.sceneObjs = [];
             this._selectedEntity.clear();
         }
+        document.querySelectorAll('[id^=textLabel_]').forEach(value => {
+            container.removeChild(value);
+        });
+        this.ObjLabelMap.clear();
+        this._textLabels.clear();
+
         this._addGrid();
         this._addHemisphereLight();
         this._addAxes();
@@ -178,6 +184,7 @@ export class DataThreejs {
         this._selecting.delete(selecting);
         this._scene.remove(this._scene.getObjectById(removing));
 
+        this.ObjLabelMap.delete(selecting);
         container.removeChild(document.getElementById(`textLabel_${selecting}`));
     }
 

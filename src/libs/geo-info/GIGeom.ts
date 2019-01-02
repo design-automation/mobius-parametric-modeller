@@ -60,7 +60,7 @@ export class GIGeom {
             wires: this._geom_arrays.dn_wires_edges,
             faces: this._geom_arrays.dn_faces_wirestris,
             points: this._geom_arrays.dn_points_verts,
-            linestrings: this._geom_arrays.dn_plines_wires,
+            polylines: this._geom_arrays.dn_plines_wires,
             polygons: this._geom_arrays.dn_pgons_faces,
             collections: this._geom_arrays.dn_colls_objs
         };

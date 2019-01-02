@@ -1,5 +1,5 @@
 import { GIModel } from "./GIModel";
-import { IAttribsData, IModelData, IAttribData, TId, TAttribDataTypes, EEntityTypeStr,
+import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntityTypeStr,
     EAttribDataTypeStrs, IGeomData, IAttribsMaps, EEntStrToAttribMap, EAttribNames, Txyz } from "./common";
 import { GIAttribMap } from "./GIAttribMap";
 import { isArray } from "util";
@@ -48,12 +48,44 @@ export class GIAttribsAdd {
         const attribs_data: IAttribsData = model_data.attributes;
         const geom_data: IGeomData = model_data.geometry;
         // add the attribute data
-        _addAttribData(this._attribs_maps.posis, attribs_data.positions, this._model.geom.query.numPosis(), geom_data.num_positions);
-        _addAttribData(this._attribs_maps.verts, attribs_data.vertices, this._model.geom.query.numVerts(), geom_data.vertices.length);
-        _addAttribData(this._attribs_maps.edges, attribs_data.edges, this._model.geom.query.numEdges(), geom_data.edges.length);
-        _addAttribData(this._attribs_maps.wires, attribs_data.wires, this._model.geom.query.numWires(), geom_data.wires.length);
-        _addAttribData(this._attribs_maps.faces, attribs_data.faces, this._model.geom.query.numFaces(), geom_data.faces.length);
-        _addAttribData(this._attribs_maps.colls, attribs_data.collections, this._model.geom.query.numColls(), geom_data.collections.length);
+        // exist_attribs_maps, new_attribs_data, num_existing_entities, num_new_entities
+        if (attribs_data.positions !== undefined) {
+            _addAttribData(this._attribs_maps.posis, attribs_data.positions, 
+                this._model.geom.query.numPosis(), geom_data.num_positions);
+        }
+        if (attribs_data.vertices !== undefined) {
+            _addAttribData(this._attribs_maps.verts, attribs_data.vertices, 
+                this._model.geom.query.numVerts(), geom_data.vertices.length);
+        }
+        if (attribs_data.edges !== undefined) {
+            _addAttribData(this._attribs_maps.edges, attribs_data.edges, 
+                this._model.geom.query.numEdges(), geom_data.edges.length);
+        }
+        if (attribs_data.wires !== undefined) {
+            _addAttribData(this._attribs_maps.wires, attribs_data.wires, 
+                this._model.geom.query.numWires(), geom_data.wires.length);
+        }
+        if (attribs_data.faces !== undefined) {
+            _addAttribData(this._attribs_maps.faces, attribs_data.faces, 
+                this._model.geom.query.numFaces(), geom_data.faces.length);
+        }
+        if (attribs_data.points !== undefined) {
+            _addAttribData(this._attribs_maps.points, attribs_data.points, 
+                this._model.geom.query.numPoints(), geom_data.points.length);
+        }
+        if (attribs_data.polylines !== undefined) {
+            _addAttribData(this._attribs_maps.plines, attribs_data.polylines, 
+                this._model.geom.query.numPlines(), geom_data.polylines.length);
+        }
+        if (attribs_data.polygons !== undefined) {
+            _addAttribData(this._attribs_maps.pgons, attribs_data.polygons, 
+                this._model.geom.query.numFaces(), geom_data.polygons.length);
+        }
+        if (attribs_data.collections !== undefined) {
+            _addAttribData(this._attribs_maps.colls, attribs_data.collections, 
+                this._model.geom.query.numColls(), geom_data.collections.length);
+        }
+
     }
     // ============================================================================
     // Private methods
@@ -102,6 +134,12 @@ export class GIAttribsAdd {
                 return this._model.geom.query.numWires();
             case EEntityTypeStr.FACE:
                 return this._model.geom.query.numFaces();
+            case EEntityTypeStr.POINT:
+                return this._model.geom.query.numPoints();
+            case EEntityTypeStr.PLINE:
+                return this._model.geom.query.numPlines();
+            case EEntityTypeStr.PGON:
+                return this._model.geom.query.numPgons();
             case EEntityTypeStr.COLL:
                 return this._model.geom.query.numColls();
             default:

@@ -21183,7 +21183,7 @@
 						},
 						{
 							"id": 179,
-							"name": "linestrings",
+							"name": "polylines",
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {

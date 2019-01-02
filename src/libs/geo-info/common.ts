@@ -99,12 +99,15 @@ export enum EEntStrToGeomArray {
  * Attribute maps
  */
 export interface IAttribsMaps {
-    posis: Map<string, GIAttribMap>; // IGIAttribMap>;
-    verts: Map<string, GIAttribMap>; // IGIAttribMap>;
-    edges: Map<string, GIAttribMap>; // IGIAttribMap>;
-    wires: Map<string, GIAttribMap>; // IGIAttribMap>;
-    faces: Map<string, GIAttribMap>; // IGIAttribMap>;
-    colls: Map<string, GIAttribMap>; // IGIAttribMap>;
+    posis: Map<string, GIAttribMap>;
+    verts: Map<string, GIAttribMap>;
+    edges: Map<string, GIAttribMap>;
+    wires: Map<string, GIAttribMap>;
+    faces: Map<string, GIAttribMap>;
+    points: Map<string, GIAttribMap>;
+    plines: Map<string, GIAttribMap>;
+    pgons: Map<string, GIAttribMap>;
+    colls: Map<string, GIAttribMap>;
 }
 // export interface IGIAttribMap {
 //     // TODO
@@ -115,6 +118,9 @@ export enum EEntStrToAttribMap {
     _e = 'edges',
     _w = 'wires',
     _f = 'faces',
+    pt = 'points',
+    pl = 'plines',
+    pg = 'pgons',
     co = 'colls'
 }
 
@@ -154,7 +160,7 @@ export interface IGeomData {
     wires: TWire[];
     faces: TFace[];
     points: TPoint[];
-    linestrings: TPline[];
+    polylines: TPline[];
     polygons: TPgon[];
     collections: TColl[];
 }
@@ -170,6 +176,9 @@ export interface IAttribsData {
     edges: IAttribData[];
     wires: IAttribData[];
     faces: IAttribData[];
+    points: IAttribData[];
+    polylines: IAttribData[];
+    polygons: IAttribData[];
     collections: IAttribData[];
 }
 export interface IModelData {

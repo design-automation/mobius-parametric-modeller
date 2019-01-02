@@ -13,7 +13,7 @@
             [[[1], [0, 1]]],
         "points":
             [0],
-        "linestrings":
+        "polylines":
             [0],
         "polygons":
             [0],

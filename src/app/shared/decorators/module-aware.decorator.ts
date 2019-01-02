@@ -64,18 +64,21 @@ export function ModuleAware(constructor: Function) {
     constructor.prototype.Modules = module_list;
 }
 
-function analyzeParamType(paramType) {
+function analyzeParamType(fn, paramType) {
     if (paramType.type === 'array') {
-        return `${paramType.elementType.name}[]`;
+        return `${analyzeParamType(fn, paramType.elementType)}[]`;
     } else if (paramType.type === 'intrinsic' || paramType.type === 'reference') {
         return paramType.name;
     } else if (paramType.type === 'union') {
-        return paramType.types.map((tp: any) => analyzeParamType(tp)).join('||');
+        return paramType.types.map((tp: any) => analyzeParamType(fn, tp)).join(' || ');
+    } else if (paramType.type === 'tuple') {
+        return '[' + paramType.elements.map((tp: any) => analyzeParamType(fn, tp)).join(', ') + ']';
     } else {
         /**
          * TODO: Update unrecognized param type here
          */
         console.log('param type requires updating:', paramType);
+        console.log('in function:', fn.module + '.' + fn.name);
         return paramType.type;
     }
 
@@ -131,14 +134,17 @@ export function ModuleDocAware(constructor: Function) {
                                 break;
                             }
                         }
-                        if (!namecheck) { continue; }
+                        if (!namecheck) {
+                            fn['parameters'].push(undefined);
+                            continue;
+                        }
                         const pr = {};
 
                         pr['name'] = param.name;
                         if (param.comment) {
                             pr['description'] = param.comment.shortText || param.comment.text;
                         }
-                        pr['type'] = analyzeParamType(param.type);
+                        pr['type'] = analyzeParamType(fn, param.type);
                         fn['parameters'].push(pr);
                     }
                 }

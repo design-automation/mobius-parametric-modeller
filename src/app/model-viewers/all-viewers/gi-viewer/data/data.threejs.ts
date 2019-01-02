@@ -20,6 +20,7 @@ export class DataThreejs {
     public _selectedEntity = new Map(); // TODO add types
     public _text: string;
     // text lables
+    public ObjLabelMap: Map<string, any> = new Map();
     public _textLabels = new Map(); // TODO add types
     public _font; // TODO add types
     // number of threejs points, lines, triangles
@@ -97,10 +98,10 @@ export class DataThreejs {
         this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
-        this._addLabel();
+        // this._addLabel();
     }
 
-    public selectObjFace(selecting, triangle_i, positions, container) {
+    public selectObjFace(labelText, triangle_i, positions, container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( triangle_i );
         geom.addAttribute( 'position',  new THREE.Float32BufferAttribute( positions, 3 ));
@@ -119,16 +120,14 @@ export class DataThreejs {
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         this._scene.add( mesh );
-        this._selecting.set(selecting, mesh.id);
+        this._selecting.set(labelText, mesh.id);
 
-        const label = this._createTextLabel(container, 'face');
-        label.setHTML(selecting);
-        label.setParent(mesh);
-        this._textLabels.set(label.element.id, label);
-        container.appendChild(label.element);
+        const obj: {entity: THREE.Mesh, type: string } = {entity: mesh, type: objType.face};
+        this.createLabelforObj(container, obj.entity, obj.type, labelText);
+        this.ObjLabelMap.set(labelText, obj);
     }
 
-    public selectObjLine(selecting, positions, container) {
+    public selectObjLine(labelText, positions, container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( [0, 1] );
         geom.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
@@ -141,16 +140,14 @@ export class DataThreejs {
         } );
         const line = new THREE.LineSegments(geom, mat);
         this._scene.add(line);
-        this._selecting.set(selecting, line.id);
+        this._selecting.set(labelText, line.id);
 
-        const label = this._createTextLabel(container, 'line');
-        label.setHTML(selecting);
-        label.setParent(line);
-        this._textLabels.set(label.element.id, label);
-        container.appendChild(label.element);
+        const obj: {entity: THREE.LineSegments, type: string } = {entity: line, type: objType.line};
+        this.createLabelforObj(container, obj.entity, obj.type, labelText);
+        this.ObjLabelMap.set(labelText, obj);
     }
 
-    public selectObjPoint(selecting, position, container) {
+    public selectObjPoint(labelText, position, container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex( [0] );
         geom.addAttribute( 'position', new THREE.Float32BufferAttribute( position, 3 ) );
@@ -162,24 +159,26 @@ export class DataThreejs {
         } );
         const point = new THREE.Points(geom, mat);
         this._scene.add(point);
-        this._selecting.set(selecting, point.id);
+        this._selecting.set(labelText, point.id);
+        const obj: {entity: THREE.Points, type: string } = {entity: point, type: objType.point};
+        this.createLabelforObj(container, obj.entity, obj.type, labelText);
+        this.ObjLabelMap.set(labelText, obj);
+    }
 
-        const label = this._createTextLabel(container, 'point');
-        label.setHTML(selecting);
-        label.setParent(point);
+    public createLabelforObj(container, obj, type: string, labelText: string) {
+        const label = this._createTextLabel(container, type, labelText);
+        label.setHTML(labelText);
+        label.setParent(obj);
         this._textLabels.set(label.element.id, label);
         container.appendChild(label.element);
-        localStorage.setItem('mpm_threejs_text_labels', JSON.stringify(label.element));
     }
 
     public unselectObj(selecting, container) {
         const removing = this._selecting.get(selecting);
         this._selecting.delete(selecting);
         this._scene.remove(this._scene.getObjectById(removing));
-        document.querySelectorAll('[id^=textLabel_]').forEach(value => {
-            container.removeChild(value);
-        });
-        this._textLabels.clear();
+
+        container.removeChild(document.getElementById(`textLabel_${selecting}`));
     }
 
     // ============================================================================
@@ -312,27 +311,12 @@ export class DataThreejs {
         this._threejs_nums[0] = points_i.length;
     }
 
-    private _addLabel() {
-        const textGeo = new THREE.TextGeometry( 'Hello three.js!', {
-            font: this._font,
-            size: 1,
-            height: 1,
-            curveSegments: 12,
-            bevelEnabled: false
-        } );
-        const materials = [new THREE.MeshPhongMaterial( { color: 0x000000, flatShading: true } )];
-        const mesh = new THREE.Mesh( textGeo, materials );
-        mesh.quaternion.copy(this._camera.quaternion);
-        this._scene.add( mesh );
-        this._textLabels.set(mesh.id, mesh);
-    }
-
-    private _createTextLabel(container, type) {
+    private _createTextLabel(container, type: string, labelText: string) {
         const div = document.createElement('div');
-        div.id = `textLabel_${this._textLabels.size}`;
+        div.id = `textLabel_${labelText}`;
         div.className = 'text-label';
         div.style.position = 'absolute';
-        div.innerHTML = 'hi there!';
+        div.innerHTML = '';
         div.style.top = '-1000';
         div.style.left = '-1000';
         const _this = this;
@@ -348,16 +332,12 @@ export class DataThreejs {
           },
           updatePosition: function() {
             if (this.parent) {
-                if (type === 'point') {
+                if (type === objType.point || type === objType.face) {
                     const center = this.parent.geometry.boundingSphere.center;
                     this.position.copy(center);
-                } else if (type === 'line') {
+                } else if (type === objType.line) {
                     const p = this.parent.geometry.getAttribute('position').array;
-                    const middle = new THREE.Vector3((p[0] + p[3]) / 2, (p[1] + p[4]) / 2, (p[2] + p[5]) / 2);
-                    this.position.copy(middle);
-                } else if (type === 'face') {
-                    const center = this.parent.geometry.boundingSphere.center;
-                    // console.log('geometry center', this.parent.geometry);
+                    const center = new THREE.Vector3((p[0] + p[3]) / 2, (p[1] + p[4]) / 2, (p[2] + p[5]) / 2);
                     this.position.copy(center);
                 }
             }
@@ -432,4 +412,14 @@ export class DataThreejs {
             break;
         }
     }
+}
+
+/**
+ * objType includes point, line, face
+ */
+
+enum objType {
+    point = 'point',
+    line = 'line',
+    face = 'face'
 }

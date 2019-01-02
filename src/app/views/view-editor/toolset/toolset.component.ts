@@ -9,7 +9,7 @@ import { INode } from '@models/node';
 
 import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
-import {inline_expr, inline_func} from './toolset.inline';
+import { inline_query_expr, inline_func} from './toolset.inline';
 import { DataService } from '@services';
 
 const keys = Object.keys(ProcedureTypes);
@@ -37,7 +37,7 @@ export class ToolsetComponent {
     searchedInlines = [];
     focusedInput: any;
 
-    inlineExpr = inline_expr;
+    inlineQueryExpr = inline_query_expr;
     inlineFunc = inline_func;
 
     constructor(private dataService: DataService) {
@@ -362,7 +362,7 @@ export class ToolsetComponent {
                 this.searchedInlines.push(cnstString);
             }
         }
-        for (const expr of this.inlineExpr) {
+        for (const expr of this.inlineQueryExpr) {
             if (this.searchedInlines.length >= 10) { break; }
             if (expr.toLowerCase().indexOf(str) !== -1) {
                 this.searchedInlines.push(expr);

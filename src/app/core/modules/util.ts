@@ -5,7 +5,7 @@ import { download } from '@libs/filesys/download';
 import { __merge__ } from './_model';
 
 // Import / Export data types
-export enum EIODataFormat {
+enum EIODataFormat {
     GI = 'gi',
     OBJ = 'obj'
 }

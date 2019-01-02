@@ -48,7 +48,7 @@ export abstract class NodeUtils {
 
     static getEndNode(): INode {
         const node = NodeUtils.getNewNode();
-        node.procedure = [];
+        // node.procedure = [];
         node.name = 'End';
         node.type = 'end';
         return node;

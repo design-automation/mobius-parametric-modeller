@@ -110,7 +110,7 @@ export class ToolsetComponent {
                     description: fl.description,
                     summary: fl.description,
                     parameters: [],
-                    returns: undefined
+                    returns: fl.returnDescription
                 };
                 const func: IFunction = <IFunction>{
                     flowchart: <IFlowchart>{
@@ -148,12 +148,6 @@ export class ToolsetComponent {
                 }
                 */
 
-                // go through the nodes
-                for (const node of fl.nodes) {
-                    if (node.type === 'end') {
-                        if (node.procedure.length > 0) {documentation.returns = node.procedure[0].meta.description; }
-                    }
-                }
 
                 // add func and all the imported functions of the imported flowchart to funcs
                 funcs.push(func);

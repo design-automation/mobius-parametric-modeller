@@ -1,5 +1,6 @@
 import * as mathjs from 'mathjs';
 import { TId, Txyz } from '@libs/geo-info/common';
+import { checkCommTypes, checkIDs, checkEdgVec} from './_check_args';
 
 /**
  * Vector functions.
@@ -14,9 +15,12 @@ import { TId, Txyz } from '@libs/geo-info/common';
  * @example vector1 = vec.SetLength ([2,4,4], 3)
  * @example_info vector1 = [1,2,2]
  */
-export function SetLength(vector: TId|Txyz, length: number): Txyz {
-    if (vector === undefined) { throw new Error('Invalid arg: vector must be defined.'); }
-    if (length === undefined) { throw new Error('Invalid arg: length must be defined.'); }
+export function SetLength(vector: Txyz, length: number): Txyz {
+    // --- Error Check ---
+    const fn_name = 'vec.SetLength';
+    checkCommTypes(fn_name, 'vector', vector, ['isVector']);
+    checkCommTypes(fn_name, 'length', length, ['isNumber']);
+    // --- Error Check ---
     return mathjs.multiply(mathjs.norm(vector), length) as Txyz;
 }
 
@@ -28,7 +32,10 @@ export function SetLength(vector: TId|Txyz, length: number): Txyz {
  * @example length1 = vec.GetLength ([1,2,2])
  * @example_info length1 = 3
  */
-export function GetLength(vector: TId|Txyz): number {
+export function GetLength(vector: Txyz): number {
+    // --- Error Check ---
+    checkCommTypes('vec.GetLength', 'vector', vector, ['isVector']);
+    // --- Error Check ---
     if (vector === undefined) { throw new Error('Invalid arg: vector must be defined.'); }
     return mathjs.hypot(vector);
 }
@@ -41,8 +48,13 @@ export function GetLength(vector: TId|Txyz): number {
  * @returns Angle (in radian).
  * @example angle1 = vec.Angle (edgeorvector1, edgeorvector2)
  */
-export function Angle(edgeOrVector1: TId|Txyz, edgeOrVector2: Txyz): number {
-    throw new Error("Not impemented."); return null;
+export function Angle(edgeOrVector1: Txyz, edgeOrVector2: Txyz): number {
+    // --- Error Check ---
+    const fn_name = 'vec.Angle';
+    checkEdgVec(fn_name, 'edgeOrVector1', edgeOrVector1);
+    checkEdgVec(fn_name, 'edgeOrVector2', edgeOrVector2);
+    // --- Error Check ---
+    throw new Error('Not impemented.'); return null;
 }
 
 /**
@@ -53,9 +65,12 @@ export function Angle(edgeOrVector1: TId|Txyz, edgeOrVector2: Txyz): number {
  * @returns The vector cross product of two vectors.
  * @example vector3 = vec.Cross(vector1, vector2)
  */
-export function Cross(vector1: TId|Txyz, vector2: TId|Txyz): Txyz {
-    if (vector1 === undefined) { throw new Error('Invalid arg: vector1 must be defined.'); }
-    if (vector2 === undefined) { throw new Error('Invalid arg: vector2 must be defined.'); }
+export function Cross(vector1: Txyz, vector2: Txyz): Txyz {
+    // --- Error Check ---
+    const fn_name = 'vec.Cross';
+    checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
+    checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
+    // --- Error Check ---
     return mathjs.cross(vector1, vector2);
 }
 
@@ -67,8 +82,11 @@ export function Cross(vector1: TId|Txyz, vector2: TId|Txyz): Txyz {
  * @returns The scalar dot product of two vectors.
  * @example vector3 = vec.Dot(vector1, vector2)
  */
-export function Dot(vector1: TId|Txyz, vector2: TId|Txyz): number {
-    if (vector1 === undefined) { throw new Error('Invalid arg: vector1 must be defined.'); }
-    if (vector2 === undefined) { throw new Error('Invalid arg: vector2 must be defined.'); }
+export function Dot(vector1: Txyz, vector2: Txyz): number {
+    // --- Error Check ---
+    const fn_name = 'vec.Dot';
+    checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
+    checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
+    // --- Error Check ---
     return mathjs.dot(vector1, vector2);
 }

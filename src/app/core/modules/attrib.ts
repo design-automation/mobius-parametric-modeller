@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
-import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
+import { checkCommTypes, checkIDs} from './_check_args';
 
 /**
  * Gets attribute value of all entities.

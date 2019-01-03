@@ -247,7 +247,21 @@ export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void
     }
     return;
 }
-
+export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {
+    const err_arr = [];
+    try {
+        checkCommTypes(fn_name, arg_name, arg, ['isVector']);
+    } catch (err1) {
+        err_arr.push(err1.message + '\n');
+        try {
+            checkIDs(fn_name, arg_name, arg, ['isID'], ['EDGE']);
+        } catch (err2) {
+            err_arr.push(err2.message);
+            throw new Error(err_arr.join(''));
+        }
+    }
+    return;
+}
 // // dim0
 // export function isDim0arg(fn_name: string, arg_name: string, arg: any): void {
 //     if (!isDim0(arg)) {

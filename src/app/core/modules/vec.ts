@@ -1,6 +1,6 @@
 import * as mathjs from 'mathjs';
 import { TId, Txyz } from '@libs/geo-info/common';
-import { checkCommTypes, checkIDs, checkEdgVec} from './_check_args';
+import { checkCommTypes, checkEdgVec} from './_check_args';
 
 /**
  * Vector functions.

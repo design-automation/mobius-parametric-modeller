@@ -196,7 +196,7 @@ const IDcheckObj = {
         return;
     },
 };
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void {
+export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]|'all'): void {
     let pass = false;
     const err_arr = [];
     for (let i = 0; i < check_fns.length; i++) {
@@ -214,7 +214,7 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         throw new Error(ret_msg + err_arr.join(''));
     }
 }
-export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks: string[]): void {
+export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks: string[]|'all'): void {
     let pass = false;
     const err_arr = [];
     for (let i = 0; i < check_fns.length; i++) {

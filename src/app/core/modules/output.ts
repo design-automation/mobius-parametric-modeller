@@ -10,5 +10,3 @@ import { GIModel } from '@libs/geo-info/GIModel';
 export function Return(__model__: GIModel, value: any): any {
     return value;
 }
-
-

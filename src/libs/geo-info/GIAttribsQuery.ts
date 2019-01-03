@@ -156,19 +156,14 @@ export class GIAttribsQuery {
         console.log("     attrib_value_str", query.attrib_value_str);
         console.log("     operator_type" ,   query.operator_type);
         // do the query
-        console.log("ent_type_str",ent_type_str);
         const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
-        console.log("attribs_maps_key",attribs_maps_key);
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        console.log("attribs",attribs);
         if (!attribs || !attribs.has(query.attrib_name)) { return []; }
-        console.log("attribs.get(query.attrib_name)",attribs.get(query.attrib_name));
         const entities_i: number[] = attribs.get(query.attrib_name).queryValueStr(
             query.attrib_value_str,
             query.operator_type,
             query.attrib_index
         );
-        console.log("entities_i",entities_i);
         return entities_i;
     }
     // ============================================================================

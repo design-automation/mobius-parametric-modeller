@@ -21,7 +21,6 @@ export class ViewGalleryComponent {
 
     // private allFiles: Observable<any>;
     private allGalleries = [];
-    private active;
     @Output() switch = new EventEmitter();
 
     /*

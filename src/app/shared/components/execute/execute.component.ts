@@ -209,6 +209,7 @@ export class ExecuteComponent {
                 error = new Error('Unable to read file input. Check all start node inputs.');
             } else {
                 error = ex;
+                // error = new Error(ex.message);
             }
             document.getElementById('Console').click();
             // @ts-ignore
@@ -217,8 +218,8 @@ export class ExecuteComponent {
             console.log(error.name.toUpperCase());
             console.log('=======================================');
             console.log(error.message);
-            // console.log('---------------\nError node code:');
-            // console.log(fnString);
+            console.log('---------------\nError node code:');
+            console.log(fnString);
             throw error;
 
         }

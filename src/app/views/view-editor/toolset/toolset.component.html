@@ -159,7 +159,10 @@
             <button id='inlineExpr' class="accordion"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)'>
+                    <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
+                        {{expr[0]}}
+                    </li> -->
+                    <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
                         {{expr}}
                     </li>
                 </ul>
@@ -174,7 +177,10 @@
                     <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
                     <div class="panel">
                         <ul class='toolset__functions--subset'>
-                            <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)'>
+                            <!-- <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString[0])' title='{{funcString[1]}}'>
+                                {{funcString[0]}}
+                            </li> -->
+                            <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)' title='{{funcString}}'>
                                 {{funcString}}
                             </li>
                         </ul>

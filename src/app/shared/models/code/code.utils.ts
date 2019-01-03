@@ -25,15 +25,24 @@ export class CodeUtils {
 
         switch ( prod.type ) {
             case ProcedureTypes.Variable:
-                codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
-                if (prefix === 'let ') {
-                    existingVars.push(args[0].value);
+                if (!args[0].value) {
+                    codeStr.push(`${this.repGetAttrib(args[1].value)};`);
+                    break;
+                }
+                const repVar = this.repSetAttrib(args[0].value);
+                if (!repVar) {
+                    codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
+                    if (prefix === 'let ') {
+                        existingVars.push(args[0].value);
+                    }
+                } else {
+                    codeStr.push(`${repVar}${this.repGetAttrib(args[1].value)});`);
                 }
                 break;
 
             case ProcedureTypes.If:
                 if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`if (${args[0].value}){`);
+                codeStr.push(`if (${this.repGetAttrib(args[0].value)}){`);
                 break;
 
             case ProcedureTypes.Else:
@@ -42,18 +51,18 @@ export class CodeUtils {
 
             case ProcedureTypes.Elseif:
                 if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`else if(${args[0].value}){`);
+                codeStr.push(`else if(${this.repGetAttrib(args[0].value)}){`);
                 break;
 
             case ProcedureTypes.Foreach:
                 // codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
                 if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`for (${prefix} ${args[0].value} of ${args[1].value}){`);
+                codeStr.push(`for (${prefix} ${args[0].value} of ${this.repGetAttrib(args[1].value)}){`);
                 break;
 
             case ProcedureTypes.While:
                 if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`while (${args[0].value}){`);
+                codeStr.push(`while (${this.repGetAttrib(args[0].value)}){`);
                 break;
 
             case ProcedureTypes.Break:
@@ -114,22 +123,27 @@ export class CodeUtils {
                     }
 
                     if (arg.value && arg.value.substring(0, 1) === '#') {
-                        argVals.push('`' + arg.value + '`');
+                        argVals.push('`' + this.repGetAttrib(arg.value) + '`');
                         continue;
                     }
-                    argVals.push(arg.value);
+                    argVals.push(this.repGetAttrib(arg.value));
 
                 }
                 const argValues = argVals.join(', ');
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
                     codeStr.push(`return ${fnCall};`);
-                } else if (args[0].name === '__none__') {
+                } else if (args[0].name === '__none__' || !args[0].value) {
                     codeStr.push(`${fnCall};`);
                 } else {
-                    codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
-                    if (prefix === 'let ') {
-                        existingVars.push(args[0].value);
+                    const repfuncVar = this.repSetAttrib(args[0].value);
+                    if (!repfuncVar) {
+                        codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
+                        if (prefix === 'let ') {
+                            existingVars.push(args[0].value);
+                        }
+                    } else {
+                        codeStr.push(`${repfuncVar}${fnCall});`);
                     }
                 }
                 break;
@@ -138,13 +152,27 @@ export class CodeUtils {
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
                     // args.slice(1).map((arg) => {
-                    if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(arg.value); }
+                    if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(this.repGetAttrib(arg.value)); }
                     argsVals.push(prod.resolvedValue);
                 }
                 argsVals = argsVals.join(', ');
 
                 const fn = `${prod.meta.name}(__params__, ${argsVals} )`;
-                codeStr.push(`${prefix}${args[0].value} = ${fn};`);
+
+                if (!args[0].value) {
+                    codeStr.push(`${fnCall};`);
+                    break;
+                }
+                const repImpVar = this.repSetAttrib(args[0].value);
+                if (!repImpVar) {
+                    codeStr.push(`${prefix}${args[0].value} = ${fn};`);
+                    if (prefix === 'let ') {
+                        existingVars.push(args[0].value);
+                    }
+                } else {
+                    codeStr.push(`${repImpVar}${fnCall});`);
+                }
+
                 if (prefix === 'let ') {
                     existingVars.push(args[0].value);
                 }
@@ -164,7 +192,22 @@ export class CodeUtils {
         }
         return codeStr;
     }
+    static repSetAttrib(val: string) {
+        if (val.indexOf('@') === -1) {
+            return false;
+        }
+        return `__modules__.${_parameterTypes.setattrib}('${val}', `;
+    }
 
+    static repGetAttrib(val: string) {
+        const res = val.split(' ');
+        for (const i in res) {
+            if (res[i].indexOf('@') !== -1) {
+                res[i] = `__modules__.${_parameterTypes.getattrib}('${res[i]}')`;
+            }
+        }
+        return res.join(' ');
+    }
 
     static async getStartInput(arg, inputMode): Promise<any> {
         let val;

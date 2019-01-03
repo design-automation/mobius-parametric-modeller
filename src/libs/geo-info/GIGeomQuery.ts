@@ -59,9 +59,106 @@ export class GIGeomQuery {
     public navCollToColl(coll_i: number): number {
         return coll_i[0]; // coll parent
     }
-
+    // ============================================================================
+    // Navigate up the hierarchy
+    // ============================================================================
+    public navPosiToVert(posi_i: number): number[] {
+        return this._geom_arrays.up_posis_verts[posi_i];
+    }
+    public navVertToTri(vert_i: number): number[] {
+        return this._geom_arrays.up_verts_tris[vert_i];
+    }
+    public navVertToEdge(vert_i: number): number[] {
+        return this._geom_arrays.up_verts_edges[vert_i];
+    }
+    public navTriToFace(tri_i: number): number {
+        return this._geom_arrays.up_tris_faces[tri_i];
+    }
+    public navEdgeToWire(edge_i: number): number {
+        return this._geom_arrays.up_edges_wires[edge_i];
+    }
+    public navWireToFace(wire_i: number): number {
+        return this._geom_arrays.up_wires_faces[wire_i];
+    }
+    public navVertToPoint(vert_i: number): number {
+        return this._geom_arrays.up_verts_points[vert_i];
+    }
+    public navWireToLine(wire_i: number): number {
+        return this._geom_arrays.up_wires_plines[wire_i];
+    }
+    public navFaceToPgon(face: number): number {
+        return this._geom_arrays.up_faces_pgons[face];
+    }
+    public navPointToColl(point_i: number): number {
+        return this._geom_arrays.up_points_colls[point_i];
+    }
+    public navLineToColl(line_i: number): number {
+        return this._geom_arrays.up_plines_colls[line_i];
+    }
+    public navPgonToColl(pgon_i: number): number {
+        return this._geom_arrays.up_pgons_colls[pgon_i];
+    }
     /**
-     * Navigate from any level down to the edges, (or up if coming from positions or vertices)
+     * Returns the vertices.
+     * For a closed wire, #vertices = #edges
+     * For an open wire, #vertices = #edges + 1
+     */
+    private getWireVerts(wire_i: number): number[] {
+        const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
+        const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
+        // if wire is open, then add final vertex
+        if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
+            verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+        }
+        return verts_i;
+    }
+    // ============================================================================
+    // Navigate from any level to ? (up or down)
+    // ============================================================================
+    /**
+     * Navigate from any level to the colls
+     * @param id
+     */
+    public navAnyToColl(entity_str: EEntityTypeStr, index: number): number[] {
+        throw new Error("Not implemented.")
+    }
+    /**
+     * Navigate from any level to the pgons
+     * @param id
+     */
+    public navAnyToPgon(entity_str: EEntityTypeStr, index: number): number[] {
+        throw new Error("Not implemented.")
+    }
+    /**
+     * Navigate from any level to the plines
+     * @param id
+     */
+    public navAnyToPline(entity_str: EEntityTypeStr, index: number): number[] {
+        throw new Error("Not implemented.")
+    }
+    /**
+     * Navigate from any level to the points
+     * @param id
+     */
+    public navAnyToPoint(entity_str: EEntityTypeStr, index: number): number[] {
+        throw new Error("Not implemented.")
+    }
+    /**
+     * Navigate from any level to the faces
+     * @param id
+     */
+    public navAnyToFace(entity_str: EEntityTypeStr, index: number): number[] {
+        throw new Error("Not implemented.")
+    }
+    /**
+     * Navigate from any level to the wires
+     * @param id
+     */
+    public navAnyToWire(entity_str: EEntityTypeStr, index: number): number[] {
+        throw new Error("Not implemented.")
+    }
+    /**
+     * Navigate from any level to the edges, (or up if coming from positions or vertices)
      * @param id
      */
     public navAnyToEdge(entity_str: EEntityTypeStr, index: number): number[] {
@@ -135,58 +232,40 @@ export class GIGeomQuery {
     }
 
     // ============================================================================
-    // Navigate up the hierarchy
+    // Navigate from any to any, general method
     // ============================================================================
-    public navPosiToVert(posi_i: number): number[] {
-        return this._geom_arrays.up_posis_verts[posi_i];
-    }
-    public navVertToTri(vert_i: number): number[] {
-        return this._geom_arrays.up_verts_tris[vert_i];
-    }
-    public navVertToEdge(vert_i: number): number[] {
-        return this._geom_arrays.up_verts_edges[vert_i];
-    }
-    public navTriToFace(tri_i: number): number {
-        return this._geom_arrays.up_tris_faces[tri_i];
-    }
-    public navEdgeToWire(edge_i: number): number {
-        return this._geom_arrays.up_edges_wires[edge_i];
-    }
-    public navWireToFace(wire_i: number): number {
-        return this._geom_arrays.up_wires_faces[wire_i];
-    }
-    public navVertToPoint(vert_i: number): number {
-        return this._geom_arrays.up_verts_points[vert_i];
-    }
-    public navWireToLine(wire_i: number): number {
-        return this._geom_arrays.up_wires_plines[wire_i];
-    }
-    public navFaceToPgon(face: number): number {
-        return this._geom_arrays.up_faces_pgons[face];
-    }
-    public navPointToColl(point_i: number): number {
-        return this._geom_arrays.up_points_colls[point_i];
-    }
-    public navLineToColl(line_i: number): number {
-        return this._geom_arrays.up_plines_colls[line_i];
-    }
-    public navPgonToColl(pgon_i: number): number {
-        return this._geom_arrays.up_pgons_colls[pgon_i];
-    }
     /**
-     * Returns the vertices.
-     * For a closed wire, #vertices = #edges
-     * For an open wire, #vertices = #edges + 1
+     * Navigate from any level down to the positions
+     * @param id
      */
-    private getWireVerts(wire_i: number): number[] {
-        const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
-        const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
-        // if wire is open, then add final vertex
-        if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
-            verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+    public navAnyToAny(from_ets: EEntityTypeStr, to_ets: EEntityTypeStr, index: number): number[] {
+        // same level
+        if (from_ets === to_ets) { return [index]; }
+        // from -> to
+        switch (to_ets) {
+            case EEntityTypeStr.POSI:
+                return this.navAnyToPosi(from_ets, index);
+            case EEntityTypeStr.VERT:
+                return this.navAnyToVert(from_ets, index);
+            case EEntityTypeStr.EDGE:
+                return this.navAnyToEdge(from_ets, index);
+            case EEntityTypeStr.WIRE:
+                return this.navAnyToWire(from_ets, index);
+            case EEntityTypeStr.FACE:
+                return this.navAnyToFace(from_ets, index);
+            case EEntityTypeStr.POINT:
+                return this.navAnyToPoint(from_ets, index);
+            case EEntityTypeStr.PLINE:
+                return this.navAnyToPline(from_ets, index);
+            case EEntityTypeStr.PGON:
+                return this.navAnyToPgon(from_ets, index);
+            case EEntityTypeStr.COLL:
+                return this.navAnyToColl(from_ets, index);
+            default:
+                throw new Error('Navigation not recognised: ' + to_ets);
         }
-        return verts_i;
     }
+
     // ============================================================================
     // Get arrays of entities
     // ============================================================================

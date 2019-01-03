@@ -25,7 +25,7 @@ export enum EEntityTypeStr {
 
 // Names of attributes
 export enum EAttribNames {
-    COORDS =  'coordinates',
+    COORDS =  'xyz',
     NORMAL =  'normal',
     COLOR =   'color',
     TEXTURE = 'texture'

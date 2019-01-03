@@ -106,14 +106,14 @@ export class GIAttribMap {
     /**
      * Executes a query
      * @param value_str The string version of the value.
-     * @param index The index of the value
+     * @param value_index The index of the value
      * @param operator The relational operator, ==, !=, <=, >=, etc
      */
-    public queryValueStr(value_str: string, operator: EQueryOperatorTypes, index?: number, indicies?: number[]): number[] {
+    public queryValueStr(value_str: string, operator: EQueryOperatorTypes, value_index: number, indicies: number[]): number[] {
         // check the index
-        const indexed = (index !== null && index !== undefined);
+        const indexed = (value_index !== null && value_index !== undefined);
         if (indexed) {
-            if (!Number.isInteger(index)) { throw new Error('Query index cannot be converted to an integer: ' + index); }
+            if (!Number.isInteger(value_index)) { throw new Error('Query index cannot be converted to an integer: ' + value_index); }
             if (!(this._data_size > 0))  { throw new Error('Query attribute ' + this._name + ' is not a list.'); }
         }
         // get the numeric value for the query
@@ -137,42 +137,42 @@ export class GIAttribMap {
             // ==
             case EQueryOperatorTypes.IS_EQUAL:
                 if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[index] === value );
+                    return keys.filter( key => this._bi_map.getValue(key)[value_index] === value );
                 } else {
                     return keys.filter( key => this._bi_map.getValue(key) === value );
                 }
             // !=
             case EQueryOperatorTypes.IS_NOT_EQUAL:
                 if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[index] !== value );
+                    return keys.filter( key => this._bi_map.getValue(key)[value_index] !== value );
                 } else {
                     return keys.filter( key => this._bi_map.getValue(key) !== value );
                 }
             // >
             case EQueryOperatorTypes.IS_GREATER:
                 if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[index] > value );
+                    return keys.filter( key => this._bi_map.getValue(key)[value_index] > value );
                 } else {
                     return keys.filter( key => this._bi_map.getValue(key) > value );
                 }
             // >=
             case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
                 if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[index] >= value );
+                    return keys.filter( key => this._bi_map.getValue(key)[value_index] >= value );
                 } else {
                     return keys.filter( key => this._bi_map.getValue(key) >= value );
                 }
             // <
             case EQueryOperatorTypes.IS_LESS:
                 if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[index] < value );
+                    return keys.filter( key => this._bi_map.getValue(key)[value_index] < value );
                 } else {
                     return keys.filter( key => this._bi_map.getValue(key) < value );
                 }
             // <=
             case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
                 if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[index] <= value );
+                    return keys.filter( key => this._bi_map.getValue(key)[value_index] <= value );
                 } else {
                     return keys.filter( key => this._bi_map.getValue(key) <= value );
                 }

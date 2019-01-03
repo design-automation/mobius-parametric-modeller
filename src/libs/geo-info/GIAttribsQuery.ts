@@ -80,8 +80,8 @@ function _parse_query_component(query_component: string): IQueryComponent {
  * [ [ query1 && query2 ] || [ query3 && query4 ] ]
  */
 function parseQuery(query_str: string): IQueryComponent[][] {
-    if (!query_str.startsWith('#')) {throw new Error('Bad query, must start with #.'); }
-    const query_str_clean: string = query_str.replace(/\s/g, '').slice(1);
+    if (!query_str.startsWith('#')) {throw new Error('Bad query, query string must start with #.'); }
+    const query_str_clean: string = query_str.replace(/\s/g, '');
     const or_query_strs: string[] = query_str_clean.split('||');
     const query_list: IQueryComponent[][] = [];
     or_query_strs.forEach(or_query_str => {
@@ -139,22 +139,25 @@ export class GIAttribsQuery {
      * Query the model using a query strings.
      * Returns a list of string IDs of entities in the model.
      */
-    public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string): number[] {
+    public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string, indicies?: number[]): number[] {
         // get the map that contains all the ettributes for the ent_type_str
         const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         // parse the query
         const queries: IQueryComponent[][] = parseQuery(query_str);
         if (!queries) { return []; }
-        console.log(queries);
         // do the query, one by one
         // [[query1 and query2] or [query3 and query4]]
         let union_query_results: number[] = [];
         for (const and_queries of queries)  {
             let intersect_query_result: number[] = null;
+            if (indicies !== null && indicies !== undefined) {
+                intersect_query_result = indicies;
+            }
             for (const and_query of and_queries) {
-                if (attribs || attribs.has(and_query.attrib_name)) {
-                    intersect_query_result = attribs.get(and_query.attrib_name).queryValueStr(
+                if (attribs && attribs.has(and_query.attrib_name)) {
+                    const attrib: GIAttribMap = attribs.get(and_query.attrib_name);
+                    intersect_query_result = attrib.queryValueStr(
                         and_query.attrib_value_str,
                         and_query.operator_type,
                         and_query.attrib_index,

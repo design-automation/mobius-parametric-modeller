@@ -3,6 +3,13 @@ import { TId, TQuery, EEntityTypeStr } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { checkIDs } from './_check_args';
 
+// TQuery should be something like this:
+//
+// #@name != value
+// #@name1 > 10 || #@name2 < 5 && #@name3 == 'red'
+// #@xyz[2] > 5
+//
+
 export enum _EQuerySelect {
     POSI =   'positions',
     VERT =   'vertices',
@@ -51,10 +58,18 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     // --- Error Check ---
     checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
     // --- Error Check ---
-
-    // const result = __model__.attribs.query.queryAttribs(query);
-    // console.log(result);
-    throw new Error('Not impemented.'); return null;
+    // get the select ent_type_str
+    const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);
+    // get the list of entities
+    const indicies: number[] = [];
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    for (const entity_id of entities) {
+        const [curr_ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entity_id);
+        indicies.push(...__model__.geom.query.navAnyToAny(curr_ent_type_str, select_ent_type_str, index));
+    }
+    // do the query on the list of entities
+    const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type_str, attrib_query, indicies);
+    return query_result.map( entity_i => select_ent_type_str + entity_i);
 }
 /**
  * Queries the id of any entity based on attribute name.

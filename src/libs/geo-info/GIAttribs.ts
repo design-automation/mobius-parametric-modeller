@@ -1,12 +1,8 @@
 import { GIAttribsAdd } from './GIAttribsAdd';
 import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsQuery } from './GIAttribsQuery';
-import { GIAttribMap } from './GIAttribMap';
 import { GIModel } from './GIModel';
-import { TId, EEntityTypeStr, EAttribNames, IQueryComponent,  IAttribsData,
-    EAttribDataTypeStrs, TAttribDataTypes, IAttribData, Txyz, IGeomData, IModelData, IAttribsMaps, EEntStrToAttribMap  } from './common';
-import { idBreak  } from './id';
-import { parse_query } from './query';
+import { EEntityTypeStr, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
 
 /**
  * Class for attributes.

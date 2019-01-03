@@ -8,7 +8,7 @@ export const inline_query_expr = [
 ];
 
 const lists = [
-    'range(star, end)',
+    'range(start, end)',
     'length(list)'
 ];
 

@@ -370,11 +370,11 @@ export function Join(__model__: GIModel, objects: TId[]): TId {
     throw new Error('Not implemented.'); return null;
 }
 // Enums for Copy()
-enum _ECopyPositions {
+export enum _ECopyPositions {
     COPY_POSITIONS = 'copy_positions',
     REUSE_POSITIONS = 'reuse_positions'
 }
-enum _ECopyAttribues {
+export enum _ECopyAttribues {
     COPY_ATTRIBUTES = 'copy_attributes',
     NO_ATTRIBUTES = 'no_attributes'
 }
@@ -388,11 +388,11 @@ enum _ECopyAttribues {
  * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
  * @example_info Creates a list containing a copy of the objects in sequence of input.
  */
-export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: _ECopyPositions,
-                     copy_attributes: _ECopyAttribues): TId|TId[] {
+export function Copy(__model__: GIModel, geometry: TId|TId[],
+    copy_positions: _ECopyPositions, copy_attributes: _ECopyAttribues): TId|TId[] {
     // --- Error Check ---
     checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     // TODO positions may be copied multiple times
     if (!Array.isArray(geometry)) {
@@ -419,16 +419,16 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_positions: _E
     }
 }
 // Divide edge modelling operation
-enum _EDivideMethod {
-    BY_NUMBER =  'divide edge by number',
-    BY_LENGTH  =  'divide edge by length'
+export enum _EDivideMethod {
+    BY_NUMBER =  'by_number',
+    BY_LENGTH  =  'by_length'
 }
 /**
  * Divides edge by length or by number of segments.
  * If edge is not exact multiple of length, length of last segment will be the remainder.
  * @param __model__
  * @param edges Edge(s) to be divided.
- * @param divisor Length or number of segments.
+ * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
  * @returns List of segments if successful, null if unsuccessful or on error.
  * @example segments1 = make.Divide(edge1, 5, number)

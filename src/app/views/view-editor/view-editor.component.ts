@@ -4,6 +4,8 @@ import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { DataService } from '@services';
 import { Router } from '@angular/router';
+import * as circularJSON from 'circular-json';
+import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 
 @Component({
   selector: 'view-editor',
@@ -25,6 +27,7 @@ export class ViewEditorComponent {
     private copyCheck = false;
 
     constructor(private dataService: DataService, private router: Router) {
+        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
     }
 
     // add a procedure
@@ -49,7 +52,16 @@ export class ViewEditorComponent {
     // copy selected procedures
     copyProd() {
         const node = this.dataService.node;
-        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.type === 'end') { return; }
+        let i = 0;
+        while (i < node.state.procedure.length) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank) {
+                node.state.procedure[i].selected = false;
+                node.state.procedure.splice(i, 1);
+            } else {
+                i += 1;
+            }
+        }
+        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
         // console.log('copying', node.state.procedure);
         this.dataService.copiedType = node.type;
         this.dataService.copiedProd = node.state.procedure;
@@ -61,7 +73,16 @@ export class ViewEditorComponent {
     // cut selected procedures
     cutProd() {
         const node = this.dataService.node;
-        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.type === 'end') { return; }
+        let i = 0;
+        while (i < node.state.procedure.length) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank) {
+                node.state.procedure[i].selected = false;
+                node.state.procedure.splice(i, 1);
+            } else {
+                i += 1;
+            }
+        }
+        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
         // console.log('cutting', node.state.procedure);
         this.dataService.copiedType = node.type;
         this.dataService.copiedProd = node.state.procedure;
@@ -72,9 +93,9 @@ export class ViewEditorComponent {
                 parentArray = prod.parent.children;
             } else { parentArray = node.procedure; }
 
-            for (let i = 0; i < parentArray.length; i++ ) {
-                if (parentArray[i] === prod) {
-                    parentArray.splice(i, 1);
+            for (let j = 0; j < parentArray.length; j++ ) {
+                if (parentArray[j] === prod) {
+                    parentArray.splice(j, 1);
                     break;
                 }
             }
@@ -85,45 +106,54 @@ export class ViewEditorComponent {
         this.notificationTrigger = !this.notificationTrigger;
     }
 
+    removeReturns(pastingProds) {
+        let i = 0;
+        while (i < pastingProds.length) {
+            if (pastingProds[i].type === 11 || (pastingProds[i].type === 8 && pastingProds[i].meta.module.toLowerCase() === 'output')) {
+                pastingProds.splice(i, 1);
+            } else {
+                if (pastingProds[i].children) {
+                    this.removeReturns(pastingProds[i].children);
+                }
+                i += 1;
+            }
+        }
+    }
+
     // paste copied procedures
     pasteProd() {
         const node = this.dataService.node;
         if (this.copyCheck
         && this.dataService.copiedProd
-        && this.dataService.copiedType === node.type
+        && node.type !== 'start'
         && document.activeElement.nodeName !== 'INPUT'
-        && document.activeElement.nodeName !== 'TEXTAREA'
-        && node.type !== 'end') {
+        && document.activeElement.nodeName !== 'TEXTAREA') {
             const pastingPlace = node.state.procedure[0];
+            let toBePasted = this.dataService.copiedProd;
+            if (this.dataService.copiedType === 'end' && node.type === '') {
+                toBePasted = circularJSON.parse(circularJSON.stringify(this.dataService.copiedProd));
+                this.removeReturns(toBePasted);
+            }
             if (pastingPlace === undefined) {
-                for (let i = 0; i < this.dataService.copiedProd.length; i++) {
-                    if (this.dataService.copiedProd[i].type === ProcedureTypes.Blank) { continue; }
-                    // console.log('pasting', this.dataService.copiedProd[i].ID);
-                    NodeUtils.paste_procedure(node, this.dataService.copiedProd[i]);
+                for (let i = 0; i < toBePasted.length; i++) {
+                    if (toBePasted[i].type === ProcedureTypes.Blank) { continue; }
+                    // console.log('pasting', toBePasted[i].ID);
+                    NodeUtils.paste_procedure(node, toBePasted[i]);
                     node.state.procedure[0].selected = false;
                     node.state.procedure = [];
                 }
-            } else if (pastingPlace.children) {
-                for (let i = 0; i < this.dataService.copiedProd.length; i++) {
-                    if (this.dataService.copiedProd[i].type === ProcedureTypes.Blank) { continue; }
-                    // console.log('pasting', this.dataService.copiedProd[i].ID);
-                    NodeUtils.paste_procedure(node, this.dataService.copiedProd[i]);
-                    node.state.procedure[0].selected = false;
-                    pastingPlace.selected = true;
-                    node.state.procedure = [pastingPlace];
-                }
             } else {
-                for (let i = this.dataService.copiedProd.length - 1; i >= 0; i --) {
-                    if (this.dataService.copiedProd[i].type === ProcedureTypes.Blank) { continue; }
-                    // console.log('pasting', this.dataService.copiedProd[i].ID);
-                    NodeUtils.paste_procedure(node, this.dataService.copiedProd[i]);
+                for (let i = toBePasted.length - 1; i >= 0; i --) {
+                    if (toBePasted[i].type === ProcedureTypes.Blank) { continue; }
+                    // console.log('pasting', toBePasted[i].ID);
+                    NodeUtils.paste_procedure(node, toBePasted[i]);
                     node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;
                     node.state.procedure = [pastingPlace];
                 }
             }
-            // this.dataService.copiedProd = undefined;
-            this.notificationMessage = `Pasted ${this.dataService.copiedProd.length} Procedures`;
+            // toBePasted = undefined;
+            this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
             this.notificationTrigger = !this.notificationTrigger;
         }
     }
@@ -170,8 +200,8 @@ export class ViewEditorComponent {
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
-        if (node.type === 'output') { return node.input.value; }
-        return node.output.value;
+        // if (node.type === 'output') { return node.input.value; }
+        return node.model;
     }
     setSplit(event) { this.dataService.splitVal = event.sizes[1]; }
 

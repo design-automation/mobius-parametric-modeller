@@ -11,6 +11,7 @@ import { IFunction } from '@models/procedure';
 export interface IFlowchart {
     name: string;
     description: string;
+    returnDescription?: string;
     language: string;
 
     nodes: INode[];

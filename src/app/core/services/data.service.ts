@@ -17,6 +17,7 @@ export class DataService {
     private static _newFlowchart = true;
 
     private static _activeModelView: string = undefined;
+    private static _activeGallery: any = undefined;
 
     private static _splitVal = 60;
 
@@ -45,6 +46,9 @@ export class DataService {
 
     get activeView() {return DataService._activeModelView; }
     set activeView(view: string) {DataService._activeModelView = view; }
+
+    get activeGallery() {return DataService._activeGallery; }
+    set activeGallery(gallery: any) {DataService._activeGallery = gallery; }
 
     get copiedProd() {return DataService._copiedProd; }
     set copiedProd(prods: any) {DataService._copiedProd = prods; }

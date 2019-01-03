@@ -4,10 +4,16 @@
     </div>
     <textarea autogrow
     id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder="flowchart description"></textarea>
+    <hr>
+    <div class='container--input'>
+        <procedure-input-editor *ngFor="let prod of node.procedure; let i = index;" [prod]="prod" (delete)='deleteProd(i)'></procedure-input-editor>
+    </div>
 </div>
-<hr *ngIf="node.type=='start'">
-<div class='container--input'>
-    <procedure-input-editor *ngFor="let prod of node.procedure; let i = index;" [prod]="prod" (delete)='deleteProd(i)'></procedure-input-editor>
+<div class='flowchart-info' *ngIf="node.type=='end'">
+    <input class='disabled-input' value="Return Description:" disabled>
+    <textarea autogrow
+    id='flowchart-return' [(ngModel)]='flowchart.returnDescription' placeholder="void"></textarea>
+    
 </div>
 
 <!--

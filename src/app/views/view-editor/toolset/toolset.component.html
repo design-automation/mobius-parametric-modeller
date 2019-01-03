@@ -12,7 +12,7 @@
 <div class = "divider"></div>
 
 <div class = "toolset--body" (mouseover)='setCurrent()'>
-    <ng-container *ngIf="dataService.node.type == ''">          
+    <ng-container *ngIf="dataService.node.type !== 'start'">          
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     
         <button id='basic-funcs' class="accordion" 
@@ -27,6 +27,14 @@
                         {{type}}
                     </li>
                 </ng-container>
+                <ng-container *ngFor='let mod of Modules'>
+                    <ng-container *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
+                        <li *ngFor='let fn of mod.functions' 
+                        class='tooltip' 
+                        [class.invalid]='dataService.node.type !== "end"'
+                        (click)='add_function(fn)'> {{fn.name}} </li>
+                    </ng-container>
+                </ng-container>
             </ul>
         </div>
         
@@ -35,7 +43,7 @@
         <button id='Functions' class="accordion"  (click)='toggleAccordionHead("Functions")'>Functions
         </button>
         <!--Search Bar-->
-        <div class = 'searchbar--container' *ngIf="dataService.node.type == ''" >
+        <div class = 'searchbar--container'>
             <input id='searchbarFunction' class='searchBar' placeholder='Search' (keyup)='searchFunction($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedFunctions.length > 0'>
                 <ul class='toolset__functions--subset'>
@@ -108,8 +116,7 @@
                                 <p class='funcDesc'>{{fn.doc.description}}</p>
                                 <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
                                 <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                                <p><span>Returns: </span></p>
-                                <p *ngIf='fn.doc.returns'>{{fn.doc.returns}}</p>
+                                <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
                             </span>
                         </div>
                     </ul>
@@ -125,7 +132,7 @@
         <button id='Inline' class="accordion"  (click)='toggleAccordionHead("Inline")'>Inline
         </button>
         <!--Search Bar-->
-        <div class = 'searchbar--container' *ngIf="dataService.node.type == ''" >
+        <div class = 'searchbar--container'>
             <input id='searchbarInline' class='searchBar' placeholder='Search' (keyup)='searchInline($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedInlines.length > 0'>
                 <ul class='toolset__functions--subset'>
@@ -212,9 +219,10 @@
     </div>
     
     <!-- functions for output nodes -->
+    <!-- 
     <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'end'">
         <div class='toolset__functions' *ngIf="dataService.node.procedure.length == 0">
-            <!--
+            <! --
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "RETURN"'>
                     <ul class='toolset__functions--subset'>
@@ -222,7 +230,7 @@
                     </ul>
                 </div>
             </section>
-            -->
+            -- >
             <section *ngFor='let mod of Modules' >
                 <div *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
                     <ul class='toolset__functions--subset'>
@@ -232,4 +240,5 @@
             </section>
         </div>
     </div>            
+    -->
 </div>

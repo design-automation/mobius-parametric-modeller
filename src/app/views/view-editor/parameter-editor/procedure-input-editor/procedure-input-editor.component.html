@@ -1,4 +1,4 @@
-<div class='container--parameter' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta?.module=="Input"'>
+<div class='container--parameter' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta && prod.meta.module=="Input"'>
     <div class = "btn-container">
         <div class = "btns">
             <!-- delete button-->
@@ -13,25 +13,19 @@
     <div class='inline-div'>
         <ng-container *ngIf='prod.type == 10'>
             <ng-container [ngSwitch]="prod.meta.inputMode">
-                <input *ngSwitchCase='0' [class.disabled-input]='true' value='Simple Input' size='10' disabled>
-                <input *ngSwitchCase='1' [class.disabled-input]='true' value='Slider' size='10' disabled>
-                <input *ngSwitchCase='2' [class.disabled-input]='true' value='Check Box' size='10' disabled>
-                <input *ngSwitchCase='3' [class.disabled-input]='true' value='URL' size='10' disabled>
-                <input *ngSwitchCase='4' [class.disabled-input]='true' value='File' size='10' disabled>
-                <input *ngSwitchCase='5' [class.disabled-input]='true' value='Constant' size='10' disabled>
+                <input *ngSwitchCase='0' [class.disabled-input]='true' value='Simple Input Description' size='20' disabled>
+                <input *ngSwitchCase='1' [class.disabled-input]='true' value='Slider Description' size='20' disabled>
+                <input *ngSwitchCase='2' [class.disabled-input]='true' value='Check Box Description' size='20' disabled>
+                <input *ngSwitchCase='3' [class.disabled-input]='true' value='URL Description' size='20' disabled>
+                <input *ngSwitchCase='4' [class.disabled-input]='true' value='File Description' size='20' disabled>
+                <input *ngSwitchCase='5' [class.disabled-input]='true' value='Constant Description' size='20' disabled>
             </ng-container>
         </ng-container>
         <input *ngIf='prod.type == 12' [class.disabled-input]='true' value='Add Model' size='5' disabled>
     </div>
 
-    <div class='inline-div'>
-        <input [class.disabled-input]='true' value='Name:' size='8' disabled>
-        <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder="undefined"
-        [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
-    </div>
-
     <div class='inline-div' *ngIf='prod.type == 12'>
-        <input [class.disabled-input]='true' value='Input Mode:' size='8' disabled>
+        <input [class.disabled-input]='true' value='Input Mode:' disabled> 
         <!-- 
             <input *ngIf='prod.type != 12' [class.disabled-input]='true' [value]='PortTypes[prod.meta.inputMode]'
             [style.width.px]='inputSize(PortTypes[prod.meta.inputMode])' disabled>
@@ -39,14 +33,27 @@
         <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
             <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
             <option value='4' [selected]="prod.meta.inputMode == 4">File</option>
-
         </select>
-    
+    </div>
 
+    <!-- <div class='inline-div'>
+        <input [class.disabled-input]='true' value='Description:' disabled>
+    </div> -->
+
+    <div class='inline-div'>
+        <input class='inp--desc' placeholder='Description' [(ngModel)]='prod.meta.description'
+            [style.width.px]='inputSize(prod.meta.description,"Description")'>
+        </div>
+    </div>
+
+    <div class='inline-div'>
+        <input [class.disabled-input]='true' value='Name:' disabled>
+        <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder="undefined"
+        [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
     </div>
 
     <div class='FFA'>
-        <input [class.disabled-input]='true' value='Default:' size='8' disabled>
+        <input [class.disabled-input]='true' value='Default:' disabled>
         <ng-container [ngSwitch]="prod.meta.inputMode" >
 
             <!-- Constant -->
@@ -103,15 +110,7 @@
         </ng-container>
     </div>
 
-    <div class='inline-div'>
-        <input [class.disabled-input]='true' value='Description:' size='8' disabled>
-    </div>
 
-    <div class='inline-div'>
-            <input class='inp--desc' placeholder='Constant Description' [(ngModel)]='prod.meta.description'
-            [style.width.px]='inputSize(prod.meta.description,"Constant Description")'>
-        </div>
-    </div>
 
 <div class='container container--parameter' *ngIf='prod.meta.module=="Output"'>
     <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'

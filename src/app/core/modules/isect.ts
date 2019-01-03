@@ -15,7 +15,7 @@ export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[]
     throw new Error("Not impemented."); return null;
 }
 // Knife modelling operation keep
-enum _EKnifeKeep {
+export enum _EKnifeKeep {
     KEEP_ABOVE =  'keep above the plane',
     KEEP_BELOW  =  'keep below the plane',
     KEEP_ALL =  'keep all'

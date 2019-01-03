@@ -18,15 +18,26 @@ export class ParameterEditorComponent implements AfterViewInit {
     ngAfterViewInit() {
         ctx.font = '12px sans-serif';
 
-        const textarea = document.getElementById('flowchart-desc');
-        if (!textarea) { return; }
-        const desc = this.flowchart.description.split('\n');
-        const textareaWidth = textarea.getBoundingClientRect().width - 20;
-        let lineCount = 0;
-        for (const line of desc) {
-            lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+        let textarea = document.getElementById('flowchart-desc');
+        if (textarea) {
+            const desc = this.flowchart.description.split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 20;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
         }
-        textarea.style.height = lineCount * 14 + 4 + 'px';
+        textarea = document.getElementById('flowchart-return');
+        if (textarea) {
+            const desc = (this.flowchart.returnDescription || '').split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 20;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
+        }
     }
 
     deleteProd(index: number) {

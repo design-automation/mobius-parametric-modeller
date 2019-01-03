@@ -86,6 +86,12 @@ export class DataThreejs {
             this.sceneObjs = [];
             this._selectedEntity.clear();
         }
+        document.querySelectorAll('[id^=textLabel_]').forEach(value => {
+            container.removeChild(value);
+        });
+        this.ObjLabelMap.clear();
+        this._textLabels.clear();
+
         this._addGrid();
         this._addHemisphereLight();
         this._addAxes();
@@ -127,9 +133,13 @@ export class DataThreejs {
         this.ObjLabelMap.set(labelText, obj);
     }
 
-    public selectObjLine(labelText, positions, container) {
+    public selectObjLine(labelText, indices, positions, container) {
         const geom = new THREE.BufferGeometry();
-        geom.setIndex( [0, 1] );
+        if (indices.length > 2) {
+            geom.setIndex( indices );
+        } else {
+            geom.setIndex( [0, 1] );
+        }
         geom.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
         geom.addAttribute( 'normal', new THREE.Float32BufferAttribute( Array(positions.length).fill(0), 3 ));
         const mat = new THREE.LineBasicMaterial( {
@@ -178,6 +188,7 @@ export class DataThreejs {
         this._selecting.delete(selecting);
         this._scene.remove(this._scene.getObjectById(removing));
 
+        this.ObjLabelMap.delete(selecting);
         container.removeChild(document.getElementById(`textLabel_${selecting}`));
     }
 

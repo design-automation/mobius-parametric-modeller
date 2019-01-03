@@ -35,6 +35,8 @@ export class AttributeComponent implements OnChanges {
     if (changes['data'] && this.data) {
       if (localStorage.getItem('mpm_attrib_current_tab') != null) {
         this.currentTab = Number(localStorage.getItem('mpm_attrib_current_tab'));
+      } else {
+        this.currentTab = 0;
       }
       setTimeout(() => {
         this.generateTable(this.currentTab);

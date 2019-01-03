@@ -244,7 +244,7 @@ export class GIGeomQuery {
     public numPoints(): number {
         return this._geom_arrays.dn_points_verts.length;
     }
-    public numLines(): number {
+    public numPlines(): number {
         return this._geom_arrays.dn_plines_wires.length;
     }
     public numPgons(): number {

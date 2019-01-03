@@ -12,6 +12,7 @@ import { DataService } from '@services';
 import { canvasSize } from '@models/flowchart';
 import { Router } from '@angular/router';
 import { SplitComponent } from 'angular-split';
+import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 
 declare const InstallTrigger: any;
 
@@ -27,6 +28,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     @ViewChild('flowchartSplit') flowchartSplit: SplitComponent;
 
     constructor(private dataService: DataService, private router: Router) {
+        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
     }
 
     viewbox = `0 0 ${canvasSize} ${canvasSize}`;
@@ -867,8 +869,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
-        if (node.type === 'output') { return node.input.value; }
-        return node.output.value;
+        // if (node.type === 'output') { return node.input.value; }
+        return node.model;
     }
 
     dragSplitStart(e) {

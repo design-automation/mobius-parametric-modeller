@@ -202,7 +202,11 @@ export class CodeUtils {
     static repGetAttrib(val: string) {
         const res = val.split(' ');
         for (const i in res) {
-            if (res[i].indexOf('@') !== -1) {
+            if (!res[i]) {
+                continue;
+            }
+            const atIndex = res[i].indexOf('@');
+            if (atIndex !== -1 && atIndex > 0 && res[atIndex - 1] !== '#') {
                 res[i] = `__modules__.${_parameterTypes.getattrib}('${res[i]}')`;
             }
         }

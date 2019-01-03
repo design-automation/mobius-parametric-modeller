@@ -6,7 +6,7 @@ import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item'
 import { vecsSum, vecDiv, vecsAdd, vecsSub } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
-import { checkIDs, checkCommTypes, checkPPVCoord, checkIDnTypes} from './_check_args';
+import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
 
 /**
  * Calculates the distance between two positions.

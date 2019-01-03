@@ -5,7 +5,7 @@ import { __merge__ } from './_model';
 import { isArray } from 'util';
 import { vecsAdd, vecDiv, vecMult } from '@libs/geom/vectors';
 import { _model } from '@modules';
-import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
+import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
 
 /**
  * Adds a new position to the model.
@@ -454,7 +454,7 @@ export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, me
 export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: Txyz): TId {
     // --- Error Check ---
     const fn_name = 'make.VectorVisible';
-    checkPPVCoord(fn_name, 'origin', origin);
+    checkIDnTypes(fn_name, 'origin', origin, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
     checkCommTypes(fn_name, 'vector', vector, ['isVector']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
@@ -472,8 +472,7 @@ export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: Txyz
 export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: Txyz, vector2: Txyz): TId {
     // --- Error Check ---
     const fn_name = 'make.PlanerVisible';
-    const err_arr = [];
-    checkPPVCoord(fn_name, 'location', location);
+    checkIDnTypes(fn_name, 'location', location, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
     checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
     checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
     // --- Error Check ---

@@ -178,7 +178,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
     }
 }
 // =========================================================================================================================================
-// Most General Check to export
+// Most General Check
 // =========================================================================================================================================
 export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks?: string[]|'all') {
     let pass = false;
@@ -210,55 +210,6 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
-}
-// =========================================================================================================================================
-// to remove and use checkIDnTypes (following functions checks for both)
-// calc.minDistance
-// =========================================================================================================================================
-export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows POINT POSITION VERT, COORD
-    const err_arr = [];
-    try {
-        checkIDs(fn_name, arg_name, arg, ['isID'], ['POSI', 'POINT', 'VERT']);
-    } catch (err1) {
-        err_arr.push(err1.message + '\n');
-        try {
-            typeCheckObj['isCoord'](fn_name + '.' + 'isCoord', arg_name, arg);
-        } catch (err2) {
-            err_arr.push(err2.message);
-            throw new Error(err_arr.join(''));
-        }
-    }
-    return;
-}
-export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows EDGE, VEC
-    const err_arr = [];
-    try {
-        checkIDs(fn_name, arg_name, arg, ['isID'], ['EDGE']);
-    } catch (err1) {
-        err_arr.push(err1.message + '\n');
-        try {
-            typeCheckObj['isVector'](fn_name + '.' + 'isVector', arg_name, arg);
-        } catch (err2) {
-            err_arr.push(err2.message);
-            throw new Error(err_arr.join(''));
-        }
-    }
-    return;
-}
-export function check2D(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows PLINE PGON FACE, PLANE
-    const err_arr = [];
-    try {
-        checkIDs(fn_name, arg_name, arg, ['isID'], ['PLINE', 'PGON', 'FACE']);
-    } catch (err1) {
-        err_arr.push(err1.message + '\n');
-        try {
-            typeCheckObj['isPlane'](fn_name + '.' + 'isPlane', arg_name, arg);
-        } catch (err2) {
-            err_arr.push(err2.message);
-            throw new Error(err_arr.join(''));
-        }
-    }
-    return;
 }
 
 // =====================================================================================================================

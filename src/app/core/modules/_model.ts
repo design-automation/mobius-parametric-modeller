@@ -1,5 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
+import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntityTypeStr, TId } from '@libs/geo-info/common';
+import { idBreak } from '@libs/geo-info/id';
 
 //  ===============================================================================================================
 //  Functions used by Mobius
@@ -53,4 +54,30 @@ export function __merge__(model1: GIModel, model2: GIModel): void {
  */
 export function __stringify__(__model__: GIModel): string {
     return JSON.stringify(__model__.getData());
+}
+/**
+ * Sets an attribute in the model.
+ * @param __model__
+ */
+export function __setAttrib__(__model__: GIModel, entities: TId|TId[], attrib_name: string, value: TAttribDataTypes): void {
+    if (!Array.isArray(entities)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value);
+    } else {
+        for (const entity of entities) {
+            __setAttrib__(__model__, entity , attrib_name, value);
+        }
+    }
+}
+/**
+ * Gets an attribute from the model.
+ * @param __model__
+ */
+export function __getAttrib__(__model__: GIModel, entities: TId|TId[], attrib_name: string): TAttribDataTypes|TAttribDataTypes[] {
+    if (!Array.isArray(entities)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+    } else {
+        return (entities as TId[]).map( entity => __getAttrib__(__model__, entity, attrib_name)) as TAttribDataTypes[];
+    }
 }

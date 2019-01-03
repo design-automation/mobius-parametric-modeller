@@ -47,9 +47,12 @@ export enum EQueryOperatorTypes {
 /**
  * A query component.
  * Each query can consist of multiple components.
+ * Some examples of queries
+ * @name == value
+ * @name > value
+ * @name[2] <= value
  */
 export interface IQueryComponent {
-    attrib_type: EEntityTypeStr;
     attrib_name: string;
     attrib_index: number;
     attrib_value_str: string;

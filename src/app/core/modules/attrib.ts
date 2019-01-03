@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, Txyz, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
+import { TId, Txyz, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
 
@@ -45,44 +45,10 @@ export function Set(__model__: GIModel, entities: TId|TId[], attrib_name: string
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value);
     } else {
-        (entities as TId[]).map( entity => Set(__model__, entity, attrib_name, value));
+        for (const entity of entities) {
+            Set(__model__, entity , attrib_name, value);
+        }
     }
-}
-// Promote modelling operation
-export enum _EPromoteMethod {
-    MEAN =  'mean',
-    MIN  =  'min',
-    MAX = 'max',
-    NONE = 'none'
-}
-// Promote modelling operation
-export enum _EPromoteAttribTypes {
-    POSIS =  'positions',
-    VERTS  =  'vertices',
-    EDGES = 'edges',
-    WIRES = 'wires',
-    FACES = 'faces',
-    POINTS = 'points',
-    PLINES = 'plines',
-    PGONS = 'pgons',
-    COLLS = 'collections'
-}
-/**
- * Promotes or demotes an attribute from one geometry level to another.
- * @param __model__
- * @param attrib_names Attribute name to be promoted or demoted.
- * @param from Enum, Positions, vertices, edges, wires, faces or collections.
- * @param to Enum, Positions, vertices, edges, wires, faces or collections.
- * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
- * @returns List of attributes.
- * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
- */
-export function Promote(__model__: GIModel, attrib_name: string,
-    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
-    // --- Error Check ---
-    checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
-    // --- Error Check ---
-    throw new Error('Not implemented.');
 }
 /**
  * Gets the xyz coordinates of any geometry
@@ -122,6 +88,44 @@ export function SetXyz(__model__: GIModel, positions: TId|TId[], xyz: Txyz): voi
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
         __model__.attribs.add.setAttribValue(ent_type_str, index,  EAttribNames.COORDS, xyz);
     } else {
-        (positions as TId[]).map( position => SetXyz(__model__, position, xyz));
+        for (const position of positions) {
+            SetXyz(__model__, position, xyz);
+        }
     }
+}
+// Promote modelling operation
+export enum _EPromoteMethod {
+    MEAN =  'mean',
+    MIN  =  'min',
+    MAX = 'max',
+    NONE = 'none'
+}
+// Promote modelling operation
+export enum _EPromoteAttribTypes {
+    POSIS =  'positions',
+    VERTS  =  'vertices',
+    EDGES = 'edges',
+    WIRES = 'wires',
+    FACES = 'faces',
+    POINTS = 'points',
+    PLINES = 'plines',
+    PGONS = 'pgons',
+    COLLS = 'collections'
+}
+/**
+ * Promotes or demotes an attribute from one geometry level to another.
+ * @param __model__
+ * @param attrib_names Attribute name to be promoted or demoted.
+ * @param from Enum, Positions, vertices, edges, wires, faces or collections.
+ * @param to Enum, Positions, vertices, edges, wires, faces or collections.
+ * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
+ * @returns List of attributes.
+ * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
+ */
+export function Promote(__model__: GIModel, attrib_name: string,
+    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
+    // --- Error Check ---
+    checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
+    // --- Error Check ---
+    throw new Error('Not implemented.');
 }

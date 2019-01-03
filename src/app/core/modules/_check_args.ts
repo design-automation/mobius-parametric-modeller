@@ -216,14 +216,14 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         throw new Error(ret_msg + err_arr.toString());
     }
 }
-export function checkPosiCoord(fn_name: string, arg_name: string, arg: any): void {
+export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void {
     const err_arr = [];
     try {
         checkCommTypes(fn_name, arg_name, arg, ['isCoord']);
     } catch (err1) {
         err_arr.push(err1.message + '\n');
         try {
-            checkIDs(fn_name, arg_name, arg, ['isID'], ['POSI']);
+            checkIDs(fn_name, arg_name, arg, ['isID'], ['POSI', 'POINT', 'VERT']);
         } catch (err2) {
             err_arr.push(err2.message);
             throw new Error(err_arr.toString());

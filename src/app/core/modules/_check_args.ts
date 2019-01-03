@@ -49,7 +49,7 @@ function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
 function isNumberListArg(fn_name: string, arg_name: string, arg_list: any): void {
     isListArg(fn_name, arg_name, arg_list, 'numbers');
     for (let i = 0; i < arg_list.length; i++) {
-        if (typeof arg_list[i] !== 'string') {
+        if (typeof arg_list[i] !== 'number') {
             throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not a number');
         }
     }
@@ -194,8 +194,8 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + 'failed the following tests - ' + check_fns.toString() + '\n';
-        throw new Error(ret_msg + err_arr.toString());
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
+        throw new Error(ret_msg + err_arr.join(''));
     }
 }
 export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks: string[]): void {
@@ -212,8 +212,8 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + 'failed the following tests - ' + check_fns.toString() + '\n';
-        throw new Error(ret_msg + err_arr.toString());
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
+        throw new Error(ret_msg + err_arr.join(''));
     }
 }
 export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void {
@@ -226,7 +226,7 @@ export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void
             checkIDs(fn_name, arg_name, arg, ['isID'], ['POSI', 'POINT', 'VERT']);
         } catch (err2) {
             err_arr.push(err2.message);
-            throw new Error(err_arr.toString());
+            throw new Error(err_arr.join(''));
         }
     }
     return;

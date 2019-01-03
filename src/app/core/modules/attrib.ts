@@ -10,7 +10,7 @@ import * as _check_args from './_check_args';
  * @param attrib_name Attribute name to get the value for.
  * @returns Attribute value.
  */
-export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
+export function Get(__model__: GIModel, entities: TId|TId[], attrib_name: string): TAttribDataTypes|TAttribDataTypes[] {
     //_check_args.isStringArg('Get name', name);
     // _check_args.isIdListArg("ccc", entities, [EEntityTypeStr.POSI, EEntityTypeStr.VERT] );
     if (!Array.isArray(entities)) {

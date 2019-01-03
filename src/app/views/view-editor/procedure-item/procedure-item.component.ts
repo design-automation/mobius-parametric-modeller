@@ -133,36 +133,42 @@ export class ProcedureItemComponent {
         let str = event.trim();
         str = str.replace(/ /g, '_');
         str = str.toLowerCase();
-        try {
-            if (str.substring(0, 1) === '_') {
+        const strSplit = str.split('@');
+        for (const i of strSplit) {
+            try {
+                if (i.substring(0, 1) === '_') {
+                    this.invalidVar = true;
+                    return str;
+                }
+                for (const reserved of reservedWords) {
+                    if (i === reserved) {
+                        this.invalidVar = true;
+                        return str;
+                    }
+                }
+                for (const funcName of this.mathFuncs) {
+                    if (i === funcName) {
+                        this.invalidVar = true;
+                        return str;
+                    }
+                }
+                const fn = new Function('', `${i}=1;`);
+                fn();
+                this.invalidVar = false;
+            } catch (ex) {
+                // console.log(ex.message);
                 this.invalidVar = true;
                 return str;
             }
-            for (const reserved of reservedWords) {
-                if (str === reserved) {
-                    this.invalidVar = true;
-                    return str;
-                }
-            }
-            for (const funcName of this.mathFuncs) {
-                if (str === funcName) {
-                    this.invalidVar = true;
-                    return str;
-                }
-            }
-            const fn = new Function('', `${str}=1;`);
-            fn();
-            this.invalidVar = false;
-        } catch (ex) {
-            // console.log(ex.message);
-            this.invalidVar = true;
         }
         return str;
     }
 
     // modify argument input: check if input is valid
-    argMod(event: string) {
-        return event;
+    argMod(event: string, argIndex: number) {
+        this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
+            /([\+\-\*\/\%\[\]\{\}\(\)])/g, ' $1 ').replace(/,/g, ', ').replace(/[ ]{2,}/g, ' ');
+        return;
 
         console.log(event);
         const string = event.trim();

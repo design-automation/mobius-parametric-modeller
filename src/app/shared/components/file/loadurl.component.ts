@@ -29,12 +29,10 @@ export class LoadUrlComponent {
         url = url[1].split('&')[0];
         url = url.replace(/%2F/g, '/');
         url = url.replace(/%5C/g, '\\');
-        url = url.replace(/%22/g, '');
-        url = url.replace(/'/g, '');
+        url = url.replace(/%22|%27|'/g, '');
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
-        // url = url.substring(1, url.length - 1);
         this.loadURL(url);
 
     }

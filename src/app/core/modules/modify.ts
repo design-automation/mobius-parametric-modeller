@@ -2,17 +2,24 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { vecsAdd } from '@libs/geom/vectors';
+import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
 
 /**
  * Moves geometry by vector.
  * @param __model__
  * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection.
- * @param vector List of three values.
+ * @param vector List of three numbers.
  * @returns void
  * @example mod.Move(geometry, vector)
  * @example_info Moves geometry by vector.
  */
 export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): void {
+    // --- Error Check ---
+    const fn_name = 'modify.Move';
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    checkCommTypes(fn_name, 'vector', vector, ['isVector']);
+    // --- Error Check ---
     if (!Array.isArray(geometry)) {
         geometry = [geometry] as TId[];
     }
@@ -39,7 +46,14 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
  * @example_info Rotates geometry on plane1 by PI (i.e. 180 degrees).
  */
 export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    const fn_name = 'modify.Rotate';
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
+    checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Scales geometry on plane by factor.
@@ -52,7 +66,14 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
  * @example_info Scales geometry by 0.5 on plane1.
  */
 export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, scale: number): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    const fn_name = 'modify.Scale';
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
+    checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Mirrors geometry across plane.
@@ -64,7 +85,13 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TI
  * @example_info Mirrors geometry across the plane.
  */
 export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    const fn_name = 'modify.Mirror';
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Transforms geometry from one construction plane to another.
@@ -77,7 +104,14 @@ export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): 
  * @example_info Transforms geometry from plane1 to plane2.
  */
 export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to: TPlane): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    const fn_name = 'modify.Mirror';
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    checkCommTypes(fn_name, 'from', from, ['isPlane']);
+    checkCommTypes(fn_name, 'to', to, ['isPlane']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Reverses direction of objects.
@@ -89,8 +123,11 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
  * @example mod.Reverse(polyline1)
  * @example_info Reverses the order of vertices to reverse the direction of the polyline.
  */
-export function Reverse(__model__: GIModel, objects: TId[]): void {
-    throw new Error("Not implemented."); return null;
+export function Reverse(__model__: GIModel, objects: TId|TId[]): void {
+    // --- Error Check ---
+    checkIDs('modify.Reverse', 'objects', objects, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Welds geometry together.
@@ -101,7 +138,11 @@ export function Reverse(__model__: GIModel, objects: TId[]): void {
  * @example_info Welds both polyline1 and polyline2 together.
  */
 export function Weld(__model__: GIModel, geometry: TId[]): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    checkIDs('modify.Weld', 'geometry', geometry, ['isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Unweld geometries.
@@ -112,7 +153,11 @@ export function Weld(__model__: GIModel, geometry: TId[]): void {
  * @example_info Unwelds polyline1 from polyline2.
  */
 export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    checkIDs('modify.Unweld', 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Closes polylines if open.
@@ -123,6 +168,9 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
  * @example_info If open, polylines are changed to closed; if closed, nothing happens.
  */
 export function Close(__model__: GIModel, lines: TId|TId[]): void {
+    // --- Error Check ---
+    checkIDs('modify.Close', 'lines', lines, ['isID', 'isIDList'], ['PLINE']);
+    // --- Error Check ---
     if (!Array.isArray(lines)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
         let wire_i: number = index;
@@ -145,6 +193,9 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
+    // --- Error Check ---
+    checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // --- Error Check ---
     if (!Array.isArray(lines)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
         let wire_i: number = index;
@@ -167,5 +218,8 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
  * @example_info Deletes specified geometry from model.
  */
 export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    checkIDs('modify.Close', 'geometry', geometry, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }

@@ -1,6 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntityTypeStr } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
+import { checkIDs } from './_check_args';
 
 export enum _EQuerySelect {
     POSI =   'positions',
@@ -47,9 +48,13 @@ function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
  * @example query1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])
  */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], attrib_query: TQuery): TId[] {
+    // --- Error Check ---
+    checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
+    // --- Error Check ---
+
     // const result = __model__.attribs.query.queryAttribs(query);
     // console.log(result);
-    throw new Error("Not impemented."); return null;
+    throw new Error('Not impemented.'); return null;
 }
 /**
  * Queries the id of any entity based on attribute name.
@@ -74,6 +79,9 @@ export function GetAll(__model__: GIModel, select: _EQuerySelect, attrib_query: 
  * @example queryNum1 = attrib.QueryNumber (@Colour==Grey, #face, *normal==[0,0,1])
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], attrib_query: TQuery): number {
+    // --- Error Check ---
+    checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
+    // --- Error Check ---
     return Get(__model__, select, entities, attrib_query).length;
 }
 /**

@@ -1,3 +1,5 @@
+import { checkCommTypes } from './_check_args';
+
 /**
  * ================================================================================================
  * list functions that obtain and return information from an input list. Does not modify input list.
@@ -22,8 +24,11 @@ export enum _EIndexOfMethod {
  * Expected value of positions is [1,2].
  */
 export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.IndexOf';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
     const positions = [];
     for (let i = 0 ; i < list.length; i++) {
         if (list[i] === value) {
@@ -53,8 +58,11 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
  * Expected value of exists is true.
  */
 export function Includes(list: any[], value: any): boolean {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.Includes';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
     for (let i = list.length - 1; i >= 0; i--) {
         if (list[i] === value) {
             return true;
@@ -76,7 +84,9 @@ export function Includes(list: any[], value: any): boolean {
  * Expected value of copy is [1,2,3].
  */
 export function Copy(list: any[]): any[] {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
+    // --- Error Check ---
+    checkCommTypes('list.Copy', 'list', list, ['isList']);
+    // --- Error Check ---
     return list.slice();
 }
 /**
@@ -91,8 +101,11 @@ export function Copy(list: any[]): any[] {
  * Expected value of newlist is [1,2,3,9,0].
  */
 export function Concat(list1: any[], list2: any[]): any[] {
-    if (list1 === undefined) { throw new Error('Invalid arg: list1 must be defined.'); }
-    if (list2 === undefined) { throw new Error('Invalid arg: list2 must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.Concat';
+    checkCommTypes(fn_name, 'list1', list1, ['isList']);
+    checkCommTypes(fn_name, 'list2', list2, ['isList']);
+    // --- Error Check ---
     return list1.concat(list2);
 }
 /**
@@ -105,7 +118,9 @@ export function Concat(list1: any[], list2: any[]): any[] {
  * Expected value of flatten is [1,2,3,4,5].
  */
 export function Flatten(list: any[]): any[] {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
+    // --- Error Check ---
+    checkCommTypes('list.Flatten', 'list', list, ['isList']);
+    // --- Error Check ---
     return _flattenDeep(list);
 }
 function _flattenDeep(list: any[]): any[] {
@@ -127,9 +142,12 @@ function _flattenDeep(list: any[]): any[] {
  * Expected value of result is [2,3].
  */
 export function Slice(list: any[], start: number, end: number): any[] {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (start === undefined) { throw new Error('Invalid arg: start must be defined.'); }
-    if (end === undefined) { throw new Error('Invalid arg: end must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.Slice';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'start', start, ['isInt']);
+    checkCommTypes(fn_name, 'end', end, ['isInt']);
+    // --- Error Check ---
     return list.slice(start, end);
 }
 /**
@@ -151,8 +169,11 @@ export enum _EAppendMethod {
  * Expected value of list is [1,2,3,4].
  */
 export function Append(list: any[], value: any, method: _EAppendMethod): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.Append';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
     if (method === _EAppendMethod.TO_END) {
         list.push(value);
     } else {
@@ -169,8 +190,11 @@ export function Append(list: any[], value: any, method: _EAppendMethod): void {
  * Expected value of remove is [1,3].
  */
 export function RemoveIndex(list: any[], index: number): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (index === undefined) { throw new Error('Invalid arg: index must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.RemoveIndex';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'index', index, ['isInt']);
+    // --- Error Check ---
     list.splice(index, 1);
 }
 export enum _ERemoveValueMethod {
@@ -191,8 +215,11 @@ export enum _ERemoveValueMethod {
  * Expected value of remove is [1,3].
  */
 export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (value === undefined) { throw new Error('Invalid arg: value must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.RemoveValue';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
     for (let i = list.length - 1; i >= 0; i--) {
         if (list[i] === value) {
             list.splice(i, 1);
@@ -211,7 +238,7 @@ export enum _EReplaceValueMethod {
  * Returns original list if no values in list match specified value.
  *
  * @param list List to remove value from.
- * @param value Value to search for.
+ * @param value1 Value to search for.
  * @param value2 Value to replace existing value with.
  * @param method Enum, specifies whether to replace all occurances or only the first.
  * @example replace = list.replaceValue(list,2,9,true)
@@ -219,9 +246,12 @@ export enum _EReplaceValueMethod {
  * Expected value of replace is [1,9,9,3].
  */
 export function ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (value1 === undefined) { throw new Error('Invalid arg: value1 must be defined.'); }
-    if (value2 === undefined) { throw new Error('Invalid arg: value2 must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.ReplaceValue';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value1', value1, ['isAny']);
+    checkCommTypes(fn_name, 'value2', value2, ['isAny']);
+    // --- Error Check ---
     for (let i = 0 ; i < list.length ; i++) {
         if (list[i] === value1) {
             list[i] = value2;
@@ -239,7 +269,9 @@ export function ReplaceValue(list: any[], value1: any, value2: any, method: _ERe
  * Expected value of result is [3,2,1].
  */
 export function Reverse(list: any[]): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
+    // --- Error Check ---
+    checkCommTypes('list.Reverse', 'list', list, ['isList']);
+    // --- Error Check ---
     list.reverse();
 }
 export enum _ESortMethod {
@@ -265,7 +297,9 @@ export enum _ESortMethod {
  * Expected value of list is [6,48,56].
  */
 export function Sort(list: any[], method: _ESortMethod): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
+    // --- Error Check ---
+    checkCommTypes('list.Sort', 'list', list, ['isList']);
+    // --- Error Check ---
     switch (method) {
         case _ESortMethod.ALPHA:
             list.sort();
@@ -299,8 +333,14 @@ export function Sort(list: any[], method: _ESortMethod): void {
  * Expected value of result is [10, 2.2, 3.2, 50].
  */
 export function Splice(list: any[], index: number, num_to_remove: number, values_to_add: any[]): void {
-    if (list === undefined) { throw new Error('Invalid arg: list must be defined.'); }
-    if (index === undefined) { throw new Error('Invalid arg: index must be defined.'); }
+    // --- Error Check ---
+    const fn_name = 'list.Splice';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'index', index, ['isInt']);
+    checkCommTypes(fn_name, 'num_to_remove', num_to_remove, ['isInt']);
+    checkCommTypes(fn_name, 'values_to_add', values_to_add, ['isList']);
+    // --- Error Check ---
+
     // const list2 = list.slice();
     // list2.splice(index, num_to_remove, ...values_to_add);
     // return list2;

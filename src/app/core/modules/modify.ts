@@ -2,7 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { vecsAdd } from '@libs/geom/vectors';
-import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
+import { checkCommTypes, checkIDs} from './_check_args';
 
 /**
  * Moves geometry by vector.

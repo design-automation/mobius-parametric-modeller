@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, Txyz, TAttribDataTypes, EAttribNames, EEntityTypeStr } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
-import * as _check_args from './_check_args';
+import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
 
 /**
  * Gets attribute value of all entities.
@@ -11,8 +11,12 @@ import * as _check_args from './_check_args';
  * @returns Attribute value.
  */
 export function Get(__model__: GIModel, entities: TId|TId[], attrib_name: string): TAttribDataTypes|TAttribDataTypes[] {
-    //_check_args.isStringArg('Get name', name);
-    // _check_args.isIdListArg("ccc", entities, [EEntityTypeStr.POSI, EEntityTypeStr.VERT] );
+    // --- Error Check ---
+    const fn_name = 'attrib.Get';
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    checkCommTypes(fn_name, 'attrib_name', attrib_name, ['isString']);
+    // --- Error Check ---
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
@@ -30,6 +34,13 @@ export function Get(__model__: GIModel, entities: TId|TId[], attrib_name: string
  * @example set1 = attrib.Set (entities, name, value)
  */
 export function Set(__model__: GIModel, entities: TId|TId[], attrib_name: string, value: TAttribDataTypes): void {
+    // --- Error Check ---
+    const fn_name = 'attrib.Set';
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    checkCommTypes(fn_name, 'attrib_name', attrib_name, ['isString']);
+    checkCommTypes(fn_name, 'value', value, ['isList', 'isString', 'isNumber']);
+    // --- Error Check ---
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value);
@@ -68,7 +79,10 @@ export enum _EPromoteAttribTypes {
  */
 export function Promote(__model__: GIModel, attrib_name: string,
     from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
-    throw new Error("Not implemented.");
+    // --- Error Check ---
+    checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
+    // --- Error Check ---
+    throw new Error('Not implemented.');
 }
 /**
  * Gets the xyz coordinates of any geometry
@@ -79,6 +93,9 @@ export function Promote(__model__: GIModel, attrib_name: string,
  * @example_info Expected result could be [[1,2,3],[4,5,6]].
  */
 export function GetXyz(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
+    // --- Error Check ---
+    checkIDs('attrib.GetXyz', 'positions', positions, ['isID', 'isIDList'], ['POSI']);
+    // --- Error Check ---
     if (!Array.isArray(positions)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
         return __model__.attribs.query.getAttribValue(ent_type_str, EAttribNames.COORDS, index) as Txyz;
@@ -96,6 +113,11 @@ export function GetXyz(__model__: GIModel, positions: TId|TId[]): Txyz|Txyz[] {
  * @example_info Coordinates of position1 are changed to [0,0,1]. All geometry referring to position1 alters accordingly.
  */
 export function SetXyz(__model__: GIModel, positions: TId|TId[], xyz: Txyz): void {
+    // --- Error Check ---
+    const fn_name = 'attrib.SetXyz';
+    checkIDs(fn_name, 'positions', positions, ['isID', 'isIDList'], ['POSI']);
+    checkCommTypes(fn_name, 'xyz', xyz, ['isCoord']);
+    // --- Error Check ---
     if (!Array.isArray(positions)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
         __model__.attribs.add.setAttribValue(ent_type_str, index,  EAttribNames.COORDS, xyz);

@@ -153,7 +153,7 @@ const IDcheckObj = {
         for (let i = 0; i < arg_list.length; i++) {
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
-                if (arg_list[i].startsWith(ent_type_strs[j])) {
+                if (arg_list[i].startsWith(EEntityTypeStr[ent_type_strs[j]])) {
                     pass = true;
                     break;
                 }

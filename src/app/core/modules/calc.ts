@@ -6,6 +6,7 @@ import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item'
 import { vecsSum, vecDiv, vecsAdd, vecsSub } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
+import { checkIDs, checkCommTypes, checkPPVCoord, checkIDnTypes} from './_check_args';
 
 /**
  * Calculates the distance between two positions.
@@ -18,6 +19,11 @@ import { normal, area } from '@libs/geom/triangle';
  * Expected value of distance is 10.
  */
 export function Distance(__model__: GIModel, position1: TId, position2: TId): number {
+    // --- Error Check ---
+    const fn_name = 'calc.Distance';
+    checkIDs(fn_name, 'position1', position1, ['isID'], ['POSI']);
+    checkIDs(fn_name, 'position2', position2, ['isID'], ['POSI']);
+    // --- Error Check ---
     const ps1_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position1)[1]);
     const ps2_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position2)[1]);
     return distance(ps1_xyz, ps2_xyz);
@@ -30,6 +36,9 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId): nu
  * @example length1 = calc.Length (line1)
  */
 export function Length(__model__: GIModel, lines: TId|TId[]): number {
+    // --- Error Check ---
+    checkIDs('calc.Length', 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
+    // --- Error Check ---
     if (!Array.isArray(lines)) {
         lines = [lines] as TId[];
     }
@@ -68,7 +77,11 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
  * @example_info Calculates minimum distance between polyline1 and polyline2.
  */
 export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], object: TId): number {
-    throw new Error("Not impemented."); return null;
+    // --- Error Check ---
+    // Nature of locationOrObject argument is inconsistent internally
+    // (why take list of coordinates but not list of anything else?)
+    // --- Error Check ---
+    throw new Error('Not impemented.'); return null;
 }
 /**
  * Calculates the area of a surface or a list of surfaces.
@@ -78,6 +91,10 @@ export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], obj
  * @example area1 = calc.Area (surface1)
  */
 export function Area(__model__: GIModel, geometry: TId): number {
+    // --- Error Check ---
+    const fn_name = 'calc.Area';
+    checkIDs(fn_name, 'geometry', geometry, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    // --- Error Check ---
     const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
     if (isPgon(geometry) || isFace(geometry)) {
         // faces, these are already triangulated
@@ -101,7 +118,7 @@ export function Area(__model__: GIModel, geometry: TId): number {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
         if (__model__.geom.query.istWireClosed(wire_i)) {
-            throw new Error('To calculate normals, wire must be closed');
+            throw new Error(fn_name + ': ' + 'To calculate area, wire must be closed');
         }
         const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
         const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
@@ -113,9 +130,10 @@ export function Area(__model__: GIModel, geometry: TId): number {
             total_area += tri_area;
         }
         return total_area;
-    } else {
-        throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
     }
+    // } else {
+    //     throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
+    // }
 }
 /**
  * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
@@ -126,6 +144,10 @@ export function Area(__model__: GIModel, geometry: TId): number {
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
 export function Normal(__model__: GIModel, geometry: TId): Txyz {
+    // --- Error Check ---
+    const fn_name = 'calc.Area';
+    checkIDs(fn_name, 'geometry', geometry, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    // --- Error Check ---
     const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
     if (isPgon(geometry) || isFace(geometry)) {
         // faces, these are already triangulated
@@ -149,7 +171,7 @@ export function Normal(__model__: GIModel, geometry: TId): Txyz {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
         if (__model__.geom.query.istWireClosed(wire_i)) {
-            throw new Error('To calculate normals, wire must be closed');
+            throw new Error(fn_name + ': ' + 'To calculate normals, wire must be closed');
         }
         const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
         const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
@@ -161,9 +183,10 @@ export function Normal(__model__: GIModel, geometry: TId): Txyz {
             normal_vec = vecsAdd(normal_vec, tri_normal);
         }
         return vecDiv(normal_vec, tris.length);
-    } else {
-        throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
     }
+    // } else {
+    //     throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
+    // }
 }
 /**
  * Calculates the centroid of a list of any geometry.
@@ -173,6 +196,10 @@ export function Normal(__model__: GIModel, geometry: TId): Txyz {
  * @example centroid1 = calc.Centroid (geometry)
  */
 export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
+    // --- Error Check ---
+    checkIDs('calc.Centroid', 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'POINT', 'EDGE', 'WIRE', 'PLINE', 'FACE', 'PGON', 'COLL']);
+    // --- Error Check ---
     const posis_i: number[] = [];
     for (const geom_id of geometry) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
@@ -191,6 +218,12 @@ export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
  * @example coord1 = calc.ParamTToXyz (lines, t_param)
  */
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
+    // --- Error Check ---
+    const fn_name = 'calc.ParamTToXyz';
+    checkIDs(fn_name, 'line', line, ['isID'], ['EDGE', 'WIRE', 'POLYLINE']);
+    checkCommTypes(fn_name, 't_param', t_param, ['isNumber']);
+    if (t_param < 0 || t_param > 1) {throw new Error(fn_name + ': ' + 't_param is not between 0 and 1'); }
+    // --- Error Check ---
     const edges_i: number[] = [];
     const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(line);
     if (isEdge(line)) {
@@ -200,9 +233,10 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
     } else if (isPline(line)) {
         const wire_i: number = __model__.geom.query.navPlineToWire(index);
         edges_i.push(...__model__.geom.query.navWireToEdge(wire_i));
-    } else {
-        throw new Error('Entity is of wrong type. Must be a an edge, a wire or a polyline');
     }
+    // } else {
+    //     throw new Error('Entity is of wrong type. Must be a an edge, a wire or a polyline');
+    // }
     const num_edges: number = edges_i.length;
     // get all the edge lengths
     let total_dist = 0;
@@ -243,5 +277,10 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
  * @example coord1 = calc.ParamXyzToT (lines, locations)
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
-    throw new Error("Not impemented."); return null;
+    // --- Error Check ---
+    const fn_name = 'calc.ParamXyzToT';
+    checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'POLYLINE']);
+    checkIDnTypes(fn_name, 'locations', locations, ['isID', 'isIDList', 'isCoord'], ['POSI', 'VERT', 'POINT']);
+    // --- Error Check ---
+    throw new Error('Not impemented.'); return null;
 }

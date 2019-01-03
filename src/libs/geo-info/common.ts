@@ -133,7 +133,7 @@ export enum EEntStrToAttribMap {
 
 // enums
 export enum EAttribDataTypeStrs {
-    INT = 'Int',
+    // INT = 'Int',
     FLOAT = 'Float',
     STRING = 'String'
 }

@@ -5,6 +5,7 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { DataService } from '@services';
 import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
+import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 
 @Component({
   selector: 'view-editor',
@@ -26,6 +27,7 @@ export class ViewEditorComponent {
     private copyCheck = false;
 
     constructor(private dataService: DataService, private router: Router) {
+        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
     }
 
     // add a procedure

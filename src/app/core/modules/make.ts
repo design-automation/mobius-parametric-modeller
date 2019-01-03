@@ -5,7 +5,7 @@ import { __merge__ } from './_model';
 import { isArray } from 'util';
 import { vecsAdd, vecDiv, vecMult } from '@libs/geom/vectors';
 import { _model } from '@modules';
-import { checkCommTypes, checkIDs, checkPosiCoord, checkPPVCoord } from './_check_args';
+import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
 
 /**
  * Adds a new position to the model.

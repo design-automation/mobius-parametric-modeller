@@ -20,6 +20,9 @@ export class GIAttribs {
         edges: new Map(),
         wires: new Map(),
         faces: new Map(),
+        points: new Map(),
+        plines: new Map(),
+        pgons: new Map(),
         colls: new Map()
     };
     // sub classes with methods
@@ -47,6 +50,9 @@ export class GIAttribs {
             edges: Array.from(this._attribs_maps.edges.values()).map(attrib => attrib.getData()),
             wires: Array.from(this._attribs_maps.wires.values()).map(attrib => attrib.getData()),
             faces: Array.from(this._attribs_maps.faces.values()).map(attrib => attrib.getData()),
+            points: Array.from(this._attribs_maps.points.values()).map(attrib => attrib.getData()),
+            polylines: Array.from(this._attribs_maps.plines.values()).map(attrib => attrib.getData()),
+            polygons: Array.from(this._attribs_maps.pgons.values()).map(attrib => attrib.getData()),
             collections: Array.from(this._attribs_maps.colls.values()).map(attrib => attrib.getData())
         };
     }

@@ -31,7 +31,7 @@ export class GIGeomAdd {
         const num_wires: number = this._geom_arrays.dn_wires_edges.length;
         const num_faces: number = this._geom_arrays.dn_faces_wirestris.length;
         const num_points: number = this._geom_arrays.dn_points_verts.length;
-        const num_lines: number = this._geom_arrays.dn_plines_wires.length;
+        const num_plines: number = this._geom_arrays.dn_plines_wires.length;
         const num_pgons: number = this._geom_arrays.dn_pgons_faces.length;
         const num_colls: number = this._geom_arrays.dn_colls_objs.length;
         // Add triangles to model
@@ -56,8 +56,8 @@ export class GIGeomAdd {
         const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
         this._geom_arrays.dn_points_verts.push( ...new_points );
         // Add lines to model
-        const new_lines: TPline[] = geom_data.linestrings.map(w => w + num_wires as TPline);
-        this._geom_arrays.dn_plines_wires.push( ...new_lines );
+        const new_plines: TPline[] = geom_data.polylines.map(w => w + num_wires as TPline);
+        this._geom_arrays.dn_plines_wires.push( ...new_plines );
         // Add pgons to model
         const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
         this._geom_arrays.dn_pgons_faces.push( ...new_pgons );
@@ -65,7 +65,7 @@ export class GIGeomAdd {
         const new_colls: TColl[] = geom_data.collections.map(c => [
             c[0] === -1 ? -1 : c[0] + num_colls,
             c[1].map( point => point + num_points),
-            c[2].map( line => line + num_lines),
+            c[2].map( line => line + num_plines),
             c[3].map( pgon => pgon + num_pgons)
         ] as TColl);
         this._geom_arrays.dn_colls_objs.push( ...new_colls );
@@ -141,7 +141,7 @@ export class GIGeomAdd {
         this._geom_arrays.dn_pgons_faces.forEach( (face_i, pgon_i) => {
             this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
         });
-        // collections of points, linestrings, polygons
+        // collections of points, polylines, polygons
         this._geom_arrays.up_points_colls = [];
         this._geom_arrays.up_plines_colls = [];
         this._geom_arrays.up_pgons_colls = [];

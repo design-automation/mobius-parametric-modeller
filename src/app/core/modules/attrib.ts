@@ -49,6 +49,9 @@ export enum _EPromoteAttribTypes {
     EDGES = 'edges',
     WIRES = 'wires',
     FACES = 'faces',
+    POINTS = 'points',
+    PLINES = 'plines',
+    PGONS = 'pgons',
     COLLS = 'collections'
 }
 /**

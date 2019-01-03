@@ -218,8 +218,8 @@ export class ExecuteComponent {
             console.log(error.name.toUpperCase());
             console.log('=======================================');
             console.log(error.message);
-            console.log('---------------\nError node code:');
-            console.log(fnString);
+            // console.log('---------------\nError node code:');
+            // console.log(fnString);
             throw error;
 
         }

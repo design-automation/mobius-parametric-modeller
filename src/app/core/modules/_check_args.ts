@@ -3,6 +3,15 @@ import { EEntityTypeStr } from '@libs/geo-info/common';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
 
 // =====================================================================================================================
+// Any
+// =====================================================================================================================
+function isAnyArg(fn_name: string, arg_name: string, arg: any): void {
+    if (arg === undefined) {
+        throw new Error(fn_name + ': ' + arg_name + ' must be defined');
+    }
+    return;
+}
+// =====================================================================================================================
 // string
 // =====================================================================================================================
 function isStringArg(fn_name: string, arg_name: string, arg: any): void {
@@ -20,14 +29,6 @@ function isStringListArg(fn_name: string, arg_name: string, arg_list: any[]): vo
     }
     return;
 }
-
-// isIDList_list: function(fn_name: string, arg_name: string, arg_list: string[][]): void {
-//     isListArg(fn_name, arg_name, arg_list, 'ID lists');
-//     for (let i = 0; i < arg_list.length; i++) {
-//         isStringListArg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-//     }
-//     return;
-// },
 
 // =====================================================================================================================
 // Numbers
@@ -68,6 +69,10 @@ function isIntListArg(fn_name: string, arg_name: string, arg_list: any[]): void 
 // =====================================================================================================================
 
 const typeCheckObj  = {
+    // any: to catch undefined
+    isAny: function(fn_name: string, arg_name: string, arg: string): void {
+        isAnyArg(fn_name, arg_name, arg);
+    },
     // list
     isList: function(fn_name: string, arg_name: string, arg: string): void {
         isListArg(fn_name, arg_name, arg, 'any');
@@ -262,54 +267,6 @@ export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {
     }
     return;
 }
-// // dim0
-// export function isDim0arg(fn_name: string, arg_name: string, arg: any): void {
-//     if (!isDim0(arg)) {
-//         throw new Error(fn_name + ': ' + arg_name + ' is not a Dim0 object');
-//     }
-//     return;
-// }
-// export function isDim0ListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
-//     for (let i = 0; i < arg_list.length; i++) {
-//         if (!isDim0(arg_list[i])) {
-//             throw new Error(fn_name + ': list ' + arg_name + ' contains a non-Dim0 object');
-//         }
-//     }
-//     return;
-// }
-
-// // dim1
-// export function isDim1arg(fn_name: string, arg_name: string, arg: any): void {
-//     if (!isDim1(arg)) {
-//         throw new Error(fn_name + ': ' + arg_name + ' is not a Dim1 object');
-//     }
-//     return;
-// }
-// export function isDim1ListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
-//     for (let i = 0; i < arg_list.length; i++) {
-//         if (!isDim1(arg_list[i])) {
-//             throw new Error(fn_name + ': list ' + arg_name + ' contains a non-Dim1 object');
-//         }
-//     }
-//     return;
-// }
-
-// // dim2
-// export function isDim2arg(fn_name: string, arg_name: string, arg: any): void {
-//     if (!isDim2(arg)) {
-//         throw new Error(fn_name + ': ' + arg_name + ' is not a Dim2 object');
-//     }
-//     return;
-// }
-// export function isDim2ListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
-//     for (let i = 0; i < arg_list.length; i++) {
-//         if (!isDim2(arg_list[i])) {
-//             throw new Error(fn_name + ': list ' + arg_name + ' contains a non-Dim2 object');
-//         }
-//     }
-//     return;
-// }
-
 // =====================================================================================================================
 // util
 // =====================================================================================================================

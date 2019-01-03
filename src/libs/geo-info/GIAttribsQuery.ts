@@ -76,15 +76,17 @@ function _parse_query_component(query_component: string): IQueryComponent {
 }
 /**
  * Parse a query string.
+ * && takes precedence over ||
+ * [ [ query1 && query2 ] || [ query3 && query4 ] ]
  */
 function parseQuery(query_str: string): IQueryComponent[][] {
     if (!query_str.startsWith('#')) {throw new Error('Bad query, must start with #.'); }
     const query_str_clean: string = query_str.replace(/\s/g, '').slice(1);
-    const and_query_strs: string[] = query_str_clean.split('&&');
+    const or_query_strs: string[] = query_str_clean.split('||');
     const query_list: IQueryComponent[][] = [];
-    and_query_strs.forEach(and_query_str => {
-        const or_query_strs: string[] = and_query_str.split('||');
-        query_list.push(or_query_strs.map( or_query_str => _parse_query_component(or_query_str) ) );
+    or_query_strs.forEach(or_query_str => {
+        const and_query_strs: string[] = or_query_str.split('&&');
+        query_list.push(and_query_strs.map( and_query_str => _parse_query_component(and_query_str) ) );
     });
     return query_list;
 }
@@ -138,33 +140,34 @@ export class GIAttribsQuery {
      * Returns a list of string IDs of entities in the model.
      */
     public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string): number[] {
-        const queries: IQueryComponent[][] = parseQuery(query_str);
-        console.log("queries", queries);
-        if (!queries) { return []; }
-        const query1: IQueryComponent = queries[0][0];
-        return this.queryAttrib(ent_type_str, query1);  
-    }
-    /**
-     * Query the model using a sequence of && and || queries.
-     * Returns a list of string IDs of entities in the model.
-     * @param query
-     */
-    public queryAttrib(ent_type_str: EEntityTypeStr, query: IQueryComponent): number[] {
-        // print the query
-        console.log("     attrib_name" ,     query.attrib_name);
-        console.log("     attrib_index" ,    query.attrib_index);
-        console.log("     attrib_value_str", query.attrib_value_str);
-        console.log("     operator_type" ,   query.operator_type);
-        // do the query
+        // get the map that contains all the ettributes for the ent_type_str
         const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        if (!attribs || !attribs.has(query.attrib_name)) { return []; }
-        const entities_i: number[] = attribs.get(query.attrib_name).queryValueStr(
-            query.attrib_value_str,
-            query.operator_type,
-            query.attrib_index
-        );
-        return entities_i;
+        // parse the query
+        const queries: IQueryComponent[][] = parseQuery(query_str);
+        if (!queries) { return []; }
+        console.log(queries);
+        // do the query, one by one
+        // [[query1 and query2] or [query3 and query4]]
+        let union_query_results: number[] = [];
+        for (const and_queries of queries)  {
+            let intersect_query_result: number[] = null;
+            for (const and_query of and_queries) {
+                if (attribs || attribs.has(and_query.attrib_name)) {
+                    intersect_query_result = attribs.get(and_query.attrib_name).queryValueStr(
+                        and_query.attrib_value_str,
+                        and_query.operator_type,
+                        and_query.attrib_index,
+                        intersect_query_result
+                    );
+                }
+            }
+            if (intersect_query_result !== null) {
+                union_query_results = Array.from(new Set([...union_query_results, ...intersect_query_result]));
+            }
+        }
+        // return the result
+        return union_query_results;
     }
     // ============================================================================
     // Get all values

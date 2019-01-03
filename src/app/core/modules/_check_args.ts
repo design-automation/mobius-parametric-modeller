@@ -237,7 +237,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         throw new Error(ret_msg + err_arr.join(''));
     }
 }
-export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void {
+export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows POINT POSITION VERT, COORD
     const err_arr = [];
     try {
         checkCommTypes(fn_name, arg_name, arg, ['isCoord']);
@@ -252,7 +252,7 @@ export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void
     }
     return;
 }
-export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {
+export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows EDGE, VEC
     const err_arr = [];
     try {
         checkCommTypes(fn_name, arg_name, arg, ['isVector']);
@@ -260,6 +260,21 @@ export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {
         err_arr.push(err1.message + '\n');
         try {
             checkIDs(fn_name, arg_name, arg, ['isID'], ['EDGE']);
+        } catch (err2) {
+            err_arr.push(err2.message);
+            throw new Error(err_arr.join(''));
+        }
+    }
+    return;
+}
+export function check2D(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows PLINE PGON FACE, PLANE
+    const err_arr = [];
+    try {
+        checkCommTypes(fn_name, arg_name, arg, ['isPlane']);
+    } catch (err1) {
+        err_arr.push(err1.message + '\n');
+        try {
+            checkIDs(fn_name, arg_name, arg, ['isID'], ['PLINE', 'PGON', 'FACE']);
         } catch (err2) {
             err_arr.push(err2.message);
             throw new Error(err_arr.join(''));

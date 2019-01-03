@@ -206,7 +206,7 @@ export class CodeUtils {
                 continue;
             }
             const atIndex = res[i].indexOf('@');
-            if (atIndex !== -1 && atIndex > 0 && res[atIndex - 1] !== '#') {
+            if (atIndex !== -1 && atIndex > 0 && res[i][0] !== '#') {
                 res[i] = `__modules__.${_parameterTypes.getattrib}('${res[i]}')`;
             }
         }

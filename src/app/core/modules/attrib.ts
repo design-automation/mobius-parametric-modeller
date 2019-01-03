@@ -3,23 +3,23 @@ import { TId, TQuery, Txyz, TAttribDataTypes, EAttribNames, EEntityTypeStr } fro
 import { idBreak } from '@libs/geo-info/id';
 import * as _check_args from './_check_args';
 
-// /**
-//  * Gets attribute value of all entities.
-//  * @param __model__
-//  * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection or a list.
-//  * @param attrib_name Attribute name to get the value for.
-//  * @returns Attribute value.
-//  */
-// export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
-//     //_check_args.isStringArg('Get name', name);
-//     // _check_args.isIdListArg("ccc", entities, [EEntityTypeStr.POSI, EEntityTypeStr.VERT] );
-//     if (!Array.isArray(entities)) {
-//         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
-//         return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
-//     } else {
-//         return (entities as TId[]).map( entity => Get(__model__, entity, attrib_name)) as TAttribDataTypes[];
-//     }
-// }
+/**
+ * Gets attribute value of all entities.
+ * @param __model__
+ * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection or a list.
+ * @param attrib_name Attribute name to get the value for.
+ * @returns Attribute value.
+ */
+export function Get(__model__: GIModel, entities: TId|TId[], name: string): TAttribDataTypes|TAttribDataTypes[] {
+    //_check_args.isStringArg('Get name', name);
+    // _check_args.isIdListArg("ccc", entities, [EEntityTypeStr.POSI, EEntityTypeStr.VERT] );
+    if (!Array.isArray(entities)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+    } else {
+        return (entities as TId[]).map( entity => Get(__model__, entity, attrib_name)) as TAttribDataTypes[];
+    }
+}
 
 /**
  * Sets attribute value.

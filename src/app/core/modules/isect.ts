@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
-import { checkIDs, check2D, checkCommTypes } from './_check_args';
+import { checkIDs, checkCommTypes, checkIDnTypes } from './_check_args';
 
 /**
  * Adds positions by intersecting polylines, planes, and polygons.
@@ -15,8 +15,8 @@ import { checkIDs, check2D, checkCommTypes } from './_check_args';
 export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[] {
     // --- Error Check ---
     const fn_name = 'isect.Intersect';
-    check2D(fn_name, 'object1', object1);
-    check2D(fn_name, 'object2', object2);
+    checkIDnTypes(fn_name, 'object1', object1, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
+    checkIDnTypes(fn_name, 'object2', object2, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }

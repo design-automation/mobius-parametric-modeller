@@ -53,14 +53,17 @@ export class GIAttribsThreejs {
 
     public getAttribsForTable(tab: string) {
         const e = EEntityTypeStr;
-        const EntityType = [e.POSI, e.VERT, e.EDGE, e.WIRE, e.FACE, e.COLL];
+        const EntityType = [e.POSI, e.VERT, e.EDGE, e.WIRE, e.FACE, e.POINT, e.PLINE, e.PGON, e.COLL];
         const _attrib_inner_maps = {};
         _attrib_inner_maps[EntityType[0]] = this._model.geom.query.numPosis();
         _attrib_inner_maps[EntityType[1]] = this._model.geom.query.numVerts();
         _attrib_inner_maps[EntityType[2]] = this._model.geom.query.numEdges();
         _attrib_inner_maps[EntityType[3]] = this._model.geom.query.numWires();
         _attrib_inner_maps[EntityType[4]] = this._model.geom.query.numFaces();
-        _attrib_inner_maps[EntityType[5]] = this._model.geom.query.numColls();
+        _attrib_inner_maps[EntityType[5]] = this._model.geom.query.numPoints();
+        _attrib_inner_maps[EntityType[6]] = this._model.geom.query.numPlines();
+        _attrib_inner_maps[EntityType[7]] = this._model.geom.query.numPgons();
+        _attrib_inner_maps[EntityType[8]] = this._model.geom.query.numColls();
 
         const data_obj_map: Map<number, { id: string}> = new Map();
         for (let index = 0; index < _attrib_inner_maps[tab]; index++) {

@@ -2,72 +2,9 @@ import { EEntityTypeStr } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
 
-// =====================================================================================================================
-// Any
-// =====================================================================================================================
-function isAnyArg(fn_name: string, arg_name: string, arg: any): void {
-    if (arg === undefined) {
-        throw new Error(fn_name + ': ' + arg_name + ' must be defined');
-    }
-    return;
-}
-// =====================================================================================================================
-// string
-// =====================================================================================================================
-function isStringArg(fn_name: string, arg_name: string, arg: any): void {
-    if (typeof arg !== 'string') {
-        throw new Error(fn_name + ': ' + arg_name + ' is not a string');
-    }
-    return;
-}
-function isStringListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
-    isListArg(fn_name, arg_name, arg_list, 'strings');
-    for (let i = 0; i < arg_list.length; i++) {
-        if (typeof arg_list[i] !== 'string') {
-            throw new Error(fn_name + arg_name + '[' + i + ']' + ' is not a string');
-        }
-    }
-    return;
-}
-
-// =====================================================================================================================
-// Numbers
-// =====================================================================================================================
-function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
-    if (typeof arg !== 'number') {
-        throw new Error(fn_name + ': ' + arg_name + ' is not a number');
-    }
-    return;
-}
-function isNumberListArg(fn_name: string, arg_name: string, arg_list: any): void {
-    isListArg(fn_name, arg_name, arg_list, 'numbers');
-    for (let i = 0; i < arg_list.length; i++) {
-        if (typeof arg_list[i] !== 'number') {
-            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not a number');
-        }
-    }
-    return;
-}
-function isIntArg(fn_name: string, arg_name: string, arg: any): void {
-    if (!Number.isInteger(arg)) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not an integer');
-    }
-    return;
-}
-function isIntListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
-    isListArg(fn_name, arg_name, arg_list, 'integers');
-    for (let i = 0; i < arg_list.length; i++) {
-        if (!Number.isInteger(arg_list[i])) {
-            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not an integer');
-        }
-    }
-    return;
-}
-
-// =====================================================================================================================
-// common types
-// =====================================================================================================================
-
+// =========================================================================================================================================
+// Function Dictionaries
+// =========================================================================================================================================
 const typeCheckObj  = {
     // any: to catch undefined
     isAny: function(fn_name: string, arg_name: string, arg: string): void {
@@ -201,6 +138,9 @@ const IDcheckObj = {
         return;
     },
 };
+// =========================================================================================================================================
+// Specific Checks
+// =========================================================================================================================================
 export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]|'all'): void {
     let pass = false;
     const err_arr = [];
@@ -237,55 +177,45 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         throw new Error(ret_msg + err_arr.join(''));
     }
 }
-export function checkPPVCoord(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows POINT POSITION VERT, COORD
+// =========================================================================================================================================
+// Most General Check
+// =========================================================================================================================================
+export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks?: string[]|'all') {
+    let pass = false;
     const err_arr = [];
-    try {
-        checkCommTypes(fn_name, arg_name, arg, ['isCoord']);
-    } catch (err1) {
-        err_arr.push(err1.message + '\n');
-        try {
-            checkIDs(fn_name, arg_name, arg, ['isID'], ['POSI', 'POINT', 'VERT']);
-        } catch (err2) {
-            err_arr.push(err2.message);
-            throw new Error(err_arr.join(''));
+    for (let i = 0; i < check_fns.length; i++) {
+        if (Object.keys(IDcheckObj).includes(check_fns[i])) {
+            // checking for ID
+            try {
+                IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+            } catch (err) {
+                err_arr.push(err.message + '\n');
+                continue;
+            }
+            pass = true;
+            break; // passed
+        } else {
+            // checking common types
+            try {
+                typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
+            } catch (err) {
+                err_arr.push(err.message + '\n');
+                continue;
+            }
+            pass = true;
+            break; // passed
         }
     }
-    return;
-}
-export function checkEdgVec(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows EDGE, VEC
-    const err_arr = [];
-    try {
-        checkCommTypes(fn_name, arg_name, arg, ['isVector']);
-    } catch (err1) {
-        err_arr.push(err1.message + '\n');
-        try {
-            checkIDs(fn_name, arg_name, arg, ['isID'], ['EDGE']);
-        } catch (err2) {
-            err_arr.push(err2.message);
-            throw new Error(err_arr.join(''));
-        }
+    if (pass === false) { // Failed all tests: argument does not fall into any valid types
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
+        throw new Error(ret_msg + err_arr.join(''));
     }
-    return;
 }
-export function check2D(fn_name: string, arg_name: string, arg: any): void {// for arguments that allows PLINE PGON FACE, PLANE
-    const err_arr = [];
-    try {
-        checkCommTypes(fn_name, arg_name, arg, ['isPlane']);
-    } catch (err1) {
-        err_arr.push(err1.message + '\n');
-        try {
-            checkIDs(fn_name, arg_name, arg, ['isID'], ['PLINE', 'PGON', 'FACE']);
-        } catch (err2) {
-            err_arr.push(err2.message);
-            throw new Error(err_arr.join(''));
-        }
-    }
-    return;
-}
+
 // =====================================================================================================================
 // util
 // =====================================================================================================================
-
+// List
 function isListArg(fn_name: string, arg_name: string, arg: any, typ: string): void {
     if (!Array.isArray(arg)) {
         throw new Error (fn_name + ': ' + arg_name + ' is not a list of ' + typ);
@@ -295,6 +225,60 @@ function isListArg(fn_name: string, arg_name: string, arg: any, typ: string): vo
 function isListLenArg(fn_name: string, arg_name: string, arg_list: any[], len: number): void {
     if (arg_list.length !== len) {
         throw new Error (fn_name + ': ' + arg_name + ' is not a list of length ' + len);
+    }
+    return;
+}
+// Any
+function isAnyArg(fn_name: string, arg_name: string, arg: any): void {
+    if (arg === undefined) {
+        throw new Error(fn_name + ': ' + arg_name + ' must be defined');
+    }
+    return;
+}
+// String
+function isStringArg(fn_name: string, arg_name: string, arg: any): void {
+    if (typeof arg !== 'string') {
+        throw new Error(fn_name + ': ' + arg_name + ' is not a string');
+    }
+    return;
+}
+function isStringListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
+    isListArg(fn_name, arg_name, arg_list, 'strings');
+    for (let i = 0; i < arg_list.length; i++) {
+        if (typeof arg_list[i] !== 'string') {
+            throw new Error(fn_name + arg_name + '[' + i + ']' + ' is not a string');
+        }
+    }
+    return;
+}
+// Numbers
+function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
+    if (typeof arg !== 'number') {
+        throw new Error(fn_name + ': ' + arg_name + ' is not a number');
+    }
+    return;
+}
+function isNumberListArg(fn_name: string, arg_name: string, arg_list: any): void {
+    isListArg(fn_name, arg_name, arg_list, 'numbers');
+    for (let i = 0; i < arg_list.length; i++) {
+        if (typeof arg_list[i] !== 'number') {
+            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not a number');
+        }
+    }
+    return;
+}
+function isIntArg(fn_name: string, arg_name: string, arg: any): void {
+    if (!Number.isInteger(arg)) {
+        throw new Error(fn_name + ': ' + arg_name + ' is not an integer');
+    }
+    return;
+}
+function isIntListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
+    isListArg(fn_name, arg_name, arg_list, 'integers');
+    for (let i = 0; i < arg_list.length; i++) {
+        if (!Number.isInteger(arg_list[i])) {
+            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not an integer');
+        }
     }
     return;
 }

@@ -1,6 +1,6 @@
 import * as mathjs from 'mathjs';
 import { TId, Txyz } from '@libs/geo-info/common';
-import { checkCommTypes, checkEdgVec} from './_check_args';
+import { checkCommTypes, checkIDnTypes } from './_check_args';
 
 /**
  * Vector functions.
@@ -51,8 +51,8 @@ export function GetLength(vector: Txyz): number {
 export function Angle(edgeOrVector1: Txyz, edgeOrVector2: Txyz): number {
     // --- Error Check ---
     const fn_name = 'vec.Angle';
-    checkEdgVec(fn_name, 'edgeOrVector1', edgeOrVector1);
-    checkEdgVec(fn_name, 'edgeOrVector2', edgeOrVector2);
+    checkIDnTypes(fn_name, 'edgeOrVector1', edgeOrVector1, ['isID', 'isVector'], ['EDGE']);
+    checkIDnTypes(fn_name, 'edgeOrVector2', edgeOrVector2, ['isID', 'isVector'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }

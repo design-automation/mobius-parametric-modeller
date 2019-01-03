@@ -14,7 +14,7 @@ export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
   currentTab: number;
 
-  tabs: string[] = ['Positions', 'Vertex', 'Edges', 'Wires', 'Faces', 'Collections'];
+  tabs: string[] = ['Positions', 'Vertex', 'Edges', 'Wires', 'Faces', 'Points', 'Polylines', 'Polygons', 'Collections'];
   displayedColumns: string[] = [];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -52,7 +52,10 @@ export class AttributeComponent implements OnChanges {
       2: EntityType.EDGE,
       3: EntityType.WIRE,
       4: EntityType.FACE,
-      5: EntityType.COLL
+      5: EntityType.POINT,
+      6: EntityType.PLINE,
+      7: EntityType.PGON,
+      8: EntityType.COLL
     };
     if (this.data) {
       const attribData = this.data.attribs.threejs.getAttribsForTable(tab_map[tabIndex]);

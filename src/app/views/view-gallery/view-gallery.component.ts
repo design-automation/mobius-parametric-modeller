@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { HttpClient } from '@angular/common/http';
 import { Constants } from './view-gallery.config';
 import { Observable } from 'rxjs';
@@ -32,13 +33,16 @@ export class ViewGalleryComponent {
 
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
         this.allGalleries = galleryUrls.data.map(gallery => gallery.name);
-        this.active = galleryUrls.data[0];
+        if (!this.dataService.activeGallery || !this.switchGallery(this.dataService.activeGallery.name)) {
+            this.dataService.activeGallery = galleryUrls.data[0];
+        }
         /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();
         }
         */
-    }
+        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
+   }
 
     getFilesFromURL(): Observable<any> {
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
@@ -56,56 +60,61 @@ export class ViewGalleryComponent {
     }
 
 
-    switchGallery(galleryName: string) {
+    switchGallery(galleryName: string): boolean {
         for (const gallery of galleryUrls.data) {
             if (gallery.name === galleryName) {
-                this.active = gallery;
-                return;
+                this.dataService.activeGallery = gallery;
+                return true;
             }
         }
+        return false;
     }
 
     loadFile(fileLink) {
-        const stream = Observable.create(observer => {
-            const request = new XMLHttpRequest();
 
-            request.open('GET', fileLink + '.mob');
-            request.onload = () => {
-                if (request.status === 200) {
-                    const f = circularJSON.parse(request.responseText);
-                    const file: IMobius = {
-                        name: f.name,
-                        author: f.author,
-                        flowchart: f.flowchart,
-                        last_updated: f.last_updated,
-                        version: f.version
-                    };
-                    observer.next(file);
-                    observer.complete();
-                } else {
-                    observer.error('error happened');
-                }
-            };
+        new LoadUrlComponent(this.dataService).loadURL(fileLink + '.mob');
+        this.router.navigate(['/dashboard']);
 
-            request.onerror = () => {
-            observer.error('error happened');
-            };
-            request.send();
-        });
-        stream.subscribe(loadeddata => {
-            this.dataService.file = loadeddata;
-            this.dataService.newFlowchart = true;
-            if (this.dataService.node.type !== 'end') {
-                for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
-                    if (loadeddata.flowchart.nodes[i].type === 'end') {
-                        loadeddata.flowchart.meta.selected_nodes = [i];
-                        break;
-                    }
-                }
-            }
-            this.router.navigate(['/dashboard']);
-            document.getElementById('executeButton').click();
-        });
+        // const stream = Observable.create(observer => {
+        //     const request = new XMLHttpRequest();
+
+        //     request.open('GET', fileLink + '.mob');
+        //     request.onload = () => {
+        //         if (request.status === 200) {
+        //             const f = circularJSON.parse(request.responseText);
+        //             const file: IMobius = {
+        //                 name: f.name,
+        //                 author: f.author,
+        //                 flowchart: f.flowchart,
+        //                 last_updated: f.last_updated,
+        //                 version: f.version
+        //             };
+        //             observer.next(file);
+        //             observer.complete();
+        //         } else {
+        //             observer.error('error happened');
+        //         }
+        //     };
+
+        //     request.onerror = () => {
+        //     observer.error('error happened');
+        //     };
+        //     request.send();
+        // });
+        // stream.subscribe(loadeddata => {
+        //     this.dataService.file = loadeddata;
+        //     this.dataService.newFlowchart = true;
+        //     if (this.dataService.node.type !== 'end') {
+        //         for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
+        //             if (loadeddata.flowchart.nodes[i].type === 'end') {
+        //                 loadeddata.flowchart.meta.selected_nodes = [i];
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     this.router.navigate(['/dashboard']);
+        //     document.getElementById('executeButton').click();
+        // });
     }
 
     viewerData(): any {

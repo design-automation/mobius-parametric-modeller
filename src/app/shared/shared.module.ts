@@ -29,6 +29,7 @@ import { NewFileComponent, SaveFileComponent, LoadFileComponent } from './compon
 import { NotificationComponent } from './components/notification/notification.component';
 // app model viewers
 import { DataViewersContainer } from '../model-viewers/model-viewers-container.module';
+import { LoadUrlComponent } from './components/file/loadurl.component';
 
 @NgModule({
     providers: [ ],
@@ -42,7 +43,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             NotificationComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             // ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
-            NewFileComponent, SaveFileComponent, LoadFileComponent
+            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent
         ],
     imports: [
             CommonModule,
@@ -85,7 +86,7 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
             AddOutputComponent,
             // ParameterViewerComponent,
             NotificationComponent,
-            NewFileComponent, SaveFileComponent, LoadFileComponent
+            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent
     ]
 })
 export class SharedModule {

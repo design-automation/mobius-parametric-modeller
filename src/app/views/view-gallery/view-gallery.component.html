@@ -4,7 +4,7 @@
             <panel-header [title]='dataService.flowchart.name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{active.name}}<span>▾</span></h3>
+                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{dataService.activeGallery.name}}<span>▾</span></h3>
                 <div id="galleryMenu">
                     <div *ngFor='let galleryName of allGalleries;'>
                         <li (click)="switchGallery(galleryName)">
@@ -14,9 +14,9 @@
                 </div>
                 <div class = 'content--container'>
                     <div class="container__element container__element--project-container">
-                        <div class="project-container__project" *ngFor="let f of active.files">
-                            <div class="tile--contents" (click)='loadFile(active.link + f)'>
-                                <img src ='{{active.link+"imgs/"+f+".JPG"}}' alt = 'project image'>
+                        <div class="project-container__project" *ngFor="let f of dataService.activeGallery.files">
+                            <div class="tile--contents" (click)='loadFile(dataService.activeGallery.link + f)'>
+                                <img src ='{{dataService.activeGallery.link+"imgs/"+f+".JPG"}}' alt = 'project image'>
                             </div>
                             <span class = 'project__title'>{{ f | simplename }}</span>
                         </div>

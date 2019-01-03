@@ -139,7 +139,7 @@ export enum EAttribDataTypeStrs {
 }
 
 // types
-export type Txyz = [number, number, number];
+export type Txyz = [number, number, number]; // in use
 export type TPosi = number;
 export type TTri = [number, number, number]; // [position, position, position]
 export type TVert = number; // positions

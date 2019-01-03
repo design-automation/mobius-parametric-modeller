@@ -5,6 +5,7 @@ import { __merge__ } from './_model';
 import { isArray } from 'util';
 import { vecsAdd, vecDiv, vecMult } from '@libs/geom/vectors';
 import { _model } from '@modules';
+import { checkCommTypes, checkIDs, checkPPVCoord } from './_check_args';
 
 /**
  * Adds a new position to the model.
@@ -15,6 +16,9 @@ import { _model } from '@modules';
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
+    // --- Error Check ---
+    checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
+    // --- Error Check ---
     if (isArray(coords) && !Array.isArray(coords[0])) {
         const posi_i: number = __model__.geom.add.addPosition();
         __model__.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, coords as Txyz);
@@ -36,6 +40,13 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
  */
 export function PositionsArc(__model__: GIModel, origin: Txyz|TPlane,
     radius: number, num_positions: number, arc_angle: number): TId[] {
+    // --- Error Check ---
+    const fn_name = 'make.PositionsArc';
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
+    checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
+    checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt']);
+    checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber']);
+    // --- Error Check ---
     const posis_id: TId[] = [];
     for (let i = 0; i < num_positions + 1; i++) {
         const vec: Txyz = origin as Txyz;
@@ -63,6 +74,12 @@ export function PositionsArc(__model__: GIModel, origin: Txyz|TPlane,
  */
 export function PositionsGrid(__model__: GIModel, origin: Txyz|TPlane,
     size: number|[number, number], num_positions: number|[number, number]): TId[] {
+    // --- Error Check ---
+    const fn_name = 'make.PositionsGrid';
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
+    checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
+    checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt', 'isXYlistInt']);
+    // --- Error Check ---
     const xy_size: [number, number] = (isArray(size) ? size : [size, size]) as [number, number];
     const xy_num_posis: [number, number] = (isArray(num_positions) ? num_positions : [num_positions, num_positions]) as [number, number];
     const x_offset: number = xy_size[0] / (xy_num_posis[0] - 1);
@@ -93,6 +110,11 @@ export function PositionsGrid(__model__: GIModel, origin: Txyz|TPlane,
 * @example_info Creates a list of 4 positions, being the vertices of a 10 by 20 rectangle.
  */
 export function PositionsRect(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
+    // --- Error Check ---
+    const fn_name = 'make.PositionsRect';
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
+    checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
+    // --- Error Check ---
     const xy_size: [number, number] = (isArray(size) ? size : [size, size]) as [number, number];
     const posis_id: TId[] = [];
     const vec: Txyz = origin as Txyz;
@@ -118,6 +140,9 @@ export function PositionsRect(__model__: GIModel, origin: Txyz|TPlane, size: num
  * @example_info Creates a point at position1.
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
+    // --- Error Check ---
+    checkIDs('make.Point', 'positions', positions, ['isID', 'isIDList'], ['POSI']);
+    // --- Error Check ---
     if (!Array.isArray(positions)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(positions as TId);
         const point_i: number = __model__.geom.add.addPoint(index);
@@ -141,6 +166,9 @@ export enum _EClose {
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
+    // --- Error Check ---
+    checkIDs('make.Polyline', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+    // --- Error Check ---
     if (isArray(positions) && !Array.isArray(positions[0])) {
         const bool_close: boolean = (close === _EClose.CLOSE);
         const posis_i: number[] = idIndicies(positions as TId[]);
@@ -159,6 +187,9 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
+    // --- Error Check ---
+    checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+    // --- Error Check ---
     if (isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(positions as TId[]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
@@ -170,13 +201,18 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 /**
  * Adds a new collection to the model.
  * @param __model__
- * @param parent_coll ???
+ * @param parent_coll Collection
  * @param objects List of points, polylines, polygons.
  * @returns New collection if successful, null if unsuccessful or on error.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
  */
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
+    // --- Error Check ---
+    const fn_name = 'make.Collection';
+    checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
+    checkIDs(fn_name, 'objects', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
+    // --- Error Check ---
     if (!Array.isArray(objects)) {
         objects = [objects] as TId[];
     }
@@ -201,6 +237,9 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
  * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
  */
 export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
+    // --- Error Check ---
+    checkIDs('make.Loft', 'geometry', geometry, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
+    // --- Error Check ---
     const edges_arrs_i: number[][] = [];
     let num_edges = 0;
     for (const geom_id of geometry) {
@@ -208,7 +247,7 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
         const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type_str, index);
         if (edges_arrs_i.length === 0) { num_edges = edges_i.length; }
         if (edges_i.length !== num_edges) {
-            throw new Error('Number of edges is not consistent.');
+            throw new Error('make.Loft: Number of edges is not consistent.');
         }
         edges_arrs_i.push(edges_i);
     }
@@ -242,6 +281,13 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
  * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */
 export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
+    // --- Error Check ---
+    const fn_name = 'make.Extrude';
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON',
+            'COLL']);
+    checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
+    checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
+    // --- Error Check ---
     const extrude_vec: Txyz = (isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
     if (!Array.isArray(geometry)) {
@@ -318,7 +364,10 @@ export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: numbe
  * @example_info Creates a new polyline by joining polyline1 and polyline2.
  */
 export function Join(__model__: GIModel, objects: TId[]): TId {
-    throw new Error("Not implemented."); return null;
+    // --- Error Check ---
+    checkIDs('make.Join', 'objects', objects, ['isIDList'], ['PLINE', 'PGON']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 // Enums for Copy()
 export enum _ECopyPositions {
@@ -341,6 +390,10 @@ export enum _ECopyAttribues {
  */
 export function Copy(__model__: GIModel, geometry: TId|TId[],
     copy_positions: _ECopyPositions, copy_attributes: _ECopyAttribues): TId|TId[] {
+    // --- Error Check ---
+    checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
+    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // --- Error Check ---
     // TODO positions may be copied multiple times
     if (!Array.isArray(geometry)) {
         const bool_copy_posis: boolean = (copy_positions === _ECopyPositions.COPY_POSITIONS);
@@ -383,18 +436,28 @@ export enum _EDivideMethod {
  * @example segments2 = make.Divide(edge1, 5, length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, edges: TId[], divisor: number, method: _EDivideMethod): TId[] {
-    throw new Error("Not implemented."); return null;
+export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
+    // --- Error Check ---
+    const fn_name = 'make.Divide';
+    checkIDs('make.Copy', 'edges', edges, ['isID', 'isIDList'], ['EDGE']);
+    checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
- * Adds a visible vector to the model from a location and vector.
+ * Adds a visible vector to the model from a Position and vector.
  * @param __model__
- * @param origin Location of origin, or list of three coordinates
+ * @param origin Position of origin, or list of three coordinates
  * @param vector Vector or list of three coordinates.
  * @returns Visible vector from origin if successful, null if unsuccessful or on error.
  */
-export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: TId|Txyz): TId {
-    throw new Error("Not implemented."); return null;
+export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: Txyz): TId {
+    // --- Error Check ---
+    const fn_name = 'make.VectorVisible';
+    checkPPVCoord(fn_name, 'origin', origin);
+    checkCommTypes(fn_name, 'vector', vector, ['isVector']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
 /**
  * Adds a new plane to the model from a location and two vectors.
@@ -406,9 +469,13 @@ export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: TId|
  * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: TId|Txyz, vector2: TId|Txyz): TId {
-    throw new Error("Not implemented."); return null;
+export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: Txyz, vector2: Txyz): TId {
+    // --- Error Check ---
+    const fn_name = 'make.PlanerVisible';
+    const err_arr = [];
+    checkPPVCoord(fn_name, 'location', location);
+    checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
+    checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
 }
-// export function PlaneVisible(__model__: GIModel, locationOrVector: TId|Txyz, vector: TId|Txyz): TId {
-//     throw new Error("Not implemented."); return null;
-// }

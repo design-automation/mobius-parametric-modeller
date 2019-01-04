@@ -210,7 +210,32 @@ export class CodeUtils {
             const atIndex = res[i].indexOf('@');
             if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
                 const splitted = res[i].split('@');
-                res[i] = `__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')`;
+                let pref = '';
+                let postf = '';
+                if (splitted[0].substring(0, 1) === '[') {
+                    splitted[0] = splitted[0].substring(1, splitted[0].length);
+                    pref = '[';
+                }
+                if ((splitted[1].match(/\]/g) || []).length === (splitted[1].match(/\[/g) || []).length + 1) {
+                    splitted[1] = splitted[1].substring(0, splitted[1].length - 1);
+                    postf = ']';
+                }
+                // if (res[i + 1] && res[i + 1] === '[') {
+                //     let bracketCheck = 1;
+                //     let count = 1;
+                //     while (Number(i) + count < res.length && bracketCheck > 0) {
+                //         if ( res[i + count] === ']' ) {
+                //             bracketCheck += 1;
+                //         } else if ( res[i + count] === ']' ) {
+                //             bracketCheck -= 1;
+                //         }
+                //         count += 1;
+                //         splitted[1] += res[i + count];
+                //         res[i + count] = '';
+                //     }
+                // }
+                res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
+                console.log(res[i]);
             }
         }
         return res.join(' ');

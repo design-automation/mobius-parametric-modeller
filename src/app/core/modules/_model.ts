@@ -60,6 +60,10 @@ export function __stringify__(__model__: GIModel): string {
  * @param __model__
  */
 export function __setAttrib__(__model__: GIModel, entities: TId|TId[], attrib_name: string, value: TAttribDataTypes): void {
+    console.log("__model__", __model__);
+    console.log("entities", entities);
+    console.log("attrib_name", attrib_name);
+    console.log("value", value);
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value);
@@ -74,6 +78,9 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[], attrib_na
  * @param __model__
  */
 export function __getAttrib__(__model__: GIModel, entities: TId|TId[], attrib_name: string): TAttribDataTypes|TAttribDataTypes[] {
+    console.log("__model__", __model__);
+    console.log("entities", entities);
+    console.log("attrib_name", attrib_name);
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);

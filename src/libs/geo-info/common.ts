@@ -25,7 +25,7 @@ export enum EEntityTypeStr {
 
 // Names of attributes
 export enum EAttribNames {
-    COORDS =  'coordinates',
+    COORDS =  'xyz',
     NORMAL =  'normal',
     COLOR =   'color',
     TEXTURE = 'texture'
@@ -82,9 +82,9 @@ export interface IGeomArrays {
     up_wires_faces: number[];
     up_wires_plines: number[];
     up_faces_pgons: number[];
-    up_points_colls: number[];
-    up_plines_colls: number[];
-    up_pgons_colls: number[];
+    up_points_colls: number[][]; // one to many
+    up_plines_colls: number[][]; // one to many
+    up_pgons_colls: number[][]; // one to many
 }
 export enum EEntStrToGeomArray {
     _v = 'dn_verts_posis',

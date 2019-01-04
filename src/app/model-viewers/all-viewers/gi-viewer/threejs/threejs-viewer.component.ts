@@ -360,7 +360,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private selectPLine(line) {
         const scene = this._data_threejs;
         const wire = this.model.geom.query.navEdgeToWire(line.index / 2);
-        const pline = this.model.geom.query.navWireToLine(wire);
+        const pline = this.model.geom.query.navWireToPline(wire);
         if (pline === undefined) {
             return null;
         }

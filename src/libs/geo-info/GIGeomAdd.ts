@@ -145,15 +145,27 @@ export class GIGeomAdd {
         this._geom_arrays.up_points_colls = [];
         this._geom_arrays.up_plines_colls = [];
         this._geom_arrays.up_pgons_colls = [];
-        this._geom_arrays.dn_colls_objs.forEach( ([parent, point_i_arr, line_i_arr, pgon_i_arr], coll_i) => {
+        this._geom_arrays.dn_colls_objs.forEach( ([parent, point_i_arr, pline_i_arr, pgon_i_arr], coll_i) => {
             point_i_arr.forEach( point_i => {
-                this._geom_arrays.up_points_colls[point_i] = coll_i;
+                if (this._geom_arrays.up_points_colls[point_i] === undefined) {
+                    this._geom_arrays.up_points_colls[point_i] = [coll_i];
+                } else {
+                    this._geom_arrays.up_points_colls[point_i].push(coll_i);
+                }
             });
-            line_i_arr.forEach( line_i => {
-                this._geom_arrays.up_plines_colls[line_i] = coll_i;
+            pline_i_arr.forEach( pline_i => {
+                if (this._geom_arrays.up_points_colls[pline_i] === undefined) {
+                    this._geom_arrays.up_points_colls[pline_i] = [coll_i];
+                } else {
+                    this._geom_arrays.up_points_colls[pline_i].push(coll_i);
+                }
             });
             pgon_i_arr.forEach( pgon_i => {
-                this._geom_arrays.up_pgons_colls[pgon_i] = coll_i;
+                if (this._geom_arrays.up_points_colls[pgon_i] === undefined) {
+                    this._geom_arrays.up_points_colls[pgon_i] = [coll_i];
+                } else {
+                    this._geom_arrays.up_points_colls[pgon_i].push(coll_i);
+                }
             });
         });
     }
@@ -322,15 +334,33 @@ export class GIGeomAdd {
      * Adds a collection and updates the rev array using numeric indicies.
      * @param parent_i
      * @param points_i
-     * @param lines_i
+     * @param plines_i
      * @param pgons_i
      */
-    public addColl(parent_i: number, points_i: number[], lines_i: number[], pgons_i: number[]): number {
+    public addColl(parent_i: number, points_i: number[], plines_i: number[], pgons_i: number[]): number {
         // create collection
-        const coll_i: number = this._geom_arrays.dn_colls_objs.push([parent_i, points_i, lines_i, pgons_i]) - 1;
-        points_i.forEach( point_i => this._geom_arrays.up_points_colls[point_i] = coll_i);
-        lines_i.forEach( line_i => this._geom_arrays.up_points_colls[line_i] = coll_i);
-        pgons_i.forEach( pgon_i => this._geom_arrays.up_points_colls[pgon_i] = coll_i);
+        const coll_i: number = this._geom_arrays.dn_colls_objs.push([parent_i, points_i, plines_i, pgons_i]) - 1;
+        for (const point_i of points_i) {
+            if (this._geom_arrays.up_points_colls[point_i] === undefined) {
+                this._geom_arrays.up_points_colls[point_i] = [coll_i];
+            } else {
+                this._geom_arrays.up_points_colls[point_i].push(coll_i);
+            }
+        }
+        for (const pline_i of plines_i) {
+            if (this._geom_arrays.up_points_colls[pline_i] === undefined) {
+                this._geom_arrays.up_points_colls[pline_i] = [coll_i];
+            } else {
+                this._geom_arrays.up_points_colls[pline_i].push(coll_i);
+            }
+        }
+        for (const pgon_i of pgons_i) {
+            if (this._geom_arrays.up_points_colls[pgon_i] === undefined) {
+                this._geom_arrays.up_points_colls[pgon_i] = [coll_i];
+            } else {
+                this._geom_arrays.up_points_colls[pgon_i].push(coll_i);
+            }
+        }
         return coll_i;
     }
     /**

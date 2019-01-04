@@ -59,81 +59,6 @@ export class GIGeomQuery {
     public navCollToColl(coll_i: number): number {
         return coll_i[0]; // coll parent
     }
-
-    /**
-     * Navigate from any level down to the edges, (or up if coming from positions or vertices)
-     * @param id
-     */
-    public navAnyToEdge(entity_str: EEntityTypeStr, index: number): number[] {
-        if (isPosi(entity_str)) {
-            return [].concat(...this.navPosiToVert(index).map( vert_i => this.navVertToEdge(vert_i)));
-        } else if (isVert(entity_str)) {
-            return this.navVertToEdge(index);
-        } else if (isTri(entity_str)) {
-            throw new Error('Trinagles have no edges.');
-        } else if (isEdge(entity_str)) {
-            return [index];
-        } else if (isWire(entity_str)) {
-            return this.navWireToEdge(index);
-        } else if (isFace(entity_str)) {
-            return [].concat(...this.navFaceToWire(index).map(wire_i => this.navWireToEdge(wire_i)));
-        } else if (isPoint(entity_str)) {
-            throw new Error('Points have no edges.')
-        } else if (isPline(entity_str)) {
-            return this.navAnyToEdge(EEntityTypeStr.WIRE, this.navPlineToWire(index));
-        } else if (isPgon(entity_str)) {
-            return this.navAnyToEdge(EEntityTypeStr.FACE, this.navPgonToFace(index));
-        } else if (isColl(entity_str)) {
-            const edges_i_plines = this.navCollToPline(index).map( pline_i => this.navAnyToEdge(entity_str, pline_i) );
-            const edges_i_pgons = this.navCollToPgon(index).map( pgon_i => this.navAnyToEdge(entity_str, pgon_i) );
-            const edges_i = [edges_i_plines, edges_i_pgons];
-            return [].concat(...edges_i);
-        }
-        throw new Error('Bad entity ID: ' + index);
-    }
-    /**
-     * Navigate from any level down to the vertices, (or up if coming from positions)
-     * @param id
-     */
-    public navAnyToVert(entity_str: EEntityTypeStr, index: number): number[] {
-        if (isPosi(entity_str)) {
-            return this.navPosiToVert(index);
-        } else if (isVert(entity_str)) {
-            return [index];
-        } else if (isTri(entity_str)) {
-            return this.navTriToVert(index);
-        } else if (isEdge(entity_str)) {
-            return this.navEdgeToVert(index);
-        } else if (isWire(entity_str)) {
-            return this.getWireVerts(index);
-        } else if (isFace(entity_str)) {
-            return [].concat(...this.navFaceToWire(index).map(wire_i => this.getWireVerts(wire_i)));
-        } else if (isPoint(entity_str)) {
-            return  [this.navPointToVert(index)];
-        } else if (isPline(entity_str)) {
-            return this.navAnyToVert(EEntityTypeStr.WIRE, this.navPlineToWire(index));
-        } else if (isPgon(entity_str)) {
-            return this.navAnyToVert(EEntityTypeStr.FACE, this.navPgonToFace(index));
-        } else if (isColl(entity_str)) {
-            const verts_i_points = this.navCollToPoint(index).map( point_i => this.navAnyToVert(entity_str, point_i) );
-            const verts_i_plines = this.navCollToPline(index).map( pline_i => this.navAnyToVert(entity_str, pline_i) );
-            const verts_i_pgons = this.navCollToPgon(index).map( pgon_i => this.navAnyToVert(entity_str, pgon_i) );
-            const verts_i = [verts_i_points, verts_i_plines, verts_i_pgons];
-            return [].concat(...verts_i);
-        }
-        throw new Error('Bad entity ID: ' + index);
-    }
-    /**
-     * Navigate from any level down to the positions
-     * @param id
-     */
-    public navAnyToPosi(entity_str: EEntityTypeStr, index: number): number[] {
-        if (isPosi(entity_str)) {
-            return [index];
-        }
-        return this.navAnyToVert(entity_str, index).map(vert_i => this.navVertToPosi(vert_i));
-    }
-
     // ============================================================================
     // Navigate up the hierarchy
     // ============================================================================
@@ -158,19 +83,19 @@ export class GIGeomQuery {
     public navVertToPoint(vert_i: number): number {
         return this._geom_arrays.up_verts_points[vert_i];
     }
-    public navWireToLine(wire_i: number): number {
+    public navWireToPline(wire_i: number): number {
         return this._geom_arrays.up_wires_plines[wire_i];
     }
     public navFaceToPgon(face: number): number {
         return this._geom_arrays.up_faces_pgons[face];
     }
-    public navPointToColl(point_i: number): number {
+    public navPointToColl(point_i: number): number[] {
         return this._geom_arrays.up_points_colls[point_i];
     }
-    public navLineToColl(line_i: number): number {
+    public navPlineToColl(line_i: number): number[] {
         return this._geom_arrays.up_plines_colls[line_i];
     }
-    public navPgonToColl(pgon_i: number): number {
+    public navPgonToColl(pgon_i: number): number[] {
         return this._geom_arrays.up_pgons_colls[pgon_i];
     }
     /**
@@ -186,6 +111,243 @@ export class GIGeomQuery {
             verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
         }
         return verts_i;
+    }
+    // ============================================================================
+    // Navigate from any level to ? (up or down)
+    // ============================================================================
+    /**
+     * Navigate from any level to the colls
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToColl(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isColl(ent_type_str)) { return [index]; }
+        const points_i: number[] = this.navAnyToPoint(ent_type_str, index);
+        const colls1_i: number[] = [].concat(...points_i.map(point_i => this.navPointToColl(point_i)));
+        const plines_i: number[] = this.navAnyToPline(ent_type_str, index);
+        const colls2_i: number[] = [].concat(...plines_i.map(pline_i => this.navPlineToColl(pline_i)));
+        const pgons_i: number[] = this.navAnyToPgon(ent_type_str, index);
+        const colls3_i: number[] = [].concat(...pgons_i.map(pgon_i => this.navPgonToColl(pgon_i)));
+        return Array.from(new Set([...colls1_i, ...colls2_i, ...colls3_i])).filter(coll_i => coll_i !== undefined); // remove duplicates
+    }
+    /**
+     * Navigate from any level to the pgons
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToPgon(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPgon(ent_type_str)) { return [index]; }
+        const faces_i: number[] = this.navAnyToFace(ent_type_str, index);
+        return faces_i.map( face_i => this.navFaceToPgon(face_i) ).filter(pgon_i => pgon_i !== undefined);
+    }
+    /**
+     * Navigate from any level to the plines
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToPline(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPline(ent_type_str)) { return [index]; }
+        const wires_i: number[] = this.navAnyToWire(ent_type_str, index);
+        return wires_i.map( wire_i => this.navWireToPline(wire_i) ).filter(pline_i => pline_i !== undefined);
+    }
+    /**
+     * Navigate from any level to the points
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToPoint(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPoint(ent_type_str)) { return [index]; }
+        const verts_i: number[] = this.navAnyToVert(ent_type_str, index);
+        return verts_i.map( vert_i => this.navVertToPoint(vert_i) ).filter(point_i => point_i !== undefined);
+    }
+    /**
+     * Navigate from any level to the faces
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToFace(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(ent_type_str)) {
+            const verts_i: number[] = this.navPosiToVert(index);
+            return [].concat(...verts_i.map( vert_i => this.navAnyToFace(EEntityTypeStr.VERT, vert_i) ));
+        } else if (isVert(ent_type_str)) {
+            const edges_i: number[] = this.navVertToEdge(index);
+            return [].concat(...edges_i.map( edge_i => this.navAnyToFace(EEntityTypeStr.EDGE, edge_i) ));
+        } else if (isTri(ent_type_str)) {
+            return [this.navTriToFace(index)];
+        } else if (isEdge(ent_type_str)) {
+            const wire_i: number = this.navEdgeToWire(index);
+            return this.navAnyToFace(EEntityTypeStr.WIRE, wire_i);
+        } else if (isWire(ent_type_str)) {
+            return [this.navWireToFace(index)];
+        } else if (isFace(ent_type_str)) { // target
+            return [index];
+        } else if (isPoint(ent_type_str)) {
+            return [];
+        } else if (isPline(ent_type_str)) {
+            return [];
+        } else if (isPgon(ent_type_str)) {
+            return [this.navPgonToFace(index)];
+        } else if (isColl(ent_type_str)) {
+            const pgons_i: number[] = this.navCollToPgon(index);
+            return pgons_i.map(pgon_i => this.navPgonToFace(pgon_i));
+        }
+        throw new Error('Bad navigation: ' + ent_type_str + index);
+    }
+    /**
+     * Navigate from any level to the wires
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToWire(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(ent_type_str)) {
+            const verts_i: number[] = this.navPosiToVert(index);
+            return [].concat(...verts_i.map( vert_i => this.navAnyToWire(EEntityTypeStr.VERT, vert_i) ));
+        } else if (isVert(ent_type_str)) {
+            const edges_i: number[] = this.navVertToEdge(index);
+            return [].concat(...edges_i.map( edge_i => this.navEdgeToWire(edge_i) ));
+        } else if (isTri(ent_type_str)) {
+            return [];
+        } else if (isEdge(ent_type_str)) {
+            return [this.navEdgeToWire(index)];
+        } else if (isWire(ent_type_str)) { // target
+            return [index];
+        } else if (isFace(ent_type_str)) {
+            return this.navFaceToWire(index);
+        } else if (isPoint(ent_type_str)) {
+            return [];
+        } else if (isPline(ent_type_str)) {
+            return [this.navPlineToWire(index)];
+        } else if (isPgon(ent_type_str)) {
+            const face_i: number = this.navPgonToFace(index);
+            return this.navFaceToWire(face_i);
+        } else if (isColl(ent_type_str)) {
+            const plines_i: number[] = this.navCollToPline(index);
+            const wires1_i: number[] = [].concat(...plines_i.map(pline_i => this.navAnyToWire(EEntityTypeStr.PLINE, pline_i)));
+            const pgons_i: number[] = this.navCollToPgon(index);
+            const wires2_i: number[] = [].concat(...pgons_i.map(pgon_i => this.navAnyToWire(EEntityTypeStr.PGON, pgon_i)));
+            return [...wires1_i, ...wires2_i];
+        }
+        throw new Error('Bad navigation: ' + ent_type_str + index);
+    }
+    /**
+     * Navigate from any level to the edges
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToEdge(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(ent_type_str)) {
+            const verts_i: number[] = this.navPosiToVert(index);
+            return [].concat(...verts_i.map( vert_i => this.navVertToEdge(vert_i) ));
+        } else if (isVert(ent_type_str)) {
+            return this.navVertToEdge(index);
+        } else if (isTri(ent_type_str)) {
+            return [];
+        } else if (isEdge(ent_type_str)) {
+            return [index];
+        } else if (isWire(ent_type_str)) {
+            return this.navWireToEdge(index);
+        } else if (isFace(ent_type_str)) {
+            const wires_i: number[] = this.navFaceToWire(index);
+            return [].concat(...wires_i.map(wire_i => this.navWireToEdge(wire_i)));
+        } else if (isPoint(ent_type_str)) {
+            return [];
+        } else if (isPline(ent_type_str)) {
+            const wire_i: number = this.navPlineToWire(index);
+            return this.navAnyToEdge(EEntityTypeStr.WIRE, wire_i);
+        } else if (isPgon(ent_type_str)) {
+            const face_i: number = this.navPgonToFace(index);
+            return this.navAnyToEdge(EEntityTypeStr.FACE, face_i);
+        } else if (isColl(ent_type_str)) {
+            const plines_i: number[] = this.navCollToPline(index);
+            const edges1_i: number[] = [].concat(plines_i.map( pline_i => this.navAnyToEdge(EEntityTypeStr.PLINE, pline_i) ));
+            const pgons_i:  number[] = this.navCollToPgon(index);
+            const edges2_i: number[] = [].concat(pgons_i.map( pgon_i => this.navAnyToEdge(EEntityTypeStr.PGON, pgon_i) ));
+            return [...edges1_i, ...edges2_i];
+        }
+        throw new Error('Bad navigation: ' + ent_type_str + index);
+    }
+    /**
+     * Navigate from any level to the vertices
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToVert(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(ent_type_str)) {
+            return this.navPosiToVert(index);
+        } else if (isVert(ent_type_str)) {
+            return [index];
+        } else if (isTri(ent_type_str)) {
+            return this.navTriToVert(index);
+        } else if (isEdge(ent_type_str)) {
+            return this.navEdgeToVert(index);
+        } else if (isWire(ent_type_str)) {
+            return this.getWireVerts(index); // avoids duplicate verts
+        } else if (isFace(ent_type_str)) {
+            const wires_i: number[] = this.navFaceToWire(index);
+            return [].concat(...wires_i.map(wire_i => this.getWireVerts(wire_i))); // avoids duplicate verts
+        } else if (isPoint(ent_type_str)) {
+            return  [this.navPointToVert(index)];
+        } else if (isPline(ent_type_str)) {
+            const wire_i: number = this.navPlineToWire(index);
+            return this.navAnyToVert(EEntityTypeStr.WIRE, wire_i);
+        } else if (isPgon(ent_type_str)) {
+            const face_i: number = this.navPgonToFace(index);
+            return this.navAnyToVert(EEntityTypeStr.FACE, face_i);
+        } else if (isColl(ent_type_str)) {
+            const points_i: number[] = this.navCollToPoint(index);
+            const verts1_i: number[] = [].concat(points_i.map( point_i => this.navAnyToVert(EEntityTypeStr.POINT, point_i) ));
+            const plines_i: number[] = this.navCollToPline(index);
+            const verts2_i: number[] = [].concat(plines_i.map( pline_i => this.navAnyToVert(EEntityTypeStr.PLINE, pline_i) ));
+            const pgons_i:  number[] = this.navCollToPgon(index);
+            const verts3_i: number[] = [].concat(pgons_i.map( pgon_i => this.navAnyToVert(EEntityTypeStr.PGON, pgon_i) ));
+            return [...verts1_i, ...verts2_i, ...verts3_i];
+        }
+        throw new Error('Bad navigation: ' + ent_type_str + index);
+    }
+    /**
+     * Navigate from any level to the positions
+     * @param ent_type_str
+     * @param index
+     */
+    public navAnyToPosi(ent_type_str: EEntityTypeStr, index: number): number[] {
+        if (isPosi(ent_type_str)) { return [index]; }
+        const verts_i: number[] = this.navAnyToVert(ent_type_str, index);
+        const posis_i: number[] = verts_i.map(vert_i => this.navVertToPosi(vert_i));
+        return Array.from(new Set(posis_i)); // remove duplicates
+    }
+    // ============================================================================
+    // Navigate from any to any, general method
+    // ============================================================================
+    /**
+     * Navigate from any level down to the positions
+     * @param index
+     */
+    public navAnyToAny(from_ets: EEntityTypeStr, to_ets: EEntityTypeStr, index: number): number[] {
+        // same level
+        if (from_ets === to_ets) { return [index]; }
+        // from -> to
+        switch (to_ets) {
+            case EEntityTypeStr.POSI:
+                return this.navAnyToPosi(from_ets, index);
+            case EEntityTypeStr.VERT:
+                return this.navAnyToVert(from_ets, index);
+            case EEntityTypeStr.EDGE:
+                return this.navAnyToEdge(from_ets, index);
+            case EEntityTypeStr.WIRE:
+                return this.navAnyToWire(from_ets, index);
+            case EEntityTypeStr.FACE:
+                return this.navAnyToFace(from_ets, index);
+            case EEntityTypeStr.POINT:
+                return this.navAnyToPoint(from_ets, index);
+            case EEntityTypeStr.PLINE:
+                return this.navAnyToPline(from_ets, index);
+            case EEntityTypeStr.PGON:
+                return this.navAnyToPgon(from_ets, index);
+            case EEntityTypeStr.COLL:
+                return this.navAnyToColl(from_ets, index);
+            default:
+                throw new Error('Bad navigation: ' + to_ets + index);
+        }
     }
     // ============================================================================
     // Get arrays of entities
@@ -221,6 +383,23 @@ export class GIGeomQuery {
         return this._geom_arrays.dn_colls_objs;
     }
     // ============================================================================
+    // Get entity indicies and numbers
+    // ============================================================================
+    public getEnts(ent_type_str: EEntityTypeStr): number[] {
+        const geom_array_key: string = EEntStrToGeomArray[ent_type_str];
+        const geom_array: any[] = this._geom_arrays[geom_array_key];
+        const indicies: number[] = [];
+        geom_array.forEach( (entity, index) => {
+            if (entity !== null && entity !== undefined) {
+                indicies.push(index);
+            }
+        });
+        return indicies;
+    }
+    public numEnts(ent_type_str: EEntityTypeStr): number {
+        return this.getEnts(ent_type_str).length;
+    }
+    // ============================================================================
     // Get array lengths
     // ============================================================================
     public numPosis(): number {
@@ -253,9 +432,12 @@ export class GIGeomQuery {
     public numColls(): number {
         return this._geom_arrays.dn_colls_objs.length;
     }
+    // ============================================================================
+    // Util
+    // ============================================================================
     /**
      * Check if an entity exists
-     * @param id
+     * @param index
      */
     public has(ent_type_str: EEntityTypeStr, index: number): boolean {
         const geom_arrays_key: string = EEntStrToGeomArray[ent_type_str];

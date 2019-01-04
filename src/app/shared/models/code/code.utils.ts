@@ -196,7 +196,8 @@ export class CodeUtils {
         if (val.indexOf('@') === -1) {
             return false;
         }
-        return `__modules__.${_parameterTypes.setattrib}(__params__.model, '${val}', `;
+        const splitted = val.split('@');
+        return `__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}', `;
     }
 
     static repGetAttrib(val: string) {
@@ -208,7 +209,8 @@ export class CodeUtils {
             const atIndex = res[i].indexOf('@');
             console.log(res[i].trim(), atIndex);
             if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
-                res[i] = `__modules__.${_parameterTypes.getattrib}(__params__.model, '${res[i]}')`;
+                const splitted = res[i].split('@');
+                res[i] = `__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')`;
             }
         }
         return res.join(' ');

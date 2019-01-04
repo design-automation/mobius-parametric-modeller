@@ -80,7 +80,7 @@ export class GIAttribsThreejs {
                     const value2 = value as any[];
                     // console.log(data_obj_map);
                     value2.forEach( (v, i) => {
-                        data_obj_map.get(index)[`${n}${i}`] = v;
+                        data_obj_map.get(index)[`${n}[${i}]`] = v;
                     });
                 } else {
                     data_obj_map.get(index)[`${n}`] = value;

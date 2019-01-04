@@ -3,6 +3,7 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon, GIAttribs } from '@libs/geo-info';
+import { EEntityTypeStr } from '@libs/geo-info/common';
 
 @Component({
   selector: 'attribute',
@@ -14,7 +15,16 @@ export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
   currentTab: number;
 
-  tabs: string[] = ['Positions', 'Vertex', 'Edges', 'Wires', 'Faces', 'Points', 'Polylines', 'Polygons', 'Collections'];
+  tabs: {type: string, title: string}[] =
+  [{type: EEntityTypeStr.POSI, title: 'Positions'},
+  {type: EEntityTypeStr.VERT, title: 'Vertex'},
+  {type: EEntityTypeStr.EDGE, title: 'Edges'},
+  {type: EEntityTypeStr.WIRE, title: 'Wires'},
+  {type: EEntityTypeStr.FACE, title: 'Faces'},
+  {type: EEntityTypeStr.POINT, title: 'Points'},
+  {type: EEntityTypeStr.PLINE, title: 'Polylines'},
+  {type: EEntityTypeStr.PGON, title: 'Polygons'},
+  {type: EEntityTypeStr.COLL, title: 'Collections'}];
   displayedColumns: string[] = [];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -70,6 +80,7 @@ export class AttributeComponent implements OnChanges {
       this.dataSource.paginator = this.paginator.toArray()[tabIndex];
       this.dataSource.sort = this.sort.toArray()[tabIndex];
     }
+    return tabIndex;
   }
 
   _setDataSource(tabIndex: number) {

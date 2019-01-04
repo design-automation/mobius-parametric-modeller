@@ -4,8 +4,6 @@
 div[class^="container--"]{
     display: flex; 
     flex-direction: column;
-    padding-left: 10px;
-
     margin: 0px 0px;
 }
 
@@ -13,7 +11,6 @@ div[class^="container--"]{
     display: flex;
     flex-flow: column nowrap;
     padding-left: 10px;
-    margin: 5px 0px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -28,7 +25,6 @@ textarea, #flowchart-name{
     font-size: $fsize2;
     max-width: 100%;
     resize: none; 
-    white-space: wrap;
     overflow: auto;
     &:hover, &:focus{
         color: $color8;

@@ -56,7 +56,7 @@ function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
  */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
     // --- Error Check ---
-    checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
+    // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
     // --- Error Check ---
     // get the select ent_type_str
     const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);

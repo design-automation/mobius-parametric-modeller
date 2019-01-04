@@ -3,11 +3,12 @@
 @import '../general-viewer.scss';
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
-.console-container {
+#console-container {
     margin-top: 40px;
     height: calc(100vh - 40px); //$header-height
     width: 100%;
     padding: 0px;
+    overflow: auto;
 }
 
 textarea {
@@ -25,4 +26,12 @@ textarea {
     overflow-x: hidden;
     overflow-y: auto;
     box-sizing: border-box;
+}
+
+.errorText{
+    color: red;
+}
+
+.normalText{
+    color: $color1;
 }

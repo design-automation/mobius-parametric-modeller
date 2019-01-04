@@ -214,10 +214,10 @@ export class ExecuteComponent {
             document.getElementById('Console').click();
             // @ts-ignore
             // console.logs = [];
-            console.log('=======================================');
-            console.log(error.name.toUpperCase());
-            console.log('=======================================');
-            console.log(error.message);
+            console.log('\n=======================================\n' +
+                        error.name +
+                        '\n=======================================\n' +
+                        error.message);
             // console.log('---------------\nError node code:');
             // console.log(fnString);
             throw error;

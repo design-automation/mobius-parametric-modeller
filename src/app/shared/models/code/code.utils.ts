@@ -31,7 +31,7 @@ export class CodeUtils {
                 }
                 const repVar = this.repSetAttrib(args[0].value);
                 if (!repVar) {
-                    codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
+                    codeStr.push(`${prefix}${args[0].value} = ${this.repGetAttrib(args[1].value)};`);
                     if (prefix === 'let ') {
                         existingVars.push(args[0].value);
                     }
@@ -206,6 +206,7 @@ export class CodeUtils {
                 continue;
             }
             const atIndex = res[i].indexOf('@');
+            console.log(res[i].trim(), atIndex);
             if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
                 res[i] = `__modules__.${_parameterTypes.getattrib}('${res[i]}')`;
             }

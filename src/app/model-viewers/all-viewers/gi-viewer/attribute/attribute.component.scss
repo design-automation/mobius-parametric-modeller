@@ -20,6 +20,7 @@ table {
     height: 24px;
     .mat-cell{
       font-size: 12px;
+      color: $color8;
       // overflow: hidden;
       // text-overflow: ellipsis;
       // white-space: nowrap;
@@ -45,6 +46,37 @@ table {
       }
     }
   }
+  .mat-tab-header{
+    border-bottom: 2px solid $color4;
+    // label-headings
+    .mat-tab-label-container{
+      .mat-tab-list{
+        .mat-tab-labels{
+          .mat-tab-label{
+            height: 20px;
+            padding: 0 0 0 2px;
+            min-width: 100px;
+            font-size: $fsize2;
+            font-family: sans-serif;
+            .mat-tab-label-content{
+              color: $color8;
+            }
+            &:hover .mat-tab-label-content{
+              color: $selected-color; 
+              font-weight: 550;
+            }
+          }
+          .mat-tab-label-active .mat-tab-label-content{
+            color: $selected-color; 
+            font-weight: 550;
+          }
+        }
+        .mat-ink-bar{
+          visibility: hidden !important;
+        }
+      }
+    }
+  }
   // contains everything
   .mat-elevation-z8{
     display: flex;
@@ -52,28 +84,7 @@ table {
     height: 100%;
     justify-content: space-between;
   }
-
-  // label-headings
-  .mat-tab-label{
-    height: 20px;
-    padding: 0 0 0 2px;
-    min-width: 100px;
-    font-size: $fsize2;
-    font-family: sans-serif;
-
-    border-bottom: 2px solid transparent;
-    transition-duration: 0.4s;
-    .mat-tab-label-content{
-      color: $color8;
-    }
-    &:hover{
-      border-color: $selected-color;
-    }
-  }
-  .mat-ink-bar{
-    background-color: $selected-color;
-  }
-
+  
   // paginator
   .mat-paginator-container{
     position: absolute;

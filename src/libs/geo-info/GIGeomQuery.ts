@@ -386,11 +386,19 @@ export class GIGeomQuery {
     // Get entity indicies and numbers
     // ============================================================================
     public getEnts(ent_type_str: EEntityTypeStr): number[] {
+        if (isPosi(ent_type_str)) {
+            // TODO how to handle deleted positions
+            return Array.from(Array(this._geom_arrays.num_posis).keys());
+        }
         const geom_array_key: string = EEntStrToGeomArray[ent_type_str];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
+        // console.log("ent_type_str", ent_type_str);
+        // console.log("geom_array_key", geom_array_key);
+        // console.log("geom_array", geom_array);
+
         const indicies: number[] = [];
         geom_array.forEach( (entity, index) => {
-            if (entity !== null && entity !== undefined) {
+            if (entity !== null && entity !== undefined) {  // skips deleted entities
                 indicies.push(index);
             }
         });

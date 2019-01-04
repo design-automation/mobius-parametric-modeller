@@ -223,3 +223,39 @@ export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
+// Promote modelling operation
+export enum _EPromoteMethod {
+    MEAN =  'mean',
+    MIN  =  'min',
+    MAX = 'max',
+    NONE = 'none'
+}
+// Promote modelling operation
+export enum _EPromoteAttribTypes {
+    POSIS =  'positions',
+    VERTS  =  'vertices',
+    EDGES = 'edges',
+    WIRES = 'wires',
+    FACES = 'faces',
+    POINTS = 'points',
+    PLINES = 'plines',
+    PGONS = 'pgons',
+    COLLS = 'collections'
+}
+/**
+ * Promotes or demotes an attribute from one geometry level to another.
+ * @param __model__
+ * @param attrib_names Attribute name to be promoted or demoted.
+ * @param from Enum, Positions, vertices, edges, wires, faces or collections.
+ * @param to Enum, Positions, vertices, edges, wires, faces or collections.
+ * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
+ * @returns List of attributes.
+ * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
+ */
+export function AttribPromote(__model__: GIModel, attrib_name: string,
+    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
+    // --- Error Check ---
+    checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
+    // --- Error Check ---
+    throw new Error('Not implemented.');
+}

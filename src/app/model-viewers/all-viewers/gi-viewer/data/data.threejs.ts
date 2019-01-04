@@ -377,38 +377,50 @@ export class DataThreejs {
 
     public lookAtObj(width: number) {
         const allObjs = this.getAllObjs();
-        const center = allObjs.center;
-        // set grid and axeshelper to center of the objs
-        this.grid.position.set(center.x, center.y, 0);
-        this.axesHelper.position.set(center.x, center.y, 0);
+        if (allObjs) {
+            const center = allObjs.center;
+            // set grid and axeshelper to center of the objs
+            this.grid.position.set(center.x, center.y, 0);
+            this.axesHelper.position.set(center.x, center.y, 0);
 
-        const radius = allObjs.radius;
-        const fov = this._camera.fov * (Math.PI / 180);
-        const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
-        vec_centre_to_pos.subVectors(this._camera.position, center);
-        const r = radius < 100 ? 200 : (radius < 500 ? 10 : 1);
-        const f = 1 + (width / radius / r);
-        const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2) / f),
-            Math.abs(radius / Math.sin(fov / 2) / f),
-            Math.abs(radius / Math.sin(fov / 2)) / f);
-        vec_centre_to_pos.setLength(tmp_vec.length());
-        const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
-        perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-        const newLookAt = new THREE.Vector3(center.x, center.y, center.z);
-        this._camera.position.copy(perspectiveNewPos);
-        this._camera.lookAt(newLookAt);
-        this._camera.updateProjectionMatrix();
-        this._controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
-        this._controls.update();
+            const radius = allObjs.radius;
+            const fov = this._camera.fov * (Math.PI / 180);
+            const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
+            vec_centre_to_pos.subVectors(this._camera.position, center);
+            const r = radius < 100 ? 200 : (radius < 500 ? 10 : 1);
+            const f = 1 + (width / radius / r);
+            const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2) / f),
+                Math.abs(radius / Math.sin(fov / 2) / f),
+                Math.abs(radius / Math.sin(fov / 2)) / f);
+            vec_centre_to_pos.setLength(tmp_vec.length());
+            const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
+            perspectiveNewPos.addVectors(center, vec_centre_to_pos);
+            const newLookAt = new THREE.Vector3(center.x, center.y, center.z);
+            this._camera.position.copy(perspectiveNewPos);
+            this._camera.lookAt(newLookAt);
+            this._camera.updateProjectionMatrix();
+            this._controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
+            this._controls.update();
+        } else {
+            const sceneCenter = this._scene.position;
+            this._camera.lookAt(sceneCenter);
+            // this._camera.updateProjectionMatrix();
+            this._controls.target.set(sceneCenter.x, sceneCenter.y, sceneCenter.z);
+            this._controls.update();
+        }
     }
 
     private getAllObjs() {
-        const objs = new THREE.Object3D();
-        this.sceneObjs.map(obj => objs.children.push(obj));
-        const boxHelper = new THREE.BoxHelper(objs);
-        boxHelper.geometry.computeBoundingSphere();
-        const boundingSphere = boxHelper.geometry.boundingSphere;
-        return boundingSphere;
+        if (this.sceneObjs.length !== 0) {
+            const objs = new THREE.Object3D();
+            this.sceneObjs.map(obj => objs.children.push(obj));
+            const boxHelper = new THREE.BoxHelper(objs);
+            boxHelper.geometry.computeBoundingSphere();
+            const boundingSphere = boxHelper.geometry.boundingSphere;
+            return boundingSphere;
+        } else {
+            return null;
+        }
     }
 
     public onWindowKeyPress(event) {

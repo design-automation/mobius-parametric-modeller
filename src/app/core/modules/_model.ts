@@ -59,17 +59,24 @@ export function __stringify__(__model__: GIModel): string {
  * Sets an attribute in the model.
  * @param __model__
  */
-export function __setAttrib__(__model__: GIModel, entities: TId|TId[], attrib_name: string, value: TAttribDataTypes): void {
+export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
+    attrib_name: string, attrib_value: TAttribDataTypes, attrib_index?: number): void {
     // console.log("__model__", __model__);
     // console.log("entities", entities);
     // console.log("attrib_name", attrib_name);
     // console.log("value", value);
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
-        __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value);
+        if (attrib_index !== null && attrib_index !== undefined) {
+            const value_arr = __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+            value_arr[attrib_index] = attrib_value;
+            __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value_arr);
+        } else {
+            __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, attrib_value);
+        }
     } else {
         for (const entity of entities) {
-            __setAttrib__(__model__, entity , attrib_name, value);
+            __setAttrib__(__model__, entity , attrib_name, attrib_value, attrib_index);
         }
     }
 }
@@ -77,14 +84,19 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[], attrib_na
  * Gets an attribute from the model.
  * @param __model__
  */
-export function __getAttrib__(__model__: GIModel, entities: TId|TId[], attrib_name: string): TAttribDataTypes|TAttribDataTypes[] {
+export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
+    attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
     // console.log("__model__", __model__);
     // console.log("entities", entities);
     // console.log("attrib_name", attrib_name);
     if (!Array.isArray(entities)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
-        return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+        if (attrib_index !== null && attrib_index !== undefined) {
+            return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index)[attrib_index];
+        } else {
+            return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+        }
     } else {
-        return (entities as TId[]).map( entity => __getAttrib__(__model__, entity, attrib_name)) as TAttribDataTypes[];
+        return (entities as TId[]).map( entity => __getAttrib__(__model__, entity, attrib_name, attrib_index)) as TAttribDataTypes[];
     }
 }

@@ -11,6 +11,7 @@ import { Component, Input, OnInit, DoCheck, AfterViewInit, AfterViewChecked } fr
 export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, AfterViewChecked {
     text: string;
     scrollcheck: boolean;
+    logs: string[];
 
     /**
      * constructor
@@ -30,8 +31,10 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * ngOnInit
      */
     ngAfterViewInit() {
-        const ct = document.getElementById('console_textarea');
-        ct.scrollTo(0, ct.scrollHeight);
+        // const ct = document.getElementById('console_textarea');
+        // ct.scrollTo(0, ct.scrollHeight);
+        const ct = document.getElementById('console-container');
+        ct.scrollTop = ct.scrollHeight;
     }
 
     /**
@@ -40,6 +43,8 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     ngDoCheck() {
         // @ts-ignore
         const t = console.logs.join('\n');
+        // @ts-ignore
+        this.logs = console.logs;
         if (this.text !== t) {
             this.text = t;
             this.scrollcheck = true;
@@ -48,8 +53,8 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
 
     ngAfterViewChecked() {
         if (this.scrollcheck) {
-            const ct = document.getElementById('console_textarea');
-            ct.scrollTo(0, ct.scrollHeight);
+            const ct = document.getElementById('console-container');
+            ct.scrollTop = ct.scrollHeight;
             this.scrollcheck = false;
         }
     }

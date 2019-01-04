@@ -379,7 +379,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         // assign the position to the new node and add it to the flowchart
         newNode.position.x = svgP.x;
         newNode.position.y = svgP.y;
-        this.dataService.flowchart.nodes.push(newNode);
+        this.dataService.flowchart.nodes.splice(this.dataService.flowchart.nodes.length - 1, 0, newNode);
         this.dataService.registerAction({'type': 'add', 'nodes': [newNode]});
     }
 

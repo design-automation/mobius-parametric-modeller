@@ -122,7 +122,7 @@ const IDcheckObj = {
                     ret_str_arr.push(test_ent + '_list');
                 });
 
-                throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + 'is not one of the following valid types - '
+                throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not one of the following valid types - '
                                 + ret_str_arr.toString());
             }
         }

@@ -31,7 +31,7 @@ export class CodeUtils {
                 }
                 const repVar = this.repSetAttrib(args[0].value);
                 if (!repVar) {
-                    codeStr.push(`${prefix}${args[0].value} = ${args[1].value};`);
+                    codeStr.push(`${prefix}${args[0].value} = ${this.repGetAttrib(args[1].value)};`);
                     if (prefix === 'let ') {
                         existingVars.push(args[0].value);
                     }
@@ -186,8 +186,9 @@ export class CodeUtils {
             codeStr.push(`}`);
         }
 
-        if (prod.print) {
-            codeStr.push(`printFunc('${prod.args[0].value}', ${prod.args[0].value});`);
+        if (prod.print && prod.args[0].value) {
+            const repGet = this.repGetAttrib(prod.args[0].value);
+            codeStr.push(`printFunc('${prod.args[0].value}', ${repGet});`);
             // codeStr.push(`wait(5000);`);
         }
         return codeStr;
@@ -196,7 +197,8 @@ export class CodeUtils {
         if (val.indexOf('@') === -1) {
             return false;
         }
-        return `__modules__.${_parameterTypes.setattrib}('${val}', `;
+        const splitted = val.split('@');
+        return `__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}', `;
     }
 
     static repGetAttrib(val: string) {
@@ -207,7 +209,8 @@ export class CodeUtils {
             }
             const atIndex = res[i].indexOf('@');
             if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
-                res[i] = `__modules__.${_parameterTypes.getattrib}('${res[i]}')`;
+                const splitted = res[i].split('@');
+                res[i] = `__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')`;
             }
         }
         return res.join(' ');

@@ -93,6 +93,7 @@ export function SetXyz(__model__: GIModel, positions: TId|TId[], xyz: Txyz): voi
         }
     }
 }
+
 // Promote modelling operation
 export enum _EPromoteMethod {
     MEAN =  'mean',

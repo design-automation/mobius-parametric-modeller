@@ -72,12 +72,15 @@ ul{
         margin: 0px;
         padding: 0px;
         padding-left: 8px;
-        color: $color8;
+        font-style: italic;
+        font-weight: 550;
+        color: $function-text-color;
         font-size: $fsize2;
         height: 18px;
         line-height: 18px;
         width: 100%;
         box-sizing: border-box;
+        white-space: nowrap;
     }
     .user--add{
         margin-bottom: 8px;
@@ -141,6 +144,7 @@ ul{
         overflow: hidden;
         line-height: 20px;
         background-color: $color6;
+        font-weight: 550;
         border: 0px;
         margin: 0px;
         padding: 0px 10px 0px 10px;
@@ -169,7 +173,7 @@ ul{
     outline: none;
     font-size: $fsize2;
     transition: 0.4s;
-    font-weight: 500;
+    font-weight: 550;
 }
 
 .active, .accordion:hover {
@@ -182,6 +186,11 @@ ul{
     display: none;
     background-color: $color5;
     overflow: hidden;
+    button{
+        font-weight: 550;
+        color: $selected-color;
+        font-style: italic;
+    }
 
     &.opened{
         display: block;
@@ -262,7 +271,9 @@ ul{
     border: 0px;
 
     background-color: $color5;
-    color: $color8;
+    color: $color8 !important;
+    font-style: normal !important;
+    font-weight: normal !important;
 
     height: 18px;
     width: 100%;

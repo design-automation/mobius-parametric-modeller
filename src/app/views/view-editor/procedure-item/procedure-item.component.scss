@@ -32,6 +32,27 @@
 
     &.disabled{
         opacity: 0.5;
+        .btns{
+            display: inline-flex;
+            background-color: transparent;
+            #disable-btn{
+                display: flex;
+                justify-content: center;
+                background-color: $color6;
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+        &:hover .btns{
+            background-color: $color5;
+            #disable-btn{
+                background-color: $color5;
+            }
+        }
     }
 
     &.disabled .input--var, &.disabled .input--arg{

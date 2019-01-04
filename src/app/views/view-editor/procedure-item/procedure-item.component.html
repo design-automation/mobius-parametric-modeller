@@ -13,7 +13,7 @@
                     <mat-icon class='icon'>delete_outline</mat-icon>
                 </button>
                 <!-- Disable button-->
-                <button *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
+                <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
                     <mat-icon class='icon'>tv_off</mat-icon>
                 </button>
                 <!-- Print button-->

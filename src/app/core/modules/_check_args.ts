@@ -28,6 +28,10 @@ const typeCheckObj  = {
         isNumberArg(fn_name, arg_name, arg);
         return;
     },
+    isNumberList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
+        isNumberListArg(fn_name, arg_name, arg_list);
+        return;
+    },
     isInt: function(fn_name: string, arg_name: string, arg: number): void {
         isIntArg(fn_name, arg_name, arg);
         return;

@@ -20,70 +20,67 @@ table {
     height: 24px;
     .mat-cell{
       font-size: 12px;
+      color: $color8;
       // overflow: hidden;
       // text-overflow: ellipsis;
       // white-space: nowrap;
     }
   }
-  td {
-    // max-width: 0px;
-  }
 }
 
 /deep/ #attribTab{
   height: 100%;
-
-  .mat-tab-body-wrapper{
-    background-color: transparent;
-    height: calc(100vh - 20px); // 20px == label height
-    .mat-tab-body{
-      height: 100%;
-      overflow: hidden;
-      .mat-tab-body-content{
-        height: 100%;
-        overflow: hidden;
+  ul{
+    margin: 0;
+    padding-left: 15px;
+    border-bottom: 1px solid #ddd;
+    li{
+      margin-bottom: -1px;
+      list-style: none;
+      display: inline-block;
+      width: 10%;
+      font-size: 14px;
+      color: #505050;
+      cursor: pointer;
+      span{
+        margin-right: 2px;
+        border: 1px solid transparent;
+        border-radius: 3px 3px 0 0;
+        position: relative;
+        display: block;
+        padding: 9px 14px 8px;
+        text-align: center;
+      }
+      &.active{
+        span{
+          color: #555;
+          cursor: default;
+          background-color: #fafafb;
+          border: 1px solid #ddd;
+          border-bottom-color: transparent;
+        }
       }
     }
   }
+  
+  .table--container{
+    margin-bottom: 10px;
+  }
   // contains everything
-  .mat-elevation-z8{
+  .mat-elevation-z1{
     display: flex;
     flex-flow: column nowrap;
     height: 100%;
     justify-content: space-between;
   }
-
-  // label-headings
-  .mat-tab-label{
-    height: 20px;
-    padding: 0 0 0 2px;
-    min-width: 100px;
-    font-size: $fsize2;
-    font-family: sans-serif;
-
-    border-bottom: 2px solid transparent;
-    transition-duration: 0.4s;
-    .mat-tab-label-content{
-      color: $color8;
-    }
-    &:hover{
-      border-color: $selected-color;
-    }
-  }
-  .mat-ink-bar{
-    background-color: $selected-color;
-  }
-
   // paginator
   .mat-paginator-container{
     position: absolute;
-    bottom: 0px;
-
+    bottom: 8px;
     height: 20px;
     display: flex;
     flex-flow: row nowrap;
     flex-shrink: 0;
-
     font-family: sans-serif;
 
     .mat-paginator-page-size, .mat-paginator-range-actions{

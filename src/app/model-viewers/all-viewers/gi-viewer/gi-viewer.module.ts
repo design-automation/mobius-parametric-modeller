@@ -15,6 +15,9 @@ import { AttributeModule } from './attribute/attribute.module';
 import { GIViewerComponent } from './gi-viewer.component';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 import { AttributeComponent } from './attribute/attribute.component';
+
+import { TabComponent } from './attribute/tab.component';
+import { TabsComponent } from './attribute/tabs.component';
 /**
  * GIViewer
  * A viewer for Geo-Info models.
@@ -24,6 +27,8 @@ import { AttributeComponent } from './attribute/attribute.component';
         GIViewerComponent,
         ThreejsViewerComponent,
         AttributeComponent,
+        TabComponent,
+        TabsComponent
     ],
     exports: [
         GIViewerComponent

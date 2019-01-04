@@ -235,7 +235,6 @@ export class CodeUtils {
                 //     }
                 // }
                 res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
-                console.log(res[i]);
             }
         }
         return res.join(' ');

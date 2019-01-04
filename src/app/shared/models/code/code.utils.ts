@@ -186,8 +186,9 @@ export class CodeUtils {
             codeStr.push(`}`);
         }
 
-        if (prod.print) {
-            codeStr.push(`printFunc('${prod.args[0].value}', ${prod.args[0].value});`);
+        if (prod.print && prod.args[0].value) {
+            const repGet = this.repGetAttrib(prod.args[0].value);
+            codeStr.push(`printFunc('${prod.args[0].value}', ${repGet});`);
             // codeStr.push(`wait(5000);`);
         }
         return codeStr;

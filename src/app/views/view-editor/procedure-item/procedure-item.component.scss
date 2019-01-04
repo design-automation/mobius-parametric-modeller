@@ -32,6 +32,27 @@
 
     &.disabled{
         opacity: 0.5;
+        .btns{
+            display: inline-flex;
+            background-color: transparent;
+            #disable-btn{
+                display: flex;
+                justify-content: center;
+                background-color: $color6;
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+        &:hover .btns{
+            background-color: $color5;
+            #disable-btn{
+                background-color: $color5;
+            }
+        }
     }
 
     &.disabled .input--var, &.disabled .input--arg{
@@ -66,6 +87,9 @@
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
         padding-left: 1px;
+        #print-btn{
+            color: $print-color;
+        }
     }
 
     &.printing{
@@ -74,8 +98,7 @@
             background-color: transparent;
             #print-btn{
                 display: flex;
-                justify-content: center;
-                color: $print-color;
+                justify-content: center;   
                 background-color: $color6;
                 &:hover{
                     color: $selected-color;

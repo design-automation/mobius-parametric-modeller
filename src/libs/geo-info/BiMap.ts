@@ -80,19 +80,20 @@ export class BiMapManyToOne<V> {
         const value_str: string = JSON.stringify(value);
         return this.vk_map.get(value_str);
     }
-    /**
-     * Returns an array of keys that point to this value.
-     * @param value The string version of the value.
-     */
-    public getKeysFromValueStr(value_str: string): number[] {
-        return this.vk_map.get(value_str);
-    }
+    // /**
+    //  * Returns an array of keys that point to this value.
+    //  * @param value The string version of the value.
+    //  */
+    // public getKeysFromValueStr(value_str: string): number[] {
+    //     return this.vk_map.get(value_str);
+    // }
     /**
      * Returns the value to which this key points.
      * @param key
      */
     public getValue(key: number): V {
-      return this.kv_map.get(key);
+        const result: V = this.kv_map.get(key); // TODO clone arrays
+        return result;
     }
     /**
      * Returns true if the map contains the key.

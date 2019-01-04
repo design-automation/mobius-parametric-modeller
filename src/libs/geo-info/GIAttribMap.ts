@@ -101,7 +101,11 @@ export class GIAttribMap {
      * @param key
      */
     public get(key: number): TAttribDataTypes {
-        return this._bi_map.getValue(key);
+        const result: TAttribDataTypes = this._bi_map.getValue(key);
+        if (Array.isArray(result)) {
+            return result.slice(); // Make a clone of teh array
+        }
+        return result;
     }
     /**
      * Executes a query

@@ -139,7 +139,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], attrib_query: TQuery): number {
     // --- Error Check ---
-    checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
+    checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
     // --- Error Check ---
     return Get(__model__, select, entities, attrib_query).length;
 }

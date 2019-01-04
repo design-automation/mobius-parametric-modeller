@@ -68,7 +68,7 @@
     background-color: transparent;
     padding: none;
     overflow: hidden;
-    
+    margin: 5px 0px;
     height: calc(100vh - 40px); // 40px === $header-height
     &:hover{
         overflow:auto;

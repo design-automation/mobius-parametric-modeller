@@ -47,6 +47,8 @@ export class DataThreejs {
         // this._renderer.setClearColor(0xEEEEEE);
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(window.innerWidth / 1.8, window.innerHeight);
+        this._renderer.shadowMap.enabled = true;
+        this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // camera settings
         this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 20000);
@@ -75,16 +77,10 @@ export class DataThreejs {
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
 
-        // text label
-        const loader = new THREE.FontLoader();
-        loader.load('./assets/OpenSans_Regular.json', (font) => this._font = font);
-
         // add grid and lights
         this._addGrid();
         this._addHemisphereLight();
         this._addAxes();
-
-        // this.grid.position.set(1000, 1000, 0);
     }
 
     public addGeometry(model: GIModel, container): void {
@@ -101,6 +97,7 @@ export class DataThreejs {
 
         this._addGrid();
         this._addHemisphereLight();
+        // this._addDirectionalLight();
         this._addAxes();
 
         // Add geometry
@@ -228,8 +225,9 @@ export class DataThreejs {
 
     // Creates a Directional Light
     private _addDirectionalLight() {
-        const light = new THREE.DirectionalLight(0xffffff, 0.5);
-        light.position.set(0, 0, 1).normalize();
+        const light = new THREE.SpotLight(0xffffff);
+        light.position.set(200, 100, 200);
+        light.castShadow = true;
         this._scene.add(light);
     }
     // add axes
@@ -280,6 +278,8 @@ export class DataThreejs {
         const mesh = new THREE.Mesh(geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
+        mesh.castShadow = true;
+        mesh.receiveShadow = false;
 
         // show vertex normals
         const vnh = new THREE.VertexNormalsHelper(mesh, 3, 0x0000ff);

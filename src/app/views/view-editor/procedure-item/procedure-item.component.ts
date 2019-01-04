@@ -166,8 +166,13 @@ export class ProcedureItemComponent {
 
     // modify argument input: check if input is valid
     argMod(event: string, argIndex: number) {
+        if (!this.data.args[argIndex].value) { return; }
         this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
-            /([\+\-\*\/\%\[\]\{\}\(\)])/g, ' $1 ').replace(/,/g, ', ').replace(/[ ]{2,}/g, ' ');
+            // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
+            /([\+\-\*\/\%\{\}\(\)\,])/g, ' $1 ').replace(
+            /\s?([\[\]])\s?/g, '$1').trim().replace(/[ ]{2,}/g, ' ');
+            // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').replace(
+            // /@[a-z0-9]+\s\[\s/g, '[').trim().replace(/[ ]{2,}/g, ' ');
         return;
 
         console.log(event);

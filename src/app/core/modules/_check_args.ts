@@ -60,9 +60,16 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
                 break; // passed
             }
         } else {
-            if (attrib_index > 2 || attrib_index < 0) {
-                err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 2 (inclusive)');
-                throw new Error(err_arr.join(''));
+            if (isTexture) {
+                if (attrib_index > 1 || attrib_index < 0) {
+                    err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 1 (inclusive)');
+                    throw new Error(err_arr.join(''));
+                }
+            } else {
+                if (attrib_index > 2 || attrib_index < 0) {
+                    err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 2 (inclusive)');
+                    throw new Error(err_arr.join(''));
+                }
             }
             check_fns = ['isString', 'isNumber'];
             for (let i = 0; i < check_fns.length; i++) {

@@ -87,6 +87,9 @@
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
         padding-left: 1px;
+        #print-btn{
+            color: $print-color;
+        }
     }
 
     &.printing{
@@ -95,8 +98,7 @@
             background-color: transparent;
             #print-btn{
                 display: flex;
-                justify-content: center;
-                color: $print-color;
+                justify-content: center;   
                 background-color: $color6;
                 &:hover{
                     color: $selected-color;

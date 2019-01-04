@@ -11,6 +11,9 @@ export {_model};
 
 // functions for end users
 
+import * as query from './query';
+export {query};
+
 import * as make from './make';
 export {make};
 
@@ -20,14 +23,11 @@ export {modify};
 import * as isect from './isect';
 export {isect};
 
-import * as attrib from './attrib';
-export {attrib};
+// import * as attrib from './attrib';
+// export {attrib};
 
 import * as calc from './calc';
 export {calc};
-
-import * as query from './query';
-export {query};
 
 import * as util from './util';
 export {util};

@@ -108,80 +108,112 @@ export class GIAttribMap {
         return result;
     }
     /**
+     * 
+     * @param operator
+     * @param val1
+     * @param val2
+     */
+    private _compare(operator: EQueryOperatorTypes, val1: any, val2: any): boolean {
+
+        switch (operator) {
+            // ==
+            case EQueryOperatorTypes.IS_EQUAL:
+                return val1 === val2;
+            // !=
+            case EQueryOperatorTypes.IS_NOT_EQUAL:
+                return val1 !== val2;
+            // >
+            case EQueryOperatorTypes.IS_GREATER:
+                return val1 > val2;
+            // >=
+            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
+                return val1 >= val2;
+            // <
+            case EQueryOperatorTypes.IS_LESS:
+                return val1 < val2;
+            // <=
+            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+                return val1 <= val2;
+            default:
+                throw new Error('Query operator not found: ' + operator);
+        }
+    }
+    /**
      * Executes a query
      * @param value_str The string version of the value.
      * @param value_index The index of the value
      * @param operator The relational operator, ==, !=, <=, >=, etc
      */
-    public queryValueStr(value_str: string, operator: EQueryOperatorTypes, value_index: number, indicies: number[]): number[] {
+    public queryValueStr(value_str: string, operator: EQueryOperatorTypes, value_index: number, search_keys: number[]): number[] {
         // check the index
         const indexed = (value_index !== null && value_index !== undefined);
         if (indexed) {
             if (!Number.isInteger(value_index)) { throw new Error('Query index cannot be converted to an integer: ' + value_index); }
             if (!(this._data_size > 0))  { throw new Error('Query attribute ' + this._name + ' is not a list.'); }
         }
-        // get the numeric value for the query
-        const value_num: number = Number.parseFloat(value_str);
-        let value: number|string;
-        if (this._data_type === EAttribDataTypeStrs.FLOAT) {
-            if (isNaN(value_num)) { throw new Error('Query value cannot be converted to a number: ' + value_str); }
-            value = value_num;
+        // get the search keys for the query
+        if (search_keys === null || search_keys === undefined) {
+            search_keys = this._bi_map.keys();
         } else {
-            value = value_str;
-        }
-        // get the keys for the query
-        let keys: number[];
-        if (indicies === null || indicies === undefined) {
-            keys = this._bi_map.keys();
-        } else {
-            keys = indicies;
+            search_keys = search_keys;
         }
         // search
-        switch (operator) {
-            // ==
-            case EQueryOperatorTypes.IS_EQUAL:
-                if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[value_index] === value );
-                } else {
-                    return keys.filter( key => this._bi_map.getValue(key) === value );
+        const re: RegExp = /\s+/g;
+        if (value_index === undefined) {
+            // in these cases we just leave value_str as a string, but we clean it up
+            value_str = value_str.replace(re, '');
+            // in this case we can only use == or !=
+            if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+                { throw new Error('Query operator and query value are incompatible.'); }
+            }
+            if (value_str === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
+                const found_keys: number[] = this._bi_map.getKeysWithoutValue();
+                return search_keys.filter(search_key => found_keys.indexOf(search_key) !== -1);
+            } else if (value_str === 'null' && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+                const found_keys: number[] = this._bi_map.getKeysWithValue();
+                return search_keys.filter(search_key => found_keys.indexOf(search_key) !== -1);
+            } else if (operator === EQueryOperatorTypes.IS_EQUAL ) {
+                const found_keys: number[] = this._bi_map.getKeys(value_str);
+                return search_keys.filter(search_key => found_keys.indexOf(search_key) !== -1);
+            } else if (operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+                const found_keys: number[] = this._bi_map.getKeys(value_str);
+                return search_keys.filter(search_key => found_keys.indexOf(search_key) === -1);
+            }
+        } else {
+            if (!(this._data_size > 0)) {
+                { throw new Error('Query with [index] can only be used on attributes whose data type is a list.'); }
+            }
+            if (this._data_type === EAttribDataTypeStrs.FLOAT) {
+                // a number from an array of numbers
+                // value_str must be a number
+                const value_num: number = Number.parseFloat(value_str);
+                if (isNaN(value_num)) { throw new Error('Query value cannot be converted to a number: ' + value_str); }
+                // do the search
+                const found_keys: number[] = [];
+                for (const search_key of search_keys) {
+                    const search_value_arr: TAttribDataTypes = this._bi_map.getValue(search_key);
+                    if ((search_value_arr !== undefined) &&
+                       this._compare(operator, search_value_arr[value_index], value_num) ) {
+                        found_keys.push(search_key);
+                    }
                 }
-            // !=
-            case EQueryOperatorTypes.IS_NOT_EQUAL:
-                if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[value_index] !== value );
-                } else {
-                    return keys.filter( key => this._bi_map.getValue(key) !== value );
+                return found_keys;
+            } else if (this._data_type === EAttribDataTypeStrs.STRING) {
+                // a string from a list of strings
+                if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+                    { throw new Error('Query operator and query value are incompatible.'); }
                 }
-            // >
-            case EQueryOperatorTypes.IS_GREATER:
-                if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[value_index] > value );
-                } else {
-                    return keys.filter( key => this._bi_map.getValue(key) > value );
+                // clean up the string
+                const value_str_clean: string = value_str.replace(re, '');
+                // do the search
+                const found_keys: number[] = [];
+                for (const search_key of search_keys) {
+                    const search_value_arr: TAttribDataTypes = this._bi_map.getValue(search_key);
+                    if ( this._compare(operator, value_str_clean, search_value_arr[value_index]) ) {
+                        found_keys.push(search_key);
+                    }
                 }
-            // >=
-            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
-                if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[value_index] >= value );
-                } else {
-                    return keys.filter( key => this._bi_map.getValue(key) >= value );
-                }
-            // <
-            case EQueryOperatorTypes.IS_LESS:
-                if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[value_index] < value );
-                } else {
-                    return keys.filter( key => this._bi_map.getValue(key) < value );
-                }
-            // <=
-            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
-                if (indexed) {
-                    return keys.filter( key => this._bi_map.getValue(key)[value_index] <= value );
-                } else {
-                    return keys.filter( key => this._bi_map.getValue(key) <= value );
-                }
-            default:
-                throw new Error('Query operator not found: ' + operator);
+            }
         }
     }
     /**

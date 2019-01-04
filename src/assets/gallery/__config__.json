@@ -37,6 +37,14 @@
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/create/"
         },
         {
+            "name": "Queries",
+            "files": [
+                "query_simple"
+            ],
+
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/queries/"
+        },
+        {
             "name": "Test",
             "files": [
                 "box_with_holes",

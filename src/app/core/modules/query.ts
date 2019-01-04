@@ -90,16 +90,17 @@ function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
  * @example query1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])
  */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], attrib_query: TQuery): TId[] {
-    // --- Error Check ---
-    // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDlist'], 'all');
-    // --- Error Check ---
     // get the select ent_type_str
     const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);
     // get the list of entities
     const found_entities_i: number[] = [];
     if (entities === null || entities === undefined) {
+        // skip Error Check
         found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type_str));
     } else {
+        // --- Error Check ---
+        checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+        // --- Error Check ---
         if (!Array.isArray(entities)) { entities = [entities]; }
         for (const entity_id of entities) {
             const [curr_ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entity_id);

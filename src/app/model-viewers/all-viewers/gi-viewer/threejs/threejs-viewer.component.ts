@@ -38,11 +38,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     public selectable: number;
 
     // right selection dropdown
-    public selectingEntity: {id: string, name: string} = {id: '', name: ''};
+    public selectingEntity: {id: string, name: string} = {id: 'A', name: 'All'};
     public selectDropdownVisible = false;
     public selections = [
         {id: 'P', name: 'Points'}, {id: 'E', name: 'Edges'}, {id: 'W', name: 'Wires'},
-        {id: 'F', name: 'Faces'}, {id: 'PL', name: 'Polylines'}, {id: 'PG', name: 'Polygons'}];
+        {id: 'F', name: 'Faces'}, {id: 'PL', name: 'Polylines'}, {id: 'PG', name: 'Polygons'},
+        {id: 'C', name: 'Collections'}, {id: 'A', name: 'All'}];
     /**
      * Creates a new viewer,
      * @param injector
@@ -220,50 +221,78 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         // console.log('interecting object', intersect);
         if (intersects.length > 0) {
             const intersect0 = intersects[0];
-            if (intersect0.object.type === 'Mesh') {
-                if (this.selectingEntity.id === 'F') {
+            switch (this.selectingEntity.id) {
+                case 'A':
+                if (intersect0.object.type === 'Mesh') {
                     this.selectFace(intersect0);
-                } else if (this.selectingEntity.id === 'PG') {
+                } else if (intersect0.object.type === 'LineSegments') {
+                    this.selectEdge(intersect0);
+                } else if (intersect0.object.type === 'Points') {
+                    this.selectPoint(intersect0);
+                }
+                    break;
+                case 'F':
+                if (intersect0.object.type === 'Mesh') {
+                    this.selectFace(intersect0);
+                } else {
+                    this.showMessages('Faces');
+                }
+                    break;
+                case 'PG':
+                if (intersect0.object.type === 'Mesh') {
                     this.selectPGon(intersect0);
                 } else {
-                    this.showMessages('Faces or Polygons');
+                    this.showMessages('Polygons');
                 }
-            } else if (intersect0.object.type === 'LineSegments') {
-                const intersect1 = intersects[1];
-                if (intersect1 && intersect0.distance === intersect1.distance) {
-                    // this.chooseLine(intersect0, intersect1);
-                    // this.selectWire(intersect0);
-                } else {
-                    // this.selectLine(intersect0);
-                    // this.selectWire(intersect0);
-                }
-
-                if (this.selectingEntity.id === 'E') {
+                    break;
+                case 'E':
+                if (intersect0.object.type === 'LineSegments') {
                     this.selectEdge(intersect0);
-                } else if (this.selectingEntity.id === 'W') {
+                } else {
+                    this.showMessages('Edges');
+                }
+                    break;
+                case 'W':
+                if (intersect0.object.type === 'LineSegments') {
                     this.selectWire(intersect0);
-                } else if (this.selectingEntity.id === 'PL') {
+                } else {
+                    this.showMessages('Wires');
+                }
+                    break;
+                case 'PL':
+                if (intersect0.object.type === 'LineSegments') {
                     this.selectPLine(intersect0);
                 } else {
-                    this.showMessages('Edges, Wires or Polylines');
+                    this.showMessages('Polylines');
                 }
-            } else if (intersect0.object.type === 'Points') {
-                const intersect1 = intersects[1];
-                const intersect2 = intersects[2];
-                if (this.selectingEntity.id === 'P') {
+                    break;
+                case 'P':
+                if (intersect0.object.type === 'Points') {
                     this.selectPoint(intersect0);
                 } else {
                     this.showMessages('Points');
                 }
+                    break;
+                default:
+                    break;
             }
+            // if (intersect0.object.type === 'LineSegments') {
+            //     const intersect1 = intersects[1];
+            //     if (intersect1 && intersect0.distance === intersect1.distance) {
+            //         this.chooseLine(intersect0, intersect1);
+            //         this.selectWire(intersect0);
+            //     } else {
+            //         this.selectEdge(intersect0);
+            //         this.selectWire(intersect0);
+            //     }
+            // }
         }
-        // console.log(scene._selectedEntity);
         this.render(this);
     }
 
     private showMessages(tab: string) {
         this.messageVisible = true;
-        this.message = `Please choose Select ${tab}`;
+        this.message = `Please Select ${tab}`;
         setTimeout(() => {
             this.messageVisible = false;
         }, 3000);

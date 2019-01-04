@@ -28,10 +28,16 @@
     -->
     <button id="selecting" 
         mat-icon-button
-        [class.selected]="seVisible" 
-        (click)= "select(seVisible)" >
+        [class.selected]="selectDropdownVisible" 
+        (click)="selectDropdownVisible = !selectDropdownVisible">
         <mat-icon >near_me</mat-icon>
     </button>
+    <span *ngIf="!selectDropdownVisible" id="selectingEntity" matTooltip="Selecting {{selectingEntity.name}}">{{selectingEntity.id}}</span>
+    <div id="selectDropdown" *ngIf="selectDropdownVisible == true">
+        <button *ngFor="let selection of selections"  (click)="selectEntity(selection)" [class.active]="selectingEntity.id === selection.id">
+            <span matTooltip="Select {{selection.name}}">{{selection.id}}</span>
+        </button>
+    </div>
 
     <div id="shownumber">
         <tr>
@@ -54,12 +60,4 @@
     <!--setting-->
     
     <!-- <app-setting *ngIf="settingVisible == true"></app-setting> -->
-    <div *ngIf="seVisible == true">
-        <button id="points" [class.selectvisible]="SelectVisible === 'Points'"><span matTooltip="Select Points">P</span></button>
-        <button id="vertices" [class.selectvisible]="SelectVisible === 'Vertices'"><span matTooltip="Select Vertices">V</span></button>
-        <button id="edges" [class.selectvisible]="SelectVisible === 'Edges'"><span matTooltip="Select Edges">E</span></button>
-        <button id="wires" [class.selectvisible]="SelectVisible === 'Wires'"><span matTooltip="Select Wires">W</span></button>
-        <button id="faces" [class.selectvisible]="SelectVisible === 'Faces'"><span matTooltip="Select Faces">F</span></button>
-        <button id="objects" [class.selectvisible]="SelectVisible === 'Objs'"><span matTooltip="Select Objects">O</span></button>
-      </div>
 </div>

@@ -137,7 +137,10 @@ export class GIAttribsQuery {
     }
     /**
      * Query the model using a query strings.
-     * Returns a list of string IDs of entities in the model.
+     * Returns a list of entities in the model.
+     * @param ent_type_str The type of the entities being search for
+     * @param query_str The query string, e.g. '#@name == value'
+     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type_str.
      */
     public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string, indicies?: number[]): number[] {
         // get the map that contains all the ettributes for the ent_type_str

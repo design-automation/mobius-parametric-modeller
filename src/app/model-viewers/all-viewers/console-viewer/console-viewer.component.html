@@ -1,3 +1,12 @@
-<div class = 'console-container'>
-    <textarea id='console_textarea'>{{ text || "" }}</textarea>
+<div id='console-container'>
+    <ng-container *ngFor='let text of logs'>
+        <hr>
+        <ng-container *ngIf='text[0].indexOf("Error") !== -1; else default_template'>
+            <p class='errorText' *ngFor='let splittedText of text[0].split("\n")' >{{splittedText}}</p>
+        </ng-container>
+        <ng-template #default_template>
+            <p class='normalText'  *ngFor='let splittedText of text[0].split("\n")' >{{splittedText}}</p>
+        </ng-template>
+    </ng-container>
+    <!-- <textarea id='console_textarea'>{{ text || "" }}</textarea> -->
 </div>

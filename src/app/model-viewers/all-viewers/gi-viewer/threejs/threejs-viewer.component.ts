@@ -36,6 +36,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     public message: string;
     // the selectable type of entity by user, depends on the Attribute Tab
     public selectable: number;
+
+    // right selection dropdown
+    public selectingEntity: {id: string, name: string} = {id: '', name: ''};
+    public selectDropdownVisible = false;
+    public selections = [
+        {id: 'P', name: 'Points'}, {id: 'E', name: 'Edges'}, {id: 'W', name: 'Wires'},
+        {id: 'F', name: 'Faces'}, {id: 'PL', name: 'Polylines'}, {id: 'PG', name: 'Polygons'}];
     /**
      * Creates a new viewer,
      * @param injector
@@ -214,9 +221,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (intersects.length > 0) {
             const intersect0 = intersects[0];
             if (intersect0.object.type === 'Mesh') {
-                if (this.selectableEntity() === 4) {
+                if (this.selectingEntity.id === 'F') {
                     this.selectFace(intersect0);
-                } else if (this.selectableEntity() === 7) {
+                } else if (this.selectingEntity.id === 'PG') {
                     this.selectPGon(intersect0);
                 } else {
                     this.showMessages('Faces or Polygons');
@@ -231,11 +238,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     // this.selectWire(intersect0);
                 }
 
-                if (this.selectableEntity() === 2) {
+                if (this.selectingEntity.id === 'E') {
                     this.selectEdge(intersect0);
-                } else if (this.selectableEntity() === 3) {
+                } else if (this.selectingEntity.id === 'W') {
                     this.selectWire(intersect0);
-                } else if (this.selectableEntity() === 6) {
+                } else if (this.selectingEntity.id === 'PL') {
                     this.selectPLine(intersect0);
                 } else {
                     this.showMessages('Edges, Wires or Polylines');
@@ -243,7 +250,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             } else if (intersect0.object.type === 'Points') {
                 const intersect1 = intersects[1];
                 const intersect2 = intersects[2];
-                if (this.selectableEntity() === 5) {
+                if (this.selectingEntity.id === 'P') {
                     this.selectPoint(intersect0);
                 } else {
                     this.showMessages('Points');
@@ -256,7 +263,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
     private showMessages(tab: string) {
         this.messageVisible = true;
-        this.message = `Please switch to ${tab} tab`;
+        this.message = `Please choose Select ${tab}`;
         setTimeout(() => {
             this.messageVisible = false;
         }, 3000);
@@ -265,15 +272,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private chooseLine(intersect0, intersect1) {
         this.selectEdge(intersect0);
         this.selectEdge(intersect1);
-    }
-
-    // 0: Positions, 1: Vertex, 2: Edges, 3: Wires, 4: Faces, 5: Points, 6: PLines, 7: PGons, 8:Collections
-    private selectableEntity() {
-        if (localStorage.getItem('mpm_attrib_current_tab') != null) {
-            this.selectable = Number(localStorage.getItem('mpm_attrib_current_tab'));
-        }
-        console.log('selectable', this.selectable);
-        return this.selectable;
     }
 
 
@@ -418,5 +416,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
     public zoomfit() {
         this._data_threejs.lookAtObj(this._width);
+    }
+
+    private selectEntity(selection: {id: string, name: string}) {
+        this.selectingEntity = selection;
+        this.selectDropdownVisible = false;
     }
 }

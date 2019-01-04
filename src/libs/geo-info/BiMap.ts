@@ -80,6 +80,20 @@ export class BiMapManyToOne<V> {
         const value_str: string = JSON.stringify(value);
         return this.vk_map.get(value_str);
     }
+    /**
+     * Returns an array of keys without a value (undefined)
+     * @param value
+     */
+    public getKeysWithoutValue(): number[] {
+        return Array.from(this.kv_map.keys()).filter(key => this.kv_map.get(key) === undefined);
+    }
+    /**
+     * Returns an array of keys with a value (not undefined)
+     * @param value
+     */
+    public getKeysWithValue(): number[] {
+        return Array.from(this.kv_map.keys()).filter(key => this.kv_map.get(key) !== undefined);
+    }
     // /**
     //  * Returns an array of keys that point to this value.
     //  * @param value The string version of the value.

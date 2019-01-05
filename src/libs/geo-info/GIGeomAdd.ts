@@ -2,7 +2,6 @@ import { EEntityTypeStr, TTri, TVert, TEdge, TWire, TFace,
     TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
-import { isArray } from 'util';
 
 /**
  * Class for geometry.
@@ -25,8 +24,9 @@ export class GIGeomAdd {
      */
     public addData(geom_data: IGeomData): void {
         // get lengths before we start adding stuff
-        const num_tris: number = this._geom_arrays.dn_tris_verts.length;
+        const num_posis: number = this._geom_arrays.num_posis;
         const num_verts: number = this._geom_arrays.dn_verts_posis.length;
+        const num_tris: number = this._geom_arrays.dn_tris_verts.length;
         const num_edges: number = this._geom_arrays.dn_edges_verts.length;
         const num_wires: number = this._geom_arrays.dn_wires_edges.length;
         const num_faces: number = this._geom_arrays.dn_faces_wirestris.length;
@@ -34,12 +34,12 @@ export class GIGeomAdd {
         const num_plines: number = this._geom_arrays.dn_plines_wires.length;
         const num_pgons: number = this._geom_arrays.dn_pgons_faces.length;
         const num_colls: number = this._geom_arrays.dn_colls_objs.length;
-        // Add triangles to model
-        const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(p => p + this._geom.query.numPosis() ) as TTri);
-        this._geom_arrays.dn_tris_verts.push( ...new_triangles );
         // Add vertices to model
-        const new_verts: TVert[] = geom_data.vertices.map(p => p + this._geom.query.numPosis() as TVert);
+        const new_verts: TVert[] = geom_data.vertices.map(p => p + num_posis as TVert);
         this._geom_arrays.dn_verts_posis.push( ...new_verts );
+        // Add triangles to model
+        const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(v => v + num_verts) as TTri);
+        this._geom_arrays.dn_tris_verts.push( ...new_triangles );
         // Add edges to model
         const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
         this._geom_arrays.dn_edges_verts.push( ...new_edges );

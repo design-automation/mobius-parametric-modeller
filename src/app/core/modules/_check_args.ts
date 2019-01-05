@@ -1,6 +1,96 @@
-import { EEntityTypeStr } from '@libs/geo-info/common';
+import { EEntityTypeStr, EAttribNames } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
+import { isNumber } from 'util';
+// =========================================================================================================================================
+// Query Checks
+// =========================================================================================================================================
+export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
+    typeCheckObj.isString(fn_name, 'attrib_name', attrib_name); // check attrib_name is string
+    // -- check defined index
+    let ind = false;
+    if (attrib_index !== null && attrib_index !== undefined) {
+        ind = true;
+        // check if index is number
+        typeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
+    }
+    // -- check blocked name
+    const blk_att_nm_lst = Object.values(EAttribNames);
+    let blocked = false;
+    let isTexture = false;
+    for (let i = 0; i < blk_att_nm_lst.length; i++) {
+        if (attrib_name === 'texture') {
+            isTexture = true;
+            blocked = true;
+            break;
+        }
+        if (attrib_name.startsWith(blk_att_nm_lst[i])) {
+            blocked = true;
+            break;
+        }
+    }
+    let check_fns = [];
+    if (blocked === true) {
+        let pass = false;
+        const err_arr = [fn_name + ': ' + 'attrib_value starts with one of the special attribute names - '
+                        + Object.values(EAttribNames).toString() + '\n'];
+        if (ind === false) {
+            try {
+                isListArg(fn_name + '.is' + attrib_name, 'attrib_value', attrib_value, 'numbers');
+                let chkLstLen;
+                if (isTexture) {
+                    chkLstLen = 2;
+                } else {
+                    chkLstLen = 3;
+                }
+                isListLenArg(fn_name + '.is' + attrib_name, 'attrib_value', attrib_value, chkLstLen);
+            } catch (err) {
+                err_arr.push(err.message);
+                throw new Error(err_arr.join(''));
+            }
+            check_fns = ['isNumberList'];
+            for (let i = 0; i < check_fns.length; i++) {
+                try {
+                    typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                } catch (err) {
+                    err_arr.push(err.message + '\n');
+                    continue;
+                }
+                pass = true;
+                break; // passed
+            }
+        } else {
+            if (isTexture) {
+                if (attrib_index > 1 || attrib_index < 0) {
+                    err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 1 (inclusive)');
+                    throw new Error(err_arr.join(''));
+                }
+            } else {
+                if (attrib_index > 2 || attrib_index < 0) {
+                    err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 2 (inclusive)');
+                    throw new Error(err_arr.join(''));
+                }
+            }
+            check_fns = ['isString', 'isNumber'];
+            for (let i = 0; i < check_fns.length; i++) {
+                try {
+                    typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                } catch (err) {
+                    err_arr.push(err.message + '\n');
+                    continue;
+                }
+                pass = true;
+                break; // passed
+            }
+        }
+        if (pass === false) {
+            throw new Error(err_arr.join(''));
+        }
+    } else {
+        checkCommTypes(fn_name, 'attrib_value', attrib_value, ['isString', 'isNumber']);
+    }
+    return;
+}
 
 // =========================================================================================================================================
 // Function Dictionaries

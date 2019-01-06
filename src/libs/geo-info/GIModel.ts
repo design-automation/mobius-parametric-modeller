@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames, IModelData, IGeomData, IAttribsData } from './common';
+import { EAttribNames, IModelData, IGeomData, IAttribsData, EEntityTypeStr } from './common';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
@@ -63,7 +63,7 @@ export class GIModel {
      */
     private _generateColors(): number[] {
         const colors = [];
-        for (let index = 0; index < this.geom.query.numVerts(); index++) {
+        for (let index = 0; index < this.geom.query.numEnts(EEntityTypeStr.VERT); index++) {
             colors.push(1, 1, 1);
         }
         return colors;
@@ -73,7 +73,7 @@ export class GIModel {
      */
     private _generateNormals(): number[] {
         const normals = [];
-        for (let index = 0; index < this.geom.query.numVerts(); index++) {
+        for (let index = 0; index < this.geom.query.numEnts(EEntityTypeStr.VERT); index++) {
             normals.push(0, 0, 0);
         }
         return normals;
@@ -82,8 +82,8 @@ export class GIModel {
      * Returns arrays for visualization in Threejs.
      */
     public get3jsData(): IThreeJS {
-        // get the attrbs at the vertex level
-        const coords_values: number[] = this.attribs.threejs.get3jsSeqVertsCoords(this.geom.threejs.get3jsVerts());
+        // get the attribs at the vertex level
+        const coords_values: number[] = this.attribs.threejs.get3jsSeqVertsCoords();
         let normals_values: number[] = this.attribs.threejs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
         let colors_values: number[] = this.attribs.threejs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
         // add normals and colours

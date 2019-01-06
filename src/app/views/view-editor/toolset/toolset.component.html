@@ -145,7 +145,7 @@
             </div>
         </div>
         <div class="panel">
-            <button id='globals' class="accordion"  (click)='toggleAccordion("globals")'>Globals</button>
+            <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals")'>Globals</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
                     <li *ngFor='let cnst of dataService.flowchart.nodes[0].procedure' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
@@ -156,7 +156,7 @@
                 <div class = "divider--in"></div>
             </div>
 
-            <button id='inlineExpr' class="accordion"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
+            <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
                     <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
@@ -171,7 +171,7 @@
             </div>
 
 
-            <button id='inlineFunc' class="accordion" (click)='toggleAccordion("inlineFunc")'>Functions</button>
+            <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc")'>Functions</button>
             <div class="panel">
                 <ng-container *ngFor='let category of inlineFunc'>
                     <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>

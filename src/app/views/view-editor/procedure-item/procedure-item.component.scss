@@ -51,6 +51,7 @@
             background-color: $color5;
             #disable-btn{
                 background-color: $color5;
+                order: 0;
             }
         }
     }
@@ -70,16 +71,6 @@
         //         border-left: 2px solid $selected-color;
         //     }
         // }
-    }
-    
-    &.error:not(.disabled){
-        border-bottom: 2px solid $error-color;
-        border-left: 2px solid $error-color;
-        padding-bottom: 0px;
-        padding-left: 1px;
-        &.selected{
-            border-bottom: 2px solid $selected-color;
-        }
     }
 
     &.printing:not(.disabled){
@@ -112,10 +103,21 @@
             background-color: $color5;
             #print-btn{
                 background-color: $color5;
+                order: 1
             }
         }
     }
 
+    &.error:not(.disabled){
+        border-bottom: 2px solid $error-color;
+        border-left: 2px solid $error-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+    }
+    
     .input--var{
         font-size: $fsize2;
         width: 70px;
@@ -202,6 +204,7 @@
     justify-content: flex-end;
 
     background-color: $color5;
+
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
     &:hover{
@@ -221,6 +224,8 @@
 
     overflow: hidden;
     vertical-align: center;
+    
+    order: 4;
     // &.highlighted{
     //     background-color: red;
     // }

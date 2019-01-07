@@ -1,8 +1,8 @@
-import { GIModel } from "./GIModel";
+import { GIModel } from './GIModel';
 import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntityTypeStr,
-    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EEntStrToAttribMap, EAttribNames, Txyz } from "./common";
-import { GIAttribMap } from "./GIAttribMap";
-import { vecsAdd } from "@libs/geom/vectors";
+    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EEntStrToAttribMap, EAttribNames, Txyz } from './common';
+import { GIAttribMap } from './GIAttribMap';
+import { vecsAdd } from '@libs/geom/vectors';
 
 /**
  * Class for attributes.

@@ -3,6 +3,8 @@ import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/c
 import { idBreak } from '@libs/geo-info/id';
 import { vecsAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
+import { rotateMatrix, multMatrix, scaleMatrix } from '@libs/geom/matrix';
+import { Matrix4 } from 'three';
 
 /**
  * Moves geometry by vector.
@@ -45,15 +47,35 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
  * @example mod.Rotate(geometry, plane1, PI)
  * @example_info Rotates geometry on plane1 by PI (i.e. 180 degrees).
  */
-export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, angle: number): void {
+export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId, axis: Txyz, angle: number): void {
     // --- Error Check ---
     const fn_name = 'modify.Rotate';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
-    checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
+    checkCommTypes(fn_name, 'axis', axis, ['isCoord']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    if (!Array.isArray(geometry)) {
+        geometry = [geometry] as TId[];
+    }
+    if (!Array.isArray(origin)) {
+        const [origin_ent_type_str, origin_index]: [EEntityTypeStr, number] = idBreak(origin as TId);
+        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type_str, origin_index);
+        origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
+    }
+    const posis_i: number[] = [];
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+    }
+    const unique_posis_i: number[] = Array.from(new Set(posis_i));
+    const matrix: Matrix4 = rotateMatrix(origin, axis, angle);
+    for (const unique_posi_i of unique_posis_i) {
+        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+        const new_xyz: Txyz = multMatrix(old_xyz, matrix);
+        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+    }
 }
 /**
  * Scales geometry on plane by factor.
@@ -65,15 +87,37 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
  * @example mod.Scale(geometry, plane1, 0.5)
  * @example_info Scales geometry by 0.5 on plane1.
  */
-export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TId, scale: number): void {
+export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Scale';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
-    checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
-    checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
+    // checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    if (!Array.isArray(geometry)) {
+        geometry = [geometry] as TId[];
+    }
+    if (!Array.isArray(origin)) {
+        const [origin_ent_type_str, origin_index]: [EEntityTypeStr, number] = idBreak(origin as TId);
+        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type_str, origin_index);
+        origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
+    }
+    if (!Array.isArray(scale)) {
+        scale = [scale, scale, scale];
+    }
+    const posis_i: number[] = [];
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+    }
+    const unique_posis_i: number[] = Array.from(new Set(posis_i));
+    const matrix: Matrix4 = scaleMatrix(origin, scale);
+    for (const unique_posi_i of unique_posis_i) {
+        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+        const new_xyz: Txyz = multMatrix(old_xyz, matrix);
+        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+    }
 }
 /**
  * Mirrors geometry across plane.

@@ -18,7 +18,6 @@ export class DataThreejs {
     // interaction and selection
     public _select_visible = 'Objs'; // TODO add types
     public _selecting = new Map();  // TODO add types
-    public _selectedEntity = new Map(); // TODO add types
     public _text: string;
     // text lables
     public ObjLabelMap: Map<string, any> = new Map();
@@ -87,7 +86,6 @@ export class DataThreejs {
         while (this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
             this.sceneObjs = [];
-            this._selectedEntity.clear();
         }
         document.querySelectorAll('[id^=textLabel_]').forEach(value => {
             container.removeChild(value);

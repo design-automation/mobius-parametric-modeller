@@ -13,18 +13,18 @@ import { EEntityTypeStr } from '@libs/geo-info/common';
 
 export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
-  currentTab: number;
+  @Input() showSelected: boolean;
 
-  tabs: {type: string, title: string}[] =
-  [{type: EEntityTypeStr.POSI, title: 'Positions'},
-  {type: EEntityTypeStr.VERT, title: 'Vertex'},
-  {type: EEntityTypeStr.EDGE, title: 'Edges'},
-  {type: EEntityTypeStr.WIRE, title: 'Wires'},
-  {type: EEntityTypeStr.FACE, title: 'Faces'},
-  {type: EEntityTypeStr.POINT, title: 'Points'},
-  {type: EEntityTypeStr.PLINE, title: 'Polylines'},
-  {type: EEntityTypeStr.PGON, title: 'Polygons'},
-  {type: EEntityTypeStr.COLL, title: 'Collections'}];
+  tabs: { type: string, title: string }[] =
+    [{ type: EEntityTypeStr.POSI, title: 'Positions' },
+    { type: EEntityTypeStr.VERT, title: 'Vertex' },
+    { type: EEntityTypeStr.EDGE, title: 'Edges' },
+    { type: EEntityTypeStr.WIRE, title: 'Wires' },
+    { type: EEntityTypeStr.FACE, title: 'Faces' },
+    { type: EEntityTypeStr.POINT, title: 'Points' },
+    { type: EEntityTypeStr.PLINE, title: 'Polylines' },
+    { type: EEntityTypeStr.PGON, title: 'Polygons' },
+    { type: EEntityTypeStr.COLL, title: 'Collections' }];
   displayedColumns: string[] = [];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -43,13 +43,16 @@ export class AttributeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && this.data) {
-      if (localStorage.getItem('mpm_attrib_current_tab') != null) {
-        this.currentTab = Number(localStorage.getItem('mpm_attrib_current_tab'));
-      } else {
-        this.currentTab = 0;
-      }
+      const currentTab = this.getCurrentTab();
       setTimeout(() => {
-        this.generateTable(this.currentTab);
+        this.generateTable(currentTab);
+      });
+    }
+
+    if (changes['showSelected']) {
+      const currentTab = this.getCurrentTab();
+      setTimeout(() => {
+        this.generateTable(currentTab);
       });
     }
   }
@@ -68,11 +71,18 @@ export class AttributeComponent implements OnChanges {
       8: EntityType.COLL
     };
     if (this.data) {
-      const attribData = this.data.attribs.threejs.getAttribsForTable(tab_map[tabIndex]);
-      // console.log(attribData);
-      if (attribData.length > 0) {
-        this.displayedColumns = Object.keys(attribData[0]);
-        this.dataSource = new MatTableDataSource<object>(attribData);
+      const ThreeJS = this.data.attribs.threejs;
+      let displayData: { id: string }[] = [];
+      const AllAttribData = ThreeJS.getAttribsForTable(tab_map[tabIndex]);
+      const SelectedAttribData = ThreeJS.getEntsVals(this.dataService.selected_ents.get(tab_map[tabIndex]), tab_map[tabIndex]);
+      if (this.showSelected) {
+        displayData = SelectedAttribData;
+      } else {
+        displayData = AllAttribData;
+      }
+      if (displayData.length > 0) {
+        this.displayedColumns = Object.keys(displayData[0]);
+        this.dataSource = new MatTableDataSource<object>(displayData);
       } else {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
@@ -85,9 +95,16 @@ export class AttributeComponent implements OnChanges {
 
   _setDataSource(tabIndex: number) {
     setTimeout(() => {
-      this.currentTab = tabIndex;
       localStorage.setItem('mpm_attrib_current_tab', tabIndex.toString());
       this.generateTable(tabIndex);
     });
+  }
+
+  private getCurrentTab() {
+    if (localStorage.getItem('mpm_attrib_current_tab') != null) {
+      return Number(localStorage.getItem('mpm_attrib_current_tab'));
+    } else {
+      return 0;
+    }
   }
 }

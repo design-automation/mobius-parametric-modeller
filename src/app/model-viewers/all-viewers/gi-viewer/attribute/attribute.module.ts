@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import {
-  MatTabsModule,
   MatTableModule,
   MatSortModule,
   MatPaginatorModule
@@ -8,13 +7,11 @@ import {
 
 @NgModule({
   imports: [
-    MatTabsModule,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule
   ],
   exports: [
-    MatTabsModule,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule

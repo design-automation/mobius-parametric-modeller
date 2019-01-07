@@ -18,6 +18,7 @@ import { AttributeComponent } from './attribute/attribute.component';
 
 import { TabComponent } from './attribute/tab.component';
 import { TabsComponent } from './attribute/tabs.component';
+import { DropdownMenuComponent } from './html/dropdown-menu.component';
 /**
  * GIViewer
  * A viewer for Geo-Info models.
@@ -28,7 +29,8 @@ import { TabsComponent } from './attribute/tabs.component';
         ThreejsViewerComponent,
         AttributeComponent,
         TabComponent,
-        TabsComponent
+        TabsComponent,
+        DropdownMenuComponent
     ],
     exports: [
         GIViewerComponent

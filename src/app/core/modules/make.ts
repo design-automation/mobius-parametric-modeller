@@ -420,6 +420,25 @@ export enum _EDivideMethod {
     BY_NUMBER =  'by_number',
     BY_LENGTH  =  'by_length'
 }
+function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _EDivideMethod): number[] {
+    const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.EDGE, edge_i);
+    const start = __model__.attribs.query.getPosiCoords(posis_i[0]);
+    const end = __model__.attribs.query.getPosiCoords(posis_i[1]);
+    let new_xyzs: Txyz[];
+    if (method === _EDivideMethod.BY_NUMBER) {
+        new_xyzs = interpByNum(start, end, divisor - 1);
+    } else {
+        new_xyzs = interpByLen(start, end, divisor);
+    }
+    const new_edges_i: number[] = [];
+    for (const new_xyz of new_xyzs) {
+        const posi_i = __model__.geom.add.addPosition();
+        __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
+        const new_edge_i: number = __model__.geom.add.insertVertWire(edge_i, posi_i);
+        new_edges_i.push(new_edge_i);
+    }
+    return [edge_i, ...new_edges_i];
+}
 /**
  * Divides edge by length or by number of segments.
  * If edge is not exact multiple of length, length of last segment will be the remainder.
@@ -427,37 +446,32 @@ export enum _EDivideMethod {
  * @param edge Edge(s) to be divided.
  * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
- * @returns List of new positions, null if unsuccessful or on error.
- * @example segments1 = make.Divide(edge1, 5, number)
+ * @returns List of new edges (segments of original edges), null if unsuccessful or on error.
+ * @example segments1 = make.Divide(edge1, 5, by_number)
  * @example_info Creates a list of 5 equal segments from edge1.
- * @example segments2 = make.Divide(edge1, 5, length)
+ * @example segments2 = make.Divide(edge1, 5, by_length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
 export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE']);
+    // checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE']);
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
     if (!Array.isArray(edge)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge as TId);
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
-        const start = __model__.attribs.query.getPosiCoords(posis_i[0]);
-        const end = __model__.attribs.query.getPosiCoords(posis_i[1]);
-        let new_xyzs: Txyz[];
-        if (method === _EDivideMethod.BY_NUMBER) {
-            new_xyzs = interpByNum(start, end, divisor);
+        let exist_edges_i: number[];
+        if (!isEdge(ent_type_str)) {
+            exist_edges_i = __model__.geom.query.navAnyToEdge(ent_type_str, index).slice();
         } else {
-            new_xyzs = interpByLen(start, end, divisor);
+            exist_edges_i = [index];
         }
-        const new_edges_i: number[] = [];
-        new_xyzs.forEach( new_xyz => {
-            const posi_i = (__model__.geom.add.addPosition());
-            __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
-            const new_edge_i: number = __model__.geom.add.insertVertWire(index, posi_i);
-            new_edges_i.push(new_edge_i);
-        });
-        return new_edges_i.map(new_edge_i => EEntityTypeStr.EDGE + new_edge_i);
+        const all_new_edges_i: number[] = [];
+        for (const exist_edge_i of exist_edges_i) {
+            const new_edges_i: number[] = _divide(__model__, exist_edge_i, divisor, method);
+            all_new_edges_i.push(...new_edges_i);
+        }
+        return all_new_edges_i.map(one_edge_i => EEntityTypeStr.EDGE + one_edge_i);
     } else {
         return [].concat(...(edge as TId[]).map(one_edge => Divide(__model__, one_edge, divisor, method)));
     }

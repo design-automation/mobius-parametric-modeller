@@ -43,67 +43,69 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
         }
     }
     let check_fns = [];
-    if (blocked === true) {
-        let pass = false;
-        const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
-                        + Object.values(EAttribNames).toString() + '\n'];
-        if (ind === false) {
-            try {
-                isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
-                let chkLstLen;
-                if (isTexture) {
-                    chkLstLen = 2;
-                } else {
-                    chkLstLen = 3;
-                }
-                isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
-            } catch (err) {
-                err_arr.push(err.message);
-                throw new Error(err_arr.join(''));
-            }
-            check_fns = ['isNumberList'];
-            for (let i = 0; i < check_fns.length; i++) {
+    if (attrib_value !== null && attrib_value !== undefined) {
+        if (blocked === true) {
+            let pass = false;
+            const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
+                            + Object.values(EAttribNames).toString() + '\n'];
+            if (ind === false) {
                 try {
-                    typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                    isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
+                    let chkLstLen;
+                    if (isTexture) {
+                        chkLstLen = 2;
+                    } else {
+                        chkLstLen = 3;
+                    }
+                    isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
                 } catch (err) {
-                    err_arr.push(err.message + '\n');
-                    continue;
-                }
-                pass = true;
-                break; // passed
-            }
-        } else {
-            if (isTexture) {
-                if (attrib_index > 1 || attrib_index < 0) {
-                    err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
+                    err_arr.push(err.message);
                     throw new Error(err_arr.join(''));
+                }
+                check_fns = ['isNumberList'];
+                for (let i = 0; i < check_fns.length; i++) {
+                    try {
+                        typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                    } catch (err) {
+                        err_arr.push(err.message + '\n');
+                        continue;
+                    }
+                    pass = true;
+                    break; // passed
                 }
             } else {
-                if (attrib_index > 2 || attrib_index < 0) {
-                    err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
-                    throw new Error(err_arr.join(''));
+                if (isTexture) {
+                    if (attrib_index > 1 || attrib_index < 0) {
+                        err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
+                        throw new Error(err_arr.join(''));
+                    }
+                } else {
+                    if (attrib_index > 2 || attrib_index < 0) {
+                        err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
+                        throw new Error(err_arr.join(''));
+                    }
+                }
+                check_fns = ['isNumber'];
+                for (let i = 0; i < check_fns.length; i++) {
+                    try {
+                        typeCheckObj[check_fns[i]](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i], 'attrib_value', attrib_value);
+                    } catch (err) {
+                        err_arr.push(err.message + '\n');
+                        continue;
+                    }
+                    pass = true;
+                    break; // passed
                 }
             }
-            check_fns = ['isNumber'];
-            for (let i = 0; i < check_fns.length; i++) {
-                try {
-                    typeCheckObj[check_fns[i]](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i], 'attrib_value', attrib_value);
-                } catch (err) {
-                    err_arr.push(err.message + '\n');
-                    continue;
-                }
-                pass = true;
-                break; // passed
+            if (pass === false) {
+                throw new Error(err_arr.join(''));
             }
-        }
-        if (pass === false) {
-            throw new Error(err_arr.join(''));
-        }
-    } else {
-        if (ind === false) {
-            checkCommTypes(fn_name, 'attrib_value', attrib_value, ['isString', 'isNumber', 'isStringList', 'isNumberList']);
-        } else { // no nested lists
-            checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value, ['isString', 'isNumber']);
+        } else {
+            if (ind === false) {
+                checkCommTypes(fn_name, 'attrib_value', attrib_value, ['isString', 'isNumber', 'isStringList', 'isNumberList']);
+            } else { // no nested lists
+                checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value, ['isString', 'isNumber']);
+            }
         }
     }
     return;

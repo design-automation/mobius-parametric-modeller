@@ -1,9 +1,9 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane } from '@libs/geo-info/common';
+import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane, TRay } from '@libs/geo-info/common';
 import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi, isObj, isEdge } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { isArray } from 'util';
-import { vecDiv, vecMult, interpByNum, interpByLen } from '@libs/geom/vectors';
+import { vecDiv, vecMult, interpByNum, interpByLen, vecsAdd, vecsSub } from '@libs/geom/vectors';
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
 
@@ -479,36 +479,83 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
 /**
  * Adds a visible vector to the model from a Position and vector.
  * @param __model__
- * @param origin Position of origin, or list of three coordinates
- * @param vector Vector or list of three coordinates.
- * @returns Visible vector from origin if successful, null if unsuccessful or on error.
+ * @param ray A list of two list of three coordinates
+ * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
+ * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]])
  */
-export function RayVisible(__model__: GIModel, origin: TId|Txyz, vector: Txyz): TId {
+export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'make.RayVisible';
-    checkIDnTypes(fn_name, 'origin', origin, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
-    checkCommTypes(fn_name, 'vector', vector, ['isVector']);
+    // checkIDnTypes(fn_name, 'origin', origin, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    const origin: Txyz = ray[0];
+    const vec: Txyz = vecMult(ray[1], scale);
+    const end: Txyz = vecsAdd(origin, vec);
+    // create orign point
+    const origin_posi_i: number = __model__.geom.add.addPosition();
+    __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
+    const point_i = __model__.geom.add.addPoint(origin_posi_i);
+    // create pline
+    const end_posi_i: number = __model__.geom.add.addPosition();
+    __model__.attribs.add.setPosiCoords(end_posi_i, end);
+    const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
+    // return the geometry IDs
+    return [EEntityTypeStr.POINT + point_i, EEntityTypeStr.PLINE + pline_i];
 }
 /**
  * Adds a new plane to the model from a location and two vectors.
  * @param __model__
- * @param location Position, point, vertex on plane
- * @param vector1 Vector on plane or list of three coordinates defining it.
- * @param vector2 Vector on plane or list of three coordinates defining it.
- * @returns New plane if successful, null if unsuccessful or on error.
+ * @param plane A list of lists
+ * @returns A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
  * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: Txyz, vector2: Txyz): TId {
+export function PlaneGeom(__model__: GIModel, plane: TPlane, scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'make.PlanerVisible';
-    checkIDnTypes(fn_name, 'location', location, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
-    checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
-    checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
+    // checkIDnTypes(fn_name, 'location', location, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
+    // checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
+    // checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    const origin: Txyz = plane[0];
+    const x_vec: Txyz = vecMult(plane[1], scale);
+    const y_vec: Txyz = vecMult(plane[2], scale);
+    let x_end: Txyz = vecsAdd(origin, x_vec);
+    let y_end: Txyz = vecsAdd(origin, y_vec);
+    const plane_corners: Txyz[] = [
+        vecsAdd(x_end, y_vec),
+        vecsSub(y_end, x_vec),
+        vecsSub(vecsSub(origin, x_vec), y_vec),
+        vecsSub(x_end, y_vec),
+    ];
+    x_end = vecsAdd(x_end, vecMult(x_vec, 0.1));
+    y_end = vecsSub(y_end, vecMult(y_vec, 0.1));
+    // create the point
+    const origin_posi_i: number = __model__.geom.add.addPosition();
+    __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
+    const point_i = __model__.geom.add.addPoint(origin_posi_i);
+    // create the x axis
+    const x_end_posi_i: number = __model__.geom.add.addPosition();
+    __model__.attribs.add.setPosiCoords(x_end_posi_i, x_end);
+    const x_pline_i = __model__.geom.add.addPline([origin_posi_i, x_end_posi_i]);
+    // create the y axis
+    const y_end_posi_i: number = __model__.geom.add.addPosition();
+    __model__.attribs.add.setPosiCoords(y_end_posi_i, y_end);
+    const y_pline_i = __model__.geom.add.addPline([origin_posi_i, y_end_posi_i]);
+    // create pline for plane
+    const corner_posis_i: number[] = [];
+    for (const corner of plane_corners) {
+        const posi_i: number =__model__.geom.add.addPosition();
+        __model__.attribs.add.setPosiCoords(posi_i, corner);
+        corner_posis_i.push(posi_i);
+    }
+    const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
+    // return the geometry IDs
+    return [
+        EEntityTypeStr.POINT + point_i,
+        EEntityTypeStr.PLINE + x_pline_i, EEntityTypeStr.PLINE + y_pline_i,
+        EEntityTypeStr.PLINE + plane_i
+    ];
 }
 
 // Pipe

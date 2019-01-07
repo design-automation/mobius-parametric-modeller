@@ -3,7 +3,7 @@ import { TId, Txyz, EEntityTypeStr } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, idBreak, isPgon, isFace } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
-import { vecsSum, vecDiv, vecsAdd, vecsSub } from '@libs/geom/vectors';
+import { vecsSum, vecDiv, vecsAdd, vecsSub, vecNorm } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
 import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
@@ -163,7 +163,7 @@ export function Normal(__model__: GIModel, geometry: TId): Txyz {
             const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
             normal_vec = vecsAdd(normal_vec, tri_normal);
         }
-        return vecDiv(normal_vec, tris_i.length);
+        return vecNorm(vecDiv(normal_vec, tris_i.length));
     } else if (isPline(geometry) || isWire(geometry)) {
         // wires, these need to be triangulated
         let wire_i: number = index;
@@ -182,11 +182,8 @@ export function Normal(__model__: GIModel, geometry: TId): Txyz {
             const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
             normal_vec = vecsAdd(normal_vec, tri_normal);
         }
-        return vecDiv(normal_vec, tris.length);
+        return vecNorm(vecDiv(normal_vec, tris.length));
     }
-    // } else {
-    //     throw new Error('Entity is of wrong type. Must be a a polygon, a face, a polyline or a wire');
-    // }
 }
 /**
  * Calculates the centroid of a list of any geometry.

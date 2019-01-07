@@ -1,7 +1,8 @@
 import { GIAttribMap } from './GIAttribMap';
 
 // Types
-export type TPlane = [Txyz, Txyz, Txyz]; // an origin and two vectors
+export type TRay = [Txyz, Txyz]; // an origin and a direction vector
+export type TPlane = [Txyz, Txyz, Txyz]; // an origin, an x vec and a y vec
 export type TQuery = string;
 export type TId = string;
 export type TColor = [number, number, number]; // TODO replace with Txyz

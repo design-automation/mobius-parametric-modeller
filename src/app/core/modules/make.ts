@@ -1,9 +1,9 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane } from '@libs/geo-info/common';
-import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi, isObj } from '@libs/geo-info/id';
+import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi, isObj, isEdge } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { isArray } from 'util';
-import { vecsAdd, vecDiv, vecMult } from '@libs/geom/vectors';
+import { vecDiv, vecMult, interpByNum, interpByLen } from '@libs/geom/vectors';
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
 
@@ -424,22 +424,43 @@ export enum _EDivideMethod {
  * Divides edge by length or by number of segments.
  * If edge is not exact multiple of length, length of last segment will be the remainder.
  * @param __model__
- * @param edges Edge(s) to be divided.
+ * @param edge Edge(s) to be divided.
  * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
- * @returns List of segments if successful, null if unsuccessful or on error.
+ * @returns List of new positions, null if unsuccessful or on error.
  * @example segments1 = make.Divide(edge1, 5, number)
  * @example_info Creates a list of 5 equal segments from edge1.
  * @example segments2 = make.Divide(edge1, 5, length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
+export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    checkIDs('make.Copy', 'edges', edges, ['isID', 'isIDList'], ['EDGE']);
+    checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE']);
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    if (!Array.isArray(edge)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge as TId);
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+        const start = __model__.attribs.query.getPosiCoords(posis_i[0]);
+        const end = __model__.attribs.query.getPosiCoords(posis_i[1]);
+        let new_xyzs: Txyz[];
+        if (method === _EDivideMethod.BY_NUMBER) {
+            new_xyzs = interpByNum(start, end, divisor);
+        } else {
+            new_xyzs = interpByLen(start, end, divisor);
+        }
+        const new_edges_i: number[] = [];
+        new_xyzs.forEach( new_xyz => {
+            const posi_i = (__model__.geom.add.addPosition());
+            __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
+            const new_edge_i: number = __model__.geom.add.insertVertWire(index, posi_i);
+            new_edges_i.push(new_edge_i);
+        });
+        return new_edges_i.map(new_edge_i => EEntityTypeStr.EDGE + new_edge_i);
+    } else {
+        return [].concat(...(edge as TId[]).map(one_edge => Divide(__model__, one_edge, divisor, method)));
+    }
 }
 /**
  * Adds a visible vector to the model from a Position and vector.
@@ -448,9 +469,9 @@ export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, me
  * @param vector Vector or list of three coordinates.
  * @returns Visible vector from origin if successful, null if unsuccessful or on error.
  */
-export function VectorVisible(__model__: GIModel, origin: TId|Txyz, vector: Txyz): TId {
+export function RayVisible(__model__: GIModel, origin: TId|Txyz, vector: Txyz): TId {
     // --- Error Check ---
-    const fn_name = 'make.VectorVisible';
+    const fn_name = 'make.RayVisible';
     checkIDnTypes(fn_name, 'origin', origin, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
     checkCommTypes(fn_name, 'vector', vector, ['isVector']);
     // --- Error Check ---
@@ -475,3 +496,8 @@ export function PlaneVisible(__model__: GIModel, location: TId|Txyz, vector1: Tx
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
+
+// Pipe
+
+// Offset
+

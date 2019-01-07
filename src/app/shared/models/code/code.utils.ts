@@ -130,7 +130,9 @@ export class CodeUtils {
                 if (!check) {
                     codeStr.push(`return __params__['model'];`);
                 } else {
-                    codeStr.push(`return __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
+                    codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});\n` +
+                                `console.log('Return: ', __return_value__);\n` +
+                                `return __return_value__;`);
                 }
                 break;
 

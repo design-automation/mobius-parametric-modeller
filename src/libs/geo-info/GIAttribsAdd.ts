@@ -1,9 +1,8 @@
-import { GIModel } from "./GIModel";
+import { GIModel } from './GIModel';
 import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntityTypeStr,
-    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EEntStrToAttribMap, EAttribNames, Txyz } from "./common";
-import { GIAttribMap } from "./GIAttribMap";
-import { isArray } from "util";
-import { vecsAdd } from "@libs/geom/vectors";
+    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EEntStrToAttribMap, EAttribNames, Txyz } from './common';
+import { GIAttribMap } from './GIAttribMap';
+import { vecsAdd } from '@libs/geom/vectors';
 
 /**
  * Class for attributes.
@@ -25,23 +24,21 @@ export class GIAttribsAdd {
      * @param model_data The JSON data for the model.
      */
     public addData(model_data: IModelData): void {
-        // helper public to ddd attributes to model
+        // helper function to ddd attributes to model
         function _addAttribData(
                 exist_attribs_maps:  Map<string, GIAttribMap>,
                 new_attribs_data: IAttribData[],
-                num_existing_entities: number,
-                num_new_entities: number): void {
+                num_existing_entities: number): void {
             // loop through all attributes, adding data
             new_attribs_data.forEach( new_attrib_data => {
                 if (!exist_attribs_maps.has(new_attrib_data.name)) {
                     exist_attribs_maps.set(new_attrib_data.name, new GIAttribMap(
                         new_attrib_data.name,
                         new_attrib_data.data_type,
-                        new_attrib_data.data_size,
-                        num_existing_entities
+                        new_attrib_data.data_size
                     ));
                 }
-                exist_attribs_maps.get(new_attrib_data.name).addEntities(new_attrib_data, num_new_entities);
+                exist_attribs_maps.get(new_attrib_data.name).addData(new_attrib_data, num_existing_entities);
             });
         }
         // data for all the new atttributes
@@ -50,42 +47,107 @@ export class GIAttribsAdd {
         // add the attribute data
         // exist_attribs_maps, new_attribs_data, num_existing_entities, num_new_entities
         if (attribs_data.positions !== undefined) {
-            _addAttribData(this._attribs_maps.posis, attribs_data.positions, 
-                this._model.geom.query.numPosis(), geom_data.num_positions);
+            _addAttribData(this._attribs_maps.posis, attribs_data.positions,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.POSI));
         }
         if (attribs_data.vertices !== undefined) {
-            _addAttribData(this._attribs_maps.verts, attribs_data.vertices, 
-                this._model.geom.query.numVerts(), geom_data.vertices.length);
+            _addAttribData(this._attribs_maps.verts, attribs_data.vertices,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.VERT));
         }
         if (attribs_data.edges !== undefined) {
-            _addAttribData(this._attribs_maps.edges, attribs_data.edges, 
-                this._model.geom.query.numEdges(), geom_data.edges.length);
+            _addAttribData(this._attribs_maps.edges, attribs_data.edges,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.EDGE));
         }
         if (attribs_data.wires !== undefined) {
-            _addAttribData(this._attribs_maps.wires, attribs_data.wires, 
-                this._model.geom.query.numWires(), geom_data.wires.length);
+            _addAttribData(this._attribs_maps.wires, attribs_data.wires,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.WIRE));
         }
         if (attribs_data.faces !== undefined) {
-            _addAttribData(this._attribs_maps.faces, attribs_data.faces, 
-                this._model.geom.query.numFaces(), geom_data.faces.length);
+            _addAttribData(this._attribs_maps.faces, attribs_data.faces,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.FACE));
         }
         if (attribs_data.points !== undefined) {
-            _addAttribData(this._attribs_maps.points, attribs_data.points, 
-                this._model.geom.query.numPoints(), geom_data.points.length);
+            _addAttribData(this._attribs_maps.points, attribs_data.points,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.POINT));
         }
         if (attribs_data.polylines !== undefined) {
-            _addAttribData(this._attribs_maps.plines, attribs_data.polylines, 
-                this._model.geom.query.numPlines(), geom_data.polylines.length);
+            _addAttribData(this._attribs_maps.plines, attribs_data.polylines,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.PLINE));
         }
         if (attribs_data.polygons !== undefined) {
-            _addAttribData(this._attribs_maps.pgons, attribs_data.polygons, 
-                this._model.geom.query.numFaces(), geom_data.polygons.length);
+            _addAttribData(this._attribs_maps.pgons, attribs_data.polygons,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.PGON));
         }
         if (attribs_data.collections !== undefined) {
-            _addAttribData(this._attribs_maps.colls, attribs_data.collections, 
-                this._model.geom.query.numColls(), geom_data.collections.length);
+            _addAttribData(this._attribs_maps.colls, attribs_data.collections,
+                this._model.geom.query.nextEntIndex(EEntityTypeStr.COLL));
         }
-
+    }
+    /**
+     * Creates a new attribte.
+     * @param ent_type_str The level at which to create the attribute.
+     * @param name The name of the attribute.
+     * @param data_type The data type of the attribute.
+     * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
+     */
+    public addAttrib(ent_type_str: EEntityTypeStr, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        if (!attribs.has(name)) {
+            const attrib: GIAttribMap = new GIAttribMap(name, data_type, data_size);
+            attribs.set(name, attrib);
+        }
+        return attribs[name];
+    }
+    /**
+     * Set an entity attrib value
+     * @param id
+     * @param name
+     * @param value
+     */
+    public setAttribValue(ent_type_str: EEntityTypeStr, index: number, name: string, value: TAttribDataTypes): void {
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        if (attribs.get(name) === undefined) {
+            const [data_type, data_size]: [EAttribDataTypeStrs, number] = this._checkDataTypeSize(value);
+            this.addAttrib(ent_type_str, name, data_type, data_size);
+        }
+        attribs.get(name).setEntVal(index, value);
+    }
+    /**
+     * Set the xyz position by index
+     * @param index
+     * @param value
+     */
+    public setPosiCoords(index: number, xyz: Txyz): void {
+        this._attribs_maps.posis.get(EAttribNames.COORDS).setEntVal(index, xyz);
+    }
+    /**
+     * Move the xyz position by index
+     * @param index
+     * @param value
+     */
+    public movePosiCoords(index: number, xyz: Txyz): void {
+        const old_xyz: Txyz = this._attribs_maps.posis.get(EAttribNames.COORDS).getEntVal(index) as Txyz;
+        const new_xyz: Txyz = vecsAdd(old_xyz, xyz);
+        this._attribs_maps.posis.get(EAttribNames.COORDS).setEntVal(index, new_xyz);
+    }
+    /**
+     * Copy attribs from one entity to another entity
+     * @param ent_type_str
+     * @param name
+     */
+    public copyAttribs(ent_type_str: EEntityTypeStr, from_ent_i: number, to_ent_i: number): void {
+        // get the attrib names
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib_names: string[] = Array.from(attribs.keys());
+        // copy each attrib
+        for (const attrib_name of attrib_names) {
+            const attrib: GIAttribMap = attribs.get(name);
+            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i);
+            attrib.setEntVal(to_ent_i, attrib_value);
+        }
     }
     // ============================================================================
     // Private methods
@@ -97,7 +159,7 @@ export class GIAttribsAdd {
     private _checkDataTypeSize(value: TAttribDataTypes): [EAttribDataTypeStrs, number] {
         let data_size: number;
         let first_value = null;
-        if (isArray(value)) {
+        if (Array.isArray(value)) {
             const values = value as number[] | string[];
             if (values.length === 1) {
                 throw new Error('An array data type must have more than one value.');
@@ -118,88 +180,4 @@ export class GIAttribsAdd {
         }
         return [data_type, data_size];
     }
-    /**
-     * Utility method to get num entities based on Entity Type
-     * @param ent_type_str
-     */
-    private _checkNumEntities(ent_type_str: EEntityTypeStr): number {
-        switch (ent_type_str) {
-            case EEntityTypeStr.POSI:
-                return this._model.geom.query.numPosis();
-            case EEntityTypeStr.VERT:
-                return this._model.geom.query.numVerts();
-            case EEntityTypeStr.EDGE:
-                return this._model.geom.query.numEdges();
-            case EEntityTypeStr.WIRE:
-                return this._model.geom.query.numWires();
-            case EEntityTypeStr.FACE:
-                return this._model.geom.query.numFaces();
-            case EEntityTypeStr.POINT:
-                return this._model.geom.query.numPoints();
-            case EEntityTypeStr.PLINE:
-                return this._model.geom.query.numPlines();
-            case EEntityTypeStr.PGON:
-                return this._model.geom.query.numPgons();
-            case EEntityTypeStr.COLL:
-                return this._model.geom.query.numColls();
-            default:
-                throw new Error('Entity type string not recognised');
-                break;
-        }
-    }
-    // ============================================================================
-    // Public methods
-    // ============================================================================
-    /**
-     * Creates a new attribte.
-     * @param ent_type_str The level at which to create the attribute.
-     * @param name The name of the attribute.
-     * @param data_type The data type of the attribute.
-     * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
-     */
-    public addAttrib(ent_type_str: EEntityTypeStr, name: string, data_type: EAttribDataTypeStrs,
-        data_size: number): GIAttribMap {
-    const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
-    const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-    const num_entities: number = this._checkNumEntities(ent_type_str);
-    if (!attribs.has(name)) {
-        const attrib: GIAttribMap = new GIAttribMap(name, data_type, data_size, num_entities);
-        attribs.set(name, attrib);
-    }
-    return attribs[name];
 }
-    /**
-     * Set an entity attrib value
-     * @param id
-     * @param name
-     * @param value
-     */
-    public setAttribValue(ent_type_str: EEntityTypeStr, index: number, name: string, value: TAttribDataTypes): void {
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        if (attribs.get(name) === undefined) {
-            const [data_type, data_size]: [EAttribDataTypeStrs, number] = this._checkDataTypeSize(value);
-            this.addAttrib(ent_type_str, name, data_type, data_size);
-        }
-        attribs.get(name).set(index, value);
-    }
-    /**
-     * Set the xyz position by index
-     * @param index
-     * @param value
-     */
-    public setPosiCoords(index: number, xyz: Txyz): void {
-        this._attribs_maps.posis.get(EAttribNames.COORDS).set(index, xyz);
-    }
-    /**
-     * Move the xyz position by index
-     * @param index
-     * @param value
-     */
-    public movePosiCoords(index: number, xyz: Txyz): void {
-        const old_xyz: Txyz = this._attribs_maps.posis.get(EAttribNames.COORDS).get(index) as Txyz;
-        const new_xyz: Txyz = vecsAdd(old_xyz, xyz);
-        this._attribs_maps.posis.get(EAttribNames.COORDS).set(index, new_xyz);
-    }
-}
-

@@ -149,7 +149,7 @@ select{
     .input--container{
         display:inline-flex;
         width: 100%;
-        max-width: 300px;
+        // max-width: 300px;
         vertical-align: middle;
         .min-max{
             white-space: nowrap;
@@ -160,7 +160,7 @@ select{
     }
 
     .slider--container{
-        width: 300px;
+        width: 100%;
         display: flex;
         flex-flow: row nowrap;
         padding-right: 50px;
@@ -174,7 +174,7 @@ select{
         mat-slider{
             width: 100%;
             height: $fsize3;
-            max-width: 300px;
+            // max-width: 300px;
             padding: 0px;
         }
     }

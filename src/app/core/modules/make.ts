@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane } from '@libs/geo-info/common';
-import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi } from '@libs/geo-info/id';
+import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi, isObj } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { isArray } from 'util';
 import { vecsAdd, vecDiv, vecMult } from '@libs/geom/vectors';
@@ -210,7 +210,9 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
-    checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
+    if (parent_coll !== null || parent_coll !== undefined) {
+        checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
+    }
     checkIDs(fn_name, 'objects', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
     // --- Error Check ---
     if (!Array.isArray(objects)) {
@@ -219,14 +221,16 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
     const points: number[] = [];
     const plines: number[] = [];
     const pgons: number[] = [];
-    for (const object of objects) {
-        if (isPoint(object)) { points.push(idBreak(object)[1]); }
-        if (isPline(object)) { plines.push(idBreak(object)[1]); }
-        if (isPgon(object)) { pgons.push(idBreak(object)[1]); }
+    for (const ent_i of objects) {
+        if (isPoint(ent_i)) { points.push(idBreak(ent_i)[1]); }
+        if (isPline(ent_i)) { plines.push(idBreak(ent_i)[1]); }
+        if (isPgon(ent_i)) { pgons.push(idBreak(ent_i)[1]); }
     }
-    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(parent_coll);
-    const coll_i: number = __model__.geom.add.addColl(index, points, plines, pgons);
-    return EEntityTypeStr.COLL + coll_i;
+    if (parent_coll === null || parent_coll === undefined) {
+        return EEntityTypeStr.COLL + __model__.geom.add.addColl(-1, points, plines, pgons);
+    }
+    const [_, parent_index]: [EEntityTypeStr, number] = idBreak(parent_coll);
+    return EEntityTypeStr.COLL + __model__.geom.add.addColl(parent_index, points, plines, pgons);
 }
 /**
  * Lofts between edges.
@@ -389,30 +393,23 @@ export enum _ECopyAttribues {
  * @example_info Creates a list containing a copy of the objects in sequence of input.
  */
 export function Copy(__model__: GIModel, geometry: TId|TId[],
-    copy_positions: _ECopyPositions, copy_attributes: _ECopyAttribues): TId|TId[] {
+        copy_positions: _ECopyPositions, copy_attributes: _ECopyAttribues): TId|TId[] {
+    if (copy_positions === _ECopyPositions.COPY_POSITIONS) {
+        throw new Error('Copy with copy_positions option is not yet implemented... coming soon.');
+    }
     // --- Error Check ---
     checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    // TODO positions may be copied multiple times
     if (!Array.isArray(geometry)) {
-        const bool_copy_posis: boolean = (copy_positions === _ECopyPositions.COPY_POSITIONS);
         const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
         if (isColl(ent_type_str)) {
-            // Make a deep copy of a collection
-            const points_i: number[] = __model__.geom.query.navCollToPoint(index);
-            const res1 = __model__.geom.add.copyObjs(EEntityTypeStr.POINT, points_i, bool_copy_posis, bool_copy_attribs) as number[];
-            const plines_i: number[] = __model__.geom.query.navCollToPline(index);
-            const res2 = __model__.geom.add.copyObjs(EEntityTypeStr.PLINE, plines_i, bool_copy_posis, bool_copy_attribs) as number[];
-            const pgons_i: number[] = __model__.geom.query.navCollToPgon(index);
-            const res3 = __model__.geom.add.copyObjs(EEntityTypeStr.PGON, pgons_i, bool_copy_posis, bool_copy_attribs) as number[];
-            const parent: number = __model__.geom.query.getCollParent(index);
-            return EEntityTypeStr.COLL + __model__.geom.add.addColl(parent, res1, res2, res3);
+            return ent_type_str + __model__.geom.add.copyColls(index, bool_copy_attribs);
+        } else if (isObj(ent_type_str)) {
+            return ent_type_str + __model__.geom.add.copyObjs(ent_type_str, index, bool_copy_attribs);
         } else if (isPosi(ent_type_str)) {
             return ent_type_str + __model__.geom.add.copyPosis(index, bool_copy_attribs);
-        } else {
-            return ent_type_str + __model__.geom.add.copyObjs(ent_type_str, index, bool_copy_posis, bool_copy_attribs);
         }
     } else {
         return (geometry as TId[]).map(geom_i => Copy(__model__, geom_i, copy_positions, copy_attributes)) as TId[];

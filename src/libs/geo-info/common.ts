@@ -127,6 +127,13 @@ export enum EEntStrToAttribMap {
     co = 'colls'
 }
 
+// copy geometry
+export interface IGeomCopy {
+    points: number[];
+    plines: number[];
+    pgons: number[];
+    colls: number[];
+}
 // ================================================================================================
 // JSON DATA
 // ================================================================================================

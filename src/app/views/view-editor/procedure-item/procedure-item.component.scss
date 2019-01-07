@@ -32,6 +32,28 @@
 
     &.disabled{
         opacity: 0.5;
+        .btns{
+            display: inline-flex;
+            background-color: transparent;
+            #disable-btn{
+                display: flex;
+                justify-content: center;
+                background-color: $color6;
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+        &:hover .btns{
+            background-color: $color5;
+            #disable-btn{
+                background-color: $color5;
+                order: 0;
+            }
+        }
     }
 
     &.disabled .input--var, &.disabled .input--arg{
@@ -50,22 +72,15 @@
         //     }
         // }
     }
-    
-    &.error:not(.disabled){
-        border-bottom: 2px solid $error-color;
-        border-left: 2px solid $error-color;
-        padding-bottom: 0px;
-        padding-left: 1px;
-        &.selected{
-            border-bottom: 2px solid $selected-color;
-        }
-    }
 
     &.printing:not(.disabled){
         border-bottom: 2px solid $print-color;
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
         padding-left: 1px;
+        #print-btn{
+            color: $print-color;
+        }
     }
 
     &.printing{
@@ -74,8 +89,7 @@
             background-color: transparent;
             #print-btn{
                 display: flex;
-                justify-content: center;
-                color: $print-color;
+                justify-content: center;   
                 background-color: $color6;
                 &:hover{
                     color: $selected-color;
@@ -89,13 +103,24 @@
             background-color: $color5;
             #print-btn{
                 background-color: $color5;
+                order: 1
             }
         }
     }
 
+    &.error:not(.disabled){
+        border-bottom: 2px solid $error-color;
+        border-left: 2px solid $error-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+    }
+    
     .input--var{
         font-size: $fsize2;
-        width: 70px;
+        min-width: 10px;
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
@@ -179,6 +204,7 @@
     justify-content: flex-end;
 
     background-color: $color5;
+
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
     &:hover{
@@ -198,6 +224,8 @@
 
     overflow: hidden;
     vertical-align: center;
+    
+    order: 4;
     // &.highlighted{
     //     background-color: red;
     // }

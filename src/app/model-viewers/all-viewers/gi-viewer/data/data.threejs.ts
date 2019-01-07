@@ -53,11 +53,11 @@ export class DataThreejs {
         // camera settings
         this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 20000);
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
-        this._camera.position.x = 100;
-        this._camera.position.y = 50;
-        this._camera.position.z = 100;
+        this._camera.position.x = -80;
+        this._camera.position.y = -80;
+        this._camera.position.z = 50;
         this._camera.aspect = 1;
-        // this._camera.up.set(0, 0, 1);
+        this._camera.up.set(0, 0, 1);
         this._camera.lookAt(this._scene.position);
         this._camera.updateProjectionMatrix();
 
@@ -110,10 +110,10 @@ export class DataThreejs {
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer);
 
-        const allObjs = this.getAllObjs();
-        const center = allObjs.center;
-        this.grid.position.copy(center);
-        this.axesHelper.position.copy(center);
+        // const allObjs = this.getAllObjs();
+        // const center = allObjs.center;
+        // this.grid.position.copy(center);
+        // this.axesHelper.position.copy(center);
     }
 
     public selectObjFace(labelText, triangle_i, positions, container) {
@@ -198,7 +198,9 @@ export class DataThreejs {
         this._scene.remove(this._scene.getObjectById(removing));
 
         this.ObjLabelMap.delete(selecting);
-        container.removeChild(document.getElementById(`textLabel_${selecting}`));
+        if (document.getElementById(`textLabel_${selecting}`)) {
+            container.removeChild(document.getElementById(`textLabel_${selecting}`));
+        }
     }
 
     // ============================================================================
@@ -248,9 +250,9 @@ export class DataThreejs {
         // todo: change grid -> grid_value
         if (this._grid_show) {
             this.grid.name = 'GridHelper';
-            // const vector = new THREE.Vector3(1, 1, 1);
-            // this.grid.lookAt(vector);
-            // this.grid.position.set(0, 0, 0);
+            const vector = new THREE.Vector3(0, 1, 0);
+            this.grid.lookAt(vector);
+            this.grid.position.set(0, 0, 0);
             this._scene.add(this.grid);
         }
     }

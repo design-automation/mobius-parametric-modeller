@@ -1,7 +1,6 @@
 
-import {  EEntityTypeStr, IGeomArrays, EEntStrToGeomArray, TWire, TVert, TTri,
-    TEdge, TFace, TPoint, TPline, TPgon, TColl, TPosi } from './common';
-import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, idBreak, isTri } from './id';
+import {  EEntityTypeStr, IGeomArrays, EEntStrToGeomArray, TWire } from './common';
+import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 /**
  * Class for geometry.
@@ -16,6 +15,94 @@ export class GIGeomQuery {
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
         this._geom_arrays = geom_arrays;
+    }
+    // ============================================================================
+    // Get entity indicies, and num ents
+    // ============================================================================
+    public getEnts(ent_type_str: EEntityTypeStr): number[] {
+        if (isPosi(ent_type_str)) {
+            // TODO how to handle deleted positions
+            return Array.from(Array(this._geom_arrays.num_posis).keys());
+        }
+        const geom_array_key: string = EEntStrToGeomArray[ent_type_str];
+        const geom_array: any[] = this._geom_arrays[geom_array_key];
+        // console.log("ent_type_str", ent_type_str);
+        // console.log("geom_array_key", geom_array_key);
+        // console.log("geom_array", geom_array);
+        const ents_i: number[] = [];
+        geom_array.forEach( (entity, index) => {
+            if (entity !== null && entity !== undefined) {  // skips deleted entities
+                ents_i.push(index);
+            }
+        });
+        return ents_i;
+    }
+    /**
+     * Returns the number of entities, excluding deleted entities
+     * @param ent_type_str
+     */
+    public numEnts(ent_type_str: EEntityTypeStr): number {
+        return this.getEnts(ent_type_str).length;
+    }
+    /**
+     * Returns the number of entities, including deleted entities
+     * @param ent_type_str
+     */
+    public nextEntIndex(ent_type_str: EEntityTypeStr): number {
+        if (isPosi(ent_type_str)) {
+            // TODO how to handle deleted positions
+            return this._geom_arrays.num_posis;
+        }
+        const geom_array_key: string = EEntStrToGeomArray[ent_type_str];
+        const geom_array: any[] = this._geom_arrays[geom_array_key];
+        return geom_array.length;
+    }
+    // ============================================================================
+    // Util
+    // ============================================================================
+    /**
+     * Check if an entity exists
+     * @param index
+     */
+    public entExists(ent_type_str: EEntityTypeStr, index: number): boolean {
+        const geom_arrays_key: string = EEntStrToGeomArray[ent_type_str];
+        return (this._geom_arrays[geom_arrays_key][index] !== undefined);
+    }
+    /**
+     * Check if a wire is closed.
+     * @param wire_i
+     */
+    public istWireClosed(wire_i: number): boolean {
+        // get the wire start and end verts
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const num_edges: number = wire.length;
+        const start_edge_i: number = wire[0];
+        const end_edge_i: number = wire[num_edges - 1];
+        const start_vert_i: number = this._geom.query.navEdgeToVert(start_edge_i)[0];
+        const end_vert_i: number = this._geom.query.navEdgeToVert(end_edge_i)[1];
+        // if start and end verts are the same, then wire is closed
+        return (start_vert_i === end_vert_i);
+    }
+    /**
+     * Returns the vertices.
+     * For a closed wire, #vertices = #edges
+     * For an open wire, #vertices = #edges + 1
+     */
+    private getWireVerts(wire_i: number): number[] {
+        const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
+        const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
+        // if wire is open, then add final vertex
+        if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
+            verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+        }
+        return verts_i;
+    }
+    /**
+     * Get the parent of a collection.
+     * @param wire_i
+     */
+    public getCollParent(coll_i: number): number {
+        return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
     // ============================================================================
     // Navigate down the hierarchy
@@ -97,20 +184,6 @@ export class GIGeomQuery {
     }
     public navPgonToColl(pgon_i: number): number[] {
         return this._geom_arrays.up_pgons_colls[pgon_i];
-    }
-    /**
-     * Returns the vertices.
-     * For a closed wire, #vertices = #edges
-     * For an open wire, #vertices = #edges + 1
-     */
-    private getWireVerts(wire_i: number): number[] {
-        const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
-        const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
-        // if wire is open, then add final vertex
-        if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
-            verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
-        }
-        return verts_i;
     }
     // ============================================================================
     // Navigate from any level to ? (up or down)
@@ -348,129 +421,5 @@ export class GIGeomQuery {
             default:
                 throw new Error('Bad navigation: ' + to_ets + index);
         }
-    }
-    // ============================================================================
-    // Get arrays of entities
-    // ============================================================================
-    public getPosis(): TPosi[] {
-        return Array.from(Array(this._geom_arrays.num_posis).keys());
-    }
-    public getVerts(): TVert[] {
-        return this._geom_arrays.dn_verts_posis;
-    }
-    public getTris(): TTri[] {
-        return this._geom_arrays.dn_tris_verts;
-    }
-    public getEdges(): TEdge[] {
-        return this._geom_arrays.dn_edges_verts;
-    }
-    public getWires(): TWire[] {
-        return this._geom_arrays.dn_wires_edges;
-    }
-    public getFaces(): TFace[] {
-        return this._geom_arrays.dn_faces_wirestris;
-    }
-    public getPoints(): TPoint[] {
-        return this._geom_arrays.dn_points_verts;
-    }
-    public getLines(): TPline[] {
-        return this._geom_arrays.dn_plines_wires;
-    }
-    public getPgons(): TPgon[] {
-        return this._geom_arrays.dn_pgons_faces;
-    }
-    public getColls(): TColl[] {
-        return this._geom_arrays.dn_colls_objs;
-    }
-    // ============================================================================
-    // Get entity indicies and numbers
-    // ============================================================================
-    public getEnts(ent_type_str: EEntityTypeStr): number[] {
-        if (isPosi(ent_type_str)) {
-            // TODO how to handle deleted positions
-            return Array.from(Array(this._geom_arrays.num_posis).keys());
-        }
-        const geom_array_key: string = EEntStrToGeomArray[ent_type_str];
-        const geom_array: any[] = this._geom_arrays[geom_array_key];
-        // console.log("ent_type_str", ent_type_str);
-        // console.log("geom_array_key", geom_array_key);
-        // console.log("geom_array", geom_array);
-
-        const indicies: number[] = [];
-        geom_array.forEach( (entity, index) => {
-            if (entity !== null && entity !== undefined) {  // skips deleted entities
-                indicies.push(index);
-            }
-        });
-        return indicies;
-    }
-    public numEnts(ent_type_str: EEntityTypeStr): number {
-        return this.getEnts(ent_type_str).length;
-    }
-    // ============================================================================
-    // Get array lengths
-    // ============================================================================
-    public numPosis(): number {
-        return this._geom_arrays.num_posis;
-    }
-    public numVerts(): number {
-        return this._geom_arrays.dn_verts_posis.length;
-    }
-    public numEdges(): number {
-        return this._geom_arrays.dn_edges_verts.length;
-    }
-    public numWires(): number {
-        return this._geom_arrays.dn_wires_edges.length;
-    }
-    public numFaces(): number {
-        return this._geom_arrays.dn_faces_wirestris.length;
-    }
-    public numCollections(): number {
-        return this._geom_arrays.dn_colls_objs.length;
-    }
-    public numPoints(): number {
-        return this._geom_arrays.dn_points_verts.length;
-    }
-    public numPlines(): number {
-        return this._geom_arrays.dn_plines_wires.length;
-    }
-    public numPgons(): number {
-        return this._geom_arrays.dn_pgons_faces.length;
-    }
-    public numColls(): number {
-        return this._geom_arrays.dn_colls_objs.length;
-    }
-    // ============================================================================
-    // Util
-    // ============================================================================
-    /**
-     * Check if an entity exists
-     * @param index
-     */
-    public has(ent_type_str: EEntityTypeStr, index: number): boolean {
-        const geom_arrays_key: string = EEntStrToGeomArray[ent_type_str];
-        return (this._geom_arrays[geom_arrays_key][index] !== undefined);
-    }
-    /**
-     * Check if a wire is closed.
-     * @param wire_i
-     */
-    public istWireClosed(wire_i: number): boolean {
-        // get the wire start and end verts
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
-        const num_edges: number = wire.length;
-        const start_edge_i: number = wire[0];
-        const end_edge_i: number = wire[num_edges - 1];
-        const start_vert_i: number = this._geom.query.navEdgeToVert(start_edge_i)[0];
-        const end_vert_i: number = this._geom.query.navEdgeToVert(end_edge_i)[1];
-        // if start and end verts are the same, then wire is closed
-        return (start_vert_i === end_vert_i);
-    }
-    /**
-     * Get the parfent of a collection.
-     * @param wire_i
-     */
-    public getCollParent(coll_i: number): number {
-        return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
 }

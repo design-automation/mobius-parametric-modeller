@@ -1,6 +1,9 @@
 import * as mathjs from 'mathjs';
-import { TId, Txyz } from '@libs/geo-info/common';
+import { TId, Txyz, TEdge, EEntStrToAttribMap, EEntityTypeStr } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDnTypes } from './_check_args';
+import { GIModel } from '@libs/geo-info/GIModel';
+import { idBreak } from '@libs/geo-info/id';
+import { vecsSub } from '@libs/geom/vectors';
 
 /**
  * Vector functions.
@@ -89,4 +92,21 @@ export function Dot(vector1: Txyz, vector2: Txyz): number {
     checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
     // --- Error Check ---
     return mathjs.dot(vector1, vector2);
+}
+
+/**
+ * Returns the dot product of two vectors.
+ * @param __model__
+ * @param edge The id of an edge
+ * @returns The vector from the start point of an edge to teh end point of an edge
+ */
+export function FromEdge(__model__: GIModel, edge_id: TId): Txyz {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge_id);
+    const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+    const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
+    const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+    return vecsSub(end, start);
 }

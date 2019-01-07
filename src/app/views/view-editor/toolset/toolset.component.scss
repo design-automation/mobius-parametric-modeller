@@ -186,7 +186,7 @@ ul{
     display: none;
     background-color: $color5;
     overflow: hidden;
-    button{
+    button:not(.inline--cat){
         font-weight: 550;
         color: $selected-color;
         font-style: italic;

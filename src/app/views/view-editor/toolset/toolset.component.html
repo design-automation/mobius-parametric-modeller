@@ -27,14 +27,14 @@
                         {{type}}
                     </li>
                 </ng-container>
-                <ng-container *ngFor='let mod of Modules'>
+                <!-- <ng-container *ngFor='let mod of Modules'>
                     <ng-container *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
                         <li *ngFor='let fn of mod.functions' 
                         class='tooltip' 
                         [class.invalid]='dataService.node.type !== "end"'
                         (click)='add_function(fn)'> {{fn.name}} </li>
                     </ng-container>
-                </ng-container>
+                </ng-container> -->
             </ul>
         </div>
         
@@ -65,7 +65,7 @@
             <!-- functions from core.modules -->
             <ng-container *ngFor='let mod of Modules' >
                 <button id='{{mod.module}}' class="accordion" 
-                *ngIf='mod.module.toUpperCase() != "INPUT" && mod.module.toUpperCase() != "OUTPUT"'
+                *ngIf='mod.module.substring(0,1) !== "_"'
                 (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
@@ -206,11 +206,11 @@
                         <li (click)='add(ProcedureTypes[type], 4)'> File </li>
                     </ul>
                 </div>
-                <div *ngIf='type.toUpperCase() == "ADDDATA"'>
+                <!-- <div *ngIf='type.toUpperCase() == "ADDDATA"'>
                     <ul class='toolset__functions--subset'>
                         <li (click)='add(ProcedureTypes[type])'> Add Model </li>
                     </ul>
-                </div>
+                </div> -->
             </section>
             <!--
             <section *ngFor='let mod of Modules' >

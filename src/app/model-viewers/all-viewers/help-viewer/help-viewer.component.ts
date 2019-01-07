@@ -1,17 +1,17 @@
 import { Component, Input } from '@angular/core';
-import { ModuleDocAware } from '@shared/decorators';
+import { ModuleDocList } from '@shared/decorators';
 
 /**
  * HelpViewerComponent
  */
-@ModuleDocAware
-@Component({
+ @Component({
   selector: 'help-viewer',
   templateUrl: './help-viewer.component.html',
   styleUrls: ['./help-viewer.component.scss']
 })
 export class HelpViewerComponent {
     @Input() output;
+    ModuleDoc = ModuleDocList;
     /**
      * constructor
      */

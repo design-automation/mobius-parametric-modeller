@@ -6,6 +6,7 @@
   overflow-y: auto;
 
   margin-bottom: $fsize3; // paginator height
+  border-bottom: 1px solid $color4;
 }
 
 table {
@@ -14,16 +15,24 @@ table {
   background-color: transparent;
 
   tr.mat-header-row{
-    height: $fsize3;
+    background-color: $color5-5;
+    height: 27px;
   }
   tr.mat-row{
     height: 24px;
     .mat-cell{
       font-size: 12px;
       color: $color8;
+      background-color: $color6;
+      border-bottom: 1px solid $color3;
       // overflow: hidden;
       // text-overflow: ellipsis;
       // white-space: nowrap;
+    }
+    &:last-child{
+      .mat-cell{
+        border-bottom-color: transparent;
+      }
     }
   }
 }
@@ -32,32 +41,38 @@ table {
   height: 100%;
   ul{
     margin: 0;
-    padding-left: 15px;
-    border-bottom: 1px solid #ddd;
+    padding-left: 11px;
+    border-bottom: 1px solid $color3;
+    white-space: nowrap;
     li{
       margin-bottom: -1px;
       list-style: none;
       display: inline-block;
-      width: 10%;
-      font-size: 14px;
-      color: #505050;
+      width: 75px;
+      color: $color1;
       cursor: pointer;
       span{
+        font-family: sans-serif;
         margin-right: 2px;
+        font-weight: 550;
+        font-size: $fsize2;
+        line-height: $fsize1;
         border: 1px solid transparent;
-        border-radius: 3px 3px 0 0;
         position: relative;
         display: block;
-        padding: 9px 14px 8px;
+        padding: 2px;
         text-align: center;
+      }
+      &:hover span{
+        color: $selected-color;
       }
       &.active{
         span{
-          color: #555;
+          color: $selected-color;
           cursor: default;
-          background-color: #fafafb;
-          border: 1px solid #ddd;
-          border-bottom-color: transparent;
+          background-color: $color5-5;
+          border: 1px solid $color3;
+          border-bottom-color: $color5-5;
         }
       }
     }
@@ -66,6 +81,7 @@ table {
   .table--container{
     margin-bottom: 0px;
     z-index: 999;
+    background-color: $color5-5;
   }
   // contains everything
   .mat-elevation-z1{
@@ -73,6 +89,7 @@ table {
     flex-flow: column nowrap;
     height: 100%;
     justify-content: space-between;
+    box-shadow: none;
   }
   // paginator
   .mat-paginator-container{
@@ -115,10 +132,16 @@ table {
 /deep/ #settings.btn{
   height: 20px;
   width: 20px;
+  background-color: $color6;
+  position: absolute;
+  top: -1px;
   .mat-icon{
     height: inherit;
     width: inherit;
     line-height: 20px;
     font-size: 15px;
+  }
+  &:hover .mat-icon{
+    color: $selected-color;
   }
 }

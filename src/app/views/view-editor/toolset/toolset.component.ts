@@ -1,24 +1,24 @@
-import { Component, Output, EventEmitter, Input} from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
 
-import { ProcedureTypes, IFunction, IModule, IProcedure } from '@models/procedure';
+import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
-import { ModuleAware, ModuleDocAware } from '@shared/decorators';
+import { ModuleList, ModuleDocList } from '@shared/decorators';
 import { INode } from '@models/node';
 
 import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
 import { inline_query_expr, inline_func} from './toolset.inline';
 import { DataService } from '@services';
+import { _parameterTypes } from '@modules';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
     'bubbles': true,
     'cancelable': true
 });
-@ModuleAware
-@ModuleDocAware
+
 @Component({
   selector: 'toolset',
   templateUrl: './toolset.component.html',
@@ -40,8 +40,10 @@ export class ToolsetComponent {
     inlineQueryExpr = inline_query_expr;
     inlineFunc = inline_func;
 
-    constructor(private dataService: DataService) {
-    }
+    Modules = ModuleList;
+    ModuleDoc = ModuleDocList;
+
+    constructor(private dataService: DataService) {}
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {

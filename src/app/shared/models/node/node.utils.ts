@@ -3,6 +3,8 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { InputType, PortUtils } from '@models/port';
 import * as circularJSON from 'circular-json';
 import { IdGenerator } from '@utils';
+import { ModuleList, ModuleDocList } from '@shared/decorators';
+import { _parameterTypes } from '@modules';
 
 export abstract class NodeUtils {
 
@@ -48,6 +50,30 @@ export abstract class NodeUtils {
 
     static getEndNode(): INode {
         const node = NodeUtils.getNewNode();
+        const returnMeta = _parameterTypes.return.split('.');
+        let check = false;
+        for (const i of ModuleList) {
+            if (i.module !== returnMeta[0]) { continue; }
+            for ( const j of i.functions) {
+                if (j.name !== returnMeta[1]) { continue; }
+                node.procedure.push({type: 11, ID: '',
+                parent: undefined,
+                meta: {name: '', module: ''},
+                children: undefined,
+                argCount: j.argCount,
+                args: j.args,
+                print: false,
+                enabled: true,
+                selected: false,
+                hasError: false});
+                check = true;
+                break;
+            }
+            break;
+        }
+        if (!check) {
+            console.log('CORE FUNCTION ERROR: Unable to retrieve return procedure, please check "Return" in _ParameterTypes.ts');
+        }
         // node.procedure = [];
         node.name = 'End';
         node.type = 'end';
@@ -122,6 +148,10 @@ export abstract class NodeUtils {
     static insert_procedure(node: INode, prod: IProcedure) {
         if (node.state.procedure[0]) {
             let list: IProcedure[];
+            if (node.type === 'end' && node.state.procedure[0].type === ProcedureTypes.Return) {
+                node.procedure.splice( node.procedure.length - 1, 0, prod);
+                return;
+            }
             if (node.state.procedure[0].parent) {
                 prod.parent = node.state.procedure[0].parent;
                 list = prod.parent.children;
@@ -155,6 +185,10 @@ export abstract class NodeUtils {
             }
             */
         } else {
+            if (node.type === 'end') {
+                node.procedure.splice( node.procedure.length - 1, 0, prod);
+                return;
+            }
             node.procedure.push(prod);
         }
 

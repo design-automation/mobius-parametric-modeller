@@ -119,7 +119,8 @@ export class ExecuteComponent {
             fnString = printFunc + nodeCode.join('\n');
             // add the constants from the start node
             fnString = _varString + globalVars + fnString;
-            params['model'] = node.input.value;
+            params['model'] = _parameterTypes.newFn();
+            _parameterTypes.mergeFn(params['model'], node.input.value);
 
             // add the imported functions code
             let hasFunctions = false;
@@ -207,6 +208,8 @@ export class ExecuteComponent {
                 error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
                 error = new Error('Unable to read file input. Check all start node inputs.');
+            } else if (ex.toString().indexOf('Cannot read property') > -1) {
+                error = new Error('Unrecognized or missing varible in the procedure.');
             } else {
                 error = ex;
                 // error = new Error(ex.message);

@@ -17,7 +17,9 @@ export const _parameterTypes = {
     postprocess: '_model.__postprocess__', // TODO - make this genric
 
     setattrib: '_model.__setAttrib__', // TODO - make this genric
-    getattrib: '_model.__getAttrib__' // TODO - make this genric
+    getattrib: '_model.__getAttrib__', // TODO - make this genric
+
+    return: '_Output.Return'
 };
 
 export const _varString = `

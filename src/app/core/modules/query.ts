@@ -84,10 +84,11 @@ function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
  * Queries the id of any entity based on attribute name.
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
- * @param entities List of entities to be searched,
- * @param attrib_query
+ * @param entities List of entities to be searched.
+ * @param attrib_query Attribute condition.
  * @returns List of id.
- * @example query1 = attrib.Query (@Colour==Grey, #face, *normal==[0,0,1])
+ * @example query1 = query.Get(positions, polyline1, #@xyz[2]>10)
+ * @example_info Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
  */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], attrib_query: TQuery): TId[] {
     // get the select ent_type_str
@@ -131,11 +132,12 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
 /**
  * Queries the number of any entity based on attribute name.
  * @param __model__
- * @param select Enum
- * @param entities
- * @param attrib_query
- * @returns List of number of entities.
- * @example queryNum1 = attrib.QueryNumber (@Colour==Grey, #face, *normal==[0,0,1])
+ * @param select Enum, specifies what type of entities are to be counted.
+ * @param entities List of entities to be searched.
+ * @param attrib_query Attribute condition.
+ * @returns Number of entities.
+ * @example queryNum1 = query.Count(positions, polyline1, #@xyz[2]>10)
+ * @example_info Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], attrib_query: TQuery): number {
     // --- Error Check ---

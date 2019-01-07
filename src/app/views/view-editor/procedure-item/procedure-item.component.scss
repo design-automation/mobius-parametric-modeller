@@ -162,7 +162,7 @@
 
 .container--item{
     position: relative;
-    margin: none;
+
     padding-bottom: 2px;
     border: none;
 
@@ -177,7 +177,7 @@
     }
 }
 
-.container--item:hover > .btn-container{//.container--line
+.container--item:hover + .btn-container{//.container--line
     .btns{
         display: inline-flex;
         .btn{
@@ -194,7 +194,15 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-end;
-
+    order: -1;
+    z-index: 9999;
+    &:hover .btns{
+        display: inline-flex;
+        .btn{
+            display: flex;
+            justify-content: center;
+        }
+    }
 }
 
 .btns{

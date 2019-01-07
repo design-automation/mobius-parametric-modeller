@@ -49,4 +49,35 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
         this.prod.enabled = !this.prod.enabled;
     }
 
+    updateMin(args, event) {
+        if (event.type === 'keyup' && event.which !== 13) { return; }
+        const currentVal = Number(event.target.value);
+        if (currentVal !== 0 && !currentVal) { return; }
+        if (Number(args.max) && Number(args.max) < currentVal) {
+            args.min = args.max;
+            event.target.value = args.min;
+        } else {
+            args.min = event.target.value;
+        }
+        if (!args.default || args.default < Number(args.min)) {
+            args.default = Number(args.min);
+        }
+    }
+
+    updateMax(args, event) {
+        if (event.type === 'keyup' && event.which !== 13) { return; }
+        const currentVal = Number(event.target.value);
+        if (currentVal !== 0 && !currentVal) { return; }
+        if (Number(args.min) && Number(args.min) > currentVal) {
+            args.max = args.min;
+            event.target.value = args.max;
+        } else {
+            args.max = event.target.value;
+        }
+        if (!args.default || args.default > Number(args.max)) {
+            args.default = Number(args.max);
+        }
+    }
+
+
 }

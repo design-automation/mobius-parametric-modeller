@@ -7,26 +7,6 @@
     (click)='emitSelect($event, data)'
     *ngIf= 'data.type != ProcedureTypes.Return'>
     <div class='container--item' >
-        <div class = "btn-container">
-            <div class = "btns">
-                <!-- delete button-->
-                <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
-                    <mat-icon class='icon'>delete_outline</mat-icon>
-                </button>
-                <!-- Disable button-->
-                <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
-                    <mat-icon class='icon'>tv_off</mat-icon>
-                </button>
-                <!-- Print button-->
-                <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
-                    <mat-icon class='icon'>print</mat-icon>
-                </button>
-                <!-- help button-->
-                <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
-                    <mat-icon class='icon'>help</mat-icon>
-                </button>
-            </div>
-        </div>
         <!-- Variable Assignment Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Variable">
             <input class='input--var'
@@ -226,7 +206,8 @@
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
                     [class.error]='invalidVar'
-                    placeholder={{data.args[0].name}}>  
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
             <div class='function-text'><span class='module-name'>User.</span>{{data.meta.name}} </div> 
             
@@ -237,6 +218,26 @@
                     placeholder={{p.name}}
                     [style.width.px]='inputSize(p.value||p.name)'>    
             </ng-container>
+        </div>
+    </div>
+    <div class = "btn-container">
+        <div class = "btns">
+            <!-- delete button-->
+            <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
+                <mat-icon class='icon'>delete_outline</mat-icon>
+            </button>
+            <!-- Disable button-->
+            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
+                <mat-icon class='icon'>tv_off</mat-icon>
+            </button>
+            <!-- Print button-->
+            <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
+                <mat-icon class='icon'>print</mat-icon>
+            </button>
+            <!-- help button-->
+            <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
+                <mat-icon class='icon'>help</mat-icon>
+            </button>
         </div>
     </div>
     <!-- list of child procedures (if the procedure has children) -->

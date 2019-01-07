@@ -446,10 +446,10 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
  * @param edge Edge(s) to be divided.
  * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
- * @returns List of new positions, null if unsuccessful or on error.
- * @example segments1 = make.Divide(edge1, 5, number)
+ * @returns List of new edges (segments of original edges), null if unsuccessful or on error.
+ * @example segments1 = make.Divide(edge1, 5, by_number)
  * @example_info Creates a list of 5 equal segments from edge1.
- * @example segments2 = make.Divide(edge1, 5, length)
+ * @example segments2 = make.Divide(edge1, 5, by_length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
 export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {

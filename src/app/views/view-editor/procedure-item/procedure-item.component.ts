@@ -1,7 +1,7 @@
 import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 
 import { IProcedure, ProcedureTypes } from '@models/procedure';
-import { ProcedureTypesAware, ModuleDocAware } from '@shared/decorators';
+import { ModuleDocList } from '@shared/decorators';
 
 import { _parameterTypes} from '@modules';
 
@@ -37,8 +37,6 @@ const reservedWords = [
 ];
 
 
-@ProcedureTypesAware
-@ModuleDocAware
 @Component({
     selector: 'procedure-item',
     templateUrl: './procedure-item.component.html',
@@ -53,8 +51,12 @@ export class ProcedureItemComponent {
     @Output() helpText = new EventEmitter();
 
     ProcedureTypes = ProcedureTypes;
+
+    private keys = Object.keys(ProcedureTypes);
+    ProcedureTypesArr = this.keys.slice(this.keys.length / 2);
     invalidVar = false;
     mathFuncs = [];
+    ModuleDoc = ModuleDocList;
 
     constructor() {
         for (const funcMod of inline_func) {
@@ -95,7 +97,8 @@ export class ProcedureItemComponent {
     }
 
     canBePrinted() {
-        return (this.data.argCount > 0 && this.data.args[0].name === 'var_name');
+        return this.data.type === ProcedureTypes.Return ||
+               (this.data.argCount > 0 && this.data.args[0].name === 'var_name');
     }
 
     haveHelpText() {
@@ -113,7 +116,6 @@ export class ProcedureItemComponent {
                 // this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
 
             } else {
-            // @ts-ignore
             this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
             }
         } catch (ex) {
@@ -168,9 +170,9 @@ export class ProcedureItemComponent {
     argMod(event: string, argIndex: number) {
         if (!this.data.args[argIndex].value) { return; }
         this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
+            /\s*([\[\]])\s*/g, '$1').replace(
             // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
-            /([\+\-\*\/\%\{\}\(\)\,])/g, ' $1 ').replace(
-            /\s*([\[\]])\s*/g, '$1').trim().replace(/[ ]{2,}/g, ' ');
+            /([\+\-\*\/\%\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
             // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').replace(
             // /@[a-z0-9]+\s\[\s/g, '[').trim().replace(/[ ]{2,}/g, ' ');
         return;

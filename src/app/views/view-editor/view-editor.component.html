@@ -20,15 +20,28 @@
                         <!-- procedure editor on the right side -->
                         <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
                             <!-- parameter-editor only for start/end node -->
-                            <parameter-editor *ngIf="dataService.node.type == 'start' || dataService.node.type == 'end'" [flowchart]='dataService.flowchart' [node]='dataService.node'></parameter-editor>
+                            <parameter-editor *ngIf="dataService.node.type == 'start'" 
+                                [flowchart]='dataService.flowchart' 
+                                [node]='dataService.node'></parameter-editor>
                             <ng-container *ngIf="dataService.node.type != 'start'">
                                 <!-- list of procedure items for all nodes -->
+                                <p>Viewing: 
+                                    <span *ngIf='!dataService.modelOutputView'>Input</span>
+                                    <span *ngIf='dataService.modelOutputView'>Output</span>
+                                </p>
+                                <button class='modelViewButton' (click)='setViewOutput(false)'>View Input</button>
                                 <procedure-item 
                                 *ngFor="let line of dataService.node?.procedure; let idx=index" 
                                 [data]="line"
                                 (select)="selectProcedure($event,line)"
                                 (delete)="deleteChild(idx)"
                                 (helpText)='updateHelpView($event)'></procedure-item>
+
+                                <parameter-editor *ngIf="dataService.node.type == 'end'" 
+                                [flowchart]='dataService.flowchart' 
+                                [node]='dataService.node'></parameter-editor>
+                                <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button>
+
                                 <br>
                                 <br>
                             </ng-container>

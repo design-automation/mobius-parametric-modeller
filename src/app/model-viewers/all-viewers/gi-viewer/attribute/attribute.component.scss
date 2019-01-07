@@ -79,7 +79,8 @@ table {
   }
   
   .table--container{
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    z-index: 999;
     background-color: $color5-5;
   }
   // contains everything

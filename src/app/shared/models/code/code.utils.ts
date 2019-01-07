@@ -105,8 +105,33 @@ export class CodeUtils {
 
 
             case ProcedureTypes.Return:
-                codeStr.push(`if (${args[0].value} > __params__['model'].length) { return __params__['model']; }`);
-                codeStr.push(`return __params__['model'][${args[0].value}].value;`);
+                let check = true;
+                const returnArgVals = [];
+                for (const arg of args) {
+                    if (arg.name === _parameterTypes.constList) {
+                        returnArgVals.push('__params__.constants');
+                        continue;
+                    }
+                    if (arg.name === _parameterTypes.model) {
+                        returnArgVals.push('__params__.model');
+                        continue;
+                    }
+                    if (!arg.value) {
+                        check = false;
+                        break;
+                    }
+                    if (arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                    if (arg.value.substring(0, 1) === '#') {
+                        returnArgVals.push('`' + this.repGetAttrib(arg.value) + '`');
+                        continue;
+                    }
+                    returnArgVals.push(this.repGetAttrib(arg.value));
+                }
+                if (!check) {
+                    codeStr.push(`return __params__['model'];`);
+                } else {
+                    codeStr.push(`return __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
+                }
                 break;
 
             case ProcedureTypes.Function:
@@ -132,7 +157,9 @@ export class CodeUtils {
                 const argValues = argVals.join(', ');
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
-                    codeStr.push(`return ${fnCall};`);
+                    if (prod.args[prod.args.length - 1].value) {
+                        codeStr.push(`return ${fnCall};`);
+                    }
                 } else if (args[0].name === '__none__' || !args[0].value) {
                     codeStr.push(`${fnCall};`);
                 } else {
@@ -194,7 +221,7 @@ export class CodeUtils {
         return codeStr;
     }
     static repSetAttrib(val: string) {
-        if (val.indexOf('@') === -1) {
+        if (!val || val.indexOf('@') === -1) {
             return false;
         }
         const splitted = val.split('@');
@@ -216,6 +243,7 @@ export class CodeUtils {
     }
 
     static repGetAttrib(val: string) {
+        if (!val) { return; }
         const res = val.split(' ');
         for (const i in res) {
             if (!res[i]) {

@@ -24,7 +24,7 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
             blocked = true;
             break;
         }
-        if (attrib_name.startsWith(blk_att_nm_lst[i])) {
+        if (attrib_name === blk_att_nm_lst[i]) {
             blocked = true;
             break;
         }
@@ -32,18 +32,18 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
     let check_fns = [];
     if (blocked === true) {
         let pass = false;
-        const err_arr = [fn_name + ': ' + 'attrib_value starts with one of the special attribute names - '
+        const err_arr = [fn_name + ': ' + 'attrib_name is one of the special attribute names - '
                         + Object.values(EAttribNames).toString() + '\n'];
         if (ind === false) {
             try {
-                isListArg(fn_name + '.is' + attrib_name, 'attrib_value', attrib_value, 'numbers');
+                isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
                 let chkLstLen;
                 if (isTexture) {
                     chkLstLen = 2;
                 } else {
                     chkLstLen = 3;
                 }
-                isListLenArg(fn_name + '.is' + attrib_name, 'attrib_value', attrib_value, chkLstLen);
+                isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
             } catch (err) {
                 err_arr.push(err.message);
                 throw new Error(err_arr.join(''));
@@ -62,19 +62,19 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
         } else {
             if (isTexture) {
                 if (attrib_index > 1 || attrib_index < 0) {
-                    err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 1 (inclusive)');
+                    err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
                     throw new Error(err_arr.join(''));
                 }
             } else {
                 if (attrib_index > 2 || attrib_index < 0) {
-                    err_arr.push(fn_name + '.validIndex: attrib_value is not between 0 and 2 (inclusive)');
+                    err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
                     throw new Error(err_arr.join(''));
                 }
             }
-            check_fns = ['isString', 'isNumber'];
+            check_fns = ['isNumber'];
             for (let i = 0; i < check_fns.length; i++) {
                 try {
-                    typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                    typeCheckObj[check_fns[i]](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i], 'attrib_value', attrib_value);
                 } catch (err) {
                     err_arr.push(err.message + '\n');
                     continue;
@@ -87,7 +87,11 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
             throw new Error(err_arr.join(''));
         }
     } else {
-        checkCommTypes(fn_name, 'attrib_value', attrib_value, ['isString', 'isNumber']);
+        if (ind === false) {
+            checkCommTypes(fn_name, 'attrib_value', attrib_value, ['isString', 'isNumber', 'isStringList', 'isNumberList']);
+        } else { // no nested lists
+            checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value, ['isString', 'isNumber']);
+        }
     }
     return;
 }

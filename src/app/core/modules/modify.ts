@@ -5,6 +5,7 @@ import { vecsAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
+import { FromEdge } from './vec';
 
 /**
  * Moves geometry by vector.
@@ -41,7 +42,8 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
  * Rotates geometry on plane by angle.
  * @param __model__
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Plane to rotate on.
+ * @param origin A list of three numbers (or a position, point, or vertex).
+ * @param axis A list of three numbers.
  * @param angle Angle (in radians).
  * @returns void
  * @example mod.Rotate(geometry, plane1, PI)
@@ -56,14 +58,17 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId
     checkCommTypes(fn_name, 'axis', axis, ['isCoord']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
+    // handle geometry type
     if (!Array.isArray(geometry)) {
         geometry = [geometry] as TId[];
     }
+    // handle origin type
     if (!Array.isArray(origin)) {
         const [origin_ent_type_str, origin_index]: [EEntityTypeStr, number] = idBreak(origin as TId);
         const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type_str, origin_index);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
+    // rotate all positions
     const posis_i: number[] = [];
     for (const geom_id of geometry) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
@@ -95,17 +100,21 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|
     // checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
     // checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
+    // handle geometry type
     if (!Array.isArray(geometry)) {
         geometry = [geometry] as TId[];
     }
+    // handle origin type
     if (!Array.isArray(origin)) {
         const [origin_ent_type_str, origin_index]: [EEntityTypeStr, number] = idBreak(origin as TId);
         const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type_str, origin_index);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
+    // handle scale type
     if (!Array.isArray(scale)) {
         scale = [scale, scale, scale];
     }
+    // scale all positions
     const posis_i: number[] = [];
     for (const geom_id of geometry) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);

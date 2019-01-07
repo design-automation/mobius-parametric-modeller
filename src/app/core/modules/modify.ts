@@ -259,3 +259,8 @@ export function AttribPromote(__model__: GIModel, attrib_name: string,
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
+
+// Collection Add
+
+// Collection Remove
+

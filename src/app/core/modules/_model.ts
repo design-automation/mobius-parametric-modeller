@@ -63,7 +63,11 @@ export function __stringify__(__model__: GIModel): string {
 export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
     attrib_name: string, attrib_value: TAttribDataTypes, attrib_index?: number): void {
     // --- Error Check ---
+<<<<<<< HEAD
     checkAttribNameValue(entities + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']', attrib_name, attrib_value, attrib_index);
+=======
+    // checkAttribNameValue('Inline.__setAttrib__', attrib_name, attrib_value, attrib_index);
+>>>>>>> 5c21ff88b2c7e8e7e88df79c1a5d0a3b0c484a54
     // --- Error Check ---
     // console.log("__model__", __model__);
     // console.log("entities", entities);

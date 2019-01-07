@@ -49,6 +49,12 @@ export function isColl(id: TId): boolean {
     return id.startsWith(EEntityTypeStr.COLL);
 }
 // more general test
+export function isObj(id: TId): boolean {
+    if (id.startsWith(EEntityTypeStr.PGON)) { return true; }
+    if (id.startsWith(EEntityTypeStr.PLINE)) { return true; }
+    if (id.startsWith(EEntityTypeStr.POINT)) { return true; }
+    return false;
+}
 export function isDim0(id: TId): boolean {
     if (id.startsWith(EEntityTypeStr.POSI)) { return true; }
     if (id.startsWith(EEntityTypeStr.VERT)) { return true; }

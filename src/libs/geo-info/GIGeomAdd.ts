@@ -1,5 +1,5 @@
 import { EEntityTypeStr, TTri, TVert, TEdge, TWire, TFace,
-    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays } from './common';
+    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
 
@@ -388,39 +388,67 @@ export class GIGeomAdd {
      * @param copy_posis
      * @param copy_attribs
      */
-    public copyObjs(ent_type_str: EEntityTypeStr, indices: number|number[], copy_posis: boolean, copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(indices)) {
-            const original_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type_str, indices as number);
-            let posis_i: number[] = original_posis_i;
-            if (copy_posis) {
-                posis_i = this.copyPosis(original_posis_i, copy_attribs) as number[];
-            }
+    public copyObjs(ent_type_str: EEntityTypeStr, ent_i: number|number[], copy_attribs: boolean): number|number[] {
+        // make copies
+        if (!Array.isArray(ent_i)) {
+            const original_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type_str, ent_i as number);
+            const posis_i: number[] = original_posis_i;
             switch (ent_type_str) {
                 case EEntityTypeStr.POINT:
                     const point_i: number = this.addPoint(posis_i[0]);
                     if (copy_attribs) {
-                        // TODO copy attributes
+                        this._geom.model.attribs.add.copyAttribs(ent_type_str, ent_i, point_i);
                     }
                     return point_i;
                 case EEntityTypeStr.PLINE:
-                    const wire_i: number = this._geom.query.navPlineToWire(indices as number);
+                    const wire_i: number = this._geom.query.navPlineToWire(ent_i as number);
                     const is_closed: boolean = this._geom.query.istWireClosed(wire_i);
                     const pline_i: number = this.addPline(posis_i, is_closed);
                     if (copy_attribs) {
-                        // TODO copy attributes
+                        this._geom.model.attribs.add.copyAttribs(ent_type_str, ent_i, pline_i);
                     }
                     return pline_i;
                 case EEntityTypeStr.PGON:
                     const pgon_i: number = this.addPgon(posis_i);
                     if (copy_attribs) {
-                        // TODO copy attributes
+                        this._geom.model.attribs.add.copyAttribs(ent_type_str, ent_i, pgon_i);
                     }
                     return pgon_i;
                 default:
                     throw new Error('Cannot copy entity of this type: ' + ent_type_str);
             }
+        } else { // AN array of ent_i
+            return (ent_i as number[]).map(one_ent_i => this.copyObjs(ent_type_str, one_ent_i, copy_attribs)) as number[];
+        }
+    }
+   /**
+     * Copy an object (point, polyline, polygon).
+     * @param ent_type_str
+     * @param index
+     * @param copy_posis
+     * @param copy_attribs
+     */
+    public copyColls(coll_i: number|number[], copy_attribs: boolean): number|number[] {
+        // make copies
+        if (!Array.isArray(coll_i)) {
+            // Make a deep copy of the objects in the collection
+            const points_i: number[] = this._geom.query.navCollToPoint(coll_i);
+            const res1 = this.copyObjs(EEntityTypeStr.POINT, points_i, copy_attribs) as number[];
+            const plines_i: number[] = this._geom.query.navCollToPline(coll_i);
+            const res2 = this.copyObjs(EEntityTypeStr.PLINE, plines_i, copy_attribs) as number[];
+            const pgons_i: number[] = this._geom.query.navCollToPgon(coll_i);
+            const res3 = this.copyObjs(EEntityTypeStr.PGON, pgons_i, copy_attribs) as number[];
+            const parent: number = this._geom.query.getCollParent(coll_i);
+            // add the new collection
+            const new_coll_i: number = this.addColl(parent, res1, res2, res3);
+            // copy the attributes from old collection to new collection
+            if (copy_attribs) {
+                this._geom.model.attribs.add.copyAttribs(EEntityTypeStr.COLL, coll_i, new_coll_i);
+            }
+            // return the new collection
+            return new_coll_i;
         } else {
-            return (indices as number[]).map(index => this.copyObjs(ent_type_str, index, copy_posis, copy_attribs)) as number[];
+            return (coll_i as number[]).map(one_coll_i => this.copyColls(one_coll_i, copy_attribs)) as number[];
         }
     }
     // ============================================================================

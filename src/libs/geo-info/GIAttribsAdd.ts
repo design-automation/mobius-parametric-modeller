@@ -132,6 +132,23 @@ export class GIAttribsAdd {
         const new_xyz: Txyz = vecsAdd(old_xyz, xyz);
         this._attribs_maps.posis.get(EAttribNames.COORDS).setEntVal(index, new_xyz);
     }
+    /**
+     * Copy attribs from one entity to another entity
+     * @param ent_type_str
+     * @param name
+     */
+    public copyAttribs(ent_type_str: EEntityTypeStr, from_ent_i: number, to_ent_i: number): void {
+        // get the attrib names
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib_names: string[] = Array.from(attribs.keys());
+        // copy each attrib
+        for (const attrib_name of attrib_names) {
+            const attrib: GIAttribMap = attribs.get(name);
+            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i);
+            attrib.setEntVal(to_ent_i, attrib_value);
+        }
+    }
     // ============================================================================
     // Private methods
     // ============================================================================

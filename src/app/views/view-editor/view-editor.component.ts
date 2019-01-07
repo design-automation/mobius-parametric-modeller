@@ -199,8 +199,8 @@ export class ViewEditorComponent {
         }
     }
 
-    setViewOutput(check: boolean) {
-        this.dataService.modelOutputView = check;
+    setViewOutput() {
+        this.dataService.modelOutputView = !this.dataService.modelOutputView;
     }
 
     viewerData(): any {

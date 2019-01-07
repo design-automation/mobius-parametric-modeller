@@ -16,7 +16,6 @@
                             (selected)='add($event)' 
                             (imported)='importFunction($event)'></toolset>
                         </div>
-                
                         <!-- procedure editor on the right side -->
                         <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
                             <!-- parameter-editor only for start/end node -->
@@ -25,22 +24,30 @@
                                 [node]='dataService.node'></parameter-editor>
                             <ng-container *ngIf="dataService.node.type != 'start'">
                                 <!-- list of procedure items for all nodes -->
-                                <p>Viewing: 
+                                <!-- <p>Viewing: 
                                     <span *ngIf='!dataService.modelOutputView'>Input</span>
                                     <span *ngIf='dataService.modelOutputView'>Output</span>
-                                </p>
-                                <button class='modelViewButton' (click)='setViewOutput(false)'>View Input</button>
-                                <procedure-item 
-                                *ngFor="let line of dataService.node?.procedure; let idx=index" 
-                                [data]="line"
-                                (select)="selectProcedure($event,line)"
-                                (delete)="deleteChild(idx)"
-                                (helpText)='updateHelpView($event)'></procedure-item>
-
-                                <parameter-editor *ngIf="dataService.node.type == 'end'" 
-                                [flowchart]='dataService.flowchart' 
-                                [node]='dataService.node'></parameter-editor>
-                                <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button>
+                                </p> -->
+                                <div id='modelViewButton--container'>
+                                    <button (click)='setViewOutput()'>Viewing 
+                                        <span *ngIf='!dataService.modelOutputView'>Input Model</span>
+                                        <span *ngIf='dataService.modelOutputView'>Output Model</span></button>
+                                </div>
+                                
+                                <div class = 'procedureln--container'>
+                                    <procedure-item 
+                                    *ngFor="let line of dataService.node?.procedure; let idx=index" 
+                                    [data]="line"
+                                    (select)="selectProcedure($event,line)"
+                                    (delete)="deleteChild(idx)"
+                                    (helpText)='updateHelpView($event)'></procedure-item>
+    
+                                    <parameter-editor *ngIf="dataService.node.type == 'end'" 
+                                    [flowchart]='dataService.flowchart' 
+                                    [node]='dataService.node'></parameter-editor>
+                                    <div id = 'spacer'></div>
+                                </div>
+                                <!-- <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button> -->
 
                                 <br>
                                 <br>

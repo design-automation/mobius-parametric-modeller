@@ -62,17 +62,23 @@
 }
 
 .container--procedure{
-    display: in-line block;
     width: 80%;
-    bottom: 10px;
     background-color: transparent;
-    padding: none;
+    padding: 0px;   
+}
+
+.procedureln--container{
+    padding: 0px;
+    padding-bottom: 10px;
     overflow: hidden;
     margin: 5px 0px;
-    height: calc(100vh - 40px); // 40px === $header-height
+    height: calc(100vh - 40px - 25px); // 40px === $header-height 25px top margin & btn height
+    #spacer{
+        height: 10px;
+    }
     &:hover{
         overflow:auto;
-    }    
+    } 
 }
 
 hr{
@@ -85,6 +91,30 @@ procedure-item.ng-star-inserted{
     max-height: 100%;
 }
 
-.modelViewButton{
-    width: 100%;
+#modelViewButton--container{
+    padding: 0px 10px 0px 0px;
+    button{
+        width: 100%;
+        margin: 0px 5px 2px 8px;
+    
+        background-color: $color5;
+        color: $color1;
+    
+        text-align: center;
+        text-decoration: none;
+    
+        font-size: $fsize2;
+        transition: 0.4s;
+        border: 2px solid transparent;
+    
+        span{
+            color: $selected-color;
+            font-weight: 550;
+        }
+        &:hover, &:active {
+            // border-color: $selected-color;
+            background-color: $color4;
+            color: $color8;
+        }
+    }
 }

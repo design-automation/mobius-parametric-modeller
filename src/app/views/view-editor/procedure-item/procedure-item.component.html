@@ -181,7 +181,8 @@
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
                 [class.error]='invalidVar'
-                placeholder={{data.args[0].name}}>  
+                placeholder={{data.args[0].name}}
+                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
                 = 
 
             </ng-container>

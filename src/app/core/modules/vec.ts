@@ -1,5 +1,5 @@
 import * as mathjs from 'mathjs';
-import { TId, Txyz, TEdge, EEntStrToAttribMap, EEntityTypeStr } from '@libs/geo-info/common';
+import { TId, Txyz, TEdge, EEntStrToAttribMap, EEntityTypeStr, TPlane, TRay } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDnTypes } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idBreak } from '@libs/geo-info/id';
@@ -26,7 +26,6 @@ export function SetLength(vector: Txyz, length: number): Txyz {
     // --- Error Check ---
     return mathjs.multiply(mathjs.norm(vector), length) as Txyz;
 }
-
 /**
  * Gets the length of a vector.
  * @param __model__
@@ -42,7 +41,6 @@ export function GetLength(vector: Txyz): number {
     if (vector === undefined) { throw new Error('Invalid arg: vector must be defined.'); }
     return mathjs.hypot(vector);
 }
-
 /**
  * Gets the angle (in radian) between two edges, two vectors, or an edge and a vector.
  * @param __model__
@@ -59,7 +57,6 @@ export function Angle(edgeOrVector1: Txyz, edgeOrVector2: Txyz): number {
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }
-
 /**
  * Gets the cross product of two vectors.
  * @param __model__
@@ -76,7 +73,6 @@ export function Cross(vector1: Txyz, vector2: Txyz): Txyz {
     // --- Error Check ---
     return mathjs.cross(vector1, vector2);
 }
-
 /**
  * Returns the dot product of two vectors.
  * @param __model__
@@ -93,14 +89,13 @@ export function Dot(vector1: Txyz, vector2: Txyz): number {
     // --- Error Check ---
     return mathjs.dot(vector1, vector2);
 }
-
 /**
- * Returns the dot product of two vectors.
+ * Returns a vector along an edge.
  * @param __model__
  * @param edge The id of an edge
- * @returns The vector from the start point of an edge to teh end point of an edge
+ * @returns The vector from the start point of an edge to the end point of an edge
  */
-export function FromEdge(__model__: GIModel, edge_id: TId): Txyz {
+export function EdgeVector(__model__: GIModel, edge_id: TId): Txyz {
     // --- Error Check ---
 
     // --- Error Check ---
@@ -110,3 +105,89 @@ export function FromEdge(__model__: GIModel, edge_id: TId): Txyz {
     const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
     return vecsSub(end, start);
 }
+/**
+ * Returns a vector normal to a face.
+ * @param __model__
+ * @param face_id The id of an face
+ * @returns The normal vecotr.
+ */
+export function FaceNormal(__model__: GIModel, face_id: TId): Txyz {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+/**
+ * Returns a vector normal to a vertex of face.
+ * @param __model__
+ * @param vertex_id The id of an vertex
+ * @returns The normal vecotr.
+ */
+export function VertexNormal(__model__: GIModel, vertex_id: TId): Txyz {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+/**
+ * Returns a plane of a face.
+ * @param __model__
+ * @param face_id The id of an face
+ * @returns The face plane.
+ */
+export function FacePlane(__model__: GIModel, face_id: TId): TPlane {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+/**
+ * Create a plane, centered at the origin.
+ * @param __model__
+ * @param origin The id of an face
+ * @param x_vec
+ * @param xy_vec
+ * @returns The face plane.
+ */
+export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+/**
+ * Create a ray, centered at the origin.
+ * @param __model__
+ * @param origin The id of an face
+ * @param dir_vec
+ * @returns The face plane.
+ */
+export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+
+/**
+ * Create a ray, from a plane.
+ * The direction will be along the z axis
+ * @param __model__
+ * @param plane
+ * @returns The face plane.
+ */
+export function PlaneRay(plane: TPlane): TRay {
+    // --- Error Check ---
+
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+// Add, Sub, Div, Mult Vectors
+
+// Get Normal from Face (average of triangles)
+
+// Get Normal from vertex (of a face)
+
+// Get plane from origin and two vectors
+
+// Get plane from face

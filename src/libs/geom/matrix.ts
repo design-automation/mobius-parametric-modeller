@@ -1,4 +1,5 @@
 import * as three from 'three';
+import { vecNorm } from './vectors';
 type Txyz = [number, number, number]; // x, y, z
 type TPlane = [Txyz, Txyz, Txyz]; // origin, xaxis, yaxis
 const EPS = 1e-6;
@@ -10,6 +11,8 @@ export function multMatrix(xyz: Txyz, m: three.Matrix4): Txyz {
 }
 
 export function rotateMatrix(origin: Txyz, axis: Txyz, angle: number): three.Matrix4 {
+    // norm the axis
+    axis = vecNorm(axis);
     // rotation matrix
     const matrix_rot: three.Matrix4 = new three.Matrix4();
     matrix_rot.makeRotationAxis(new three.Vector3(...axis), angle);

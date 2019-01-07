@@ -34,7 +34,8 @@
                 (ngModelChange)='data.args[0].value=varMod($event)'
                 [class.error]='invalidVar'
                 name='data.args[0].name'
-                placeholder={{data.args[0].name}}>  
+                placeholder={{data.args[0].name}}
+                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
             <input 
                 class='input--arg'

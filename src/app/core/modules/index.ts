@@ -48,10 +48,7 @@ export {_list};
 
 // input, output ports
 
-import * as Input from './input';
-export {Input};
-
-import * as Output from './output';
-export {Output};
+import * as _Output from './output';
+export {_Output};
 
 export * from './_parameterTypes';

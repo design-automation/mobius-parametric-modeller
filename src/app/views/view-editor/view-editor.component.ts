@@ -54,7 +54,7 @@ export class ViewEditorComponent {
         const node = this.dataService.node;
         let i = 0;
         while (i < node.state.procedure.length) {
-            if (node.state.procedure[i].type === ProcedureTypes.Blank) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
                 node.state.procedure[i].selected = false;
                 node.state.procedure.splice(i, 1);
             } else {
@@ -75,7 +75,7 @@ export class ViewEditorComponent {
         const node = this.dataService.node;
         let i = 0;
         while (i < node.state.procedure.length) {
-            if (node.state.procedure[i].type === ProcedureTypes.Blank) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
                 node.state.procedure[i].selected = false;
                 node.state.procedure.splice(i, 1);
             } else {
@@ -136,7 +136,8 @@ export class ViewEditorComponent {
             }
             if (pastingPlace === undefined) {
                 for (let i = 0; i < toBePasted.length; i++) {
-                    if (toBePasted[i].type === ProcedureTypes.Blank) { continue; }
+                    if (toBePasted[i].type === ProcedureTypes.Blank ||
+                        toBePasted[i].type === ProcedureTypes.Return) { continue; }
                     // console.log('pasting', toBePasted[i].ID);
                     NodeUtils.paste_procedure(node, toBePasted[i]);
                     node.state.procedure[0].selected = false;
@@ -144,7 +145,8 @@ export class ViewEditorComponent {
                 }
             } else {
                 for (let i = toBePasted.length - 1; i >= 0; i --) {
-                    if (toBePasted[i].type === ProcedureTypes.Blank) { continue; }
+                    if (toBePasted[i].type === ProcedureTypes.Blank ||
+                        toBePasted[i].type === ProcedureTypes.Return) { continue; }
                     // console.log('pasting', toBePasted[i].ID);
                     NodeUtils.paste_procedure(node, toBePasted[i]);
                     node.state.procedure[0].selected = false;
@@ -197,12 +199,20 @@ export class ViewEditorComponent {
         }
     }
 
+    setViewOutput(check: boolean) {
+        this.dataService.modelOutputView = check;
+    }
+
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
         // if (node.type === 'output') { return node.input.value; }
-        return node.model;
+        if (node.type === 'start' || this.dataService.modelOutputView) {
+            return node.model;
+        }
+        return node.input.value;
     }
+
     setSplit(event) { this.dataService.splitVal = event.sizes[1]; }
 
     unselectAll(event) {

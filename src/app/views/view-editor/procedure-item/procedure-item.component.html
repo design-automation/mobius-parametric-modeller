@@ -9,7 +9,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- delete button-->
-                <button *ngIf='data.type != ProcedureTypes.Blank' class='btn deletebtn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
+                <button *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn deletebtn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
                     <mat-icon class='icon'>delete_outline</mat-icon>
                 </button>
                 <!-- Disable button-->
@@ -155,14 +155,16 @@
         <!-- Return (Only visible in End node) Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Return">
             <div class='function-text'>Return</div>
-
-            <input class='input--arg' 
-                    [(ngModel)]='data.args[0].value'
-                    (blur)='argMod($event, 0)'
-                    name='data.args[0].name'
-                    placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >  
+            <ng-container  *ngFor='let p of data.args;let i=index'>
+                <input class='input--arg' 
+                *ngIf='p.name.substring(0,1) !== "_"'
+                [(ngModel)]='p.value'
+                (blur)='argMod($event, i)'
+                name='p.name'
+                placeholder={{p.name}}
+                [style.width.px]='inputSize(p.value||p.name)'
+                >  
+            </ng-container>
         </div>
         
         <!-- Blank (always the first procedure of if/else/else if/for/while) -->
@@ -172,7 +174,7 @@
         
         <!-- Function Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Function">
-            <ng-container *ngIf="data.meta.module.toUpperCase() !='OUTPUT' && data.args[0].name !=='__none__'">
+            <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'

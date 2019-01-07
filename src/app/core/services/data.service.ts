@@ -16,6 +16,8 @@ export class DataService {
     private static _flowchartPosition: string = undefined;
     private static _newFlowchart = true;
 
+    private static _modelOutputView = true;
+
     private static _activeModelView: string = undefined;
     private static _activeGallery: any = undefined;
 
@@ -43,6 +45,9 @@ export class DataService {
 
     get newFlowchart() {return DataService._newFlowchart; }
     set newFlowchart(check: boolean) {DataService._newFlowchart = check; }
+
+    get modelOutputView() {return DataService._modelOutputView; }
+    set modelOutputView(check: boolean) {DataService._modelOutputView = check; }
 
     get activeView() {return DataService._activeModelView; }
     set activeView(view: string) {DataService._activeModelView = view; }

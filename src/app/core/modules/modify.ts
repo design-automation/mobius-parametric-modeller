@@ -17,7 +17,7 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
     // --- Error Check ---
     const fn_name = 'modify.Move';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'vector', vector, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(geometry)) {
@@ -49,7 +49,7 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: TPlane|T
     // --- Error Check ---
     const fn_name = 'modify.Rotate';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
@@ -69,7 +69,7 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TPlane|TI
     // --- Error Check ---
     const fn_name = 'modify.Scale';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
@@ -88,7 +88,7 @@ export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): 
     // --- Error Check ---
     const fn_name = 'modify.Mirror';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
@@ -107,7 +107,7 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
     // --- Error Check ---
     const fn_name = 'modify.Mirror';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'from', from, ['isPlane']);
     checkCommTypes(fn_name, 'to', to, ['isPlane']);
     // --- Error Check ---
@@ -140,7 +140,7 @@ export function Reverse(__model__: GIModel, objects: TId|TId[]): void {
 export function Weld(__model__: GIModel, geometry: TId[]): void {
     // --- Error Check ---
     checkIDs('modify.Weld', 'geometry', geometry, ['isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -155,7 +155,7 @@ export function Weld(__model__: GIModel, geometry: TId[]): void {
 export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
     // --- Error Check ---
     checkIDs('modify.Unweld', 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'POLYLINE', 'POLYGON', 'COLL']);
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

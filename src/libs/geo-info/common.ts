@@ -61,6 +61,23 @@ export interface IQueryComponent {
 }
 
 /**
+ * A sort component.
+ * Each sort can consist of multiple components.
+ * Some examples of queries
+ * @name
+ * @name[2]
+ */
+export interface ISortComponent {
+    attrib_name: string;
+    attrib_index: number;
+}
+
+export enum ESort {
+    'DESCENDING' = 'descending',
+    'ASCENDING' = 'ascending'
+}
+
+/**
  * Geom arrays
  */
 export interface IGeomArrays {

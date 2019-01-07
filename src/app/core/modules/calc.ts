@@ -281,16 +281,4 @@ export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }
-/**
- * Calculates a location on a line to get t parameter.
- * @param __model__
- * @param geometry
- * @example coord1 = calc.ParamXyzToT (lines, locations)
- */
-export function SortByAttrib(__model__: GIModel, geometry: TId[]): number[] {
-    // --- Error Check ---
-    // const fn_name = 'calc.ParamXyzToT';
-    // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'POLYLINE']);
-    // --- Error Check ---
-    throw new Error('Not impemented.'); return null;
-}
+

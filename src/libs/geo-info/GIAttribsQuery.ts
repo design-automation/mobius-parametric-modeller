@@ -1,6 +1,6 @@
 import { GIModel } from './GIModel';
 import { TAttribDataTypes, IAttribsMaps, EEntStrToAttribMap, IQueryComponent,
-    Txyz, EAttribNames, EEntityTypeStr, EQueryOperatorTypes } from './common';
+    Txyz, EAttribNames, EEntityTypeStr, EQueryOperatorTypes, ISortComponent, ESort, EAttribDataTypeStrs } from './common';
 import { GIAttribMap } from './GIAttribMap';
 
 /**
@@ -75,7 +75,7 @@ export class GIAttribsQuery {
      * @param query_str The query string, e.g. '#@name == value'
      * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type_str.
      */
-    public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string, indicies?: number[]): number[] {
+    public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string, indicies: number[]): number[] {
         // get the map that contains all the ettributes for the ent_type_str
         const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
@@ -112,6 +112,53 @@ export class GIAttribsQuery {
         }
         // return the result
         return union_query_results;
+    }
+    /**
+     * Query the model using a sort strings.
+     * Returns a list of entities in the model.
+     * @param ent_type_str The type of the entities being search for
+     * @param sort_str The sort string, e.g. '#@name && #@name2[3]'
+     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type_str.
+     */
+    public sortByAttribs(ent_type_str: EEntityTypeStr, sort_str: string, indicies: number[], method: ESort): number[] {
+        // get the map that contains all the ettributes for the ent_type_str
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        if (!attribs)  { throw new Error('Bad sort: Attribute does not exist.'); }
+        // parse the query
+        const sorts: ISortComponent[] = parseSort(sort_str);
+        if (!sorts) { return []; }
+        // create the sort copmapre function
+        function _sortCompare(ent1_i: number, ent2_i: number): number {
+            // do the '&&' sorts
+            for (const sort of sorts) {
+                if (!attribs.has(sort.attrib_name)) {
+                    throw new Error('Bad sort: Attribute does not exist.');
+                }
+                const attrib: GIAttribMap = attribs.get(sort.attrib_name);
+                const data_size: number = attrib.getDataSize();
+                if (sort.attrib_index !== undefined && data_size === 1) {
+                    throw new Error('Bad sort: Attribute with index must have a size greater than 1.');
+                }
+                let val1: TAttribDataTypes = attrib.getEntVal(ent1_i);
+                let val2: TAttribDataTypes = attrib.getEntVal(ent2_i);
+                if (sort.attrib_index !== undefined) {
+                    val1 = val1[sort.attrib_index];
+                    val2 = val2[sort.attrib_index];
+                }
+                if (method === ESort.DESCENDING) {
+                    if (val1 < val2) { return -1; }
+                    if (val1 > val2) { return 1; }
+                } else {
+                    if (val1 < val2) { return 1; }
+                    if (val1 > val2) { return -1; }
+                }
+            }
+            return 0;
+        }
+        // do the sort
+        indicies.sort(_sortCompare);
+        return indicies;
     }
     // ============================================================================
     // Shortcuts for getting xyz
@@ -180,7 +227,7 @@ function _parse_query_component(query_component: string): IQueryComponent {
     let attrib_value_str = '' ;
     let operator_type: EQueryOperatorTypes = null;
     // split the query at the @ sign
-    const [attrib_type_str, attrib_name_value_str]: string[] = query_component.split('@');
+    const [_, attrib_name_value_str]: string[] = query_component.split('@');
     if (!attrib_name_value_str) { throw new Error('Bad query.'); }
     // split the attrib_name_value_str based on operator, ==, !=, etc...
     for (const key of Object.keys(EQueryOperatorTypes)) {
@@ -210,6 +257,41 @@ function _parse_query_component(query_component: string): IQueryComponent {
         operator_type: operator_type
     };
 }
+/**
+ * Parse a sort string. #@name1 && #@name2
+ * Rerurns an array,[ query1, query2 ]
+ */
+function parseSort(sort_str: string): ISortComponent[] {
+    if (!sort_str.startsWith('#')) { throw new Error('Bad sort, sort string must start with #.'); }
+    if (sort_str.indexOf('||') !== -1) { throw new Error('Bad sort, sort string cannot contain || conditions.'); }
+    const sort_str_clean: string = sort_str.replace(/\s/g, '');
+    const component_strs: string[] = sort_str_clean.split('&&');
+    const sort_list: ISortComponent[] = [];
+    component_strs.forEach(component_str => {
+        sort_list.push(_parse_sort_component(component_str));
+    });
+    return sort_list;
+}
+
+/**
+ * Parse a query component string.
+ */
+function _parse_sort_component(sort_component: string): ISortComponent {
+    // split the query at the @ sign
+    const [_, attrib_name_str]: string[] = sort_component.split('@');
+    // check
+    if (!attrib_name_str) {throw new Error('Bad attribute name in query.'); }
+    // parse the name
+    const attrib_name_index = _parse_name_str(attrib_name_str);
+    const attrib_name  = attrib_name_index[0];
+    const attrib_index  = attrib_name_index[1];
+    // return the data for the query component as an object
+    return {
+        attrib_name: attrib_name,
+        attrib_index: attrib_index
+    };
+}
+
 /**
  * Parse the attribute value. Handles sting with quotes, e.g. 'this' and "that".
  * Remove quotes from value string

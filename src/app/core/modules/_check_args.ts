@@ -3,10 +3,23 @@ import { EEntityTypeStr, EAttribNames } from '@libs/geo-info/common';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
 import { isNumber } from 'util';
 // =========================================================================================================================================
-// Query Checks
+// Attribute Checks
 // =========================================================================================================================================
+function checkAttribName(fn_name: string, attrib_name: string): void {
+    // typeCheckObj.isString(fn_name, 'attrib_name', attrib_name); // check attrib_name is string
+    // attrib_name is always a string: check if name is invalid (0 length, contains non-alphanumeric, starts with numbers)
+    if (attrib_name.length === 0) {
+        throw new Error (fn_name + ': attrib_name not specified');
+    }
+    if (attrib_name.search(/\W/) !== -1) {
+        throw new Error (fn_name + ': attrib_name contains restricted characters');
+    }
+    if (attrib_name[0].search(/[0-9]/) !== -1) {
+        throw new Error (fn_name + ': attrib_name should not start with numbers');
+    }
+}
 export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
-    typeCheckObj.isString(fn_name, 'attrib_name', attrib_name); // check attrib_name is string
+    checkAttribName(fn_name, attrib_name);
     // -- check defined index
     let ind = false;
     if (attrib_index !== null && attrib_index !== undefined) {
@@ -32,7 +45,7 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
     let check_fns = [];
     if (blocked === true) {
         let pass = false;
-        const err_arr = [fn_name + ': ' + 'attrib_name is one of the special attribute names - '
+        const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
                         + Object.values(EAttribNames).toString() + '\n'];
         if (ind === false) {
             try {

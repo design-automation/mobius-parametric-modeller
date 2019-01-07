@@ -54,6 +54,24 @@ hr{
 .disabled-input{
     border: 0px;
     margin: 0px;
+    width: 50px;
+    font-family: sans-serif;
+    font-weight: 550;
+    font-style: italic;
     background-color: $color6;
-    color: $color1;
+    color: $function-text-color;
+}
+
+.input{
+    font-size: $fsize2;
+    resize: horizontal;
+    min-width: 10px;
+    background-color: $color6; 
+    margin-left: 5px;
+    border: 2px solid $color5;
+    padding-left: 2px;
+}
+
+.returnProd{
+    display: inline-block;
 }

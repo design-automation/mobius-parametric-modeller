@@ -4,7 +4,8 @@
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
     [ngSwitch]="data.type"
-    (click)='emitSelect($event, data)'>
+    (click)='emitSelect($event, data)'
+    *ngIf= 'data.type != ProcedureTypes.Return'>
     <div class='container--item' >
         <div class = "btn-container">
             <div class = "btns">
@@ -153,9 +154,9 @@
 
         </div>
         
-        <!-- Return (Only visible in End node) Template -->
+        <!-- Return (Not visible) Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Return">
-            <div class='function-text'>Return</div>
+            <!-- <div class='function-text'>Return</div>
             <ng-container  *ngFor='let p of data.args;let i=index'>
                 <input class='input--arg' 
                 *ngIf='p.name.substring(0,1) !== "_"'
@@ -165,7 +166,7 @@
                 placeholder={{p.name}}
                 [style.width.px]='inputSize(p.value||p.name)'
                 >  
-            </ng-container>
+            </ng-container> -->
         </div>
         
         <!-- Blank (always the first procedure of if/else/else if/for/while) -->

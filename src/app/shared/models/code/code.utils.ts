@@ -1,4 +1,4 @@
-import { INode, NodeUtils } from '@models/node';
+import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 import { IPortInput, InputType } from '@models/port';
 import { Observable } from 'rxjs';

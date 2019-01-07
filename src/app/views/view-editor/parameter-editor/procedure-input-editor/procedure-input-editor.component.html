@@ -1,4 +1,4 @@
-<div class='container--parameter' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta && prod.meta.module=="Input"'>
+<div class='container--parameter' [class.error]='prod.hasError' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta && prod.meta.module=="Input"'>
     <div class = "btn-container">
         <div class = "btns">
             <!-- delete button-->

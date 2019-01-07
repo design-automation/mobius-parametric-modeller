@@ -25,6 +25,10 @@
     &:hover .btns{
         display: inline-flex;
     }
+
+    &.error {
+        border: 2px solid $error-color;
+    }
 }
 
 .inline-div{

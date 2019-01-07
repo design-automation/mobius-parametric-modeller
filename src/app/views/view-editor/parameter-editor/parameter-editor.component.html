@@ -11,7 +11,7 @@
 </div>
 <div class='flowchart-info' *ngIf="node.type=='end'">
     <div class='returnProd'>
-        <input class='disabled-input' value="Return:" disabled>
+        <input class='disabled-input' value="Return" disabled>
         <ng-container *ngFor='let p of node.procedure[node.procedure.length-1].args; let i=index'>
             <input class='input' 
             *ngIf='p.name.substring(0,1) !== "_"'

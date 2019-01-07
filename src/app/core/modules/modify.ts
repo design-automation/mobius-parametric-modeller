@@ -5,7 +5,6 @@ import { vecsAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { FromEdge } from './vec';
 
 /**
  * Moves geometry by vector.
@@ -306,14 +305,19 @@ export enum _EPromoteAttribTypes {
  * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
  */
 export function AttribPromote(__model__: GIModel, attrib_name: string,
-    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): TId[] {
+    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
     // --- Error Check ---
     checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
 
-// Collection Add
+// Collection Add Entities
 
-// Collection Remove
+// Collection Remove Remove Entities
 
+// ExtendPline
+
+// ProjectPosition
+
+// Move position along vector (normals)

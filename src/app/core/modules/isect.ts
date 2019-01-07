@@ -61,3 +61,5 @@ export function Split(__model__: GIModel, objects: TId[], polyline: TId): TId[] 
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
+
+// Ray and plane

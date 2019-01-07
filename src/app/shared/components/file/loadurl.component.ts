@@ -5,6 +5,8 @@ import { ProcedureTypes } from '@shared/models/procedure';
 import * as circularJSON from 'circular-json';
 import * as funcs from '@modules';
 import { DataService } from '@services';
+import { _parameterTypes } from '@modules';
+import { ModuleList } from '@shared/decorators';
 
 @Component({
   selector: 'load-url',
@@ -52,6 +54,40 @@ export class LoadUrlComponent {
                         last_updated: f.last_updated,
                         version: f.version
                     };
+                    const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];
+                    if (endNode.procedure.length === 0) {
+                        endNode.procedure = [{type: 13, ID: '',
+                        parent: undefined,
+                        meta: {name: '', module: ''},
+                        children: undefined,
+                        argCount: 0,
+                        args: [],
+                        print: false,
+                        enabled: true,
+                        selected: false,
+                        hasError: false}];
+                    }
+                    if (endNode.procedure[endNode.procedure.length - 1].type !== 11) {
+                        const returnMeta = _parameterTypes.return.split('.');
+                        for (const i of ModuleList) {
+                            if (i.module !== returnMeta[0]) { continue; }
+                            for ( const j of i.functions) {
+                                if (j.name !== returnMeta[1]) { continue; }
+                                endNode.procedure.push({type: 11, ID: '',
+                                parent: undefined,
+                                meta: {name: '', module: ''},
+                                children: undefined,
+                                argCount: j.argCount,
+                                args: j.args,
+                                print: false,
+                                enabled: true,
+                                selected: false,
+                                hasError: false});
+                                break;
+                            }
+                            break;
+                        }
+                    }
                     observer.next(file);
                     observer.complete();
                 } else {

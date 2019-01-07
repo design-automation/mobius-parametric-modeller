@@ -55,12 +55,14 @@ export class LoadUrlComponent {
                     observer.next(file);
                     observer.complete();
                 } else {
+                    console.log('Error: Unable to load file: ' + url);
                     observer.error('error happened');
                 }
             };
 
             request.onerror = () => {
-            observer.error('error happened');
+                console.log('Error: Unable to load file: ' + url);
+                observer.error('error happened');
             };
             request.send();
         });

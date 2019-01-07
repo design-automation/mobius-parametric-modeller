@@ -200,30 +200,27 @@ export class ExecuteComponent {
                     }
                 });
             }
-            let error: Error;
+
             if (ex.toString().indexOf('Unexpected identifier') > -1) {
-                error = new Error('Unexpected Identifier error. Did you declare everything?' +
-                    'Check that your strings are enclosed in quotes (")');
-            } else if (ex.toString().indexOf('Unexpected token') > -1) {
-                error = new Error('Unexpected token error. Check for stray spaces or reserved keywords?');
+                ex.message = 'Unexpected Identifier error. Did you declare everything?' +
+                'Check that your strings are enclosed in quotes (")';
+            } else if (ex.toString().indexOf('Unexpected token') > -1 || ex.toString().indexOf('unexpected token') > -1) {
+                ex.message = 'Unexpected token error. Check for stray spaces or reserved keywords?';
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
-                error = new Error('Unable to read file input. Check all start node inputs.');
+                ex.message = 'Unable to read file input. Check all start node inputs.';
             } else if (ex.toString().indexOf('Cannot read property') > -1) {
-                error = new Error('Unrecognized or missing varible in the procedure.');
-            } else {
-                error = ex;
-                // error = new Error(ex.message);
+                ex.message = 'Unrecognized or missing varible in the procedure.';
             }
             document.getElementById('Console').click();
             // @ts-ignore
             // console.logs = [];
             console.log('\n=======================================\n' +
-                        error.name +
+                        ex.name +
                         '\n=======================================\n' +
-                        error.message);
+                        ex.message);
             // console.log('---------------\nError node code:');
             // console.log(fnString);
-            throw error;
+            throw ex;
 
         }
     }

@@ -54,6 +54,8 @@ export class LoadUrlComponent {
                         last_updated: f.last_updated,
                         version: f.version
                     };
+
+                    // TO BE REMOVED after all the existing mob files are updated
                     const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];
                     if (endNode.procedure.length === 0) {
                         endNode.procedure = [{type: 13, ID: '',
@@ -88,6 +90,8 @@ export class LoadUrlComponent {
                             break;
                         }
                     }
+                    // REMOVE ENDS
+
                     observer.next(file);
                     observer.complete();
                 } else {

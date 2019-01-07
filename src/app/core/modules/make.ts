@@ -210,7 +210,9 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
-    // checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
+    if (parent_coll !== null || parent_coll !== undefined) {
+        checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
+    }
     checkIDs(fn_name, 'objects', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
     // --- Error Check ---
     if (!Array.isArray(objects)) {

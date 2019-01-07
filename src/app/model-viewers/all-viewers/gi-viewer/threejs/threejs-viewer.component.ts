@@ -38,12 +38,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     public selectable: number;
 
     // right selection dropdown
-    public selectingEntity: {id: string, name: string} = {id: 'A', name: 'All'};
+    public selectingEntity: {id: string, name: string} = {id: '', name: ''};
     public selectDropdownVisible = false;
     public selections = [
         {id: 'P', name: 'Points'}, {id: 'E', name: 'Edges'}, {id: 'W', name: 'Wires'},
         {id: 'F', name: 'Faces'}, {id: 'PL', name: 'Polylines'}, {id: 'PG', name: 'Polygons'},
-        {id: 'C', name: 'Collections'}, {id: 'A', name: 'All'}];
+        {id: 'C', name: 'Collections'}];
     /**
      * Creates a new viewer,
      * @param injector
@@ -222,13 +222,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (intersects.length > 0) {
             const intersect0 = intersects[0];
             switch (this.selectingEntity.id) {
-                case 'A':
+                // case 'A':
+                // if (intersect0.object.type === 'Mesh') {
+                //     this.selectFace(intersect0);
+                // } else if (intersect0.object.type === 'LineSegments') {
+                //     this.selectEdge(intersect0);
+                // } else if (intersect0.object.type === 'Points') {
+                //     this.selectPoint(intersect0);
+                // }
+                //     break;
+                case 'C':
                 if (intersect0.object.type === 'Mesh') {
-                    this.selectFace(intersect0);
+                    this.selectColl(intersect0, 'Mesh');
                 } else if (intersect0.object.type === 'LineSegments') {
-                    this.selectEdge(intersect0);
+                    this.selectColl(intersect0, 'LineSegments');
                 } else if (intersect0.object.type === 'Points') {
-                    this.selectPoint(intersect0);
+                    this.selectColl(intersect0, 'Points');
                 }
                     break;
                 case 'F':
@@ -440,6 +449,37 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         } else {
             scene.unselectObj(selecting, this.container);
             scene._selectedEntity.delete(selecting);
+        }
+    }
+
+    private selectColl(object, type) {
+        const scene = this._data_threejs;
+        if (type === 'Mesh') {
+            const colls = this.model.geom.query.navAnyToAny(EEntityTypeStr.TRI, EEntityTypeStr.COLL, object.faceIndex);
+            const pgons = this.model.geom.query.navCollToPgon(colls[0]);
+            const pgons_flat = [].concat(...pgons);
+            const faces = pgons_flat.map(pgon => this.model.geom.query.navPgonToFace(pgon));
+            const faces_flat = [].concat(...faces);
+            const tris = faces_flat.map(face => this.model.geom.query.navFaceToTri(face));
+            const tris_flat = [].concat(...tris);
+            const verts = tris_flat.map(tri => this.model.geom.query.navTriToVert(tri));
+            const verts_flat = [].concat(...verts);
+            const posis = verts_flat.map(v => this.model.geom.query.navAnyToPosi(EEntityTypeStr.VERT, v));
+            const posis_flat = [].concat(...posis);
+            const tri_indices = [];
+            const positions = [];
+            posis_flat.map((posi, index) => {
+                positions.push(this.model.attribs.query.getPosiCoords(posi));
+                tri_indices.push(index);
+            });
+            const posi_flat = [].concat(...positions);
+            scene.selectObjFace('coll', tri_indices, posi_flat, this.container);
+        } else if (type === 'LineSegments') {
+            // console.log('selectColl');
+            // const wire = this.model.geom.query.navEdgeToWire(object.index / 2);
+            // console.log(wire);
+            // const coll = this.model.geom.query.navAnyToColl(EEntityTypeStr.WIRE, wire);
+            // console.log(coll);
         }
     }
 

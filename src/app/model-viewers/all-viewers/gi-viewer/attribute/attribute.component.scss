@@ -64,7 +64,8 @@ table {
   }
   
   .table--container{
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    z-index: 999;
   }
   // contains everything
   .mat-elevation-z1{

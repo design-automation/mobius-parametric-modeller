@@ -32,8 +32,8 @@ export {calc};
 import * as util from './util';
 export {util};
 
-import * as vec from './vec';
-export {vec};
+import * as vector from './vector';
+export {vector};
 
 import * as list from './list';
 export {list};

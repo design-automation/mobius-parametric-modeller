@@ -3,7 +3,7 @@ import { TId, Txyz, TEdge, EEntStrToAttribMap, EEntityTypeStr, TPlane, TRay } fr
 import { checkCommTypes, checkIDnTypes } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idBreak } from '@libs/geo-info/id';
-import { vecsSub } from '@libs/geom/vectors';
+import { vecsSub, vecMakeOrtho, vecNorm, vecsCross } from '@libs/geom/vectors';
 
 /**
  * Vector functions.
@@ -153,7 +153,16 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
     // --- Error Check ---
 
     // --- Error Check ---
-    throw new Error('Not implemented');
+    if (!Array.isArray(origin)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
+        const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type_str, index)[0];
+        origin = __model__.attribs.query.getPosiCoords(posi_i);
+    }
+    return [
+        origin,
+        vecNorm(x_vec),
+        vecNorm(vecMakeOrtho(xy_vec, x_vec))
+    ];
 }
 /**
  * Create a ray, centered at the origin.
@@ -166,7 +175,15 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     // --- Error Check ---
 
     // --- Error Check ---
-    throw new Error('Not implemented');
+    if (!Array.isArray(origin)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
+        const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type_str, index)[0];
+        origin = __model__.attribs.query.getPosiCoords(posi_i);
+    }
+    return [
+        origin,
+        vecNorm(dir_vec)
+    ];
 }
 
 /**
@@ -180,14 +197,8 @@ export function PlaneRay(plane: TPlane): TRay {
     // --- Error Check ---
 
     // --- Error Check ---
-    throw new Error('Not implemented');
+    return [plane[0], vecsCross(plane[1], plane[2])];
 }
-// Add, Sub, Div, Mult Vectors
+// Add, Sub, Div, Mult Vectors, these should be inline functions
 
-// Get Normal from Face (average of triangles)
 
-// Get Normal from vertex (of a face)
-
-// Get plane from origin and two vectors
-
-// Get plane from face

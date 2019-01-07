@@ -9,11 +9,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- delete button-->
-<<<<<<< HEAD
-                <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
-=======
-                <button *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn deletebtn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
->>>>>>> e1534097dee012182ba042838b5676bf647841af
+                <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
                     <mat-icon class='icon'>delete_outline</mat-icon>
                 </button>
                 <!-- Disable button-->

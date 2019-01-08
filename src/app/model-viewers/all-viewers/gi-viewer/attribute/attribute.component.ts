@@ -13,7 +13,7 @@ import { EEntityTypeStr } from '@libs/geo-info/common';
 
 export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
-  @Input() showSelected: boolean;
+  showSelected = false;
 
   tabs: { type: string, title: string }[] =
     [{ type: EEntityTypeStr.POSI, title: 'Positions' },
@@ -43,13 +43,6 @@ export class AttributeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && this.data) {
-      const currentTab = this.getCurrentTab();
-      setTimeout(() => {
-        this.generateTable(currentTab);
-      });
-    }
-
-    if (changes['showSelected']) {
       const currentTab = this.getCurrentTab();
       setTimeout(() => {
         this.generateTable(currentTab);
@@ -106,5 +99,13 @@ export class AttributeComponent implements OnChanges {
     } else {
       return 0;
     }
+  }
+
+  showSelectedSwitch() {
+    this.showSelected = !this.showSelected;
+    const currentTab = this.getCurrentTab();
+      setTimeout(() => {
+        this.generateTable(currentTab);
+    });
   }
 }

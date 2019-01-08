@@ -82,7 +82,7 @@ export class GIAttribsThreejs {
      */
     public getEntsVals(selected_ents: Map<string, number>, ent_type_str: EEntityTypeStr) {
         const data_obj_map: Map< number, { id: string} > = new Map();
-        if (!selected_ents) {
+        if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         selected_ents.forEach(ent => {

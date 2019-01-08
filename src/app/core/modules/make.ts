@@ -210,7 +210,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
-    if (parent_coll !== null || parent_coll !== undefined) {
+    if (parent_coll !== null && parent_coll !== undefined) {
         checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
     }
     checkIDs(fn_name, 'objects', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
@@ -440,10 +440,10 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
     return [edge_i, ...new_edges_i];
 }
 /**
- * Divides edge by length or by number of segments.
- * If edge is not exact multiple of length, length of last segment will be the remainder.
+ * Divides edge/wire/polyline by length or by number of segments.
+ * If object is not exact multiple of length, length of last segment will be the remainder.
  * @param __model__
- * @param edge Edge(s) to be divided.
+ * @param edge Edge/wire/polyline(s) to be divided.
  * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
  * @returns List of new edges (segments of original edges), null if unsuccessful or on error.
@@ -455,7 +455,7 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
 export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    // checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE']);
+    checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
     if (!Array.isArray(edge)) {
@@ -485,8 +485,7 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
  */
 export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'make.RayVisible';
-    // checkIDnTypes(fn_name, 'origin', origin, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
+    checkCommTypes('make.RayGeom', 'ray', ray, ['isCoord', 'isVector']);
     // --- Error Check ---
     const origin: Txyz = ray[0];
     const vec: Txyz = vecMult(ray[1], scale);
@@ -505,17 +504,14 @@ export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
 /**
  * Adds a plane to the model from an origin location and two vectors.
  * @param __model__
- * @param plane A list of lists
- * @returns A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
+ * @param plane A list: [origin (POSI|VERT|POINT|xyz), vector(xyz), vector(xyz)]
+ * @returns A point, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
  * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 export function PlaneGeom(__model__: GIModel, plane: TPlane, scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'make.PlanerVisible';
-    // checkIDnTypes(fn_name, 'location', location, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
-    // checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
-    // checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
+    checkCommTypes('make.PlaneGeom', 'plane', plane, ['isPlane']);
     // --- Error Check ---
     const origin: Txyz = plane[0];
     const x_vec: Txyz = vecMult(plane[1], scale);

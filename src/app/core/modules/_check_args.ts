@@ -17,6 +17,7 @@ function checkAttribName(fn_name: string, attrib_name: string): void {
     if (attrib_name[0].search(/[0-9]/) !== -1) {
         throw new Error (fn_name + ': attrib_name should not start with numbers');
     }
+    return;
 }
 export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
     checkAttribName(fn_name, attrib_name);
@@ -172,19 +173,26 @@ const typeCheckObj  = {
         }
         return;
     },
-    isVector: function(fn_name: string, arg_name: string, arg: number[]): void { // same checks as coord
-        typeCheckObj.isCoord(fn_name, arg_name, arg);
+    isVector: function(fn_name: string, arg_name: string, arg_list: number[]): void { // same checks as coord
+        typeCheckObj.isCoord(fn_name, arg_name, arg_list);
         return;
     },
-    isVectorList: function(fn_name: string, arg_name: string, arg: number[]): void {
+    isVectorList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
         // Add if required
     },
-    isPlane: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TPlane = [Txyz, Txyz, Txyz]
+    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): void {
+        checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
+        return;
+    },
+    isPlane: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TPlane = [Txyz/POSI/VERT/POINT, Txyz, Txyz]
+        // one origin: point, posi, vert, coord + 2 vectors
+        // first element of array strictly taken to be origin: otherwise what happens when argument == [xyz, xyz, xyz]
         isListArg(fn_name, arg_name, arg_list, 'origin and vectors');
         isListLenArg(fn_name, arg_name, arg_list, 3);
-        for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isCoord(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        }
+        typeCheckObj.isOrigin(fn_name, arg_name  + '[0]', arg_list[0]);
+        [1, 2].forEach((i) => {
+            checkCommTypes(fn_name, arg_name + '[' + i + ']', arg_list[i], ['isVector']);
+        });
         return;
     },
     isPlaneList: function(fn_name: string, arg_name: string, arg_list: number[][][]): void {

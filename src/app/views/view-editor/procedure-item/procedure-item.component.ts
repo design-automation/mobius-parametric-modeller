@@ -61,7 +61,7 @@ export class ProcedureItemComponent {
     constructor() {
         for (const funcMod of inline_func) {
             for (const func of funcMod[1]) {
-                this.mathFuncs.push(func.split('(')[0]);
+                this.mathFuncs.push(func[0].split('(')[0]);
             }
         }
     }

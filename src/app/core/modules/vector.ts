@@ -44,16 +44,16 @@ export function GetLength(vector: Txyz): number {
 /**
  * Gets the angle (in radian) between two edges, two vectors, or an edge and a vector.
  * @param __model__
- * @param edgeOrVector1 First edge or vector.
- * @param edgeOrVector2 Second edge or vector.
+ * @param vector1 First edge or vector.
+ * @param vector2 Second edge or vector.
  * @returns Angle (in radian).
  * @example angle1 = vec.Angle (edgeorvector1, edgeorvector2)
  */
-export function Angle(edgeOrVector1: Txyz, edgeOrVector2: Txyz): number {
+export function Angle(vector1: Txyz, vector2: Txyz): number {
     // --- Error Check ---
     const fn_name = 'vector.Angle';
-    checkIDnTypes(fn_name, 'edgeOrVector1', edgeOrVector1, ['isID', 'isVector'], ['EDGE']);
-    checkIDnTypes(fn_name, 'edgeOrVector2', edgeOrVector2, ['isID', 'isVector'], ['EDGE']);
+    checkIDnTypes(fn_name, 'vector1', vector1, ['isID', 'isVector'], ['EDGE']);
+    checkIDnTypes(fn_name, 'vector2', vector2, ['isID', 'isVector'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }

@@ -18,13 +18,16 @@
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
-            <input 
+            <div style='position:relative; display:inline-block;'>
+                <input 
                 class='input--arg'
                 [(ngModel)]='data.args[1].value'
                 (blur)='argMod($event, 1)'
                 name='data.args[1].name'
                 placeholder={{data.args[1].name}}
-                [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>  
+                [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>
+                <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
+            </div>
             </div>
 
         <!-- IF Template -->

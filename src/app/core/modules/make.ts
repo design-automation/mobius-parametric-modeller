@@ -477,7 +477,7 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
     }
 }
 /**
- * Adds a visible vector to the model from a Position and vector.
+ * Adds a ray to the model from an origin location and vector.
  * @param __model__
  * @param ray A list of two list of three coordinates
  * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
@@ -503,7 +503,7 @@ export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     return [EEntityTypeStr.POINT + point_i, EEntityTypeStr.PLINE + pline_i];
 }
 /**
- * Adds a new plane to the model from a location and two vectors.
+ * Adds a plane to the model from an origin location and two vectors.
  * @param __model__
  * @param plane A list of lists
  * @returns A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)

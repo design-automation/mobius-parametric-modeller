@@ -75,4 +75,35 @@ export class GIAttribsThreejs {
         });
         return Array.from(data_obj_map.values());
     }
+
+    /**
+     * @param ent_type_str
+     * @param ents_i
+     */
+    public getEntsVals(selected_ents: Map<string, number>, ent_type_str: EEntityTypeStr) {
+        const data_obj_map: Map< number, { id: string} > = new Map();
+        if (!selected_ents) {
+            return [];
+        }
+        selected_ents.forEach(ent => {
+            data_obj_map.set(ent, { id: `${ent_type_str}${ent}` } );
+        });
+
+        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        attribs.forEach( (attrib, attrib_name) => {
+            const data_size: number = attrib.getDataSize();
+            for (const ent_i of Array.from(selected_ents.values())) {
+                const attrib_value = attrib.getEntVal(ent_i);
+                if ( data_size > 1 ) {
+                    (attrib_value as any[]).forEach( (v, i) => {
+                        data_obj_map.get(ent_i)[`${attrib_name}[${i}]`] = v;
+                    });
+                } else {
+                    data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
+                }
+            }
+        });
+        return Array.from(data_obj_map.values());
+    }
 }

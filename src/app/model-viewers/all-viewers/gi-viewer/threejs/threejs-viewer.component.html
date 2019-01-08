@@ -32,9 +32,9 @@
         (click)="selectDropdownVisible = !selectDropdownVisible">
         <mat-icon >near_me</mat-icon>
     </button>
-    <span *ngIf="!selectDropdownVisible" id="selectingEntity" matTooltip="Selecting {{selectingEntity.name}}">{{selectingEntity.id}}</span>
+    <span *ngIf="!selectDropdownVisible" id="selectingEntityType" matTooltip="Selecting {{selectingEntityType.name}}">{{selectingEntityType.id}}</span>
     <div id="selectDropdown" *ngIf="selectDropdownVisible == true">
-        <button *ngFor="let selection of selections"  (click)="selectEntity(selection)" [class.active]="selectingEntity.id === selection.id">
+        <button *ngFor="let selection of selections"  (click)="selectEntityType(selection)" [class.active]="selectingEntityType.id === selection.id">
             <span matTooltip="Select {{selection.name}}">{{selection.id}}</span>
         </button>
     </div>
@@ -53,6 +53,8 @@
             <td  align=left style="width: 10px;">{{_threejs_nums[0]}}</td>
         </tr>
     </div>
+
+    <dropdown-menu (selected)='selectEntity($event)'></dropdown-menu>
 
     <!-- <button id="imagery"  
         [class.selected]="imVisible" (click)="leaflet()">I

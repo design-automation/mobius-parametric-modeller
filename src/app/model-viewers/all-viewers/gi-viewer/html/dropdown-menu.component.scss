@@ -1,0 +1,16 @@
+div{
+    position: absolute;
+    ul{
+        padding: 0;
+        ol{
+            cursor: pointer;
+            list-style: none;
+            background: #ffffff;
+            min-width: 20px;
+            padding: 5px 10px;
+            &:hover{
+                background: #eeeeee;
+            }
+        }
+    }
+}

@@ -78,7 +78,7 @@ export class GIAttribMap {
     /**
      * Returns the data type of this attribute.
      */
-    public getDataType(): string {
+    public getDataType(): EAttribDataTypeStrs {
         return this._data_type;
     }
     /**

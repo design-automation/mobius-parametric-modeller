@@ -263,6 +263,19 @@ export class ToolsetComponent {
             return (node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
             && node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
         } else {
+            if (tp === 'BREAK' || tp === 'CONTINUE') {
+                let checkNode = node.state.procedure[0];
+                if (!checkNode) {return true; }
+                while (checkNode.parent) {
+                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
+                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
+                        return false;
+                    }
+                    checkNode = checkNode.parent;
+                }
+                return true;
+            }
+
             if (node.state.procedure[0]) {
                 let prods: IProcedure[];
 
@@ -284,18 +297,6 @@ export class ToolsetComponent {
             }
 
 
-            if (tp === 'BREAK' || tp === 'CONTINUE') {
-                let checkNode = node.state.procedure[0];
-                if (!checkNode) {return true; }
-                while (checkNode.parent) {
-                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
-                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
-                        return false;
-                    }
-                    checkNode = checkNode.parent;
-                }
-                return true;
-            }
         }
         return false;
     }

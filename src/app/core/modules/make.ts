@@ -480,8 +480,8 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
  * Adds a ray to the model from an origin location and vector.
  * @param __model__
  * @param ray A list of two list of three coordinates
- * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
- * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]])
+ * @returns A point and a line representing the ray. (The point is tha start point of the ray.)
+ * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]], 10)
  */
 export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---

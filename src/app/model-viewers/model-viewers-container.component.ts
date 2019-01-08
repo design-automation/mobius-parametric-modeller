@@ -1,5 +1,5 @@
 import { Component, Injector, Input,
-    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, OnInit, OnChanges } from '@angular/core';
+    ViewChild, ViewContainerRef, ComponentFactoryResolver, OnDestroy, OnInit, DoCheck } from '@angular/core';
 import { IView } from './view.interface';
 import { Viewers } from './model-viewers.config';
 import { DataService } from '@services';
@@ -14,11 +14,9 @@ import { DataService } from '@services';
     templateUrl: 'model-viewers-container.component.html',
     styleUrls: ['model-viewers-container.component.scss']
 })
-export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestroy {
+export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy {
     @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
     @Input() data: any;
-    @Input() helpView: any;
-    currentHelpView: any;
     private views = [];
     private activeView: IView;
     Viewers = Viewers;
@@ -57,15 +55,15 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
         }
     }
     /**
-     * ngOnChanges
+     * ngDoCheck
      */
-    ngOnChanges() {
-        if (this.currentHelpView !== this.helpView) {
+    ngDoCheck() {
+        if (this.dataService.helpView[0] === true) {
             let view;
             for (const v of this.Viewers) {
                 if (v.name === 'Help') { view = v; }
             }
-            this.currentHelpView = this.helpView;
+            this.dataService.toggleHelp(false);
             this.updateView(view);
         } else { this.updateValue(); }
     }
@@ -107,7 +105,7 @@ export class DataViewersContainerComponent implements OnChanges, OnInit, OnDestr
         try {
             const componentRef =  this.views[ this.activeView.name ];
             if (this.activeView.name === 'Help') {
-                componentRef.instance['output'] = this.currentHelpView;
+                componentRef.instance['output'] = this.dataService.helpView[1];
             } else if (this.activeView.name !== 'Console') {
                 componentRef.instance['data'] = this.data;
             } else {

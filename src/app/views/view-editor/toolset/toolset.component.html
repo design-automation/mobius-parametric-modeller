@@ -11,7 +11,7 @@
 <!--Divider-->
 <div class = "divider"></div>
 
-<div class = "toolset--body" (mouseover)='setCurrent()'>
+<div class = "toolset--body" (mouseover)='setCurrent($event)'>
     <ng-container *ngIf="dataService.node.type !== 'start'">          
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     

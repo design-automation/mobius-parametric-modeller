@@ -57,8 +57,8 @@ export class ToolsetComponent implements OnInit {
                     fn['doc'] = false;
                 }
                 nMod.functions.push(fn);
-
             }
+            this.Modules.push(nMod);
         }
     }
 
@@ -86,8 +86,9 @@ export class ToolsetComponent implements OnInit {
         this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
     }
 
-    setCurrent() {
+    setCurrent(event) {
         if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
+            // this.dataService.focusedInput = [document.activeElement, (<HTMLInputElement>document.activeElement).selectionStart];
             this.dataService.focusedInput = document.activeElement;
         } else {
             // this.dataService.focusedInput = undefined;

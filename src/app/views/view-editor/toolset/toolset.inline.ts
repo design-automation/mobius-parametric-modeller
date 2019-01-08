@@ -96,5 +96,7 @@ export const inline_func = [
 ];
 
 // for (let i = 0; i < inline_func.length; i++) {
-//     inline
+//     inline_func[i][1].forEach((arr) => {
+//         arr[0].
+//     });
 // }

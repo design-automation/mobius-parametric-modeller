@@ -22,7 +22,8 @@
         border-bottom: 1px solid $color5;
         padding: 2px 0px;
         .line{
-            white-space: nowrap;
+            white-space: pre-wrap;
+            word-wrap: break-word;
             font-family: 'Ubuntu Mono';
         }
     }

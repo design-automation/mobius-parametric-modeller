@@ -7,7 +7,7 @@
 }
 
 .container--line{
-    background-color: $color6;
+    background-color: transparent;
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
     padding: 0px;
@@ -188,9 +188,9 @@
 
     white-space: nowrap;
     overflow: hidden;
-    &:hover{
-        overflow-x: auto;
-    }
+    // &:hover{
+    //     overflow-x: auto;
+    // }
 }
 
 .container--item:hover + .btn-container{//.container--line
@@ -245,7 +245,7 @@
     background-color: transparent;
 
     border: none;
-    color: $button-color;
+    color: $color1;
 
     display: none;
 

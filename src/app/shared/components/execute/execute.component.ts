@@ -236,7 +236,7 @@ export class ExecuteComponent {
                 ex.message = 'Unexpected token error. Check for stray spaces or reserved keywords?';
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
                 ex.message = 'Unable to read file input. Check all start node inputs.';
-            } else if (ex.toString().indexOf('Cannot read property') > -1) {
+            } else if (ex.toString().indexOf('Cannot read property \'splice\'') > -1) {
                 ex.message = 'Unrecognized or missing variable in the procedure.';
             }
             document.getElementById('Console').click();

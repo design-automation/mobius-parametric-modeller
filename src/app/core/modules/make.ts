@@ -232,15 +232,21 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
     const [_, parent_index]: [EEntityTypeStr, number] = idBreak(parent_coll);
     return EEntityTypeStr.COLL + __model__.geom.add.addColl(parent_index, points, plines, pgons);
 }
+// Loft modelling operation
+export enum _ELoftMethod {
+    OPEN =  'open',
+    CLOSED  =  'closed'
+}
 /**
  * Lofts between edges.
  * @param __model__
  * @param geometry Edges (or wires, polylines or polygons), with the same number of edges.
+ * @param method Enum, if 'closed', then close the loft back to the first curve.
  * @returns Lofted polygons between edges if successful, null if unsuccessful or on error.
  * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
  * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
  */
-export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
+export function Loft(__model__: GIModel, geometry: TId[], method: _ELoftMethod): TId[] {
     // --- Error Check ---
     checkIDs('make.Loft', 'geometry', geometry, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
     // --- Error Check ---
@@ -254,6 +260,9 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
             throw new Error('make.Loft: Number of edges is not consistent.');
         }
         edges_arrs_i.push(edges_i);
+    }
+    if (method === _ELoftMethod.CLOSED) {
+        edges_arrs_i.push(edges_arrs_i[0]);
     }
     const pgons_id: TId[] = [];
     for (let i = 0; i < edges_arrs_i.length - 1; i++) {

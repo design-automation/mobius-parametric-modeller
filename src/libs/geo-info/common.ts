@@ -29,7 +29,8 @@ export enum EAttribNames {
     COORDS =  'xyz',
     NORMAL =  'normal',
     COLOR =   'color',
-    TEXTURE = 'texture'
+    TEXTURE = 'texture',
+    NAME = 'name'
 }
 
 /**

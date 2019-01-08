@@ -9,7 +9,7 @@ import { INode } from '@models/node';
 
 import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
-import { inline_query_expr, inline_func} from './toolset.inline';
+import { inline_query_expr, inline_func, inline_sort_expr} from './toolset.inline';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 
@@ -24,7 +24,7 @@ const inputEvent = new Event('input', {
   templateUrl: './toolset.component.html',
   styleUrls: ['./toolset.component.scss']
 })
-export class ToolsetComponent {
+export class ToolsetComponent implements OnInit {
 
     @Output() selected = new EventEmitter();
     @Output() delete = new EventEmitter();
@@ -35,15 +35,32 @@ export class ToolsetComponent {
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedFunctions = [];
     searchedInlines = [];
-    focusedInput: any;
 
     inlineQueryExpr = inline_query_expr;
+    inlineSortExpr = inline_sort_expr;
     inlineFunc = inline_func;
 
-    Modules = ModuleList;
+    Modules = [];
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {}
+
+    ngOnInit() {
+        for (const mod of ModuleList) {
+            if (mod.module.substring(0, 1) === '_') { continue; }
+            const nMod = {'module': mod.module, 'functions': []};
+            for (const fn of mod.functions) {
+                if (fn.name.substring(0, 1) === '_') { continue; }
+                if (ModuleDocList[mod.module] && ModuleDocList[mod.module][fn.name]) {
+                    fn['doc'] = ModuleDocList[mod.module][fn.name];
+                } else {
+                    fn['doc'] = false;
+                }
+                nMod.functions.push(fn);
+            }
+            this.Modules.push(nMod);
+        }
+    }
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {
@@ -69,23 +86,24 @@ export class ToolsetComponent {
         this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
     }
 
-    setCurrent() {
-        if (document.activeElement.tagName === 'INPUT') {
-            this.focusedInput = document.activeElement;
+    setCurrent(event) {
+        if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
+            // this.dataService.focusedInput = [document.activeElement, (<HTMLInputElement>document.activeElement).selectionStart];
+            this.dataService.focusedInput = document.activeElement;
         } else {
-            this.focusedInput = undefined;
+            // this.dataService.focusedInput = undefined;
         }
     }
 
     add_inline(string) {
-        if (!this.focusedInput) {
+        if (!this.dataService.focusedInput) {
             return;
         }
-        this.focusedInput.focus();
-        this.focusedInput.value += string;
+        this.dataService.focusedInput.focus();
+        this.dataService.focusedInput.value += string;
 
-        this.focusedInput.dispatchEvent(inputEvent);
-        // this.focusedInput.trigger('input');
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        // this.dataService.focusedInput.trigger('input');
     }
 
     // delete imported function
@@ -183,8 +201,8 @@ export class ToolsetComponent {
     }
 
     toggleAccordion(id: string) {
-        if (this.focusedInput) {
-            this.focusedInput.focus();
+        if (this.dataService.focusedInput) {
+            this.dataService.focusedInput.focus();
         }
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
@@ -198,8 +216,8 @@ export class ToolsetComponent {
     }
 
     toggleAccordionHead(id: string) {
-        if (this.focusedInput) {
-            this.focusedInput.focus();
+        if (this.dataService.focusedInput) {
+            this.dataService.focusedInput.focus();
         }
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
@@ -263,6 +281,19 @@ export class ToolsetComponent {
             return (node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
             && node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
         } else {
+            if (tp === 'BREAK' || tp === 'CONTINUE') {
+                let checkNode = node.state.procedure[0];
+                if (!checkNode) {return true; }
+                while (checkNode.parent) {
+                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
+                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
+                        return false;
+                    }
+                    checkNode = checkNode.parent;
+                }
+                return true;
+            }
+
             if (node.state.procedure[0]) {
                 let prods: IProcedure[];
 
@@ -284,18 +315,6 @@ export class ToolsetComponent {
             }
 
 
-            if (tp === 'BREAK' || tp === 'CONTINUE') {
-                let checkNode = node.state.procedure[0];
-                if (!checkNode) {return true; }
-                while (checkNode.parent) {
-                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
-                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
-                        return false;
-                    }
-                    checkNode = checkNode.parent;
-                }
-                return true;
-            }
         }
         return false;
     }
@@ -360,7 +379,7 @@ export class ToolsetComponent {
         }
         for (const expr of this.inlineQueryExpr) {
             if (this.searchedInlines.length >= 10) { break; }
-            if (expr.toLowerCase().indexOf(str) !== -1) {
+            if (expr[0].toLowerCase().indexOf(str) !== -1) {
                 this.searchedInlines.push(expr);
             }
         }

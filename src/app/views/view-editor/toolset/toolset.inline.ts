@@ -110,3 +110,27 @@ export const inline_func = [
     ['statistics', statistics],
     ['trigonometry', trigonometry]
 ];
+
+// const inline_func_lst: string[][][] = inline_func.map(x => x[1]);
+// const inline_func_lst = [
+//     lists,
+//     conversion,
+//     arithmetic,
+//     statistics,
+//     trigonometry
+// ];
+
+// const inline_fn_names = [];
+// for (let i = 0; i < inline_func_lst.length; i++) {
+//     inline_func_lst[i].forEach((arr) => {
+//         const mtch = arr[0].match(/^\w*(?=\()/);
+//         let ret;
+//         if (mtch !== null) {
+//             ret = mtch[0];
+//         } else {
+//             ret = arr[0];
+//         }
+//         inline_fn_names.push(ret);
+//     });
+// }
+// export const inline_fn_regEx = RegExp(inline_fn_names.join('|'), 'g');

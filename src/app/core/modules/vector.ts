@@ -38,7 +38,6 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
  */
 export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
     // --- Error Check ---
-
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
@@ -60,7 +59,6 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
  */
 export function RayFromPlane(plane: TPlane): TRay {
     // --- Error Check ---
-
     // --- Error Check ---
     return [plane[0], vecCross(plane[1], plane[2])];
 }
@@ -74,7 +72,7 @@ export function RayFromPlane(plane: TPlane): TRay {
  */
 export function GetVector(__model__: GIModel, edge_id: TId): Txyz {
     // --- Error Check ---
-
+    checkIDs('vector.EdgeVector', 'edge_id', edge_id, ['isID'], ['EDGE']);
     // --- Error Check ---
     const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge_id);
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
@@ -82,7 +80,6 @@ export function GetVector(__model__: GIModel, edge_id: TId): Txyz {
     const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
     return vecSub(end, start);
 }
-
 /**
  * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
  * @param __model__
@@ -142,11 +139,10 @@ export function GetNormal(__model__: GIModel, geometry: TId): Txyz {
  */
 export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
-
+    checkIDs('vector.FacePlane', 'face_id', edge, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
-
 /**
  * Returns a plane of a face.
  * @param __model__
@@ -155,11 +151,12 @@ export function GetRay(__model__: GIModel, edge: TId): TPlane {
  */
 export function GetPlane(__model__: GIModel, face: TId): TPlane {
     // --- Error Check ---
-
+    const fn_name = 'vector.Ray';
+    // checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    // checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
-
 
 
 // /**

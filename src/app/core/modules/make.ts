@@ -106,7 +106,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
-    if (parent_coll !== null || parent_coll !== undefined) {
+    if (parent_coll !== null && parent_coll !== undefined) {
         checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
     }
     checkIDs(fn_name, 'objects', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
@@ -345,10 +345,10 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
     return [edge_i, ...new_edges_i];
 }
 /**
- * Divides edge by length or by number of segments.
- * If edge is not exact multiple of length, length of last segment will be the remainder.
+ * Divides edge/wire/polyline by length or by number of segments.
+ * If object is not exact multiple of length, length of last segment will be the remainder.
  * @param __model__
- * @param edge Edge(s) to be divided.
+ * @param edge Edge/wire/polyline(s) to be divided.
  * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
  * @returns List of new edges (segments of original edges), null if unsuccessful or on error.
@@ -360,7 +360,7 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
 export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    // checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE']);
+    checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
     if (!Array.isArray(edge)) {

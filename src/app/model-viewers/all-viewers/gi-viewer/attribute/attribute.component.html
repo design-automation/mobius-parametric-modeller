@@ -15,4 +15,8 @@
       </div>
   </my-tab>
 </my-tabs>
+<div id="displaySelected" [hidden]="dataSource === undefined">
+  <span>Show Selected</span>
+  <input type="checkbox" id="switch" (click)="showSelectedSwitch()" [checked]="showSelected"/><label for="switch">Toggle</label>
+</div>
   

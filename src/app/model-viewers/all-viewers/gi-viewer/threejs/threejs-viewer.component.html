@@ -1,65 +1,135 @@
-<div id="threejs-container"  
-(window:keydown)="onUserAction($event)" 
-(window:mousedown)="onUserAction($event)" 
-(window:mousemove)="onDocumentMouseMove($event)">
-    <div *ngIf="_model_error" style="position:absolute;color:red;margin-top: 50px;left:40%;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">Error displaying model:{{text}}</div>
-    <div *ngIf="_no_model" style="position:absolute;color:red;margin-top: 50px;left:40%;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">Model or Scene not defined.</div>
-    <div *ngIf="messageVisible" style="position:absolute;color:orange;margin-top: 50px;left:40%;padding:10px;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;">{{message}}</div>
+<div
+    id="threejs-container"
+    (window:keydown)="onUserAction($event)"
+    (window:mousedown)="onUserAction($event)"
+    (window:mousemove)="onDocumentMouseMove($event)"
+>
+    <div
+        *ngIf="_model_error"
+        style="position:absolute;color:red;margin-top: 50px;left:40%;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;"
+    >
+        Error displaying model:{{text}}
+    </div>
+    <div
+        *ngIf="_no_model"
+        style="position:absolute;color:red;margin-top: 50px;left:40%;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;"
+    >
+        Model or Scene not defined.
+    </div>
+    <div
+        *ngIf="messageVisible"
+        style="position:absolute;color:orange;margin-top: 50px;left:40%;padding:10px;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;"
+    >
+        {{message}}
+    </div>
 
-    <!--
-    <button id="zoomingfit"  
+
+    <!-- <button id="zoomingfit"  
         [class.visible]="Visible === 'zoomfit'" 
         (click)="zoomfit()">
         <span matTooltip="zoom to fit"><i class="fa fa-arrows-alt"></i></span>
-    </button> 
-    -->
-    <button id="zoomingfit"
+    </button> -->
+    <button
+        id="zoomingfit"
         mat-icon-button
-        [class.visible]="Visible === 'zoomfit'" 
-        (click)="zoomfit()">
+        [class.visible]="Visible === 'zoomfit'"
+        (click)="zoomfit()"
+    >
         <mat-icon svgIcon="cZoom"></mat-icon>
-    </button> 
+    </button>
+
 
     <!-- <button id="selecting" [class.visible]="Visible === 'select'" (click)= "select($event, Visible)" ><i class="fa fa-mouse-pointer"></i></button> -->
     <!-- <button id="setting" [class.selected]="settingVisible" (click)= "setting(settingVisible)"><i class="fa fa-cog"></i></button> -->
-    <!-- 
-    <button id="selecting" [class.selected]="seVisible" (click)= "select(seVisible)" ><span matTooltip="select"><i class="fa fa-mouse-pointer"></i></span></button>
-
-    -->
-    <button id="selecting" 
+    <!-- <button id="selecting" [class.selected]="seVisible" (click)= "select(seVisible)" ><span matTooltip="select"><i class="fa fa-mouse-pointer"></i></span></button> -->
+    <button
+        id="EntitySelection"
         mat-icon-button
-        [class.selected]="selectDropdownVisible" 
-        (click)="selectDropdownVisible = !selectDropdownVisible">
-        <mat-icon >near_me</mat-icon>
+        (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+    >
+        <mat-icon>near_me</mat-icon>
+        <div
+            [hidden]="needSelect?(!needSelect&&selectDropdownVisible):!needSelect"
+            class="needSelect"
+        ></div>
     </button>
-    <span *ngIf="!selectDropdownVisible" id="selectingEntityType" matTooltip="Selecting {{selectingEntityType.name}}">{{selectingEntityType.id}}</span>
-    <div id="selectDropdown" *ngIf="selectDropdownVisible == true">
-        <button *ngFor="let selection of selections"  (click)="selectEntityType(selection)" [class.active]="selectingEntityType.id === selection.id">
+    <span
+        *ngIf="!selectDropdownVisible"
+        id="selectingEntityType"
+        matTooltip="Selecting {{selectingEntityType.name}}"
+    >
+        {{selectingEntityType.id}}
+    </span>
+    <div
+        id="selectDropdown"
+        *ngIf="selectDropdownVisible == true"
+    >
+        <button
+            *ngFor="let selection of selections"
+            (click)="selectEntityType(selection); needSelect=false"
+            [class.active]="selectingEntityType.id === selection.id"
+        >
             <span matTooltip="Select {{selection.name}}">{{selection.id}}</span>
         </button>
     </div>
 
+
     <div id="shownumber">
-        <tr>
-            <td  align=left style="width: 60px;">Triangles&nbsp;&nbsp;</td>
-            <td  align=left style="width: 10px;">{{_threejs_nums[2]}}</td>
-        </tr>
-        <tr>
-            <td  align=left style="width: 60px;">Lines</td>
-            <td  align=left style="width: 10px;">{{_threejs_nums[1]}}</td>
-        </tr>
-        <tr>
-            <td  align=left style="width: 60px;">Points&nbsp;&nbsp;</td>
-            <td  align=left style="width: 10px;">{{_threejs_nums[0]}}</td>
-        </tr>
+        <tbody>
+            <tr>
+                <td
+                    align=left
+                    style="width: 60px;"
+                >
+                    Triangles&nbsp;&nbsp;
+                </td>
+                <td
+                    align=left
+                    style="width: 10px;"
+                >
+                    {{_threejs_nums[2]}}
+                </td>
+            </tr>
+            <tr>
+                <td
+                    align=left
+                    style="width: 60px;"
+                >
+                    Lines
+                </td>
+                <td
+                    align=left
+                    style="width: 10px;"
+                >
+                    {{_threejs_nums[1]}}
+                </td>
+            </tr>
+            <tr>
+                <td
+                    align=left
+                    style="width: 60px;"
+                >
+                    Points&nbsp;&nbsp;
+                </td>
+                <td
+                    align=left
+                    style="width: 10px;"
+                >
+                    {{_threejs_nums[0]}}
+                </td>
+            </tr>
+        </tbody>
     </div>
 
+
     <dropdown-menu (selected)='selectEntity($event)'></dropdown-menu>
+
 
     <!-- <button id="imagery"  
         [class.selected]="imVisible" (click)="leaflet()">I
         </button> -->
-    <!--setting-->
-    
+    <!-- setting -->
+
+
     <!-- <app-setting *ngIf="settingVisible == true"></app-setting> -->
 </div>

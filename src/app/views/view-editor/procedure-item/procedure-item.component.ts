@@ -7,6 +7,7 @@ import { _parameterTypes} from '@modules';
 
 import { inline_func } from '../toolset/toolset.inline';
 import * as Modules from '@modules';
+import { DataService } from '@services';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -58,7 +59,7 @@ export class ProcedureItemComponent {
     mathFuncs = [];
     ModuleDoc = ModuleDocList;
 
-    constructor() {
+    constructor(private dataService: DataService) {
         for (const funcMod of inline_func) {
             for (const func of funcMod[1]) {
                 this.mathFuncs.push(func[0].split('(')[0]);
@@ -172,7 +173,8 @@ export class ProcedureItemComponent {
     }
 
     // modify argument input: check if input is valid
-    argMod(event: string, argIndex: number) {
+    argMod(event: Event, argIndex: number) {
+        this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
         this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
             /\s*([\[\]])\s*/g, '$1').replace(
@@ -180,22 +182,13 @@ export class ProcedureItemComponent {
             /([\+\-\*\/\%\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
             // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').replace(
             // /@[a-z0-9]+\s\[\s/g, '[').trim().replace(/[ ]{2,}/g, ' ');
-        return;
-
-        console.log(event);
-        const string = event.trim();
-        if ( string.substring(0, 1) === '@' || (/^[a-zA-Z_$][0-9a-zA-Z_$]*/i).test(string)) {
-            return event;
-        }
-        try {
-            JSON.parse(string);
-        } catch (ex) {
-            console.log('.........', ex);
-            // document.activeElement.style.error = true;
-        }
-
-        return event;
     }
+
+    // argHighlight(value: any) {
+    //     return value.replace(
+    //         inline_fn_regEx, '<span class = "inline-function">' + value.match(inline_fn_regEx) + '</span>'
+    //     );
+    // }
 
     inputSize(val) {
         return ctx.measureText(val).width + 2;

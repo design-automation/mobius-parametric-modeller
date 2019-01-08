@@ -17,9 +17,12 @@ export class DataService {
     private static _newFlowchart = true;
 
     private static _modelOutputView = true;
+    private static _helpView = [false, undefined];
 
     private static _activeModelView: string = undefined;
     private static _activeGallery: any = undefined;
+
+    private static _focusedInput: any;
 
     private static _splitVal = 60;
 
@@ -54,6 +57,13 @@ export class DataService {
 
     get activeGallery() {return DataService._activeGallery; }
     set activeGallery(gallery: any) {DataService._activeGallery = gallery; }
+
+    get helpView() {return DataService._helpView; }
+    set helpView(view: any) {DataService._helpView[1] = view; }
+    toggleHelp(state: boolean) { DataService._helpView[0] = state; }
+
+    get focusedInput() {return DataService._focusedInput; }
+    set focusedInput(input: any) {DataService._focusedInput = input; }
 
     get copiedProd() {return DataService._copiedProd; }
     set copiedProd(prods: any) {DataService._copiedProd = prods; }

@@ -54,7 +54,7 @@ export class DataThreejs {
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
         this._camera.position.x = -80;
         this._camera.position.y = -80;
-        this._camera.position.z = 50;
+        this._camera.position.z = 80;
         this._camera.aspect = 1;
         this._camera.up.set(0, 0, 1);
         this._camera.lookAt(this._scene.position);

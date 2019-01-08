@@ -11,7 +11,7 @@
 <!--Divider-->
 <div class = "divider"></div>
 
-<div class = "toolset--body" (mouseover)='setCurrent()'>
+<div class = "toolset--body" (mouseover)='setCurrent($event)'>
     <ng-container *ngIf="dataService.node.type !== 'start'">          
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     
@@ -50,11 +50,11 @@
                     <ng-container *ngFor='let fn of searchedFunctions'>
                         <li *ngIf='fn.type=="function"'
                         (click)='add_function(fn.data)'>
-                            {{fn.module}}.{{fn.name}}
+                            <span class='module-name'>{{fn.module}}.</span>{{fn.name}}
                         </li>
                         <li *ngIf='fn.type=="imported"'
                         (click)='add_imported_function(fn.data)'>
-                            Imported.{{fn.name}}
+                            <span class='module-name'>user.</span>{{fn.name}}
                         </li>
                     </ng-container>
                 </ul>
@@ -65,23 +65,22 @@
             <!-- functions from core.modules -->
             <ng-container *ngFor='let mod of Modules' >
                 <button id='{{mod.module}}' class="accordion" 
-                *ngIf='mod.module.substring(0,1) !== "_"'
                 (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
                         <ng-container *ngFor='let fn of mod.functions'>
-                            <div class='tooltip' *ngIf='fn.name.substring(0,1)!="_"'>
+                            <div class='tooltip'>
                                 <li 
                                 (click)='add_function(fn)'> 
                                     {{fn.name}} 
                                 </li>
-                                <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
-                                    <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
-                                    <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
-                                    <ng-container *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'>
+                                <span class="tooltiptext" *ngIf='fn.doc'>
+                                    <p class='funcDesc'>{{fn.doc.summary||fn.doc.description}}</p>
+                                    <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+                                    <ng-container *ngFor='let param of fn.doc.parameters'>
                                         <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
                                     </ng-container>
-                                    <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
+                                    <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>
                                 </span>
                             </div>
                         </ng-container>
@@ -158,16 +157,32 @@
 
             <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
             <div class="panel">
-                <ul class='toolset__functions--subset'>
-                    <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
-                        {{expr[0]}}
-                    </li> -->
-                    <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
-                        {{expr}}
-                    </li>
-                </ul>
-                <!--Divider-->
-                <div class = "divider--in"></div>
+                <button id='inlineQueryExpr' class="accordion" (click)='toggleAccordion("inlineQueryExpr")'>Inline Query Expr</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
+                        <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
+                            {{expr[0]}}
+                        </li> -->
+                        <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
+                            {{expr}}
+                        </li>
+                    </ul>
+                    <!--Divider-->
+                    <div class = "divider--in"></div>
+                </div>
+                <button id='inlineSortExpr' class="accordion" (click)='toggleAccordion("inlineSortExpr")'>Inline Sort Expr</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
+                        <!-- <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
+                            {{expr[0]}}
+                        </li> -->
+                        <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr)' title='{{expr}}'>
+                            {{expr}}
+                        </li>
+                    </ul>
+                    <!--Divider-->
+                    <div class = "divider--in"></div>
+                </div>
             </div>
 
 

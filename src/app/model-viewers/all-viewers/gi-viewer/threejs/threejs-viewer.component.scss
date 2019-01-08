@@ -103,7 +103,7 @@ button{
     border:0;
 }
 
-#selecting{
+#EntitySelection{
     width: 40px;
     height: 40px;
     font-size:$fsize1;
@@ -114,6 +114,28 @@ button{
     color: #505050;
     background-color:transparent;
     border:0;
+}
+.needSelect{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    opacity: 0;
+    animation: scaleIn 2s infinite cubic-bezier(.36, .11, .89, .32);
+}
+
+@keyframes scaleIn {
+    from {
+      transform: scale(.8, .8);
+      opacity: .5;
+    }
+    to {
+      transform: scale(1.2, 1.2);
+      opacity: 0;
+    }
 }
 
 #selectingEntityType{
@@ -161,10 +183,7 @@ button{
     border:0;
 }
 
-.selected{
-    color: grey;
 
-}
 
 .visible{
     color: grey;

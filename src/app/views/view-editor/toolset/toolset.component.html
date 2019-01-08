@@ -50,11 +50,11 @@
                     <ng-container *ngFor='let fn of searchedFunctions'>
                         <li *ngIf='fn.type=="function"'
                         (click)='add_function(fn.data)'>
-                            {{fn.module}}.{{fn.name}}
+                            <span class='module-name'>{{fn.module}}.</span>{{fn.name}}
                         </li>
                         <li *ngIf='fn.type=="imported"'
                         (click)='add_imported_function(fn.data)'>
-                            Imported.{{fn.name}}
+                            <span class='module-name'>user.</span>{{fn.name}}
                         </li>
                     </ng-container>
                 </ul>

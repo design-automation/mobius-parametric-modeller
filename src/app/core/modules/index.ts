@@ -32,6 +32,9 @@ export {calc};
 import * as util from './util';
 export {util};
 
+import * as pattern from './pattern';
+export {pattern};
+
 import * as vector from './vector';
 export {vector};
 

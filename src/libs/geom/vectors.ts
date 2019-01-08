@@ -6,7 +6,7 @@ const EPS = 1e-6;
 //  Vectors using Txyz =======================================================================================================
 
 
-export function vecsSub(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
+export function vecSub(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     const v3: Txyz = [
         v1[0] - v2[0],
         v1[1] - v2[1],
@@ -18,7 +18,7 @@ export function vecsSub(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     return v3;
 }
 
-export function vecsAdd(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
+export function vecAdd(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     const v3: Txyz = [
         v1[0] + v2[0],
         v1[1] + v2[1],
@@ -30,7 +30,7 @@ export function vecsAdd(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     return v3;
 }
 
-export function vecsSum(vecs: Txyz[], norm: boolean = false): Txyz {
+export function vecSum(vecs: Txyz[], norm: boolean = false): Txyz {
     const vec_sum: Txyz = [0, 0, 0];
     for (const vec of vecs) {
         vec_sum[0] += vec[0];
@@ -59,11 +59,11 @@ export function vecMult(vec: Txyz, multiplier: number): Txyz {
     ];
 }
 
-export function vecsCross(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
+export function vecCross(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     return mathjs.cross(v1, v2);
 }
 
-export function vecsDot(v1: Txyz, v2: Txyz): number {
+export function vecDot(v1: Txyz, v2: Txyz): number {
     return mathjs.dot(v1, v2);
 }
 
@@ -75,7 +75,10 @@ export function vecNorm(v: Txyz): Txyz {
 export function vecLen(v: Txyz): number {
     return Math.hypot(...v);
 }
-
+export function vecSetLen(v: Txyz, len: number): Txyz {
+    const fac: number = len / Math.hypot(...v);
+    return [v[0] * fac, v[1] * fac, v[2] * fac];
+}
 export function vecRev(v: Txyz): Txyz {
     return [
         v[0] * -1,
@@ -84,11 +87,15 @@ export function vecRev(v: Txyz): Txyz {
     ];
 }
 
-export function vecMakeOrtho(v1: Txyz, v2: Txyz): Txyz {
-    return vecsCross(v2, vecsCross(v1, v2));
+export function vecFromTo(v1: Txyz, v2: Txyz): Txyz {
+    return vecSub(v2, v1);
 }
 
-export function vecsAreCodir(v1: Txyz, v2: Txyz) {
+export function vecMakeOrtho(v1: Txyz, v2: Txyz): Txyz {
+    return vecCross(v2, vecCross(v1, v2));
+}
+
+export function vecCodir(v1: Txyz, v2: Txyz) {
     v1  = vecNorm(v1);
     v2  = vecNorm(v2);
     if (Math.abs(1 - mathjs.dot(v1, v2)) > EPS) { return false; }
@@ -120,23 +127,23 @@ export function newellNorm(pts: Txyz[]): Txyz {
  */
 export function interpByNum(pt1: Txyz, pt2: Txyz, num_points: number): Txyz[] {
     if (num_points < 1) {return []; }
-    const sub_vec: Txyz = vecDiv(vecsSub(pt2, pt1), num_points + 1);
+    const sub_vec: Txyz = vecDiv(vecSub(pt2, pt1), num_points + 1);
     const points: Txyz[] = [];
     let next: Txyz = pt1;
     for (let i = 0; i < num_points; i++) {
-        next = vecsAdd(next, sub_vec);
+        next = vecAdd(next, sub_vec);
         points.push(next);
     }
     return points;
 }
 export function interpByLen(pt1: Txyz, pt2: Txyz, len: number): Txyz[] {
-    const vec: Txyz = vecsSub(pt2, pt1);
+    const vec: Txyz = vecSub(pt2, pt1);
     const num_points: number = Math.floor(vecLen(vec) / len);
     const sub_vec: Txyz = vecMult(vecNorm(vec), len);
     const points: Txyz[] = [];
     let next: Txyz = pt1;
     for (let i = 0; i < num_points; i++) {
-        next = vecsAdd(next, sub_vec);
+        next = vecAdd(next, sub_vec);
         points.push(next);
     }
     return points;

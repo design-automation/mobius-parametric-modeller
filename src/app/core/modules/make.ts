@@ -2,8 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane, TRay } from '@libs/geo-info/common';
 import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi, isObj, isEdge } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
-import { isArray } from 'util';
-import { vecDiv, vecMult, interpByNum, interpByLen, vecsAdd, vecsSub } from '@libs/geom/vectors';
+import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecSub } from '@libs/geom/vectors';
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
 
@@ -19,116 +18,13 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
     // --- Error Check ---
     checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
     // --- Error Check ---
-    if (isArray(coords) && !Array.isArray(coords[0])) {
+    if (Array.isArray(coords) && !Array.isArray(coords[0])) {
         const posi_i: number = __model__.geom.add.addPosition();
         __model__.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, coords as Txyz);
         return EEntityTypeStr.POSI + posi_i;
     } else {
         return (coords as Txyz[]).map(_coords => Position(__model__, _coords)) as TId[];
     }
-}
-/**
- * Adds positions in a circle.
-* @param __model__
-* @param origin XYZ coordinates as a list of three numbers.
-* @param radius Radius of circle as a number.
-* @param num_positions Number of positions distributed equally along the arc.
-* @param arc_angle Angle of arc (in radians).
-* @returns New positions if successful, null if unsuccessful or on error.
-* @example positions1 = make.PositionsArc([0,0,0], 10, 12, PI)
-* @example_info Creates a list of 12 positions distributed equally along a semicircle of radius 10.
- */
-export function PositionsArc(__model__: GIModel, origin: Txyz|TPlane,
-    radius: number, num_positions: number, arc_angle: number): TId[] {
-    // --- Error Check ---
-    const fn_name = 'make.PositionsArc';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
-    checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
-    checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt']);
-    checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber']);
-    // --- Error Check ---
-    const posis_id: TId[] = [];
-    for (let i = 0; i < num_positions + 1; i++) {
-        const vec: Txyz = origin as Txyz;
-        const angle: number = (arc_angle / num_positions) * i;
-        const x: number = (Math.cos(angle) * radius) + vec[0];
-        const y: number = (Math.sin(angle) * radius) + vec[1];
-        const posi_i: number = __model__.geom.add.addPosition();
-        __model__.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, [x, y, vec[2]]);
-        posis_id.push( EEntityTypeStr.POSI + posi_i );
-    }
-    // TODO Implement the TPlane version
-    return posis_id;
-}
-/**
- * Adds positions in a grid.
- * @param __model__
-* @param origin XYZ coordinates as a list of three numbers.
-* @param size Size of grid. If number, assume square grid of that length; if list of two numbers, x and y lengths respectively.
-* @param num_positions Number of positions. If integer, same number for x and y; if list of two numbers, number for x and y respectively.
-* @returns New positions if successful, null if unsuccessful or on error.
-* @example positions1 = make.PositionsGrid([0,0,0], 10, 3)
-* @example_info Creates a list of 9 positions on a 3x3 square grid of length 10.
-* @example positions1 = make.PositionsGrid([0,0,0], [10,20], [2,4])
-* @example_info Creates a list of 8 positions on a 2x4 grid of length 10 by 20.
- */
-export function PositionsGrid(__model__: GIModel, origin: Txyz|TPlane,
-    size: number|[number, number], num_positions: number|[number, number]): TId[] {
-    // --- Error Check ---
-    const fn_name = 'make.PositionsGrid';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
-    checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
-    checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt', 'isXYlistInt']);
-    // --- Error Check ---
-    const xy_size: [number, number] = (isArray(size) ? size : [size, size]) as [number, number];
-    const xy_num_posis: [number, number] = (isArray(num_positions) ? num_positions : [num_positions, num_positions]) as [number, number];
-    const x_offset: number = xy_size[0] / (xy_num_posis[0] - 1);
-    const y_offset: number = xy_size[1] / (xy_num_posis[1] - 1);
-    const posis_id: TId[] = [];
-    for (let i = 0; i < xy_num_posis[0]; i++) {
-        const vec: Txyz = origin as Txyz;
-        const x: number = (i * x_offset) + vec[0] - (xy_size[0] / 2);
-        for (let j = 0; j < xy_num_posis[1]; j++) {
-            const y: number = (j * y_offset) + vec[1] - (xy_size[1] / 2);
-            const posi_i: number = __model__.geom.add.addPosition();
-            __model__.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, [x, y, vec[2]]);
-            posis_id.push( EEntityTypeStr.POSI + posi_i );
-        }
-    }
-    // TODO Implement the TPlane version
-    return posis_id;
-}
-/**
- * Adds positions in a rectangle.
-* @param __model__
-* @param origin XYZ coordinates as a list of three numbers.
-* @param size Size of rectangle. If number, assume square of that length; if list of two numbers, x and y lengths respectively.
-* @returns New positions if successful, null if unsuccessful or on error.
-* @example positions1 = make.PositionsRect([0,0,0], 10)
-* @example_info Creates a list of 4 positions, being the vertices of a 10 by 10 square.
-* @example positions1 = make.PositionsGrid([0,0,0], [10,20])
-* @example_info Creates a list of 4 positions, being the vertices of a 10 by 20 rectangle.
- */
-export function PositionsRect(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
-    // --- Error Check ---
-    const fn_name = 'make.PositionsRect';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
-    checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
-    // --- Error Check ---
-    const xy_size: [number, number] = (isArray(size) ? size : [size, size]) as [number, number];
-    const posis_id: TId[] = [];
-    const vec: Txyz = origin as Txyz;
-    const c1: Txyz = [vec[0] - (xy_size[0] / 2), vec[1] - (xy_size[1] / 2), vec[2]];
-    const c2: Txyz = [vec[0] + (xy_size[0] / 2), vec[1] - (xy_size[1] / 2), vec[2]];
-    const c3: Txyz = [vec[0] + (xy_size[0] / 2), vec[1] + (xy_size[1] / 2), vec[2]];
-    const c4: Txyz = [vec[0] - (xy_size[0] / 2), vec[1] + (xy_size[1] / 2), vec[2]];
-    for (const xyz of [c1, c2, c3, c4]) {
-        const posi_i: number = __model__.geom.add.addPosition();
-        __model__.attribs.add.setAttribValue(EEntityTypeStr.POSI, posi_i, EAttribNames.COORDS, xyz);
-        posis_id.push( EEntityTypeStr.POSI + posi_i );
-    }
-    // TODO Implement the TPlane version
-    return posis_id;
 }
 /**
  * Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.
@@ -169,7 +65,7 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
     // --- Error Check ---
     checkIDs('make.Polyline', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
-    if (isArray(positions) && !Array.isArray(positions[0])) {
+    if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const bool_close: boolean = (close === _EClose.CLOSE);
         const posis_i: number[] = idIndicies(positions as TId[]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
@@ -190,7 +86,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
     // --- Error Check ---
     checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
-    if (isArray(positions) && !Array.isArray(positions[0])) {
+    if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(positions as TId[]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
         return EEntityTypeStr.PGON + pgon_i;
@@ -232,15 +128,21 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
     const [_, parent_index]: [EEntityTypeStr, number] = idBreak(parent_coll);
     return EEntityTypeStr.COLL + __model__.geom.add.addColl(parent_index, points, plines, pgons);
 }
+// Loft modelling operation
+export enum _ELoftMethod {
+    OPEN =  'open',
+    CLOSED  =  'closed'
+}
 /**
  * Lofts between edges.
  * @param __model__
  * @param geometry Edges (or wires, polylines or polygons), with the same number of edges.
+ * @param method Enum, if 'closed', then close the loft back to the first curve.
  * @returns Lofted polygons between edges if successful, null if unsuccessful or on error.
  * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
  * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
  */
-export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
+export function Loft(__model__: GIModel, geometry: TId[], method: _ELoftMethod): TId[] {
     // --- Error Check ---
     checkIDs('make.Loft', 'geometry', geometry, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
     // --- Error Check ---
@@ -254,6 +156,9 @@ export function Loft(__model__: GIModel, geometry: TId[]): TId[] {
             throw new Error('make.Loft: Number of edges is not consistent.');
         }
         edges_arrs_i.push(edges_i);
+    }
+    if (method === _ELoftMethod.CLOSED) {
+        edges_arrs_i.push(edges_arrs_i[0]);
     }
     const pgons_id: TId[] = [];
     for (let i = 0; i < edges_arrs_i.length - 1; i++) {
@@ -292,7 +197,7 @@ export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: numbe
     checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
     checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
     // --- Error Check ---
-    const extrude_vec: Txyz = (isArray(distance) ? distance : [0, 0, distance]) as Txyz;
+    const extrude_vec: Txyz = (Array.isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
     if (!Array.isArray(geometry)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
@@ -373,34 +278,12 @@ export function Join(__model__: GIModel, objects: TId[]): TId {
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
-// Enums for Copy()
-export enum _ECopyPositions {
-    COPY_POSITIONS = 'copy_positions',
-    REUSE_POSITIONS = 'reuse_positions'
-}
+// Stuff for Copy()
 export enum _ECopyAttribues {
     COPY_ATTRIBUTES = 'copy_attributes',
     NO_ATTRIBUTES = 'no_attributes'
 }
-/**
- * Adds a new copy to the model.
- * @param __model__
- * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
- * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
- * @param copy_attributes Enum to copy attributes or to have no attributes copied.
- * @returns New copy if successful, null if unsuccessful or on error.
- * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
- * @example_info Creates a list containing a copy of the objects in sequence of input.
- */
-export function Copy(__model__: GIModel, geometry: TId|TId[],
-        copy_positions: _ECopyPositions, copy_attributes: _ECopyAttribues): TId|TId[] {
-    if (copy_positions === _ECopyPositions.COPY_POSITIONS) {
-        throw new Error('Copy with copy_positions option is not yet implemented... coming soon.');
-    }
-    // --- Error Check ---
-    checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
-    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // --- Error Check ---
+function _copy(__model__: GIModel, geometry: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
     if (!Array.isArray(geometry)) {
         const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
@@ -412,8 +295,30 @@ export function Copy(__model__: GIModel, geometry: TId|TId[],
             return ent_type_str + __model__.geom.add.copyPosis(index, bool_copy_attribs);
         }
     } else {
-        return (geometry as TId[]).map(geom_i => Copy(__model__, geom_i, copy_positions, copy_attributes)) as TId[];
+        return (geometry as TId[]).map(geom_i => _copy(__model__, geom_i, copy_attributes)) as TId[];
     }
+}
+/**
+ * Adds a new copy to the model.
+ * @param __model__
+ * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
+ * @param copy_attributes Enum to copy attributes or to have no attributes copied.
+ * @returns New copy if successful, null if unsuccessful or on error.
+ * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
+ * @example_info Creates a list containing a copy of the objects in sequence of input.
+ */
+export function Copy(__model__: GIModel, geometry: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
+    // --- Error Check ---
+    checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
+    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // --- Error Check ---
+    const new_positions: TId|TId[] = this.Unweld(__model__, geometry);
+    const copied_geometry: TId|TId[] = _copy(__model__, geometry, copy_attributes);
+    const entities: TId[] = [];
+    entities.concat(new_positions);
+    entities.concat(copied_geometry);
+    return entities;
 }
 // Divide edge modelling operation
 export enum _EDivideMethod {
@@ -477,83 +382,66 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
     }
 }
 /**
- * Adds a ray to the model from an origin location and vector.
+ * Unweld geometries.
  * @param __model__
- * @param ray A list of two list of three coordinates [origin (xyz), vector(xyz)]
- * @returns A point and a line representing the ray. (The point is tha start point of the ray.)
- * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]], 10)
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param method Enum, the method to use for unweld.
+ * @returns void
+ * @example mod.Unweld(polyline1,polyline2)
+ * @example_info Unwelds polyline1 from polyline2.
  */
-export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
+export function Unweld(__model__: GIModel, geometry: TId|TId[]): TId[] {
     // --- Error Check ---
-    checkCommTypes('make.RayGeom', 'ray', ray, ['isRay']);
+    checkIDs('modify.Unweld', 'geometry', geometry, ['isID', 'isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    const origin: Txyz = ray[0];
-    const vec: Txyz = vecMult(ray[1], scale);
-    const end: Txyz = vecsAdd(origin, vec);
-    // create orign point
-    const origin_posi_i: number = __model__.geom.add.addPosition();
-    __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
-    const point_i = __model__.geom.add.addPoint(origin_posi_i);
-    // create pline
-    const end_posi_i: number = __model__.geom.add.addPosition();
-    __model__.attribs.add.setPosiCoords(end_posi_i, end);
-    const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
-    // return the geometry IDs
-    return [EEntityTypeStr.POINT + point_i, EEntityTypeStr.PLINE + pline_i];
-}
-/**
- * Adds a plane to the model from an origin location and two vectors.
- * @param __model__
- * @param plane A list: [origin (xyz), vector(xyz), vector(xyz)]
- * @returns A point, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
- * @example plane1 = make.Plane(position1, vector1, [0,1,0])
- * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
- */
-export function PlaneGeom(__model__: GIModel, plane: TPlane, scale: number): TId[] {
-    // --- Error Check ---
-    checkCommTypes('make.PlaneGeom', 'plane', plane, ['isPlane']);
-    // --- Error Check ---
-    const origin: Txyz = plane[0];
-    const x_vec: Txyz = vecMult(plane[1], scale);
-    const y_vec: Txyz = vecMult(plane[2], scale);
-    let x_end: Txyz = vecsAdd(origin, x_vec);
-    let y_end: Txyz = vecsAdd(origin, y_vec);
-    const plane_corners: Txyz[] = [
-        vecsAdd(x_end, y_vec),
-        vecsSub(y_end, x_vec),
-        vecsSub(vecsSub(origin, x_vec), y_vec),
-        vecsSub(x_end, y_vec),
-    ];
-    x_end = vecsAdd(x_end, vecMult(x_vec, 0.1));
-    y_end = vecsSub(y_end, vecMult(y_vec, 0.1));
-    // create the point
-    const origin_posi_i: number = __model__.geom.add.addPosition();
-    __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
-    const point_i = __model__.geom.add.addPoint(origin_posi_i);
-    // create the x axis
-    const x_end_posi_i: number = __model__.geom.add.addPosition();
-    __model__.attribs.add.setPosiCoords(x_end_posi_i, x_end);
-    const x_pline_i = __model__.geom.add.addPline([origin_posi_i, x_end_posi_i]);
-    // create the y axis
-    const y_end_posi_i: number = __model__.geom.add.addPosition();
-    __model__.attribs.add.setPosiCoords(y_end_posi_i, y_end);
-    const y_pline_i = __model__.geom.add.addPline([origin_posi_i, y_end_posi_i]);
-    // create pline for plane
-    const corner_posis_i: number[] = [];
-    for (const corner of plane_corners) {
-        const posi_i: number = __model__.geom.add.addPosition();
-        __model__.attribs.add.setPosiCoords(posi_i, corner);
-        corner_posis_i.push(posi_i);
+    if (!Array.isArray(geometry)) {
+        geometry = [geometry] as TId[];
     }
-    const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
-    // return the geometry IDs
-    return [
-        EEntityTypeStr.POINT + point_i,
-        EEntityTypeStr.PLINE + x_pline_i, EEntityTypeStr.PLINE + y_pline_i,
-        EEntityTypeStr.PLINE + plane_i
-    ];
+    // analyse existing positions and count them
+    const exist_posis_i_map: Map<number, number> = new Map(); // count number of posis
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+        for (const posi_i of posis_i) {
+            if (!exist_posis_i_map.has(posi_i)) {
+                exist_posis_i_map.set(posi_i, 0);
+            }
+            const vert_count: number = exist_posis_i_map.get(posi_i);
+            exist_posis_i_map.set(posi_i, vert_count + 1);
+        }
+    }
+    // copy positions and make map
+    const new_posis_i_map: Map<number, number> = new Map();
+    exist_posis_i_map.forEach( (vert_count, old_posi_i) => {
+        const all_old_verts_i: number[] = __model__.geom.query.navPosiToVert(old_posi_i);
+        const all_vert_count: number = all_old_verts_i.length;
+        if (vert_count !== all_vert_count) {
+            if (!new_posis_i_map.has(old_posi_i)) {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
+                const new_posi_i: number = __model__.geom.add.addPosition();
+                __model__.attribs.add.setPosiCoords(new_posi_i, xyz);
+                new_posis_i_map.set(old_posi_i, new_posi_i);
+            }
+        }
+    });
+    // now go through the geom again and rewire to the new posis
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id); // TODO this could be optimised
+        const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+        const new_posis_i: number[] = [];
+        for (const old_posi_i of old_posis_i) {
+            let new_posi_i: number = old_posi_i;
+            if (new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = new_posis_i_map.get(old_posi_i);
+            }
+            new_posis_i.push(new_posi_i);
+        }
+        __model__.geom.add.replacePosis(ent_type_str, index, new_posis_i);
+    }
+    // return all the new points
+    return Array.from(new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
 }
-
 // Pipe
 
 // Offset

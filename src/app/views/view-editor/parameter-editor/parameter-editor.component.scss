@@ -25,7 +25,7 @@ div[class^="container--"]{
 }
 
 textarea, #flowchart-name{
-    color: $color1;
+    color: $color8;
     border: 2px solid $color5;
     background-color: transparent;
 
@@ -36,7 +36,6 @@ textarea, #flowchart-name{
     resize: none; 
     overflow: auto;
     &:hover, &:focus{
-        color: $color8;
         border-color: $selected-color;
         background-color: $color7;
     }

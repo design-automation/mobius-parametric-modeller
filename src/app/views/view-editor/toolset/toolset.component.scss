@@ -315,3 +315,9 @@ ul{
 //     background-color: $color3;
 //     font-style: italic;
 // }
+
+.inline_set{
+    li{
+        color: $function-text-color2;
+    }
+}

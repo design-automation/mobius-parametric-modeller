@@ -142,9 +142,13 @@ export class GIAttribsQuery {
                 }
                 let val1: TAttribDataTypes = attrib.getEntVal(ent1_i);
                 let val2: TAttribDataTypes = attrib.getEntVal(ent2_i);
-                if (sort.attrib_index !== undefined) {
-                    val1 = val1[sort.attrib_index];
-                    val2 = val2[sort.attrib_index];
+                if (sort.attrib_index !== undefined && sort.attrib_index !== null) {
+                    if (val1 !== undefined && val1 !== null) {
+                        val1 = val1[sort.attrib_index];
+                    }
+                    if (val2 !== undefined && val2 !== null) {
+                        val2 = val2[sort.attrib_index];
+                    }
                 }
                 if (method === ESort.DESCENDING) {
                     if (val1 < val2) { return -1; }

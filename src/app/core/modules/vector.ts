@@ -1,6 +1,6 @@
 import * as mathjs from 'mathjs';
 import { TId, Txyz, TEdge, EEntStrToAttribMap, EEntityTypeStr, TPlane, TRay } from '@libs/geo-info/common';
-import { checkCommTypes, checkIDnTypes } from './_check_args';
+import { checkCommTypes, checkIDnTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idBreak } from '@libs/geo-info/id';
 import { vecsSub, vecMakeOrtho, vecNorm, vecsCross } from '@libs/geom/vectors';
@@ -20,7 +20,7 @@ import { vecsSub, vecMakeOrtho, vecNorm, vecsCross } from '@libs/geom/vectors';
  */
 export function SetLength(vector: Txyz, length: number): Txyz {
     // --- Error Check ---
-    const fn_name = 'vec.SetLength';
+    const fn_name = 'vector.SetLength';
     checkCommTypes(fn_name, 'vector', vector, ['isVector']);
     checkCommTypes(fn_name, 'length', length, ['isNumber']);
     // --- Error Check ---
@@ -36,7 +36,7 @@ export function SetLength(vector: Txyz, length: number): Txyz {
  */
 export function GetLength(vector: Txyz): number {
     // --- Error Check ---
-    checkCommTypes('vec.GetLength', 'vector', vector, ['isVector']);
+    checkCommTypes('vector.GetLength', 'vector', vector, ['isVector']);
     // --- Error Check ---
     if (vector === undefined) { throw new Error('Invalid arg: vector must be defined.'); }
     return mathjs.hypot(vector);
@@ -51,7 +51,7 @@ export function GetLength(vector: Txyz): number {
  */
 export function Angle(edgeOrVector1: Txyz, edgeOrVector2: Txyz): number {
     // --- Error Check ---
-    const fn_name = 'vec.Angle';
+    const fn_name = 'vector.Angle';
     checkIDnTypes(fn_name, 'edgeOrVector1', edgeOrVector1, ['isID', 'isVector'], ['EDGE']);
     checkIDnTypes(fn_name, 'edgeOrVector2', edgeOrVector2, ['isID', 'isVector'], ['EDGE']);
     // --- Error Check ---
@@ -67,7 +67,7 @@ export function Angle(edgeOrVector1: Txyz, edgeOrVector2: Txyz): number {
  */
 export function Cross(vector1: Txyz, vector2: Txyz): Txyz {
     // --- Error Check ---
-    const fn_name = 'vec.Cross';
+    const fn_name = 'vector.Cross';
     checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
     checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
     // --- Error Check ---
@@ -83,7 +83,7 @@ export function Cross(vector1: Txyz, vector2: Txyz): Txyz {
  */
 export function Dot(vector1: Txyz, vector2: Txyz): number {
     // --- Error Check ---
-    const fn_name = 'vec.Dot';
+    const fn_name = 'vector.Dot';
     checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
     checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
     // --- Error Check ---
@@ -97,7 +97,7 @@ export function Dot(vector1: Txyz, vector2: Txyz): number {
  */
 export function EdgeVector(__model__: GIModel, edge_id: TId): Txyz {
     // --- Error Check ---
-
+    checkIDs('vector.EdgeVector', 'edge_id', edge_id, ['isID'], ['EDGE']);
     // --- Error Check ---
     const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge_id);
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
@@ -113,7 +113,7 @@ export function EdgeVector(__model__: GIModel, edge_id: TId): Txyz {
  */
 export function FaceNormal(__model__: GIModel, face_id: TId): Txyz {
     // --- Error Check ---
-
+    checkIDs('vector.FaceNormal', 'face_id', face_id, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -125,7 +125,7 @@ export function FaceNormal(__model__: GIModel, face_id: TId): Txyz {
  */
 export function VertexNormal(__model__: GIModel, vertex_id: TId): Txyz {
     // --- Error Check ---
-
+    checkIDs('vector.VertexNormal', 'vertex_id', vertex_id, ['isID'], ['VERT']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -137,21 +137,24 @@ export function VertexNormal(__model__: GIModel, vertex_id: TId): Txyz {
  */
 export function FacePlane(__model__: GIModel, face_id: TId): TPlane {
     // --- Error Check ---
-
+    checkIDs('vector.FacePlane', 'face_id', face_id, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
 /**
  * Create a plane, centered at the origin.
  * @param __model__
- * @param origin The id of an face
- * @param x_vec
- * @param xy_vec
- * @returns The face plane.
+ * @param origin position/vertex/point/coordinates
+ * @param x_vec vector
+ * @param xy_vec vector
+ * @returns Plane centered at the origin.
  */
 export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
     // --- Error Check ---
-
+    const fn_name = 'vector.Plane';
+    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'x_vec', x_vec, ['isVector']);
+    checkCommTypes(fn_name, 'xy_vec', xy_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
@@ -167,13 +170,15 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
 /**
  * Create a ray, centered at the origin.
  * @param __model__
- * @param origin The id of an face
- * @param dir_vec
- * @returns The face plane.
+ * @param origin position/vertex/point/coordinates
+ * @param dir_vec vector
+ * @returns Ray centered at the origin.
  */
 export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     // --- Error Check ---
-
+    const fn_name = 'vector.Ray';
+    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
@@ -195,7 +200,7 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
  */
 export function PlaneRay(plane: TPlane): TRay {
     // --- Error Check ---
-
+    checkCommTypes('vector.PlaneRay', 'plane', plane, ['isPlane']);
     // --- Error Check ---
     return [plane[0], vecsCross(plane[1], plane[2])];
 }

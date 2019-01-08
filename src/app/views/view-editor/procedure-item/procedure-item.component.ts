@@ -174,6 +174,7 @@ export class ProcedureItemComponent {
 
     // modify argument input: check if input is valid
     argMod(event: Event, argIndex: number) {
+        // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
         this.data.args[argIndex].value = this.data.args[argIndex].value.replace(

@@ -379,7 +379,7 @@ export class ToolsetComponent implements OnInit {
         }
         for (const expr of this.inlineQueryExpr) {
             if (this.searchedInlines.length >= 10) { break; }
-            if (expr.toLowerCase().indexOf(str) !== -1) {
+            if (expr[0].toLowerCase().indexOf(str) !== -1) {
                 this.searchedInlines.push(expr);
             }
         }

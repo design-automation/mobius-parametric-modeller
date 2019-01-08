@@ -229,7 +229,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.Foreach:
                 prod.argCount = 2;
-                prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'arr', value: undefined, default: []} ];
+                prod.args = [ {name: 'i', value: undefined, default: undefined}, {name: 'list', value: undefined, default: []} ];
                 this.initiateChildren(prod);
                 break;
 

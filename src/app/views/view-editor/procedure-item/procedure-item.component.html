@@ -85,7 +85,7 @@
     <!-- FOREACH Template -->
         <div class='line--item hasChildren' *ngSwitchCase="ProcedureTypes.Foreach">
                 <div class='function-text'>
-                    For
+                    Foreach
                 </div>
                 <input class='input--arg'
                     [ngModel]='data.args[0].value'
@@ -183,7 +183,7 @@
                 </ng-template>
                 -->
                 <select class='input--arg' [(ngModel)]='p.value' *ngIf="checkEnum(p, i); else default_template" >
-                    <option *ngFor='let opt of getEnum(i)' value='"{{opt}}"'>{{opt}}</option>
+                    <option *ngFor='let opt of getEnum(i)' value="'{{opt}}'">{{opt}}</option>
                     <!--
                         <option *ngFor='let opt of Modules[data.meta.module][ModuleDoc[data.meta.module][data.meta.name].parameters[i].type]' value={{opt}}>{{opt}}</option>
                     -->
@@ -212,7 +212,7 @@
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
-            <div class='function-text'><span class='module-name'>User.</span>{{data.meta.name}} </div> 
+            <div class='function-text'><span class='module-name'>user.</span>{{data.meta.name}} </div> 
             
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input class='input--arg' 

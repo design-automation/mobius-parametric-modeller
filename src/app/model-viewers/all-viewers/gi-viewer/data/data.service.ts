@@ -25,8 +25,8 @@ export class DataService {
      * Create a data service.
      */
     constructor() {
-        // Do nothing
-        // console.log('CALLING constructor in DATA SERVICE');
+        this.selected_ents.set(EEntityTypeStr.POSI, new Map());
+        this.selected_ents.set(EEntityTypeStr.VERT, new Map());
         this.selected_ents.set(EEntityTypeStr.EDGE, new Map());
         this.selected_ents.set(EEntityTypeStr.FACE, new Map());
         this.selected_ents.set(EEntityTypeStr.WIRE, new Map());

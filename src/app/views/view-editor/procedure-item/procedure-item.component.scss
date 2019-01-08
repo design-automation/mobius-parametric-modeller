@@ -206,6 +206,7 @@
 //.container--item .selected .btn {display: block}
 
 .btn-container{
+    position: relative;
     width: 100%;
     display: flex;
     flex-flow: row nowrap;

@@ -541,7 +541,7 @@ export function PlaneGeom(__model__: GIModel, plane: TPlane, scale: number): TId
     // create pline for plane
     const corner_posis_i: number[] = [];
     for (const corner of plane_corners) {
-        const posi_i: number =__model__.geom.add.addPosition();
+        const posi_i: number = __model__.geom.add.addPosition();
         __model__.attribs.add.setPosiCoords(posi_i, corner);
         corner_posis_i.push(posi_i);
     }

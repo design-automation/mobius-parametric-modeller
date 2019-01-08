@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
-import { vecsAdd } from '@libs/geom/vectors';
+import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
@@ -33,7 +33,7 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     for (const unique_posi_i of unique_posis_i) {
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
-        const new_xyz: Txyz = vecsAdd(old_xyz, vector);
+        const new_xyz: Txyz = vecAdd(old_xyz, vector);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
 }
@@ -182,36 +182,6 @@ export function Reverse(__model__: GIModel, objects: TId|TId[]): void {
     throw new Error('Not implemented.'); return null;
 }
 /**
- * Welds geometry together.
- * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @returns void
- * @example mod.Weld([polyline1,polyline2])
- * @example_info Welds both polyline1 and polyline2 together.
- */
-export function Weld(__model__: GIModel, geometry: TId[]): void {
-    // --- Error Check ---
-    checkIDs('modify.Weld', 'geometry', geometry, ['isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
-}
-/**
- * Unweld geometries.
- * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @returns void
- * @example mod.Unweld(polyline1,polyline2)
- * @example_info Unwelds polyline1 from polyline2.
- */
-export function Unweld(__model__: GIModel, geometry: TId|TId[]): void {
-    // --- Error Check ---
-    checkIDs('modify.Unweld', 'geometry', geometry, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
-}
-/**
  * Closes polylines if open.
  * @param __model__
  * @param lines Polyline(s).
@@ -235,45 +205,6 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
     } else {
         (lines as TId[]).map(line => Close(__model__, line));
     }
-}
-/**
- * Checks if polyline(s) or wire(s) are closed.
- * @param __model__
- * @param lines Polyline(s) or wire(s).
- * @returns Boolean or list of boolean in input sequence of lines.
- * @example mod.IsClosed([polyline1,polyline2,polyline3])
- * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
- */
-export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    // --- Error Check ---
-    checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
-    // --- Error Check ---
-    if (!Array.isArray(lines)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
-        let wire_i: number = index;
-        if (ent_type_str === EEntityTypeStr.PLINE) {
-            wire_i = __model__.geom.query.navPlineToWire(index);
-        } else if (ent_type_str !== EEntityTypeStr.WIRE) {
-            throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
-        }
-        return __model__.geom.query.istWireClosed(wire_i);
-    } else {
-        return (lines as TId[]).map(line => IsClosed(__model__, line)) as boolean[];
-    }
-}
-/**
- * Deletes geometry.
- * @param __model__
- * @param geometry Position, point, polyline, polygon, collection. Can be a list.
- * @returns void
- * @example mod.Delete(geometry)
- * @example_info Deletes specified geometry from model.
- */
-export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
-    // --- Error Check ---
-    checkIDs('modify.Close', 'geometry', geometry, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
 }
 // Promote modelling operation
 export enum _EPromoteMethod {
@@ -304,14 +235,42 @@ export enum _EPromoteAttribTypes {
  * @returns List of attributes.
  * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
  */
-export function AttribPromote(__model__: GIModel, attrib_name: string,
+export function Promote(__model__: GIModel, attrib_name: string,
     from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
     // --- Error Check ---
     checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
-
+/**
+ * Welds geometry together.
+ * @param __model__
+ * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @returns void
+ * @example mod.Weld([polyline1,polyline2])
+ * @example_info Welds both polyline1 and polyline2 together.
+ */
+export function Weld(__model__: GIModel, geometry: TId[]): void {
+    // --- Error Check ---
+    checkIDs('modify.Weld', 'geometry', geometry, ['isIDList'],
+            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
+}
+/**
+ * Deletes geometry.
+ * @param __model__
+ * @param geometry Position, point, polyline, polygon, collection. Can be a list.
+ * @returns void
+ * @example mod.Delete(geometry)
+ * @example_info Deletes specified geometry from model.
+ */
+export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
+    // --- Error Check ---
+    checkIDs('modify.Close', 'geometry', geometry, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // --- Error Check ---
+    throw new Error('Not implemented.'); return null;
+}
 // Collection Add Entities
 
 // Collection Remove Remove Entities

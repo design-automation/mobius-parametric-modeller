@@ -496,4 +496,20 @@ export class GIGeomAdd {
     public deleteVertWire(edge_i: number, posi_i: number): void {
         throw new Error("Not implemented.");
     }
+    /**
+     * Replace positions
+     * @param ent_type_str
+     * @param ent_i
+     * @param new_posis_i
+     */
+    public replacePosis(ent_type_str: EEntityTypeStr, ent_i: number, new_posis_i: number[]): void {
+        // get the attrib names
+        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type_str, ent_i);
+        if (verts_i.length !== new_posis_i.length) {
+            throw new Error('Replacing positions operation failed due to incorrect number of positions.');
+        }
+        for (let i = 0; i < verts_i.length; i++) {
+            this._geom_arrays.dn_verts_posis[verts_i[i]] = new_posis_i[i];
+        }
+    }
 }

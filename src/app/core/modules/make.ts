@@ -485,7 +485,7 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
  */
 export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---
-    checkCommTypes('make.RayGeom', 'ray', ray, ['isCoord', 'isVector']);
+    checkCommTypes('make.RayGeom', 'ray', ray, ['isRay']);
     // --- Error Check ---
     const origin: Txyz = ray[0];
     const vec: Txyz = vecMult(ray[1], scale);

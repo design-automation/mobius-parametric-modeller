@@ -94,3 +94,7 @@ export const inline_func = [
     ['statistics', statistics],
     ['trigonometry', trigonometry]
 ];
+
+// for (let i = 0; i < inline_func.length; i++) {
+//     inline
+// }

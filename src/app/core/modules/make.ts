@@ -479,13 +479,13 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
 /**
  * Adds a ray to the model from an origin location and vector.
  * @param __model__
- * @param ray A list of two list of three coordinates
- * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
- * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]])
+ * @param ray A list of two list of three coordinates [origin (xyz), vector(xyz)]
+ * @returns A point and a line representing the ray. (The point is tha start point of the ray.)
+ * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]], 10)
  */
 export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---
-    checkCommTypes('make.RayGeom', 'ray', ray, ['isCoord', 'isVector']);
+    checkCommTypes('make.RayGeom', 'ray', ray, ['isRay']);
     // --- Error Check ---
     const origin: Txyz = ray[0];
     const vec: Txyz = vecMult(ray[1], scale);
@@ -504,7 +504,7 @@ export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
 /**
  * Adds a plane to the model from an origin location and two vectors.
  * @param __model__
- * @param plane A list: [origin (POSI|VERT|POINT|xyz), vector(xyz), vector(xyz)]
+ * @param plane A list: [origin (xyz), vector(xyz), vector(xyz)]
  * @returns A point, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
  * @example plane1 = make.Plane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.

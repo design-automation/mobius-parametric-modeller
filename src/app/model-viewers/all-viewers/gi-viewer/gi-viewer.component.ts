@@ -21,7 +21,6 @@ export class GIViewerComponent implements OnInit {
     // model data passed to the viewer
     @Input() data: GIModel;
     modelData: GIModel;
-    showSelected = false;
     /**
      * constructor
      * @param dataService
@@ -52,8 +51,4 @@ export class GIViewerComponent implements OnInit {
     //         console.error('Error generating model', ex);
     //     }
     // }
-    showSelectedSwitch() {
-        this.showSelected = !this.showSelected;
-        // this.dataservice.show_selected = true;
-    }
 }

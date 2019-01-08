@@ -11,5 +11,10 @@
             </div>
         </ng-container>
     </div>
-    <!-- <textarea id='console_textarea'>{{ text || "" }}</textarea> -->
+    <button id="clearConsole"
+        mat-icon-button
+        (click)="clearConsole()"
+        title='Clear Console'>
+        <mat-icon>block</mat-icon>
+    </button> 
 </div>

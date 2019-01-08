@@ -367,8 +367,8 @@ export class ToolsetComponent {
         for (const category of this.inlineFunc) {
             for (const funcString of category[1]) {
                 if (this.searchedInlines.length >= 10) { break; }
-                if (funcString.toLowerCase().indexOf(str) !== -1) {
-                    this.searchedInlines.push(funcString);
+                if (funcString[0].toLowerCase().indexOf(str) !== -1) {
+                    this.searchedInlines.push(funcString[0]);
                 }
             }
             if (this.searchedInlines.length >= 10) { break; }

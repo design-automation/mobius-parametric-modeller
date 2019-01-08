@@ -61,7 +61,7 @@ export class ProcedureItemComponent {
     constructor() {
         for (const funcMod of inline_func) {
             for (const func of funcMod[1]) {
-                this.mathFuncs.push(func.split('(')[0]);
+                this.mathFuncs.push(func[0].split('(')[0]);
             }
         }
     }
@@ -135,8 +135,13 @@ export class ProcedureItemComponent {
         let str = event.trim();
         str = str.replace(/ /g, '_');
         str = str.toLowerCase();
-        const strSplit = str.split('@');
+        if ((str.match(/\[/g) || []).length !== (str.match(/\]/g) || []).length) {
+            this.invalidVar = true;
+            return str;
+        }
+        const strSplit = str.split(/[\@\[\]]/g);
         for (const i of strSplit) {
+            if (i === '') { continue; }
             try {
                 if (i.substring(0, 1) === '_') {
                     this.invalidVar = true;

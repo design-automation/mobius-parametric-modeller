@@ -58,4 +58,9 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
             this.scrollcheck = false;
         }
     }
+
+    clearConsole() {
+        // @ts-ignore
+        console.logs = [];
+    }
 }

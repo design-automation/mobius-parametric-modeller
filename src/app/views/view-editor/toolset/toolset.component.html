@@ -177,12 +177,12 @@
                     <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
                     <div class="panel">
                         <ul class='toolset__functions--subset'>
-                            <!-- <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString[0])' title='{{funcString[1]}}'>
+                            <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString[0])' title='{{funcString[1]}}'>
                                 {{funcString[0]}}
-                            </li> -->
-                            <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)' title='{{funcString}}'>
-                                {{funcString}}
                             </li>
+                            <!-- <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)' title='{{funcString}}'>
+                                {{funcString}}
+                            </li> -->
                         </ul>
                         <!--Divider-->
                         <div class = "divider--in"></div>

@@ -109,7 +109,6 @@ export class ToolsetComponent implements OnInit {
 
         this.dataService.focusedInput.dispatchEvent(inputEvent);
         this.dataService.focusedInput.selectionStart = index + string.length;
-        console.log(document.activeElement);
         // this.dataService.focusedInput.trigger('input');
     }
 

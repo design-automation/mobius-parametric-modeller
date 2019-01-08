@@ -184,20 +184,26 @@ const typeCheckObj  = {
         checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
         return;
     },
-    isPlane: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TPlane = [Txyz/POSI/VERT/POINT, Txyz, Txyz]
+    isPlane: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TPlane = Txyz, Txyz, Txyz]
         // one origin: point, posi, vert, coord + 2 vectors
-        // first element of array strictly taken to be origin: otherwise what happens when argument == [xyz, xyz, xyz]
         isListArg(fn_name, arg_name, arg_list, 'origin and vectors');
         isListLenArg(fn_name, arg_name, arg_list, 3);
-        typeCheckObj.isOrigin(fn_name, arg_name  + '[0]', arg_list[0]);
+        typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
         [1, 2].forEach((i) => {
-            checkCommTypes(fn_name, arg_name + '[' + i + ']', arg_list[i], ['isVector']);
+            typeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         });
         return;
     },
     isPlaneList: function(fn_name: string, arg_name: string, arg_list: number[][][]): void {
         // Add if required
     },
+    isRay: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TRay = [Txyz, Txyz]
+        isListArg(fn_name, arg_name, arg_list, 'origin and vector');
+        isListLenArg(fn_name, arg_name, arg_list, 2);
+        typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
+        typeCheckObj.isVector(fn_name, arg_name + '[' + 1 + ']', arg_list[1]);
+        return;
+    }
 };
 const IDcheckObj = {
     // IDs

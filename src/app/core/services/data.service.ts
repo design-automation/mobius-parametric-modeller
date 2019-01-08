@@ -21,6 +21,8 @@ export class DataService {
     private static _activeModelView: string = undefined;
     private static _activeGallery: any = undefined;
 
+    private static _focusedInput: any;
+
     private static _splitVal = 60;
 
     private static _copiedProd: IProcedure[];
@@ -54,6 +56,9 @@ export class DataService {
 
     get activeGallery() {return DataService._activeGallery; }
     set activeGallery(gallery: any) {DataService._activeGallery = gallery; }
+
+    get focusedInput() {return DataService._focusedInput; }
+    set focusedInput(input: any) {DataService._focusedInput = input; }
 
     get copiedProd() {return DataService._copiedProd; }
     set copiedProd(prods: any) {DataService._copiedProd = prods; }

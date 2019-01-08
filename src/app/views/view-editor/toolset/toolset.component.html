@@ -158,16 +158,32 @@
 
             <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
             <div class="panel">
-                <ul class='toolset__functions--subset'>
-                    <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
-                        {{expr[0]}}
-                    </li> -->
-                    <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
-                        {{expr}}
-                    </li>
-                </ul>
-                <!--Divider-->
-                <div class = "divider--in"></div>
+                <button id='inlineQueryExpr' class="accordion" (click)='toggleAccordion("inlineQueryExpr")'>Inline Query Expr</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
+                        <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
+                            {{expr[0]}}
+                        </li> -->
+                        <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
+                            {{expr}}
+                        </li>
+                    </ul>
+                    <!--Divider-->
+                    <div class = "divider--in"></div>
+                </div>
+                <button id='inlineSortExpr' class="accordion" (click)='toggleAccordion("inlineSortExpr")'>Inline Sort Expr</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
+                        <!-- <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
+                            {{expr[0]}}
+                        </li> -->
+                        <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr)' title='{{expr}}'>
+                            {{expr}}
+                        </li>
+                    </ul>
+                    <!--Divider-->
+                    <div class = "divider--in"></div>
+                </div>
             </div>
 
 

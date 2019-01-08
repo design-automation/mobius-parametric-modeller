@@ -9,7 +9,7 @@ import { INode } from '@models/node';
 
 import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
-import { inline_query_expr, inline_func} from './toolset.inline';
+import { inline_query_expr, inline_func, inline_sort_expr} from './toolset.inline';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 
@@ -35,9 +35,9 @@ export class ToolsetComponent {
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedFunctions = [];
     searchedInlines = [];
-    focusedInput: any;
 
     inlineQueryExpr = inline_query_expr;
+    inlineSortExpr = inline_sort_expr;
     inlineFunc = inline_func;
 
     Modules = ModuleList;
@@ -70,22 +70,22 @@ export class ToolsetComponent {
     }
 
     setCurrent() {
-        if (document.activeElement.tagName === 'INPUT') {
-            this.focusedInput = document.activeElement;
+        if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
+            this.dataService.focusedInput = document.activeElement;
         } else {
-            this.focusedInput = undefined;
+            // this.dataService.focusedInput = undefined;
         }
     }
 
     add_inline(string) {
-        if (!this.focusedInput) {
+        if (!this.dataService.focusedInput) {
             return;
         }
-        this.focusedInput.focus();
-        this.focusedInput.value += string;
+        this.dataService.focusedInput.focus();
+        this.dataService.focusedInput.value += string;
 
-        this.focusedInput.dispatchEvent(inputEvent);
-        // this.focusedInput.trigger('input');
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        // this.dataService.focusedInput.trigger('input');
     }
 
     // delete imported function
@@ -183,8 +183,8 @@ export class ToolsetComponent {
     }
 
     toggleAccordion(id: string) {
-        if (this.focusedInput) {
-            this.focusedInput.focus();
+        if (this.dataService.focusedInput) {
+            this.dataService.focusedInput.focus();
         }
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
@@ -198,8 +198,8 @@ export class ToolsetComponent {
     }
 
     toggleAccordionHead(id: string) {
-        if (this.focusedInput) {
-            this.focusedInput.focus();
+        if (this.dataService.focusedInput) {
+            this.dataService.focusedInput.focus();
         }
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");

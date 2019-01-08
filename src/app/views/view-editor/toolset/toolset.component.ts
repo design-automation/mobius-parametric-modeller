@@ -24,7 +24,7 @@ const inputEvent = new Event('input', {
   templateUrl: './toolset.component.html',
   styleUrls: ['./toolset.component.scss']
 })
-export class ToolsetComponent {
+export class ToolsetComponent implements OnInit {
 
     @Output() selected = new EventEmitter();
     @Output() delete = new EventEmitter();
@@ -40,10 +40,27 @@ export class ToolsetComponent {
     inlineSortExpr = inline_sort_expr;
     inlineFunc = inline_func;
 
-    Modules = ModuleList;
+    Modules = [];
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {}
+
+    ngOnInit() {
+        for (const mod of ModuleList) {
+            if (mod.module.substring(0, 1) === '_') { continue; }
+            const nMod = {'module': mod.module, 'functions': []};
+            for (const fn of mod.functions) {
+                if (fn.name.substring(0, 1) === '_') { continue; }
+                if (ModuleDocList[mod.module] && ModuleDocList[mod.module][fn.name]) {
+                    fn['doc'] = ModuleDocList[mod.module][fn.name];
+                } else {
+                    fn['doc'] = false;
+                }
+                nMod.functions.push(fn);
+
+            }
+        }
+    }
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {

@@ -65,23 +65,22 @@
             <!-- functions from core.modules -->
             <ng-container *ngFor='let mod of Modules' >
                 <button id='{{mod.module}}' class="accordion" 
-                *ngIf='mod.module.substring(0,1) !== "_"'
                 (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
                         <ng-container *ngFor='let fn of mod.functions'>
-                            <div class='tooltip' *ngIf='fn.name.substring(0,1)!="_"'>
+                            <div class='tooltip'>
                                 <li 
                                 (click)='add_function(fn)'> 
                                     {{fn.name}} 
                                 </li>
-                                <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
-                                    <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
-                                    <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
-                                    <ng-container *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'>
+                                <span class="tooltiptext" *ngIf='fn.doc'>
+                                    <p class='funcDesc'>{{fn.doc.summary||fn.doc.description}}</p>
+                                    <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+                                    <ng-container *ngFor='let param of fn.doc.parameters'>
                                         <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
                                     </ng-container>
-                                    <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
+                                    <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>
                                 </span>
                             </div>
                         </ng-container>

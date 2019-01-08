@@ -35,3 +35,15 @@
 .normalText{
     color: $color1;
 }
+
+#clearConsole {
+    position: absolute;
+    background-color: transparent;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    top: 5px;
+    right: 10px;
+    color: $color1;
+
+}

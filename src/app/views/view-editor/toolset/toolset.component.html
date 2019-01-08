@@ -70,19 +70,21 @@
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
                         <ng-container *ngFor='let fn of mod.functions'>
-                            <div class='tooltip' *ngIf='fn.name.substring(0,1)!="_"'>
-                                <li 
-                                (click)='add_function(fn)'> 
-                                    {{fn.name}} 
-                                </li>
-                                <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
-                                    <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
-                                    <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
-                                    <ng-container *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'>
-                                        <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
-                                    </ng-container>
-                                    <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
-                                </span>
+                            <div class = 'tooltip-container'>
+                                <div class='tooltip' *ngIf='fn.name.substring(0,1)!="_"'>
+                                    <li 
+                                    (click)='add_function(fn)'> 
+                                        {{fn.name}} 
+                                    </li>
+                                    <span class="tooltiptext" *ngIf='ModuleDoc[mod.module] && ModuleDoc[mod.module][fn.name]'>
+                                        <p class='funcDesc'>{{ModuleDoc[mod.module][fn.name].summary||ModuleDoc[mod.module][fn.name].description}}</p>
+                                        <p *ngIf='ModuleDoc[mod.module][fn.name].parameters?.length > 0'><span>Parameters: </span></p>
+                                        <ng-container *ngFor='let param of ModuleDoc[mod.module][fn.name].parameters'>
+                                            <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
+                                        </ng-container>
+                                        <p *ngIf='ModuleDoc[mod.module][fn.name].returns'><span>Returns: </span> {{ModuleDoc[mod.module][fn.name].returns}}</p>
+                                    </span>
+                                </div>
                             </div>
                         </ng-container>
                         <!--Divider-->
@@ -102,23 +104,25 @@
                                     <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                             </button>
                         </li>
-
-                        <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
-                            <li (click)='add_imported_function(fn)'> {{fn.name}} 
-                                <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
-                                    <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
-                                </button>
-                                <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
-                                    <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
-                                </button>
-                            </li>
-                            <span class="tooltiptext">
-                                <p class='funcDesc'>{{fn.doc.description}}</p>
-                                <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                                <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                                <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
-                            </span>
+                        <div class = 'tooltip-container'>
+                            <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
+                                <li (click)='add_imported_function(fn)'> {{fn.name}} 
+                                    <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
+                                        <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
+                                    </button>
+                                    <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
+                                        <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
+                                    </button>
+                                </li>
+                                <span class="tooltiptext">
+                                    <p class='funcDesc'>{{fn.doc.description}}</p>
+                                    <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+                                    <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                                    <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
+                                </span>
+                            </div>
                         </div>
+                       
                     </ul>
 
                     <input type="file" id="selectedFile" (change)="import_function($event)" style="display: none;" />  

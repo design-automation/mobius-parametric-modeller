@@ -100,9 +100,16 @@ export class ToolsetComponent implements OnInit {
             return;
         }
         this.dataService.focusedInput.focus();
-        this.dataService.focusedInput.value += string;
+        const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+            this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        this.dataService.focusedInput.value =
+            this.dataService.focusedInput.value.slice(0, index) +
+            string +
+            this.dataService.focusedInput.value.slice(index);
 
         this.dataService.focusedInput.dispatchEvent(inputEvent);
+        this.dataService.focusedInput.selectionStart = index + string.length;
+        console.log(document.activeElement);
         // this.dataService.focusedInput.trigger('input');
     }
 

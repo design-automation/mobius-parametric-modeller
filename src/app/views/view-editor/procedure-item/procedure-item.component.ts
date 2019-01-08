@@ -182,8 +182,13 @@ export class ProcedureItemComponent {
             /([\+\-\*\/\%\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
             // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').replace(
             // /@[a-z0-9]+\s\[\s/g, '[').trim().replace(/[ ]{2,}/g, ' ');
-        return;
     }
+
+    // argHighlight(value: any) {
+    //     return value.replace(
+    //         inline_fn_regEx, '<span class = "inline-function">' + value.match(inline_fn_regEx) + '</span>'
+    //     );
+    // }
 
     inputSize(val) {
         return ctx.measureText(val).width + 2;

@@ -8,59 +8,59 @@ export const inline_query_expr = [
 ];
 
 const lists = [
-    'range(start, end)',
-    'length(list)'
-];
+//     'range(start, end)',
+//     'length(list)'
+// ];
 
-const lists2 = [
+// const lists2 = [
     ['range(start, end)', 'List of integers as a range'],
     ['length(list)', 'Returns the number of items in the list']
  ];
 
 const conversion = [
-    'boolean(value)',
-    'number(value)',
-    'string(value)'
-];
+//     'boolean(value)',
+//     'number(value)',
+//     'string(value)'
+// ];
 
-const conversion2 = [
+// const conversion2 = [
     ['boolean(value)', 'Converts the value to a boolean'],
     ['number(value)', 'Converts the value to a number'],
     ['string(value)', 'Converts the value to a string']
 ];
 
 const random = [
-    'random([min, max])',
-    'randomInt([min, max]))',
-    'pickRandom(list)'
-];
+//     'random([min, max])',
+//     'randomInt([min, max]))',
+//     'pickRandom(list)'
+// ];
 
-const random2 = [
+// const random2 = [
     ['random([min, max])', 'Returns a random number in the specified range'],
     ['randomInt([min, max]))', 'Returns a random integer in the specified range'],
     ['pickRandom(list)', 'Returns a random item from the list']
 ];
 
 const arithmetic = [
-    'abs(number)',
-    'square(number)',
-    'cube(number)',
-    'pow(number, power)',
-    'sqrt(number)',
-    'exp(number)',
-    'log(number)',
-    'round(number)',
-    'ceil(number)',
-    'floor(number)',
-    'mod(number, number)',
-    'sum(list)',
-    'prod(list)',
-    'hypot(list)',
-    'norm(list)',
-    'distance(list, list)'
-];
+//     'abs(number)',
+//     'square(number)',
+//     'cube(number)',
+//     'pow(number, power)',
+//     'sqrt(number)',
+//     'exp(number)',
+//     'log(number)',
+//     'round(number)',
+//     'ceil(number)',
+//     'floor(number)',
+//     'mod(number, number)',
+//     'sum(list)',
+//     'prod(list)',
+//     'hypot(list)',
+//     'norm(list)',
+//     'distance(list, list)'
+// ];
 
-const arithmetic2 = [
+// const arithmetic2 = [
     ['abs(number)', 'Returns the absolute value of the number'],
     ['square(number)', 'Returns the square of the number'],
     ['cube(number)', 'Returns the cube of the number'],
@@ -80,17 +80,17 @@ const arithmetic2 = [
 ];
 
 const statistics = [
-    'min(list)',
-    'max(list)',
-    'mad(list)',
-    'mean(list)',
-    'median(list)',
-    'mode(list)',
-    'std(list)',
-    'vari(list)'
-];
+//     'min(list)',
+//     'max(list)',
+//     'mad(list)',
+//     'mean(list)',
+//     'median(list)',
+//     'mode(list)',
+//     'std(list)',
+//     'vari(list)'
+// ];
 
-const statistics2 = [
+// const statistics2 = [
     ['min(list)', 'Returns the number with the lowest value'],
     ['max(list)', 'Returns the number with the highest value'],
     ['mad(list)', 'Returns the median absolute deviation of the list'],
@@ -102,23 +102,23 @@ const statistics2 = [
 ];
 
 const trigonometry = [
-    'PI',
-    'sin(radians)',
-    'asin(number)',
-    'sinh(radians)',
-    'asinh(number)',
-    'cos(radians)',
-    'acos(number)',
-    'cosh(radians)',
-    'acosh(number)',
-    'tan(radians)',
-    'atan(number)',
-    'tanh(radians)',
-    'atanh(number)',
-    'atan2(number, number)'
-];
+//     'PI',
+//     'sin(radians)',
+//     'asin(number)',
+//     'sinh(radians)',
+//     'asinh(number)',
+//     'cos(radians)',
+//     'acos(number)',
+//     'cosh(radians)',
+//     'acosh(number)',
+//     'tan(radians)',
+//     'atan(number)',
+//     'tanh(radians)',
+//     'atanh(number)',
+//     'atan2(number, number)'
+// ];
 
-const trigonometry2 = [
+// const trigonometry2 = [
     ['PI', 'Returns the value of pi'],
     ['sin(radians)', 'Returns the sine of a value (in radians)'],
     ['asin(number)', 'Returns the inverse sine of a value (in radians)'],
@@ -136,10 +136,10 @@ const trigonometry2 = [
 ];
 
 const str = [
-    'replace(string,search_str,new_str)'
-];
+//     'replace(string,search_str,new_str)'
+// ];
 
-const str2 = [
+// const str2 = [
     ['replace(string,search_str,new_str)', 'Replace all instances of specified search with a new string']
 ];
 

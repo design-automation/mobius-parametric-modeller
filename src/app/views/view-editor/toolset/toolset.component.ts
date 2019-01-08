@@ -24,7 +24,7 @@ const inputEvent = new Event('input', {
   templateUrl: './toolset.component.html',
   styleUrls: ['./toolset.component.scss']
 })
-export class ToolsetComponent {
+export class ToolsetComponent implements OnInit {
 
     @Output() selected = new EventEmitter();
     @Output() delete = new EventEmitter();
@@ -40,10 +40,27 @@ export class ToolsetComponent {
     inlineSortExpr = inline_sort_expr;
     inlineFunc = inline_func;
 
-    Modules = ModuleList;
+    Modules = [];
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {}
+
+    ngOnInit() {
+        for (const mod of ModuleList) {
+            if (mod.module.substring(0, 1) === '_') { continue; }
+            const nMod = {'module': mod.module, 'functions': []};
+            for (const fn of mod.functions) {
+                if (fn.name.substring(0, 1) === '_') { continue; }
+                if (ModuleDocList[mod.module] && ModuleDocList[mod.module][fn.name]) {
+                    fn['doc'] = ModuleDocList[mod.module][fn.name];
+                } else {
+                    fn['doc'] = false;
+                }
+                nMod.functions.push(fn);
+            }
+            this.Modules.push(nMod);
+        }
+    }
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {
@@ -69,8 +86,9 @@ export class ToolsetComponent {
         this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
     }
 
-    setCurrent() {
+    setCurrent(event) {
         if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
+            // this.dataService.focusedInput = [document.activeElement, (<HTMLInputElement>document.activeElement).selectionStart];
             this.dataService.focusedInput = document.activeElement;
         } else {
             // this.dataService.focusedInput = undefined;
@@ -82,9 +100,15 @@ export class ToolsetComponent {
             return;
         }
         this.dataService.focusedInput.focus();
-        this.dataService.focusedInput.value += string;
+        const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+            this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        this.dataService.focusedInput.value =
+            this.dataService.focusedInput.value.slice(0, index) +
+            string +
+            this.dataService.focusedInput.value.slice(index);
 
         this.dataService.focusedInput.dispatchEvent(inputEvent);
+        this.dataService.focusedInput.selectionStart = index + string.length;
         // this.dataService.focusedInput.trigger('input');
     }
 
@@ -361,7 +385,7 @@ export class ToolsetComponent {
         }
         for (const expr of this.inlineQueryExpr) {
             if (this.searchedInlines.length >= 10) { break; }
-            if (expr.toLowerCase().indexOf(str) !== -1) {
+            if (expr[0].toLowerCase().indexOf(str) !== -1) {
                 this.searchedInlines.push(expr);
             }
         }

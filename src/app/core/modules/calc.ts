@@ -3,22 +3,27 @@ import { TId, Txyz, EEntityTypeStr } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, idBreak, isPgon, isFace } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
-import { vecsSum, vecDiv, vecsAdd, vecsSub, vecNorm } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecNorm } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
 import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
 
+export enum _EDistanceMethod {
+    DISTANCE = 'distance',
+    MIN_DISTANCE = 'min_distance'
+}
 /**
  * Calculates the distance between two positions.
  * @param __model__
  * @param position1 First position.
  * @param position2 Second position.
+ * @param method Enum
  * @returns Distance.
  * @example distance1 = calc.Distance (position1, position2)
  * @example_info position1 = [0,0,0], position2 = [0,0,10]
  * Expected value of distance is 10.
  */
-export function Distance(__model__: GIModel, position1: TId, position2: TId): number {
+export function Distance(__model__: GIModel, position1: TId, position2: TId, method: _EDistanceMethod): number {
     // --- Error Check ---
     const fn_name = 'calc.Distance';
     checkIDs(fn_name, 'position1', position1, ['isID'], ['POSI']);
@@ -28,6 +33,24 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId): nu
     const ps2_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position2)[1]);
     return distance(ps1_xyz, ps2_xyz);
 }
+// /**
+//  * Calculates the minimum distance between a location and an object, or two objects.
+//  * @param __model__
+//  * @param locationOrObject Position, vertex, point, list of coordinates, polyline, or polygon.
+//  * @param object Polyline or polygon.
+//  * @returns Minimum distance.
+//  * @example mindistance1 = calc.MinDistance (position1, polyline1)
+//  * @example_info Calculates minimum distance between position1 and polyline1.
+//  * @example mindistance2 = calc.MinDistance (polyline1, polyline2)
+//  * @example_info Calculates minimum distance between polyline1 and polyline2.
+//  */
+// export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], object: TId): number {
+//     // --- Error Check ---
+//     // Nature of locationOrObject argument is inconsistent internally
+//     // (why take list of coordinates but not list of anything else?)
+//     // --- Error Check ---
+//     throw new Error('Not impemented.'); return null;
+// }
 /**
  * Calculates the length of a line or a list of lines.
  * @param __model__
@@ -65,24 +88,7 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
     }
     return dist;
 }
-/**
- * Calculates the minimum distance between a location and an object, or two objects.
- * @param __model__
- * @param locationOrObject Position, vertex, point, list of coordinates, polyline, or polygon.
- * @param object Polyline or polygon.
- * @returns Minimum distance.
- * @example mindistance1 = calc.MinDistance (position1, polyline1)
- * @example_info Calculates minimum distance between position1 and polyline1.
- * @example mindistance2 = calc.MinDistance (polyline1, polyline2)
- * @example_info Calculates minimum distance between polyline1 and polyline2.
- */
-export function MinDistance(__model__: GIModel, locationOrObject: TId|TId[], object: TId): number {
-    // --- Error Check ---
-    // Nature of locationOrObject argument is inconsistent internally
-    // (why take list of coordinates but not list of anything else?)
-    // --- Error Check ---
-    throw new Error('Not impemented.'); return null;
-}
+
 /**
  * Calculates the area of a surface or a list of surfaces.
  * @param __model__
@@ -136,56 +142,6 @@ export function Area(__model__: GIModel, geometry: TId): number {
     // }
 }
 /**
- * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
- * @param __model__
- * @param geometry A polygon, a face, a closed polyline, or or closed wire.
- * @returns Vector.
- * @example normal1 = calc.Normal (geometry)
- * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
- */
-export function Normal(__model__: GIModel, geometry: TId): Txyz {
-    // --- Error Check ---
-    const fn_name = 'calc.Area';
-    checkIDs(fn_name, 'geometry', geometry, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
-    // --- Error Check ---
-    const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
-    if (isPgon(geometry) || isFace(geometry)) {
-        // faces, these are already triangulated
-        let face_i: number = index;
-        if (isPgon(geometry)) {
-            face_i = __model__.geom.query.navPgonToFace(index);
-        }
-        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
-        let normal_vec: Txyz = [0, 0, 0];
-        for (const tri_i of tris_i) {
-            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.TRI, tri_i);
-            const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
-            const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
-            normal_vec = vecsAdd(normal_vec, tri_normal);
-        }
-        return vecNorm(vecDiv(normal_vec, tris_i.length));
-    } else if (isPline(geometry) || isWire(geometry)) {
-        // wires, these need to be triangulated
-        let wire_i: number = index;
-        if (isPline(geometry)) {
-            wire_i = __model__.geom.query.navPlineToWire(index);
-        }
-        if (__model__.geom.query.istWireClosed(wire_i)) {
-            throw new Error(fn_name + ': ' + 'To calculate normals, wire must be closed');
-        }
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
-        const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
-        const tris: number[][] = triangulate(xyzs);
-        let normal_vec: Txyz = [0, 0, 0];
-        for (const tri of tris) {
-            const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
-            const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
-            normal_vec = vecsAdd(normal_vec, tri_normal);
-        }
-        return vecNorm(vecDiv(normal_vec, tris.length));
-    }
-}
-/**
  * Calculates the centroid of a list of any geometry.
  * @param __model__
  * @param geometry List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
@@ -204,7 +160,7 @@ export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
     }
     const unique_posis_i = Array.from(new Set(posis_i));
     const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
-    return vecDiv(vecsSum(unique_xyzs), unique_xyzs.length);
+    return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
 }
 /**
  * Calculates the xyz position on a linear entity, given a t parameter.
@@ -260,7 +216,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
             const edge_length = dist_b - dist_a;
             const to_t = t_param_mapped - dist_a;
             const divisor = to_t / edge_length;
-            return vecsAdd( xyz_pair[0], vecDiv(vecsSub(xyz_pair[1], xyz_pair[0]), divisor) );
+            return vecAdd( xyz_pair[0], vecDiv(vecSub(xyz_pair[1], xyz_pair[0]), divisor) );
         }
     }
     // t param must be 1 (or greater)

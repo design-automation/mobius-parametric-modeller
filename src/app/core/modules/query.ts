@@ -97,7 +97,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
  * Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
  * Query expressions can be combine with either && (and) and || (or), where
  * && takes precedence over ||.
- * 
+ *
  * @param __model__
  * @param select Enum, specifies what type of entities are to be counted.
  * @param entities List of entities to be searched. If 'null' (without quotes), list of all entities in the model.
@@ -108,7 +108,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
     // --- Error Check ---
-    checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+    // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
     // --- Error Check ---
     return Get(__model__, select, entities, query_expr).length;
 }
@@ -161,4 +161,29 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
     const sort_result: number[] = __model__.attribs.query.sortByAttribs(
         select_ent_type_str, sort_expr, found_entities_i, _sort_method);
     return sort_result.map( entity_i => select_ent_type_str + entity_i);
+}
+/**
+ * Checks if polyline(s) or wire(s) are closed.
+ * @param __model__
+ * @param lines Polyline(s) or wire(s).
+ * @returns Boolean or list of boolean in input sequence of lines.
+ * @example mod.IsClosed([polyline1,polyline2,polyline3])
+ * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
+ */
+export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
+    // --- Error Check ---
+    checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // --- Error Check ---
+    if (!Array.isArray(lines)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
+        let wire_i: number = index;
+        if (ent_type_str === EEntityTypeStr.PLINE) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        } else if (ent_type_str !== EEntityTypeStr.WIRE) {
+            throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
+        }
+        return __model__.geom.query.istWireClosed(wire_i);
+    } else {
+        return (lines as TId[]).map(line => IsClosed(__model__, line)) as boolean[];
+    }
 }

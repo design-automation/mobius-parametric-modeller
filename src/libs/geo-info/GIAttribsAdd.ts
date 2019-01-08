@@ -2,7 +2,7 @@ import { GIModel } from './GIModel';
 import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntityTypeStr,
     EAttribDataTypeStrs, IGeomData, IAttribsMaps, EEntStrToAttribMap, EAttribNames, Txyz } from './common';
 import { GIAttribMap } from './GIAttribMap';
-import { vecsAdd } from '@libs/geom/vectors';
+import { vecAdd } from '@libs/geom/vectors';
 
 /**
  * Class for attributes.
@@ -129,7 +129,7 @@ export class GIAttribsAdd {
      */
     public movePosiCoords(index: number, xyz: Txyz): void {
         const old_xyz: Txyz = this._attribs_maps.posis.get(EAttribNames.COORDS).getEntVal(index) as Txyz;
-        const new_xyz: Txyz = vecsAdd(old_xyz, xyz);
+        const new_xyz: Txyz = vecAdd(old_xyz, xyz);
         this._attribs_maps.posis.get(EAttribNames.COORDS).setEntVal(index, new_xyz);
     }
     /**

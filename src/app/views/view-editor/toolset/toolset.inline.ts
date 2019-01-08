@@ -1,33 +1,48 @@
 export const inline_query_expr = [
-    '#@name == value',
-    '#@name[i] == value',
-    '#@name != value',
-    '#@name[i] != value',
-    '#@name > value',
-    '#@name[i] > value',
-    '#@name >= value',
-    '#@name[i] >= value',
-    '#@name < value',
-    '#@name[i] < value',
-    '#@name <= value',
-    '#@name[i] <= value'
+    ['#@name == value', 'Search attributes equal to a given value'],
+    ['#@name[i] == value', 'Search attribute index i equal to a given value'],
+    ['#@name != value', 'Search attributes not equal to a given value'],
+    ['#@name[i] != value', 'Search attribute index not equal to a given value'],
+    ['#@name > value', 'Search attributes greater than a given value'],
+    ['#@name[i] > value', 'Search attribute index greater than a given value'],
+    ['#@name >= value', 'Search attributes greater than or equal to a given value'],
+    ['#@name[i] >= value', 'Search attribute index greater than or equal to a given value'],
+    ['#@name < value', 'Search attributes less than a given value'],
+    ['#@name[i] < value', 'Search attribute index less than a given value'],
+    ['#@name <= value', 'Search attributes less than or equal to a given value'],
+    ['#@name[i] <= value', 'Search attribute index less than or equal to a given value']
 ];
 
 export const inline_sort_expr = [
-    '#@name',
-    '#@name[i]'
+    ['#@name', 'Sort based on attribute value'],
+    ['#@name[i]', 'Sort based on attribute index value']
 ];
 
-
 const lists = [
-    ['range(start, end)', 'List of integers as a range'],
+    ['range(start, end)', 'Generates a list of integers as a range'],
     ['length(list)', 'Returns the number of items in the list']
  ];
 
+ const vectors = [
+    ['vecAdd(v1, v2)', 'Adds two vectors'],
+    ['vecSub(v1, v2)', 'Subtracts vec2 from vec1'],
+    ['vecDiv(v, num)', 'Divides a vector by a number'],
+    ['vecMult(v, num)', 'Multiplies a vector by a number'],
+    ['vecLen(v)', 'Calculates the magnitude of a vector'],
+    ['vecSetLen(v, num)', 'Sets the magnitude of a vector'],
+    ['vecNorm(v)', 'Sets the magnitude of a vector to 1'],
+    ['vecRev(v)', 'Reverses the direction of a vector'],
+    ['vecFromTo(pt1, pt2)', 'Creates a vector between two points'],
+    ['vecDot(v1, v2)', 'Calculates the cross product of thre vectors'],
+    ['vecCross(v1, v2)', 'Calculates the dot product of two vectors']
+];
+
 const conversion = [
-    ['boolean(value)', 'Converts the value to a boolean'],
-    ['number(value)', 'Converts the value to a number'],
-    ['string(value)', 'Converts the value to a string']
+    ['boolean(val)', 'Converts the value to a boolean'],
+    ['number(val)', 'Converts the value to a number'],
+    ['string(val)', 'Converts the value to a string'],
+    ['radToDeg(rad)', 'Converts radians to degrees'],
+    ['degToRad(deg)', 'Converts degrees to radians']
 ];
 
 const random = [
@@ -37,17 +52,17 @@ const random = [
 ];
 
 const arithmetic = [
-    ['abs(number)', 'Returns the absolute value of the number'],
-    ['square(number)', 'Returns the square of the number'],
-    ['cube(number)', 'Returns the cube of the number'],
-    ['pow(number, power)', 'Returns the number to the specified power'],
-    ['sqrt(number)', 'Returns the square root of the number'],
-    ['exp(number)', 'Returns the value of E to the power of the number'],
-    ['log(number)', 'Returns the natural logarithm (base E) of the number'],
-    ['round(number)', 'Returns the value of the number rounded to its nearest integer'],
-    ['ceil(number)', 'Returns the value of the number rounded up to its nearest integer'],
-    ['floor(number)', 'Returns the value of the number rounded down to its nearest integer'],
-    ['mod(number, number)', 'Converts the value to a boolean'],
+    ['abs(num)', 'Returns the absolute value of the number'],
+    ['square(num)', 'Returns the square of the number'],
+    ['cube(num)', 'Returns the cube of the number'],
+    ['pow(numb, pow)', 'Returns the number to the specified power'],
+    ['sqrt(num)', 'Returns the square root of the number'],
+    ['exp(num)', 'Returns the value of E to the power of the number'],
+    ['log(num)', 'Returns the natural logarithm (base E) of the number'],
+    ['round(num)', 'Returns the value of the number rounded to its nearest integer'],
+    ['ceil(num)', 'Returns the value of the number rounded up to its nearest integer'],
+    ['floor(num)', 'Returns the value of the number rounded down to its nearest integer'],
+    ['mod(num, num)', 'Converts the value to a boolean'],
     ['sum(list)', 'Returns the sum of all values in a list'],
     ['prod(list)', 'Returns the product of all values in a list'],
     ['hypot(list)', 'Returns the hypothenuse of all values in a list'],
@@ -68,18 +83,18 @@ const statistics = [
 
 const trigonometry = [
     ['PI', 'Returns the value of pi'],
-    ['sin(radians)', 'Returns the sine of a value (in radians)'],
-    ['asin(number)', 'Returns the inverse sine of a value (in radians)'],
-    ['sinh(radians)', 'Returns the hyperbolic sine of a value (in radians)'],
-    ['asinh(number)', 'Returns the hyperbolic arcsine of a value (in radians)'],
-    ['cos(radians)', 'Returns the cosine of a value (in radians)'],
-    ['acos(number)', 'Returns the inverse cosine of a value (in radians)'],
-    ['cosh(radians)', 'Returns the hyperbolic cosine of a value (in radians)'],
-    ['acosh(number)', 'Returns the hyperbolic arccos of a value (in radians)'],
-    ['tan(radians)', 'Returns the tangent of a value (in radians)'],
-    ['atan(number)', 'Returns the inverse tangent of a value (in radians)'],
-    ['tanh(radians)', 'Returns the hyperbolic tangent of a value (in radians)'],
-    ['atanh(number)', 'Returns the hyperbolic arctangent of a value (in radians)'],
+    ['sin(rad)', 'Returns the sine of a value (in radians)'],
+    ['asin(num)', 'Returns the inverse sine of a value (in radians)'],
+    ['sinh(rad)', 'Returns the hyperbolic sine of a value (in radians)'],
+    ['asinh(num)', 'Returns the hyperbolic arcsine of a value (in radians)'],
+    ['cos(rad)', 'Returns the cosine of a value (in radians)'],
+    ['acos(num)', 'Returns the inverse cosine of a value (in radians)'],
+    ['cosh(rad)', 'Returns the hyperbolic cosine of a value (in radians)'],
+    ['acosh(num)', 'Returns the hyperbolic arccos of a value (in radians)'],
+    ['tan(rad)', 'Returns the tangent of a value (in radians)'],
+    ['atan(num)', 'Returns the inverse tangent of a value (in radians)'],
+    ['tanh(rad)', 'Returns the hyperbolic tangent of a value (in radians)'],
+    ['atanh(num)', 'Returns the hyperbolic arctangent of a value (in radians)'],
     ['atan2(number1, number2)', 'Returns the inverse tangent function with two arguments, number1/number2']
 ];
 
@@ -90,6 +105,7 @@ const str = [
 export const inline_func = [
     ['lists', lists],
     ['conversion', conversion],
+    ['vectors', vectors],
     ['arithmetic', arithmetic],
     ['statistics', statistics],
     ['trigonometry', trigonometry]

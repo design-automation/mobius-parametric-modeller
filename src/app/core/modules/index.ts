@@ -23,14 +23,14 @@ export {modify};
 import * as isect from './isect';
 export {isect};
 
-// import * as attrib from './attrib';
-// export {attrib};
-
 import * as calc from './calc';
 export {calc};
 
 import * as util from './util';
 export {util};
+
+import * as pattern from './pattern';
+export {pattern};
 
 import * as vector from './vector';
 export {vector};
@@ -43,8 +43,14 @@ export {list};
 import * as _mathjs from './_mathjs';
 export {_mathjs};
 
+import * as _vec from './_vec';
+export {_vec};
+
 import * as _list from './_list';
 export {_list};
+
+import * as _conversion from './_conversion';
+export {_conversion};
 
 // input, output ports
 

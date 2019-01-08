@@ -180,7 +180,7 @@
                 </ng-template>
                 -->
                 <select class='input--arg' [(ngModel)]='p.value' *ngIf="checkEnum(p, i); else default_template" >
-                    <option *ngFor='let opt of getEnum(i)' value='"{{opt}}"'>{{opt}}</option>
+                    <option *ngFor='let opt of getEnum(i)' value="'{{opt}}'">{{opt}}</option>
                     <!--
                         <option *ngFor='let opt of Modules[data.meta.module][ModuleDoc[data.meta.module][data.meta.name].parameters[i].type]' value={{opt}}>{{opt}}</option>
                     -->

@@ -374,7 +374,12 @@ export class GIGeomAdd {
             const new_posi_i: number = this.addPosition();
             this._geom.model.attribs.add.setPosiCoords(new_posi_i, xyz);
             if (copy_attribs) {
-                // TODO copy attributes
+                const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntityTypeStr.POSI);
+                for (const attrib_name of attrib_names) {
+                    const value: TAttribDataTypes =
+                        this._geom.model.attribs.query.getAttribValue(EEntityTypeStr.POSI, attrib_name, posis_i as number);
+                    this._geom.model.attribs.add.setAttribValue(EEntityTypeStr.POSI, new_posi_i, attrib_name, value);
+                }
             }
             return new_posi_i;
         } else {
@@ -383,6 +388,7 @@ export class GIGeomAdd {
     }
     /**
      * Copy an object (point, polyline, polygon).
+     * TODO copy attribs of topo entities
      * @param ent_type_str
      * @param index
      * @param copy_posis
@@ -423,6 +429,7 @@ export class GIGeomAdd {
     }
    /**
      * Copy an object (point, polyline, polygon).
+     * TODO Copy attribs of object and topo entities
      * @param ent_type_str
      * @param index
      * @param copy_posis
@@ -503,7 +510,6 @@ export class GIGeomAdd {
      * @param new_posis_i
      */
     public replacePosis(ent_type_str: EEntityTypeStr, ent_i: number, new_posis_i: number[]): void {
-        // get the attrib names
         const verts_i: number[] = this._geom.query.navAnyToVert(ent_type_str, ent_i);
         if (verts_i.length !== new_posis_i.length) {
             throw new Error('Replacing positions operation failed due to incorrect number of positions.');

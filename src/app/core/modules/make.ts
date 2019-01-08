@@ -1,10 +1,10 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribNames, TId, EEntityTypeStr, Txyz, TPlane, TRay } from '@libs/geo-info/common';
+import { EAttribNames, TId, EEntityTypeStr, Txyz } from '@libs/geo-info/common';
 import { idBreak, isPoint, isPline, isPgon, idIndicies, isDim0, isDim2, isColl, isPosi, isObj, isEdge } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecSub } from '@libs/geom/vectors';
 import { _model } from '@modules';
-import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
+import { checkCommTypes, checkIDs } from './_check_args';
 
 /**
  * Adds a new position to the model.
@@ -283,20 +283,43 @@ export enum _ECopyAttribues {
     COPY_ATTRIBUTES = 'copy_attributes',
     NO_ATTRIBUTES = 'no_attributes'
 }
-function _copy(__model__: GIModel, geometry: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
+function _copyGeom(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
     if (!Array.isArray(geometry)) {
-        const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
         if (isColl(ent_type_str)) {
-            return ent_type_str + __model__.geom.add.copyColls(index, bool_copy_attribs);
+            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
+            return [ ent_type_str + coll_i];
         } else if (isObj(ent_type_str)) {
-            return ent_type_str + __model__.geom.add.copyObjs(ent_type_str, index, bool_copy_attribs);
+            const obj_i: number = __model__.geom.add.copyObjs(ent_type_str, index, copy_attributes) as number;
+            return [ ent_type_str + obj_i];
         } else if (isPosi(ent_type_str)) {
-            return ent_type_str + __model__.geom.add.copyPosis(index, bool_copy_attribs);
+            // Do not copy posis, they have already been copied
         }
     } else {
-        return (geometry as TId[]).map(geom_i => _copy(__model__, geom_i, copy_attributes)) as TId[];
+        return [].concat(...(geometry as TId[]).map(one_geom => _copyGeom(__model__, one_geom, copy_attributes)));
     }
+}
+function _copyPosis(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
+    // create the new positions
+    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+        const geom_new_posis_i: number[] = [];
+        for (const old_posi_i of old_posis_i) {
+            let new_posi_i: number;
+            if (old_to_new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+            } else {
+                new_posi_i = __model__.geom.add.copyPosis(old_posi_i, copy_attributes) as number;
+                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+            }
+            geom_new_posis_i.push(new_posi_i);
+        }
+        __model__.geom.add.replacePosis(ent_type_str, index, geom_new_posis_i);
+    }
+    // return all the new points
+    return Array.from(old_to_new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
 }
 /**
  * Adds a new copy to the model.
@@ -313,12 +336,10 @@ export function Copy(__model__: GIModel, geometry: TId|TId[], copy_attributes: _
     checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    const new_positions: TId|TId[] = this.Unweld(__model__, geometry);
-    const copied_geometry: TId|TId[] = _copy(__model__, geometry, copy_attributes);
-    const entities: TId[] = [];
-    entities.concat(new_positions);
-    entities.concat(copied_geometry);
-    return entities;
+    const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
+    const copied_geom: TId[] = _copyGeom(__model__, geometry, bool_copy_attribs);
+    _copyPosis(__model__, geometry, bool_copy_attribs);
+    return copied_geom;
 }
 // Divide edge modelling operation
 export enum _EDivideMethod {
@@ -411,17 +432,15 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): TId[] {
             exist_posis_i_map.set(posi_i, vert_count + 1);
         }
     }
-    // copy positions and make map
-    const new_posis_i_map: Map<number, number> = new Map();
+    // copy positions on the edge and make a map
+    const old_to_new_posis_i_map: Map<number, number> = new Map();
     exist_posis_i_map.forEach( (vert_count, old_posi_i) => {
         const all_old_verts_i: number[] = __model__.geom.query.navPosiToVert(old_posi_i);
         const all_vert_count: number = all_old_verts_i.length;
         if (vert_count !== all_vert_count) {
-            if (!new_posis_i_map.has(old_posi_i)) {
-                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
-                const new_posi_i: number = __model__.geom.add.addPosition();
-                __model__.attribs.add.setPosiCoords(new_posi_i, xyz);
-                new_posis_i_map.set(old_posi_i, new_posi_i);
+            if (!old_to_new_posis_i_map.has(old_posi_i)) {
+                const new_posi_i: number = __model__.geom.add.copyPosis(old_posi_i, true) as number;
+                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
             }
         }
     });
@@ -432,17 +451,17 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): TId[] {
         const new_posis_i: number[] = [];
         for (const old_posi_i of old_posis_i) {
             let new_posi_i: number = old_posi_i;
-            if (new_posis_i_map.has(old_posi_i)) {
-                new_posi_i = new_posis_i_map.get(old_posi_i);
+            if (old_to_new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
             }
             new_posis_i.push(new_posi_i);
         }
         __model__.geom.add.replacePosis(ent_type_str, index, new_posis_i);
     }
-    // return all the new points
-    return Array.from(new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
+    // return all the new positions
+    return Array.from(old_to_new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
 }
+
 // Pipe
 
 // Offset
-

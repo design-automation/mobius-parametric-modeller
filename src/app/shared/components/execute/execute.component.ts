@@ -59,8 +59,11 @@ export class ExecuteComponent {
                     node.input.value = undefined;
                 }
                 await this.resolveImportedUrl(node.procedure);
+                if (!node.enabled) {
+                    continue;
+                }
                 for (const prod of node.procedure) {
-                    if (prod.type === ProcedureTypes.Return) { continue; }
+                    if (prod.type === ProcedureTypes.Return || !prod.enabled) { continue; }
                     for (const arg of prod.args) {
                         if (arg.name.substring(0, 1) === '_') {
                             continue;
@@ -84,6 +87,7 @@ export class ExecuteComponent {
                 }
             }
             if (errorCheck) {
+                document.getElementById('Console').click();
                 console.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
                 throw new Error('Empty Argument');
             }

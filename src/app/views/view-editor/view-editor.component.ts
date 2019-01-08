@@ -20,7 +20,6 @@ export class ViewEditorComponent {
 
     @Output() imported = new EventEmitter();
     @Output() delete_Function = new EventEmitter();
-    helpView: any;
     notificationMessage = '';
     notificationTrigger = true;
 
@@ -191,12 +190,13 @@ export class ViewEditorComponent {
         if (typeof(event) === 'string') {
             for (const func of this.dataService.flowchart.functions) {
                 if (func.name === event) {
-                    this.helpView = func.doc;
+                    this.dataService.helpView = func.doc;
                 }
             }
         } else {
-            this.helpView = event;
+            this.dataService.helpView = event;
         }
+        this.dataService.toggleHelp(true);
     }
 
     setViewOutput() {

@@ -16,13 +16,11 @@ export class DataThreejs {
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
-    public _select_visible = 'Objs'; // TODO add types
-    public _selecting = new Map();  // TODO add types
+    public selected_geoms: Map<string, {id: number, name: string}> = new Map();  // TODO add types
     public _text: string;
     // text lables
     public ObjLabelMap: Map<string, any> = new Map();
-    public _textLabels = new Map(); // TODO add types
-    public _font; // TODO add types
+    public _textLabels: Map<string, any> = new Map();
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
@@ -32,7 +30,7 @@ export class DataThreejs {
     // the GI model to display
     public _model: GIModel;
 
-    public sceneObjs = []; // TODO add types
+    public sceneObjs: THREE.Object3D[] = [];
     /**
      * Constructs a new data subscriber.
      */
@@ -114,7 +112,7 @@ export class DataThreejs {
         // this.axesHelper.position.copy(center);
     }
 
-    public selectObjFace(labelText, triangle_i, positions, container) {
+    public selectObjFace(ent_id: string, triangle_i: number[], positions: number[], container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(triangle_i);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -132,15 +130,16 @@ export class DataThreejs {
         const mesh = new THREE.Mesh(geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
+        mesh.name = ent_id;
         this._scene.add(mesh);
-        this._selecting.set(labelText, mesh.id);
+        this.selected_geoms.set(ent_id, {id: mesh.id, name: mesh.name});
 
         const obj: { entity: THREE.Mesh, type: string } = { entity: mesh, type: objType.face };
-        this.createLabelforObj(container, obj.entity, obj.type, labelText);
-        this.ObjLabelMap.set(labelText, obj);
+        this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+        this.ObjLabelMap.set(ent_id, obj);
     }
 
-    public selectObjLine(labelText, indices, positions, container) {
+    public selectObjLine(ent_id, indices, positions, container) {
         const geom = new THREE.BufferGeometry();
         if (indices.length > 2) {
             geom.setIndex(indices);
@@ -156,15 +155,16 @@ export class DataThreejs {
             linejoin: 'round' // ignored by WebGLRenderer
         });
         const line = new THREE.LineSegments(geom, mat);
+        line.name = ent_id;
         this._scene.add(line);
-        this._selecting.set(labelText, line.id);
+        this.selected_geoms.set(ent_id, {id: line.id, name: ent_id});
 
         const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
-        this.createLabelforObj(container, obj.entity, obj.type, labelText);
-        this.ObjLabelMap.set(labelText, obj);
+        this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+        this.ObjLabelMap.set(ent_id, obj);
     }
 
-    public selectObjPoint(labelText, position, container) {
+    public selectObjPoint(ent_id, position, container) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex([0]);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(position, 3));
@@ -175,11 +175,12 @@ export class DataThreejs {
             vertexColors: THREE.VertexColors
         });
         const point = new THREE.Points(geom, mat);
+        point.name = ent_id;
         this._scene.add(point);
-        this._selecting.set(labelText, point.id);
+        this.selected_geoms.set(ent_id,  {id: point.id, name: ent_id});
         const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-        this.createLabelforObj(container, obj.entity, obj.type, labelText);
-        this.ObjLabelMap.set(labelText, obj);
+        this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+        this.ObjLabelMap.set(ent_id, obj);
     }
 
     public createLabelforObj(container, obj, type: string, labelText: string) {
@@ -190,14 +191,14 @@ export class DataThreejs {
         container.appendChild(label.element);
     }
 
-    public unselectObj(selecting, container) {
-        const removing = this._selecting.get(selecting);
-        this._selecting.delete(selecting);
+    public unselectObj(ent_id, container) {
+        const removing = this.selected_geoms.get(ent_id).id;
+        this.selected_geoms.delete(ent_id);
         this._scene.remove(this._scene.getObjectById(removing));
 
-        this.ObjLabelMap.delete(selecting);
-        if (document.getElementById(`textLabel_${selecting}`)) {
-            container.removeChild(document.getElementById(`textLabel_${selecting}`));
+        this.ObjLabelMap.delete(ent_id);
+        if (document.getElementById(`textLabel_${ent_id}`)) {
+            container.removeChild(document.getElementById(`textLabel_${ent_id}`));
         }
     }
 

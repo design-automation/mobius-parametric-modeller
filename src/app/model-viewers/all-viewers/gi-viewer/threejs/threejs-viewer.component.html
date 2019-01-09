@@ -1,8 +1,10 @@
 <div
     id="threejs-container"
-    (window:keydown)="onUserAction($event)"
-    (window:mousedown)="onUserAction($event)"
-    (window:mousemove)="onDocumentMouseMove($event)"
+    (window:keydown)="onKeyDown($event)"
+    (window:keyup)="onKeyUp($event)"
+    (window:mousedown)="onMouseDown($event)"
+    (window:mousemove)="onMouseMove($event)"
+    (window:mouseup)="onMouseUp($event)"
 >
     <div
         *ngIf="_model_error"
@@ -55,10 +57,10 @@
     </button>
     <span
         *ngIf="!selectDropdownVisible"
-        id="selectingEntityType"
-        matTooltip="Selecting {{selectingEntityType.name}}"
+        id="SelectingEntityType"
+        matTooltip="Selecting {{SelectingEntityType.name}}"
     >
-        {{selectingEntityType.id}}
+        {{SelectingEntityType.id}}
     </span>
     <div
         id="selectDropdown"
@@ -67,7 +69,7 @@
         <button
             *ngFor="let selection of selections"
             (click)="selectEntityType(selection); needSelect=false"
-            [class.active]="selectingEntityType.id === selection.id"
+            [class.active]="SelectingEntityType.id === selection.id"
         >
             <span matTooltip="Select {{selection.name}}">{{selection.id}}</span>
         </button>

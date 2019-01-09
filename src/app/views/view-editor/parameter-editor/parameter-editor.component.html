@@ -12,7 +12,7 @@
 <div class='flowchart-info' *ngIf="node.type=='end'">
     <div id='ret-container'>
         <div class='returnProd'>
-            <input class='disabled-input' autocomplete='off' value="Return" disabled>
+            <input class='disabled-input' value="Return" disabled>
             <ng-container *ngFor='let p of node.procedure[node.procedure.length-1].args; let i=index'>
                 <input id='ret--input' 
                 *ngIf='p.name.substring(0,1) !== "_"'
@@ -20,6 +20,7 @@
                 name='p.name'
                 placeholder={{p.name}}
                 [style.width.px]='inputSize(p.value||p.name)'
+                autocomplete='off'
                 >  
             </ng-container>
             </div>

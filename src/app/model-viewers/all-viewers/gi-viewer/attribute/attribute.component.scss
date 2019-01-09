@@ -4,16 +4,19 @@
 .table--container{
   height: 100%;
   overflow-y: auto;
+}
 
-  margin-bottom: $fsize3; // paginator height
+.mat-table{
+  background-color: $color5-5;
   border-bottom: 1px solid $color4;
+  // height: 100%;
 }
 
 table {
   width: 100%;
   font-family: sans-serif;
   background-color: transparent;
-
+  
   tr.mat-header-row{
     background-color: $color5-5;
     height: 27px;
@@ -77,54 +80,15 @@ table {
       }
     }
   }
-  
-  .table--container{
-    margin-bottom: 0px;
-    z-index: 999;
-    background-color: $color5-5;
-  }
   // contains everything
-  .mat-elevation-z1{
-    display: flex;
-    flex-flow: column nowrap;
-    height: 100%;
-    justify-content: space-between;
-    box-shadow: none;
-  }
-  // paginator
-  .mat-paginator-container{
-    position: absolute;
-    bottom: 8px;
-    height: 20px;
-    display: flex;
-    flex-flow: row nowrap;
-    flex-shrink: 0;
-    font-family: sans-serif;
-
-    .mat-paginator-page-size, .mat-paginator-range-actions{
-      height: inherit;  
-      align-items: baseline;
-      padding-right: $small-padding;
-    }
-    .mat-paginator-page-size-label, .mat-paginator-range-label{
-      white-space: nowrap;
-    }
-
-    // items/page selector
-    .mat-paginator-page-size-select{
-      margin-top:0 !important;
-      .mat-form-field-wrapper{
-        padding-bottom: 0.95em;
-        .mat-form-field-flex .mat-form-field-infix .mat-select .mat-select-trigger .mat-select-value{
-          font-family: sans-serif;
-          color: $color1;
-        }
-      }
-    }
-
-    // page change icons
-    .mat-icon-button:hover .mat-paginator-icon{
-      fill: $selected-color;
+  .pane{
+    height: calc(100% - 20px);
+    .mat-elevation-z1{
+      display: flex;
+      flex-flow: column nowrap;
+      height: 100%;
+      justify-content: space-between;
+      box-shadow: none;
     }
   }
 }
@@ -145,7 +109,15 @@ table {
     color: $selected-color;
   }
 }
-
+.attrib--container{
+  height: calc(100% - 30px); // $fsize3 btm container height
+  #attribTab{
+    height: 100%;
+    my-tab{
+    height: 100%;
+    }
+  }
+}
 #displaySelected{
   position: absolute;
   bottom: 17px;
@@ -163,47 +135,128 @@ table {
     width: 0;
     visibility: hidden;
   }
-  
-  label {
-    vertical-align: middle;
-    cursor: pointer;
-    text-indent: -9999px;
-    width: 2 * $fsize1;
-    height: $fsize1;
-    background: $color4;
-    display: inline-block;
-    // border-radius: 2 * $fsize1;
-    position: relative;
-    &:after{
-      content: '';
-      position: absolute;
-      top: 1px;
-      left: 1px;
-      width: $fsize1 - 2px;
-      height: $fsize1 - 2px;
-      background: $color5;
-      // border-radius: $fsize1 - 2px;
-      transition: 0.3s;
-    }
-  }
-  
-  input:checked + label {
-    background: $selected-color;
-  }
-  
-  input:checked + label:after {
-    left: calc(100% - 2px);
-    transform: translateX(-100%);
-  }
-  
-  input:hover:not(:checked) + label{
-    background: rgba($selected-color, 0.4);
-    &:after{
-      box-shadow: 2px 0px 0px 0px;
-    }
-  }
+}
 
-  label:active:after {
-    width: $fsize1 - 2px;
+.btm--container{
+  position: relative;
+  height: $fsize3;
+  position: absolute;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  width: 100%;
+  bottom: 0px;
+  #displaySelected{
+    padding-left: 10px;
+    width: 20%;
+    span{
+      vertical-align: middle;
+      font-size: $fsize2;
+      color: $color1;
+      padding-right:5px;
+      -moz-user-select:none;
+      -webkit-user-select:none;
+    }
+    input[type=checkbox]{
+      height: 0;
+      width: 0;
+      visibility: hidden;
+    }
+    
+    label {
+      vertical-align: middle;
+      cursor: pointer;
+      text-indent: -9999px;
+      width: 2 * $fsize1;
+      height: $fsize1;
+      background: $color4;
+      display: inline-block;
+      // border-radius: 2 * $fsize1;
+      position: relative;
+      &:after{
+        content: '';
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: $fsize1 - 2px;
+        height: $fsize1 - 2px;
+        background: $color5;
+        // border-radius: $fsize1 - 2px;
+        transition: 0.3s;
+      }
+    }
+    
+    input:checked + label {
+      background: $selected-color;
+    }
+    
+    input:checked + label:after {
+      left: calc(100% - 2px);
+      transform: translateX(-100%);
+    }
+    
+    input:hover:not(:checked) + label{
+      background: rgba($selected-color, 0.4);
+      &:after{
+        box-shadow: 2px 0px 0px 0px;
+      }
+    }
+  
+    label:active:after {
+      width: $fsize1 - 2px;
+    }
+  }
+  .paginator--container{
+    position: relative;
+    width: 80%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+  }
+  #matPaginator{
+    position: absolute;
+    top: -20px;
+    background-color: transparent;
+    width: 100%;
+    // paginator
+    .mat-paginator-outer-container{
+      .mat-paginator-container{
+        width: inherit;
+        min-height: $fsize3 !important;
+        position: absolute;
+        bottom: 8px;
+        height: 20px;
+        display: flex;
+        flex-flow: row nowrap;
+        flex-shrink: 0;
+        font-family: sans-serif;
+
+        .mat-paginator-page-size, .mat-paginator-range-actions{
+          height: inherit;  
+          align-items: baseline;
+          padding-right: $small-padding;
+        }
+        .mat-paginator-page-size-label, .mat-paginator-range-label{
+          white-space: nowrap;
+        }
+
+        // items/page selector
+        .mat-paginator-page-size-select{
+          margin: 0;
+          .mat-form-field-wrapper{
+            padding-bottom: 0.95em;
+            .mat-form-field-flex .mat-form-field-infix .mat-select .mat-select-trigger .mat-select-value{
+              font-family: sans-serif;
+              color: $color1;
+            }
+          }
+        }
+
+        // page change icons
+        .mat-icon-button:hover .mat-paginator-icon{
+          fill: $selected-color;
+        }
+      }
+    }
   }
 }

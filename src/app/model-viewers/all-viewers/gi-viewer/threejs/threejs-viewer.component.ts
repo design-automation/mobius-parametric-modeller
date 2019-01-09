@@ -1,6 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 // import @angular stuff
-import { Component, OnInit, Input, Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter,
+    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
 import { DataService } from '../data/data.service';
@@ -17,6 +18,7 @@ import { DropdownMenuComponent } from '../html/dropdown-menu.component';
     styleUrls: ['./threejs-viewer.component.scss']
 })
 export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
+    @Output() eventClicked = new EventEmitter<Event>();
     @Input() model: GIModel;
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
@@ -277,12 +279,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (intersects.length > 0) {
             if (event.which === 1) {
                 this.selectObj(intersects[0]);
+                this.refreshTable(event);
             }
         } else {
             if (event.target.tagName === 'CANVAS') {
                 this.unselectAll();
             }
         }
+    }
+
+    private refreshTable(event: Event) {
+        this.eventClicked.emit(event);
     }
 
     private unselectAll() {
@@ -307,7 +314,38 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const scene = this._data_threejs;
         switch (this.SelectingEntityType.id) {
             case EEntityTypeStr.POSI:
-                this.selectPositions(intersect0);
+                if (intersect0.object.type === 'Mesh') {
+                    const face = this.model.geom.query.navTriToFace(intersect0.faceIndex);
+                    const ent_id = `${EEntityTypeStr.POSI}${face}`;
+                    if (scene.selected_geoms.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntityTypeStr.POSI);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectPositions(intersect0);
+                    }
+                } else if (intersect0.object.type === 'LineSegments') {
+                    const ent_id = `${EEntityTypeStr.POSI}${intersect0.index / 2}`;
+                    if (scene.selected_geoms.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntityTypeStr.POSI);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectPositions(intersect0);
+                    }
+                } else if (intersect0.object.type === 'Points') {
+                    const ent_id = `${EEntityTypeStr.POINT}${intersect0.index}`;
+                    if (scene.selected_geoms.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntityTypeStr.POSI);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectPositions(intersect0);
+                    }
+                }
                 break;
             case EEntityTypeStr.VERT:
                 this.selectVertex(intersect0);
@@ -461,29 +499,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const posi_ents = this.model.geom.query.navVertToPosi(vert);
 
             const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-            const selecting = `${EEntityTypeStr.POINT}${object.index}`;
-            if (!scene.selected_geoms.has(selecting)) {
-                scene.selectObjPoint(selecting, position, this.container);
-                posi_ent.set(`${EEntityTypeStr.POSI}${posi_ents}`, posi_ents);
-            } else {
-                scene.unselectObj(selecting, this.container);
-                posi_ent.delete(`${ent_type_str}${posi_ents}`);
-            }
+            const ent_id = `${ent_type_str}${object.index}`;
+            scene.selectObjPositions(ent_id, position);
+            posi_ent.set(`${ent_type_str}${posi_ents}`, posi_ents);
         } else if (object.object.type === 'LineSegments') {
             const verts = this.model.geom.query.navEdgeToVert(object.index / 2),
                 positions = verts.map(v => this.model.attribs.query.getVertCoords(v)),
                 posi_flat = [].concat(...positions),
                 posi_ents = verts.map(v => this.model.geom.query.navVertToPosi(v));
 
+            const ent_id = `${ent_type_str}${object.index / 2}`;
+            scene.selectObjPositions(ent_id, posi_flat);
             const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-            const selecting = `${EEntityTypeStr.EDGE}${object.index / 2}`;
-            if (!scene.selected_geoms.has(selecting)) {
-                scene.selectObjLine(selecting, [], posi_flat, this.container);
-                posi_ents.map(posi => posi_ent.set(`${ent_type_str}${posi}`, posi));
-            } else {
-                scene.unselectObj(selecting, this.container);
-                posi_ents.map(posi => posi_ent.delete(`${ent_type_str}${posi}`));
-            }
+            posi_ents.map(posi => posi_ent.set(`${ent_type_str}${posi}`, posi));
         } else if (object.object.type === 'Mesh') {
             const face = this.model.geom.query.navTriToFace(object.faceIndex),
                 tri = this.model.geom.query.navFaceToTri(face),
@@ -501,15 +529,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             });
             const posi_flat = [].concat(...positions);
 
+            const ent_id = `${ent_type_str}${object.faceIndex}`;
+            scene.selectObjPositions(ent_id, posi_flat);
             const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-            const selecting = `${EEntityTypeStr.FACE}${face}`;
-            if (!scene.selected_geoms.has(selecting)) {
-                scene.selectObjFace(selecting, tri_indices, posi_flat, this.container);
-                posi_ents.map(posi => posi_ent.set(`${ent_type_str}${posi}`, posi));
-            } else {
-                scene.unselectObj(selecting, this.container);
-                posi_ents.map(posi => posi_ent.delete(`${ent_type_str}${posi}`));
-            }
+            posi_ents.map(posi => posi_ent.set(`${ent_type_str}${posi}`, posi));
         }
     }
 

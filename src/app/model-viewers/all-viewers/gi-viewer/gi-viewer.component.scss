@@ -41,3 +41,13 @@ as-split-area{
         color: $selected-color;
     }
 }
+
+#attrib{
+    overflow: hidden !important;
+    attribute{
+        height: calc(100% - 10px);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+    }
+}

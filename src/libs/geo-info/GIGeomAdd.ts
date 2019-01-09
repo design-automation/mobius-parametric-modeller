@@ -1,5 +1,5 @@
 import { EEntityTypeStr, TTri, TVert, TEdge, TWire, TFace,
-    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes } from './common';
+    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
 
@@ -22,7 +22,7 @@ export class GIGeomAdd {
      * The existing data in the model is not deleted.
      * @param geom_data The JSON data
      */
-    public addData(geom_data: IGeomData): void {
+    public addData(geom_data: IGeomData): IGeomPack {
         // get lengths before we start adding stuff
         const num_posis: number = this._geom_arrays.num_posis;
         const num_verts: number = this._geom_arrays.dn_verts_posis.length;
@@ -73,6 +73,16 @@ export class GIGeomAdd {
         this._updateRevArrays();
         // update the positions array
         this._geom_arrays.num_posis += geom_data.num_positions;
+        // return
+        let num_new_posis = 0;
+        if (new_verts.length > 0) { num_new_posis = Math.max(...new_verts); }
+        return {
+            posis_i:  Array.from(Array(num_new_posis).keys()).map(k => k +  num_posis),
+            points_i: Array.from(Array(new_points.length).keys()).map(k => k + num_points),
+            plines_i: Array.from(Array(new_plines.length).keys()).map(k => k + num_plines),
+            pgons_i:  Array.from(Array(new_pgons.length).keys()).map(k => k +  num_pgons),
+            colls_i:  Array.from(Array(new_colls.length).keys()).map(k => k +  num_colls)
+        };
     }
     // ============================================================================
     // Private method to update the reverse arrays after addData()

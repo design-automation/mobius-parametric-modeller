@@ -21,6 +21,8 @@ export class GIViewerComponent implements OnInit {
     // model data passed to the viewer
     @Input() data: GIModel;
     modelData: GIModel;
+
+    public clickedEvent: Event;
     /**
      * constructor
      * @param dataService
@@ -36,6 +38,10 @@ export class GIViewerComponent implements OnInit {
         if (this.dataService.getThreejsScene() === undefined) {
             this.dataService.setThreejsScene();
         }
+    }
+
+    childEventClicked(event: Event) {
+        this.clickedEvent = event;
     }
 
     /**

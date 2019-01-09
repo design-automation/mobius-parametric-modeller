@@ -138,7 +138,7 @@ export class GIAttribMap {
      */
     public getEntsFromVal(val: TAttribDataTypes): number[] {
         const val_i: number = this._map_val_k_to_val_i.get(this._valToValkey(val));
-        if (val_i === undefined) { return undefined; }
+        if (val_i === undefined) { return []; }
         return this._map_val_i_to_ents_i.get(val_i);
     }
     /**
@@ -261,8 +261,19 @@ export class GIAttribMap {
      * Convert a value into a map key
      */
     private _valToValkey(val: TAttribDataTypes): string|number {
-        if (typeof val === 'string' || typeof val === 'number') {
-            return val;
+        if (this._data_size === 1 && this._data_type === EAttribDataTypeStrs.STRING) {
+            if (typeof val === 'string') {
+                return val as string;
+            } else {
+                return String(val);
+            }
+        }
+        if (this._data_size === 1 && this._data_type === EAttribDataTypeStrs.FLOAT) {
+            if (typeof val === 'string') {
+                return parseFloat(val);
+            } else {
+                return val as number;
+            }
         }
         return JSON.stringify(val);
     }

@@ -338,8 +338,8 @@ export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _
     checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    if (!Array.isArray(geometry)) {
-        geometry = [geometry] as TId[];
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
     }
     const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
     const copied_geom: TId[] = _copyGeom(__model__, entities, bool_copy_attribs);

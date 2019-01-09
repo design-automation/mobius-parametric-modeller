@@ -522,4 +522,48 @@ export class GIGeomAdd {
             this._geom_arrays.dn_verts_posis[verts_i[i]] = new_posis_i[i];
         }
     }
+    /**
+     * Unweld the vertices
+     * @param verts_i
+     */
+    public unweldVerts(verts_i: number[]): number[] {
+        const exist_posis_i_map: Map<number, number> = new Map(); // posi_i -> count
+        for (const vert_i of verts_i) {
+            const posi_i: number = this._geom.query.navVertToPosi(vert_i);
+            if (!exist_posis_i_map.has(posi_i)) {
+                exist_posis_i_map.set(posi_i, 0);
+            }
+            const vert_count: number = exist_posis_i_map.get(posi_i);
+            exist_posis_i_map.set(posi_i, vert_count + 1);
+        }
+        // copy positions on the perimeter and make a map
+        const old_to_new_posis_i_map: Map<number, number> = new Map();
+        exist_posis_i_map.forEach( (vert_count, old_posi_i) => {
+            const all_old_verts_i: number[] = this._geom.query.navPosiToVert(old_posi_i);
+            const all_vert_count: number = all_old_verts_i.length;
+            if (vert_count !== all_vert_count) {
+                if (!old_to_new_posis_i_map.has(old_posi_i)) {
+                    const new_posi_i: number = this.copyPosis(old_posi_i, true) as number;
+                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+                }
+            }
+        });
+        // now go through the geom again and rewire to the new posis
+        for (const vert_i of verts_i) {
+            const old_posi_i: number = this._geom.query.navVertToPosi(vert_i);
+            let new_posi_i: number = old_posi_i;
+            if (old_to_new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+            }
+            // update the down arrays
+            this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+            // update the up arrays
+            if (this._geom_arrays.up_posis_verts[new_posi_i] === undefined) {
+                this._geom_arrays.up_posis_verts[new_posi_i] = [];
+            }
+            this._geom_arrays.up_posis_verts[new_posi_i].push(new_posi_i);
+        }
+        // return all the new positions
+        return Array.from(old_to_new_posis_i_map.values());
+    }
 }

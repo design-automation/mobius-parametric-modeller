@@ -410,64 +410,37 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
         return [].concat(...(edge as TId[]).map(one_edge => Divide(__model__, one_edge, divisor, method)));
     }
 }
+
 /**
- * Unweld geometries.
+ * Unweld vertices so that they do not share positions.
+ * For the vertices of the specified entities, if they share positions with other entities in the model,
+ * then those positions will be replaced with new positions.
+ * This function performs a shallow unweld.
+ * The vertices within the set of specified entities are not unwelded.
  * @param __model__
- * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, point, polyline, polygon, collection.
  * @param method Enum, the method to use for unweld.
- * @returns void
- * @example mod.Unweld(polyline1,polyline2)
+ * @returns The newly created positions resulting from the unweld.
+ * @example mod.Unweld(polyline1)
  * @example_info Unwelds polyline1 from polyline2.
  */
 export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     // --- Error Check ---
     checkIDs('modify.Unweld', 'entities', entities, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+            ['VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     if (!Array.isArray(entities)) {
         entities = [entities] as TId[];
     }
-    // analyse existing positions and count them
-    const exist_posis_i_map: Map<number, number> = new Map(); // count number of posis
-    for (const geom_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
-        for (const posi_i of posis_i) {
-            if (!exist_posis_i_map.has(posi_i)) {
-                exist_posis_i_map.set(posi_i, 0);
-            }
-            const vert_count: number = exist_posis_i_map.get(posi_i);
-            exist_posis_i_map.set(posi_i, vert_count + 1);
-        }
+    // get verts_i
+    const all_verts_i: number[] = []; // count number of posis
+    for (const ent_id of entities) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(ent_id);
+        const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type_str, index);
+        all_verts_i.push(...verts_i);
     }
-    // copy positions on the edge and make a map
-    const old_to_new_posis_i_map: Map<number, number> = new Map();
-    exist_posis_i_map.forEach( (vert_count, old_posi_i) => {
-        const all_old_verts_i: number[] = __model__.geom.query.navPosiToVert(old_posi_i);
-        const all_vert_count: number = all_old_verts_i.length;
-        if (vert_count !== all_vert_count) {
-            if (!old_to_new_posis_i_map.has(old_posi_i)) {
-                const new_posi_i: number = __model__.geom.add.copyPosis(old_posi_i, true) as number;
-                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-            }
-        }
-    });
-    // now go through the geom again and rewire to the new posis
-    for (const geom_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id); // TODO this could be optimised
-        const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
-        const new_posis_i: number[] = [];
-        for (const old_posi_i of old_posis_i) {
-            let new_posi_i: number = old_posi_i;
-            if (old_to_new_posis_i_map.has(old_posi_i)) {
-                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-            }
-            new_posis_i.push(new_posi_i);
-        }
-        __model__.geom.add.replacePosis(ent_type_str, index, new_posis_i);
-    }
-    // return all the new positions
-    return Array.from(old_to_new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
+    const new_posis_i: number [] = __model__.geom.add.unweldVerts(all_verts_i);
+    return new_posis_i.map( posi_i => EEntityTypeStr.POSI + posi_i );
 }
 
 // Pipe

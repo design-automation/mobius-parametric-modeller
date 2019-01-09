@@ -130,9 +130,11 @@ export class CodeUtils {
                 if (!check) {
                     codeStr.push(`return __params__['model'];`);
                 } else {
-                    codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});\n` +
-                                `console.log('Return: ', __return_value__);\n` +
-                                `return __return_value__;`);
+                    codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
+                    if (addProdArr) {
+                        codeStr.push(`console.log('Return: ', __return_value__);`);
+                    }
+                    codeStr.push(`return __return_value__;`);
                 }
                 break;
 
@@ -181,8 +183,11 @@ export class CodeUtils {
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
                     // args.slice(1).map((arg) => {
-                    if (arg.type.toString() !== InputType.URL.toString()) {argsVals.push(this.repGetAttrib(arg.value)); }
-                    argsVals.push(prod.resolvedValue);
+                    if (arg.type.toString() !== InputType.URL.toString()) {
+                        argsVals.push(this.repGetAttrib(arg.value));
+                    } else {
+                        argsVals.push(prod.resolvedValue);
+                    }
                 }
                 argsVals = argsVals.join(', ');
 
@@ -409,8 +414,9 @@ export class CodeUtils {
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
-            codeStr.push('}');
-            return ['{'].concat(codeStr);
+            return codeStr;
+            // codeStr.push('}');
+            // return ['{'].concat(codeStr);
             // return `{\n${codeStr.join('\n')}\n}`;
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
@@ -429,18 +435,13 @@ export class CodeUtils {
 
     static getFunctionString(func: IFunction): string {
         let fullCode = '';
-        /*
-        let fnCode = `function ${func.name}(${func.args.map(arg=>{return arg.name}).join(', ')})` +
-        `{\nvar merged;\nlet __params__={"currentProcedure": [''],"model":{}};\n`;
-        */
         let fnCode;
         if (func.args.length === 0) {
-            fnCode = `function ${func.name}(__mainParams__)` +
-            `{\nvar merged;\nvar _newModel = __modules__.${_parameterTypes['new']}();\n`
-            + `let __params__={"currentProcedure": [''],"model": _newModel};\n`;
+            fnCode = `function ${func.name}(__params__)` +
+            `{\nvar merged;\n`;
         } else {
-            fnCode = `function ${func.name}(__mainParams__, ${func.args.map(arg => arg.name).join(', ')})` +
-            `{\nvar merged;\nlet __params__={"model":__modules__.${_parameterTypes['new']}()};\n`;
+            fnCode = `function ${func.name}(__params__, ${func.args.map(arg => arg.name).join(', ')})` +
+            `{\nvar merged;\n`;
         }
 
         for (const node of func.flowchart.nodes) {
@@ -463,37 +464,91 @@ export class CodeUtils {
                     }
                     activeNodes.push(nodeEdge.source.parentNode.id);
                 }
-                if (activeNodes.length === 1) {
-                    fnCode += `__params__.model = result_${activeNodes};\n`;
-                } else {
-                    fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
-                    fnCode += `__params__.model = merged;\n`;
-                }
+                fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
+                // if (activeNodes.length === 1) {
+                //     fnCode += `__params__.model = mergeInputs([result_${activeNodes}]);\n`;
+                // } else {
+                //     fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
+                //     fnCode += `__params__.model = merged;\n`;
+                // }
                 if (func.args.length === 0) {
                     fnCode += `let result_${node.id} = ${node.id}(__params__);\n`;
                 } else {
                     fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;
                 }
             }
-            /*
-            } else if (node.input.edges.length == 1) {
-                fnCode += `let result_${node.id} = ${node.id}(result_${node.input.edges[0].source.parentNode.id});\n`
-            } else {
-                fnCode += `merged = mergeResults([${node.input.edges.map((edge)=>'result_'+edge.source.parentNode.id).join(', ')}]);\n`;
-                fnCode += `let result_${node.id} = ${node.id}(merged);\n`
-
-
-            */
             if (node.type === 'end') {
-                fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
-                fnCode += `return result_${node.id};\n`;
+                // fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
+                fnCode += `\nreturn result_${node.id};\n`;
             }
-            // fnCode += `console.log(result_${node.id});\n`;
         }
         fnCode += '}\n\n';
         fullCode += fnCode;
         // console.log(fullCode)
         return fullCode;
     }
+
+
+    // static getFunctionString(func: IFunction): string {
+    //     let fullCode = '';
+    //     let fnCode;
+    //     if (func.args.length === 0) {
+    //         fnCode = `function ${func.name}(__mainParams__)` +
+    //         `{\nvar merged;\nvar _newModel = __modules__.${_parameterTypes['new']}();\n`
+    //         + `_newModel = mergeInputs([_newModel, __mainParams__.model]);\n`
+    //         + `let __params__={"model": _newModel};\n`;
+    //     } else {
+    //         fnCode = `function ${func.name}(__mainParams__, ${func.args.map(arg => arg.name).join(', ')})` +
+    //         // `{\nvar merged;\nlet __params__={"model":__modules__.${_parameterTypes['new']}()};\n`;
+    //         `{\nvar merged;\nvar _newModel = __modules__.${_parameterTypes['new']}();\n`
+    //         + `_newModel = mergeInputs([_newModel, __mainParams__.model]);\n`
+    //         + `let __params__={"model": _newModel};\n`;
+
+    //     }
+
+    //     for (const node of func.flowchart.nodes) {
+    //         let code: any = CodeUtils.getNodeCode(node, false);
+    //         code = '{\n' + code.join('\n') + '\n}';
+    //         if (func.args.length === 0) {
+    //             fullCode += `function ${node.id}(__params__)` + code + `\n\n`;
+    //         } else {
+    //             fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')})` + code + `\n\n`;
+    //         }
+
+    //         if (node.type === 'start') {
+    //             // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
+    //             fnCode += `let result_${node.id} = __params__.model;\n`;
+    //         } else {
+    //             const activeNodes = [];
+    //             for (const nodeEdge of node.input.edges) {
+    //                 if (!nodeEdge.source.parentNode.enabled) {
+    //                     continue;
+    //                 }
+    //                 activeNodes.push(nodeEdge.source.parentNode.id);
+    //             }
+    //             if (activeNodes.length === 1) {
+    //                 fnCode += `__params__.model = result_${activeNodes};\n`;
+    //             } else {
+    //                 fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
+    //                 fnCode += `__params__.model = merged;\n`;
+    //             }
+    //             if (func.args.length === 0) {
+    //                 fnCode += `let result_${node.id} = ${node.id}(__params__);\n`;
+    //             } else {
+    //                 fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;
+    //             }
+    //         }
+    //         if (node.type === 'end') {
+    //             fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
+    //             fnCode += `return result_${node.id};\n`;
+    //         }
+    //     }
+    //     fnCode += '}\n\n';
+    //     fullCode += fnCode;
+    //     // console.log(fullCode)
+    //     return fullCode;
+    // }
+
+
 
 }

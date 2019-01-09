@@ -1,4 +1,4 @@
-<div class='container--parameter' [class.error]='prod.hasError' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta && prod.meta.module=="Input"'>
+<div class='container--parameter' [class.error]='prod.hasError' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta?.module =="Input"'>
     <div class = "btn-container">
         <div class = "btns">
             <!-- delete button-->
@@ -108,7 +108,7 @@
 </div>
 
 
-<div class='container container--parameter' *ngIf='prod.meta.module=="Output"'>
+<!-- <div class='container container--parameter' *ngIf='prod.meta?.module=="Output"'>
     <input class='inp--desc' placeholder='Return Description' [(ngModel)]='prod.meta.description'
     [style.width.px]='inputSize(prod.meta.description,"Return Description")'>
-</div>
+</div> -->

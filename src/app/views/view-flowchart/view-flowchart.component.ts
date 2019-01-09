@@ -118,8 +118,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         this.copySub = this.copyListener.subscribe(val => {
             // || document.activeElement.tagName === 'TEXTAREA'
             if (!this.listenerActive) { return; }
-            const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-            if (node.type !== 'start' && node.type !== 'end') {
+            const node = this.dataService.node;
+            if (node.type === '') {
                 // console.log('copied node:', node);
                 const cp = circularJSON.parse(circularJSON.stringify(node));
                 this.copied = circularJSON.stringify(cp);
@@ -407,7 +407,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             const node_index = this.dataService.flowchart.meta.selected_nodes.pop();
             const node = this.dataService.flowchart.nodes[node_index];
             // continue if the node is a start/end node
-            if (node.type === 'start' || node.type === 'end') { continue; }
+            if (node.type !== '') { continue; }
 
             deletedNodes.push(node);
 

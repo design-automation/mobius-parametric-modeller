@@ -12,7 +12,7 @@
 <div class = "divider"></div>
 
 <div class = "toolset--body" (mouseover)='setCurrent($event)'>
-    <ng-container *ngIf="dataService.node.type !== 'start'">          
+    <ng-container>
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
     
         <button id='basic-funcs' class="accordion" 
@@ -27,14 +27,6 @@
                         {{type}}
                     </li>
                 </ng-container>
-                <!-- <ng-container *ngFor='let mod of Modules'>
-                    <ng-container *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
-                        <li *ngFor='let fn of mod.functions' 
-                        class='tooltip' 
-                        [class.invalid]='dataService.node.type !== "end"'
-                        (click)='add_function(fn)'> {{fn.name}} </li>
-                    </ng-container>
-                </ng-container> -->
             </ul>
         </div>
         
@@ -149,9 +141,11 @@
             <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals")'>Globals</button>
             <div class="panel">
                 <ul class='toolset__functions--subset inline_set'>
-                    <li *ngFor='let cnst of dataService.flowchart.nodes[0].procedure' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
-                        {{cnst.args[cnst.argCount-2].value}}
-                    </li>
+                    <ng-container *ngFor='let cnst of dataService.flowchart.nodes[0].procedure'>
+                        <li *ngIf='cnst.type === 10' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
+                            {{cnst.args[cnst.argCount-2].value}}
+                        </li>
+                    </ng-container>
                 </ul>
                 <!--Divider-->
                 <div class = "divider--in"></div>
@@ -211,7 +205,10 @@
     
     <!-- functions for input nodes -->
     <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'start'">
-        <div class='toolset__functions'>
+        <div class = "divider--in"></div>
+        <button id='startFuncs' class="accordion inline--cat" (click)='toggleAccordion("startFuncs")'>Parameters</button>
+        <div class="panel">
+        <!-- <div class='toolset__functions'> -->
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "CONSTANT"'>
                     <ul class='toolset__functions--subset'>
@@ -229,39 +226,7 @@
                     </ul>
                 </div> -->
             </section>
-            <!--
-            <section *ngFor='let mod of Modules' >
-                <div *ngIf='mod.module.toUpperCase() == "INPUT"'>
-                    <ul class='toolset__functions--subset'>
-                        <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
-                    </ul>
-                </div>
-            </section>
-            -->
         </div>
     </div>
     
-    <!-- functions for output nodes -->
-    <!-- 
-    <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'end'">
-        <div class='toolset__functions' *ngIf="dataService.node.procedure.length == 0">
-            <! --
-            <section *ngFor='let type of ProcedureTypesArr' >
-                <div *ngIf='type.toUpperCase() == "RETURN"'>
-                    <ul class='toolset__functions--subset'>
-                        <li (click)='add(ProcedureTypes[type])'> {{type}} </li>
-                    </ul>
-                </div>
-            </section>
-            -- >
-            <section *ngFor='let mod of Modules' >
-                <div *ngIf='mod.module.toUpperCase() == "OUTPUT"'>
-                    <ul class='toolset__functions--subset'>
-                        <li *ngFor='let fn of mod.functions' (click)='add_function(fn)'> {{fn.name}} </li>
-                    </ul>
-                </div>
-            </section>
-        </div>
-    </div>            
-    -->
 </div>

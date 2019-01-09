@@ -70,6 +70,7 @@ export class LoadFileComponent {
                     last_updated: f.last_updated,
                     version: f.version
                 };
+                file.flowchart.name = selectedFile.name.split('.mob')[0];
                 let hasError = false;
                 for (const node of file.flowchart.nodes) {
                     if (!checkMissingProd(node.procedure)) {
@@ -127,12 +128,13 @@ export class LoadFileComponent {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {
-                for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
-                    if (loadeddata.flowchart.nodes[i].type === 'end') {
-                        loadeddata.flowchart.meta.selected_nodes = [i];
-                        break;
-                    }
-                }
+                loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
+                // for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
+                //     if (loadeddata.flowchart.nodes[i].type === 'end') {
+                //         loadeddata.flowchart.meta.selected_nodes = [i];
+                //         break;
+                //     }
+                // }
             }
             document.getElementById('executeButton').click();
             const zooming = document.getElementById('zoomToFit');

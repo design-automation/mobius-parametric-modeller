@@ -54,6 +54,8 @@ export class LoadUrlComponent {
                         last_updated: f.last_updated,
                         version: f.version
                     };
+                    const urlSplit = url.split('/');
+                    file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
                     // TO BE REMOVED after all the existing mob files are updated
                     const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];
@@ -110,12 +112,13 @@ export class LoadUrlComponent {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {
-                for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
-                    if (loadeddata.flowchart.nodes[i].type === 'end') {
-                        loadeddata.flowchart.meta.selected_nodes = [i];
-                        break;
-                    }
-                }
+                loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
+                // for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
+                //     if (loadeddata.flowchart.nodes[i].type === 'end') {
+                //         loadeddata.flowchart.meta.selected_nodes = [i];
+                //         break;
+                //     }
+                // }
             }
             document.getElementById('executeButton').click();
         });

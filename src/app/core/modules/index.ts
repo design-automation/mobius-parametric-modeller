@@ -43,6 +43,9 @@ export {list};
 import * as _mathjs from './_mathjs';
 export {_mathjs};
 
+import * as _rand from './_rand';
+export {_rand};
+
 import * as _vec from './_vec';
 export {_vec};
 

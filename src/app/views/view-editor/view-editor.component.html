@@ -21,38 +21,36 @@
                             <!-- parameter-editor only for start/end node -->
                             <parameter-editor *ngIf="dataService.node.type == 'start'" 
                                 [flowchart]='dataService.flowchart' 
-                                [node]='dataService.node'></parameter-editor>
-                            <ng-container *ngIf="dataService.node.type != 'start'">
-                                <!-- list of procedure items for all nodes -->
-                                <!-- <p>Viewing: 
-                                    <span *ngIf='!dataService.modelOutputView'>Input</span>
-                                    <span *ngIf='dataService.modelOutputView'>Output</span>
-                                </p> -->
-                                <div id='modelViewButton--container'>
-                                    <button (click)='setViewOutput()'>Viewing 
-                                        <span *ngIf='!dataService.modelOutputView'>Input Model</span>
-                                        <span *ngIf='dataService.modelOutputView'>Output Model</span></button>
-                                </div>
-                                
-                                <div class = 'procedureln--container'>
-                                    <procedure-item 
-                                    *ngFor="let line of dataService.node?.procedure; let idx=index" 
-                                    [data]="line"
-                                    (select)="selectProcedure($event,line)"
-                                    (delete)="deleteChild(idx)"
-                                    (helpText)='updateHelpView($event)'></procedure-item>
-    
-                                    <parameter-editor *ngIf="dataService.node.type == 'end'" 
-                                    [flowchart]='dataService.flowchart' 
-                                    [node]='dataService.node'></parameter-editor>
-                                    <div id = 'spacer'></div>
-                                    
-                                </div>
-                                <!-- <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button> -->
+                                [node]='dataService.node'
+                                [prodCheck]='false'></parameter-editor>
 
-                                <br>
-                                <br>
-                            </ng-container>
+                            <div id='modelViewButton--container'>
+                                <button (click)='setViewOutput()'>Viewing 
+                                    <span *ngIf='!dataService.modelOutputView'>Input Model</span>
+                                    <span *ngIf='dataService.modelOutputView'>Output Model</span></button>
+                            </div>
+                            
+                            <div class = 'procedureln--container'>
+                                <!-- list of procedure items for all nodes -->
+                                <procedure-item 
+                                *ngFor="let line of dataService.node?.procedure; let idx=index" 
+                                [data]="line"
+                                (select)="selectProcedure($event,line)"
+                                (delete)="deleteChild(idx)"
+                                (helpText)='updateHelpView($event)'></procedure-item>
+
+                                <parameter-editor *ngIf="dataService.node.type !== ''" 
+                                [flowchart]='dataService.flowchart' 
+                                [node]='dataService.node'
+                                [prodCheck]='true'></parameter-editor>
+                                <div id = 'spacer'></div>
+                                
+                            </div>
+                            <!-- <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button> -->
+
+                            <br>
+                            <br>
+
                         </div>
                     </div>
                 </div>

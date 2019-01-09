@@ -14,6 +14,7 @@ const ctx = canvas.getContext('2d');
 export class ParameterEditorComponent implements AfterViewInit {
     @Input() node: INode;
     @Input() flowchart: IFlowchart;
+    @Input() prodCheck: boolean;
 
     ngAfterViewInit() {
         ctx.font = '12px sans-serif';

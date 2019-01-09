@@ -1,5 +1,14 @@
 import { GIAttribMap } from './GIAttribMap';
 
+// Object for entities
+export interface IGeomPack {
+    posis_i: number[];
+    points_i: number[];
+    plines_i: number[];
+    pgons_i: number[];
+    colls_i: number[];
+}
+
 // Types
 export type TRay = [Txyz, Txyz]; // an origin and a direction vector
 export type TPlane = [Txyz, Txyz, Txyz]; // an origin, an x vec and a y vec

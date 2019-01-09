@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames, IModelData, IGeomData, IAttribsData, EEntityTypeStr } from './common';
+import { EAttribNames, IModelData, IGeomData, IAttribsData, EEntityTypeStr, IGeomPack } from './common';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
@@ -25,17 +25,17 @@ export class GIModel {
      * The existing data in the model is deleted.
      * @param model_data The JSON data.
      */
-    public addData (model_data: IModelData): void {
-        this.attribs.add.addData(model_data); // warning: must be before this.geom.add.addDat()
-        this.geom.add.addData(model_data.geometry);
+    public addData (model_data: IModelData): IGeomPack {
+        this.attribs.add.addData(model_data); // warning: must be before this.geom.add.addData()
+        return this.geom.add.addData(model_data.geometry);
     }
     /**
      * Adds data to this model from a GI model.
      * The existing data in the model is not deleted.
      * @param model_data The GI model.
      */
-    public merge(model: GIModel): void {
-        this.addData(model.getData());
+    public merge(model: GIModel): IGeomPack {
+        return this.addData(model.getData());
     }
     /**
      * Returns the JSON data for this model.

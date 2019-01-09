@@ -42,7 +42,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     // right selection dropdown
     public needSelect = false;
     // current entity type enabled for selection
-    public SelectingEntityType: { id: string, name: string } = { id: '', name: '' };
+    public SelectingEntityType: { id: string, name: string } = { id: EEntityTypeStr.FACE, name: 'Faces' };
     public selectDropdownVisible = false;
     public selections = [
         { id: EEntityTypeStr.POSI, name: 'Positions' }, { id: EEntityTypeStr.VERT, name: 'Vetex' },
@@ -183,7 +183,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private onMouseUp(event) {
-        event.preventDefault();
+        // event.preventDefault();
         if (this.dragHash < 5) {
             this.onUserAction(event);
         } else {
@@ -207,7 +207,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
 
         if (!this.isDown) { return; }
-        event.preventDefault();
+        // event.preventDefault();
         const mouseX = event.clientX - event.target.getBoundingClientRect().left;
         const mouseY = event.clientY - event.target.getBoundingClientRect().top;
 
@@ -227,7 +227,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private onMouseDown(event) {
-        event.preventDefault();
+        // event.preventDefault();
         event.stopPropagation();
 
         this.lastX = event.clientX - event.target.getBoundingClientRect().left;

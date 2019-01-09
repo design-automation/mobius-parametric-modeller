@@ -155,8 +155,8 @@ table {
     font-size: $fsize2;
     color: $color1;
     padding-right:5px;
-    -moz-user-select:none;
-    -webkit-user-select:none;
+    // -moz-user-select:none;
+    // -webkit-user-select:none;
   }
   input[type=checkbox]{
     height: 0;

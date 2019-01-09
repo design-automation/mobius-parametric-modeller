@@ -13,14 +13,25 @@
 }
 
 h2{
-    height: $fsize3;
+    min-height: $fsize3;
     color: $color8;
     padding-left: 8px;
     font-family: sans-serif;
     line-height: $fsize3;
     font-size: $fsize2;
     font-weight: 550;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
     cursor: pointer;
+    #node--name{
+        width: 80%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    #node--arr{
+        width: 20%;
+    }
 }
 
 .toolset--body{
@@ -64,6 +75,8 @@ ul{
     margin: 0px;
     padding: 0px;
     background-color: $color5;
+    overflow: hidden;
+    text-overflow: ellipsis;
     //padding-top: 2px;
     //padding-bottom: 2px;
 
@@ -81,6 +94,8 @@ ul{
         width: 100%;
         box-sizing: border-box;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .user--add{
         margin-bottom: 8px;
@@ -140,8 +155,9 @@ ul{
     li{
         display: block;
         min-width: 100px;
-        max-width: 300px;
+        max-width: 150px;
         overflow: hidden;
+        text-overflow: ellipsis;
         line-height: 20px;
         background-color: $color6;
         font-weight: 550;
@@ -174,6 +190,8 @@ ul{
     font-size: $fsize2;
     transition: 0.4s;
     font-weight: 550;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .active, .accordion:hover {

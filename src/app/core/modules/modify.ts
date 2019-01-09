@@ -9,24 +9,24 @@ import { Matrix4 } from 'three';
 /**
  * Moves geometry by vector.
  * @param __model__
- * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection.
+ * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection.
  * @param vector List of three numbers.
  * @returns void
- * @example mod.Move(geometry, vector)
- * @example_info Moves geometry by vector.
+ * @example mod.Move(entities, vector)
+ * @example_info Moves entities by vector.
  */
-export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): void {
+export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Move';
-    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'vector', vector, ['isVector']);
     // --- Error Check ---
-    if (!Array.isArray(geometry)) {
-        geometry = [geometry] as TId[];
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
     }
     const posis_i: number[] = [];
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
     }
@@ -40,7 +40,7 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
 /**
  * Rotates geometry on plane by angle.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin A list of three numbers (or a position, point, or vertex).
  * @param axis A list of three numbers.
  * @param angle Angle (in radians).
@@ -48,18 +48,18 @@ export function Move(__model__: GIModel, geometry: TId|TId[], vector: Txyz): voi
  * @example mod.Rotate(geometry, plane1, PI)
  * @example_info Rotates geometry on plane1 by PI (i.e. 180 degrees).
  */
-export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId, axis: Txyz, angle: number): void {
+export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, axis: Txyz, angle: number): void {
     // --- Error Check ---
     const fn_name = 'modify.Rotate';
-    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    checkCommTypes(fn_name, 'axis', axis, ['isXYZList']);
+    checkCommTypes(fn_name, 'axis', axis, ['isXYZlist']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
     // handle geometry type
-    if (!Array.isArray(geometry)) {
-        geometry = [geometry] as TId[];
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
     }
     // handle origin type
     if (!Array.isArray(origin)) {
@@ -69,7 +69,7 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId
     }
     // rotate all positions
     const posis_i: number[] = [];
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
     }
@@ -84,24 +84,24 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId
 /**
  * Scales geometry on plane by factor.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Position, Point, Vertex, Coordinate, Plane
  * @param scale Scale factor.
  * @returns void
- * @example mod.Scale(geometry, plane1, 0.5)
- * @example_info Scales geometry by 0.5 on plane1.
+ * @example mod.Scale(entities, plane1, 0.5)
+ * @example_info Scales entities by 0.5 on plane1.
  */
-export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
+export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Scale';
-    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
-    checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZList']);
+    checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZlist']);
     // --- Error Check ---
     // handle geometry type
-    if (!Array.isArray(geometry)) {
-        geometry = [geometry] as TId[];
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
     }
     // handle origin type
     if (!Array.isArray(origin)) {
@@ -115,7 +115,7 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|
     }
     // scale all positions
     const posis_i: number[] = [];
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
     }
@@ -130,16 +130,16 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|
 /**
  * Mirrors geometry across plane.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param plane Plane to mirror across.
  * @returns void
- * @example mod.Mirror(geometry, plane)
- * @example_info Mirrors geometry across the plane.
+ * @example mod.Mirror(entities, plane)
+ * @example_info Mirrors entities across the plane.
  */
-export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): void {
+export function Mirror(__model__: GIModel, entities: TId|TId[], plane: TPlane): void {
     // --- Error Check ---
     const fn_name = 'modify.Mirror';
-    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
     // --- Error Check ---
@@ -148,17 +148,17 @@ export function Mirror(__model__: GIModel, geometry: TId|TId[], plane: TPlane): 
 /**
  * Transforms geometry from one construction plane to another.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param from Plane defining target construction plane.
  * @param to Plane defining destination construction plane.
  * @returns void
- * @example mod.XForm(geometry, plane1, plane2)
- * @example_info Transforms geometry from plane1 to plane2.
+ * @example mod.XForm(entities, plane1, plane2)
+ * @example_info Transforms entities from plane1 to plane2.
  */
-export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to: TPlane): void {
+export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to: TPlane): void {
     // --- Error Check ---
     const fn_name = 'modify.Mirror';
-    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'from', from, ['isPlane']);
     checkCommTypes(fn_name, 'to', to, ['isPlane']);
@@ -166,18 +166,18 @@ export function XForm(__model__: GIModel, geometry: TId|TId[], from: TPlane, to:
     throw new Error('Not implemented.'); return null;
 }
 /**
- * Reverses direction of objects.
+ * Reverses direction of entities.
  * @param __model__
- * @param objects polyline, polygon, wire
+ * @param entities polyline, polygon, wire
  * @returns void
  * @example mod.Reverse(plane1)
  * @example_info Flips plane1.
  * @example mod.Reverse(polyline1)
  * @example_info Reverses the order of vertices to reverse the direction of the polyline.
  */
-export function Reverse(__model__: GIModel, objects: TId|TId[]): void {
+export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
-    checkIDs('modify.Reverse', 'objects', objects, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
+    checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -228,7 +228,7 @@ export enum _EPromoteAttribTypes {
 /**
  * Promotes or demotes an attribute from one geometry level to another.
  * @param __model__
- * @param attrib_names Attribute name to be promoted or demoted.
+ * @param attrib_name Attribute name to be promoted or demoted.
  * @param from Enum, Positions, vertices, edges, wires, faces or collections.
  * @param to Enum, Positions, vertices, edges, wires, faces or collections.
  * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
@@ -243,31 +243,31 @@ export function Promote(__model__: GIModel, attrib_name: string,
     throw new Error('Not implemented.');
 }
 /**
- * Welds geometry together.
+ * Welds entities together.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @returns void
  * @example mod.Weld([polyline1,polyline2])
  * @example_info Welds both polyline1 and polyline2 together.
  */
-export function Weld(__model__: GIModel, geometry: TId[]): void {
+export function Weld(__model__: GIModel, entities: TId[]): void {
     // --- Error Check ---
-    checkIDs('modify.Weld', 'geometry', geometry, ['isIDList'],
+    checkIDs('modify.Weld', 'entities', entities, ['isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
 /**
- * Deletes geometry.
+ * Deletes entities.
  * @param __model__
- * @param geometry Position, point, polyline, polygon, collection. Can be a list.
+ * @param entities Position, point, polyline, polygon, collection. Can be a list.
  * @returns void
- * @example mod.Delete(geometry)
- * @example_info Deletes specified geometry from model.
+ * @example mod.Delete(entities)
+ * @example_info Deletes specified entities from model.
  */
-export function Delete(__model__: GIModel, geometry: TId|TId[]  ): void {
+export function Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     // --- Error Check ---
-    checkIDs('modify.Close', 'geometry', geometry, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

@@ -205,7 +205,7 @@ const typeCheckObj  = {
         isListArg(fn_name, arg_name, arg_list, 'origin and vector');
         isListLenArg(fn_name, arg_name, arg_list, 2);
         typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
-        typeCheckObj.isVector(fn_name, arg_name + '[' + 1 + ']', arg_list[1]);
+        typeCheckObj.isVector(fn_name, arg_name + '[1]', arg_list[1]);
         return;
     }
 };

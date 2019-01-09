@@ -1,4 +1,4 @@
-<h2 title='{{dataService.node.name}}' (click)='openNodeMenu($event)'>{{dataService.node.name}} <span>▾</span></h2>
+<h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{dataService.node.name}}'>{{dataService.node.name}}</span><span id='node--arr'>▾</span></h2>
 
 <div id="nodeMenu">
     <div *ngFor='let nd of dataService.flowchart.nodes; let i = index;'>

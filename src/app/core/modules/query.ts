@@ -108,7 +108,9 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
     // --- Error Check ---
-    // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+    if (entities !== null && entities !== undefined) {
+        checkIDs('query.Count', 'entities', entities, ['isID', 'isIDList'], 'all');
+    }
     // --- Error Check ---
     return Get(__model__, select, entities, query_expr).length;
 }
@@ -180,7 +182,7 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
         if (ent_type_str === EEntityTypeStr.PLINE) {
             wire_i = __model__.geom.query.navPlineToWire(index);
         } else if (ent_type_str !== EEntityTypeStr.WIRE) {
-            throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
+            throw new Error('modify.isClosed: Entity is of wrong type. It must be either a polyline or a wire.');
         }
         return __model__.geom.query.istWireClosed(wire_i);
     } else {

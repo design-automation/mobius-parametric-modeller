@@ -6,6 +6,7 @@ import { TId, EEntityTypeStr, Txyz, TPlane, TRay } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
 import { vecMult, vecAdd, vecSub } from '@libs/geom/vectors';
 import { _model } from '@modules';
+import { checkCommTypes } from './_check_args';
 
 // Import / Export data types
 export enum _EIODataFormat {
@@ -60,14 +61,15 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
 /**
  * Adds a ray to the model from an origin location and vector.
  * @param __model__
- * @param ray A list of two list of three coordinates
+ * @param ray A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
  * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
- * @example ray1 = make.RayVisible([[1,2,3],[0,0,1]])
+ * @example ray1 = util.RayGeom([[1,2,3],[0,0,1]])
  */
 export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'make.RayVisible';
-    // checkIDnTypes(fn_name, 'origin', origin, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
+    const fn_name = 'make.RayGeom';
+    checkCommTypes(fn_name, 'ray', ray, ['isRay']);
+    checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
     const origin: Txyz = ray[0];
     const vec: Txyz = vecMult(ray[1], scale);
@@ -88,15 +90,14 @@ export function RayGeom(__model__: GIModel, ray: TRay, scale: number): TId[] {
  * @param __model__
  * @param plane A list of lists
  * @returns A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
- * @example plane1 = make.Plane(position1, vector1, [0,1,0])
+ * @example plane1 = util.PlaneGeom(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 export function PlaneGeom(__model__: GIModel, plane: TPlane, scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'make.PlanerVisible';
-    // checkIDnTypes(fn_name, 'location', location, ['isID', 'isCoord'], ['POSI', 'POINT', 'VERT']);
-    // checkCommTypes(fn_name, 'vector1', vector1, ['isVector']);
-    // checkCommTypes(fn_name, 'vector2', vector2, ['isVector']);
+    const fn_name = 'make.PlaneGeom';
+    checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
+    checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
     const origin: Txyz = plane[0];
     const x_vec: Txyz = vecMult(plane[1], scale);

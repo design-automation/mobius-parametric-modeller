@@ -14,7 +14,7 @@
         <div class='returnProd'>
             <input class='disabled-input' autocomplete='off' value="Return" disabled>
             <ng-container *ngFor='let p of node.procedure[node.procedure.length-1].args; let i=index'>
-                <input class='input' 
+                <input id='ret--input' 
                 *ngIf='p.name.substring(0,1) !== "_"'
                 [(ngModel)]='p.value'
                 name='p.name'

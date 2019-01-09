@@ -283,7 +283,7 @@ export enum _ESortMethod {
 /**
  * Sorts an list of values, either alphabetically or numerically.
  *
- * For alphabetical sort, values are sorted according to string Unicode code points 
+ * For alphabetical sort, values are sorted according to string Unicode code points
  * (character by character, numbers before upper case
  * alphabets, upper case alphabets before lower case alphabets)
  *
@@ -314,7 +314,7 @@ export function Sort(list: any[], method: _ESortMethod): void {
             list.sort((a, b) => a - b).reverse();
             break;
         default:
-            throw new Error('Sort method not recognised.');
+            throw new Error('list.Sort: Sort method not recognised.');
             break;
     }
 }

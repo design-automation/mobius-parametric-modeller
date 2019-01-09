@@ -183,13 +183,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private onMouseUp(event) {
-        // event.preventDefault();
-        if (this.dragHash < 5) {
-            this.onUserAction(event);
+        if (event.target.tagName !== 'CANVAS') {
+            return null;
         } else {
-            // this._data_threejs._controls.enabled = true;
+            if (this.dragHash < 5) {
+                this.onUserAction(event);
+            } else {
+                // this._data_threejs._controls.enabled = true;
+            }
+            this.isDown = false;
         }
-        this.isDown = false;
     }
 
     public onMouseMove(event) {
@@ -227,15 +230,18 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private onMouseDown(event) {
-        // event.preventDefault();
-        event.stopPropagation();
+        if (event.target.tagName !== 'CANVAS') {
+            return null;
+        } else {
+            event.stopPropagation();
 
-        this.lastX = event.clientX - event.target.getBoundingClientRect().left;
-        this.lastY = event.clientY - event.target.getBoundingClientRect().top;
+            this.lastX = event.clientX - event.target.getBoundingClientRect().left;
+            this.lastY = event.clientY - event.target.getBoundingClientRect().top;
 
-        // Put your mousedown stuff here
-        this.dragHash = 0;
-        this.isDown = true;
+            // Put your mousedown stuff here
+            this.dragHash = 0;
+            this.isDown = true;
+        }
     }
 
     private onKeyDown(event) {

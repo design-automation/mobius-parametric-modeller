@@ -146,12 +146,16 @@ export abstract class NodeUtils {
     }
 
     static insert_procedure(node: INode, prod: IProcedure) {
+        if (prod.type === ProcedureTypes.Constant) {
+            node.procedure.push(prod);
+            return;
+        }
         if (node.state.procedure[0]) {
             let list: IProcedure[];
-            if (node.type === 'end' && node.state.procedure[0].type === ProcedureTypes.Return) {
-                node.procedure.splice( node.procedure.length - 1, 0, prod);
-                return;
-            }
+            // if (node.type === 'end' && node.state.procedure[0].type === ProcedureTypes.Return) {
+            //     node.procedure.splice( node.procedure.length - 1, 0, prod);
+            //     return;
+            // }
             if (node.state.procedure[0].parent) {
                 prod.parent = node.state.procedure[0].parent;
                 list = prod.parent.children;
@@ -187,6 +191,15 @@ export abstract class NodeUtils {
         } else {
             if (node.type === 'end') {
                 node.procedure.splice( node.procedure.length - 1, 0, prod);
+                return;
+            } else if (node.type === 'start') {
+                for (let i = 0; i < node.procedure.length; i++) {
+                    if (node.procedure[i].type === ProcedureTypes.Constant ) {
+                        node.procedure.splice( i, 0, prod);
+                        return;
+                    }
+                }
+                node.procedure.push(prod);
                 return;
             }
             node.procedure.push(prod);

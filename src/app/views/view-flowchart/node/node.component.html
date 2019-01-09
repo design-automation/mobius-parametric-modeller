@@ -60,13 +60,13 @@
                  ' L'+ (node.position.x + 100) +' '+ (node.position.y + 30) + ' Z'" 
         />
 
-    <!-- circles as draggable input/output ports of the node -->
-    <svg:circle
+    <!-- circles as inputs of the node -->
+    <!-- <svg:circle
     *ngFor="let prod of node.procedure; let i=index"
     r=3
     [attr.cx]="node.position.x + (100 * (i+1) / (node.procedure.length + 1))" 
     [attr.cy]="node.position.y + 22"
-    class='inputPort'/>
+    class='inputPort'/> -->
 
 
 
@@ -114,12 +114,12 @@
                  ' L'+ (node.position.x + 100) +' '+ (node.position.y + 50) + ' Z'" 
         />
 
-    <svg:circle
+    <!-- <svg:circle
     *ngIf="node.procedure.length > 0"
     r=3
     [attr.cx]="node.position.x + 50" 
     [attr.cy]="node.position.y + 58"
-    class='inputPort'/>
+    class='inputPort'/> -->
     
 
     <!-- node description inside the ellipse -->

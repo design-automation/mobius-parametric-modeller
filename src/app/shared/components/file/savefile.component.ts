@@ -4,6 +4,7 @@ import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
 import { DataService } from '@services';
 import { InputType } from '@models/port';
+import { ProcedureTypes } from '@models/procedure';
 
 @Component({
   selector: 'file-save',
@@ -42,6 +43,7 @@ export class SaveFileComponent {
         }
 
         for (const prod of f.flowchart.nodes[0].procedure) {
+            if (prod.type !== ProcedureTypes.Constant) { continue; }
             if (prod.meta.inputMode.toString() === InputType.File.toString()) {
                 const arg = prod.args[1];
                 if (arg.value && arg.value.lastModified) {

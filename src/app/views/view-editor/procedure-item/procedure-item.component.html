@@ -5,7 +5,7 @@
     [class.printing]='data.print'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
-    *ngIf= 'data.type != ProcedureTypes.Return'>
+    *ngIf= 'data.type != ProcedureTypes.Return && data.type != ProcedureTypes.Constant'>
     <div class='container--item' >
         <!-- Variable Assignment Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Variable">
@@ -123,9 +123,9 @@
 
         </div>
 
-        <!-- Constant (Only visible in start node) Template -->
+        <!-- Constant (Not visible) Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Constant">
-            <div class='function-text'>Constant</div>
+            <!-- <div class='function-text'>Constant</div>
 
             <input class='input--arg' 
                     [(ngModel)]='data.args[0].value'
@@ -133,7 +133,7 @@
                     name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >  
+                    >   -->
 
         </div>
         
@@ -210,12 +210,13 @@
                     (ngModelChange)='data.args[0].value=varMod($event)'
                     [class.error]='invalidVar'
                     placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
             = 
             <div class='function-text'><span class='module-name'>user.</span>{{data.meta.name}} </div> 
             
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input class='input--arg' 
+                    *ngIf='p.type !== 5'
                     [(ngModel)]='p.value'
                     (blur)='argMod($event, i+1)'
                     placeholder={{p.name}}

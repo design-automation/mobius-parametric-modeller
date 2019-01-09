@@ -112,12 +112,13 @@ export class LoadUrlComponent {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {
-                for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
-                    if (loadeddata.flowchart.nodes[i].type === 'end') {
-                        loadeddata.flowchart.meta.selected_nodes = [i];
-                        break;
-                    }
-                }
+                loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
+                // for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
+                //     if (loadeddata.flowchart.nodes[i].type === 'end') {
+                //         loadeddata.flowchart.meta.selected_nodes = [i];
+                //         break;
+                //     }
+                // }
             }
             document.getElementById('executeButton').click();
         });

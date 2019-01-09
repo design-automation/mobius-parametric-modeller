@@ -58,14 +58,26 @@ export class ExecuteComponent {
                 if (node.input.edges) {
                     node.input.value = undefined;
                 }
-                await this.resolveImportedUrl(node.procedure);
-                if (!node.enabled) {
-                    continue;
-                }
-                for (const prod of node.procedure) {
-                    if (prod.type === ProcedureTypes.Return || !prod.enabled) { continue; }
+            }
+            await this.resolveImportedUrl(node.procedure);
+
+            if (!node.enabled) {
+                continue;
+            }
+
+            for (const prod of node.procedure) {
+                if (prod.type === ProcedureTypes.Return || !prod.enabled) { continue; }
+                if (prod.type === ProcedureTypes.Constant) {
+                    prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
+                    if (!prod.args[0].value || (!prod.args[1].value && !prod.args[1].default &&
+                        prod.args[1].value !== 0 && prod.args[1].default !== 0)) {
+                        node.hasError = true;
+                        prod.hasError = true;
+                        errorCheck = true;
+                    }
+                } else {
                     for (const arg of prod.args) {
-                        if (arg.name.substring(0, 1) === '_') {
+                        if (arg.name.substring(0, 1) === '_' || arg.type === 5) {
                             continue;
                         }
                         if (arg.value !== 0 && !arg.value) {
@@ -73,16 +85,6 @@ export class ExecuteComponent {
                             prod.hasError = true;
                             errorCheck = true;
                         }
-                    }
-                }
-            } else {
-                for (const prod of node.procedure) {
-                    prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
-                    if (!prod.args[0].value || (!prod.args[1].value && !prod.args[1].default &&
-                        prod.args[1].value !== 0 && prod.args[1].default !== 0)) {
-                        node.hasError = true;
-                        prod.hasError = true;
-                        errorCheck = true;
                     }
                 }
             }

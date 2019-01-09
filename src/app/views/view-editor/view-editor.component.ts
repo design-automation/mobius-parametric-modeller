@@ -62,7 +62,7 @@ export class ViewEditorComponent {
         }
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
         // console.log('copying', node.state.procedure);
-        this.dataService.copiedType = node.type;
+
         this.dataService.copiedProd = node.state.procedure;
 
         this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
@@ -83,7 +83,7 @@ export class ViewEditorComponent {
         }
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
         // console.log('cutting', node.state.procedure);
-        this.dataService.copiedType = node.type;
+
         this.dataService.copiedProd = node.state.procedure;
         let parentArray: IProcedure[];
         for (const prod of this.dataService.copiedProd) {
@@ -105,34 +105,15 @@ export class ViewEditorComponent {
         this.notificationTrigger = !this.notificationTrigger;
     }
 
-    removeReturns(pastingProds) {
-        let i = 0;
-        while (i < pastingProds.length) {
-            if (pastingProds[i].type === 11 || (pastingProds[i].type === 8 && pastingProds[i].meta.module.toLowerCase() === 'output')) {
-                pastingProds.splice(i, 1);
-            } else {
-                if (pastingProds[i].children) {
-                    this.removeReturns(pastingProds[i].children);
-                }
-                i += 1;
-            }
-        }
-    }
-
     // paste copied procedures
     pasteProd() {
         const node = this.dataService.node;
         if (this.copyCheck
         && this.dataService.copiedProd
-        && node.type !== 'start'
         && document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA') {
             const pastingPlace = node.state.procedure[0];
-            let toBePasted = this.dataService.copiedProd;
-            if (this.dataService.copiedType === 'end' && node.type === '') {
-                toBePasted = circularJSON.parse(circularJSON.stringify(this.dataService.copiedProd));
-                this.removeReturns(toBePasted);
-            }
+            const toBePasted = this.dataService.copiedProd;
             if (pastingPlace === undefined) {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
@@ -207,7 +188,7 @@ export class ViewEditorComponent {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
         // if (node.type === 'output') { return node.input.value; }
-        if (node.type === 'start' || this.dataService.modelOutputView) {
+        if (this.dataService.modelOutputView) {
             return node.model;
         }
         return node.input.value;

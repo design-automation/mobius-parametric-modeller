@@ -12,6 +12,7 @@ import { DownloadUtils } from '@shared/components/file/download.utils';
 import { inline_query_expr, inline_func, inline_sort_expr} from './toolset.inline';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
+import { InputType } from '@models/port';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -81,6 +82,9 @@ export class ToolsetComponent implements OnInit {
     // add selected imported function as a new procedure
     add_imported_function(fnData) {
         fnData.args = fnData.args.map( (arg) => {
+            if (arg.type === InputType.Constant) {
+                return {name: arg.name, value: arg.default, type: arg.type};
+            }
             return {name: arg.name, value: arg.value, type: arg.type};
             });
         this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
@@ -152,14 +156,15 @@ export class ToolsetComponent implements OnInit {
 
                 func.args = [];
                 for (const prod of fl.nodes[0].procedure) {
-                    if (!prod.enabled) { continue; }
-
+                    if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
                     let v: string = prod.args[prod.argCount - 2].value || 'undefined';
                     if (v.substring(0, 1) === '"' || v.substring(0, 1) === '\'') { v = v.substring(1, v.length - 1); }
-                    documentation.parameters.push({
-                        name: v,
-                        description: prod.meta.description
-                    });
+                    if (prod.meta.inputMode !== InputType.Constant) {
+                        documentation.parameters.push({
+                            name: v,
+                            description: prod.meta.description
+                        });
+                    }
                     func.args.push(<IArgument>{
                         name: v,
                         default: prod.args[prod.argCount - 1].default,
@@ -378,6 +383,7 @@ export class ToolsetComponent implements OnInit {
         }
         for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
             if (this.searchedInlines.length >= 10) { break; }
+            if (cnst.type !== ProcedureTypes.Constant) { continue; }
             const cnstString = cnst.args[cnst.argCount - 2].value;
             if (cnstString.toLowerCase().indexOf(str) !== -1) {
                 this.searchedInlines.push(cnstString);

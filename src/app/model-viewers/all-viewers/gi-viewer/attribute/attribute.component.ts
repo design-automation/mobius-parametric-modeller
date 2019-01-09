@@ -11,8 +11,9 @@ import { EEntityTypeStr } from '@libs/geo-info/common';
   styleUrls: ['./attribute.component.scss']
 })
 
-export class AttributeComponent implements OnChanges {
+export class AttributeComponent implements OnChanges{
   @Input() data: GIModel;
+  @Input() refresh: Event;
   showSelected = false;
 
   tabs: { type: string, title: string }[] =
@@ -43,10 +44,10 @@ export class AttributeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && this.data) {
-      const currentTab = this.getCurrentTab();
-      setTimeout(() => {
-        this.generateTable(currentTab);
-      });
+      this.refreshTable();
+    }
+    if (changes['refresh']) {
+      this.refreshTable();
     }
   }
 
@@ -103,9 +104,13 @@ export class AttributeComponent implements OnChanges {
 
   showSelectedSwitch() {
     this.showSelected = !this.showSelected;
+    this.refreshTable();
+  }
+
+  public refreshTable() {
     const currentTab = this.getCurrentTab();
-      setTimeout(() => {
-        this.generateTable(currentTab);
+    setTimeout(() => {
+      this.generateTable(currentTab);
     });
   }
 }

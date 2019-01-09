@@ -24,10 +24,12 @@ div[class^="container--"]{
     }
 }
 
-textarea, #flowchart-name{
+textarea, #flowchart-name, #ret--input{
     color: $color8;
     border: 2px solid $color5;
     background-color: transparent;
+    height: $fsize1;
+    margin-bottom: 1px;
 
     padding-left: 5px;
     font-family: sans-serif;

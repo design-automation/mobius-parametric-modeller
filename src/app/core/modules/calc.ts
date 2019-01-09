@@ -153,6 +153,7 @@ export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
     checkIDs('calc.Centroid', 'geometry', geometry, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'POINT', 'EDGE', 'WIRE', 'PLINE', 'FACE', 'PGON', 'COLL']);
     // --- Error Check ---
+    if (!Array.isArray(geometry)) { geometry = [geometry]; }
     const posis_i: number[] = [];
     for (const geom_id of geometry) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);

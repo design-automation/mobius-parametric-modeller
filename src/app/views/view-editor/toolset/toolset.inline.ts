@@ -103,6 +103,7 @@ const str = [
 ];
 
 export const inline_func = [
+    ['random', random],
     ['lists', lists],
     ['conversion', conversion],
     ['vectors', vectors],

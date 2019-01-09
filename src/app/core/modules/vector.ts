@@ -6,17 +6,18 @@ import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecDiv } from '@libs/g
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal } from '@libs/geom/triangle';
 
-
 /**
  * Create a ray, centered at the origin.
  * @param __model__
- * @param origin The id of an face
- * @param dir_vec
- * @returns The face plane.
+ * @param origin Origin of Ray: Position/Vertex/Point/Coordinate
+ * @param dir_vec Direction of Ray: Vector/List of three numbers
+ * @returns [origin, vector]: [[x,y,z],[x',y',z']]
  */
 export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     // --- Error Check ---
-
+    const fn_name = 'vector.Ray';
+    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
@@ -31,13 +32,17 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
 /**
  * Create a plane, centered at the origin.
  * @param __model__
- * @param origin The id of an face
- * @param x_vec
- * @param xy_vec
- * @returns The face plane.
+ * @param origin Origin of Plane: Position/Vertex/Point/Coordinate
+ * @param x_vec First plane determining vector: Vector/List of three numbers
+ * @param xy_vec Second plane determining vector: Vector/List of three numbers
+ * @returns [origin, vector, vector]: [[x,y,z],[x',y',z'],[x",y",z"]]
  */
 export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
     // --- Error Check ---
+    const fn_name = 'vector.Plane';
+    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'x_vec', x_vec, ['isVector']);
+    checkCommTypes(fn_name, 'xy_vec', xy_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
@@ -54,11 +59,12 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
  * Create a ray, from a plane.
  * The direction will be along the z axis
  * @param __model__
- * @param plane
- * @returns The face plane.
+ * @param plane Plane/list of list of three numbers: [origin, vector, vector]
+ * @returns Ray Normal to the plane at plane origin [origin, vector]: [[x,y,z],[x',y',z']]
  */
 export function RayFromPlane(plane: TPlane): TRay {
     // --- Error Check ---
+    checkCommTypes('vector.RayFromPlane', 'origin', origin, ['isOrigin']);
     // --- Error Check ---
     return [plane[0], vecCross(plane[1], plane[2])];
 }
@@ -67,14 +73,14 @@ export function RayFromPlane(plane: TPlane): TRay {
 /**
  * Returns a vector along an edge.
  * @param __model__
- * @param edge The id of an edge
+ * @param edge An edge
  * @returns The vector from the start point of an edge to the end point of an edge
  */
-export function GetVector(__model__: GIModel, edge_id: TId): Txyz {
+export function GetVector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
-    checkIDs('vector.EdgeVector', 'edge_id', edge_id, ['isID'], ['EDGE']);
+    checkIDs('vector.EdgeVector', 'edge_id', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
-    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge_id);
+    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge);
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
     const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
     const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);

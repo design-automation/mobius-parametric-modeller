@@ -158,14 +158,18 @@ const typeCheckObj  = {
         isIntListArg(fn_name, arg_name, arg_list);
         return;
     },
+    isXYZlist: function(fn_name: string, arg_name: string, arg_list: [number, number, number]): void {
+        typeCheckObj.isCoord(fn_name, arg_name, arg_list);
+        return;
+    },
     // Other Geometry
-    isCoord: function(fn_name: string, arg_name: string, arg: number[]): void { // Txyz = [number, number, number]
+    isCoord: function(fn_name: string, arg_name: string, arg: [number, number, number]): void { // Txyz = [number, number, number]
         isListArg(fn_name, arg_name, arg, 'numbers');
         isListLenArg(fn_name, arg_name, arg, 3);
         isNumberListArg(fn_name, arg_name, arg);
         return;
     },
-    isCoordList: function(fn_name: string, arg_name: string, arg_list: number[][]): void {
+    isCoordList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void {
         isListArg(fn_name, arg_name, arg_list, 'coordinates');
         for (let i = 0; i < arg_list.length; i++) {
             isListLenArg(fn_name, arg_name + '[' + i + ']', arg_list[i], 3);
@@ -173,7 +177,7 @@ const typeCheckObj  = {
         }
         return;
     },
-    isVector: function(fn_name: string, arg_name: string, arg_list: number[]): void { // same checks as coord
+    isVector: function(fn_name: string, arg_name: string, arg_list: [number, number, number]): void { // same checks as coord
         typeCheckObj.isCoord(fn_name, arg_name, arg_list);
         return;
     },
@@ -184,7 +188,7 @@ const typeCheckObj  = {
         checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
         return;
     },
-    isPlane: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TPlane = Txyz, Txyz, Txyz]
+    isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = Txyz, Txyz, Txyz]
         // one origin: point, posi, vert, coord + 2 vectors
         isListArg(fn_name, arg_name, arg_list, 'origin and vectors');
         isListLenArg(fn_name, arg_name, arg_list, 3);
@@ -197,7 +201,7 @@ const typeCheckObj  = {
     isPlaneList: function(fn_name: string, arg_name: string, arg_list: number[][][]): void {
         // Add if required
     },
-    isRay: function(fn_name: string, arg_name: string, arg_list: number[][]): void { // TRay = [Txyz, Txyz]
+    isRay: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TRay = [Txyz, Txyz]
         isListArg(fn_name, arg_name, arg_list, 'origin and vector');
         isListLenArg(fn_name, arg_name, arg_list, 2);
         typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);

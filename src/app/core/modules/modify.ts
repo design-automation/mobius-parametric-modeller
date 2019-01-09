@@ -53,8 +53,8 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId
     const fn_name = 'modify.Rotate';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
-    checkCommTypes(fn_name, 'axis', axis, ['isCoord']);
+    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'axis', axis, ['isXYZList']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
     // handle geometry type
@@ -85,7 +85,7 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId
  * Scales geometry on plane by factor.
  * @param __model__
  * @param geometry Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Plane to scale on.
+ * @param origin Position, Point, Vertex, Coordinate, Plane
  * @param scale Scale factor.
  * @returns void
  * @example mod.Scale(geometry, plane1, 0.5)
@@ -96,8 +96,8 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|
     const fn_name = 'modify.Scale';
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // checkCommTypes(fn_name, 'origin', origin, ['isPlane']);
-    // checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
+    checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
+    checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZList']);
     // --- Error Check ---
     // handle geometry type
     if (!Array.isArray(geometry)) {

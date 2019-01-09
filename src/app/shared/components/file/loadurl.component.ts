@@ -54,6 +54,8 @@ export class LoadUrlComponent {
                         last_updated: f.last_updated,
                         version: f.version
                     };
+                    const urlSplit = url.split('/');
+                    file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
                     // TO BE REMOVED after all the existing mob files are updated
                     const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];

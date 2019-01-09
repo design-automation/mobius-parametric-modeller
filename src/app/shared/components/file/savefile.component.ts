@@ -34,7 +34,6 @@ export class SaveFileComponent {
     constructor(private dataService: DataService) {}
 
 
-    // todo: save file
     async download() {
         const f = this.dataService.file;
 
@@ -105,6 +104,7 @@ export class SaveFileComponent {
         const blob = new Blob([fileString], {type: 'application/json'});
         DownloadUtils.downloadFile(fname, blob);
 
+        this.dataService.flowchart.name = 'Untitled';
     }
 
 }

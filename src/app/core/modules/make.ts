@@ -357,13 +357,16 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
         new_xyzs = interpByLen(start, end, divisor);
     }
     const new_edges_i: number[] = [];
+    let old_edge_i: number = edge_i;
     for (const new_xyz of new_xyzs) {
         const posi_i = __model__.geom.add.addPosition();
         __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
-        const new_edge_i: number = __model__.geom.add.insertVertWire(edge_i, posi_i);
-        new_edges_i.push(new_edge_i);
+        const new_edge_i: number = __model__.geom.add.insertVertIntoEdge(old_edge_i, posi_i);
+        new_edges_i.push(old_edge_i);
+        old_edge_i = new_edge_i;
     }
-    return [edge_i, ...new_edges_i];
+    new_edges_i.push(old_edge_i);
+    return new_edges_i;
 }
 /**
  * Divides edge/wire/polyline by length or by number of segments.

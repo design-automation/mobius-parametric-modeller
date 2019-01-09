@@ -482,18 +482,22 @@ export class GIGeomAdd {
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
     }
     /**
-     * Insert a vertex into a wire
+     * Insert a vertex into an edge and updates the wire with the new edge
      * @param wire_i The wire to close.
      */
-    public insertVertWire(edge_i: number, posi_i: number): number {
+    public insertVertIntoEdge(edge_i: number, posi_i: number): number {
         const wire_i: number = this._geom.query.navEdgeToWire(edge_i);
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
         const old_edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
         // create one new vertex and one new edge
         const new_vert_i: number = this._addVertex(posi_i);
         const new_edge_i: number = this._addEdge(new_vert_i, old_edge[1]);
+        // update the down arrays
         old_edge[1] = new_vert_i;
         wire.splice(wire.indexOf(edge_i), 1, edge_i, new_edge_i);
+        // update the up arrays
+        this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+        // return the new edge
         return new_edge_i;
     }
     /**

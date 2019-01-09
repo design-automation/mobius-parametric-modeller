@@ -78,7 +78,7 @@ export function RayFromPlane(plane: TPlane): TRay {
  */
 export function GetVector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
-    checkIDs('vector.EdgeVector', 'edge_id', edge, ['isID'], ['EDGE']);
+    checkIDs('vector.GetVector', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge);
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
@@ -89,21 +89,21 @@ export function GetVector(__model__: GIModel, edge: TId): Txyz {
 /**
  * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
  * @param __model__
- * @param geometry A polygon, a face, a closed polyline, or or closed wire.
+ * @param entity A polygon, a face, a closed polyline, or or closed wire.
  * @returns Vector.
  * @example normal1 = calc.Normal (geometry)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
-export function GetNormal(__model__: GIModel, geometry: TId): Txyz {
+export function GetNormal(__model__: GIModel, entity: TId): Txyz {
     // --- Error Check ---
-    const fn_name = 'calc.Area';
-    checkIDs(fn_name, 'geometry', geometry, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    const fn_name = 'vector.GetNormal';
+    checkIDs(fn_name, 'entity', entity, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
-    if (isPgon(geometry) || isFace(geometry)) {
+    const [_, index]: [EEntityTypeStr, number] = idBreak(entity);
+    if (isPgon(entity) || isFace(entity)) {
         // faces, these are already triangulated
         let face_i: number = index;
-        if (isPgon(geometry)) {
+        if (isPgon(entity)) {
             face_i = __model__.geom.query.navPgonToFace(index);
         }
         const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
@@ -115,10 +115,10 @@ export function GetNormal(__model__: GIModel, geometry: TId): Txyz {
             normal_vec = vecAdd(normal_vec, tri_normal);
         }
         return vecNorm(vecDiv(normal_vec, tris_i.length));
-    } else if (isPline(geometry) || isWire(geometry)) {
+    } else if (isPline(entity) || isWire(entity)) {
         // wires, these need to be triangulated
         let wire_i: number = index;
-        if (isPline(geometry)) {
+        if (isPline(entity)) {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
         if (__model__.geom.query.istWireClosed(wire_i)) {
@@ -145,7 +145,7 @@ export function GetNormal(__model__: GIModel, geometry: TId): Txyz {
  */
 export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
-    checkIDs('vector.FacePlane', 'face_id', edge, ['isID'], ['FACE']);
+    checkIDs('vector.GetRay', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -157,9 +157,7 @@ export function GetRay(__model__: GIModel, edge: TId): TPlane {
  */
 export function GetPlane(__model__: GIModel, face: TId): TPlane {
     // --- Error Check ---
-    const fn_name = 'vector.Ray';
-    // checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    // checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
+    checkIDs('vector.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }

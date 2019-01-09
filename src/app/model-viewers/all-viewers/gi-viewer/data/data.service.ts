@@ -12,15 +12,11 @@ export class DataService {
     // GI Model
     // private _model: GIModel;
     private _data_threejs: DataThreejs;
-    // Others
-    // imVisible: boolean;
+
     selecting: any = [];
 
     // Selected Entities by Threejs Viewer
-    selected_ents: Map<string, Map<string, number>>  = new Map();
-
-    // Settings
-    show_selected = false;
+    selected_ents: Map<string, Map<string, number>> = new Map();
     /**
      * Create a data service.
      */

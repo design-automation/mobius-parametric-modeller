@@ -4,7 +4,7 @@ import { Txyz, TPlane, TRay } from '@libs/geo-info/common';
 /**
  * Adds positions in a circle.
 * @param __model__
-* @param origin XYZ coordinates as a list of three numbers.
+* @param origin XYZ coordinates as a list of three numbers
 * @param radius Radius of circle as a number.
 * @param num_positions Number of positions distributed equally along the arc.
 * @param arc_angle Angle of arc (in radians).
@@ -12,10 +12,10 @@ import { Txyz, TPlane, TRay } from '@libs/geo-info/common';
 * @example positions1 = make.PositionsArc([0,0,0], 10, 12, PI)
 * @example_info Creates a list of 12 positions distributed equally along a semicircle of radius 10.
  */
-export function Arc(origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): Txyz[] {
+export function Arc(origin: Txyz, radius: number, num_positions: number, arc_angle: number): Txyz[] {
     // --- Error Check ---
-    const fn_name = 'make.PositionsArc';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
+    const fn_name = 'pattern.Arc';
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord']);
     checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
     checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt']);
     checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber']);
@@ -43,10 +43,10 @@ export function Arc(origin: Txyz|TPlane, radius: number, num_positions: number, 
 * @example positions1 = make.PositionsGrid([0,0,0], [10,20], [2,4])
 * @example_info Creates a list of 8 positions on a 2x4 grid of length 10 by 20.
  */
-export function Grid(origin: Txyz|TPlane, size: number|[number, number], num_positions: number|[number, number]): Txyz[] {
+export function Grid(origin: Txyz, size: number|[number, number], num_positions: number|[number, number]): Txyz[] {
     // --- Error Check ---
-    const fn_name = 'make.PositionsGrid';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
+    const fn_name = 'pattern.Grid';
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord']);
     checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
     checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt', 'isXYlistInt']);
     // --- Error Check ---
@@ -78,10 +78,10 @@ export function Grid(origin: Txyz|TPlane, size: number|[number, number], num_pos
 * @example positions1 = make.PositionsGrid([0,0,0], [10,20])
 * @example_info Creates a list of 4 positions, being the vertices of a 10 by 20 rectangle.
  */
-export function Rectangle(origin: Txyz|TPlane, size: number|[number, number]): Txyz[] {
+export function Rectangle(origin: Txyz, size: number|[number, number]): Txyz[] {
     // --- Error Check ---
-    const fn_name = 'make.PositionsRect';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
+    const fn_name = 'pattern.Rectangle';
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord']);
     checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
     // --- Error Check ---
     const xy_size: [number, number] = (Array.isArray(size) ? size : [size, size]) as [number, number];

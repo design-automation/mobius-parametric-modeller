@@ -46,9 +46,9 @@ const conversion = [
 ];
 
 const random = [
-    ['random([min, max])', 'Returns a random number in the specified range'],
-    ['randomInt([min, max]))', 'Returns a random integer in the specified range'],
-    ['pickRandom(list)', 'Returns a random item from the list']
+    ['rand(min, max)', 'Returns a random number in the specified range'],
+    ['randInt(min, max))', 'Returns a random integer in the specified range'],
+    ['randPick(list)', 'Returns a random item from the list']
 ];
 
 const arithmetic = [
@@ -103,6 +103,7 @@ const str = [
 ];
 
 export const inline_func = [
+    ['random', random],
     ['lists', lists],
     ['conversion', conversion],
     ['vectors', vectors],

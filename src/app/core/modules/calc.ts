@@ -93,20 +93,20 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
  * Calculates the area of a surface or a list of surfaces.
  * TODO: allow for a list of surfaces
  * @param __model__
- * @param geometry A polygon, a face, a closed polyline, or or closed wire.
+ * @param entities A polygon, a face, a closed polyline, or or closed wire.
  * @returns Area.
  * @example area1 = calc.Area (surface1)
  */
-export function Area(__model__: GIModel, geometry: TId): number {
+export function Area(__model__: GIModel, entities: TId): number {
     // --- Error Check ---
     const fn_name = 'calc.Area';
-    checkIDs(fn_name, 'geometry', geometry, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    checkIDs(fn_name, 'entities', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
-    if (isPgon(geometry) || isFace(geometry)) {
+    const [_, index]: [EEntityTypeStr, number] = idBreak(entities);
+    if (isPgon(entities) || isFace(entities)) {
         // faces, these are already triangulated
         let face_i: number = index;
-        if (isPgon(geometry)) {
+        if (isPgon(entities)) {
             face_i = __model__.geom.query.navPgonToFace(index);
         }
         const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
@@ -118,10 +118,10 @@ export function Area(__model__: GIModel, geometry: TId): number {
             total_area += tri_area;
         }
         return total_area;
-    } else if (isPline(geometry) || isWire(geometry)) {
+    } else if (isPline(entities) || isWire(entities)) {
         // wires, these need to be triangulated
         let wire_i: number = index;
-        if (isPline(geometry)) {
+        if (isPline(entities)) {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
         if (__model__.geom.query.istWireClosed(wire_i)) {
@@ -143,20 +143,20 @@ export function Area(__model__: GIModel, geometry: TId): number {
     // }
 }
 /**
- * Calculates the centroid of a list of any geometry.
+ * Calculates the centroid of a list of any entity.
  * @param __model__
- * @param geometry List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
+ * @param entities List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
  * @returns Centroid.
- * @example centroid1 = calc.Centroid (geometry)
+ * @example centroid1 = calc.Centroid (entities)
  */
-export function Centroid(__model__: GIModel, geometry: TId|TId[]): Txyz {
+export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     // --- Error Check ---
-    checkIDs('calc.Centroid', 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs('calc.Centroid', 'geometry', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'POINT', 'EDGE', 'WIRE', 'PLINE', 'FACE', 'PGON', 'COLL']);
     // --- Error Check ---
-    if (!Array.isArray(geometry)) { geometry = [geometry]; }
+    if (!Array.isArray(entities)) { entities = [entities]; }
     const posis_i: number[] = [];
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
     }

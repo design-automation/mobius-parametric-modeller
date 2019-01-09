@@ -91,6 +91,7 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
 
 /**
  * Calculates the area of a surface or a list of surfaces.
+ * TODO: allow for a list of surfaces
  * @param __model__
  * @param geometry A polygon, a face, a closed polyline, or or closed wire.
  * @returns Area.

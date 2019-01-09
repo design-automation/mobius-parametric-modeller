@@ -98,26 +98,26 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
  * Adds a new collection to the model.
  * @param __model__
  * @param parent_coll Collection
- * @param objects List of points, polylines, polygons.
+ * @param geometry List of points, polylines, polygons.
  * @returns New collection if successful, null if unsuccessful or on error.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
  */
-export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
+export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
     if (parent_coll !== null && parent_coll !== undefined) {
         checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
     }
-    checkIDs(fn_name, 'objects', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
+    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
     // --- Error Check ---
-    if (!Array.isArray(objects)) {
-        objects = [objects] as TId[];
+    if (!Array.isArray(geometry)) {
+        geometry = [geometry] as TId[];
     }
     const points: number[] = [];
     const plines: number[] = [];
     const pgons: number[] = [];
-    for (const ent_i of objects) {
+    for (const ent_i of geometry) {
         if (isPoint(ent_i)) { points.push(idBreak(ent_i)[1]); }
         if (isPline(ent_i)) { plines.push(idBreak(ent_i)[1]); }
         if (isPgon(ent_i)) { pgons.push(idBreak(ent_i)[1]); }
@@ -136,19 +136,19 @@ export enum _ELoftMethod {
 /**
  * Lofts between edges.
  * @param __model__
- * @param geometry Edges (or wires, polylines or polygons), with the same number of edges.
+ * @param entities Edges (or wires, polylines or polygons), with the same number of edges.
  * @param method Enum, if 'closed', then close the loft back to the first curve.
  * @returns Lofted polygons between edges if successful, null if unsuccessful or on error.
  * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
  * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
  */
-export function Loft(__model__: GIModel, geometry: TId[], method: _ELoftMethod): TId[] {
+export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod): TId[] {
     // --- Error Check ---
-    checkIDs('make.Loft', 'geometry', geometry, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
+    checkIDs('make.Loft', 'entities', entities, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
     // --- Error Check ---
     const edges_arrs_i: number[][] = [];
     let num_edges = 0;
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id as TId);
         const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type_str, index);
         if (edges_arrs_i.length === 0) { num_edges = edges_i.length; }
@@ -179,28 +179,28 @@ export function Loft(__model__: GIModel, geometry: TId[], method: _ELoftMethod):
  * - Extrusion of line produces a polygon;
  * - Extrusion of surface produces a list of surfaces.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
  * @param divisions Number of divisions to divide extrusion by.
- * @returns Extrusion of geometry if successful, null if unsuccessful or on error.
+ * @returns Extrusion of entities if successful, null if unsuccessful or on error.
  * @example extrusion1 = make.Extrude(point1, 10, 2)
  * @example_info Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
  * If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].
  * @example extrusion2 = make.Extrude(polygon1, [0,5,0], 1)
  * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
  */
-export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
+export function Extrude(__model__: GIModel, entities: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
     // --- Error Check ---
     const fn_name = 'make.Extrude';
-    checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON',
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON',
             'COLL']);
     checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
     checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
     // --- Error Check ---
     const extrude_vec: Txyz = (Array.isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
-    if (!Array.isArray(geometry)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
+    if (!Array.isArray(entities)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
         // check if this is a collection
         if (isColl(ent_type_str)) {
             const points_i: number[] = __model__.geom.query.navCollToPoint(index);
@@ -261,20 +261,20 @@ export function Extrude(__model__: GIModel, geometry: TId|TId[], distance: numbe
         }
         return pgons_id;
     } else {
-        return [].concat(...(geometry as TId[]).map(geom_i => Extrude(__model__, geom_i, extrude_vec, divisions))) as TId[];
+        return [].concat(...(entities as TId[]).map(geom_i => Extrude(__model__, geom_i, extrude_vec, divisions))) as TId[];
     }
 }
 /**
  * Joins polylines to polylines or polygons to polygons.
  * @param __model__
- * @param objects Polylines or polygons.
+ * @param geometry Polylines or polygons.
  * @returns New joined polyline or polygon if successful, null if unsuccessful or on error.
  * @example joined1 = make.Join([polyline1,polyline2])
  * @example_info Creates a new polyline by joining polyline1 and polyline2.
  */
-export function Join(__model__: GIModel, objects: TId[]): TId {
+export function Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
-    checkIDs('make.Join', 'objects', objects, ['isIDList'], ['PLINE', 'PGON']);
+    checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -324,21 +324,21 @@ function _copyPosis(__model__: GIModel, geometry: TId|TId[], copy_attributes: bo
 /**
  * Adds a new copy to the model.
  * @param __model__
- * @param geometry Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
  * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
  * @param copy_attributes Enum to copy attributes or to have no attributes copied.
  * @returns New copy if successful, null if unsuccessful or on error.
  * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
- * @example_info Creates a list containing a copy of the objects in sequence of input.
+ * @example_info Creates a list containing a copy of the entities in sequence of input.
  */
-export function Copy(__model__: GIModel, geometry: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
+export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
     // --- Error Check ---
-    checkIDs('make.Copy', 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
-    const copied_geom: TId[] = _copyGeom(__model__, geometry, bool_copy_attribs);
-    _copyPosis(__model__, geometry, bool_copy_attribs);
+    const copied_geom: TId[] = _copyGeom(__model__, entities, bool_copy_attribs);
+    _copyPosis(__model__, entities, bool_copy_attribs);
     return copied_geom;
 }
 // Divide edge modelling operation
@@ -384,7 +384,7 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
 export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    checkIDs('make.Copy', 'edges', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
+    checkIDs('make.Copy', 'edge', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
     if (!Array.isArray(edge)) {
@@ -408,23 +408,23 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
 /**
  * Unweld geometries.
  * @param __model__
- * @param geometry Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param method Enum, the method to use for unweld.
  * @returns void
  * @example mod.Unweld(polyline1,polyline2)
  * @example_info Unwelds polyline1 from polyline2.
  */
-export function Unweld(__model__: GIModel, geometry: TId|TId[]): TId[] {
+export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     // --- Error Check ---
-    checkIDs('modify.Unweld', 'geometry', geometry, ['isID', 'isIDList'],
+    checkIDs('modify.Unweld', 'entities', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    if (!Array.isArray(geometry)) {
-        geometry = [geometry] as TId[];
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
     }
     // analyse existing positions and count them
     const exist_posis_i_map: Map<number, number> = new Map(); // count number of posis
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
         const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
         for (const posi_i of posis_i) {
@@ -448,7 +448,7 @@ export function Unweld(__model__: GIModel, geometry: TId|TId[]): TId[] {
         }
     });
     // now go through the geom again and rewire to the new posis
-    for (const geom_id of geometry) {
+    for (const geom_id of entities) {
         const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id); // TODO this could be optimised
         const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
         const new_posis_i: number[] = [];

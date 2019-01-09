@@ -6,17 +6,17 @@ import { checkIDs, checkCommTypes, checkIDnTypes } from './_check_args';
 /**
  * Adds positions by intersecting polylines, planes, and polygons.
  * @param __model__
- * @param object1 First polyline, plane, face, or polygon.
- * @param object2 Second polyline, plane face, or polygon.
+ * @param entities1 First polyline, plane, face, or polygon.
+ * @param entities2 Second polyline, plane face, or polygon.
  * @returns List of positions.
  * @example intersect1 = isect.Intersect (object1, object2)
  * @example_info Returns a list of positions at the intersections between both objects.
  */
-export function Intersect(__model__: GIModel, object1: TId, object2: TId): TId[] {
+export function Intersect(__model__: GIModel, entities1: TId, entities2: TId): TId[] {
     // --- Error Check ---
     const fn_name = 'isect.Intersect';
-    checkIDnTypes(fn_name, 'object1', object1, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
-    checkIDnTypes(fn_name, 'object2', object2, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
+    checkIDnTypes(fn_name, 'object1', entities1, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
+    checkIDnTypes(fn_name, 'object2', entities2, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }
@@ -29,17 +29,17 @@ export enum _EKnifeKeep {
 /**
  * Separates a list of points, polylines or polygons into two lists with a plane.
  * @param __model__
- * @param objects List of points, polylines or polygons.
+ * @param geometry List of points, polylines or polygons.
  * @param plane Knife.
  * @param keep Keep above, keep below, or keep both lists of separated points, polylines or polygons.
  * @returns List, or list of two lists, of points, polylines or polygons.
  * @example knife1 = isect.Knife ([p1,p2,p3,p4,p5], plane1, keepabove)
  * @example_info Returns [[p1,p2,p3],[p4,p5]] if p1, p2, p3 are points above the plane and p4, p5 are points below the plane.
  */
-export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: _EKnifeKeep): TId[] {
+export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: _EKnifeKeep): TId[] {
     // --- Error Check ---
     const fn_name = 'isect.Knife';
-    checkIDs(fn_name, 'objects', objects, ['isIDList'], ['POINT', 'PLINE', 'PGON']);
+    checkIDs(fn_name, 'geometry', geometry, ['isIDList'], ['POINT', 'PLINE', 'PGON']);
     checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
@@ -47,16 +47,16 @@ export function Knife(__model__: GIModel, objects: TId[], plane: TPlane, keep: _
 /**
  * Splits a polyline or polygon with a polyline.
  * @param __model__
- * @param objects A list of polylines or polygons to be split.
+ * @param geometry A list of polylines or polygons to be split.
  * @param polyline Splitter.
  * @returns List of two lists containing polylines or polygons.
  * @example splitresult = isect.Split (pl1, pl2)
  * @example_info Returns [[pl1A],[pl1B]], where pl1A and pl1B are polylines resulting from the split occurring where pl1 and pl2 intersect.
  */
-export function Split(__model__: GIModel, objects: TId[], polyline: TId): TId[] {
+export function Split(__model__: GIModel, geometry: TId[], polyline: TId): TId[] {
     // --- Error Check ---
     const fn_name = 'isect.Split';
-    checkIDs(fn_name, 'objects', objects, ['isIDList'], ['PLINE', 'PGON']);
+    checkIDs(fn_name, 'objects', geometry, ['isIDList'], ['PLINE', 'PGON']);
     checkIDs(fn_name, 'polyline', polyline, ['isID'], ['PLINE']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;

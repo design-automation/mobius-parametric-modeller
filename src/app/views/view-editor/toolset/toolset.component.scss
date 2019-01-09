@@ -20,7 +20,18 @@ h2{
     line-height: $fsize3;
     font-size: $fsize2;
     font-weight: 550;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
     cursor: pointer;
+    #node--name{
+        width: 80%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    #node--arr{
+        width: 20%;
+    }
 }
 
 .toolset--body{
@@ -140,8 +151,9 @@ ul{
     li{
         display: block;
         min-width: 100px;
-        max-width: 300px;
+        max-width: 150px;
         overflow: hidden;
+        text-overflow: ellipsis;
         line-height: 20px;
         background-color: $color6;
         font-weight: 550;

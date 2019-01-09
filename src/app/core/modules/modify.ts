@@ -54,7 +54,7 @@ export function Rotate(__model__: GIModel, geometry: TId|TId[], origin: Txyz|TId
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    checkCommTypes(fn_name, 'axis', axis, ['isXYZList']);
+    checkCommTypes(fn_name, 'axis', axis, ['isXYZlist']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
     // handle geometry type

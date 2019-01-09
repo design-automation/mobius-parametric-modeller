@@ -31,8 +31,6 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * ngOnInit
      */
     ngAfterViewInit() {
-        // const ct = document.getElementById('console_textarea');
-        // ct.scrollTo(0, ct.scrollHeight);
         const ct = document.getElementById('console-container');
         ct.scrollTop = ct.scrollHeight;
     }

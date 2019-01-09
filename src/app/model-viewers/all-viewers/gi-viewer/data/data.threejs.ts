@@ -424,7 +424,8 @@ export class DataThreejs {
         }
     }
 
-    public onWindowKeyPress(event) {
+    public onWindowKeyPress(event: KeyboardEvent) {
+        if ( (<Element>event.target).nodeName === 'TEXTAREA') {return; }
         const segment_str = window.location.pathname;
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];

@@ -108,8 +108,8 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                 componentRef.instance['output'] = this.dataService.helpView[1];
             } else if (this.activeView.name !== 'Console') {
                 componentRef.instance['data'] = this.data;
-            } else {
-                componentRef.instance['scrollcheck'] = true;
+            // } else {
+            //     componentRef.instance['scrollcheck'] = true;
             }
         } catch (ex) {
             // console.log(`Active View not defined`);

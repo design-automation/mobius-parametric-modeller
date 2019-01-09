@@ -293,7 +293,7 @@ function _copyGeom(__model__: GIModel, geometry: TId|TId[], copy_attributes: boo
             const obj_i: number = __model__.geom.add.copyObjs(ent_type_str, index, copy_attributes) as number;
             return [ ent_type_str + obj_i];
         } else if (isPosi(ent_type_str)) {
-            // Do not copy posis, they have already been copied
+            return [];
         }
     } else {
         return [].concat(...(geometry as TId[]).map(one_geom => _copyGeom(__model__, one_geom, copy_attributes)));
@@ -316,7 +316,9 @@ function _copyPosis(__model__: GIModel, geometry: TId|TId[], copy_attributes: bo
             }
             geom_new_posis_i.push(new_posi_i);
         }
-        __model__.geom.add.replacePosis(ent_type_str, index, geom_new_posis_i);
+        if (!isPosi(ent_type_str)) { // obj or coll
+            __model__.geom.add.replacePosis(ent_type_str, index, geom_new_posis_i);
+        }
     }
     // return all the new points
     return Array.from(old_to_new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
@@ -336,6 +338,9 @@ export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _
     checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
+    }
     const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
     const copied_geom: TId[] = _copyGeom(__model__, entities, bool_copy_attribs);
     _copyPosis(__model__, entities, bool_copy_attribs);

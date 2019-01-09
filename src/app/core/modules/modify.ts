@@ -97,7 +97,7 @@ export function Scale(__model__: GIModel, geometry: TId|TId[], origin: TId|Txyz|
     checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
-    checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZList']);
+    checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZlist']);
     // --- Error Check ---
     // handle geometry type
     if (!Array.isArray(geometry)) {

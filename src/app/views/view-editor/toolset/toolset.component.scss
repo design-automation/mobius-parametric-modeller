@@ -13,7 +13,7 @@
 }
 
 h2{
-    height: $fsize3;
+    min-height: $fsize3;
     color: $color8;
     padding-left: 8px;
     font-family: sans-serif;
@@ -75,6 +75,8 @@ ul{
     margin: 0px;
     padding: 0px;
     background-color: $color5;
+    overflow: hidden;
+    text-overflow: ellipsis;
     //padding-top: 2px;
     //padding-bottom: 2px;
 
@@ -92,6 +94,8 @@ ul{
         width: 100%;
         box-sizing: border-box;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .user--add{
         margin-bottom: 8px;
@@ -186,6 +190,8 @@ ul{
     font-size: $fsize2;
     transition: 0.4s;
     font-weight: 550;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .active, .accordion:hover {

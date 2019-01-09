@@ -78,7 +78,7 @@ export function RayFromPlane(plane: TPlane): TRay {
  */
 export function GetVector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
-    checkIDs('vector.EdgeVector', 'edge_id', edge, ['isID'], ['EDGE']);
+    checkIDs('vector.GetVector', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge);
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
@@ -96,7 +96,7 @@ export function GetVector(__model__: GIModel, edge: TId): Txyz {
  */
 export function GetNormal(__model__: GIModel, geometry: TId): Txyz {
     // --- Error Check ---
-    const fn_name = 'calc.Area';
+    const fn_name = 'vector.GetNormal';
     checkIDs(fn_name, 'geometry', geometry, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
     const [_, index]: [EEntityTypeStr, number] = idBreak(geometry);
@@ -145,7 +145,7 @@ export function GetNormal(__model__: GIModel, geometry: TId): Txyz {
  */
 export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
-    checkIDs('vector.FacePlane', 'face_id', edge, ['isID'], ['FACE']);
+    checkIDs('vector.GetRay', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -157,9 +157,7 @@ export function GetRay(__model__: GIModel, edge: TId): TPlane {
  */
 export function GetPlane(__model__: GIModel, face: TId): TPlane {
     // --- Error Check ---
-    const fn_name = 'vector.Ray';
-    // checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    // checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
+    checkIDs('vector.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }

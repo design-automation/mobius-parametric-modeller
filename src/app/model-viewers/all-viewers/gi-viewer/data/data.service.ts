@@ -15,7 +15,7 @@ export class DataService {
 
     selecting: any = [];
 
-    // Selected Entities by Threejs Viewer
+    // Selected Entities by Threejs Viewer for Attribute Table
     selected_ents: Map<string, Map<string, number>> = new Map();
     /**
      * Create a data service.

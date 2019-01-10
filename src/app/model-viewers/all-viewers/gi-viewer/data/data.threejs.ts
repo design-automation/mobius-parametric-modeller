@@ -130,7 +130,6 @@ export class DataThreejs {
         const mesh = new THREE.Mesh(geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
-        mesh.name = ent_id;
         this._scene.add(mesh);
         this.selected_geoms.set(ent_id, {id: mesh.id, name: mesh.name});
 
@@ -155,7 +154,6 @@ export class DataThreejs {
             linejoin: 'round' // ignored by WebGLRenderer
         });
         const line = new THREE.LineSegments(geom, mat);
-        line.name = ent_id;
         this._scene.add(line);
         this.selected_geoms.set(ent_id, {id: line.id, name: ent_id});
 
@@ -166,7 +164,6 @@ export class DataThreejs {
 
     public selectObjPoint(ent_id, position, container) {
         const geom = new THREE.BufferGeometry();
-        geom.setIndex([0]);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(position, 3));
         geom.addAttribute('color', new THREE.Float32BufferAttribute([255, 0, 0], 3));
         geom.computeBoundingSphere();
@@ -175,12 +172,26 @@ export class DataThreejs {
             vertexColors: THREE.VertexColors
         });
         const point = new THREE.Points(geom, mat);
-        point.name = ent_id;
         this._scene.add(point);
         this.selected_geoms.set(ent_id,  {id: point.id, name: ent_id});
         const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
         this.createLabelforObj(container, obj.entity, obj.type, ent_id);
         this.ObjLabelMap.set(ent_id, obj);
+    }
+
+    public selectObjPositions(ent_id, positions) {
+        const geom = new THREE.BufferGeometry();
+        geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        const colors = new Uint8Array([].concat(...Array(positions.length / 3).fill([0, 60, 255])));
+        geom.addAttribute('color', new THREE.BufferAttribute(colors, 3, true));
+        geom.computeBoundingSphere();
+        const mat = new THREE.PointsMaterial({
+            size: 0.8,
+            vertexColors: THREE.VertexColors
+        });
+        const point = new THREE.Points(geom, mat);
+        this._scene.add(point);
+        this.selected_geoms.set(ent_id,  {id: point.id, name: ent_id});
     }
 
     public createLabelforObj(container, obj, type: string, labelText: string) {
@@ -381,8 +392,8 @@ export class DataThreejs {
         if (allObjs) {
             const center = allObjs.center;
             // set grid and axeshelper to center of the objs
-            this.grid.position.set(center.x, center.y, 0);
-            this.axesHelper.position.set(center.x, center.y, 0);
+            // this.grid.position.set(center.x, center.y, 0);
+            // this.axesHelper.position.set(center.x, center.y, 0);
 
             const radius = allObjs.radius;
             const fov = this._camera.fov * (Math.PI / 180);
@@ -424,7 +435,8 @@ export class DataThreejs {
         }
     }
 
-    public onWindowKeyPress(event) {
+    public onWindowKeyPress(event: KeyboardEvent) {
+        if ( (<Element>event.target).nodeName === 'TEXTAREA') {return; }
         const segment_str = window.location.pathname;
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];

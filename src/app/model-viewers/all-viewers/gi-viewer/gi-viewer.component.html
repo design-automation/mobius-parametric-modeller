@@ -1,10 +1,10 @@
 <div id="gi-viewer-container">
 	<as-split direction="vertical">
 		<as-split-area [size]="68" id="three-js">
-			<threejs-viewer [model]='data'></threejs-viewer>
+			<threejs-viewer [model]='data' (eventClicked)="childEventClicked($event)"></threejs-viewer>
 		</as-split-area>
 		<as-split-area [size]='32' id="attrib">
-			<attribute [data]="data"></attribute>
+			<attribute [data]="data" [refresh]="clickedEvent"></attribute>
 			<button class='btn' id="settings" mat-icon-button><mat-icon>settings</mat-icon></button>
 		</as-split-area>
 	</as-split>

@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntityTypeStr, TId } from '@libs/geo-info/common';
+import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntityTypeStr, TId, IGeomPack } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes, checkAttribNameValue } from './_check_args';
 
@@ -46,8 +46,8 @@ export function __postprocess__(__model__: GIModel): void {
  * @param model1 The model to merge into.
  * @param model2 The model to merge from    .
  */
-export function __merge__(model1: GIModel, model2: GIModel): void {
-    model1.merge(model2);
+export function __merge__(model1: GIModel, model2: GIModel): IGeomPack {
+    return model1.merge(model2);
 }
 /**
  * Returns a string representation of this model.

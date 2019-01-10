@@ -35,7 +35,7 @@
                 <input *ngIf='prod.type != 12' [class.disabled-input]='true' [value]='PortTypes[prod.meta.inputMode]'
                 [style.width.px]='inputSize(PortTypes[prod.meta.inputMode])' disabled>
             -->
-            <select name={{prod.ID}}_type [(ngModel)]="prod.meta.inputMode" tabindex="-1">
+            <select [(ngModel)]="prod.meta.inputMode" tabindex="-1">
                 <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
                 <option value='4' [selected]="prod.meta.inputMode == 4">File</option>
             </select>
@@ -69,13 +69,13 @@
                 
                 <!-- checkbox -->
                 <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
-                    <input class='chkbox' id = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' type="checkbox">
+                    <input class='chkbox' id = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default' type="checkbox">
                     <label for = 'chbox_{{prod.ID}}'></label>
     
                 </div>
     
                 <!-- URL -->
-                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' name='prod.args[prod.argCount-1].default' placeholder='Default URL'
+                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default URL'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
     
                 <!-- File -->

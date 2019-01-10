@@ -1,11 +1,11 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz } from '@libs/geo-info/common';
-import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
+import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, 
+    isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs, checkIDs2 } from './_check_args';
-import { isDist } from './_check_args';
 
 // ================================================================================================
 /**

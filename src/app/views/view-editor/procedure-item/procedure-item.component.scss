@@ -7,7 +7,7 @@
 }
 
 .container--line{
-    background-color: transparent;
+    background-color: $color6;
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
     padding: 0px;
@@ -173,9 +173,6 @@
 
     &:hover{
         background-color: $color5;
-        .btn{
-            background-color: inherit;
-        }
     }
 }
 
@@ -221,7 +218,6 @@
         .btn{
             display: flex;
             justify-content: center;
-            background-color: inherit;
         }
     }
 }
@@ -242,7 +238,6 @@
         .btn{
             display: flex;
             justify-content: center;
-            background-color: inherit;
         }
     }
 }
@@ -266,7 +261,7 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: $color6;
+    background-color: inherit;
 
     border: none;
     color: $color1;

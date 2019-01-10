@@ -74,7 +74,7 @@
     padding: 0px;
     padding-bottom: 10px;
     overflow: hidden;
-    margin: 5px 0px;
+    margin: 0px 0px 5px 0px;
     height: calc(100vh - 40px - 25px); // 40px === $header-height 25px top margin & btn height
     #spacer{
         height: 10px;
@@ -102,7 +102,7 @@ procedure-item.ng-star-inserted{
     padding-right: 5px;
     width: 100%;
     box-sizing: border-box;
-    margin: 5px 0px 2px 0px;
+    margin: 10px 0px 2px 0px;
     .divider{
         height: 100%;
         padding-left: 2px;
@@ -118,6 +118,7 @@ procedure-item.ng-star-inserted{
 
 #modelViewButton--container{
     padding: 0px 13px 0px 0px;
+    margin-bottom: 5px;
     button{
         width: 100%;
         margin: 0px 5px 2px 8px;

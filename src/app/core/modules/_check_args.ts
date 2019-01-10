@@ -116,21 +116,32 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
 // Function Dictionaries
 // =========================================================================================================================================
 const typeCheckObj  = {
+    // entities: Check if string
+    isEntity: function(fn_name: string, arg_name: string, arg: string): void {
+        isStringArg(fn_name, arg_name, arg, 'entity');
+        return;
+    },
+    isEntityList: function(fn_name: string, arg_name: string, arg_list: string[]): void {
+        isStringListArg(fn_name, arg_name, arg_list, 'entity');
+        return;
+    },
     // any: to catch undefined
     isAny: function(fn_name: string, arg_name: string, arg: string): void {
         isAnyArg(fn_name, arg_name, arg);
+        return;
     },
     // list
     isList: function(fn_name: string, arg_name: string, arg: string): void {
         isListArg(fn_name, arg_name, arg, 'any');
+        return;
     },
     // strings
     isString: function(fn_name: string, arg_name: string, arg: string): void {
-        isStringArg(fn_name, arg_name, arg);
+        isStringArg(fn_name, arg_name, arg, 'string');
         return;
     },
     isStringList: function(fn_name: string, arg_name: string, arg_list: string[]): void {
-        isStringListArg(fn_name, arg_name, arg_list);
+        isStringListArg(fn_name, arg_name, arg_list, 'string');
         return;
     },
     // numbers and special numbers
@@ -214,6 +225,7 @@ const IDcheckObj = {
     // entity types
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
     isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|'all'): void {
+        typeCheckObj.isEntity(fn_name, arg_name, arg);
         if (ent_type_strs === 'all') {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
@@ -232,10 +244,12 @@ const IDcheckObj = {
         throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
     },
     isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|'all'): void {
+        typeCheckObj.isEntityList(fn_name, arg_name, arg_list);
         if (ent_type_strs === 'all') {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
         for (let i = 0; i < arg_list.length; i++) {
+            typeCheckObj.isString(fn_name, arg_name, arg_list[0]);
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
                 if (arg_list[i].startsWith(EEntityTypeStr[ent_type_strs[j]])) {
@@ -367,18 +381,16 @@ function isAnyArg(fn_name: string, arg_name: string, arg: any): void {
     return;
 }
 // String
-function isStringArg(fn_name: string, arg_name: string, arg: any): void {
+function isStringArg(fn_name: string, arg_name: string, arg: any, typ: string): void {
     if (typeof arg !== 'string') {
-        throw new Error(fn_name + ': ' + arg_name + ' is not a string');
+        throw new Error(fn_name + ': ' + arg_name + ' is not a ' + typ);
     }
     return;
 }
-function isStringListArg(fn_name: string, arg_name: string, arg_list: any[]): void {
-    isListArg(fn_name, arg_name, arg_list, 'strings');
+function isStringListArg(fn_name: string, arg_name: string, arg_list: any[], typ: string): void {
+    isListArg(fn_name, arg_name, arg_list, typ);
     for (let i = 0; i < arg_list.length; i++) {
-        if (typeof arg_list[i] !== 'string') {
-            throw new Error(fn_name + arg_name + '[' + i + ']' + ' is not a string');
-        }
+        isStringArg(fn_name, arg_name + '[' + i + ']', arg_list[i], typ);
     }
     return;
 }

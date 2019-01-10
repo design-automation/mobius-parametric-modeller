@@ -51,6 +51,7 @@ export class ExecuteComponent {
     constructor(private dataService: DataService) {}
 
     async execute() {
+        console.log(' ');
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
             let errorCheck = false;
@@ -108,7 +109,6 @@ export class ExecuteComponent {
 
     executeFlowchart(flowchart) {
         let globalVars = '';
-
 
         // order the flowchart
         if (!flowchart.ordered) {

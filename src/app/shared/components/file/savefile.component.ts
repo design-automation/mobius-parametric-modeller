@@ -79,6 +79,11 @@ export class SaveFileComponent {
             if (node.output.hasOwnProperty('value')) {
                 node.output.value = undefined;
             }
+            for (const prod of node.procedure) {
+                if (prod.hasOwnProperty('resolvedValue')) {
+                    prod.resolvedValue = undefined;
+                }
+            }
         }
 
         const savedfile = circularJSON.parse(circularJSON.stringify(f));

@@ -79,7 +79,6 @@ export function idMake(ent_type: EEntType, index: number): TId {
     return EEntTypeStr[ent_type] + index;
 }
 export function idBreak(id: TId): [EEntType, number] {
-    // error check
     const ent_type_str: string = id.slice(0, 2);
     const ent_type: EEntType = EEntTypeStr[ent_type_str];
     const index: number = Number(id.slice(2));
@@ -88,8 +87,8 @@ export function idBreak(id: TId): [EEntType, number] {
 export function idsBreak(ids: TId[]): [EEntType, number][] {
     return ids.map(id => idBreak(id));
 }
-export function idIndicies(ids: TId[]): number[] {
-    return ids.map( id => Number(id.slice(2)));
+export function idIndicies(ents_arr: [EEntType, number][]): number[] {
+    return ents_arr.map( ents => ents[1]);
 }
 // ============================================================================
 export function isPosi(ent_type: EEntType): boolean {

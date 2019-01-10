@@ -1,11 +1,10 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz } from '@libs/geo-info/common';
-import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
+import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies, idBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
-import { checkCommTypes, checkIDs, checkIDs2 } from './_check_args';
-import { isDist } from './_check_args';
+import { checkCommTypes, checkIDs } from './_check_args';
 
 // ================================================================================================
 /**
@@ -40,10 +39,10 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
-    checkIDs('make.Point', 'positions', positions, ['isID', 'isIDList'], ['POSI']);
+    const ents_arr = checkIDs('make.Point', 'positions', positions, ['isID', 'isIDList'], ['POSI']);
     // --- Error Check ---
     if (!Array.isArray(positions)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(positions as TId);
+        const index: number = ents_arr[1] as number;
         const point_i: number = __model__.geom.add.addPoint(index);
         return idMake(EEntType.POINT, point_i);
     } else {
@@ -67,11 +66,11 @@ export enum _EClose {
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
     // --- Error Check ---
-    checkIDs('make.Polyline', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+    const ents_arr = checkIDs('make.Polyline', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
     if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const bool_close: boolean = (close === _EClose.CLOSE);
-        const posis_i: number[] = idIndicies(positions as TId[]);
+        const posis_i: number[] = idIndicies(ents_arr as [EEntType, number][]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
         return idMake(EEntType.PLINE, pline_i);
     } else {
@@ -88,13 +87,11 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
-    const ents_arr: [EEntType, number][] = idsBreak(positions as TId[]);
     // --- Error Check ---
-    checkIDs2('make.Polygon', 'positions', ents_arr, ['isIDList', 'isIDList_list'], ['POSI']);
-    checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+    const ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
     if (Array.isArray(positions) && !Array.isArray(positions[0])) {
-        const posis_i: number[] = idIndicies(positions as TId[]);
+        const posis_i: number[] = idIndicies(ents_arr as [EEntType, number][]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
         return idMake(EEntType.PGON, pgon_i);
     } else {
@@ -111,31 +108,30 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
  */
-export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
-
+export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
+    let coll_ents_arr: [EEntType, number];
     if (parent_coll !== null && parent_coll !== undefined) {
-        checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']);
+        coll_ents_arr = checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']) as [EEntType, number];
     }
-    checkIDs(fn_name, 'geometry', objects, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
+    let geo_ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
     // --- Error Check ---
-    if (!Array.isArray(objects)) {
-        objects = [objects] as TId[];
+    if (!Array.isArray(geo_ents_arr[0])) {
+        geo_ents_arr = [geo_ents_arr] as [EEntType, number][];
     }
     const points: number[] = [];
     const plines: number[] = [];
     const pgons: number[] = [];
-    for (const ent_id of objects) {
-        const [ent_type, index]: [EEntType, number] = idBreak(ent_id);
-        if (isPoint(ent_type)) { points.push(index); }
-        if (isPline(ent_type)) { plines.push(index); }
-        if (isPgon(ent_type)) { pgons.push(index); }
+    for (const ents_arr of geo_ents_arr) {
+        if (isPoint(ents_arr[0])) { points.push(ents_arr[1]); }
+        if (isPline(ents_arr[0])) { plines.push(ents_arr[1]); }
+        if (isPgon(ents_arr[0])) { pgons.push(ents_arr[1]); }
     }
     if (parent_coll === null || parent_coll === undefined) {
         return idMake(EEntType.COLL, __model__.geom.add.addColl(-1, points, plines, pgons));
     }
-    const [_, parent_index]: [EEntType, number] = idBreak(parent_coll);
+    const parent_index: number = coll_ents_arr[1] as number;
     return idMake(EEntType.COLL, __model__.geom.add.addColl(parent_index, points, plines, pgons));
 }
 // ================================================================================================
@@ -224,12 +220,12 @@ export enum _ELoftMethod {
  */
 export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod): TId[] {
     // --- Error Check ---
-    checkIDs('make.Loft', 'entities', entities, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
+    const ents_arr = checkIDs('make.Loft', 'entities', entities, ['isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']);
     // --- Error Check ---
     const edges_arrs_i: number[][] = [];
     let num_edges = 0;
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id as TId);
+    for (const ents of ents_arr) {
+        const [ent_type, index]: [EEntType, number] = ents as [EEntType, number];
         const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
         if (edges_arrs_i.length === 0) { num_edges = edges_i.length; }
         if (edges_i.length !== num_edges) {

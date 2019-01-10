@@ -3,7 +3,7 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon, GIAttribs } from '@libs/geo-info';
-import { EEntityTypeStr } from '@libs/geo-info/common';
+import { EEntType } from '@libs/geo-info/common';
 
 @Component({
   selector: 'attribute',
@@ -16,16 +16,18 @@ export class AttributeComponent implements OnChanges{
   @Input() refresh: Event;
   showSelected = false;
 
-  tabs: { type: string, title: string }[] =
-    [{ type: EEntityTypeStr.POSI, title: 'Positions' },
-    { type: EEntityTypeStr.VERT, title: 'Vertex' },
-    { type: EEntityTypeStr.EDGE, title: 'Edges' },
-    { type: EEntityTypeStr.WIRE, title: 'Wires' },
-    { type: EEntityTypeStr.FACE, title: 'Faces' },
-    { type: EEntityTypeStr.POINT, title: 'Points' },
-    { type: EEntityTypeStr.PLINE, title: 'Polylines' },
-    { type: EEntityTypeStr.PGON, title: 'Polygons' },
-    { type: EEntityTypeStr.COLL, title: 'Collections' }];
+  tabs: { type: number, title: string }[] =
+    [
+      { type: EEntType.POSI, title: 'Positions' },
+      { type: EEntType.VERT, title: 'Vertex' },
+      { type: EEntType.EDGE, title: 'Edges' },
+      { type: EEntType.WIRE, title: 'Wires' },
+      { type: EEntType.FACE, title: 'Faces' },
+      { type: EEntType.POINT, title: 'Points' },
+      { type: EEntType.PLINE, title: 'Polylines' },
+      { type: EEntType.PGON, title: 'Polygons' },
+      { type: EEntType.COLL, title: 'Collections' }
+    ];
   displayedColumns: string[] = [];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -52,7 +54,7 @@ export class AttributeComponent implements OnChanges{
   }
 
   generateTable(tabIndex: number) {
-    const EntityType = GICommon.EEntityTypeStr;
+    const EntityType = GICommon.EEntType;
     const tab_map = {
       0: EntityType.POSI,
       1: EntityType.VERT,

@@ -1,4 +1,4 @@
-import { EEntityTypeStr, TTri, TVert, TEdge, TWire, TFace,
+import { EEntType, TTri, TVert, TEdge, TWire, TFace,
     TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
@@ -238,7 +238,7 @@ export class GIGeomAdd {
      */
     private _addTris(wire_i: number): number[] {
         // create the triangles
-        const wire_verts_i: number[] = this._geom.query.navAnyToVert(EEntityTypeStr.WIRE, wire_i);
+        const wire_verts_i: number[] = this._geom.query.navAnyToVert(EEntType.WIRE, wire_i);
         const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
         const wire_coords: Txyz[] = wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
         const tris_corners: number[][] = triangulate(wire_coords);
@@ -384,11 +384,11 @@ export class GIGeomAdd {
             const new_posi_i: number = this.addPosition();
             this._geom.model.attribs.add.setPosiCoords(new_posi_i, xyz);
             if (copy_attribs) {
-                const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntityTypeStr.POSI);
+                const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntType.POSI);
                 for (const attrib_name of attrib_names) {
                     const value: TAttribDataTypes =
-                        this._geom.model.attribs.query.getAttribValue(EEntityTypeStr.POSI, attrib_name, posis_i as number);
-                    this._geom.model.attribs.add.setAttribValue(EEntityTypeStr.POSI, new_posi_i, attrib_name, value);
+                        this._geom.model.attribs.query.getAttribValue(EEntType.POSI, attrib_name, posis_i as number);
+                    this._geom.model.attribs.add.setAttribValue(EEntType.POSI, new_posi_i, attrib_name, value);
                 }
             }
             return new_posi_i;
@@ -399,48 +399,48 @@ export class GIGeomAdd {
     /**
      * Copy an object (point, polyline, polygon).
      * TODO copy attribs of topo entities
-     * @param ent_type_str
+     * @param ent_type
      * @param index
      * @param copy_posis
      * @param copy_attribs
      */
-    public copyObjs(ent_type_str: EEntityTypeStr, ent_i: number|number[], copy_attribs: boolean): number|number[] {
+    public copyObjs(ent_type: EEntType, ent_i: number|number[], copy_attribs: boolean): number|number[] {
         // make copies
         if (!Array.isArray(ent_i)) {
-            const original_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type_str, ent_i as number);
+            const original_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type, ent_i as number);
             const posis_i: number[] = original_posis_i;
-            switch (ent_type_str) {
-                case EEntityTypeStr.POINT:
+            switch (ent_type) {
+                case EEntType.POINT:
                     const point_i: number = this.addPoint(posis_i[0]);
                     if (copy_attribs) {
-                        this._geom.model.attribs.add.copyAttribs(ent_type_str, ent_i, point_i);
+                        this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, point_i);
                     }
                     return point_i;
-                case EEntityTypeStr.PLINE:
+                case EEntType.PLINE:
                     const wire_i: number = this._geom.query.navPlineToWire(ent_i as number);
                     const is_closed: boolean = this._geom.query.istWireClosed(wire_i);
                     const pline_i: number = this.addPline(posis_i, is_closed);
                     if (copy_attribs) {
-                        this._geom.model.attribs.add.copyAttribs(ent_type_str, ent_i, pline_i);
+                        this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pline_i);
                     }
                     return pline_i;
-                case EEntityTypeStr.PGON:
+                case EEntType.PGON:
                     const pgon_i: number = this.addPgon(posis_i);
                     if (copy_attribs) {
-                        this._geom.model.attribs.add.copyAttribs(ent_type_str, ent_i, pgon_i);
+                        this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pgon_i);
                     }
                     return pgon_i;
                 default:
-                    throw new Error('Cannot copy entity of this type: ' + ent_type_str);
+                    throw new Error('Cannot copy entity of this type: ' + ent_type);
             }
         } else { // AN array of ent_i
-            return (ent_i as number[]).map(one_ent_i => this.copyObjs(ent_type_str, one_ent_i, copy_attribs)) as number[];
+            return (ent_i as number[]).map(one_ent_i => this.copyObjs(ent_type, one_ent_i, copy_attribs)) as number[];
         }
     }
    /**
      * Copy an object (point, polyline, polygon).
      * TODO Copy attribs of object and topo entities
-     * @param ent_type_str
+     * @param ent_type
      * @param index
      * @param copy_posis
      * @param copy_attribs
@@ -450,17 +450,17 @@ export class GIGeomAdd {
         if (!Array.isArray(coll_i)) {
             // Make a deep copy of the objects in the collection
             const points_i: number[] = this._geom.query.navCollToPoint(coll_i);
-            const res1 = this.copyObjs(EEntityTypeStr.POINT, points_i, copy_attribs) as number[];
+            const res1 = this.copyObjs(EEntType.POINT, points_i, copy_attribs) as number[];
             const plines_i: number[] = this._geom.query.navCollToPline(coll_i);
-            const res2 = this.copyObjs(EEntityTypeStr.PLINE, plines_i, copy_attribs) as number[];
+            const res2 = this.copyObjs(EEntType.PLINE, plines_i, copy_attribs) as number[];
             const pgons_i: number[] = this._geom.query.navCollToPgon(coll_i);
-            const res3 = this.copyObjs(EEntityTypeStr.PGON, pgons_i, copy_attribs) as number[];
+            const res3 = this.copyObjs(EEntType.PGON, pgons_i, copy_attribs) as number[];
             const parent: number = this._geom.query.getCollParent(coll_i);
             // add the new collection
             const new_coll_i: number = this.addColl(parent, res1, res2, res3);
             // copy the attributes from old collection to new collection
             if (copy_attribs) {
-                this._geom.model.attribs.add.copyAttribs(EEntityTypeStr.COLL, coll_i, new_coll_i);
+                this._geom.model.attribs.add.copyAttribs(EEntType.COLL, coll_i, new_coll_i);
             }
             // return the new collection
             return new_coll_i;
@@ -519,12 +519,12 @@ export class GIGeomAdd {
     }
     /**
      * Replace positions
-     * @param ent_type_str
+     * @param ent_type
      * @param ent_i
      * @param new_posis_i
      */
-    public replacePosis(ent_type_str: EEntityTypeStr, ent_i: number, new_posis_i: number[]): void {
-        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type_str, ent_i);
+    public replacePosis(ent_type: EEntType, ent_i: number, new_posis_i: number[]): void {
+        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type, ent_i);
         if (verts_i.length !== new_posis_i.length) {
             throw new Error('Replacing positions operation failed due to incorrect number of positions.');
         }

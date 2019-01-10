@@ -1102,7 +1102,7 @@
 										},
 										{
 											"id": 1187,
-											"name": "ent_type_strs",
+											"name": "ent_types",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -1190,7 +1190,7 @@
 										},
 										{
 											"id": 1193,
-											"name": "ent_type_strs",
+											"name": "ent_types",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -1281,7 +1281,7 @@
 										},
 										{
 											"id": 1199,
-											"name": "ent_type_strs",
+											"name": "ent_types",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -12240,14 +12240,14 @@
 				},
 				{
 					"id": 1352,
-					"name": "_convertSelectToEEntityTypeStr",
+					"name": "_convertSelectToEEntTypeStr",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
 							"id": 1353,
-							"name": "_convertSelectToEEntityTypeStr",
+							"name": "_convertSelectToEEntTypeStr",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -12267,7 +12267,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "EEntityTypeStr",
+								"name": "EEntTypeStr",
 								"id": 74
 							}
 						}
@@ -15331,7 +15331,7 @@
 									"parameters": [
 										{
 											"id": 825,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -15340,7 +15340,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -15477,14 +15477,14 @@
 									"parameters": [
 										{
 											"id": 845,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -15608,13 +15608,13 @@
 									"parameters": [
 										{
 											"id": 831,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16039,14 +16039,14 @@
 									"parameters": [
 										{
 											"id": 900,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16103,7 +16103,7 @@
 									"parameters": [
 										{
 											"id": 897,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -16112,7 +16112,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										}
@@ -16157,14 +16157,14 @@
 									"parameters": [
 										{
 											"id": 883,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16232,14 +16232,14 @@
 									"parameters": [
 										{
 											"id": 888,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16415,14 +16415,14 @@
 									"parameters": [
 										{
 											"id": 893,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16478,7 +16478,7 @@
 									"parameters": [
 										{
 											"id": 904,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -16487,7 +16487,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16512,7 +16512,7 @@
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
-												"text": "The indicies of entites in the model. These are assumed to be of type ent_type_str.\n"
+												"text": "The indicies of entites in the model. These are assumed to be of type ent_type.\n"
 											},
 											"type": {
 												"type": "array",
@@ -16563,7 +16563,7 @@
 									"parameters": [
 										{
 											"id": 909,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -16572,7 +16572,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -16597,7 +16597,7 @@
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
-												"text": "The indicies of entites in the model. These are assumed to be of type ent_type_str.\n"
+												"text": "The indicies of entites in the model. These are assumed to be of type ent_type.\n"
 											},
 											"type": {
 												"type": "array",
@@ -17249,7 +17249,7 @@
 									"parameters": [
 										{
 											"id": 866,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -17258,7 +17258,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										}
@@ -17322,14 +17322,14 @@
 										},
 										{
 											"id": 870,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										}
@@ -19256,14 +19256,14 @@
 									"parameters": [
 										{
 											"id": 499,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -19556,14 +19556,14 @@
 									"parameters": [
 										{
 											"id": 519,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -19893,13 +19893,13 @@
 									"parameters": [
 										{
 											"id": 599,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -19999,13 +19999,13 @@
 									"parameters": [
 										{
 											"id": 590,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										}
@@ -20156,7 +20156,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20168,7 +20168,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20227,14 +20227,14 @@
 									"parameters": [
 										{
 											"id": 687,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20293,14 +20293,14 @@
 									"parameters": [
 										{
 											"id": 711,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20359,14 +20359,14 @@
 									"parameters": [
 										{
 											"id": 703,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20425,14 +20425,14 @@
 									"parameters": [
 										{
 											"id": 691,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20491,14 +20491,14 @@
 									"parameters": [
 										{
 											"id": 695,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20557,14 +20557,14 @@
 									"parameters": [
 										{
 											"id": 699,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20623,14 +20623,14 @@
 									"parameters": [
 										{
 											"id": 719,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20689,14 +20689,14 @@
 									"parameters": [
 										{
 											"id": 715,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -20755,14 +20755,14 @@
 									"parameters": [
 										{
 											"id": 707,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -21969,7 +21969,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -21981,7 +21981,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										},
@@ -22040,7 +22040,7 @@
 									"parameters": [
 										{
 											"id": 596,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -22049,7 +22049,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										}
@@ -22091,7 +22091,7 @@
 									"parameters": [
 										{
 											"id": 593,
-											"name": "ent_type_str",
+											"name": "ent_type",
 											"kind": 32768,
 											"kindString": "Parameter",
 											"flags": {},
@@ -22100,7 +22100,7 @@
 											},
 											"type": {
 												"type": "reference",
-												"name": "EEntityTypeStr",
+												"name": "EEntTypeStr",
 												"id": 74
 											}
 										}
@@ -23881,7 +23881,7 @@
 				},
 				{
 					"id": 74,
-					"name": "EEntityTypeStr",
+					"name": "EEntTypeStr",
 					"kind": 4,
 					"kindString": "Enumeration",
 					"flags": {
@@ -27344,7 +27344,7 @@
 								"elements": [
 									{
 										"type": "reference",
-										"name": "EEntityTypeStr",
+										"name": "EEntTypeStr",
 										"id": 74
 									},
 									{
@@ -27395,7 +27395,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "EEntityTypeStr",
+								"name": "EEntTypeStr",
 								"id": 74
 							}
 						}

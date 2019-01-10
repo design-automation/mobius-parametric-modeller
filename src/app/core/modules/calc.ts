@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz, EEntityTypeStr } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, idBreak, isPgon, isFace } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
@@ -52,19 +52,19 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
     const edges_i: number[] = [];
     let dist = 0;
     for (const line of lines) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(line);
-        if (isEdge(line)) {
+        const [ent_type, index]: [EEntType, number] = idBreak(line);
+        if (isEdge(ent_type)) {
             edges_i.push(index);
-        } else if (isWire(line)) {
+        } else if (isWire(ent_type)) {
             edges_i.push(...__model__.geom.query.navWireToEdge(index));
-        } else if (isPline(line)) {
+        } else if (isPline(ent_type)) {
             const wire_i: number = __model__.geom.query.navPlineToWire(index);
             edges_i.push(...__model__.geom.query.navWireToEdge(wire_i));
         } else {
             throw new Error('Entity is of wrong type. Must be a an edge, a wire or a polyline');
         }
         for (const edge_i of edges_i) {
-            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.EDGE, edge_i);
+            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
             const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
             const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
             dist += distance(xyz_0, xyz_1);
@@ -86,32 +86,32 @@ export function Area(__model__: GIModel, entities: TId): number {
     const fn_name = 'calc.Area';
     checkIDs(fn_name, 'entities', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    const [_, index]: [EEntityTypeStr, number] = idBreak(entities);
-    if (isPgon(entities) || isFace(entities)) {
+    const [ent_type, index]: [EEntType, number] = idBreak(entities);
+    if (isPgon(ent_type) || isFace(ent_type)) {
         // faces, these are already triangulated
         let face_i: number = index;
-        if (isPgon(entities)) {
+        if (isPgon(ent_type)) {
             face_i = __model__.geom.query.navPgonToFace(index);
         }
         const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
         let total_area = 0;
         for (const tri_i of tris_i) {
-            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.TRI, tri_i);
+            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
             const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
             const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
             total_area += tri_area;
         }
         return total_area;
-    } else if (isPline(entities) || isWire(entities)) {
+    } else if (isPline(ent_type) || isWire(ent_type)) {
         // wires, these need to be triangulated
         let wire_i: number = index;
-        if (isPline(entities)) {
+        if (isPline(ent_type)) {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
         if (__model__.geom.query.istWireClosed(wire_i)) {
             throw new Error(fn_name + ': ' + 'To calculate area, wire must be closed');
         }
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
         const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
         const tris: number[][] = triangulate(xyzs);
         let total_area = 0;
@@ -134,8 +134,8 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
     checkIDs('vector.GetVector', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
-    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(edge);
-    const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+    const [ent_type, index]: [EEntType, number] = idBreak(edge);
+    const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
     const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
     const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
     return vecSub(end, start);
@@ -156,8 +156,8 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     if (!Array.isArray(entities)) { entities = [entities]; }
     const posis_i: number[] = [];
     for (const geom_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i = Array.from(new Set(posis_i));
     const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
@@ -177,32 +177,32 @@ export function Normal(__model__: GIModel, entity: TId): Txyz {
     const fn_name = 'vector.GetNormal';
     checkIDs(fn_name, 'entity', entity, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    const [_, index]: [EEntityTypeStr, number] = idBreak(entity);
-    if (isPgon(entity) || isFace(entity)) {
+    const [ent_type, index]: [EEntType, number] = idBreak(entity);
+    if (isPgon(ent_type) || isFace(ent_type)) {
         // faces, these are already triangulated
         let face_i: number = index;
-        if (isPgon(entity)) {
+        if (isPgon(ent_type)) {
             face_i = __model__.geom.query.navPgonToFace(index);
         }
         const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
         let normal_vec: Txyz = [0, 0, 0];
         for (const tri_i of tris_i) {
-            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.TRI, tri_i);
+            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
             const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
             const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
             normal_vec = vecAdd(normal_vec, tri_normal);
         }
         return vecNorm(vecDiv(normal_vec, tris_i.length));
-    } else if (isPline(entity) || isWire(entity)) {
+    } else if (isPline(ent_type) || isWire(ent_type)) {
         // wires, these need to be triangulated
         let wire_i: number = index;
-        if (isPline(entity)) {
+        if (isPline(ent_type)) {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
         if (!__model__.geom.query.istWireClosed(wire_i)) {
             throw new Error(fn_name + ': ' + 'To calculate normals, wire must be closed');
         }
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
         const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
         const tris: number[][] = triangulate(xyzs);
         let normal_vec: Txyz = [0, 0, 0];
@@ -231,12 +231,12 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
     if (t_param < 0 || t_param > 1) {throw new Error(fn_name + ': ' + 't_param is not between 0 and 1'); }
     // --- Error Check ---
     const edges_i: number[] = [];
-    const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(line);
-    if (isEdge(line)) {
+    const [ent_type, index]: [EEntType, number] = idBreak(line);
+    if (isEdge(ent_type)) {
         edges_i.push(index);
-    } else if (isWire(line)) {
+    } else if (isWire(ent_type)) {
         edges_i.push(...__model__.geom.query.navWireToEdge(index));
-    } else if (isPline(line)) {
+    } else if (isPline(ent_type)) {
         const wire_i: number = __model__.geom.query.navPlineToWire(index);
         edges_i.push(...__model__.geom.query.navWireToEdge(wire_i));
     }
@@ -249,7 +249,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
     const dists: number[] = [];
     const xyz_pairs: Txyz[][] = [];
     for (const edge_i of edges_i) {
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.EDGE, edge_i);
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
         const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
         const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
         const dist: number = distance(xyz_0, xyz_1);

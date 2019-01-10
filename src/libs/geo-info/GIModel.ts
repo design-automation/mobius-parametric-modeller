@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames, IModelData, IGeomData, IAttribsData, EEntityTypeStr, IGeomPack } from './common';
+import { EAttribNames, IModelData, IGeomData, IAttribsData, EEntType, IGeomPack } from './common';
 import { IThreeJS } from './ThreejsJSON';
 /**
  * Geo-info model class.
@@ -63,7 +63,7 @@ export class GIModel {
      */
     private _generateColors(): number[] {
         const colors = [];
-        const numEnts = this.geom.query.numEnts(EEntityTypeStr.VERT);
+        const numEnts = this.geom.query.numEnts(EEntType.VERT);
         for (let index = 0; index < numEnts; index++) {
             colors.push(1, 1, 1);
         }
@@ -74,7 +74,7 @@ export class GIModel {
      */
     private _generateNormals(): number[] {
         const normals = [];
-        const numEnts = this.geom.query.numEnts(EEntityTypeStr.VERT);
+        const numEnts = this.geom.query.numEnts(EEntType.VERT);
         for (let index = 0; index < numEnts; index++) {
             normals.push(0, 0, 0);
         }

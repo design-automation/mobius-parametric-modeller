@@ -2,7 +2,7 @@ import { GIAttribsAdd } from './GIAttribsAdd';
 import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
-import { EEntityTypeStr, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
+import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
 
 /**
  * Class for attributes.
@@ -11,15 +11,15 @@ export class GIAttribs {
     private _model: GIModel;
     // maps, the key is the name, the value is the attrib map clas
     private _attribs_maps: IAttribsMaps = {
-        posis: new Map(),
-        verts: new Map(),
-        edges: new Map(),
-        wires: new Map(),
-        faces: new Map(),
-        points: new Map(),
-        plines: new Map(),
-        pgons: new Map(),
-        colls: new Map()
+        ps: new Map(),
+        _v: new Map(),
+        _e: new Map(),
+        _w: new Map(),
+        _f: new Map(),
+        pt: new Map(),
+        pl: new Map(),
+        pg: new Map(),
+        co: new Map()
     };
     // sub classes with methods
     public add: GIAttribsAdd;
@@ -34,22 +34,22 @@ export class GIAttribs {
         this.add = new GIAttribsAdd(model, this._attribs_maps);
         this.query = new GIAttribsQuery(model, this._attribs_maps);
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
-        this.add.addAttrib(EEntityTypeStr.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
+        this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     }
     /**
      * Returns the JSON data for this model.
      */
     public getData(): IAttribsData {
         return {
-            positions: Array.from(this._attribs_maps.posis.values()).map(attrib => attrib.getData()),
-            vertices: Array.from(this._attribs_maps.verts.values()).map(attrib => attrib.getData()),
-            edges: Array.from(this._attribs_maps.edges.values()).map(attrib => attrib.getData()),
-            wires: Array.from(this._attribs_maps.wires.values()).map(attrib => attrib.getData()),
-            faces: Array.from(this._attribs_maps.faces.values()).map(attrib => attrib.getData()),
-            points: Array.from(this._attribs_maps.points.values()).map(attrib => attrib.getData()),
-            polylines: Array.from(this._attribs_maps.plines.values()).map(attrib => attrib.getData()),
-            polygons: Array.from(this._attribs_maps.pgons.values()).map(attrib => attrib.getData()),
-            collections: Array.from(this._attribs_maps.colls.values()).map(attrib => attrib.getData())
+            positions: Array.from(this._attribs_maps.ps.values()).map(attrib => attrib.getData()),
+            vertices: Array.from(this._attribs_maps._v.values()).map(attrib => attrib.getData()),
+            edges: Array.from(this._attribs_maps._e.values()).map(attrib => attrib.getData()),
+            wires: Array.from(this._attribs_maps._w.values()).map(attrib => attrib.getData()),
+            faces: Array.from(this._attribs_maps._f.values()).map(attrib => attrib.getData()),
+            points: Array.from(this._attribs_maps.pt.values()).map(attrib => attrib.getData()),
+            polylines: Array.from(this._attribs_maps.pl.values()).map(attrib => attrib.getData()),
+            polygons: Array.from(this._attribs_maps.pg.values()).map(attrib => attrib.getData()),
+            collections: Array.from(this._attribs_maps.co.values()).map(attrib => attrib.getData())
         };
     }
 }

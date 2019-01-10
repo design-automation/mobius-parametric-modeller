@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TTexture, EAttribNames, Txyz, EEntityTypeStr} from './common';
+import { TColor, TNormal, TTexture, EAttribNames, Txyz, EEntType} from './common';
 /**
  * Export to obj
  */
@@ -12,15 +12,15 @@ export function exportObj(model: GIModel): string {
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntityTypeStr.VERT, EAttribNames.COLOR);
-    const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntityTypeStr.VERT, EAttribNames.NORMAL);
-    const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntityTypeStr.VERT, EAttribNames.TEXTURE);
-    const posis_i: number[] = model.geom.query.getEnts(EEntityTypeStr.POSI);
-    const verts_i: number[] = model.geom.query.getEnts(EEntityTypeStr.VERT);
+    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
+    const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI);
+    const verts_i: number[] = model.geom.query.getEnts(EEntType.VERT);
     // positions
     if (has_color_attrib) {
         for (const vert_i of verts_i) {
-            const color: TColor = model.attribs.query.getAttribValue(EEntityTypeStr.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            const color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
             const coord: Txyz = model.attribs.query.getVertCoords(vert_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + color.map( c => c.toString() ).join(' ') + '\n';
         }
@@ -33,21 +33,21 @@ export function exportObj(model: GIModel): string {
     // textures, vt
     if (has_texture_attrib) {
         for (const vert_i of verts_i) {
-            const texture: TTexture = model.attribs.query.getAttribValue(EEntityTypeStr.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
+            const texture: TTexture = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
             vt_str += 'v ' + texture.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // normals, vn
     if (has_normal_attrib) {
         for (const vert_i of verts_i) {
-            const normal: TNormal = model.attribs.query.getAttribValue(EEntityTypeStr.VERT, EAttribNames.NORMAL, vert_i,) as TNormal;
+            const normal: TNormal = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.NORMAL, vert_i,) as TNormal;
             vn_str += 'v ' + normal.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // polygons, f
-    const pgons_i: number[] = model.geom.query.getEnts(EEntityTypeStr.PGON);
+    const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON);
     for (const pgon_i of pgons_i) {
-        const pgon_verts_i_outer: number[] = model.geom.query.navAnyToVert(EEntityTypeStr.PGON, pgon_i);
+        const pgon_verts_i_outer: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
         // const verts_i_outer = verts_i[0];
         // TODO what about holes
         if (has_texture_attrib) {
@@ -63,9 +63,9 @@ export function exportObj(model: GIModel): string {
         }
     }
     // polylines, l
-    const plines_i: number[] = model.geom.query.getEnts(EEntityTypeStr.PLINE);
+    const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE);
     for (const pline_i of plines_i) {
-        const pline_verts_i: number[] = model.geom.query.navAnyToVert(EEntityTypeStr.PLINE, pline_i);
+        const pline_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PLINE, pline_i);
         l_str += 'l ' + pline_verts_i.map( vert_i => (vert_i + 1).toString() ).join(' ') + '\n';
     }
     // result

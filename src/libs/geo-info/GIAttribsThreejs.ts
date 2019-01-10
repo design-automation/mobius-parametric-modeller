@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TAttribDataTypes, EEntityTypeStr, IAttribsMaps, EEntStrToAttribMap, EAttribNames } from './common';
+import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
 
 /**
@@ -27,9 +27,9 @@ export class GIAttribsThreejs {
      * @param verts An array of vertex indicies pointing to the positio.
      */
     public get3jsSeqVertsCoords(): number[] {
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntityTypeStr.VERT);
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         const posis_i: number[] = verts_i.map(vert_i => this._model.geom.query.navVertToPosi(vert_i));
-        const coords_attrib: GIAttribMap = this._attribs_maps.posis.get(EAttribNames.COORDS);
+        const coords_attrib: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         return [].concat(...coords_attrib.getEntsVals(posis_i));
     }
     /**
@@ -38,25 +38,25 @@ export class GIAttribsThreejs {
      * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
      */
     public get3jsSeqVertsAttrib(attrib_name: string): number[] {
-        if (!this._attribs_maps.verts.has(attrib_name)) { return null; }
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntityTypeStr.VERT);
-        const verts_attrib: GIAttribMap = this._attribs_maps.verts.get(attrib_name);
+        if (!this._attribs_maps._v.has(attrib_name)) { return null; }
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
+        const verts_attrib: GIAttribMap = this._attribs_maps._v.get(attrib_name);
         return [].concat(...verts_attrib.getEntsVals(verts_i));
     }
     /**
      *
-     * @param ent_type_str
+     * @param ent_type
      */
-    public getAttribsForTable(ent_type_str: EEntityTypeStr): any[] {
+    public getAttribsForTable(ent_type: EEntType): any[] {
         // create a map of objects to store the data
         const data_obj_map: Map< number, { id: string} > = new Map();
         // create the ID for each table row
-        const ents_i: number[] = this._model.geom.query.getEnts(ent_type_str);
+        const ents_i: number[] = this._model.geom.query.getEnts(ent_type);
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { id: `${ent_type_str}${ent_i}` } );
+            data_obj_map.set(ent_i, { id: `${ent_type}${ent_i}` } );
         }
         // get the attribs map for this ent type
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
 
         // loop through all the attributes
@@ -77,19 +77,19 @@ export class GIAttribsThreejs {
     }
 
     /**
-     * @param ent_type_str
+     * @param ent_type
      * @param ents_i
      */
-    public getEntsVals(selected_ents: Map<string, number>, ent_type_str: EEntityTypeStr) {
+    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType) {
         const data_obj_map: Map< number, { id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         selected_ents.forEach(ent => {
-            data_obj_map.set(ent, { id: `${ent_type_str}${ent}` } );
+            data_obj_map.set(ent, { id: `${ent_type}${ent}` } );
         });
 
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();

@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntityTypeStr, TId, IGeomPack } from '@libs/geo-info/common';
+import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, IGeomPack } from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes, checkAttribNameValue } from './_check_args';
 
@@ -14,7 +14,7 @@ import { checkIDs, checkCommTypes, checkAttribNameValue } from './_check_args';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs.add.addAttrib(EEntityTypeStr.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
+    model.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     return model;
 }
 
@@ -70,13 +70,13 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
     // console.log("attrib_name", attrib_name);
     // console.log("value", value);
     if (!Array.isArray(entities)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        const [ent_type, index]: [EEntType, number] = idBreak(entities as TId);
         if (attrib_index !== null && attrib_index !== undefined) {
-            const value_arr = __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+            const value_arr = __model__.attribs.query.getAttribValue(ent_type, attrib_name, index);
             value_arr[attrib_index] = attrib_value;
-            __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, value_arr);
+            __model__.attribs.add.setAttribValue(ent_type, index, attrib_name, value_arr);
         } else {
-            __model__.attribs.add.setAttribValue(ent_type_str, index, attrib_name, attrib_value);
+            __model__.attribs.add.setAttribValue(ent_type, index, attrib_name, attrib_value);
         }
     } else {
         for (const entity of entities) {
@@ -99,14 +99,14 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
     // console.log("entities", entities);
     // console.log("attrib_name", attrib_name);
     if (!Array.isArray(entities)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entities as TId);
+        const [ent_type, index]: [EEntType, number] = idBreak(entities as TId);
         if (attrib_index !== null && attrib_index !== undefined) {
             // --- Error Check ---
             checkCommTypes(fn_name, 'attrib_index', attrib_index, ['isNumber']);
             // --- Error Check ---
-            return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index)[attrib_index];
+            return __model__.attribs.query.getAttribValue(ent_type, attrib_name, index)[attrib_index];
         } else {
-            return __model__.attribs.query.getAttribValue(ent_type_str, attrib_name, index);
+            return __model__.attribs.query.getAttribValue(ent_type, attrib_name, index);
         }
     } else {
         return (entities as TId[]).map( entity => __getAttrib__(__model__, entity, attrib_name, attrib_index)) as TAttribDataTypes[];

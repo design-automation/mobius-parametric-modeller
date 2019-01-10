@@ -1,4 +1,4 @@
-import { EEntityTypeStr, EAttribNames } from '@libs/geo-info/common';
+import { EEntType, EAttribNames } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
 import { isNumber } from 'util';
@@ -233,7 +233,7 @@ const IDcheckObj = {
             if (typeof arg !== 'string') {
                 break; // throw error
             }
-            if (arg.startsWith(EEntityTypeStr[ent_type_strs[i]])) {
+            if (arg.startsWith(EEntType[ent_type_strs[i]])) {
                 if (arg.length !== 2) {
                     return; // passed test
                 } else {
@@ -252,7 +252,7 @@ const IDcheckObj = {
             typeCheckObj.isString(fn_name, arg_name, arg_list[0]);
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
-                if (arg_list[i].startsWith(EEntityTypeStr[ent_type_strs[j]])) {
+                if (arg_list[i].startsWith(EEntType[ent_type_strs[j]])) {
                     if (arg_list[i].length !== 2) {
                         pass = true;
                         return; // passed test

@@ -1,7 +1,7 @@
-import { TId, Txyz, EEntityTypeStr, TPlane, TRay } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TPlane, TRay } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { idBreak } from '@libs/geo-info/id';
+import { idBreak, idMake } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult } from '@libs/geom/vectors';
 
 // ================================================================================================
@@ -19,8 +19,8 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
-        const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type_str, index)[0];
+        const [ent_type, index]: [EEntType, number] = idBreak(origin as TId);
+        const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
         origin = __model__.attribs.query.getPosiCoords(posi_i);
     }
     return [
@@ -45,8 +45,8 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
     checkCommTypes(fn_name, 'xy_vec', xy_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(origin as TId);
-        const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type_str, index)[0];
+        const [ent_type, index]: [EEntType, number] = idBreak(origin as TId);
+        const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
         origin = __model__.attribs.query.getPosiCoords(posi_i);
     }
     return [
@@ -120,7 +120,7 @@ export function VisRay(__model__: GIModel, ray: TRay, scale: number): TId[] {
     __model__.attribs.add.setPosiCoords(end_posi_i, end);
     const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
     // return the geometry IDs
-    return [EEntityTypeStr.POINT + point_i, EEntityTypeStr.PLINE + pline_i];
+    return [idMake(EEntType.POINT, point_i), idMake(EEntType.PLINE, pline_i)];
 }
 // ================================================================================================
 /**
@@ -172,9 +172,9 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
     const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
     // return the geometry IDs
     return [
-        EEntityTypeStr.POINT + point_i,
-        EEntityTypeStr.PLINE + x_pline_i, EEntityTypeStr.PLINE + y_pline_i,
-        EEntityTypeStr.PLINE + plane_i
+        idMake(EEntType.POINT, point_i),
+        idMake(EEntType.PLINE, x_pline_i), idMake(EEntType.PLINE, y_pline_i),
+        idMake(EEntType.PLINE, plane_i)
     ];
 }
 // ================================================================================================

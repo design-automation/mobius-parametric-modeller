@@ -24,21 +24,34 @@
                                 [node]='dataService.node'
                                 [prodCheck]='false'></parameter-editor>
 
-                            <div id='modelViewButton--container'>
+                            <div id='modelViewButton--container' *ngIf="dataService.node.type !== 'start'">
                                 <button (click)='setViewOutput()'>Viewing 
                                     <span *ngIf='!dataService.modelOutputView'>Input Model</span>
                                     <span *ngIf='dataService.modelOutputView'>Output Model</span></button>
                             </div>
+
+                            <div id='modelViewButton--container' *ngIf="dataService.node.type == 'start'">
+                                <button (click)='setTestModel()'>
+                                    <span *ngIf='dataService.testModel'>Viewing</span>
+                                    <span *ngIf='!dataService.testModel'>Hiding</span>
+                                Test Model</button>
+                            </div>
                             
                             <div class = 'procedureln--container'>
                                 <!-- list of procedure items for all nodes -->
-                                <procedure-item 
-                                *ngFor="let line of dataService.node?.procedure; let idx=index" 
-                                [data]="line"
-                                (select)="selectProcedure($event,line)"
-                                (delete)="deleteChild(idx)"
-                                (helpText)='updateHelpView($event)'></procedure-item>
-
+                                <div class = 'pro-container' [hidden]="!dataService.testModel && dataService.node.type == 'start'">
+                                    <procedure-item 
+                                    *ngFor="let line of dataService.node?.procedure; let idx=index" 
+                                    [data]="line"
+                                    (select)="selectProcedure($event,line)"
+                                    (delete)="deleteChild(idx)"
+                                    (helpText)='updateHelpView($event)'
+                                    ></procedure-item>
+                                </div>
+                                <div class = 'divider--container'>
+                                    <div class = 'divider' *ngIf="dataService.node.type == 'start'"><span>Parameters</span></div>
+                                    <div class = 'divider' *ngIf="dataService.node.type == 'end'"><span>Return</span></div>
+                                </div>
                                 <parameter-editor *ngIf="dataService.node.type !== ''" 
                                 [flowchart]='dataService.flowchart' 
                                 [node]='dataService.node'

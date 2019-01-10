@@ -119,8 +119,7 @@ export class ExecuteComponent {
         // get the string of all imported functions
         const funcStrings = {};
         for (const func of flowchart.functions) {
-            const funcStringRes =  CodeUtils.getFunctionString(func);
-            funcStrings[func.name] = funcStringRes[0];
+            funcStrings[func.name] =  CodeUtils.getFunctionString(func);
         }
 
         // execute each node
@@ -160,7 +159,6 @@ export class ExecuteComponent {
             fnString = printFunc + '\nfunction __main_node_code__(){\n' + nodeCode.join('\n') + '\n}\nreturn __main_node_code__();';
             // add the constants from the start node
             fnString = _varString + globalVars + fnString;
-
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
 
@@ -194,15 +192,24 @@ export class ExecuteComponent {
                 console.log('--------------------------\n');
                 */
             }
+            const prevWindowVar = {};
+            for (const v of varsDefined) {
+                if (window.hasOwnProperty(v)) {
+                    prevWindowVar[v] = window[v];
+                }
+            }
+            console.log(fnString);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
-            const context = {};
-            const fn = new Function('__modules__', '__params__', fnString).bind(context);
+            const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
 
             const result = fn(Modules, params);
             for (const v of varsDefined) {
-                if (window[v]) {
+                if (window.hasOwnProperty(v)) {
                     delete window[v];
+                    if (prevWindowVar[v]) {
+                        window[v] = prevWindowVar[v];
+                    }
                 }
             }
 

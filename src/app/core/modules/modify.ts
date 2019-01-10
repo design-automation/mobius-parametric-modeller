@@ -6,6 +6,7 @@ import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 
+// ================================================================================================
 /**
  * Moves geometry by vector.
  * @param __model__
@@ -37,6 +38,7 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
 }
+// ================================================================================================
 /**
  * Rotates geometry on plane by angle.
  * @param __model__
@@ -81,6 +83,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
 }
+// ================================================================================================
 /**
  * Scales geometry on plane by factor.
  * @param __model__
@@ -127,6 +130,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
 }
+// ================================================================================================
 /**
  * Mirrors geometry across plane.
  * @param __model__
@@ -143,8 +147,9 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], plane: TPlane): 
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    throw new Error('Not implemented.');
 }
+// ================================================================================================
 /**
  * Transforms geometry from one construction plane to another.
  * @param __model__
@@ -163,8 +168,9 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
     checkCommTypes(fn_name, 'from', from, ['isPlane']);
     checkCommTypes(fn_name, 'to', to, ['isPlane']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    throw new Error('Not implemented.');
 }
+// ================================================================================================
 /**
  * Reverses direction of entities.
  * @param __model__
@@ -179,8 +185,9 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
     checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    throw new Error('Not implemented.');
 }
+// ================================================================================================
 /**
  * Closes polylines if open.
  * @param __model__
@@ -203,9 +210,12 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
         }
         __model__.geom.add.closeWire(wire_i);
     } else {
-        (lines as TId[]).map(line => Close(__model__, line));
+        for (const line of lines) {
+            Close(__model__, line);
+        }
     }
 }
+// ================================================================================================
 // Promote modelling operation
 export enum _EPromoteMethod {
     MEAN =  'mean',
@@ -232,7 +242,7 @@ export enum _EPromoteAttribTypes {
  * @param from Enum, Positions, vertices, edges, wires, faces or collections.
  * @param to Enum, Positions, vertices, edges, wires, faces or collections.
  * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
- * @returns List of attributes.
+ * @returns void
  * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
  */
 export function Promote(__model__: GIModel, attrib_name: string,
@@ -242,6 +252,7 @@ export function Promote(__model__: GIModel, attrib_name: string,
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
+// ================================================================================================
 /**
  * Welds entities together.
  * @param __model__
@@ -255,8 +266,9 @@ export function Weld(__model__: GIModel, entities: TId[]): void {
     checkIDs('modify.Weld', 'entities', entities, ['isIDList'],
             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    throw new Error('Not implemented.');
 }
+// ================================================================================================
 /**
  * Deletes entities.
  * @param __model__
@@ -269,8 +281,9 @@ export function Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     // --- Error Check ---
     checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
+    throw new Error('Not implemented.');
 }
+
 // Collection Add Entities
 
 // Collection Remove Remove Entities

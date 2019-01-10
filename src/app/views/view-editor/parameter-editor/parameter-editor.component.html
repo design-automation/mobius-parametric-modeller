@@ -21,7 +21,6 @@
                 <input id='ret--input' 
                 *ngIf='p.name.substring(0,1) !== "_"'
                 [(ngModel)]='p.value'
-                name='p.name'
                 placeholder={{p.name}}
                 [style.width.px]='inputSize(p.value||p.name)'
                 autocomplete='off'

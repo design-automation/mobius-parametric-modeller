@@ -14,7 +14,6 @@
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
                 [class.error]='invalidVar'
-                name='data.args[0].name'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
@@ -23,7 +22,6 @@
                 class='input--arg'
                 [(ngModel)]='data.args[1].value'
                 (blur)='argMod($event, 1)'
-                name='data.args[1].name'
                 placeholder={{data.args[1].name}}
                 [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>
                 <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
@@ -38,7 +36,6 @@
             <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
                     (blur)='argMod($event, 0)'
-                    name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >
@@ -54,7 +51,6 @@
         <input class='input--arg'
                 [(ngModel)]='data.args[0].value'
                 (blur)='argMod($event, 0)'
-                name='data.args[0].name'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                 >  
@@ -91,7 +87,6 @@
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
                     [class.error]='invalidVar'
-                    name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -101,7 +96,6 @@
                 <input class='input--arg'
                     [(ngModel)]='data.args[1].value'
                     (blur)='argMod($event, 1)'
-                    name='data.args[1].name'
                     placeholder={{data.args[1].name}}
                     [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
                     >  
@@ -116,7 +110,6 @@
             <input class='input--arg' 
                     [(ngModel)]='data.args[0].value'
                     (blur)='argMod($event, 0)'
-                    name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -130,7 +123,6 @@
             <input class='input--arg' 
                     [(ngModel)]='data.args[0].value'
                     (blur)='argMod($event, 0)'
-                    name='data.args[0].name'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >   -->
@@ -145,7 +137,6 @@
                 *ngIf='p.name.substring(0,1) !== "_"'
                 [(ngModel)]='p.value'
                 (blur)='argMod($event, i)'
-                name='p.name'
                 placeholder={{p.name}}
                 [style.width.px]='inputSize(p.value||p.name)'
                 >  

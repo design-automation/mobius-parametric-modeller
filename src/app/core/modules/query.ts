@@ -9,7 +9,7 @@ import { checkIDs } from './_check_args';
 // #@name1 > 10 || #@name2 < 5 && #@name3 == 'red'
 // #@xyz[2] > 5
 //
-
+// ================================================================================================
 export enum _EQuerySelect {
     POSI =   'positions',
     VERT =   'vertices',
@@ -45,6 +45,7 @@ function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
             throw new Error('Query select parameter not recognised.');
     }
 }
+// ================================================================================================
 /**
  * Returns a list of entities based on a query expression.
  * The query expression should follow the following format: #@name == value,
@@ -88,6 +89,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type_str, query_expr, found_entities_i);
     return query_result.map( entity_i => select_ent_type_str + entity_i);
 }
+// ================================================================================================
 /**
  * Returns the number of entities based on a query expression.
  * The query expression should follow the following format: #@name == value,
@@ -114,6 +116,7 @@ export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|T
     // --- Error Check ---
     return Get(__model__, select, entities, query_expr).length;
 }
+// ================================================================================================
 export enum _ESortMethod {
     'DESCENDING' = 'descending',
     'ASCENDING' = 'ascending'
@@ -164,6 +167,7 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
         select_ent_type_str, sort_expr, found_entities_i, _sort_method);
     return sort_result.map( entity_i => select_ent_type_str + entity_i);
 }
+// ================================================================================================
 /**
  * Checks if polyline(s) or wire(s) are closed.
  * @param __model__
@@ -188,4 +192,46 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
     } else {
         return (lines as TId[]).map(line => IsClosed(__model__, line)) as boolean[];
     }
+}
+// ================================================================================================
+/**
+ * Checks if a wire, polyline, face, or polygon is planar.
+ * @param __model__
+ * @param entities Wire, polyline, face, or polygon.
+ * @returns Boolean or list of boolean in input sequence of lines.
+ * @example mod.IsPlanar([polyline1,polyline2,polyline3])
+ * @example_info Returns list [true,true,false] if polyline1 and polyline2 are planar but polyline3 is not planar.
+ */
+export function IsPLanar(__model__: GIModel, entities: TId|TId[]): boolean|boolean[] {
+    // --- Error Check ---
+    // checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // --- Error Check ---
+    throw new Error('Not implemented');
+}
+// ================================================================================================
+/**
+ * Returns a list of welded neighbours of eny entity
+ * @param __model__
+ * @param select Enum, select the types of neighbours to return
+ * @param entities Everything except positions (which cannot have neighbours).
+ * @returns A list of welded neighbours
+ * @example mod.Neighbours([polyline1,polyline2,polyline3])
+ * @example_info Returns list of entities that are welded to polyline1 and polyline2.
+ */
+export function Neighbours(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+    // --- Error Check ---
+    // checkIDs('modify.isClosed', 'lines', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // --- Error Check ---
+    // get the select ent_type_str
+    const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);
+    if (!Array.isArray(entities)) {
+        entities = [entities];
+    }
+    const all_nbor_ents_i: Set<number> = new Set();
+    for (const ent_id of entities) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(ent_id as TId);
+        const nbor_ents_i: number[] = __model__.geom.query.neighbours(ent_type_str, select_ent_type_str, index);
+        nbor_ents_i.forEach(nbor_ent_i => all_nbor_ents_i.add(nbor_ent_i));
+    }
+    return Array.from(all_nbor_ents_i).map(nbor_ent_i => select_ent_type_str + nbor_ent_i);
 }

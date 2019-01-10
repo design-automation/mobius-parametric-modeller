@@ -452,6 +452,8 @@ export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     const new_posis_i: number [] = __model__.geom.add.unweldVerts(all_verts_i);
     return new_posis_i.map( posi_i => EEntityTypeStr.POSI + posi_i );
 }
+// ================================================================================================
+// Explode
 
 // Pipe
 

@@ -121,7 +121,7 @@ export function GetNormal(__model__: GIModel, entity: TId): Txyz {
         if (isPline(entity)) {
             wire_i = __model__.geom.query.navPlineToWire(index);
         }
-        if (__model__.geom.query.istWireClosed(wire_i)) {
+        if (!__model__.geom.query.istWireClosed(wire_i)) {
             throw new Error(fn_name + ': ' + 'To calculate normals, wire must be closed');
         }
         const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntityTypeStr.WIRE, index);

@@ -164,6 +164,7 @@ export enum _EAppendMethod {
  *
  * @param list List to add to.
  * @param value Item to add.
+ * @param method Enum, append to start or end.
  * @example append = list.append(list,4. 'at_end')
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].

@@ -13,7 +13,7 @@
 }
 
 h2{
-    color: $color1;
+    color: $color8;
     text-align: left;
     padding-left: 15px;
     font-size: $fsize2;
@@ -21,7 +21,7 @@ h2{
 }
 
 p{
-    color: $color1;
+    color: $color8;
     text-align: left;
     padding-left: 15px;
     font-size: $fsize2;
@@ -40,7 +40,7 @@ div[class^="container--"]{
 }
 
 textarea{
-    color: $color1;
+    color: $color8;
     background-color: transparent;
     border:none;
     padding: 10px 0px 0px 15px;
@@ -51,5 +51,4 @@ textarea{
     min-height: 20px;
     //max-height: 300px;
     resize: none; 
-    
 }

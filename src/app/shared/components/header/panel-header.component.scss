@@ -29,7 +29,7 @@
         cursor: pointer;
         height: $header-height;
         font-size: $fsize1;
-        color: $color1;
+        color: $color8;
         overflow: hidden;
         // background-color: transparent;
         padding-top: 0px;
@@ -90,8 +90,9 @@ button.mat-menu-item:hover{
 
     z-index: 1;
     background-color: $color6;
-    border-left: 1px solid $color1;
-    border-bottom: 1px solid $color1;
+    border-left: 1px solid $color2;
+    // border-right: 1px solid $color2;
+    border-bottom: 1px solid $color2;
     button{
         display: inline-block;
         width: 100px;
@@ -99,11 +100,16 @@ button.mat-menu-item:hover{
         height: $fsize3;
         font-size: $fsize2;
         vertical-align: middle;
+        color: $color8;
         mat-icon{
+            color: inherit;
             vertical-align: middle;
             font-size: 20px;
             height: 20px;
             width: 20px;
+        }
+        &:hover{
+            color: $selected-color;
         }
     }
 }

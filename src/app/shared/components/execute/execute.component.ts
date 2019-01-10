@@ -151,9 +151,12 @@ export class ExecuteComponent {
         let fnString = '';
         try {
             // get the code for the node
+            console.log(window['aaa']);
             const codeRes = CodeUtils.getNodeCode(node, true);
             const nodeCode = codeRes[0];
             const varsDefined = codeRes[1];
+
+
 
             // fnString = printFunc + nodeCode.join('\n');
             fnString = printFunc + '\nfunction __main_node_code__(){\n' + nodeCode.join('\n') + '\n}\nreturn __main_node_code__();';
@@ -192,23 +195,27 @@ export class ExecuteComponent {
                 console.log('--------------------------\n');
                 */
             }
+
             const prevWindowVar = {};
             for (const v of varsDefined) {
                 if (window.hasOwnProperty(v)) {
                     prevWindowVar[v] = window[v];
                 }
             }
+            console.log(prevWindowVar);
+
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
 
             const result = fn(Modules, params);
+
             for (const v of varsDefined) {
                 if (window.hasOwnProperty(v)) {
                     delete window[v];
-                    if (prevWindowVar[v]) {
-                        window[v] = prevWindowVar[v];
-                    }
+                    // if (prevWindowVar[v]) {
+                    //     window[v] = prevWindowVar[v];
+                    // }
                 }
             }
 

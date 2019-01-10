@@ -7,7 +7,7 @@
 }
 
 .container--line{
-    background-color: $color6;
+    background-color: transparent;
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
     padding: 0px;
@@ -91,6 +91,9 @@
     &.printing{
         .btns{
             display: inline-flex;
+            .btn{
+                background-color: inherit;
+            }
             #print-btn{
                 display: flex;
                 justify-content: center;   
@@ -115,6 +118,9 @@
         border-left: 2px solid $error-color;
         padding-bottom: 0px;
         padding-left: 1px;
+        .btn{
+            background-color: inherit;
+        }
         &.selected{
             border-bottom: 2px solid $selected-color;
             background-color: $error-color-lt;
@@ -173,6 +179,9 @@
 
     &:hover{
         background-color: $color5;
+        .btn{
+            background-color: inherit;
+        }
     }
 }
 
@@ -218,6 +227,7 @@
         .btn{
             display: flex;
             justify-content: center;
+            background-color: inherit;
         }
     }
 }
@@ -238,6 +248,7 @@
         .btn{
             display: flex;
             justify-content: center;
+            background-color: inherit;
         }
     }
 }
@@ -261,7 +272,7 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: inherit;
+    background-color: $color6;
 
     border: none;
     color: $color1;

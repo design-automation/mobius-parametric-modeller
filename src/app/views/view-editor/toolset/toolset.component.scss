@@ -28,6 +28,7 @@ h2{
         width: 80%;
         text-overflow: ellipsis;
         overflow: hidden;
+        white-space: nowrap;
     }
     #node--arr{
         width: 20%;
@@ -132,17 +133,16 @@ ul{
     position: fixed;
     transition: display 0.4s;
     top: 70px;
-
+    width: 125px;
     z-index: 1;
     background-color: $color6;
-    border-left: 1px solid $color1;
-    border-bottom: 1px solid $color1;
+    border-right: 1px solid $color2;
+    border-bottom: 1px solid $color2;
+    border-top: 1px solid $color2;
     cursor: pointer;
 
     button{
         display: block;
-        min-width: 100px;
-        max-width: 200px;
         background-color: $color6;
         border: 0px;
         margin: 0px;
@@ -154,10 +154,9 @@ ul{
 
     li{
         display: block;
-        min-width: 100px;
-        max-width: 150px;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
         line-height: 20px;
         background-color: $color6;
         font-weight: 550;

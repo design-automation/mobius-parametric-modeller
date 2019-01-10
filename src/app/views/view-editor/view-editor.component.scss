@@ -27,9 +27,9 @@
 
 .container--toolset{
     display: inline-flex;
-    width: 20%;
-    min-width: 100px;
-    max-width: 150px;
+    width: 125px;
+    min-width: 125px;
+    max-width: 125px;
     
     background-color: transparent;
     height: calc(100vh - 40px); // 40px === $header-height

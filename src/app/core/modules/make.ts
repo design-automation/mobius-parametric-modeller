@@ -6,6 +6,7 @@ import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecSub } from '@libs
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs } from './_check_args';
 
+// ================================================================================================
 /**
  * Adds a new position to the model.
  * @param __model__
@@ -26,6 +27,7 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
         return (coords as Txyz[]).map(_coords => Position(__model__, _coords)) as TId[];
     }
 }
+// ================================================================================================
 /**
  * Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.
  * @param __model__
@@ -47,6 +49,7 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
         return (positions as TId[]).map(position => Point(__model__, position)) as TId[];
     }
 }
+// ================================================================================================
 // Enums for Polyline()
 export enum _EClose {
     CLOSE = 'close',
@@ -74,6 +77,7 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
         return (positions as TId[][]).map(_positions => Polyline(__model__, _positions, close)) as TId[];
     }
 }
+// ================================================================================================
 /**
  * Adds a new polygon to the model.
  * @param __model__
@@ -94,6 +98,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
         return (positions as TId[][]).map(_positions => Polygon(__model__, _positions)) as TId[];
     }
 }
+// ================================================================================================
 /**
  * Adds a new collection to the model.
  * @param __model__
@@ -128,6 +133,76 @@ export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|T
     const [_, parent_index]: [EEntityTypeStr, number] = idBreak(parent_coll);
     return EEntityTypeStr.COLL + __model__.geom.add.addColl(parent_index, points, plines, pgons);
 }
+// ================================================================================================
+// Stuff for Copy()
+function _copyGeom(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
+    if (!Array.isArray(geometry)) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
+        if (isColl(ent_type_str)) {
+            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
+            return [ ent_type_str + coll_i];
+        } else if (isObj(ent_type_str)) {
+            const obj_i: number = __model__.geom.add.copyObjs(ent_type_str, index, copy_attributes) as number;
+            return [ ent_type_str + obj_i];
+        } else if (isPosi(ent_type_str)) {
+            return [];
+        }
+    } else {
+        return [].concat(...(geometry as TId[]).map(one_geom => _copyGeom(__model__, one_geom, copy_attributes)));
+    }
+}
+function _copyPosis(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
+    // create the new positions
+    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
+    for (const geom_id of geometry) {
+        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
+        const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
+        const geom_new_posis_i: number[] = [];
+        for (const old_posi_i of old_posis_i) {
+            let new_posi_i: number;
+            if (old_to_new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+            } else {
+                new_posi_i = __model__.geom.add.copyPosis(old_posi_i, copy_attributes) as number;
+                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+            }
+            geom_new_posis_i.push(new_posi_i);
+        }
+        if (!isPosi(ent_type_str)) { // obj or coll
+            __model__.geom.add.replacePosis(ent_type_str, index, geom_new_posis_i);
+        }
+    }
+    // return all the new points
+    return Array.from(old_to_new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
+}
+export enum _ECopyAttribues {
+    COPY_ATTRIBUTES = 'copy_attributes',
+    NO_ATTRIBUTES = 'no_attributes'
+}
+/**
+ * Adds a new copy to the model.
+ * @param __model__
+ * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
+ * @param copy_attributes Enum to copy attributes or to have no attributes copied.
+ * @returns New copy if successful, null if unsuccessful or on error.
+ * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
+ * @example_info Creates a list containing a copy of the entities in sequence of input.
+ */
+export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
+    // --- Error Check ---
+    checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
+    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // --- Error Check ---
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
+    }
+    const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
+    const copied_geom: TId[] = _copyGeom(__model__, entities, bool_copy_attribs);
+    _copyPosis(__model__, entities, bool_copy_attribs);
+    return copied_geom;
+}
+// ================================================================================================
 // Loft modelling operation
 export enum _ELoftMethod {
     OPEN =  'open',
@@ -173,6 +248,7 @@ export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod):
     }
     return pgons_id;
 }
+// ================================================================================================
 /**
  * Extrudes geometry by distance (in default direction = z-axis) or by vector.
  * - Extrusion of location produces a line;
@@ -264,6 +340,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
         return [].concat(...(entities as TId[]).map(geom_i => Extrude(__model__, geom_i, extrude_vec, divisions))) as TId[];
     }
 }
+// ================================================================================================
 /**
  * Joins polylines to polylines or polygons to polygons.
  * @param __model__
@@ -278,74 +355,7 @@ export function Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
-// Stuff for Copy()
-export enum _ECopyAttribues {
-    COPY_ATTRIBUTES = 'copy_attributes',
-    NO_ATTRIBUTES = 'no_attributes'
-}
-function _copyGeom(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
-    if (!Array.isArray(geometry)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geometry as TId);
-        if (isColl(ent_type_str)) {
-            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
-            return [ ent_type_str + coll_i];
-        } else if (isObj(ent_type_str)) {
-            const obj_i: number = __model__.geom.add.copyObjs(ent_type_str, index, copy_attributes) as number;
-            return [ ent_type_str + obj_i];
-        } else if (isPosi(ent_type_str)) {
-            return [];
-        }
-    } else {
-        return [].concat(...(geometry as TId[]).map(one_geom => _copyGeom(__model__, one_geom, copy_attributes)));
-    }
-}
-function _copyPosis(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
-    // create the new positions
-    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
-    for (const geom_id of geometry) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
-        const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type_str, index);
-        const geom_new_posis_i: number[] = [];
-        for (const old_posi_i of old_posis_i) {
-            let new_posi_i: number;
-            if (old_to_new_posis_i_map.has(old_posi_i)) {
-                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-            } else {
-                new_posi_i = __model__.geom.add.copyPosis(old_posi_i, copy_attributes) as number;
-                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-            }
-            geom_new_posis_i.push(new_posi_i);
-        }
-        if (!isPosi(ent_type_str)) { // obj or coll
-            __model__.geom.add.replacePosis(ent_type_str, index, geom_new_posis_i);
-        }
-    }
-    // return all the new points
-    return Array.from(old_to_new_posis_i_map.values()).map( posi_i => EEntityTypeStr.POSI + posi_i );
-}
-/**
- * Adds a new copy to the model.
- * @param __model__
- * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
- * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
- * @param copy_attributes Enum to copy attributes or to have no attributes copied.
- * @returns New copy if successful, null if unsuccessful or on error.
- * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
- * @example_info Creates a list containing a copy of the entities in sequence of input.
- */
-export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
-    // --- Error Check ---
-    checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
-    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // --- Error Check ---
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
-    }
-    const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
-    const copied_geom: TId[] = _copyGeom(__model__, entities, bool_copy_attribs);
-    _copyPosis(__model__, entities, bool_copy_attribs);
-    return copied_geom;
-}
+// ================================================================================================
 // Divide edge modelling operation
 export enum _EDivideMethod {
     BY_NUMBER =  'by_number',
@@ -410,7 +420,7 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
         return [].concat(...(edge as TId[]).map(one_edge => Divide(__model__, one_edge, divisor, method)));
     }
 }
-
+// ================================================================================================
 /**
  * Unweld vertices so that they do not share positions.
  * For the vertices of the specified entities, if they share positions with other entities in the model,

@@ -184,6 +184,11 @@ export class ViewEditorComponent {
         this.dataService.modelOutputView = !this.dataService.modelOutputView;
     }
 
+    setTestModel() {
+        this.dataService.testModel = !this.dataService.testModel;
+        this.dataService.modelOutputView = this.dataService.testModel;
+    }
+
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }

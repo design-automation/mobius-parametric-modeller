@@ -282,6 +282,8 @@ export function Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.');
+}
+
 // Collection Add Entities
 
 // Collection Remove Remove Entities

@@ -60,6 +60,9 @@
     //     background: $color2; 
     // }
 }
+.pro-container{
+    height: auto;
+}
 
 .container--procedure{
     width: calc(100% - 100px); //min-width toolset
@@ -91,8 +94,13 @@ procedure-item.ng-star-inserted{
     max-height: 100%;
 }
 
+.divider{
+    height: 20px;
+    width: 100%;
+}
+
 #modelViewButton--container{
-    padding: 0px 10px 0px 0px;
+    padding: 0px 13px 0px 0px;
     button{
         width: 100%;
         margin: 0px 5px 2px 8px;

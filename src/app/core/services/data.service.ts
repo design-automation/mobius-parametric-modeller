@@ -17,6 +17,7 @@ export class DataService {
     private static _newFlowchart = true;
 
     private static _modelOutputView = true;
+    private static _testModel = false;
     private static _helpView = [false, undefined];
 
     private static _activeModelView: string = undefined;
@@ -51,6 +52,9 @@ export class DataService {
 
     get modelOutputView() {return DataService._modelOutputView; }
     set modelOutputView(check: boolean) {DataService._modelOutputView = check; }
+
+    get testModel() {return DataService._testModel; }
+    set testModel(check: boolean) {DataService._testModel = check; }
 
     get activeView() {return DataService._activeModelView; }
     set activeView(view: string) {DataService._activeModelView = view; }

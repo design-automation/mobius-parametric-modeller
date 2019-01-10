@@ -1,4 +1,5 @@
 <div class='flowchart-info' *ngIf="node.type=='start'">
+    <!-- <div class = 'divider'></div> -->
     <ng-container *ngIf='!prodCheck'>
         <div class = 'input-container'>
             <input id='flowchart-name' autocomplete='off' [(ngModel)]='flowchart.name' placeholder="flowchart name" [style.width.px]='inputSize(flowchart.name||"flowchart name")'>
@@ -12,6 +13,7 @@
     </div>
 </div>
 <div class='flowchart-info' *ngIf="node.type=='end'">
+    <!-- <div class = 'divider'></div> -->
     <div id='ret-container'>
         <div class='returnProd'>
             <input class='disabled-input' value="Return" disabled>

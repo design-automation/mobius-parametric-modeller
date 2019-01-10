@@ -4,7 +4,12 @@ type Txyz = [number, number, number];
 const EPS = 1e-6;
 
 //  Vectors using Txyz =======================================================================================================
-
+export function vecEqual(v1: Txyz, v2: Txyz, tol: number): boolean {
+    if (Math.abs(v1[0] - v2[0]) > tol) { return false; }
+    if (Math.abs(v1[1] - v2[1]) > tol) { return false; }
+    if (Math.abs(v1[2] - v2[2]) > tol) { return false; }
+    return true;
+}
 
 export function vecSub(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     const v3: Txyz = [

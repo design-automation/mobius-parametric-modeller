@@ -11,3 +11,4 @@ export const vecRev = vec.vecRev;
 export const vecFromTo = vec.vecFromTo;
 export const vecDot = vec.vecDot;
 export const vecCross = vec.vecCross;
+export const vecEqual = vec.vecEqual;

@@ -34,7 +34,8 @@ const lists = [
     ['vecRev(v)', 'Reverses the direction of a vector'],
     ['vecFromTo(pt1, pt2)', 'Creates a vector between two points'],
     ['vecDot(v1, v2)', 'Calculates the cross product of thre vectors'],
-    ['vecCross(v1, v2)', 'Calculates the dot product of two vectors']
+    ['vecCross(v1, v2)', 'Calculates the dot product of two vectors'],
+    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaler than a specified tolerance']
 ];
 
 const conversion = [

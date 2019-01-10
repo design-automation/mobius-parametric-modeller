@@ -56,7 +56,7 @@ export abstract class NodeUtils {
             if (i.module !== returnMeta[0]) { continue; }
             for ( const j of i.functions) {
                 if (j.name !== returnMeta[1]) { continue; }
-                node.procedure.push({type: 11, ID: '',
+                const newReturn = {type: 11, ID: '',
                 parent: undefined,
                 meta: {name: '', module: ''},
                 children: undefined,
@@ -65,7 +65,11 @@ export abstract class NodeUtils {
                 print: false,
                 enabled: true,
                 selected: false,
-                hasError: false});
+                hasError: false};
+                for (const arg of newReturn.args) {
+                    arg.value = '';
+                }
+                node.procedure.push(newReturn);
                 check = true;
                 break;
             }

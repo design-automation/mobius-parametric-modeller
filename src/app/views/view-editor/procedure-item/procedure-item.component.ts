@@ -171,8 +171,17 @@ export class ProcedureItemComponent {
                         return str;
                     }
                 }
+                let currentWindow;
+                if (window.hasOwnProperty(i)) {
+                    currentWindow = window[i];
+                }
                 const fn = new Function('', `${i}=1;`);
                 fn();
+                delete window[i];
+                if (currentWindow) {
+                    window[i] = currentWindow;
+                }
+
                 this.invalidVar = false;
             } catch (ex) {
                 // console.log(ex.message);

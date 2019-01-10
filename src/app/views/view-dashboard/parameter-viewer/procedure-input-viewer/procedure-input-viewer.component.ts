@@ -33,7 +33,8 @@ export class ProcedureInputViewerComponent {
         if (val.substring(0, 1) === '"' || val.substring(0, 1) === '\'') {
             val = val.substring(1, val.length - 1);
         }
-        return val.replace(/_/g, ' ') + ':';
+        // return val.replace(/_/g, ' ') + ':';
+        return val + ':';
     }
 
     inputSize(val, defaultVal) {

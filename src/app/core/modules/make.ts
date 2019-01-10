@@ -182,7 +182,7 @@ export enum _ECopyAttribues {
 /**
  * Adds a new copy to the model.
  * @param __model__
- * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection to be copied.
+ * @param entities Position, point, polyline, polygon, collection to be copied.
  * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
  * @param copy_attributes Enum to copy attributes or to have no attributes copied.
  * @returns New copy if successful, null if unsuccessful or on error.
@@ -192,7 +192,7 @@ export enum _ECopyAttribues {
 export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
     // --- Error Check ---
     checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
-    ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     if (!Array.isArray(entities)) {
         entities = [entities] as TId[];

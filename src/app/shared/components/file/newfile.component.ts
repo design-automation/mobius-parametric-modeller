@@ -52,5 +52,6 @@ export class NewFileComponent {
             this.dataService.newFlowchart = true;
         }
         this.cdr.detectChanges();
+        document.getElementById('executeButton').click();
     }
 }

@@ -138,7 +138,7 @@ select{
     }
     .filebtn{
         width: 75px;
-        height: $fsize1 + 2px;
+        height: $fsize1 + 3px;
         border: none;
         margin-left: 2px;
     }
@@ -192,7 +192,7 @@ select{
     height: fit-content;
     .inp--desc{
         margin-left: 3px;
-        color: $color1;
+        color: $color8;
         border: 2px solid $color5;
         background-color: transparent;
 
@@ -203,8 +203,8 @@ select{
         resize: none;
 
         height: $fsize1;
-        max-height: 32px;
-        overflow: auto;
+        // max-height: 32px;
+        // overflow-y: auto;
         &:hover, &:focus{
             color: $color8;
             border-color: $selected-color;

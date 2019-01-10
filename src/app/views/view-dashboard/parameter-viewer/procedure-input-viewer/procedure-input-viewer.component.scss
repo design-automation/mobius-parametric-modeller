@@ -9,19 +9,20 @@
 }
 
 .container--parameter{
-    margin: 0px 0px 5px 0px;
+    padding: 5px 0px;
 
     display: flex;
     flex-flow: row nowrap;
     padding-left: $small-padding;
 
-    color: $color1;
+    color: $color8;
     vertical-align: bottom;
-    padding-bottom: 5px;
+
     border-bottom: 1px solid $color5;
     // border-left: 1px solid red;
     overflow: hidden;
     width: 100%;
+    height: $fsize1 + 2px;
 
     &.inputDisabled{
         opacity: 0.4;
@@ -34,18 +35,19 @@
 
 .FFA{
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     flex-grow: 1;
     mat-slider{
         width: 100%;
         height: $fsize3;
-        max-width: 300px;
-        padding: 0px 8px 0px 0px;
+        padding: 0px 20px 0px 0px;
+        position: relative;
+        bottom: 7px;
     }
 }
 
 input{
-    color: $color1;
+    color: $color8;
     background-color: transparent;
     border:none;
     border-bottom: 1px solid $color1;
@@ -73,51 +75,7 @@ input{
         border-bottom: 0px; //2px solid transparent;
         &:hover{ // no change
             background-color: transparent;
-            color: $color1;
+            color: $color8;
         }
     }
 }
-
-
-// .container--parameter{
-//     display: inline-block; 
-//     flex-direction: row; 
-//     flex-wrap: wrap;
-//     bottom: 0px;
-//     padding-bottom: 5px;
-//     border-bottom: 1px solid $color5;
-//     border-left: 1px solid $color5;
-//     width: 98%;
-
-// }
-
-// .container--input{
-//     display: inline-flex; 
-//     flex-direction: row; 
-// }
-
-
-// input{
-//     color: $color1;
-//     background-color: $color4;
-//     max-width: 96%;
-//     border: none;
-//     border-bottom: 1px solid $color1;
-//     margin-left: 5px;
-//     vertical-align: bottom;
-//     &.disabled-input{
-//         border-bottom: none;
-//     }
-// }
-
-// .input-const-name{
-//     min-width: 100px;
-// }
-
-
-// .parameter__name{
-//     display: inline-block; 
-//     flex-direction: row; 
-//     flex-wrap: wrap;
-//     width: 100px;
-// }

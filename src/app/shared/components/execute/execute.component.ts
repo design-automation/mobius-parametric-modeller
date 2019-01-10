@@ -51,6 +51,7 @@ export class ExecuteComponent {
     constructor(private dataService: DataService) {}
 
     async execute() {
+        console.log(' ');
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
             let errorCheck = false;
@@ -98,6 +99,12 @@ export class ExecuteComponent {
 
         this.executeFlowchart(this.dataService.flowchart);
         // this._webWorkerService.run(this.executeFlowchart, this.dataService.flowchart);
+
+        for (const node of this.dataService.flowchart.nodes) {
+            if (node.type !== 'end') {
+                delete node.output.value;
+            }
+        }
     }
 
     executeFlowchart(flowchart) {

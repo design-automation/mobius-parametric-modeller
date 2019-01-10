@@ -1,8 +1,7 @@
-import { EEntType, EAttribNames, EEntTypeStr } from '@libs/geo-info/common';
+import { EEntType, EAttribNames } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
-import { isNumber } from 'util';
-
+import { idBreak, idsBreak } from '@libs/geo-info/id';
 
 // =========================================================================================================================================
 // Attribute Checks
@@ -140,6 +139,9 @@ const typeCheckObj  = {
     // entities: Check if string
     isEntity: function(fn_name: string, arg_name: string, arg: string): void {
         isStringArg(fn_name, arg_name, arg, 'entity');
+        if (arg.slice(2).length === 0) {
+            throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
+        }
         return;
     },
     isEntityList: function(fn_name: string, arg_name: string, arg_list: string[]): void {
@@ -245,43 +247,38 @@ const IDcheckObj = {
     // IDs
     // entity types
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
-    isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|'all'): void {
-        typeCheckObj.isEntity(fn_name, arg_name, arg);
+    isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|'all'): [EEntType, number] {
+        typeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
+        const ent_arr = idBreak(arg); // split
+
         if (ent_type_strs === 'all') {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
         let pass = false;
         for (let i = 0; i < ent_type_strs.length; i++) {
-            if (arg.startsWith(EEntTypeStr[ent_type_strs[i]])) {  // arg[0] === EEntType[ent_type_strs[i]]
-                if (arg.length !== 2) {
-                    // split id here
-                    pass = true;
-                } else {
-                    throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
-                }
+            if (ent_arr[0] === EEntType[ent_type_strs[i]]) {
+                pass = true;
+                break;
             }
         }
         if (pass === false) {
             throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
         }
-        return;
+        return ent_arr;
     },
-    isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|'all'): void {
-        typeCheckObj.isEntityList(fn_name, arg_name, arg_list);
+    isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|'all'): [EEntType, number][] {
+        typeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
+        const ent_arr_lst = idsBreak(arg_list); // split
+
         if (ent_type_strs === 'all') {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
-        for (let i = 0; i < arg_list.length; i++) {
+        for (let i = 0; i < ent_arr_lst.length; i++) {
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
-                if (arg_list[i].startsWith(EEntType[ent_type_strs[j]])) {
-                    if (arg_list[i].length !== 2) {
-                        // split id here
-                        pass = true;
-                        return; // passed test
-                    } else {
-                        throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' needs to have an index specified');
-                    }
+                if (ent_arr_lst[i][0] === EEntType[ent_type_strs[j]]) {
+                    pass = true;
+                    break;
                 }
             }
             if (pass === false) {
@@ -289,27 +286,20 @@ const IDcheckObj = {
                 ent_type_strs.forEach((test_ent) => {
                     ret_str_arr.push(test_ent + '_list');
                 });
-
                 throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not one of the following valid types - '
                                 + ret_str_arr.toString());
             }
         }
-        return;
+        return ent_arr_lst;
     },
-    isIDList_list: function(fn_name: string, arg_name: string, arg_list: string[][], ent_type_strs: string[]|'all'): void {
-        if (ent_type_strs === 'all') {
-            ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
-        }
-        for (let i = 0; i < arg_list.length; i++) {
-            IDcheckObj.isIDList(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs);
-        }
-        return;
+    isIDList_list: function(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|'all'): [EEntType, number][][] {
+        return arg_list.map(arg => IDcheckObj.isIDList(fn_name, arg_name, arg, ent_type_strs));
     },
 };
 // =========================================================================================================================================
 // Specific Checks
 // =========================================================================================================================================
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]|'all'): void {
+export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void {
     let pass = false;
     const err_arr = [];
     for (let i = 0; i < check_fns.length; i++) {
@@ -328,12 +318,15 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
     }
     return;
 }
-export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks: string[]|'all'): void {
+
+export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[],
+                         IDchecks: string[]|'all'): [EEntType, number]|[EEntType, number][]|[EEntType, number][][] {
     let pass = false;
     const err_arr = [];
+    let ret: [EEntType, number]|[EEntType, number][];
     for (let i = 0; i < check_fns.length; i++) {
         try {
-            IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+           ret =  IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -345,39 +338,21 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
-    return;
-}
-export function checkIDs2(fn_name: string, arg_name: string, arg: [EEntType, number][], 
-        check_fns: string[], IDchecks: string[]|'all'): void {
-    let pass = false;
-    const err_arr = [];
-    for (let i = 0; i < check_fns.length; i++) {
-        try {
-            IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
-        } catch (err) {
-            err_arr.push(err.message + '\n');
-            continue;
-        }
-        pass = true;
-        break; // passed
-    }
-    if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
-        throw new Error(ret_msg + err_arr.join(''));
-    }
-    return;
+    return ret; // returns [EEntType, number]|[EEntType, number][]|[EEntType, number][][]; depends on which passes
 }
 // =========================================================================================================================================
 // Most General Check
 // =========================================================================================================================================
-export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks?: string[]|'all') {
+export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[],
+                              IDchecks?: string[]|'all'): [EEntType, number]|[EEntType, number][]|[EEntType, number][][] {
     let pass = false;
     const err_arr = [];
+    let ret: [EEntType, number]|[EEntType, number][];
     for (let i = 0; i < check_fns.length; i++) {
         if (Object.keys(IDcheckObj).includes(check_fns[i])) {
             // checking for ID
             try {
-                IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+                ret = IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
             } catch (err) {
                 err_arr.push(err.message + '\n');
                 continue;
@@ -400,6 +375,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
+    return ret; // returns [EEntType, number]|[EEntType, number][]|[EEntType, number][][]; depends on which passes
 }
 
 // =====================================================================================================================
@@ -436,6 +412,9 @@ function isStringListArg(fn_name: string, arg_name: string, arg_list: any[], typ
     isListArg(fn_name, arg_name, arg_list, typ);
     for (let i = 0; i < arg_list.length; i++) {
         isStringArg(fn_name, arg_name + '[' + i + ']', arg_list[i], typ);
+        if (arg_list[i].slice(2).length === 0) {
+            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' needs to have an index specified');
+        }
     }
     return;
 }

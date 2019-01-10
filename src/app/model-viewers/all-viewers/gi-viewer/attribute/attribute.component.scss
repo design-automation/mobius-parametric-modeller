@@ -2,7 +2,7 @@
 @import '~scss/variables';
 
 .table--container{
-  height: 100%;
+  // height: 100%;
   overflow-y: auto;
 }
 
@@ -93,7 +93,7 @@ table {
   }
 }
 
-/deep/ #settings.btn{
+/deep/ #settings_button.btn{
   height: 20px;
   width: 20px;
   background-color: $color6;

@@ -7,6 +7,7 @@ import { DataThreejs } from '../data/data.threejs';
 import { DataService } from '../data/data.service';
 import { EEntityTypeStr, EAttribNames } from '@libs/geo-info/common';
 import { DropdownMenuComponent } from '../html/dropdown-menu.component';
+import { ModalService } from '../html/modal-window.service';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -22,6 +23,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     @Input() model: GIModel;
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
+    protected modalWindow: ModalService;
     public container = null;
     public _elem;
     // viewer size
@@ -68,6 +70,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     constructor(injector: Injector, elem: ElementRef) {
         this._elem = elem;
         this.dataService = injector.get(DataService);
+        this.modalWindow = injector.get(ModalService);
     }
     /**
      * Called when the viewer is initialised.
@@ -198,36 +201,44 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     public onMouseMove(event) {
-        const intersects = this.initRaycaster(event);
-        if (intersects.length > 0) {
-            const tags = document.getElementsByTagName('body');
-            for (let index = 0; index < tags.length; index++) {
-                tags[index].style.cursor = 'pointer';
-            }
-        } else {
+        if (event.target.tagName !== 'CANVAS') {
             const tags = document.getElementsByTagName('body');
             for (let index = 0; index < tags.length; index++) {
                 tags[index].style.cursor = 'default';
             }
-        }
+            return null;
+        } else {
+            const intersects = this.initRaycaster(event);
+            if (intersects.length > 0) {
+                const tags = document.getElementsByTagName('body');
+                for (let index = 0; index < tags.length; index++) {
+                    tags[index].style.cursor = 'pointer';
+                }
+            } else {
+                const tags = document.getElementsByTagName('body');
+                for (let index = 0; index < tags.length; index++) {
+                    tags[index].style.cursor = 'default';
+                }
+            }
 
-        if (!this.isDown) { return; }
-        // event.preventDefault();
-        const mouseX = event.clientX - event.target.getBoundingClientRect().left;
-        const mouseY = event.clientY - event.target.getBoundingClientRect().top;
+            if (!this.isDown) { return; }
+            // event.preventDefault();
+            const mouseX = event.clientX - event.target.getBoundingClientRect().left;
+            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
 
-        // Put your mousemove stuff here
-        const dx = mouseX - this.lastX;
-        const dy = mouseY - this.lastY;
-        this.lastX = mouseX;
-        this.lastY = mouseY;
+            // Put your mousemove stuff here
+            const dx = mouseX - this.lastX;
+            const dy = mouseY - this.lastY;
+            this.lastX = mouseX;
+            this.lastY = mouseY;
 
-        // accumulate the drag distance
-        // (used in mouseup to see if this is a drag or click)
-        this.dragHash += Math.abs(dx) + Math.abs(dy);
+            // accumulate the drag distance
+            // (used in mouseup to see if this is a drag or click)
+            this.dragHash += Math.abs(dx) + Math.abs(dy);
 
-        if (this.dragHash > 4) {
-            // dragging
+            if (this.dragHash > 4) {
+                // dragging
+            }
         }
     }
 

@@ -248,19 +248,21 @@ const IDcheckObj = {
         if (ent_type_strs === 'all') {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
+        let pass = false;
         for (let i = 0; i < ent_type_strs.length; i++) {
-            if (typeof arg !== 'string') {
-                break; // throw error
-            }
             if (arg.startsWith(EEntityTypeStr[ent_type_strs[i]])) {
                 if (arg.length !== 2) {
-                    return; // passed test
+                    // split id here
+                    pass = true;
                 } else {
                     throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
                 }
             }
         }
-        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
+        if (pass === false) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
+        }
+        return;
     },
     isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|'all'): void {
         typeCheckObj.isEntityList(fn_name, arg_name, arg_list);
@@ -268,11 +270,11 @@ const IDcheckObj = {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
         for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isString(fn_name, arg_name, arg_list[0]);
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
                 if (arg_list[i].startsWith(EEntityTypeStr[ent_type_strs[j]])) {
                     if (arg_list[i].length !== 2) {
+                        // split id here
                         pass = true;
                         return; // passed test
                     } else {
@@ -280,7 +282,7 @@ const IDcheckObj = {
                     }
                 }
             }
-            if (!pass) {
+            if (pass === false) {
                 const ret_str_arr = [];
                 ent_type_strs.forEach((test_ent) => {
                     ret_str_arr.push(test_ent + '_list');

@@ -51,6 +51,7 @@ export class ExecuteComponent {
     constructor(private dataService: DataService) {}
 
     async execute() {
+        console.log(' ');
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
             let errorCheck = false;
@@ -169,7 +170,6 @@ export class ExecuteComponent {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
             }
             // print the code
-            console.log();
             console.log(`Executing node: ${node.name}\n`);
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);

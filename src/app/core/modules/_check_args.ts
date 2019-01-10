@@ -1,26 +1,29 @@
-import { EEntType, EAttribNames } from '@libs/geo-info/common';
+import { EEntType, EAttribNames, EEntTypeStr } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
 import { isNumber } from 'util';
 // =========================================================================================================================================
 // Attribute Checks
 // =========================================================================================================================================
-function checkAttribName(fn_name: string, attrib_name: string): void {
-    // typeCheckObj.isString(fn_name, 'attrib_name', attrib_name); // check attrib_name is string
-    // attrib_name is always a string: check if name is invalid (0 length, contains non-alphanumeric, starts with numbers)
-    if (attrib_name.length === 0) {
-        throw new Error (fn_name + ': attrib_name not specified');
+function isValidName(fn_name: string, arg_name: string, arg: string): void {
+    typeCheckObj.isString(fn_name, arg_name, arg); // check arg is string
+    if (arg.length === 0) {
+        throw new Error (fn_name + ': ' + arg_name + ' not specified');
     }
-    if (attrib_name.search(/\W/) !== -1) {
-        throw new Error (fn_name + ': attrib_name contains restricted characters');
+    if (arg.search(/\W/) !== -1) {
+        throw new Error (fn_name + ': ' + arg_name + ' contains restricted characters');
     }
-    if (attrib_name[0].search(/[0-9]/) !== -1) {
-        throw new Error (fn_name + ': attrib_name should not start with numbers');
+    if (arg[0].search(/[0-9]/) !== -1) {
+        throw new Error (fn_name + ': ' + arg_name + ' should not start with numbers');
     }
     return;
 }
 export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
-    checkAttribName(fn_name, attrib_name);
+    isValidName(fn_name, 'attrib_name', attrib_name);
+    // blocks writing to id
+    if (attrib_name === 'id') {
+        throw new Error(fn_name + ': id is not modifiable!');
+    }
     // -- check defined index
     let ind = false;
     if (attrib_index !== null && attrib_index !== undefined) {
@@ -32,9 +35,15 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
     const blk_att_nm_lst = Object.values(EAttribNames);
     let blocked = false;
     let isTexture = false;
+    let isName = false;
     for (let i = 0; i < blk_att_nm_lst.length; i++) {
         if (attrib_name === 'texture') {
             isTexture = true;
+            blocked = true;
+            break;
+        }
+        if (attrib_name === 'name') {
+            isName = true;
             blocked = true;
             break;
         }
@@ -49,53 +58,63 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
             let pass = false;
             const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
                             + Object.values(EAttribNames).toString() + '\n'];
-            if (ind === false) {
+            if (isName) {
                 try {
-                    isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
-                    let chkLstLen;
-                    if (isTexture) {
-                        chkLstLen = 2;
-                    } else {
-                        chkLstLen = 3;
-                    }
-                    isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
-                } catch (err) {
-                    err_arr.push(err.message);
-                    throw new Error(err_arr.join(''));
-                }
-                check_fns = ['isNumberList'];
-                for (let i = 0; i < check_fns.length; i++) {
-                    try {
-                        typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
-                    } catch (err) {
-                        err_arr.push(err.message + '\n');
-                        continue;
-                    }
+                    isValidName(fn_name, 'attrib_value', attrib_value);
                     pass = true;
-                    break; // passed
+                } catch (err) {
+                    err_arr.push(err);
                 }
             } else {
-                if (isTexture) {
-                    if (attrib_index > 1 || attrib_index < 0) {
-                        err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
+                if (ind === false) {
+                    try {
+                        isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
+                        let chkLstLen;
+                        if (isTexture) {
+                            chkLstLen = 2;
+                        } else {
+                            chkLstLen = 3;
+                        }
+                        isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
+                    } catch (err) {
+                        err_arr.push(err.message);
                         throw new Error(err_arr.join(''));
+                    }
+                    check_fns = ['isNumberList'];
+                    for (let i = 0; i < check_fns.length; i++) {
+                        try {
+                            typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                        } catch (err) {
+                            err_arr.push(err.message + '\n');
+                            continue;
+                        }
+                        pass = true;
+                        break; // passed
                     }
                 } else {
-                    if (attrib_index > 2 || attrib_index < 0) {
-                        err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
-                        throw new Error(err_arr.join(''));
+                    if (isTexture) {
+                        if (attrib_index > 1 || attrib_index < 0) {
+                            err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
+                            throw new Error(err_arr.join(''));
+                        }
+                    } else {
+                        if (attrib_index > 2 || attrib_index < 0) {
+                            err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
+                            throw new Error(err_arr.join(''));
+                        }
                     }
-                }
-                check_fns = ['isNumber'];
-                for (let i = 0; i < check_fns.length; i++) {
-                    try {
-                        typeCheckObj[check_fns[i]](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i], 'attrib_value', attrib_value);
-                    } catch (err) {
-                        err_arr.push(err.message + '\n');
-                        continue;
+                    check_fns = ['isNumber'];
+                    for (let i = 0; i < check_fns.length; i++) {
+                        try {
+                            typeCheckObj[check_fns[i]](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
+                                                      'attrib_value', attrib_value);
+                        } catch (err) {
+                            err_arr.push(err.message + '\n');
+                            continue;
+                        }
+                        pass = true;
+                        break; // passed
                     }
-                    pass = true;
-                    break; // passed
                 }
             }
             if (pass === false) {
@@ -229,19 +248,21 @@ const IDcheckObj = {
         if (ent_type_strs === 'all') {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
+        let pass = false;
         for (let i = 0; i < ent_type_strs.length; i++) {
-            if (typeof arg !== 'string') {
-                break; // throw error
-            }
-            if (arg.startsWith(EEntType[ent_type_strs[i]])) {
+            if (arg.startsWith(EEntTypeStr[ent_type_strs[i]])) {
                 if (arg.length !== 2) {
-                    return; // passed test
+                    // split id here
+                    pass = true;
                 } else {
                     throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
                 }
             }
         }
-        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
+        if (pass === false) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
+        }
+        return;
     },
     isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|'all'): void {
         typeCheckObj.isEntityList(fn_name, arg_name, arg_list);
@@ -249,11 +270,11 @@ const IDcheckObj = {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
         for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isString(fn_name, arg_name, arg_list[0]);
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
                 if (arg_list[i].startsWith(EEntType[ent_type_strs[j]])) {
                     if (arg_list[i].length !== 2) {
+                        // split id here
                         pass = true;
                         return; // passed test
                     } else {
@@ -261,7 +282,7 @@ const IDcheckObj = {
                     }
                 }
             }
-            if (!pass) {
+            if (pass === false) {
                 const ret_str_arr = [];
                 ent_type_strs.forEach((test_ent) => {
                     ret_str_arr.push(test_ent + '_list');

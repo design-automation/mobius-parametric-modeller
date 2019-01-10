@@ -9,8 +9,7 @@ import { NgModule, SkipSelf, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatSliderModule, MatCheckboxModule, MatIconModule, MatMenuModule,
-    MatButtonModule, MatExpansionModule, MatSelectModule, MatFormFieldModule } from '@angular/material';
+import { MatSliderModule, MatCheckboxModule, MatIconModule } from '@angular/material';
 // app directives
 import { MbFileReaderDirective } from './directives/filesys';
 import { AutogrowDirective } from './directives/textarea';
@@ -30,6 +29,7 @@ import { NotificationComponent } from './components/notification/notification.co
 // app model viewers
 import { DataViewersContainer } from '../model-viewers/model-viewers-container.module';
 import { LoadUrlComponent } from './components/file/loadurl.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
     providers: [ ],
@@ -43,7 +43,8 @@ import { LoadUrlComponent } from './components/file/loadurl.component';
             NotificationComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             // ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
-            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent
+            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent,
+            SpinnerComponent
         ],
     imports: [
             CommonModule,
@@ -84,6 +85,7 @@ import { LoadUrlComponent } from './components/file/loadurl.component';
             AddNodeComponent,
             AddInputComponent,
             AddOutputComponent,
+            SpinnerComponent,
             // ParameterViewerComponent,
             NotificationComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent

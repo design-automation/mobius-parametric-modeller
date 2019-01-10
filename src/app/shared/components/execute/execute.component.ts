@@ -52,6 +52,7 @@ export class ExecuteComponent {
 
     async execute() {
         console.log(' ');
+        document.getElementById('spinner-on').click();
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
             let errorCheck = false;
@@ -105,6 +106,7 @@ export class ExecuteComponent {
                 delete node.output.value;
             }
         }
+        document.getElementById('spinner-off').click();
     }
 
     executeFlowchart(flowchart) {

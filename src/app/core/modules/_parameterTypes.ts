@@ -77,6 +77,7 @@ vecRev = __modules__._vec.vecRev;
 vecFromTo = __modules__._vec.vecFromTo;
 vecDot = __modules__._vec.vecDot;
 vecCross = __modules__._vec.vecCross;
+vecEqual = __modules__._vec.vecEqual;
 radToDeg = __modules__._conversion.radToDeg;
 degToRad = __modules__._conversion.degToRad;
 rand = __modules__._rand.rand;

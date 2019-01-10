@@ -112,7 +112,8 @@ export class ExecuteComponent {
         // get the string of all imported functions
         const funcStrings = {};
         for (const func of flowchart.functions) {
-            funcStrings[func.name] = CodeUtils.getFunctionString(func);
+            const funcStringRes =  CodeUtils.getFunctionString(func);
+            funcStrings[func.name] = funcStringRes[0];
         }
 
         // execute each node
@@ -144,11 +145,15 @@ export class ExecuteComponent {
         let fnString = '';
         try {
             // get the code for the node
-            const nodeCode = CodeUtils.getNodeCode(node, true);
+            const codeRes = CodeUtils.getNodeCode(node, true);
+            const nodeCode = codeRes[0];
+            const varsDefined = codeRes[1];
 
-            fnString = printFunc + nodeCode.join('\n');
+            // fnString = printFunc + nodeCode.join('\n');
+            fnString = printFunc + '\nfunction __main_node_code__(){\n' + nodeCode.join('\n') + '\n}\nreturn __main_node_code__();';
             // add the constants from the start node
             fnString = _varString + globalVars + fnString;
+
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
 
@@ -183,9 +188,17 @@ export class ExecuteComponent {
                 */
             }
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
-            const fn = new Function('__modules__', '__params__', fnString);
+            const context = {};
+            const fn = new Function('__modules__', '__params__', fnString).bind(context);
             // execute the function
+
             const result = fn(Modules, params);
+            for (const v of varsDefined) {
+                if (window[v]) {
+                    delete window[v];
+                }
+            }
+
             node.output.value = result;
             if (node.type === 'start') {
                 for (const constant in params['constants']) {
@@ -200,6 +213,10 @@ export class ExecuteComponent {
             return globalVars;
         } catch (ex) {
             if (DEBUG) {
+                console.log('\n=======================================\n' +
+                    ex.name +
+                    '\n=======================================\n' +
+                    ex.message);
                 throw ex;
             }
             node.hasError = true;

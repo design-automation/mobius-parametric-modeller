@@ -4,5 +4,11 @@
 
 <hr>
 <ng-container *ngFor="let prod of startNode.procedure">
-    <procedure-input-viewer *ngIf="prod.enabled && prod.type === 10 && prod.meta.inputMode != 5" [prod]="prod"></procedure-input-viewer>
+    <div *ngIf="prod.enabled && prod.type === 10 && prod.meta.inputMode != 5">
+        <procedure-input-viewer [prod]="prod"></procedure-input-viewer>
+
+        <!-- input description -->
+        <textarea id='{{prod.ID}}_desc' [(ngModel)]='prod.meta.description' placeholder="Input Description" disabled></textarea>
+        <hr>
+    </div>
 </ng-container>

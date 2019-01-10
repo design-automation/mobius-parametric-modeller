@@ -169,6 +169,7 @@ export class ExecuteComponent {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
             }
             // print the code
+            console.log();
             console.log(`Executing node: ${node.name}\n`);
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);

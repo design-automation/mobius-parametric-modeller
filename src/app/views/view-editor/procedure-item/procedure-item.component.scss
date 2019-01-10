@@ -173,6 +173,9 @@
 
     &:hover{
         background-color: $color5;
+        .btn{
+            background-color: inherit;
+        }
     }
 }
 
@@ -187,10 +190,29 @@
     // min-width: fit-content; // for global side scroll
 
     white-space: nowrap;
-    overflow: hidden;
-    // &:hover{
-    //     overflow-x: auto;
-    // }
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: transparent; 
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color2; 
+    }
+
+    &:hover{
+        &::-webkit-scrollbar-thumb {
+            background: $color4; 
+        }
+    }
 }
 
 .container--item:hover + .btn-container{//.container--line
@@ -199,6 +221,7 @@
         .btn{
             display: flex;
             justify-content: center;
+            background-color: inherit;
         }
     }
 }
@@ -219,6 +242,7 @@
         .btn{
             display: flex;
             justify-content: center;
+            background-color: inherit;
         }
     }
 }
@@ -242,7 +266,7 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: transparent;
+    background-color: $color6;
 
     border: none;
     color: $color1;

@@ -90,8 +90,8 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
     const ents_arr: [EEntType, number][] = idsBreak(positions as TId[]);
     // --- Error Check ---
-    checkIDs2('make.Polygon', 'positions', ents_arr, ['isIDList', 'isIDList_list'], ['POSI']);
-    checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+    // checkIDs2('make.Polygon', 'positions', ents_arr, ['isIDList', 'isIDList_list'], ['POSI']);
+    // checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
     if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(positions as TId[]);
@@ -341,9 +341,9 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
         }
         if (isDim2(ent_type)) {
             const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
-            const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i))[divisions];
-            // const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
-            // pgons_id.push(idMake(EEntType.PGON, pgon_i));
+            const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
+            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
+            pgons_id.push(idMake(EEntType.PGON, pgon_i));
         }
         return pgons_id;
     } else {

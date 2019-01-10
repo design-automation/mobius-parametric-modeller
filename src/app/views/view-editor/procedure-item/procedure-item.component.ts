@@ -141,8 +141,19 @@ export class ProcedureItemComponent {
             return str;
         }
         const strSplit = str.split(/[\@\[\]]/g);
+        let teststr = str;
         for (const i of strSplit) {
             if (i === '') { continue; }
+            if (i === '0' || Number(i)) {
+                const sStr = `[${i}]`;
+                const ind = teststr.indexOf(sStr);
+                if (ind === -1) {
+                    this.invalidVar = true;
+                    return str;
+                }
+                teststr = teststr.slice(0, ind) + teststr.slice(ind + sStr.length);
+                continue;
+            }
             try {
                 if (i.substring(0, 1) === '_') {
                     this.invalidVar = true;

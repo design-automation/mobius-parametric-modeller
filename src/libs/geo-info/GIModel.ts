@@ -63,7 +63,8 @@ export class GIModel {
      */
     private _generateColors(): number[] {
         const colors = [];
-        for (let index = 0; index < this.geom.query.numEnts(EEntityTypeStr.VERT); index++) {
+        const numEnts = this.geom.query.numEnts(EEntityTypeStr.VERT);
+        for (let index = 0; index < numEnts; index++) {
             colors.push(1, 1, 1);
         }
         return colors;
@@ -73,7 +74,8 @@ export class GIModel {
      */
     private _generateNormals(): number[] {
         const normals = [];
-        for (let index = 0; index < this.geom.query.numEnts(EEntityTypeStr.VERT); index++) {
+        const numEnts = this.geom.query.numEnts(EEntityTypeStr.VERT);
+        for (let index = 0; index < numEnts; index++) {
             normals.push(0, 0, 0);
         }
         return normals;

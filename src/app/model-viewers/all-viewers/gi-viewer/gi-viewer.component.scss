@@ -17,12 +17,12 @@ as-split-area{
     overflow: hidden auto !important;
 }
 
-#settings {
+#settings_button {
     position: absolute;
     top: 2px;
     right: 10px;
     cursor: pointer;
-    z-index: 9999999;
+    z-index: 800;
     display: inline-block;
     vertical-align: bottom;
     background-color: transparent;
@@ -50,4 +50,131 @@ as-split-area{
         flex-flow: column nowrap;
         justify-content: space-between;
     }
+}
+
+
+modal-window {
+    display: none;
+    ul{
+        margin: 20px 0;
+        padding: 0;
+        li{
+            list-style: none;
+            padding: 10px 0;
+            overflow: auto;
+            .label{
+                float: left;
+                line-height: 20px;
+                width: 100px;
+            }
+            .label + div{
+                float: left;
+            }
+        }
+    }
+}
+ 
+body.modal-open {
+    overflow: hidden;
+}
+
+
+#settings_modal{
+    .onoffswitch {
+        position: relative; width: 60px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        display: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 1px solid #999999; border-radius: 0px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.1s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+        font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        content: "ON";
+        padding-left: 5px;
+        background-color: #FFFFFF; color: #505050;
+    }
+    .onoffswitch-inner:after {
+        content: "OFF";
+        padding-right: 5px;
+        background-color: #FFFFFF; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block; width: 20px; margin: 0px;
+        background: #A1A1A1;
+        position: absolute; top: 0; bottom: 0;
+        right: 35px;
+        border: 2px solid transparent; border-radius: 0px;
+        transition: all 0.1s ease-in 0s; 
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px; 
+        background-color: #00006D; 
+    }
+
+
+    // Grid Size Slider
+    #slidecontainer {
+        width: calc(100% - 100px); /* Width of the outside container */
+      }
+      
+      /* The slider itself */
+      .slider {
+        -webkit-appearance: none;  /* Override default CSS styles */
+        appearance: none;
+        width: 50%; /* Full-width */
+        height: 20px; /* Specified height */
+        background: #d3d3d3; /* Grey background */
+        outline: none; /* Remove outline */
+        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+        transition: opacity .2s;
+        margin: 0;
+      }
+      
+      /* Mouse-over effects */
+      .slider:hover {
+        opacity: 1; /* Fully shown on mouse-over */
+      }
+      
+      /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        width: 15px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #00006D; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+      
+      .slider::-moz-range-thumb {
+        width: 15px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #00006D; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+
+    input + input{
+        vertical-align: top;
+        border: none;
+        margin-left: 10px;
+        line-height: 20px;
+        background: transparent;
+    }
+
 }

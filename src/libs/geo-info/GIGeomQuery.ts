@@ -422,4 +422,27 @@ export class GIGeomQuery {
                 throw new Error('Bad navigation: ' + to_ets + index);
         }
     }
+    // ============================================================================
+    // Other methods
+    // ============================================================================
+    /**
+     * Get the welded neighbour vertices of a set of vertices.
+     * @param ent_type_str
+     * @param index
+     */
+    public neighbours(from_ets: EEntityTypeStr, to_ets: EEntityTypeStr, index: number): number[] {
+        const verts_i: number[] = this.navAnyToVert(from_ets, index);
+        const posis_i: number[] = this.navAnyToPosi(from_ets, index);
+        const neighbour_ents_i: Set<number> = new Set();
+        for (const posi_i of posis_i) {
+            const found_verts_i: number[] = this.navPosiToVert(posi_i);
+            for (const found_vert_i of found_verts_i) {
+                if (verts_i.indexOf(found_vert_i) === -1) {
+                    const found_ents_i: number[] = this.navAnyToAny(EEntityTypeStr.VERT, to_ets, found_vert_i);
+                    found_ents_i.forEach( found_ent_i => neighbour_ents_i.add(found_ent_i));
+                }
+            }
+        }
+        return Array.from(neighbour_ents_i);
+    }
 }

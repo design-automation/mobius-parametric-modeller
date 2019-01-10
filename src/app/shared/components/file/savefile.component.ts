@@ -71,14 +71,23 @@ export class SaveFileComponent {
             }
         }
 
-        const savedfile = circularJSON.parse(circularJSON.stringify(f));
-        for (const node of savedfile.flowchart.nodes) {
+        for (const node of f.flowchart.nodes) {
+            node.model = undefined;
             if (node.input.hasOwnProperty('value')) {
                 node.input.value = undefined;
             }
             if (node.output.hasOwnProperty('value')) {
                 node.output.value = undefined;
             }
+            for (const prod of node.procedure) {
+                if (prod.hasOwnProperty('resolvedValue')) {
+                    prod.resolvedValue = undefined;
+                }
+            }
+        }
+
+        const savedfile = circularJSON.parse(circularJSON.stringify(f));
+        for (const node of savedfile.flowchart.nodes) {
             for (const prod of node.state.procedure) {
                 prod.selected = false;
             }

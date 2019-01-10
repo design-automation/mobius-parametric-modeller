@@ -42,8 +42,8 @@ export class DataService {
     /**
      * Set the THreejs Scene
      */
-    setThreejsScene() {
-        this._data_threejs = new DataThreejs();
+    setThreejsScene(settings) {
+        this._data_threejs = new DataThreejs(settings);
     }
 
     /**

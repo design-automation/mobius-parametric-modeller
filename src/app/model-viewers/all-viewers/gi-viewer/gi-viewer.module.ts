@@ -19,6 +19,9 @@ import { AttributeComponent } from './attribute/attribute.component';
 import { TabComponent } from './attribute/tab.component';
 import { TabsComponent } from './attribute/tabs.component';
 import { DropdownMenuComponent } from './html/dropdown-menu.component';
+import { ModalWindowComponent } from './html/modal-window.component';
+import { ModalService } from './html/modal-window.service';
+import { FormsModule } from '@angular/forms';
 /**
  * GIViewer
  * A viewer for Geo-Info models.
@@ -30,7 +33,8 @@ import { DropdownMenuComponent } from './html/dropdown-menu.component';
         AttributeComponent,
         TabComponent,
         TabsComponent,
-        DropdownMenuComponent
+        DropdownMenuComponent,
+        ModalWindowComponent
     ],
     exports: [
         GIViewerComponent
@@ -43,7 +47,11 @@ import { DropdownMenuComponent } from './html/dropdown-menu.component';
         NgxPaginationModule,
         MatExpansionModule,
         MatTooltipModule,
-        AttributeModule
+        AttributeModule,
+        FormsModule
+    ],
+    providers: [
+        ModalService
     ]
 })
 export class GIViewerModule {

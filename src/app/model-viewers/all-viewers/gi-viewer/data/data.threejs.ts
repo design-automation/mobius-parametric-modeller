@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { async } from 'q';
 
 /**
  * ThreejsScene
@@ -31,10 +30,24 @@ export class DataThreejs {
     public _model: GIModel;
 
     public sceneObjs: THREE.Object3D[] = [];
+
+    // Show Normals
+    public vnh: THREE.VertexNormalsHelper;
+    // Settings
+    public settings: {
+        normalsOnOff: boolean,
+        axesOnOff: boolean,
+        gridSize: number
+    };
     /**
      * Constructs a new data subscriber.
      */
-    constructor() {
+    constructor(settings: {
+        normalsOnOff: boolean,
+        axesOnOff: boolean,
+        gridSize: number
+    }) {
+        this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
         this._scene.background = new THREE.Color(0xcccccc);
@@ -67,8 +80,7 @@ export class DataThreejs {
         // mouse
         this._mouse = new THREE.Vector2();
 
-        // grid and axes
-        this.grid = new THREE.GridHelper(500, 50);
+        // axes
         this.axesHelper = new THREE.AxesHelper(20);
         // selecting
         this._raycaster = new THREE.Raycaster();
@@ -250,13 +262,14 @@ export class DataThreejs {
     /**
      * Draws a grid on the XY plane.
      */
-    private _addGrid() {
+    public _addGrid(size: number = this.settings.gridSize) {
         for (let i = 0; i < this._scene.children.length; i++) {
             if (this._scene.children[i].name === 'GridHelper') {
                 this._scene.remove(this._scene.children[i]);
                 i = i - 1;
             }
         }
+        this.grid = new THREE.GridHelper(size, size / 10);
         // todo: change grid -> grid_value
         if (this._grid_show) {
             this.grid.name = 'GridHelper';
@@ -294,8 +307,9 @@ export class DataThreejs {
         mesh.receiveShadow = false;
 
         // show vertex normals
-        const vnh = new THREE.VertexNormalsHelper(mesh, 3, 0x0000ff);
-        // this._scene.add( vnh );
+        this.vnh = new THREE.VertexNormalsHelper(mesh, 3, 0x0000ff);
+        this.vnh.visible = false;
+        this._scene.add( this.vnh );
         this.sceneObjs.push(mesh);
         // add mesh to scene
         this._scene.add(mesh);

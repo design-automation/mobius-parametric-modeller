@@ -136,6 +136,10 @@
         &.error{
             border: 2px solid $error-color;
         }
+        &:focus, &:hover{
+            border-color: $selected-color;
+            background-color: $color7;
+        }
     }
     
     .input--arg{
@@ -152,25 +156,21 @@
         &.error{
             border: 2px solid $error-color;
         }
-    }
-
-    .input--arg--p{
-        position: absolute;
-        z-index: 999;
-        /deep/ .inline-function{
-            font-style: italic;
-            color: $function-text-color;
+        &:focus, &:hover{
+            border-color: $selected-color;
+            background-color: $color7;
         }
     }
 
-    input:focus{
-        border-color: $selected-color;
-        background-color: $color7;
-    }
-    input:hover{
-        border-color: $selected-color;
-        background-color: $color7;
-    }
+    // .input--arg--p{
+    //     position: absolute;
+    //     z-index: 999;
+    //     /deep/ .inline-function{
+    //         font-style: italic;
+    //         color: $function-text-color;
+    //     }
+    // }
+
     &:hover{
         background-color: $color5;
     }

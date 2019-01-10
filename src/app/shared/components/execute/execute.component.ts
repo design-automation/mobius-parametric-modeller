@@ -99,6 +99,12 @@ export class ExecuteComponent {
 
         this.executeFlowchart(this.dataService.flowchart);
         // this._webWorkerService.run(this.executeFlowchart, this.dataService.flowchart);
+
+        for (const node of this.dataService.flowchart.nodes) {
+            if (node.type !== 'end') {
+                delete node.output.value;
+            }
+        }
     }
 
     executeFlowchart(flowchart) {

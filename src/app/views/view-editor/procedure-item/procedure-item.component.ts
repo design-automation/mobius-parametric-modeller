@@ -180,8 +180,8 @@ export class ProcedureItemComponent {
         this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
             /\s*([\[\]])\s*/g, '$1').replace(
             // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
-            /([\+\-\*\/\%\{\}\(\)\,\<\>\=])/g, ' $1 ')
-            .replace(/([\<\>\=])\s+=/g, '$1=')
+            /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
+            .replace(/([\<\>\=\!])\s+=/g, '$1=')
             .trim().replace(/\s{2,}/g, ' ');
             // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').replace(
             // /@[a-z0-9]+\s\[\s/g, '[').trim().replace(/[ ]{2,}/g, ' ');

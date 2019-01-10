@@ -140,8 +140,8 @@ input, textarea, select, a {
     //background-color: $color7 !important;
     font-size: $fsize2!important;
     position: relative;
-    bottom: 10px;
-    z-index: 1;
+    right: 5px;
+    bottom: 5px;
 }
 
 .mat-slider-thumb{
@@ -157,8 +157,6 @@ input, textarea, select, a {
     height: 0px !important;
     width: 0px !important;
     top: 0px !important;
-    right: -$fsize1 !important;
-
     background-color: $color4!important;
 }
 
@@ -171,6 +169,7 @@ input, textarea, select, a {
     //     border-bottom: 1px solid $color4;
     // }
     .mat-slider-thumb{
+        transform: scale(0.5) !important;
         background-color: $selected-color !important;
     }
 }

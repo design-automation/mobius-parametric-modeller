@@ -37,7 +37,7 @@
                                 Test Model</button>
                             </div>
                             
-                            <div class = 'procedureln--container'>
+                            <div class = 'procedureln--container' [ngClass]="{'procedureln--container-start': dataService.node.type == 'start'}">
                                 <!-- list of procedure items for all nodes -->
                                 <div class = 'pro-container' [hidden]="!dataService.testModel && dataService.node.type == 'start'">
                                     <procedure-item 
@@ -48,7 +48,7 @@
                                     (helpText)='updateHelpView($event)'
                                     ></procedure-item>
                                 </div>
-                                <div class = 'divider--container'>
+                                <div class = 'divider--container' *ngIf="dataService.node.type !== ''">
                                     <div class = 'divider' *ngIf="dataService.node.type == 'start'"><span>Parameters</span></div>
                                     <div class = 'divider' *ngIf="dataService.node.type == 'end'"><span>Return</span></div>
                                 </div>

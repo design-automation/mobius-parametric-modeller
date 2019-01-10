@@ -17,8 +17,9 @@
     border-bottom: 1px solid $color1;
     border-left: 1px solid $color1;
     overflow: hidden;
+    // width: calc(100% - 20px);
     width: 100%;
-
+    
     &.inputDisabled{
         opacity: 0.4;
     }

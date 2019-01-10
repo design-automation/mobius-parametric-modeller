@@ -29,7 +29,7 @@ export class ParameterViewerComponent implements AfterViewInit {
         }
         for (const prod of this.startNode.procedure) {
             if (!prod.enabled || prod.type !== 10 || prod.meta.inputMode === 5) { continue; }
-            textarea = document.getElementById(prod.ID + '-desc');
+            textarea = document.getElementById(prod.ID + '_desc');
             if (textarea) {
                 const desc = this.flowchart.description.split('\n');
                 const textareaWidth = textarea.getBoundingClientRect().width - 20;

@@ -65,7 +65,7 @@
 }
 
 .container--procedure{
-    width: calc(100% - 100px); //min-width toolset
+    width: calc(100% - 125px); //min-width toolset
     background-color: transparent;
     padding: 0px;   
 }
@@ -82,6 +82,10 @@
     &:hover{
         overflow:auto;
     } 
+}
+
+.procedureln--container-start{
+    height: calc(100vh - 40px - 25px - 56px); // 40px === $header-height 25px top margin & btn height 56px flowchart info
 }
 
 hr{

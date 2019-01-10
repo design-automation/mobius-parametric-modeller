@@ -32,8 +32,8 @@ export {util};
 import * as pattern from './pattern';
 export {pattern};
 
-import * as vector from './vector';
-export {vector};
+import * as virtual from './virtual';
+export {virtual};
 
 import * as list from './list';
 export {list};

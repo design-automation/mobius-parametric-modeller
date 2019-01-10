@@ -1,19 +1,11 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz } from '@libs/geo-info/common';
-<<<<<<< HEAD
-import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies, idBreak } from '@libs/geo-info/id';
-import { __merge__ } from './_model';
-import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
-import { _model } from '@modules';
-import { checkCommTypes, checkIDs } from './_check_args';
-=======
-import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, 
+import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
     isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
-import { checkCommTypes, checkIDs, checkIDs2 } from './_check_args';
->>>>>>> 2f1c18ea73b8e90caeed95f4322530a004591db6
+import { checkCommTypes, checkIDs } from './_check_args';
 
 // ================================================================================================
 /**
@@ -97,12 +89,7 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
     // --- Error Check ---
-<<<<<<< HEAD
     const ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
-=======
-    // checkIDs2('make.Polygon', 'positions', ents_arr, ['isIDList', 'isIDList_list'], ['POSI']);
-    // checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
->>>>>>> 2f1c18ea73b8e90caeed95f4322530a004591db6
     // --- Error Check ---
     if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(ents_arr as [EEntType, number][]);
@@ -282,16 +269,16 @@ export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod):
  */
 export function Extrude(__model__: GIModel, entities: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
     // --- Error Check ---
-    // const fn_name = 'make.Extrude';
-    // checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON',
-    //         'COLL']);
-    // checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
-    // checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
+    const fn_name = 'make.Extrude';
+    const ents_arr =  checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                              ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
+    checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
     // --- Error Check ---
     const extrude_vec: Txyz = (Array.isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
     if (!Array.isArray(entities)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(entities as TId);
+        const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
         // check if this is a collection
         if (isColl(ent_type)) {
             const points_i: number[] = __model__.geom.query.navCollToPoint(index);
@@ -371,7 +358,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
  */
 export function Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
-    checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
+    const ents_arr =  checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -419,11 +406,11 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
 export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    // checkIDs('make.Copy', 'edge', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
-    // checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
+    const ents_arr = checkIDs('make.Copy', 'edge', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
+    checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
-    if (!Array.isArray(edge)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(edge as TId);
+    if (!Array.isArray(ents_arr[0])) {
+        const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
         let exist_edges_i: number[];
         if (!isEdge(ent_type)) {
             exist_edges_i = __model__.geom.query.navAnyToEdge(ent_type, index).slice();
@@ -456,17 +443,16 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
  */
 export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     // --- Error Check ---
-    checkIDs('modify.Unweld', 'entities', entities, ['isID', 'isIDList'],
-            ['VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    let ents_arr = checkIDs('modify.Unweld', 'entities', entities, ['isID', 'isIDList'],
+                              ['VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as [EEntType, number][];
     }
     // get verts_i
     const all_verts_i: number[] = []; // count number of posis
-    for (const ent_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(ent_id);
-        const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, index);
+    for (const ents of ents_arr) {
+        const verts_i: number[] = __model__.geom.query.navAnyToVert(ents[0], ents[1]);
         all_verts_i.push(...verts_i);
     }
     const new_posis_i: number [] = __model__.geom.add.unweldVerts(all_verts_i);

@@ -139,6 +139,9 @@ input, textarea, select, a {
     color: $selected-color !important;
     //background-color: $color7 !important;
     font-size: $fsize2!important;
+    position: relative;
+    bottom: 10px;
+    z-index: 1;
 }
 
 .mat-slider-thumb{
@@ -146,7 +149,8 @@ input, textarea, select, a {
 	background-color: $color4 !important;
 	border: 1px solid $color1 !important;
 	width: 5px !important;
-	right: -5px !important;
+    right: -5px !important;
+    transform: scale(0.75) !important;
 }
 
 .mat-slider-thumb-label{
@@ -159,12 +163,15 @@ input, textarea, select, a {
 }
 
 .cdk-mouse-focused{
-    .mat-slider-track-fill{
+    // .mat-slider-track-fill{
+    //     background-color: $selected-color !important;
+    // }
+    // .mat-slider-track-background{
+    //     background-color: $color7 !important;
+    //     border-bottom: 1px solid $color4;
+    // }
+    .mat-slider-thumb{
         background-color: $selected-color !important;
-    }
-    .mat-slider-track-background{
-        background-color: $color7 !important;
-        border-bottom: 1px solid $color4;
     }
 }
 
@@ -174,6 +181,9 @@ input, textarea, select, a {
     height: $fsize1;
     width: $fsize1;
     position: relative;
+    input{
+        visibility: hidden;
+    }
     label{
         cursor: pointer;
         position: absolute;
@@ -222,7 +232,8 @@ input, textarea, select, a {
 // import file button
 
 .filebtn{
-    height: 20px;
+    height: 16px;
+    width: 75px;
     margin: 0px;
     padding: 0px;
     border: 2px solid transparent;

@@ -303,6 +303,7 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
+    return;
 }
 export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[], IDchecks: string[]|'all'): void {
     let pass = false;
@@ -321,6 +322,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
+    return;
 }
 // =========================================================================================================================================
 // Most General Check

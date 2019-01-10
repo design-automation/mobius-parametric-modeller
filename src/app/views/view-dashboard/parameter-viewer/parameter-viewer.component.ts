@@ -17,15 +17,29 @@ export class ParameterViewerComponent implements AfterViewInit {
     @Input() endNode: INode;
 
     ngAfterViewInit() {
-        const textarea = document.getElementById('display-flowchart-desc');
-        if (!textarea) { return; }
-        const desc = this.flowchart.description.split('\n');
-        const textareaWidth = textarea.getBoundingClientRect().width - 20;
-        let lineCount = 0;
-        for (const line of desc) {
-            lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+        let textarea = document.getElementById('display-flowchart-desc');
+        if (textarea) {
+            const desc = this.flowchart.description.split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 20;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
         }
-        textarea.style.height = lineCount * 14 + 4 + 'px';
+        for (const prod of this.startNode.procedure) {
+            if (!prod.enabled || prod.type !== 10 || prod.meta.inputMode === 5) { continue; }
+            textarea = document.getElementById(prod.ID + '-desc');
+            if (textarea) {
+                const desc = this.flowchart.description.split('\n');
+                const textareaWidth = textarea.getBoundingClientRect().width - 20;
+                let lineCount = 0;
+                for (const line of desc) {
+                    lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                }
+                textarea.style.height = lineCount * 14 + 4 + 'px';
+            }
+        }
     }
 
     displayName() {

@@ -1,10 +1,19 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz } from '@libs/geo-info/common';
+<<<<<<< HEAD
 import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies, idBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs } from './_check_args';
+=======
+import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, 
+    isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
+import { __merge__ } from './_model';
+import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
+import { _model } from '@modules';
+import { checkCommTypes, checkIDs, checkIDs2 } from './_check_args';
+>>>>>>> 2f1c18ea73b8e90caeed95f4322530a004591db6
 
 // ================================================================================================
 /**
@@ -88,7 +97,12 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
     // --- Error Check ---
+<<<<<<< HEAD
     const ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+=======
+    // checkIDs2('make.Polygon', 'positions', ents_arr, ['isIDList', 'isIDList_list'], ['POSI']);
+    // checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+>>>>>>> 2f1c18ea73b8e90caeed95f4322530a004591db6
     // --- Error Check ---
     if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(ents_arr as [EEntType, number][]);
@@ -337,9 +351,9 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
         }
         if (isDim2(ent_type)) {
             const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
-            const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i))[divisions];
-            // const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
-            // pgons_id.push(idMake(EEntType.PGON, pgon_i));
+            const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
+            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
+            pgons_id.push(idMake(EEntType.PGON, pgon_i));
         }
         return pgons_id;
     } else {

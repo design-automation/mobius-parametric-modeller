@@ -79,10 +79,14 @@ export function idMake(ent_type: EEntType, index: number): TId {
     return EEntTypeStr[ent_type] + index;
 }
 export function idBreak(id: TId): [EEntType, number] {
+    // error check
     const ent_type_str: string = id.slice(0, 2);
     const ent_type: EEntType = EEntTypeStr[ent_type_str];
     const index: number = Number(id.slice(2));
     return [ent_type, index];
+}
+export function idsBreak(ids: TId[]): [EEntType, number][] {
+    return ids.map(id => idBreak(id));
 }
 export function idIndicies(ids: TId[]): number[] {
     return ids.map( id => Number(id.slice(2)));

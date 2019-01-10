@@ -1,10 +1,11 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz } from '@libs/geo-info/common';
-import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies } from '@libs/geo-info/id';
+import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi, isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
-import { checkCommTypes, checkIDs } from './_check_args';
+import { checkCommTypes, checkIDs, checkIDs2 } from './_check_args';
+import { isDist } from './_check_args';
 
 // ================================================================================================
 /**
@@ -87,8 +88,10 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
+    const ents_arr: [EEntType, number][] = idsBreak(positions as TId[]);
     // --- Error Check ---
-    // checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
+    checkIDs2('make.Polygon', 'positions', ents_arr, ['isIDList', 'isIDList_list'], ['POSI']);
+    checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
     if (Array.isArray(positions) && !Array.isArray(positions[0])) {
         const posis_i: number[] = idIndicies(positions as TId[]);
@@ -109,6 +112,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
  * @example_info Creates a collection containing point1, polyline1, polygon1.
  */
 export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId {
+
     // --- Error Check ---
     const fn_name = 'make.Collection';
     if (parent_coll !== null && parent_coll !== undefined) {

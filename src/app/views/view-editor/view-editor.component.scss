@@ -94,9 +94,26 @@ procedure-item.ng-star-inserted{
     max-height: 100%;
 }
 
-.divider{
+.divider--container{
     height: 20px;
+    display: flex;
+    flex-flow: column nowrap;
+    padding-left: 8px;
+    padding-right: 5px;
     width: 100%;
+    box-sizing: border-box;
+    margin: 5px 0px 2px 0px;
+    .divider{
+        height: 100%;
+        padding-left: 2px;
+        padding-bottom: 2px;
+        border-bottom: 3px solid $color2;
+        span{
+            font-size: $fsize2;
+            font-weight: 550;
+            color: $selected-color;
+        }
+    }
 }
 
 #modelViewButton--container{

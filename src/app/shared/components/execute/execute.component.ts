@@ -93,6 +93,7 @@ export class ExecuteComponent {
             if (errorCheck) {
                 document.getElementById('Console').click();
                 console.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
+                document.getElementById('spinner-off').click();
                 throw new Error('Empty Argument');
             }
         }
@@ -231,6 +232,7 @@ export class ExecuteComponent {
             node.model = params['model'];
             return globalVars;
         } catch (ex) {
+            document.getElementById('spinner-off').click();
             if (DEBUG) {
                 console.log('\n=======================================\n' +
                     ex.name +

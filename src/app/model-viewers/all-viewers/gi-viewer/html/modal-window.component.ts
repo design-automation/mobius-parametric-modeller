@@ -30,7 +30,7 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
         // close modal on background click
         this.element.addEventListener('click', function (e: any) {
             if (e.target.className === 'modal-window') {
-                modal.close();
+                // modal.close();
             }
         });
 

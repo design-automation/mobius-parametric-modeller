@@ -35,6 +35,7 @@ export class ViewDashboardComponent {
         return node.model;
     }
     setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
-
+    getSplit() { return this.dataService.splitVal; }
+    getFlowchart() { return this.dataService.flowchart; }
 }
 

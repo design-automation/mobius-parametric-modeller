@@ -1,7 +1,7 @@
-<h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{dataService.node.name}}'>{{dataService.node.name}}</span><span id='node--arr'>▾</span></h2>
+<h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{getNode().name}}</span><span id='node--arr'>▾</span></h2>
 
 <div id="nodeMenu">
-    <div *ngFor='let nd of dataService.flowchart.nodes; let i = index;'>
+    <div *ngFor='let nd of getFlowchart().nodes; let i = index;'>
         <li (click)="changeNode(i)"> 
             {{nd.name}}
         </li>
@@ -12,7 +12,7 @@
 <div class = "divider"></div>
 
 <div class = "toolset--body" (mouseover)='setCurrent($event)'>
-    <div [hidden]="!dataService.testModel && dataService.node.type == 'start'">
+    <div [hidden]="getNode().type == 'start' && !getViewOutput()">
         <ng-container>
             <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
         
@@ -67,13 +67,7 @@
                                     (click)='add_function(fn)'> 
                                         {{fn.name}} 
                                     </li>
-                                    <span class="tooltiptext" *ngIf='fn.doc'>
-                                        <p class='funcDesc'>{{fn.doc.summary||fn.doc.description}}</p>
-                                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                                        <ng-container *ngFor='let param of fn.doc.parameters'>
-                                            <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
-                                        </ng-container>
-                                        <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>
+                                    <span class="tooltiptext" *ngIf='fn.doc' [innerHTML]='fn.doc'>
                                     </span>
                                 </div>
                             </ng-container>
@@ -94,23 +88,25 @@
                                         <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                                 </button>
                             </li>
-                            <div class = 'tooltip-container'>
-                                <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
+                            <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
+                                <div class = 'user--def-lnContainer'>
                                     <li (click)='add_imported_function(fn)'> {{fn.name}} 
+                                    </li>
+                                    <div class = 'btn--container'>
                                         <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
                                             <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
                                         </button>
                                         <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
                                             <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
                                         </button>
-                                    </li>
-                                    <span class="tooltiptext">
-                                        <p class='funcDesc'>{{fn.doc.description}}</p>
-                                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                                        <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                                        <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
-                                    </span>
+                                    </div>
                                 </div>
+                                <span class="tooltiptext">
+                                    <p class='funcDesc'>{{fn.doc.description}}</p>
+                                    <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+                                    <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                                    <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
+                                </span>
                             </div>
                             
                         </ul>
@@ -142,7 +138,7 @@
                 <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals")'>Globals</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
-                        <ng-container *ngFor='let cnst of dataService.flowchart.nodes[0].procedure'>
+                        <ng-container *ngFor='let cnst of getFlowchart().nodes[0].procedure'>
                             <li *ngIf='cnst.type === 10' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
                                 {{cnst.args[cnst.argCount-2].value}}
                             </li>
@@ -207,7 +203,7 @@
     </div>
     
     <!-- functions for input nodes -->
-    <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'start'">
+    <div id='toolset_inp' class = 'toolset' *ngIf="getNode().type == 'start'">
         <button id='startFuncs' class="accordion inline--cat" (click)='toggleAccordion("startFuncs")'>Parameters</button>
         <div class="panel">
         <!-- <div class='toolset__functions'> -->

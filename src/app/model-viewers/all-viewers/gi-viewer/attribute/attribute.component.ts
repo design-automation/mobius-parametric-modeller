@@ -3,7 +3,7 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon, GIAttribs } from '@libs/geo-info';
-import { EEntType } from '@libs/geo-info/common';
+import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
 
 @Component({
   selector: 'attribute',
@@ -70,7 +70,7 @@ export class AttributeComponent implements OnChanges{
       const ThreeJS = this.data.attribs.threejs;
       let displayData: { id: string }[] = [];
       const AllAttribData = ThreeJS.getAttribsForTable(tab_map[tabIndex]);
-      const SelectedAttribData = ThreeJS.getEntsVals(this.dataService.selected_ents.get(tab_map[tabIndex]), tab_map[tabIndex]);
+      const SelectedAttribData = ThreeJS.getEntsVals(this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]), tab_map[tabIndex]);
       if (this.showSelected) {
         displayData = SelectedAttribData;
       } else {

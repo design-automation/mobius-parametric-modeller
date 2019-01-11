@@ -1,11 +1,12 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
-        <as-split-area [size]="100 - dataService.splitVal">
-            <panel-header [title]='dataService.flowchart.name'></panel-header>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [title]='getFlowchart().name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
 
-                <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'
+                <!-- <div class='container--editor' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()' -->
+                <div class='container--editor'
                 (copy)='copyProd()' (cut)='cutProd($event)' (paste)='pasteProd($event)'>
                 
                     <div class='container__content'>
@@ -19,42 +20,42 @@
                         <!-- procedure editor on the right side -->
                         <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
                             <!-- parameter-editor only for start/end node -->
-                            <parameter-editor *ngIf="dataService.node.type == 'start'" 
-                                [flowchart]='dataService.flowchart' 
-                                [node]='dataService.node'
+                            <parameter-editor *ngIf="getNode().type == 'start'" 
+                                [flowchart]='getFlowchart()' 
+                                [node]='getNode()'
                                 [prodCheck]='false'></parameter-editor>
 
-                            <div id='modelViewButton--container' *ngIf="dataService.node.type !== 'start'">
+                            <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
                                 <button (click)='setViewOutput()'>Viewing 
-                                    <span *ngIf='!dataService.modelOutputView'>Input Model</span>
-                                    <span *ngIf='dataService.modelOutputView'>Output Model</span></button>
+                                    <span *ngIf='!getViewOutput()'>Input Model</span>
+                                    <span *ngIf='getViewOutput()'>Output Model</span></button>
                             </div>
 
-                            <div id='modelViewButton--container' *ngIf="dataService.node.type == 'start'">
-                                <button (click)='setTestModel()'>
-                                    <span *ngIf='dataService.testModel'>Viewing</span>
-                                    <span *ngIf='!dataService.testModel'>Hiding</span>
+                            <div id='modelViewButton--container' *ngIf="getNode().type == 'start'">
+                                <button (click)='setViewOutput()'>
+                                    <span *ngIf='getViewOutput()'>Viewing</span>
+                                    <span *ngIf='!getViewOutput()'>Hiding</span>
                                 Test Model</button>
                             </div>
                             
-                            <div class = 'procedureln--container' [ngClass]="{'procedureln--container-start': dataService.node.type == 'start'}">
+                            <div class = 'procedureln--container' [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
                                 <!-- list of procedure items for all nodes -->
-                                <div class = 'pro-container' [hidden]="!dataService.testModel && dataService.node.type == 'start'">
+                                <div class = 'pro-container' [hidden]="getNode().type == 'start' && !getViewOutput()">
                                     <procedure-item 
-                                    *ngFor="let line of dataService.node?.procedure; let idx=index" 
+                                    *ngFor="let line of getNode()?.procedure; let idx=index" 
                                     [data]="line"
                                     (select)="selectProcedure($event,line)"
                                     (delete)="deleteChild(idx)"
                                     (helpText)='updateHelpView($event)'
                                     ></procedure-item>
                                 </div>
-                                <div class = 'divider--container' *ngIf="dataService.node.type !== ''">
-                                    <div class = 'divider' *ngIf="dataService.node.type == 'start'"><span>Parameters</span></div>
-                                    <div class = 'divider' *ngIf="dataService.node.type == 'end'"><span>Return</span></div>
+                                <div class = 'divider--container' *ngIf="getNode().type !== ''">
+                                    <div class = 'divider' *ngIf="getNode().type == 'start'"><span>Parameters</span></div>
+                                    <div class = 'divider' *ngIf="getNode().type == 'end'"><span>Return</span></div>
                                 </div>
-                                <parameter-editor *ngIf="dataService.node.type !== ''" 
-                                [flowchart]='dataService.flowchart' 
-                                [node]='dataService.node'
+                                <parameter-editor *ngIf="getNode().type !== ''" 
+                                [flowchart]='getFlowchart()' 
+                                [node]='getNode()'
                                 [prodCheck]='true'></parameter-editor>
                                 <div id = 'spacer'></div>
                                 
@@ -70,7 +71,7 @@
             </div>
         </as-split-area>
 
-        <as-split-area [size]="dataService.splitVal">
+        <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
                 <model-viewers-container [data]='viewerData()'></model-viewers-container>

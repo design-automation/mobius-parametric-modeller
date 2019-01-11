@@ -129,52 +129,61 @@ body.modal-open {
 
 
     // Grid Size Slider
-    #slidecontainer {
+    .slidecontainer {
         width: calc(100% - 100px); /* Width of the outside container */
-      }
+    }
       
-      /* The slider itself */
-      .slider {
+    /* The slider itself */
+    .slider {
         -webkit-appearance: none;  /* Override default CSS styles */
         appearance: none;
         width: 50%; /* Full-width */
-        height: 20px; /* Specified height */
+        height: 22px; /* Specified height */
         background: #d3d3d3; /* Grey background */
         outline: none; /* Remove outline */
         opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
         -webkit-transition: .2s; /* 0.2 seconds transition on hover */
         transition: opacity .2s;
         margin: 0;
-      }
-      
-      /* Mouse-over effects */
-      .slider:hover {
+    }
+    
+    /* Mouse-over effects */
+    .slider:hover {
         opacity: 1; /* Fully shown on mouse-over */
-      }
-      
-      /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
-      .slider::-webkit-slider-thumb {
-        -webkit-appearance: none; /* Override default look */
+    }
+    
+    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none; 
         appearance: none;
-        width: 15px; /* Set a specific slider handle width */
-        height: 25px; /* Slider handle height */
-        background: #00006D; /* Green background */
-        cursor: pointer; /* Cursor on hover */
-      }
-      
-      .slider::-moz-range-thumb {
-        width: 15px; /* Set a specific slider handle width */
-        height: 25px; /* Slider handle height */
-        background: #00006D; /* Green background */
-        cursor: pointer; /* Cursor on hover */
-      }
+        width: 12px; 
+        height: 26px; 
+        background: #00006D; 
+        cursor: pointer; 
+    }
+    
+    .slider::-moz-range-thumb {
+        width: 12px; 
+        height: 26px; 
+        background: #00006D; 
+        cursor: pointer; 
+    }
+    .slider:disabled::-webkit-slider-thumb {
+        background: #dddddd; 
+    }
 
+    .slider:disabled::-moz-range-thumb {
+        background: #dddddd; 
+    }
+
+    input {
+        margin-left: 10px !important;
+    }
     input + input{
         vertical-align: top;
         border: none;
-        margin-left: 10px;
         line-height: 20px;
         background: transparent;
+        width: 50px;
     }
-
 }

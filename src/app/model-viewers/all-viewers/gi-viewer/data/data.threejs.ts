@@ -15,7 +15,7 @@ export class DataThreejs {
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
-    public selected_geoms: Map<string, {id: number, name: string}> = new Map();  // TODO add types
+    public selected_geoms: Map<string, { id: number, name: string }> = new Map();  // TODO add types
     public _text: string;
     // text lables
     public ObjLabelMap: Map<string, any> = new Map();
@@ -23,8 +23,8 @@ export class DataThreejs {
     // number of threejs points, lines, triangles
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
-    public _grid_show = true;
     public grid: THREE.GridHelper;
+    // axes
     public axesHelper: THREE.AxesHelper;
     // the GI model to display
     public _model: GIModel;
@@ -35,17 +35,17 @@ export class DataThreejs {
     public vnh: THREE.VertexNormalsHelper;
     // Settings
     public settings: {
-        normalsOnOff: boolean,
-        axesOnOff: boolean,
-        gridSize: number
+        normals: { show: boolean, size: number },
+        axes: { show: boolean, size: number },
+        grid: { show: boolean, size: number }
     };
     /**
      * Constructs a new data subscriber.
      */
     constructor(settings: {
-        normalsOnOff: boolean,
-        axesOnOff: boolean,
-        gridSize: number
+        normals: { show: boolean, size: number },
+        axes: { show: boolean, size: number },
+        grid: { show: boolean, size: number }
     }) {
         this.settings = settings;
         // scene
@@ -80,8 +80,6 @@ export class DataThreejs {
         // mouse
         this._mouse = new THREE.Vector2();
 
-        // axes
-        this.axesHelper = new THREE.AxesHelper(20);
         // selecting
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
@@ -143,7 +141,7 @@ export class DataThreejs {
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         this._scene.add(mesh);
-        this.selected_geoms.set(ent_id, {id: mesh.id, name: mesh.name});
+        this.selected_geoms.set(ent_id, { id: mesh.id, name: mesh.name });
 
         const obj: { entity: THREE.Mesh, type: string } = { entity: mesh, type: objType.face };
         this.createLabelforObj(container, obj.entity, obj.type, ent_id);
@@ -167,7 +165,7 @@ export class DataThreejs {
         });
         const line = new THREE.LineSegments(geom, mat);
         this._scene.add(line);
-        this.selected_geoms.set(ent_id, {id: line.id, name: ent_id});
+        this.selected_geoms.set(ent_id, { id: line.id, name: ent_id });
 
         const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
         this.createLabelforObj(container, obj.entity, obj.type, ent_id);
@@ -185,7 +183,7 @@ export class DataThreejs {
         });
         const point = new THREE.Points(geom, mat);
         this._scene.add(point);
-        this.selected_geoms.set(ent_id,  {id: point.id, name: ent_id});
+        this.selected_geoms.set(ent_id, { id: point.id, name: ent_id });
         const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
         this.createLabelforObj(container, obj.entity, obj.type, ent_id);
         this.ObjLabelMap.set(ent_id, obj);
@@ -203,7 +201,7 @@ export class DataThreejs {
         });
         const point = new THREE.Points(geom, mat);
         this._scene.add(point);
-        this.selected_geoms.set(ent_id,  {id: point.id, name: ent_id});
+        this.selected_geoms.set(ent_id, { id: point.id, name: ent_id });
     }
 
     public createLabelforObj(container, obj, type: string, labelText: string) {
@@ -255,14 +253,25 @@ export class DataThreejs {
         this._scene.add(light);
     }
     // add axes
-    private _addAxes() {
-        this._scene.add(this.axesHelper);
+    public _addAxes(size: number = this.settings.axes.size) {
+        for (let i = 0; i < this._scene.children.length; i++) {
+            if (this._scene.children[i].name === 'AxesHelper') {
+                this._scene.remove(this._scene.children[i]);
+                i = i - 1;
+            }
+        }
+        this.axesHelper = new THREE.AxesHelper(size);
+        this.axesHelper.visible = this.settings.axes.show;
+        if (this.axesHelper.visible) {
+            this.axesHelper.name = 'AxesHelper';
+            this._scene.add(this.axesHelper);
+        }
         // this.axesHelper.position.set(0, 0, 0);
     }
     /**
      * Draws a grid on the XY plane.
      */
-    public _addGrid(size: number = this.settings.gridSize) {
+    public _addGrid(size: number = this.settings.grid.size) {
         for (let i = 0; i < this._scene.children.length; i++) {
             if (this._scene.children[i].name === 'GridHelper') {
                 this._scene.remove(this._scene.children[i]);
@@ -270,8 +279,9 @@ export class DataThreejs {
             }
         }
         this.grid = new THREE.GridHelper(size, size / 10);
+        this.grid.visible = this.settings.grid.show;
         // todo: change grid -> grid_value
-        if (this._grid_show) {
+        if (this.grid.visible) {
             this.grid.name = 'GridHelper';
             const vector = new THREE.Vector3(0, 1, 0);
             this.grid.lookAt(vector);
@@ -307,9 +317,9 @@ export class DataThreejs {
         mesh.receiveShadow = false;
 
         // show vertex normals
-        this.vnh = new THREE.VertexNormalsHelper(mesh, 3, 0x0000ff);
-        this.vnh.visible = false;
-        this._scene.add( this.vnh );
+        this.vnh = new THREE.VertexNormalsHelper(mesh, this.settings.normals.size, 0x0000ff);
+        this.vnh.visible = this.settings.normals.show;
+        this._scene.add(this.vnh);
         this.sceneObjs.push(mesh);
         // add mesh to scene
         this._scene.add(mesh);
@@ -450,7 +460,7 @@ export class DataThreejs {
     }
 
     public onWindowKeyPress(event: KeyboardEvent) {
-        if ( (<Element>event.target).nodeName === 'TEXTAREA') {return; }
+        if ((<Element>event.target).nodeName === 'TEXTAREA') { return; }
         const segment_str = window.location.pathname;
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];

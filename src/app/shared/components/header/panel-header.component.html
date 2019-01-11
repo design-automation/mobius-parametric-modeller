@@ -24,16 +24,16 @@
                         
 
         <!-- buttons to navigate to the 4 pages -->
-        <button class='btn' [class.active]='router.url=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
+        <button class='btn' [class.active]='getUrl()=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
             <mat-icon svgIcon="cGallery"></mat-icon>
         </button>
-        <button class='btn' [class.active]='router.url=="/dashboard"' [routerLink]="'/dashboard'" title='Dashboard'>
+        <button class='btn' [class.active]='getUrl()=="/dashboard"' [routerLink]="'/dashboard'" title='Dashboard'>
             <mat-icon svgIcon="cDashboard"></mat-icon>
         </button>
-        <button class='btn' [class.active]='router.url=="/flowchart"' [routerLink]="'/flowchart'" title='Flowchart'>
+        <button class='btn' [class.active]='getUrl()=="/flowchart"' [routerLink]="'/flowchart'" title='Flowchart'>
             <mat-icon svgIcon="cFlowchart"></mat-icon>
         </button>
-        <button class='btn' [class.active]='router.url=="/editor"' [routerLink]="'/editor'" title='Procedure'>
+        <button class='btn' [class.active]='getUrl()=="/editor"' [routerLink]="'/editor'" title='Procedure'>
             <mat-icon svgIcon="cEditor"></mat-icon>
         </button>
                 
@@ -58,7 +58,7 @@
                 
             </button>
             <br>
-            <button onclick="document.getElementById('file-input').click();"
+            <button (click)="loadFile()"
             title="Load Flowchart File from Computer">
                 <mat-icon>launch</mat-icon>
                 Load File 

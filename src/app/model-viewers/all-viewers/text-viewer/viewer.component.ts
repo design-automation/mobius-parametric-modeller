@@ -9,7 +9,7 @@ import { _model } from '@modules';
     template: `<textarea>{{ output || "no-value" }}</textarea>`,
     styleUrls: [`../general-viewer.scss`]
 })
-export class TextViewerComponent implements OnInit, DoCheck {
+class TextViewerComponent implements OnInit, DoCheck {
     @Input() data;
     output: string;
     /**

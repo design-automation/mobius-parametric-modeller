@@ -73,15 +73,28 @@ import { TId, EEntType, EEntTypeStr, TEntTypeIdx } from './common';
 //     return false;
 // }
 
-
 // ============================================================================
+export function getArrDepth(arr: any): number {
+    if (Array.isArray(arr)) {
+        return 1 + getArrDepth(arr[0]);
+    }
+    return 0;
+}
+// ============================================================================
+export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]): TId|TId[] {
+    if (getArrDepth(ent_type_idxs) === 2) {
+        const ent_type_idxs_arr: TEntTypeIdx[] = ent_type_idxs as  TEntTypeIdx[];
+        return ent_type_idxs_arr.map(ent_type_idx =>  EEntTypeStr[ent_type_idx[0] as EEntType] + ent_type_idx[1]) as TId[];
+    }
+    return EEntTypeStr[ent_type_idxs[0] as EEntType] + ent_type_idxs[1] as TId;
+}
 export function idMake(ent_type: EEntType|TEntTypeIdx, index?: number): TId {
     if (index === undefined) {
         ent_type = ent_type[0];
         index = ent_type[1];
     }
     return EEntTypeStr[ent_type as EEntType] + index;
- }
+}
 export function idBreak(id: TId): [EEntType, number] {
     const ent_type_str: string = id.slice(0, 2);
     const ent_type: EEntType = EEntTypeStr[ent_type_str];
@@ -91,7 +104,7 @@ export function idBreak(id: TId): [EEntType, number] {
 export function idsBreak(ids: TId[]): [EEntType, number][] {
     return ids.map(id => idBreak(id));
 }
-export function idIndicies(ents_arr: [EEntType, number][]): number[] {
+export function idIndicies(ents_arr: TEntTypeIdx[]): number[] {
     return ents_arr.map( ents => ents[1]);
 }
 // ============================================================================

@@ -1,15 +1,15 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
         
-        <as-split-area [size]="100 - dataService.splitVal">
-            <panel-header [title]='dataService.flowchart.name'></panel-header>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [title]='getFlowchart().name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <parameter-viewer [flowchart]='dataService.flowchart' [startNode]='dataService.flowchart.nodes[0]' [endNode]='getEndNode()'></parameter-viewer>
+                <parameter-viewer [flowchart]='getFlowchart()' [startNode]='getFlowchart().nodes[0]' [endNode]='getEndNode()'></parameter-viewer>
             </div>
         </as-split-area>
 
-        <as-split-area [size]="dataService.splitVal">
+        <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
                 <model-viewers-container [data]='viewerData()'></model-viewers-container>

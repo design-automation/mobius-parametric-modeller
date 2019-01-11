@@ -124,5 +124,7 @@ export class ViewGalleryComponent {
     }
 
     setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
-
+    getSplit() { return this.dataService.splitVal; }
+    getFlowchart() { return this.dataService.flowchart; }
+    getActiveGallery() { return this.dataService.activeGallery; }
 }

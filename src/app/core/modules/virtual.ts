@@ -79,7 +79,7 @@ export function RayFromPlane(plane: TPlane): TRay {
  */
 export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
-    checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']);
+    // checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -92,8 +92,8 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
         if (unique_posis_i.length < 3) { throw new Error('Too few points to calculate plane.'); }
         const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
         const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
-        //const normal: Txyz = newellNorm(unique_xyzs);
-        const normal: Txyz = _normal(__model__, ent_arr) as Txyz;
+        // const normal: Txyz = newellNorm(unique_xyzs);
+        const normal: Txyz = _normal(__model__, ent_arr) as Txyz; // TODO
         const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
         const y_vec: Txyz = vecCross(x_vec, normal);
         return [origin, x_vec, y_vec] as TPlane;
@@ -115,7 +115,7 @@ export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane
         ents_arr = idsBreak(entities as TId[]);
     }
     // --- Error Check ---
-    // checkIDs('virtual.GetPlane', 'faces', faces, ['isID'], ['FACE']); // can be a
+    // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
     return _getPlane(__model__, ents_arr);
 }

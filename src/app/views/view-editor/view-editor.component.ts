@@ -23,7 +23,7 @@ export class ViewEditorComponent {
     notificationMessage = '';
     notificationTrigger = true;
 
-    private copyCheck = false;
+    private copyCheck = true;
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
@@ -181,19 +181,24 @@ export class ViewEditorComponent {
     }
 
     setViewOutput() {
-        this.dataService.modelOutputView = !this.dataService.modelOutputView;
+        this.dataService.setModelOutputView(this.dataService.node.id, !this.getViewOutput());
+        // this.dataService.modelOutputView = !this.dataService.modelOutputView;
     }
 
-    setTestModel() {
-        this.dataService.testModel = !this.dataService.testModel;
-        this.dataService.modelOutputView = this.dataService.testModel;
+    getViewOutput() {
+        return this.dataService.getModelOutputView(this.dataService.node.id);
     }
+
+    // setTestModel() {
+    //     this.dataService.testModel = !this.dataService.testModel;
+    //     this.dataService.modelOutputView = this.dataService.testModel;
+    // }
 
     viewerData(): any {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
         // if (node.type === 'output') { return node.input.value; }
-        if (this.dataService.modelOutputView) {
+        if (this.getViewOutput()) {
             return node.model;
         }
         return node.input.value;
@@ -205,4 +210,8 @@ export class ViewEditorComponent {
         if (event.ctrlKey) { return; }
         NodeUtils.deselect_procedure(this.dataService.node);
     }
+    getSplit() { return this.dataService.splitVal; }
+    getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
+
 }

@@ -3,8 +3,8 @@
     direction="horizontal" 
     (dragStart)='dragSplitStart($event)'
     (dragEnd)='dragSplitEnd($event)'>
-        <as-split-area [size]="100 - dataService.splitVal">
-            <panel-header [title]='dataService.flowchart.name'></panel-header>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [title]='getFlowchart().name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
                 <div id = 'flowchart-main-container' class='flowchart-container'>
@@ -55,7 +55,7 @@
                                         
                     
                             <!-- wires => edge.component -->
-                            <g edge *ngFor="let edge of dataService.flowchart.edges; let edge_index = index" 
+                            <g edge *ngFor="let edge of getFlowchart().edges; let edge_index = index" 
                             [edge]='edge'
                             [inputOffset]='inputOffset'
                             [outputOffset]='outputOffset'
@@ -66,7 +66,7 @@
                             <line id="temporary-wire" class="temp-wire" x1="0" y1='0' x2='0' y2='0'></line>
                     
                             <!-- nodes => node.component -->
-                            <g node *ngFor="let node of dataService.flowchart.nodes; let node_index = index" 
+                            <g node *ngFor="let node of getFlowchart().nodes; let node_index = index" 
                             id='flw_node_{{node_index}}'
                             [node]='node' 
                             [selected]='isSelected(node_index)'
@@ -87,7 +87,7 @@
             </div>
         </as-split-area>
 
-        <as-split-area [size]="dataService.splitVal">
+        <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
                 <model-viewers-container [data]='viewerData()'></model-viewers-container>

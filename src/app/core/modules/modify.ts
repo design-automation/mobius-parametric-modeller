@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EAttribNames, EEntityTypeStr} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EAttribNames, EEntType} from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
@@ -28,8 +28,8 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
     }
     const posis_i: number[] = [];
     for (const geom_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     for (const unique_posi_i of unique_posis_i) {
@@ -65,15 +65,15 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
     }
     // handle origin type
     if (!Array.isArray(origin)) {
-        const [origin_ent_type_str, origin_index]: [EEntityTypeStr, number] = idBreak(origin as TId);
-        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type_str, origin_index);
+        const [origin_ent_type, origin_index]: [EEntType, number] = idBreak(origin as TId);
+        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type, origin_index);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
     // rotate all positions
     const posis_i: number[] = [];
     for (const geom_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     const matrix: Matrix4 = rotateMatrix(origin, axis, angle);
@@ -108,8 +108,8 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
     }
     // handle origin type
     if (!Array.isArray(origin)) {
-        const [origin_ent_type_str, origin_index]: [EEntityTypeStr, number] = idBreak(origin as TId);
-        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type_str, origin_index);
+        const [origin_ent_type, origin_index]: [EEntType, number] = idBreak(origin as TId);
+        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type, origin_index);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
     // handle scale type
@@ -119,8 +119,8 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
     // scale all positions
     const posis_i: number[] = [];
     for (const geom_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type_str, index));
+        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     const matrix: Matrix4 = scaleMatrix(origin, scale);
@@ -201,11 +201,11 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
     checkIDs('modify.Close', 'lines', lines, ['isID', 'isIDList'], ['PLINE']);
     // --- Error Check ---
     if (!Array.isArray(lines)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
+        const [ent_type, index]: [EEntType, number] = idBreak(lines as TId);
         let wire_i: number = index;
-        if (ent_type_str === EEntityTypeStr.PLINE) {
+        if (ent_type === EEntType.PLINE) {
             wire_i = __model__.geom.query.navPlineToWire(index);
-        } else if (ent_type_str !== EEntityTypeStr.WIRE) {
+        } else if (ent_type !== EEntType.WIRE) {
             throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
         }
         __model__.geom.add.closeWire(wire_i);

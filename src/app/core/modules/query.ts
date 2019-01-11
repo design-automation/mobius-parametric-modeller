@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, EEntityTypeStr, ESort } from '@libs/geo-info/common';
-import { idBreak, idIndicies } from '@libs/geo-info/id';
+import { TId, TQuery, EEntType, ESort } from '@libs/geo-info/common';
+import { idBreak, idIndicies, idMake } from '@libs/geo-info/id';
 import { checkIDs } from './_check_args';
 
 // TQuery should be something like this:
@@ -21,26 +21,26 @@ export enum _EQuerySelect {
     PGON =   'polygons',
     COLL =   'collections'
 }
-function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
+function _convertSelectToEEntTypeStr(select: _EQuerySelect): EEntType {
     switch (select) {
         case _EQuerySelect.POSI:
-            return EEntityTypeStr.POSI;
+            return EEntType.POSI;
         case _EQuerySelect.VERT:
-            return EEntityTypeStr.VERT;
+            return EEntType.VERT;
         case _EQuerySelect.EDGE:
-            return EEntityTypeStr.EDGE;
+            return EEntType.EDGE;
         case _EQuerySelect.WIRE:
-            return EEntityTypeStr.WIRE;
+            return EEntType.WIRE;
         case _EQuerySelect.FACE:
-            return EEntityTypeStr.FACE;
+            return EEntType.FACE;
         case _EQuerySelect.POINT:
-            return EEntityTypeStr.POINT;
+            return EEntType.POINT;
         case _EQuerySelect.PLINE:
-            return EEntityTypeStr.PLINE;
+            return EEntType.PLINE;
         case _EQuerySelect.PGON:
-            return EEntityTypeStr.PGON;
+            return EEntType.PGON;
         case _EQuerySelect.COLL:
-            return EEntityTypeStr.COLL;
+            return EEntType.COLL;
         default:
             throw new Error('Query select parameter not recognised.');
     }
@@ -64,30 +64,30 @@ function _convertSelectToEEntityTypeStr(select: _EQuerySelect): EEntityTypeStr {
  * @example_info Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
  */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
-    // get the select ent_type_str
-    const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);
+    // get the select ent_type
+    const select_ent_type: EEntType = _convertSelectToEEntTypeStr(select);
     // get the list of entities
     const found_entities_i: number[] = [];
     if (entities === null || entities === undefined) {
         // skip Error Check
-        found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type_str));
+        found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type));
     } else {
         // --- Error Check ---
-        checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+        // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
         // --- Error Check ---
         if (!Array.isArray(entities)) { entities = [entities]; }
         for (const entity_id of entities) {
-            const [curr_ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entity_id);
-            found_entities_i.push(...__model__.geom.query.navAnyToAny(curr_ent_type_str, select_ent_type_str, index));
+            const [curr_ent_type, index]: [EEntType, number] = idBreak(entity_id);
+            found_entities_i.push(...__model__.geom.query.navAnyToAny(curr_ent_type, select_ent_type, index));
         }
     }
     // check if the query is null
     if (query_expr === null || query_expr === undefined) {
-        return found_entities_i.map( entity_i => select_ent_type_str + entity_i);
+        return found_entities_i.map( entity_i => idMake(select_ent_type, entity_i));
     }
     // do the query on the list of entities
-    const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type_str, query_expr, found_entities_i);
-    return query_result.map( entity_i => select_ent_type_str + entity_i);
+    const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type, query_expr, found_entities_i);
+    return query_result.map( entity_i => idMake(select_ent_type, entity_i) );
 }
 // ================================================================================================
 /**
@@ -111,7 +111,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
     // --- Error Check ---
     if (entities !== null && entities !== undefined) {
-        checkIDs('query.Count', 'entities', entities, ['isID', 'isIDList'], 'all');
+        // checkIDs('query.Count', 'entities', entities, ['isID', 'isIDList'], 'all');
     }
     // --- Error Check ---
     return Get(__model__, select, entities, query_expr).length;
@@ -136,21 +136,21 @@ export enum _ESortMethod {
  * @example_info Returns a list of positions in polyline1, sorted according to the descending z value.
  */
 export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], sort_expr: TQuery, method: _ESortMethod): TId[] {
-    // get the select ent_type_str
-    const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);
+    // get the select ent_type
+    const select_ent_type: EEntType = _convertSelectToEEntTypeStr(select);
     // get the list of entities
     const found_entities_i: number[] = [];
     if (entities === null || entities === undefined) {
         // skip Error Check
-        found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type_str));
+        found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type));
     } else {
         // --- Error Check ---
-        checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+        // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
         // --- Error Check ---
         if (!Array.isArray(entities)) { entities = [entities]; }
         for (const entity_id of entities) {
-            const [curr_ent_type_str, index]: [EEntityTypeStr, number] = idBreak(entity_id);
-            found_entities_i.push(...__model__.geom.query.navAnyToAny(curr_ent_type_str, select_ent_type_str, index));
+            const [curr_ent_type, index]: [EEntType, number] = idBreak(entity_id);
+            found_entities_i.push(...__model__.geom.query.navAnyToAny(curr_ent_type, select_ent_type, index));
         }
     }
     // check if the query is null
@@ -159,13 +159,13 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
         if (method === _ESortMethod.ASCENDING) {
             found_entities_i.reverse();
         }
-        return found_entities_i.map( entity_i => select_ent_type_str + entity_i);
+        return found_entities_i.map( entity_i => idMake(select_ent_type, entity_i));
     }
     // do the sort on the list of entities
     const _sort_method: ESort = (method === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
     const sort_result: number[] = __model__.attribs.query.sortByAttribs(
-        select_ent_type_str, sort_expr, found_entities_i, _sort_method);
-    return sort_result.map( entity_i => select_ent_type_str + entity_i);
+        select_ent_type, sort_expr, found_entities_i, _sort_method);
+    return sort_result.map( entity_i => idMake(select_ent_type, entity_i));
 }
 // ================================================================================================
 /**
@@ -178,14 +178,14 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     // --- Error Check ---
-    checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
     // --- Error Check ---
     if (!Array.isArray(lines)) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(lines as TId);
+        const [ent_type, index]: [EEntType, number] = idBreak(lines as TId);
         let wire_i: number = index;
-        if (ent_type_str === EEntityTypeStr.PLINE) {
+        if (ent_type === EEntType.PLINE) {
             wire_i = __model__.geom.query.navPlineToWire(index);
-        } else if (ent_type_str !== EEntityTypeStr.WIRE) {
+        } else if (ent_type !== EEntType.WIRE) {
             throw new Error('modify.isClosed: Entity is of wrong type. It must be either a polyline or a wire.');
         }
         return __model__.geom.query.istWireClosed(wire_i);
@@ -202,10 +202,11 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
  * @example mod.IsPlanar([polyline1,polyline2,polyline3])
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are planar but polyline3 is not planar.
  */
-export function IsPLanar(__model__: GIModel, entities: TId|TId[]): boolean|boolean[] {
+export function IsPLanar(__model__: GIModel, entities: TId|TId[], tolerance: number): boolean|boolean[] {
     // --- Error Check ---
     // checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
     // --- Error Check ---
+
     throw new Error('Not implemented');
 }
 // ================================================================================================
@@ -222,16 +223,16 @@ export function Neighbours(__model__: GIModel, select: _EQuerySelect, entities: 
     // --- Error Check ---
     // checkIDs('modify.isClosed', 'lines', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
     // --- Error Check ---
-    // get the select ent_type_str
-    const select_ent_type_str: EEntityTypeStr = _convertSelectToEEntityTypeStr(select);
+    const select_ent_type: EEntType = _convertSelectToEEntTypeStr(select);
     if (!Array.isArray(entities)) {
         entities = [entities];
     }
     const all_nbor_ents_i: Set<number> = new Set();
     for (const ent_id of entities) {
-        const [ent_type_str, index]: [EEntityTypeStr, number] = idBreak(ent_id as TId);
-        const nbor_ents_i: number[] = __model__.geom.query.neighbours(ent_type_str, select_ent_type_str, index);
+        const [ent_type, index]: [EEntType, number] = idBreak(ent_id as TId);
+        const nbor_ents_i: number[] = __model__.geom.query.neighbours(ent_type, select_ent_type, index);
         nbor_ents_i.forEach(nbor_ent_i => all_nbor_ents_i.add(nbor_ent_i));
     }
-    return Array.from(all_nbor_ents_i).map(nbor_ent_i => select_ent_type_str + nbor_ent_i);
+    return Array.from(all_nbor_ents_i).map(nbor_ent_i => idMake(select_ent_type, nbor_ent_i));
 }
+// ================================================================================================

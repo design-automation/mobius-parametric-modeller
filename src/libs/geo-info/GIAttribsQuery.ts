@@ -1,6 +1,6 @@
 import { GIModel } from './GIModel';
-import { TAttribDataTypes, IAttribsMaps, EEntStrToAttribMap, IQueryComponent,
-    Txyz, EAttribNames, EEntityTypeStr, EQueryOperatorTypes, ISortComponent, ESort, EAttribDataTypeStrs } from './common';
+import { TAttribDataTypes, IAttribsMaps, IQueryComponent,
+    Txyz, EAttribNames, EEntType, EQueryOperatorTypes, ISortComponent, ESort, EAttribDataTypeStrs, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
 
 /**
@@ -19,65 +19,65 @@ export class GIAttribsQuery {
     }
     /**
      * Get an entity attrib value
-     * @param ent_type_str
+     * @param ent_type
      * @param name
      */
-    public getAttribValue(ent_type_str: EEntityTypeStr, name: string, index: number): TAttribDataTypes {
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public getAttribValue(ent_type: EEntType, name: string, index: number): TAttribDataTypes {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).getEntVal(index);
     }
     /**
      * Get attrib values for multiple entities
-     * @param ent_type_str
+     * @param ent_type
      * @param name
      */
-    public getAttribValues(ent_type_str: EEntityTypeStr, name: string, ents_i: number[]): TAttribDataTypes[] {
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public getAttribValues(ent_type: EEntType, name: string, ents_i: number[]): TAttribDataTypes[] {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         return attribs.get(name).getEntsVals(ents_i);
     }
     /**
      * Check if attribute exists
-     * @param ent_type_str
+     * @param ent_type
      * @param name
      */
-    public hasAttrib(ent_type_str: EEntityTypeStr, name: string): boolean {
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public hasAttrib(ent_type: EEntType, name: string): boolean {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         return attribs.has(name);
     }
     /**
      * Get all the attribute names for an entity type
-     * @param ent_type_str
+     * @param ent_type
      */
-    public getAttribNames(ent_type_str: EEntityTypeStr): string[] {
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public getAttribNames(ent_type: EEntType): string[] {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         return Array.from(attribs.keys());
     }
     /**
      * Get attrib
-     * @param ent_type_str
+     * @param ent_type
      * @param name
      */
-    public getAttrib(ent_type_str: EEntityTypeStr, name: string): GIAttribMap {
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public getAttrib(ent_type: EEntType, name: string): GIAttribMap {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         return attribs.get(name);
     }
     /**
      * Query the model using a query strings.
      * Returns a list of entities in the model.
-     * @param ent_type_str The type of the entities being search for
+     * @param ent_type The type of the entities being search for
      * @param query_str The query string, e.g. '#@name == value'
-     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type_str.
+     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type.
      */
-    public queryAttribs(ent_type_str: EEntityTypeStr, query_str: string, indicies: number[]): number[] {
-        // get the map that contains all the ettributes for the ent_type_str
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public queryAttribs(ent_type: EEntType, query_str: string, indicies: number[]): number[] {
+        // get the map that contains all the ettributes for the ent_type
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         // parse the query
         const queries: IQueryComponent[][] = parseQuery(query_str);
@@ -91,7 +91,7 @@ export class GIAttribsQuery {
             if (indicies !== null && indicies !== undefined) {
                 query_ents_i = indicies;
             } else {
-                query_ents_i = this._model.geom.query.getEnts(ent_type_str);
+                query_ents_i = this._model.geom.query.getEnts(ent_type);
             }
             // do the '&&' queries
             for (const and_query of and_queries) {
@@ -116,13 +116,13 @@ export class GIAttribsQuery {
     /**
      * Query the model using a sort strings.
      * Returns a list of entities in the model.
-     * @param ent_type_str The type of the entities being search for
+     * @param ent_type The type of the entities being search for
      * @param sort_str The sort string, e.g. '#@name && #@name2[3]'
-     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type_str.
+     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type.
      */
-    public sortByAttribs(ent_type_str: EEntityTypeStr, sort_str: string, indicies: number[], method: ESort): number[] {
-        // get the map that contains all the ettributes for the ent_type_str
-        const attribs_maps_key: string = EEntStrToAttribMap[ent_type_str];
+    public sortByAttribs(ent_type: EEntType, sort_str: string, indicies: number[], method: ESort): number[] {
+        // get the map that contains all the ettributes for the ent_type
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (!attribs)  { throw new Error('Bad sort: Attribute does not exist.'); }
         // parse the query
@@ -172,7 +172,7 @@ export class GIAttribsQuery {
      * @param posi_i
      */
     public getPosiCoords(posi_i: number): Txyz {
-        const result = this._attribs_maps.posis.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
+        const result = this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
         return result;
     }
     /**
@@ -180,8 +180,8 @@ export class GIAttribsQuery {
      * @param posi_i
      */
     public getAllPosisCoords(): Txyz[] {
-        const posis_i: number[] = this._model.geom.query.getEnts(EEntityTypeStr.POSI);
-        const coords_map: GIAttribMap = this._attribs_maps.posis.get(EAttribNames.COORDS);
+        const posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI);
+        const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         return coords_map.getEntsVals(posis_i) as Txyz[];
     }
     /**
@@ -190,16 +190,16 @@ export class GIAttribsQuery {
      */
     public getVertCoords(vert_i: number): Txyz {
         const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
-        return this._attribs_maps.posis.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
+        return this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
     }
     /**
      * Shortcut for getting coords for all verts
      * @param attrib_name
      */
     public getAllVertsCoords(attrib_name: string): Txyz[] {
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntityTypeStr.VERT);
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         const posis_i: number[] = verts_i.map( vert_i => this._model.geom.query.navVertToPosi(vert_i));
-        const coords_map: GIAttribMap = this._attribs_maps.posis.get(EAttribNames.COORDS);
+        const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         return coords_map.getEntsVals(posis_i) as Txyz[];
     }
 }

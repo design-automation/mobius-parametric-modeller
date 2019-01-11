@@ -20,18 +20,74 @@ export type TTexture = [number, number];
 
 
 // Types of entities
-export enum EEntityTypeStr {
-    POSI =   'ps',
-    TRI  =   '_t',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co'
+export enum EEntType {
+    POSI,
+    TRI,
+    VERT,
+    EDGE,
+    WIRE,
+    FACE,
+    POINT,
+    PLINE,
+    PGON,
+    COLL
 }
+
+// Types of entities
+export enum EEntTypeStr {
+    'ps',
+    '_t',
+    '_v',
+    '_e',
+    '_w',
+    '_f',
+    'pt',
+    'pl',
+    'pg',
+    'co'
+}
+
+export enum EEntStrToGeomArray {
+    'posis',
+    'dn_tris_verts',
+    'dn_verts_posis',
+    'dn_edges_verts',
+    'dn_wires_edges',
+    'dn_faces_wirestris',
+    'dn_points_verts',
+    'dn_plines_wires',
+    'dn_pgons_faces',
+    'dn_colls_objs'
+}
+
+/**
+ * Attribute maps
+ */
+export interface IAttribsMaps {
+    ps: Map<string, GIAttribMap>;
+    _v: Map<string, GIAttribMap>;
+    _e: Map<string, GIAttribMap>;
+    _w: Map<string, GIAttribMap>;
+    _f: Map<string, GIAttribMap>;
+    pt: Map<string, GIAttribMap>;
+    pl: Map<string, GIAttribMap>;
+    pg: Map<string, GIAttribMap>;
+    co: Map<string, GIAttribMap>;
+}
+// export interface IGIAttribMap {
+//     // TODO
+// }
+// export enum EEntStrToAttribMap {
+//     ps = 'posis',
+//     _v = 'verts',
+//     _e = 'edges',
+//     _w = 'wires',
+//     _f = 'faces',
+//     pt = 'points',
+//     pl = 'plines',
+//     pg = 'pgons',
+//     co = 'colls'
+// }
 
 // Names of attributes
 export enum EAttribNames {
@@ -113,46 +169,6 @@ export interface IGeomArrays {
     up_points_colls: number[][]; // one to many
     up_plines_colls: number[][]; // one to many
     up_pgons_colls: number[][]; // one to many
-}
-export enum EEntStrToGeomArray {
-    _v = 'dn_verts_posis',
-    _t = 'dn_tris_verts',
-    _e = 'dn_edges_verts',
-    _w = 'dn_wires_edges',
-    _f = 'dn_faces_wirestris',
-    pt = 'dn_points_verts',
-    pl = 'dn_plines_wires',
-    pg = 'dn_pgons_faces',
-    co = 'dn_colls_objs'
-}
-
-/**
- * Attribute maps
- */
-export interface IAttribsMaps {
-    posis: Map<string, GIAttribMap>;
-    verts: Map<string, GIAttribMap>;
-    edges: Map<string, GIAttribMap>;
-    wires: Map<string, GIAttribMap>;
-    faces: Map<string, GIAttribMap>;
-    points: Map<string, GIAttribMap>;
-    plines: Map<string, GIAttribMap>;
-    pgons: Map<string, GIAttribMap>;
-    colls: Map<string, GIAttribMap>;
-}
-// export interface IGIAttribMap {
-//     // TODO
-// }
-export enum EEntStrToAttribMap {
-    ps = 'posis',
-    _v = 'verts',
-    _e = 'edges',
-    _w = 'wires',
-    _f = 'faces',
-    pt = 'points',
-    pl = 'plines',
-    pg = 'pgons',
-    co = 'colls'
 }
 
 // copy geometry

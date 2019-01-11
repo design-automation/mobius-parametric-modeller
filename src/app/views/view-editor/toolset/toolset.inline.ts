@@ -33,6 +33,8 @@ const lists = [
     ['vecNorm(v)', 'Sets the magnitude of a vector to 1'],
     ['vecRev(v)', 'Reverses the direction of a vector'],
     ['vecFromTo(pt1, pt2)', 'Creates a vector between two points'],
+    ['vecAng(v1, v2)', 'Calculate the angle (0 to PI) between two vectors'],
+    ['vecAng2(v1, v2, n)', 'Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal'],
     ['vecDot(v1, v2)', 'Calculates the cross product of thre vectors'],
     ['vecCross(v1, v2)', 'Calculates the dot product of two vectors'],
     ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaler than a specified tolerance']
@@ -48,7 +50,7 @@ const conversion = [
 
 const random = [
     ['rand(min, max)', 'Returns a random number in the specified range'],
-    ['randInt(min, max))', 'Returns a random integer in the specified range'],
+    ['randInt(min, max)', 'Returns a random integer in the specified range'],
     ['randPick(list)', 'Returns a random item from the list']
 ];
 

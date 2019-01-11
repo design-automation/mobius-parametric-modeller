@@ -11,17 +11,27 @@
 				<ul>
 					<li>
 						<div class="label">Normals</div>
-						<div class="onoffswitch">
+						<div class="onoffswitch" [title] = "!normalsOnOffEnabled?'No models available':''">
 							<input type="checkbox"
 							name="onoffswitch"
 							class="onoffswitch-checkbox"
 							id="normalsOnOff"
-							[checked]='settings.normalsOnOff'
-							(click)="settingChange('normalsOnOff')">
+							[checked]='settings.normals.show'
+							[disabled] = "!normalsEnabled"
+							(click)="settingOnChange('normals.show')"
+							>
 							<label class="onoffswitch-label" for="normalsOnOff">
 								<span class="onoffswitch-inner"></span>
 								<span class="onoffswitch-switch"></span>
 							</label>
+						</div>
+						<div class="slidecontainer">
+							<input type="range" min="1" max="100" step="1"
+							[(ngModel)]="normalSize"
+							class="slider" id="normalSize"
+							(input)="settingOnChange('normals.size', $event.target.value)"
+							[disabled] = "!normalsEnabled">
+							<input type="text" [(ngModel)]="normalSize" disabled>
 						</div>
 					</li>
 					<li>
@@ -31,24 +41,43 @@
 							name="onoffswitch"
 							class="onoffswitch-checkbox"
 							id="axesOnOff"
-							[checked]='settings.axesOnOff'
-							(click)="settingChange('axesOnOff')">
+							[(ngModel)]="currentSettings.axes.show"
+							[ngModelOptions]="{standalone: true}"
+							(click)="settingOnChange('axes.show')">
 							<label class="onoffswitch-label" for="axesOnOff">
 								<span class="onoffswitch-inner"></span>
 								<span class="onoffswitch-switch"></span>
 							</label>
 						</div>
+						<div class="slidecontainer">
+							<input type="range" min="1" max="1000" step="1" [(ngModel)]="axesSize" class="slider" id="axesSize" (input)="settingOnChange('axes.size', $event.target.value)">
+							<input type="text" [(ngModel)]="axesSize" disabled>
+						</div>
 					</li>
 					<li>
-						<div class="label">Grid Size</div>
-						<div id="slidecontainer">
-							<input type="range" min="10" max="1000" step="10" [value]="settings.gridSize" class="slider" id="gridSize" (input)="settingChange('gridSize', $event.target.value)">
-							<input type="text" [value]="gridSize" disabled>
+						<div class="label">Grid</div>
+						<div class="onoffswitch">
+							<input type="checkbox"
+							name="onoffswitch"
+							class="onoffswitch-checkbox"
+							id="gridOnOff"
+							[checked]='settings.grid.show'
+							(click)="settingOnChange('grid.show')"
+							>
+							<label class="onoffswitch-label" for="gridOnOff">
+								<span class="onoffswitch-inner"></span>
+								<span class="onoffswitch-switch"></span>
+							</label>
+						</div>
+						<div class="slidecontainer">
+							<input type="range" min="10" max="1000" step="10" [(ngModel)]="gridSize" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
+							<input type="text" [(ngModel)]="gridSize" disabled>
 						</div>
 					</li>
 					<li>Shadow On/Off</li>
 					<li>Position color/size</li>
 				</ul>
+				<button (click)="closeModal('settings_modal', true);">Save</button>
 				<button (click)="closeModal('settings_modal');">Close</button>
 			</modal-window>
 		</as-split-area>

@@ -1,4 +1,4 @@
-import { zip } from "src/app/core/modules/_list";
+// import { zip } from "src/app/core/modules/_list";
 
 export const inline_query_expr = [
     ['#@name == value', 'Search attributes equal to a given value'],

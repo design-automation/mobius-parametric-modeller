@@ -35,8 +35,8 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
         document.body.appendChild(this.element);
 
         // close modal on background click
-        document.body.addEventListener('click', function (e: any) {
-            if (e.target.className === 'modal-open') {
+        this.element.addEventListener('click', function (e: any) {
+            if (e.target.className === 'modal-background') {
                 modal.close();
             }
         });
@@ -56,13 +56,13 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
         const modalWindow = document.getElementById('modal-window');
         // modalWindow.style.left = 0;
         modalWindow.classList.add('open');
-        // this.element.style.display = 'block';
+        this.element.style.display = 'block';
         document.body.classList.add('modal-open');
     }
 
     // close modal
     close(): void {
-        // this.element.style.display = 'none';
+        this.element.style.display = 'none';
         const modalWindow = this.element.querySelector('.modal-window');
         // modalWindow.style.left = `${-this.containerWidth - 11}px`;
         modalWindow.classList.remove('open');

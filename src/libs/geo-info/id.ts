@@ -1,4 +1,4 @@
-import { TId, EEntType, EEntTypeStr } from './common';
+import { TId, EEntType, EEntTypeStr, TEntTypeIdx } from './common';
 
 // ============================================================================
 // Each entity in the model can be accessed using an ID string.
@@ -75,8 +75,12 @@ import { TId, EEntType, EEntTypeStr } from './common';
 
 
 // ============================================================================
-export function idMake(ent_type: EEntType, index: number): TId {
-    return EEntTypeStr[ent_type] + index;
+export function idMake(ent_type: EEntType|TEntTypeIdx, index?: number): TId {
+    if (index === undefined) {
+        ent_type = ent_type[0];
+        index = ent_type[1];
+    }
+    return EEntTypeStr[ent_type as EEntType] + index;
 }
 export function idBreak(id: TId): [EEntType, number] {
     const ent_type_str: string = id.slice(0, 2);

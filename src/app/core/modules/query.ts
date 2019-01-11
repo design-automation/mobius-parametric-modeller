@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, EEntType, ESort } from '@libs/geo-info/common';
+import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
 import { idBreak, idIndicies, idMake } from '@libs/geo-info/id';
-import { checkIDs } from './_check_args';
+import { checkIDs, checkCommTypes } from './_check_args';
 
 // TQuery should be something like this:
 //
@@ -73,12 +73,11 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
         found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type));
     } else {
         // --- Error Check ---
-        // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+        let ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null);
         // --- Error Check ---
-        if (!Array.isArray(entities)) { entities = [entities]; }
-        for (const entity_id of entities) {
-            const [curr_ent_type, index]: [EEntType, number] = idBreak(entity_id);
-            found_entities_i.push(...__model__.geom.query.navAnyToAny(curr_ent_type, select_ent_type, index));
+        if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+        for (const ents of ents_arr) {
+            found_entities_i.push(...__model__.geom.query.navAnyToAny(ents[0], select_ent_type, ents[1]));
         }
     }
     // check if the query is null
@@ -110,11 +109,11 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
     // --- Error Check ---
-    if (entities !== null && entities !== undefined) {
-        // checkIDs('query.Count', 'entities', entities, ['isID', 'isIDList'], 'all');
-    }
+    // if (entities !== null && entities !== undefined) {
+    //     checkIDs('query.Count', 'entities', entities, ['isID', 'isIDList'], null);
+    // }
     // --- Error Check ---
-    return Get(__model__, select, entities, query_expr).length;
+    return Get(__model__, select, entities, query_expr).length; // Check done in Get
 }
 // ================================================================================================
 export enum _ESortMethod {
@@ -145,12 +144,11 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
         found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type));
     } else {
         // --- Error Check ---
-        // checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], 'all');
+        let ents_arr = checkIDs('query.Sort', 'entities', entities, ['isID', 'isIDList'], null);
         // --- Error Check ---
-        if (!Array.isArray(entities)) { entities = [entities]; }
-        for (const entity_id of entities) {
-            const [curr_ent_type, index]: [EEntType, number] = idBreak(entity_id);
-            found_entities_i.push(...__model__.geom.query.navAnyToAny(curr_ent_type, select_ent_type, index));
+        if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+        for (const ents of ents_arr) {
+            found_entities_i.push(...__model__.geom.query.navAnyToAny(ents[0], select_ent_type, ents[1]));
         }
     }
     // check if the query is null
@@ -168,6 +166,20 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
     return sort_result.map( entity_i => idMake(select_ent_type, entity_i));
 }
 // ================================================================================================
+function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boolean|boolean[] {
+    if (!Array.isArray(ents_arr[0])) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        let wire_i: number = index;
+        if (ent_type === EEntType.PLINE) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        } else if (ent_type !== EEntType.WIRE) {
+            throw new Error('query.isClosed: Entity is of wrong type. It must be either a polyline or a wire.');
+        }
+        return __model__.geom.query.istWireClosed(wire_i);
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(ents => _isClosed(__model__, ents)) as boolean[];
+    }
+}
 /**
  * Checks if polyline(s) or wire(s) are closed.
  * @param __model__
@@ -178,35 +190,26 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     // --- Error Check ---
-    // checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    const ents_arr = checkIDs('query.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
     // --- Error Check ---
-    if (!Array.isArray(lines)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(lines as TId);
-        let wire_i: number = index;
-        if (ent_type === EEntType.PLINE) {
-            wire_i = __model__.geom.query.navPlineToWire(index);
-        } else if (ent_type !== EEntType.WIRE) {
-            throw new Error('modify.isClosed: Entity is of wrong type. It must be either a polyline or a wire.');
-        }
-        return __model__.geom.query.istWireClosed(wire_i);
-    } else {
-        return (lines as TId[]).map(line => IsClosed(__model__, line)) as boolean[];
-    }
+    return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
 /**
  * Checks if a wire, polyline, face, or polygon is planar.
  * @param __model__
  * @param entities Wire, polyline, face, or polygon.
+ * @param tolerance
  * @returns Boolean or list of boolean in input sequence of lines.
  * @example mod.IsPlanar([polyline1,polyline2,polyline3])
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are planar but polyline3 is not planar.
  */
-export function IsPLanar(__model__: GIModel, entities: TId|TId[], tolerance: number): boolean|boolean[] {
+export function IsPlanar(__model__: GIModel, entities: TId|TId[], tolerance: number): boolean|boolean[] {
     // --- Error Check ---
-    // checkIDs('modify.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // const fn_name = 'query.isPlanar';
+    // const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    // checkCommTypes(fn_name, 'tolerance', tolerance, ['isNumber']);
     // --- Error Check ---
-
     throw new Error('Not implemented');
 }
 // ================================================================================================
@@ -221,15 +224,15 @@ export function IsPLanar(__model__: GIModel, entities: TId|TId[], tolerance: num
  */
 export function Neighbours(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
     // --- Error Check ---
-    // checkIDs('modify.isClosed', 'lines', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    let ents_arr = checkIDs('modify.isClosed', 'lines', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
     // --- Error Check ---
     const select_ent_type: EEntType = _convertSelectToEEntTypeStr(select);
-    if (!Array.isArray(entities)) {
-        entities = [entities];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     const all_nbor_ents_i: Set<number> = new Set();
-    for (const ent_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(ent_id as TId);
+    for (const ents of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ents as TEntTypeIdx ;
         const nbor_ents_i: number[] = __model__.geom.query.neighbours(ent_type, select_ent_type, index);
         nbor_ents_i.forEach(nbor_ent_i => all_nbor_ents_i.add(nbor_ent_i));
     }

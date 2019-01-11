@@ -14,9 +14,9 @@ import { checkIDs, checkCommTypes, checkIDnTypes } from './_check_args';
  */
 export function Intersect(__model__: GIModel, entities1: TId, entities2: TId): TId[] {
     // --- Error Check ---
-    const fn_name = 'isect.Intersect';
-    checkIDnTypes(fn_name, 'object1', entities1, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
-    checkIDnTypes(fn_name, 'object2', entities2, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
+    // const fn_name = 'isect.Intersect';
+    // const ents_arr_1 = checkIDnTypes(fn_name, 'object1', entities1, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
+    // const ents_arr_2 = checkIDnTypes(fn_name, 'object2', entities2, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }
@@ -38,9 +38,9 @@ export enum _EKnifeKeep {
  */
 export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: _EKnifeKeep): TId[] {
     // --- Error Check ---
-    const fn_name = 'isect.Knife';
-    checkIDs(fn_name, 'geometry', geometry, ['isIDList'], ['POINT', 'PLINE', 'PGON']);
-    checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
+    // const fn_name = 'isect.Knife';
+    // const ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isIDList'], ['POINT', 'PLINE', 'PGON']);
+    // checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -55,9 +55,9 @@ export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: 
  */
 export function Split(__model__: GIModel, geometry: TId[], polyline: TId): TId[] {
     // --- Error Check ---
-    const fn_name = 'isect.Split';
-    checkIDs(fn_name, 'objects', geometry, ['isIDList'], ['PLINE', 'PGON']);
-    checkIDs(fn_name, 'polyline', polyline, ['isID'], ['PLINE']);
+    // const fn_name = 'isect.Split';
+    // const ents_arr = checkIDs(fn_name, 'objects', geometry, ['isIDList'], ['PLINE', 'PGON']);
+    // checkIDs(fn_name, 'polyline', polyline, ['isID'], ['PLINE']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

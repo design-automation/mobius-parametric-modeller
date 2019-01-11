@@ -1,4 +1,4 @@
-import { EEntType, EAttribNames } from '@libs/geo-info/common';
+import { EEntType, EAttribNames, TEntTypeIdx } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
 import { idBreak, idsBreak } from '@libs/geo-info/id';
@@ -218,7 +218,7 @@ const typeCheckObj  = {
     isVectorList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
         // Add if required
     },
-    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): [EEntType, number]|[EEntType, number][]|[EEntType, number][][] {
+    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
         return checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
     },
     isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = Txyz, Txyz, Txyz]
@@ -246,11 +246,11 @@ const IDcheckObj = {
     // IDs
     // entity types
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
-    isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|'all'): [EEntType, number] {
+    isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|null): TEntTypeIdx {
         typeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
         const ent_arr = idBreak(arg); // split
 
-        if (ent_type_strs === 'all') {
+        if (ent_type_strs === null) {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
         let pass = false;
@@ -265,11 +265,11 @@ const IDcheckObj = {
         }
         return ent_arr;
     },
-    isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|'all'): [EEntType, number][] {
+    isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|null): TEntTypeIdx[] {
         typeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
         const ent_arr_lst = idsBreak(arg_list); // split
 
-        if (ent_type_strs === 'all') {
+        if (ent_type_strs === null) {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
         }
         for (let i = 0; i < ent_arr_lst.length; i++) {
@@ -291,15 +291,15 @@ const IDcheckObj = {
         }
         return ent_arr_lst;
     },
-    isIDList_list: function(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|'all'): [EEntType, number][][] {
+    isIDList_list: function(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|null): TEntTypeIdx[][] {
         return arg_list.map(arg => IDcheckObj.isIDList(fn_name, arg_name, arg, ent_type_strs));
     },
 };
 // =========================================================================================================================================
 // Specific Checks
 // =========================================================================================================================================
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void|[EEntType, number]|
-                               [EEntType, number][]|[EEntType, number][][] {
+export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void|TEntTypeIdx|
+                               TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
     let ret;
@@ -321,10 +321,10 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
 }
 
 export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[],
-                         IDchecks: string[]|'all'): [EEntType, number]|[EEntType, number][]|[EEntType, number][][] {
+                         IDchecks: string[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
-    let ret: [EEntType, number]|[EEntType, number][];
+    let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         try {
            ret =  IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
@@ -339,16 +339,16 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
-    return ret; // returns [EEntType, number]|[EEntType, number][]|[EEntType, number][][]; depends on which passes
+    return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
 }
 // =========================================================================================================================================
 // Most General Check
 // =========================================================================================================================================
 export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[],
-                              IDchecks?: string[]|'all'): [EEntType, number]|[EEntType, number][]|[EEntType, number][][] {
+                              IDchecks?: string[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
-    let ret: [EEntType, number]|[EEntType, number][];
+    let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         if (Object.keys(IDcheckObj).includes(check_fns[i])) {
             // checking for ID
@@ -376,7 +376,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
-    return ret; // returns void|[EEntType, number]|[EEntType, number][]|[EEntType, number][][]; depends on which passes
+    return ret; // returns void|TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
 }
 
 // =====================================================================================================================

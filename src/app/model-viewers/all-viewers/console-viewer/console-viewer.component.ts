@@ -40,6 +40,11 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      */
     ngDoCheck() {
         // @ts-ignore
+        if (console.logs.length > 500) {
+            // @ts-ignore
+            console.logs.splice(0, console.logs.length - 500);
+        }
+        // @ts-ignore
         const t = console.logs.join('\n');
         // @ts-ignore
         this.logs = console.logs;

@@ -22,8 +22,8 @@ export class PanelHeaderComponent {
     }
 
     loadFile() {
-        this.router.navigate(['/dashboard']);
         document.getElementById('file-input').click();
+        // this.router.navigate(['/dashboard']);
     }
 
     openDropdownMenu(e: MouseEvent) {

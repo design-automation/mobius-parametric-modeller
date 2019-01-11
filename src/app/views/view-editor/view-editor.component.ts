@@ -210,4 +210,8 @@ export class ViewEditorComponent {
         if (event.ctrlKey) { return; }
         NodeUtils.deselect_procedure(this.dataService.node);
     }
+    getSplit() { return this.dataService.splitVal; }
+    getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
+
 }

@@ -406,4 +406,12 @@ export class ToolsetComponent implements OnInit {
         }
 
     }
+
+    getViewOutput() {
+        return this.dataService.getModelOutputView(this.dataService.node.id);
+    }
+
+    getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
+
 }

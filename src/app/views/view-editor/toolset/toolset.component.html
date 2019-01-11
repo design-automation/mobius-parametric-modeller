@@ -1,7 +1,7 @@
-<h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{dataService.node.name}}'>{{dataService.node.name}}</span><span id='node--arr'>▾</span></h2>
+<h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{getNode().name}}</span><span id='node--arr'>▾</span></h2>
 
 <div id="nodeMenu">
-    <div *ngFor='let nd of dataService.flowchart.nodes; let i = index;'>
+    <div *ngFor='let nd of getFlowchart().nodes; let i = index;'>
         <li (click)="changeNode(i)"> 
             {{nd.name}}
         </li>
@@ -12,7 +12,7 @@
 <div class = "divider"></div>
 
 <div class = "toolset--body" (mouseover)='setCurrent($event)'>
-    <div [hidden]="!dataService.testModel && dataService.node.type == 'start'">
+    <div [hidden]="getNode().type == 'start' && !getViewOutput()">
         <ng-container>
             <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
         
@@ -95,7 +95,7 @@
                                 </button>
                             </li>
                             <div class = 'tooltip-container'>
-                                <div class='tooltip' *ngFor='let fn of dataService.flowchart.functions'>
+                                <div class='tooltip' *ngFor='let fn of getFlowchart().functions'>
                                     <li (click)='add_imported_function(fn)'> {{fn.name}} 
                                         <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
                                             <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
@@ -142,7 +142,7 @@
                 <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals")'>Globals</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
-                        <ng-container *ngFor='let cnst of dataService.flowchart.nodes[0].procedure'>
+                        <ng-container *ngFor='let cnst of getFlowchart().nodes[0].procedure'>
                             <li *ngIf='cnst.type === 10' (click)='add_inline(cnst.args[cnst.argCount-2].value)'>
                                 {{cnst.args[cnst.argCount-2].value}}
                             </li>
@@ -207,7 +207,7 @@
     </div>
     
     <!-- functions for input nodes -->
-    <div id='toolset_inp' class = 'toolset' *ngIf="dataService.node.type == 'start'">
+    <div id='toolset_inp' class = 'toolset' *ngIf="getNode().type == 'start'">
         <button id='startFuncs' class="accordion inline--cat" (click)='toggleAccordion("startFuncs")'>Parameters</button>
         <div class="panel">
         <!-- <div class='toolset__functions'> -->

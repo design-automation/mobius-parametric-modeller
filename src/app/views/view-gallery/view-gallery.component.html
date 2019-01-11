@@ -1,10 +1,10 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
-        <as-split-area [size]="100 - dataService.splitVal">
-            <panel-header [title]='dataService.flowchart.name'></panel-header>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [title]='getFlowchart().name'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{dataService.activeGallery.name}}<span>▾</span></h3>
+                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{getActiveGallery().name}}<span>▾</span></h3>
                 <div id="galleryMenu">
                     <div *ngFor='let galleryName of allGalleries;'>
                         <li (click)="switchGallery(galleryName)">
@@ -14,9 +14,9 @@
                 </div>
                 <div class = 'content--container'>
                     <div class="container__element container__element--project-container">
-                        <div class="project-container__project" *ngFor="let f of dataService.activeGallery.files">
-                            <div class="tile--contents" (click)='loadFile(dataService.activeGallery.link + f)'>
-                                <img src ='{{dataService.activeGallery.link+"imgs/"+f+".JPG"}}' alt = 'project image'>
+                        <div class="project-container__project" *ngFor="let f of getActiveGallery().files">
+                            <div class="tile--contents" (click)='loadFile(getActiveGallery().link + f)'>
+                                <img src ='{{getActiveGallery().link+"imgs/"+f+".JPG"}}' alt = 'project image'>
                             </div>
                             <span class = 'project__title'>{{ f | simplename }}</span>
                         </div>
@@ -25,7 +25,7 @@
             </div>
         </as-split-area>
 
-        <as-split-area [size]="dataService.splitVal">
+        <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
                 <model-viewers-container [data]='viewerData()'></model-viewers-container>

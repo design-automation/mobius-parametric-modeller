@@ -94,23 +94,25 @@
                                         <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                                 </button>
                             </li>
-                            <div class = 'tooltip-container'>
-                                <div class='tooltip' *ngFor='let fn of getFlowchart().functions'>
+                            <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
+                                <div class = 'user--def-lnContainer'>
                                     <li (click)='add_imported_function(fn)'> {{fn.name}} 
+                                    </li>
+                                    <div class = 'btn--container'>
                                         <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
                                             <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
                                         </button>
                                         <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
                                             <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
                                         </button>
-                                    </li>
-                                    <span class="tooltiptext">
-                                        <p class='funcDesc'>{{fn.doc.description}}</p>
-                                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                                        <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                                        <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
-                                    </span>
+                                    </div>
                                 </div>
+                                <span class="tooltiptext">
+                                    <p class='funcDesc'>{{fn.doc.description}}</p>
+                                    <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+                                    <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+                                    <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
+                                </span>
                             </div>
                             
                         </ul>

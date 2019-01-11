@@ -107,13 +107,24 @@ ul{
     }
 
 }
-
+.user--def{
+    .user--def-lnContainer{
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        .btn--container{
+            display: flex;
+            flex-flow: row nowrap;
+        }
+    }
+}
 .importedFunc-btn{
     background-color: transparent;
     border: none;
     width: 13px;
     height : 13px;
-    float: right;
+    height: 100%;
     padding: 0px;
 
     .importedFunc-btn-icon{
@@ -121,6 +132,7 @@ ul{
         color: $color8;
         width: 13px;
         height: 13px;
+        line-height: 13px;
     }
 
     &:hover .importedFunc-btn-icon{
@@ -280,7 +292,6 @@ ul{
 }
 
 // user functions
-
 .add-btn{
     height: 20px;
 

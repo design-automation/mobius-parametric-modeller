@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
-    isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
+    isObj, isEdge, idMake, idIndicies, idsBreak, idsMake, getArrDepth } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
@@ -30,8 +30,7 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
     checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
     // --- Error Check ---
     const result: TEntTypeIdx|TEntTypeIdx[] = _position(__model__, coords);
-    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
-    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
+    return idsMake(result as TEntTypeIdx[]);
 }
 // ================================================================================================
 function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx|TEntTypeIdx[] {
@@ -57,8 +56,7 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     const ents_arr = checkIDs('make.Point', 'positions', positions, ['isID', 'isIDList'], ['POSI']);
     // --- Error Check ---
     const result: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
-    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
-    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
+    return idsMake(result as TEntTypeIdx[]);
 }
 // ================================================================================================
 // Enums for Polyline()
@@ -67,7 +65,7 @@ export enum _EClose {
     OPEN = 'open'
 }
 function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], close: _EClose): TEntTypeIdx|TEntTypeIdx[] {
-    if (Array.isArray(ents_arr) && !Array.isArray(ents_arr[0])) {
+    if (getArrDepth(ents_arr) === 2) {
         const bool_close: boolean = (close === _EClose.CLOSE);
         const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
@@ -90,12 +88,11 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
     const ents_arr = checkIDs('make.Polyline', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
     const result: TEntTypeIdx|TEntTypeIdx[] = _polyline(__model__, ents_arr as TEntTypeIdx[]|TEntTypeIdx[][], close);
-    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
-    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
+    return idsMake(result as TEntTypeIdx[]);
 }
 // ================================================================================================
 function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
-    if (Array.isArray(ents_arr[0]) && !Array.isArray(ents_arr[0][0])) {
+    if (getArrDepth(ents_arr) === 2) {
         const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
         return [EEntType.PGON, pgon_i] as TEntTypeIdx;
@@ -116,8 +113,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
     const ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
     const result: TEntTypeIdx|TEntTypeIdx[] = _polygon(__model__, ents_arr as TEntTypeIdx[]|TEntTypeIdx[][]);
-    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
-    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
+    return idsMake(result as TEntTypeIdx[]);
 }
 // ================================================================================================
 /**
@@ -149,11 +145,9 @@ export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|T
         if (isPline(ents_arr[0])) { plines.push(ents_arr[1]); }
         if (isPgon(ents_arr[0])) { pgons.push(ents_arr[1]); }
     }
-    if (parent_coll === null || parent_coll === undefined) {
-        return idMake(EEntType.COLL, __model__.geom.add.addColl(-1, points, plines, pgons));
-    }
-    const parent_index: number = coll_ents_arr[1] as number;
-    return idMake(EEntType.COLL, __model__.geom.add.addColl(parent_index, points, plines, pgons));
+    const parent_index: number = (parent_coll === null || parent_coll === undefined) ? -1 : coll_ents_arr[1];
+    const coll_i: number = __model__.geom.add.addColl(parent_index, points, plines, pgons);
+    return idMake([EEntType.COLL, coll_i]);
 }
 // ================================================================================================
 // Stuff for Copy()
@@ -214,8 +208,8 @@ export enum _ECopyAttribues {
 export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
     const is_array: boolean =  Array.isArray(entities);
     // --- Error Check ---
-    checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
-    ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
+        ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     if (!Array.isArray(entities)) {
         entities = [entities] as TId[];

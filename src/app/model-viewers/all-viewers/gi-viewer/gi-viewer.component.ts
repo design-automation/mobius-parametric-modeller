@@ -24,15 +24,15 @@ export class GIViewerComponent implements OnInit {
     @Input() data: GIModel;
     modelData: GIModel;
 
-    settings: settings = {
+    settings: {
+        normals: { show: boolean, size: number },
+        axes: { show: boolean, size: number },
+        grid: { show: boolean, size: number },
+    } = {
         normals: { show: false, size: 5 },
-        axes: { show: true, size: 20 },
+        axes: { show: false, size: 20 },
         grid: { show: true, size: 500 },
     };
-    // defalt settings, will be saved to settings when Save
-    currentSettings: settings;
-    // temp settings, will be replaced when Cancel
-    changeSettings: settings;
 
     normalsEnabled = false;
 
@@ -53,7 +53,6 @@ export class GIViewerComponent implements OnInit {
      */
     ngOnInit() {
         this.getSettings();
-        this.currentSettings = this.settings;
         if (this.dataService.getThreejsScene() === undefined) {
             this.dataService.setThreejsScene(this.settings);
         }
@@ -70,27 +69,24 @@ export class GIViewerComponent implements OnInit {
     }
 
     openModal(id: string) {
-        this.modalService.open(id);
-        const scene = this.dataService.getThreejsScene();
-        scene.vnh !== undefined ? this.normalsEnabled = true : this.normalsEnabled = false;
-        this.changeSettings = this.settings;
-        console.log('Open Modal', this.settings.axes.show);
+        this.getSettings();
+        if (document.body.className === 'modal-open') {
+            this.modalService.close(id);
+        } else {
+            this.modalService.open(id);
+            const scene = this.dataService.getThreejsScene();
+            if (scene._threejs_nums.reduce((a, b) => a + b, 0) !== 0) {
+                scene.vnh !== undefined ? this.normalsEnabled = true : this.normalsEnabled = false;
+            }
+        }
     }
 
-    closeModal(id: string, saveSettings = false) {
+    closeModal(id: string, save = false) {
         this.modalService.close(id);
-        const scene = this.dataService.getThreejsScene();
-        if (saveSettings) {
-            this.settings = this.currentSettings;
+        if (save) {
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-            scene.axesHelper.visible = this.settings.axes.show;
-        } else {
-            this.settings = this.changeSettings;
-            console.log('Close Modal: Cancel', this.settings.axes.show);
-            scene._addAxes(this.settings.axes.size);
-            scene.axesHelper.visible = this.settings.axes.show;
-            scene._renderer.render(scene._scene, scene._camera);
+            document.getElementById('executeButton').click();
         }
     }
 
@@ -98,52 +94,31 @@ export class GIViewerComponent implements OnInit {
         const scene = this.dataService.getThreejsScene();
         switch (setting) {
             case 'normals.show':
-                // this.settings[_setting].show = !this.settings[_setting].show;
-                // scene.vnh.visible = this.currentSettings[_setting].show;
+                this.settings.normals.show = !this.settings.normals.show;
+                scene.vnh.visible = this.settings.normals.show;
                 break;
             case 'normals.size':
-                // this.currentSettings.normals.size = Number(value);
+                this.settings.normals.size = Number(value);
                 break;
             case 'axes.show':
-                // this.currentSettings.axes.show = !this.currentSettings.axes.show;
-                scene.axesHelper.visible = !this.currentSettings.axes.show;
-                console.log('On Change', !this.currentSettings.axes.show);
+                this.settings.axes.show = !this.settings.axes.show;
+                scene.axesHelper.visible = this.settings.axes.show;
                 break;
             case 'axes.size':
-                // this.axesSize = Number(value);
-                // scene._addAxes(this.axesSize);
+                this.settings.axes.size = Number(value);
+                scene._addAxes(Number(value));
                 break;
             case 'grid.show':
-                // this.settings[_setting].show = !this.settings[_setting].show;
-                // scene.grid.visible = this.currentSettings[_setting].show;
+                this.settings.grid.show = !this.settings.grid.show;
+                scene.grid.visible = this.settings.grid.show;
                 break;
             case 'grid.size':
-                // this.gridSize = Number(value);
-                // scene._addGrid(this.gridSize);
+                this.settings.grid.size = Number(value);
+                scene._addGrid(this.settings.grid.size);
                 break;
             default:
                 break;
         }
         scene._renderer.render(scene._scene, scene._camera);
     }
-
-    /**
-     * setModel Sets the model in the data service.
-     * @param data
-     */
-    // setModel(data: GIModel): void {
-    //     try {
-    //         this.dataService.setGIModel(data);
-    //         // this.modelData = this.data;
-    //     } catch (ex) {
-    //         // this.modelData = undefined;
-    //         console.error('Error generating model', ex);
-    //     }
-    // }
-}
-
-interface settings {
-    normals: { show: boolean, size: number };
-    axes: { show: boolean, size: number };
-    grid: { show: boolean, size: number };
 }

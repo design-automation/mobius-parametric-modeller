@@ -54,7 +54,7 @@ as-split-area{
 
 
 modal-window {
-    display: none;
+    // display: none;
     ul{
         margin: 20px 0;
         padding: 0;
@@ -72,8 +72,25 @@ modal-window {
             }
         }
     }
+
+    button{
+        background: #ffffff;
+        border: 1px solid #cccccc;
+        padding: 3px 10px;
+        cursor: pointer;
+        margin-right: 10px;
+        width: 55px;
+        &.primary{
+            background: #00006d;
+            border-color: #00006d;
+            color: white;
+        }
+        &:focus{
+            outline: none;
+        }
+    }
 }
- 
+
 body.modal-open {
     overflow: hidden;
 }
@@ -126,11 +143,19 @@ body.modal-open {
         right: 0px; 
         background-color: #00006D; 
     }
+    .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-switch {
+        background-color: #dddddd; 
+    }
+
+    .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-inner,
+    .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-switch{
+        cursor: help;
+    }
 
 
     // Grid Size Slider
     .slidecontainer {
-        width: calc(100% - 100px); /* Width of the outside container */
+        width: 100%; /* Width of the outside container */
     }
       
     /* The slider itself */
@@ -169,11 +194,15 @@ body.modal-open {
         cursor: pointer; 
     }
     .slider:disabled::-webkit-slider-thumb {
-        background: #dddddd; 
+        background: #dddddd;
     }
 
     .slider:disabled::-moz-range-thumb {
         background: #dddddd; 
+    }
+
+    .slider:disabled{
+        cursor: help;
     }
 
     input {

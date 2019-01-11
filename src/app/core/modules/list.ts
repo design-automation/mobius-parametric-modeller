@@ -276,17 +276,19 @@ export function Reverse(list: any[]): void {
     list.reverse();
 }
 export enum _ESortMethod {
-    'ALPHA' = 'alpha',
-    'NUM' = 'numeric',
-    'REV_ALPHA' = 'revrese_alpha',
-    'REV_NUM' = 'reverse_numeric',
+    'ALPHA' = 'alpha_descending',
+    'REV_ALPHA' = 'alpha_ascending',
+    'NUM' = 'numeric_descending',
+    'REV_NUM' = 'numeric_ascending',
+    'SHIFT' = 'shift_1',
+    'REV_SHIFT' = 'reverse_shift_1',
+    'RANDOM' = 'random'
 }
 /**
- * Sorts an list of values, either alphabetically or numerically.
+ * Sorts an list of values.
  *
  * For alphabetical sort, values are sorted according to string Unicode code points
- * (character by character, numbers before upper case
- * alphabets, upper case alphabets before lower case alphabets)
+ * (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)
  *
  * @param list List to sort.
  * @param method Enum, specifies the sort method to use.
@@ -313,6 +315,17 @@ export function Sort(list: any[], method: _ESortMethod): void {
             break;
         case _ESortMethod.REV_NUM:
             list.sort((a, b) => a - b).reverse();
+            break;
+        case _ESortMethod.SHIFT:
+            const first: any = list.shift();
+            list.push(first);
+            break;
+        case _ESortMethod.REV_SHIFT:
+            const last: any = list.pop();
+            list.unshift(last);
+            break;
+        case _ESortMethod.RANDOM:
+            list.sort(() => .5 - Math.random());
             break;
         default:
             throw new Error('list.Sort: Sort method not recognised.');

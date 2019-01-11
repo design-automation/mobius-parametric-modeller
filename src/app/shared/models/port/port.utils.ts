@@ -6,7 +6,6 @@ export class PortUtils {
 
     static getNewInput(): IPortInput {
         const inp: IPortInput = <IPortInput>{
-            id: IdGenerator.getId(),
             name: 'input',
             type: PortType.Input,
             value: undefined,
@@ -23,7 +22,6 @@ export class PortUtils {
 
     static getNewOutput(): IPortOutput {
         const oup: IPortOutput = <IPortOutput>{
-            id: IdGenerator.getId(),
             name: 'output',
             type: PortType.Output,
             edges: [],

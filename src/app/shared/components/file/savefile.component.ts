@@ -5,6 +5,7 @@ import { FlowchartUtils } from '@models/flowchart';
 import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { ProcedureTypes } from '@models/procedure';
+import { IdGenerator } from '@utils';
 
 @Component({
   selector: 'file-save',
@@ -88,6 +89,7 @@ export class SaveFileComponent {
 
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
         for (const node of savedfile.flowchart.nodes) {
+            node.id = IdGenerator.getNodeID();
             for (const prod of node.state.procedure) {
                 prod.selected = false;
             }

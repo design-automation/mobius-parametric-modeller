@@ -69,7 +69,7 @@
 							</label>
 						</div>
 						<div class="slidecontainer">
-							<input type="range" min="10" max="1000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
+							<input type="range" min="10" max="10000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
 							<input type="text" [value]="settings.grid.size" disabled>
 						</div>
 					</li>

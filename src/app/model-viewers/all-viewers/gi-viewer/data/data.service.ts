@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EEntType } from '@libs/geo-info/common';
+import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
 import { DataThreejs } from './data.threejs';
 // import @angular stuff
 import { Injectable } from '@angular/core';
@@ -16,20 +16,20 @@ export class DataService {
     selecting: any = [];
 
     // Selected Entities by Threejs Viewer for Attribute Table
-    selected_ents: Map<number, Map<string, number>> = new Map();
+    selected_ents: Map<string, Map<string, number>> = new Map();
     /**
      * Create a data service.
      */
     constructor() {
-        this.selected_ents.set(EEntType.POSI, new Map());
-        this.selected_ents.set(EEntType.VERT, new Map());
-        this.selected_ents.set(EEntType.EDGE, new Map());
-        this.selected_ents.set(EEntType.FACE, new Map());
-        this.selected_ents.set(EEntType.WIRE, new Map());
-        this.selected_ents.set(EEntType.PGON, new Map());
-        this.selected_ents.set(EEntType.PLINE, new Map());
-        this.selected_ents.set(EEntType.POINT, new Map());
-        this.selected_ents.set(EEntType.COLL, new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.POSI], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.VERT], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.EDGE], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.FACE], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.WIRE], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.PGON], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.PLINE], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.POINT], new Map());
+        this.selected_ents.set(EEntTypeStr[EEntType.COLL], new Map());
     }
 
     /**

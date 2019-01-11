@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { MatSliderModule, MatCheckboxModule, MatIconModule } from '@angular/material';
 // app directives
 import { MbFileReaderDirective } from './directives/filesys';
-import { AutogrowDirective } from './directives/textarea';
 // app components
 import { ExecuteComponent } from './components/execute/execute.component';
 import { PageNotFoundComponent } from './components/not-found/not-found.component';
@@ -35,7 +34,6 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     providers: [ ],
     declarations: [
             MbFileReaderDirective,
-            AutogrowDirective,
             ExecuteComponent,
             PageNotFoundComponent,
             NavigationComponent,
@@ -77,7 +75,6 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
             DataViewersContainer,
             AngularSplitModule,
             MbFileReaderDirective,
-            AutogrowDirective,
             ExecuteComponent,
             PageNotFoundComponent,
             NavigationComponent,

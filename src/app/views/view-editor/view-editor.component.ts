@@ -23,7 +23,7 @@ export class ViewEditorComponent {
     notificationMessage = '';
     notificationTrigger = true;
 
-    private copyCheck = false;
+    private copyCheck = true;
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);

@@ -68,7 +68,7 @@ export class ToolsetComponent implements OnInit {
                     }
                     fn['doc'] = fnDocHtml;
                 } else {
-                    fn['doc'] = false;
+                    fn['doc'] = '<br>';
                 }
                 nMod.functions.push(fn);
             }

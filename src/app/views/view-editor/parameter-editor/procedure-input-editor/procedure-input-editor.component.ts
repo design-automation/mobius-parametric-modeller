@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { ProcedureItemComponent } from '../../procedure-item/procedure-item.component';
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { InputType } from '@models/port';
 const keys = Object.keys(InputType);
@@ -77,6 +78,12 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
         if (!args.default || args.default > Number(args.max)) {
             args.default = Number(args.max);
         }
+    }
+
+    // modify variable input: replace space " " with underscore "_"
+    varMod(event: string) {
+        if (!event) { return event; }
+        return ProcedureItemComponent.modifyVarArg(event, this.prod.args[0]);
     }
 
 

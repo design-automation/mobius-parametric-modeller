@@ -13,7 +13,7 @@
                 id='argVar_{{data.ID}}'
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
-                [class.error]='invalidVar'
+                [class.error]='data.args[0].invalidVar'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
@@ -86,7 +86,7 @@
                 <input class='input--arg'
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
-                    [class.error]='invalidVar'
+                    [class.error]='data.args[0].invalidVar'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -154,7 +154,7 @@
                 <input class='input--var'
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
-                [class.error]='invalidVar'
+                [class.error]='data.args[0].invalidVar'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
                 = 
@@ -199,7 +199,7 @@
             <input class='input--var'
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
-                    [class.error]='invalidVar'
+                    [class.error]='data.args[0].invalidVar'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
             = 

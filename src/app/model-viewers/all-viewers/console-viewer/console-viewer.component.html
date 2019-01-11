@@ -2,12 +2,14 @@
     <div class='container'>
         <ng-container *ngFor='let text of logs'>
             <div class = 'line-container'>
-                <ng-container *ngIf='text.join(" ").indexOf("Error") !== -1; else default_template'>
+                <p class='normalText line'  *ngFor='let splittedText of text.join(" ").split("\n")' >{{splittedText}}</p>
+
+                <!-- <ng-container *ngIf='text.join(" ").indexOf("Error") !== -1; else default_template'>
                     <p class='errorText line' *ngFor='let splittedText of text.join(" ").split("\n")' >{{splittedText}}</p>
                 </ng-container>
                 <ng-template #default_template>
                     <p class='normalText line'  *ngFor='let splittedText of text.join(" ").split("\n")' >{{splittedText}}</p>
-                </ng-template>
+                </ng-template> -->
             </div>
         </ng-container>
     </div>

@@ -67,13 +67,7 @@
                                     (click)='add_function(fn)'> 
                                         {{fn.name}} 
                                     </li>
-                                    <span class="tooltiptext" *ngIf='fn.doc'>
-                                        <p class='funcDesc'>{{fn.doc.summary||fn.doc.description}}</p>
-                                        <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                                        <ng-container *ngFor='let param of fn.doc.parameters'>
-                                            <p class='paramP' *ngIf='param'><span>{{param.name}} - </span> {{param.description}}</p>
-                                        </ng-container>
-                                        <p *ngIf='fn.doc.returns'><span>Returns: </span> {{fn.doc.returns}}</p>
+                                    <span class="tooltiptext" *ngIf='fn.doc' [innerHTML]='fn.doc'>
                                     </span>
                                 </div>
                             </ng-container>

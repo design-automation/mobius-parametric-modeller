@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit, ViewEncapsulation} from '@angular/core';
 
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
@@ -23,7 +23,8 @@ const inputEvent = new Event('input', {
 @Component({
   selector: 'toolset',
   templateUrl: './toolset.component.html',
-  styleUrls: ['./toolset.component.scss']
+  styleUrls: ['./toolset.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ToolsetComponent implements OnInit {
 
@@ -54,6 +55,18 @@ export class ToolsetComponent implements OnInit {
                 if (fn.name.substring(0, 1) === '_') { continue; }
                 if (ModuleDocList[mod.module] && ModuleDocList[mod.module][fn.name]) {
                     fn['doc'] = ModuleDocList[mod.module][fn.name];
+                    let fnDocHtml = `<p class="funcDesc">${fn.doc.summary || fn.doc.description}</p>`;
+                    if (fn.doc.parameters && fn.doc.parameters.length > 0) {
+                        fnDocHtml += `<p><span>Parameters: </span></p>`;
+                        for (const param of fn.doc.parameters) {
+                            if (!param) {continue; }
+                            fnDocHtml += `<p class="paramP"><span>${param.name} - </span> ${param.description}</p>`;
+                        }
+                    }
+                    if (fn.doc.returns) {
+                        fnDocHtml += `<p><span>Returns: </span> ${fn.doc.returns}</p>`;
+                    }
+                    fn['doc'] = fnDocHtml;
                 } else {
                     fn['doc'] = false;
                 }

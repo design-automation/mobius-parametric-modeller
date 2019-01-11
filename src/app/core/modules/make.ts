@@ -192,6 +192,7 @@ export enum _ECopyAttribues {
  * @example_info Creates a list containing a copy of the entities in sequence of input.
  */
 export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
+    const is_array: boolean =  Array.isArray(entities);
     // --- Error Check ---
     checkIDs('make.Copy', 'entities', entities, ['isID', 'isIDList'],
     ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
@@ -202,7 +203,11 @@ export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _
     const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
     const copied_geom: TId[] = _copyGeom(__model__, entities, bool_copy_attribs);
     _copyPosis(__model__, entities, bool_copy_attribs);
-    return copied_geom;
+    if (!is_array) {
+        return copied_geom[0];
+    } else {
+        return copied_geom;
+    }
 }
 // ================================================================================================
 // Loft modelling operation

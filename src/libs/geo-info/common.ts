@@ -18,6 +18,8 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
+// EEntType and an index
+export type TEntTypeIdx = [EEntType, number];
 
 // Types of entities
 export enum EEntType {

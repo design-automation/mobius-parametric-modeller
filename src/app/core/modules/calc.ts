@@ -1,9 +1,9 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz, EEntType } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, idBreak, isPgon, isFace } from '@libs/geo-info/id';
+import { TId, Txyz, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
+import { isPline, isWire, isEdge, idBreak, isPgon, isFace, idsBreak } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
-import { vecSum, vecDiv, vecAdd, vecSub, vecNorm } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecNorm, newellNorm } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
 import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
@@ -141,6 +141,15 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
     return vecSub(end, start);
 }
 // ================================================================================================
+function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
+    const posis_i: number[] = [];
+    for (const ent_arr of ents_arr) {
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]));
+    }
+    const unique_posis_i = Array.from(new Set(posis_i));
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
+}
 /**
  * Calculates the centroid of a list of any entity.
  * @param __model__
@@ -149,21 +158,67 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
  * @example centroid1 = calc.Centroid (entities)
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    const ents_arr: TEntTypeIdx[] = idsBreak(entities);
     // --- Error Check ---
     checkIDs('calc.Centroid', 'geometry', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'POINT', 'EDGE', 'WIRE', 'PLINE', 'FACE', 'PGON', 'COLL']);
     // --- Error Check ---
-    if (!Array.isArray(entities)) { entities = [entities]; }
-    const posis_i: number[] = [];
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
-    }
-    const unique_posis_i = Array.from(new Set(posis_i));
-    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
-    return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
+    return _centroid(__model__, ents_arr);
 }
 // ================================================================================================
+export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
+    if (ents_arr.length > 0 && !Array.isArray(ents_arr[0])) {
+        const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
+        const index: number = (ents_arr as TEntTypeIdx)[1];
+        if (isPgon(ent_type) || isFace(ent_type)) {
+            // faces, these are already triangulated
+            let face_i: number = index;
+            if (isPgon(ent_type)) {
+                face_i = __model__.geom.query.navPgonToFace(index);
+            }
+            const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+            let normal_vec: Txyz = [0, 0, 0];
+            for (const tri_i of tris_i) {
+                const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+                const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
+                const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
+                normal_vec = vecAdd(normal_vec, tri_normal);
+            }
+            return vecNorm(vecDiv(normal_vec, tris_i.length));
+        } else if (isPline(ent_type) || isWire(ent_type)) {
+            // wires, these need to be triangulated
+            let wire_i: number = index;
+            if (isPline(ent_type)) {
+                wire_i = __model__.geom.query.navPlineToWire(index);
+            }
+            if (!__model__.geom.query.istWireClosed(wire_i)) {
+                throw new Error('To calculate normals, wire must be closed');
+            }
+            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
+            const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
+            const tris: number[][] = triangulate(xyzs);
+            let normal_vec: Txyz = [0, 0, 0];
+            for (const tri of tris) {
+                const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
+                const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
+                normal_vec = vecAdd(normal_vec, tri_normal);
+            }
+            return vecNorm(vecDiv(normal_vec, tris.length));
+        }
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr)) as Txyz[];
+    }
+}
+// function _normal(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
+//     const posis_i: number[] = [];
+//     for (const ent_arr of ents_arr) {
+//         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]));
+//     }
+//     const unique_posis_i = Array.from(new Set(posis_i));
+//     const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+//     return newellNorm(unique_xyzs);
+// }
 /**
  * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
  * @param __model__
@@ -172,47 +227,18 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
  * @example normal1 = calc.Normal (geometry)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
-export function Normal(__model__: GIModel, entity: TId): Txyz {
+export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (!Array.isArray(entities)) {
+        ents_arr = idBreak(entities as TId);
+    } else {
+        ents_arr = idsBreak(entities as TId[]);
+    }
     // --- Error Check ---
     const fn_name = 'vector.GetNormal';
-    checkIDs(fn_name, 'entity', entity, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    // checkIDs(fn_name, 'entity', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    const [ent_type, index]: [EEntType, number] = idBreak(entity);
-    if (isPgon(ent_type) || isFace(ent_type)) {
-        // faces, these are already triangulated
-        let face_i: number = index;
-        if (isPgon(ent_type)) {
-            face_i = __model__.geom.query.navPgonToFace(index);
-        }
-        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
-        let normal_vec: Txyz = [0, 0, 0];
-        for (const tri_i of tris_i) {
-            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
-            const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
-            const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
-            normal_vec = vecAdd(normal_vec, tri_normal);
-        }
-        return vecNorm(vecDiv(normal_vec, tris_i.length));
-    } else if (isPline(ent_type) || isWire(ent_type)) {
-        // wires, these need to be triangulated
-        let wire_i: number = index;
-        if (isPline(ent_type)) {
-            wire_i = __model__.geom.query.navPlineToWire(index);
-        }
-        if (!__model__.geom.query.istWireClosed(wire_i)) {
-            throw new Error(fn_name + ': ' + 'To calculate normals, wire must be closed');
-        }
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
-        const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
-        const tris: number[][] = triangulate(xyzs);
-        let normal_vec: Txyz = [0, 0, 0];
-        for (const tri of tris) {
-            const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
-            const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
-            normal_vec = vecAdd(normal_vec, tri_normal);
-        }
-        return vecNorm(vecDiv(normal_vec, tris.length));
-    }
+    return _normal(__model__, ents_arr);
 }
 // ================================================================================================
 /**

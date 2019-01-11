@@ -1,5 +1,6 @@
 import * as three from 'three';
-import { vecNorm } from './vectors';
+import { vecNorm, vecCross } from './vectors';
+import { Vector3 } from 'three';
 type Txyz = [number, number, number]; // x, y, z
 type TPlane = [Txyz, Txyz, Txyz]; // origin, xaxis, yaxis
 const EPS = 1e-6;
@@ -66,7 +67,71 @@ export function scaleMatrix(origin: Txyz|TPlane, factor: Txyz): three.Matrix4 {
     return move_scale_move;
 }
 
-export function matrixFromXYZ(pts: Txyz[],
+export function xfromSourceTargetMatrix(source_plane: TPlane, target_plane: TPlane): three.Matrix4 {
+    // matrix to xform from source to gcs, then from gcs to target
+    const matrix_source_to_gcs: three.Matrix4 = _xformMatrixFromXYZVectors(
+        source_plane[0], source_plane[1], source_plane[2], true);
+    const matrix_gcs_to_target: three.Matrix4 = _xformMatrixFromXYZVectors(
+        target_plane[0], target_plane[1], target_plane[2], false);
+    // final matrix
+    const xform: three.Matrix4 = matrix_gcs_to_target.multiply(matrix_source_to_gcs);
+    // return the matrix
+    return xform;
+}
+
+// ================================================================================================
+// Helper functions
+// ================================================================================================
+
+function _crossVectors(v1: three.Vector3, v2: three.Vector3, norm: boolean = false): three.Vector3 {
+    const v3: three.Vector3 = new three.Vector3();
+    v3.crossVectors(v1, v2);
+    if (norm) {v3.normalize();}
+    return v3;
+}
+
+function _dotVectors(v1: three.Vector3, v2: three.Vector3): number {
+    return v1.dot(v2);
+}
+
+function _xformMatrixFromXYZVectors(o: Txyz, xaxis: Txyz, xyplane: Txyz, neg: boolean): three.Matrix4 {
+    const x_vec: three.Vector3 = new three.Vector3(...xaxis).normalize();
+    const xyplane_vec: three.Vector3 = new three.Vector3(...xyplane).normalize();
+    const z_vec: three.Vector3 = _crossVectors(x_vec, xyplane_vec);
+    const y_vec: three.Vector3 = _crossVectors(z_vec, x_vec);
+    if (neg) {
+        return _xformMatrixNeg(new three.Vector3(...o), x_vec, y_vec);
+    }
+    return xformMatrixPos(new three.Vector3(...o), x_vec, y_vec);
+}
+
+function _xformMatrixNeg(o: three.Vector3, x: three.Vector3, y: three.Vector3): three.Matrix4 {
+    const m1: three.Matrix4 = new three.Matrix4();
+    const o_neg: three.Vector3 = o.clone().negate();
+    m1.setPosition(o_neg);
+    const m2: three.Matrix4 = new three.Matrix4();
+    m2.makeBasis(x.normalize(), y.normalize(), _crossVectors(x, y, true));
+    m2.getInverse(m2);
+    const m3: three.Matrix4 = new three.Matrix4();
+    // first translate to (0,0,0), then xform, so m1 x m2
+    m3.multiplyMatrices(m2, m1);
+    return m3;
+}
+
+function xformMatrixPos(o: three.Vector3, x: three.Vector3, y: three.Vector3): three.Matrix4 {
+    const m1: three.Matrix4 = new three.Matrix4();
+    m1.setPosition(o);
+    const m2: three.Matrix4 = new three.Matrix4();
+    m2.makeBasis(x.normalize(), y.normalize(), _crossVectors(x, y, true));
+    const m3: three.Matrix4 = new three.Matrix4();
+    // first xform, then translate to origin, so m1 x m2
+    m3.multiplyMatrices(m1, m2);
+    return m3;
+}
+
+// ---------------------------------------------------------------------------------
+
+function _matrixFromXYZ(pts: Txyz[],
     from_origin: Txyz, from_vectors: Txyz[],
     to_origin: Txyz, to_vectors: Txyz[]): number[][] {
 

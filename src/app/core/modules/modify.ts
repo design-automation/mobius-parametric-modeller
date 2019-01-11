@@ -3,8 +3,9 @@ import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo
 import { idBreak } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
-import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix } from '@libs/geom/matrix';
+import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
+import { xformMatrix } from '@libs/triangulate/threex';
 
 // ================================================================================================
 /**
@@ -191,7 +192,24 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
     // checkCommTypes(fn_name, 'from', from, ['isPlane']);
     // checkCommTypes(fn_name, 'to', to, ['isPlane']);
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    // handle geometry type
+    if (!Array.isArray(entities)) {
+        entities = [entities] as TId[];
+    }
+
+    // xform all positions
+    const posis_i: number[] = [];
+    for (const geom_id of entities) {
+        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
+    }
+    const unique_posis_i: number[] = Array.from(new Set(posis_i));
+    const matrix: Matrix4 = xfromSourceTargetMatrix(from, to);
+    for (const unique_posi_i of unique_posis_i) {
+        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+        const new_xyz: Txyz = multMatrix(old_xyz, matrix);
+        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+    }
 }
 // ================================================================================================
 /**

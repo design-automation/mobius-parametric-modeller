@@ -43,6 +43,11 @@ function _makeVertices2D(points: three.Vector3[]): three.Vector3[] {
  */
 export function triangulate(coords: Txyz[]): number[][] {
     const vects: three.Vector3[] = _makeVertices2D(coords.map( coord => new three.Vector3(...coord)) );
+
+    if (vects === undefined || vects === null || vects.length === 0) {
+        return [];
+    }
+
     const flat_vert_xys: number[] = Arr.flatten(vects.map((v) => [v.x, v.y])); // TODO remove dependency
     const flat_tris_i: number[] = earcut.Earcut.triangulate(flat_vert_xys);
     const tris_i: number[][] = [];

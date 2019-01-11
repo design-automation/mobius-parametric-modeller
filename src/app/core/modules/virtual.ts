@@ -1,8 +1,9 @@
-import { TId, Txyz, EEntType, TPlane, TRay } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { idBreak, idMake } from '@libs/geo-info/id';
-import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult } from '@libs/geom/vectors';
+import { idBreak, idMake, idsBreak } from '@libs/geo-info/id';
+import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
+import { Normal, Centroid, _normal } from './calc';
 
 // ================================================================================================
 /**
@@ -82,17 +83,41 @@ export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
     throw new Error('Not implemented');
 }
+// ================================================================================================
+function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
+    if (ents_arr.length > 0 && !Array.isArray(ents_arr[0])) {
+        const ent_arr = ents_arr as TEntTypeIdx;
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        const unique_posis_i = Array.from(new Set(posis_i));
+        if (unique_posis_i.length < 3) { throw new Error('Too few points to calculate plane.'); }
+        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+        const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
+        // const normal: Txyz = newellNorm(unique_xyzs);
+        const normal: Txyz = _normal(__model__, ent_arr) as Txyz; // TODO
+        const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
+        const y_vec: Txyz = vecCross(x_vec, normal);
+        return [origin, x_vec, y_vec] as TPlane;
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _getPlane(__model__, ent_arr)) as TPlane[];
+    }
+}
 /**
- * Returns a plane of a face.
+ * Returns a plane from a set of positions.
  * @param __model__
- * @param face The id of an face
- * @returns The face plane.
+ * @param entities Any entities
+ * @returns The plane.
  */
-export function GetPlane(__model__: GIModel, face: TId): TPlane {
+export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (!Array.isArray(entities)) {
+        ents_arr = idBreak(entities as TId);
+    } else {
+        ents_arr = idsBreak(entities as TId[]);
+    }
     // --- Error Check ---
     // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
-    throw new Error('Not implemented');
+    return _getPlane(__model__, ents_arr);
 }
 // ================================================================================================
 /**

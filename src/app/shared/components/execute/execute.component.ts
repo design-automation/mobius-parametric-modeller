@@ -52,8 +52,10 @@ export class ExecuteComponent {
 
     async execute() {
         console.log(' ');
+        // const startTime = performance.now();
         document.getElementById('spinner-on').click();
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
+        // console.log('Retrieving flowchart\'s external inputs');
         for (const node of this.dataService.flowchart.nodes) {
             let errorCheck = false;
             if (node.type !== 'start') {
@@ -94,6 +96,7 @@ export class ExecuteComponent {
                 document.getElementById('Console').click();
                 console.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
+                // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
                 throw new Error('Empty Argument');
             }
         }
@@ -108,6 +111,7 @@ export class ExecuteComponent {
             }
         }
         document.getElementById('spinner-off').click();
+        // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
     }
 
     executeFlowchart(flowchart) {
@@ -151,6 +155,7 @@ export class ExecuteComponent {
     executeNode(node: INode, funcStrings, globalVars): string {
         const params = {'currentProcedure': ['']};
         let fnString = '';
+        const startTime = performance.now();
         try {
             // get the code for the node
             const codeRes = CodeUtils.getNodeCode(node, true);
@@ -230,8 +235,12 @@ export class ExecuteComponent {
                 globalVars += '\n';
             }
             node.model = params['model'];
+            const endTime = performance.now();
+            console.log('  Executed in ' + (endTime - startTime) + ' milliseconds.');
             return globalVars;
         } catch (ex) {
+            const endTime = performance.now();
+            console.log('  Executed with error in ' + (endTime - startTime) + ' milliseconds.');
             document.getElementById('spinner-off').click();
             if (DEBUG) {
                 console.log('\n=======================================\n' +

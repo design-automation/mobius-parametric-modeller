@@ -1,4 +1,4 @@
-import { Component, Input, Output,  EventEmitter, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
+import { Component, Input, Output,  EventEmitter} from '@angular/core';
 
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { ModuleDocList } from '@shared/decorators';
@@ -8,6 +8,7 @@ import { _parameterTypes} from '@modules';
 import { inline_func } from '../toolset/toolset.inline';
 import * as Modules from '@modules';
 import { DataService } from '@services';
+import { IArgument } from '@models/code';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -37,6 +38,13 @@ const reservedWords = [
     'prototype', 'String', 'toString', 'undefined', 'valueOf'
 ];
 
+const mathFuncs = [];
+for (const funcMod of inline_func) {
+    for (const func of funcMod[1]) {
+        mathFuncs.push(func[0].split('(')[0]);
+    }
+}
+
 
 @Component({
     selector: 'procedure-item',
@@ -55,16 +63,70 @@ export class ProcedureItemComponent {
 
     private keys = Object.keys(ProcedureTypes);
     ProcedureTypesArr = this.keys.slice(this.keys.length / 2);
-    invalidVar = false;
-    mathFuncs = [];
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {
-        for (const funcMod of inline_func) {
-            for (const func of funcMod[1]) {
-                this.mathFuncs.push(func[0].split('(')[0]);
+    }
+
+    static modifyVarArg(value: string, arg: IArgument) {
+        let str = value.trim();
+        str = str.replace(/ /g, '_');
+        str = str.toLowerCase();
+        if ((str.match(/\[/g) || []).length !== (str.match(/\]/g) || []).length) {
+            arg.invalidVar = true;
+            return str;
+        }
+        const strSplit = str.split(/[\@\[\]]/g);
+        let teststr = str;
+        for (const i of strSplit) {
+            if (i === '') { continue; }
+            if (i === '0' || Number(i)) {
+                const sStr = `[${i}]`;
+                const ind = teststr.indexOf(sStr);
+                if (ind === -1) {
+                    arg.invalidVar = true;
+                    return str;
+                }
+                teststr = teststr.slice(0, ind) + teststr.slice(ind + sStr.length);
+                continue;
+            }
+            try {
+                if (i.substring(0, 1) === '_') {
+                    arg.invalidVar = true;
+                    return str;
+                }
+                for (const reserved of reservedWords) {
+                    if (i === reserved) {
+                        arg.invalidVar = true;
+                        return str;
+                    }
+                }
+                for (const funcName of mathFuncs) {
+                    if (i === funcName) {
+                        arg.invalidVar = true;
+                        return str;
+                    }
+                }
+                let currentWindow;
+                if (window.hasOwnProperty(i)) {
+                    currentWindow = window[i];
+                }
+                const fn = new Function('', `${i}=1;`);
+                fn();
+                delete window[i];
+                if (currentWindow) {
+                    window[i] = currentWindow;
+                }
+
+                arg.invalidVar = false;
+            } catch (ex) {
+                // console.log(ex.message);
+                arg.invalidVar = true;
+                return str;
             }
         }
+        return str;
+
     }
 
 
@@ -131,66 +193,11 @@ export class ProcedureItemComponent {
     }
 
     // modify variable input: replace space " " with underscore "_"
-    varMod(event) {
+    varMod(event: string) {
         if (!event) { return event; }
-        let str = event.trim();
-        str = str.replace(/ /g, '_');
-        str = str.toLowerCase();
-        if ((str.match(/\[/g) || []).length !== (str.match(/\]/g) || []).length) {
-            this.invalidVar = true;
-            return str;
-        }
-        const strSplit = str.split(/[\@\[\]]/g);
-        let teststr = str;
-        for (const i of strSplit) {
-            if (i === '') { continue; }
-            if (i === '0' || Number(i)) {
-                const sStr = `[${i}]`;
-                const ind = teststr.indexOf(sStr);
-                if (ind === -1) {
-                    this.invalidVar = true;
-                    return str;
-                }
-                teststr = teststr.slice(0, ind) + teststr.slice(ind + sStr.length);
-                continue;
-            }
-            try {
-                if (i.substring(0, 1) === '_') {
-                    this.invalidVar = true;
-                    return str;
-                }
-                for (const reserved of reservedWords) {
-                    if (i === reserved) {
-                        this.invalidVar = true;
-                        return str;
-                    }
-                }
-                for (const funcName of this.mathFuncs) {
-                    if (i === funcName) {
-                        this.invalidVar = true;
-                        return str;
-                    }
-                }
-                let currentWindow;
-                if (window.hasOwnProperty(i)) {
-                    currentWindow = window[i];
-                }
-                const fn = new Function('', `${i}=1;`);
-                fn();
-                delete window[i];
-                if (currentWindow) {
-                    window[i] = currentWindow;
-                }
-
-                this.invalidVar = false;
-            } catch (ex) {
-                // console.log(ex.message);
-                this.invalidVar = true;
-                return str;
-            }
-        }
-        return str;
+        return ProcedureItemComponent.modifyVarArg(event, this.data.args[0]);
     }
+
 
     // modify argument input: check if input is valid
     argMod(event: Event, argIndex: number) {

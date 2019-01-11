@@ -57,13 +57,22 @@ export class ExecuteComponent {
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         // console.log('Retrieving flowchart\'s external inputs');
         for (const node of this.dataService.flowchart.nodes) {
-            let errorCheck = false;
+            let EmptyECheck = false;
+            let InvalidECheck = false;
             if (node.type !== 'start') {
                 if (node.input.edges) {
                     node.input.value = undefined;
                 }
             }
-            await this.resolveImportedUrl(node.procedure);
+
+            try {
+                await this.resolveImportedUrl(node.procedure);
+            } catch (ex) {
+                document.getElementById('Console').click();
+                console.log(ex.message);
+                document.getElementById('spinner-off').click();
+                throw ex;
+            }
 
             if (!node.enabled) {
                 continue;
@@ -71,13 +80,18 @@ export class ExecuteComponent {
 
             for (const prod of node.procedure) {
                 if (prod.type === ProcedureTypes.Return || !prod.enabled) { continue; }
+                if (prod.args.length > 0 && prod.args[0].invalidVar) {
+                    node.hasError = true;
+                    prod.hasError = true;
+                    InvalidECheck = true;
+                }
                 if (prod.type === ProcedureTypes.Constant) {
                     prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
                     if (!prod.args[0].value || (!prod.args[1].value && !prod.args[1].default &&
                         prod.args[1].value !== 0 && prod.args[1].default !== 0)) {
                         node.hasError = true;
                         prod.hasError = true;
-                        errorCheck = true;
+                        EmptyECheck = true;
                     }
                 } else {
                     for (const arg of prod.args) {
@@ -87,17 +101,24 @@ export class ExecuteComponent {
                         if (arg.value !== 0 && !arg.value) {
                             node.hasError = true;
                             prod.hasError = true;
-                            errorCheck = true;
+                            EmptyECheck = true;
                         }
                     }
                 }
             }
-            if (errorCheck) {
+            if (EmptyECheck) {
                 document.getElementById('Console').click();
                 console.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
                 // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
                 throw new Error('Empty Argument');
+            }
+            if (InvalidECheck) {
+                document.getElementById('Console').click();
+                console.log('Error: Invalid Argument or Argument with Reserved Word detected. Check marked node(s) and procedure(s)!');
+                document.getElementById('spinner-off').click();
+                // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
+                throw new Error('Reserved Word Argument');
             }
         }
 

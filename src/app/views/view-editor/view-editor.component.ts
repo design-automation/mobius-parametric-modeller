@@ -198,7 +198,7 @@ export class ViewEditorComponent {
         const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
         if (!node) { return ''; }
         // if (node.type === 'output') { return node.input.value; }
-        if (this.getViewOutput) {
+        if (this.getViewOutput()) {
             return node.model;
         }
         return node.input.value;

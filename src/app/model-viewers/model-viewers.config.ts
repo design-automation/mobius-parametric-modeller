@@ -1,6 +1,6 @@
 import { IView } from './view.interface';
 // Step-1: Add new ViewerComponet here
-import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component';
+// import { TextViewerComponent } from './all-viewers/text-viewer/viewer.component';
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/console-viewer.component';
 import { HelpViewerComponent } from './all-viewers/help-viewer/help-viewer.component';
 import { GIViewerComponent } from './all-viewers/gi-viewer/gi-viewer.component';

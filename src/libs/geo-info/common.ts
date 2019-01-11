@@ -1,5 +1,8 @@
 import { GIAttribMap } from './GIAttribMap';
 
+// EEntType and an index
+export type TEntTypeIdx = [EEntType, number];
+
 // Object for entities
 export interface IGeomPack {
     posis_i: number[];

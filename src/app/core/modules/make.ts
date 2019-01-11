@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribNames, TId, EEntType, Txyz } from '@libs/geo-info/common';
+import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 import { idBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
     isObj, isEdge, idMake, idIndicies, idsBreak } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
@@ -8,6 +8,15 @@ import { _model } from '@modules';
 import { checkCommTypes, checkIDs } from './_check_args';
 
 // ================================================================================================
+function _position(__model__: GIModel, coords: Txyz|Txyz[]): TEntTypeIdx|TEntTypeIdx[] {
+    if (Array.isArray(coords) && !Array.isArray(coords[0])) {
+        const posi_i: number = __model__.geom.add.addPosition();
+        __model__.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coords as Txyz);
+        return [EEntType.POSI, posi_i] as TEntTypeIdx;
+    } else {
+        return (coords as Txyz[]).map(_coords => _position(__model__, _coords)) as TEntTypeIdx[];
+    }
+}
 /**
  * Adds a new position to the model.
  * @param __model__
@@ -20,15 +29,20 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
     // --- Error Check ---
     checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
     // --- Error Check ---
-    if (Array.isArray(coords) && !Array.isArray(coords[0])) {
-        const posi_i: number = __model__.geom.add.addPosition();
-        __model__.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coords as Txyz);
-        return idMake(EEntType.POSI, posi_i);
-    } else {
-        return (coords as Txyz[]).map(_coords => Position(__model__, _coords)) as TId[];
-    }
+    const result: TEntTypeIdx|TEntTypeIdx[] = _position(__model__, coords);
+    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
+    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
 }
 // ================================================================================================
+function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx|TEntTypeIdx[] {
+    if (!Array.isArray(ents_arr)) {
+        const index: number = ents_arr[1] as number;
+        const point_i: number = __model__.geom.add.addPoint(index);
+        return [EEntType.POINT, point_i] as TEntTypeIdx;
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(_ents_arr => _point(__model__, _ents_arr)) as TEntTypeIdx[];
+    }
+}
 /**
  * Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.
  * @param __model__
@@ -42,19 +56,25 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Point', 'positions', positions, ['isID', 'isIDList'], ['POSI']);
     // --- Error Check ---
-    if (!Array.isArray(positions)) {
-        const index: number = ents_arr[1] as number;
-        const point_i: number = __model__.geom.add.addPoint(index);
-        return idMake(EEntType.POINT, point_i);
-    } else {
-        return (positions as TId[]).map(position => Point(__model__, position)) as TId[];
-    }
+    const result: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
+    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
+    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
 }
 // ================================================================================================
 // Enums for Polyline()
 export enum _EClose {
     CLOSE = 'close',
     OPEN = 'open'
+}
+function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], close: _EClose): TEntTypeIdx|TEntTypeIdx[] {
+    if (Array.isArray(ents_arr) && !Array.isArray(ents_arr[0])) {
+        const bool_close: boolean = (close === _EClose.CLOSE);
+        const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
+        const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
+        return [EEntType.PLINE, pline_i] as TEntTypeIdx;
+    } else {
+        return (ents_arr as TEntTypeIdx[][]).map(_ents_arr => _polyline(__model__, _ents_arr, close)) as TEntTypeIdx[];
+    }
 }
 /**
  * Adds a new polyline to the model.
@@ -69,16 +89,20 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polyline', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
-    if (Array.isArray(positions) && !Array.isArray(positions[0])) {
-        const bool_close: boolean = (close === _EClose.CLOSE);
-        const posis_i: number[] = idIndicies(ents_arr as [EEntType, number][]);
-        const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
-        return idMake(EEntType.PLINE, pline_i);
-    } else {
-        return (positions as TId[][]).map(_positions => Polyline(__model__, _positions, close)) as TId[];
-    }
+    const result: TEntTypeIdx|TEntTypeIdx[] = _polyline(__model__, ents_arr as TEntTypeIdx[]|TEntTypeIdx[][], close);
+    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
+    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
 }
 // ================================================================================================
+function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
+    if (Array.isArray(ents_arr[0]) && !Array.isArray(ents_arr[0][0])) {
+        const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
+        const pgon_i: number = __model__.geom.add.addPgon(posis_i);
+        return [EEntType.PGON, pgon_i] as TEntTypeIdx;
+    } else {
+        return (ents_arr as TEntTypeIdx[][]).map(_ents_arr => _polygon(__model__, _ents_arr)) as TEntTypeIdx[];
+    }
+}
 /**
  * Adds a new polygon to the model.
  * @param __model__
@@ -91,13 +115,9 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList', 'isIDList_list'], ['POSI']);
     // --- Error Check ---
-    if (Array.isArray(positions) && !Array.isArray(positions[0])) {
-        const posis_i: number[] = idIndicies(ents_arr as [EEntType, number][]);
-        const pgon_i: number = __model__.geom.add.addPgon(posis_i);
-        return idMake(EEntType.PGON, pgon_i);
-    } else {
-        return (positions as TId[][]).map(_positions => Polygon(__model__, _positions)) as TId[];
-    }
+    const result: TEntTypeIdx|TEntTypeIdx[] = _polygon(__model__, ents_arr as TEntTypeIdx[]|TEntTypeIdx[][]);
+    if (Array.isArray(result) && !Array.isArray(result[0])) {return idMake(result as TEntTypeIdx) as TId; }
+    return (result as TEntTypeIdx[]).map(_res => idMake(_res)) as TId[];
 }
 // ================================================================================================
 /**
@@ -112,14 +132,14 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
 export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|TId[]): TId {
     // --- Error Check ---
     const fn_name = 'make.Collection';
-    let coll_ents_arr: [EEntType, number];
+    let coll_ents_arr: TEntTypeIdx;
     if (parent_coll !== null && parent_coll !== undefined) {
-        coll_ents_arr = checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']) as [EEntType, number];
+        coll_ents_arr = checkIDs(fn_name, 'parent_coll', parent_coll, ['isID'], ['COLL']) as TEntTypeIdx;
     }
     let geo_ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isID', 'isIDList'], ['POINT', 'PLINE', 'PGON']);
     // --- Error Check ---
     if (!Array.isArray(geo_ents_arr[0])) {
-        geo_ents_arr = [geo_ents_arr] as [EEntType, number][];
+        geo_ents_arr = [geo_ents_arr] as TEntTypeIdx[];
     }
     const points: number[] = [];
     const plines: number[] = [];
@@ -139,7 +159,7 @@ export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|T
 // Stuff for Copy()
 function _copyGeom(__model__: GIModel, geometry: TId|TId[], copy_attributes: boolean): TId[] {
     if (!Array.isArray(geometry)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geometry as TId);
+        const [ent_type, index]: TEntTypeIdx = idBreak(geometry as TId);
         if (isColl(ent_type)) {
             const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
             return [ idMake(ent_type, coll_i)];
@@ -157,7 +177,7 @@ function _copyPosis(__model__: GIModel, geometry: TId|TId[], copy_attributes: bo
     // create the new positions
     const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
     for (const geom_id of geometry) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        const [ent_type, index]: TEntTypeIdx = idBreak(geom_id);
         const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
         const geom_new_posis_i: number[] = [];
         for (const old_posi_i of old_posis_i) {
@@ -226,7 +246,7 @@ export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod):
     const edges_arrs_i: number[][] = [];
     let num_edges = 0;
     for (const ents of ents_arr) {
-        const [ent_type, index]: [EEntType, number] = ents as [EEntType, number];
+        const [ent_type, index]: TEntTypeIdx = ents as TEntTypeIdx;
         const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
         if (edges_arrs_i.length === 0) { num_edges = edges_i.length; }
         if (edges_i.length !== num_edges) {
@@ -251,43 +271,21 @@ export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod):
     return pgons_id;
 }
 // ================================================================================================
-/**
- * Extrudes geometry by distance (in default direction = z-axis) or by vector.
- * - Extrusion of location produces a line;
- * - Extrusion of line produces a polygon;
- * - Extrusion of surface produces a list of surfaces.
- * @param __model__
- * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
- * @param divisions Number of divisions to divide extrusion by.
- * @returns Extrusion of entities if successful, null if unsuccessful or on error.
- * @example extrusion1 = make.Extrude(point1, 10, 2)
- * @example_info Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
- * If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].
- * @example extrusion2 = make.Extrude(polygon1, [0,5,0], 1)
- * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
- */
-export function Extrude(__model__: GIModel, entities: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
-    // --- Error Check ---
-    const fn_name = 'make.Extrude';
-    const ents_arr =  checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-                              ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
-    checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
-    // --- Error Check ---
+function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
+        distance: number|Txyz, divisions: number): TEntTypeIdx|TEntTypeIdx[] {
     const extrude_vec: Txyz = (Array.isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
-    if (!Array.isArray(entities)) {
-        const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
+    if (!Array.isArray(ents_arr[0])) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         // check if this is a collection
         if (isColl(ent_type)) {
             const points_i: number[] = __model__.geom.query.navCollToPoint(index);
-            const res1 = points_i.map( point_i => Extrude(__model__, idMake(EEntType.POINT, point_i), extrude_vec, divisions));
+            const res1 = points_i.map( point_i => _extrude(__model__, [EEntType.POINT, point_i], extrude_vec, divisions));
             const plines_i: number[] = __model__.geom.query.navCollToPline(index);
-            const res2 = plines_i.map( pline_i => Extrude(__model__, idMake(EEntType.PLINE, pline_i), extrude_vec, divisions));
+            const res2 = plines_i.map( pline_i => _extrude(__model__, [EEntType.PLINE, pline_i], extrude_vec, divisions));
             const pgons_i: number[] = __model__.geom.query.navCollToPgon(index);
-            const res3 = pgons_i.map( pgon_i => Extrude(__model__, idMake(EEntType.PGON, pgon_i), extrude_vec, divisions));
-            return [].concat(...[res1, res2, res3]) as TId[];
+            const res3 = pgons_i.map( pgon_i => _extrude(__model__, [EEntType.PGON, pgon_i], extrude_vec, divisions));
+            return [].concat(...[res1, res2, res3]);
         }
         // check if this is a position, a vertex, or a point -> pline
         if (isDim0(ent_type)) {
@@ -301,10 +299,10 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
             }
             // loft between the positions and create a single polyline
             const pline_i: number = __model__.geom.add.addPline(new_posis_i);
-            return idMake(EEntType.PLINE, pline_i);
+            return [EEntType.PLINE, pline_i];
         }
         // extrude edges
-        const pgons_id: TId[] = [];
+        const new_pgons_i: number[] = [];
         const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
         const strip_posis_map: Map<number, number[]> = new Map();
         for (const edge_i of edges_i) {
@@ -333,19 +331,47 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
                 const c3: number = strip2_posis_i[i + 1];
                 const c4: number = strip1_posis_i[i + 1];
                 const pgon_i: number = __model__.geom.add.addPgon([c1, c2, c3, c4]);
-                pgons_id.push(idMake(EEntType.PGON, pgon_i));
+                new_pgons_i.push(pgon_i);
             }
         }
         if (isDim2(ent_type)) {
             const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
             const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
             const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
-            pgons_id.push(idMake(EEntType.PGON, pgon_i));
+            new_pgons_i.push(pgon_i);
         }
-        return pgons_id;
+        return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);
     } else {
-        return [].concat(...(entities as TId[]).map(geom_i => Extrude(__model__, geom_i, extrude_vec, divisions))) as TId[];
+        return [].concat(...(ents_arr as TEntTypeIdx[]).map(_ents_arr => _extrude(__model__, _ents_arr, extrude_vec, divisions)));
     }
+}
+/**
+ * Extrudes geometry by distance (in default direction = z-axis) or by vector.
+ * - Extrusion of location produces a line;
+ * - Extrusion of line produces a polygon;
+ * - Extrusion of surface produces a list of surfaces.
+ * @param __model__
+ * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
+ * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
+ * @param divisions Number of divisions to divide extrusion by.
+ * @returns Extrusion of entities if successful, null if unsuccessful or on error.
+ * @example extrusion1 = make.Extrude(point1, 10, 2)
+ * @example_info Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
+ * If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].
+ * @example extrusion2 = make.Extrude(polygon1, [0,5,0], 1)
+ * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
+ */
+export function Extrude(__model__: GIModel, entities: TId|TId[], distance: number|Txyz, divisions: number): TId|TId[] {
+    // --- Error Check ---
+    const fn_name = 'make.Extrude';
+    const ents_arr =  checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                              ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
+    checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
+    // --- Error Check ---
+    const result: TEntTypeIdx|TEntTypeIdx[] = _extrude(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[], distance, divisions);
+    if (Array.isArray(result) && !Array.isArray(result[0])) { return idMake(result as TEntTypeIdx); }
+    (result as TEntTypeIdx[]).map(ent_type_idx => idMake(ent_type_idx));
 }
 // ================================================================================================
 /**
@@ -368,7 +394,7 @@ export enum _EDivideMethod {
     BY_NUMBER =  'by_number',
     BY_LENGTH  =  'by_length'
 }
-function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _EDivideMethod): number[] {
+function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method: _EDivideMethod): number[] {
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
     const start = __model__.attribs.query.getPosiCoords(posis_i[0]);
     const end = __model__.attribs.query.getPosiCoords(posis_i[1]);
@@ -390,6 +416,25 @@ function _divide(__model__: GIModel, edge_i: number, divisor: number, method: _E
     new_edges_i.push(old_edge_i);
     return new_edges_i;
 }
+function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], divisor: number, method: _EDivideMethod): TEntTypeIdx[] {
+    if (!Array.isArray(ents_arr[0])) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        let exist_edges_i: number[];
+        if (!isEdge(ent_type)) {
+            exist_edges_i = __model__.geom.query.navAnyToEdge(ent_type, index).slice();
+        } else {
+            exist_edges_i = [index];
+        }
+        const all_new_edges_i: number[] = [];
+        for (const exist_edge_i of exist_edges_i) {
+            const new_edges_i: number[] = _divideEdge(__model__, exist_edge_i, divisor, method);
+            all_new_edges_i.push(...new_edges_i);
+        }
+        return all_new_edges_i.map(one_edge_i => [EEntType.EDGE, one_edge_i] as TEntTypeIdx);
+    } else {
+        return [].concat(...(ents_arr as TEntTypeIdx[]).map(one_edge => _divide(__model__, one_edge, divisor, method)));
+    }
+}
 /**
  * Divides edge/wire/polyline by length or by number of segments.
  * If object is not exact multiple of length, length of last segment will be the remainder.
@@ -409,23 +454,7 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
     const ents_arr = checkIDs('make.Copy', 'edge', edge, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
-    if (!Array.isArray(ents_arr[0])) {
-        const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
-        let exist_edges_i: number[];
-        if (!isEdge(ent_type)) {
-            exist_edges_i = __model__.geom.query.navAnyToEdge(ent_type, index).slice();
-        } else {
-            exist_edges_i = [index];
-        }
-        const all_new_edges_i: number[] = [];
-        for (const exist_edge_i of exist_edges_i) {
-            const new_edges_i: number[] = _divide(__model__, exist_edge_i, divisor, method);
-            all_new_edges_i.push(...new_edges_i);
-        }
-        return all_new_edges_i.map(one_edge_i => idMake(EEntType.EDGE, one_edge_i));
-    } else {
-        return [].concat(...(edge as TId[]).map(one_edge => Divide(__model__, one_edge, divisor, method)));
-    }
+    return _divide(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[], divisor, method).map(ent_type_idx => idMake(ent_type_idx));
 }
 // ================================================================================================
 /**
@@ -447,7 +476,7 @@ export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
                               ['VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     if (!Array.isArray(ents_arr[0])) {
-        ents_arr = [ents_arr] as [EEntType, number][];
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     // get verts_i
     const all_verts_i: number[] = []; // count number of posis

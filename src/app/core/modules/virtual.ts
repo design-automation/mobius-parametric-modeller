@@ -78,7 +78,7 @@ export function RayFromPlane(plane: TPlane): TRay {
  */
 export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
-    checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']);
+    // checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -90,7 +90,7 @@ export function GetRay(__model__: GIModel, edge: TId): TPlane {
  */
 export function GetPlane(__model__: GIModel, face: TId): TPlane {
     // --- Error Check ---
-    checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
+    // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }

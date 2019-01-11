@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EAttribNames, EEntType} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { idBreak } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
@@ -19,17 +19,16 @@ import { Matrix4 } from 'three';
 export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Move';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     checkCommTypes(fn_name, 'vector', vector, ['isVector']);
     // --- Error Check ---
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     const posis_i: number[] = [];
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
+    for (const ents of ents_arr) {
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     for (const unique_posi_i of unique_posis_i) {
@@ -37,6 +36,7 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
         const new_xyz: Txyz = vecAdd(old_xyz, vector);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
+    return;
 }
 // ================================================================================================
 /**
@@ -53,27 +53,25 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
 export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, axis: Txyz, angle: number): void {
     // --- Error Check ---
     const fn_name = 'modify.Rotate';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
     checkCommTypes(fn_name, 'axis', axis, ['isXYZlist']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
     // handle geometry type
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     // handle origin type
     if (!Array.isArray(origin)) {
-        const [origin_ent_type, origin_index]: [EEntType, number] = idBreak(origin as TId);
-        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type, origin_index);
+        const origin_posi = __model__.geom.query.navAnyToPosi(ori_ents_arr[0], ori_ents_arr[1]);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
     // rotate all positions
     const posis_i: number[] = [];
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
+    for (const ents of ents_arr) {
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     const matrix: Matrix4 = rotateMatrix(origin, axis, angle);
@@ -82,6 +80,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
+    return;
 }
 // ================================================================================================
 /**
@@ -97,19 +96,18 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
 export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Scale';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
+    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
     checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZlist']);
     // --- Error Check ---
     // handle geometry type
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     // handle origin type
     if (!Array.isArray(origin)) {
-        const [origin_ent_type, origin_index]: [EEntType, number] = idBreak(origin as TId);
-        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type, origin_index);
+        const origin_posi = __model__.geom.query.navAnyToPosi(ori_ents_arr[0], ori_ents_arr[1]);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
     // handle scale type
@@ -118,9 +116,8 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
     }
     // scale all positions
     const posis_i: number[] = [];
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
+    for (const ents of ents_arr) {
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
     const matrix: Matrix4 = scaleMatrix(origin, scale);
@@ -129,40 +126,42 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
+    return;
 }
 // ================================================================================================
 /**
  * Mirrors geometry across plane.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param plane Plane to mirror across.
+ * @param origin Position Vertex Point Coordinate
+ * @param direction Vector
  * @returns void
  * @example mod.Mirror(entities, plane)
  * @example_info Mirrors entities across the plane.
  */
-export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz, direction: Txyz): void {
+export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, direction: Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Mirror';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
-    checkCommTypes(fn_name, 'direction', direction, ['isXYZlist']);
+    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'direction', direction, ['isVector']);
     // --- Error Check ---
 
     // handle geometry type
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     // handle origin type
     if (!Array.isArray(origin)) {
-        const [origin_ent_type, origin_index]: [EEntType, number] = idBreak(origin as TId);
+        const [origin_ent_type, origin_index]: TEntTypeIdx = ori_ents_arr as TEntTypeIdx;
         const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type, origin_index);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
     // mirror all positions
     const posis_i: number[] = [];
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+    for (const ents of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ents as TEntTypeIdx;
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
@@ -186,11 +185,11 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz, di
  */
 export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to: TPlane): void {
     // --- Error Check ---
-    const fn_name = 'modify.Mirror';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'from', from, ['isPlane']);
-    checkCommTypes(fn_name, 'to', to, ['isPlane']);
+    // const fn_name = 'modify.Mirror';
+    // const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+    //                          ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // checkCommTypes(fn_name, 'from', from, ['isPlane']);
+    // checkCommTypes(fn_name, 'to', to, ['isPlane']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
@@ -207,11 +206,27 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
  */
 export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
-    checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
+    // const ents_arr = checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
 // ================================================================================================
+function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
+    if (!Array.isArray(ents_arr[0])) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        let wire_i: number = index;
+        if (ent_type === EEntType.PLINE) {
+            wire_i = __model__.geom.query.navPlineToWire(index);
+        } else if (ent_type !== EEntType.WIRE) {
+            throw new Error('modify.Close: Entity is of wrong type. It must be either a polyline or a wire.');
+        }
+        __model__.geom.add.closeWire(wire_i);
+    } else {
+        for (const ents of ents_arr) {
+            _close(__model__, ents as TEntTypeIdx);
+        }
+    }
+}
 /**
  * Closes polylines if open.
  * @param __model__
@@ -222,22 +237,9 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
  */
 export function Close(__model__: GIModel, lines: TId|TId[]): void {
     // --- Error Check ---
-    checkIDs('modify.Close', 'lines', lines, ['isID', 'isIDList'], ['PLINE']);
+    const ents_arr = checkIDs('modify.Close', 'lines', lines, ['isID', 'isIDList'], ['PLINE']);
     // --- Error Check ---
-    if (!Array.isArray(lines)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(lines as TId);
-        let wire_i: number = index;
-        if (ent_type === EEntType.PLINE) {
-            wire_i = __model__.geom.query.navPlineToWire(index);
-        } else if (ent_type !== EEntType.WIRE) {
-            throw new Error('Entity is of wrong type. It must be either a polyline or a wire.');
-        }
-        __model__.geom.add.closeWire(wire_i);
-    } else {
-        for (const line of lines) {
-            Close(__model__, line);
-        }
-    }
+    _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
 // Promote modelling operation
@@ -272,7 +274,7 @@ export enum _EPromoteAttribTypes {
 export function Promote(__model__: GIModel, attrib_name: string,
     from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
     // --- Error Check ---
-    checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
+    // checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
@@ -287,8 +289,8 @@ export function Promote(__model__: GIModel, attrib_name: string,
  */
 export function Weld(__model__: GIModel, entities: TId[]): void {
     // --- Error Check ---
-    checkIDs('modify.Weld', 'entities', entities, ['isIDList'],
-            ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // const ents_arr = checkIDs('modify.Weld', 'entities', entities, ['isIDList'],
+    //                          ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }
@@ -303,7 +305,7 @@ export function Weld(__model__: GIModel, entities: TId[]): void {
  */
 export function Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     // --- Error Check ---
-    checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    // const ents_arr = checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.');
 }

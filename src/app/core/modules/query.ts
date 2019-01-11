@@ -53,7 +53,7 @@ function _convertSelectToEEntTypeStr(select: _EQuerySelect): EEntType {
  * If the attribute value is a string, then in must be in qoutes, as follows: #@name == 'str_value'.
  * The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
  * Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
- * Query expressions can be combine with either && (and) and || (or), where
+ * Query expressions can be combined with either && (and) and || (or), where
  * && takes precedence over ||.
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
@@ -129,7 +129,7 @@ export enum _ESortMethod {
  * @param select Enum, specifies what type of entities are to be counted.
  * @param entities List of entities to be searched. If 'null' (without quotes), list of all entities in the model.
  * @param sort_expr Attribute condition. If 'null' (without quotes), no condition is set; list of all search entities is returned.
- * @param method Enum
+ * @param method Enum.
  * @returns Sorted entities.
  * @example sorted_list = query.Sort(positions, polyline1, #@xyz[2], descending)
  * @example_info Returns a list of positions in polyline1, sorted according to the descending z value.

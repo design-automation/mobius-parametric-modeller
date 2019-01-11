@@ -7,12 +7,16 @@ import { Normal, Centroid, _normal } from './calc';
 
 // ================================================================================================
 /**
- * Create a ray, centered at the origin.
+ * Creates a ray, centered at the origin.
  * @param __model__
  * @param origin Origin of Ray: Position/Vertex/Point/Coordinate
  * @param dir_vec Direction of Ray: Vector/List of three numbers
  * @returns [origin, vector]: [[x,y,z],[x',y',z']]
+ * @example virtual.Ray([1,2,3],[4,3,2])
+ * @example_info Creates a ray from [1,2,3] with the vector [4,3,2].
+ *
  */
+
 export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     // --- Error Check ---
     const fn_name = 'virtual.Ray';
@@ -31,13 +35,16 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
 }
 // ================================================================================================
 /**
- * Create a plane, centered at the origin.
+ * Creates a plane, centered at the origin.
  * @param __model__
  * @param origin Origin of Plane: Position/Vertex/Point/Coordinate
  * @param x_vec First plane determining vector: Vector/List of three numbers
  * @param xy_vec Second plane determining vector: Vector/List of three numbers
  * @returns [origin, vector, vector]: [[x,y,z],[x',y',z'],[x",y",z"]]
+ * @example virtual.Plane ([1,2,3],[4,3,2],[3,3,9])
+ * @example_info Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
  */
+
 export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
     // --- Error Check ---
     const fn_name = 'virtual.Plane';

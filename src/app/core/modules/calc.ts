@@ -18,9 +18,9 @@ export enum _EDistanceMethod {
  * @param __model__
  * @param position1 First position.
  * @param position2 Second position.
- * @param method Enum
+ * @param method Enum; distance or min_distance.
  * @returns Distance.
- * @example distance1 = calc.Distance (position1, position2)
+ * @example distance1 = calc.Distance (position1, position2, distance)
  * @example_info position1 = [0,0,0], position2 = [0,0,10]
  * Expected value of distance is 10.
  */
@@ -77,7 +77,7 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
  * Calculates the area of a surface or a list of surfaces.
  * TODO: allow for a list of surfaces
  * @param __model__
- * @param entities A polygon, a face, a closed polyline, or or closed wire.
+ * @param entities A polygon, a face, a closed polyline, or a closed wire.
  * @returns Area.
  * @example area1 = calc.Area (surface1)
  */
@@ -155,7 +155,7 @@ function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
  * @param __model__
  * @param entities List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
  * @returns Centroid.
- * @example centroid1 = calc.Centroid (entities)
+ * @example centroid1 = calc.Centroid (polygon1)
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     if (!Array.isArray(entities)) { entities = [entities]; }
@@ -220,11 +220,11 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
 //     return newellNorm(unique_xyzs);
 // }
 /**
- * Calculates the normal of a list of positions, a wire, a closed polyline, a surface, or a plane.
+ * Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..
  * @param __model__
- * @param entity A polygon, a face, a closed polyline, or or closed wire.
+ * @param entities List of positions, a polygon, a face, a closed polyline, a closed wire, or a plane.
  * @returns Vector.
- * @example normal1 = calc.Normal (geometry)
+ * @example normal1 = calc.Normal (polygon1)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
 export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
@@ -242,12 +242,12 @@ export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
 }
 // ================================================================================================
 /**
- * Calculates the xyz position on a linear entity, given a t parameter.
+ * Calculates the position on a linear entity, given a t parameter.
  * @param __model__
  * @param line Edge, wire, or polyline.
  * @param t_param A value between 0 to 1.
- * @returns Set of coordinates.
- * @example coord1 = calc.ParamTToXyz (lines, t_param)
+ * @returns Set of XYZ coordinates.
+ * @example coord1 = calc.ParamTToXyz (polyline1, 0.23)
  */
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
     // --- Error Check ---
@@ -307,7 +307,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
  * @param __model__
  * @param lines List of edges, wires, or polylines.
  * @param locations List of positions, vertices, points, or coordinates.
- * @example coord1 = calc.ParamXyzToT (lines, locations)
+ * @example coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
     // --- Error Check ---

@@ -48,7 +48,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTy
  * @param positions Position of point.
  * @returns New point if successful, null if unsuccessful or on error.
  * @example_info Creates a point at position1.
- * @example point1 = make.Point(position)
+ * @example point1 = make.Point(position1)
  * @example_info Creates a point at position1.
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
@@ -196,7 +196,7 @@ export enum _ECopyAttribues {
     NO_ATTRIBUTES = 'no_attributes'
 }
 /**
- * Adds a new copy to the model.
+ * Adds a new copy of specified entities to the model.
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection to be copied.
  * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
@@ -232,11 +232,11 @@ export enum _ELoftMethod {
 /**
  * Lofts between edges.
  * @param __model__
- * @param entities Edges (or wires, polylines or polygons), with the same number of edges.
- * @param method Enum, if 'closed', then close the loft back to the first curve.
+ * @param entities Edges (or wires, polylines or polygons with the same number of edges).
+ * @param method Enum, if 'closed', then close the loft back to the first edge in the input.
  * @returns Lofted polygons between edges if successful, null if unsuccessful or on error.
- * @example surface1 = make.Loft([polyline1,polyline2,polyline3])
- * @example_info Creates collection of polygons lofting between polyline1, polyline2 and polyline3.
+ * @example surface1 = make.Loft([polyline1,polyline2,polyline3], closed)
+ * @example_info Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
  */
 export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod): TId[] {
     // --- Error Check ---
@@ -352,7 +352,7 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
- * @param divisions Number of divisions to divide extrusion by.
+ * @param divisions Number of divisions to divide extrusion by. Minimum is 1.
  * @returns Extrusion of entities if successful, null if unsuccessful or on error.
  * @example extrusion1 = make.Extrude(point1, 10, 2)
  * @example_info Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
@@ -379,7 +379,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
  * @param geometry Polylines or polygons.
  * @returns New joined polyline or polygon if successful, null if unsuccessful or on error.
  * @example joined1 = make.Join([polyline1,polyline2])
- * @example_info Creates a new polyline by joining polyline1 and polyline2.
+ * @example_info Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
  */
 export function Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
@@ -435,10 +435,10 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
     }
 }
 /**
- * Divides edge/wire/polyline by length or by number of segments.
+ * Divides edge, wire or polyline by length or by number of segments.
  * If object is not exact multiple of length, length of last segment will be the remainder.
  * @param __model__
- * @param edge Edge/wire/polyline(s) to be divided.
+ * @param edge Edge, wire, or polyline(s) to be divided.
  * @param divisor Segment length or number of segments.
  * @param method Enum to choose which method.
  * @returns List of new edges (segments of original edges), null if unsuccessful or on error.
@@ -460,14 +460,14 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
  * Unweld vertices so that they do not share positions.
  * For the vertices of the specified entities, if they share positions with other entities in the model,
  * then those positions will be replaced with new positions.
- * This function performs a shallow unweld.
- * The vertices within the set of specified entities are not unwelded.
+ * This function performs a simple unweld.
+ * That is, the vertices within the set of specified entities are not unwelded.
  * @param __model__
  * @param entities Vertex, edge, wire, face, point, polyline, polygon, collection.
- * @param method Enum, the method to use for unweld.
+ * @param method Enum; the method to use for unweld.
  * @returns The newly created positions resulting from the unweld.
  * @example mod.Unweld(polyline1)
- * @example_info Unwelds polyline1 from polyline2.
+ * @example_info Unwelds polyline1 from all ther entities that shares the same position.
  */
 export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     // --- Error Check ---

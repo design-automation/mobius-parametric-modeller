@@ -15,10 +15,10 @@ export enum _EIODataFormat {
     OBJ = 'obj'
 }
 /**
- * Import data into the model.
+ * Imports data into the model.
  *
  * @param model_data The model data in gs-json string format.
- * @param data_format Enum of GI or OBJ.
+ * @param data_format Enum of GI (txt) or OBJ.
  * @returns A list of the positions, points, polylines, polygons and collections added to the model.
  * @example util.ImportData (file1, OBJ)
  * @example_info Imports the data from file1 (defining the .obj file uploaded in 'Start' node).
@@ -50,7 +50,7 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
  * Export data from the model.
  * @param __model__
  * @param filename Name of the file as a string.
- * @param data_format Enum of GI or OBJ.
+ * @param data_format Enum of GI (txt) or OBJ.
  * @returns Boolean.
  */
 export function ExportData(__model__: GIModel, filename: string, data_format: _EIODataFormat): boolean {

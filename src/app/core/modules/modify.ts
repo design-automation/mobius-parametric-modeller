@@ -9,13 +9,13 @@ import { xformMatrix } from '@libs/triangulate/threex';
 
 // ================================================================================================
 /**
- * Moves geometry by vector.
+ * Moves entities by vector.
  * @param __model__
  * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection.
  * @param vector List of three numbers.
- * @returns void
- * @example mod.Move(entities, vector)
- * @example_info Moves entities by vector.
+ * @returns Modifies the input entities.
+ * @example modify.Move(position1, [1,1,1])
+ * @example_info Moves position1 by [1,1,1].
  */
 export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): void {
     // --- Error Check ---
@@ -41,15 +41,15 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
 }
 // ================================================================================================
 /**
- * Rotates geometry on plane by angle.
+ * Rotates entities on plane by angle.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin A list of three numbers (or a position, point, or vertex).
  * @param axis A list of three numbers.
  * @param angle Angle (in radians).
- * @returns void
- * @example mod.Rotate(geometry, plane1, PI)
- * @example_info Rotates geometry on plane1 by PI (i.e. 180 degrees).
+ * @returns Modifies the input entities.
+ * @example modify.Rotate(polyline1, plane1, PI)
+ * @example_info Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
  */
 export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, axis: Txyz, angle: number): void {
     // --- Error Check ---
@@ -85,13 +85,13 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
 }
 // ================================================================================================
 /**
- * Scales geometry on plane by factor.
+ * Scales entities on plane by factor.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Position, Point, Vertex, Coordinate, Plane
+ * @param origin Position, point, vertex, list of three numbers, plane.
  * @param scale Scale factor.
- * @returns void
- * @example mod.Scale(entities, plane1, 0.5)
+ * @returns Modifies the input entities.
+ * @example modify.Scale(entities, plane1, 0.5)
  * @example_info Scales entities by 0.5 on plane1.
  */
 export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
@@ -131,14 +131,14 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
 }
 // ================================================================================================
 /**
- * Mirrors geometry across plane.
+ * Mirrors entities across plane.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Position Vertex Point Coordinate
- * @param direction Vector
- * @returns void
- * @example mod.Mirror(entities, plane)
- * @example_info Mirrors entities across the plane.
+ * @param origin Position, vertex, point, list of three numbers.
+ * @param direction Vector or a list of three numbers.
+ * @returns Modifies the input entities.
+ * @example modify.Mirror(polygon1, plane1)
+ * @example_info Mirrors polygon1 across plane1.
  */
 export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, direction: Txyz): void {
     // --- Error Check ---
@@ -175,14 +175,14 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
 }
 // ================================================================================================
 /**
- * Transforms geometry from one construction plane to another.
+ * Transforms entities from one construction plane to another.
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param from Plane defining target construction plane.
  * @param to Plane defining destination construction plane.
- * @returns void
- * @example mod.XForm(entities, plane1, plane2)
- * @example_info Transforms entities from plane1 to plane2.
+ * @returns Modifies the input entities.
+ * @example modify.XForm(polygon1, plane1, plane2)
+ * @example_info Transforms polygon1 from plane1 to plane2.
  */
 export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to: TPlane): void {
     // --- Error Check ---
@@ -215,11 +215,11 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
 /**
  * Reverses direction of entities.
  * @param __model__
- * @param entities wire, face, polyline, polygon
- * @returns void
- * @example mod.Reverse(plane1)
- * @example_info Flips plane1.
- * @example mod.Reverse(polyline1)
+ * @param entities Wire, face, polyline, polygon.
+ * @returns Modifies the input entities.
+ * @example modify.Reverse(face1)
+ * @example_info Flips face1 and reverses its normal.
+ * @example modify.Reverse(polyline1)
  * @example_info Reverses the order of vertices to reverse the direction of the polyline.
  */
 export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
@@ -246,12 +246,12 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     }
 }
 /**
- * Closes polylines if open.
+ * Closes polyline(s) if open.
  * @param __model__
  * @param lines Polyline(s).
- * @returns void
- * @example mod.Close([polyline1,polyline2])
- * @example_info If open, polylines are changed to closed; if closed, nothing happens.
+ * @returns Modifies the input polyline(s).
+ * @example modify.Close([polyline1,polyline2,...])
+ * @example_info If open, polylines are changed to closed; if already closed, nothing happens.
  */
 export function Close(__model__: GIModel, lines: TId|TId[]): void {
     // --- Error Check ---
@@ -283,11 +283,11 @@ export enum _EPromoteAttribTypes {
  * Promotes or demotes an attribute from one geometry level to another.
  * @param __model__
  * @param attrib_name Attribute name to be promoted or demoted.
- * @param from Enum, Positions, vertices, edges, wires, faces or collections.
- * @param to Enum, Positions, vertices, edges, wires, faces or collections.
- * @param method Enum, Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
- * @returns void
- * @example attribpro1 = attrib.Promote (colour, positions, faces, sum)
+ * @param from Enum; Positions, vertices, edges, wires, faces or collections.
+ * @param to Enum; Positions, vertices, edges, wires, faces or collections.
+ * @param method Enum; Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
+ * @returns Promotes or demotes the attribute.
+ * @example promote1 = modify.Promote (colour, positions, faces, sum)
  */
 export function Promote(__model__: GIModel, attrib_name: string,
     from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
@@ -301,9 +301,9 @@ export function Promote(__model__: GIModel, attrib_name: string,
  * Welds entities together.
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @returns void
- * @example mod.Weld([polyline1,polyline2])
- * @example_info Welds both polyline1 and polyline2 together.
+ * @returns Modifies the input entities.
+ * @example modify.Weld([polyline1,polyline2])
+ * @example_info Welds both polyline1 and polyline2 together. Entities must be of the same type.
  */
 export function Weld(__model__: GIModel, entities: TId[]): void {
     // --- Error Check ---
@@ -317,9 +317,9 @@ export function Weld(__model__: GIModel, entities: TId[]): void {
  * Deletes entities.
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection. Can be a list.
- * @returns void
- * @example mod.Delete(entities)
- * @example_info Deletes specified entities from model.
+ * @returns Modifies the input entities.
+ * @example modify.Delete(polygon1)
+ * @example_info Deletes polygon1 from the model.
  */
 export function Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     // --- Error Check ---

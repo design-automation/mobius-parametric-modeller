@@ -26,14 +26,14 @@
 
                             <div id='modelViewButton--container' *ngIf="dataService.node.type !== 'start'">
                                 <button (click)='setViewOutput()'>Viewing 
-                                    <span *ngIf='!dataService.modelOutputView'>Input Model</span>
-                                    <span *ngIf='dataService.modelOutputView'>Output Model</span></button>
+                                    <span *ngIf='!getViewOutput()'>Input Model</span>
+                                    <span *ngIf='getViewOutput()'>Output Model</span></button>
                             </div>
 
                             <div id='modelViewButton--container' *ngIf="dataService.node.type == 'start'">
-                                <button (click)='setTestModel()'>
-                                    <span *ngIf='dataService.testModel'>Viewing</span>
-                                    <span *ngIf='!dataService.testModel'>Hiding</span>
+                                <button (click)='setViewOutput()'>
+                                    <span *ngIf='getViewOutput()'>Viewing</span>
+                                    <span *ngIf='!getViewOutput()'>Hiding</span>
                                 Test Model</button>
                             </div>
                             

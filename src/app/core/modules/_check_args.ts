@@ -218,9 +218,8 @@ const typeCheckObj  = {
     isVectorList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
         // Add if required
     },
-    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): void {
-        checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
-        return;
+    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): [EEntType, number]|[EEntType, number][]|[EEntType, number][][] {
+        return checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
     },
     isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = Txyz, Txyz, Txyz]
         // one origin: point, posi, vert, coord + 2 vectors
@@ -299,12 +298,14 @@ const IDcheckObj = {
 // =========================================================================================================================================
 // Specific Checks
 // =========================================================================================================================================
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void {
+export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void|[EEntType, number]|
+                               [EEntType, number][]|[EEntType, number][][] {
     let pass = false;
     const err_arr = [];
+    let ret;
     for (let i = 0; i < check_fns.length; i++) {
         try {
-            typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
+           ret = typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -316,7 +317,7 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
-    return;
+    return ret;
 }
 
 export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[],
@@ -375,7 +376,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
-    return ret; // returns [EEntType, number]|[EEntType, number][]|[EEntType, number][][]; depends on which passes
+    return ret; // returns void|[EEntType, number]|[EEntType, number][]|[EEntType, number][][]; depends on which passes
 }
 
 // =====================================================================================================================

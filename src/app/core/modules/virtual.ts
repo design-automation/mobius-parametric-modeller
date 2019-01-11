@@ -14,12 +14,12 @@ import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult } from '@libs/
  */
 export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     // --- Error Check ---
-    const fn_name = 'vector.Ray';
-    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    const fn_name = 'virtual.Ray';
+    const ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
     checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(origin as TId);
+        const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
         const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
         origin = __model__.attribs.query.getPosiCoords(posi_i);
     }
@@ -39,13 +39,13 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
  */
 export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
     // --- Error Check ---
-    const fn_name = 'vector.Plane';
-    checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    const fn_name = 'virtual.Plane';
+    const ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
     checkCommTypes(fn_name, 'x_vec', x_vec, ['isVector']);
     checkCommTypes(fn_name, 'xy_vec', xy_vec, ['isVector']);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
-        const [ent_type, index]: [EEntType, number] = idBreak(origin as TId);
+        const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
         const posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
         origin = __model__.attribs.query.getPosiCoords(posi_i);
     }
@@ -65,7 +65,7 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
  */
 export function RayFromPlane(plane: TPlane): TRay {
     // --- Error Check ---
-    checkCommTypes('vector.RayFromPlane', 'origin', origin, ['isOrigin']);
+    checkCommTypes('virtual.RayFromPlane', 'origin', origin, ['isOrigin']);
     // --- Error Check ---
     return [plane[0], vecCross(plane[1], plane[2])];
 }
@@ -78,7 +78,7 @@ export function RayFromPlane(plane: TPlane): TRay {
  */
 export function GetRay(__model__: GIModel, edge: TId): TPlane {
     // --- Error Check ---
-    checkIDs('vector.GetRay', 'edge', edge, ['isID'], ['EDGE']);
+    checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -90,7 +90,7 @@ export function GetRay(__model__: GIModel, edge: TId): TPlane {
  */
 export function GetPlane(__model__: GIModel, face: TId): TPlane {
     // --- Error Check ---
-    checkIDs('vector.GetPlane', 'face', face, ['isID'], ['FACE']);
+    checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
     throw new Error('Not implemented');
 }
@@ -100,11 +100,11 @@ export function GetPlane(__model__: GIModel, face: TId): TPlane {
  * @param __model__
  * @param ray A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
  * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
- * @example ray1 = util.RayGeom([[1,2,3],[0,0,1]])
+ * @example ray1 = virtual.visRay([[1,2,3],[0,0,1]])
  */
 export function VisRay(__model__: GIModel, ray: TRay, scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'make.RayGeom';
+    const fn_name = 'virtual.visRay';
     checkCommTypes(fn_name, 'ray', ray, ['isRay']);
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
@@ -128,12 +128,12 @@ export function VisRay(__model__: GIModel, ray: TRay, scale: number): TId[] {
  * @param __model__
  * @param plane A list of lists
  * @returns A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
- * @example plane1 = util.PlaneGeom(position1, vector1, [0,1,0])
+ * @example plane1 = virtual.visPlane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'make.PlaneGeom';
+    const fn_name = 'virtual.visPlane';
     checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---

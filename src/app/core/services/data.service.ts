@@ -16,7 +16,7 @@ export class DataService {
     private static _flowchartPosition: string = undefined;
     private static _newFlowchart = true;
 
-    private static _modelOutputView = true;
+    private static _modelOutputView = {};
     private static _testModel = false;
     private static _helpView = [false, undefined];
 
@@ -29,6 +29,8 @@ export class DataService {
 
     private static _copiedProd: IProcedure[];
     private static _copiedType: IProcedure[];
+
+    private static _consoleScroll: number;
 
     private _prevActions = [];
     private _nextActions = [];
@@ -50,8 +52,13 @@ export class DataService {
     get newFlowchart() {return DataService._newFlowchart; }
     set newFlowchart(check: boolean) {DataService._newFlowchart = check; }
 
-    get modelOutputView() {return DataService._modelOutputView; }
-    set modelOutputView(check: boolean) {DataService._modelOutputView = check; }
+    getModelOutputView(nodeID: string) {
+        if (DataService._modelOutputView.hasOwnProperty(nodeID)) {
+            return DataService._modelOutputView[nodeID];
+        }
+        return true;
+    }
+    setModelOutputView(nodeID: string, check: boolean) {DataService._modelOutputView[nodeID] = check; }
 
     get testModel() {return DataService._testModel; }
     set testModel(check: boolean) {DataService._testModel = check; }
@@ -77,6 +84,9 @@ export class DataService {
 
     get splitVal() {return DataService._splitVal; }
     set splitVal(num: number) {DataService._splitVal = num; }
+
+    get consoleScroll() {return DataService._consoleScroll; }
+    set consoleScroll(num: number) {DataService._consoleScroll = num; }
 
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }

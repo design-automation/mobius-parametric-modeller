@@ -910,6 +910,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         }
         this.selectedEdge = [];
     }
+    getSplit() { return this.dataService.splitVal; }
+    getFlowchart() { return this.dataService.flowchart; }
 
 }
 

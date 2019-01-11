@@ -133,7 +133,10 @@ export class ToolsetComponent implements OnInit {
 
                 // create function and documentation of the function
                 const funcs = [];
-                const funcName = fl.name.replace(/\ /g, '_');
+                let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+                if (funcName.match(/^[\d_]/)) {
+                    funcName = 'func' + funcName;
+                }
                 const documentation = {
                     name: funcName,
                     module: 'Imported',
@@ -406,4 +409,12 @@ export class ToolsetComponent implements OnInit {
         }
 
     }
+
+    getViewOutput() {
+        return this.dataService.getModelOutputView(this.dataService.node.id);
+    }
+
+    getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
+
 }

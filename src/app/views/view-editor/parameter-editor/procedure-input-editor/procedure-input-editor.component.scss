@@ -67,6 +67,9 @@ input, select {
             color: $color1;
         }
     }
+    &.error{
+        border: 2px solid $error-color;
+    }
 }
 
 select{

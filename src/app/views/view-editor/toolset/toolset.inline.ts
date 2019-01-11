@@ -1,3 +1,5 @@
+// import { zip } from "src/app/core/modules/_list";
+
 export const inline_query_expr = [
     ['#@name == value', 'Search attributes equal to a given value'],
     ['#@name[i] == value', 'Search attribute index i equal to a given value'],
@@ -20,7 +22,10 @@ export const inline_sort_expr = [
 
 const lists = [
     ['range(start, end)', 'Generates a list of integers as a range'],
-    ['length(list)', 'Returns the number of items in the list']
+    ['length(list)', 'Returns the number of items in the list'],
+    ['shuffle(list)', 'Shuffles the items in a list in random order'],
+    ['zip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list.'],
+    ['zip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list.']
  ];
 
  const vectors = [
@@ -51,7 +56,7 @@ const conversion = [
 const random = [
     ['rand(min, max)', 'Returns a random number in the specified range'],
     ['randInt(min, max)', 'Returns a random integer in the specified range'],
-    ['randPick(list)', 'Returns a random item from the list']
+    ['randPick(list, num)', 'Returns a random set of items from the list']
 ];
 
 const arithmetic = [

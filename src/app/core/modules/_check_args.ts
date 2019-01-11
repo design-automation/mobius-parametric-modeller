@@ -218,8 +218,8 @@ const typeCheckObj  = {
     isVectorList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
         // Add if required
     },
-    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-        return checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']);
+    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx {
+        return checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']) as TEntTypeIdx;
     },
     isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = Txyz, Txyz, Txyz]
         // one origin: point, posi, vert, coord + 2 vectors

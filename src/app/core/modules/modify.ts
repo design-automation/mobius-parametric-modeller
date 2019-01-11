@@ -3,7 +3,7 @@ import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo
 import { idBreak } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
-import { rotateMatrix, multMatrix, scaleMatrix } from '@libs/geom/matrix';
+import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 
 // ================================================================================================
@@ -133,19 +133,44 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
  * Mirrors geometry across plane.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param plane Plane to mirror across.
+ * @param origin Position Vertex Point Coordinate
+ * @param direction Vector
  * @returns void
  * @example mod.Mirror(entities, plane)
  * @example_info Mirrors entities across the plane.
  */
-export function Mirror(__model__: GIModel, entities: TId|TId[], plane: TPlane): void {
+export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, direction: Txyz): void {
     // --- Error Check ---
-    // const fn_name = 'modify.Mirror';
-    // const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-    //                  ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
+    const fn_name = 'modify.Mirror';
+    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                     ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    checkCommTypes(fn_name, 'direction', direction, ['isVector']);
     // --- Error Check ---
-    throw new Error('Not implemented.');
+
+    // handle geometry type
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
+    }
+    // handle origin type
+    if (!Array.isArray(origin)) {
+        const [origin_ent_type, origin_index]: TEntTypeIdx = ori_ents_arr as TEntTypeIdx;
+        const origin_posi = __model__.geom.query.navAnyToPosi(origin_ent_type, origin_index);
+        origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
+    }
+    // mirror all positions
+    const posis_i: number[] = [];
+    for (const ents of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ents as TEntTypeIdx;
+        posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
+    }
+    const unique_posis_i: number[] = Array.from(new Set(posis_i));
+    const matrix: Matrix4 = mirrorMatrix(origin, direction);
+    for (const unique_posi_i of unique_posis_i) {
+        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+        const new_xyz: Txyz = multMatrix(old_xyz, matrix);
+        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+    }
 }
 // ================================================================================================
 /**
@@ -172,7 +197,7 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
 /**
  * Reverses direction of entities.
  * @param __model__
- * @param entities polyline, polygon, wire
+ * @param entities wire, face, polyline, polygon
  * @returns void
  * @example mod.Reverse(plane1)
  * @example_info Flips plane1.

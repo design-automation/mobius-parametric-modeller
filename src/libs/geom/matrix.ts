@@ -10,6 +10,28 @@ export function multMatrix(xyz: Txyz, m: three.Matrix4): Txyz {
     return v2.toArray() as Txyz;
 }
 
+export function mirrorMatrix(origin: Txyz, normal: Txyz): three.Matrix4 {
+    // plane normal
+    const [a, b, c]: number[] = vecNorm(normal);
+    // rotation matrix
+    const matrix_mirror: three.Matrix4 = new three.Matrix4();
+    matrix_mirror.set(
+        1 - (2 * a * a), -2 * a * b, -2 * a * c, 0,
+        -2 * a * b, 1 - (2 * b * b), -2 * b * c, 0,
+        -2 * a * c, -2 * b * c, 1 - (2 * c * c), 0,
+        0, 0, 0, 1
+    );
+    // translation matrix
+    const matrix_trn1: three.Matrix4 = new three.Matrix4();
+    matrix_trn1.makeTranslation(-origin[0], -origin[1], -origin[2]);
+    const matrix_trn2: three.Matrix4 = new three.Matrix4();
+    matrix_trn2.makeTranslation(origin[0], origin[1], origin[2]);
+    // final matrix
+    const move_mirror_move: three.Matrix4 = matrix_trn2.multiply(matrix_mirror.multiply(matrix_trn1));
+    // do the xform
+    return move_mirror_move;
+}
+
 export function rotateMatrix(origin: Txyz, axis: Txyz, angle: number): three.Matrix4 {
     // norm the axis
     axis = vecNorm(axis);

@@ -26,8 +26,12 @@
         </div>
         <div class='inline-div'>
             <!-- <input [class.disabled-input]='true' value='Name:' disabled> -->
-            <input [(ngModel)]='prod.args[prod.argCount-2].value' placeholder="name"
-            [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined")'>
+            <input 
+            [ngModel]='prod.args[0].value'
+            (ngModelChange)='prod.args[0].value=varMod($event)'
+            [class.error]='prod.args[0].invalidVar'
+            placeholder="name"
+            [style.width.px]='inputSize(prod.args[0].value,"Undefined")'>
         </div>
         <div class='inline-div' *ngIf='prod.type == 12'>
             <!-- <input [class.disabled-input]='true' value='Input Mode:' disabled>  -->

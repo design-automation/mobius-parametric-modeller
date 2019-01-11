@@ -48,16 +48,16 @@ export class GIAttribsThreejs {
      * @param ent_type
      */
     public getAttribsForTable(ent_type: EEntType): any[] {
+        // get the attribs map for this ent type
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         // create a map of objects to store the data
         const data_obj_map: Map< number, { id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type);
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { id: `${ent_type}${ent_i}` } );
+            data_obj_map.set(ent_i, { id: `${attribs_maps_key}${ent_i}` } );
         }
-        // get the attribs map for this ent type
-        const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
 
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
@@ -81,16 +81,15 @@ export class GIAttribsThreejs {
      * @param ents_i
      */
     public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType) {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const data_obj_map: Map< number, { id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         selected_ents.forEach(ent => {
-            data_obj_map.set(ent, { id: `${ent_type}${ent}` } );
+            data_obj_map.set(ent, { id: `${attribs_maps_key}${ent}` } );
         });
-
-        const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of Array.from(selected_ents.values())) {

@@ -17,6 +17,15 @@ export class PanelHeaderComponent {
         return this.title.replace(/_/g, ' ');
     }
 
+    getUrl() {
+        return this.router.url;
+    }
+
+    loadFile() {
+        this.router.navigate(['/dashboard']);
+        document.getElementById('file-input').click();
+    }
+
     openDropdownMenu(e: MouseEvent) {
         /*
         const dropdowns = document.getElementsByClassName('dropdown-content');

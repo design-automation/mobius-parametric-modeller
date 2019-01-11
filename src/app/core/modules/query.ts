@@ -175,7 +175,7 @@ function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boo
         } else if (ent_type !== EEntType.WIRE) {
             throw new Error('query.isClosed: Entity is of wrong type. It must be either a polyline or a wire.');
         }
-        return __model__.geom.query.istWireClosed(wire_i);
+        return __model__.geom.query.istWireClosed(wire_i) as boolean;
     } else {
         return (ents_arr as TEntTypeIdx[]).map(ents => _isClosed(__model__, ents)) as boolean[];
     }

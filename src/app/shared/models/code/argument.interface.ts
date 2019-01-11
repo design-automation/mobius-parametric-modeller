@@ -6,4 +6,5 @@ export interface IArgument {
     max?: number;
     step?: number;
     type?: any;
+    invalidVar?: boolean;
 }

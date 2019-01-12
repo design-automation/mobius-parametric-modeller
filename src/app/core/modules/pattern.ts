@@ -2,15 +2,15 @@ import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
 import { Txyz, TPlane, TRay } from '@libs/geo-info/common';
 
 /**
- * Adds positions in a circle.
+* Creates a list of XYZ coordinates in an arc arrangement.
 * @param __model__
-* @param origin XYZ coordinates as a list of three numbers
+* @param origin XYZ coordinates as a list of three numbers.
 * @param radius Radius of circle as a number.
-* @param num_positions Number of positions distributed equally along the arc.
+* @param num_positions Number of XYZ coordinates distributed equally along the arc.
 * @param arc_angle Angle of arc (in radians).
-* @returns New positions if successful, null if unsuccessful or on error.
-* @example positions1 = make.PositionsArc([0,0,0], 10, 12, PI)
-* @example_info Creates a list of 12 positions distributed equally along a semicircle of radius 10.
+* @returns XYZ coordinates if successful, null if unsuccessful or on error.
+* @example coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
+* @example_info Creates a list of 12 XYZ coordinates distributed equally along a semicircle of radius 10.
  */
 export function Arc(origin: Txyz, radius: number, num_positions: number, arc_angle: number): Txyz[] {
     // --- Error Check ---
@@ -32,17 +32,18 @@ export function Arc(origin: Txyz, radius: number, num_positions: number, arc_ang
     return posis_id;
 }
 /**
- * Adds positions in a grid.
- * @param __model__
+* Creates a list of XYZ coordinates in a grid arrangement.
+* @param __model__
 * @param origin XYZ coordinates as a list of three numbers.
 * @param size Size of grid. If number, assume square grid of that length; if list of two numbers, x and y lengths respectively.
-* @param num_positions Number of positions. If integer, same number for x and y; if list of two numbers, number for x and y respectively.
-* @returns New positions if successful, null if unsuccessful or on error.
-* @example positions1 = make.PositionsGrid([0,0,0], 10, 3)
-* @example_info Creates a list of 9 positions on a 3x3 square grid of length 10.
-* @example positions1 = make.PositionsGrid([0,0,0], [10,20], [2,4])
-* @example_info Creates a list of 8 positions on a 2x4 grid of length 10 by 20.
- */
+* @param num_positions Number of XYZ coordinates.
+* If integer, same number for x and y; if list of two numbers, number for x and y respectively.
+* @returns XYZ coordinates if successful, null if unsuccessful or on error.
+* @example coordinates1 = pattern.Grid([0,0,0], 10, 3)
+* @example_info Creates a list of 9 XYZ coordinates on a 3x3 square grid of length 10.
+* @example coordinates1 = pattern.Grid([0,0,0], [10,20], [2,4])
+* @example_info Creates a list of 8 XYZ coordinates on a 2x4 grid of length 10 by 20.
+*/
 export function Grid(origin: Txyz, size: number|[number, number], num_positions: number|[number, number]): Txyz[] {
     // --- Error Check ---
     const fn_name = 'pattern.Grid';
@@ -68,14 +69,14 @@ export function Grid(origin: Txyz, size: number|[number, number], num_positions:
     return posis_id;
 }
 /**
- * Adds positions in a rectangle.
+* Creates a list of XYZ coordinates in a rectangular arrangement.
 * @param __model__
 * @param origin XYZ coordinates as a list of three numbers.
 * @param size Size of rectangle. If number, assume square of that length; if list of two numbers, x and y lengths respectively.
-* @returns New positions if successful, null if unsuccessful or on error.
-* @example positions1 = make.PositionsRect([0,0,0], 10)
+* @returns XYZ coordinates if successful, null if unsuccessful or on error.
+* @example coordinates1 = pattern.Rectangle([0,0,0], 10)
 * @example_info Creates a list of 4 positions, being the vertices of a 10 by 10 square.
-* @example positions1 = make.PositionsGrid([0,0,0], [10,20])
+* @example coordinates1 = pattern.Rectangle([0,0,0], [10,20])
 * @example_info Creates a list of 4 positions, being the vertices of a 10 by 20 rectangle.
  */
 export function Rectangle(origin: Txyz, size: number|[number, number]): Txyz[] {

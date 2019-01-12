@@ -10,7 +10,7 @@ export enum _EIndexOfMethod {
     SEARCH_FIRST = 'search_first'
 }
 /**
- * Searches for a value in an list and returns the index position if found.
+ * Searches for a value in a list and returns the index position if found.
  * Items must match both the value and type of specified value.
  *
  * Returns -1 if no values in list match specified value.
@@ -19,7 +19,7 @@ export enum _EIndexOfMethod {
  * @param value Value to search for.
  * @param method Enum, specifies whether to search all occurances or only the first.
  * @returns Index position or list of index positions containing specified value.
- * @example positions = list.indexOf(list,2,true)
+ * @example positions = list.IndexOf(list,2,true)
  * @example_info where list = [6,2,2,7]
  * Expected value of positions is [1,2].
  */
@@ -53,7 +53,7 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
  * @param list List.
  * @param value Value to search for.
  * @returns Returns true if value can be found in list, false if value cannot be found.
- * @example exists = list.includes(list,2)
+ * @example exists = list.Includes(list,2)
  * @example_info where list = [6,2,2,7]
  * Expected value of exists is true.
  */
@@ -79,7 +79,7 @@ export function Includes(list: any[], value: any): boolean {
  *
  * @param list List to copy.
  * @returns New duplicated list.
- * @example copy = list.byCopy(list)
+ * @example copy1 = list.Copy(list)
  * @example_info where list = [1,2,3]
  * Expected value of copy is [1,2,3].
  */
@@ -95,7 +95,7 @@ export function Copy(list: any[]): any[] {
  * @param list1 First list.
  * @param list2 Second list.
  * @returns Combined list (list1 first, followed by list2).
- * @example newlist = list.concat(list1,list2)
+ * @example newlist = list.Concat(list1,list2)
  * @example_info where list1 = [1,2,3]
  * and list2 = [9,0]
  * Expected value of newlist is [1,2,3,9,0].
@@ -113,7 +113,7 @@ export function Concat(list1: any[], list2: any[]): any[] {
  *
  * @param list List to flatten.
  * @returns Flattened list.
- * @example flatten = list.flatten(list)
+ * @example flatten = list.Flatten(list)
  * @example_info where list = [1,2,3,[4,5]]
  * Expected value of flatten is [1,2,3,4,5].
  */
@@ -137,7 +137,7 @@ function _flattenDeep(list: any[]): any[] {
  *      A negative index can be used, indicating an offset from the end of the sequence.
  *      If end is undefined, slice extracts through the end of the sequence.
  * @returns A new list.
- * @example result = list.slice(list,1,3)
+ * @example result = list.Slice(list,1,3)
  * @example_info where list = [1,2,3,4,5]
  * Expected value of result is [2,3].
  */
@@ -159,13 +159,13 @@ export enum _EAppendMethod {
     TO_END = 'to_end'
 }
 /**
- * Adds one value to the end of an list
+ * Adds one value to the end of an list.
  * If value is an list, the entire list will be appended as one value.
  *
  * @param list List to add to.
  * @param value Item to add.
  * @param method Enum, append to start or end.
- * @example append = list.append(list,4. 'at_end')
+ * @example append = list.Append(list, 4, 'at_end')
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].
  */
@@ -182,11 +182,11 @@ export function Append(list: any[], value: any, method: _EAppendMethod): void {
     }
 }
 /**
- * Removes the value at the specified index from an list
+ * Removes the value at the specified index from a list.
  *
  * @param list List to remove value from.
  * @param index Zero-based index number of value to remove.
- * @example remove = list.removeIndex(list,1)
+ * @example remove = list.RemoveIndex(list,1)
  * @example_info where list = [1,2,3]
  * Expected value of remove is [1,3].
  */
@@ -203,15 +203,15 @@ export enum _ERemoveValueMethod {
     REMOVE_FIRST = 'remove_first'
 }
 /**
- * Removes values that match specified value from an list
- * Items must match both the value and type of specified value
+ * Removes values that matches specified value from a list.
+ * Items must match both the value and type of specified value.
  *
  * Returns original list if no values in list match specified value.
  *
  * @param list List to remove value from.
  * @param value Value to search for.
- * @param method Enum, specifies whether to remove all occurances or only the first.
- * @example remove = list.removeValue(list,2,'remove_all')
+ * @param method Enum; specifies whether to remove all occurances or only the first.
+ * @example remove = list.RemoveValue(list,2,'remove_all')
  * @example_info where list = [1,2,2,3]
  * Expected value of remove is [1,3].
  */
@@ -233,16 +233,16 @@ export enum _EReplaceValueMethod {
     REPLACE_FIRST = 'replace_first'
 }
 /**
- * Replaces values that match specified value from an list with a new value
+ * Replaces values that matches specified value from an list with a new value
  * Items must match both the value and type of specified value
  *
- * Returns original list if no values in list match specified value.
+ * Returns original list if no value in list matches specified value.
  *
  * @param list List to remove value from.
  * @param value1 Value to search for.
  * @param value2 Value to replace existing value with.
- * @param method Enum, specifies whether to replace all occurances or only the first.
- * @example replace = list.replaceValue(list,2,9,true)
+ * @param method Enum; specifies whether to replace all occurances or only the first.
+ * @example replace = list.ReplaceValue(list,2,9,'replace_all')
  * @example_info where list = [1,2,2,3]
  * Expected value of replace is [1,9,9,3].
  */
@@ -261,12 +261,12 @@ export function ReplaceValue(list: any[], value1: any, value2: any, method: _ERe
     }
 }
 /**
- * Reverses the order of values in an list and returns a new list.
+ * Reverses the order of values in a list and returns a new list.
  *
  * @param list List to reverse.
  * @returns New reversed list.
- * @example result = list.reverse(list)
- * @example_info where list = [1,2,3]
+ * @example result = list.Reverse(list1)
+ * @example_info where list1 = [1,2,3]
  * Expected value of result is [3,2,1].
  */
 export function Reverse(list: any[]): void {
@@ -291,11 +291,11 @@ export enum _ESortMethod {
  * (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)
  *
  * @param list List to sort.
- * @param method Enum, specifies the sort method to use.
- * @example sort = list.sortAlpha(list, 'alpha')
+ * @param method Enum; specifies the sort method to use.
+ * @example sort = list.Sort(list, 'alpha')
  * @example_info where list = ["1","2","10","Orange","apple"]
  * Expected value of list is ["1","10","2","Orange","apple"].
- * @example sort = list.sortNum(list, 'numeric')
+ * @example sort = list.Sort(list, 'numeric')
  * @example_info where list = [56,6,48]
  * Expected value of list is [6,48,56].
  */
@@ -333,18 +333,18 @@ export function Sort(list: any[], method: _ESortMethod): void {
     }
 }
 /**
- * Adds and/or removes values to/from an list
+ * Adds and/or removes values to/from a list.
  *
  * If no values_to_add are specified, then values are only removed.
  * If num_to_remove is 0, then values are only added.
  *
- * @param list List to splice
+ * @param list List to splice.
  * @param index Zero-based index at which to add/remove values. (Items are added/removed after specified index)
  * @param num_to_remove Number of values to remove.
- * @param values_to_add list of values to add.
- * @example result = list.splice(list, 1, 3, [2.2, 3.3])
- * @example_info where list = [10, 20, 30, 40, 50]
- * Expected value of result is [10, 2.2, 3.2, 50].
+ * @param values_to_add List of values to add.
+ * @example result = list.Splice(list1, 1, 3, [2.2, 3.3])
+ * @example_info where list1 = [10, 20, 30, 40, 50]
+ * Expected value of result is [10, 2.2, 3.2, 50]. New values were added where the values were removed.
  */
 export function Splice(list: any[], index: number, num_to_remove: number, values_to_add: any[]): void {
     // --- Error Check ---

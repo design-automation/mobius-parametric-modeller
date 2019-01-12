@@ -1,5 +1,9 @@
 import { checkCommTypes, checkIDs, checkIDnTypes } from './_check_args';
-import { Txyz, TPlane, TRay } from '@libs/geo-info/common';
+import { Txyz, TPlane, TRay, XYPLANE } from '@libs/geo-info/common';
+import { getArrDepth } from '@libs/geo-info/id';
+import { vecAdd } from '@libs/geom/vectors';
+import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
+import { Matrix4 } from 'three';
 
 /**
 * Creates a list of XYZ coordinates in an arc arrangement.
@@ -79,18 +83,22 @@ export function Grid(origin: Txyz, size: number|[number, number], num_positions:
 * @example coordinates1 = pattern.Rectangle([0,0,0], [10,20])
 * @example_info Creates a list of 4 positions, being the vertices of a 10 by 20 rectangle.
  */
-export function Rectangle(origin: Txyz, size: number|[number, number]): Txyz[] {
+export function Rectangle(origin: Txyz|TPlane, size: number|[number, number]): Txyz[] {
     // --- Error Check ---
     const fn_name = 'pattern.Rectangle';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord']);
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
     checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
     // --- Error Check ---
     const xy_size: [number, number] = (Array.isArray(size) ? size : [size, size]) as [number, number];
-    const vec: Txyz = origin as Txyz;
-    const c1: Txyz = [vec[0] - (xy_size[0] / 2), vec[1] - (xy_size[1] / 2), vec[2]];
-    const c2: Txyz = [vec[0] + (xy_size[0] / 2), vec[1] - (xy_size[1] / 2), vec[2]];
-    const c3: Txyz = [vec[0] + (xy_size[0] / 2), vec[1] + (xy_size[1] / 2), vec[2]];
-    const c4: Txyz = [vec[0] - (xy_size[0] / 2), vec[1] + (xy_size[1] / 2), vec[2]];
-    return [c1, c2, c3, c4];
-    // TODO Implement the TPlane version
+    const c1: Txyz = [-(xy_size[0] / 2), -(xy_size[1] / 2), 0];
+    const c2: Txyz = [ (xy_size[0] / 2), -(xy_size[1] / 2), 0];
+    const c3: Txyz = [ (xy_size[0] / 2),  (xy_size[1] / 2), 0];
+    const c4: Txyz = [-(xy_size[0] / 2),  (xy_size[1] / 2), 0];
+    const corners: Txyz[] = [c1, c2, c3, c4];
+    if (getArrDepth(origin) === 1) {
+        return corners.map(c => vecAdd(c, origin as Txyz));
+    } else { // we have a plane
+        const matrix: Matrix4 = xfromSourceTargetMatrix(XYPLANE, origin as  TPlane);
+        return corners.map(c => multMatrix(c, matrix));
+    }
 }

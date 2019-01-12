@@ -176,10 +176,12 @@ export class DataThreejs {
         }
     }
 
-    public selectObjPoint(ent_id: string = null, position, container, label = true) {
+    public selectObjPoint(ent_id: string = null, point_indices, positions, container, label = true) {
         const geom = new THREE.BufferGeometry();
-        geom.addAttribute('position', new THREE.Float32BufferAttribute(position, 3));
-        geom.addAttribute('color', new THREE.Float32BufferAttribute([255, 0, 0], 3));
+        geom.setIndex(point_indices);
+        geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        const colors = new Uint8Array([].concat(...Array(positions.length / 3).fill([255, 0, 0])));
+        geom.addAttribute('color', new THREE.BufferAttribute(colors, 3, true));
         geom.computeBoundingSphere();
         const mat = new THREE.PointsMaterial({
             size: 1,

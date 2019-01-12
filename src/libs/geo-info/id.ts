@@ -6,7 +6,7 @@ import { TId, EEntType, EEntTypeStr, TEntTypeIdx } from './common';
 // IDs start with two characters followed by numeric digits.
 // For example '_v22' is vertex number 22.
 // ============================================================================
-// export function idBreak(id: TId): [EEntTypeStr, number] {
+// export function idsBreak(id: TId): [EEntTypeStr, number] {
 //     return [idEntityTypeStr(id), idIndex(id)];
 // }
 // export function idIndex(id: TId): number {
@@ -82,30 +82,26 @@ export function getArrDepth(arr: any): number {
 }
 // ============================================================================
 export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]): TId|TId[] {
-    if (getArrDepth(ent_type_idxs) === 2) {
-        const ent_type_idxs_arr: TEntTypeIdx[] = ent_type_idxs as  TEntTypeIdx[];
-        return ent_type_idxs_arr.map(ent_type_idx =>  EEntTypeStr[ent_type_idx[0] as EEntType] + ent_type_idx[1]) as TId[];
+    if (getArrDepth(ent_type_idxs) === 1) {
+        const ent_type_idx: TEntTypeIdx = ent_type_idxs as TEntTypeIdx;
+        return EEntTypeStr[ent_type_idx[0] as EEntType] + ent_type_idx[1] as TId;
+    } else {
+        return (ent_type_idxs as TEntTypeIdx[]).map( ent_type_idx => idsMake(ent_type_idx) ) as TId[];
     }
-    return EEntTypeStr[ent_type_idxs[0] as EEntType] + ent_type_idxs[1] as TId;
 }
-export function idMake(ent_type: EEntType|TEntTypeIdx, index?: number): TId {
-    if (index === undefined) {
-        ent_type = ent_type[0];
-        index = ent_type[1];
+export function idsBreak(ids: TId|TId[]|TId[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+    if (getArrDepth(ids) === 0) {
+        const id: TId = ids as TId;
+        const ent_type_str: string = id.slice(0, 2);
+        const ent_type: EEntType = EEntTypeStr[ent_type_str];
+        const index: number = Number(id.slice(2));
+        return [ent_type, index];
+    } else {
+        return (ids as TId[]).map( id => idsBreak(id) ) as TEntTypeIdx[]|TEntTypeIdx[][];
     }
-    return EEntTypeStr[ent_type as EEntType] + index;
-}
-export function idBreak(id: TId): [EEntType, number] {
-    const ent_type_str: string = id.slice(0, 2);
-    const ent_type: EEntType = EEntTypeStr[ent_type_str];
-    const index: number = Number(id.slice(2));
-    return [ent_type, index];
-}
-export function idsBreak(ids: TId[]): [EEntType, number][] {
-    return ids.map(id => idBreak(id));
 }
 export function idIndicies(ents_arr: TEntTypeIdx[]): number[] {
-    return ents_arr.map( ents => ents[1]);
+    return ents_arr.map( ents => ents[1] );
 }
 // ============================================================================
 export function isPosi(ent_type: EEntType): boolean {

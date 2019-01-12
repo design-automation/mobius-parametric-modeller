@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { idsBreak, idIndicies, idsMake } from '@libs/geo-info/id';
-import { checkIDs, checkCommTypes } from './_check_args';
+import { idsMake } from '@libs/geo-info/id';
+import { checkIDs } from './_check_args';
 
 // TQuery should be something like this:
 //
@@ -10,6 +10,7 @@ import { checkIDs, checkCommTypes } from './_check_args';
 // #@xyz[2] > 5
 //
 // ================================================================================================
+// These are used by Get(), Count(), and Neighbours()
 export enum _EQuerySelect {
     POSI =   'positions',
     VERT =   'vertices',
@@ -126,6 +127,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
     }
+    // TODO check the query string
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
@@ -283,7 +285,7 @@ export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[
  * @example mod.IsPlanar([polyline1,polyline2,polyline3])
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are planar but polyline3 is not planar.
  */
-export function IsPlanar(__model__: GIModel, entities: TId|TId[], tolerance: number): boolean|boolean[] {
+export function _IsPlanar(__model__: GIModel, entities: TId|TId[], tolerance: number): boolean|boolean[] {
     // --- Error Check ---
     // const fn_name = 'query.isPlanar';
     // const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);

@@ -8,13 +8,19 @@ import { _model } from '@modules';
 import { checkCommTypes, checkIDs } from './_check_args';
 
 // ================================================================================================
-function _position(__model__: GIModel, coords: Txyz|Txyz[]): TEntTypeIdx|TEntTypeIdx[] {
-    if (Array.isArray(coords) && !Array.isArray(coords[0])) {
+function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+    const depth: number = getArrDepth(coords);
+    if (depth === 1) {
+        const coord1: Txyz = coords as Txyz;
         const posi_i: number = __model__.geom.add.addPosition();
-        __model__.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coords as Txyz);
+        __model__.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coord1);
         return [EEntType.POSI, posi_i] as TEntTypeIdx;
+    } else if (depth === 2) {
+        const coords2: Txyz[] = coords as Txyz[];
+        return coords2.map(coord => _position(__model__, coord)) as TEntTypeIdx[];
     } else {
-        return (coords as Txyz[]).map(_coords => _position(__model__, _coords)) as TEntTypeIdx[];
+        const coords3: Txyz[][] = coords as Txyz[][];
+        return coords3.map(coord2 => _position(__model__, coord2)) as TEntTypeIdx[][];
     }
 }
 /**
@@ -25,9 +31,10 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]): TEntTypeIdx|TEntTyp
  * @example position1 = make.Position([1,2,3])
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
  */
-export function Position(__model__: GIModel, coords: Txyz|Txyz[]): TId|TId[] {
+export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[] {
     // --- Error Check ---
-    checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
+    // checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
+    // TODO allow to Txyz[][]
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _position(__model__, coords);
     return idsMake(new_ents_arr);

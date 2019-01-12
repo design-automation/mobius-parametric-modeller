@@ -7,7 +7,7 @@ import {
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
 import { DataService } from '../data/data.service';
-import { EEntType, EAttribNames, EEntTypeStr } from '@libs/geo-info/common';
+import { EEntType, EAttribNames, EEntTypeStr, Txyz } from '@libs/geo-info/common';
 import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 
@@ -323,6 +323,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         });
         this.refreshTable(event);
         scene.sceneObjsSelected.clear();
+        // if (this.SelectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
+        //     document.getElementById('executeButton').click();
+        // }
     }
 
 
@@ -560,7 +563,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const posi_ent = this.dataService.selected_ents.get(ent_type_str);
             const selecting = `${EEntTypeStr[EEntType.POINT]}${object.index}`;
             if (!scene.selected_geoms.has(selecting)) {
-                scene.selectObjPoint(selecting, position, this.container);
+                // scene.selectObjPoint(selecting, position, this.container);
                 posi_ent.set(`${EEntTypeStr[EEntType.POSI]}${vert}`, vert);
             } else {
                 scene.unselectObj(selecting, this.container);
@@ -663,11 +666,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private selectPoint(point: THREE.Intersection) {
-        const ent_type_str = EEntTypeStr[EEntType.POINT],
-            vert = this.model.geom.query.navPointToVert(point.index),
-            position = this.model.attribs.query.getPosiCoords(vert),
-            ent_id = `${ent_type_str}${point.index}`;
-        this._data_threejs.selectObjPoint(ent_id, position, this.container);
+        const ent_type_str = EEntTypeStr[EEntType.POINT];
+
+        const result = this.getPointPosis(point.index);
+        const point_indices = result.point_indices;
+        const point_posi = result.posi_flat;
+        const ent_id = `${ent_type_str}${point.index}`;
+        this._data_threejs.selectObjPoint(ent_id, point_indices, point_posi, this.container);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, point.index);
     }
 
@@ -703,13 +708,25 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * @param points
      */
 
-    private getPointPosis(points: number[] = null) {
+    private getPointPosis(point1: number = null, points: number[] = null) {
         let verts_flat: number[] = null;
-        const verts = points.map(p => this.model.geom.query.navPointToVert(p));
-        verts_flat = [].concat(...verts);
-        const positions = verts_flat.map(v => this.model.attribs.query.getPosiCoords(v));
+        if (point1 !== null) {
+            verts_flat = [this.model.geom.query.navPointToVert(point1)];
+        }
+        if (points !== null) {
+            const verts = points.map(p => this.model.geom.query.navPointToVert(p));
+            verts_flat = [].concat(...verts);
+        }
+
+        const point_indices: number[] = [];
+        const positions: Txyz[] = [];
+        verts_flat.map((v, i) => {
+            positions.push(this.model.attribs.query.getPosiCoords(v));
+            point_indices.push(i);
+        });
         const posi_flat = [].concat(...positions);
-        return posi_flat;
+        const result = { posi_flat, point_indices };
+        return result;
     }
 
     /**
@@ -789,13 +806,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             colls = this.model.geom.query.navAnyToAny(EEntType.TRI, EEntType.COLL, object.faceIndex);
         } else if (type === 'LineSegments') {
             colls = this.model.geom.query.navAnyToAny(EEntType.EDGE, EEntType.COLL, object.index / 2);
-            // console.log('selectColl');
-            // const wire = this.model.geom.query.navEdgeToWire(object.index / 2);
-            // console.log(wire);
-            // const coll = this.model.geom.query.navAnyToColl(EEntTypeStr[EEntType.EDGE], wire);
-            // console.log(coll);
         } else if (type === 'Points') {
-            colls = this.model.geom.query.navAnyToAny(EEntType.POINT, EEntType.COLL, object.index);
+            const vert = this.model.geom.query.navVertToPoint(object.index);
+            colls = this.model.geom.query.navAnyToAny(EEntType.POINT, EEntType.COLL, vert);
         }
         /**
          * Show dropdown menu only when Entity belongs to more than 1 Collection.
@@ -839,10 +852,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
         const points = this.model.geom.query.navCollToPoint(id);
         const points_flat = [].concat(...points);
-        const points_posi = this.getPointPosis(points_flat);
-        if (points_posi.length !== 0) {
+        const pointResult = this.getPointPosis(null, points_flat);
+        const point_posi = pointResult.posi_flat;
+        const point_indices = pointResult.point_indices;
+        if (point_indices.length !== 0) {
             const point_id = `${EEntTypeStr[EEntType.COLL]}_pt_${id}`;
-            scene.selectObjPoint(point_id, points_posi, this.container, false);
+            scene.selectObjPoint(point_id, point_indices, point_posi, this.container, false);
         }
 
         this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, id);

@@ -22,6 +22,9 @@
             height: $header-height !important;
             width: $header-height !important;
         }
+        .active{
+            background-color: transparent;
+        }
     }
     
     #filename{

@@ -4,14 +4,17 @@
 
 
 .container__header{
-    display: flex;
+    display: inline-flex;
     float: left;
+    width: 100%;
     height: $header-height + 1;
     padding: 0px;
     margin: 0px;
 
     .header-btn-group {
-        //display: inline;
+        flex-shrink: 0;
+        display: inline-flex;
+        flex-flow: row nowrap;
         height: $header-height + 1;
         padding: 0px;
         margin: 0px;
@@ -22,20 +25,30 @@
             height: $header-height !important;
             width: $header-height !important;
         }
+        .active{
+            background-color: transparent;
+        }
     }
-    
+    .filename-container{
+        width: calc(100% - 170px);//width of btn-container;
+        display: flex;
+        justify-content: flex-start;
+    }
     #filename{
         //display: inline-block;
         cursor: pointer;
         height: $header-height;
         font-size: $fsize1;
         color: $color8;
-        overflow: hidden;
+        width: 100%;
         // background-color: transparent;
         padding-top: 0px;
-        text-align: center;
+        text-align: left;
         vertical-align: middle;
         line-height: $header-height - 5px;
+        
+        overflow: hidden;
+        text-overflow: ellipsis;
         &:hover{
             color: $selected-color;
         }

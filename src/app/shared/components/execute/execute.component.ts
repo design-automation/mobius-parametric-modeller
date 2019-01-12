@@ -257,11 +257,25 @@ export class ExecuteComponent {
             }
             node.model = params['model'];
             const endTime = performance.now();
-            console.log('  Executed in ' + (endTime - startTime) + ' milliseconds.');
+            const duration: number = Math.round(endTime - startTime);
+            let duration_msg: string;
+            if (duration < 1000)  {
+                duration_msg = '  Executed in ' + duration + ' milliseconds.'
+            } else {
+                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.'
+            }
+            console.log(duration_msg);
             return globalVars;
         } catch (ex) {
             const endTime = performance.now();
-            console.log('  Executed with error in ' + (endTime - startTime) + ' milliseconds.');
+            const duration: number = Math.round(endTime - startTime);
+            let duration_msg: string;
+            if (duration < 1000)  {
+                duration_msg = '  Executed in ' + duration + ' milliseconds.'
+            } else {
+                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.'
+            }
+            console.log(duration_msg);
             document.getElementById('spinner-off').click();
             if (DEBUG) {
                 console.log('\n=======================================\n' +

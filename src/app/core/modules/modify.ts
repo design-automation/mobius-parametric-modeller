@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
-import { idBreak } from '@libs/geo-info/id';
+import { idsBreak } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
@@ -200,7 +200,7 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
     // xform all positions
     const posis_i: number[] = [];
     for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idBreak(geom_id);
+        const [ent_type, index]: [EEntType, number] = idsBreak(geom_id) as TEntTypeIdx;
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));

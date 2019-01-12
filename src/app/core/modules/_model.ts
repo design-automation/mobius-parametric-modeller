@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, IGeomPack, TEntTypeIdx } from '@libs/geo-info/common';
-import { idBreak } from '@libs/geo-info/id';
+import { idsBreak } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes, checkAttribNameValue } from './_check_args';
 
 //  ===============================================================================================================

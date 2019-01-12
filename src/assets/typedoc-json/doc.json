@@ -27311,7 +27311,7 @@
 			"children": [
 				{
 					"id": 526,
-					"name": "idBreak",
+					"name": "idsBreak",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {
@@ -27321,7 +27321,7 @@
 					"signatures": [
 						{
 							"id": 527,
-							"name": "idBreak",
+							"name": "idsBreak",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},

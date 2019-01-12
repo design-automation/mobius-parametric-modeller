@@ -6,7 +6,7 @@ import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack } from '@libs/geo-info/com
 import { __merge__ } from './_model';
 import { _model } from '@modules';
 import { checkCommTypes } from './_check_args';
-import { idMake } from '@libs/geo-info/id';
+import { idsMake } from '@libs/geo-info/id';
 
 // ================================================================================================
 // Import / Export data types
@@ -38,11 +38,11 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
             throw new Error('Data type not recognised');
             break;
     }
-    const posis_id: TId[] =  geom_pack.posis_i.map(  posi_i =>  idMake(EEntType.POSI,  posi_i));
-    const points_id: TId[] = geom_pack.points_i.map( point_i => idMake(EEntType.POINT, point_i));
-    const plines_id: TId[] = geom_pack.plines_i.map( pline_i => idMake(EEntType.PLINE, pline_i));
-    const pgons_id: TId[] =  geom_pack.pgons_i.map(  pgon_i =>  idMake(EEntType.PGON,  pgon_i));
-    const colls_id: TId[] =  geom_pack.colls_i.map(  coll_i =>  idMake(EEntType.COLL,  coll_i));
+    const posis_id: TId[] =  geom_pack.posis_i.map(  posi_i =>  idsMake([EEntType.POSI,  posi_i])) as TId[];
+    const points_id: TId[] = geom_pack.points_i.map( point_i => idsMake([EEntType.POINT, point_i])) as TId[];
+    const plines_id: TId[] = geom_pack.plines_i.map( pline_i => idsMake([EEntType.PLINE, pline_i])) as TId[];
+    const pgons_id: TId[] =  geom_pack.pgons_i.map(  pgon_i =>  idsMake([EEntType.PGON,  pgon_i])) as TId[];
+    const colls_id: TId[] =  geom_pack.colls_i.map(  coll_i =>  idsMake([EEntType.COLL,  coll_i])) as TId[];
     return [...posis_id, ...points_id, ...plines_id, ...pgons_id, ...colls_id];
 }
 // ================================================================================================

@@ -55,13 +55,25 @@ as-split-area{
 
 modal-window {
     display: none;
+    h1{
+        font-size: $fsize1;
+        font-weight: 550;
+        line-height: 35px;
+    }
     ul{
         margin: 20px 0;
         padding: 0;
+        background-color: transparent;
         li{
             list-style: none;
             padding: 10px 0;
-            overflow: auto;
+            background-color: inherit;
+            height: $fsize1;
+            font-size: $fsize2;
+            box-sizing: content-box;
+            color: $color8;
+            font-size: $fsize2;
+            font-style: normal;
             .label{
                 float: left;
                 line-height: 20px;
@@ -70,20 +82,32 @@ modal-window {
             .label + div{
                 float: left;
             }
+            .label, input{
+                color: $color8;
+                font-size: $fsize2;
+                font-style: normal;
+                &:hover{
+                    background-color: inherit;
+                }
+            }
         }
     }
 
     button{
-        background: #ffffff;
-        border: 1px solid #cccccc;
+        background: $color7;
+        border: 1px solid $color5-5;
         padding: 3px 10px;
         cursor: pointer;
         margin-right: 10px;
-        width: 55px;
+        width: 75px;
+        font-size: $fsize2;
         &.primary{
-            background: #00006d;
-            border-color: #00006d;
+            background: $selected-color;
+            border-color: $selected-color;
             color: white;
+            &:hover{
+                background: rgba($selected-color,0.75);
+            }
         }
         &:focus{
             outline: none;
@@ -106,7 +130,7 @@ body.modal-open {
     }
     .onoffswitch-label {
         display: block; overflow: hidden; cursor: pointer;
-        border: 1px solid #999999; border-radius: 0px;
+        border: 1px solid $color4; border-radius: 0px;
     }
     .onoffswitch-inner {
         display: block; width: 200%; margin-left: -100%;
@@ -120,17 +144,17 @@ body.modal-open {
     .onoffswitch-inner:before {
         content: "ON";
         padding-left: 5px;
-        background-color: #FFFFFF; color: #505050;
+        background-color: $color7; color: $color1;
     }
     .onoffswitch-inner:after {
         content: "OFF";
         padding-right: 5px;
-        background-color: #FFFFFF; color: #999999;
+        background-color: $color7; color: $color3;
         text-align: right;
     }
     .onoffswitch-switch {
         display: block; width: 20px; margin: 0px;
-        background: #A1A1A1;
+        background: $color4;
         position: absolute; top: 0; bottom: 0;
         right: 35px;
         border: 2px solid transparent; border-radius: 0px;
@@ -141,10 +165,10 @@ body.modal-open {
     }
     .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
         right: 0px; 
-        background-color: #00006D; 
+        background-color: $selected-color; 
     }
     .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-switch {
-        background-color: #dddddd; 
+        background-color: $color7; 
     }
 
     .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-inner,
@@ -156,6 +180,9 @@ body.modal-open {
     // Grid Size Slider
     .slidecontainer {
         width: 100%; /* Width of the outside container */
+        &:hover{
+            background-color: transparent;  
+        }
     }
       
     /* The slider itself */
@@ -184,22 +211,22 @@ body.modal-open {
         appearance: none;
         width: 12px; 
         height: 26px; 
-        background: #00006D; 
+        background: $selected-color; 
         cursor: pointer; 
     }
     
     .slider::-moz-range-thumb {
         width: 12px; 
         height: 26px; 
-        background: #00006D; 
+        background: $selected-color; 
         cursor: pointer; 
     }
     .slider:disabled::-webkit-slider-thumb {
-        background: #dddddd;
+        background: $color7;
     }
 
     .slider:disabled::-moz-range-thumb {
-        background: #dddddd; 
+        background: $color7; 
     }
 
     .slider:disabled{

@@ -1,7 +1,7 @@
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { idBreak, idMake, idsBreak } from '@libs/geo-info/id';
+import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
 import { Normal, Centroid, _normal } from './calc';
 
@@ -115,12 +115,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * @returns The plane.
  */
 export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
-    if (!Array.isArray(entities)) {
-        ents_arr = idBreak(entities as TId);
-    } else {
-        ents_arr = idsBreak(entities as TId[]);
-    }
+    const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
     // --- Error Check ---
@@ -152,7 +147,10 @@ export function VisRay(__model__: GIModel, ray: TRay, scale: number): TId[] {
     __model__.attribs.add.setPosiCoords(end_posi_i, end);
     const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
     // return the geometry IDs
-    return [idMake(EEntType.POINT, point_i), idMake(EEntType.PLINE, pline_i)];
+    return [
+        idsMake([EEntType.POINT, point_i]),
+        idsMake([EEntType.PLINE, pline_i])
+    ] as TId[];
 }
 // ================================================================================================
 /**
@@ -204,9 +202,10 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
     const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
     // return the geometry IDs
     return [
-        idMake(EEntType.POINT, point_i),
-        idMake(EEntType.PLINE, x_pline_i), idMake(EEntType.PLINE, y_pline_i),
-        idMake(EEntType.PLINE, plane_i)
-    ];
+        idsMake([EEntType.POINT, point_i]),
+        idsMake([EEntType.PLINE, x_pline_i]),
+        idsMake([EEntType.PLINE, y_pline_i]),
+        idsMake([EEntType.PLINE, plane_i])
+    ] as TId[];
 }
 // ================================================================================================

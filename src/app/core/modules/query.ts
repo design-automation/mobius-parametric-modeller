@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { idBreak, idIndicies, idMake } from '@libs/geo-info/id';
+import { idsBreak, idIndicies, idsMake } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes } from './_check_args';
 
 // TQuery should be something like this:
@@ -82,11 +82,11 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     }
     // check if the query is null
     if (query_expr === null || query_expr === undefined) {
-        return found_entities_i.map( entity_i => idMake(select_ent_type, entity_i));
+        return found_entities_i.map( entity_i => idsMake([select_ent_type, entity_i])) as TId[];
     }
     // do the query on the list of entities
     const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type, query_expr, found_entities_i);
-    return query_result.map( entity_i => idMake(select_ent_type, entity_i) );
+    return query_result.map( entity_i => idsMake([select_ent_type, entity_i])) as TId[];
 }
 // ================================================================================================
 /**
@@ -157,13 +157,13 @@ export function Sort(__model__: GIModel, select: _EQuerySelect, entities: TId|TI
         if (method === _ESortMethod.ASCENDING) {
             found_entities_i.reverse();
         }
-        return found_entities_i.map( entity_i => idMake(select_ent_type, entity_i));
+        return found_entities_i.map( entity_i => idsMake([select_ent_type, entity_i])) as TId[];
     }
     // do the sort on the list of entities
     const _sort_method: ESort = (method === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
     const sort_result: number[] = __model__.attribs.query.sortByAttribs(
         select_ent_type, sort_expr, found_entities_i, _sort_method);
-    return sort_result.map( entity_i => idMake(select_ent_type, entity_i));
+    return sort_result.map( entity_i => idsMake([select_ent_type, entity_i])) as TId[];
 }
 // ================================================================================================
 function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boolean|boolean[] {
@@ -236,6 +236,6 @@ export function Neighbours(__model__: GIModel, select: _EQuerySelect, entities: 
         const nbor_ents_i: number[] = __model__.geom.query.neighbours(ent_type, select_ent_type, index);
         nbor_ents_i.forEach(nbor_ent_i => all_nbor_ents_i.add(nbor_ent_i));
     }
-    return Array.from(all_nbor_ents_i).map(nbor_ent_i => idMake(select_ent_type, nbor_ent_i));
+    return Array.from(all_nbor_ents_i).map(nbor_ent_i => idsMake([select_ent_type, nbor_ent_i])) as TId[];
 }
 // ================================================================================================

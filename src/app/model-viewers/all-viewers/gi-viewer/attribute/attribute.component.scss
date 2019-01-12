@@ -8,6 +8,7 @@
 
 .mat-table{
   background-color: $color5-5;
+  border-top: 1px solid $color3;
   border-bottom: 1px solid $color4;
   // height: 100%;
 }
@@ -43,17 +44,24 @@ table {
 /deep/ #attribTab{
   height: 100%;
   ul{
+    background-color: transparent;
     margin: 0;
     padding-left: 11px;
-    border-bottom: 1px solid $color3;
+    // border-bottom: 1px solid $color3;
     white-space: nowrap;
+    height: 20px;
+    position: absolute;
+    top:1px;
     li{
-      margin-bottom: -1px;
       list-style: none;
       display: inline-block;
       width: 75px;
       color: $color1;
+      overflow:visible;
       cursor: pointer;
+      position: relative;
+      height: inherit;
+      padding: 0px;
       span{
         font-family: sans-serif;
         margin-right: 2px;
@@ -65,23 +73,33 @@ table {
         display: block;
         padding: 2px;
         text-align: center;
+        position: absolute;
+        width: inherit;
+        box-sizing: border-box;
+        // top: 1px;
       }
-      &:hover span{
-        color: $selected-color;
+      &:hover{
+        background-color: transparent;
+        span{
+          color: $selected-color;
+          background-color: transparent;
+        }
       }
       &.active{
+        background-color: transparent;
         span{
           color: $selected-color;
           cursor: default;
           background-color: $color5-5;
           border: 1px solid $color3;
-          border-bottom-color: $color5-5;
+          border-bottom: 2px solid $color5-5;
         }
       }
     }
   }
   // contains everything
   .pane{
+    margin-top: 20px;
     height: calc(100% - 20px);
     .mat-elevation-z1{
       display: flex;

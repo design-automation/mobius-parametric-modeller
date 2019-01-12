@@ -518,7 +518,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const posi_ent = this.dataService.selected_ents.get(ent_type_str);
             const ent_id = `${ent_type_str}${object.index}`;
             scene.selectObjPositions(ent_id, position);
-            posi_ent.set(`${ent_type_str}${posi_ents}`, posi_ents);
+            posi_ent.set(ent_id, posi_ents);
         } else if (object.object.type === 'LineSegments') {
             const verts = this.model.geom.query.navEdgeToVert(object.index / 2),
                 positions = verts.map(v => this.model.attribs.query.getVertCoords(v)),

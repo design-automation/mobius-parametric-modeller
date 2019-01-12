@@ -120,7 +120,7 @@ export class GIAttribsQuery {
      * @param sort_str The sort string, e.g. '#@name && #@name2[3]'
      * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type.
      */
-    public sortByAttribs(ent_type: EEntType, sort_str: string, indicies: number[], method: ESort): number[] {
+    public sortByAttribs(ent_type: EEntType, indicies: number[], sort_str: string, method: ESort): number[] {
         // get the map that contains all the ettributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];

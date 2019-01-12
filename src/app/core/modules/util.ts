@@ -5,7 +5,6 @@ import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
 import { _model } from '@modules';
-import { checkCommTypes } from './_check_args';
 import { idsMake } from '@libs/geo-info/id';
 
 // ================================================================================================
@@ -16,11 +15,13 @@ export enum _EIODataFormat {
 }
 /**
  * Imports data into the model.
+ * In order to get the model data from a file, you need to define the File or URL parameter 
+ * in the Start node of the flowchart.
  *
- * @param model_data The model data in gs-json string format.
- * @param data_format Enum of GI (txt) or OBJ.
+ * @param model_data The model data
+ * @param data_format Enum, the file format.
  * @returns A list of the positions, points, polylines, polygons and collections added to the model.
- * @example util.ImportData (file1, OBJ)
+ * @example util.ImportData (file1_data, obj)
  * @example_info Imports the data from file1 (defining the .obj file uploaded in 'Start' node).
  */
 export function ImportData(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId[] {
@@ -47,20 +48,24 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
 }
 // ================================================================================================
 /**
- * Export data from the model.
+ * Export data from the model as a file.
+ * This will result in a popup in your browser, asking you to save the filel.
  * @param __model__
  * @param filename Name of the file as a string.
- * @param data_format Enum of GI (txt) or OBJ.
+ * @param data_format Enum, the file format.
  * @returns Boolean.
+ * @example util.ExportData ('my_model.obj', obj)
+ * @example_info Exports all the data in the model as an OBJ.
  */
 export function ExportData(__model__: GIModel, filename: string, data_format: _EIODataFormat): boolean {
     switch (data_format) {
         case _EIODataFormat.GI:
-            return download( JSON.stringify(__model__.getData()), filename );
+            const gi_data: string = JSON.stringify(__model__.getData());
+            return download(gi_data , filename);
             break;
         case _EIODataFormat.OBJ:
-            const data: string = exportObj(__model__);
-            return download( data, filename );
+            const obj_data: string = exportObj(__model__);
+            return download(obj_data, filename);
             break;
         default:
             throw new Error('Data type not recognised');

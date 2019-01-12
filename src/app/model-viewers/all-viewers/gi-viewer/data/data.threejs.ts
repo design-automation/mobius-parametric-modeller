@@ -15,7 +15,7 @@ export class DataThreejs {
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
-    public selected_geoms: Map<string, { id: number, name: string }> = new Map();  // TODO add types
+    public selected_geoms: Map<string, any> = new Map();
     public _text: string;
     // text lables
     public ObjLabelMap: Map<string, any> = new Map();
@@ -30,7 +30,7 @@ export class DataThreejs {
     public _model: GIModel;
 
     public sceneObjs: THREE.Object3D[] = [];
-
+    public sceneObjsSelected: Map<string, THREE.Object3D> = new Map();
     // Show Normals
     public vnh: THREE.VertexNormalsHelper;
     // Settings
@@ -122,7 +122,7 @@ export class DataThreejs {
         // this.axesHelper.position.copy(center);
     }
 
-    public selectObjFace(ent_id: string, triangle_i: number[], positions: number[], container) {
+    public selectObjFace(ent_id: string, triangle_i: number[], positions: number[], container, label = true) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(triangle_i);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -141,14 +141,16 @@ export class DataThreejs {
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         this._scene.add(mesh);
-        this.selected_geoms.set(ent_id, { id: mesh.id, name: mesh.name });
-
-        const obj: { entity: THREE.Mesh, type: string } = { entity: mesh, type: objType.face };
-        this.createLabelforObj(container, obj.entity, obj.type, ent_id);
-        this.ObjLabelMap.set(ent_id, obj);
+        this.selected_geoms.set(ent_id, mesh.id);
+        this.sceneObjsSelected.set(ent_id, mesh);
+        if (label) {
+            const obj: { entity: THREE.Mesh, type: string } = { entity: mesh, type: objType.face };
+            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+            this.ObjLabelMap.set(ent_id, obj);
+        }
     }
 
-    public selectObjLine(ent_id, indices, positions, container) {
+    public selectObjLine(ent_id: string, indices, positions, container, label = true) {
         const geom = new THREE.BufferGeometry();
         if (indices.length > 2) {
             geom.setIndex(indices);
@@ -165,14 +167,16 @@ export class DataThreejs {
         });
         const line = new THREE.LineSegments(geom, mat);
         this._scene.add(line);
-        this.selected_geoms.set(ent_id, { id: line.id, name: ent_id });
-
-        const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
-        this.createLabelforObj(container, obj.entity, obj.type, ent_id);
-        this.ObjLabelMap.set(ent_id, obj);
+        this.selected_geoms.set(ent_id, line.id);
+        this.sceneObjsSelected.set(ent_id, line);
+        if (label) {
+            const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
+            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+            this.ObjLabelMap.set(ent_id, obj);
+        }
     }
 
-    public selectObjPoint(ent_id, position, container) {
+    public selectObjPoint(ent_id: string = null, position, container, label = true) {
         const geom = new THREE.BufferGeometry();
         geom.addAttribute('position', new THREE.Float32BufferAttribute(position, 3));
         geom.addAttribute('color', new THREE.Float32BufferAttribute([255, 0, 0], 3));
@@ -183,10 +187,13 @@ export class DataThreejs {
         });
         const point = new THREE.Points(geom, mat);
         this._scene.add(point);
-        this.selected_geoms.set(ent_id, { id: point.id, name: ent_id });
-        const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-        this.createLabelforObj(container, obj.entity, obj.type, ent_id);
-        this.ObjLabelMap.set(ent_id, obj);
+        this.selected_geoms.set(ent_id, point.id);
+        this.sceneObjsSelected.set(ent_id, point);
+        if (label) {
+            const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
+            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+            this.ObjLabelMap.set(ent_id, obj);
+        }
     }
 
     public selectObjPositions(ent_id, positions) {
@@ -201,7 +208,8 @@ export class DataThreejs {
         });
         const point = new THREE.Points(geom, mat);
         this._scene.add(point);
-        this.selected_geoms.set(ent_id, { id: point.id, name: ent_id });
+        this.selected_geoms.set(ent_id, point);
+        this.sceneObjsSelected.set(ent_id, point);
     }
 
     public createLabelforObj(container, obj, type: string, labelText: string) {
@@ -213,9 +221,13 @@ export class DataThreejs {
     }
 
     public unselectObj(ent_id, container) {
-        const removing = this.selected_geoms.get(ent_id).id;
+        const removing = this.selected_geoms.get(ent_id);
+        //
         this.selected_geoms.delete(ent_id);
+        // remove Geom from scene
         this._scene.remove(this._scene.getObjectById(removing));
+        // remove Geom from selected Objs Map
+        this.sceneObjsSelected.delete(ent_id);
 
         this.ObjLabelMap.delete(ent_id);
         if (document.getElementById(`textLabel_${ent_id}`)) {
@@ -254,10 +266,15 @@ export class DataThreejs {
     }
     // add axes
     public _addAxes(size: number = this.settings.axes.size) {
-        for (let i = 0; i < this._scene.children.length; i++) {
-            if (this._scene.children[i].name === 'AxesHelper') {
-                this._scene.remove(this._scene.children[i]);
-                i = i - 1;
+        let i = 0;
+        const length = this._scene.children.length;
+        if (length !== 0) {
+            for (; i < length; i++) {
+                if (this._scene.children[i]) {
+                    if (this._scene.children[i].name === 'AxesHelper') {
+                        this._scene.remove(this._scene.children[i]);
+                    }
+                }
             }
         }
         this.axesHelper = new THREE.AxesHelper(size);
@@ -272,10 +289,13 @@ export class DataThreejs {
      * Draws a grid on the XY plane.
      */
     public _addGrid(size: number = this.settings.grid.size) {
-        for (let i = 0; i < this._scene.children.length; i++) {
-            if (this._scene.children[i].name === 'GridHelper') {
-                this._scene.remove(this._scene.children[i]);
-                i = i - 1;
+        let i = 0;
+        const length = this._scene.children.length;
+        for (; i < length; i++) {
+            if (this._scene.children[i]) {
+                if (this._scene.children[i].name === 'GridHelper') {
+                    this._scene.remove(this._scene.children[i]);
+                }
             }
         }
         this.grid = new THREE.GridHelper(size, size / 10);
@@ -413,43 +433,64 @@ export class DataThreejs {
 
     public lookAtObj(width: number) {
         const allObjs = this.getAllObjs();
-        if (allObjs) {
-            const center = allObjs.center;
-            // set grid and axeshelper to center of the objs
-            // this.grid.position.set(center.x, center.y, 0);
-            // this.axesHelper.position.set(center.x, center.y, 0);
-
-            const radius = allObjs.radius;
-            const fov = this._camera.fov * (Math.PI / 180);
-            const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
-            vec_centre_to_pos.subVectors(this._camera.position, center);
-            const r = radius < 100 ? 200 : (radius < 500 ? 10 : 1);
-            const f = 1 + (width / radius / r);
-            const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2) / f),
-                Math.abs(radius / Math.sin(fov / 2) / f),
-                Math.abs(radius / Math.sin(fov / 2)) / f);
-            vec_centre_to_pos.setLength(tmp_vec.length());
-            const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
-            perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-            const newLookAt = new THREE.Vector3(center.x, center.y, center.z);
-            this._camera.position.copy(perspectiveNewPos);
-            this._camera.lookAt(newLookAt);
-            this._camera.updateProjectionMatrix();
-            this._controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
-            this._controls.update();
-        } else {
+        const selectedObjs = this.getSelectedObjs();
+        if (allObjs === null && selectedObjs === null) {
             const sceneCenter = this._scene.position;
             this._camera.lookAt(sceneCenter);
             // this._camera.updateProjectionMatrix();
             this._controls.target.set(sceneCenter.x, sceneCenter.y, sceneCenter.z);
             this._controls.update();
         }
+
+        let center = null;
+        let radius = null;
+        if (selectedObjs) {
+            center = selectedObjs.center;
+            radius = selectedObjs.radius;
+        } else {
+            center = allObjs.center;
+            radius = allObjs.radius;
+        }
+        // set grid and axeshelper to center of the objs
+        // this.grid.position.set(center.x, center.y, 0);
+        // this.axesHelper.position.set(center.x, center.y, 0);
+
+        const fov = this._camera.fov * (Math.PI / 180);
+        const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
+        vec_centre_to_pos.subVectors(this._camera.position, center);
+        const r = radius < 100 ? 200 : (radius < 500 ? 10 : 1);
+        const f = 1 + (width / radius / r);
+        const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2) / f),
+            Math.abs(radius / Math.sin(fov / 2) / f),
+            Math.abs(radius / Math.sin(fov / 2)) / f);
+        vec_centre_to_pos.setLength(tmp_vec.length());
+        const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
+        perspectiveNewPos.addVectors(center, vec_centre_to_pos);
+        const newLookAt = new THREE.Vector3(center.x, center.y, center.z);
+        this._camera.position.copy(perspectiveNewPos);
+        this._camera.lookAt(newLookAt);
+        this._camera.updateProjectionMatrix();
+        this._controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
+        this._controls.update();
     }
 
     private getAllObjs() {
         if (this.sceneObjs.length !== 0) {
             const objs = new THREE.Object3D();
             this.sceneObjs.map(obj => objs.children.push(obj));
+            const boxHelper = new THREE.BoxHelper(objs);
+            boxHelper.geometry.computeBoundingSphere();
+            const boundingSphere = boxHelper.geometry.boundingSphere;
+            return boundingSphere;
+        } else {
+            return null;
+        }
+    }
+
+    private getSelectedObjs() {
+        if (this.sceneObjsSelected.size !== 0) {
+            const objs = new THREE.Object3D();
+            this.sceneObjsSelected.forEach(obj => objs.children.push(obj));
             const boxHelper = new THREE.BoxHelper(objs);
             boxHelper.geometry.computeBoundingSphere();
             const boundingSphere = boxHelper.geometry.boundingSphere;

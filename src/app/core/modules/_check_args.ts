@@ -1,7 +1,6 @@
 import { EEntType, EAttribNames, TEntTypeIdx } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
-import { INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic/src/platform_providers';
-import { idBreak, idsBreak } from '@libs/geo-info/id';
+import { idsBreak } from '@libs/geo-info/id';
 
 // =========================================================================================================================================
 // Attribute Checks
@@ -248,7 +247,7 @@ const IDcheckObj = {
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
     isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|null): TEntTypeIdx {
         typeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
-        const ent_arr = idBreak(arg); // split
+        const ent_arr = idsBreak(arg) as TEntTypeIdx; // split
 
         if (ent_type_strs === null) {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
@@ -267,7 +266,7 @@ const IDcheckObj = {
     },
     isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|null): TEntTypeIdx[] {
         typeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
-        const ent_arr_lst = idsBreak(arg_list); // split
+        const ent_arr_lst = idsBreak(arg_list) as TEntTypeIdx[]; // split
 
         if (ent_type_strs === null) {
             ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];

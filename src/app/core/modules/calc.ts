@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, idBreak, isPgon, isFace, idsBreak } from '@libs/geo-info/id';
+import { isPline, isWire, isEdge, isPgon, isFace, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
 import { vecSum, vecDiv, vecAdd, vecSub, vecNorm, newellNorm } from '@libs/geom/vectors';
@@ -10,29 +10,50 @@ import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
 
 // ================================================================================================
 export enum _EDistanceMethod {
-    DISTANCE = 'distance',
+    P_P_DISTANCE = 'p_to_p_distance',
     MIN_DISTANCE = 'min_distance'
+}
+function _distanceMin(__model__: GIModel, ent_arr1: TEntTypeIdx, ents_arr2: TEntTypeIdx|TEntTypeIdx[]): number|number[] {
+    const depth2: number = getArrDepth(ents_arr2);
+    if (depth2 === 1) {
+        throw Error('Not implemented');
+    } else if (depth2 === 2) {
+        return (ents_arr2 as TEntTypeIdx[]).map( ent_arr2 => _distanceMin(__model__, ent_arr1, ent_arr2) ) as number[];
+    }
+}
+function _distancePtoP(__model__: GIModel, ent_arr1: TEntTypeIdx, ents_arr2: TEntTypeIdx|TEntTypeIdx[]): number|number[] {
+    const depth2: number = getArrDepth(ents_arr2);
+    if (depth2 === 1) {
+        const ent_arr2: TEntTypeIdx = ents_arr2 as TEntTypeIdx;
+        const ps1_xyz: Txyz = __model__.attribs.query.getPosiCoords(ent_arr1[1]);
+        const ps2_xyz: Txyz = __model__.attribs.query.getPosiCoords(ent_arr2[1]);
+        return distance(ps1_xyz, ps2_xyz) as number;
+    } else if (depth2 === 2) {
+        return (ents_arr2 as TEntTypeIdx[]).map( ent_arr2 => _distancePtoP(__model__, ent_arr1, ent_arr2) ) as number[];
+    }
 }
 /**
  * Calculates the distance between two positions.
  * @param __model__
  * @param position1 First position.
- * @param position2 Second position.
+ * @param position2 Second position, or list of positions.
  * @param method Enum; distance or min_distance.
- * @returns Distance.
- * @example distance1 = calc.Distance (position1, position2, distance)
- * @example_info position1 = [0,0,0], position2 = [0,0,10]
- * Expected value of distance is 10.
+ * @returns Distance, or list of distances (if position2 is a list).
+ * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
+ * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]]
+ * Expected value of distance is [10,20].
  */
-export function Distance(__model__: GIModel, position1: TId, position2: TId, method: _EDistanceMethod): number {
+export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[], method: _EDistanceMethod): number|number[] {
     // --- Error Check ---
     const fn_name = 'calc.Distance';
-    checkIDs(fn_name, 'position1', position1, ['isID'], ['POSI']);
-    checkIDs(fn_name, 'position2', position2, ['isID'], ['POSI']);
+    const ents_arr1 = checkIDs(fn_name, 'position1', position1, ['isID'], ['POSI'])  as TEntTypeIdx;
+    const ents_arr2 = checkIDs(fn_name, 'position2', position2, ['isID'], ['POSI']) as TEntTypeIdx|TEntTypeIdx[]; // TODO
     // --- Error Check ---
-    const ps1_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position1)[1]);
-    const ps2_xyz: Txyz = __model__.attribs.query.getPosiCoords(idBreak(position2)[1]);
-    return distance(ps1_xyz, ps2_xyz);
+    if (method === _EDistanceMethod.P_P_DISTANCE) {
+        return _distancePtoP(__model__, ents_arr1, ents_arr2);
+    } else if (method === _EDistanceMethod.MIN_DISTANCE) {
+        return _distanceMin(__model__, ents_arr1, ents_arr2);
+    }
 }
 // ================================================================================================
 /**
@@ -52,7 +73,7 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
     const edges_i: number[] = [];
     let dist = 0;
     for (const line of lines) {
-        const [ent_type, index]: [EEntType, number] = idBreak(line);
+        const [ent_type, index]: [EEntType, number] = idsBreak(line) as TEntTypeIdx;
         if (isEdge(ent_type)) {
             edges_i.push(index);
         } else if (isWire(ent_type)) {
@@ -86,7 +107,7 @@ export function Area(__model__: GIModel, entities: TId): number {
     const fn_name = 'calc.Area';
     checkIDs(fn_name, 'entities', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    const [ent_type, index]: [EEntType, number] = idBreak(entities);
+    const [ent_type, index]: [EEntType, number] = idsBreak(entities) as TEntTypeIdx;
     if (isPgon(ent_type) || isFace(ent_type)) {
         // faces, these are already triangulated
         let face_i: number = index;
@@ -134,7 +155,7 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
     checkIDs('vector.GetVector', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
-    const [ent_type, index]: [EEntType, number] = idBreak(edge);
+    const [ent_type, index]: [EEntType, number] = idsBreak(edge) as TEntTypeIdx;
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
     const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
     const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
@@ -159,7 +180,7 @@ function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     if (!Array.isArray(entities)) { entities = [entities]; }
-    const ents_arr: TEntTypeIdx[] = idsBreak(entities);
+    const ents_arr: TEntTypeIdx[] = idsBreak(entities) as TEntTypeIdx[];
     // --- Error Check ---
     checkIDs('calc.Centroid', 'geometry', entities, ['isID', 'isIDList'],
             ['POSI', 'VERT', 'POINT', 'EDGE', 'WIRE', 'PLINE', 'FACE', 'PGON', 'COLL']);
@@ -210,7 +231,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
         return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr)) as Txyz[];
     }
 }
-// function _normal(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
+// function _newell_normal(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
 //     const posis_i: number[] = [];
 //     for (const ent_arr of ents_arr) {
 //         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]));
@@ -228,12 +249,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
 export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
-    if (!Array.isArray(entities)) {
-        ents_arr = idBreak(entities as TId);
-    } else {
-        ents_arr = idsBreak(entities as TId[]);
-    }
+    const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const fn_name = 'vector.GetNormal';
     // checkIDs(fn_name, 'entity', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
@@ -257,7 +273,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
     if (t_param < 0 || t_param > 1) {throw new Error(fn_name + ': ' + 't_param is not between 0 and 1'); }
     // --- Error Check ---
     const edges_i: number[] = [];
-    const [ent_type, index]: [EEntType, number] = idBreak(line);
+    const [ent_type, index]: [EEntType, number] = idsBreak(line) as TEntTypeIdx;
     if (isEdge(ent_type)) {
         edges_i.push(index);
     } else if (isWire(ent_type)) {

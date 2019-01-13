@@ -51,9 +51,10 @@ export class ExecuteComponent {
     constructor(private dataService: DataService) {}
 
     async execute() {
-        console.log(' ');
         // const startTime = performance.now();
         document.getElementById('spinner-on').click();
+        console.log(' ');
+
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         // console.log('Retrieving flowchart\'s external inputs');
         for (const node of this.dataService.flowchart.nodes) {
@@ -122,17 +123,21 @@ export class ExecuteComponent {
             }
         }
 
+        // setTimeout for 20ms so that the loading screen has enough time to be loaded in
+        setTimeout(() => {
+            this.executeFlowchart(this.dataService.flowchart);
+            // this._webWorkerService.run(this.executeFlowchart, this.dataService.flowchart);
 
-        this.executeFlowchart(this.dataService.flowchart);
-        // this._webWorkerService.run(this.executeFlowchart, this.dataService.flowchart);
-
-        for (const node of this.dataService.flowchart.nodes) {
-            if (node.type !== 'end') {
-                delete node.output.value;
+            for (const node of this.dataService.flowchart.nodes) {
+                if (node.type !== 'end') {
+                    delete node.output.value;
+                }
             }
-        }
-        document.getElementById('spinner-off').click();
-        // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
+            document.getElementById('spinner-off').click();
+            // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
+        }, 20);
+
+
     }
 
     executeFlowchart(flowchart) {
@@ -260,9 +265,9 @@ export class ExecuteComponent {
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
             if (duration < 1000)  {
-                duration_msg = '  Executed in ' + duration + ' milliseconds.'
+                duration_msg = '  Executed in ' + duration + ' milliseconds.';
             } else {
-                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.'
+                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
             }
             console.log(duration_msg);
             return globalVars;
@@ -271,9 +276,9 @@ export class ExecuteComponent {
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
             if (duration < 1000)  {
-                duration_msg = '  Executed in ' + duration + ' milliseconds.'
+                duration_msg = '  Executed in ' + duration + ' milliseconds.';
             } else {
-                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.'
+                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
             }
             console.log(duration_msg);
             document.getElementById('spinner-off').click();

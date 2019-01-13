@@ -36,7 +36,9 @@ export class GIGeomThreejs {
      * The indices in the list point to the vertices.
      */
     public get3jsTris(): number[] {
-        return [].concat(...this._geom_arrays.dn_tris_verts);
+        // @ts-ignore
+        return this._geom_arrays.dn_tris_verts.flat(1);
+        // return [].concat(...this._geom_arrays.dn_tris_verts);
     }
     /**
      * Returns a flat list of the sequence of verices for all the edges.
@@ -44,7 +46,9 @@ export class GIGeomThreejs {
      * The indices in the list point to the vertices.
      */
     public get3jsEdges(): number[] {
-        return [].concat(...this._geom_arrays.dn_edges_verts);
+        // @ts-ignore
+        return this._geom_arrays.dn_edges_verts.flat(1);
+        // return [].concat(...this._geom_arrays.dn_edges_verts);
     }
     /**
      * Returns a flat list of the sequence of verices for all the points.

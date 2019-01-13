@@ -30,7 +30,10 @@ export class GIAttribsThreejs {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         const posis_i: number[] = verts_i.map(vert_i => this._model.geom.query.navVertToPosi(vert_i));
         const coords_attrib: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
-        return [].concat(...coords_attrib.getEntsVals(posis_i));
+
+        // @ts-ignore
+        return coords_attrib.getEntsVals(posis_i).flat(1);
+        // return [].concat(...coords_attrib.getEntsVals(posis_i));
     }
     /**
      * Get a flat array of attribute values for all the vertices.
@@ -41,7 +44,10 @@ export class GIAttribsThreejs {
         if (!this._attribs_maps._v.has(attrib_name)) { return null; }
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         const verts_attrib: GIAttribMap = this._attribs_maps._v.get(attrib_name);
-        return [].concat(...verts_attrib.getEntsVals(verts_i));
+
+        // @ts-ignore
+        return verts_attrib.getEntsVals(verts_i).flat(1);
+        // return [].concat(...verts_attrib.getEntsVals(verts_i));
     }
     /**
      *

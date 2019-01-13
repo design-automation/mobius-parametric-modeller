@@ -8,26 +8,41 @@ export function getArrDepth(arr: any): number {
     return 0;
 }
 // ============================================================================
+export function idsMakeFromIndicies(ent_type: EEntType, idxs: number|number[]|number[][]): TId|TId[]|TId[][] {
+    const depth: number = getArrDepth(idxs);
+    if (depth === 0) {
+        const idx: number = idxs as number;
+        return EEntTypeStr[ent_type as EEntType] + idx as TId;
+    } else if (depth === 1) {
+        const idxs_arr: number[] = idxs as number[];
+        return idxs_arr.map( idx => idsMakeFromIndicies(ent_type, idx) ) as TId[];
+    } else { // depth === 2
+        const idxs_arrs: number[][] = idxs as number[][];
+        return idxs_arrs.map( idxs_arr => idsMakeFromIndicies(ent_type, idxs_arr) ) as TId[][];
+    }
+}
 export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TId|TId[]|TId[][] {
-    if (getArrDepth(ent_type_idxs) === 1) {
+    const depth: number = getArrDepth(ent_type_idxs);
+    if (depth === 1) {
         const ent_type_idx: TEntTypeIdx = ent_type_idxs as TEntTypeIdx;
         return EEntTypeStr[ent_type_idx[0] as EEntType] + ent_type_idx[1] as TId;
-    } else if (getArrDepth(ent_type_idxs) === 2) {
+    } else if (depth === 2) {
         const ent_type_idxs_arr: TEntTypeIdx[] = ent_type_idxs as TEntTypeIdx[];
         return ent_type_idxs_arr.map( ent_type_idx => idsMake(ent_type_idx) ) as TId[];
     } else { // depth === 3
-        const ent_type_idxs_arr: TEntTypeIdx[][] = ent_type_idxs as TEntTypeIdx[][];
-        return ent_type_idxs_arr.map( ent_type_idx => idsMake(ent_type_idx) ) as TId[][];
+        const ent_type_idxs_arrs: TEntTypeIdx[][] = ent_type_idxs as TEntTypeIdx[][];
+        return ent_type_idxs_arrs.map( ent_type_idxs_arr => idsMake(ent_type_idxs_arr) ) as TId[][];
     }
 }
 export function idsBreak(ids: TId|TId[]|TId[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-    if (getArrDepth(ids) === 0) {
+    const depth: number = getArrDepth(ids);
+    if (depth === 0) {
         const id: TId = ids as TId;
         const ent_type_str: string = id.slice(0, 2);
         const ent_type: EEntType = EEntTypeStr[ent_type_str];
         const index: number = Number(id.slice(2));
         return [ent_type, index];
-    } else if (getArrDepth(ids) === 1) {
+    } else if (depth === 1) {
         const ids_arr: TId[] = ids as TId[];
         return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[];
     } else { // depth === 2

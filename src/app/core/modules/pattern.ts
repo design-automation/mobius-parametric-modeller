@@ -16,24 +16,28 @@ import { Matrix4 } from 'three';
 * @example coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
 * @example_info Creates a list of 12 XYZ coordinates distributed equally along a semicircle of radius 10.
  */
-export function Arc(origin: Txyz, radius: number, num_coords: number, arc_angle: number): Txyz[] {
+export function Arc(origin: Txyz|TPlane, radius: number, num_coords: number, arc_angle: number): Txyz[] {
     // --- Error Check ---
     const fn_name = 'pattern.Arc';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord']);
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
     checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
     checkCommTypes(fn_name, 'num_coords', num_coords, ['isInt']);
     checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber']);
     // --- Error Check ---
-    const coords_id: Txyz[] = [];
+    const coords: Txyz[] = [];
     for (let i = 0; i < num_coords + 1; i++) {
-        const vec: Txyz = origin as Txyz;
         const angle: number = (arc_angle / num_coords) * i;
-        const x: number = (Math.cos(angle) * radius) + vec[0];
-        const y: number = (Math.sin(angle) * radius) + vec[1];
-        coords_id.push( [x, y, vec[2]] );
+        const x: number = (Math.cos(angle) * radius);
+        const y: number = (Math.sin(angle) * radius);
+        coords.push( [x, y, 0] );
     }
-    // TODO Implement the TPlane version
-    return coords_id;
+    // transform the points using origin and return
+    if (getArrDepth(origin) === 1) {
+        return coords.map(c => vecAdd(c, origin as Txyz));
+    } else { // we have a plane
+        const matrix: Matrix4 = xfromSourceTargetMatrix(XYPLANE, origin as  TPlane);
+        return coords.map(c => multMatrix(c, matrix));
+    }
 }
 // ================================================================================================
 export enum _EGridMethod {
@@ -59,7 +63,7 @@ export function Grid(origin: Txyz|TPlane, size: number|[number, number],
         num_coords: number|[number, number], method: _EGridMethod): Txyz[]|Txyz[][] {
     // --- Error Check ---
     const fn_name = 'pattern.Grid';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord']);
+    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
     checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
     checkCommTypes(fn_name, 'num_coords', num_coords, ['isInt', 'isXYlistInt']);
     // --- Error Check ---

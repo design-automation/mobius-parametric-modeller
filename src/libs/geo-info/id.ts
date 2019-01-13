@@ -1,79 +1,6 @@
 import { TId, EEntType, EEntTypeStr, TEntTypeIdx } from './common';
 
 // ============================================================================
-// Each entity in the model can be accessed using an ID string.
-// Below are functions for breaking ID strings into the component parts
-// IDs start with two characters followed by numeric digits.
-// For example '_v22' is vertex number 22.
-// ============================================================================
-// export function idsBreak(id: TId): [EEntTypeStr, number] {
-//     return [idEntityTypeStr(id), idIndex(id)];
-// }
-// export function idIndex(id: TId): number {
-//     return Number(id.slice(2));
-// }
-// export function idIndicies(ids: TId[]): number[] {
-//     return ids.map( id => Number(id.slice(2)));
-// }
-// export function idEntityTypeStr(id: TId): EEntTypeStr {
-//     return id.slice(0, 2) as EEntTypeStr;
-// }
-// // ============================================================================
-// export function isPosi(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.POSI);
-// }
-// export function isVert(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.VERT);
-// }
-// export function isTri(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.TRI);
-// }
-// export function isEdge(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.EDGE);
-// }
-// export function isWire(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.WIRE);
-// }
-// export function isFace(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.FACE);
-// }
-// export function isPoint(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.POINT);
-// }
-// export function isPline(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.PLINE);
-// }
-// export function isPgon(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.PGON);
-// }
-// export function isColl(id: TId): boolean {
-//     return id.startsWith(EEntTypeStr.COLL);
-// }
-// // more general test
-// export function isObj(id: TId): boolean {
-//     if (id.startsWith(EEntTypeStr.PGON)) { return true; }
-//     if (id.startsWith(EEntTypeStr.PLINE)) { return true; }
-//     if (id.startsWith(EEntTypeStr.POINT)) { return true; }
-//     return false;
-// }
-// export function isDim0(id: TId): boolean {
-//     if (id.startsWith(EEntTypeStr.POSI)) { return true; }
-//     if (id.startsWith(EEntTypeStr.VERT)) { return true; }
-//     if (id.startsWith(EEntTypeStr.POINT)) { return true; }
-//     return false;
-// }
-// export function isDim1(id: TId): boolean {
-//     if (id.startsWith(EEntTypeStr.EDGE)) { return true; }
-//     if (id.startsWith(EEntTypeStr.PLINE)) { return true; }
-//     return false;
-// }
-// export function isDim2(id: TId): boolean {
-//     if (id.startsWith(EEntTypeStr.FACE)) { return true; }
-//     if (id.startsWith(EEntTypeStr.PGON)) { return true; }
-//     return false;
-// }
-
-// ============================================================================
 export function getArrDepth(arr: any): number {
     if (Array.isArray(arr)) {
         return 1 + getArrDepth(arr[0]);
@@ -81,12 +8,16 @@ export function getArrDepth(arr: any): number {
     return 0;
 }
 // ============================================================================
-export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]): TId|TId[] {
+export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TId|TId[]|TId[][] {
     if (getArrDepth(ent_type_idxs) === 1) {
         const ent_type_idx: TEntTypeIdx = ent_type_idxs as TEntTypeIdx;
         return EEntTypeStr[ent_type_idx[0] as EEntType] + ent_type_idx[1] as TId;
-    } else {
-        return (ent_type_idxs as TEntTypeIdx[]).map( ent_type_idx => idsMake(ent_type_idx) ) as TId[];
+    } else if (getArrDepth(ent_type_idxs) === 2) {
+        const ent_type_idxs_arr: TEntTypeIdx[] = ent_type_idxs as TEntTypeIdx[];
+        return ent_type_idxs_arr.map( ent_type_idx => idsMake(ent_type_idx) ) as TId[];
+    } else { // depth === 3
+        const ent_type_idxs_arr: TEntTypeIdx[][] = ent_type_idxs as TEntTypeIdx[][];
+        return ent_type_idxs_arr.map( ent_type_idx => idsMake(ent_type_idx) ) as TId[][];
     }
 }
 export function idsBreak(ids: TId|TId[]|TId[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
@@ -96,8 +27,12 @@ export function idsBreak(ids: TId|TId[]|TId[][]): TEntTypeIdx|TEntTypeIdx[]|TEnt
         const ent_type: EEntType = EEntTypeStr[ent_type_str];
         const index: number = Number(id.slice(2));
         return [ent_type, index];
-    } else {
-        return (ids as TId[]).map( id => idsBreak(id) ) as TEntTypeIdx[]|TEntTypeIdx[][];
+    } else if (getArrDepth(ids) === 1) {
+        const ids_arr: TId[] = ids as TId[];
+        return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[];
+    } else { // depth === 2
+        const ids_arr: TId[][] = ids as TId[][];
+        return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[][];
     }
 }
 export function idIndicies(ents_arr: TEntTypeIdx[]): number[] {

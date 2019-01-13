@@ -879,9 +879,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
     dragSplitStart(e) {
         const currentTransf: any = this.dataService.flowchartPos.split(',');
-        currentTransf[0] = currentTransf[0].split('(')[1];
         currentTransf[5] = currentTransf[5].split(')')[0];
-        this.canvas.style.transition = 'transform 0ms linear';
+        // this.canvas.style.transition = 'transform 0ms linear';
 
         // @ts-ignore
         const dragProcess = this.flowchartSplit.dragProgress$ || this.flowchartSplit.dragProgress;
@@ -889,14 +888,14 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         this.splitDragSub = dragProcess.subscribe(x => {
             const nX = currentTransf[4] * x.sizes[0] / e.sizes[0];
             const nY = currentTransf[5] * x.sizes[0] / e.sizes[0];
-            this.dataService.flowchartPos = 'matrix(' + currentTransf[0] + ', 0, 0,' + currentTransf[0] + ',' + nX + ',' + nY + ')';
+            this.dataService.flowchartPos = currentTransf[0] + ', 0, 0,' + currentTransf[3] + ',' + nX + ',' + nY + ')';
             this.canvas.style.transform = this.dataService.flowchartPos;
         });
     }
 
     dragSplitEnd(e) {
         this.splitDragSub.unsubscribe();
-        this.canvas.style.transition = 'transform 0ms ease-in';
+        // this.canvas.style.transition = 'transform 0ms ease-in';
         this.dataService.splitVal = e.sizes[1];
     }
 

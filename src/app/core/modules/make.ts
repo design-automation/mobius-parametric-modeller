@@ -92,10 +92,9 @@ function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], 
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
-    const ents_arr = idsBreak(positions) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
-    // const ents_arr = checkIDs('make.Polyline', 'positions', positions,
-    //     ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][]; // TODO
+    const ents_arr = checkIDs('make.Polyline', 'positions', positions,
+        ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][]; // TODO
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _polyline(__model__, ents_arr, close);
     return idsMake(new_ents_arr) as TId|TId[];

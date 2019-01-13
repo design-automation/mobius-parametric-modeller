@@ -291,7 +291,11 @@ const IDcheckObj = {
         return ent_arr_lst;
     },
     isIDList_list: function(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|null): TEntTypeIdx[][] {
-        return arg_list.map(arg => IDcheckObj.isIDList(fn_name, arg_name, arg, ent_type_strs));
+        const ret_arr = [];
+        for (let i = 0; i < arg_list.length; i++) {
+            ret_arr.push(IDcheckObj.isIDList(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
+        }
+        return ret_arr as TEntTypeIdx[][];
     },
 };
 // =========================================================================================================================================

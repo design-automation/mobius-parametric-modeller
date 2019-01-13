@@ -31,12 +31,12 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
  * @example position1 = make.Position([1,2,3])
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
  */
-export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[] {
+export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     // --- Error Check ---
     // checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
     // TODO allow to Txyz[][]
     // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _position(__model__, coords);
+    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _position(__model__, coords);
     return idsMake(new_ents_arr);
 }
 // ================================================================================================
@@ -64,7 +64,7 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
         ['isID', 'isIDList'], ['POSI'])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr);
-    return idsMake(new_ents_arr);
+    return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
 // Enums for Polyline()
@@ -98,7 +98,7 @@ export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _E
     //     ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][]; // TODO
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _polyline(__model__, ents_arr, close);
-    return idsMake(new_ents_arr);
+    return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
 function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
@@ -124,7 +124,7 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
         ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _polygon(__model__, ents_arr);
-    return idsMake(new_ents_arr);
+    return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
 export function _collection(__model__: GIModel, parent_index: number, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx {
@@ -239,7 +239,7 @@ export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _
     // copy the positions that belong to the list of entities
     _copyGeomPosis(__model__, ents_arr, bool_copy_attribs);
     // return only the new entities
-    return idsMake(new_ents_arr);
+    return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
 // Loft modelling operation
@@ -392,7 +392,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
     checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _extrude(__model__, ents_arr, distance, divisions);
-    return idsMake(new_ents_arr);
+    return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
 /**

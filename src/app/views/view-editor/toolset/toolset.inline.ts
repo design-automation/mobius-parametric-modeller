@@ -18,6 +18,16 @@ export const inline_sort_expr = [
     ['#@name[i]', 'Sort based on attribute index value']
 ];
 
+const constants = [
+    ['PI', 'Generates a list of integers as a range'],
+    ['XY', 'A plane at the origin, aligned with the XY plane'],
+    ['YZ', 'A plane at the origin, aligned with the YZ plane'],
+    ['ZX', 'A plane at the origin, aligned with the ZX plane'],
+    ['YX', 'A plane at the origin, aligned with the YX plane'],
+    ['ZY', 'A plane at the origin, aligned with the ZY plane'],
+    ['XZ', 'A plane at the origin, aligned with the XZ plane']
+ ];
+
 const lists = [
     ['range(start, end)', 'Generates a list of integers as a range'],
     ['length(list)', 'Returns the number of items in the list'],
@@ -88,7 +98,6 @@ const statistics = [
 ];
 
 const trigonometry = [
-    ['PI', 'Returns the value of pi'],
     ['sin(rad)', 'Returns the sine of a value (in radians)'],
     ['asin(num)', 'Returns the inverse sine of a value (in radians)'],
     ['sinh(rad)', 'Returns the hyperbolic sine of a value (in radians)'],
@@ -109,6 +118,7 @@ const str = [
 ];
 
 export const inline_func = [
+    ['constants', constants],
     ['random', random],
     ['lists', lists],
     ['conversion', conversion],

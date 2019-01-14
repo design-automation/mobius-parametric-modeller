@@ -90,6 +90,7 @@ function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], 
  * @returns New polyline if successful, null if unsuccessful or on error.
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
+ * @example_link polyline_example.mob
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
     // --- Error Check ---

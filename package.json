@@ -21,8 +21,7 @@
     "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
-    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules",
-    "docConvert": "node  --experimental-modules ./src/assets/typedoc-json/docConvert.mjs"
+    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules && node --experimental-modules ./src/assets/typedoc-json/docConvert.mjs",
   },
   "private": true,
   "dependencies": {

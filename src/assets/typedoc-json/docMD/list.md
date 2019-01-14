@@ -8,8 +8,8 @@ If value is an list, the entire list will be appended as one value.
   * *value:* Item to add.  
   * *method:* Enum, append to start or end.  
 * **Examples:**  
-append = list.Append(list, 4, 'at_end')  
-where list = [1,2,3]
+  * append = list.Append(list, 4, 'at_end')  
+    where list = [1,2,3]
 Expected value of list is [1,2,3,4].
   
   
@@ -20,8 +20,8 @@ Expected value of list is [1,2,3,4].
   * *list2:* Second list.  
 * **Returns:** Combined list (list1 first, followed by list2).  
 * **Examples:**  
-newlist = list.Concat(list1,list2)  
-where list1 = [1,2,3]
+  * newlist = list.Concat(list1,list2)  
+    where list1 = [1,2,3]
 and list2 = [9,0]
 Expected value of newlist is [1,2,3,9,0].
   
@@ -32,8 +32,8 @@ Expected value of newlist is [1,2,3,9,0].
   * *list:* List to copy.  
 * **Returns:** New duplicated list.  
 * **Examples:**  
-copy1 = list.Copy(list)  
-where list = [1,2,3]
+  * copy1 = list.Copy(list)  
+    where list = [1,2,3]
 Expected value of copy is [1,2,3].
   
   
@@ -43,8 +43,8 @@ Expected value of copy is [1,2,3].
   * *list:* List to flatten.  
 * **Returns:** Flattened list.  
 * **Examples:**  
-flatten = list.Flatten(list)  
-where list = [1,2,3,[4,5]]
+  * flatten = list.Flatten(list)  
+    where list = [1,2,3,[4,5]]
 Expected value of flatten is [1,2,3,4,5].
   
   
@@ -56,8 +56,8 @@ Items must match both the value and type of specified value.
   * *value:* Value to search for.  
 * **Returns:** Returns true if value can be found in list, false if value cannot be found.  
 * **Examples:**  
-exists = list.Includes(list,2)  
-where list = [6,2,2,7]
+  * exists = list.Includes(list,2)  
+    where list = [6,2,2,7]
 Expected value of exists is true.
   
   
@@ -70,8 +70,8 @@ Items must match both the value and type of specified value.
   * *method:* Enum, specifies whether to search all occurances or only the first.  
 * **Returns:** Index position or list of index positions containing specified value.  
 * **Examples:**  
-positions = list.IndexOf(list,2,true)  
-where list = [6,2,2,7]
+  * positions = list.IndexOf(list,2,true)  
+    where list = [6,2,2,7]
 Expected value of positions is [1,2].
   
   
@@ -81,8 +81,8 @@ Expected value of positions is [1,2].
   * *list:* List to remove value from.  
   * *index:* Zero-based index number of value to remove.  
 * **Examples:**  
-remove = list.RemoveIndex(list,1)  
-where list = [1,2,3]
+  * remove = list.RemoveIndex(list,1)  
+    where list = [1,2,3]
 Expected value of remove is [1,3].
   
   
@@ -94,8 +94,8 @@ Items must match both the value and type of specified value.
   * *value:* Value to search for.  
   * *method:* Enum; specifies whether to remove all occurances or only the first.  
 * **Examples:**  
-remove = list.RemoveValue(list,2,'remove_all')  
-where list = [1,2,2,3]
+  * remove = list.RemoveValue(list,2,'remove_all')  
+    where list = [1,2,2,3]
 Expected value of remove is [1,3].
   
   
@@ -108,8 +108,8 @@ Items must match both the value and type of specified value
   * *value2:* Value to replace existing value with.  
   * *method:* Enum; specifies whether to replace all occurances or only the first.  
 * **Examples:**  
-replace = list.ReplaceValue(list,2,9,'replace_all')  
-where list = [1,2,2,3]
+  * replace = list.ReplaceValue(list,2,9,'replace_all')  
+    where list = [1,2,2,3]
 Expected value of replace is [1,9,9,3].
   
   
@@ -119,8 +119,8 @@ Expected value of replace is [1,9,9,3].
   * *list:* List to reverse.  
 * **Returns:** New reversed list.  
 * **Examples:**  
-result = list.Reverse(list1)  
-where list1 = [1,2,3]
+  * result = list.Reverse(list1)  
+    where list1 = [1,2,3]
 Expected value of result is [3,2,1].
   
   
@@ -136,8 +136,8 @@ Expected value of result is [3,2,1].
      If end is undefined, slice extracts through the end of the sequence.  
 * **Returns:** A new list.  
 * **Examples:**  
-result = list.Slice(list,1,3)  
-where list = [1,2,3,4,5]
+  * result = list.Slice(list,1,3)  
+    where list = [1,2,3,4,5]
 Expected value of result is [2,3].
   
   
@@ -147,11 +147,11 @@ Expected value of result is [2,3].
   * *list:* List to sort.  
   * *method:* Enum; specifies the sort method to use.  
 * **Examples:**  
-sort = list.Sort(list, 'alpha')  
-where list = ["1","2","10","Orange","apple"]
+  * sort = list.Sort(list, 'alpha')  
+    where list = ["1","2","10","Orange","apple"]
 Expected value of list is ["1","10","2","Orange","apple"].  
-sort = list.Sort(list, 'numeric')  
-where list = [56,6,48]
+  * sort = list.Sort(list, 'numeric')  
+    where list = [56,6,48]
 Expected value of list is [6,48,56].
   
   
@@ -163,8 +163,8 @@ Expected value of list is [6,48,56].
   * *num_to_remove:* Number of values to remove.  
   * *values_to_add:* List of values to add.  
 * **Examples:**  
-result = list.Splice(list1, 1, 3, [2.2, 3.3])  
-where list1 = [10, 20, 30, 40, 50]
+  * result = list.Splice(list1, 1, 3, [2.2, 3.3])  
+    where list1 = [10, 20, 30, 40, 50]
 Expected value of result is [10, 2.2, 3.2, 50]. New values were added where the values were removed.
   
   

@@ -6,8 +6,8 @@
   * *lines:* Polyline(s).  
 * **Returns:** Modifies the input polyline(s).  
 * **Examples:**  
-modify.Close([polyline1,polyline2,...])  
-If open, polylines are changed to closed; if already closed, nothing happens.
+  * modify.Close([polyline1,polyline2,...])  
+    If open, polylines are changed to closed; if already closed, nothing happens.
   
   
 ## Delete  
@@ -16,8 +16,8 @@ If open, polylines are changed to closed; if already closed, nothing happens.
   * *entities:* Position, point, polyline, polygon, collection. Can be a list.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Delete(polygon1)  
-Deletes polygon1 from the model.
+  * modify.Delete(polygon1)  
+    Deletes polygon1 from the model.
   
   
 ## Mirror  
@@ -28,8 +28,8 @@ Deletes polygon1 from the model.
   * *direction:* Vector or a list of three numbers.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Mirror(polygon1, plane1)  
-Mirrors polygon1 across plane1.
+  * modify.Mirror(polygon1, plane1)  
+    Mirrors polygon1 across plane1.
   
   
 ## Move  
@@ -39,8 +39,8 @@ Mirrors polygon1 across plane1.
   * *vector:* List of three numbers.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Move(position1, [1,1,1])  
-Moves position1 by [1,1,1].
+  * modify.Move(position1, [1,1,1])  
+    Moves position1 by [1,1,1].
   
   
 ## Promote  
@@ -52,7 +52,7 @@ Moves position1 by [1,1,1].
   * *method:* Enum; Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.  
 * **Returns:** Promotes or demotes the attribute.  
 * **Examples:**  
-promote1 = modify.Promote (colour, positions, faces, sum)
+  * promote1 = modify.Promote (colour, positions, faces, sum)
   
   
 ## Reverse  
@@ -61,10 +61,10 @@ promote1 = modify.Promote (colour, positions, faces, sum)
   * *entities:* Wire, face, polyline, polygon.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Reverse(face1)  
-Flips face1 and reverses its normal.  
-modify.Reverse(polyline1)  
-Reverses the order of vertices to reverse the direction of the polyline.
+  * modify.Reverse(face1)  
+    Flips face1 and reverses its normal.  
+  * modify.Reverse(polyline1)  
+    Reverses the order of vertices to reverse the direction of the polyline.
   
   
 ## Rotate  
@@ -76,8 +76,8 @@ Reverses the order of vertices to reverse the direction of the polyline.
   * *angle:* Angle (in radians).  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Rotate(polyline1, plane1, PI)  
-Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
+  * modify.Rotate(polyline1, plane1, PI)  
+    Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
   
   
 ## Scale  
@@ -88,8 +88,8 @@ Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
   * *scale:* Scale factor.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Scale(entities, plane1, 0.5)  
-Scales entities by 0.5 on plane1.
+  * modify.Scale(entities, plane1, 0.5)  
+    Scales entities by 0.5 on plane1.
   
   
 ## Weld  
@@ -98,8 +98,8 @@ Scales entities by 0.5 on plane1.
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.Weld([polyline1,polyline2])  
-Welds both polyline1 and polyline2 together. Entities must be of the same type.
+  * modify.Weld([polyline1,polyline2])  
+    Welds both polyline1 and polyline2 together. Entities must be of the same type.
   
   
 ## XForm  
@@ -110,7 +110,7 @@ Welds both polyline1 and polyline2 together. Entities must be of the same type.
   * *to:* Plane defining destination construction plane.  
 * **Returns:** Modifies the input entities.  
 * **Examples:**  
-modify.XForm(polygon1, plane1, plane2)  
-Transforms polygon1 from plane1 to plane2.
+  * modify.XForm(polygon1, plane1, plane2)  
+    Transforms polygon1 from plane1 to plane2.
   
   

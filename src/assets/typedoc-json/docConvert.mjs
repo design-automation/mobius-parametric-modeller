@@ -118,9 +118,9 @@ for (const modName in docs) {
             mdString += `* **Examples:**  \n`;
             for (const i in func.example) {
                 if (!func.example[i]) {continue; }
-                mdString += `${func.example[i]}  \n`;
+                mdString += `  * ${func.example[i]}  \n`;
                 if (func.example_info) {
-                    mdString += `${func.example_info[i]}  \n`;
+                    mdString += `    ${func.example_info[i]}  \n`;
                 }
 
             }

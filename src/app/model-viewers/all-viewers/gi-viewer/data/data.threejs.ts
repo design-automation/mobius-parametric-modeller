@@ -16,6 +16,7 @@ export class DataThreejs {
     public _mouse: THREE.Vector2;
     // interaction and selection
     public selected_geoms: Map<string, any> = new Map();
+    public selected_positions: Map<string, Map<string, number>> = new Map();
     public _text: string;
     // text lables
     public ObjLabelMap: Map<string, any> = new Map();
@@ -198,7 +199,7 @@ export class DataThreejs {
         }
     }
 
-    public selectObjPositions(ent_id, positions) {
+    public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
         const geom = new THREE.BufferGeometry();
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         const colors = new Uint8Array([].concat(...Array(positions.length / 3).fill([0, 60, 255])));
@@ -208,10 +209,29 @@ export class DataThreejs {
             size: 0.8,
             vertexColors: THREE.VertexColors
         });
-        const point = new THREE.Points(geom, mat);
-        this._scene.add(point);
-        this.selected_geoms.set(ent_id, point);
-        this.sceneObjsSelected.set(ent_id, point);
+        if (this.selected_positions.get(parent_ent_id) === undefined) {
+            this.selected_positions.set(parent_ent_id, new Map());
+        }
+
+        const check_exist: string[] = [];
+        this.selected_positions.forEach(v => {
+            v.forEach((vv, k) => {
+                check_exist.push(k);
+            });
+        });
+
+        if (!check_exist.includes(ent_id)) {
+            const point = new THREE.Points(geom, mat);
+            this._scene.add(point);
+            this.selected_positions.get(parent_ent_id).set(ent_id, point.id);
+            if (label) {
+                const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.ObjLabelMap.set(ent_id, obj);
+            }
+        }
+        // this.selected_positions[parent_ent_id].set(ent_point_map.set(ent_id, point.id));
+        // this.sceneObjsSelected.set(ent_id, point);
     }
 
     public createLabelforObj(container, obj, type: string, labelText: string) {
@@ -224,10 +244,9 @@ export class DataThreejs {
 
     public unselectObj(ent_id, container) {
         const removing = this.selected_geoms.get(ent_id);
-        //
-        this.selected_geoms.delete(ent_id);
         // remove Geom from scene
         this._scene.remove(this._scene.getObjectById(removing));
+        this.selected_geoms.delete(ent_id);
         // remove Geom from selected Objs Map
         this.sceneObjsSelected.delete(ent_id);
 
@@ -235,6 +254,21 @@ export class DataThreejs {
         if (document.getElementById(`textLabel_${ent_id}`)) {
             container.removeChild(document.getElementById(`textLabel_${ent_id}`));
         }
+    }
+
+    public unselectPosi(parent_ent_id, container) {
+        // get the removing first
+        const removing = this.selected_positions.get(parent_ent_id);
+        // remove positions from scene
+        removing.forEach((v, k) => {
+            this._scene.remove(this._scene.getObjectById(v));
+            this.ObjLabelMap.delete(k);
+            if (document.getElementById(`textLabel_${k}`)) {
+                container.removeChild(document.getElementById(`textLabel_${k}`));
+            }
+        });
+        // then delete
+        this.selected_positions.delete(parent_ent_id);
     }
 
     // ============================================================================

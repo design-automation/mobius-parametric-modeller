@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 * @param __model__
 * @param origin XYZ coordinates as a list of three numbers.
 * @param radius Radius of circle as a number.
-* @param num_positions Number of XYZ coordinates distributed equally along the arc.
+* @param num_positions Number of positions distributed equally along the arc.
 * @param arc_angle Angle of arc (in radians).
 * @returns XYZ coordinates if successful, null if unsuccessful or on error.
 * @example coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
@@ -63,7 +63,7 @@ export enum _EGridMethod {
 * @param __model__
 * @param origin XYZ coordinates as a list of three numbers.
 * @param size Size of grid. If number, assume square grid of that length; if list of two numbers, x and y lengths respectively.
-* @param num_positions Number of XYZ coordinates.
+* @param num_positions Number of positions.
 * @param method Enum, define the way the coords will be return as lists.
 * If integer, same number for x and y; if list of two numbers, number for x and y respectively.
 * @returns XYZ coordinates if successful, null if unsuccessful or on error.

@@ -108,10 +108,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             this.dataService.flowchartPos = 'matrix(' + this.zoom + ', 0, 0,' + this.zoom + ', -' +
             boundingDiv.width * this.zoom / 2 + ', -' + boundingDiv.width * this.zoom / 2 + ')';
         } else {
-            this.zoom = Number(this.dataService.flowchartPos.split(',')[0].split('(')[1]);
+            this.zoom = Number(this.dataService.flowchartPos.split(',')[3]);
         }
-        this.canvas.style.transformOrigin = `top left`;
-        this.canvas.style.transition = 'transform 0ms ease-in';
+
         this.canvas.style.transform = this.dataService.flowchartPos;
 
         // copy: copy node
@@ -261,7 +260,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         if (this.dataService.newFlowchart) {
             this.focusFlowchart();
             this.dataService.newFlowchart = false;
+        } else if (this.dataService.splitUpdate) {
+            this.focusFlowchart();
+            this.dataService.splitUpdate = false;
         }
+
     }
 
     /*
@@ -547,7 +550,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
 
         const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
-        const ctm = this.zoom * boundingDiv.width / canvasSize;
+        // const ctm = this.zoom * boundingDiv.width / canvasSize;
+        const ctm = bRect.width / canvasSize;
 
         let nX = (boundingDiv.width  - (frame[2] + frame[0]) * ctm * zoom / this.zoom) / 2;
         let nY = (boundingDiv.height - (frame[3] + frame[1]) * ctm * zoom / this.zoom) / 2;
@@ -884,10 +888,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
         // @ts-ignore
         const dragProcess = this.flowchartSplit.dragProgress$ || this.flowchartSplit.dragProgress;
-
-        this.splitDragSub = dragProcess.subscribe(x => {
-            const nX = currentTransf[4] * x.sizes[0] / e.sizes[0];
-            const nY = currentTransf[5] * x.sizes[0] / e.sizes[0];
+        const bW = (<DOMRect>this.canvas.getBoundingClientRect()).width;
+        this.splitDragSub = dragProcess.subscribe(() => {
+            const nBW = (<DOMRect>this.canvas.getBoundingClientRect()).width / bW;
+            const nX = currentTransf[4] * nBW;
+            const nY = currentTransf[5] * nBW;
             this.dataService.flowchartPos = currentTransf[0] + ', 0, 0,' + currentTransf[3] + ',' + nX + ',' + nY + ')';
             this.canvas.style.transform = this.dataService.flowchartPos;
         });

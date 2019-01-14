@@ -17,6 +17,7 @@ export class DataService {
 
     // Selected Entities by Threejs Viewer for Attribute Table
     selected_ents: Map<string, Map<string, number>> = new Map();
+    selected_positions: Map<string, string[]>;
     /**
      * Create a data service.
      */
@@ -30,6 +31,7 @@ export class DataService {
         this.selected_ents.set(EEntTypeStr[EEntType.PLINE], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.POINT], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.COLL], new Map());
+        this.selected_positions = new Map();
     }
 
     /**

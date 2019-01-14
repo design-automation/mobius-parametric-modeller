@@ -204,7 +204,10 @@ export class ViewEditorComponent {
         return node.input.value;
     }
 
-    setSplit(event) { this.dataService.splitVal = event.sizes[1]; }
+    setSplit(event) {
+        this.dataService.splitUpdate = true;
+        this.dataService.splitVal = event.sizes[1];
+    }
 
     unselectAll(event) {
         if (event.ctrlKey) { return; }

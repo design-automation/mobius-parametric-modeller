@@ -14,13 +14,14 @@
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-prod": "ng build --base-href=%npm_package_config_prod_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-server": "ng build --base-href='./'",
-    "build-deploy": "ng build --base-href 'https://design-automation.github.io/mobius-parametric-modeller/'",
+    "build-deploy": "ng build --base-href 'https://mobius.design-automation.net/'",
+    "build-deploy1": "ng build --base-href 'https://design-automation.github.io/mobius-parametric-modeller/'",
     "test": "ng test",
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
-    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules"
+    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/app/core/modules && node --experimental-modules ./src/assets/typedoc-json/docConvert.mjs"
   },
   "private": true,
   "dependencies": {
@@ -52,7 +53,7 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.11.4",
+    "@angular-devkit/build-angular": "^0.12.1",
     "@angular/cli": "^7.1.4",
     "@angular/compiler-cli": "^7.1.4",
     "@angular/language-service": "^7.1.4",

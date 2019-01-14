@@ -30,7 +30,7 @@ export class GIViewerComponent implements OnInit {
         grid: { show: boolean, size: number },
     } = {
         normals: { show: false, size: 5 },
-        axes: { show: false, size: 20 },
+        axes: { show: true, size: 50 },
         grid: { show: true, size: 500 },
     };
 

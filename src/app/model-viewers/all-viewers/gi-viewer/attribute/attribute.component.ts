@@ -70,7 +70,8 @@ export class AttributeComponent implements OnChanges{
       const ThreeJS = this.data.attribs.threejs;
       let displayData: { id: string }[] = [];
       const AllAttribData = ThreeJS.getAttribsForTable(tab_map[tabIndex]);
-      const SelectedAttribData = ThreeJS.getEntsVals(this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]), tab_map[tabIndex]);
+      const selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
+      const SelectedAttribData = ThreeJS.getEntsVals(selected_ents, tab_map[tabIndex]);
       if (this.showSelected) {
         displayData = SelectedAttribData;
       } else {

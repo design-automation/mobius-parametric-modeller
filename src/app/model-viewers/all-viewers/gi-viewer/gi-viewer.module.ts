@@ -4,7 +4,7 @@ import { NgxPaginationModule} from 'ngx-pagination';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { MatIconModule} from '@angular/material';
 import { MatExpansionModule} from '@angular/material/expansion';
@@ -21,7 +21,7 @@ import { TabsComponent } from './attribute/tabs.component';
 import { DropdownMenuComponent } from './html/dropdown-menu.component';
 import { ModalWindowComponent } from './html/modal-window.component';
 import { ModalService } from './html/modal-window.service';
-import { FormsModule } from '@angular/forms';
+import { ThreeJSViewerService } from './threejs/threejs-viewer.service';
 /**
  * GIViewer
  * A viewer for Geo-Info models.
@@ -51,7 +51,8 @@ import { FormsModule } from '@angular/forms';
         FormsModule
     ],
     providers: [
-        ModalService
+        ModalService,
+        ThreeJSViewerService
     ]
 })
 export class GIViewerModule {

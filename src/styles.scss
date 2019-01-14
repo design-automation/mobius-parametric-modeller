@@ -135,11 +135,14 @@ input, textarea, select, a {
 
 .mat-slider-track-wrapper{
     height: $fsize1 !important;
+    box-sizing: border-box !important;
 }
 
 .mat-slider-track-background{
-    background-color: $color5 !important;
+    background-color: $color5-5 !important;
     
+    border: 2px solid $color5 !important;
+    box-sizing: border-box;
     height: $fsize1 !important;
 }
 

@@ -93,25 +93,27 @@ modal-window {
         }
     }
 
-    button{
+    .closebtn{
         background: $color7;
         border: 1px solid $color4;
-        padding: 3px 10px;
-        cursor: pointer;
-        margin-right: 10px;
-        width: 75px;
-        font-size: $fsize2;
-        &.primary{
-            background: $selected-color;
-            border-color: $selected-color;
-            color: white;
-            &:hover{
-                background: rgba($selected-color,0.75);
-            }
-        }
-        &:focus{
-            outline: none;
-        }
+        box-sizing: border-box;
+        margin-left: 10px;
+        // padding: 3px 10px;
+        // cursor: pointer;
+        // margin-right: 10px;
+        // width: 75px;
+        // font-size: $fsize2;
+        // &.primary{
+        //     background: $selected-color;
+        //     border-color: $selected-color;
+        //     color: white;
+        //     &:hover{
+        //         background: rgba($selected-color,0.75);
+        //     }
+        // }
+        // &:focus{
+        //     outline: none;
+        // }
     }
 }
 
@@ -121,54 +123,86 @@ body.modal-open {
 
 
 #settings_modal{
+    /deep/ .modal-window .modal-body{
+        background: $color6;
+    }
+
     .onoffswitch {
-        position: relative; width: 60px;
+        position: relative; 
+        width: 2 * $fsize1;
+        height: $fsize1;
+        box-sizing: border-box;
+        vertical-align: middle;
         -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
     }
     .onoffswitch-checkbox {
         display: none;
     }
     .onoffswitch-label {
-        display: block; overflow: hidden; cursor: pointer;
-        border: 1px solid $color4; border-radius: 0px;
+        display: block;
+        overflow: hidden;
+        height: inherit;
+        background-color: $color4;
+        cursor: pointer;
     }
-    .onoffswitch-inner {
-        display: block; width: 200%; margin-left: -100%;
-        transition: margin 0.1s ease-in 0s;
-    }
-    .onoffswitch-inner:before, .onoffswitch-inner:after {
-        display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
-        font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-        box-sizing: border-box;
-    }
-    .onoffswitch-inner:before {
-        content: "ON";
-        padding-left: 5px;
-        background-color: $color7; color: $color1;
-    }
-    .onoffswitch-inner:after {
-        content: "OFF";
-        padding-right: 5px;
-        background-color: $color7; color: $color3;
-        text-align: right;
-    }
+    // .onoffswitch-inner {
+    //     display: block; width: 200%; margin-left: -100%;
+    //     transition: 0.3s
+    // }
+    // .onoffswitch-inner:before, .onoffswitch-inner:after {
+    //     display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+    //     font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    //     box-sizing: border-box;
+    // }
+    // .onoffswitch-inner:before {
+    //     content: "ON";
+    //     padding-left: 5px;
+    //     background-color: $color7; color: $color1;
+    // }
+    // .onoffswitch-inner:after {
+    //     content: "OFF";
+    //     padding-right: 5px;
+    //     background-color: $color7; color: $color3;
+    //     text-align: right;
+    // }
     .onoffswitch-switch {
-        display: block; width: 20px; margin: 0px;
-        background: $color4;
-        position: absolute; top: 0; bottom: 0;
-        right: 35px;
-        border: 2px solid transparent; border-radius: 0px;
-        transition: all 0.1s ease-in 0s; 
+        // display: block; width: 20px; margin: 0px;
+        // background: $color4;
+        // position: absolute; top: 0; bottom: 0;
+        // right: 35px;
+        // border: 2px solid transparent; border-radius: 0px;
+        // transition: all 0.1s ease-in 0s; 
+
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: $fsize1 - 2px;
+        height: $fsize1 - 2px;
+        background: $color5;
     }
-    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-        margin-left: 0;
+    
+    .onoffswitch-checkbox:hover:not(:checked) + .onoffswitch-label{
+        background-color: rgba($selected-color, 0.4);
+        .onoffswitch-switch{
+            box-shadow: 2px 0px 0px 0px;
+        }
     }
-    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-        right: 0px; 
+
+    .onoffswitch-checkbox:disabled + .onoffswitch-label{
+        background-color: $color4 !important;
+        .onoffswitch-switch{
+            box-shadow: none !important;
+        }
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label{
         background-color: $selected-color; 
-    }
-    .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-switch {
-        background-color: $color7; 
+        .onoffswitch-switch {
+            right: 0px; 
+            
+            left: calc(100% - 2px);
+            transform: translateX(-100%);
+        }
     }
 
     .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-inner,
@@ -180,6 +214,7 @@ body.modal-open {
     // Grid Size Slider
     .slidecontainer {
         width: 100%; /* Width of the outside container */
+        height: $fsize1;
         &:hover{
             background-color: transparent;  
         }
@@ -191,7 +226,7 @@ body.modal-open {
         appearance: none;
         width: calc(100% - 230px);
         max-width: 500px;
-        height: 22px; /* Specified height */
+        height: $fsize1; /* Specified height */
         background: #d3d3d3; /* Grey background */
         outline: none; /* Remove outline */
         opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
@@ -209,17 +244,21 @@ body.modal-open {
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none; 
         appearance: none;
-        width: 12px; 
-        height: 26px; 
-        background: $selected-color; 
+        width: 5px; 
+        height: $fsize1; 
+        background: $color4; 
+        border: 1px solid $color1;
         cursor: pointer; 
+        &:hover, &:active{
+            background: $selected-color;
+        }
     }
     
     .slider::-moz-range-thumb {
-        width: 12px; 
-        height: 26px; 
-        background: $selected-color; 
-        cursor: pointer; 
+        width: 5px; 
+        height: $fsize1; 
+        background: $color4; 
+        cursor: pointer;
     }
     .slider:disabled::-webkit-slider-thumb {
         background: $color7;

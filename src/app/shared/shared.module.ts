@@ -29,6 +29,7 @@ import { NotificationComponent } from './components/notification/notification.co
 import { DataViewersContainer } from '../model-viewers/model-viewers-container.module';
 import { LoadUrlComponent } from './components/file/loadurl.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { ChromeComponent } from './components/chrome/chrome.component';
 
 @NgModule({
     providers: [ ],
@@ -42,7 +43,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             // ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent,
-            SpinnerComponent
+            SpinnerComponent,
+            ChromeComponent
         ],
     imports: [
             CommonModule,
@@ -83,6 +85,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
             AddInputComponent,
             AddOutputComponent,
             SpinnerComponent,
+            ChromeComponent,
             // ParameterViewerComponent,
             NotificationComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent

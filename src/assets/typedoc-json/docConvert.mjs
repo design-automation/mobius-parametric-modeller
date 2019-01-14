@@ -24,7 +24,7 @@ function analyzeParamType(fn, paramType) {
 
 const doc = dc.default;
 const docs = {};
-console.log(fs);
+
 for (const mod of doc.children) {
     let modName = mod.name.split('/');
     modName = modName[modName.length - 1];
@@ -142,6 +142,6 @@ for (const modName in docs) {
             return console.log(err);
         }
 
-        console.log('The file was saved!');
+        console.log(`successfully saved ${modName}.md`);
     });
 }

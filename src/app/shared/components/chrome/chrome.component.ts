@@ -36,8 +36,5 @@ export class ChromeComponent implements AfterViewInit {
         }
     }
 
-    stopProp(e: Event) {
-        e.stopPropagation();
-    }
 
 }

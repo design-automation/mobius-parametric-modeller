@@ -20,23 +20,26 @@
                         <!-- procedure editor on the right side -->
                         <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
                             <!-- parameter-editor only for start/end node -->
-                            <parameter-editor *ngIf="getNode().type == 'start'" 
-                                [flowchart]='getFlowchart()' 
-                                [node]='getNode()'
-                                [prodCheck]='false'></parameter-editor>
+                            <ng-container *ngIf=''>
+                                <parameter-editor *ngIf="getNode().type == 'start'" 
+                                    [flowchart]='getFlowchart()' 
+                                    [node]='getNode()'
+                                    [prodCheck]='false'></parameter-editor>
 
-                            <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
-                                <button (click)='setViewOutput()'>Viewing 
-                                    <span *ngIf='!getViewOutput()'>Input Model</span>
-                                    <span *ngIf='getViewOutput()'>Output Model</span></button>
-                            </div>
+                                <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
+                                    <button (click)='setViewOutput()'>Viewing 
+                                        <span *ngIf='!getViewOutput()'>Input Model</span>
+                                        <span *ngIf='getViewOutput()'>Output Model</span></button>
+                                </div>
 
-                            <div id='modelViewButton--container' *ngIf="getNode().type == 'start'">
-                                <button (click)='setViewOutput()'>
-                                    <span *ngIf='getViewOutput()'>Viewing</span>
-                                    <span *ngIf='!getViewOutput()'>Hiding</span>
-                                Test Model</button>
-                            </div>
+                                <div id='modelViewButton--container' *ngIf="getNode().type == 'start'">
+                                    <button (click)='setViewOutput()'>
+                                        <span *ngIf='getViewOutput()'>Viewing</span>
+                                        <span *ngIf='!getViewOutput()'>Hiding</span>
+                                    Test Model</button>
+                                </div>
+
+                            </ng-container>
                             
                             <div class = 'procedureln--container' [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
                                 <!-- list of procedure items for all nodes -->

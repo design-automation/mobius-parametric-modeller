@@ -110,8 +110,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         } else {
             this.zoom = Number(this.dataService.flowchartPos.split(',')[3]);
         }
-        // this.canvas.style.transformOrigin = `top left 0px`;
-        // this.canvas.style.transition = 'transform 0ms ease-in';
+
         this.canvas.style.transform = this.dataService.flowchartPos;
 
         // copy: copy node
@@ -261,7 +260,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         if (this.dataService.newFlowchart) {
             this.focusFlowchart();
             this.dataService.newFlowchart = false;
+        } else if (this.dataService.splitUpdate) {
+            this.focusFlowchart();
+            this.dataService.splitUpdate = false;
         }
+
     }
 
     /*

@@ -1,6 +1,6 @@
-#ISECT    
+# ISECT    
 
-##Intersect  
+## Intersect  
 * **Description:** Adds positions by intersecting polylines, planes, and polygons.  
 * **Parameters:**  
   * *entities1:* First polyline, plane, face, or polygon.  
@@ -11,7 +11,7 @@ intersect1 = isect.Intersect (object1, object2)
 Returns a list of positions at the intersections between both objects.
   
   
-##Knife  
+## Knife  
 * **Description:** Separates a list of points, polylines or polygons into two lists with a plane.  
 * **Parameters:**  
   * *geometry:* List of points, polylines or polygons.  
@@ -23,7 +23,7 @@ knife1 = isect.Knife ([p1,p2,p3,p4,p5], plane1, keepabove)
 Returns [[p1,p2,p3],[p4,p5]] if p1, p2, p3 are points above the plane and p4, p5 are points below the plane.
   
   
-##Split  
+## Split  
 * **Description:** Splits a polyline or polygon with a polyline.  
 * **Parameters:**  
   * *geometry:* A list of polylines or polygons to be split.  

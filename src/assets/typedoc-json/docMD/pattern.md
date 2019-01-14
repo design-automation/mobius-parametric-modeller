@@ -1,6 +1,6 @@
-#PATTERN    
+# PATTERN    
 
-##Arc  
+## Arc  
 * **Description:** Creates a list of XYZ coordinates in an arc arrangement.  
 * **Parameters:**  
   * *origin:* XYZ coordinates as a list of three numbers.  
@@ -13,7 +13,7 @@ coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
 Creates a list of 12 XYZ coordinates distributed equally along a semicircle of radius 10.
   
   
-##Grid  
+## Grid  
 * **Description:** Creates a list of XYZ coordinates in a grid arrangement.  
 * **Parameters:**  
   * *origin:* XYZ coordinates as a list of three numbers.  
@@ -29,7 +29,7 @@ coordinates1 = pattern.Grid([0,0,0], [10,20], [2,4])
 Creates a list of 8 XYZ coordinates on a 2x4 grid of length 10 by 20.
   
   
-##Rectangle  
+## Rectangle  
 * **Description:** Creates a list of XYZ coordinates in a rectangular arrangement.  
 * **Parameters:**  
   * *origin:* XYZ coordinates as a list of three numbers.  

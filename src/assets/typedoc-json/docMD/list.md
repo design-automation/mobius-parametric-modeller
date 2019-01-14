@@ -1,6 +1,6 @@
-#LIST    
+# LIST    
 
-##Append  
+## Append  
 * **Description:** Adds one value to the end of an list.
 If value is an list, the entire list will be appended as one value.  
 * **Parameters:**  
@@ -13,7 +13,7 @@ where list = [1,2,3]
 Expected value of list is [1,2,3,4].
   
   
-##Concat  
+## Concat  
 * **Description:** Creates a new list by combining two lists into a new list.  
 * **Parameters:**  
   * *list1:* First list.  
@@ -26,7 +26,7 @@ and list2 = [9,0]
 Expected value of newlist is [1,2,3,9,0].
   
   
-##Copy  
+## Copy  
 * **Description:** Creates a new list by creating a new list by making a copy of an existing list.  
 * **Parameters:**  
   * *list:* List to copy.  
@@ -37,7 +37,7 @@ where list = [1,2,3]
 Expected value of copy is [1,2,3].
   
   
-##Flatten  
+## Flatten  
 * **Description:** Creates a new list by flattening an n-dimensional list into a one-dimensional list.  
 * **Parameters:**  
   * *list:* List to flatten.  
@@ -48,7 +48,7 @@ where list = [1,2,3,[4,5]]
 Expected value of flatten is [1,2,3,4,5].
   
   
-##Includes  
+## Includes  
 * **Description:** Searches for a value in an list and returns true if found.
 Items must match both the value and type of specified value.  
 * **Parameters:**  
@@ -61,7 +61,7 @@ where list = [6,2,2,7]
 Expected value of exists is true.
   
   
-##IndexOf  
+## IndexOf  
 * **Description:** Searches for a value in a list and returns the index position if found.
 Items must match both the value and type of specified value.  
 * **Parameters:**  
@@ -75,7 +75,7 @@ where list = [6,2,2,7]
 Expected value of positions is [1,2].
   
   
-##RemoveIndex  
+## RemoveIndex  
 * **Description:** Removes the value at the specified index from a list.  
 * **Parameters:**  
   * *list:* List to remove value from.  
@@ -86,7 +86,7 @@ where list = [1,2,3]
 Expected value of remove is [1,3].
   
   
-##RemoveValue  
+## RemoveValue  
 * **Description:** Removes values that matches specified value from a list.
 Items must match both the value and type of specified value.  
 * **Parameters:**  
@@ -99,7 +99,7 @@ where list = [1,2,2,3]
 Expected value of remove is [1,3].
   
   
-##ReplaceValue  
+## ReplaceValue  
 * **Description:** Replaces values that matches specified value from an list with a new value
 Items must match both the value and type of specified value  
 * **Parameters:**  
@@ -113,7 +113,7 @@ where list = [1,2,2,3]
 Expected value of replace is [1,9,9,3].
   
   
-##Reverse  
+## Reverse  
 * **Description:** Reverses the order of values in a list and returns a new list.  
 * **Parameters:**  
   * *list:* List to reverse.  
@@ -124,7 +124,7 @@ where list1 = [1,2,3]
 Expected value of result is [3,2,1].
   
   
-##Slice  
+## Slice  
 * **Description:** Creates a new list by copying a portion of an existing list, from start index to end index (end not included).  
 * **Parameters:**  
   * *list:* List to slice.  
@@ -141,7 +141,7 @@ where list = [1,2,3,4,5]
 Expected value of result is [2,3].
   
   
-##Sort  
+## Sort  
 * **Description:** Sorts an list of values.  
 * **Parameters:**  
   * *list:* List to sort.  
@@ -155,7 +155,7 @@ where list = [56,6,48]
 Expected value of list is [6,48,56].
   
   
-##Splice  
+## Splice  
 * **Description:** Adds and/or removes values to/from a list.  
 * **Parameters:**  
   * *list:* List to splice.  
@@ -167,9 +167,4 @@ result = list.Splice(list1, 1, 3, [2.2, 3.3])
 where list1 = [10, 20, 30, 40, 50]
 Expected value of result is [10, 2.2, 3.2, 50]. New values were added where the values were removed.
   
-  
-##_flattenDeep  
-* **Description:** undefined  
-* **Parameters:**  
-  * *list:* undefined  
   

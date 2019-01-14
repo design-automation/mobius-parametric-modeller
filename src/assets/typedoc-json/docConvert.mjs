@@ -39,6 +39,7 @@ for (const mod of doc.children) {
     const moduleDoc = {};
     for (const func of mod.children) {
         // console.log(func);
+        if (func.name.substring(0, 1) === '_') { continue; }
         const fn = {};
         fn['name'] = func.name;
         fn['module'] = modName;
@@ -95,13 +96,13 @@ for (const modName in docs) {
     if (!docs[modName]) { continue; }
     const mod = docs[modName];
     // Module name
-    let mdString = `#${modName.toUpperCase()}    \n\n`;
+    let mdString = `# ${modName.toUpperCase()}    \n\n`;
     for (const funcName in mod) {
         if (!mod[funcName]) { continue; }
 
         const func = mod[funcName];
 
-        mdString += `##${func.name}  \n`;
+        mdString += `## ${func.name}  \n`;
         mdString += `* **Description:** ${func.description}  \n`;
         if (func.parameters && func.parameters.length > 0) {
             mdString += `* **Parameters:**  \n`;

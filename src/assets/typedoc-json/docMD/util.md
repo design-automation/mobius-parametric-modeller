@@ -1,6 +1,6 @@
-#UTIL    
+# UTIL    
 
-##ExportData  
+## ExportData  
 * **Description:** Export data from the model as a file.
 This will result in a popup in your browser, asking you to save the filel.  
 * **Parameters:**  
@@ -12,7 +12,7 @@ util.ExportData ('my_model.obj', obj)
 Exports all the data in the model as an OBJ.
   
   
-##ImportData  
+## ImportData  
 * **Description:** Imports data into the model.
 In order to get the model data from a file, you need to define the File or URL parameter
 in the Start node of the flowchart.  

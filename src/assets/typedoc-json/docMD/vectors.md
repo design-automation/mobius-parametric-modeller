@@ -1,129 +1,129 @@
-#VECTORS    
+# VECTORS    
 
-##dist  
+## dist  
 * **Description:** undefined  
 * **Parameters:**  
   * *p1:* undefined  
   * *p2:* undefined  
   
-##interpByLen  
+## interpByLen  
 * **Description:** undefined  
 * **Parameters:**  
   * *pt1:* undefined  
   * *pt2:* undefined  
   * *len:* undefined  
   
-##interpByNum  
+## interpByNum  
 * **Description:** Create new points between two points.  
 * **Parameters:**  
   * *pt1:* undefined  
   * *pt2:* undefined  
   * *num_points:* undefined  
   
-##newellNorm  
+## newellNorm  
 * **Description:** Finds the normal to a set of points using Newell's method  
 * **Parameters:**  
   * *pts:* undefined  
   
-##vecAdd  
+## vecAdd  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   * *norm:* undefined  
   
-##vecAng  
+## vecAng  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   
-##vecAng2  
+## vecAng2  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   * *n:* undefined  
   
-##vecCodir  
+## vecCodir  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   
-##vecCross  
+## vecCross  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   * *norm:* undefined  
   
-##vecDiv  
+## vecDiv  
 * **Description:** undefined  
 * **Parameters:**  
   * *vec:* undefined  
   * *divisor:* undefined  
   
-##vecDot  
+## vecDot  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   
-##vecEqual  
+## vecEqual  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   * *tol:* undefined  
   
-##vecFromTo  
+## vecFromTo  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   
-##vecLen  
+## vecLen  
 * **Description:** undefined  
 * **Parameters:**  
   * *v:* undefined  
   
-##vecMakeOrtho  
+## vecMakeOrtho  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   
-##vecMult  
+## vecMult  
 * **Description:** undefined  
 * **Parameters:**  
   * *vec:* undefined  
   * *multiplier:* undefined  
   
-##vecNorm  
+## vecNorm  
 * **Description:** undefined  
 * **Parameters:**  
   * *v:* undefined  
   
-##vecRev  
+## vecRev  
 * **Description:** undefined  
 * **Parameters:**  
   * *v:* undefined  
   
-##vecSetLen  
+## vecSetLen  
 * **Description:** undefined  
 * **Parameters:**  
   * *v:* undefined  
   * *len:* undefined  
   
-##vecSub  
+## vecSub  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   * *norm:* undefined  
   
-##vecSum  
+## vecSum  
 * **Description:** undefined  
 * **Parameters:**  
   * *vecs:* undefined  

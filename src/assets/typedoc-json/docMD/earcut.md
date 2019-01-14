@@ -1,33 +1,33 @@
-#EARCUT    
+# EARCUT    
 
-##Node  
+## Node  
 * **Description:** undefined  
 * **Parameters:**  
   * *i:* undefined  
   * *x:* undefined  
   * *y:* undefined  
   
-##area  
+## area  
 * **Description:** undefined  
 * **Parameters:**  
   * *p:* undefined  
   * *q:* undefined  
   * *r:* undefined  
   
-##compareX  
+## compareX  
 * **Description:** undefined  
 * **Parameters:**  
   * *a:* undefined  
   * *b:* undefined  
   
-##cureLocalIntersections  
+## cureLocalIntersections  
 * **Description:** undefined  
 * **Parameters:**  
   * *start:* undefined  
   * *triangles:* undefined  
   * *dim:* undefined  
   
-##earcutLinked  
+## earcutLinked  
 * **Description:** undefined  
 * **Parameters:**  
   * *ear:* undefined  
@@ -38,13 +38,13 @@
   * *invSize:* undefined  
   * *pass:* undefined  
   
-##eliminateHole  
+## eliminateHole  
 * **Description:** undefined  
 * **Parameters:**  
   * *hole:* undefined  
   * *outerNode:* undefined  
   
-##eliminateHoles  
+## eliminateHoles  
 * **Description:** undefined  
 * **Parameters:**  
   * *data:* undefined  
@@ -52,30 +52,30 @@
   * *outerNode:* undefined  
   * *dim:* undefined  
   
-##equals  
+## equals  
 * **Description:** undefined  
 * **Parameters:**  
   * *p1:* undefined  
   * *p2:* undefined  
   
-##filterPoints  
+## filterPoints  
 * **Description:** undefined  
 * **Parameters:**  
   * *start:* undefined  
   * *end:* undefined  
   
-##findHoleBridge  
+## findHoleBridge  
 * **Description:** undefined  
 * **Parameters:**  
   * *hole:* undefined  
   * *outerNode:* undefined  
   
-##getLeftmost  
+## getLeftmost  
 * **Description:** undefined  
 * **Parameters:**  
   * *start:* undefined  
   
-##indexCurve  
+## indexCurve  
 * **Description:** undefined  
 * **Parameters:**  
   * *start:* undefined  
@@ -83,7 +83,7 @@
   * *minY:* undefined  
   * *invSize:* undefined  
   
-##insertNode  
+## insertNode  
 * **Description:** undefined  
 * **Parameters:**  
   * *i:* undefined  
@@ -91,7 +91,7 @@
   * *y:* undefined  
   * *last:* undefined  
   
-##intersects  
+## intersects  
 * **Description:** undefined  
 * **Parameters:**  
   * *p1:* undefined  
@@ -99,18 +99,18 @@
   * *p2:* undefined  
   * *q2:* undefined  
   
-##intersectsPolygon  
+## intersectsPolygon  
 * **Description:** undefined  
 * **Parameters:**  
   * *a:* undefined  
   * *b:* undefined  
   
-##isEar  
+## isEar  
 * **Description:** undefined  
 * **Parameters:**  
   * *ear:* undefined  
   
-##isEarHashed  
+## isEarHashed  
 * **Description:** undefined  
 * **Parameters:**  
   * *ear:* undefined  
@@ -118,13 +118,13 @@
   * *minY:* undefined  
   * *invSize:* undefined  
   
-##isValidDiagonal  
+## isValidDiagonal  
 * **Description:** undefined  
 * **Parameters:**  
   * *a:* undefined  
   * *b:* undefined  
   
-##linkedList  
+## linkedList  
 * **Description:** undefined  
 * **Parameters:**  
   * *data:* undefined  
@@ -133,19 +133,19 @@
   * *dim:* undefined  
   * *clockwise:* undefined  
   
-##locallyInside  
+## locallyInside  
 * **Description:** undefined  
 * **Parameters:**  
   * *a:* undefined  
   * *b:* undefined  
   
-##middleInside  
+## middleInside  
 * **Description:** undefined  
 * **Parameters:**  
   * *a:* undefined  
   * *b:* undefined  
   
-##pointInTriangle  
+## pointInTriangle  
 * **Description:** undefined  
 * **Parameters:**  
   * *ax:* undefined  
@@ -157,12 +157,12 @@
   * *px:* undefined  
   * *py:* undefined  
   
-##removeNode  
+## removeNode  
 * **Description:** undefined  
 * **Parameters:**  
   * *p:* undefined  
   
-##signedArea  
+## signedArea  
 * **Description:** undefined  
 * **Parameters:**  
   * *data:* undefined  
@@ -170,12 +170,12 @@
   * *end:* undefined  
   * *dim:* undefined  
   
-##sortLinked  
+## sortLinked  
 * **Description:** undefined  
 * **Parameters:**  
   * *list:* undefined  
   
-##splitEarcut  
+## splitEarcut  
 * **Description:** undefined  
 * **Parameters:**  
   * *start:* undefined  
@@ -185,13 +185,13 @@
   * *minY:* undefined  
   * *invSize:* undefined  
   
-##splitPolygon  
+## splitPolygon  
 * **Description:** undefined  
 * **Parameters:**  
   * *a:* undefined  
   * *b:* undefined  
   
-##zOrder  
+## zOrder  
 * **Description:** undefined  
 * **Parameters:**  
   * *x:* undefined  

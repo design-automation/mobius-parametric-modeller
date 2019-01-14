@@ -1,6 +1,6 @@
-#QUERY    
+# QUERY    
 
-##Count  
+## Count  
 * **Description:** Returns the number of entities based on a query expression.
 The query expression should use the following format: #@name == value,
 where 'name' is the attribute name, and 'value' is the attribute value.
@@ -19,7 +19,7 @@ num_ents = query.Count(positions, polyline1, #@xyz[2]>10)
 Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
   
   
-##Get  
+## Get  
 * **Description:** Returns a list of entities based on a query expression.
 The query expression should use the following format: #@name == value,
 where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
@@ -38,7 +38,7 @@ positions = query.Get(positions, polyline1, #@xyz[2]>10)
 Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
   
   
-##IsClosed  
+## IsClosed  
 * **Description:** Checks if polyline(s) or wire(s) are closed.  
 * **Parameters:**  
   * *lines:* Polyline(s) or wire(s).  
@@ -48,7 +48,7 @@ mod.IsClosed([polyline1,polyline2,polyline3])
 Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
   
   
-##Neighbours  
+## Neighbours  
 * **Description:** Returns a list of welded neighbours of any entity  
 * **Parameters:**  
   * *select:* Enum, select the types of neighbours to return  
@@ -59,7 +59,7 @@ mod.Neighbours([polyline1,polyline2,polyline3])
 Returns list of entities that are welded to polyline1 and polyline2.
   
   
-##Sort  
+## Sort  
 * **Description:** Sorts entities based on a sort expression.
 The sort expression should use the following format: #@name, where 'name' is the attribute name.
 Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
@@ -73,45 +73,4 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
 sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
 Returns a list of three positions, sorted according to the descending z value.
   
-  
-##_IsPlanar  
-* **Description:** Checks if a wire, polyline, face, or polygon is planar.  
-* **Parameters:**  
-  * *entities:* Wire, polyline, face, or polygon.  
-  * *tolerance:* undefined  
-* **Returns:** Boolean or list of boolean in input sequence of lines.  
-* **Examples:**  
-mod.IsPlanar([polyline1,polyline2,polyline3])  
-Returns list [true,true,false] if polyline1 and polyline2 are planar but polyline3 is not planar.
-  
-  
-##_convertSelectToEEntTypeStr  
-* **Description:** undefined  
-* **Parameters:**  
-  * *select:* undefined  
-  
-##_get  
-* **Description:** undefined  
-* **Parameters:**  
-  * *select_ent_types:* undefined  
-  * *ents_arr:* undefined  
-  * *query_expr:* undefined  
-  
-##_isClosed  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  
-##_neighbours  
-* **Description:** undefined  
-* **Parameters:**  
-  * *select_ent_types:* undefined  
-  * *ents_arr:* undefined  
-  
-##_sort  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *sort_expr:* undefined  
-  * *method:* undefined  
   

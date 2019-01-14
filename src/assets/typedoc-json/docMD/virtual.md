@@ -1,18 +1,18 @@
-#VIRTUAL    
+# VIRTUAL    
 
-##GetPlane  
+## GetPlane  
 * **Description:** Returns a plane from a set of positions.  
 * **Parameters:**  
   * *entities:* Any entities  
 * **Returns:** The plane.  
   
-##GetRay  
+## GetRay  
 * **Description:** Returns a plane of a face.  
 * **Parameters:**  
   * *edge:* The id of an edge  
 * **Returns:** The face plane.  
   
-##Plane  
+## Plane  
 * **Description:** Creates a plane, centered at the origin.
 A plane is define by a list of three lists, as folows: [origin, x_vector, y_vector].  
 * **Parameters:**  
@@ -25,7 +25,7 @@ virtual.Plane ([1,2,3],[4,3,2],[3,3,9])
 Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
   
   
-##Ray  
+## Ray  
 * **Description:** Creates a ray, centered at the origin.
 A ray is defined by a list of two lists, as follows: [origin, direction_vector].  
 * **Parameters:**  
@@ -38,7 +38,7 @@ Creates a ray from [1,2,3] with the vector [4,3,2].
 
   
   
-##RayFromPlane  
+## RayFromPlane  
 * **Description:** Create a ray, from a plane.
 The direction will be along the z axis.
 A plane is define by a list of three lists, as folows: [origin, x_vector, y_vector].
@@ -47,7 +47,7 @@ A ray is defined by a list of two lists, as follows: [origin, direction_vector].
   * *plane:* Plane or list of planes.  
 * **Returns:** Ray or list of rays.  
   
-##VisPlane  
+## VisPlane  
 * **Description:** Visualises a plane by adding geometry to the model.  
 * **Parameters:**  
   * *plane:* A list of lists  
@@ -58,7 +58,7 @@ plane1 = virtual.visPlane(position1, vector1, [0,1,0])
 Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
   
   
-##VisRay  
+## VisRay  
 * **Description:** Visualises a ray by adding geometry to the model.  
 * **Parameters:**  
   * *ray:* A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]  
@@ -67,19 +67,4 @@ Creates a plane with position1 on it and normal = cross product of vector1 with 
 * **Examples:**  
 ray1 = virtual.visRay([[1,2,3],[0,0,1]])
   
-  
-##_getPlane  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  
-##_getRay  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  
-##_rayFromPlane  
-* **Description:** undefined  
-* **Parameters:**  
-  * *planes:* undefined  
   

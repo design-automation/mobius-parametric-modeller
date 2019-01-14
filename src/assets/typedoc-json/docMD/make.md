@@ -1,6 +1,6 @@
-#MAKE    
+# MAKE    
 
-##Collection  
+## Collection  
 * **Description:** Adds a new collection to the model.  
 * **Parameters:**  
   * *parent_coll:* Collection  
@@ -11,7 +11,7 @@ collection1 = make.Collection([point1,polyine1,polygon1])
 Creates a collection containing point1, polyline1, polygon1.
   
   
-##Copy  
+## Copy  
 * **Description:** Adds a new copy of specified entities to the model.  
 * **Parameters:**  
   * *entities:* Position, point, polyline, polygon, collection to be copied.  
@@ -22,7 +22,7 @@ copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes
 Creates a list containing a copy of the entities in sequence of input.
   
   
-##Divide  
+## Divide  
 * **Description:** Divides edge, wire or polyline by length or by number of segments.
 If object is not exact multiple of length, length of last segment will be the remainder.  
 * **Parameters:**  
@@ -37,7 +37,7 @@ segments2 = make.Divide(edge1, 5, by_length)
 If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
   
   
-##Extrude  
+## Extrude  
 * **Description:** Extrudes geometry by distance (in default direction = z-axis) or by vector.
 - Extrusion of location produces a line;
 - Extrusion of line produces a polygon;
@@ -55,7 +55,7 @@ extrusion2 = make.Extrude(polygon1, [0,5,0], 1)
 Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
   
   
-##Join  
+## Join  
 * **Description:** Joins polylines to polylines or polygons to polygons.  
 * **Parameters:**  
   * *geometry:* Polylines or polygons.  
@@ -65,7 +65,7 @@ joined1 = make.Join([polyline1,polyline2])
 Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
   
   
-##Loft  
+## Loft  
 * **Description:** Lofts between edges.  
 * **Parameters:**  
   * *entities:* Edges (or wires, polylines or polygons with the same number of edges).  
@@ -76,7 +76,7 @@ surface1 = make.Loft([polyline1,polyline2,polyline3], closed)
 Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
   
   
-##Point  
+## Point  
 * **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
 * **Parameters:**  
   * *positions:* Position of point.  
@@ -85,7 +85,7 @@ Creates a list of polygons lofting between polyline1, polyline2, polyline3, and 
 point1 = make.Point(position1)  
 Creates a point at position1.  
   
-##Polygon  
+## Polygon  
 * **Description:** Adds a new polygon to the model.  
 * **Parameters:**  
   * *positions:* List of positions.  
@@ -95,7 +95,7 @@ polygon1 = make.Polygon([position1,position2,position3])
 Creates a polygon with vertices position1, position2, position3 in sequence.
   
   
-##Polyline  
+## Polyline  
 * **Description:** Adds a new polyline to the model.  
 * **Parameters:**  
   * *positions:* List of positions.  
@@ -109,7 +109,7 @@ Creates a closed polyline with vertices position1, position2, position3 in seque
 ](mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/polyline_example.mob
 )  
   
-##Position  
+## Position  
 * **Description:** Adds a new position to the model.  
 * **Parameters:**  
   * *coords:* XYZ coordinates as a list of three numbers.  
@@ -119,7 +119,7 @@ position1 = make.Position([1,2,3])
 Creates a position with coordinates x=1, y=2, z=3.
   
   
-##Unweld  
+## Unweld  
 * **Description:** Unweld vertices so that they do not share positions.
 For the vertices of the specified entities, if they share positions with other entities in the model,
 then those positions will be replaced with new positions.
@@ -132,70 +132,4 @@ That is, the vertices within the set of specified entities are not unwelded.
 mod.Unweld(polyline1)  
 Unwelds polyline1 from all ther entities that shares the same position.
   
-  
-##_collection  
-* **Description:** undefined  
-* **Parameters:**  
-  * *parent_index:* undefined  
-  * *ents_arr:* undefined  
-  
-##_copyGeom  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *copy_attributes:* undefined  
-  
-##_copyGeomPosis  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *copy_attributes:* undefined  
-  
-##_divide  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *divisor:* undefined  
-  * *method:* undefined  
-  
-##_divideEdge  
-* **Description:** undefined  
-* **Parameters:**  
-  * *edge_i:* undefined  
-  * *divisor:* undefined  
-  * *method:* undefined  
-  
-##_extrude  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *distance:* undefined  
-  * *divisions:* undefined  
-  
-##_loft  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *method:* undefined  
-  
-##_point  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  
-##_polygon  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  
-##_polyline  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
-  * *close:* undefined  
-  
-##_position  
-* **Description:** undefined  
-* **Parameters:**  
-  * *coords:* undefined  
   

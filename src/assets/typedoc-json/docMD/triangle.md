@@ -1,13 +1,13 @@
-#TRIANGLE    
+# TRIANGLE    
 
-##area  
+## area  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  
   * *v2:* undefined  
   * *v3:* undefined  
   
-##normal  
+## normal  
 * **Description:** undefined  
 * **Parameters:**  
   * *v1:* undefined  

@@ -1,6 +1,6 @@
-#MODIFY    
+# MODIFY    
 
-##Close  
+## Close  
 * **Description:** Closes polyline(s) if open.  
 * **Parameters:**  
   * *lines:* Polyline(s).  
@@ -10,7 +10,7 @@ modify.Close([polyline1,polyline2,...])
 If open, polylines are changed to closed; if already closed, nothing happens.
   
   
-##Delete  
+## Delete  
 * **Description:** Deletes entities.  
 * **Parameters:**  
   * *entities:* Position, point, polyline, polygon, collection. Can be a list.  
@@ -20,7 +20,7 @@ modify.Delete(polygon1)
 Deletes polygon1 from the model.
   
   
-##Mirror  
+## Mirror  
 * **Description:** Mirrors entities across plane.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
@@ -32,7 +32,7 @@ modify.Mirror(polygon1, plane1)
 Mirrors polygon1 across plane1.
   
   
-##Move  
+## Move  
 * **Description:** Moves entities by vector.  
 * **Parameters:**  
   * *entities:* Position, vertex, edge, wire, face, point, polyline, polygon, collection.  
@@ -43,7 +43,7 @@ modify.Move(position1, [1,1,1])
 Moves position1 by [1,1,1].
   
   
-##Promote  
+## Promote  
 * **Description:** Promotes or demotes an attribute from one geometry level to another.  
 * **Parameters:**  
   * *attrib_name:* Attribute name to be promoted or demoted.  
@@ -55,7 +55,7 @@ Moves position1 by [1,1,1].
 promote1 = modify.Promote (colour, positions, faces, sum)
   
   
-##Reverse  
+## Reverse  
 * **Description:** Reverses direction of entities.  
 * **Parameters:**  
   * *entities:* Wire, face, polyline, polygon.  
@@ -67,7 +67,7 @@ modify.Reverse(polyline1)
 Reverses the order of vertices to reverse the direction of the polyline.
   
   
-##Rotate  
+## Rotate  
 * **Description:** Rotates entities on plane by angle.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
@@ -80,7 +80,7 @@ modify.Rotate(polyline1, plane1, PI)
 Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
   
   
-##Scale  
+## Scale  
 * **Description:** Scales entities on plane by factor.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
@@ -92,7 +92,7 @@ modify.Scale(entities, plane1, 0.5)
 Scales entities by 0.5 on plane1.
   
   
-##Weld  
+## Weld  
 * **Description:** Welds entities together.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
@@ -102,7 +102,7 @@ modify.Weld([polyline1,polyline2])
 Welds both polyline1 and polyline2 together. Entities must be of the same type.
   
   
-##XForm  
+## XForm  
 * **Description:** Transforms entities from one construction plane to another.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
@@ -113,9 +113,4 @@ Welds both polyline1 and polyline2 together. Entities must be of the same type.
 modify.XForm(polygon1, plane1, plane2)  
 Transforms polygon1 from plane1 to plane2.
   
-  
-##_close  
-* **Description:** undefined  
-* **Parameters:**  
-  * *ents_arr:* undefined  
   

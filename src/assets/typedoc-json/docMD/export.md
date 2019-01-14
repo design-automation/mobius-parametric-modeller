@@ -1,6 +1,6 @@
-#EXPORT    
+# EXPORT    
 
-##exportObj  
+## exportObj  
 * **Description:** Export to obj  
 * **Parameters:**  
   * *model:* undefined  

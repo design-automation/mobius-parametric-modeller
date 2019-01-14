@@ -1,6 +1,6 @@
-#DOWNLOAD    
+# DOWNLOAD    
 
-##download  
+## download  
 * **Description:** Download a file.  
 * **Parameters:**  
   * *data:* undefined  

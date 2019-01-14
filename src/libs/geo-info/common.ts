@@ -1,5 +1,14 @@
 import { GIAttribMap } from './GIAttribMap';
 
+// some constants
+export const XYPLANE: TPlane = [[0, 0, 0], [1, 0, 0], [0, 1, 0]];
+export const YZPLANE: TPlane = [[0, 0, 0], [0, 1, 0], [0, 0, 1]];
+export const ZXPLANE: TPlane = [[0, 0, 0], [0, 0, 1], [1, 0, 0]];
+
+export const YXPLANE: TPlane = [[0, 0, 0], [0, 1, 0], [1, 0, 0]];
+export const ZYPLANE: TPlane = [[0, 0, 0], [0, 0, 1], [0, 1, 0]];
+export const XZPLANE: TPlane = [[0, 0, 0], [1, 0, 0], [0, 0, 1]];
+
 // EEntType and an index
 export type TEntTypeIdx = [EEntType, number];
 

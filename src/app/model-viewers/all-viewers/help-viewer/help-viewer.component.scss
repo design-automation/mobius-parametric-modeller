@@ -87,3 +87,16 @@ $ln-height: $fsize2 + 3px;
         }
     }
 }
+
+.hyperlink{
+    color: $color1;
+    :link {
+        color: $color1;
+    }
+    :visited {
+        color: $color2;
+    }
+    :hover {
+        color: $color3;
+    }
+}

@@ -26,6 +26,7 @@ export class DataService {
     private static _focusedInput: any;
 
     private static _splitVal = 60;
+    private static _flowchartSplitUpdate = false;
 
     private static _copiedProd: IProcedure[];
     private static _copiedType: IProcedure[];
@@ -84,6 +85,9 @@ export class DataService {
 
     get splitVal() {return DataService._splitVal; }
     set splitVal(num: number) {DataService._splitVal = num; }
+
+    get splitUpdate() {return DataService._flowchartSplitUpdate; }
+    set splitUpdate(check: boolean) {DataService._flowchartSplitUpdate = check; }
 
     get consoleScroll() {return DataService._consoleScroll; }
     set consoleScroll(num: number) {DataService._consoleScroll = num; }

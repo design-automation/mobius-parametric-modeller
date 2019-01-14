@@ -1,16 +1,17 @@
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { idBreak, idMake, idsBreak } from '@libs/geo-info/id';
+import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
-import { Normal, Centroid, _normal } from './calc';
+import { _normal } from './calc';
 
 // ================================================================================================
 /**
  * Creates a ray, centered at the origin.
+ * A ray is defined by a list of two lists, as follows: [origin, direction_vector].
  * @param __model__
- * @param origin Origin of Ray: Position/Vertex/Point/Coordinate
- * @param dir_vec Direction of Ray: Vector/List of three numbers
+ * @param origin Origin of ray: Position, Vertex, Point, or a list of three numbers
+ * @param dir_vec Direction of Ray: Vector, or list of three numbers
  * @returns [origin, vector]: [[x,y,z],[x',y',z']]
  * @example virtual.Ray([1,2,3],[4,3,2])
  * @example_info Creates a ray from [1,2,3] with the vector [4,3,2].
@@ -36,10 +37,11 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
 // ================================================================================================
 /**
  * Creates a plane, centered at the origin.
+ * A plane is define by a list of three lists, as folows: [origin, x_vector, y_vector].
  * @param __model__
- * @param origin Origin of Plane: Position/Vertex/Point/Coordinate
- * @param x_vec First plane determining vector: Vector/List of three numbers
- * @param xy_vec Second plane determining vector: Vector/List of three numbers
+ * @param origin Origin of plane: Position, Vertex, Point, or a list of three numbers
+ * @param x_vec X vector of the plane: List of three numbers
+ * @param xy_vec A vector in the xy plane (parallel to teh x vector): List of three numbers
  * @returns [origin, vector, vector]: [[x,y,z],[x',y',z'],[x",y",z"]]
  * @example virtual.Plane ([1,2,3],[4,3,2],[3,3,9])
  * @example_info Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
@@ -64,31 +66,53 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
     ];
 }
 // ================================================================================================
+function _rayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
+    if (getArrDepth(planes) === 2) {
+        const plane: TPlane = planes as TPlane;
+        return [plane[0], vecCross(plane[1], plane[2])];
+    } else {
+        return (planes as TPlane[]).map( plane => _rayFromPlane(plane)) as TRay[];
+    }
+}
 /**
  * Create a ray, from a plane.
- * The direction will be along the z axis
+ * The direction will be along the z axis.
+ * A plane is define by a list of three lists, as folows: [origin, x_vector, y_vector].
+ * A ray is defined by a list of two lists, as follows: [origin, direction_vector].
  * @param __model__
- * @param plane Plane/list of list of three numbers: [origin, vector, vector]
- * @returns Ray Normal to the plane at plane origin [origin, vector]: [[x,y,z],[x',y',z']]
+ * @param plane Plane or list of planes.
+ * @returns Ray or list of rays.
  */
-export function RayFromPlane(plane: TPlane): TRay {
+export function RayFromPlane(plane: TPlane|TPlane[]): TRay|TRay[] {
     // --- Error Check ---
-    checkCommTypes('virtual.RayFromPlane', 'origin', origin, ['isOrigin']);
+    checkCommTypes('virtual.RayFromPlane', 'origin', plane, ['isPlane']);
+    // TODO allow list of planes
     // --- Error Check ---
-    return [plane[0], vecCross(plane[1], plane[2])];
+    return _rayFromPlane(plane);
 }
 // ================================================================================================
+function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|TRay[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const ent_arr: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        const xyzs: Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+        return [xyzs[0], vecSub(xyzs[1], xyzs[0])];
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map( ent_arr => _getRay(__model__, ent_arr)) as TRay[];
+    }
+}
 /**
  * Returns a plane of a face.
  * @param __model__
- * @param edge The id of an face
+ * @param edge The id of an edge
  * @returns The face plane.
  */
-export function GetRay(__model__: GIModel, edge: TId): TPlane {
+export function GetRay(__model__: GIModel, edge: TId|TId[]): TRay|TRay[] {
     // --- Error Check ---
-    // checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']);
+    const ents_arr = checkIDs('virtual.GetRay', 'edge', edge, ['isID'], ['EDGE']) as TEntTypeIdx|TEntTypeIdx[]; 
+    // TODO allow list of edges
     // --- Error Check ---
-    throw new Error('Not implemented');
+    return _getRay(__model__, ents_arr);
 }
 // ================================================================================================
 function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
@@ -115,14 +139,10 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * @returns The plane.
  */
 export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
-    if (!Array.isArray(entities)) {
-        ents_arr = idBreak(entities as TId);
-    } else {
-        ents_arr = idsBreak(entities as TId[]);
-    }
+    const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']);
+    // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']); // TODO should match _normal(), 
+    // TODO ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
     return _getPlane(__model__, ents_arr);
 }
@@ -152,7 +172,10 @@ export function VisRay(__model__: GIModel, ray: TRay, scale: number): TId[] {
     __model__.attribs.add.setPosiCoords(end_posi_i, end);
     const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
     // return the geometry IDs
-    return [idMake(EEntType.POINT, point_i), idMake(EEntType.PLINE, pline_i)];
+    return [
+        idsMake([EEntType.POINT, point_i]),
+        idsMake([EEntType.PLINE, pline_i])
+    ] as TId[];
 }
 // ================================================================================================
 /**
@@ -204,9 +227,10 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
     const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
     // return the geometry IDs
     return [
-        idMake(EEntType.POINT, point_i),
-        idMake(EEntType.PLINE, x_pline_i), idMake(EEntType.PLINE, y_pline_i),
-        idMake(EEntType.PLINE, plane_i)
-    ];
+        idsMake([EEntType.POINT, point_i]),
+        idsMake([EEntType.PLINE, x_pline_i]),
+        idsMake([EEntType.PLINE, y_pline_i]),
+        idsMake([EEntType.PLINE, plane_i])
+    ] as TId[];
 }
 // ================================================================================================

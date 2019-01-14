@@ -36,31 +36,54 @@ export class GIGeomAdd {
         const num_colls: number = this._geom_arrays.dn_colls_objs.length;
         // Add vertices to model
         const new_verts: TVert[] = geom_data.vertices.map(p => p + num_posis as TVert);
-        this._geom_arrays.dn_verts_posis.push( ...new_verts );
+        for (const v of new_verts) {
+            this._geom_arrays.dn_verts_posis.push( v );
+        }
         // Add triangles to model
         const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(v => v + num_verts) as TTri);
-        this._geom_arrays.dn_tris_verts.push( ...new_triangles );
+        // this._geom_arrays.dn_tris_verts.push( ...new_triangles );
+        for (const v of new_triangles) {
+            this._geom_arrays.dn_tris_verts.push( v );
+        }
         // Add edges to model
         const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
-        this._geom_arrays.dn_edges_verts.push( ...new_edges );
+        // this._geom_arrays.dn_edges_verts.push( ...new_edges );
+        for (const v of new_edges) {
+            this._geom_arrays.dn_edges_verts.push( v );
+        }
         // Add wires to model
         const new_wires: TWire[] = geom_data.wires.map(w => w.map(e => e + num_edges) as TWire);
-        this._geom_arrays.dn_wires_edges.push( ...new_wires );
+        // this._geom_arrays.dn_wires_edges.push( ...new_wires );
+        for (const v of new_wires) {
+            this._geom_arrays.dn_wires_edges.push( v );
+        }
         // Add faces to model
         const new_faces: TFace[] = geom_data.faces.map(f => [
             f[0].map( w => w + num_wires),
             f[1].map( t => t + num_tris)
         ] as TFace);
-        this._geom_arrays.dn_faces_wirestris.push( ...new_faces );
+        // this._geom_arrays.dn_faces_wirestris.push( ...new_faces );
+        for (const v of new_faces) {
+            this._geom_arrays.dn_faces_wirestris.push( v );
+        }
         // Add points to model
         const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
-        this._geom_arrays.dn_points_verts.push( ...new_points );
+        // this._geom_arrays.dn_points_verts.push( ...new_points );
+        for (const v of new_points) {
+            this._geom_arrays.dn_points_verts.push( v );
+        }
         // Add lines to model
         const new_plines: TPline[] = geom_data.polylines.map(w => w + num_wires as TPline);
-        this._geom_arrays.dn_plines_wires.push( ...new_plines );
+        // this._geom_arrays.dn_plines_wires.push( ...new_plines );
+        for (const v of new_plines) {
+            this._geom_arrays.dn_plines_wires.push( v );
+        }
         // Add pgons to model
         const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
-        this._geom_arrays.dn_pgons_faces.push( ...new_pgons );
+        // this._geom_arrays.dn_pgons_faces.push( ...new_pgons );
+        for (const v of new_pgons) {
+            this._geom_arrays.dn_pgons_faces.push( v );
+        }
         // Add collections to model
         const new_colls: TColl[] = geom_data.collections.map(c => [
             c[0] === -1 ? -1 : c[0] + num_colls,
@@ -68,14 +91,25 @@ export class GIGeomAdd {
             c[2].map( line => line + num_plines),
             c[3].map( pgon => pgon + num_pgons)
         ] as TColl);
-        this._geom_arrays.dn_colls_objs.push( ...new_colls );
+        // this._geom_arrays.dn_colls_objs.push( ...new_colls );
+        for (const v of new_colls) {
+            this._geom_arrays.dn_colls_objs.push( v );
+        }
         // Update the reverse arrays
         this._updateRevArrays();
         // update the positions array
         this._geom_arrays.num_posis += geom_data.num_positions;
         // return
         let num_new_posis = 0;
-        if (new_verts.length > 0) { num_new_posis = Math.max(...new_verts); }
+        // if (new_verts.length > 0) { num_new_posis = Math.max(...new_verts); }
+        if (new_verts.length > 0) { new_verts.map(val => {
+            if (val > num_new_posis) {
+                num_new_posis = val;
+            }
+        }); }
+
+
+
         return {
             posis_i:  Array.from(Array(num_new_posis).keys()).map(k => k +  num_posis),
             points_i: Array.from(Array(new_points.length).keys()).map(k => k + num_points),

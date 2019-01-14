@@ -24,6 +24,12 @@ export const _parameterTypes = {
 
 export const _varString = `
 PI = Math.PI;
+XY = __modules__._constants.XY;
+YZ = __modules__._constants.YZ;
+ZX = __modules__._constants.ZX;
+YX = __modules__._constants.YX;
+ZY = __modules__._constants.ZY;
+XZ = __modules__._constants.XZ;
 min = Math.min;
 max = Math.max;
 pow = Math.pow;

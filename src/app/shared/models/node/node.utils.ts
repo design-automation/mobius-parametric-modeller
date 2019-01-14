@@ -156,10 +156,6 @@ export abstract class NodeUtils {
         }
         if (node.state.procedure[0]) {
             let list: IProcedure[];
-            // if (node.type === 'end' && node.state.procedure[0].type === ProcedureTypes.Return) {
-            //     node.procedure.splice( node.procedure.length - 1, 0, prod);
-            //     return;
-            // }
             if (node.state.procedure[0].parent) {
                 prod.parent = node.state.procedure[0].parent;
                 list = prod.parent.children;
@@ -172,26 +168,7 @@ export abstract class NodeUtils {
                     break;
                 }
             }
-            /*
-            if (node.state.procedure[0].children) {
-                node.state.procedure[0].children.push(prod);
-                prod.parent = node.state.procedure[0];
-            } else {
-                let list;
-                if (node.state.procedure[0].parent) {
-                    prod.parent = node.state.procedure[0].parent;
-                    list = prod.parent.children;
-                } else {
-                    list = node.procedure;
-                }
-                for (const index in list) {
-                    if (list[index].selected) {
-                        list.splice(parseInt(index, 10) + 1, 0, prod);
-                        break;
-                    }
-                }
-            }
-            */
+
         } else {
             if (node.type === 'end') {
                 node.procedure.splice( node.procedure.length - 1, 0, prod);

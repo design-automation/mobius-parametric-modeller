@@ -123,7 +123,11 @@ export class ViewGalleryComponent {
         return node.model;
     }
 
-    setSplit(e) { this.dataService.splitVal = e.sizes[1]; }
+    setSplit(event) {
+        this.dataService.splitUpdate = true;
+        this.dataService.splitVal = event.sizes[1];
+    }
+
     getSplit() { return this.dataService.splitVal; }
     getFlowchart() { return this.dataService.flowchart; }
     getActiveGallery() { return this.dataService.activeGallery; }

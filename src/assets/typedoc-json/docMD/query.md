@@ -15,8 +15,8 @@ Query expressions can be combine with either && (and) and || (or), where
   * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; list of all search entities is returned.  
 * **Returns:** Number of entities.  
 * **Examples:**  
-num_ents = query.Count(positions, polyline1, #@xyz[2]>10)  
-Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
+  * num_ents = query.Count(positions, polyline1, #@xyz[2]>10)  
+    Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
   
   
 ## Get  
@@ -34,8 +34,8 @@ Query expressions can be combined with either && (and) and || (or), where
   * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.  
 * **Returns:** List of entities whose type matches the type specified in 'select'.  
 * **Examples:**  
-positions = query.Get(positions, polyline1, #@xyz[2]>10)  
-Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
+  * positions = query.Get(positions, polyline1, #@xyz[2]>10)  
+    Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
   
   
 ## IsClosed  
@@ -44,8 +44,8 @@ Returns a list of positions defined by polyline1 where the z-coordinate is more 
   * *lines:* Polyline(s) or wire(s).  
 * **Returns:** Boolean or list of boolean in input sequence of lines.  
 * **Examples:**  
-mod.IsClosed([polyline1,polyline2,polyline3])  
-Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
+  * mod.IsClosed([polyline1,polyline2,polyline3])  
+    Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
   
   
 ## Neighbours  
@@ -55,8 +55,8 @@ Returns list [true,true,false] if polyline1 and polyline2 are closed but polylin
   * *entities:* List of entities.  
 * **Returns:** A list of welded neighbours  
 * **Examples:**  
-mod.Neighbours([polyline1,polyline2,polyline3])  
-Returns list of entities that are welded to polyline1 and polyline2.
+  * mod.Neighbours([polyline1,polyline2,polyline3])  
+    Returns list of entities that are welded to polyline1 and polyline2.
   
   
 ## Sort  
@@ -70,7 +70,7 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
   * *method:* Enum, sort descending or ascending.  
 * **Returns:** Sorted entities.  
 * **Examples:**  
-sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
-Returns a list of three positions, sorted according to the descending z value.
+  * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
+    Returns a list of three positions, sorted according to the descending z value.
   
   

@@ -21,8 +21,8 @@ A plane is define by a list of three lists, as folows: [origin, x_vector, y_vect
   * *xy_vec:* A vector in the xy plane (parallel to teh x vector): List of three numbers  
 * **Returns:** : [[x,y,z],[x',y',z'],[x",y",z"]]  
 * **Examples:**  
-virtual.Plane ([1,2,3],[4,3,2],[3,3,9])  
-Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
+  * virtual.Plane ([1,2,3],[4,3,2],[3,3,9])  
+    Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
   
   
 ## Ray  
@@ -33,8 +33,8 @@ A ray is defined by a list of two lists, as follows: [origin, direction_vector].
   * *dir_vec:* Direction of Ray: Vector, or list of three numbers  
 * **Returns:** : [[x,y,z],[x',y',z']]  
 * **Examples:**  
-virtual.Ray([1,2,3],[4,3,2])  
-Creates a ray from [1,2,3] with the vector [4,3,2].
+  * virtual.Ray([1,2,3],[4,3,2])  
+    Creates a ray from [1,2,3] with the vector [4,3,2].
 
   
   
@@ -54,8 +54,8 @@ A ray is defined by a list of two lists, as follows: [origin, direction_vector].
   * *scale:* undefined  
 * **Returns:** A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)  
 * **Examples:**  
-plane1 = virtual.visPlane(position1, vector1, [0,1,0])  
-Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
+  * plane1 = virtual.visPlane(position1, vector1, [0,1,0])  
+    Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
   
   
 ## VisRay  
@@ -65,6 +65,6 @@ Creates a plane with position1 on it and normal = cross product of vector1 with 
   * *scale:* undefined  
 * **Returns:** A points and a line representing the ray. (The point is tha start point of the ray.)  
 * **Examples:**  
-ray1 = virtual.visRay([[1,2,3],[0,0,1]])
+  * ray1 = virtual.visRay([[1,2,3],[0,0,1]])
   
   

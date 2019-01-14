@@ -32,7 +32,7 @@ export class GIAttribsThreejs {
         const coords_attrib: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
 
         // @ts-ignore
-        return coords_attrib.getEntsVals(posis_i).flat(1);
+        return coords_attrib.getEntVal(posis_i).flat(1);
         // return [].concat(...coords_attrib.getEntsVals(posis_i));
     }
     /**
@@ -46,7 +46,7 @@ export class GIAttribsThreejs {
         const verts_attrib: GIAttribMap = this._attribs_maps._v.get(attrib_name);
 
         // @ts-ignore
-        return verts_attrib.getEntsVals(verts_i).flat(1);
+        return verts_attrib.getEntVal(verts_i).flat(1);
         // return [].concat(...verts_attrib.getEntsVals(verts_i));
     }
     /**

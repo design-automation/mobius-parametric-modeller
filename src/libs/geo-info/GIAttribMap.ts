@@ -100,11 +100,11 @@ export class GIAttribMap {
         return this._map_ent_i_to_val_i.has(ent_i);
     }
     /**
-     * Sets the value for a given entity or ent_ities.
+     * Sets the value for a given entity or entities.
      * @param ent_i
      * @param val
      */
-    public setEntVal(ent_i: number|number[], val: TAttribDataTypes): void {
+    public setEntVal(ents_i: number|number[], val: TAttribDataTypes): void {
         const val_k: string | number = this._valToValkey(val);
         let val_i: number;
         if (this._map_val_k_to_val_i.has(val_k)) {
@@ -116,20 +116,52 @@ export class GIAttribMap {
             this._map_val_k_to_val_i.set(val_k, val_i);
             this._map_val_i_to_ents_i.set(val_i, []);
         }
-        const ents_i: number[] = (Array.isArray(ent_i)) ? ent_i : [ent_i] ;
+        ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         ents_i.forEach(e => this._map_ent_i_to_val_i.set(e, val_i));
         const ents_i_union: number[] = Array.from(new Set([...this._map_val_i_to_ents_i.get(val_i), ...ents_i]));
         this._map_val_i_to_ents_i.set(val_i, ents_i_union);
     }
     /**
-     * Gets the value for a given entity.
+     * Sets the indexed value for a given entity or entities.
+     * This assumes that this attribute has a data_size > 1.
+     * @param ent_i
+     * @param val
+     */
+    public setEntIdxVal(ent_i: number|number[], val_index: number, val: number|string): void {
+        const exist_value_arr: number[]|string[] = this.getEntVal(ent_i) as number[]|string[];
+        const new_value_arr: number[]|string[] = exist_value_arr.slice(); // IMPORTANT clone the array
+        new_value_arr[val_index] = val;
+        this.setEntVal(ent_i, new_value_arr);
+    }
+    /**
+     * Gets the value for a given entity, or an array of values given an array of entities.
      * Returns undefined if the entity does not exist
      * @param ent_i
      */
-    public getEntVal(ent_i: number): TAttribDataTypes {
-        const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-        if (val_i === undefined) { return undefined; }
-        return this._map_val_i_to_val.get(val_i);
+    public getEntVal(ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
+        if (!Array.isArray(ents_i)) {
+            const ent_i: number = ents_i as number;
+            const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+            if (val_i === undefined) { return undefined; }
+            return this._map_val_i_to_val.get(val_i) as TAttribDataTypes;
+        } else {
+            return ents_i.map(ent_i => this.getEntVal(ent_i)) as TAttribDataTypes[];
+        }
+    }
+    /**
+     * Gets the indexed value for a given entity.
+     * Returns undefined if the entity does not exist
+     * This assumes that this attribute has a data_size > 1.
+     * @param ent_i
+     */
+    public getEntIdxVal(ents_i: number|number[], val_index: number): number|string|number[]|string[] {
+        if (!Array.isArray(ents_i)) {
+            const ent_i: number = ents_i as number;
+            const exist_value_arr: number[]|string[] = this.getEntVal(ent_i) as number[]|string[];
+            return exist_value_arr[val_index] as number|string;
+        } else {
+            return ents_i.map(ent_i => this.getEntVal(ent_i)) as number[]|string[];
+        }
     }
     /**
      * Gets all the keys that have a given value
@@ -153,22 +185,22 @@ export class GIAttribMap {
     public getEntsWithVal(ents_i: number[]): number[] {
         return ents_i.filter(ent_i => this._map_ent_i_to_val_i.has(ent_i));
     }
-    /**
-     * Gets an array of values, given an array of entity indicies
-     */
-    public getEntsVals(ents_i: number[]): TAttribDataTypes[] {
-        const vals: TAttribDataTypes[] = [];
-        ents_i.forEach( ent_i => {
-            const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-            if (val_i === undefined) {
-                vals.push(null);
-            } else {
-                const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-                vals.push(val);
-            }
-        });
-        return vals;
-    }
+    // /**
+    //  * Gets an array of values, given an array of entity indicies
+    //  */
+    // public getEntsVals(ents_i: number[]): TAttribDataTypes[] {
+    //     const vals: TAttribDataTypes[] = [];
+    //     ents_i.forEach( ent_i => {
+    //         const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+    //         if (val_i === undefined) {
+    //             vals.push(null);
+    //         } else {
+    //             const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
+    //             vals.push(val);
+    //         }
+    //     });
+    //     return vals;
+    // }
     /**
      * Executes a query
      * @param ents_i

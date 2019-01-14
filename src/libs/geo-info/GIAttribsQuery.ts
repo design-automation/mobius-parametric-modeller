@@ -22,22 +22,25 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribValue(ent_type: EEntType, name: string, index: number): TAttribDataTypes {
+    public getAttribValue(ent_type: EEntType, name: string, ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
-        return attribs.get(name).getEntVal(index);
+        return attribs.get(name).getEntVal(ents_i);
     }
     /**
-     * Get attrib values for multiple entities
+     * Get an entity attrib indexed value
      * @param ent_type
      * @param name
      */
-    public getAttribValues(ent_type: EEntType, name: string, ents_i: number[]): TAttribDataTypes[] {
+    public getAttribIndexedValue(ent_type: EEntType, name: string, ents_i: number, value_index: number): number|string|number[]|string[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
-        return attribs.get(name).getEntsVals(ents_i);
+        const attrib: GIAttribMap = attribs.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
+        if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
+        return attrib.getEntIdxVal(ents_i, value_index) as number|string;
     }
     /**
      * Check if attribute exists
@@ -106,7 +109,7 @@ export class GIAttribsQuery {
                 }
             }
             // combine the results of the '&&' queries
-            if (query_ents_i !== null) {
+            if (query_ents_i !== null && query_ents_i.length > 0) {
                 union_query_results = Array.from(new Set([...union_query_results, ...query_ents_i]));
             }
         }
@@ -140,8 +143,8 @@ export class GIAttribsQuery {
                 if (sort.attrib_index !== undefined && data_size === 1) {
                     throw new Error('Bad sort: Attribute with index must have a size greater than 1.');
                 }
-                let val1: TAttribDataTypes = attrib.getEntVal(ent1_i);
-                let val2: TAttribDataTypes = attrib.getEntVal(ent2_i);
+                let val1: TAttribDataTypes = attrib.getEntVal(ent1_i) as TAttribDataTypes;
+                let val2: TAttribDataTypes = attrib.getEntVal(ent2_i) as TAttribDataTypes;
                 if (sort.attrib_index !== undefined && sort.attrib_index !== null) {
                     if (val1 !== undefined && val1 !== null) {
                         val1 = val1[sort.attrib_index];
@@ -182,7 +185,7 @@ export class GIAttribsQuery {
     public getAllPosisCoords(): Txyz[] {
         const posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI);
         const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
-        return coords_map.getEntsVals(posis_i) as Txyz[];
+        return coords_map.getEntVal(posis_i) as Txyz[];
     }
     /**
      * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)
@@ -200,7 +203,7 @@ export class GIAttribsQuery {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         const posis_i: number[] = verts_i.map( vert_i => this._model.geom.query.navVertToPosi(vert_i));
         const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
-        return coords_map.getEntsVals(posis_i) as Txyz[];
+        return coords_map.getEntVal(posis_i) as Txyz[];
     }
 }
 // ================================================================================================

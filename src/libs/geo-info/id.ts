@@ -15,6 +15,7 @@ export function idsMakeFromIndicies(ent_type: EEntType, idxs: number|number[]|nu
         return EEntTypeStr[ent_type as EEntType] + idx as TId;
     } else if (depth === 1) {
         const idxs_arr: number[] = idxs as number[];
+        if (idxs_arr.length === 0) { return []; } //  deal with empty array
         return idxs_arr.map( idx => idsMakeFromIndicies(ent_type, idx) ) as TId[];
     } else { // depth === 2
         const idxs_arrs: number[][] = idxs as number[][];
@@ -24,6 +25,7 @@ export function idsMakeFromIndicies(ent_type: EEntType, idxs: number|number[]|nu
 export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TId|TId[]|TId[][] {
     const depth: number = getArrDepth(ent_type_idxs);
     if (depth === 1) {
+        if (ent_type_idxs.length === 0) { return []; } //  deal with empty array
         const ent_type_idx: TEntTypeIdx = ent_type_idxs as TEntTypeIdx;
         return EEntTypeStr[ent_type_idx[0] as EEntType] + ent_type_idx[1] as TId;
     } else if (depth === 2) {

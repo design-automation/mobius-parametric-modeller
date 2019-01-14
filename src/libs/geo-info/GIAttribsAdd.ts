@@ -101,18 +101,36 @@ export class GIAttribsAdd {
     }
     /**
      * Set an entity attrib value
+     * If the attribute does not exist, then it is created.
      * @param id
      * @param name
      * @param value
      */
-    public setAttribValue(ent_type: EEntType, index: number, name: string, value: TAttribDataTypes): void {
+    public setAttribValue(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) {
             const [data_type, data_size]: [EAttribDataTypeStrs, number] = this._checkDataTypeSize(value);
             this.addAttrib(ent_type, name, data_type, data_size);
         }
-        attribs.get(name).setEntVal(index, value);
+        attribs.get(name).setEntVal(ents_i, value);
+    }
+    /**
+     * Set an entity attrib indexed value.
+     * If the attribute does not exist, it throws an error.
+     * @param id
+     * @param name
+     * @param value
+     */
+    public setAttribIndexedValue(ent_type: EEntType, ents_i: number|number[], name: string,
+            value_index: number, value: number|string): void {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: GIAttribMap = attribs.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
+        if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
+        attrib.setEntIdxVal(ents_i, value_index, value);
     }
     /**
      * Set the xyz position by index
@@ -145,7 +163,7 @@ export class GIAttribsAdd {
         // copy each attrib
         for (const attrib_name of attrib_names) {
             const attrib: GIAttribMap = attribs.get(name);
-            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i);
+            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes;
             attrib.setEntVal(to_ent_i, attrib_value);
         }
     }

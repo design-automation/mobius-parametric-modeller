@@ -79,7 +79,7 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
               ents_arr: TEntTypeIdx|TEntTypeIdx[], query_expr: TQuery): TEntTypeIdx[] {
     if (!Array.isArray(select_ent_types)) {
         const select_ent_type: EEntType = select_ent_types as EEntType;
-                // get the list of entities
+        // get the list of entities
         const found_entities_i: number[] = [];
         if (ents_arr === null || ents_arr === undefined) {
             found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type));
@@ -95,13 +95,17 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         }
         // do the query on the list of entities
         const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type, query_expr, found_entities_i);
+        if (query_result.length === 0) { return []; }
         return query_result.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
     } else {
-        const query_results: TEntTypeIdx[] = [];
+        const query_results_arr: TEntTypeIdx[] = [];
         for (const select_ent_type of select_ent_types) {
-            query_results.push(..._get(__model__, select_ent_type, ents_arr, query_expr));
+            const ent_type_query_results: TEntTypeIdx[] = _get(__model__, select_ent_type, ents_arr, query_expr);
+            for (const query_result of ent_type_query_results) {
+                query_results_arr.push(query_result);
+            }
         }
-        return query_results;
+        return query_results_arr;
     }
 }
 /**

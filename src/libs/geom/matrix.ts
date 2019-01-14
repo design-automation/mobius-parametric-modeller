@@ -86,7 +86,7 @@ export function xfromSourceTargetMatrix(source_plane: TPlane, target_plane: TPla
 function _crossVectors(v1: three.Vector3, v2: three.Vector3, norm: boolean = false): three.Vector3 {
     const v3: three.Vector3 = new three.Vector3();
     v3.crossVectors(v1, v2);
-    if (norm) {v3.normalize();}
+    if (norm) { v3.normalize(); }
     return v3;
 }
 

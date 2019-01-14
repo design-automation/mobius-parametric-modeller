@@ -1,6 +1,6 @@
 import * as dc from './doc.json';
 import * as fs from 'fs';
-const urlString = 'mobius.design-automation.net';
+const urlString = 'https://mobius.design-automation.net';
 
 function analyzeParamType(fn, paramType) {
     if (paramType.type === 'array') {
@@ -128,7 +128,7 @@ for (const modName in docs) {
         if (func.example_link) {
             mdString += `* **Example URLs:**  \n`;
             for (const ex of func.example_link) {
-                mdString += `  1. [${ex}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
+                mdString += `  1. [${ex.trim()}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
                             `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
 
             }

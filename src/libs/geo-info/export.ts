@@ -12,7 +12,7 @@ export function exportObj(model: GIModel): string {
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
+    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOUR);
     const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
     const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
     const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI);
@@ -20,7 +20,7 @@ export function exportObj(model: GIModel): string {
     // positions
     if (has_color_attrib) {
         for (const vert_i of verts_i) {
-            const color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            const color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOUR, vert_i) as TColor;
             const coord: Txyz = model.attribs.query.getVertCoords(vert_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + color.map( c => c.toString() ).join(' ') + '\n';
         }

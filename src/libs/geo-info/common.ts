@@ -104,8 +104,8 @@ export interface IAttribsMaps {
 export enum EAttribNames {
     COORDS =  'xyz',
     NORMAL =  'normal',
-    COLOR =   'color',
-    TEXTURE = 'texture',
+    COLOUR =   'rgb',
+    TEXTURE = 'uv',
     NAME = 'name'
 }
 

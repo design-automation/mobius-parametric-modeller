@@ -25,9 +25,9 @@
                 <span>{{param.name}} - </span>{{param.description}}
             </p> -->
             
-            <div class = 'ret--container'>
-                <h5 *ngIf='output.returns'>Returns:</h5>
-                <p *ngIf='output.returns'>{{output.returns}}</p>
+            <div class = 'ret--container' *ngIf='output.returns'>
+                <h5>Returns:</h5>
+                <p>{{output.returns}}</p>
             </div>
 
             <div *ngIf='output.example' class = 'exam--container'>

@@ -13421,6 +13421,7 @@ var ViewFlowchartComponent = /** @class */ (function () {
         });
     };
     ViewFlowchartComponent.prototype.convertCoord = function (pt) {
+        return pt.matrixTransform(this.canvas.getScreenCTM().inverse());
         var isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
             var ctm = this.canvas.getScreenCTM();

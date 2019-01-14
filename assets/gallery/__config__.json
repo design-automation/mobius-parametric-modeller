@@ -1,15 +1,54 @@
 {
-    "names": [
-        "box_with_holes.mob",
-        "draw_point_line_polygon.mob",
-        "geometry_with_attribs.mob",
-        "pig_head.mob",
-        "point_line_polygon_with_attribs.mob",
-        "point_line_polygon.mob",
-        "rubber_toy.mob",
-        "torus_with_holes.mob",
-        "two_polygons_with_holes.mob"
-    ],
-
-    "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/"
+    "data": [
+        {
+            "name": "Getting Started",
+            "files": [
+                "box_with_holes",
+                "geometry_with_attribs",
+                "pig_head",
+                "point_line_polygon_with_attribs",
+                "point_line_polygon",
+                "rubber_toy",
+                "torus_with_holes",
+                "two_polygons_with_holes"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/beginner/"
+        },
+        {
+            "name": "Create",
+            "files": [
+                "calc_area_normal",
+                "calc_distance_length",
+                "close_polyline",
+                "create_attribute",
+                "create_extrusion",
+                "create_grid",
+                "create_line_extrusion",
+                "create_loft",
+                "create_posi_extrusion",
+                "create_rectangle",
+                "create_arc",
+                "create_polygon",
+                "create_polyline",
+                "move_polyline"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/create/"
+        },
+        {
+            "name": "Queries",
+            "files": [
+                "query_simple"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/queries/"
+        },
+        {
+            "name": "Test",
+            "files": [
+                "box_with_holes",
+                "pig_head",
+                "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/test/"
+        }
+    ]
 }

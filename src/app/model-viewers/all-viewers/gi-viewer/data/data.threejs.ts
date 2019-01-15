@@ -17,6 +17,7 @@ export class DataThreejs {
     // interaction and selection
     public selected_geoms: Map<string, any> = new Map();
     public selected_positions: Map<string, Map<string, number>> = new Map();
+    public selected_face_edges: Map<string, Map<string, number>> = new Map();
     public _text: string;
     // text lables
     public ObjLabelMap: Map<string, any> = new Map();
@@ -151,7 +152,7 @@ export class DataThreejs {
         }
     }
 
-    public selectObjLine(ent_id: string, indices, positions, container, label = true) {
+    private initBufferLine(positions, indices: number[], colors: [number, number, number]) {
         const geom = new THREE.BufferGeometry();
         if (indices.length > 2) {
             geom.setIndex(indices);
@@ -160,16 +161,24 @@ export class DataThreejs {
         }
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        const rgb = `rgb(${colors.toString()})`;
         const mat = new THREE.LineBasicMaterial({
-            color: 0xff0000,
+            color: new THREE.Color(rgb),
             linewidth: 5,
             linecap: 'round', // ignored by WebGLRenderer
             linejoin: 'round' // ignored by WebGLRenderer
         });
-        const line = new THREE.LineSegments(geom, mat);
+        const bg = {geom, mat};
+        return bg;
+    }
+
+    public selectObjLine(ent_id: string, indices, positions, container, label = true) {
+        const bg = this.initBufferLine(positions, indices, [255, 0 , 0]);
+        const line = new THREE.LineSegments(bg.geom, bg.mat);
         this._scene.add(line);
         this.selected_geoms.set(ent_id, line.id);
         this.sceneObjsSelected.set(ent_id, line);
+
         if (label) {
             const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
             this.createLabelforObj(container, obj.entity, obj.type, ent_id);
@@ -177,18 +186,45 @@ export class DataThreejs {
         }
     }
 
-    public selectObjPoint(ent_id: string = null, point_indices, positions, container, label = true) {
+    public selectEdgeByFace(parent_ent_id: string, ent_id: string, indices, positions, container, label = true) {
+        const bg = this.initBufferLine(positions, indices, [255, 0 , 0]);
+        if (this.selected_face_edges.get(parent_ent_id) === undefined) {
+            this.selected_face_edges.set(parent_ent_id, new Map());
+        }
+
+        const line = new THREE.LineSegments(bg.geom, bg.mat);
+        this._scene.add(line);
+        this.selected_face_edges.get(parent_ent_id).set(ent_id, line.id);
+
+        console.log('this.selected_face_edges', Array.from(this.selected_face_edges));
+
+        if (label) {
+            const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
+            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+            this.ObjLabelMap.set(ent_id, obj);
+        }
+    }
+
+    private initBufferPoint(positions, point_indices = null, color: [number, number, number]) {
         const geom = new THREE.BufferGeometry();
-        geom.setIndex(point_indices);
+        if (point_indices) {
+            geom.setIndex(point_indices);
+        }
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        const colors = new Uint8Array([].concat(...Array(positions.length / 3).fill([255, 0, 0])));
+        const colors = new Uint8Array([].concat(...Array(positions.length / 3).fill(color)));
         geom.addAttribute('color', new THREE.BufferAttribute(colors, 3, true));
         geom.computeBoundingSphere();
         const mat = new THREE.PointsMaterial({
             size: 1,
             vertexColors: THREE.VertexColors
         });
-        const point = new THREE.Points(geom, mat);
+        const bg = {geom, mat};
+        return bg;
+    }
+
+    public selectObjPoint(ent_id: string = null, point_indices, positions, container, label = true) {
+        const bg = this.initBufferPoint(positions, point_indices, [255, 0, 0]);
+        const point = new THREE.Points(bg.geom, bg.mat);
         this._scene.add(point);
         this.selected_geoms.set(ent_id, point.id);
         this.sceneObjsSelected.set(ent_id, point);
@@ -200,15 +236,7 @@ export class DataThreejs {
     }
 
     public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const geom = new THREE.BufferGeometry();
-        geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        const colors = new Uint8Array([].concat(...Array(positions.length / 3).fill([0, 60, 255])));
-        geom.addAttribute('color', new THREE.BufferAttribute(colors, 3, true));
-        geom.computeBoundingSphere();
-        const mat = new THREE.PointsMaterial({
-            size: 0.8,
-            vertexColors: THREE.VertexColors
-        });
+        const bg = this.initBufferPoint(positions, null, [0, 60, 255]);
         if (this.selected_positions.get(parent_ent_id) === undefined) {
             this.selected_positions.set(parent_ent_id, new Map());
         }
@@ -221,7 +249,7 @@ export class DataThreejs {
         });
 
         if (!check_exist.includes(ent_id)) {
-            const point = new THREE.Points(geom, mat);
+            const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
             this.selected_positions.get(parent_ent_id).set(ent_id, point.id);
             if (label) {
@@ -230,7 +258,6 @@ export class DataThreejs {
                 this.ObjLabelMap.set(ent_id, obj);
             }
         }
-        // this.selected_positions[parent_ent_id].set(ent_point_map.set(ent_id, point.id));
         // this.sceneObjsSelected.set(ent_id, point);
     }
 
@@ -256,9 +283,15 @@ export class DataThreejs {
         }
     }
 
-    public unselectPosi(parent_ent_id, container) {
-        // get the removing first
-        const removing = this.selected_positions.get(parent_ent_id);
+    public unselectObjGroup(parent_ent_id, container, group) {
+        let removing;
+        if (group === 'positions') {
+            // get the removing first
+            removing = this.selected_positions.get(parent_ent_id);
+        } else if (group === 'face_edges') {
+            // get the removing first
+            removing = this.selected_face_edges.get(parent_ent_id);
+        }
         // remove positions from scene
         removing.forEach((v, k) => {
             this._scene.remove(this._scene.getObjectById(v));
@@ -267,8 +300,12 @@ export class DataThreejs {
                 container.removeChild(document.getElementById(`textLabel_${k}`));
             }
         });
-        // then delete
-        this.selected_positions.delete(parent_ent_id);
+        if (group === 'positions') {
+            // then delete
+            this.selected_positions.delete(parent_ent_id);
+        } else if (group === 'face_edges') {
+            this.selected_face_edges.delete(parent_ent_id);
+        }
     }
 
     // ============================================================================
@@ -450,7 +487,8 @@ export class DataThreejs {
                         this.position.copy(center);
                     } else if (type === objType.line) {
                         const p = this.parent.geometry.getAttribute('position').array;
-                        const center = new THREE.Vector3((p[0] + p[3]) / 2, (p[1] + p[4]) / 2, (p[2] + p[5]) / 2);
+                        const x = (p[0] + p[3]) / 2, y = (p[1] + p[4]) / 2, z = (p[2] + p[5]) / 2;
+                        const center = new THREE.Vector3(x, y, z);
                         this.position.copy(center);
                     }
                 }
@@ -483,9 +521,12 @@ export class DataThreejs {
         if (selectedObjs) {
             center = selectedObjs.center;
             radius = selectedObjs.radius;
-        } else {
+        } else if (allObjs) {
             center = allObjs.center;
             radius = allObjs.radius;
+        } else {
+            center = this._scene.position;
+            radius = 50;
         }
         // set grid and axeshelper to center of the objs
         // this.grid.position.set(center.x, center.y, 0);

@@ -1,12 +1,10 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
-import { idsBreak, getArrDepth } from '@libs/geo-info/id';
+import { getArrDepth } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { xformMatrix } from '@libs/triangulate/threex';
-import { Arr } from '@libs/triangulate/arr';
 
 // ================================================================================================
 /**

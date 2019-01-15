@@ -84,12 +84,12 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
         } else {
             throw new Error('Entity is of wrong type. Must be a an edge, a wire or a polyline');
         }
-        for (const edge_i of edges_i) {
-            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
-            const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
-            const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
-            dist += distance(xyz_0, xyz_1);
-        }
+    }
+    for (const edge_i of edges_i) {
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
+        const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
+        const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+        dist += distance(xyz_0, xyz_1);
     }
     return dist;
 }

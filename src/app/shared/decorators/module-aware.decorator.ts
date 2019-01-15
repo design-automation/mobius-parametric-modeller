@@ -66,7 +66,7 @@ function analyzeParamType(fn, paramType) {
     } else if (paramType.type === 'intrinsic' || paramType.type === 'reference') {
         return paramType.name;
     } else if (paramType.type === 'union') {
-        return paramType.types.map((tp: any) => analyzeParamType(fn, tp)).join(' || ');
+        return paramType.types.map((tp: any) => analyzeParamType(fn, tp)).join(' | ');
     } else if (paramType.type === 'tuple') {
         return '[' + paramType.elements.map((tp: any) => analyzeParamType(fn, tp)).join(', ') + ']';
     } else {

@@ -1,51 +1,17 @@
 # LIST    
 
-## Append  
-* **Description:** Adds one value to the end of an list.
-If value is an list, the entire list will be appended as one value.  
+## IndexOf  
+* **Description:** Searches for a value in a list and returns the index position if found.
+Items must match both the value and type of specified value.  
 * **Parameters:**  
-  * *list:* List to add to.  
-  * *value:* Item to add.  
-  * *method:* Enum, append to start or end.  
+  * *list:* List.  
+  * *value:* Value to search for.  
+  * *method:* Enum, specifies whether to search all occurances or only the first.  
+* **Returns:** Index position or list of index positions containing specified value.  
 * **Examples:**  
-  * append = list.Append(list, 4, 'at_end')  
-    where list = [1,2,3]
-Expected value of list is [1,2,3,4].
-  
-  
-## Concat  
-* **Description:** Creates a new list by combining two lists into a new list.  
-* **Parameters:**  
-  * *list1:* First list.  
-  * *list2:* Second list.  
-* **Returns:** Combined list (list1 first, followed by list2).  
-* **Examples:**  
-  * newlist = list.Concat(list1,list2)  
-    where list1 = [1,2,3]
-and list2 = [9,0]
-Expected value of newlist is [1,2,3,9,0].
-  
-  
-## Copy  
-* **Description:** Creates a new list by creating a new list by making a copy of an existing list.  
-* **Parameters:**  
-  * *list:* List to copy.  
-* **Returns:** New duplicated list.  
-* **Examples:**  
-  * copy1 = list.Copy(list)  
-    where list = [1,2,3]
-Expected value of copy is [1,2,3].
-  
-  
-## Flatten  
-* **Description:** Creates a new list by flattening an n-dimensional list into a one-dimensional list.  
-* **Parameters:**  
-  * *list:* List to flatten.  
-* **Returns:** Flattened list.  
-* **Examples:**  
-  * flatten = list.Flatten(list)  
-    where list = [1,2,3,[4,5]]
-Expected value of flatten is [1,2,3,4,5].
+  * positions = list.IndexOf(list,2,true)  
+    where list = [6,2,2,7]
+Expected value of positions is [1,2].
   
   
 ## Includes  
@@ -61,18 +27,69 @@ Items must match both the value and type of specified value.
 Expected value of exists is true.
   
   
-## IndexOf  
-* **Description:** Searches for a value in a list and returns the index position if found.
-Items must match both the value and type of specified value.  
+## Copy  
+* **Description:** Creates a new list by creating a new list by making a copy of an existing list.  
 * **Parameters:**  
-  * *list:* List.  
-  * *value:* Value to search for.  
-  * *method:* Enum, specifies whether to search all occurances or only the first.  
-* **Returns:** Index position or list of index positions containing specified value.  
+  * *list:* List to copy.  
+* **Returns:** New duplicated list.  
 * **Examples:**  
-  * positions = list.IndexOf(list,2,true)  
-    where list = [6,2,2,7]
-Expected value of positions is [1,2].
+  * copy1 = list.Copy(list)  
+    where list = [1,2,3]
+Expected value of copy is [1,2,3].
+  
+  
+## Concat  
+* **Description:** Creates a new list by combining two lists into a new list.  
+* **Parameters:**  
+  * *list1:* First list.  
+  * *list2:* Second list.  
+* **Returns:** Combined list (list1 first, followed by list2).  
+* **Examples:**  
+  * newlist = list.Concat(list1,list2)  
+    where list1 = [1,2,3]
+and list2 = [9,0]
+Expected value of newlist is [1,2,3,9,0].
+  
+  
+## Flatten  
+* **Description:** Creates a new list by flattening an n-dimensional list into a one-dimensional list.  
+* **Parameters:**  
+  * *list:* List to flatten.  
+* **Returns:** Flattened list.  
+* **Examples:**  
+  * flatten = list.Flatten(list)  
+    where list = [1,2,3,[4,5]]
+Expected value of flatten is [1,2,3,4,5].
+  
+  
+## Slice  
+* **Description:** Creates a new list by copying a portion of an existing list, from start index to end index (end not included).  
+* **Parameters:**  
+  * *list:* List to slice.  
+  * *start:* Zero-based index at which to begin slicing.
+     A negative index can be used, indicating an offset from the end of the sequence.
+     If start is undefined, slice begins from index 0.  
+  * *end:* Zero-based index before which to end slicing. Slice extracts up to but not including end.
+     A negative index can be used, indicating an offset from the end of the sequence.
+     If end is undefined, slice extracts through the end of the sequence.  
+* **Returns:** A new list.  
+* **Examples:**  
+  * result = list.Slice(list,1,3)  
+    where list = [1,2,3,4,5]
+Expected value of result is [2,3].
+  
+  
+## Append  
+* **Description:** Adds one value to the end of an list.
+If value is an list, the entire list will be appended as one value.  
+* **Parameters:**  
+  * *list:* List to add to.  
+  * *value:* Item to add.  
+  * *method:* Enum, append to start or end.  
+* **Examples:**  
+  * append = list.Append(list, 4, 'at_end')  
+    where list = [1,2,3]
+Expected value of list is [1,2,3,4].
   
   
 ## RemoveIndex  
@@ -122,23 +139,6 @@ Expected value of replace is [1,9,9,3].
   * result = list.Reverse(list1)  
     where list1 = [1,2,3]
 Expected value of result is [3,2,1].
-  
-  
-## Slice  
-* **Description:** Creates a new list by copying a portion of an existing list, from start index to end index (end not included).  
-* **Parameters:**  
-  * *list:* List to slice.  
-  * *start:* Zero-based index at which to begin slicing.
-     A negative index can be used, indicating an offset from the end of the sequence.
-     If start is undefined, slice begins from index 0.  
-  * *end:* Zero-based index before which to end slicing. Slice extracts up to but not including end.
-     A negative index can be used, indicating an offset from the end of the sequence.
-     If end is undefined, slice extracts through the end of the sequence.  
-* **Returns:** A new list.  
-* **Examples:**  
-  * result = list.Slice(list,1,3)  
-    where list = [1,2,3,4,5]
-Expected value of result is [2,3].
   
   
 ## Sort  

@@ -2,13 +2,37 @@ import * as dc from './doc.json';
 import * as fs from 'fs';
 const urlString = 'https://mobius.design-automation.net';
 
+// Edit this ModuleList to include modules that are to be converted into MD file
+const ModuleList = [
+    'query',
+    'make',
+    'modify',
+    'isect',
+    'calc',
+    'util',
+    'pattern',
+    'virtual',
+    'list',
+];
+
+
+function compare(a, b) {
+    if (a.id < b.id) {
+        return -1;
+    }
+    if (a.id > b.id) {
+        return 1;
+    }
+    return 0;
+}
+
 function analyzeParamType(fn, paramType) {
     if (paramType.type === 'array') {
         return `${analyzeParamType(fn, paramType.elementType)}[]`;
     } else if (paramType.type === 'intrinsic' || paramType.type === 'reference') {
         return paramType.name;
     } else if (paramType.type === 'union') {
-        return paramType.types.map((tp) => analyzeParamType(fn, tp)).join(' || ');
+        return paramType.types.map((tp) => analyzeParamType(fn, tp)).join(' | ');
     } else if (paramType.type === 'tuple') {
         return '[' + paramType.elements.map((tp) => analyzeParamType(fn, tp)).join(', ') + ']';
     } else {
@@ -23,7 +47,7 @@ function analyzeParamType(fn, paramType) {
 }
 
 const doc = dc.default;
-const docs = {};
+const docs = [];
 
 for (const mod of doc.children) {
     let modName = mod.name.split('/');
@@ -37,10 +61,14 @@ for (const mod of doc.children) {
         continue;
     }
     const moduleDoc = {};
+    moduleDoc['id'] = mod.id;
+    moduleDoc['name'] = modName;
+    moduleDoc['func'] = [];
     for (const func of mod.children) {
         // console.log(func);
         if (func.name.substring(0, 1) === '_') { continue; }
         const fn = {};
+        fn['id'] = func.id;
         fn['name'] = func.name;
         fn['module'] = modName;
         if (!func['signatures']) { continue; }
@@ -86,21 +114,27 @@ for (const mod of doc.children) {
                 fn['parameters'].push(pr);
             }
         }
-        moduleDoc[func.name] = fn;
+        moduleDoc.func.push(fn);
     }
-    if (Object.keys(moduleDoc).length === 0) {continue; }
-    docs[modName] = moduleDoc;
+    if (moduleDoc.func.length === 0) {continue; }
+    moduleDoc.func.sort(compare);
+    docs.push(moduleDoc);
 }
+docs.sort(compare);
 
-for (const modName in docs) {
-    if (!docs[modName]) { continue; }
-    const mod = docs[modName];
+let count = 0;
+for (const mod of docs) {
+    // if (!docs[modName]) { continue; }
+    // const mod = docs[modName];
     // Module name
-    let mdString = `# ${modName.toUpperCase()}    \n\n`;
-    for (const funcName in mod) {
-        if (!mod[funcName]) { continue; }
+    if (ModuleList.indexOf (mod.name) === -1) { continue; }
 
-        const func = mod[funcName];
+    const modName = mod.name;
+    let mdString = `# ${modName.toUpperCase()}    \n\n`;
+    for (const func of mod.func) {
+        // if (!mod[funcName]) { continue; }
+
+        // const func = mod[funcName];
 
         mdString += `## ${func.name}  \n`;
         mdString += `* **Description:** ${func.description}  \n`;
@@ -137,11 +171,16 @@ for (const modName in docs) {
 
     }
 
-    fs.default.writeFile(`./src/assets/typedoc-json/docMD/${modName}.md`, mdString, function(err) {
+    count += 1;
+    let countStr = count.toString();
+    if (countStr.length === 1) {
+        countStr = '0' + countStr;
+    }
+    fs.default.writeFile(`./src/assets/typedoc-json/docMD/${countStr}_${modName}.md`, mdString, function(err) {
         if (err) {
             return console.log(err);
         }
 
-        console.log(`successfully saved ${modName}.md`);
+        console.log(`successfully saved ${countStr}_${modName}.md`);
     });
 }

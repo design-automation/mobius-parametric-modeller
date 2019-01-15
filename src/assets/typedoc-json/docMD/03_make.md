@@ -1,5 +1,47 @@
 # MAKE    
 
+## Position  
+* **Description:** Adds a new position to the model.  
+* **Parameters:**  
+  * *coords:* XYZ coordinates as a list of three numbers.  
+* **Returns:** New position if successful, null if unsuccessful or on error.  
+* **Examples:**  
+  * position1 = make.Position([1,2,3])  
+    Creates a position with coordinates x=1, y=2, z=3.
+  
+  
+## Point  
+* **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
+* **Parameters:**  
+  * *positions:* Position of point.  
+* **Returns:** New point if successful, null if unsuccessful or on error.  
+* **Examples:**  
+  * point1 = make.Point(position1)  
+    Creates a point at position1.  
+  
+## Polyline  
+* **Description:** Adds a new polyline to the model.  
+* **Parameters:**  
+  * *positions:* List of positions.  
+  * *close:* Enum of 'close' or 'open'.  
+* **Returns:** New polyline if successful, null if unsuccessful or on error.  
+* **Examples:**  
+  * polyline1 = make.Polyline([position1,position2,position3], close)  
+    Creates a closed polyline with vertices position1, position2, position3 in sequence.  
+* **Example URLs:**  
+  1. [polyline_example.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/polyline_example.mob
+)  
+  
+## Polygon  
+* **Description:** Adds a new polygon to the model.  
+* **Parameters:**  
+  * *positions:* List of positions.  
+* **Returns:** New polygon if successful, null if unsuccessful or on error.  
+* **Examples:**  
+  * polygon1 = make.Polygon([position1,position2,position3])  
+    Creates a polygon with vertices position1, position2, position3 in sequence.
+  
+  
 ## Collection  
 * **Description:** Adds a new collection to the model.  
 * **Parameters:**  
@@ -22,19 +64,15 @@
     Creates a list containing a copy of the entities in sequence of input.
   
   
-## Divide  
-* **Description:** Divides edge, wire or polyline by length or by number of segments.
-If object is not exact multiple of length, length of last segment will be the remainder.  
+## Loft  
+* **Description:** Lofts between edges.  
 * **Parameters:**  
-  * *edge:* Edge, wire, or polyline(s) to be divided.  
-  * *divisor:* Segment length or number of segments.  
-  * *method:* Enum to choose which method.  
-* **Returns:** List of new edges (segments of original edges), null if unsuccessful or on error.  
+  * *entities:* Edges (or wires, polylines or polygons with the same number of edges).  
+  * *method:* Enum, if 'closed', then close the loft back to the first edge in the input.  
+* **Returns:** Lofted polygons between edges if successful, null if unsuccessful or on error.  
 * **Examples:**  
-  * segments1 = make.Divide(edge1, 5, by_number)  
-    Creates a list of 5 equal segments from edge1.  
-  * segments2 = make.Divide(edge1, 5, by_length)  
-    If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
+  * surface1 = make.Loft([polyline1,polyline2,polyline3], closed)  
+    Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
   
   
 ## Extrude  
@@ -65,57 +103,19 @@ If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrus
     Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
   
   
-## Loft  
-* **Description:** Lofts between edges.  
+## Divide  
+* **Description:** Divides edge, wire or polyline by length or by number of segments.
+If object is not exact multiple of length, length of last segment will be the remainder.  
 * **Parameters:**  
-  * *entities:* Edges (or wires, polylines or polygons with the same number of edges).  
-  * *method:* Enum, if 'closed', then close the loft back to the first edge in the input.  
-* **Returns:** Lofted polygons between edges if successful, null if unsuccessful or on error.  
+  * *edge:* Edge, wire, or polyline(s) to be divided.  
+  * *divisor:* Segment length or number of segments.  
+  * *method:* Enum to choose which method.  
+* **Returns:** List of new edges (segments of original edges), null if unsuccessful or on error.  
 * **Examples:**  
-  * surface1 = make.Loft([polyline1,polyline2,polyline3], closed)  
-    Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
-  
-  
-## Point  
-* **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
-* **Parameters:**  
-  * *positions:* Position of point.  
-* **Returns:** New point if successful, null if unsuccessful or on error.  
-* **Examples:**  
-  * point1 = make.Point(position1)  
-    Creates a point at position1.  
-  
-## Polygon  
-* **Description:** Adds a new polygon to the model.  
-* **Parameters:**  
-  * *positions:* List of positions.  
-* **Returns:** New polygon if successful, null if unsuccessful or on error.  
-* **Examples:**  
-  * polygon1 = make.Polygon([position1,position2,position3])  
-    Creates a polygon with vertices position1, position2, position3 in sequence.
-  
-  
-## Polyline  
-* **Description:** Adds a new polyline to the model.  
-* **Parameters:**  
-  * *positions:* List of positions.  
-  * *close:* Enum of 'close' or 'open'.  
-* **Returns:** New polyline if successful, null if unsuccessful or on error.  
-* **Examples:**  
-  * polyline1 = make.Polyline([position1,position2,position3], close)  
-    Creates a closed polyline with vertices position1, position2, position3 in sequence.  
-* **Example URLs:**  
-  1. [polyline_example.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/polyline_example.mob
-)  
-  
-## Position  
-* **Description:** Adds a new position to the model.  
-* **Parameters:**  
-  * *coords:* XYZ coordinates as a list of three numbers.  
-* **Returns:** New position if successful, null if unsuccessful or on error.  
-* **Examples:**  
-  * position1 = make.Position([1,2,3])  
-    Creates a position with coordinates x=1, y=2, z=3.
+  * segments1 = make.Divide(edge1, 5, by_number)  
+    Creates a list of 5 equal segments from edge1.  
+  * segments2 = make.Divide(edge1, 5, by_length)  
+    If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
   
   
 ## Unweld  

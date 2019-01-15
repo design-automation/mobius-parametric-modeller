@@ -7529,7 +7529,7 @@ var AddOutputComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id='chrome-only'>\r\n    Unable to display web page. Mobius is only compatible with Google Chrome.\r\n</div>\r\n"
+module.exports = "<div id='chrome-only'>\r\n    Möbius Modeller only works on Chrome. Please install Chrome.\r\n</div>\r\n"
 
 /***/ }),
 

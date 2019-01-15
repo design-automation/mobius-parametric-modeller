@@ -31,9 +31,9 @@ export class GIGeomQuery {
         // console.log("geom_array", geom_array);
         const ents_i: number[] = [];
         geom_array.forEach( (entity, index) => {
-            if (entity !== null && entity !== undefined) {  // skips deleted entities
+            //if (entity !== null && entity !== undefined) {  // skips deleted entities
                 ents_i.push(index);
-            }
+            //}
         });
         return ents_i;
     }

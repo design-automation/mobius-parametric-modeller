@@ -8,11 +8,11 @@ import {Arr} from './arr';  // TODO remove dependence on this
 //  3D to 2D ======================================================================================================
 
 /**
- * Function to transform a set of vertices in 3d space onto the xy plane.
+ * Function that returns a matrix to transform a set of vertices in 3d space onto the xy plane.
  * This function assumes that the vertices are co-planar.
  * Returns a set of three Vectors that represent points on the xy plane.
  */
-function _makeVertices2D(points: three.Vector3[]): three.Vector3[] {
+function _getMatrix(points: three.Vector3[]): three.Matrix4 {
     const o: three.Vector3 = new three.Vector3();
     for (const v of points) {
         o.add(v);
@@ -33,26 +33,60 @@ function _makeVertices2D(points: three.Vector3[]): three.Vector3[] {
     }
     const vy: three.Vector3 =  threex.crossVectors(vz, vx);
     const m: three.Matrix4 = threex.xformMatrix(o, vx, vy, vz);
-    const points_2d: three.Vector3[] = points.map((v) => threex.multVectorMatrix(v, m));
-    return points_2d;
+    return m;
+    // const points_2d: three.Vector3[] = points.map((v) => threex.multVectorMatrix(v, m));
+    // return points_2d;
 }
 
 /**
- * Triangulates a polygon
+ * Triangulates a polygon in 3d with holes
  * @param coords
  */
-export function triangulate(coords: Txyz[]): number[][] {
-    const vects: three.Vector3[] = _makeVertices2D(coords.map( coord => new three.Vector3(...coord)) );
+export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
 
-    if (vects === undefined || vects === null || vects.length === 0) {
+    // get the matrix to transform from 2D to 3D
+    const coords_v: three.Vector3[] = coords.map( coord => new three.Vector3(...coord));
+    const matrix: three.Matrix4 = _getMatrix( coords_v );
+
+    // create an array to store all x y vertex coordinates
+    const flat_vert_xys: number[] = [];
+
+    // get the perimeter vertices and add them to the array
+    const coords_v_2d: three.Vector3[] = coords_v.map((coord_v) => threex.multVectorMatrix(coord_v, matrix));
+    if (coords_v_2d === undefined || coords_v_2d === null || coords_v_2d.length === 0) {
+        console.log('WARNING: triangulation failed.');
         return [];
     }
+    coords_v_2d.forEach(coord_v_2d => flat_vert_xys.push(coord_v_2d.x, coord_v_2d.y));
 
-    const flat_vert_xys: number[] = Arr.flatten(vects.map((v) => [v.x, v.y])); // TODO remove dependency
-    const flat_tris_i: number[] = earcut.Earcut.triangulate(flat_vert_xys);
+    // hole vertices uing EARCUT
+    // holes is an array of hole indices if any (e.g. [5, 8] for a 12-vertex input would mean 
+    // one hole with vertices 5–7 and another with 8–11).
+    const hole_indices: number[] = [];
+    let index_counter: number = coords_v.length;
+    if (holes !== undefined && holes.length) {
+        for (const hole of holes) {
+            hole_indices.push(index_counter);
+            if (hole.length) {
+                const hole_coords_v: three.Vector3[] = hole.map( hole_coord => new three.Vector3(...hole_coord));
+                const hole_coords_v_2d: three.Vector3[] = hole_coords_v.map((hole_coord_v) =>
+                    threex.multVectorMatrix(hole_coord_v, matrix));
+                const one_hole: number[] = [];
+                hole_coords_v_2d.forEach(hole_coord_v => flat_vert_xys.push(hole_coord_v.x, hole_coord_v.y));
+                index_counter += hole.length;
+            }
+        }
+    }
+
+    // do the triangulation
+    const flat_tris_i: number[] = earcut.Earcut.triangulate(flat_vert_xys, hole_indices);
+
+    // convert the triangles into lists of three and return them
     const tris_i: number[][] = [];
     for (let i = 0; i < flat_tris_i.length; i += 3) {
         tris_i.push([flat_tris_i[i], flat_tris_i[i + 1], flat_tris_i[i + 2]]);
     }
+
+    // return the list of triangles
     return tris_i;
 }

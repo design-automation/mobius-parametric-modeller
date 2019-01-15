@@ -13,7 +13,7 @@ import { xformMatrix } from '@libs/triangulate/threex';
  * @param __model__
  * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection.
  * @param vector List of three numbers.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Move(position1, [1,1,1])
  * @example_info Moves position1 by [1,1,1].
  */
@@ -47,7 +47,7 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
  * @param origin A list of three numbers (or a position, point, or vertex).
  * @param axis A list of three numbers.
  * @param angle Angle (in radians).
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Rotate(polyline1, plane1, PI)
  * @example_info Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
  */
@@ -90,7 +90,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Position, point, vertex, list of three numbers, plane.
  * @param scale Scale factor.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Scale(entities, plane1, 0.5)
  * @example_info Scales entities by 0.5 on plane1.
  */
@@ -136,7 +136,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Position, vertex, point, list of three numbers.
  * @param direction Vector or a list of three numbers.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Mirror(polygon1, plane1)
  * @example_info Mirrors polygon1 across plane1.
  */
@@ -180,7 +180,7 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param from Plane defining target construction plane.
  * @param to Plane defining destination construction plane.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.XForm(polygon1, plane1, plane2)
  * @example_info Transforms polygon1 from plane1 to plane2.
  */
@@ -216,13 +216,30 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
  * Reverses direction of entities.
  * @param __model__
  * @param entities Wire, face, polyline, polygon.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Reverse(face1)
  * @example_info Flips face1 and reverses its normal.
  * @example modify.Reverse(polyline1)
  * @example_info Reverses the order of vertices to reverse the direction of the polyline.
  */
 export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
+    // --- Error Check ---
+    // const ents_arr = checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
+    // --- Error Check ---
+    throw new Error('Not implemented.');
+}
+// ================================================================================================
+/**
+ * Reverses direction of entities.
+ * @param __model__
+ * @param entities Wire, face, polyline, polygon.
+ * @returns void
+ * @example modify.Reverse(face1)
+ * @example_info Flips face1 and reverses its normal.
+ * @example modify.Reverse(polyline1)
+ * @example_info Reverses the order of vertices to reverse the direction of the polyline.
+ */
+export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): void {
     // --- Error Check ---
     // const ents_arr = checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
     // --- Error Check ---
@@ -249,7 +266,7 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
  * Closes polyline(s) if open.
  * @param __model__
  * @param lines Polyline(s).
- * @returns Modifies the input polyline(s).
+ * @returns void
  * @example modify.Close([polyline1,polyline2,...])
  * @example_info If open, polylines are changed to closed; if already closed, nothing happens.
  */
@@ -286,7 +303,7 @@ export enum _EPromoteAttribTypes {
  * @param from Enum; Positions, vertices, edges, wires, faces or collections.
  * @param to Enum; Positions, vertices, edges, wires, faces or collections.
  * @param method Enum; Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
- * @returns Promotes or demotes the attribute.
+ * @returns void
  * @example promote1 = modify.Promote (colour, positions, faces, sum)
  */
 export function Promote(__model__: GIModel, attrib_name: string,
@@ -301,7 +318,7 @@ export function Promote(__model__: GIModel, attrib_name: string,
  * Welds entities together.
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Weld([polyline1,polyline2])
  * @example_info Welds both polyline1 and polyline2 together. Entities must be of the same type.
  */
@@ -317,7 +334,7 @@ export function Weld(__model__: GIModel, entities: TId[]): void {
  * Deletes entities.
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection. Can be a list.
- * @returns Modifies the input entities.
+ * @returns void
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.
  */

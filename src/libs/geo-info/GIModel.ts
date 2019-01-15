@@ -96,17 +96,20 @@ export class GIModel {
             colors_values = this._generateColors();
         }
         // get the indices of the vertices for edges, points and triangles
-        const tris_verts_i: number[] = this.geom.threejs.get3jsTris();
-        const edges_verts_i: number[] = this.geom.threejs.get3jsEdges();
-        const points_verts_i: number[] = this.geom.threejs.get3jsPoints();
+        const [tris_verts_i, triangle_select_map]: [number[], Map<number, number>] = this.geom.threejs.get3jsTris();
+        const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this.geom.threejs.get3jsEdges();
+        const [points_verts_i, point_select_map]: [number[], Map<number, number>] = this.geom.threejs.get3jsPoints();
         // return an object containing all the data
         return {
             positions: coords_values,
             normals: normals_values,
             colors: colors_values,
             point_indices: points_verts_i,
+            point_select_map: point_select_map,
             edge_indices: edges_verts_i,
-            triangle_indices: tris_verts_i
+            edge_select_map: edge_select_map,
+            triangle_indices: tris_verts_i,
+            triangle_select_map: triangle_select_map
         };
     }
 }

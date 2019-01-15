@@ -1,5 +1,5 @@
 import { GIGeom } from './GIGeom';
-import { IGeomArrays } from './common';
+import { IGeomArrays, TTri, TEdge, TPgon, TPoint } from './common';
 import { GIAttribs } from './GIAttribs';
 
 /**
@@ -35,9 +35,20 @@ export class GIGeomThreejs {
      * This list will be assumed to be in pairs.
      * The indices in the list point to the vertices.
      */
-    public get3jsTris(): number[] {
+    public get3jsTris(): [number[], Map<number, number>] {
+        const tris_verts_i_filt: TTri[] = [];
+        const tri_select_map: Map<number, number> = new Map();
+        for (let gi_i = 0; gi_i < this._geom_arrays.dn_tris_verts.length; gi_i++) {
+            const tri_verts_i: TTri = this._geom_arrays.dn_tris_verts[gi_i];
+            if (tri_verts_i !== null) {
+                const tjs_i = tris_verts_i_filt.push(tri_verts_i) - 1;
+                tri_select_map.set(tjs_i, gi_i);
+            }
+        }
         // @ts-ignore
-        return this._geom_arrays.dn_tris_verts.flat(1);
+        return [tris_verts_i_filt.flat(1), tri_select_map];
+
+        //return this._geom_arrays.dn_tris_verts.flat(1);
         // return [].concat(...this._geom_arrays.dn_tris_verts);
     }
     /**
@@ -45,16 +56,38 @@ export class GIGeomThreejs {
      * This list will be assumed to be in pairs.
      * The indices in the list point to the vertices.
      */
-    public get3jsEdges(): number[] {
+    public get3jsEdges(): [number[], Map<number, number>] {
+        const edges_verts_i_filt: TEdge[] = [];
+        const edge_select_map: Map<number, number> = new Map();
+        for (let gi_i = 0; gi_i < this._geom_arrays.dn_edges_verts.length; gi_i++) {
+            const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
+            if (edge_verts_i !== null) {
+                const tjs_i = edges_verts_i_filt.push(edge_verts_i) - 1;
+                edge_select_map.set(tjs_i, gi_i);
+            }
+        }
         // @ts-ignore
-        return this._geom_arrays.dn_edges_verts.flat(1);
+        return [edges_verts_i_filt.flat(1), edge_select_map];
+
+        // @ts-ignore
+        //return this._geom_arrays.dn_edges_verts.flat(1);
         // return [].concat(...this._geom_arrays.dn_edges_verts);
     }
     /**
      * Returns a flat list of the sequence of verices for all the points.
      * The indices in the list point to the vertices.
      */
-    public get3jsPoints(): number[] {
-        return this._geom_arrays.dn_points_verts;
+    public get3jsPoints(): [number[], Map<number, number>] {
+        const points_verts_i_filt: TPoint[] = [];
+        const point_select_map: Map<number, number> = new Map();
+        for (let gi_i = 0; gi_i < this._geom_arrays.dn_points_verts.length; gi_i++) {
+            const point_verts_i: TPoint = this._geom_arrays.dn_points_verts[gi_i];
+            if (point_verts_i !== null) {
+                const tjs_i = points_verts_i_filt.push(point_verts_i) - 1;
+                point_select_map.set(tjs_i, gi_i);
+            }
+        }
+        return [points_verts_i_filt, point_select_map];
+        // return this._geom_arrays.dn_points_verts;
     }
 }

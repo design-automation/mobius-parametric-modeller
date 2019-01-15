@@ -16,6 +16,7 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();
+    @Output() selectInp = new EventEmitter();
 
     PortTypes = InputType;
     PortTypesArr = keys.slice(keys.length / 2);
@@ -25,6 +26,11 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         // console.log(this.prod);
+    }
+
+    selectInput(event: MouseEvent) {
+        event.stopPropagation();
+        this.selectInp.emit({'ctrl': event.ctrlKey, 'prod': this.prod});
     }
 
     editOptions(): void { }

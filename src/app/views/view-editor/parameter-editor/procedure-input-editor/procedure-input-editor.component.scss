@@ -30,6 +30,10 @@
     &.error {
         border: 2px solid $error-color;
     }
+    &.selected {
+        border-left: 2px solid $selected-color;
+        border-bottom: 2px solid $selected-color;
+    }
 }
 
 .inline-div{

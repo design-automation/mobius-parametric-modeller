@@ -1,4 +1,4 @@
-import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked, Output, EventEmitter } from '@angular/core';
 import { INode, NodeUtils } from '@models/node';
 import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
@@ -15,6 +15,7 @@ export class ParameterEditorComponent implements AfterViewInit {
     @Input() node: INode;
     @Input() flowchart: IFlowchart;
     @Input() prodCheck: boolean;
+    @Output() selectInp = new EventEmitter();
 
     ngAfterViewInit() {
         ctx.font = '12px sans-serif';
@@ -51,6 +52,9 @@ export class ParameterEditorComponent implements AfterViewInit {
         return ctx.measureText(val).width + 2;
     }
 
+    selectInput(event) {
+        this.selectInp.emit(event);
+    }
 }
 
 

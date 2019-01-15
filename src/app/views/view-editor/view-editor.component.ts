@@ -26,7 +26,7 @@ export class ViewEditorComponent {
     private copyCheck = true;
 
     constructor(private dataService: DataService, private router: Router) {
-        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
+        new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
     }
 
     // add a procedure
@@ -41,7 +41,7 @@ export class ViewEditorComponent {
     }
 
     // select a procedure
-    selectProcedure(event, line): void {
+    selectProcedure(event): void {
         if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
             return;
         }

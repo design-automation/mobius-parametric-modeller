@@ -41,7 +41,7 @@ export abstract class NodeUtils {
 
     static getStartNode(): INode {
         const node = NodeUtils.getNewNode();
-        node.procedure = [];
+        // node.procedure = [];
         node.enabled = true;
         node.name = 'Start';
         node.type = 'start';
@@ -151,10 +151,34 @@ export abstract class NodeUtils {
 
     static insert_procedure(node: INode, prod: IProcedure) {
         if (prod.type === ProcedureTypes.Constant) {
-            node.procedure.push(prod);
+            if (node.type !== 'start') { return; }
+            if (node.state.procedure[0]) {
+                if (node.state.procedure[0].type === ProcedureTypes.Constant) {
+                    for (const index in node.procedure) {
+                        if (node.procedure[index].selected) {
+                            node.procedure.splice(parseInt(index, 10) + 1, 0, prod);
+                            break;
+                        }
+                    }
+                } else {
+                    let addCheck = false;
+                    for (const index in node.procedure) {
+                        if (node.procedure[index].type === ProcedureTypes.Constant) {
+                            node.procedure.splice(parseInt(index, 10), 0, prod);
+                            addCheck = true;
+                            break;
+                        }
+                    }
+                    if (!addCheck) {
+                        node.procedure.push(prod);
+                    }
+                }
+            } else {
+                node.procedure.push(prod);
+            }
             return;
         }
-        if (node.state.procedure[0]) {
+        if (node.state.procedure[0] && node.state.procedure[0].type !== ProcedureTypes.Constant) {
             let list: IProcedure[];
             if (node.state.procedure[0].parent) {
                 prod.parent = node.state.procedure[0].parent;
@@ -185,7 +209,6 @@ export abstract class NodeUtils {
             }
             node.procedure.push(prod);
         }
-
     }
 
     static initiateChildren(prod) {

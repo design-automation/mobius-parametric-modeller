@@ -7,6 +7,7 @@ import * as funcs from '@modules';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'load-url',
@@ -21,9 +22,9 @@ import { ModuleList } from '@shared/decorators';
 })
 export class LoadUrlComponent {
 
-    constructor(private dataService: DataService) {}
+    constructor(private dataService: DataService, private router: Router) {}
 
-    loadStartUpURL(routerUrl: string) {
+    async loadStartUpURL(routerUrl: string) {
         let url: any = routerUrl.split('file=');
         if (url.length <= 1 ) {
             return;
@@ -35,11 +36,17 @@ export class LoadUrlComponent {
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
-        this.loadURL(url);
 
+        if (routerUrl.indexOf('node=') !== 1) {
+            let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
+            nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
+            this.loadURL(url, nodeID);
+        } else {
+            this.loadURL(url);
+        }
     }
 
-    loadURL(url: string) {
+    loadURL(url: string, nodeID?: number) {
         const stream = Observable.create(observer => {
             const request = new XMLHttpRequest();
 
@@ -111,14 +118,11 @@ export class LoadUrlComponent {
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
-            if (this.dataService.node.type !== 'end') {
+            if (nodeID) {
+                loadeddata.flowchart.meta.selected_nodes = [nodeID];
+                this.router.navigate(['/editor']);
+            } else if (this.dataService.node.type !== 'end') {
                 loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
-                // for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
-                //     if (loadeddata.flowchart.nodes[i].type === 'end') {
-                //         loadeddata.flowchart.meta.selected_nodes = [i];
-                //         break;
-                //     }
-                // }
             }
             document.getElementById('executeButton').click();
         });

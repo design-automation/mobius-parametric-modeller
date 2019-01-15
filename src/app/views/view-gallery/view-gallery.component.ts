@@ -40,7 +40,7 @@ export class ViewGalleryComponent {
             this.dataService.galleryFiles = this.getFilesFromURL();
         }
         */
-        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
+        new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
    }
 
     getFilesFromURL(): Observable<any> {
@@ -71,7 +71,7 @@ export class ViewGalleryComponent {
 
     loadFile(fileLink) {
 
-        new LoadUrlComponent(this.dataService).loadURL(fileLink + '.mob');
+        new LoadUrlComponent(this.dataService, this.router).loadURL(fileLink + '.mob');
         this.router.navigate(['/dashboard']);
 
         // const stream = Observable.create(observer => {

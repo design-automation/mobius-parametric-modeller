@@ -13,7 +13,7 @@ import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 export class ViewDashboardComponent {
 
     constructor(private dataService: DataService, private router: Router) {
-        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
+        new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
     }
 
     selectNode(node_index: number): void {

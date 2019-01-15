@@ -40,8 +40,8 @@ function _distancePtoP(__model__: GIModel, ent_arr1: TEntTypeIdx, ents_arr2: TEn
  * @param method Enum; distance or min_distance.
  * @returns Distance, or list of distances (if position2 is a list).
  * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
- * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]]
- * Expected value of distance is [10,20].
+ * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
+ * @example_link calc_Distance.mob
  */
 export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[], method: _EDistanceMethod): number|number[] {
     // --- Error Check ---
@@ -62,6 +62,7 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[
  * @param lines Edge, wire or polyline.
  * @returns Length.
  * @example length1 = calc.Length (line1)
+ * @example_link calc_Length.mob
  */
 export function Length(__model__: GIModel, lines: TId|TId[]): number {
     // --- Error Check ---
@@ -101,6 +102,7 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
  * @param entities A polygon, a face, a closed polyline, or a closed wire.
  * @returns Area.
  * @example area1 = calc.Area (surface1)
+ * @example_link calc_Area.mob
  */
 export function Area(__model__: GIModel, entities: TId): number {
     // --- Error Check ---
@@ -150,6 +152,7 @@ export function Area(__model__: GIModel, entities: TId): number {
  * @param __model__
  * @param edge An edge
  * @returns The vector from the start point of an edge to the end point of an edge
+ * @example_link calc_Vectore.mob
  */
 export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
@@ -177,6 +180,7 @@ function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
  * @param entities List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
  * @returns Centroid.
  * @example centroid1 = calc.Centroid (polygon1)
+ * @example_link calc_Centroid.mob
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     if (!Array.isArray(entities)) { entities = [entities]; }
@@ -247,6 +251,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
  * @returns Vector.
  * @example normal1 = calc.Normal (polygon1)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
+ * @example_link calc_Normal.mob
  */
 export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
     const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
@@ -264,6 +269,7 @@ export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
  * @param t_param A value between 0 to 1.
  * @returns Set of XYZ coordinates.
  * @example coord1 = calc.ParamTToXyz (polyline1, 0.23)
+ * @example_link calc_ParamTToXyz.mob
  */
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
     // --- Error Check ---
@@ -324,6 +330,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
  * @param lines List of edges, wires, or polylines.
  * @param locations List of positions, vertices, points, or coordinates.
  * @example coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
+ * @example_link calc_ParamXyzToT.mob
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
     // --- Error Check ---

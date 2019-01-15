@@ -241,7 +241,7 @@ ul{
     // min-width: 50px;
     // max-width: 250px;
 
-    background-color: $color4;
+    background-color: $color6;// $color4;
     border: 1px solid $color4;
     color: $color8;
     pointer-events: none;
@@ -249,7 +249,11 @@ ul{
     padding: 0px 10px 0px 10px;
     //border-radius: 6px;
     opacity:0;
-    position: absolute;
+
+    position: fixed; //absolute
+    bottom:0px;
+    left:125px;
+
     float:left;
     z-index: 1;
 

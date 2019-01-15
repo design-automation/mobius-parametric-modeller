@@ -1,0 +1,1176 @@
+{
+    "name": "ScaleEndExtrude",
+    "author": "new_user",
+    "flowchart": {
+        "name": "ScaleEndExtrude",
+        "description": "Creates a box extrusion with one end scaled.",
+        "language": "js",
+        "meta": {
+            "selected_nodes": [
+                0
+            ]
+        },
+        "nodes": [
+            {
+                "name": "Start",
+                "id": "node_t1przwqp79j",
+                "position": {
+                    "x": 5350,
+                    "y": 5000
+                },
+                "enabled": true,
+                "type": "start",
+                "procedure": [
+                    {
+                        "type": 8,
+                        "ID": "prod-z474ws65li",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "pattern",
+                            "name": "Rectangle"
+                        },
+                        "argCount": 4,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "r",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "origin",
+                                "value": "XY",
+                                "default": 0
+                            },
+                            {
+                                "name": "size",
+                                "value": "10",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-88qzst5el6f",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "make",
+                            "name": "Polyline"
+                        },
+                        "argCount": 4,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "pl1"
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "positions",
+                                "value": "r",
+                                "default": 0
+                            },
+                            {
+                                "name": "close",
+                                "value": "'close'",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-u14uegudw7h",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Input a single polyline ID"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "polyline",
+                                "default": 0
+                            },
+                            {
+                                "name": "__input__",
+                                "value": "pl1",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-739y4f9ruu",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Extrusion distance"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "extru_dist",
+                                "default": 0
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "1",
+                                "value": "10"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-n02q2pga6ot",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Scale factors in x- and y- directions as a list of two numbers: [scale_factor_x_dir, scale_factor_y_dir]"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "scale_factor_xy",
+                                "default": 0
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "[1,1]",
+                                "value": "[0.6,0.4]"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-m4prhbhytzm",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Material thickness"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "material_thickness",
+                                "default": 0
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "1"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    }
+                ],
+                "state": {
+                    "procedure": []
+                },
+                "input": {
+                    "id": "43201fbd-f1f2-a0d7-31f4-98e53a90cf9f",
+                    "name": "input",
+                    "type": 0,
+                    "edges": [],
+                    "meta": {
+                        "mode": 0,
+                        "opts": {}
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "output": {
+                    "id": "c8ef2257-50ab-d6c6-0a4d-33e1db511dd3",
+                    "name": "output",
+                    "type": 1,
+                    "edges": [
+                        {
+                            "source": "~flowchart~nodes~0~output",
+                            "target": {
+                                "id": "c0846e7c-756b-d3d8-2b6b-ea9e4f11bca6",
+                                "name": "input",
+                                "type": 0,
+                                "edges": [
+                                    "~flowchart~nodes~0~output~edges~0"
+                                ],
+                                "meta": {
+                                    "mode": 0,
+                                    "opts": {}
+                                },
+                                "parentNode": {
+                                    "name": "End",
+                                    "id": "node_ul9a3xizuu7",
+                                    "position": {
+                                        "x": 5349.72021484375,
+                                        "y": 5157.7021484375
+                                    },
+                                    "enabled": true,
+                                    "type": "end",
+                                    "procedure": [
+                                        {
+                                            "type": 13,
+                                            "ID": "",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-vwnnt4xvfmt",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Copy"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "polyline2"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "polyline",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "copy_attributes",
+                                                    "value": "'no_attributes'",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-r63llrdx1xb",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "calc",
+                                                "name": "Centroid"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "cen"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "polyline2",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-5iydq5ff3qa",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "modify",
+                                                "name": "Scale"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "__none__"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "polyline2",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "origin",
+                                                    "value": "cen",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "scale",
+                                                    "value": "[scale_factor_xy[0] , scale_factor_xy[1] , 0]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-e3ewr8n1ilg",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "query",
+                                                "name": "Get"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pl1_edges"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select",
+                                                    "value": "'edges'",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "polyline",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "query_expr",
+                                                    "value": "null",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-mxsbumxv6t",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "query",
+                                                "name": "Get"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pl2_edges"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select",
+                                                    "value": "'edges'",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "polyline2",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "query_expr",
+                                                    "value": "null",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-gedllsktrw4",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "calc",
+                                                "name": "Length"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "length_side1a"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "lines",
+                                                    "value": "pl1_edges[0]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-tgpe0hzfxxj",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "calc",
+                                                "name": "Length"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "length_side1b"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "lines",
+                                                    "default": 0,
+                                                    "value": "pl1_edges[1]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-tsdgcxtnn1l",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "calc",
+                                                "name": "Length"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "length_side2a"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "lines",
+                                                    "value": "pl2_edges[0]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-olyuu62im0o",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "calc",
+                                                "name": "Length"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "length_side2b"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "lines",
+                                                    "default": 0,
+                                                    "value": "pl2_edges[1]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-s2cky1omtb7",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "max_thk"
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "min ( length_side1a , length_side1b , length_side2a , length_side2b ) / 2"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-avddbzizl9k",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Copy"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pl_inner"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "default": 0,
+                                                    "value": "[polyline , polyline2]"
+                                                },
+                                                {
+                                                    "name": "copy_attributes",
+                                                    "default": 0,
+                                                    "value": "'no_attributes'"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 1,
+                                            "ID": "prod-c8c24sj25zb",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 1,
+                                            "args": [
+                                                {
+                                                    "name": "condition",
+                                                    "value": "material_thickness >= max_thk"
+                                                }
+                                            ],
+                                            "children": [
+                                                {
+                                                    "type": 13,
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~12",
+                                                    "meta": {
+                                                        "name": "",
+                                                        "module": ""
+                                                    },
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "print": false,
+                                                    "enabled": true,
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 0,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~12",
+                                                    "ID": "prod-oqm8zj4llv",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 2,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "lofted"
+                                                        },
+                                                        {
+                                                            "name": "value",
+                                                            "value": "\"Error: For the specified scale factor and polyline , your material thickness should be less than \" + max_thk"
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                }
+                                            ],
+                                            "hasError": false,
+                                            "selected": false
+                                        },
+                                        {
+                                            "type": 3,
+                                            "ID": "prod-8u9eogdfnzx",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 0,
+                                            "args": [],
+                                            "children": [
+                                                {
+                                                    "type": 13,
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13",
+                                                    "meta": {
+                                                        "name": "",
+                                                        "module": ""
+                                                    },
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "print": false,
+                                                    "enabled": true,
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 1,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13",
+                                                    "ID": "prod-ek7cik6og79",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 1,
+                                                    "args": [
+                                                        {
+                                                            "name": "condition",
+                                                            "value": "length_side2a / length_side1a == scale_factor_xy[0]"
+                                                        }
+                                                    ],
+                                                    "children": [
+                                                        {
+                                                            "type": 13,
+                                                            "ID": "",
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1",
+                                                            "meta": {
+                                                                "name": "",
+                                                                "module": ""
+                                                            },
+                                                            "argCount": 0,
+                                                            "args": [],
+                                                            "print": false,
+                                                            "enabled": true,
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1",
+                                                            "ID": "prod-44bpokx852a",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_x_pl1"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side1a - 2 * material_thickness ) / length_side1a"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1",
+                                                            "ID": "prod-80ml46ulsga",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_y_pl1"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side1b - 2 * material_thickness ) / length_side1b"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1",
+                                                            "ID": "prod-2wx8ynopjte",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_x_pl2"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side2a - 2 * material_thickness ) / length_side2a"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1",
+                                                            "ID": "prod-uu8a1xvbbuq",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_y_pl2"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side2b - 2 * material_thickness ) / length_side2b"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "ID": "prod-w7su3qs788",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "modify",
+                                                                "name": "Scale"
+                                                            },
+                                                            "argCount": 5,
+                                                            "args": [
+                                                                {
+                                                                    "name": "__none__"
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "entities",
+                                                                    "value": "pl_inner[0]",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "origin",
+                                                                    "value": "cen",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "scale",
+                                                                    "value": "[inner_scale_factor_x_pl1 , inner_scale_factor_y_pl1 , 0]",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1"
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "ID": "prod-68e1z1193x2",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "modify",
+                                                                "name": "Scale"
+                                                            },
+                                                            "argCount": 5,
+                                                            "args": [
+                                                                {
+                                                                    "name": "__none__"
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "entities",
+                                                                    "value": "pl_inner[1]",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "origin",
+                                                                    "value": "cen",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "scale",
+                                                                    "value": "[inner_scale_factor_x_pl2 , inner_scale_factor_y_pl2 , 0]",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~1"
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 3,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13",
+                                                    "ID": "prod-hmboujjhe3",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "children": [
+                                                        {
+                                                            "type": 13,
+                                                            "ID": "",
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2",
+                                                            "meta": {
+                                                                "name": "",
+                                                                "module": ""
+                                                            },
+                                                            "argCount": 0,
+                                                            "args": [],
+                                                            "print": false,
+                                                            "enabled": true,
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2",
+                                                            "ID": "prod-8x5nw2p2c75",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_x_pl1"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side1b - 2 * material_thickness ) / length_side1b"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2",
+                                                            "ID": "prod-puqb0ggcsb",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_y_pl1"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side1a - 2 * material_thickness ) / length_side1a"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2",
+                                                            "ID": "prod-p9syhw5zv7j",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_x_pl2"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side2b - 2 * material_thickness ) / length_side2b"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2",
+                                                            "ID": "prod-o6n2bglt6js",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "inner_scale_factor_y_pl2"
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "( length_side2a - 2 * material_thickness ) / length_side2a"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "ID": "prod-30u0us1w0qb",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "modify",
+                                                                "name": "Scale"
+                                                            },
+                                                            "argCount": 5,
+                                                            "args": [
+                                                                {
+                                                                    "name": "__none__"
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "entities",
+                                                                    "value": "pl_inner[0]",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "origin",
+                                                                    "value": "cen",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "scale",
+                                                                    "value": "[inner_scale_factor_x_pl1 , inner_scale_factor_y_pl1 , 0]",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2"
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "ID": "prod-vpv6j2xa9pk",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "modify",
+                                                                "name": "Scale"
+                                                            },
+                                                            "argCount": 5,
+                                                            "args": [
+                                                                {
+                                                                    "name": "__none__"
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "entities",
+                                                                    "value": "pl_inner[1]",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "origin",
+                                                                    "value": "cen",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "scale",
+                                                                    "value": "[inner_scale_factor_x_pl2 , inner_scale_factor_y_pl2 , 0]",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13~children~2"
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13",
+                                                    "ID": "prod-mkh0t0ue0xm",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "modify",
+                                                        "name": "Move"
+                                                    },
+                                                    "argCount": 4,
+                                                    "args": [
+                                                        {
+                                                            "name": "__none__"
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "value": "[polyline2 , pl_inner[1]]",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "vector",
+                                                            "value": "[0 , 0 , extru_dist]",
+                                                            "default": 0
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~13",
+                                                    "ID": "prod-hqfktym4mxk",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "make",
+                                                        "name": "Loft"
+                                                    },
+                                                    "argCount": 4,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "lofted"
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "value": "[polyline , pl_inner[0] , pl_inner[1] , polyline2]",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "method",
+                                                            "value": "'closed'",
+                                                            "default": 0
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 11,
+                                            "ID": "",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "default": 0,
+                                                    "value": "lofted"
+                                                }
+                                            ],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "hasError": false
+                                        }
+                                    ],
+                                    "state": {
+                                        "procedure": []
+                                    },
+                                    "input": "~flowchart~nodes~0~output~edges~0~target",
+                                    "output": {
+                                        "id": "63cf54e6-755e-dbd8-6dde-cc1b341e29cb",
+                                        "name": "output",
+                                        "type": 1,
+                                        "edges": [],
+                                        "meta": {
+                                            "mode": 0
+                                        },
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                    },
+                                    "hasError": false,
+                                    "hasExecuted": true
+                                }
+                            },
+                            "selected": false
+                        }
+                    ],
+                    "meta": {
+                        "mode": 0
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "hasError": false,
+                "hasExecuted": true
+            },
+            "~flowchart~nodes~0~output~edges~0~target~parentNode"
+        ],
+        "edges": [
+            "~flowchart~nodes~0~output~edges~0"
+        ],
+        "functions": [],
+        "ordered": true
+    },
+    "last_updated": "2019-01-10T10:07:08.670Z",
+    "version": 1
+}

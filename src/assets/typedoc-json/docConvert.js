@@ -1,5 +1,8 @@
-import * as dc from './doc.json';
-import * as fs from 'fs';
+// import * as dc from './doc.json';
+// import * as fs from 'fs';
+const dc = require('./doc.json');
+const fs = require('fs');
+
 const urlString = 'https://mobius.design-automation.net';
 
 // Edit this ModuleList to include modules that are to be converted into MD file
@@ -46,7 +49,8 @@ function analyzeParamType(fn, paramType) {
 
 }
 
-const doc = dc.default;
+// const doc = dc.default;
+const doc = dc;
 const docs = [];
 
 for (const mod of doc.children) {
@@ -176,7 +180,7 @@ for (const mod of docs) {
     if (countStr.length === 1) {
         countStr = '0' + countStr;
     }
-    fs.default.writeFile(`./src/assets/typedoc-json/docMD/${countStr}_${modName}.md`, mdString, function(err) {
+    fs.writeFile(`./src/assets/typedoc-json/docMD/${countStr}_${modName}.md`, mdString, function(err) {
         if (err) {
             return console.log(err);
         }

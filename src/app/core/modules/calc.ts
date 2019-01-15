@@ -256,8 +256,8 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
 export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
     const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    const fn_name = 'vector.GetNormal';
-    // checkIDs(fn_name, 'entity', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    const fn_name = 'calc.Normal';
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
     return _normal(__model__, ents_arr);
 }
@@ -334,9 +334,9 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
     // --- Error Check ---
-    const fn_name = 'calc.ParamXyzToT';
-    checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'POLYLINE']);
-    checkIDnTypes(fn_name, 'locations', locations, ['isID', 'isIDList', 'isCoord'], ['POSI', 'VERT', 'POINT']);
+    // const fn_name = 'calc.ParamXyzToT';
+    // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'POLYLINE']);
+    // checkIDnTypes(fn_name, 'locations', locations, ['isID', 'isIDList', 'isCoord'], ['POSI', 'VERT', 'POINT']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }

@@ -186,21 +186,21 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
  */
 export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to: TPlane): void {
     // --- Error Check ---
-    // const fn_name = 'modify.Mirror';
-    // const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
-    //                          ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    // checkCommTypes(fn_name, 'from', from, ['isPlane']);
-    // checkCommTypes(fn_name, 'to', to, ['isPlane']);
+    const fn_name = 'modify.XForm';
+    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+                             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    checkCommTypes(fn_name, 'from', from, ['isPlane']);
+    checkCommTypes(fn_name, 'to', to, ['isPlane']);
     // --- Error Check ---
     // handle geometry type
-    if (!Array.isArray(entities)) {
-        entities = [entities] as TId[];
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
     }
 
     // xform all positions
     const posis_i: number[] = [];
-    for (const geom_id of entities) {
-        const [ent_type, index]: [EEntType, number] = idsBreak(geom_id) as TEntTypeIdx;
+    for (const ents of ents_arr) {
+        const [ent_type, index]: [EEntType, number] = ents as TEntTypeIdx;
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));

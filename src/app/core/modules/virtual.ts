@@ -139,12 +139,11 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * @returns The plane.
  */
 export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
-    const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    // checkIDs('virtual.GetPlane', 'face', face, ['isID'], ['FACE']); // TODO should match _normal(), 
+    const ents_arr =  checkIDs('virtual.GetPlane', 'entities', entities, ['isID', 'isIDList'], null); // takes in any
     // TODO ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    return _getPlane(__model__, ents_arr);
+    return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
 /**

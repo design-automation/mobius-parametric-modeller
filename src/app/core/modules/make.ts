@@ -33,7 +33,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     // --- Error Check ---
-    // checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList']);
+    checkCommTypes('make.Position', 'coords', coords, ['isCoord', 'isCoordList', 'isCoordList_List']);
     // TODO allow to Txyz[][]
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _position(__model__, coords);
@@ -406,7 +406,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
  */
 export function Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
-    const ents_arr =  checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
+    // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

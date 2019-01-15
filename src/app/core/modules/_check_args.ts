@@ -210,6 +210,16 @@ const typeCheckObj  = {
         }
         return;
     },
+    isCoordList_List: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'lists of coordinates');
+        for (let i = 0; i < arg_list.length; i++) {
+            for (let j = 0; j < arg_list[i].length; j++) {
+                isListLenArg(fn_name, arg_name + '[' + i + ']' + '[' + j + ']', arg_list[i][j], 3);
+                isNumberListArg(fn_name, arg_name + '[' + i + ']' + '[' + j + ']', arg_list[i][j]);
+            }
+        }
+        return;
+    },
     isVector: function(fn_name: string, arg_name: string, arg_list: [number, number, number]): void { // same checks as coord
         typeCheckObj.isCoord(fn_name, arg_name, arg_list);
         return;

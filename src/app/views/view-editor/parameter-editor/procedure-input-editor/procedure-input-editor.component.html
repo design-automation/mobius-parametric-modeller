@@ -1,4 +1,9 @@
-<div class='container--parameter' [class.error]='prod.hasError' [class.inputDisabled]='!prod.enabled' *ngIf='prod.meta?.module =="Input"'>
+<div class='container--parameter' 
+*ngIf='prod.meta?.module =="Input"'
+[class.error]='prod.hasError' 
+[class.selected]='prod.selected' 
+[class.inputDisabled]='!prod.enabled' 
+(click)='selectInput($event)'>
     <div class = "btn-container">
         <div class = "btns">
             <!-- delete button-->

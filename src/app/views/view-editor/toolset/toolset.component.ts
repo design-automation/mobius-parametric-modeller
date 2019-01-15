@@ -7,7 +7,6 @@ import { IArgument } from '@models/code';
 import { ModuleList, ModuleDocList } from '@shared/decorators';
 import { INode } from '@models/node';
 
-import * as circularJSON from 'flatted';
 import { DownloadUtils } from '@shared/components/file/download.utils';
 import { inline_query_expr, inline_func, inline_sort_expr} from './toolset.inline';
 import { DataService } from '@services';

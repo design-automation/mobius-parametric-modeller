@@ -28,7 +28,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     @ViewChild('flowchartSplit') flowchartSplit: SplitComponent;
 
     constructor(private dataService: DataService, private router: Router) {
-        new LoadUrlComponent(this.dataService).loadStartUpURL(this.router.url);
+        new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
     }
 
     viewbox = `0 0 ${canvasSize} ${canvasSize}`;

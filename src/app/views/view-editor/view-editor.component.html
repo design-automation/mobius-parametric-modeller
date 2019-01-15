@@ -50,7 +50,7 @@
                                     <procedure-item 
                                     *ngFor="let line of getNode()?.procedure; let idx=index" 
                                     [data]="line"
-                                    (select)="selectProcedure($event,line)"
+                                    (select)="selectProcedure($event)"
                                     (delete)="deleteChild(idx)"
                                     (helpText)='updateHelpView($event)'
                                     ></procedure-item>
@@ -62,7 +62,8 @@
                                 <parameter-editor *ngIf="getNode().type !== ''" 
                                 [flowchart]='getFlowchart()' 
                                 [node]='getNode()'
-                                [prodCheck]='true'></parameter-editor>
+                                [prodCheck]='true'
+                                (selectInp)='selectProcedure($event)'></parameter-editor>
                                 <div id = 'spacer'></div>
                                 
                             </div>

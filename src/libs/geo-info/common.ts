@@ -85,20 +85,6 @@ export interface IAttribsMaps {
     pg: Map<string, GIAttribMap>;
     co: Map<string, GIAttribMap>;
 }
-// export interface IGIAttribMap {
-//     // TODO
-// }
-// export enum EEntStrToAttribMap {
-//     ps = 'posis',
-//     _v = 'verts',
-//     _e = 'edges',
-//     _w = 'wires',
-//     _f = 'faces',
-//     pt = 'points',
-//     pl = 'plines',
-//     pg = 'pgons',
-//     co = 'colls'
-// }
 
 // Names of attributes
 export enum EAttribNames {

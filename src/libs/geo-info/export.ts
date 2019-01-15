@@ -40,7 +40,7 @@ export function exportObj(model: GIModel): string {
     // normals, vn
     if (has_normal_attrib) {
         for (const vert_i of verts_i) {
-            const normal: TNormal = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.NORMAL, vert_i,) as TNormal;
+            const normal: TNormal = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.NORMAL, vert_i) as TNormal;
             vn_str += 'v ' + normal.map( v => v.toString() ).join(' ') + '\n';
         }
     }

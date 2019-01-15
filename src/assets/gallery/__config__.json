@@ -1,6 +1,31 @@
 {
     "data": [
         {
+            "name": "Basic Examples",
+            "files": [
+                "basic_variable",
+                "basic_if",
+                "basic_ifelse",
+                "basic_ifelseif",
+                "basic_foreach",
+                "basic_while"
+            ],
+
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/"
+        },
+        {
+            "name": "Function Examples",
+            "files": [
+                "query_Get",
+                "query_Count",
+                "query_Neighbours",
+                "query_Sort",
+                "query_IsClosed"
+            ],
+
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
+        },
+        {
             "name": "Getting Started",
             "files": [
                 "box_with_holes",

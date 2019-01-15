@@ -1,24 +1,5 @@
 # CALC    
 
-## Area  
-* **Description:** Calculates the area of a surface or a list of surfaces.
-TODO: allow for a list of surfaces  
-* **Parameters:**  
-  * *entities:* A polygon, a face, a closed polyline, or a closed wire.  
-* **Returns:** Area.  
-* **Examples:**  
-  * area1 = calc.Area (surface1)
-  
-  
-## Centroid  
-* **Description:** Calculates the centroid of a list of any entity.  
-* **Parameters:**  
-  * *entities:* List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.  
-* **Returns:** Centroid.  
-* **Examples:**  
-  * centroid1 = calc.Centroid (polygon1)
-  
-  
 ## Distance  
 * **Description:** Calculates the distance between two positions.  
 * **Parameters:**  
@@ -41,6 +22,31 @@ Expected value of distance is [10,20].
   * length1 = calc.Length (line1)
   
   
+## Area  
+* **Description:** Calculates the area of a surface or a list of surfaces.
+TODO: allow for a list of surfaces  
+* **Parameters:**  
+  * *entities:* A polygon, a face, a closed polyline, or a closed wire.  
+* **Returns:** Area.  
+* **Examples:**  
+  * area1 = calc.Area (surface1)
+  
+  
+## Vector  
+* **Description:** Returns a vector along an edge.  
+* **Parameters:**  
+  * *edge:* An edge  
+* **Returns:** The vector from the start point of an edge to the end point of an edge  
+  
+## Centroid  
+* **Description:** Calculates the centroid of a list of any entity.  
+* **Parameters:**  
+  * *entities:* List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.  
+* **Returns:** Centroid.  
+* **Examples:**  
+  * centroid1 = calc.Centroid (polygon1)
+  
+  
 ## Normal  
 * **Description:** Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..  
 * **Parameters:**  
@@ -48,8 +54,10 @@ Expected value of distance is [10,20].
 * **Returns:** Vector.  
 * **Examples:**  
   * normal1 = calc.Normal (polygon1)  
-    If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
-  
+    If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.  
+* **Example URLs:**  
+  1. [https://mobius.design-automation.net/flowchart?file=xxx](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/https://mobius.design-automation.net/flowchart?file=xxx
+)  
   
 ## ParamTToXyz  
 * **Description:** Calculates the position on a linear entity, given a t parameter.  
@@ -69,10 +77,4 @@ Expected value of distance is [10,20].
 * **Examples:**  
   * coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
   
-  
-## Vector  
-* **Description:** Returns a vector along an edge.  
-* **Parameters:**  
-  * *edge:* An edge  
-* **Returns:** The vector from the start point of an edge to the end point of an edge  
   

@@ -56,3 +56,12 @@
     width: $header-height;
     height: $header-height;
 }
+
+#arrow{
+    stroke: $color1;
+    fill: transparent;
+}
+#arrow_selected{
+    stroke: $selected-color;
+    fill: transparent;
+}

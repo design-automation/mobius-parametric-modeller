@@ -586,7 +586,17 @@ export class GIGeomAdd {
                 case EEntType.PGON:
                     const wires_i: number[] = this._geom.query.navAnyToWire(ent_type, ent_i as number);
                     posis_i = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
-                    const pgon_i: number = this.addPgon(posis_i);
+                    let pgon_i: number;
+                    if (wires_i.length === 1) {
+                        pgon_i = this.addPgon(posis_i);
+                    } else {
+                        const holes_posis_i: number[][] = [];
+                        for (let i = 1; i < wires_i.length; i++) {
+                            const hole_posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
+                            holes_posis_i.push(hole_posis_i);
+                        }
+                        pgon_i = this.addPgonWithHole(posis_i, holes_posis_i);
+                    }
                     if (copy_attribs) {
                         this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pgon_i);
                     }

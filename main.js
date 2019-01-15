@@ -8392,7 +8392,7 @@ var LoadUrlComponent = /** @class */ (function () {
                 if (url.indexOf('dropbox') !== -1) {
                     url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
                 }
-                if (routerUrl.indexOf('node=') !== 1) {
+                if (routerUrl.indexOf('node=') !== -1) {
                     nodeID = routerUrl.split('node=')[1].split('&')[0];
                     nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
                     this.loadURL(url, nodeID);
@@ -8763,7 +8763,7 @@ var SaveFileComponent = /** @class */ (function () {
                             edge.selected = false;
                         }
                         savedfile.name = savedfile.flowchart.name;
-                        fileString = circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](savedfile);
+                        fileString = circular_json__WEBPACK_IMPORTED_MODULE_2__["stringify"](savedfile, null, 4);
                         fname = savedfile.flowchart.name.replace(/\ /g, '_') + ".mob";
                         blob = new Blob([fileString], { type: 'application/json' });
                         _download_utils__WEBPACK_IMPORTED_MODULE_1__["DownloadUtils"].downloadFile(fname, blob);

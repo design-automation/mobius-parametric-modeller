@@ -41,7 +41,7 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|
 }
 // ================================================================================================
 function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx|TEntTypeIdx[] {
-    if (!Array.isArray(ents_arr)) {
+    if (getArrDepth(ents_arr) === 1) {
         const index: number = ents_arr[1] as number;
         const point_i: number = __model__.geom.add.addPoint(index);
         return [EEntType.POINT, point_i] as TEntTypeIdx;

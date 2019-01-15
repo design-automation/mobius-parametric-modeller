@@ -297,6 +297,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     this.dropdownPosition = { x: pos_x, y: pos_y };
                 }
                 this.selectObj(intersects[0]);
+                // intersects[0].material.emissive.setHex( 0xff0000 );
             }
         } else {
             if (event.target.tagName === 'CANVAS') {
@@ -336,7 +337,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         // }
         const positions = Array.from(scene.selected_positions.keys());
         for (const posi of positions) {
-            scene.unselectPosi(posi, this.container);
+            scene.unselectObjGroup(posi, this.container, 'positions');
+        }
+
+        const edges = Array.from(scene.selected_face_edges.keys());
+        for (const edge of edges) {
+            scene.unselectObjGroup(edge, this.container, 'face_edges');
         }
 
         this.render(this);
@@ -441,6 +447,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         }
                         this.selectEdge(intersect0);
                     }
+                } else if (intersect0.object.type === 'Mesh') {
+                    const face = this.model.geom.query.navTriToFace(intersect0.faceIndex);
+                    const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
+                    if (scene.selected_face_edges.has(ent_id)) {
+                        this.unselectGeom(ent_id, 'face_edges');
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectEdgeByFace(intersect0, ent_id);
+                    }
                 } else {
                     this.showMessages('Edges', true);
                 }
@@ -533,10 +550,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const scene = this._data_threejs;
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         if (object.object.type === 'Points') {
-            const vert = this.model.geom.query.navPointToVert(object.index);
-            const position = this.model.attribs.query.getPosiCoords(vert);
-            const posi_ents = this.model.geom.query.navVertToPosi(vert);
-
+            const position = this.model.attribs.query.getPosiCoords(object.index);
+            const posi_ents = this.model.geom.query.navVertToPosi(object.index);
             const ent_id = `${ent_type_str}${object.index}`;
             scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, true);
             posi_ent.set(ent_id, posi_ents);
@@ -638,12 +653,20 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private unselectGeom(ent_id: string, ent_type_str: string) {
         const scene = this._data_threejs;
         if (ent_type_str === EEntTypeStr[EEntType.POSI]) {
-            scene.unselectPosi(ent_id, this.container);
-            const posi_child = this.dataService.selected_positions.get(ent_id);
-            posi_child.forEach(p => {
-                this.dataService.selected_ents.get(EEntTypeStr[EEntType.POSI]).delete(p);
+            scene.unselectObjGroup(ent_id, this.container, 'positions');
+            const children = this.dataService.selected_positions.get(ent_id);
+            children.forEach(c => {
+                this.dataService.selected_ents.get(EEntTypeStr[EEntType.POSI]).delete(c);
             });
             this.dataService.selected_positions.delete(ent_id);
+
+        } else if (ent_type_str === 'face_edges') {
+            scene.unselectObjGroup(ent_id, this.container, 'face_edges');
+            const children = this.dataService.selected_face_edges.get(ent_id);
+            children.forEach(c => {
+                this.dataService.selected_ents.get(EEntTypeStr[EEntType.EDGE]).delete(c);
+            });
+            this.dataService.selected_face_edges.delete(ent_id);
 
         } else {
             scene.unselectObj(ent_id, this.container);
@@ -660,6 +683,29 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this._data_threejs.selectObjLine(ent_id, [], posi_flat, this.container);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, line.index / 2);
     }
+
+    private selectEdgeByFace(object: THREE.Intersection, parent_ent_id: string) {
+        const ent_type_str = EEntTypeStr[EEntType.EDGE],
+            face = this.model.geom.query.navTriToFace(object.faceIndex),
+            edges = this.model.geom.query.navAnyToAny(EEntType.FACE, EEntType.EDGE, face);
+        const children = [];
+        edges.map(edge => {
+            const ent_id = `${ent_type_str}${edge}`;
+            children.push(ent_id);
+            const vert = this.model.geom.query.navEdgeToVert(edge);
+            const position = [];
+            const indices = [];
+            vert.map((v, i) => {
+                position.push(this.model.attribs.query.getVertCoords(v));
+                indices.push(i);
+            });
+            const posi_flat = [].concat(...position);
+            this._data_threejs.selectEdgeByFace(parent_ent_id, ent_id, indices, posi_flat, this.container);
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, edge);
+        });
+        this.dataService.selected_face_edges.set(`${parent_ent_id}`, children);
+    }
+
 
     private selectWire(line: THREE.Intersection) {
         const ent_type_str = EEntTypeStr[EEntType.EDGE],

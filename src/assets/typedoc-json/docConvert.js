@@ -2,6 +2,7 @@
 // import * as fs from 'fs';
 const dc = require('./doc.json');
 const fs = require('fs');
+const config = require('../gallery/__config__.json');
 
 const urlString = 'https://mobius.design-automation.net';
 
@@ -18,6 +19,14 @@ const ModuleList = [
     'list',
 ];
 
+
+let examples;
+for (const s of config.data){
+    if (s.name === 'Function Examples'){
+        examples = s;
+        break;
+    }
+}
 
 function compare(a, b) {
     if (a.id < b.id) {
@@ -166,6 +175,10 @@ for (const mod of docs) {
         if (func.example_link) {
             mdString += `* **Example URLs:**  \n`;
             for (const ex of func.example_link) {
+                const f = ex.trim().split('.mob')[0];
+                if (examples.files.indexOf(f) === -1) {
+                    examples.files.push(f);
+                }
                 mdString += `  1. [${ex.trim()}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
                             `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
 
@@ -184,7 +197,13 @@ for (const mod of docs) {
         if (err) {
             return console.log(err);
         }
-
         console.log(`successfully saved ${countStr}_${modName}.md`);
     });
 }
+
+fs.writeFile(`./src/assets/gallery/__config__.json`, JSON.stringify(config, null, 4), function(err) {
+    if (err) {
+        return console.log(err);
+    }
+    console.log(`successfully saved __config__.json`);
+});

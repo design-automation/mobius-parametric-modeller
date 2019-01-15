@@ -5945,11 +5945,7 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces."
-									},
-									{
-										"tag": "example_link",
-										"text": "calc_Normal.mob\n"
+										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.\n"
 									}
 								]
 							},
@@ -6019,7 +6015,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 257,
+							"line": 251,
 							"character": 22
 						}
 					]
@@ -6120,7 +6116,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 275,
+							"line": 268,
 							"character": 27
 						}
 					]
@@ -6258,7 +6254,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 336,
+							"line": 328,
 							"character": 27
 						}
 					]

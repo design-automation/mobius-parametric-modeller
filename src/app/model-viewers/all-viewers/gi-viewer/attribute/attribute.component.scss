@@ -43,6 +43,8 @@ table {
 
 /deep/ #attribTab{
   height: 100%;
+  width: 100%;
+  overflow-x: scroll;
   ul{
     background-color: transparent;
     margin: 0;
@@ -52,6 +54,8 @@ table {
     height: 20px;
     position: absolute;
     top:1px;
+    width: 100%;
+    min-width: fit-content;
     li{
       list-style: none;
       display: inline-block;

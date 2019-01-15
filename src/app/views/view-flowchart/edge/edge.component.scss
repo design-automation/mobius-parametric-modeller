@@ -1,6 +1,9 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
 .edge{
     fill: none;
-    stroke: rgb(80, 80, 80);
+    stroke: $color1;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 2px;
@@ -10,13 +13,13 @@
 }
 .inviEdge{
     fill: none;
-    stroke: gray;
+    stroke: $color2;
     stroke-width: 30px;
     opacity: 0;
     pointer-events: stroke;
 }
 .selected{
-    stroke: rgb(0, 0, 150);
+    stroke: $selected-color;
     opacity: 1;
     marker-end: url(#arrow_selected);
 }

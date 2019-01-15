@@ -118,7 +118,7 @@ export class LoadUrlComponent {
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
-            if (nodeID) {
+            if (nodeID && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
                 loadeddata.flowchart.meta.selected_nodes = [nodeID];
                 this.router.navigate(['/editor']);
             } else if (this.dataService.node.type !== 'end') {

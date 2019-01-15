@@ -12,7 +12,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_check_args.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_check_args.ts",
 			"children": [
 				{
 					"id": 1114,
@@ -2895,7 +2895,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_constants.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_constants.ts",
 			"children": [
 				{
 					"id": 1997,
@@ -3060,7 +3060,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_conversion.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_conversion.ts",
 			"children": [
 				{
 					"id": 1993,
@@ -3173,7 +3173,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_list.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_list.ts",
 			"children": [
 				{
 					"id": 1977,
@@ -3459,7 +3459,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_mathjs.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_mathjs.ts",
 			"children": [
 				{
 					"id": 1924,
@@ -3946,7 +3946,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_model.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_model.ts",
 			"children": [
 				{
 					"id": 1396,
@@ -4547,7 +4547,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_parameterTypes.ts",
 			"children": [
 				{
 					"id": 2023,
@@ -4923,7 +4923,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_rand.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_rand.ts",
 			"children": [
 				{
 					"id": 1945,
@@ -5115,7 +5115,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/_vec.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/_vec.ts",
 			"children": [
 				{
 					"id": 1958,
@@ -5478,7 +5478,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/calc.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/calc.ts",
 			"children": [
 				{
 					"id": 1310,
@@ -5563,7 +5563,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "area1 = calc.Area (surface1)\n"
+										"text": "area1 = calc.Area (surface1)"
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_Area.mob\n"
 									}
 								]
 							},
@@ -5606,7 +5610,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 105,
+							"line": 108,
 							"character": 20
 						}
 					]
@@ -5632,7 +5636,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "centroid1 = calc.Centroid (polygon1)\n"
+										"text": "centroid1 = calc.Centroid (polygon1)"
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_Centroid.mob\n"
 									}
 								]
 							},
@@ -5689,7 +5697,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 181,
+							"line": 186,
 							"character": 24
 						}
 					]
@@ -5719,7 +5727,11 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]]\nExpected value of distance is [10,20].\n"
+										"text": "position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]]"
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_Distance.mob\nExpected value of distance is [10,20].\n"
 									}
 								]
 							},
@@ -5817,7 +5829,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 46,
+							"line": 47,
 							"character": 24
 						}
 					]
@@ -5843,7 +5855,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "length1 = calc.Length (line1)\n"
+										"text": "length1 = calc.Length (line1)"
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_Length.mob\n"
 									}
 								]
 							},
@@ -5899,7 +5915,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 66,
+							"line": 68,
 							"character": 22
 						}
 					]
@@ -5933,7 +5949,7 @@
 									},
 									{
 										"tag": "example_link",
-										"text": "https://mobius.design-automation.net/flowchart?file=xxx\n"
+										"text": "calc_Normal.mob\n"
 									}
 								]
 							},
@@ -6003,7 +6019,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 252,
+							"line": 257,
 							"character": 22
 						}
 					]
@@ -6029,7 +6045,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "coord1 = calc.ParamTToXyz (polyline1, 0.23)\n"
+										"text": "coord1 = calc.ParamTToXyz (polyline1, 0.23)"
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_ParamTToXyz.mob\n"
 									}
 								]
 							},
@@ -6100,7 +6120,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 269,
+							"line": 275,
 							"character": 27
 						}
 					]
@@ -6125,7 +6145,11 @@
 								"tags": [
 									{
 										"tag": "example",
-										"text": "coord1 = calc.ParamXyzToT (polyline1, [1,2,3])\n"
+										"text": "coord1 = calc.ParamXyzToT (polyline1, [1,2,3])"
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_ParamXyzToT.mob\n"
 									}
 								]
 							},
@@ -6234,7 +6258,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 329,
+							"line": 336,
 							"character": 27
 						}
 					]
@@ -6256,7 +6280,13 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Returns a vector along an edge.",
-								"returns": "The vector from the start point of an edge to the end point of an edge\n"
+								"returns": "The vector from the start point of an edge to the end point of an edge",
+								"tags": [
+									{
+										"tag": "example_link",
+										"text": "calc_Vectore.mob\n"
+									}
+								]
 							},
 							"parameters": [
 								{
@@ -6298,7 +6328,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 154,
+							"line": 158,
 							"character": 22
 						}
 					]
@@ -6355,7 +6385,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 165,
+							"line": 169,
 							"character": 18
 						}
 					]
@@ -6617,7 +6647,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 191,
+							"line": 196,
 							"character": 23
 						}
 					]
@@ -6666,7 +6696,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/index.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/index.ts",
 			"sources": [
 				{
 					"fileName": "app/core/modules/index.ts",
@@ -6683,7 +6713,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/isect.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/isect.ts",
 			"children": [
 				{
 					"id": 1726,
@@ -7097,7 +7127,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/list.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/list.ts",
 			"children": [
 				{
 					"id": 1846,
@@ -8702,7 +8732,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/make.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/make.ts",
 			"children": [
 				{
 					"id": 1476,
@@ -8724,7 +8754,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 72,
+									"line": 73,
 									"character": 9
 								}
 							],
@@ -8741,7 +8771,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 73,
+									"line": 74,
 									"character": 8
 								}
 							],
@@ -8761,7 +8791,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 71,
+							"line": 72,
 							"character": 19
 						}
 					]
@@ -8786,7 +8816,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 218,
+									"line": 219,
 									"character": 19
 								}
 							],
@@ -8803,7 +8833,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 219,
+									"line": 220,
 									"character": 17
 								}
 							],
@@ -8823,7 +8853,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 217,
+							"line": 218,
 							"character": 27
 						}
 					]
@@ -8848,7 +8878,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 416,
+									"line": 417,
 									"character": 13
 								}
 							],
@@ -8865,7 +8895,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 415,
+									"line": 416,
 									"character": 13
 								}
 							],
@@ -8885,7 +8915,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 414,
+							"line": 415,
 							"character": 26
 						}
 					]
@@ -8910,7 +8940,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 248,
+									"line": 249,
 									"character": 10
 								}
 							],
@@ -8927,7 +8957,7 @@
 							"sources": [
 								{
 									"fileName": "app/core/modules/make.ts",
-									"line": 247,
+									"line": 248,
 									"character": 8
 								}
 							],
@@ -8947,7 +8977,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 246,
+							"line": 247,
 							"character": 24
 						}
 					]
@@ -9049,7 +9079,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 154,
+							"line": 155,
 							"character": 26
 						}
 					]
@@ -9164,7 +9194,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 231,
+							"line": 232,
 							"character": 20
 						}
 					]
@@ -9291,7 +9321,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 472,
+							"line": 473,
 							"character": 22
 						}
 					]
@@ -9437,7 +9467,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 386,
+							"line": 387,
 							"character": 23
 						}
 					]
@@ -9514,7 +9544,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 406,
+							"line": 407,
 							"character": 20
 						}
 					]
@@ -9609,7 +9639,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 287,
+							"line": 288,
 							"character": 20
 						}
 					]
@@ -9713,7 +9743,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 61,
+							"line": 62,
 							"character": 21
 						}
 					]
@@ -9819,7 +9849,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 121,
+							"line": 122,
 							"character": 23
 						}
 					]
@@ -9944,7 +9974,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 95,
+							"line": 96,
 							"character": 24
 						}
 					]
@@ -10156,7 +10186,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 496,
+							"line": 497,
 							"character": 22
 						}
 					]
@@ -10236,7 +10266,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 130,
+							"line": 131,
 							"character": 27
 						}
 					]
@@ -10327,7 +10357,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 172,
+							"line": 173,
 							"character": 18
 						}
 					]
@@ -10408,7 +10438,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 189,
+							"line": 190,
 							"character": 23
 						}
 					]
@@ -10501,7 +10531,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 440,
+							"line": 441,
 							"character": 16
 						}
 					]
@@ -10579,7 +10609,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 418,
+							"line": 419,
 							"character": 20
 						}
 					]
@@ -10691,7 +10721,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 296,
+							"line": 297,
 							"character": 17
 						}
 					]
@@ -10763,7 +10793,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 250,
+							"line": 251,
 							"character": 14
 						}
 					]
@@ -10814,6 +10844,17 @@
 													"type": "reference",
 													"name": "TEntTypeIdx",
 													"id": 214
+												}
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "array",
+													"elementType": {
+														"type": "reference",
+														"name": "TEntTypeIdx",
+														"id": 214
+													}
 												}
 											}
 										]
@@ -10929,7 +10970,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 104,
+							"line": 105,
 							"character": 17
 						}
 					]
@@ -11027,7 +11068,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/make.ts",
-							"line": 75,
+							"line": 76,
 							"character": 18
 						}
 					]
@@ -11191,7 +11232,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/modify.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/modify.ts",
 			"children": [
 				{
 					"id": 1658,
@@ -12667,7 +12708,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/output.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/output.ts",
 			"children": [
 				{
 					"id": 2004,
@@ -12765,7 +12806,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/pattern.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/pattern.ts",
 			"children": [
 				{
 					"id": 1774,
@@ -13346,7 +13387,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/query.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/query.ts",
 			"children": [
 				{
 					"id": 1403,
@@ -14776,7 +14817,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/util.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/util.ts",
 			"children": [
 				{
 					"id": 1760,
@@ -15051,7 +15092,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/app/core/modules/virtual.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/app/core/modules/virtual.ts",
 			"children": [
 				{
 					"id": 1828,
@@ -15959,7 +16000,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/filesys/download.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/filesys/download.ts",
 			"children": [
 				{
 					"id": 1755,
@@ -16049,7 +16090,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribMap.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIAttribMap.ts",
 			"children": [
 				{
 					"id": 2,
@@ -17467,7 +17508,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribs.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIAttribs.ts",
 			"children": [
 				{
 					"id": 982,
@@ -18070,7 +18111,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribsAdd.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIAttribsAdd.ts",
 			"children": [
 				{
 					"id": 844,
@@ -18877,7 +18918,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribsQuery.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIAttribsQuery.ts",
 			"children": [
 				{
 					"id": 912,
@@ -20143,7 +20184,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIAttribsThreejs.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIAttribsThreejs.ts",
 			"children": [
 				{
 					"id": 890,
@@ -20583,7 +20624,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeom.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIGeom.ts",
 			"children": [
 				{
 					"id": 1019,
@@ -21446,7 +21487,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeomAdd.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIGeomAdd.ts",
 			"children": [
 				{
 					"id": 461,
@@ -22878,7 +22919,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeomQuery.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIGeomQuery.ts",
 			"children": [
 				{
 					"id": 603,
@@ -25353,7 +25394,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIGeomThreejs.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIGeomThreejs.ts",
 			"children": [
 				{
 					"id": 1003,
@@ -25694,7 +25735,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/GIModel.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/GIModel.ts",
 			"children": [
 				{
 					"id": 1061,
@@ -26220,7 +26261,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/ThreejsJSON.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/ThreejsJSON.ts",
 			"children": [
 				{
 					"id": 1053,
@@ -26426,7 +26467,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/common.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/common.ts",
 			"children": [
 				{
 					"id": 176,
@@ -30559,7 +30600,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/export.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/export.ts",
 			"children": [
 				{
 					"id": 1747,
@@ -30635,7 +30676,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/id.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/id.ts",
 			"children": [
 				{
 					"id": 541,
@@ -31724,7 +31765,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geo-info/import.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geo-info/import.ts",
 			"children": [
 				{
 					"id": 1751,
@@ -31800,7 +31841,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geom/distance.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geom/distance.ts",
 			"children": [
 				{
 					"id": 1088,
@@ -31954,7 +31995,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geom/matrix.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geom/matrix.ts",
 			"children": [
 				{
 					"id": 1597,
@@ -32830,7 +32871,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geom/triangle.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geom/triangle.ts",
 			"children": [
 				{
 					"id": 1095,
@@ -33078,7 +33119,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/geom/vectors.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/geom/vectors.ts",
 			"children": [
 				{
 					"id": 754,
@@ -34434,7 +34475,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/triangulate/arr.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/triangulate/arr.ts",
 			"children": [
 				{
 					"id": 418,
@@ -35092,7 +35133,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/triangulate/earcut.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/triangulate/earcut.ts",
 			"children": [
 				{
 					"id": 406,
@@ -37106,7 +37147,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/triangulate/threex.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/triangulate/threex.ts",
 			"children": [
 				{
 					"id": 237,
@@ -37543,7 +37584,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/libs/triangulate/triangulate.ts",
+			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/libs/triangulate/triangulate.ts",
 			"children": [
 				{
 					"id": 454,

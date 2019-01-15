@@ -54,10 +54,8 @@ TODO: allow for a list of surfaces
 * **Returns:** Vector.  
 * **Examples:**  
   * normal1 = calc.Normal (polygon1)  
-    If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.  
-* **Example URLs:**  
-  1. [https://mobius.design-automation.net/flowchart?file=xxx](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/https://mobius.design-automation.net/flowchart?file=xxx
-)  
+    If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
+  
   
 ## ParamTToXyz  
 * **Description:** Calculates the position on a linear entity, given a t parameter.  

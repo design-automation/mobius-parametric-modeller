@@ -5929,11 +5929,7 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces."
-									},
-									{
-										"tag": "example_link",
-										"text": "https://mobius.design-automation.net/flowchart?file=xxx\n"
+										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.\n"
 									}
 								]
 							},
@@ -6003,7 +5999,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 252,
+							"line": 251,
 							"character": 22
 						}
 					]
@@ -6100,7 +6096,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 269,
+							"line": 268,
 							"character": 27
 						}
 					]
@@ -6234,7 +6230,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 329,
+							"line": 328,
 							"character": 27
 						}
 					]

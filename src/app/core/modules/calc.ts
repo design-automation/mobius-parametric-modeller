@@ -247,7 +247,6 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
  * @returns Vector.
  * @example normal1 = calc.Normal (polygon1)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
- * @example_link https://mobius.design-automation.net/flowchart?file=xxx
  */
 export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
     const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];

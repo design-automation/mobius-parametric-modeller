@@ -19,8 +19,7 @@
                 "query_Count",
                 "query_Neighbours",
                 "query_Sort",
-                "query_IsClosed",
-                "polyline_example"
+                "query_IsClosed"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
         },

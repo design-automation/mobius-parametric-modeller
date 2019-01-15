@@ -37,7 +37,7 @@ export class LoadUrlComponent {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
 
-        if (routerUrl.indexOf('node=') !== 1) {
+        if (routerUrl.indexOf('node=') !== -1) {
             let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
             nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
             this.loadURL(url, nodeID);

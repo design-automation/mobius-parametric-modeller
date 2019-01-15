@@ -136,13 +136,19 @@ for (const mod of doc.children) {
 docs.sort(compare);
 
 let count = 0;
-for (const mod of docs) {
+for (const modName of ModuleList) {
+    let mod;
+    for (let m of docs) {
+        if (m.name === modName) {
+            mod = m;
+            break;
+        }
+    }
+    if (!mod) {continue;}
     // if (!docs[modName]) { continue; }
     // const mod = docs[modName];
     // Module name
-    if (ModuleList.indexOf (mod.name) === -1) { continue; }
-
-    const modName = mod.name;
+    if (ModuleList.indexOf (mod.name) === -1) { continue; }``
     let mdString = `# ${modName.toUpperCase()}    \n\n`;
     for (const func of mod.func) {
         // if (!mod[funcName]) { continue; }

@@ -40,12 +40,13 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|
     return idsMake(new_ents_arr);
 }
 // ================================================================================================
-function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx|TEntTypeIdx[] {
-    if (getArrDepth(ents_arr) === 1) {
+function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
         const index: number = ents_arr[1] as number;
         const point_i: number = __model__.geom.add.addPoint(index);
         return [EEntType.POINT, point_i] as TEntTypeIdx;
-    } else {
+    } else { // depth === 2 or 3
         return (ents_arr as TEntTypeIdx[]).map(_ents_arr => _point(__model__, _ents_arr)) as TEntTypeIdx[];
     }
 }
@@ -61,7 +62,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTy
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Point', 'positions', positions,
-        ['isID', 'isIDList'], ['POSI'])  as TEntTypeIdx|TEntTypeIdx[];
+        ['isID', 'isIDList', 'isIDList_list'], ['POSI'])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr);
     return idsMake(new_ents_arr) as TId|TId[];

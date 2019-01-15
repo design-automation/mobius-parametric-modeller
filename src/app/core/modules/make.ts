@@ -151,7 +151,7 @@ function _polygonHoles(__model__: GIModel, ents_arr: TEntTypeIdx[],
  * @example polygon1 = make.Polygon([position1,position2,position3], [position4,position5,position6])
  * @example_info Creates a polygon with  a hole, with vertices in sequence from position1 to position6.
  */
-export function PolygonHoles(__model__: GIModel, positions: TId[], hole_positions: TId[]|TId[][]): TId {
+function _PolygonHoles(__model__: GIModel, positions: TId[], hole_positions: TId[]|TId[][]): TId {
     // --- Error Check ---
     const pgon_ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList'], ['POSI']) as TEntTypeIdx[];
     const holes_ents_arr = checkIDs('make.Polygon', 'positions', hole_positions,

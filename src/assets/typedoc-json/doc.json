@@ -5610,7 +5610,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 108,
+							"line": 107,
 							"character": 20
 						}
 					]
@@ -5697,7 +5697,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 186,
+							"line": 185,
 							"character": 24
 						}
 					]
@@ -5727,11 +5727,11 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]]"
+										"text": "position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20]."
 									},
 									{
 										"tag": "example_link",
-										"text": "calc_Distance.mob\nExpected value of distance is [10,20].\n"
+										"text": "calc_Distance.mob\n"
 									}
 								]
 							},
@@ -5829,7 +5829,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 47,
+							"line": 46,
 							"character": 24
 						}
 					]
@@ -5915,7 +5915,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 68,
+							"line": 67,
 							"character": 22
 						}
 					]
@@ -5945,7 +5945,11 @@
 									},
 									{
 										"tag": "example_info",
-										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.\n"
+										"text": "If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces."
+									},
+									{
+										"tag": "example_link",
+										"text": "calc_Normal.mob\n"
 									}
 								]
 							},
@@ -6015,7 +6019,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 251,
+							"line": 256,
 							"character": 22
 						}
 					]
@@ -6116,7 +6120,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 268,
+							"line": 274,
 							"character": 27
 						}
 					]
@@ -6254,7 +6258,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 328,
+							"line": 335,
 							"character": 27
 						}
 					]
@@ -6324,7 +6328,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 158,
+							"line": 157,
 							"character": 22
 						}
 					]
@@ -6381,7 +6385,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 169,
+							"line": 168,
 							"character": 18
 						}
 					]
@@ -6643,7 +6647,7 @@
 					"sources": [
 						{
 							"fileName": "app/core/modules/calc.ts",
-							"line": 196,
+							"line": 195,
 							"character": 23
 						}
 					]

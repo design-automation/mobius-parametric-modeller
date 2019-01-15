@@ -20,7 +20,15 @@
                 "query_Neighbours",
                 "query_Sort",
                 "query_IsClosed",
-                "polyline_example"
+                "polyline_example",
+                "calc_Distance",
+                "calc_Length",
+                "calc_Area",
+                "calc_Vectore",
+                "calc_Centroid",
+                "calc_Normal",
+                "calc_ParamTToXyz",
+                "calc_ParamXyzToT"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
         },

@@ -185,7 +185,7 @@ for (const modName of ModuleList) {
                 if (examples.files.indexOf(f) === -1) {
                     examples.files.push(f);
                 }
-                mdString += `  1. [${ex.trim()}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
+                mdString += `  1. [${ex.trim().split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
                             `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
 
             }

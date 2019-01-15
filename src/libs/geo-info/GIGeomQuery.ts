@@ -19,6 +19,11 @@ export class GIGeomQuery {
     // ============================================================================
     // Get entity indicies, and num ents
     // ============================================================================
+    /**
+     * Returns a list of indicies for all, including ents that are null
+     * TODO This seems unecessary
+     * @param ent_type
+     */
     public getEnts(ent_type: EEntType): number[] {
         if (isPosi(ent_type)) {
             // TODO how to handle deleted positions
@@ -31,14 +36,12 @@ export class GIGeomQuery {
         // console.log("geom_array", geom_array);
         const ents_i: number[] = [];
         geom_array.forEach( (entity, index) => {
-            //if (entity !== null && entity !== undefined) {  // skips deleted entities
-                ents_i.push(index);
-            //}
+            ents_i.push(index);
         });
         return ents_i;
     }
     /**
-     * Returns the number of entities, excluding deleted entities
+     * Returns the number of entities, including deleted entities (which are set to null)
      * @param ent_type
      */
     public numEnts(ent_type: EEntType): number {

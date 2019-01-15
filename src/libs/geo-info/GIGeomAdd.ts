@@ -686,6 +686,14 @@ export class GIGeomAdd {
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
     }
     /**
+     * Open a wire, by deleting an edge
+     * @param wire_i The wire to close.
+     */
+    public openWire(wire_i: number): void {
+        // This deletes an edge
+        throw new Error('Not implemented');
+    }
+    /**
      * Insert a vertex into an edge and updates the wire with the new edge
      * @param wire_i The wire to close.
      */
@@ -728,6 +736,7 @@ export class GIGeomAdd {
     }
     /**
      * Unweld the vertices
+     * TODO copy attributes onto new positions?
      * @param verts_i
      */
     public unweldVerts(verts_i: number[]): number[] {
@@ -769,5 +778,37 @@ export class GIGeomAdd {
         }
         // return all the new positions
         return Array.from(old_to_new_posis_i_map.values());
+    }
+    /**
+     * Reverse the edges of a wire.
+     * Theis lists the edges in reverse order, and flips each edge.
+     * The attributes ...
+     */
+    public reverse(wire_i: number): void {
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        wire.reverse();
+        // reverse the edges
+        for (const edge_i of wire) {
+            const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+            edge.reverse();
+        }
+        // if this is a face, reverse the triangles
+        if (this._geom_arrays.up_wires_faces[wire_i] !== undefined) {
+            const face_i: number = this._geom_arrays.up_wires_faces[wire_i];
+            const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
+            for (const tri_i of face[1]) {
+                const tri: TTri = this._geom_arrays.dn_tris_verts[tri_i];
+                tri.reverse();
+            }
+        }
+    }
+    /**
+     * Reverse the edges of a wire.
+     * Theis lists the edges in reverse order, and flips each edge.
+     * The attributes ...
+     */
+    public shift(wire_i: number, offset: number): void {
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        wire.unshift.apply( wire, wire.splice( offset, wire.length ) );
     }
 }

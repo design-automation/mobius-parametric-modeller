@@ -1,11 +1,12 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
-import { idsBreak } from '@libs/geo-info/id';
+import { idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { xformMatrix } from '@libs/triangulate/threex';
+import { Arr } from '@libs/triangulate/arr';
 
 // ================================================================================================
 /**
@@ -212,6 +213,15 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
     }
 }
 // ================================================================================================
+function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
+    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        wires_i.forEach( wire_i => __model__.geom.add.reverse(wire_i) );
+    } else {
+        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _reverse(__model__, ent_arr) );
+    }
+}
 /**
  * Reverses direction of entities.
  * @param __model__
@@ -224,11 +234,21 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
  */
 export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
-    // const ents_arr = checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
+    const ents_arr = checkIDs('modify.Reverse', 'entities', entities,
+        ['isID', 'isIDList'], ['WIRE', 'PLINE', 'FACE', 'PGON'])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    _reverse(__model__, ents_arr);
 }
 // ================================================================================================
+function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset: number): void {
+    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        wires_i.forEach( wire_i => __model__.geom.add.shift(wire_i, offset) );
+    } else {
+        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _shift(__model__, ent_arr, offset) );
+    }
+}
 /**
  * Reverses direction of entities.
  * @param __model__
@@ -241,13 +261,14 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
  */
 export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): void {
     // --- Error Check ---
-    // const ents_arr = checkIDs('modify.Reverse', 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'PGON', 'WIRE']);
+    const ents_arr = checkIDs('modify.Reverse', 'entities', entities,
+        ['isID', 'isIDList'], ['WIRE', 'PLINE', 'FACE', 'PGON'])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    _shift(__model__, ents_arr, offset);
 }
 // ================================================================================================
 function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
-    if (!Array.isArray(ents_arr[0])) {
+    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         let wire_i: number = index;
         if (ent_type === EEntType.PLINE) {
@@ -306,7 +327,7 @@ export enum _EPromoteAttribTypes {
  * @returns void
  * @example promote1 = modify.Promote (colour, positions, faces, sum)
  */
-export function Promote(__model__: GIModel, attrib_name: string,
+export function _Promote(__model__: GIModel, attrib_name: string,
     from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
     // --- Error Check ---
     // checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
@@ -322,7 +343,7 @@ export function Promote(__model__: GIModel, attrib_name: string,
  * @example modify.Weld([polyline1,polyline2])
  * @example_info Welds both polyline1 and polyline2 together. Entities must be of the same type.
  */
-export function Weld(__model__: GIModel, entities: TId[]): void {
+export function _Weld(__model__: GIModel, entities: TId[]): void {
     // --- Error Check ---
     // const ents_arr = checkIDs('modify.Weld', 'entities', entities, ['isIDList'],
     //                          ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
@@ -338,7 +359,7 @@ export function Weld(__model__: GIModel, entities: TId[]): void {
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.
  */
-export function Delete(__model__: GIModel, entities: TId|TId[]  ): void {
+export function _Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     // --- Error Check ---
     // const ents_arr = checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---

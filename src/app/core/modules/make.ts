@@ -471,7 +471,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
  * @example joined1 = make.Join([polyline1,polyline2])
  * @example_info Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
  */
-export function Join(__model__: GIModel, geometry: TId[]): TId {
+export function _Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
     // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
     // --- Error Check ---

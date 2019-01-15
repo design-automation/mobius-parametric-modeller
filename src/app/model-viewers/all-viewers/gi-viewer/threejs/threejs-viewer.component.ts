@@ -289,6 +289,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
         // check intersect exist
         if (intersects.length > 0) {
+            console.log(intersects[0].object);
             if (event.which === 1) {
                 // check mouse event triggered in THREE viewer, then enable dropdown menu
                 if (event.target.tagName === 'CANVAS') {
@@ -297,7 +298,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     this.dropdownPosition = { x: pos_x, y: pos_y };
                 }
                 this.selectObj(intersects[0]);
-                // intersects[0].material.emissive.setHex( 0xff0000 );
+                // intersects[0].object.material.emissive.setHex( 0xff0000 );
             }
         } else {
             if (event.target.tagName === 'CANVAS') {

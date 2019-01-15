@@ -15,7 +15,7 @@ export class DataThreejs {
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
-    public selected_geoms: Map<string, any> = new Map();
+    public selected_geoms: Map<string, number> = new Map();
     public selected_positions: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
     public _text: string;
@@ -192,16 +192,27 @@ export class DataThreejs {
             this.selected_face_edges.set(parent_ent_id, new Map());
         }
 
-        const line = new THREE.LineSegments(bg.geom, bg.mat);
-        this._scene.add(line);
-        this.selected_face_edges.get(parent_ent_id).set(ent_id, line.id);
+        const check_exist: string[] = [];
+        this.selected_face_edges.forEach(v => {
+            v.forEach((vv, k) => {
+                check_exist.push(k);
+            });
+        });
 
-        console.log('this.selected_face_edges', Array.from(this.selected_face_edges));
+        this.selected_geoms.forEach((v, k) => {
+            check_exist.push(k);
+        });
 
-        if (label) {
-            const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
-            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
-            this.ObjLabelMap.set(ent_id, obj);
+        if (!check_exist.includes(ent_id)) {
+            const line = new THREE.LineSegments(bg.geom, bg.mat);
+            this._scene.add(line);
+            this.selected_face_edges.get(parent_ent_id).set(ent_id, line.id);
+            this.sceneObjsSelected.set(ent_id, line);
+            if (label) {
+                const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.ObjLabelMap.set(ent_id, obj);
+            }
         }
     }
 
@@ -252,13 +263,13 @@ export class DataThreejs {
             const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
             this.selected_positions.get(parent_ent_id).set(ent_id, point.id);
+            this.sceneObjsSelected.set(ent_id, point);
             if (label) {
                 const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
                 this.createLabelforObj(container, obj.entity, obj.type, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         }
-        // this.sceneObjsSelected.set(ent_id, point);
     }
 
     public createLabelforObj(container, obj, type: string, labelText: string) {

@@ -9,6 +9,7 @@ import { _parameterTypes, _varString } from '@modules';
 import { DataService } from '@services';
 // import { WebWorkerService } from 'ngx-web-worker';
 import { InputType } from '@models/port';
+import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -48,7 +49,7 @@ const DEBUG = false;
 })
 export class ExecuteComponent {
 
-    constructor(private dataService: DataService) {}
+    constructor(private dataService: DataService, private googleAnalyticsService: GoogleAnalyticsService) {}
 
     async execute() {
         // const startTime = performance.now();
@@ -162,6 +163,7 @@ export class ExecuteComponent {
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
+        this.googleAnalyticsService.trackEvent('execute', 'successful', 'click');
     }
 
     async resolveImportedUrl(prodList: IProcedure[]) {
@@ -337,6 +339,7 @@ export class ExecuteComponent {
                         ex.message);
             // console.log('---------------\nError node code:');
             // console.log(fnString);
+            this.googleAnalyticsService.trackEvent('execute', `error${ex.name}`, 'click');
             throw ex;
 
         }

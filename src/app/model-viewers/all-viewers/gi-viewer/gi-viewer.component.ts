@@ -124,7 +124,6 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'positions.size':
                 this.settings.positions.size = Number(value);
-                scene.addPositions(this.settings.positions.size);
                 break;
             default:
                 break;

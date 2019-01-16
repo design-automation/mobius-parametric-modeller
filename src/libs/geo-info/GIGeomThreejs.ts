@@ -38,7 +38,9 @@ export class GIGeomThreejs {
     public get3jsTris(): [number[], Map<number, number>] {
         const tris_verts_i_filt: TTri[] = [];
         const tri_select_map: Map<number, number> = new Map();
-        for (let gi_i = 0; gi_i < this._geom_arrays.dn_tris_verts.length; gi_i++) {
+        let gi_i = 0;
+        const l = this._geom_arrays.dn_tris_verts.length;
+        for (; gi_i < l; gi_i++) {
             const tri_verts_i: TTri = this._geom_arrays.dn_tris_verts[gi_i];
             if (tri_verts_i !== null) {
                 const tjs_i = tris_verts_i_filt.push(tri_verts_i) - 1;
@@ -48,7 +50,7 @@ export class GIGeomThreejs {
         // @ts-ignore
         return [tris_verts_i_filt.flat(1), tri_select_map];
 
-        //return this._geom_arrays.dn_tris_verts.flat(1);
+        // return this._geom_arrays.dn_tris_verts.flat(1);
         // return [].concat(...this._geom_arrays.dn_tris_verts);
     }
     /**
@@ -59,7 +61,9 @@ export class GIGeomThreejs {
     public get3jsEdges(): [number[], Map<number, number>] {
         const edges_verts_i_filt: TEdge[] = [];
         const edge_select_map: Map<number, number> = new Map();
-        for (let gi_i = 0; gi_i < this._geom_arrays.dn_edges_verts.length; gi_i++) {
+        let gi_i = 0;
+        const l = this._geom_arrays.dn_edges_verts.length;
+        for (; gi_i < l; gi_i++) {
             const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
             if (edge_verts_i !== null) {
                 const tjs_i = edges_verts_i_filt.push(edge_verts_i) - 1;
@@ -70,7 +74,7 @@ export class GIGeomThreejs {
         return [edges_verts_i_filt.flat(1), edge_select_map];
 
         // @ts-ignore
-        //return this._geom_arrays.dn_edges_verts.flat(1);
+        // return this._geom_arrays.dn_edges_verts.flat(1);
         // return [].concat(...this._geom_arrays.dn_edges_verts);
     }
     /**
@@ -80,7 +84,9 @@ export class GIGeomThreejs {
     public get3jsPoints(): [number[], Map<number, number>] {
         const points_verts_i_filt: TPoint[] = [];
         const point_select_map: Map<number, number> = new Map();
-        for (let gi_i = 0; gi_i < this._geom_arrays.dn_points_verts.length; gi_i++) {
+        let gi_i = 0;
+        const l = this._geom_arrays.dn_points_verts.length;
+        for (; gi_i < l; gi_i++) {
             const point_verts_i: TPoint = this._geom_arrays.dn_points_verts[gi_i];
             if (point_verts_i !== null) {
                 const tjs_i = points_verts_i_filt.push(point_verts_i) - 1;

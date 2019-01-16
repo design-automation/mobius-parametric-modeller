@@ -46,8 +46,6 @@ export class DataThreejs {
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number}
     };
-
-    private threejs_data;
     /**
      * Constructs a new data subscriber.
      */
@@ -117,29 +115,29 @@ export class DataThreejs {
         this._addAxes();
 
         // Add geometry
-        this.threejs_data = model.get3jsData();
-        const ThreeJsData: IThreeJS = this.threejs_data;
-        this.tri_select_map = ThreeJsData.triangle_select_map;
-        this.edge_select_map = ThreeJsData.edge_select_map;
-        this.point_select_map = ThreeJsData.point_select_map;
+        const threejs_data: IThreeJS = model.get3jsData();
+        this.tri_select_map = threejs_data.triangle_select_map;
+        this.edge_select_map = threejs_data.edge_select_map;
+        this.point_select_map = threejs_data.point_select_map;
 
         // Create buffers that will be used by all geometry
-        const posis_buffer = new THREE.Float32BufferAttribute(ThreeJsData.positions, 3);
-        const normals_buffer = new THREE.Float32BufferAttribute(ThreeJsData.normals, 3);
-        const colors_buffer = new THREE.Float32BufferAttribute(ThreeJsData.colors, 3);
-        this._addTris(ThreeJsData.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
-        this._addLines(ThreeJsData.edge_indices, posis_buffer, normals_buffer);
-        this._addPoints(ThreeJsData.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
-        this.addPositions(this.settings.positions.size);
+        const posis_buffer = new THREE.Float32BufferAttribute(threejs_data.positions, 3);
+        const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
+        const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
+        this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
+        this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
+        this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
+        this.addPositions(threejs_data.colors, this.settings.positions.size);
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
         // this.grid.position.copy(center);
         // this.axesHelper.position.copy(center);
     }
 
-    public addPositions(size) {
+    public addPositions(all_positions_colors: number[] = null, size) {
         const all_positions = this._model.attribs.query.getAllPosisCoords();
-        const all_positions_flat = [].concat.apply([], all_positions);
+        // @ts-ignore
+        const all_positions_flat = all_positions.flat(1);
         const all_positions_indices = [];
         let index = 0;
         const l = all_positions_flat.length / 3;
@@ -149,7 +147,7 @@ export class DataThreejs {
 
         this._addPositions(all_positions_flat,
             all_positions_indices,
-            this.threejs_data.colors,
+            all_positions_colors,
             [120, 120, 120],
             size);
         this._positions.map(p => p.visible = this.settings.positions.show);
@@ -261,7 +259,8 @@ export class DataThreejs {
         if (colors) {
             geom.addAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
         } else {
-            const color_buffer = new Uint8Array([].concat(...Array(positions.length / 3).fill(color)));
+            // @ts-ignore
+            const color_buffer = new Uint8Array(Array(positions.length / 3).fill(color).flat(1));
             geom.addAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));
         }
         geom.computeBoundingSphere();
@@ -648,12 +647,13 @@ export class DataThreejs {
     }
 
     public onWindowKeyPress(event: KeyboardEvent) {
-        if ((<Element>event.target).nodeName === 'TEXTAREA') { return; }
+        const nodeName = (<Element>event.target).nodeName;
+        if ( nodeName === 'TEXTAREA' || nodeName === 'INPUT') { return; }
         const segment_str = window.location.pathname;
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];
         if (last_segment === 'editor') {
-            return null;
+            // return;
         }
         const keyCode = event.which;
         // console.log(keyCode);

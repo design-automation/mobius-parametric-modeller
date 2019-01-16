@@ -197,7 +197,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     //     return scene._raycaster.intersectObjects(scene.sceneObjs);
     // }
 
-    private onMouseUp(event) {
+    onMouseUp(event) {
         if (event.target.tagName !== 'CANVAS') {
             return null;
         } else {
@@ -254,7 +254,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    private onMouseDown(event) {
+    onMouseDown(event) {
         if (event.target.tagName !== 'CANVAS') {
             return null;
         } else {
@@ -269,7 +269,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    private onKeyDown(event) {
+    onKeyDown(event) {
         const scene = this._data_threejs;
         // keyboard control for camera
         scene.onWindowKeyPress(event);
@@ -279,7 +279,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.render(this);
     }
 
-    private onKeyUp(event) {
+    onKeyUp(event) {
         this.shiftKeyPressed = false;
     }
 
@@ -952,7 +952,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.selectDropdownVisible = false;
     }
 
-    private selectEntity(id: number) {
+    selectEntity(id: number) {
         this.chooseColl(id);
     }
 }

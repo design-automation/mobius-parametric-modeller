@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'load-url',
-  template:  `<button id='loadurl' class='btn' (click)='loadURL()'></button>`,
+  template:  `<button id='loadurl' class='btn'></button>`,
   styles: [
             `
             button.btn{

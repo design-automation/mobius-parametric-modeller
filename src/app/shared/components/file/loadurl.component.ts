@@ -37,7 +37,7 @@ export class LoadUrlComponent {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
 
-        if (routerUrl.indexOf('node=') !== 1) {
+        if (routerUrl.indexOf('node=') !== -1) {
             let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
             nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
             this.loadURL(url, nodeID);
@@ -118,7 +118,7 @@ export class LoadUrlComponent {
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
             this.dataService.newFlowchart = true;
-            if (nodeID) {
+            if (nodeID && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
                 loadeddata.flowchart.meta.selected_nodes = [nodeID];
                 this.router.navigate(['/editor']);
             } else if (this.dataService.node.type !== 'end') {

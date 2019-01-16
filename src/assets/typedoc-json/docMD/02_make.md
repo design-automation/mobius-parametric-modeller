@@ -29,7 +29,7 @@
   * polyline1 = make.Polyline([position1,position2,position3], close)  
     Creates a closed polyline with vertices position1, position2, position3 in sequence.  
 * **Example URLs:**  
-  1. [polyline_example.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/polyline_example.mob
+  1. [polyline_example.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/polyline_example.mob&node=1
 )  
   
 ## Polygon  

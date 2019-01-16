@@ -241,15 +241,19 @@ ul{
     // min-width: 50px;
     // max-width: 250px;
 
-    background-color: $color4;
-    border: 1px solid $color4;
+    background-color: $color5-5;// $color4;
+    border: 2px solid $color5;
     color: $color8;
     pointer-events: none;
     //text-align: left;
     padding: 0px 10px 0px 10px;
     //border-radius: 6px;
     opacity:0;
-    position: absolute;
+
+    position: fixed; //absolute
+    bottom:0px;
+    left:125px;
+
     float:left;
     z-index: 1;
 

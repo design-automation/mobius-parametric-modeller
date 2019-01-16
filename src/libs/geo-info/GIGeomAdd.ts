@@ -40,11 +40,22 @@ export class GIGeomAdd {
             this._geom_arrays.dn_verts_posis.push( v );
         }
         // Add triangles to model
-        const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(v => v + num_verts) as TTri);
-        // this._geom_arrays.dn_tris_verts.push( ...new_triangles );
-        for (const v of new_triangles) {
-            this._geom_arrays.dn_tris_verts.push( v );
+        // const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(v => v + num_verts) as TTri);
+        // // this._geom_arrays.dn_tris_verts.push( ...new_triangles );
+        // for (const v of new_triangles) {
+        //     this._geom_arrays.dn_tris_verts.push( v );
+        // }
+        for (const triangle of geom_data.triangles) {
+            if (triangle !== null) {
+                const new_triangle: TTri = triangle.map(v => v + num_verts) as TTri;
+                this._geom_arrays.dn_tris_verts.push( new_triangle );
+            } else {
+                this._geom_arrays.dn_tris_verts.push( null );
+            }
         }
+
+
+
         // Add edges to model
         const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
         // this._geom_arrays.dn_edges_verts.push( ...new_edges );
@@ -137,12 +148,14 @@ export class GIGeomAdd {
         // verts->tris, one to many
         this._geom_arrays.up_verts_tris = [];
         this._geom_arrays.dn_tris_verts.forEach( (vert_i_arr, tri_i) => {
-            vert_i_arr.forEach( vert_i => {
-                if (this._geom_arrays.up_verts_tris[vert_i] === undefined) {
-                    this._geom_arrays.up_verts_tris[vert_i] = [];
-                }
-                this._geom_arrays.up_verts_tris[vert_i].push(tri_i);
-            });
+            if (vert_i_arr !== null) {
+                vert_i_arr.forEach( vert_i => {
+                    if (this._geom_arrays.up_verts_tris[vert_i] === undefined) {
+                        this._geom_arrays.up_verts_tris[vert_i] = [];
+                    }
+                    this._geom_arrays.up_verts_tris[vert_i].push(tri_i);
+                });
+            }
         });
         // verts->edges, one to two
         this._geom_arrays.up_verts_edges = [];
@@ -267,16 +280,30 @@ export class GIGeomAdd {
     /**
      * Adds trangles and updates the arrays.
      * Wires are assumed to be closed!
-     * No holes yet... TODO
      * @param wire_i
      */
-    private _addTris(wire_i: number): number[] {
-        // create the triangles
+    private _addTris(wire_i: number, hole_wires_i?: number[]): number[] {
+        // save all verts
+        const all_verts_i: number[] = [];
+        // get the coords of the outer perimeter edge
         const wire_verts_i: number[] = this._geom.query.navAnyToVert(EEntType.WIRE, wire_i);
+        wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
         const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
         const wire_coords: Txyz[] = wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
-        const tris_corners: number[][] = triangulate(wire_coords);
-        const tris_verts_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => wire_verts_i[corner] ) as TTri );
+        // get the coords of the holes
+        const all_hole_coords: Txyz[][] = [];
+        if (hole_wires_i !== undefined) {
+            for (const hole_wire_i of hole_wires_i) {
+                const hole_wire_verts_i: number[] = this._geom.query.navAnyToVert(EEntType.WIRE, hole_wire_i);
+                hole_wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
+                const hole_wire_posis_i: number[] = hole_wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
+                const hole_wire_coords: Txyz[] = hole_wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
+                all_hole_coords.push(hole_wire_coords);
+            }
+        }
+        // create the triangles
+        const tris_corners: number[][] = triangulate(wire_coords, all_hole_coords);
+        const tris_verts_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => all_verts_i[corner] ) as TTri );
         // update down arrays
         const tris_i: number[] = tris_verts_i.map(tri_verts_i => this._geom_arrays.dn_tris_verts.push(tri_verts_i) - 1);
         // update up arrays
@@ -297,7 +324,6 @@ export class GIGeomAdd {
      * Adds a face and updates the arrays.
      * Wires are assumed to be closed!
      * This also calls addTris()
-     * No holes yet... TODO
      * @param wire_i
      */
     private _addFace(wire_i: number): number {
@@ -310,6 +336,72 @@ export class GIGeomAdd {
         // update up arrays
         this._geom_arrays.up_wires_faces[wire_i] = face_i;
         tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
+        // return the numeric index of the face
+        return face_i;
+    }
+    /**
+     * Adds a face with a hole and updates the arrays.
+     * Wires are assumed to be closed!
+     * This also calls addTris()
+     * @param wire_i
+     */
+    private _addFaceWithHoles(wire_i: number, holes_wires_i: number[]): number {
+        // create the triangles
+        const tris_i: number[] = this._addTris(wire_i, holes_wires_i);
+        // create the face
+        const face_wires_i: number[] = [wire_i].concat(holes_wires_i);
+        const face: TFace = [face_wires_i, tris_i];
+        // update down arrays
+        const face_i: number = this._geom_arrays.dn_faces_wirestris.push(face) - 1;
+        // update up arrays
+        face_wires_i.forEach(face_wire_i => this._geom_arrays.up_wires_faces[face_wire_i] = face_i);
+        tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
+        // return the numeric index of the face
+        return face_i;
+    }
+    /**
+     * Adds a hole to a face and updates the arrays.
+     * Wires are assumed to be closed!
+     * This also calls addTris()
+     * @param wire_i
+     */
+    private _addFaceHoles(face_i: number, hole_wires_i: number[]): number {
+        // get the wires and triangles arrays
+        const [face_wires_i, old_face_tris_i]: [number[], number[]] = this._geom_arrays.dn_faces_wirestris[face_i];
+        // get the outer wire
+        const outer_wire_i: number = face_wires_i[0];
+        // get the hole wires
+        const all_hole_wires_i: number[] = [];
+        if (face_wires_i.length > 1) {
+            face_wires_i.slice(1).forEach(wire_i => all_hole_wires_i.push(wire_i));
+        }
+        hole_wires_i.forEach(wire_i => all_hole_wires_i.push(wire_i));
+        // create the triangles
+        const new_tris_i: number[] = this._addTris(outer_wire_i, all_hole_wires_i);
+        // create the face
+        const new_wires_i: number[] = face_wires_i.concat(hole_wires_i);
+        const new_face: TFace = [new_wires_i, new_tris_i];
+        // update down arrays
+        this._geom_arrays.dn_faces_wirestris[face_i] = new_face;
+        // update up arrays
+        hole_wires_i.forEach(hole_wire_i => this._geom_arrays.up_wires_faces[hole_wire_i] = face_i);
+        new_tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
+        // delete the old trianges
+        for (const old_face_tri_i of old_face_tris_i) {
+            for (const vertex_i of this._geom_arrays.dn_tris_verts[old_face_tri_i]) {
+                const tris_i: number[] = this._geom_arrays.up_verts_tris[vertex_i];
+                const index: number = tris_i.indexOf(old_face_tri_i);
+                if (index === -1) {
+                    throw new Error('There was a problem with triangulation during hole operation.');
+                }
+                tris_i.splice(index, 1);
+            }
+            this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;
+        }
+        // TODO deal with the old triangles, stored in face_tris_i
+        // TODO These are still there and are still pointing up at this face
+        // TODO the have to be deleted...
+
         // return the numeric index of the face
         return face_i;
     }
@@ -369,6 +461,38 @@ export class GIGeomAdd {
         edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
         const wire_i: number = this._addWire(edges_i_arr, true);
         const face_i: number = this._addFace(wire_i);
+        // create polygon
+        const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
+        this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
+        return pgon_i;
+    }
+    /**
+     * Adds a new polygon + hole entity to the model using numeric indicies.
+     * @param posis_id
+     */
+    public addPgonWithHole(posis_i: number[], holes_posis_i: number[][]): number {
+        // create verts, edges, wire for face
+        const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
+        const edges_i_arr: number[] = [];
+        for (let i = 0; i < vert_i_arr.length - 1; i++) {
+            edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
+        }
+        edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
+        const wire_i: number = this._addWire(edges_i_arr, true);
+        // create verts, edges, wire for holes
+        const holes_wires_i: number[] = [];
+        for (const hole_posis_i of holes_posis_i) {
+            const hole_vert_i_arr: number[] = hole_posis_i.map( posi_i => this._addVertex(posi_i));
+            const hole_edges_i_arr: number[] = [];
+            for (let i = 0; i < hole_vert_i_arr.length - 1; i++) {
+                hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[i], hole_vert_i_arr[i + 1]));
+            }
+            hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[hole_vert_i_arr.length - 1], hole_vert_i_arr[0]));
+            const hole_wire_i: number = this._addWire(hole_edges_i_arr, true);
+            holes_wires_i.push(hole_wire_i);
+        }
+        // create the new face with a hole
+        const face_i: number = this._addFaceWithHoles(wire_i, holes_wires_i);
         // create polygon
         const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
         this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
@@ -441,16 +565,17 @@ export class GIGeomAdd {
     public copyObjs(ent_type: EEntType, ent_i: number|number[], copy_attribs: boolean): number|number[] {
         // make copies
         if (!Array.isArray(ent_i)) {
-            const original_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type, ent_i as number);
-            const posis_i: number[] = original_posis_i;
+            let posis_i: number[];
             switch (ent_type) {
                 case EEntType.POINT:
+                    posis_i = this._geom.query.navAnyToPosi(ent_type, ent_i as number);
                     const point_i: number = this.addPoint(posis_i[0]);
                     if (copy_attribs) {
                         this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, point_i);
                     }
                     return point_i;
                 case EEntType.PLINE:
+                    posis_i = this._geom.query.navAnyToPosi(ent_type, ent_i as number);
                     const wire_i: number = this._geom.query.navPlineToWire(ent_i as number);
                     const is_closed: boolean = this._geom.query.istWireClosed(wire_i);
                     const pline_i: number = this.addPline(posis_i, is_closed);
@@ -459,7 +584,19 @@ export class GIGeomAdd {
                     }
                     return pline_i;
                 case EEntType.PGON:
-                    const pgon_i: number = this.addPgon(posis_i);
+                    const wires_i: number[] = this._geom.query.navAnyToWire(ent_type, ent_i as number);
+                    posis_i = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
+                    let pgon_i: number;
+                    if (wires_i.length === 1) {
+                        pgon_i = this.addPgon(posis_i);
+                    } else {
+                        const holes_posis_i: number[][] = [];
+                        for (let i = 1; i < wires_i.length; i++) {
+                            const hole_posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
+                            holes_posis_i.push(hole_posis_i);
+                        }
+                        pgon_i = this.addPgonWithHole(posis_i, holes_posis_i);
+                    }
                     if (copy_attribs) {
                         this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pgon_i);
                     }
@@ -506,6 +643,29 @@ export class GIGeomAdd {
     // Modify geometry
     // ============================================================================
     /**
+     * Adds a new polygon entity to the model using numeric indicies.
+     * @param posis_id
+     */
+    public addFaceHoles(face_i: number, posis_i_arr: number[][]): number[] {
+        // make the wires for the holes
+        const hole_wires_i: number[] = [];
+        for (const hole_posis_i of posis_i_arr) {
+            const hole_vert_i_arr: number[] = hole_posis_i.map( posi_i => this._addVertex(posi_i));
+            const hole_edges_i_arr: number[] = [];
+            for (let i = 0; i < hole_vert_i_arr.length - 1; i++) {
+                hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[i], hole_vert_i_arr[i + 1]));
+            }
+            hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[hole_vert_i_arr.length - 1], hole_vert_i_arr[0]));
+            const hole_wire_i: number = this._addWire(hole_edges_i_arr, true);
+            hole_wires_i.push(hole_wire_i);
+        }
+        // create the holes
+        this._addFaceHoles(face_i, hole_wires_i);
+        // no need to change either the up or down arrays
+        // return the new wires
+        return hole_wires_i;
+    }
+    /**
      * Close a wire
      * @param wire_i The wire to close.
      */
@@ -524,6 +684,14 @@ export class GIGeomAdd {
         this._geom_arrays.dn_wires_edges[wire_i].push(new_edge_i);
         // update the up arrays
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+    }
+    /**
+     * Open a wire, by deleting an edge
+     * @param wire_i The wire to close.
+     */
+    public openWire(wire_i: number): void {
+        // This deletes an edge
+        throw new Error('Not implemented');
     }
     /**
      * Insert a vertex into an edge and updates the wire with the new edge
@@ -568,6 +736,7 @@ export class GIGeomAdd {
     }
     /**
      * Unweld the vertices
+     * TODO copy attributes onto new positions?
      * @param verts_i
      */
     public unweldVerts(verts_i: number[]): number[] {
@@ -609,5 +778,37 @@ export class GIGeomAdd {
         }
         // return all the new positions
         return Array.from(old_to_new_posis_i_map.values());
+    }
+    /**
+     * Reverse the edges of a wire.
+     * Theis lists the edges in reverse order, and flips each edge.
+     * The attributes ...
+     */
+    public reverse(wire_i: number): void {
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        wire.reverse();
+        // reverse the edges
+        for (const edge_i of wire) {
+            const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+            edge.reverse();
+        }
+        // if this is a face, reverse the triangles
+        if (this._geom_arrays.up_wires_faces[wire_i] !== undefined) {
+            const face_i: number = this._geom_arrays.up_wires_faces[wire_i];
+            const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
+            for (const tri_i of face[1]) {
+                const tri: TTri = this._geom_arrays.dn_tris_verts[tri_i];
+                tri.reverse();
+            }
+        }
+    }
+    /**
+     * Reverse the edges of a wire.
+     * Theis lists the edges in reverse order, and flips each edge.
+     * The attributes ...
+     */
+    public shift(wire_i: number, offset: number): void {
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        wire.unshift.apply( wire, wire.splice( offset, wire.length ) );
     }
 }

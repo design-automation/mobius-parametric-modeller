@@ -15,6 +15,9 @@ export class DataThreejs {
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
+    public tri_select_map: Map<number, number>;
+    public edge_select_map: Map<number, number>;
+    public point_select_map: Map<number, number>;
     public selected_geoms: Map<string, number> = new Map();
     public selected_positions: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
@@ -115,7 +118,11 @@ export class DataThreejs {
 
         // Add geometry
         this.threejs_data = model.get3jsData();
-        const ThreeJsData = this.threejs_data;
+        const ThreeJsData: IThreeJS = this.threejs_data;
+        this.tri_select_map = ThreeJsData.triangle_select_map;
+        this.edge_select_map = ThreeJsData.edge_select_map;
+        this.point_select_map = ThreeJsData.point_select_map;
+
         // Create buffers that will be used by all geometry
         const posis_buffer = new THREE.Float32BufferAttribute(ThreeJsData.positions, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(ThreeJsData.normals, 3);

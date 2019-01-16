@@ -11,7 +11,7 @@ import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
   styleUrls: ['./attribute.component.scss']
 })
 
-export class AttributeComponent implements OnChanges{
+export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
   @Input() refresh: Event;
   showSelected = false;

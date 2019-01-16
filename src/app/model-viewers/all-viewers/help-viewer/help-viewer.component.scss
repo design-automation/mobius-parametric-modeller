@@ -4,7 +4,9 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
 h2{
+    padding: 0px;
     padding-bottom: 6px;
+    font-size: $fsize1;
 }
 #help-container {
     margin-top: 40px;
@@ -51,15 +53,25 @@ $ln-height: $fsize2 + 3px;
     ul{
         margin: 0px;
         padding-left: $small-padding;
+        background-color: transparent;
         li{
             display: list-item;
             .li--item{
                 display: flex;
                 flex-flow: row nowrap;
                 padding:0px;
+                font-style: normal;
+                font-weight: 400;
                 span{
                     margin-right: 2px;
+                    font-weight: 550;
                 }
+                &:hover{
+                    background-color: transparent;
+                }
+            }
+            &:hover{
+                background-color: transparent;
             }
         }
     }
@@ -77,12 +89,19 @@ $ln-height: $fsize2 + 3px;
         ul{
             margin-bottom: 6px;
             padding: 0px;
+            background-color: transparent;
             li{
                 display: flex;
                 border: 1px solid $color1;
+                color: $color8;
+                font-style: normal;
                 font-family: 'Ubuntu Mono';
                 padding: 0px 0px 0px 2px;
                 margin: 4px 0px;
+                background-color: transparent !important;
+            }
+            p{
+                background-color: transparent !important;
             }
         }
     }

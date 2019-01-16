@@ -92,7 +92,7 @@ export class GIViewerComponent implements OnInit {
         }
     }
 
-    settingOnChange(setting: string, value: number) {
+    settingOnChange(setting: string, value?: number) {
         const scene = this.dataService.getThreejsScene();
         switch (setting) {
             case 'normals.show':

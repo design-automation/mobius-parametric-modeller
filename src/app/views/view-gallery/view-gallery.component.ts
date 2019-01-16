@@ -20,7 +20,7 @@ import * as galleryUrls from '@assets/gallery/__config__.json';
 export class ViewGalleryComponent {
 
     // private allFiles: Observable<any>;
-    private allGalleries = [];
+    allGalleries = [];
     @Output() switch = new EventEmitter();
 
     /*

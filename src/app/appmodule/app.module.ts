@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataService } from '@services';
 import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
 // import app modules
-import { CoreModule } from '../core/core.module';
+// import { CoreModule } from '@assets/core/core.module';
 import { SharedModule } from '@shared/shared.module';
 // import { AppRoutingModule } from './app-routing.module';
 // import app components
@@ -35,7 +35,6 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
         HttpClientModule,
         FormsModule,
         AppRoutingModule,
-        CoreModule,
         ViewGalleryModule,
         ViewEditorModule,
         ViewDashboardModule,

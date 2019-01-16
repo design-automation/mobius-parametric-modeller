@@ -11,6 +11,10 @@ const appRoutes: Routes = [
     { path: 'gallery', loadChildren: () => ViewGalleryModule },
     { path: 'dashboard', loadChildren: () => ViewDashboardModule },
     { path: 'editor', loadChildren: () => ViewEditorModule },
+    // { path: 'flowchart', component: ViewFlowchartModule },
+    // { path: 'gallery', component: ViewGalleryModule },
+    // { path: 'dashboard', component: ViewDashboardModule },
+    // { path: 'editor', component: ViewEditorModule },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },
     { path: '**', component: ViewGalleryModule }
 ];

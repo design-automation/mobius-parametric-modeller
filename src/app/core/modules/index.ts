@@ -20,20 +20,20 @@ export {make};
 import * as modify from './modify';
 export {modify};
 
-import * as isect from './isect';
-export {isect};
+// import * as isect from './isect';
+// export {isect};
 
 import * as calc from './calc';
 export {calc};
-
-import * as util from './util';
-export {util};
 
 import * as pattern from './pattern';
 export {pattern};
 
 import * as virtual from './virtual';
 export {virtual};
+
+import * as util from './util';
+export {util};
 
 import * as list from './list';
 export {list};

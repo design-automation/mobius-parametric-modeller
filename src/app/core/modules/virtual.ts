@@ -116,7 +116,7 @@ export function GetRay(__model__: GIModel, edge: TId|TId[]): TRay|TRay[] {
 }
 // ================================================================================================
 function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
-    if (ents_arr.length > 0 && !Array.isArray(ents_arr[0])) {
+    if (getArrDepth(ents_arr) === 1) {
         const ent_arr = ents_arr as TEntTypeIdx;
         const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
         const unique_posis_i = Array.from(new Set(posis_i));

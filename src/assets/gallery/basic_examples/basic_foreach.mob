@@ -1,8 +1,8 @@
 {
-    "name": "basic_while",
+    "name": "Untitled",
     "author": "new_user",
     "flowchart": {
-        "name": "basic_while",
+        "name": "Untitled",
         "description": "",
         "language": "js",
         "meta": {
@@ -13,14 +13,29 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_t5rudyvwee",
+                "id": "node_6ny4sugoxwk",
                 "position": {
                     "x": 5350,
                     "y": 5000
                 },
                 "enabled": true,
                 "type": "start",
-                "procedure": [],
+                "procedure": [
+                    {
+                        "type": 13,
+                        "ID": "",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "hasError": false
+                    }
+                ],
                 "state": {
                     "procedure": []
                 },
@@ -52,10 +67,10 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_wawfr3z540e",
+                                    "id": "node_xm5pj54qcb",
                                     "position": {
-                                        "x": 5351.44189453125,
-                                        "y": 5193.451171875
+                                        "x": 5350,
+                                        "y": 5200
                                     },
                                     "enabled": true,
                                     "type": "",
@@ -75,42 +90,28 @@
                                             "hasError": false
                                         },
                                         {
-                                            "type": 0,
-                                            "ID": "prod-4g1ud59td2u",
+                                            "type": 4,
+                                            "ID": "prod-st6otqgkmai",
                                             "enabled": true,
                                             "print": false,
                                             "argCount": 2,
                                             "args": [
                                                 {
-                                                    "name": "var_name",
-                                                    "value": "a",
+                                                    "name": "item",
+                                                    "value": "i",
                                                     "invalidVar": false
                                                 },
                                                 {
-                                                    "name": "value",
-                                                    "value": "2"
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 5,
-                                            "ID": "prod-uifousyt8fe",
-                                            "enabled": true,
-                                            "print": false,
-                                            "argCount": 1,
-                                            "args": [
-                                                {
-                                                    "name": "condition",
-                                                    "value": "a < 10"
+                                                    "name": "list",
+                                                    "value": "range ( 1 , 20 )",
+                                                    "default": []
                                                 }
                                             ],
                                             "children": [
                                                 {
                                                     "type": 13,
-                                                    "ID": "prod-qyral40ecpc",
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
                                                     "meta": {
                                                         "name": "",
                                                         "module": ""
@@ -124,19 +125,19 @@
                                                 },
                                                 {
                                                     "type": 8,
-                                                    "ID": "prod-0rjwi65nzo6i",
+                                                    "ID": "prod-krsejk72ppe",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "pattern",
-                                                        "name": "Arc"
+                                                        "name": "Rectangle"
                                                     },
-                                                    "argCount": 6,
+                                                    "argCount": 4,
                                                     "args": [
                                                         {
                                                             "name": "var_name",
-                                                            "value": "pattern1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "value": "grid"
                                                         },
                                                         {
                                                             "name": "__model__",
@@ -144,43 +145,34 @@
                                                         },
                                                         {
                                                             "name": "origin",
-                                                            "value": "[0 , 0 , 0]",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "value": "[0 , 0 , i * 5]"
                                                         },
                                                         {
-                                                            "name": "radius",
-                                                            "value": "10",
-                                                            "default": 0
-                                                        },
-                                                        {
-                                                            "name": "num_positions",
-                                                            "value": "a",
-                                                            "default": 0
-                                                        },
-                                                        {
-                                                            "name": "arc_angle",
-                                                            "value": "2 * PI",
-                                                            "default": 0
+                                                            "name": "size",
+                                                            "default": 0,
+                                                            "value": "[50 , 10]"
                                                         }
                                                     ],
                                                     "selected": false,
-                                                    "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
+                                                    "hasError": false
                                                 },
                                                 {
                                                     "type": 8,
-                                                    "ID": "prod-85r3vyejh1p",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
+                                                    "ID": "prod-lnu0xx73tn7",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "make",
-                                                        "name": "Polyline"
+                                                        "name": "Polygon"
                                                     },
-                                                    "argCount": 4,
+                                                    "argCount": 3,
                                                     "args": [
                                                         {
                                                             "name": "var_name",
-                                                            "value": "polyline1",
+                                                            "value": "pg",
                                                             "invalidVar": false
                                                         },
                                                         {
@@ -189,30 +181,24 @@
                                                         },
                                                         {
                                                             "name": "positions",
-                                                            "value": "pattern1",
-                                                            "default": 0
-                                                        },
-                                                        {
-                                                            "name": "close",
-                                                            "value": "'close'",
+                                                            "value": "grid",
                                                             "default": 0
                                                         }
                                                     ],
                                                     "selected": false,
-                                                    "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2"
+                                                    "hasError": false
                                                 },
                                                 {
                                                     "type": 8,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
-                                                    "ID": "prod-bu5abdh4aa",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
+                                                    "ID": "prod-xp99mrv3bu",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "modify",
-                                                        "name": "Move"
+                                                        "name": "Rotate"
                                                     },
-                                                    "argCount": 4,
+                                                    "argCount": 6,
                                                     "args": [
                                                         {
                                                             "name": "__none__"
@@ -223,42 +209,31 @@
                                                         },
                                                         {
                                                             "name": "entities",
-                                                            "value": "polyline1",
+                                                            "value": "pg",
                                                             "default": 0
                                                         },
                                                         {
-                                                            "name": "vector",
-                                                            "value": "[0 , 0 , a * 10]",
+                                                            "name": "origin",
+                                                            "value": "[0 , 0 , 0]",
                                                             "default": 0
-                                                        }
-                                                    ],
-                                                    "selected": false,
-                                                    "hasError": false
-                                                },
-                                                {
-                                                    "type": 0,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
-                                                    "ID": "prod-xwwpf9qduh",
-                                                    "enabled": true,
-                                                    "print": false,
-                                                    "argCount": 2,
-                                                    "args": [
-                                                        {
-                                                            "name": "var_name",
-                                                            "value": "a",
-                                                            "invalidVar": false
                                                         },
                                                         {
-                                                            "name": "value",
-                                                            "value": "a + 1"
+                                                            "name": "axis",
+                                                            "value": "[0 , 0 , 1]",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "angle",
+                                                            "value": "( PI / 8 ) * i",
+                                                            "default": 0
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false
                                                 }
                                             ],
-                                            "hasError": false,
-                                            "selected": false
+                                            "selected": false,
+                                            "hasError": false
                                         }
                                     ],
                                     "state": {
@@ -283,7 +258,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_f7qzx0f4unv",
+                                                        "id": "node_ex4autcu3v5",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -344,8 +319,7 @@
                                                             },
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
-                                                        "hasError": false,
-                                                        "hasExecuted": true
+                                                        "hasError": false
                                                     }
                                                 },
                                                 "selected": false
@@ -356,7 +330,6 @@
                                         },
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
                                     },
-                                    "hasExecuted": true,
                                     "hasError": false
                                 }
                             },
@@ -368,8 +341,7 @@
                     },
                     "parentNode": "~flowchart~nodes~0"
                 },
-                "hasError": false,
-                "hasExecuted": true
+                "hasError": false
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
@@ -381,6 +353,6 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-14T08:48:11.827Z",
+    "last_updated": "2019-01-15T23:14:00.302Z",
     "version": 1
 }

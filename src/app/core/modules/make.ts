@@ -6,6 +6,7 @@ import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/vectors';
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs } from './_check_args';
+import { Arr } from '@libs/arr/arr';
 
 // ================================================================================================
 function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
@@ -128,6 +129,39 @@ export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[]
     return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
+function _polygonHoles(__model__: GIModel, ents_arr: TEntTypeIdx[],
+        holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx {
+    if (getArrDepth(holes_ents_arr) === 2) {
+        holes_ents_arr = [holes_ents_arr] as TEntTypeIdx[][];
+    }
+    const posis_i: number[] = ents_arr.map(ent_arr => ent_arr[1]);
+    const holes_posis_i: number[][] = [];
+    for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
+        holes_posis_i.push( hole_ents_arr.map(ent_arr => ent_arr[1]) );
+    }
+    const pgon_i: number = __model__.geom.add.addPgonWithHole(posis_i, holes_posis_i);
+    return [EEntType.PGON, pgon_i];
+}
+/**
+ * Adds a single new polygon to the model with one or more holes.
+ * @param __model__
+ * @param positions List of positions.
+ * @param hole_positions List of positions for the holes. For multiple holes, a list of list can provided.
+ * @returns New polygon if successful, null if unsuccessful or on error.
+ * @example polygon1 = make.Polygon([position1,position2,position3], [position4,position5,position6])
+ * @example_info Creates a polygon with  a hole, with vertices in sequence from position1 to position6.
+ */
+function _PolygonHoles(__model__: GIModel, positions: TId[], hole_positions: TId[]|TId[][]): TId {
+    // --- Error Check ---
+    const pgon_ents_arr = checkIDs('make.Polygon', 'positions', positions, ['isIDList'], ['POSI']) as TEntTypeIdx[];
+    const holes_ents_arr = checkIDs('make.Polygon', 'positions', hole_positions,
+        ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][];
+    // --- Error Check ---
+    const new_ent_arr: TEntTypeIdx = _polygonHoles(__model__, pgon_ents_arr, holes_ents_arr);
+    console.log(__model__);
+    return idsMake(new_ent_arr) as TId;
+}
+// ================================================================================================
 export function _collection(__model__: GIModel, parent_index: number, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx {
     if (getArrDepth(ents_arr) === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
@@ -243,6 +277,39 @@ export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _
     return idsMake(new_ents_arr) as TId|TId[];
 }
 // ================================================================================================
+// Hole modelling operation
+function _hole(__model__: GIModel, face_ent_arr: TEntTypeIdx, holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[] {
+    if (getArrDepth(holes_ents_arr) === 2) {
+        holes_ents_arr = [holes_ents_arr] as TEntTypeIdx[][];
+    }
+    // convert the holes to lists of posis_i
+    const holes_posis_i: number[][] = [];
+    for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
+        holes_posis_i.push( hole_ents_arr.map( ent_arr => ent_arr[1] ) );
+    }
+    // create the hole
+    const wires_i: number[] = __model__.geom.add.addFaceHoles(face_ent_arr[1], holes_posis_i);
+    return wires_i.map(wire_i => [EEntType.WIRE, wire_i]) as TEntTypeIdx[];
+}
+/**
+ * Makes one or more holes in a polygon.
+ * @param __model__
+ * @param face Polygons or faces.
+ * @param positions A list of positions defining the wires of the holes.
+ * @returns Wires for the new holes.
+ */
+export function Hole(__model__: GIModel, face: TId, positions: TId[]|TId[][]): TId[] {
+    // --- Error Check ---
+    const face_ent_arr = checkIDs('make.Hole', 'face', face, ['isID'], ['FACE', 'PGON']) as TEntTypeIdx;
+    const holes_ents_arr = checkIDs('make.Hole', 'positions', positions,
+        ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][];
+    // --- Error Check ---
+    const new_ents_arr: TEntTypeIdx[] = _hole(__model__, face_ent_arr, holes_ents_arr);
+    return idsMake(new_ents_arr) as TId[];
+}
+// ================================================================================================
+
+
 // Loft modelling operation
 export enum _ELoftMethod {
     OPEN =  'open',
@@ -404,7 +471,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
  * @example joined1 = make.Join([polyline1,polyline2])
  * @example_info Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
  */
-export function Join(__model__: GIModel, geometry: TId[]): TId {
+export function _Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
     // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, ['isIDList'], ['PLINE', 'PGON']);
     // --- Error Check ---

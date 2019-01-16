@@ -30,7 +30,7 @@
         }
     }
     .filename-container{
-        width: calc(100% - 170px);//width of btn-container;
+        width: calc(100% - 170px - 40px);//width of btn-container width of zoom fit in flowchart;
         display: flex;
         justify-content: flex-start;
     }
@@ -46,7 +46,8 @@
         text-align: left;
         vertical-align: middle;
         line-height: $header-height - 5px;
-        
+        z-index: 999999999;
+
         overflow: hidden;
         text-overflow: ellipsis;
         &:hover{
@@ -99,6 +100,7 @@ button.mat-menu-item:hover{
 #dropdownMenu {
     display: none;
     position: fixed;
+    top: 40px;
     transition: display 0.4s;
 
     z-index: 1;

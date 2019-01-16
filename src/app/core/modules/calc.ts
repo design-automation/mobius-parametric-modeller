@@ -193,7 +193,7 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
 }
 // ================================================================================================
 export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
-    if (ents_arr.length > 0 && !Array.isArray(ents_arr[0])) {
+    if (getArrDepth(ents_arr) === 1) {
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
         if (isPgon(ent_type) || isFace(ent_type)) {

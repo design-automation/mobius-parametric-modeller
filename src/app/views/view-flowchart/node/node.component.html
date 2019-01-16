@@ -144,6 +144,7 @@
 r=3
 [attr.cx]="node.position.x + inputOffset[0]" 
 [attr.cy]="node.position.y + inputOffset[1]"
+[class.disabled]='!node.enabled'
 *ngIf="inputDraggable()" 
 class='inputPort'
 id = 'node.input.id'
@@ -155,6 +156,7 @@ id = 'node.output.id'
 (mousedown)='startDragPort($event, "output")' 
 [attr.cx]="node.position.x + outputOffset[0]" 
 [attr.cy]="node.position.y + outputOffset[1]" 
+[class.disabled]='!node.enabled'
 pointer-events="all"
 r=3
 fill="black"/>

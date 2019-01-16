@@ -18,7 +18,7 @@
             stroke: $color1;
             stroke-width: 2px;
             stroke-dasharray: 10 15;
-            opacity: 0.5;
+            opacity: $disabled-opacity;
         }
     }
     
@@ -58,7 +58,7 @@
 }
 
 #arrow{
-    stroke: $color1;
+    stroke: $color8;
     fill: transparent;
 }
 #arrow_selected{

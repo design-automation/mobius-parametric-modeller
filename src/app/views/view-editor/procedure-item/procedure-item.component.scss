@@ -32,7 +32,7 @@
     // min-width: fit-content; // for global side scroll
 
     &.disabled{
-        opacity: 0.5;
+        opacity: $disabled-opacity;
         .btns{
             display: inline-flex;
             #disable-btn{

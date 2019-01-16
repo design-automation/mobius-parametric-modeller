@@ -14,7 +14,7 @@
     bottom: 0;
     background-color: $color5;
     z-index: 5;
-    opacity: 0.5;
+    opacity: $disabled-opacity;
     pointer-events: none;
   }
 

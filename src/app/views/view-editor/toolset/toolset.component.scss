@@ -230,7 +230,7 @@ ul{
 .tooltip{
     display: block;
     &.invalid{
-        opacity: 0.5;
+        opacity: $disabled-opacity;
         pointer-events: none;
     }
 }

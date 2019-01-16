@@ -11,15 +11,15 @@
     "target": "es5",
     "paths": {
       "@assets/*" : ["src/assets/*"],
-      "@libs/*" : ["src/libs/*"],
+      "@libs/*" : ["src/assets/libs/*"],
       "@store" : ["src/app/core/store"],
       "@models/*" : ["src/app/shared/models/*"],
       "@utils" : ["src/app/shared/utils"],
       "@shared/*" : ["src/app/shared/*"],
       "@views" : ["src/app/views"],
       "@model-viewers": ["src/app/mobius-viewer/viewers"],
-      "@services" : ["src/app/core/services"],
-      "@modules" : ["src/app/core/modules"]
+      "@services" : ["src/app/shared/services"],
+      "@modules" : ["src/assets/core/modules"]
     },
     "typeRoots": [
       "node_modules/@types"

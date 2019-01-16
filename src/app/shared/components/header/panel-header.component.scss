@@ -30,6 +30,7 @@
         }
     }
     .filename-container{
+        z-index: 1;
         width: calc(100% - 170px - 40px);//width of btn-container width of zoom fit in flowchart;
         display: flex;
         justify-content: flex-start;

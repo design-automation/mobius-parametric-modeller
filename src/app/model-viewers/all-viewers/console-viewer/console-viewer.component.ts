@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, DoCheck, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
+import { DataService } from '@services';
 
 /**
  * ConsoleViewerComponent
@@ -8,7 +9,7 @@ import { Component, Input, OnInit, DoCheck, AfterViewInit, AfterViewChecked } fr
     templateUrl: './console-viewer.component.html',
     styleUrls: ['./console-viewer.component.scss']
 })
-export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, AfterViewChecked {
+export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, AfterViewChecked, OnDestroy {
     text: string;
     scrollcheck: boolean;
     logs: string[];
@@ -16,9 +17,16 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     /**
      * constructor
      */
-    constructor() {
+    constructor(private dataService: DataService) {
         // console.log('Console Viewer Created');
     }
+
+    ngOnDestroy() {
+        const ct = document.getElementById('console-container');
+        if (!ct) { return; }
+        this.dataService.consoleScroll = ct.scrollTop;
+    }
+
     /**
      * ngOnInit
      */
@@ -32,7 +40,11 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      */
     ngAfterViewInit() {
         const ct = document.getElementById('console-container');
-        ct.scrollTop = ct.scrollHeight;
+        if (! this.dataService.consoleScroll) {
+            ct.scrollTop = ct.scrollHeight;
+        } else {
+            ct.scrollTop = this.dataService.consoleScroll;
+        }
     }
 
     /**
@@ -55,7 +67,9 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     }
 
     ngAfterViewChecked() {
-        if (this.scrollcheck) {
+        if (this.dataService.consoleScroll) {
+            this.dataService.consoleScroll = undefined;
+        } else if (this.scrollcheck) {
             const ct = document.getElementById('console-container');
             ct.scrollTop = ct.scrollHeight;
             this.scrollcheck = false;

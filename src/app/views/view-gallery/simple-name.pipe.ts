@@ -10,11 +10,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'simplename'})
 export class SimpleNamePipe implements PipeTransform {
   transform(value: string): string {
-    if (value.endsWith('.mob')) {
-        value = value.substr(0, value.length - 4);
-    }
-    value = value.split('_').join(' ');
-    value = value.split('-').join(' ');
-    return value;
+    return value.split('.mob')[0].replace(/_|-/g, ' ');
   }
 }

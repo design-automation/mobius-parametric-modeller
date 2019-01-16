@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_mvxjhz5ww5",
+                "id": "node_upheqbr4u6s",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -224,7 +224,7 @@
                                 },
                                 "parentNode": {
                                     "name": "1. Grid of squares",
-                                    "id": "node_1wmgnjmkts",
+                                    "id": "node_729yli718xm",
                                     "position": {
                                         "x": 5350,
                                         "y": 5147.541015625
@@ -379,7 +379,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "2. Move by shifted sin/ cos/sin+cos wave",
-                                                        "id": "node_svf5fe7ryk7",
+                                                        "id": "node_1l2eskucb2c",
                                                         "position": {
                                                             "x": 5350.02099609375,
                                                             "y": 5296.05810546875
@@ -449,12 +449,12 @@
                                                                 "args": [
                                                                     {
                                                                         "name": "item",
-                                                                        "value": "i",
+                                                                        "value": "pl",
                                                                         "invalidVar": false
                                                                     },
                                                                     {
                                                                         "name": "list",
-                                                                        "value": "range ( 0 , length ( pls ) )",
+                                                                        "value": "pls",
                                                                         "default": []
                                                                     }
                                                                 ],
@@ -497,7 +497,7 @@
                                                                             },
                                                                             {
                                                                                 "name": "entities",
-                                                                                "value": "pls[i]",
+                                                                                "value": "pl",
                                                                                 "default": 0
                                                                             }
                                                                         ],
@@ -527,7 +527,7 @@
                                                                             },
                                                                             {
                                                                                 "name": "entities",
-                                                                                "value": "pls[i]",
+                                                                                "value": "pl",
                                                                                 "default": 0
                                                                             }
                                                                         ],
@@ -739,7 +739,7 @@
                                                                             },
                                                                             {
                                                                                 "name": "entities",
-                                                                                "value": "pls[i]",
+                                                                                "value": "pl",
                                                                                 "default": 0
                                                                             },
                                                                             {
@@ -786,7 +786,8 @@
                                                                         "default": 0
                                                                     }
                                                                 ],
-                                                                "selected": false
+                                                                "selected": false,
+                                                                "hasError": false
                                                             }
                                                         ],
                                                         "state": {
@@ -811,7 +812,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_06v5dwp46cpo",
+                                                                            "id": "node_l9ry3cncd3q",
                                                                             "position": {
                                                                                 "x": 5349.7265625,
                                                                                 "y": 5472.67822265625

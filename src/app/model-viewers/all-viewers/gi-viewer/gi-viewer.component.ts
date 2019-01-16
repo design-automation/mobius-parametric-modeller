@@ -28,10 +28,12 @@ export class GIViewerComponent implements OnInit {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
+        positions: { show: boolean, size: number}
     } = {
         normals: { show: false, size: 5 },
         axes: { show: true, size: 50 },
         grid: { show: true, size: 500 },
+        positions: { show: false, size: 0.5}
     };
 
     normalsEnabled = false;
@@ -115,6 +117,14 @@ export class GIViewerComponent implements OnInit {
             case 'grid.size':
                 this.settings.grid.size = Number(value);
                 scene._addGrid(this.settings.grid.size);
+                break;
+            case 'positions.show':
+                this.settings.positions.show = !this.settings.positions.show;
+                scene._positions.map(p => p.visible = this.settings.positions.show);
+                break;
+            case 'positions.size':
+                this.settings.positions.size = Number(value);
+                scene.addPositions(this.settings.positions.size);
                 break;
             default:
                 break;

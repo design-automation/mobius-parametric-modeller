@@ -5,7 +5,7 @@ import { IArgument } from '@models/code';
 import * as doc from '@assets/typedoc-json/doc.json';
 // const doc = require('@assets/typedoc-json/doc.json');
 
-import * as Modules from '@modules';
+import * as Modules from 'assets/core/modules';
 
 const module_list = [];
 
@@ -44,6 +44,7 @@ for ( const m_name in Modules ) {
     modObj.functions = [];
 
     for ( const fn_name of Object.keys(Modules[m_name])) {
+        // if (fn_name[0] === '_') { continue; }
 
         const func = Modules[m_name][fn_name];
 

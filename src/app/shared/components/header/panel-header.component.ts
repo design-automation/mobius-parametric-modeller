@@ -9,9 +9,15 @@ import { Router } from '@angular/router';
 export class PanelHeaderComponent {
 
     @Input() title: string;
+    executeCheck: boolean;
 
     constructor(private router: Router) {
-      }
+        if (this.router.url === '/about' || this.router.url === '/gallery') {
+            this.executeCheck = false;
+        } else {
+            this.executeCheck = true;
+        }
+    }
 
     getTitle() {
         return this.title.replace(/_/g, ' ');

@@ -24,8 +24,11 @@
                         
 
         <!-- buttons to navigate to the 4 pages -->
-        <button class='btn' [class.active]='getUrl()=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
+        <button class='btn' [class.active]='getUrl()=="/about"' [routerLink]="'/about'" title='About'>
             <mat-icon svgIcon="cGallery"></mat-icon>
+        </button>
+        <button class='btn' [class.active]='getUrl()=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
+            <mat-icon>view_comfy</mat-icon>
         </button>
         <button class='btn' [class.active]='getUrl()=="/dashboard"' [routerLink]="'/dashboard'" title='Dashboard'>
             <mat-icon svgIcon="cDashboard"></mat-icon>
@@ -38,7 +41,9 @@
         </button>
                 
         <!-- execute button -->
-        <execute></execute>
+        <div class='executeCls' [class.disabled]='!executeCheck'>
+            <execute ></execute>
+        </div>
     </div>
 
     <div class='filename-container'>

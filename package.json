@@ -11,6 +11,7 @@
     "start": "ng serve",
     "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json",
     "build": "ng build",
+    "build-test": "ng build --prod && http-server ./dist",
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-prod": "ng build --base-href=%npm_package_config_prod_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-server": "ng build --base-href='./'",
@@ -77,8 +78,6 @@
     "protractor": "^5.3.1",
     "ts-node": "^6.0.1",
     "tslint": "^5.12.0",
-    "typescript": "3.1.6",
-    "webpack": "^4.28.4",
-    "webpack-dev-server": "^3.1.14"
+    "typescript": "3.1.6"
   }
 }

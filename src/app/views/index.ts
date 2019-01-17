@@ -1,3 +1,5 @@
+export * from './view-about/view-about.component';
+export * from './view-about/view-about.module';
 export * from './view-editor/view-editor.component';
 export * from './view-editor/view-editor.module';
 export * from './view-flowchart/view-flowchart.component';

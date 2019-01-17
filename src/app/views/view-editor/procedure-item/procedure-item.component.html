@@ -134,7 +134,7 @@
             <!-- <div class='function-text'>Return</div>
             <ng-container  *ngFor='let p of data.args;let i=index'>
                 <input class='input--arg' 
-                *ngIf='p.name.substring(0,1) !== "_"'
+                *ngIf='p.name[0] !== "_"'
                 [(ngModel)]='p.value'
                 (blur)='argMod($event, i)'
                 placeholder={{p.name}}
@@ -181,7 +181,7 @@
                 </select>    
                 
                 <ng-template #default_template>
-                    <input *ngIf="p.name.substring(0,1) !== '_'" 
+                    <input *ngIf="p.name[0] !== '_'" 
                     class='input--arg' 
                     [(ngModel)]='p.value'
                     (blur)='argMod($event, i+1)'

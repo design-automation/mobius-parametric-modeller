@@ -35,14 +35,18 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                },
+                {
+                    "replace": "src/app/appmodule/app-routing.module.ts",
+                    "with": "src/app/appmodule/app-routing.module.prod.ts"
                 }
               ]
             }

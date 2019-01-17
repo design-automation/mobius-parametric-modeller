@@ -15,7 +15,8 @@ import { SharedModule } from '@shared/shared.module';
 import { AppComponent } from './app.component';
 import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
-    ViewFlowchartComponent, ViewFlowchartModule} from '@views';
+    ViewFlowchartComponent, ViewFlowchartModule,
+    ViewAboutComponent, ViewAboutModule} from '@views';
 import { AppRoutingModule } from './app-routing.module';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 // import { WebWorkerService } from 'ngx-web-worker';
@@ -39,6 +40,7 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
         ViewEditorModule,
         ViewDashboardModule,
         ViewFlowchartModule,
+        ViewAboutModule,
         SharedModule,
     ],
     entryComponents: [
@@ -46,6 +48,7 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
         ViewDashboardComponent,
         ViewFlowchartComponent,
         ViewGalleryComponent,
+        ViewAboutComponent,
     ],
     providers: [ DataService, GiViewerDataService, GoogleAnalyticsService],
     bootstrap: [ AppComponent ]

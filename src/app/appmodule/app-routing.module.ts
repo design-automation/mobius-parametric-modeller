@@ -4,17 +4,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Component } from '@angular/core';
 
-import { ViewFlowchartModule, ViewGalleryModule, ViewDashboardModule, ViewEditorModule } from '@views';
+import { ViewFlowchartModule, ViewGalleryModule, ViewDashboardModule, ViewEditorModule, ViewAboutModule } from '@views';
 
 const appRoutes: Routes = [
     { path: 'flowchart', loadChildren: () => ViewFlowchartModule },
     { path: 'gallery', loadChildren: () => ViewGalleryModule },
     { path: 'dashboard', loadChildren: () => ViewDashboardModule },
     { path: 'editor', loadChildren: () => ViewEditorModule },
-    // { path: 'flowchart', component: ViewFlowchartModule },
-    // { path: 'gallery', component: ViewGalleryModule },
-    // { path: 'dashboard', component: ViewDashboardModule },
-    // { path: 'editor', component: ViewEditorModule },
+    { path: 'about', loadChildren: () => ViewAboutModule },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },
     { path: '**', component: ViewGalleryModule }
 ];

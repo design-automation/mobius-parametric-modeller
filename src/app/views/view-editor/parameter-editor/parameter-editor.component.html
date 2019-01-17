@@ -19,7 +19,7 @@
             <input class='disabled-input' value="Return" disabled>
             <ng-container *ngFor='let p of node.procedure[node.procedure.length-1].args; let i=index'>
                 <input id='ret--input' 
-                *ngIf='p.name.substring(0,1) !== "_"'
+                *ngIf='p.name[0] !== "_"'
                 [(ngModel)]='p.value'
                 placeholder={{p.name}}
                 [style.width.px]='inputSize(p.value||p.name)'

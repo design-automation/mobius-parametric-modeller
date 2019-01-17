@@ -1,17 +1,39 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
+.container{
+    height: 100%;
+    overflow: auto;
+
+}
 .content__panel{
-    // margin-top: $header-height;
-    vertical-align: middle;
-    align-content: center;
+    margin-top: 1px;
+    margin-left: 11px; //split bar width
+    max-width: 600px;
+    height: fit-content;
+
+    //height: calc(100vh - 40px); //header height
+    // overflow-y: hidden;
 }
 
-h1{
-    line-height: 35px;
+h3 {
+    line-height: 30px;
+    height: 30px;
+    color: $color8;
 }
+
 p{
-    font-family: sans-serif;
-    font-size: 12px;
-    line-height: 14px;
+    color: $color8;
+    text-align: left;
+    font-size: $fsize2;
+    //line-height: 14px;
+    //height: 14px;
+}
+
+mat-icon{
+    color: $color1;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    top: 5px;
 }

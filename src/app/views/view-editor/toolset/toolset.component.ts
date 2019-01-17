@@ -44,7 +44,7 @@ export class ToolsetComponent implements OnInit {
     Modules = [];
     ModuleDoc = ModuleDocList;
 
-    private timeOut: NodeJS.Timer;
+    private timeOut;
 
     constructor(private dataService: DataService) {}
 

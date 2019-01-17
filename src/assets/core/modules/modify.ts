@@ -50,12 +50,12 @@ export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): voi
  * @example modify.Rotate(polyline1, plane1, PI)
  * @example_info Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
  */
-export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, axis: Txyz, angle: number): void {
+export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId|TPlane, axis: Txyz, angle: number): void {
     // --- Error Check ---
     const fn_name = 'modify.Rotate';
     let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
                             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
     checkCommTypes(fn_name, 'axis', axis, ['isXYZlist']);
     checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
     // --- Error Check ---
@@ -68,13 +68,16 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
         const origin_posi = __model__.geom.query.navAnyToPosi(ori_ents_arr[0], ori_ents_arr[1]);
         origin = __model__.attribs.query.getPosiCoords(origin_posi[0]);
     }
+    if (Array.isArray(origin) && Array.isArray(origin[0])) { // handles plane type
+        origin = origin[0];
+    }
     // rotate all positions
     const posis_i: number[] = [];
     for (const ents of ents_arr) {
         posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    const matrix: Matrix4 = rotateMatrix(origin, axis, angle);
+    const matrix: Matrix4 = rotateMatrix(origin as [number, number, number], axis, angle);
     for (const unique_posi_i of unique_posis_i) {
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);

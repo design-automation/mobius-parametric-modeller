@@ -62,12 +62,13 @@
                     <div class="panel">
                         <ul class='toolset__functions--subset'>
                             <ng-container *ngFor='let fn of mod.functions'>
-                                <div class='tooltip'>
-                                    <li 
-                                    (click)='add_function(fn)'> 
+                                <div class='tooltip'
+                                (mouseenter)='popupTooltip($event, fn.doc)'
+                                (mouseleave)='turnoffTooltip()'>
+                                    <li (click)='add_function(fn)'> 
                                         {{fn.name}} 
                                     </li>
-                                    <span class="tooltiptext" [innerHTML]='fn.doc'></span>
+                                    <!-- <span class="tooltiptext" [innerHTML]='fn.doc'></span> -->
                                 </div>
                             </ng-container>
                             <!--Divider-->
@@ -88,7 +89,9 @@
                                 </button>
                             </li>
                             <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
-                                <div class = 'user--def-lnContainer'>
+                                <div class = 'user--def-lnContainer'
+                                (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn.doc))'
+                                (mouseleave)='turnoffTooltip()'>
                                     <li (click)='add_imported_function(fn)'> {{fn.name}} 
                                     </li>
                                     <div class = 'btn--container'>
@@ -100,12 +103,6 @@
                                         </button>
                                     </div>
                                 </div>
-                                <span class="tooltiptext">
-                                    <p class='funcDesc'>{{fn.doc.description}}</p>
-                                    <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-                                    <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-                                    <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
-                                </span>
                             </div>
                             
                         </ul>
@@ -227,3 +224,4 @@
     </div>
     
 </div>
+<span id="tooltiptext"></span>

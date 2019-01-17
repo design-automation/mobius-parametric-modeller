@@ -44,7 +44,10 @@ export class ToolsetComponent implements OnInit {
     Modules = [];
     ModuleDoc = ModuleDocList;
 
+    private timeOut: NodeJS.Timer;
+
     constructor(private dataService: DataService) {}
+
 
     ngOnInit() {
         for (const mod of ModuleList) {
@@ -131,6 +134,7 @@ export class ToolsetComponent implements OnInit {
     // delete imported function
     delete_imported_function(fnData) {
         this.delete.emit(fnData);
+        this.turnoffTooltip();
     }
 
 
@@ -218,12 +222,11 @@ export class ToolsetComponent implements OnInit {
 
     downloadImported(event: MouseEvent, fnData) {
         event.stopPropagation();
-
         const fileString = fnData.importedFile;
         const fname = `${fnData.name}.mob`;
         const blob = new Blob([fileString], {type: 'application/json'});
         DownloadUtils.downloadFile(fname, blob);
-
+        this.turnoffTooltip();
     }
 
     toggleAccordion(id: string) {
@@ -419,7 +422,43 @@ export class ToolsetComponent implements OnInit {
             }
             if (this.searchedInlines.length >= 10) { break; }
         }
+    }
 
+    assembleImportedTooltip(funcDoc): string {
+        // <span class="tooltiptext1">
+        //     <p class='funcDesc'>{{fn.doc.description}}</p>
+        //     <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
+        //     <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
+        //     <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
+        // </span>
+        let htmlDesc = `<p class="funcDesc">${funcDoc.description}</p>`;
+        if (funcDoc.parameters && funcDoc.parameters.length > 0) {
+            htmlDesc += `<p><span>Parameters: </span></p>`;
+            for (const param of funcDoc.parameters) {
+                htmlDesc += `<p class='paramP'><span>${param.name} - </span> ${param.description}</p>`;
+            }
+        }
+        if (funcDoc.returns) {
+            htmlDesc += `<p><span>Returns: </span>${funcDoc.returns}</p>`;
+        }
+        return htmlDesc;
+    }
+
+    popupTooltip(event, funcText: string) {
+        const tooltip = document.getElementById('tooltiptext');
+        tooltip.innerHTML = funcText;
+        tooltip.style.top = event.target.getBoundingClientRect().top + 'px';
+        this.timeOut = setTimeout(() => {
+            tooltip.style.transitionDuration = '0.3s';
+            tooltip.style.opacity = '1';
+        }, 700);
+    }
+
+    turnoffTooltip() {
+        clearTimeout(this.timeOut);
+        const tooltip = document.getElementById('tooltiptext');
+        tooltip.style.transitionDuration = '0s';
+        tooltip.style.opacity = '0';
     }
 
     getViewOutput() {

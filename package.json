@@ -15,6 +15,7 @@
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-prod": "ng build --base-href=%npm_package_config_prod_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",
     "build-server": "ng build --base-href='./'",
+    "build-deploy-prod": "ng build --prod --base-href 'https://mobius.design-automation.net/'",
     "build-deploy1": "ng build --base-href 'https://mobius.design-automation.net/'",
     "build-deploy2": "npx ngh",
     "build-deploy-old": "ng build --base-href 'https://design-automation.github.io/mobius-parametric-modeller/'",

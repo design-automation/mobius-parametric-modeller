@@ -339,6 +339,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             scene.unselectObjGroup(posi, this.container, 'positions');
         }
 
+        const vertex = Array.from(scene.selected_vertex.keys());
+        for (const vert of vertex) {
+            scene.unselectObjGroup(vert, this.container, 'vertex');
+        }
+
         const edges = Array.from(scene.selected_face_edges.keys());
         for (const edge of edges) {
             scene.unselectObjGroup(edge, this.container, 'face_edges');
@@ -369,32 +374,71 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(intersect0, face, ent_id);
+                        this.selectPositions(null, null, face, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
-                    const ent_id = `_e_posi${intersect0.index / 2}`;
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const ent_id = `_e_posi${edge}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(intersect0, null, ent_id);
+                        this.selectPositions(null, edge, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'Points') {
-                    const ent_id = `_pt_posi${intersect0.index}`;
+                    const index = scene.point_select_map.get(intersect0.index);
+                    const point = this.model.geom.query.navVertToPosi(index);
+                    const ent_id = `_pt_posi${point}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(intersect0, null, ent_id);
+                        this.selectPositions(point, null, null, ent_id);
                     }
                 }
                 break;
             case EEntTypeStr[EEntType.VERT]:
-                this.selectVertex(intersect0);
+                if (intersect0.object.type === 'Mesh') {
+                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
+                    const face = this.model.geom.query.navTriToFace(tri);
+                    const ent_id = `_f_v${face}`;
+                    if (scene.selected_vertex.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectVertex(null, null, face, ent_id);
+                    }
+                } else if (intersect0.object.type === 'LineSegments') {
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const ent_id = `_e_v${edge}`;
+                    if (scene.selected_vertex.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectVertex(null, edge, null, ent_id);
+                    }
+                } else if (intersect0.object.type === 'Points') {
+                    const vert_to_point = this.model.geom.query.navVertToPoint(intersect0.index);
+                    const index = scene.point_select_map.get(vert_to_point);
+                    const point = this.model.geom.query.navPointToVert(index);
+                    const ent_id = `_pt_v${point}`;
+                    if (scene.selected_vertex.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectVertex(point, null, null, ent_id);
+                    }
+                }
                 break;
             case EEntTypeStr[EEntType.COLL]:
                 if (!this.shiftKeyPressed) {
@@ -547,19 +591,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }, 3000);
     }
 
-    private selectPositions(object: THREE.Intersection, face: number, parent_ent_id: string) {
+    private selectPositions(point: number = null, edge: number = null, face: number = null, parent_ent_id: string) {
         const ent_type_str = EEntTypeStr[EEntType.POSI];
         const scene = this._data_threejs;
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-        if (object.object.type === 'Points') {
-            const position = this.model.attribs.query.getPosiCoords(object.index);
-            const posi_ents = this.model.geom.query.navVertToPosi(object.index);
-            const ent_id = `${ent_type_str}${object.index}`;
+        if (point !== null) {
+            const vert = this.model.geom.query.navPointToVert(point);
+            const position = this.model.attribs.query.getVertCoords(vert);
+            const ent_id = `${ent_type_str}${vert}`;
             scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, true);
-            posi_ent.set(ent_id, posi_ents);
+            posi_ent.set(ent_id, point);
             this.dataService.selected_positions.set(`${parent_ent_id}`, [ent_id]);
-        } else if (object.object.type === 'LineSegments') {
-            const verts = this.model.geom.query.navEdgeToVert(object.index / 2);
+        } else if (edge !== null) {
+            const verts = this.model.geom.query.navEdgeToVert(edge);
             const posis = verts.map(v => this.model.geom.query.navVertToPosi(v));
             const children = [];
             posis.map(posi => {
@@ -569,7 +613,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 children.push(`${ent_type_str}${posi}`);
             });
             this.dataService.selected_positions.set(`${parent_ent_id}`, children);
-        } else if (object.object.type === 'Mesh') {
+        } else if (face !== null) {
             const tris = this.model.geom.query.navFaceToTri(face),
                 posis = tris.map(tri => this.model.geom.query.navAnyToPosi(EEntType.TRI, tri)),
                 posi_flat = [].concat(...posis);
@@ -593,61 +637,41 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         });
     }
 
-    private selectVertex(object: THREE.Intersection) {
+    private selectVertex(point: number = null, edge: number = null, face: number = null, parent_ent_id: string) {
         const ent_type_str = EEntTypeStr[EEntType.VERT];
+        const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         const scene = this._data_threejs;
-        if (object.object.type === 'Points') {
-            const vert = this.model.geom.query.navPointToVert(object.index),
-                position = this.model.attribs.query.getPosiCoords(vert);
-
-            const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-            const selecting = `${EEntTypeStr[EEntType.POINT]}${object.index}`;
-            if (!scene.selected_geoms.has(selecting)) {
-                // scene.selectObjPoint(selecting, position, this.container);
-                posi_ent.set(`${EEntTypeStr[EEntType.POSI]}${vert}`, vert);
-            } else {
-                scene.unselectObj(selecting, this.container);
-                posi_ent.delete(`${ent_type_str}${vert}`);
-            }
-        } else if (object.object.type === 'LineSegments') {
-            const verts = this.model.geom.query.navEdgeToVert(object.index / 2);
-            const positions = verts.map(v => this.model.attribs.query.getVertCoords(v));
-            const posi_flat = [].concat(...positions);
-
-            const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-            const selecting = `${EEntTypeStr[EEntType.EDGE]}${object.index / 2}`;
-            if (!scene.selected_geoms.has(selecting)) {
-                scene.selectObjLine(selecting, [], posi_flat, this.container);
-                verts.map(vert => posi_ent.set(`${ent_type_str}${vert}`, vert));
-            } else {
-                scene.unselectObj(selecting, this.container);
-                verts.map(vert => posi_ent.delete(`${ent_type_str}${vert}`));
-            }
-        } else if (object.object.type === 'Mesh') {
-            const face = this.model.geom.query.navTriToFace(object.faceIndex),
-                tris = this.model.geom.query.navFaceToTri(face),
-                verts = tris.map(tri => this.model.geom.query.navTriToVert(tri)),
-                verts_flat = [].concat(...verts),
-                posis = verts_flat.map(v => this.model.geom.query.navAnyToPosi(EEntType.VERT, v)),
-                posis_flat = [].concat(...posis);
-
-            const tri_indices = [];
-            const positions = [];
-            posis_flat.map((posi, index) => {
-                positions.push(this.model.attribs.query.getPosiCoords(posi));
-                tri_indices.push(index);
+        if (point !== null) {
+            const position = this.model.attribs.query.getVertCoords(point);
+            const ent_id = `${ent_type_str}${point}`;
+            scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, true);
+            posi_ent.set(ent_id, point);
+            this.dataService.selected_vertex.set(`${parent_ent_id}`, [ent_id]);
+        } else if (edge !== null) {
+            const verts = this.model.geom.query.navEdgeToVert(edge);
+            const children = [];
+            verts.map(vert => {
+                const position = this.model.attribs.query.getVertCoords(vert);
+                scene.selectObjVetex(parent_ent_id, `${ent_type_str}${vert}`, position, this.container, true);
+                posi_ent.set(`${ent_type_str}${vert}`, vert);
+                children.push(`${ent_type_str}${vert}`);
             });
-            const posi_flat = [].concat(...positions);
+            this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
 
-            const posi_ent = this.dataService.selected_ents.get(ent_type_str);
-            const selecting = `${EEntType.FACE}${face}`;
-            if (!scene.selected_geoms.has(selecting)) {
-                scene.selectObjFace(selecting, tri_indices, posi_flat, this.container);
-                verts_flat.map(vert => posi_ent.set(`${ent_type_str}${vert}`, vert));
-            } else {
-                scene.unselectObj(selecting, this.container);
-                verts_flat.map(vert => posi_ent.delete(`${ent_type_str}${vert}`));
-            }
+        } else if (face !== null) {
+            const tris = this.model.geom.query.navFaceToTri(face),
+                verts = tris.map(tri => this.model.geom.query.navTriToVert(tri)),
+                verts_flat = [].concat(...verts);
+
+            const uniqVerts = this.uniq(verts_flat);
+            const children = [];
+            uniqVerts.map(vert => {
+                const position = this.model.attribs.query.getVertCoords(vert);
+                scene.selectObjVetex(parent_ent_id, `${ent_type_str}${vert}`, position, this.container, true);
+                posi_ent.set(`${ent_type_str}${vert}`, vert);
+                children.push(`${ent_type_str}${vert}`);
+            });
+            this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
         }
     }
 
@@ -660,6 +684,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 this.dataService.selected_ents.get(EEntTypeStr[EEntType.POSI]).delete(c);
             });
             this.dataService.selected_positions.delete(ent_id);
+
+        } else if (ent_type_str === EEntTypeStr[EEntType.VERT]) {
+            scene.unselectObjGroup(ent_id, this.container, 'vertex');
+            const children = this.dataService.selected_vertex.get(ent_id);
+            children.forEach(c => {
+                this.dataService.selected_ents.get(EEntTypeStr[EEntType.VERT]).delete(c);
+            });
+            this.dataService.selected_vertex.delete(ent_id);
 
         } else if (ent_type_str === 'face_edges') {
             scene.unselectObjGroup(ent_id, this.container, 'face_edges');

@@ -48,9 +48,6 @@ export class GoogleAnalyticsService {
     } catch (error) {
       console.log(`error: ${error}`);
     }
-
-    // testing
-    console.log(category, label, action, value);
   }
 
 }

@@ -746,7 +746,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private selectPoint(point: THREE.Intersection) {
         const ent_type_str = EEntTypeStr[EEntType.POINT];
 
-        const result = this.getPointPosis(point.index);
+        const result = this.getPointPosis(point.index, null);
         const point_indices = result.point_indices;
         const point_posi = result.posi_flat;
         const ent_id = `${ent_type_str}${point.index}`;
@@ -788,7 +788,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private getPointPosis(point1: number = null, points: number[] = null) {
         let verts_flat: number[] = null;
         if (point1 !== null) {
-            verts_flat = [this.model.geom.query.navPointToVert(point1)];
+            verts_flat = [this.model.geom.query.navVertToPosi(point1)];
         }
         if (points !== null) {
             const verts = points.map(p => this.model.geom.query.navPointToVert(p));

@@ -27,16 +27,16 @@
         <ul>
             <li><b>Gallery</b>: The gallery contains a selection of example models for you to explore. 
                 To access the gallery, 
-                click <mat-icon>view_comfy</mat-icon></li>.
+                click <mat-icon (click)='routeTo("/gallery")'>view_comfy</mat-icon></li>.
             <li><b>Dashboard</b>: Each model has its own dashbaord that exposes a set of parameters, that can be set using sliders and UI components.
                 To access the dashboard, 
-                click <mat-icon svgIcon="cDashboard"></mat-icon></li>.
+                click <mat-icon svgIcon="cDashboard" (click)='routeTo("/dashboard")'></mat-icon></li>.
             <li><b>Flowchart</b>: Each model is has a flowchart that defines a set of nodes connected with edges. 
                 To access the flowchart, 
-                click <mat-icon svgIcon="cFlowchart"></mat-icon></li>.
+                click <mat-icon svgIcon="cFlowchart" (click)='routeTo("/flowchart")'></mat-icon></li>.
             <li><b>Procedure</b>: Each node in the model has its own procedure, defined using the 'Obi' visual programming language.
                 To access the procedure, 
-                click <mat-icon svgIcon="cEditor"></mat-icon>.
+                click <mat-icon svgIcon="cEditor" (click)='routeTo("/editor")'></mat-icon>.
         </ul>
 
 

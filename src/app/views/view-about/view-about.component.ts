@@ -16,31 +16,7 @@ export class ViewAboutComponent {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
     }
 
-    selectNode(node_index: number): void {
-      if ( typeof(node_index) === 'number' ) {
-          this.dataService.flowchart.meta.selected_nodes = [node_index];
-      }
-    }
-
-    getEndNode(): INode {
-      for (const node of this.dataService.flowchart.nodes) {
-        if (node.type === 'end') { return node; }
-      }
-    }
-
-    viewerData(): any {
-        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-        if (!node) { return ''; }
-        // if (node.type === 'output') { return node.input.value; }
-        return node.model;
-    }
-
-    setSplit(event) {
-        this.dataService.splitUpdate = true;
-        this.dataService.splitVal = event.sizes[1];
-    }
-
-    getSplit() { return this.dataService.splitVal; }
+    routeTo(url: string) { this.router.navigate([url]); }
     getFlowchart() { return this.dataService.flowchart; }
 }
 

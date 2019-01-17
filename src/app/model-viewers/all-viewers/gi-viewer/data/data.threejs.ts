@@ -44,7 +44,7 @@ export class DataThreejs {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number}
+        positions: { show: boolean, size: number }
     };
     /**
      * Constructs a new data subscriber.
@@ -53,7 +53,7 @@ export class DataThreejs {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number}
+        positions: { show: boolean, size: number }
     }) {
         this.settings = settings;
         // scene
@@ -256,11 +256,18 @@ export class DataThreejs {
             geom.setIndex(point_indices);
         }
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
         if (colors) {
             geom.addAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
         } else {
-            // @ts-ignore
-            const color_buffer = new Uint8Array(Array(positions.length / 3).fill(color).flat(1));
+            let color_data;
+            if (positions.length < 3) {
+                color_data = color;
+            } else {
+                // @ts-ignore
+                color_data = Array(positions.length / 3).fill(color).flat(1);
+            }
+            const color_buffer = new Uint8Array(color_data);
             geom.addAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));
         }
         geom.computeBoundingSphere();
@@ -288,7 +295,7 @@ export class DataThreejs {
     }
 
     public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const bg = this.initBufferPoint(positions, null, null, [0, 60, 255]);
+        const bg = this.initBufferPoint(positions, null, null, [0, 60, 255], this.settings.positions.size + 0.5);
         if (this.selected_positions.get(parent_ent_id) === undefined) {
             this.selected_positions.set(parent_ent_id, new Map());
         }
@@ -648,7 +655,7 @@ export class DataThreejs {
 
     public onWindowKeyPress(event: KeyboardEvent) {
         const nodeName = (<Element>event.target).nodeName;
-        if ( nodeName === 'TEXTAREA' || nodeName === 'INPUT') { return; }
+        if (nodeName === 'TEXTAREA' || nodeName === 'INPUT') { return; }
         const segment_str = window.location.pathname;
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];

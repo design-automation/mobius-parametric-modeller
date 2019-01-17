@@ -28,13 +28,13 @@ export class GIViewerComponent implements OnInit {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number}
+        positions: { show: boolean, size: number }
     } = {
-        normals: { show: false, size: 5 },
-        axes: { show: true, size: 50 },
-        grid: { show: true, size: 500 },
-        positions: { show: false, size: 0.5}
-    };
+            normals: { show: false, size: 5 },
+            axes: { show: true, size: 50 },
+            grid: { show: true, size: 500 },
+            positions: { show: false, size: 0.5 }
+        };
 
     normalsEnabled = false;
 
@@ -45,9 +45,22 @@ export class GIViewerComponent implements OnInit {
      */
     constructor(private dataService: DataService, private modalService: ModalService) {
         //
-        if (localStorage.getItem('mpm_settings') === null) {
+        const previous_settings = localStorage.getItem('mpm_settings');
+        if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
+    }
+
+    /**
+     * Check whether the current settings has same structure with
+     * the previous settings saved in local storage. If not, replace the local storage.
+     * @param obj1
+     * @param obj2
+     */
+    hasDiffProps(obj1, obj2) {
+        return Object.keys(obj1).every(function (prop) {
+            return !obj2.hasOwnProperty(prop);
+        });
     }
 
     /**

@@ -2,6 +2,8 @@ div{
     position: absolute;
     ul{
         padding: 0;
+        border: 1px solid #eeeeee;
+        box-shadow: 1px 1px 3px 0px #bbbbbb;
         ol{
             cursor: pointer;
             list-style: none;
@@ -11,6 +13,9 @@ div{
             &:hover{
                 background: #eeeeee;
             }
+        }
+        &:first-child{
+            background: #f9f9f9;
         }
     }
 }

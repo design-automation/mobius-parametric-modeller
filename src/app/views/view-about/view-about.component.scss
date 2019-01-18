@@ -9,17 +9,21 @@
 .content__panel{
     margin-top: 1px;
     margin-left: 11px; //split bar width
-    max-width: 600px;
+    // max-width: 600px;
     height: auto;
 
-    //height: calc(100vh - 40px); //header height
-    // overflow-y: hidden;
-
-    ul{
-        li{
-            color: $color8;
-            text-align: left;
-            font-size: $fsize2;
+    .logo{
+        float: right;
+        margin-right: 50px;
+    }
+    .text{
+        max-width: 600px;
+    }
+    .key {
+        margin-left: 25px;
+        td {
+            padding: 10px;
+            valign: 'top';
         }
     }
 }
@@ -30,15 +34,14 @@ h3 {
     color: $color8;
 }
 
-p{
+p, li, td{
     color: $color8;
     text-align: left;
-    font-size: $fsize2;
-    //line-height: 14px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    line-height: 18px;
     //height: 14px;
 }
-
-
 
 mat-icon{
     color: $color1;

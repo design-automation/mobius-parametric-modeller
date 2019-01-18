@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
+import { number } from '@assets/core/modules/_mathjs';
+import { EEntType } from '@assets/libs/geo-info/common';
 
 /**
  * ThreejsScene
@@ -92,6 +94,7 @@ export class DataThreejs {
         // selecting
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
+        this._raycaster.params.Points.threshold = 0.1;
 
         // add grid and lights
         this._addGrid();
@@ -128,7 +131,17 @@ export class DataThreejs {
         this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
-        this.addPositions(threejs_data.colors, this.settings.positions.size);
+        const posi_colors: number[] = [];
+        if (threejs_data.colors.length === 0) {
+            const numPosi = this._model.geom.query.numEnts(EEntType.POSI);
+            for (let index = 0; index < numPosi; index++) {
+                posi_colors.push(1, 1, 1);
+            }
+        }
+        const check_posi_colors = threejs_data.colors.length === 0 ? posi_colors : threejs_data.colors;
+        this.addPositions(check_posi_colors, this.settings.positions.size);
+        const position_size = this.settings.positions.size;
+        this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
         // this.grid.position.copy(center);
@@ -149,7 +162,7 @@ export class DataThreejs {
         this._addPositions(all_positions_flat,
             all_positions_indices,
             all_positions_colors,
-            [120, 120, 120],
+            [255, 255, 0],
             size);
         this._positions.map(p => p.visible = this.settings.positions.show);
     }
@@ -296,7 +309,7 @@ export class DataThreejs {
     }
 
     public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const bg = this.initBufferPoint(positions, null, null, [0, 60, 255], this.settings.positions.size + 0.5);
+        const bg = this.initBufferPoint(positions, null, null, [0, 60, 255], this.settings.positions.size + 0.1);
         if (this.selected_positions.get(parent_ent_id) === undefined) {
             this.selected_positions.set(parent_ent_id, new Map());
         }
@@ -322,7 +335,7 @@ export class DataThreejs {
     }
 
     public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const bg = this.initBufferPoint(positions, null, null, [255, 215, 0], this.settings.positions.size + 0.5);
+        const bg = this.initBufferPoint(positions, null, null, [255, 215, 0], this.settings.positions.size + 0.1);
         if (this.selected_vertex.get(parent_ent_id) === undefined) {
             this.selected_vertex.set(parent_ent_id, new Map());
         }
@@ -375,7 +388,6 @@ export class DataThreejs {
             removing = this.selected_positions.get(parent_ent_id);
         } else if (group === 'vertex') {
             removing = this.selected_vertex.get(parent_ent_id);
-            console.log('removing', removing);
         } else if (group === 'face_edges') {
             // get the removing first
             removing = this.selected_face_edges.get(parent_ent_id);
@@ -573,6 +585,8 @@ export class DataThreejs {
         div.id = `textLabel_${labelText}`;
         div.className = 'text-label';
         div.style.position = 'absolute';
+        div.style.background = 'rgba(255, 255, 255, 0.3)';
+        div.style.padding = '1px';
         div.innerHTML = '';
         div.style.top = '-1000';
         div.style.left = '-1000';

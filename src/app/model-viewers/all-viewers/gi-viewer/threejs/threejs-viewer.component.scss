@@ -90,6 +90,19 @@ button{
     border:0;
 }*/
 
+.messages{
+    position:absolute;
+    color:orange;
+    margin-top: 50px;
+    left:40%;
+    padding:10px;
+    text-align: center;
+    font-family:sans-serif;
+    font-size: 14px;
+    background-color: white;
+    box-shadow: 2px 2px 5px 0px #505050;
+}
+
 #zoomingfit{
     width: 40px;
     height: 40px;
@@ -192,4 +205,13 @@ button{
 .selectvisible{
     background-color:  white !important;
     color:#395d73;
+}
+
+#mouse_label{
+    display:none;
+    position:fixed;
+    overflow:hidden;
+    font-style: italic;
+    background: rgba(255,255,255,0.5);
+    padding: 5px;
 }

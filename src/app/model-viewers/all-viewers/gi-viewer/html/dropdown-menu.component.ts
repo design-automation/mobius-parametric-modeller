@@ -14,7 +14,7 @@ export class DropdownMenuComponent {
     setItems(items: number[], label: string) {
         const dropdownMenu = [];
         items.map(item => dropdownMenu.push({ id: item, label: `${label}${item}` }));
-        console.log('dropdownMenu', dropdownMenu);
+        // console.log('dropdownMenu', dropdownMenu);
         this.items = dropdownMenu;
     }
     selectItem(item: {id: number, label: string}) {

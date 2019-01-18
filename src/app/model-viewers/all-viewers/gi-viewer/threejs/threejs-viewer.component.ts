@@ -65,6 +65,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private lastY: number;
     private dragHash: number;
     private shiftKeyPressed = false;
+    private mouse_label;
     /**
      * Creates a new viewer,
      * @param injector
@@ -79,6 +80,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * Called when the viewer is initialised.
      */
     ngOnInit() {
+        this.mouse_label = document.getElementById('mouse_label');
         this.dropdown.items = [];
         this.dropdown.visible = false;
         this.dropdown.position = { x: 0, y: 0 };
@@ -211,34 +213,37 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     public onMouseMove(event) {
-        const tags = document.getElementsByTagName('body');
-        const length = tags.length;
+        const body = document.getElementsByTagName('body');
+
         if (event.target.tagName !== 'CANVAS') {
-            let index = 0;
-            for (; index < length; index++) {
-                tags[index].style.cursor = 'default';
-            }
+            body[0].style.cursor = 'default';
+            // if (this.mouse_label !== null) {
+            //     this.mouse_label.style.display = 'none';
+            // }
             return null;
         } else {
             const intersects = this.threeJSViewerService.initRaycaster(event);
             if (intersects.length > 0) {
-                let index = 0;
-                for (; index < length; index++) {
-                    tags[index].style.cursor = 'pointer';
-                }
+                body[0].style.cursor = 'pointer';
+                // if (this.mouse_label !== null) {
+                //     const x = event.clientX, y = event.clientY;
+                //     this.mouse_label.style.top = y + 'px';
+                //     this.mouse_label.style.left = (x + 15) + 'px';
+                //     this.mouse_label.style.display = 'block';
+                //     this.mouse_label.innerHTML = mouseLabel[intersects[0].object.type];
+                // }
             } else {
-                let index = 0;
-                for (; index < length; index++) {
-                    tags[index].style.cursor = 'default';
-                }
+                body[0].style.cursor = 'default';
+                // if (this.mouse_label !== null) {
+                //     this.mouse_label.style.display = 'none';
+                // }
             }
 
             if (!this.isDown) { return; }
-            // event.preventDefault();
-            const mouseX = event.clientX - event.target.getBoundingClientRect().left;
-            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
 
             // Put your mousemove stuff here
+            const mouseX = event.offsetX - event.target.getBoundingClientRect().left;
+            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
             const dx = mouseX - this.lastX;
             const dy = mouseY - this.lastY;
             this.lastX = mouseX;
@@ -364,17 +369,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.getSelectingEntityType();
         switch (this.SelectingEntityType.id) {
             case EEntTypeStr[EEntType.POSI]:
-                if (intersect0.object.type === 'Mesh') {
-                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
-                    const ent_id = `_f_posi${face}`;
+                if (intersect0.object.type === 'Points') {
+                    const point = intersect0.index;
+                    const ent_id = `_pt_posi${point}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(null, null, face, ent_id);
+                        this.selectPositions(point, null, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
@@ -387,33 +391,39 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         }
                         this.selectPositions(null, edge, null, ent_id);
                     }
-                } else if (intersect0.object.type === 'Points') {
-                    const vert_to_point = this.model.geom.query.navVertToPoint(intersect0.index);
-                    const index = scene.point_select_map.get(vert_to_point);
-                    const point = this.model.geom.query.navPointToVert(index);
-                    const ent_id = `_pt_posi${point}`;
+                } else if (intersect0.object.type === 'Mesh') {
+                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
+                    const face = this.model.geom.query.navTriToFace(tri);
+                    const ent_id = `_f_posi${face}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(point, null, null, ent_id);
+                        this.selectPositions(null, null, face, ent_id);
                     }
                 }
                 break;
             case EEntTypeStr[EEntType.VERT]:
-                if (intersect0.object.type === 'Mesh') {
-                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
-                    const ent_id = `_f_v${face}`;
+                if (intersect0.object.type === 'Points') {
+                    const vert = this.model.geom.query.navPosiToVert(intersect0.index);
+                    let point: number;
+                    if (vert.length > 1) {
+                        this.dropdown.setItems(vert, EEntTypeStr[EEntType.VERT]);
+                        this.dropdown.visible = true;
+                        this.dropdown.position = this.dropdownPosition;
+                    } else if (vert.length === 1) {
+                        point = vert[0];
+                    }
+                    const ent_id = `_pt_v${point}`;
                     if (scene.selected_vertex.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectVertex(null, null, face, ent_id);
+                        this.selectVertex(point, null, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
@@ -426,18 +436,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         }
                         this.selectVertex(null, edge, null, ent_id);
                     }
-                } else if (intersect0.object.type === 'Points') {
-                    const vert_to_point = this.model.geom.query.navVertToPoint(intersect0.index);
-                    const index = scene.point_select_map.get(vert_to_point);
-                    const point = this.model.geom.query.navPointToVert(index);
-                    const ent_id = `_pt_v${point}`;
+                } else if (intersect0.object.type === 'Mesh') {
+                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
+                    const face = this.model.geom.query.navTriToFace(tri);
+                    const ent_id = `_f_v${face}`;
                     if (scene.selected_vertex.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectVertex(point, null, null, ent_id);
+                        this.selectVertex(null, null, face, ent_id);
                     }
                 }
                 break;
@@ -551,7 +560,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPoint(intersect0);
+                        this.selectPoint(intersect0.index);
                     }
                 } else {
                     this.showMessages('Points', true);
@@ -597,7 +606,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const scene = this._data_threejs;
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         if (point !== null) {
-            const position = this.model.attribs.query.getVertCoords(point);
+            const position = this.model.attribs.query.getPosiCoords(point);
             const ent_id = `${ent_type_str}${point}`;
             scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, true);
             posi_ent.set(ent_id, point);
@@ -775,15 +784,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
     }
 
-    private selectPoint(point: THREE.Intersection) {
+    private selectPoint(point: number) {
         const ent_type_str = EEntTypeStr[EEntType.POINT];
-
-        const result = this.getPointPosis(point.index, null);
+        const pt = this.model.geom.query.navVertToPoint(point);
+        if (pt === undefined) {
+            this.showMessages('This is not a Point', false, 'custom');
+            return;
+        }
+        const result = this.getPointPosis(point, null);
         const point_indices = result.point_indices;
         const point_posi = result.posi_flat;
-        const ent_id = `${ent_type_str}${point.index}`;
+        const ent_id = `${ent_type_str}${point}`;
         this._data_threejs.selectObjPoint(ent_id, point_indices, point_posi, this.container);
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, point.index);
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, point);
     }
 
     private selectPLine(line: THREE.Intersection) {
@@ -974,6 +987,20 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.render(this);
     }
 
+    private chooseVertex(id: number) {
+        const ent_type_str = EEntTypeStr[EEntType.VERT];
+        const posi_ent = this.dataService.selected_ents.get(ent_type_str);
+        const scene = this._data_threejs;
+        const date = new Date(), timestamp = date.getTime();
+        const position = this.model.attribs.query.getVertCoords(id);
+        const ent_id = `${ent_type_str}${id}`;
+        scene.selectObjVetex(`_single_v${timestamp}`, ent_id, position, this.container, true);
+        posi_ent.set(ent_id, id);
+        this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
+        this.refreshTable(null);
+        this.render(this);
+    }
+
     public zoomfit() {
         this._data_threejs.lookAtObj(this._width);
     }
@@ -985,6 +1012,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     selectEntity(id: number) {
-        this.chooseColl(id);
+        if (this.SelectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
+            this.chooseColl(id);
+        } else if (this.SelectingEntityType.id === EEntTypeStr[EEntType.VERT]) {
+            this.chooseVertex(id);
+        }
     }
+}
+
+enum mouseLabel {
+    Mesh = 'Polygon',
+    LineSegments = 'Polyline/',
+    Points = 'Point/Position'
 }

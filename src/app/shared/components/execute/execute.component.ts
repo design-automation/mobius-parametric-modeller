@@ -49,10 +49,11 @@ const DEBUG = false;
 })
 export class ExecuteComponent {
 
+    private startTime;
     constructor(private dataService: DataService, private googleAnalyticsService: GoogleAnalyticsService) {}
 
     async execute() {
-        // const startTime = performance.now();
+        this.startTime = performance.now();
         document.getElementById('spinner-on').click();
         console.log(' ');
 
@@ -73,6 +74,7 @@ export class ExecuteComponent {
                 document.getElementById('Console').click();
                 console.log(ex.message);
                 document.getElementById('spinner-off').click();
+                this.googleAnalyticsService.trackEvent('execute', `error: ${ex.name}`, 'click', performance.now() - this.startTime);
                 throw ex;
             }
 
@@ -113,13 +115,15 @@ export class ExecuteComponent {
                 console.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
                 // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
+                this.googleAnalyticsService.trackEvent('execute', `error: Empty Argument`, 'click', performance.now() - this.startTime);
                 throw new Error('Empty Argument');
             }
             if (InvalidECheck) {
                 document.getElementById('Console').click();
                 console.log('Error: Invalid Argument or Argument with Reserved Word detected. Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
-                // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
+                this.googleAnalyticsService.trackEvent('execute', `error: Reserved Word Argument`,
+                    'click', performance.now() - this.startTime);
                 throw new Error('Reserved Word Argument');
             }
         }
@@ -138,6 +142,7 @@ export class ExecuteComponent {
             // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
         }, 20);
 
+        this.googleAnalyticsService.trackEvent('execute', 'successful', 'click', performance.now() - this.startTime);
 
     }
 
@@ -163,7 +168,6 @@ export class ExecuteComponent {
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
-        this.googleAnalyticsService.trackEvent('execute', 'successful', 'click');
     }
 
     async resolveImportedUrl(prodList: IProcedure[]) {
@@ -339,7 +343,7 @@ export class ExecuteComponent {
                         ex.message);
             // console.log('---------------\nError node code:');
             // console.log(fnString);
-            this.googleAnalyticsService.trackEvent('execute', `error${ex.name}`, 'click');
+            this.googleAnalyticsService.trackEvent('execute', `error: ${ex.name}`, 'click', performance.now() - this.startTime);
             throw ex;
 
         }

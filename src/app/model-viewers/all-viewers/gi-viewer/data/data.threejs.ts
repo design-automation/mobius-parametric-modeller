@@ -20,6 +20,7 @@ export class DataThreejs {
     public point_select_map: Map<number, number>;
     public selected_geoms: Map<string, number> = new Map();
     public selected_positions: Map<string, Map<string, number>> = new Map();
+    public selected_vertex: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
     public _text: string;
     // text lables
@@ -320,6 +321,32 @@ export class DataThreejs {
         }
     }
 
+    public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, label) {
+        const bg = this.initBufferPoint(positions, null, null, [255, 215, 0], this.settings.positions.size + 0.5);
+        if (this.selected_vertex.get(parent_ent_id) === undefined) {
+            this.selected_vertex.set(parent_ent_id, new Map());
+        }
+
+        const check_exist: string[] = [];
+        this.selected_vertex.forEach(v => {
+            v.forEach((vv, k) => {
+                check_exist.push(k);
+            });
+        });
+
+        if (!check_exist.includes(ent_id)) {
+            const point = new THREE.Points(bg.geom, bg.mat);
+            this._scene.add(point);
+            this.selected_vertex.get(parent_ent_id).set(ent_id, point.id);
+            this.sceneObjsSelected.set(ent_id, point);
+            if (label) {
+                const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.ObjLabelMap.set(ent_id, obj);
+            }
+        }
+    }
+
     public createLabelforObj(container, obj, type: string, labelText: string) {
         const label = this._createTextLabel(container, type, labelText);
         label.setHTML(labelText);
@@ -345,8 +372,10 @@ export class DataThreejs {
     public unselectObjGroup(parent_ent_id, container, group) {
         let removing;
         if (group === 'positions') {
-            // get the removing first
             removing = this.selected_positions.get(parent_ent_id);
+        } else if (group === 'vertex') {
+            removing = this.selected_vertex.get(parent_ent_id);
+            console.log('removing', removing);
         } else if (group === 'face_edges') {
             // get the removing first
             removing = this.selected_face_edges.get(parent_ent_id);
@@ -362,6 +391,8 @@ export class DataThreejs {
         if (group === 'positions') {
             // then delete
             this.selected_positions.delete(parent_ent_id);
+        } else if (group === 'vertex') {
+            this.selected_vertex.delete(parent_ent_id);
         } else if (group === 'face_edges') {
             this.selected_face_edges.delete(parent_ent_id);
         }

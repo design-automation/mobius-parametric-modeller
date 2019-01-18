@@ -2,18 +2,26 @@
 @import '~scss/variables';
 
 .container{
+    display: block;
     height: 100%;
     overflow: auto;
-
 }
 .content__panel{
     margin-top: 1px;
     margin-left: 11px; //split bar width
     max-width: 600px;
-    height: fit-content;
+    height: auto;
 
     //height: calc(100vh - 40px); //header height
     // overflow-y: hidden;
+
+    ul{
+        li{
+            color: $color8;
+            text-align: left;
+            font-size: $fsize2;
+        }
+    }
 }
 
 h3 {
@@ -30,10 +38,13 @@ p{
     //height: 14px;
 }
 
+
+
 mat-icon{
     color: $color1;
     margin: 0px;
     padding: 0px;
     position: relative;
     top: 5px;
+    cursor: pointer;
 }

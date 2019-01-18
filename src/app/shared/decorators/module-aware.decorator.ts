@@ -5,6 +5,7 @@ import { IArgument } from '@models/code';
 import * as doc from '@assets/typedoc-json/doc.json';
 // const doc = require('@assets/typedoc-json/doc.json');
 
+// @ts-ignore
 import * as Modules from 'assets/core/modules';
 
 const module_list = [];

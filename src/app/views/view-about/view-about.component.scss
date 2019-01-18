@@ -23,7 +23,6 @@
         margin-left: 25px;
         td {
             padding: 10px;
-            valign: 'top';
         }
     }
 }
@@ -38,8 +37,8 @@ p, li, td{
     color: $color8;
     text-align: left;
     margin-bottom: 14px;
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 12px;
+    line-height: 14px;
     //height: 14px;
 }
 
@@ -47,7 +46,5 @@ mat-icon{
     color: $color1;
     margin: 0px;
     padding: 0px;
-    position: relative;
-    top: 5px;
     cursor: pointer;
 }

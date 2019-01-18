@@ -9,7 +9,7 @@
 }
 
 .container--parameter{
-    padding: 5px 0px;
+    padding: 10px 0px 5px 0px;
 
     display: flex;
     flex-flow: row nowrap;
@@ -18,7 +18,7 @@
     color: $color8;
     vertical-align: bottom;
 
-    border-bottom: 1px solid $color5;
+    //border-bottom: 1px solid $color5;
 
     overflow: hidden;
     width: 100%;
@@ -50,7 +50,7 @@ input{
     color: $color8;
     background-color: transparent;
     border:none;
-    border-bottom: 1px solid $color1;
+    border: 2px solid $color5;
     margin: 0px 2px;
     
     // margin-left: 5px;
@@ -72,7 +72,8 @@ input{
 
     &.disabled-input{
         padding: 0px;
-        border-bottom: 0px; //2px solid transparent;
+        //border-bottom: 0px; //2px solid transparent;
+        border: 2px solid transparent;
         &:hover{ // no change
             background-color: transparent;
             color: $color8;

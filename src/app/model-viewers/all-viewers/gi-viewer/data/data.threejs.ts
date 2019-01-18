@@ -92,6 +92,7 @@ export class DataThreejs {
         // selecting
         this._raycaster = new THREE.Raycaster();
         this._raycaster.linePrecision = 0.05;
+        this._raycaster.params.Points.threshold = 0.1;
 
         // add grid and lights
         this._addGrid();
@@ -129,6 +130,8 @@ export class DataThreejs {
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
         this.addPositions(threejs_data.colors, this.settings.positions.size);
+        const position_size = this.settings.positions.size;
+        this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
         // this.grid.position.copy(center);
@@ -296,7 +299,7 @@ export class DataThreejs {
     }
 
     public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const bg = this.initBufferPoint(positions, null, null, [0, 60, 255], this.settings.positions.size + 0.5);
+        const bg = this.initBufferPoint(positions, null, null, [0, 60, 255], this.settings.positions.size + 0.1);
         if (this.selected_positions.get(parent_ent_id) === undefined) {
             this.selected_positions.set(parent_ent_id, new Map());
         }
@@ -322,7 +325,7 @@ export class DataThreejs {
     }
 
     public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const bg = this.initBufferPoint(positions, null, null, [255, 215, 0], this.settings.positions.size + 0.5);
+        const bg = this.initBufferPoint(positions, null, null, [255, 215, 0], this.settings.positions.size + 0.1);
         if (this.selected_vertex.get(parent_ent_id) === undefined) {
             this.selected_vertex.set(parent_ent_id, new Map());
         }
@@ -375,7 +378,6 @@ export class DataThreejs {
             removing = this.selected_positions.get(parent_ent_id);
         } else if (group === 'vertex') {
             removing = this.selected_vertex.get(parent_ent_id);
-            console.log('removing', removing);
         } else if (group === 'face_edges') {
             // get the removing first
             removing = this.selected_face_edges.get(parent_ent_id);

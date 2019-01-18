@@ -388,9 +388,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectPositions(null, edge, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'Points') {
-                    const vert_to_point = this.model.geom.query.navVertToPoint(intersect0.index);
-                    const index = scene.point_select_map.get(vert_to_point);
-                    const point = this.model.geom.query.navPointToVert(index);
+                    const point = intersect0.index;
                     const ent_id = `_pt_posi${point}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
@@ -427,9 +425,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectVertex(null, edge, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'Points') {
-                    const vert_to_point = this.model.geom.query.navVertToPoint(intersect0.index);
-                    const index = scene.point_select_map.get(vert_to_point);
-                    const point = this.model.geom.query.navPointToVert(index);
+                    const vert = this.model.geom.query.navPosiToVert(intersect0.index);
+                    let point: number;
+                    if (vert.length > 1) {
+                        this.dropdown.setItems(vert, EEntTypeStr[EEntType.VERT]);
+                        this.dropdown.visible = true;
+                        this.dropdown.position = this.dropdownPosition;
+                    } else if (vert.length === 1) {
+                        point = vert[0];
+                    }
                     const ent_id = `_pt_v${point}`;
                     if (scene.selected_vertex.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
@@ -597,7 +601,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const scene = this._data_threejs;
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         if (point !== null) {
-            const position = this.model.attribs.query.getVertCoords(point);
+            const position = this.model.attribs.query.getPosiCoords(point);
             const ent_id = `${ent_type_str}${point}`;
             scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, true);
             posi_ent.set(ent_id, point);
@@ -974,6 +978,20 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.render(this);
     }
 
+    private chooseVertex(id: number) {
+        const ent_type_str = EEntTypeStr[EEntType.VERT];
+        const posi_ent = this.dataService.selected_ents.get(ent_type_str);
+        const scene = this._data_threejs;
+        const date = new Date(), timestamp = date.getTime();
+        const position = this.model.attribs.query.getVertCoords(id);
+        const ent_id = `${ent_type_str}${id}`;
+        scene.selectObjVetex(`_single_v${timestamp}`, ent_id, position, this.container, true);
+        posi_ent.set(ent_id, id);
+        this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
+        this.refreshTable(null);
+        this.render(this);
+    }
+
     public zoomfit() {
         this._data_threejs.lookAtObj(this._width);
     }
@@ -985,6 +1003,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     selectEntity(id: number) {
-        this.chooseColl(id);
+        if (this.SelectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
+            this.chooseColl(id);
+        } else if (this.SelectingEntityType.id === EEntTypeStr[EEntType.VERT]) {
+            this.chooseVertex(id);
+        }
     }
 }

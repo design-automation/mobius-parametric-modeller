@@ -8,6 +8,7 @@
     <rect class="node" 
     width="100" height="80"
     [class.node--selected]='selected'
+    [class.node--editing]='editing'
     [class.node--error]="node.hasError"
     [class.node--disabled]='!node.enabled'
     [attr.x]="node.position.x" 
@@ -25,6 +26,8 @@
                 [(ngModel)]='node.name'
                 [class.selected]='selected'
                 [class.disabled]='!node.enabled'
+                (focus)='editing = true'
+                (blur)='editing = false'
                 title={{node.name}}
                 style="font-weight: 600;"
                 placeholder='Description of Node'/>  

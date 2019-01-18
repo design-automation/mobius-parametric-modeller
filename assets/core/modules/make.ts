@@ -272,7 +272,7 @@ export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _
     // copy the list of entities
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _copyGeom(__model__, ents_arr, bool_copy_attribs);
     // copy the positions that belong to the list of entities
-    _copyGeomPosis(__model__, ents_arr, bool_copy_attribs);
+    _copyGeomPosis(__model__, new_ents_arr, bool_copy_attribs);
     // return only the new entities
     return idsMake(new_ents_arr) as TId|TId[];
 }

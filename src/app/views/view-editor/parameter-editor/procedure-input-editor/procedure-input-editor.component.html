@@ -38,17 +38,12 @@
             placeholder="name"
             [style.width.px]='inputSize(prod.args[0].value,"Undefined")'>
         </div>
-        <div class='inline-div' *ngIf='prod.type == 12'>
-            <!-- <input [class.disabled-input]='true' value='Input Mode:' disabled>  -->
-            <!-- 
-                <input *ngIf='prod.type != 12' [class.disabled-input]='true' [value]='PortTypes[prod.meta.inputMode]'
-                [style.width.px]='inputSize(PortTypes[prod.meta.inputMode])' disabled>
-            -->
+        <!-- <div class='inline-div' *ngIf='prod.type == 12'>
             <select [(ngModel)]="prod.meta.inputMode" tabindex="-1">
                 <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
                 <option value='4' [selected]="prod.meta.inputMode == 4">File</option>
             </select>
-        </div>
+        </div> -->
         <!-- <input [class.disabled-input]='true' value='Default:' disabled> -->
         <div class='inline-div'>
             <ng-container [ngSwitch]="prod.meta.inputMode" >

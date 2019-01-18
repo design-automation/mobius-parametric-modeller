@@ -138,7 +138,8 @@ export class DataThreejs {
                 posi_colors.push(1, 1, 1);
             }
         }
-        this.addPositions(posi_colors, this.settings.positions.size);
+        const check_posi_colors = threejs_data.colors.length === 0 ? posi_colors : threejs_data.colors;
+        this.addPositions(check_posi_colors, this.settings.positions.size);
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
         // const allObjs = this.getAllObjs();

@@ -74,9 +74,9 @@ export class ExecuteComponent {
             try {
                 await this.resolveImportedUrl(node.procedure);
             } catch (ex) {
+                document.getElementById('spinner-off').click();
                 document.getElementById('Console').click();
                 console.log(ex.message);
-                document.getElementById('spinner-off').click();
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
                 throw ex;
@@ -94,7 +94,13 @@ export class ExecuteComponent {
                     InvalidECheck = true;
                 }
                 if (prod.type === ProcedureTypes.Constant) {
-                    prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
+                    try {
+                        prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
+                    } catch (ex) {
+                        node.hasError = true;
+                        prod.hasError = true;
+                        InvalidECheck = true;
+                    }
                     if (!prod.args[0].value || (!prod.args[1].value && !prod.args[1].default &&
                         prod.args[1].value !== 0 && prod.args[1].default !== 0)) {
                         node.hasError = true;

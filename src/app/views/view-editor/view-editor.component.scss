@@ -3,6 +3,11 @@
 
 .content__panel{
     margin-top: $header-height;
+    overflow: hidden;
+
+    :hover{
+        overflow: auto;
+    }
 }
 
 .container--editor{
@@ -22,7 +27,6 @@
     display: inline-flex;
     width: 100%;
     min-height: 100%;
-    overflow: inherit;
 }
 
 .container--toolset{
@@ -76,17 +80,15 @@
     padding-bottom: 10px;
     overflow: hidden;
     margin: 0px 0px 5px 0px;
-    height: calc(100vh - 40px - 25px); // 40px === $header-height 25px top margin & btn height
+    height: fit-content;
+    // height: calc(100vh - 40px - 25px); // 40px === $header-height 25px top margin & btn height
     #spacer{
         height: 10px;
     }
-    &:hover{
-        overflow:auto;
-    } 
 }
 
 .procedureln--container-start{
-    height: calc(100vh - 40px - 25px - 56px); // 40px === $header-height 25px top margin & btn height 56px flowchart info
+    height: fit-content; // 40px === $header-height 25px top margin & btn height 56px flowchart info
 }
 
 hr{

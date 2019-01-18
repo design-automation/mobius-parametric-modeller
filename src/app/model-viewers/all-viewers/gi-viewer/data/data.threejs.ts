@@ -162,7 +162,7 @@ export class DataThreejs {
         this._addPositions(all_positions_flat,
             all_positions_indices,
             all_positions_colors,
-            [120, 120, 120],
+            [255, 255, 0],
             size);
         this._positions.map(p => p.visible = this.settings.positions.show);
     }
@@ -585,6 +585,8 @@ export class DataThreejs {
         div.id = `textLabel_${labelText}`;
         div.className = 'text-label';
         div.style.position = 'absolute';
+        div.style.background = 'rgba(255, 255, 255, 0.3)';
+        div.style.padding = '1px';
         div.innerHTML = '';
         div.style.top = '-1000';
         div.style.left = '-1000';

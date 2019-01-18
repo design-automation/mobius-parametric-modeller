@@ -65,6 +65,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private lastY: number;
     private dragHash: number;
     private shiftKeyPressed = false;
+    private mouse_label;
     /**
      * Creates a new viewer,
      * @param injector
@@ -79,6 +80,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * Called when the viewer is initialised.
      */
     ngOnInit() {
+        this.mouse_label = document.getElementById('mouse_label');
         this.dropdown.items = [];
         this.dropdown.visible = false;
         this.dropdown.position = { x: 0, y: 0 };
@@ -211,34 +213,37 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     public onMouseMove(event) {
-        const tags = document.getElementsByTagName('body');
-        const length = tags.length;
+        const body = document.getElementsByTagName('body');
+
         if (event.target.tagName !== 'CANVAS') {
-            let index = 0;
-            for (; index < length; index++) {
-                tags[index].style.cursor = 'default';
-            }
+            body[0].style.cursor = 'default';
+            // if (this.mouse_label !== null) {
+            //     this.mouse_label.style.display = 'none';
+            // }
             return null;
         } else {
             const intersects = this.threeJSViewerService.initRaycaster(event);
             if (intersects.length > 0) {
-                let index = 0;
-                for (; index < length; index++) {
-                    tags[index].style.cursor = 'pointer';
-                }
+                body[0].style.cursor = 'pointer';
+                // if (this.mouse_label !== null) {
+                //     const x = event.clientX, y = event.clientY;
+                //     this.mouse_label.style.top = y + 'px';
+                //     this.mouse_label.style.left = (x + 15) + 'px';
+                //     this.mouse_label.style.display = 'block';
+                //     this.mouse_label.innerHTML = mouseLabel[intersects[0].object.type];
+                // }
             } else {
-                let index = 0;
-                for (; index < length; index++) {
-                    tags[index].style.cursor = 'default';
-                }
+                body[0].style.cursor = 'default';
+                // if (this.mouse_label !== null) {
+                //     this.mouse_label.style.display = 'none';
+                // }
             }
 
             if (!this.isDown) { return; }
-            // event.preventDefault();
-            const mouseX = event.clientX - event.target.getBoundingClientRect().left;
-            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
 
             // Put your mousemove stuff here
+            const mouseX = event.offsetX - event.target.getBoundingClientRect().left;
+            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
             const dx = mouseX - this.lastX;
             const dy = mouseY - this.lastY;
             this.lastX = mouseX;
@@ -364,17 +369,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.getSelectingEntityType();
         switch (this.SelectingEntityType.id) {
             case EEntTypeStr[EEntType.POSI]:
-                if (intersect0.object.type === 'Mesh') {
-                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
-                    const ent_id = `_f_posi${face}`;
+                if (intersect0.object.type === 'Points') {
+                    const point = intersect0.index;
+                    const ent_id = `_pt_posi${point}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(null, null, face, ent_id);
+                        this.selectPositions(point, null, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
@@ -387,44 +391,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         }
                         this.selectPositions(null, edge, null, ent_id);
                     }
-                } else if (intersect0.object.type === 'Points') {
-                    const point = intersect0.index;
-                    const ent_id = `_pt_posi${point}`;
+                } else if (intersect0.object.type === 'Mesh') {
+                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
+                    const face = this.model.geom.query.navTriToFace(tri);
+                    const ent_id = `_f_posi${face}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(point, null, null, ent_id);
+                        this.selectPositions(null, null, face, ent_id);
                     }
                 }
                 break;
             case EEntTypeStr[EEntType.VERT]:
-                if (intersect0.object.type === 'Mesh') {
-                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
-                    const ent_id = `_f_v${face}`;
-                    if (scene.selected_vertex.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
-                    } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
-                        this.selectVertex(null, null, face, ent_id);
-                    }
-                } else if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2);
-                    const ent_id = `_e_v${edge}`;
-                    if (scene.selected_vertex.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
-                    } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
-                        this.selectVertex(null, edge, null, ent_id);
-                    }
-                } else if (intersect0.object.type === 'Points') {
+                if (intersect0.object.type === 'Points') {
                     const vert = this.model.geom.query.navPosiToVert(intersect0.index);
                     let point: number;
                     if (vert.length > 1) {
@@ -442,6 +424,29 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                             this.unselectAll();
                         }
                         this.selectVertex(point, null, null, ent_id);
+                    }
+                } else if (intersect0.object.type === 'LineSegments') {
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const ent_id = `_e_v${edge}`;
+                    if (scene.selected_vertex.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectVertex(null, edge, null, ent_id);
+                    }
+                } else if (intersect0.object.type === 'Mesh') {
+                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
+                    const face = this.model.geom.query.navTriToFace(tri);
+                    const ent_id = `_f_v${face}`;
+                    if (scene.selected_vertex.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectVertex(null, null, face, ent_id);
                     }
                 }
                 break;
@@ -1013,4 +1018,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             this.chooseVertex(id);
         }
     }
+}
+
+enum mouseLabel {
+    Mesh = 'Polygon',
+    LineSegments = 'Polyline/',
+    Points = 'Point/Position'
 }

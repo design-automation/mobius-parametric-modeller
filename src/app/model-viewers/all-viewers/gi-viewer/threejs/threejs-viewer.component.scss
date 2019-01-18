@@ -206,3 +206,12 @@ button{
     background-color:  white !important;
     color:#395d73;
 }
+
+#mouse_label{
+    display:none;
+    position:fixed;
+    overflow:hidden;
+    font-style: italic;
+    background: rgba(255,255,255,0.5);
+    padding: 5px;
+}

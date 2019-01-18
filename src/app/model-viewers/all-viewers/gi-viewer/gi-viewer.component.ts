@@ -33,7 +33,7 @@ export class GIViewerComponent implements OnInit {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
-            positions: { show: false, size: 0.5 }
+            positions: { show: true, size: 0.5 }
         };
 
     normalsEnabled = false;

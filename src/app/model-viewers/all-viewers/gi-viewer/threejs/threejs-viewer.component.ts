@@ -555,7 +555,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPoint(intersect0);
+                        this.selectPoint(intersect0.index);
                     }
                 } else {
                     this.showMessages('Points', true);
@@ -779,15 +779,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
     }
 
-    private selectPoint(point: THREE.Intersection) {
+    private selectPoint(point: number) {
         const ent_type_str = EEntTypeStr[EEntType.POINT];
-
-        const result = this.getPointPosis(point.index, null);
+        const pt = this.model.geom.query.navVertToPoint(point);
+        if (pt === undefined) {
+            this.showMessages('This is not a Point', false, 'custom');
+            return;
+        }
+        const result = this.getPointPosis(point, null);
         const point_indices = result.point_indices;
         const point_posi = result.posi_flat;
-        const ent_id = `${ent_type_str}${point.index}`;
+        const ent_id = `${ent_type_str}${point}`;
         this._data_threejs.selectObjPoint(ent_id, point_indices, point_posi, this.container);
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, point.index);
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, point);
     }
 
     private selectPLine(line: THREE.Intersection) {

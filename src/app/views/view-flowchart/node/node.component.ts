@@ -15,7 +15,7 @@ export class NodeComponent {
     @Input() selected: boolean;
     @Input() inputOffset; // position offset of the input port as compared to the position of the node in svg
     @Input() outputOffset; // position offset of the output port as compared to the position of the node in svg
-
+    editing: boolean;
 
     @Output() action = new EventEmitter();
     startType: string;
@@ -78,14 +78,6 @@ export class NodeComponent {
             pos = [pos.x + this.outputOffset[0], pos.y + this.outputOffset[1]];
         }
         this.action.emit({ action: ACTIONS.DRAGPORT, data: data, position: pos, type: portType});
-    }
-
-    /*
-    focus on the description of the node when mouse down inside the node
-    ** no stopPropagation to allow propagation to startDragNode --> node can still be dragged
-    */
-    focusText(event: MouseEvent) {
-        document.getElementById(this.node.id).focus();
     }
 
     /*

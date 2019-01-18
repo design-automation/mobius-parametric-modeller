@@ -99,6 +99,15 @@ export class ExecuteComponent {
                     } catch (ex) {
                         node.hasError = true;
                         prod.hasError = true;
+                        if (ex.message.indexOf('HTTP') !== -1) {
+                            document.getElementById('Console').click();
+                            document.getElementById('spinner-off').click();
+                            const _category = this.isDev ? 'dev' : 'execute';
+                            this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
+                                'click', performance.now() - this.startTime);
+                            console.log(ex.message);
+                            throw(ex);
+                        }
                         InvalidECheck = true;
                     }
                     if (!prod.args[0].value || (!prod.args[1].value && !prod.args[1].default &&

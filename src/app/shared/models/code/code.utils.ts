@@ -307,9 +307,16 @@ export class CodeUtils {
                 request.onload = () => {
                     resolve(request.responseText);
                 };
+                request.onerror = () => {
+                    resolve('HTTP Request Error: unable to retrieve file from url ' + val);
+                };
                 request.send();
             });
-            result = '`' + await p + '`';
+            result = await p;
+            if (result.indexOf('HTTP Request Error') !== -1) {
+                throw(new Error(result));
+            }
+            result = '`' + result + '`';
         } else if (inputMode.toString() === InputType.File.toString()) {
             if (val.lastModified) {
                 const p = new Promise((resolve) => {

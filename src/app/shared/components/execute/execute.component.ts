@@ -99,7 +99,7 @@ export class ExecuteComponent {
                     } catch (ex) {
                         node.hasError = true;
                         prod.hasError = true;
-                        if (ex.message.indexOf('HTTP') !== -1) {
+                        if (ex.message.indexOf('HTTP') !== -1 || ex.message.indexOf('File Reading') !== -1) {
                             document.getElementById('Console').click();
                             document.getElementById('spinner-off').click();
                             const _category = this.isDev ? 'dev' : 'execute';

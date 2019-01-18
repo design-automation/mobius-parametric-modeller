@@ -324,10 +324,17 @@ export class CodeUtils {
                     reader.onload = function() {
                         resolve(reader.result);
                     };
+                    reader.onerror = () => {
+                        resolve('File Reading Error: unable to read file ' + val.name);
+                    };
                     reader.readAsText(val);
                 });
-                result = '`' + await p + '`';
-                window.localStorage.setItem(val.name, result);
+                result = await p;
+                if (result.indexOf('File Reading Error') !== -1) {
+                    throw(new Error(result));
+                }
+                result = '`' + result + '`';
+                    window.localStorage.setItem(val.name, result);
                 if (defaultCheck) {
                     arg.default = {'name': val.name};
                 } else {

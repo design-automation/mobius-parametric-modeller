@@ -32,22 +32,21 @@ export class LoadUrlComponent {
         url = url[1].split('&')[0];
         url = url.replace(/%2F/g, '/');
         url = url.replace(/%5C/g, '\\');
-        url = url.replace(/%22|%27|'/g, '');
+        url = url.replace(/%22|%27|'|\s/g, '');
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
-
         if (routerUrl.indexOf('node=') !== -1) {
             let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
             nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
-            this.loadURL(url, nodeID);
+            await this.loadURL(url, nodeID);
         } else {
-            this.loadURL(url);
+            await this.loadURL(url);
         }
     }
 
-    loadURL(url: string, nodeID?: number) {
-        const stream = Observable.create(observer => {
+    async loadURL(url: string, nodeID?: number) {
+        const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
             request.open('GET', url);
@@ -101,31 +100,32 @@ export class LoadUrlComponent {
                     }
                     // REMOVE ENDS
 
-                    observer.next(file);
-                    observer.complete();
+                    resolve(file);
                 } else {
-                    console.log('Error: Unable to load file: ' + url);
-                    observer.error('error happened');
+                    resolve('error happened');
                 }
             };
 
             request.onerror = () => {
-                console.log('Error: Unable to load file: ' + url);
-                observer.error('error happened');
+                resolve('error happened');
             };
             request.send();
         });
-        stream.subscribe(loadeddata => {
-            this.dataService.file = loadeddata;
-            this.dataService.newFlowchart = true;
-            if (nodeID && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
-                loadeddata.flowchart.meta.selected_nodes = [nodeID];
-                this.router.navigate(['/editor']);
-            } else if (this.dataService.node.type !== 'end') {
-                loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
-            }
-            document.getElementById('executeButton').click();
-        });
+        const loadeddata: any = await p;
+        if (loadeddata === 'error happened') {
+            return;
+        }
+        this.dataService.file = loadeddata;
+        this.dataService.newFlowchart = true;
+        if (nodeID && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
+            loadeddata.flowchart.meta.selected_nodes = [nodeID];
+            this.router.navigate(['/editor']);
+        } else if (this.dataService.node.type !== 'end') {
+            loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
+        }
+        const executeB = document.getElementById('executeButton');
+        console.log('execute button:', executeB);
+        if (executeB) { executeB.click(); }
     }
 
 }

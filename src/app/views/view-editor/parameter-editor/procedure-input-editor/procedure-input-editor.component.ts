@@ -25,7 +25,16 @@ export class ProcedureInputEditorComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        // console.log(this.prod);
+        const textarea = document.getElementById(this.prod.ID + '_desc');
+        if (textarea) {
+            const desc = this.prod.meta.description.split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 20;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
+        }
     }
 
     selectInput(event: MouseEvent) {

@@ -31,7 +31,7 @@ export class ParameterViewerComponent implements AfterViewInit {
             if (!prod.enabled || prod.type !== 10 || prod.meta.inputMode === 5) { continue; }
             textarea = document.getElementById(prod.ID + '_desc');
             if (textarea) {
-                const desc = this.flowchart.description.split('\n');
+                const desc = prod.meta.description.split('\n');
                 const textareaWidth = textarea.getBoundingClientRect().width - 20;
                 let lineCount = 0;
                 for (const line of desc) {

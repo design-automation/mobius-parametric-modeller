@@ -3,4 +3,12 @@
 
 .content__panel{
     margin-top: $header-height;
+    margin-left: 11px; //split bar width
+
+}
+
+h3 {
+    line-height: 30px;
+    height: 30px;
+    color: $color8;
 }

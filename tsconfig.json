@@ -32,8 +32,6 @@
     "baseUrl": "./"
   },
   "exclude": [
-    "node_modules",
-    "src/app/core/*",
-    "**/*.spec.ts"
+    "node_modules"
   ]
 }

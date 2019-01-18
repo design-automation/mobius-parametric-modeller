@@ -276,7 +276,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.Constant:
                 prod.argCount = 2;
-                prod.meta = { module: 'Input', name: 'Constant', inputMode: data, description: undefined};
+                prod.meta = { module: 'Input', name: 'Constant', inputMode: data, description: ''};
                 prod.args = [
                 {name: 'const_name', value: undefined, default: 0},
                 {name: '__input__', value: undefined, default: 0} ];

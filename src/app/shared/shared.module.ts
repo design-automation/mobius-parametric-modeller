@@ -30,11 +30,13 @@ import { DataViewersContainer } from '../model-viewers/model-viewers-container.m
 import { LoadUrlComponent } from './components/file/loadurl.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { ChromeComponent } from './components/chrome/chrome.component';
+import { AutogrowDirective } from './directives/textarea';
 
 @NgModule({
     providers: [ ],
     declarations: [
             MbFileReaderDirective,
+            AutogrowDirective,
             ExecuteComponent,
             PageNotFoundComponent,
             NavigationComponent,
@@ -77,6 +79,7 @@ import { ChromeComponent } from './components/chrome/chrome.component';
             DataViewersContainer,
             AngularSplitModule,
             MbFileReaderDirective,
+            AutogrowDirective,
             ExecuteComponent,
             PageNotFoundComponent,
             NavigationComponent,

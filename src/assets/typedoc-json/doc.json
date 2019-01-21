@@ -9093,7 +9093,7 @@
 									},
 									{
 										"tag": "example_link",
-										"text": "make_collection.mob&node=1\n"
+										"text": "make.Collection.mob&node=1\n"
 									}
 								]
 							},
@@ -9787,7 +9787,7 @@
 									},
 									{
 										"tag": "example_link",
-										"text": "make_point.mob&node=1\n"
+										"text": "make.Point.mob&node=1\n"
 									}
 								]
 							},
@@ -9891,7 +9891,7 @@
 									},
 									{
 										"tag": "example_link",
-										"text": "make_polygon.mob&node=1\n"
+										"text": "make.Polygon.mob&node=1\n"
 									}
 								]
 							},
@@ -10001,7 +10001,7 @@
 									},
 									{
 										"tag": "example_link",
-										"text": "make_polyline.mob&node=1\n"
+										"text": "make.Polyline.mob&node=1\n"
 									}
 								]
 							},
@@ -10126,7 +10126,7 @@
 									},
 									{
 										"tag": "example_link",
-										"text": "make_position.mob&node=1\n"
+										"text": "make.Position.mob&node=1\n"
 									}
 								]
 							},

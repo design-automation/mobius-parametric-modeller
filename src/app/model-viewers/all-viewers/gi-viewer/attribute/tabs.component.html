@@ -2,7 +2,7 @@
     <li
         *ngFor="let tab of tabs;"
         (click)="tab.index!=='1'?selectTab(tab):null"
-        [class.active]="tab.active"
+        [class.active]="topologyActive?(tab.index==='1'?true:false):tab.active"
         [class.open]='topology_open'
         [hidden]="tab.index==='2' || tab.index==='3' || tab.index==='4'"
     >

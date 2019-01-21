@@ -31,7 +31,6 @@ export class TabsComponent implements AfterContentInit, AfterViewInit {
             { tab: 3, title: 'Wires' },
             { tab: 4, title: 'Faces' }
         ];
-
     // contentChildren are set
     ngAfterContentInit() {
         setTimeout(() => {// get all active tabs
@@ -55,19 +54,16 @@ export class TabsComponent implements AfterContentInit, AfterViewInit {
         // activate the tab the user has clicked on.
         tab.active = true;
         this.selectedTab.emit(tab.index);
+        this.topology_dropdown.style.display = 'none';
+        this.topologyActive = false;
     }
 
     selectTopology(option, event: Event) {
-        this.tabs.toArray().forEach(_tab => {
-            if (Number(_tab.index) === 1) {
-                _tab.active = true;
-            } else {
-                _tab.active = false;
-            }
-        });
+        this.tabs.toArray().forEach(_tab => _tab.active = false);
         if (option !== 999) {
             this.selectedTopology.emit(Number(option.tab));
             this.topology_text = option.title;
+            this.tabs.toArray()[option.tab].active = true;
         } else {
             this.selectedTopology.emit(999);
             this.topology_text = 'Topology';
@@ -75,6 +71,7 @@ export class TabsComponent implements AfterContentInit, AfterViewInit {
         // @ts-ignore
         event.target.parentElement.style.display = 'none';
         this.topology_open = false;
+        this.topologyActive = true;
     }
 
     showDropdown() {

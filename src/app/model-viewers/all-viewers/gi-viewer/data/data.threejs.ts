@@ -162,7 +162,7 @@ export class DataThreejs {
         this._addPositions(all_positions_flat,
             all_positions_indices,
             all_positions_colors,
-            [255, 255, 0],
+            [0, 0, 0],
             size);
         this._positions.map(p => p.visible = this.settings.positions.show);
     }

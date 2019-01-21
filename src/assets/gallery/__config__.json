@@ -14,7 +14,7 @@
             "name": "Function Examples",
             "files": [
                 "make_position.mob&node=1",
-                "make_point.mob&node=1",
+                "make_points.mob&node=1",
                 "make_polyline.mob&node=1",
                 "make_polygon.mob&node=1",
                 "make_collection.mob&node=1`"

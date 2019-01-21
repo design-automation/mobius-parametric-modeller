@@ -469,11 +469,11 @@ export class DataThreejs {
      */
     public _addGrid(size: number = this.settings.grid.size) {
         let i = 0;
-        const length = this._scene.children.length;
+        const length = this.basic_scene.children.length;
         for (; i < length; i++) {
-            if (this._scene.children[i]) {
-                if (this._scene.children[i].name === 'GridHelper') {
-                    this._scene.remove(this._scene.children[i]);
+            if (this.basic_scene.children[i]) {
+                if (this.basic_scene.children[i].name === 'GridHelper') {
+                    this.basic_scene.remove(this.basic_scene.children[i]);
                 }
             }
         }

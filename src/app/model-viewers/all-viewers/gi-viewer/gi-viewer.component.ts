@@ -141,6 +141,8 @@ export class GIViewerComponent implements OnInit {
             default:
                 break;
         }
+        scene._renderer.render(scene.basic_scene, scene._camera);
+        scene._renderer.clearDepth();
         scene._renderer.render(scene._scene, scene._camera);
     }
 }

@@ -136,7 +136,8 @@ export class ExecuteComponent {
             }
             if (InvalidECheck) {
                 document.getElementById('Console').click();
-                this.dataService.log('Error: Invalid Argument or Argument with Reserved Word detected. Check marked node(s) and procedure(s)!');
+                this.dataService.log('Error: Invalid Argument or Argument with Reserved Word detected.' +
+                                     'Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,

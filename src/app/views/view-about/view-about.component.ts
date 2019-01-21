@@ -4,6 +4,7 @@ import { INode } from '@models/node';
 import { DataService } from '@services';
 import { Router } from '@angular/router';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
+import { VERSION } from '@env/version';
 
 @Component({
   selector: 'view-about',
@@ -11,6 +12,7 @@ import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
   styleUrls: ['./view-about.component.scss']
 })
 export class ViewAboutComponent {
+    version = VERSION;
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);

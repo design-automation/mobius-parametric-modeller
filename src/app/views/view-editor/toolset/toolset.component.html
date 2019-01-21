@@ -1,15 +1,4 @@
-<h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{getFlowchart().meta.selected_nodes[0]}}. {{getNode().name}}</span><span id='node--arr'>▾</span></h2>
-
-<div id="nodeMenu">
-    <div *ngFor='let nd of getFlowchart().nodes; let i = index;'>
-        <li (click)="changeNode(i)"> 
-            {{i}}. {{nd.name}}
-        </li>
-    </div>
-</div>
-
 <!--Divider-->
-<div class = "divider"></div>
 
 <div class = "toolset--body" (mouseover)='setCurrent($event)'>
     <div [hidden]="getNode().type == 'start' && !getViewOutput()">

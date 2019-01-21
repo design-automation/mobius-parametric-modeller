@@ -1,0 +1,55 @@
+@import '~scss/colors';
+@import '~scss/variables';
+@import '~scss/header-button';
+
+
+.container__header{
+    display: inline-flex;
+    float: left;
+    width: 100%;
+    height: $header-height + 1;
+    padding: 0px;
+    margin: 0px;
+
+    .header-btn-group {
+        flex-shrink: 0;
+        display: inline-flex;
+        flex-flow: row nowrap;
+        height: $header-height + 1;
+        padding: 0px;
+        margin: 0px;
+        overflow: hidden;
+        // background-color: transparent;
+        z-index: 1;
+        .mat-icon-button{
+            height: $header-height !important;
+            width: $header-height !important;
+        }
+        .active{
+            background-color: transparent;
+        }
+    }
+    .filename-container{
+        z-index: 1;
+        width: calc(100% - 170px - 40px);//width of btn-container width of zoom fit in flowchart;
+        display: flex;
+        justify-content: flex-start;
+    }
+    #filename{
+        //display: inline-block;
+        cursor: default;
+        height: $header-height;
+        font-size: $fsize1;
+        color: $color8;
+        width: 100%;
+        // background-color: transparent;
+        padding-top: 0px;
+        text-align: left;
+        vertical-align: middle;
+        line-height: $header-height - 5px;
+        z-index: 999999999;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

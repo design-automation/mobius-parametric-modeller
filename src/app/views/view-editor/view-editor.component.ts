@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output} from '@angular/core';
+import { Component, Input, EventEmitter, Output, AfterViewInit} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
@@ -8,12 +8,16 @@ import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { getViewerData } from '@shared/getViewerData';
 
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+ctx.font = '12px sans-serif';
+
 @Component({
   selector: 'view-editor',
   templateUrl: './view-editor.component.html',
   styleUrls: ['./view-editor.component.scss']
 })
-export class ViewEditorComponent {
+export class ViewEditorComponent implements AfterViewInit {
     /*
     @Input() flowchart: IFlowchart;
     @Input() node: INode;
@@ -30,6 +34,50 @@ export class ViewEditorComponent {
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
     }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.adjustTextArea();
+        }, 50);
+    }
+
+    adjustTextArea() {
+        let textarea = document.getElementById('flowchart-desc');
+        if (textarea) {
+            const desc = this.dataService.flowchart.description.split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 30;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
+
+            for (const prod of this.dataService.node.procedure) {
+                if (prod.type !== ProcedureTypes.Constant) { continue; }
+                textarea = document.getElementById(prod.ID + '_desc');
+                if (textarea) {
+                    const prodDesc = prod.meta.description.split('\n');
+                    const prodTextareaWidth = textarea.getBoundingClientRect().width - 30;
+                    let prodLineCount = 0;
+                    for (const line of prodDesc) {
+                        prodLineCount += Math.floor(ctx.measureText(line).width / prodTextareaWidth) + 1;
+                    }
+                    textarea.style.height = prodLineCount * 14 + 4 + 'px';
+                }
+            }
+        }
+        textarea = document.getElementById('flowchart-return');
+        if (textarea) {
+            const desc = (this.dataService.flowchart.returnDescription || '').split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 30;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
+        }
+    }
+
 
     // add a procedure
     add(data: {type: ProcedureTypes, data: IFunction}): void {
@@ -148,6 +196,25 @@ export class ViewEditorComponent {
         this.copyCheck = false;
     }
 
+    openNodeMenu(e: MouseEvent) {
+        const stl = document.getElementById('nodeMenu').style;
+        if (!stl.display || stl.display === 'none') {
+            stl.display = 'block';
+        } else {
+            stl.display = 'none';
+        }
+        e.stopPropagation();
+
+    }
+
+    changeNode(index: number) {
+        this.dataService.flowchart.meta.selected_nodes = [index];
+        if (index === 0 || index === this.dataService.flowchart.nodes.length - 1) { setTimeout(() => {
+            this.adjustTextArea();
+        }, 50); }
+    }
+
+
     // import a flowchart as function
     importFunction(event) {
         for (const func of event) {
@@ -205,6 +272,7 @@ export class ViewEditorComponent {
     setSplit(event) {
         this.dataService.splitUpdate = true;
         this.dataService.splitVal = event.sizes[1];
+        this.adjustTextArea();
     }
 
     unselectAll(event) {

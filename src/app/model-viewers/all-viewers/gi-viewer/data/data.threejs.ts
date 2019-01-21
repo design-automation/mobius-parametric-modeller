@@ -11,6 +11,7 @@ import { EEntType } from '@assets/libs/geo-info/common';
 export class DataThreejs {
     // threeJS objects
     public _scene: THREE.Scene;
+    public basic_scene: THREE.Scene;
     public _renderer: THREE.WebGLRenderer;
     public _camera: THREE.PerspectiveCamera;
     public _controls: THREE.OrbitControls;
@@ -61,11 +62,14 @@ export class DataThreejs {
         this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
-        this._scene.background = new THREE.Color(0xcccccc);
+
+        this.basic_scene = new THREE.Scene();
+        this.basic_scene.background = new THREE.Color(0xcccccc);
 
         // renderer
-        this._renderer = new THREE.WebGLRenderer({ antialias: true });
-        // this._renderer.setClearColor(0xEEEEEE);
+        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true});
+        this._renderer.autoClear = false;
+        // this._renderer.setClearColor(0xcccccc, 0);
         this._renderer.setPixelRatio(window.devicePixelRatio);
         this._renderer.setSize(window.innerWidth / 1.8, window.innerHeight);
         this._renderer.shadowMap.enabled = true;
@@ -481,7 +485,7 @@ export class DataThreejs {
             const vector = new THREE.Vector3(0, 1, 0);
             this.grid.lookAt(vector);
             this.grid.position.set(0, 0, 0);
-            this._scene.add(this.grid);
+            this.basic_scene.add(this.grid);
         }
     }
     /**
@@ -539,6 +543,7 @@ export class DataThreejs {
             linejoin: 'round' // ignored by WebGLRenderer
         });
         const line = new THREE.LineSegments(geom, mat);
+        line.renderOrder = -1;
         this.sceneObjs.push(line);
         this._scene.add(line);
         this._threejs_nums[1] = lines_i.length / 2;

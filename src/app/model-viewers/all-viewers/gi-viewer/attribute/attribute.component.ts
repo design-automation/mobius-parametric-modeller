@@ -1,5 +1,5 @@
 import { Component, Injector, Input, OnChanges, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon, GIAttribs } from '@libs/geo-info';
@@ -29,6 +29,7 @@ export class AttributeComponent implements OnChanges {
       { type: EEntType.COLL, title: 'Collections' }
     ];
   displayedColumns: string[] = [];
+  displayData: { id: string }[] = [];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -68,18 +69,19 @@ export class AttributeComponent implements OnChanges {
     };
     if (this.data) {
       const ThreeJS = this.data.attribs.threejs;
-      let displayData: { id: string }[] = [];
       const AllAttribData = ThreeJS.getAttribsForTable(tab_map[tabIndex]);
       const selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
       const SelectedAttribData = ThreeJS.getEntsVals(selected_ents, tab_map[tabIndex]);
       if (this.showSelected) {
-        displayData = SelectedAttribData;
+        this.displayData = SelectedAttribData;
       } else {
-        displayData = AllAttribData;
+        this.displayData = AllAttribData;
       }
-      if (displayData.length > 0) {
-        this.displayedColumns = Object.keys(displayData[0]);
-        this.dataSource = new MatTableDataSource<object>(displayData);
+      if (this.displayData.length > 0) {
+        const columns = Object.keys(this.displayData[0]);
+        columns.shift();
+        this.displayedColumns = columns;
+        this.dataSource = new MatTableDataSource<object>(this.displayData);
       } else {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
@@ -93,7 +95,12 @@ export class AttributeComponent implements OnChanges {
   _setDataSource(tabIndex: number) {
     setTimeout(() => {
       localStorage.setItem('mpm_attrib_current_tab', tabIndex.toString());
-      this.generateTable(tabIndex);
+      if (tabIndex === 999) {
+        this.displayedColumns = [];
+        this.dataSource = new MatTableDataSource<object>();
+      } else {
+        this.generateTable(tabIndex);
+      }
     });
   }
 
@@ -115,5 +122,17 @@ export class AttributeComponent implements OnChanges {
     setTimeout(() => {
       this.generateTable(currentTab);
     });
+  }
+
+  sortData(sort: Sort) {
+    console.log(sort);
+    // console.log(this.displayData);
+  }
+
+  selectRow(id: string, event: Event) {
+    // console.log(id);
+    const target = event.target || event.srcElement || event.currentTarget;
+    // @ts-ignore
+    // target.parentNode.classList.add('selected');
   }
 }

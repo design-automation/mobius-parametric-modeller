@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
     ViewFlowchartComponent, ViewFlowchartModule,
-    ViewAboutComponent, ViewAboutModule} from '@views';
+    ViewAboutComponent, ViewAboutModule, ViewPublishModule, ViewPublishComponent} from '@views';
 import { AppRoutingModule } from './app-routing.module';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 // import { WebWorkerService } from 'ngx-web-worker';
@@ -39,6 +39,7 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
         ViewGalleryModule,
         ViewEditorModule,
         ViewDashboardModule,
+        ViewPublishModule,
         ViewFlowchartModule,
         ViewAboutModule,
         SharedModule,
@@ -46,6 +47,7 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
     entryComponents: [
         ViewEditorComponent,
         ViewDashboardComponent,
+        ViewPublishComponent,
         ViewFlowchartComponent,
         ViewGalleryComponent,
         ViewAboutComponent,

@@ -12,28 +12,6 @@
     border: 1px;
 }
 
-h2{
-    min-height: $fsize3;
-    color: $color8;
-    padding-left: 8px;
-    font-family: sans-serif;
-    line-height: $fsize3;
-    font-size: $fsize2;
-    font-weight: 550;
-    width: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    cursor: pointer;
-    #node--name{
-        width: 80%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-    #node--arr{
-        width: 20%;
-    }
-}
 
 .toolset--body{
     overflow:hidden;
@@ -140,52 +118,6 @@ h2{
     }
 }
 
-#nodeMenu {
-    display: none;
-    position: fixed;
-    transition: display 0.4s;
-    top: 70px;
-    width: 125px;
-    z-index: 1;
-    background-color: $color6;
-    border-right: 1px solid $color2;
-    border-bottom: 1px solid $color2;
-    border-top: 1px solid $color2;
-    cursor: pointer;
-
-    button{
-        display: block;
-        background-color: $color6;
-        border: 0px;
-        margin: 0px;
-        padding: 0px;
-        line-height: $fsize3;
-        height: $fsize3;
-        font-size: $fsize2;
-    }
-
-    li{
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        line-height: 20px;
-        background-color: $color6;
-        font-weight: 550;
-        border: 0px;
-        margin: 0px;
-        padding: 0px 10px 0px 10px;
-        line-height: $fsize3;
-        height: $fsize3;
-        font-size: $fsize2;
-        
-        color: $color8;
-        &:hover{
-            color: $selected-color;
-        }
-    }
-
-}
 
 .accordion {
     background-color: $color4;

@@ -447,30 +447,31 @@ export class GIGeomAdd {
         this._geom_arrays.up_wires_plines[wire_i] = pline_i;
         return pline_i;
     }
-    /**
-     * Adds a new polygon entity to the model using numeric indicies.
-     * @param posis_id
-     */
-    public addPgon(posis_i: number[]): number {
-        // create verts, edges, wires, faces
-        const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
-        const edges_i_arr: number[] = [];
-        for (let i = 0; i < vert_i_arr.length - 1; i++) {
-            edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
-        }
-        edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
-        const wire_i: number = this._addWire(edges_i_arr, true);
-        const face_i: number = this._addFace(wire_i);
-        // create polygon
-        const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
-        this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
-        return pgon_i;
-    }
+    // /**
+    //  * Adds a new polygon entity to the model using numeric indicies.
+    //  * @param posis_id
+    //  */
+    // public addPgon(posis_i: number[]): number {
+    //     // create verts, edges, wires, faces
+    //     const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
+    //     const edges_i_arr: number[] = [];
+    //     for (let i = 0; i < vert_i_arr.length - 1; i++) {
+    //         edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
+    //     }
+    //     edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
+    //     const wire_i: number = this._addWire(edges_i_arr, true);
+    //     const face_i: number = this._addFace(wire_i);
+    //     // create polygon
+    //     const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
+    //     this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
+    //     return pgon_i;
+    // }
     /**
      * Adds a new polygon + hole entity to the model using numeric indicies.
      * @param posis_id
      */
-    public addPgonWithHole(posis_i: number[], holes_posis_i: number[][]): number {
+    public addPgon(posis_i: number[], holes_posis_i?: number[][]): number {
+        const has_holes: boolean = (holes_posis_i !== undefined) && (holes_posis_i.length) ? true : false ;
         // create verts, edges, wire for face
         const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
         const edges_i_arr: number[] = [];
@@ -479,20 +480,25 @@ export class GIGeomAdd {
         }
         edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
         const wire_i: number = this._addWire(edges_i_arr, true);
+        let face_i: number;
+        if (has_holes) {
         // create verts, edges, wire for holes
-        const holes_wires_i: number[] = [];
-        for (const hole_posis_i of holes_posis_i) {
-            const hole_vert_i_arr: number[] = hole_posis_i.map( posi_i => this._addVertex(posi_i));
-            const hole_edges_i_arr: number[] = [];
-            for (let i = 0; i < hole_vert_i_arr.length - 1; i++) {
-                hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[i], hole_vert_i_arr[i + 1]));
+            const holes_wires_i: number[] = [];
+            for (const hole_posis_i of holes_posis_i) {
+                const hole_vert_i_arr: number[] = hole_posis_i.map( posi_i => this._addVertex(posi_i));
+                const hole_edges_i_arr: number[] = [];
+                for (let i = 0; i < hole_vert_i_arr.length - 1; i++) {
+                    hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[i], hole_vert_i_arr[i + 1]));
+                }
+                hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[hole_vert_i_arr.length - 1], hole_vert_i_arr[0]));
+                const hole_wire_i: number = this._addWire(hole_edges_i_arr, true);
+                holes_wires_i.push(hole_wire_i);
             }
-            hole_edges_i_arr.push( this._addEdge(hole_vert_i_arr[hole_vert_i_arr.length - 1], hole_vert_i_arr[0]));
-            const hole_wire_i: number = this._addWire(hole_edges_i_arr, true);
-            holes_wires_i.push(hole_wire_i);
+            // create the new face with a hole
+            face_i = this._addFaceWithHoles(wire_i, holes_wires_i);
+        } else {
+            face_i = this._addFace(wire_i);
         }
-        // create the new face with a hole
-        const face_i: number = this._addFaceWithHoles(wire_i, holes_wires_i);
         // create polygon
         const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
         this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
@@ -595,7 +601,7 @@ export class GIGeomAdd {
                             const hole_posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
                             holes_posis_i.push(hole_posis_i);
                         }
-                        pgon_i = this.addPgonWithHole(posis_i, holes_posis_i);
+                        pgon_i = this.addPgon(posis_i, holes_posis_i);
                     }
                     if (copy_attribs) {
                         this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pgon_i);

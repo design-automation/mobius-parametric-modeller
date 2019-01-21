@@ -107,6 +107,22 @@ export class GIGeomQuery {
     public getCollParent(coll_i: number): number {
         return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
+    /**
+     * 
+     * @param  
+     */
+    public getFaceBoundary(face_i: number): number {
+        const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
+        return wires_i[0];
+    }
+    /**
+     * 
+     * @param  
+     */
+    public getFaceHoles(face_i: number): number[] {
+        const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
+        return wires_i.slice(1);
+    
     // ============================================================================
     // Navigate down the hierarchy
     // ============================================================================
@@ -448,4 +464,5 @@ export class GIGeomQuery {
         }
         return Array.from(neighbour_ents_i);
     }
+
 }

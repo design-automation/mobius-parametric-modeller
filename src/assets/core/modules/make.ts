@@ -142,7 +142,7 @@ function _polygonHoles(__model__: GIModel, ents_arr: TEntTypeIdx[],
     for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
         holes_posis_i.push( hole_ents_arr.map(ent_arr => ent_arr[1]) );
     }
-    const pgon_i: number = __model__.geom.add.addPgonWithHole(posis_i, holes_posis_i);
+    const pgon_i: number = __model__.geom.add.addPgon(posis_i, holes_posis_i);
     return [EEntType.PGON, pgon_i];
 }
 /**
@@ -434,9 +434,21 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             }
         }
         if (isDim2(ent_type)) { // create a top -> polygon
-            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            const face_i: number = __model__.geom.query.navPgonToFace(index);
+            // get positions on boundary
+            const old_wire_i: number = __model__.geom.query.getFaceBoundary(face_i);
+            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_wire_i);
             const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
-            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
+            // get positions for holes
+            const old_holes_wires_i: number[] = __model__.geom.query.getFaceHoles(face_i);
+            const new_holes_posis_i: number[][] = [];
+            for (const old_hole_wire_i of old_holes_wires_i) {
+                const old_hole_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_hole_wire_i);
+                const new_hole_posis_i: number[] = old_hole_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
+                new_holes_posis_i.push(new_hole_posis_i);
+            }
+            // make new polygon
+            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i, new_holes_posis_i );
             new_pgons_i.push(pgon_i);
         }
         return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);

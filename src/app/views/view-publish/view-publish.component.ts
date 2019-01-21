@@ -11,16 +11,16 @@ const ctx = canvas.getContext('2d');
 ctx.font = '12px sans-serif';
 
 @Component({
-  selector: 'view-dashboard',
-  templateUrl: './view-dashboard.component.html',
-  styleUrls: ['./view-dashboard.component.scss']
+  selector: 'view-publish',
+  templateUrl: './view-publish.component.html',
+  styleUrls: ['./view-publish.component.scss']
 })
-export class ViewDashboardComponent implements AfterViewInit {
+export class ViewPublishComponent implements AfterViewInit {
 
     viewerData = getViewerData;
 
     constructor(private dataService: DataService, private router: Router) {
-        new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
+        new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url.split(/\s*&*\s*node\s*=/)[0]);
     }
 
     ngAfterViewInit() {
@@ -60,13 +60,6 @@ export class ViewDashboardComponent implements AfterViewInit {
         if (node.type === 'end') { return node; }
       }
     }
-
-    // viewerData(): any {
-    //     const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-    //     if (!node || !node.enabled) { return ''; }
-    //     // if (node.type === 'output') { return node.input.value; }
-    //     return node.model;
-    // }
 
     setSplit(event) {
         this.dataService.splitUpdate = true;

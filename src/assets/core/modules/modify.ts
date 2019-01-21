@@ -362,9 +362,9 @@ export function _Weld(__model__: GIModel, entities: TId[]): void {
  */
 export function _Delete(__model__: GIModel, entities: TId|TId[]  ): void {
     // --- Error Check ---
-    // const ents_arr = checkIDs('modify.Close', 'geometry', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ents_arr = checkIDs('modify.Delete', 'entities', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    //__model__.geom.add.delete(ents_arr);
 }
 
 // Collection Add Entities

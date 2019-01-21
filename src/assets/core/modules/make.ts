@@ -214,8 +214,14 @@ function _copyGeom(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], copy
         if (isColl(ent_type)) {
             const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
             return [ent_type, coll_i];
-        } else if (isObj(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyObjs(ent_type, index, copy_attributes) as number;
+        } else if (isPgon(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPline(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPoint(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
             return [ent_type, obj_i];
         } else if (isPosi(ent_type)) {
             const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;

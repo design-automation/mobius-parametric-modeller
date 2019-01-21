@@ -76,9 +76,9 @@ export class GIAttribsQuery {
      * Returns a list of entities in the model.
      * @param ent_type The type of the entities being search for
      * @param query_str The query string, e.g. '#@name == value'
-     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type.
+     * @param indices The indices of entites in the model. These are assumed to be of type ent_type.
      */
-    public queryAttribs(ent_type: EEntType, query_str: string, indicies: number[]): number[] {
+    public queryAttribs(ent_type: EEntType, query_str: string, indices: number[]): number[] {
         // get the map that contains all the ettributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
@@ -91,8 +91,8 @@ export class GIAttribsQuery {
         for (const and_queries of queries)  {
             // get the ents_i to start the '&&' query
             let query_ents_i: number[] = null;
-            if (indicies !== null && indicies !== undefined) {
-                query_ents_i = indicies;
+            if (indices !== null && indices !== undefined) {
+                query_ents_i = indices;
             } else {
                 query_ents_i = this._model.geom.query.getEnts(ent_type);
             }
@@ -121,9 +121,9 @@ export class GIAttribsQuery {
      * Returns a list of entities in the model.
      * @param ent_type The type of the entities being search for
      * @param sort_str The sort string, e.g. '#@name && #@name2[3]'
-     * @param indicies The indicies of entites in the model. These are assumed to be of type ent_type.
+     * @param indices The indices of entites in the model. These are assumed to be of type ent_type.
      */
-    public sortByAttribs(ent_type: EEntType, indicies: number[], sort_str: string, method: ESort): number[] {
+    public sortByAttribs(ent_type: EEntType, indices: number[], sort_str: string, method: ESort): number[] {
         // get the map that contains all the ettributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
@@ -164,8 +164,8 @@ export class GIAttribsQuery {
             return 0;
         }
         // do the sort
-        indicies.sort(_sortCompare);
-        return indicies;
+        indices.sort(_sortCompare);
+        return indices;
     }
     // ============================================================================
     // Shortcuts for getting xyz

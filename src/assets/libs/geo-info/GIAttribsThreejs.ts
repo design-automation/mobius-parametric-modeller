@@ -24,7 +24,7 @@ export class GIAttribsThreejs {
     /**
      * Get a flat array of all the coordinates of all the vertices.
      * Verts that have been deleted will not be included
-     * @param verts An array of vertex indicies pointing to the positio.
+     * @param verts An array of vertex indices pointing to the positio.
      */
     public get3jsSeqVertsCoords(): number[] {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);

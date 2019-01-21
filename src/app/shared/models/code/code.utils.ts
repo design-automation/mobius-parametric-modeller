@@ -132,7 +132,8 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (addProdArr) {
-                        codeStr.push(`console.log('Return: ', __return_value__);`);
+                        // codeStr.push(`console.(log'Return: ', __return_value__);`);
+                        codeStr.push(`__params__.console.push('Return: ' + __return_value__.toString());`);
                     }
                     codeStr.push(`return __return_value__;`);
                 }
@@ -222,7 +223,7 @@ export class CodeUtils {
 
         if (prod.print && prod.args[0].value) {
             const repGet = this.repGetAttrib(prod.args[0].value);
-            codeStr.push(`printFunc('${prod.args[0].value}', ${repGet});`);
+            codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
             // codeStr.push(`wait(5000);`);
         }
         return codeStr;
@@ -499,7 +500,6 @@ export class CodeUtils {
         }
         fnCode += '}\n\n';
         fullCode += fnCode;
-        // console.log(fullCode)
         return fullCode;
     }
 

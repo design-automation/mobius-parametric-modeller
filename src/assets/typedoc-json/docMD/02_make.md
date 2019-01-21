@@ -64,6 +64,13 @@
     Creates a list containing a copy of the entities in sequence of input.
   
   
+## Hole  
+* **Description:** Makes one or more holes in a polygon.  
+* **Parameters:**  
+  * *face:* Polygons or faces.  
+  * *positions:* A list of positions defining the wires of the holes.  
+* **Returns:** Wires for the new holes.  
+  
 ## Loft  
 * **Description:** Lofts between edges.  
 * **Parameters:**  
@@ -91,16 +98,6 @@
 If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].  
   * extrusion2 = make.Extrude(polygon1, [0,5,0], 1)  
     Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
-  
-  
-## Join  
-* **Description:** Joins polylines to polylines or polygons to polygons.  
-* **Parameters:**  
-  * *geometry:* Polylines or polygons.  
-* **Returns:** New joined polyline or polygon if successful, null if unsuccessful or on error.  
-* **Examples:**  
-  * joined1 = make.Join([polyline1,polyline2])  
-    Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
   
   
 ## Divide  

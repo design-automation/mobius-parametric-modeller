@@ -46,7 +46,6 @@ export class PanelHeaderComponent {
         if (!stl.display || stl.display === 'none') {
             stl.display = 'block';
             // const bRect = (<Element>e.target).getBoundingClientRect();
-            // console.log(bRect)
             // stl.transform = `translate(` + bRect.left + `px, ` + bRect.height + `px)`;
         } else {
             stl.display = 'none';

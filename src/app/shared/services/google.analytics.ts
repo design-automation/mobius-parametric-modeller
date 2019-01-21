@@ -24,7 +24,6 @@ export class GoogleAnalyticsService {
           try {
             ga('set', 'page', e.urlAfterRedirects);
             ga('send', 'pageview');
-            // console.log(`logging: ${e.urlAfterRedirects} to google analytics`);
           } catch {
              console.log('tracking not found - make sure you installed the scripts');
           }

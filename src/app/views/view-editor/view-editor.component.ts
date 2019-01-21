@@ -63,7 +63,6 @@ export class ViewEditorComponent {
             }
         }
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
-        // console.log('copying', node.state.procedure);
 
         this.dataService.copiedProd = node.state.procedure;
 
@@ -84,7 +83,6 @@ export class ViewEditorComponent {
             }
         }
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
-        // console.log('cutting', node.state.procedure);
 
         this.dataService.copiedProd = node.state.procedure;
         let parentArray: IProcedure[];
@@ -120,7 +118,6 @@ export class ViewEditorComponent {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                    // console.log('pasting', toBePasted[i].ID);
                     NodeUtils.paste_procedure(node, toBePasted[i]);
                     node.state.procedure[0].selected = false;
                     node.state.procedure = [];
@@ -129,7 +126,6 @@ export class ViewEditorComponent {
                 for (let i = toBePasted.length - 1; i >= 0; i --) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                    // console.log('pasting', toBePasted[i].ID);
                     NodeUtils.paste_procedure(node, toBePasted[i]);
                     node.state.procedure[0].selected = false;
                     pastingPlace.selected = true;

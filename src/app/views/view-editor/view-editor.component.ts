@@ -36,7 +36,9 @@ export class ViewEditorComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.adjustTextArea();
+        setTimeout(() => {
+            this.adjustTextArea();
+        }, 50);
     }
 
     adjustTextArea() {

@@ -8,3 +8,5 @@ export * from './view-gallery/view-gallery.component';
 export * from './view-gallery/view-gallery.module';
 export * from './view-dashboard/view-dashboard.component';
 export * from './view-dashboard/view-dashboard.module';
+export * from './view-publish/view-publish.component';
+export * from './view-publish/view-publish.module';

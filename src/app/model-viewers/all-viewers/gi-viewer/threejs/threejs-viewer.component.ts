@@ -751,7 +751,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private selectWire(line: THREE.Intersection) {
-        const ent_type_str = EEntTypeStr[EEntType.EDGE],
+        const ent_type_str = EEntTypeStr[EEntType.WIRE],
             wire = this.model.geom.query.navEdgeToWire(line.index / 2),
             edges = this.model.geom.query.navWireToEdge(wire),
             verts = edges.map(e => this.model.geom.query.navEdgeToVert(e)),

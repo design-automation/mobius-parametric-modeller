@@ -7,8 +7,10 @@
 * **Returns:** New position if successful, null if unsuccessful or on error.  
 * **Examples:**  
   * position1 = make.Position([1,2,3])  
-    Creates a position with coordinates x=1, y=2, z=3.
-  
+    Creates a position with coordinates x=1, y=2, z=3.  
+* **Example URLs:**  
+  1. [make.Position.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Position.mob&node=1
+)  
   
 ## Point  
 * **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
@@ -18,6 +20,9 @@
 * **Examples:**  
   * point1 = make.Point(position1)  
     Creates a point at position1.  
+* **Example URLs:**  
+  1. [make.Point.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Point.mob&node=1
+)  
   
 ## Polyline  
 * **Description:** Adds a new polyline to the model.  
@@ -29,7 +34,7 @@
   * polyline1 = make.Polyline([position1,position2,position3], close)  
     Creates a closed polyline with vertices position1, position2, position3 in sequence.  
 * **Example URLs:**  
-  1. [polyline_example.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/polyline_example.mob&node=1
+  1. [make.Polyline.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polyline.mob&node=1
 )  
   
 ## Polygon  
@@ -39,8 +44,10 @@
 * **Returns:** New polygon if successful, null if unsuccessful or on error.  
 * **Examples:**  
   * polygon1 = make.Polygon([position1,position2,position3])  
-    Creates a polygon with vertices position1, position2, position3 in sequence.
-  
+    Creates a polygon with vertices position1, position2, position3 in sequence.  
+* **Example URLs:**  
+  1. [make.Polygon.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polygon.mob&node=1
+)  
   
 ## Collection  
 * **Description:** Adds a new collection to the model.  
@@ -50,8 +57,10 @@
 * **Returns:** New collection if successful, null if unsuccessful or on error.  
 * **Examples:**  
   * collection1 = make.Collection([point1,polyine1,polygon1])  
-    Creates a collection containing point1, polyline1, polygon1.
-  
+    Creates a collection containing point1, polyline1, polygon1.  
+* **Example URLs:**  
+  1. [make.Collection.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Collection.mob&node=1
+)  
   
 ## Copy  
 * **Description:** Adds a new copy of specified entities to the model.  
@@ -65,9 +74,14 @@
   
   
 ## Hole  
-* **Description:** Makes one or more holes in a polygon.  
+* **Description:** Makes one or more holes in a polygon.
+Each hole is defined by a list of positions.
+The positions must be on the polygon, i.e. they must be co-planar with the polygon and
+they must be within the boundary of the polygon.
+If the list of positions consists of a single list, then one hole will be generated.
+If the list of positions consists of a list of lists, then multiple holes will be generated.  
 * **Parameters:**  
-  * *face:* Polygons or faces.  
+  * *face:* A polygon or a face to make holes in.  
   * *positions:* A list of positions defining the wires of the holes.  
 * **Returns:** Wires for the new holes.  
   

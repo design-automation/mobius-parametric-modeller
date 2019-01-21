@@ -56,6 +56,8 @@ export class TabsComponent implements AfterContentInit, AfterViewInit {
         this.selectedTab.emit(tab.index);
         this.topology_dropdown.style.display = 'none';
         this.topologyActive = false;
+        this.topology_text = 'Topology';
+        this.topology_open = false;
     }
 
     selectTopology(option, event: Event) {

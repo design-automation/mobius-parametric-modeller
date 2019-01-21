@@ -8,7 +8,18 @@
                 "basic_foreach.mob&node=1",
                 "basic_while.mob&node=1"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/editor/basic_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/"
+        },
+        {
+            "name": "Function Examples",
+            "files": [
+                "make_position.mob&node=1",
+                "make_point.mob&node=1",
+                "make_polyline.mob&node=1",
+                "make_polygon.mob&node=1",
+                "make_collection.mob&node=1x`"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
         }
     ]
 }

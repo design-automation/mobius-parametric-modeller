@@ -121,7 +121,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             if (!this.listenerActive) { return; }
             const node = this.dataService.node;
             if (node.type === '') {
-                // console.log('copied node:', node);
                 const cp = circularJSON.parse(circularJSON.stringify(node));
                 this.copied = circularJSON.stringify(cp);
 
@@ -145,7 +144,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
                 NodeUtils.updateNode(newNode, svgP);
                 this.dataService.flowchart.nodes.push(newNode);
-                // console.log('pasting node:', newNode);
                 this.notificationMessage = `Pasted Node`;
                 this.notificationTrigger = !this.notificationTrigger;
 

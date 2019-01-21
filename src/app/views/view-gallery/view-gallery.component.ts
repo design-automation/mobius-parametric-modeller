@@ -77,7 +77,6 @@ export class ViewGalleryComponent {
         // if (!linkSplit[0].endsWith('.mob')) {
         //     linkSplit[0] = linkSplit[0].concat('.mob');
         // }
-        console.log(linkSplit[0]);
         if (linkSplit.length > 1) {
             new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0], linkSplit[1].split('&')[0].trim());
         } else {

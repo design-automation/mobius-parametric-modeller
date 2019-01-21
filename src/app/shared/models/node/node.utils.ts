@@ -133,7 +133,6 @@ export abstract class NodeUtils {
                 node.state.procedure.push(procedure);
                 const tempArray = node.state.procedure.splice(0, node.state.procedure.length);
                 NodeUtils.rearrangeSelected(node.state.procedure, tempArray, node.procedure);
-                // console.log(node.state.procedure);
             }
         } else {
             const sel = procedure.selected;

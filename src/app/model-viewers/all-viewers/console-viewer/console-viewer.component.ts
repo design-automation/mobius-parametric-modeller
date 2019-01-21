@@ -18,7 +18,6 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * constructor
      */
     constructor(private dataService: DataService) {
-        // console.log('Console Viewer Created');
     }
 
     ngOnDestroy() {
@@ -31,8 +30,7 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * ngOnInit
      */
     ngOnInit() {
-        // @ts-ignore
-        this.text = console.logs.join('\n');
+        this.text = this.dataService.getLog().join('\n');
     }
 
     /**
@@ -51,15 +49,11 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * ngDoCheck
      */
     ngDoCheck() {
-        // @ts-ignore
-        if (console.logs.length > 500) {
-            // @ts-ignore
-            console.logs.splice(0, console.logs.length - 500);
+        if (this.dataService.getLog().length > 500) {
+            this.dataService.spliceLog(500);
         }
-        // @ts-ignore
-        const t = console.logs.join('\n');
-        // @ts-ignore
-        this.logs = console.logs;
+        const t = this.dataService.getLog().join('\n');
+        this.logs = this.dataService.getLog();
         if (this.text !== t) {
             this.text = t;
             this.scrollcheck = true;
@@ -77,7 +71,6 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     }
 
     clearConsole() {
-        // @ts-ignore
-        console.logs = [];
+        this.dataService.clearLog();
     }
 }

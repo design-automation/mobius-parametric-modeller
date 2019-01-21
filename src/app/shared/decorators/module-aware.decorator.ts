@@ -96,7 +96,6 @@ for (const mod of doc.children) {
     }
     const moduleDoc = {};
     for (const func of mod.children) {
-        // console.log(func);
         const fn = {};
         fn['name'] = func.name;
         fn['module'] = modName;

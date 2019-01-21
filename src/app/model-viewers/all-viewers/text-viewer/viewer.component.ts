@@ -16,7 +16,6 @@ class TextViewerComponent implements OnInit, DoCheck {
      * constructor
      */
     constructor() {
-        // console.log(`Text Viewer Created`);
     }
     /**
      * ngOnInit
@@ -31,8 +30,6 @@ class TextViewerComponent implements OnInit, DoCheck {
         } else if (this.data.constructor === {}.constructor) {
             this.output = JSON.stringify(this.data);
         } else {
-            // console.log('Unknown output type:', this.data);
-            // this.output = functions.__stringify__(this.data);
             this.output = _model.__stringify__(this.data); // TODO - make this generic
         }
     }
@@ -49,7 +46,6 @@ class TextViewerComponent implements OnInit, DoCheck {
         } else if (this.data.constructor === {}.constructor) {
             this.output = JSON.stringify(this.data);
         } else {
-            // console.log('Unknown output type:', this.data);
             this.output = _model.__stringify__(this.data); // TODO - make this generic
         }
     }

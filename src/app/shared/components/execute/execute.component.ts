@@ -21,7 +21,7 @@ function mergeInputs(models){
 }
 `;
 export const printFunc = `
-function printFunc(name, value){
+function printFunc(_console, name, value){
     let val;
     if (typeof value === 'number' || value === undefined) {
         val = value;
@@ -32,11 +32,9 @@ function printFunc(name, value){
     } else if (value.constructor === {}.constructor) {
         val = JSON.stringify(value);
     } else {
-        // console.log('Unknown output type:', value);
-        // this.output = functions.__stringify__(value);
         val = value; // TODO - make this generic
     }
-    console.log(name+': '+val);
+    _console.push(name+': '+val);
     return val;
 }
 `;
@@ -58,10 +56,9 @@ export class ExecuteComponent {
     async execute() {
         this.startTime = performance.now();
         document.getElementById('spinner-on').click();
-        console.log(' ');
+        this.dataService.log(' ');
 
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
-        // console.log('Retrieving flowchart\'s external inputs');
         for (const node of this.dataService.flowchart.nodes) {
             let EmptyECheck = false;
             let InvalidECheck = false;
@@ -76,7 +73,7 @@ export class ExecuteComponent {
             } catch (ex) {
                 document.getElementById('spinner-off').click();
                 document.getElementById('Console').click();
-                console.log(ex.message);
+                this.dataService.log(ex.message);
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
                 throw ex;
@@ -105,7 +102,7 @@ export class ExecuteComponent {
                             const _category = this.isDev ? 'dev' : 'execute';
                             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
                                 'click', performance.now() - this.startTime);
-                            console.log(ex.message);
+                            this.dataService.log(ex.message);
                             throw(ex);
                         }
                         InvalidECheck = true;
@@ -131,16 +128,15 @@ export class ExecuteComponent {
             }
             if (EmptyECheck) {
                 document.getElementById('Console').click();
-                console.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
+                this.dataService.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
-                // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
                 throw new Error('Empty Argument');
             }
             if (InvalidECheck) {
                 document.getElementById('Console').click();
-                console.log('Error: Invalid Argument or Argument with Reserved Word detected. Check marked node(s) and procedure(s)!');
+                this.dataService.log('Error: Invalid Argument or Argument with Reserved Word detected. Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
@@ -160,7 +156,6 @@ export class ExecuteComponent {
                 }
             }
             document.getElementById('spinner-off').click();
-            // console.log('The flowchart took ' + (performance.now() - startTime) + ' milliseconds to execute.');
         }, 20);
         const category = this.isDev ? 'dev' : 'execute';
         this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
@@ -206,7 +201,7 @@ export class ExecuteComponent {
     }
 
     executeNode(node: INode, funcStrings, globalVars): string {
-        const params = {'currentProcedure': ['']};
+        const params = {'currentProcedure': [''], 'console': []};
         let fnString = '';
         const startTime = performance.now();
         try {
@@ -236,23 +231,10 @@ export class ExecuteComponent {
                 fnString = mergeInputsFunc + '\n\n' + fnString;
             }
             // print the code
-            console.log(`Executing node: ${node.name}\n`);
+            this.dataService.log(`Executing node: ${node.name}\n`);
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
                 console.log(fnString);
-                /*
-                for (const i of nodeCode) {
-                    if (i.substring(0, 18) === '__params__.current') {
-                        continue;
-                    }
-                    if (i.length > 500) {
-                        console.log(i.substring(0, 500) + '...\n});\n');
-                    } else {
-                        console.log(i);
-                    }
-                }
-                console.log('--------------------------\n');
-                */
             }
 
             const prevWindowVar = {};
@@ -296,7 +278,10 @@ export class ExecuteComponent {
             } else {
                 duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
             }
-            console.log(duration_msg);
+            for (const str of params.console) {
+                this.dataService.log(str);
+            }
+            this.dataService.log(duration_msg);
             return globalVars;
         } catch (ex) {
             const endTime = performance.now();
@@ -307,10 +292,10 @@ export class ExecuteComponent {
             } else {
                 duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
             }
-            console.log(duration_msg);
+            this.dataService.log(duration_msg);
             document.getElementById('spinner-off').click();
             if (DEBUG) {
-                console.log('\n=======================================\n' +
+                this.dataService.log('\n=======================================\n' +
                     ex.name +
                     '\n=======================================\n' +
                     ex.message);
@@ -356,9 +341,7 @@ export class ExecuteComponent {
                 ex.message = 'Unrecognized or missing variable in the procedure.';
             }
             document.getElementById('Console').click();
-            // @ts-ignore
-            // console.logs = [];
-            console.log('\n=======================================\n' +
+            this.dataService.log('\n=======================================\n' +
                         ex.name +
                         '\n=======================================\n' +
                         ex.message);

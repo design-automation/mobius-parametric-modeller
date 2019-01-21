@@ -13,6 +13,9 @@ export class DataService {
         version: 1,
         flowchart: FlowchartUtils.newflowchart()
     };
+
+    private static _consoleLog: string[] = [];
+
     private static _flowchartPosition: string = undefined;
     private static _newFlowchart = true;
 
@@ -35,6 +38,22 @@ export class DataService {
 
     private _prevActions = [];
     private _nextActions = [];
+
+    getLog(): string[] {
+        return DataService._consoleLog;
+    }
+
+    log(str: string) {
+        DataService._consoleLog.push(str);
+    }
+
+    clearLog() {
+        DataService._consoleLog = [];
+    }
+
+    spliceLog(remainingLogs: number) {
+        DataService._consoleLog.splice(0, DataService._consoleLog.length - remainingLogs);
+    }
 
     get file() { return DataService._data; }
     set file(data: IMobius) {
@@ -99,7 +118,6 @@ export class DataService {
     registerAction(action) {
         this._prevActions.push(action);
         this._nextActions = [];
-        // console.log(action);
     }
 
     undo() {

@@ -124,7 +124,6 @@ export class LoadUrlComponent {
             loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
         }
         const executeB = document.getElementById('executeButton');
-        console.log('execute button:', executeB);
         if (executeB) { executeB.click(); }
     }
 

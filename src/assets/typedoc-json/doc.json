@@ -10514,6 +10514,20 @@
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
+							"comment": {
+								"shortText": "Joins polylines to polylines or polygons to polygons.",
+								"returns": "New joined polyline or polygon if successful, null if unsuccessful or on error.",
+								"tags": [
+									{
+										"tag": "example",
+										"text": "joined1 = make.Join([polyline1,polyline2])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.\n"
+									}
+								]
+							},
 							"parameters": [
 								{
 									"id": 1606,
@@ -10521,6 +10535,7 @@
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
+									"comment": {},
 									"type": {
 										"type": "reference",
 										"name": "GIModel",
@@ -10533,9 +10548,73 @@
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
+									"comment": {
+										"text": "Polylines or polygons."
+									},
 									"type": {
-										"type": "intrinsic",
-										"name": "number"
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TId",
+											"id": 218
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "TId",
+								"id": 218
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/make.ts",
+							"line": 474,
+							"character": 21
+						}
+					]
+				},
+				{
+					"id": 1599,
+					"name": "_PolygonHoles",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1600,
+							"name": "_PolygonHoles",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Adds a single new polygon to the model with one or more holes.",
+								"returns": "New polygon if successful, null if unsuccessful or on error.",
+								"tags": [
+									{
+										"tag": "example",
+										"text": "polygon1 = make.Polygon([position1,position2,position3], [position4,position5,position6])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Creates a polygon with  a hole, with vertices in sequence from position1 to position6.\n"
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 1601,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1092
 									}
 								},
 								{
@@ -10544,20 +10623,29 @@
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
+									"comment": {
+										"text": "List of positions for the holes. For multiple holes, a list of list can provided."
+									},
 									"type": {
 										"type": "union",
 										"types": [
 											{
-												"type": "reference",
-												"name": "TEntTypeIdx",
-												"id": 214
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "TId",
+													"id": 218
+												}
 											},
 											{
 												"type": "array",
 												"elementType": {
-													"type": "reference",
-													"name": "TEntTypeIdx",
-													"id": 214
+													"type": "array",
+													"elementType": {
+														"type": "reference",
+														"name": "TId",
+														"id": 218
+													}
 												}
 											}
 										]
@@ -10566,8 +10654,8 @@
 							],
 							"type": {
 								"type": "reference",
-								"name": "TEntTypeIdx",
-								"id": 214
+								"name": "TId",
+								"id": 218
 							}
 						}
 					],
@@ -10584,7 +10672,9 @@
 					"name": "_copyGeom",
 					"kind": 64,
 					"kindString": "Function",
-					"flags": {},
+					"flags": {
+						"isExported": true
+					},
 					"signatures": [
 						{
 							"id": 1615,
@@ -10628,6 +10718,48 @@
 												}
 											}
 										]
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"name": "TEntTypeIdx",
+								"id": 214
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/make.ts",
+							"line": 165,
+							"character": 27
+						}
+					]
+				},
+				{
+					"id": 1614,
+					"name": "_copyGeom",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1615,
+							"name": "_copyGeom",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1616,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1092
 									}
 								},
 								{

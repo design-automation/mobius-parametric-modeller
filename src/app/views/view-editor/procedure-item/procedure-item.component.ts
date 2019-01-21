@@ -120,7 +120,6 @@ export class ProcedureItemComponent {
 
                 arg.invalidVar = false;
             } catch (ex) {
-                // console.log(ex.message);
                 arg.invalidVar = true;
                 return str;
             }

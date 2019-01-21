@@ -13,6 +13,7 @@ import { canvasSize } from '@models/flowchart';
 import { Router } from '@angular/router';
 import { SplitComponent } from 'angular-split';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
+import { getViewerData } from '@shared/getViewerData';
 
 declare const InstallTrigger: any;
 
@@ -24,6 +25,7 @@ declare const InstallTrigger: any;
 })
 export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
+    viewerData = getViewerData;
     @Output() switch = new EventEmitter();
     @ViewChild('flowchartSplit') flowchartSplit: SplitComponent;
 
@@ -874,12 +876,12 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         this.focusFlowchart();
     }
 
-    viewerData(): any {
-        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-        if (!node) { return ''; }
-        // if (node.type === 'output') { return node.input.value; }
-        return node.model;
-    }
+    // viewerData(): any {
+    //     const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+    //     if (!node || !node.enabled) { return ''; }
+    //     // if (node.type === 'output') { return node.input.value; }
+    //     return node.model;
+    // }
 
     dragSplitStart(e) {
         const currentTransf: any = this.dataService.flowchartPos.split(',');
@@ -916,6 +918,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     }
     getSplit() { return this.dataService.splitVal; }
     getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
 
 }
 

@@ -25,7 +25,7 @@ export class DataThreejs {
     public selected_vertex: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
     public _text: string;
-    // text lables
+    // text labels
     public ObjLabelMap: Map<string, any> = new Map();
     public _textLabels: Map<string, any> = new Map();
     // number of threejs points, lines, triangles

@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, IGeomPack, TEntTypeIdx } from '@libs/geo-info/common';
+import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, IGeomPack, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 import { getArrDepth } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes, checkAttribNameValue } from './_check_args';
 
@@ -58,7 +58,7 @@ export function __stringify__(__model__: GIModel): string {
 }
 //  ===============================================================================================
 /**
- * Sets an attribute in the model.
+ * Sets an attribute value in the model.
  * @param __model__
  */
 export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
@@ -85,7 +85,11 @@ function _getAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        if (attrib_index !== null && attrib_index !== undefined) {
+        const has_index: boolean = attrib_index !== null && attrib_index !== undefined;
+        if (attrib_name === 'id') {
+            if (has_index) { throw new Error('The "id" attribute does have an index.'); }
+            return EEntTypeStr[ent_type] + ent_i as TAttribDataTypes;
+        } else if (has_index) {
             return __model__.attribs.query.getAttribIndexedValue(ent_type, attrib_name, ent_i, attrib_index);
         } else {
             return __model__.attribs.query.getAttribValue(ent_type, attrib_name, ent_i);
@@ -96,7 +100,7 @@ function _getAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
     }
 }
 /**
- * Gets an attribute from the model.
+ * Gets an attribute value from the model.
  * @param __model__
  */
 export function __getAttrib__(__model__: GIModel, entities: TId|TId[],

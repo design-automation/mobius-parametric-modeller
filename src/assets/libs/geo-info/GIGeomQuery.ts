@@ -122,7 +122,8 @@ export class GIGeomQuery {
     public getFaceHoles(face_i: number): number[] {
         const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
         return wires_i.slice(1);
-    
+    }
+
     // ============================================================================
     // Navigate down the hierarchy
     // ============================================================================

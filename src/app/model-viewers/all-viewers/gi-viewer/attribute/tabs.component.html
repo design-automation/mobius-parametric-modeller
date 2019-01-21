@@ -1,0 +1,25 @@
+<ul class="nav nav-tabs">
+    <li
+        *ngFor="let tab of tabs;"
+        (click)="tab.index!=='1'?selectTab(tab):null"
+        [class.active]="tab.active"
+        [class.open]='topology_open'
+        [hidden]="tab.index==='2' || tab.index==='3' || tab.index==='4'"
+    >
+        <div *ngIf="tab.index!=='1'; else topoTemplate">
+            <span>{{tab.title}}</span>
+        </div>
+    </li>
+</ul>
+<ng-content></ng-content>
+
+<ng-template #topoTemplate>
+    <div class="dropdown">
+        <button class="dropbtn" (click) = 'showDropdown()' title="Topology{{topology_text!=='Topology'?(': '+topology_text):''}}">{{topology_text}}</button>
+        <div class="dropdown-content" id='topology_dropdown'>
+            <div (click)="selectTopology(999, $event)" [hidden]='topology_text==="Topology"'>Topology</div>
+            <div *ngFor="let option of topology;" (click)="selectTopology(option, $event)" [hidden]='topology_text===option.title'>{{option.title}}</div>
+        </div>
+    </div>
+</ng-template>
+

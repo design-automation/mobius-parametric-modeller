@@ -128,6 +128,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 label.updatePosition();
             });
         }
+        // self._data_threejs._renderer.clear();
+        self._data_threejs._renderer.render(self._data_threejs.basic_scene, self._data_threejs._camera);
+        self._data_threejs._renderer.clearDepth();
         self._data_threejs._renderer.render(self._data_threejs._scene, self._data_threejs._camera);
     }
 

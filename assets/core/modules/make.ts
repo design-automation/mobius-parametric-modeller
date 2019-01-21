@@ -31,6 +31,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
  * @returns New position if successful, null if unsuccessful or on error.
  * @example position1 = make.Position([1,2,3])
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
+ * @example_link make.Position.mob&node=1
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     // --- Error Check ---
@@ -59,6 +60,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
  * @example_info Creates a point at position1.
  * @example point1 = make.Point(position1)
  * @example_info Creates a point at position1.
+ * @example_link make.Point.mob&node=1
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
@@ -92,7 +94,7 @@ function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], 
  * @returns New polyline if successful, null if unsuccessful or on error.
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
- * @example_link polyline_example.mob&node=1
+ * @example_link make.Polyline.mob&node=1
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
     // --- Error Check ---
@@ -119,6 +121,7 @@ function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): 
  * @returns New polygon if successful, null if unsuccessful or on error.
  * @example polygon1 = make.Polygon([position1,position2,position3])
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
+ * @example_link make.Polygon.mob&node=1
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
     // --- Error Check ---
@@ -139,7 +142,7 @@ function _polygonHoles(__model__: GIModel, ents_arr: TEntTypeIdx[],
     for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
         holes_posis_i.push( hole_ents_arr.map(ent_arr => ent_arr[1]) );
     }
-    const pgon_i: number = __model__.geom.add.addPgonWithHole(posis_i, holes_posis_i);
+    const pgon_i: number = __model__.geom.add.addPgon(posis_i, holes_posis_i);
     return [EEntType.PGON, pgon_i];
 }
 /**
@@ -185,6 +188,7 @@ export function _collection(__model__: GIModel, parent_index: number, ents_arr: 
  * @returns New collection if successful, null if unsuccessful or on error.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
+ * @example_link make.Collection.mob&node=1
  */
 export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|TId[]): TId {
     // --- Error Check ---
@@ -293,8 +297,13 @@ function _hole(__model__: GIModel, face_ent_arr: TEntTypeIdx, holes_ents_arr: TE
 }
 /**
  * Makes one or more holes in a polygon.
+ * Each hole is defined by a list of positions.
+ * The positions must be on the polygon, i.e. they must be co-planar with the polygon and
+ * they must be within the boundary of the polygon.
+ * If the list of positions consists of a single list, then one hole will be generated.
+ * If the list of positions consists of a list of lists, then multiple holes will be generated.
  * @param __model__
- * @param face Polygons or faces.
+ * @param face A polygon or a face to make holes in.
  * @param positions A list of positions defining the wires of the holes.
  * @returns Wires for the new holes.
  */
@@ -425,9 +434,21 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             }
         }
         if (isDim2(ent_type)) { // create a top -> polygon
-            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            const face_i: number = __model__.geom.query.navPgonToFace(index);
+            // get positions on boundary
+            const old_wire_i: number = __model__.geom.query.getFaceBoundary(face_i);
+            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_wire_i);
             const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
-            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i );
+            // get positions for holes
+            const old_holes_wires_i: number[] = __model__.geom.query.getFaceHoles(face_i);
+            const new_holes_posis_i: number[][] = [];
+            for (const old_hole_wire_i of old_holes_wires_i) {
+                const old_hole_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_hole_wire_i);
+                const new_hole_posis_i: number[] = old_hole_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
+                new_holes_posis_i.push(new_hole_posis_i);
+            }
+            // make new polygon
+            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i, new_holes_posis_i );
             new_pgons_i.push(pgon_i);
         }
         return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);

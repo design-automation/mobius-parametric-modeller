@@ -3,12 +3,23 @@
         {
             "name": "Basic Examples",
             "files": [
-                "basic_variable.mob & node = 1",
-                "basic_ifelse.mob & node=1",
-                "basic_foreach.mob &node=1",
+                "basic_variable.mob&node=1",
+                "basic_ifelse.mob&node=1",
+                "basic_foreach.mob&node=1",
                 "basic_while.mob&node=1"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/"
+        },
+        {
+            "name": "Function Examples",
+            "files": [
+                "make.Position.mob&node=1",
+                "make.Point.mob&node=1",
+                "make.Polyline.mob&node=1",
+                "make.Polygon.mob&node=1",
+                "make.Collection.mob&node=1`"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
         }
     ]
 }

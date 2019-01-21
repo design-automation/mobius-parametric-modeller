@@ -27,6 +27,15 @@ for (const s of config.data){
         break;
     }
 }
+if (examples === undefined) {
+    examples = {
+        "name": "Function Examples",
+        "files": [
+        ],
+        "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
+    };
+    config.data.push(examples);
+}
 
 function compare(a, b) {
     if (a.id < b.id) {
@@ -78,7 +87,6 @@ for (const mod of doc.children) {
     moduleDoc['name'] = modName;
     moduleDoc['func'] = [];
     for (const func of mod.children) {
-        // console.log(func);
         if (func.name.substring(0, 1) === '_') { continue; }
         const fn = {};
         fn['id'] = func.id;
@@ -181,11 +189,18 @@ for (const modName of ModuleList) {
         if (func.example_link) {
             mdString += `* **Example URLs:**  \n`;
             for (const ex of func.example_link) {
-                const f = ex.trim().split('.mob')[0];
-                if (examples.files.indexOf(f) === -1) {
+                let check = false;
+                f = ex.trim();
+                fNoNode = f.split('.mob')[0].trim();
+                for (const exampleFile of examples.files) {
+                    if (exampleFile.indexOf(fNoNode) !== -1) {
+                        check =true;
+                    }
+                }
+                if (!check) {
                     examples.files.push(f);
                 }
-                mdString += `  1. [${ex.trim().split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
+                mdString += `  1. [${f.split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
                             `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
 
             }

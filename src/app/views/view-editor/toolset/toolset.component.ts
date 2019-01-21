@@ -262,20 +262,6 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    openNodeMenu(e: MouseEvent) {
-        const stl = document.getElementById('nodeMenu').style;
-        if (!stl.display || stl.display === 'none') {
-            stl.display = 'block';
-        } else {
-            stl.display = 'none';
-        }
-        e.stopPropagation();
-
-    }
-
-    changeNode(index: number) {
-        this.dataService.flowchart.meta.selected_nodes = [index];
-    }
 
     checkInvalid(type) {
         const node = this.dataService.node;

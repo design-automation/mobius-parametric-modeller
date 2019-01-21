@@ -11,6 +11,7 @@
     "target": "es5",
     "paths": {
       "@assets/*" : ["src/assets/*"],
+      "@env/*" : ["src/environments/*"],
       "@libs/*" : ["src/assets/libs/*"],
       "@store" : ["src/app/core/store"],
       "@models/*" : ["src/app/shared/models/*"],

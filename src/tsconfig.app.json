@@ -6,6 +6,7 @@
     "types": [],
     "paths": {
       "@assets/*" : ["assets/*"],
+      "@env/*" : ["environments/*"],
       "@libs/*" : ["assets/libs/*"],
       "@store" : ["app/core/store"],
       "@models/*" : ["app/shared/models/*"],

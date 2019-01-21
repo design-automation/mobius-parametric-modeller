@@ -26,7 +26,7 @@ export class DataThreejs {
     public selected_vertex: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
     public _text: string;
-    // text lables
+    // text labels
     public ObjLabelMap: Map<string, any> = new Map();
     public _textLabels: Map<string, any> = new Map();
     // number of threejs points, lines, triangles
@@ -166,7 +166,7 @@ export class DataThreejs {
         this._addPositions(all_positions_flat,
             all_positions_indices,
             all_positions_colors,
-            [255, 255, 0],
+            [0, 0, 0],
             size);
         this._positions.map(p => p.visible = this.settings.positions.show);
     }

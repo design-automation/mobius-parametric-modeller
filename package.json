@@ -1,6 +1,6 @@
 {
   "name": "mobius-parametric-modeller",
-  "version": "0.0.1",
+  "version": "0.4.1",
   "license": "MIT",
   "config": {
     "dev_url": "https://design-automation.github.io/mobius-parametric-modeller/",
@@ -23,6 +23,7 @@
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
+    "postinstall": "node version.js",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
     "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js"
   },
@@ -66,6 +67,7 @@
     "@types/three": "^0.93.15",
     "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "^4.3.0",
+    "git-describe": "^4.0.3",
     "jasmine-core": "^3.3.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^3.1.4",

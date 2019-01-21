@@ -58,7 +58,7 @@ export class PanelHeaderComponent {
     @HostListener('window:click', [])
     onWindowClick() {
         const dropdownMenu = document.getElementById('dropdownMenu');
-        if (dropdownMenu){
+        if (dropdownMenu) {
             document.getElementById('dropdownMenu').style.display = 'none';
         }
         const nodeMenu = document.getElementById('nodeMenu');

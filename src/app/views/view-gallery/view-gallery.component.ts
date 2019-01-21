@@ -11,6 +11,7 @@ import * as circularJSON from 'circular-json';
 import { Router } from '@angular/router';
 
 import * as galleryUrls from '@assets/gallery/__config__.json';
+import { getViewerData } from '@shared/getViewerData';
 
 @Component({
   selector: 'view-gallery',
@@ -19,6 +20,7 @@ import * as galleryUrls from '@assets/gallery/__config__.json';
 })
 export class ViewGalleryComponent {
 
+    viewerData = getViewerData;
     // private allFiles: Observable<any>;
     allGalleries = [];
     @Output() switch = new EventEmitter();
@@ -125,12 +127,12 @@ export class ViewGalleryComponent {
         // });
     }
 
-    viewerData(): any {
-        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-        if (!node) { return ''; }
-        // if (node.type === 'output') { return node.input.value; }
-        return node.model;
-    }
+    // viewerData(): any {
+    //     const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+    //     if (!node || !node.enabled) { return ''; }
+    //     // if (node.type === 'output') { return node.input.value; }
+    //     return node.model;
+    // }
 
     setSplit(event) {
         this.dataService.splitUpdate = true;
@@ -139,5 +141,6 @@ export class ViewGalleryComponent {
 
     getSplit() { return this.dataService.splitVal; }
     getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
     getActiveGallery() { return this.dataService.activeGallery; }
 }

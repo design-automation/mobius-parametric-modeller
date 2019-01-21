@@ -81,7 +81,7 @@
         <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
-                <model-viewers-container [data]='viewerData()'></model-viewers-container>
+                <model-viewers-container [data]='viewerData(getNode(), getViewOutput())'></model-viewers-container>
             </div>
         </as-split-area>
         

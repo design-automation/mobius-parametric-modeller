@@ -6,6 +6,7 @@ import { DataService } from '@services';
 import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
+import { getViewerData } from '@shared/getViewerData';
 
 @Component({
   selector: 'view-editor',
@@ -17,6 +18,7 @@ export class ViewEditorComponent {
     @Input() flowchart: IFlowchart;
     @Input() node: INode;
     */
+    viewerData = getViewerData;
 
     @Output() imported = new EventEmitter();
     @Output() delete_Function = new EventEmitter();
@@ -194,15 +196,15 @@ export class ViewEditorComponent {
     //     this.dataService.modelOutputView = this.dataService.testModel;
     // }
 
-    viewerData(): any {
-        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-        if (!node) { return ''; }
-        // if (node.type === 'output') { return node.input.value; }
-        if (this.getViewOutput()) {
-            return node.model;
-        }
-        return node.input.value;
-    }
+    // viewerData(): any {
+    //     const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+    //     if (!node || !node.enabled) { return ''; }
+    //     // if (node.type === 'output') { return node.input.value; }
+    //     if (this.getViewOutput()) {
+    //         return node.model;
+    //     }
+    //     return node.input.value;
+    // }
 
     setSplit(event) {
         this.dataService.splitUpdate = true;

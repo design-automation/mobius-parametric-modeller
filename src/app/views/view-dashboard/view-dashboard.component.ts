@@ -4,6 +4,7 @@ import { INode } from '@models/node';
 import { DataService } from '@services';
 import { Router } from '@angular/router';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
+import { getViewerData } from '@shared/getViewerData';
 
 @Component({
   selector: 'view-dashboard',
@@ -11,6 +12,8 @@ import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
   styleUrls: ['./view-dashboard.component.scss']
 })
 export class ViewDashboardComponent {
+
+    viewerData = getViewerData;
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
@@ -28,12 +31,12 @@ export class ViewDashboardComponent {
       }
     }
 
-    viewerData(): any {
-        const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
-        if (!node) { return ''; }
-        // if (node.type === 'output') { return node.input.value; }
-        return node.model;
-    }
+    // viewerData(): any {
+    //     const node = this.dataService.flowchart.nodes[this.dataService.flowchart.meta.selected_nodes[0]];
+    //     if (!node || !node.enabled) { return ''; }
+    //     // if (node.type === 'output') { return node.input.value; }
+    //     return node.model;
+    // }
 
     setSplit(event) {
         this.dataService.splitUpdate = true;
@@ -42,5 +45,6 @@ export class ViewDashboardComponent {
 
     getSplit() { return this.dataService.splitVal; }
     getFlowchart() { return this.dataService.flowchart; }
+    getNode() { return this.dataService.node; }
 }
 

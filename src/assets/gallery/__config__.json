@@ -13,11 +13,19 @@
         {
             "name": "Function Examples",
             "files": [
-                "make_position.mob&node=1",
-                "make_points.mob&node=1",
-                "make_polyline.mob&node=1",
-                "make_polygon.mob&node=1",
-                "make_collection.mob&node=1`"
+                "make_Position.mob&node=1",
+                "make_Point.mob&node=1",
+                "make_Polyline.mob&node=1",
+                "make_Polygon.mob&node=1",
+                "make_Collection.mob&node=1`",
+                "calc_Distance",
+                "calc_Length",
+                "calc_Area",
+                "calc_Vectore",
+                "calc_Centroid",
+                "calc_Normal",
+                "calc_ParamTToXyz",
+                "calc_ParamXyzToT"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
         }

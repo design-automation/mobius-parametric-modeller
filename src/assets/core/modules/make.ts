@@ -31,6 +31,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
  * @returns New position if successful, null if unsuccessful or on error.
  * @example position1 = make.Position([1,2,3])
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
+ * @example_link make_position.mob&node=1
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     // --- Error Check ---
@@ -59,6 +60,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
  * @example_info Creates a point at position1.
  * @example point1 = make.Point(position1)
  * @example_info Creates a point at position1.
+ * @example_link make_point.mob&node=1
  */
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
@@ -92,7 +94,7 @@ function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], 
  * @returns New polyline if successful, null if unsuccessful or on error.
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
- * @example_link polyline_example.mob&node=1
+ * @example_link make_polyline.mob&node=1
  */
 export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
     // --- Error Check ---
@@ -119,6 +121,7 @@ function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): 
  * @returns New polygon if successful, null if unsuccessful or on error.
  * @example polygon1 = make.Polygon([position1,position2,position3])
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
+ * @example_link make_polygon.mob&node=1
  */
 export function Polygon(__model__: GIModel, positions: TId[]|TId[][]): TId|TId[] {
     // --- Error Check ---
@@ -185,6 +188,7 @@ export function _collection(__model__: GIModel, parent_index: number, ents_arr: 
  * @returns New collection if successful, null if unsuccessful or on error.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
+ * @example_link make_collection.mob&node=1
  */
 export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|TId[]): TId {
     // --- Error Check ---
@@ -293,8 +297,13 @@ function _hole(__model__: GIModel, face_ent_arr: TEntTypeIdx, holes_ents_arr: TE
 }
 /**
  * Makes one or more holes in a polygon.
+ * Each hole is defined by a list of positions.
+ * The positions must be on the polygon, i.e. they must be co-planar with the polygon and
+ * they must be within the boundary of the polygon.
+ * If the list of positions consists of a single list, then one hole will be generated.
+ * If the list of positions consists of a list of lists, then multiple holes will be generated.
  * @param __model__
- * @param face Polygons or faces.
+ * @param face A polygon or a face to make holes in.
  * @param positions A list of positions defining the wires of the holes.
  * @returns Wires for the new holes.
  */

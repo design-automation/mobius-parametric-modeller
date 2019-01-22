@@ -1,5 +1,6 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataService } from '@shared/services';
 
 @Component({
   selector: 'panel-header',
@@ -10,8 +11,11 @@ export class PanelHeaderComponent {
 
     @Input() title: string;
     executeCheck: boolean;
+    dialogBox: HTMLDialogElement;
 
-    constructor(private router: Router) {
+    urlSet = ['', 'publish', '', ''];
+
+    constructor(private dataService: DataService, private router: Router) {
         if (this.router.url === '/about' || this.router.url === '/gallery') {
             this.executeCheck = false;
         } else {
@@ -54,8 +58,14 @@ export class PanelHeaderComponent {
 
     }
 
-    @HostListener('window:click', [])
-    onWindowClick() {
+    openUrlDialog(event) {
+        event.stopPropagation();
+        this.dialogBox = <HTMLDialogElement>document.getElementById('genUrlDialog');
+        this.dialogBox.showModal();
+    }
+
+    @HostListener('window:click', ['$event'])
+    onWindowClick(event: MouseEvent) {
         const dropdownMenu = document.getElementById('dropdownMenu');
         if (dropdownMenu) {
             document.getElementById('dropdownMenu').style.display = 'none';
@@ -68,5 +78,45 @@ export class PanelHeaderComponent {
         if (galleryMenu) {
             document.getElementById('galleryMenu').style.display = 'none';
         }
+        if (this.dialogBox) {
+            if ((<HTMLElement>event.target).tagName === 'SELECT') { return; }
+
+            const rect = this.dialogBox.getBoundingClientRect();
+
+            const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+              && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+            if (!isInDialog) {
+                this.dialogBox.close();
+                this.dialogBox = undefined;
+            }
+        }
+    }
+
+    generateUrl() {
+        if (this.urlSet[0] === '') {
+            return;
+        }
+        if (this.urlSet[1] === 'publish') {
+            this.urlSet[2] = '';
+            this.urlSet[3] = '';
+        } else if (this.urlSet[2] === '') {
+            this.urlSet[3] = '';
+        } else if (this.urlSet[3] === '') {
+            this.urlSet[2] = '';
+        }
+
+        let url = this.urlSet[0];
+        if (url.indexOf('dropbox') !== -1) {
+            url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+        }
+        url = url.replace(/\//g, '%2F');
+
+        const txtArea = document.getElementById('generatedLink');
+        txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
+                            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}`;
+    }
+
+    getFlowchart() {
+        return this.dataService.flowchart;
     }
 }

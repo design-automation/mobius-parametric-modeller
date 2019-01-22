@@ -81,31 +81,38 @@
 </div>
 <dialog id='genUrlDialog'>
     MOB file URL: <br>
-    <textarea [(ngModel)]='urlSet[0]'></textarea>
-    <hr>
-    <input id='radio1' type='radio' name='showPage' value='publish' [(ngModel)]='urlSet[1]'/> <label for='radio1'>Uneditable</label> <br>
-    <input id='radio2' type='radio' name='showPage' value='dashboard' [(ngModel)]='urlSet[1]'/> <label for='radio2'>Editable</label>
-    <hr>
+    <textarea [(ngModel)]='urlSet[0]' 
+            [class.valid]='urlValid === true' 
+            [class.invalid]='urlValid === false'
+            (keyup)='urlValid = undefined'></textarea><br>
+    <button (click)='validateUrl()'>Validate Url</button>
 
-    <div *ngIf='urlSet[1] == "dashboard"'>
-        <input id='radio3' type='radio' name='displayType' value='&node=' [(ngModel)]='urlSet[2]'/> <label for='radio3'>Show Specific Node</label> <br>
-        <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
+    <ng-container *ngIf='urlValid === true'>
         <hr>
-    </div>
-
-    <div *ngIf='urlSet[1] == "dashboard" && urlSet[2] == "&node="'>
-        Shown Node Index: <input [(ngModel)]='urlSet[3]'/>
-        <!-- <select [(ngModel)]='urlSet[3]'>
-            <option *ngFor='let node of getFlowchart().nodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
-        </select> -->
+        <input id='radio1' type='radio' name='showPage' value='publish' [(ngModel)]='urlSet[1]'/> <label for='radio1'>Uneditable</label> <br>
+        <input id='radio2' type='radio' name='showPage' value='dashboard' [(ngModel)]='urlSet[1]'/> <label for='radio2'>Editable</label>
         <hr>
-    </div>
+    
+        <ng-container *ngIf='urlSet[1] == "dashboard"'>
+            <input id='radio3' type='radio' name='displayType' value='&node=' [(ngModel)]='urlSet[2]'/> <label for='radio3'>Show Specific Node</label> <br>
+            <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
+            <hr>
+            <ng-container *ngIf='urlSet[2] == "&node="'>
+                <!-- Shown Node Index: <input [(ngModel)]='urlSet[3]'/> -->
+                Shown Node: <select [(ngModel)]='urlSet[3]'>
+                    <option *ngFor='let node of urlNodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
+                </select>
+                <hr>
+            </ng-container>
+        </ng-container>
+    
+        <button (click)='generateUrl()'>Create Link</button>
 
-    <button (click)='generateUrl()'>Create</button>
+        <div>
+            <hr>
+            Möbius Link:<br>
+            <textarea [class.disabled]='true' id='generatedLink' disabled></textarea>
+        </div>
+    </ng-container>
 
-    <div>
-        <hr>
-        Möbius Link:<br>
-        <textarea [class.disabled]='true' id='generatedLink' disabled></textarea>
-    </div>
 </dialog>

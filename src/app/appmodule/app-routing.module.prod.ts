@@ -15,6 +15,7 @@ const appRoutes: Routes = [
     { path: 'flowchart', loadChildren: '../views/view-flowchart/view-flowchart.module#ViewFlowchartModule' },
     { path: 'gallery', loadChildren: '../views/view-gallery/view-gallery.module#ViewGalleryModule' },
     { path: 'dashboard', loadChildren: '../views/view-dashboard/view-dashboard.module#ViewDashboardModule' },
+    { path: 'publish', loadChildren: '../views/view-publish/view-publish.module#ViewPublishModule' },
     { path: 'editor', loadChildren: '../views/view-editor/view-editor.module#ViewEditorModule' },
     { path: 'about', loadChildren: '../views/view-about/view-about.module#ViewAboutModule' },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },

@@ -1,6 +1,7 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '@shared/services';
+import * as circularJSON from 'circular-json';
 
 @Component({
   selector: 'panel-header',
@@ -14,6 +15,8 @@ export class PanelHeaderComponent {
     dialogBox: HTMLDialogElement;
 
     urlSet = ['', 'publish', '', ''];
+    urlValid: boolean;
+    urlNodes;
 
     constructor(private dataService: DataService, private router: Router) {
         if (this.router.url === '/about' || this.router.url === '/gallery') {
@@ -92,6 +95,38 @@ export class PanelHeaderComponent {
         }
     }
 
+    validateUrl() {
+        if (this.urlSet[0] === '') {
+            this.urlValid = false;
+            return;
+        }
+        const request = new XMLHttpRequest();
+
+        let url = this.urlSet[0];
+        if (url.indexOf('dropbox') !== -1) {
+            url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+        }
+        request.open('GET', url);
+
+        request.onload = () => {
+            if (request.status === 200) {
+                try {
+                    const f = circularJSON.parse(request.responseText);
+                    this.urlNodes = f.flowchart.nodes;
+                    this.urlValid = true;
+                } catch (ex) {
+                    this.urlValid = false;
+                }
+            } else {
+                this.urlValid = false;
+            }
+        };
+        request.onerror = () => {
+            this.urlValid = false;
+        };
+        request.send();
+    }
+
     generateUrl() {
         if (this.urlSet[0] === '') {
             return;
@@ -116,7 +151,4 @@ export class PanelHeaderComponent {
                             `?file=${url}${this.urlSet[2]}${this.urlSet[3]}`;
     }
 
-    getFlowchart() {
-        return this.dataService.flowchart;
-    }
 }

@@ -109,6 +109,7 @@ button.mat-menu-item:hover{
     border-left: 1px solid $color2;
     // border-right: 1px solid $color2;
     border-bottom: 1px solid $color2;
+    
     button{
         display: inline-block;
         width: 100px;
@@ -133,5 +134,31 @@ button.mat-menu-item:hover{
 .executeCls{
     &.disabled{
         display: none;
+    }
+}
+
+#genUrlDialog{
+    font-family: 12px sans-serif;
+    color: $color1;
+    background-color: $color6;
+
+    textarea{
+        min-width: 500px;
+        min-height: 70px;
+        background-color: $color6;
+
+        &.disabled{
+            background-color: $color5;
+        }
+    }
+
+    select{
+        color: $color1;
+    }
+
+    button{
+        width:70px;
+        background-color: $color5;
+        color: $color1;
     }
 }

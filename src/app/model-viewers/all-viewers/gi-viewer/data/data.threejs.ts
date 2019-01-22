@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { number } from '@assets/core/modules/_mathjs';
 import { EEntType } from '@assets/libs/geo-info/common';
 
 /**
@@ -25,6 +24,7 @@ export class DataThreejs {
     public selected_positions: Map<string, Map<string, number>> = new Map();
     public selected_vertex: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
+    public selected_face_wires: Map<string, Map<string, number>> = new Map();
     public _text: string;
     // text labels
     public ObjLabelMap: Map<string, any> = new Map();
@@ -48,7 +48,8 @@ export class DataThreejs {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number }
+        positions: { show: boolean, size: number },
+        tjs_summary: { show: boolean }
     };
     /**
      * Constructs a new data subscriber.
@@ -57,7 +58,8 @@ export class DataThreejs {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number }
+        positions: { show: boolean, size: number },
+        tjs_summary: { show: boolean }
     }) {
         this.settings = settings;
         // scene
@@ -67,7 +69,7 @@ export class DataThreejs {
         this.basic_scene.background = new THREE.Color(0xcccccc);
 
         // renderer
-        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true});
+        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this._renderer.autoClear = false;
         // this._renderer.setClearColor(0xcccccc, 0);
         this._renderer.setPixelRatio(window.devicePixelRatio);
@@ -76,7 +78,7 @@ export class DataThreejs {
         this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // camera settings
-        this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 20000);
+        this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
         this._camera.position.x = -80;
         this._camera.position.y = -80;
@@ -136,13 +138,14 @@ export class DataThreejs {
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
         const posi_colors: number[] = [];
-        if (threejs_data.colors.length === 0) {
-            const numPosi = this._model.geom.query.numEnts(EEntType.POSI);
-            for (let index = 0; index < numPosi; index++) {
-                posi_colors.push(1, 1, 1);
-            }
+        const numPosi = this._model.geom.query.numEnts(EEntType.POSI);
+        for (let index = 0; index < numPosi; index++) {
+            posi_colors.push(1, 1, 1);
         }
-        const check_posi_colors = threejs_data.colors.length === 0 ? posi_colors : threejs_data.colors;
+        const check_posi_colors = threejs_data.colors.length === 0 ?
+            posi_colors :
+            (posi_colors.length > threejs_data.colors.length ? posi_colors : threejs_data.colors);
+
         this.addPositions(check_posi_colors, this.settings.positions.size);
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
@@ -255,6 +258,36 @@ export class DataThreejs {
             const line = new THREE.LineSegments(bg.geom, bg.mat);
             this._scene.add(line);
             this.selected_face_edges.get(parent_ent_id).set(ent_id, line.id);
+            this.sceneObjsSelected.set(ent_id, line);
+            if (label) {
+                const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.ObjLabelMap.set(ent_id, obj);
+            }
+        }
+    }
+
+    public selectWireByFace(parent_ent_id: string, ent_id: string, indices, positions, container, label = true) {
+        const bg = this.initBufferLine(positions, indices, [255, 0, 0]);
+        if (this.selected_face_wires.get(parent_ent_id) === undefined) {
+            this.selected_face_wires.set(parent_ent_id, new Map());
+        }
+
+        const check_exist: string[] = [];
+        this.selected_face_wires.forEach(v => {
+            v.forEach((vv, k) => {
+                check_exist.push(k);
+            });
+        });
+
+        this.selected_geoms.forEach((v, k) => {
+            check_exist.push(k);
+        });
+
+        if (!check_exist.includes(ent_id)) {
+            const line = new THREE.LineSegments(bg.geom, bg.mat);
+            this._scene.add(line);
+            this.selected_face_wires.get(parent_ent_id).set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
             if (label) {
                 const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
@@ -395,6 +428,8 @@ export class DataThreejs {
         } else if (group === 'face_edges') {
             // get the removing first
             removing = this.selected_face_edges.get(parent_ent_id);
+        } else if (group === 'face_wires') {
+            removing = this.selected_face_wires.get(parent_ent_id);
         }
         // remove positions from scene
         removing.forEach((v, k) => {
@@ -411,6 +446,8 @@ export class DataThreejs {
             this.selected_vertex.delete(parent_ent_id);
         } else if (group === 'face_edges') {
             this.selected_face_edges.delete(parent_ent_id);
+        } else if (group === 'face_wires') {
+            this.selected_face_wires.delete(parent_ent_id);
         }
     }
 

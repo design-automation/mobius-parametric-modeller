@@ -13,7 +13,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
     const depth: number = getArrDepth(coords);
     if (depth === 1) {
         const coord1: Txyz = coords as Txyz;
-        const posi_i: number = __model__.geom.add.addPosition();
+        const posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coord1);
         return [EEntType.POSI, posi_i] as TEntTypeIdx;
     } else if (depth === 2) {
@@ -214,8 +214,14 @@ function _copyGeom(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], copy
         if (isColl(ent_type)) {
             const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
             return [ent_type, coll_i];
-        } else if (isObj(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyObjs(ent_type, index, copy_attributes) as number;
+        } else if (isPgon(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPline(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPoint(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
             return [ent_type, obj_i];
         } else if (isPosi(ent_type)) {
             const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
@@ -413,7 +419,7 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
                     const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
                     const strip_posis_i: number[] = [exist_posi_i];
                     for (let i = 1; i < divisions + 1; i++) {
-                        const strip_posi_i: number = __model__.geom.add.addPosition();
+                        const strip_posi_i: number = __model__.geom.add.addPosi();
                         const move_xyz = vecMult(extrude_vec_div, i);
                         __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
                         strip_posis_i.push(strip_posi_i);
@@ -517,7 +523,7 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
     const new_edges_i: number[] = [];
     let old_edge_i: number = edge_i;
     for (const new_xyz of new_xyzs) {
-        const posi_i = __model__.geom.add.addPosition();
+        const posi_i = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
         const new_edge_i: number = __model__.geom.add.insertVertIntoEdge(old_edge_i, posi_i);
         new_edges_i.push(old_edge_i);

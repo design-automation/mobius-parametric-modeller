@@ -49,7 +49,7 @@ export class DataThreejs {
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean}
+        tjs_summary: { show: boolean }
     };
     /**
      * Constructs a new data subscriber.
@@ -59,7 +59,7 @@ export class DataThreejs {
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean}
+        tjs_summary: { show: boolean }
     }) {
         this.settings = settings;
         // scene
@@ -69,7 +69,7 @@ export class DataThreejs {
         this.basic_scene.background = new THREE.Color(0xcccccc);
 
         // renderer
-        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true});
+        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this._renderer.autoClear = false;
         // this._renderer.setClearColor(0xcccccc, 0);
         this._renderer.setPixelRatio(window.devicePixelRatio);
@@ -138,13 +138,14 @@ export class DataThreejs {
         this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
         const posi_colors: number[] = [];
-        if (threejs_data.colors.length === 0) {
-            const numPosi = this._model.geom.query.numEnts(EEntType.POSI);
-            for (let index = 0; index < numPosi; index++) {
-                posi_colors.push(1, 1, 1);
-            }
+        const numPosi = this._model.geom.query.numEnts(EEntType.POSI);
+        for (let index = 0; index < numPosi; index++) {
+            posi_colors.push(1, 1, 1);
         }
-        const check_posi_colors = threejs_data.colors.length === 0 ? posi_colors : threejs_data.colors;
+        const check_posi_colors = threejs_data.colors.length === 0 ?
+            posi_colors :
+            (posi_colors.length > threejs_data.colors.length ? posi_colors : threejs_data.colors);
+
         this.addPositions(check_posi_colors, this.settings.positions.size);
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;

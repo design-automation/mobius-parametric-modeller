@@ -17,17 +17,17 @@ export class GIGeomQuery {
         this._geom_arrays = geom_arrays;
     }
     // ============================================================================
-    // Get entity indicies, and num ents
+    // Get entity indices, and num ents
     // ============================================================================
     /**
-     * Returns a list of indicies for all, including ents that are null
+     * Returns a list of indices for all, including ents that are null
      * TODO This seems unecessary
      * @param ent_type
      */
     public getEnts(ent_type: EEntType): number[] {
         if (isPosi(ent_type)) {
             // TODO how to handle deleted positions
-            return Array.from(Array(this._geom_arrays.num_posis).keys());
+            return Array.from(Array(this._geom_arrays.up_posis_verts.length).keys());
         }
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
@@ -54,7 +54,7 @@ export class GIGeomQuery {
     public nextEntIndex(ent_type: EEntType): number {
         if (isPosi(ent_type)) {
             // TODO how to handle deleted positions
-            return this._geom_arrays.num_posis;
+            return this._geom_arrays.up_posis_verts.length;
         }
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
@@ -394,6 +394,38 @@ export class GIGeomQuery {
             const pgons_i:  number[] = this.navCollToPgon(index);
             const verts3_i: number[] = [].concat(pgons_i.map( pgon_i => this.navAnyToVert(EEntType.PGON, pgon_i) ));
             return [...verts1_i, ...verts2_i, ...verts3_i];
+        }
+        throw new Error('Bad navigation: ' + ent_type + index);
+    }
+    /**
+     * Navigate from any level to the triangles
+     * @param ent_type
+     * @param index
+     */
+    public navAnyToTri(ent_type: EEntType, index: number): number[] {
+        if (isPosi(ent_type)) {
+            const verts_i: number[] = this.navPosiToVert(index);
+            return [].concat(...verts_i.map(vert_i => this.navVertToTri(vert_i)));
+        } else if (isVert(ent_type)) {
+            return this.navVertToTri(index);
+        } else if (isTri(ent_type)) {
+            return [index];
+        } else if (isEdge(ent_type)) {
+            return [];
+        } else if (isWire(ent_type)) {
+            return [];
+        } else if (isFace(ent_type)) {
+            return this.navFaceToTri(index);
+        } else if (isPoint(ent_type)) {
+            return [];
+        } else if (isPline(ent_type)) {
+            return [];
+        } else if (isPgon(ent_type)) {
+            const face_i: number = this.navPgonToFace(index);
+            return this.navFaceToTri(face_i);
+        } else if (isColl(ent_type)) {
+            const pgons_i:  number[] = this.navCollToPgon(index);
+            return [].concat(pgons_i.map( pgon_i => this.navAnyToTri(EEntType.PGON, pgon_i) ));
         }
         throw new Error('Bad navigation: ' + ent_type + index);
     }

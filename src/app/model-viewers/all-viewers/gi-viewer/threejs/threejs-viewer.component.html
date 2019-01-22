@@ -74,18 +74,18 @@
     </div>
 
 
-    <div id="shownumber">
+    <div id="shownumber" [hidden]='!this._data_threejs.settings.tjs_summary.show'>
         <tbody>
             <tr>
                 <td
                     align=left
-                    style="width: 60px;"
+                    style="width: 80px;"
                 >
-                    Triangles&nbsp;&nbsp;
+                    3js Triangles:
                 </td>
                 <td
                     align=left
-                    style="width: 10px;"
+                    style="width: 20px;"
                 >
                     {{_threejs_nums[2]}}
                 </td>
@@ -93,13 +93,13 @@
             <tr>
                 <td
                     align=left
-                    style="width: 60px;"
+                    style="width: 80px;"
                 >
-                    Lines
+                    3js Edges:
                 </td>
                 <td
                     align=left
-                    style="width: 10px;"
+                    style="width: 20px;"
                 >
                     {{_threejs_nums[1]}}
                 </td>
@@ -107,13 +107,13 @@
             <tr>
                 <td
                     align=left
-                    style="width: 60px;"
+                    style="width: 80px;"
                 >
-                    Points&nbsp;&nbsp;
+                    3js Points:
                 </td>
                 <td
                     align=left
-                    style="width: 10px;"
+                    style="width: 20px;"
                 >
                     {{_threejs_nums[0]}}
                 </td>

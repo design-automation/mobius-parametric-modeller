@@ -82,7 +82,7 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         // get the list of entities
         const found_entities_i: number[] = [];
         if (ents_arr === null || ents_arr === undefined) {
-            found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type));
+            found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type, false));
         } else {
             if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
             for (const ents of ents_arr) {

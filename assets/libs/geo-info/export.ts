@@ -15,8 +15,8 @@ export function exportObj(model: GIModel): string {
     const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOUR);
     const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
     const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
-    const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI);
-    const verts_i: number[] = model.geom.query.getEnts(EEntType.VERT);
+    const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI, false);
+    const verts_i: number[] = model.geom.query.getEnts(EEntType.VERT, false);
     // positions
     if (has_color_attrib) {
         for (const vert_i of verts_i) {
@@ -45,7 +45,7 @@ export function exportObj(model: GIModel): string {
         }
     }
     // polygons, f
-    const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON);
+    const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
     for (const pgon_i of pgons_i) {
         const pgon_verts_i_outer: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
         // const verts_i_outer = verts_i[0];
@@ -63,7 +63,7 @@ export function exportObj(model: GIModel): string {
         }
     }
     // polylines, l
-    const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE);
+    const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
     for (const pline_i of plines_i) {
         const pline_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PLINE, pline_i);
         l_str += 'l ' + pline_verts_i.map( vert_i => (vert_i + 1).toString() ).join(' ') + '\n';

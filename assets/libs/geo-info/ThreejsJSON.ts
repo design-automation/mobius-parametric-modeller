@@ -1,5 +1,9 @@
 export interface IThreeJS {
-    positions: number[];
+    posis_xyz: number[];
+    posis_indices: number[];
+    posis_map: Map<number, number>;
+    vertex_xyz: number[];
+    vertex_map: Map<number, number>;
     normals: number[];
     colors: number[];
     point_indices: number[];

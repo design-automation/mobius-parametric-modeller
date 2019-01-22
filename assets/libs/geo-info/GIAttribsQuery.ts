@@ -94,7 +94,7 @@ export class GIAttribsQuery {
             if (indices !== null && indices !== undefined) {
                 query_ents_i = indices;
             } else {
-                query_ents_i = this._model.geom.query.getEnts(ent_type);
+                query_ents_i = this._model.geom.query.getEnts(ent_type, false);
             }
             // do the '&&' queries
             for (const and_query of and_queries) {
@@ -178,15 +178,15 @@ export class GIAttribsQuery {
         const result = this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
         return result;
     }
-    /**
-     * Shortcut for getting all coordinates
-     * @param posi_i
-     */
-    public getAllPosisCoords(): Txyz[] {
-        const posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI);
-        const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
-        return coords_map.getEntVal(posis_i) as Txyz[];
-    }
+    // /**
+    //  * Shortcut for getting all coordinates
+    //  * @param posi_i
+    //  */
+    // public getAllPosisCoords(): Txyz[] {
+    //     const posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI);
+    //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+    //     return coords_map.getEntVal(posis_i) as Txyz[];
+    // }
     /**
      * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)
      * @param vert_i
@@ -195,16 +195,16 @@ export class GIAttribsQuery {
         const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
         return this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
     }
-    /**
-     * Shortcut for getting coords for all verts
-     * @param attrib_name
-     */
-    public getAllVertsCoords(attrib_name: string): Txyz[] {
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
-        const posis_i: number[] = verts_i.map( vert_i => this._model.geom.query.navVertToPosi(vert_i));
-        const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
-        return coords_map.getEntVal(posis_i) as Txyz[];
-    }
+    // /**
+    //  * Shortcut for getting coords for all verts
+    //  * @param attrib_name
+    //  */
+    // public getAllVertsCoords(attrib_name: string): Txyz[] {
+    //     const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
+    //     const posis_i: number[] = verts_i.map( vert_i => this._model.geom.query.navVertToPosi(vert_i));
+    //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+    //     return coords_map.getEntVal(posis_i) as Txyz[];
+    // }
 }
 // ================================================================================================
 // Functions for parsing queries

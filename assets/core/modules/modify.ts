@@ -403,7 +403,6 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
     console.log('WARNING: Delete function is experimental.');
     const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
     _delete(__model__, ents_arr, bool_del_unused_posis);
-    console.log(__model__);
 }
 
 // Collection Add Entities

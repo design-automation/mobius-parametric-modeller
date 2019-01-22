@@ -94,10 +94,10 @@
     </div>
 
     <div *ngIf='urlSet[1] == "dashboard" && urlSet[2] == "&node="'>
-        Show Node:
-        <select [(ngModel)]='urlSet[3]'>
+        Shown Node Index: <input [(ngModel)]='urlSet[3]'/>
+        <!-- <select [(ngModel)]='urlSet[3]'>
             <option *ngFor='let node of getFlowchart().nodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
-        </select>
+        </select> -->
         <hr>
     </div>
 

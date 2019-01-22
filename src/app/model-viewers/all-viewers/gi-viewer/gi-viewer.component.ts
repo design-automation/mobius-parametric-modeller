@@ -28,12 +28,14 @@ export class GIViewerComponent implements OnInit {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number }
+        positions: { show: boolean, size: number },
+        tjs_summary: { show: boolean}
     } = {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
-            positions: { show: true, size: 0.5 }
+            positions: { show: true, size: 0.5 },
+            tjs_summary: { show: false}
         };
 
     normalsEnabled = false;
@@ -137,6 +139,9 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'positions.size':
                 this.settings.positions.size = Number(value);
+                break;
+            case 'tjs_summary.show':
+                this.settings.tjs_summary.show = !this.settings.tjs_summary.show;
                 break;
             default:
                 break;

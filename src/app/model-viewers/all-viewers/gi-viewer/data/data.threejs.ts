@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { number } from '@assets/core/modules/_mathjs';
 import { EEntType } from '@assets/libs/geo-info/common';
 
 /**
@@ -49,7 +48,8 @@ export class DataThreejs {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number }
+        positions: { show: boolean, size: number },
+        tjs_summary: { show: boolean}
     };
     /**
      * Constructs a new data subscriber.
@@ -58,7 +58,8 @@ export class DataThreejs {
         normals: { show: boolean, size: number },
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number }
+        positions: { show: boolean, size: number },
+        tjs_summary: { show: boolean}
     }) {
         this.settings = settings;
         // scene
@@ -77,7 +78,7 @@ export class DataThreejs {
         this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // camera settings
-        this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 20000);
+        this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
         this._camera.position.x = -80;
         this._camera.position.y = -80;

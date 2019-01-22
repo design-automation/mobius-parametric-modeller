@@ -74,7 +74,7 @@
 						</div>
 					</li>
 					<li>
-					<div class="label">Positions</div>
+						<div class="label">Positions</div>
 						<div class="onoffswitch">
 							<input type="checkbox"
 							name="onoffswitch"
@@ -91,6 +91,22 @@
 						<div class="slidecontainer">
 							<input type="range" min="0.1" max="10" step="0.1" [value]="settings.positions.size" class="slider" id="positionsSize" (input)="settingOnChange('positions.size', $event.target.value)">
 							<input type="text" [value]="settings.positions.size" disabled>
+						</div>
+					</li>
+					<li>
+						<div class="label">Threejs Summary</div>
+						<div class="onoffswitch">
+							<input type="checkbox"
+							name="onoffswitch"
+							class="onoffswitch-checkbox"
+							id="tjs_summaryOnOff"
+							[checked]='settings.tjs_summary.show'
+							(change)="settingOnChange('tjs_summary.show')"
+							>
+							<label class="onoffswitch-label" for="tjs_summaryOnOff">
+								<span class="onoffswitch-inner"></span>
+								<span class="onoffswitch-switch"></span>
+							</label>
 						</div>
 					</li>
 					<!-- <li>Shadow On/Off</li>

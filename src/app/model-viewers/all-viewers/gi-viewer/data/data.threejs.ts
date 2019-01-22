@@ -131,48 +131,58 @@ export class DataThreejs {
         this.point_select_map = threejs_data.point_select_map;
 
         // Create buffers that will be used by all geometry
-        const posis_buffer = new THREE.Float32BufferAttribute(threejs_data.positions, 3);
+        const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
-        this._addTris(threejs_data.triangle_indices, posis_buffer, normals_buffer, colors_buffer);
-        this._addLines(threejs_data.edge_indices, posis_buffer, normals_buffer);
-        this._addPoints(threejs_data.point_indices, posis_buffer, colors_buffer, [255, 255, 255], 1);
-        const posi_colors: number[] = [];
-        const numPosi = this._model.geom.query.numEnts(EEntType.POSI);
-        for (let index = 0; index < numPosi; index++) {
-            posi_colors.push(1, 1, 1);
-        }
-        const check_posi_colors = threejs_data.colors.length === 0 ?
-            posi_colors :
-            (posi_colors.length > threejs_data.colors.length ? posi_colors : threejs_data.colors);
+        const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
+        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer);
+        this._addLines(threejs_data.edge_indices, verts_xyz_buffer, normals_buffer);
+        this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], 1);
+        this._addPositions(threejs_data.posis_indices, posis_xyz_buffer, [255, 255, 255], 1);
 
-        this.addPositions(check_posi_colors, this.settings.positions.size);
+        // Create data for positions with no vertices
+        // const posi_colors: number[] = [];
+        // const numPosi = this._model.geom.query.numEnts(EEntType.POSI, false);
+        // for (let index = 0; index < numPosi; index++) {
+        //     posi_colors.push(1, 1, 1);
+        // }
+        // const check_posi_colors = threejs_data.colors.length === 0 ?
+        //     posi_colors :
+        //     (posi_colors.length > threejs_data.colors.length ? posi_colors : threejs_data.colors);
+
+        // this.addPositions(check_posi_colors, this.settings.positions.size);
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
+ 
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
         // this.grid.position.copy(center);
         // this.axesHelper.position.copy(center);
     }
 
-    public addPositions(all_positions_colors: number[] = null, size) {
-        const all_positions = this._model.attribs.query.getAllPosisCoords();
-        // @ts-ignore
-        const all_positions_flat = all_positions.flat(1);
-        const all_positions_indices = [];
-        let index = 0;
-        const l = all_positions_flat.length / 3;
-        for (; index < l; index++) {
-            all_positions_indices.push(index);
-        }
+    // public addPositions(all_positions_colors: number[] = null, size: number): void {
+    //     // TODO get a select map for positions
 
-        this._addPositions(all_positions_flat,
-            all_positions_indices,
-            all_positions_colors,
-            [0, 0, 0],
-            size);
-        this._positions.map(p => p.visible = this.settings.positions.show);
-    }
+    //     const all_posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI, false);
+    //     const all_positions = all_posis_i.map(posi => this._model.attribs.query.getPosiCoords(posi));
+
+    //     // console.log("all_positions", all_positions, "length = ", all_positions.length);
+    //     // @ts-ignore
+    //     const all_positions_flat = all_positions.flat(1);
+    //     const all_positions_indices = [];
+    //     let index = 0;
+    //     const l = all_positions_flat.length / 3;
+    //     for (; index < l; index++) {
+    //         all_positions_indices.push(index);
+    //     }
+
+    //     this._addPositions(all_positions_flat,
+    //         all_positions_indices,
+    //         all_positions_colors,
+    //         [0, 0, 0],
+    //         size);
+    //     this._positions.map(p => p.visible = this.settings.positions.show);
+    // }
 
 
     public selectObjFace(ent_id: string, triangle_i: number[], positions: number[], container, label = true) {
@@ -298,10 +308,11 @@ export class DataThreejs {
     }
 
     private initBufferPoint(positions: number[],
-        point_indices = null,
-        colors: number[] = null,
-        color: [number, number, number],
-        size: number = 1) {
+                point_indices = null,
+                colors: number[] = null,
+                color: [number, number, number],
+                size: number = 1) {
+        // TODO check color and colors
         const geom = new THREE.BufferGeometry();
         if (point_indices) {
             geom.setIndex(point_indices);
@@ -530,12 +541,12 @@ export class DataThreejs {
      */
     private _addTris(tris_i: number[],
         posis_buffer: THREE.Float32BufferAttribute,
-        normals_buffer: THREE.Float32BufferAttribute,
+        // normals_buffer: THREE.Float32BufferAttribute,
         colors_buffer: THREE.Float32BufferAttribute): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
         geom.addAttribute('position', posis_buffer);
-        geom.addAttribute('normal', normals_buffer);
+        // geom.addAttribute('normal', normals_buffer);
         geom.addAttribute('color', colors_buffer);
         const mat = new THREE.MeshPhongMaterial({
             // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
@@ -580,7 +591,6 @@ export class DataThreejs {
             linejoin: 'round' // ignored by WebGLRenderer
         });
         const line = new THREE.LineSegments(geom, mat);
-        line.renderOrder = -1;
         this.sceneObjs.push(line);
         this._scene.add(line);
         this._threejs_nums[1] = lines_i.length / 2;
@@ -589,10 +599,10 @@ export class DataThreejs {
      * Add threejs points to the scene
      */
     private _addPoints(points_i: number[],
-        posis_buffer: THREE.Float32BufferAttribute,
-        colors_buffer: THREE.Float32BufferAttribute,
-        color: [number, number, number],
-        size: number = 1): void {
+                posis_buffer: THREE.Float32BufferAttribute,
+                colors_buffer: THREE.Float32BufferAttribute,
+                color: [number, number, number],
+                size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
         geom.addAttribute('position', posis_buffer);
@@ -610,13 +620,21 @@ export class DataThreejs {
         this._threejs_nums[0] = points_i.length;
     }
 
-    private _addPositions(positions: number[],
-        points_i: number[],
-        colors: number[],
-        color: [number, number, number],
-        size: number = 1): void {
-        const bg = this.initBufferPoint(positions, points_i, colors, color, size);
-        const point = new THREE.Points(bg.geom, bg.mat);
+    private _addPositions(points_i: number[],
+                posis_buffer: THREE.Float32BufferAttribute,
+                color: [number, number, number],
+                size: number = 1): void {
+        const geom = new THREE.BufferGeometry();
+        geom.setIndex(points_i);
+        geom.addAttribute('position', posis_buffer);
+        // geom.computeBoundingSphere();
+        const rgb = `rgb(${color.toString()})`;
+        const mat = new THREE.PointsMaterial({
+            color: new THREE.Color(rgb),
+            size: size,
+            vertexColors: THREE.VertexColors
+        });
+        const point = new THREE.Points(geom, mat);
         this.sceneObjs.push(point);
         this._scene.add(point);
         this._positions.push(point);

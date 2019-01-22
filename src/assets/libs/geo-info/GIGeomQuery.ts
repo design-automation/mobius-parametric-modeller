@@ -2,6 +2,8 @@
 import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
+import { TPosi } from './common';
+import { ConeBufferGeometry } from 'three';
 /**
  * Class for geometry.
  */
@@ -24,28 +26,59 @@ export class GIGeomQuery {
      * TODO This seems unecessary
      * @param ent_type
      */
-    public getEnts(ent_type: EEntType): number[] {
+    public getEnts(ent_type: EEntType, include_deleted: boolean): number[] {
+        // get posis indices array
         if (isPosi(ent_type)) {
-            // TODO how to handle deleted positions
-            return Array.from(Array(this._geom_arrays.up_posis_verts.length).keys());
+            const posis: number[][] = this._geom_arrays.up_posis_verts;
+            const posis_i: number[] = [];
+            if (include_deleted) {
+                for (let i = 0; i < posis.length; i++ ) {
+                    const posi = posis[i];
+                    if (posi !== null) {
+                        posis_i.push(i);
+                    } else {
+                        posis_i.push(null);
+                    }
+                }
+            } else {
+                for (let i = 0; i < posis.length; i++ ) {
+                    const posi = posis[i];
+                    if (posi !== null) {
+                        posis_i.push(i);
+                    }
+                }
+            }
+            return posis_i;
         }
+        // get ents indices array
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
-        // console.log("ent_type", ent_type);
-        // console.log("geom_array_key", geom_array_key);
-        // console.log("geom_array", geom_array);
         const ents_i: number[] = [];
-        geom_array.forEach( (entity, index) => {
-            ents_i.push(index);
-        });
+        if (include_deleted) {
+            for (let i = 0; i < geom_array.length; i++ ) { 
+                const ent = geom_array[i];
+                if (ent !== null) {
+                    ents_i.push(i);
+                } else {
+                    ents_i.push(null);
+                }
+            }
+        } else {
+            for (let i = 0; i < geom_array.length; i++ ) {
+                const ent = geom_array[i];
+                if (ent !== null) {
+                    ents_i.push(i);
+                }
+            }
+        }
         return ents_i;
     }
     /**
      * Returns the number of entities, including deleted entities (which are set to null)
      * @param ent_type
      */
-    public numEnts(ent_type: EEntType): number {
-        return this.getEnts(ent_type).length;
+    public numEnts(ent_type: EEntType, include_deleted: boolean): number {
+        return this.getEnts(ent_type, include_deleted).length;
     }
     /**
      * Returns the number of entities, including deleted entities

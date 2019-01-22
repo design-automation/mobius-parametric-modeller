@@ -38,10 +38,6 @@ export class GIGeomAdd {
         // Add posis to the model
         // No need, gets done when we call _updateRevArrays
         // Add vertices to model
-            // const new_verts: TVert[] = geom_data.vertices.map(p => p + num_posis as TVert);
-            // for (const v of new_verts) {
-            //     this._geom_arrays.dn_verts_posis.push( v );
-            // }
         for (const posi_i of geom_data.vertices) {
             if (posi_i !== null) {
                 const new_vert: TVert = posi_i + num_posis as TVert;
@@ -60,11 +56,6 @@ export class GIGeomAdd {
             }
         }
         // Add edges to model
-            // const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
-            // // this._geom_arrays.dn_edges_verts.push( ...new_edges );
-            // for (const v of new_edges) {
-            //     this._geom_arrays.dn_edges_verts.push( v );
-            // }
         for (const verts_i of geom_data.edges) {
             if (verts_i !== null) {
                 const new_edge: TEdge = verts_i.map(v => v + num_verts) as TEdge;
@@ -74,11 +65,6 @@ export class GIGeomAdd {
             }
         }
         // Add wires to model
-            // const new_wires: TWire[] = geom_data.wires.map(w => w.map(e => e + num_edges) as TWire);
-            // // this._geom_arrays.dn_wires_edges.push( ...new_wires );
-            // for (const v of new_wires) {
-            //     this._geom_arrays.dn_wires_edges.push( v );
-            // }
         for (const edges_i of geom_data.wires) {
             if (edges_i !== null) {
                 const new_wire: TWire = edges_i.map(e => e + num_edges) as TWire;
@@ -88,14 +74,6 @@ export class GIGeomAdd {
             }
         }
         // Add faces to model
-            // const new_faces: TFace[] = geom_data.faces.map(f => [
-            //     f[0].map( w => w + num_wires),
-            //     f[1].map( t => t + num_tris)
-            // ] as TFace);
-            // // this._geom_arrays.dn_faces_wirestris.push( ...new_faces );
-            // for (const v of new_faces) {
-            //     this._geom_arrays.dn_faces_wirestris.push( v );
-            // }
         for (const wires_tris_i of geom_data.faces) {
             if (wires_tris_i !== null) {
                 const new_face: TFace = [
@@ -108,11 +86,6 @@ export class GIGeomAdd {
             }
         }
         // Add points to model
-            // const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
-            // // this._geom_arrays.dn_points_verts.push( ...new_points );
-            // for (const v of new_points) {
-            //     this._geom_arrays.dn_points_verts.push( v );
-            // }
         for (const vert_i of geom_data.points) {
             if (vert_i !== null) {
                 const new_point: TPoint = vert_i + num_verts as TPoint;
@@ -122,11 +95,6 @@ export class GIGeomAdd {
             }
         }
         // Add lines to model
-            // const new_plines: TPline[] = geom_data.polylines.map(w => w + num_wires as TPline);
-            // // this._geom_arrays.dn_plines_wires.push( ...new_plines );
-            // for (const v of new_plines) {
-            //     this._geom_arrays.dn_plines_wires.push( v );
-            // }
         for (const wire_i of geom_data.polylines) {
             if (wire_i !== null) {
                 const new_pline: TPline = wire_i + num_wires as TPline;
@@ -136,11 +104,6 @@ export class GIGeomAdd {
             }
         }
         // Add pgons to model
-            // const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
-            // // this._geom_arrays.dn_pgons_faces.push( ...new_pgons );
-            // for (const v of new_pgons) {
-            //     this._geom_arrays.dn_pgons_faces.push( v );
-            // }
         for (const face_i of geom_data.polygons) {
             if (face_i !== null) {
                 const new_pgon: TPgon = face_i + num_faces as TPgon;
@@ -150,16 +113,6 @@ export class GIGeomAdd {
             }
         }
         // Add collections to model
-            // const new_colls: TColl[] = geom_data.collections.map(c => [
-            //     c[0] === -1 ? -1 : c[0] + num_colls,
-            //     c[1].map( point => point + num_points),
-            //     c[2].map( line => line + num_plines),
-            //     c[3].map( pgon => pgon + num_pgons)
-            // ] as TColl);
-            // // this._geom_arrays.dn_colls_objs.push( ...new_colls );
-            // for (const v of new_colls) {
-            //     this._geom_arrays.dn_colls_objs.push( v );
-            // }
         for (const coll of geom_data.collections) {
             if (coll !== null) {
                 const parent: number = (coll[0] === -1) ? -1 : coll[0] + num_colls;
@@ -172,19 +125,11 @@ export class GIGeomAdd {
                 this._geom_arrays.dn_colls_objs.push( null );
             }
         }
-        // Update the reverse arrays
-        this._updateRevArrays();
-            // // update the positions array
-            // this._geom_arrays.num_posis += geom_data.num_positions;
-        // return
-            // let num_new_posis = 0;
-            // // if (new_verts.length > 0) { num_new_posis = Math.max(...new_verts); }
-            // if (new_verts.length > 0) { new_verts.map(val => {
-            //     if (val > num_new_posis) {
-            //         num_new_posis = val;
-            //     }
-            // }); }
 
+        // Update the reverse arrays
+        this._updateRevArrays(num_posis + geom_data.num_positions);
+
+        // return data
         const num_new_posis: number = this._geom_arrays.up_posis_verts.length - num_posis;
         const num_new_points: number = this._geom_arrays.dn_points_verts.length - num_points;
         const num_new_plines: number = this._geom_arrays.dn_plines_wires.length - num_plines;
@@ -204,7 +149,7 @@ export class GIGeomAdd {
     /**
      * Updates the rev arrays the create the reveres links.
      */
-    private _updateRevArrays() {
+    private _updateRevArrays(num_posis: number) {
         // posis->verts
         this._geom_arrays.up_posis_verts = [];
         this._geom_arrays.dn_verts_posis.forEach( (posi_i, vert_i) => {
@@ -215,6 +160,12 @@ export class GIGeomAdd {
                 this._geom_arrays.up_posis_verts[posi_i].push(vert_i);
             }
         });
+        // fill any undefined posis with epty arrays
+        for (let posi_i = 0; posi_i < num_posis; posi_i++) {
+            if (this._geom_arrays.up_posis_verts[posi_i] === undefined) {
+                this._geom_arrays.up_posis_verts[posi_i] = [];
+            }
+        }
         // verts->tris, one to many
         this._geom_arrays.up_verts_tris = [];
         this._geom_arrays.dn_tris_verts.forEach( (vert_i_arr, tri_i) => {
@@ -779,6 +730,7 @@ export class GIGeomAdd {
     public delPosis(posis_i: number|number[], del_objs: boolean): void {
         // create array
         posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
+        if (!posis_i.length) { return; }
         // get all objects that use these positions and delete them
         if (del_objs) {
             const points_i: number[] = [];
@@ -789,18 +741,18 @@ export class GIGeomAdd {
                 for (const found_point_i of found_points_i) {
                     points_i.push(found_point_i);
                 }
-                const found_plines_i: number[] = this._geom.query.navAnyToPoint(EEntType.PLINE, posi_i);
+                const found_plines_i: number[] = this._geom.query.navAnyToPline(EEntType.PLINE, posi_i);
                 for (const found_pline_i of found_plines_i) {
                     plines_i.push(found_pline_i);
                 }
-                const found_pgons_i: number[] = this._geom.query.navAnyToPoint(EEntType.PGON, posi_i);
+                const found_pgons_i: number[] = this._geom.query.navAnyToPgon(EEntType.PGON, posi_i);
                 for (const found_pgon_i of found_pgons_i) {
                     pgons_i.push(found_pgon_i);
                 }
             }
-            this.delPoints(points_i, false); // TODO what about positions?
-            this.delPlines(plines_i, false); // TODO what about positions?
-            this.delPgons(pgons_i, false); // TODO what about positions?
+            // this.delPoints(points_i, false); // TODO what about positions?
+            // this.delPlines(plines_i, false); // TODO what about positions?
+            // this.delPgons(pgons_i, false); // TODO what about positions?
 
         }
         // loop
@@ -827,6 +779,7 @@ export class GIGeomAdd {
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.POINT, points_i);
         // create array
         points_i = (Array.isArray(points_i)) ? points_i : [points_i];
+        if (!points_i.length) { return; }
         // loop
         for (const point_i of points_i) {
             // first get all the arrays so we dont break navigation
@@ -867,6 +820,7 @@ export class GIGeomAdd {
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.PLINE, plines_i);
         // create array
         plines_i = (Array.isArray(plines_i)) ? plines_i : [plines_i];
+        if (!plines_i.length) { return; }
         // loop
         for (const pline_i of plines_i) {
             // first get all the arrays so we dont break navigation
@@ -918,6 +872,7 @@ export class GIGeomAdd {
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.PGON, pgons_i);
         // create array
         pgons_i = (Array.isArray(pgons_i)) ? pgons_i : [pgons_i];
+        if (!pgons_i.length) { return; }
         // loop
         for (const pgon_i of pgons_i) {
             // first get all the arrays so we dont break navigation
@@ -957,7 +912,10 @@ export class GIGeomAdd {
                 for (const vert_i of verts_i) {
                     const i: number = other_verts_i.indexOf(vert_i);
                     if (i !== -1) { other_verts_i.splice(i, 1); }
+                    if (!other_verts_i.length) { break; }
                 }
+
+
             }
             // delete unused posis
             if (del_unused_posis) {
@@ -982,6 +940,7 @@ export class GIGeomAdd {
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.COLL, colls_i);
         // create array
         colls_i = (Array.isArray(colls_i)) ? colls_i : [colls_i];
+        if (!colls_i.length) { return; }
         // loop
         for (const coll_i of colls_i) {
             // up arrays

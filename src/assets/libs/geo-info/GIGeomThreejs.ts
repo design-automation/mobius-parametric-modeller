@@ -35,7 +35,7 @@ export class GIGeomThreejs {
      * This list will be assumed to be in pairs.
      * The indices in the list point to the vertices.
      */
-    public get3jsTris(): [number[], Map<number, number>] {
+    public get3jsTris(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const tris_verts_i_filt: TTri[] = [];
         const tri_select_map: Map<number, number> = new Map();
         let gi_i = 0;
@@ -43,7 +43,8 @@ export class GIGeomThreejs {
         for (; gi_i < l; gi_i++) {
             const tri_verts_i: TTri = this._geom_arrays.dn_tris_verts[gi_i];
             if (tri_verts_i !== null) {
-                const tjs_i = tris_verts_i_filt.push(tri_verts_i) - 1;
+                const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
+                const tjs_i = tris_verts_i_filt.push(new_tri_verts_i) - 1;
                 tri_select_map.set(tjs_i, gi_i);
             }
         }
@@ -58,7 +59,7 @@ export class GIGeomThreejs {
      * This list will be assumed to be in pairs.
      * The indices in the list point to the vertices.
      */
-    public get3jsEdges(): [number[], Map<number, number>] {
+    public get3jsEdges(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const edges_verts_i_filt: TEdge[] = [];
         const edge_select_map: Map<number, number> = new Map();
         let gi_i = 0;
@@ -66,7 +67,8 @@ export class GIGeomThreejs {
         for (; gi_i < l; gi_i++) {
             const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
             if (edge_verts_i !== null) {
-                const tjs_i = edges_verts_i_filt.push(edge_verts_i) - 1;
+                const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
+                const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
                 edge_select_map.set(tjs_i, gi_i);
             }
         }
@@ -81,7 +83,7 @@ export class GIGeomThreejs {
      * Returns a flat list of the sequence of verices for all the points.
      * The indices in the list point to the vertices.
      */
-    public get3jsPoints(): [number[], Map<number, number>] {
+    public get3jsPoints(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const points_verts_i_filt: TPoint[] = [];
         const point_select_map: Map<number, number> = new Map();
         let gi_i = 0;
@@ -89,7 +91,8 @@ export class GIGeomThreejs {
         for (; gi_i < l; gi_i++) {
             const point_verts_i: TPoint = this._geom_arrays.dn_points_verts[gi_i];
             if (point_verts_i !== null) {
-                const tjs_i = points_verts_i_filt.push(point_verts_i) - 1;
+                const new_point_verts_i: TPoint = vertex_map.get(point_verts_i) as TPoint;
+                const tjs_i = points_verts_i_filt.push(new_point_verts_i) - 1;
                 point_select_map.set(tjs_i, gi_i);
             }
         }

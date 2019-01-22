@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_3mtryu1u4c",
+                "id": "node_py4m2h5ov2",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_6czqa2wxkr9",
+                                    "id": "node_itwydb3yya",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -300,7 +300,7 @@
                                                 {
                                                     "name": "del_unused_posis",
                                                     "default": 0,
-                                                    "value": "true"
+                                                    "value": "'del_unused_posis'"
                                                 }
                                             ],
                                             "selected": false,
@@ -329,7 +329,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_dzhqu6hyhl",
+                                                        "id": "node_w6x16xp2id9",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400

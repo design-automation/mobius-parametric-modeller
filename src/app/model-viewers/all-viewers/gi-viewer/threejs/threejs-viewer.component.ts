@@ -84,7 +84,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.dropdown.items = [];
         this.dropdown.visible = false;
         this.dropdown.position = { x: 0, y: 0 };
-        // console.log('CALLING ngOnInit in THREEJS VIEWER COMPONENT');
         this.container = this._elem.nativeElement.children.namedItem('threejs-container');
         // check for container
         if (!this.container) {
@@ -121,7 +120,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * @param self
      */
     public render(self) {
-        // console.log('CALLING render in THREEJS VIEWER COMPONENT');
         const textLabels = this._data_threejs._textLabels;
         if (textLabels.size !== 0) {
             textLabels.forEach((label) => {
@@ -357,6 +355,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             scene.unselectObjGroup(edge, this.container, 'face_edges');
         }
 
+        const wires = Array.from(scene.selected_face_wires.keys());
+        for (const wire of wires) {
+            scene.unselectObjGroup(wire, this.container, 'face_wires');
+        }
+
         this.render(this);
     }
 
@@ -367,7 +370,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     private selectObj(intersect0: THREE.Intersection) {
-        // console.log('interecting object', intersect);
         const scene = this._data_threejs;
         this.getSelectingEntityType();
         switch (this.SelectingEntityType.id) {
@@ -522,7 +524,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 }
                 break;
             case EEntTypeStr[EEntType.WIRE]:
-                if (intersect0.object.type === 'LineSegments') {
+                if (intersect0.object.type === 'Mesh') {
+                    const tri = scene.tri_select_map.get(intersect0.faceIndex);
+                    const face = this.model.geom.query.navTriToFace(tri);
+                    const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
+                    if (scene.selected_face_wires.has(ent_id)) {
+                        this.unselectGeom(ent_id, 'face_wires');
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectWireByFace(face, ent_id);
+                    }
+                } else if (intersect0.object.type === 'LineSegments') {
                     const wire = this.model.geom.query.navEdgeToWire(intersect0.index / 2);
                     const ent_id = `${EEntTypeStr[EEntType.WIRE]}${wire}`;
                     if (scene.selected_geoms.has(ent_id)) {
@@ -713,6 +727,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             });
             this.dataService.selected_face_edges.delete(ent_id);
 
+        } else if (ent_type_str === 'face_wires') {
+            scene.unselectObjGroup(ent_id, this.container, 'face_wires');
+            const children = this.dataService.selected_face_wires.get(ent_id);
+            children.forEach(c => {
+                this.dataService.selected_ents.get(EEntTypeStr[EEntType.WIRE]).delete(c);
+            });
+            this.dataService.selected_face_wires.delete(ent_id);
         } else {
             scene.unselectObj(ent_id, this.container);
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
@@ -766,6 +787,30 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             ent_id = `${ent_type_str}${wire}`;
         this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
+    }
+
+    private selectWireByFace(face: number, parent_ent_id: string) {
+        const ent_type_str = EEntTypeStr[EEntType.WIRE],
+            wires = this.model.geom.query.navFaceToWire(face);
+        const children = [];
+        wires.map(wire => {
+            const ent_id = `${ent_type_str}${wire}`;
+            children.push(ent_id);
+            const edges = this.model.geom.query.navWireToEdge(wire),
+            verts = edges.map(e => this.model.geom.query.navEdgeToVert(e));
+            // @ts-ignore
+            const verts_flat = verts.flat(1),
+            indices = [],
+            positions = [];
+            verts_flat.map((v, i) => {
+                positions.push(this.model.attribs.query.getVertCoords(v));
+                indices.push(i);
+            });
+            const posi_flat = [].concat(...positions);
+            this._data_threejs.selectWireByFace(parent_ent_id, ent_id, indices, posi_flat, this.container);
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
+        });
+        this.dataService.selected_face_wires.set(`${parent_ent_id}`, children);
     }
 
     private selectFace(face: number) {

@@ -25,6 +25,7 @@ export class DataThreejs {
     public selected_positions: Map<string, Map<string, number>> = new Map();
     public selected_vertex: Map<string, Map<string, number>> = new Map();
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
+    public selected_face_wires: Map<string, Map<string, number>> = new Map();
     public _text: string;
     // text labels
     public ObjLabelMap: Map<string, any> = new Map();
@@ -264,6 +265,36 @@ export class DataThreejs {
         }
     }
 
+    public selectWireByFace(parent_ent_id: string, ent_id: string, indices, positions, container, label = true) {
+        const bg = this.initBufferLine(positions, indices, [255, 0, 0]);
+        if (this.selected_face_wires.get(parent_ent_id) === undefined) {
+            this.selected_face_wires.set(parent_ent_id, new Map());
+        }
+
+        const check_exist: string[] = [];
+        this.selected_face_wires.forEach(v => {
+            v.forEach((vv, k) => {
+                check_exist.push(k);
+            });
+        });
+
+        this.selected_geoms.forEach((v, k) => {
+            check_exist.push(k);
+        });
+
+        if (!check_exist.includes(ent_id)) {
+            const line = new THREE.LineSegments(bg.geom, bg.mat);
+            this._scene.add(line);
+            this.selected_face_wires.get(parent_ent_id).set(ent_id, line.id);
+            this.sceneObjsSelected.set(ent_id, line);
+            if (label) {
+                const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.ObjLabelMap.set(ent_id, obj);
+            }
+        }
+    }
+
     private initBufferPoint(positions: number[],
         point_indices = null,
         colors: number[] = null,
@@ -395,6 +426,8 @@ export class DataThreejs {
         } else if (group === 'face_edges') {
             // get the removing first
             removing = this.selected_face_edges.get(parent_ent_id);
+        } else if (group === 'face_wires') {
+            removing = this.selected_face_wires.get(parent_ent_id);
         }
         // remove positions from scene
         removing.forEach((v, k) => {
@@ -411,6 +444,8 @@ export class DataThreejs {
             this.selected_vertex.delete(parent_ent_id);
         } else if (group === 'face_edges') {
             this.selected_face_edges.delete(parent_ent_id);
+        } else if (group === 'face_wires') {
+            this.selected_face_wires.delete(parent_ent_id);
         }
     }
 

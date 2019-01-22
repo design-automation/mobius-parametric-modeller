@@ -20,6 +20,7 @@ export class DataService {
     selected_positions: Map<string, string[]>;
     selected_vertex: Map<string, string[]>;
     selected_face_edges: Map<string, string[]>;
+    selected_face_wires: Map<string, string[]>;
     /**
      * Create a data service.
      */
@@ -36,6 +37,7 @@ export class DataService {
         this.selected_positions = new Map();
         this.selected_vertex = new Map();
         this.selected_face_edges = new Map();
+        this.selected_face_wires = new Map();
     }
 
     /**

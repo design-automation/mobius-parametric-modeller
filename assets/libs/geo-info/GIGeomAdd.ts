@@ -23,8 +23,9 @@ export class GIGeomAdd {
      * @param geom_data The JSON data
      */
     public addData(geom_data: IGeomData): IGeomPack {
-        // get lengths before we start adding stuff
-        const num_posis: number = this._geom_arrays.num_posis;
+        // get lengths of existing entities before we start adding stuff
+        // const num_posis: number = this._geom_arrays.num_posis;
+        const num_posis: number = this._geom_arrays.up_posis_verts.length;
         const num_verts: number = this._geom_arrays.dn_verts_posis.length;
         const num_tris: number = this._geom_arrays.dn_tris_verts.length;
         const num_edges: number = this._geom_arrays.dn_edges_verts.length;
@@ -34,99 +35,167 @@ export class GIGeomAdd {
         const num_plines: number = this._geom_arrays.dn_plines_wires.length;
         const num_pgons: number = this._geom_arrays.dn_pgons_faces.length;
         const num_colls: number = this._geom_arrays.dn_colls_objs.length;
+        // Add posis to the model
+        // No need, gets done when we call _updateRevArrays
         // Add vertices to model
-        const new_verts: TVert[] = geom_data.vertices.map(p => p + num_posis as TVert);
-        for (const v of new_verts) {
-            this._geom_arrays.dn_verts_posis.push( v );
+            // const new_verts: TVert[] = geom_data.vertices.map(p => p + num_posis as TVert);
+            // for (const v of new_verts) {
+            //     this._geom_arrays.dn_verts_posis.push( v );
+            // }
+        for (const posi_i of geom_data.vertices) {
+            if (posi_i !== null) {
+                const new_vert: TVert = posi_i + num_posis as TVert;
+                this._geom_arrays.dn_verts_posis.push( new_vert );
+            } else {
+                this._geom_arrays.dn_verts_posis.push( null );
+            }
         }
         // Add triangles to model
-        // const new_triangles: TTri[] = geom_data.triangles.map(t => t.map(v => v + num_verts) as TTri);
-        // // this._geom_arrays.dn_tris_verts.push( ...new_triangles );
-        // for (const v of new_triangles) {
-        //     this._geom_arrays.dn_tris_verts.push( v );
-        // }
-        for (const triangle of geom_data.triangles) {
-            if (triangle !== null) {
-                const new_triangle: TTri = triangle.map(v => v + num_verts) as TTri;
+        for (const verts_i of geom_data.triangles) {
+            if (verts_i !== null) {
+                const new_triangle: TTri = verts_i.map(v => v + num_verts) as TTri;
                 this._geom_arrays.dn_tris_verts.push( new_triangle );
             } else {
                 this._geom_arrays.dn_tris_verts.push( null );
             }
         }
-
-
-
         // Add edges to model
-        const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
-        // this._geom_arrays.dn_edges_verts.push( ...new_edges );
-        for (const v of new_edges) {
-            this._geom_arrays.dn_edges_verts.push( v );
+            // const new_edges: TEdge[] = geom_data.edges.map(e => e.map(v => v + num_verts) as TEdge);
+            // // this._geom_arrays.dn_edges_verts.push( ...new_edges );
+            // for (const v of new_edges) {
+            //     this._geom_arrays.dn_edges_verts.push( v );
+            // }
+        for (const verts_i of geom_data.edges) {
+            if (verts_i !== null) {
+                const new_edge: TEdge = verts_i.map(v => v + num_verts) as TEdge;
+                this._geom_arrays.dn_edges_verts.push( new_edge );
+            } else {
+                this._geom_arrays.dn_edges_verts.push( null );
+            }
         }
         // Add wires to model
-        const new_wires: TWire[] = geom_data.wires.map(w => w.map(e => e + num_edges) as TWire);
-        // this._geom_arrays.dn_wires_edges.push( ...new_wires );
-        for (const v of new_wires) {
-            this._geom_arrays.dn_wires_edges.push( v );
+            // const new_wires: TWire[] = geom_data.wires.map(w => w.map(e => e + num_edges) as TWire);
+            // // this._geom_arrays.dn_wires_edges.push( ...new_wires );
+            // for (const v of new_wires) {
+            //     this._geom_arrays.dn_wires_edges.push( v );
+            // }
+        for (const edges_i of geom_data.wires) {
+            if (edges_i !== null) {
+                const new_wire: TWire = edges_i.map(e => e + num_edges) as TWire;
+                this._geom_arrays.dn_wires_edges.push( new_wire );
+            } else {
+                this._geom_arrays.dn_wires_edges.push( null );
+            }
         }
         // Add faces to model
-        const new_faces: TFace[] = geom_data.faces.map(f => [
-            f[0].map( w => w + num_wires),
-            f[1].map( t => t + num_tris)
-        ] as TFace);
-        // this._geom_arrays.dn_faces_wirestris.push( ...new_faces );
-        for (const v of new_faces) {
-            this._geom_arrays.dn_faces_wirestris.push( v );
+            // const new_faces: TFace[] = geom_data.faces.map(f => [
+            //     f[0].map( w => w + num_wires),
+            //     f[1].map( t => t + num_tris)
+            // ] as TFace);
+            // // this._geom_arrays.dn_faces_wirestris.push( ...new_faces );
+            // for (const v of new_faces) {
+            //     this._geom_arrays.dn_faces_wirestris.push( v );
+            // }
+        for (const wires_tris_i of geom_data.faces) {
+            if (wires_tris_i !== null) {
+                const new_face: TFace = [
+                    wires_tris_i[0].map( w => w + num_wires),
+                    wires_tris_i[1].map( t => t + num_tris)
+                ] as TFace;
+                this._geom_arrays.dn_faces_wirestris.push( new_face );
+            } else {
+                this._geom_arrays.dn_faces_wirestris.push( null );
+            }
         }
         // Add points to model
-        const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
-        // this._geom_arrays.dn_points_verts.push( ...new_points );
-        for (const v of new_points) {
-            this._geom_arrays.dn_points_verts.push( v );
+            // const new_points: TPoint[] = geom_data.points.map(v => v + num_verts as TPoint);
+            // // this._geom_arrays.dn_points_verts.push( ...new_points );
+            // for (const v of new_points) {
+            //     this._geom_arrays.dn_points_verts.push( v );
+            // }
+        for (const vert_i of geom_data.points) {
+            if (vert_i !== null) {
+                const new_point: TPoint = vert_i + num_verts as TPoint;
+                this._geom_arrays.dn_points_verts.push( new_point );
+            } else {
+                this._geom_arrays.dn_points_verts.push( null );
+            }
         }
         // Add lines to model
-        const new_plines: TPline[] = geom_data.polylines.map(w => w + num_wires as TPline);
-        // this._geom_arrays.dn_plines_wires.push( ...new_plines );
-        for (const v of new_plines) {
-            this._geom_arrays.dn_plines_wires.push( v );
+            // const new_plines: TPline[] = geom_data.polylines.map(w => w + num_wires as TPline);
+            // // this._geom_arrays.dn_plines_wires.push( ...new_plines );
+            // for (const v of new_plines) {
+            //     this._geom_arrays.dn_plines_wires.push( v );
+            // }
+        for (const wire_i of geom_data.polylines) {
+            if (wire_i !== null) {
+                const new_pline: TPline = wire_i + num_wires as TPline;
+                this._geom_arrays.dn_plines_wires.push( new_pline );
+            } else {
+                this._geom_arrays.dn_plines_wires.push( null );
+            }
         }
         // Add pgons to model
-        const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
-        // this._geom_arrays.dn_pgons_faces.push( ...new_pgons );
-        for (const v of new_pgons) {
-            this._geom_arrays.dn_pgons_faces.push( v );
+            // const new_pgons: TPgon[] = geom_data.polygons.map(f => f + num_faces as TPgon);
+            // // this._geom_arrays.dn_pgons_faces.push( ...new_pgons );
+            // for (const v of new_pgons) {
+            //     this._geom_arrays.dn_pgons_faces.push( v );
+            // }
+        for (const face_i of geom_data.polygons) {
+            if (face_i !== null) {
+                const new_pgon: TPgon = face_i + num_faces as TPgon;
+                this._geom_arrays.dn_pgons_faces.push( new_pgon );
+            } else {
+                this._geom_arrays.dn_pgons_faces.push( null );
+            }
         }
         // Add collections to model
-        const new_colls: TColl[] = geom_data.collections.map(c => [
-            c[0] === -1 ? -1 : c[0] + num_colls,
-            c[1].map( point => point + num_points),
-            c[2].map( line => line + num_plines),
-            c[3].map( pgon => pgon + num_pgons)
-        ] as TColl);
-        // this._geom_arrays.dn_colls_objs.push( ...new_colls );
-        for (const v of new_colls) {
-            this._geom_arrays.dn_colls_objs.push( v );
+            // const new_colls: TColl[] = geom_data.collections.map(c => [
+            //     c[0] === -1 ? -1 : c[0] + num_colls,
+            //     c[1].map( point => point + num_points),
+            //     c[2].map( line => line + num_plines),
+            //     c[3].map( pgon => pgon + num_pgons)
+            // ] as TColl);
+            // // this._geom_arrays.dn_colls_objs.push( ...new_colls );
+            // for (const v of new_colls) {
+            //     this._geom_arrays.dn_colls_objs.push( v );
+            // }
+        for (const coll of geom_data.collections) {
+            if (coll !== null) {
+                const parent: number = (coll[0] === -1) ? -1 : coll[0] + num_colls;
+                const coll_points_i: number[] = coll[1].map( point => point + num_points);
+                const coll_plines_i: number[] = coll[2].map( line => line + num_plines);
+                const coll_pgons_i: number[] = coll[3].map( pgon => pgon + num_pgons);
+                const new_coll: TColl = [parent, coll_points_i, coll_plines_i, coll_pgons_i];
+                this._geom_arrays.dn_colls_objs.push( new_coll );
+            } else {
+                this._geom_arrays.dn_colls_objs.push( null );
+            }
         }
         // Update the reverse arrays
         this._updateRevArrays();
-        // update the positions array
-        this._geom_arrays.num_posis += geom_data.num_positions;
+            // // update the positions array
+            // this._geom_arrays.num_posis += geom_data.num_positions;
         // return
-        let num_new_posis = 0;
-        // if (new_verts.length > 0) { num_new_posis = Math.max(...new_verts); }
-        if (new_verts.length > 0) { new_verts.map(val => {
-            if (val > num_new_posis) {
-                num_new_posis = val;
-            }
-        }); }
+            // let num_new_posis = 0;
+            // // if (new_verts.length > 0) { num_new_posis = Math.max(...new_verts); }
+            // if (new_verts.length > 0) { new_verts.map(val => {
+            //     if (val > num_new_posis) {
+            //         num_new_posis = val;
+            //     }
+            // }); }
 
-
-
+        const num_new_posis: number = this._geom_arrays.up_posis_verts.length - num_posis;
+        const num_new_points: number = this._geom_arrays.dn_points_verts.length - num_points;
+        const num_new_plines: number = this._geom_arrays.dn_plines_wires.length - num_plines;
+        const num_new_pgons: number = this._geom_arrays.dn_pgons_faces.length - num_pgons;
+        const num_new_colls: number = this._geom_arrays.dn_colls_objs.length - num_colls;
         return {
             posis_i:  Array.from(Array(num_new_posis).keys()).map(k => k +  num_posis),
-            points_i: Array.from(Array(new_points.length).keys()).map(k => k + num_points),
-            plines_i: Array.from(Array(new_plines.length).keys()).map(k => k + num_plines),
-            pgons_i:  Array.from(Array(new_pgons.length).keys()).map(k => k +  num_pgons),
-            colls_i:  Array.from(Array(new_colls.length).keys()).map(k => k +  num_colls)
+            points_i: Array.from(Array(num_new_points).keys()).map(k => k + num_points),
+            plines_i: Array.from(Array(num_new_plines).keys()).map(k => k + num_plines),
+            pgons_i:  Array.from(Array(num_new_pgons).keys()).map(k => k +  num_pgons),
+            colls_i:  Array.from(Array(num_new_colls).keys()).map(k => k +  num_colls)
         };
     }
     // ============================================================================
@@ -138,13 +207,14 @@ export class GIGeomAdd {
     private _updateRevArrays() {
         // posis->verts
         this._geom_arrays.up_posis_verts = [];
-        this._geom_arrays.dn_verts_posis.forEach( (pos_i, vert_i) => {
-            if (this._geom_arrays.up_posis_verts[pos_i] === undefined) {
-                this._geom_arrays.up_posis_verts[pos_i] = [];
+        this._geom_arrays.dn_verts_posis.forEach( (posi_i, vert_i) => {
+            if (posi_i !== null) {
+                if (this._geom_arrays.up_posis_verts[posi_i] === undefined) {
+                    this._geom_arrays.up_posis_verts[posi_i] = [];
+                }
+                this._geom_arrays.up_posis_verts[posi_i].push(vert_i);
             }
-            this._geom_arrays.up_posis_verts[pos_i].push(vert_i);
         });
-
         // verts->tris, one to many
         this._geom_arrays.up_verts_tris = [];
         this._geom_arrays.dn_tris_verts.forEach( (vert_i_arr, tri_i) => {
@@ -160,75 +230,102 @@ export class GIGeomAdd {
         // verts->edges, one to two
         this._geom_arrays.up_verts_edges = [];
         this._geom_arrays.dn_edges_verts.forEach( (vert_i_arr, edge_i) => {
-            vert_i_arr.forEach( vert_i => {
-                if (this._geom_arrays.up_verts_edges[vert_i] === undefined) {
-                    this._geom_arrays.up_verts_edges[vert_i] = [];
-                }
-                this._geom_arrays.up_verts_edges[vert_i].push(edge_i);
-            });
+            if (vert_i_arr !== null) {
+                vert_i_arr.forEach( vert_i => {
+                    if (this._geom_arrays.up_verts_edges[vert_i] === undefined) {
+                        this._geom_arrays.up_verts_edges[vert_i] = [];
+                    }
+                    this._geom_arrays.up_verts_edges[vert_i].push(edge_i);
+                });
+            }
         });
         // edges->wires
         this._geom_arrays.up_edges_wires = [];
         this._geom_arrays.dn_wires_edges.forEach( (edge_i_arr, wire_i) => {
-            edge_i_arr.forEach( edge_i => {
-                this._geom_arrays.up_edges_wires[edge_i] = wire_i;
-            });
+            if (edge_i_arr !== null) {
+                edge_i_arr.forEach( edge_i => {
+                    this._geom_arrays.up_edges_wires[edge_i] = wire_i;
+                });
+            }
         });
         // wires->faces, tris->faces, faces->wirestris
         this._geom_arrays.up_wires_faces = [];
         this._geom_arrays.up_tris_faces = [];
-        this._geom_arrays.dn_faces_wirestris.forEach( ([wire_i_arr, tri_i_arr], face_i) => {
-            wire_i_arr.forEach( wire_i => {
-                this._geom_arrays.up_wires_faces[wire_i] = face_i;
-            });
-            tri_i_arr.forEach( tri_i => {
-                this._geom_arrays.up_tris_faces[tri_i] = face_i;
-            });
+        this._geom_arrays.dn_faces_wirestris.forEach( (face, face_i) => {
+            if (face !== null) {
+                const [wire_i_arr, tri_i_arr] = face;
+                wire_i_arr.forEach( wire_i => {
+                    this._geom_arrays.up_wires_faces[wire_i] = face_i;
+                });
+                tri_i_arr.forEach( tri_i => {
+                    this._geom_arrays.up_tris_faces[tri_i] = face_i;
+                });
+            }
         });
         // points, lines, polygons
         this._geom_arrays.up_verts_points = [];
         this._geom_arrays.dn_points_verts.forEach( (vert_i, point_i) => {
-            this._geom_arrays.up_verts_points[vert_i] = point_i;
+            if (vert_i !== null) {
+                this._geom_arrays.up_verts_points[vert_i] = point_i;
+            }
         });
         this._geom_arrays.up_wires_plines = [];
         this._geom_arrays.dn_plines_wires.forEach( (wire_i, line_i) => {
-            this._geom_arrays.up_wires_plines[wire_i] = line_i;
+            if (wire_i !== null) {
+                this._geom_arrays.up_wires_plines[wire_i] = line_i;
+            }
         });
         this._geom_arrays.up_faces_pgons = [];
         this._geom_arrays.dn_pgons_faces.forEach( (face_i, pgon_i) => {
-            this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
+            if (face_i !== null) {
+                this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
+            }
         });
         // collections of points, polylines, polygons
         this._geom_arrays.up_points_colls = [];
         this._geom_arrays.up_plines_colls = [];
         this._geom_arrays.up_pgons_colls = [];
-        this._geom_arrays.dn_colls_objs.forEach( ([parent, point_i_arr, pline_i_arr, pgon_i_arr], coll_i) => {
-            point_i_arr.forEach( point_i => {
-                if (this._geom_arrays.up_points_colls[point_i] === undefined) {
-                    this._geom_arrays.up_points_colls[point_i] = [coll_i];
-                } else {
-                    this._geom_arrays.up_points_colls[point_i].push(coll_i);
-                }
-            });
-            pline_i_arr.forEach( pline_i => {
-                if (this._geom_arrays.up_plines_colls[pline_i] === undefined) {
-                    this._geom_arrays.up_plines_colls[pline_i] = [coll_i];
-                } else {
-                    this._geom_arrays.up_plines_colls[pline_i].push(coll_i);
-                }
-            });
-            pgon_i_arr.forEach( pgon_i => {
-                if (this._geom_arrays.up_pgons_colls[pgon_i] === undefined) {
-                    this._geom_arrays.up_pgons_colls[pgon_i] = [coll_i];
-                } else {
-                    this._geom_arrays.up_pgons_colls[pgon_i].push(coll_i);
-                }
-            });
+        this._geom_arrays.dn_colls_objs.forEach( (coll, coll_i) => {
+            if (coll !== null) {
+                const [parent, point_i_arr, pline_i_arr, pgon_i_arr] = coll;
+                point_i_arr.forEach( point_i => {
+                    if (this._geom_arrays.up_points_colls[point_i] === undefined) {
+                        this._geom_arrays.up_points_colls[point_i] = [coll_i];
+                    } else {
+                        this._geom_arrays.up_points_colls[point_i].push(coll_i);
+                    }
+                });
+                pline_i_arr.forEach( pline_i => {
+                    if (this._geom_arrays.up_plines_colls[pline_i] === undefined) {
+                        this._geom_arrays.up_plines_colls[pline_i] = [coll_i];
+                    } else {
+                        this._geom_arrays.up_plines_colls[pline_i].push(coll_i);
+                    }
+                });
+                pgon_i_arr.forEach( pgon_i => {
+                    if (this._geom_arrays.up_pgons_colls[pgon_i] === undefined) {
+                        this._geom_arrays.up_pgons_colls[pgon_i] = [coll_i];
+                    } else {
+                        this._geom_arrays.up_pgons_colls[pgon_i].push(coll_i);
+                    }
+                });
+            }
         });
     }
     // ============================================================================
     // Private methods to create the topological entities
     // ============================================================================
+    /**
+     * Adds a position and updates the arrays.
+     */
+    private _addPosi(): number {
+        // in this case, there are no down arrays
+        // because posis are the bottom of the hierarchy
+        // update up arrays
+        const posi_i: number = this._geom_arrays.up_posis_verts.push([]) - 1;
+        // return the numeric index of the posi
+        return posi_i;
+    }
     /**
      * Adds a vertex and updates the arrays.
      * @param posi_i
@@ -236,10 +333,10 @@ export class GIGeomAdd {
     private _addVertex(posi_i: number): number {
         // update down arrays
         const vert_i: number = this._geom_arrays.dn_verts_posis.push(posi_i) - 1;
-        // u[date up arrays]
-        if (this._geom_arrays.up_posis_verts[posi_i] === undefined) {
-            this._geom_arrays.up_posis_verts[posi_i] = [];
-        }
+        // update up arrays
+            // if (this._geom_arrays.up_posis_verts[posi_i] === undefined) {
+            //     this._geom_arrays.up_posis_verts[posi_i] = [];
+            // }
         this._geom_arrays.up_posis_verts[posi_i].push(vert_i);
         // return the numeric index of the vertex
         return vert_i;
@@ -317,7 +414,7 @@ export class GIGeomAdd {
                 this._geom_arrays.up_verts_tris[tri_vert_i].push(tri_i);
             }
         }
-        // return an array of numeric indicies of the triangles
+        // return an array of numeric indices of the triangles
         return tris_i;
     }
     /**
@@ -406,21 +503,22 @@ export class GIGeomAdd {
         return face_i;
     }
     // ============================================================================
-    // Create geometry
+    // Add geometry
     // ============================================================================
     /**
      * Adds a new position to the model and returns the index to that position.
      */
-    public addPosition(): number {
-        this._geom_arrays.num_posis += 1;
-        return this._geom_arrays.num_posis - 1;
+    public addPosi(): number {
+        // create posi
+        const posi_i: number = this._addPosi();
+        return posi_i;
     }
     /**
      * Adds a new point entity to the model.
      * @param posi_i The position for the point.
      */
     public addPoint(posi_i: number): number {
-        // create verts
+        // create vert
         const vert_i = this._addVertex(posi_i);
         // create point
         const point_i: number = this._geom_arrays.dn_points_verts.push(vert_i) - 1;
@@ -428,7 +526,7 @@ export class GIGeomAdd {
         return point_i;
     }
     /**
-     * Adds a new pline entity to the model using numeric indicies.
+     * Adds a new pline entity to the model using numeric indices.
      * @param posis_i
      */
     public addPline(posis_i: number[], close: boolean = false): number {
@@ -447,27 +545,8 @@ export class GIGeomAdd {
         this._geom_arrays.up_wires_plines[wire_i] = pline_i;
         return pline_i;
     }
-    // /**
-    //  * Adds a new polygon entity to the model using numeric indicies.
-    //  * @param posis_id
-    //  */
-    // public addPgon(posis_i: number[]): number {
-    //     // create verts, edges, wires, faces
-    //     const vert_i_arr: number[] = posis_i.map( posi_i => this._addVertex(posi_i));
-    //     const edges_i_arr: number[] = [];
-    //     for (let i = 0; i < vert_i_arr.length - 1; i++) {
-    //         edges_i_arr.push( this._addEdge(vert_i_arr[i], vert_i_arr[i + 1]));
-    //     }
-    //     edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
-    //     const wire_i: number = this._addWire(edges_i_arr, true);
-    //     const face_i: number = this._addFace(wire_i);
-    //     // create polygon
-    //     const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
-    //     this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
-    //     return pgon_i;
-    // }
     /**
-     * Adds a new polygon + hole entity to the model using numeric indicies.
+     * Adds a new polygon + hole entity to the model using numeric indices.
      * @param posis_id
      */
     public addPgon(posis_i: number[], holes_posis_i?: number[][]): number {
@@ -505,7 +584,7 @@ export class GIGeomAdd {
         return pgon_i;
     }
     /**
-     * Adds a collection and updates the rev array using numeric indicies.
+     * Adds a collection and updates the rev array using numeric indices.
      * @param parent_i
      * @param points_i
      * @param plines_i
@@ -537,6 +616,9 @@ export class GIGeomAdd {
         }
         return coll_i;
     }
+    // ============================================================================
+    // Copy geometry
+    // ============================================================================
     /**
      * Copy positions.
      * @param posis_i
@@ -544,14 +626,15 @@ export class GIGeomAdd {
      */
     public copyPosis(posis_i: number|number[], copy_attribs: boolean): number|number[] {
         if (!Array.isArray(posis_i)) {
-            const xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(posis_i as number);
-            const new_posi_i: number = this.addPosition();
+            const posi_i: number = posis_i as number;
+            const xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(posi_i);
+            const new_posi_i: number = this.addPosi();
             this._geom.model.attribs.add.setPosiCoords(new_posi_i, xyz);
             if (copy_attribs) {
                 const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntType.POSI);
                 for (const attrib_name of attrib_names) {
                     const value: TAttribDataTypes =
-                        this._geom.model.attribs.query.getAttribValue(EEntType.POSI, attrib_name, posis_i as number) as TAttribDataTypes;
+                        this._geom.model.attribs.query.getAttribValue(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
                     this._geom.model.attribs.add.setAttribValue(EEntType.POSI, new_posi_i, attrib_name, value);
                 }
             }
@@ -561,95 +644,371 @@ export class GIGeomAdd {
         }
     }
     /**
-     * Copy an object (point, polyline, polygon).
+     * Copy points.
      * TODO copy attribs of topo entities
-     * @param ent_type
      * @param index
-     * @param copy_posis
      * @param copy_attribs
      */
-    public copyObjs(ent_type: EEntType, ent_i: number|number[], copy_attribs: boolean): number|number[] {
+    public copyPoints(points_i: number|number[], copy_attribs: boolean): number|number[] {
         // make copies
-        if (!Array.isArray(ent_i)) {
-            let posis_i: number[];
-            switch (ent_type) {
-                case EEntType.POINT:
-                    posis_i = this._geom.query.navAnyToPosi(ent_type, ent_i as number);
-                    const point_i: number = this.addPoint(posis_i[0]);
-                    if (copy_attribs) {
-                        this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, point_i);
-                    }
-                    return point_i;
-                case EEntType.PLINE:
-                    posis_i = this._geom.query.navAnyToPosi(ent_type, ent_i as number);
-                    const wire_i: number = this._geom.query.navPlineToWire(ent_i as number);
-                    const is_closed: boolean = this._geom.query.istWireClosed(wire_i);
-                    const pline_i: number = this.addPline(posis_i, is_closed);
-                    if (copy_attribs) {
-                        this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pline_i);
-                    }
-                    return pline_i;
-                case EEntType.PGON:
-                    const wires_i: number[] = this._geom.query.navAnyToWire(ent_type, ent_i as number);
-                    posis_i = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
-                    let pgon_i: number;
-                    if (wires_i.length === 1) {
-                        pgon_i = this.addPgon(posis_i);
-                    } else {
-                        const holes_posis_i: number[][] = [];
-                        for (let i = 1; i < wires_i.length; i++) {
-                            const hole_posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
-                            holes_posis_i.push(hole_posis_i);
-                        }
-                        pgon_i = this.addPgon(posis_i, holes_posis_i);
-                    }
-                    if (copy_attribs) {
-                        this._geom.model.attribs.add.copyAttribs(ent_type, ent_i, pgon_i);
-                    }
-                    return pgon_i;
-                default:
-                    throw new Error('Cannot copy entity of this type: ' + ent_type);
+        if (!Array.isArray(points_i)) {
+            const old_point_i: number = points_i as number;
+            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.POINT, old_point_i);
+            const new_point_i: number = this.addPoint(posis_i[0]);
+            if (copy_attribs) {
+                this._geom.model.attribs.add.copyAttribs(EEntType.POINT, old_point_i, new_point_i);
             }
+            return new_point_i;
+        } else { // An array of ent_i
+            return (points_i as number[]).map(point_i => this.copyPoints(point_i, copy_attribs)) as number[];
+        }
+    }
+    /**
+     * Copy plines.
+     * TODO copy attribs of topo entities
+     * @param index
+     * @param copy_attribs
+     */
+    public copyPlines(plines_i: number|number[], copy_attribs: boolean): number|number[] {
+        // make copies
+        if (!Array.isArray(plines_i)) {
+            const old_pline_i: number = plines_i as number;
+            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.PLINE, old_pline_i);
+            const wire_i: number = this._geom.query.navPlineToWire(old_pline_i);
+            const is_closed: boolean = this._geom.query.istWireClosed(wire_i);
+            const new_pline_i: number = this.addPline(posis_i, is_closed);
+            if (copy_attribs) {
+                this._geom.model.attribs.add.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
+            }
+            return new_pline_i;
+        } else { // An array of ent_i
+            return (plines_i as number[]).map(pline_i => this.copyPlines(pline_i, copy_attribs)) as number[];
+        }
+    }
+    /**
+     * Copy polygons.
+     * TODO copy attribs of topo entities
+     * @param index
+     * @param copy_attribs
+     */
+    public copyPgons(pgons_i: number|number[], copy_attribs: boolean): number|number[] {
+        // make copies
+        if (!Array.isArray(pgons_i)) {
+            const old_pgon_i: number = pgons_i as number;
+            const wires_i: number[] = this._geom.query.navAnyToWire(EEntType.PGON, old_pgon_i);
+            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
+            let new_pgon_i: number;
+            if (wires_i.length === 1) {
+                new_pgon_i = this.addPgon(posis_i);
+            } else {
+                const holes_posis_i: number[][] = [];
+                for (let i = 1; i < wires_i.length; i++) {
+                    const hole_posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
+                    holes_posis_i.push(hole_posis_i);
+                }
+                new_pgon_i = this.addPgon(posis_i, holes_posis_i);
+            }
+            if (copy_attribs) {
+                this._geom.model.attribs.add.copyAttribs(EEntType.PGON, old_pgon_i, new_pgon_i);
+            }
+            return new_pgon_i;
         } else { // AN array of ent_i
-            return (ent_i as number[]).map(one_ent_i => this.copyObjs(ent_type, one_ent_i, copy_attribs)) as number[];
+            return (pgons_i as number[]).map(pgon_i => this.copyPgons(pgon_i, copy_attribs)) as number[];
         }
     }
    /**
-     * Copy an object (point, polyline, polygon).
+     * Copy a collection
      * TODO Copy attribs of object and topo entities
      * @param ent_type
      * @param index
      * @param copy_posis
      * @param copy_attribs
      */
-    public copyColls(coll_i: number|number[], copy_attribs: boolean): number|number[] {
+    public copyColls(colls_i: number|number[], copy_attribs: boolean): number|number[] {
         // make copies
-        if (!Array.isArray(coll_i)) {
-            // Make a deep copy of the objects in the collection
-            const points_i: number[] = this._geom.query.navCollToPoint(coll_i);
-            const res1 = this.copyObjs(EEntType.POINT, points_i, copy_attribs) as number[];
-            const plines_i: number[] = this._geom.query.navCollToPline(coll_i);
-            const res2 = this.copyObjs(EEntType.PLINE, plines_i, copy_attribs) as number[];
-            const pgons_i: number[] = this._geom.query.navCollToPgon(coll_i);
-            const res3 = this.copyObjs(EEntType.PGON, pgons_i, copy_attribs) as number[];
-            const parent: number = this._geom.query.getCollParent(coll_i);
+        if (!Array.isArray(colls_i)) {
+            const old_coll_i: number = colls_i as number;
+            // make a deep copy of the objects in the collection
+            const points_i: number[] = this._geom.query.navCollToPoint(old_coll_i);
+            const res1 = this.copyPoints(points_i, copy_attribs) as number[];
+            const plines_i: number[] = this._geom.query.navCollToPline(old_coll_i);
+            const res2 = this.copyPlines(plines_i, copy_attribs) as number[];
+            const pgons_i: number[] = this._geom.query.navCollToPgon(old_coll_i);
+            const res3 = this.copyPgons(pgons_i, copy_attribs) as number[];
+            const parent: number = this._geom.query.getCollParent(old_coll_i);
             // add the new collection
             const new_coll_i: number = this.addColl(parent, res1, res2, res3);
             // copy the attributes from old collection to new collection
             if (copy_attribs) {
-                this._geom.model.attribs.add.copyAttribs(EEntType.COLL, coll_i, new_coll_i);
+                this._geom.model.attribs.add.copyAttribs(EEntType.COLL, old_coll_i, new_coll_i);
             }
             // return the new collection
             return new_coll_i;
         } else {
-            return (coll_i as number[]).map(one_coll_i => this.copyColls(one_coll_i, copy_attribs)) as number[];
+            return (colls_i as number[]).map(coll_i => this.copyColls(coll_i, copy_attribs)) as number[];
+        }
+    }
+    // ============================================================================
+    // Delete geometry
+    // ============================================================================
+    /**
+     * Del all unused posis in the model.
+     * Posi attributes will also be deleted.
+     * @param posis_i
+     */
+    public delUnusedPosis(): void {
+        // loop
+        const deleted_posis_i: number[] = [];
+        for (let posi_i = 0; posi_i < this._geom_arrays.up_posis_verts.length; posi_i++) {
+            // update up arrays
+            const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+            if (!verts_i.length) {
+                this._geom_arrays.up_posis_verts[posi_i] = null; // only delete posis with no verts
+                deleted_posis_i.push(posi_i);
+            }
+            // no need to update down arrays
+        }
+        // delete all the posi attributes, for all posis that were deleted
+        this._geom.model.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
+    }
+    /**
+     * Del posis.
+     * Posi attributes will also be deleted.
+     * @param posis_i
+     */
+    public delPosis(posis_i: number|number[], del_objs: boolean): void {
+        // create array
+        posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
+        // get all objects that use these positions and delete them
+        if (del_objs) {
+            const points_i: number[] = [];
+            const plines_i: number[] = [];
+            const pgons_i: number[] = [];
+            for (const posi_i of posis_i) {
+                const found_points_i: number[] = this._geom.query.navAnyToPoint(EEntType.POSI, posi_i);
+                for (const found_point_i of found_points_i) {
+                    points_i.push(found_point_i);
+                }
+                const found_plines_i: number[] = this._geom.query.navAnyToPoint(EEntType.PLINE, posi_i);
+                for (const found_pline_i of found_plines_i) {
+                    plines_i.push(found_pline_i);
+                }
+                const found_pgons_i: number[] = this._geom.query.navAnyToPoint(EEntType.PGON, posi_i);
+                for (const found_pgon_i of found_pgons_i) {
+                    pgons_i.push(found_pgon_i);
+                }
+            }
+            this.delPoints(points_i, false); // TODO what about positions?
+            this.delPlines(plines_i, false); // TODO what about positions?
+            this.delPgons(pgons_i, false); // TODO what about positions?
+
+        }
+        // loop
+        const deleted_posis_i: number[] = [];
+        for (const posi_i of posis_i) {
+            // update up arrays
+            const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+            if (!verts_i.length) {
+                this._geom_arrays.up_posis_verts[posi_i] = null; // only delete posis with no verts
+                deleted_posis_i.push(posi_i);
+            }
+            // no need to update down arrays
+        }
+        // delete all the posi attributes, for all posis that were deleted
+        this._geom.model.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
+    }
+    /**
+     * Del points.
+     * Point attributes will also be deleted.
+     * @param points_i
+     */
+    public delPoints(points_i: number|number[], del_unused_posis: boolean): void {
+        // del attribs
+        this._geom.model.attribs.add.delEntFromAttribs(EEntType.POINT, points_i);
+        // create array
+        points_i = (Array.isArray(points_i)) ? points_i : [points_i];
+        // loop
+        for (const point_i of points_i) {
+            // first get all the arrays so we dont break navigation
+            const verts_i: number[] = this._geom.query.navAnyToVert(EEntType.POINT, point_i);
+            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.POINT, point_i);
+            // delete everything by setting it to null
+            verts_i.forEach( vert_i => {
+                this._geom_arrays.dn_verts_posis[vert_i] = null;
+                this._geom_arrays.up_verts_points[vert_i] = null;
+            });
+            // clean up posis up arrays point to verts that may have been deleted
+            for (const posi_i of posis_i) {
+                const other_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+                // loop through deleted verts
+                for (const vert_i of verts_i) {
+                    const i: number = other_verts_i.indexOf(vert_i);
+                    if (i !== -1) { other_verts_i.splice(i, 1); }
+                }
+            }
+            // delete unused posis
+            if (del_unused_posis) {
+
+                // TODO
+                // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
+
+            }
+            // down arrays
+            this._geom_arrays.dn_points_verts[point_i] = null;
+        }
+    }
+    /**
+     * Del plines.
+     * Pline attributes will also be deleted.
+     * @param plines_i
+     */
+    public delPlines(plines_i: number|number[], del_unused_posis: boolean): void {
+        // del attribs
+        this._geom.model.attribs.add.delEntFromAttribs(EEntType.PLINE, plines_i);
+        // create array
+        plines_i = (Array.isArray(plines_i)) ? plines_i : [plines_i];
+        // loop
+        for (const pline_i of plines_i) {
+            // first get all the arrays so we dont break navigation
+            const wires_i: number[] = this._geom.query.navAnyToWire(EEntType.PLINE, pline_i);
+            const edges_i: number[] = this._geom.query.navAnyToEdge(EEntType.PLINE, pline_i);
+            const verts_i: number[] = this._geom.query.navAnyToVert(EEntType.PLINE, pline_i);
+            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.PLINE, pline_i);
+            // delete everything by setting it to null
+            wires_i.forEach( wire_i => {
+                this._geom_arrays.dn_wires_edges[wire_i] = null;
+                this._geom_arrays.up_wires_plines[wire_i] = null;
+            });
+            edges_i.forEach( edge_i => {
+                this._geom_arrays.dn_edges_verts[edge_i] = null;
+                this._geom_arrays.up_edges_wires[edge_i] = null;
+            });
+            verts_i.forEach( vert_i => {
+                this._geom_arrays.dn_verts_posis[vert_i] = null;
+                this._geom_arrays.up_verts_edges[vert_i] = null;
+            });
+            // clean up posis up arrays point to verts that may have been deleted
+            for (const posi_i of posis_i) {
+                const other_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+                // loop through deleted verts
+                for (const vert_i of verts_i) {
+                    const i: number = other_verts_i.indexOf(vert_i);
+                    if (i !== -1) { other_verts_i.splice(i, 1); }
+                }
+            }
+            // delete unused posis
+            if (del_unused_posis) {
+
+                // TODO
+                // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
+
+            }
+            // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
+            // down arrays
+            this._geom_arrays.dn_plines_wires[pline_i] = null;
+        }
+    }
+    /**
+     * Del pgons.
+     * Pgon attributes will also be deleted.
+     * @param pgons_i
+     */
+    public delPgons(pgons_i: number|number[], del_unused_posis: boolean): void {
+        // del attribs
+        this._geom.model.attribs.add.delEntFromAttribs(EEntType.PGON, pgons_i);
+        // create array
+        pgons_i = (Array.isArray(pgons_i)) ? pgons_i : [pgons_i];
+        // loop
+        for (const pgon_i of pgons_i) {
+            // first get all the arrays so we dont break navigation
+            const faces_i: number[] = this._geom.query.navAnyToFace(EEntType.PGON, pgon_i);
+            const wires_i: number[] = this._geom.query.navAnyToWire(EEntType.PGON, pgon_i);
+            const edges_i: number[] = this._geom.query.navAnyToEdge(EEntType.PGON, pgon_i);
+            const verts_i: number[] = this._geom.query.navAnyToVert(EEntType.PGON, pgon_i);
+            const tris_i: number[] = this._geom.query.navAnyToTri(EEntType.PGON, pgon_i);
+            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.PGON, pgon_i);
+            // delete everything by setting it to null
+            faces_i.forEach( face_i => {
+                this._geom_arrays.dn_faces_wirestris[face_i] = null;
+                this._geom_arrays.up_faces_pgons[face_i] = null;
+             });
+            wires_i.forEach( wire_i => {
+                this._geom_arrays.dn_wires_edges[wire_i] = null;
+                this._geom_arrays.up_wires_faces[wire_i] = null;
+            });
+            edges_i.forEach( edge_i => {
+                this._geom_arrays.dn_edges_verts[edge_i] = null;
+                this._geom_arrays.up_edges_wires[edge_i] = null;
+
+            });
+            verts_i.forEach( vert_i => {
+                this._geom_arrays.dn_verts_posis[vert_i] = null;
+                this._geom_arrays.up_verts_edges[vert_i] = null;
+                this._geom_arrays.up_verts_tris[vert_i] = null;
+            });
+            tris_i.forEach( tri_i => {
+                this._geom_arrays.dn_tris_verts[tri_i] = null;
+                this._geom_arrays.up_tris_faces[tri_i] = null;
+            });
+            // clean up posis up arrays point to verts that may have been deleted
+            for (const posi_i of posis_i) {
+                const other_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+                // loop through deleted verts
+                for (const vert_i of verts_i) {
+                    const i: number = other_verts_i.indexOf(vert_i);
+                    if (i !== -1) { other_verts_i.splice(i, 1); }
+                }
+            }
+            // delete unused posis
+            if (del_unused_posis) {
+
+                // TODO
+                // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
+
+            }
+            // down arrays
+            this._geom_arrays.dn_pgons_faces[pgon_i] = null;
+        }
+    }
+    /**
+     * Delete a collection.
+     * Collection attributes will also be deleted.
+     * This does not delete any of the object in the collection.
+     * Also, does not delete any positions.
+     * @param colls_i The collections to delete
+     */
+    public delColls(colls_i: number|number[], del_unused_posis: boolean): void {
+        // del attribs
+        this._geom.model.attribs.add.delEntFromAttribs(EEntType.COLL, colls_i);
+        // create array
+        colls_i = (Array.isArray(colls_i)) ? colls_i : [colls_i];
+        // loop
+        for (const coll_i of colls_i) {
+            // up arrays
+            const points_i: number[] = this._geom_arrays.dn_colls_objs[coll_i][1];
+            points_i.forEach(point_i =>  {
+                const other_colls_i: number[] = this._geom_arrays.up_points_colls[point_i];
+                other_colls_i.splice(other_colls_i.indexOf(coll_i), 1);
+            });
+            const plines_i: number[] = this._geom_arrays.dn_colls_objs[coll_i][2];
+            plines_i.forEach(pline_i =>  {
+                const other_colls_i: number[] = this._geom_arrays.up_plines_colls[pline_i];
+                other_colls_i.splice(other_colls_i.indexOf(coll_i), 1);
+            });
+            const pgons_i: number[] = this._geom_arrays.dn_colls_objs[coll_i][3];
+            pgons_i.forEach(pgon_i =>  {
+                const other_colls_i: number[] = this._geom_arrays.up_pgons_colls[pgon_i];
+                other_colls_i.splice(other_colls_i.indexOf(coll_i), 1);
+            });
+            // down arrays
+            this._geom_arrays.dn_colls_objs[coll_i] = null;
         }
     }
     // ============================================================================
     // Modify geometry
     // ============================================================================
     /**
-     * Adds a new polygon entity to the model using numeric indicies.
+     * Adds a new polygon entity to the model using numeric indices.
      * @param posis_id
      */
     public addFaceHoles(face_i: number, posis_i_arr: number[][]): number[] {
@@ -723,7 +1082,9 @@ export class GIGeomAdd {
      * @param wire_i The wire to close.
      */
     public deleteVertWire(edge_i: number, posi_i: number): void {
+
         throw new Error("Not implemented.");
+
     }
     /**
      * Replace positions
@@ -787,8 +1148,8 @@ export class GIGeomAdd {
     }
     /**
      * Reverse the edges of a wire.
-     * Theis lists the edges in reverse order, and flips each edge.
-     * The attributes ...
+     * This lists the edges in reverse order, and flips each edge.
+     * The attributes ... TODO
      */
     public reverse(wire_i: number): void {
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
@@ -809,9 +1170,8 @@ export class GIGeomAdd {
         }
     }
     /**
-     * Reverse the edges of a wire.
-     * Theis lists the edges in reverse order, and flips each edge.
-     * The attributes ...
+     * Shifts the edges of a wire.
+     * The attributes ... TODO
      */
     public shift(wire_i: number, offset: number): void {
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];

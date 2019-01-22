@@ -133,6 +133,19 @@ export class GIAttribsAdd {
         attrib.setEntIdxVal(ents_i, value_index, value);
     }
     /**
+     * Delete the entity from an attribute
+     * If there is no value for the entity, then this does nothing
+     * If there is a value, then both the entity index and the value are deleted
+     * @param ent_type
+     * @param name
+     */
+    public delEntFromAttribs(ent_type: EEntType, ents_i: number|number[]): void {
+        // get the attrib names
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        attribs.forEach( attrib => attrib.delEnt(ents_i) );
+    }
+    /**
      * Set the xyz position by index
      * @param index
      * @param value
@@ -167,6 +180,7 @@ export class GIAttribsAdd {
             attrib.setEntVal(to_ent_i, attrib_value);
         }
     }
+
     // ============================================================================
     // Private methods
     // ============================================================================

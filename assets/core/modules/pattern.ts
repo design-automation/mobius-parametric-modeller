@@ -44,7 +44,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
         } else { // we have a plane
             xyz = vecAdd(xyz, origin as Txyz);
         }
-        const posi_i: number = __model__.geom.add.addPosition();
+        const posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(posi_i, xyz);
         posis_i.push(posi_i);
     }
@@ -103,7 +103,7 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
             } else { // we have a plane
                 xyz = vecAdd(xyz, origin as Txyz);
             }
-            const posi_i: number = __model__.geom.add.addPosition();
+            const posi_i: number = __model__.geom.add.addPosi();
             __model__.attribs.add.setPosiCoords(posi_i, xyz);
             posis_i.push(posi_i);
         }
@@ -186,7 +186,7 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
         } else { // we have a plane
             xyz = vecAdd(xyz, origin as Txyz);
         }
-        const posi_i: number = __model__.geom.add.addPosition();
+        const posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(posi_i, xyz);
         posis_i.push(posi_i);
     }

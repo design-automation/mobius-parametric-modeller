@@ -144,7 +144,7 @@ export enum ESort {
  * Geom arrays
  */
 export interface IGeomArrays {
-    num_posis: number;
+    // num_posis: number;
     dn_verts_posis: TVert[];
     dn_tris_verts: TTri[];
     dn_edges_verts: TEdge[];

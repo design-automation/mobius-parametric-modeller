@@ -13,8 +13,12 @@ export class GIAttribMap {
     private _name: string;
     private _data_type: EAttribDataTypeStrs;
     private _data_size: number;
-    // that data in this map
-    private _num_vals: number; // count of the number of unique values (including any deleted values)
+    // the _num_vals is used as an arbitrary index for the unique values
+    // the index will keep growing, even when data gets deleted
+    // it counts of the number of unique values (including any deleted values)
+    // this should never be decremented, even when values get deleted
+    private _num_vals: number;
+    // the four data maps that store everything
     private _map_val_k_to_val_i: Map<string|number, number>; // unique, no duplicates
     private _map_val_i_to_val: Map<number, TAttribDataTypes>; // unique, no duplicates
     private _map_val_i_to_ents_i: Map<number, number[]>;
@@ -100,6 +104,25 @@ export class GIAttribMap {
         return this._map_ent_i_to_val_i.has(ent_i);
     }
     /**
+     * Delete the entities from this attribute map.
+     */
+    public delEnt(ents_i: number|number[]): void {
+        ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
+        ents_i.forEach(ent_i => {
+            // _map_ent_i_to_val_i: Map<number, number>
+            const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+            if (val_i !== undefined) {
+                // del the entity from _map_ent_i_to_val_i
+                this._map_ent_i_to_val_i.delete(ent_i);
+                // del the entity from _map_val_i_to_ents_i
+                const other_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
+                other_ents_i.splice(other_ents_i.indexOf(ent_i), 1);
+                // now clean up just in case that was the last entity with this value
+                this._cleanUp(val_i);
+            }
+        });
+    }
+    /**
      * Sets the value for a given entity or entities.
      * @param ent_i
      * @param val
@@ -117,9 +140,13 @@ export class GIAttribMap {
             this._map_val_i_to_ents_i.set(val_i, []);
         }
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
+        const old_vals_i: number[] = ents_i.map(e => this._map_ent_i_to_val_i.get(e));
+        // set all the new values
         ents_i.forEach(e => this._map_ent_i_to_val_i.set(e, val_i));
         const ents_i_union: number[] = Array.from(new Set([...this._map_val_i_to_ents_i.get(val_i), ...ents_i]));
         this._map_val_i_to_ents_i.set(val_i, ents_i_union);
+        // check that none of the old values need to be cleaned up
+        old_vals_i.forEach(old_val_i => this._cleanUp(old_val_i));
     }
     /**
      * Sets the indexed value for a given entity or entities.
@@ -132,6 +159,8 @@ export class GIAttribMap {
         const new_value_arr: number[]|string[] = exist_value_arr.slice(); // IMPORTANT clone the array
         new_value_arr[val_index] = val;
         this.setEntVal(ent_i, new_value_arr);
+        // check that none of the old values need to be cleaned up
+        // TODO
     }
     /**
      * Gets the value for a given entity, or an array of values given an array of entities.
@@ -174,19 +203,19 @@ export class GIAttribMap {
         return this._map_val_i_to_ents_i.get(val_i);
     }
     /**
-     * Returns an array of entity indicies which do not have a value (undefined)
+     * Returns an array of entity indices which do not have a value (undefined)
      */
     public getEntsWithoutVal(ents_i: number[]): number[] {
         return ents_i.filter(ent_i => !this._map_ent_i_to_val_i.has(ent_i));
     }
     /**
-     * Returns an array of entity indicies which have a value (not undefined)
+     * Returns an array of entity indices which have a value (not undefined)
      */
     public getEntsWithVal(ents_i: number[]): number[] {
         return ents_i.filter(ent_i => this._map_ent_i_to_val_i.has(ent_i));
     }
     // /**
-    //  * Gets an array of values, given an array of entity indicies
+    //  * Gets an array of values, given an array of entity indices
     //  */
     // public getEntsVals(ents_i: number[]): TAttribDataTypes[] {
     //     const vals: TAttribDataTypes[] = [];
@@ -339,6 +368,27 @@ export class GIAttribMap {
                 return val1 <= val2;
             default:
                 throw new Error('Query operator not found: ' + operator);
+        }
+    }
+    /**
+     * Checks if anything still points to this value
+     * If not, cleans up the arrays
+     * _map_val_i_to_ents_i
+     * _map_val_i_to_val
+     * _map_val_k_to_val_i
+     */
+    private _cleanUp(val_i: number): void {
+        if (val_i !== undefined) {
+            // _map_val_i_to_ents_i: Map<number, number[]>
+            const ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
+            if (ents_i.length === 0) {
+                this._map_val_i_to_ents_i.delete(val_i);
+                // _map_val_i_to_val: Map<number, TAttribDataTypes>
+                const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
+                this._map_val_i_to_val.delete(val_i);
+                // _map_val_k_to_val_i: Map<string|number, number>
+                this._map_val_k_to_val_i.delete(this._valToValkey(val));
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ export class GIAttribsThreejs {
     /**
      * Get a flat array of all the coordinates of all the vertices.
      * Verts that have been deleted will not be included
-     * @param verts An array of vertex indicies pointing to the positio.
+     * @param verts An array of vertex indices pointing to the positio.
      */
     public get3jsSeqVertsCoords(): number[] {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
@@ -58,11 +58,11 @@ export class GIAttribsThreejs {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         // create a map of objects to store the data
-        const data_obj_map: Map< number, { id: string} > = new Map();
+        const data_obj_map: Map< number, { _id: number, id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type);
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { id: `${attribs_maps_key}${ent_i}` } );
+            data_obj_map.set(ent_i, { _id: ent_i, id: `${attribs_maps_key}${ent_i}` } );
         }
 
         // loop through all the attributes
@@ -89,12 +89,12 @@ export class GIAttribsThreejs {
     public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType) {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const data_obj_map: Map< number, { id: string} > = new Map();
+        const data_obj_map: Map< number, { _id: number, id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         selected_ents.forEach(ent => {
-            data_obj_map.set(ent, { id: `${attribs_maps_key}${ent}` } );
+            data_obj_map.set(ent, { _id: ent, id: `${attribs_maps_key}${ent}` } );
         });
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();

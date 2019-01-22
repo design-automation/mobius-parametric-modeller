@@ -163,11 +163,11 @@ export function VisRay(__model__: GIModel, ray: TRay, scale: number): TId[] {
     const vec: Txyz = vecMult(ray[1], scale);
     const end: Txyz = vecAdd(origin, vec);
     // create orign point
-    const origin_posi_i: number = __model__.geom.add.addPosition();
+    const origin_posi_i: number = __model__.geom.add.addPosi();
     __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
     const point_i = __model__.geom.add.addPoint(origin_posi_i);
     // create pline
-    const end_posi_i: number = __model__.geom.add.addPosition();
+    const end_posi_i: number = __model__.geom.add.addPosi();
     __model__.attribs.add.setPosiCoords(end_posi_i, end);
     const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
     // return the geometry IDs
@@ -205,21 +205,21 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
     x_end = vecAdd(x_end, vecMult(x_vec, 0.1));
     y_end = vecSub(y_end, vecMult(y_vec, 0.1));
     // create the point
-    const origin_posi_i: number = __model__.geom.add.addPosition();
+    const origin_posi_i: number = __model__.geom.add.addPosi();
     __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
     const point_i = __model__.geom.add.addPoint(origin_posi_i);
     // create the x axis
-    const x_end_posi_i: number = __model__.geom.add.addPosition();
+    const x_end_posi_i: number = __model__.geom.add.addPosi();
     __model__.attribs.add.setPosiCoords(x_end_posi_i, x_end);
     const x_pline_i = __model__.geom.add.addPline([origin_posi_i, x_end_posi_i]);
     // create the y axis
-    const y_end_posi_i: number = __model__.geom.add.addPosition();
+    const y_end_posi_i: number = __model__.geom.add.addPosi();
     __model__.attribs.add.setPosiCoords(y_end_posi_i, y_end);
     const y_pline_i = __model__.geom.add.addPline([origin_posi_i, y_end_posi_i]);
     // create pline for plane
     const corner_posis_i: number[] = [];
     for (const corner of plane_corners) {
-        const posi_i: number = __model__.geom.add.addPosition();
+        const posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(posi_i, corner);
         corner_posis_i.push(posi_i);
     }

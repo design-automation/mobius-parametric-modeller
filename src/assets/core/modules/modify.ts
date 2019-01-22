@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
-import { getArrDepth } from '@libs/geo-info/id';
+import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
@@ -352,19 +352,58 @@ export function _Weld(__model__: GIModel, entities: TId[]): void {
     throw new Error('Not implemented.');
 }
 // ================================================================================================
+// Stuff for Delete()
+export enum _EDeleteMethod {
+    DEL_UNUSED_POINTS =  'del_unused_posis',
+    KEEP_UNUSED_POINTS  =  'keep_unused_posis'
+}
+function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_unused_posis: boolean): void {
+    ents_arr = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
+    const colls_i: number[] = [];
+    const pgons_i: number[] = [];
+    const plines_i: number[] = [];
+    const points_i: number[] = [];
+    const posis_i: number[] = [];
+    for (const ent_arr of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+        if (isColl(ent_type)) {
+            colls_i.push(index);
+        } else if (isPgon(ent_type)) {
+            pgons_i.push(index);
+        } else if (isPline(ent_type)) {
+            plines_i.push(index);
+        } else if (isPoint(ent_type)) {
+            points_i.push(index);
+        } else if (isPosi(ent_type)) {
+            posis_i.push(index);
+        }
+    }
+    __model__.geom.add.delColls(colls_i, del_unused_posis);
+    __model__.geom.add.delPgons(pgons_i, del_unused_posis);
+    __model__.geom.add.delPlines(plines_i, del_unused_posis);
+    __model__.geom.add.delPoints(points_i, del_unused_posis);
+    __model__.geom.add.delPosis(posis_i, del_unused_posis);
+}
 /**
- * Deletes entities.
+ * Deletes geometric entities: positions, points, polylines, polygons, and collections.
+ * When deleting objects (point, polyline, and polygons), topology is also deleted.
+ * When deleting collections, the objects in teh collection are not deleted.
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection. Can be a list.
+ * @param del_unused_posis Enum
  * @returns void
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.
  */
-export function _Delete(__model__: GIModel, entities: TId|TId[]  ): void {
+export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
     // --- Error Check ---
-    const ents_arr = checkIDs('modify.Delete', 'entities', entities, ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']);
+    const ents_arr = checkIDs('modify.Delete', 'entities', entities,
+        ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    //__model__.geom.add.delete(ents_arr);
+    console.log('WARNING: Delete function is experimental.');
+    const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
+    _delete(__model__, ents_arr, bool_del_unused_posis);
+    console.log(__model__);
 }
 
 // Collection Add Entities

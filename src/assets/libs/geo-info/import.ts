@@ -51,7 +51,7 @@ export function importObj(obj_str: string): GIModel {
         }
     }
     for (const coord of coords) {
-        const posi_i: number = model.geom.add.addPosition();
+        const posi_i: number = model.geom.add.addPosi();
         model.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coord);
     }
     for (const face of faces) {

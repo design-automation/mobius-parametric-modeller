@@ -95,3 +95,16 @@
     If open, polylines are changed to closed; if already closed, nothing happens.
   
   
+## Delete  
+* **Description:** Deletes geometric entities: positions, points, polylines, polygons, and collections.
+When deleting objects (point, polyline, and polygons), topology is also deleted.
+When deleting collections, the objects in teh collection are not deleted.  
+* **Parameters:**  
+  * *entities:* Position, point, polyline, polygon, collection. Can be a list.  
+  * *del_unused_posis:* Enum  
+* **Returns:** void  
+* **Examples:**  
+  * modify.Delete(polygon1)  
+    Deletes polygon1 from the model.
+  
+  

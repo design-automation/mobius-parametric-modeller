@@ -27,7 +27,7 @@ export class GIGeomQuery {
     public getEnts(ent_type: EEntType): number[] {
         if (isPosi(ent_type)) {
             // TODO how to handle deleted positions
-            return Array.from(Array(this._geom_arrays.num_posis).keys());
+            return Array.from(Array(this._geom_arrays.up_posis_verts.length).keys());
         }
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
@@ -54,7 +54,7 @@ export class GIGeomQuery {
     public nextEntIndex(ent_type: EEntType): number {
         if (isPosi(ent_type)) {
             // TODO how to handle deleted positions
-            return this._geom_arrays.num_posis;
+            return this._geom_arrays.up_posis_verts.length;
         }
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];

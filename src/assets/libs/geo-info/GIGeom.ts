@@ -11,7 +11,7 @@ export class GIGeom {
     public model: GIModel;
     //  all arrays
     private _geom_arrays: IGeomArrays = {
-        num_posis: 0,
+        // num_posis: 0,
         dn_verts_posis: [],
         dn_tris_verts: [],
         dn_edges_verts: [],
@@ -53,7 +53,7 @@ export class GIGeom {
      */
     public getData(): IGeomData {
         return {
-            num_positions: this._geom_arrays.num_posis,
+            num_positions: this._geom_arrays.up_posis_verts.length,
             triangles: this._geom_arrays.dn_tris_verts,
             vertices: this._geom_arrays.dn_verts_posis,
             edges: this._geom_arrays.dn_edges_verts,

@@ -5,7 +5,6 @@
             <publish-header [title]='getFlowchart().name'></publish-header>
             <!-- viewchild content -->
             <div class='content__panel'>
-                <h3>{{getFlowchart().name}}</h3>
                 <parameter-viewer [flowchart]='getFlowchart()' [startNode]='getFlowchart().nodes[0]' [endNode]='getEndNode()'></parameter-viewer>
             </div>
         </as-split-area>

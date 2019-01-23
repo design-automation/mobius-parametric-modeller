@@ -25,7 +25,7 @@ export class ParameterEditorComponent  {
     }
 
     inputSize(val) {
-        return ctx.measureText(val).width + 2;
+        return ctx.measureText(val).width + 7;
     }
 
     selectInput(event) {

@@ -39,8 +39,8 @@ export class ProcedureInputEditorComponent {
     }
 
     inputSize(val, defaultVal) {
-        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 2; }
-        return ctx.measureText(val).width + 2;
+        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 8; }
+        return ctx.measureText(val).width + 7;
     }
 
     // delete this procedure

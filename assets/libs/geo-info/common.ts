@@ -203,6 +203,8 @@ export type TAttribDataTypes = string | string[] | number | number[];
 export type TAttribValuesArr = Array<[number[], TAttribDataTypes]>;
 // interfaces for JSON data
 
+export const RE_SPACES: RegExp = /\s+/g;
+
 export interface IGeomData {
     num_positions: number;
     triangles: TTri[];

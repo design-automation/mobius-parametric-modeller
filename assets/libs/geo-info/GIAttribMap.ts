@@ -1,4 +1,4 @@
-import { EQueryOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './common';
+import { EQueryOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, RE_SPACES } from './common';
 
 /**
  * Geo-info attribute class for one attribute.
@@ -238,80 +238,36 @@ export class GIAttribMap {
      * @param val_k The string version of the value.
      */
     public queryVal(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, val_k: string): number[] {
-        // check the val_arr_index
+        // check the validity of the arguments
         const indexed = (val_arr_index !== null && val_arr_index !== undefined);
         if (indexed) {
             if (!Number.isInteger(val_arr_index)) {
                 throw new Error('Query index "' + val_arr_index + '" cannot be converted to an integer: ' + val_arr_index);
             }
-            if (!(this._data_size > 0))  { throw new Error('Query attribute ' + this._name + ' is not a list.'); }
+            if (!(this._data_size > 0))  { 
+                throw new Error('Query attribute ' + this._name + ' is not a list.'); 
+            }
         }
-        // search
-        const re_spaces: RegExp = /\s+/g;
-        if (val_arr_index === null || val_arr_index === undefined) {
-            // in these cases we just leave value_str as a string, but we clean it up
-            val_k = val_k.replace(re_spaces, '');
-            // in this case we can only use == or !=
+        if (this._data_type === EAttribDataTypeStrs.STRING) {
+            { throw new Error('Query operator "' + operator + '" and query "' + val_k + '" value are incompatible.'); }
+        }
+        if (val_k === 'null') {
             if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
-                { throw new Error('Query operator "' + operator + '" and query "' + val_k + '" value are incompatible.'); }
+                { throw new Error('Query operator ' + operator + ' and query "null" value are incompatible.'); }
             }
-            if (val_k === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
-                return this.getEntsWithoutVal(ents_i);
-            } else if (val_k === 'null' && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
-                return this.getEntsWithVal(ents_i);
-            } else if (operator === EQueryOperatorTypes.IS_EQUAL ) {
-                const found_keys: number[] = this.getEntsFromVal(val_k);
-                if (found_keys === undefined) { return []; }
-                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
-            } else if (operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
-                const found_keys: number[] = this.getEntsFromVal(val_k);
-                if (found_keys === undefined) { return []; }
-                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
-            }
-        } else { // value_index is defined, so this query is indexing a value in an array
-            if (!(this._data_size > 0)) {
-                { throw new Error('Query with [index] can only be used on attributes whose data type is a list.'); }
-            }
+        }
+        // search, no index
+        if (indexed) {
             if (this._data_type === EAttribDataTypeStrs.FLOAT) {
-                // a number from an array of numbers
-                let val_num: number;
-                // first deal with null case
-                if (val_k === 'null') { // TODO change to constant
-                    if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
-                        { throw new Error('Query operator ' + operator + ' and query "null" value are incompatible.'); }
-                    }
-                    val_num = null;
-                } else { // value_str must be a number
-                    val_num = Number.parseFloat(val_k);
-                    if (isNaN(val_num)) {
-                        throw new Error('Query value "' + val_k + '" cannot be converted to a number: ' + val_k);
-                    }
-                }
-                // do the search
-                const found_keys: number[] = [];
-                for (const ent_i of ents_i) {
-                    const search_value_arr: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
-                    if ((search_value_arr !== undefined) &&
-                       this._compare(operator, search_value_arr[val_arr_index], val_num) ) {
-                        found_keys.push(ent_i);
-                    }
-                }
-                return found_keys;
-            } else if (this._data_type === EAttribDataTypeStrs.STRING) {
-                // a string from a list of strings
-                if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
-                    { throw new Error('Query operator and query value are incompatible.'); }
-                }
-                // clean up the string
-                const value_str_clean: string = val_k.replace(re_spaces, '');
-                // do the search
-                const found_keys: number[] = [];
-                for (const ent_i of ents_i) {
-                    const search_value_arr: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
-                    if ( this._compare(operator, value_str_clean, search_value_arr[val_arr_index]) ) {
-                        found_keys.push(ent_i);
-                    }
-                }
+                return this._searchIndexedNumValue(ents_i, val_arr_index, operator, val_k);
+            } else {
+                return this._searchIndexedStrValue(ents_i, val_arr_index, operator, val_k);
+            }
+        } else {
+            if (this._data_type === EAttribDataTypeStrs.FLOAT) {
+                return this._searchNumValue(ents_i, operator, val_k);
+            } else {
+                return this._searchStrValue(ents_i, operator, val_k);
             }
         }
     }
@@ -337,6 +293,27 @@ export class GIAttribMap {
             }
         }
         return JSON.stringify(val);
+    }
+    /**
+     * Checks if anything still points to this value
+     * If not, cleans up the arrays
+     * _map_val_i_to_ents_i
+     * _map_val_i_to_val
+     * _map_val_k_to_val_i
+     */
+    private _cleanUp(val_i: number): void {
+        if (val_i !== undefined) {
+            // _map_val_i_to_ents_i: Map<number, number[]>
+            const ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
+            if (ents_i.length === 0) {
+                this._map_val_i_to_ents_i.delete(val_i);
+                // _map_val_i_to_val: Map<number, TAttribDataTypes>
+                const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
+                this._map_val_i_to_val.delete(val_i);
+                // _map_val_k_to_val_i: Map<string|number, number>
+                this._map_val_k_to_val_i.delete(this._valToValkey(val));
+            }
+        }
     }
     /**
      * Compare two values
@@ -371,24 +348,131 @@ export class GIAttribMap {
         }
     }
     /**
-     * Checks if anything still points to this value
-     * If not, cleans up the arrays
-     * _map_val_i_to_ents_i
-     * _map_val_i_to_val
-     * _map_val_k_to_val_i
+     * Searches for the value using the operator
      */
-    private _cleanUp(val_i: number): void {
-        if (val_i !== undefined) {
-            // _map_val_i_to_ents_i: Map<number, number[]>
-            const ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
-            if (ents_i.length === 0) {
-                this._map_val_i_to_ents_i.delete(val_i);
-                // _map_val_i_to_val: Map<number, TAttribDataTypes>
-                const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-                this._map_val_i_to_val.delete(val_i);
-                // _map_val_k_to_val_i: Map<string|number, number>
-                this._map_val_k_to_val_i.delete(this._valToValkey(val));
+    private _searchNumValue(ents_i: number[], operator: EQueryOperatorTypes, val_k: string): number[] {
+        // clean up
+        val_k = val_k.replace(RE_SPACES, '');
+        // first deal with null cases
+        if (val_k === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
+            return this.getEntsWithoutVal(ents_i);
+        } else if (val_k === 'null' && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+            return this.getEntsWithVal(ents_i);
+        }
+        // get the values to search for
+        const search_val: number = Number(val_k);
+        if (isNaN(search_val)) {
+            throw new Error('Query error: the search value is not a number.');
+        }
+        // search
+        let found_keys: number[];
+        switch (operator) {
+            case EQueryOperatorTypes.IS_EQUAL:
+                found_keys = this.getEntsFromVal(search_val);
+                if (found_keys === undefined) { return []; }
+                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
+            case EQueryOperatorTypes.IS_NOT_EQUAL:
+                found_keys = this.getEntsFromVal(search_val);
+                if (found_keys === undefined) { return []; }
+                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
+            case EQueryOperatorTypes.IS_GREATER:
+            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EQueryOperatorTypes.IS_LESS:
+            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+                found_keys = [];
+                for (const ent_i of ents_i) {
+                    const val: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
+                    if ((val !== null && val !== undefined) && this._compare(operator, val, search_val) ) {
+                        found_keys.push(ent_i);
+                    }
+                }
+                return found_keys;
+            default:
+                throw new Error('Query error: Operator not found.')
+        }
+    }
+    /**
+     * Searches for the value using the operator
+     */
+    private _searchStrValue(ents_i: number[], operator: EQueryOperatorTypes, val_k: string): number[] {
+        // clean up
+        val_k = val_k.replace(RE_SPACES, '');
+        // first deal with null cases
+        if (val_k === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
+            return this.getEntsWithoutVal(ents_i);
+        } else if (val_k === 'null' && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+            return this.getEntsWithVal(ents_i);
+        }
+        // get the values to search for
+        const search_val: string = val_k;
+        // search
+        let found_keys: number[];
+        switch (operator) {
+            case EQueryOperatorTypes.IS_EQUAL:
+                found_keys = this.getEntsFromVal(search_val);
+                if (found_keys === undefined) { return []; }
+                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
+            case EQueryOperatorTypes.IS_NOT_EQUAL:
+                found_keys = this.getEntsFromVal(search_val);
+                if (found_keys === undefined) { return []; }
+                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
+            case EQueryOperatorTypes.IS_GREATER:
+            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EQueryOperatorTypes.IS_LESS:
+            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+                throw new Error('Query error: Operator not allowed with string values.');
+            default:
+                throw new Error('Query error: Operator not found.');
+        }
+    }
+    /**
+     * Searches for the value using the operator
+     */
+    private _searchIndexedNumValue(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, val_k: string): number[] {
+        // clean up
+        val_k = val_k.replace(RE_SPACES, '');
+        // get the search value, null or a number
+        let search_val: number;
+        if (val_k === 'null') {
+            search_val = null;
+        } else { // value_str must be a number
+            search_val = Number.parseFloat(val_k);
+            if (isNaN(search_val)) {
+                throw new Error('Query value "' + val_k + '" cannot be converted to a number: ' + val_k);
             }
         }
+        // do the search
+        const found_keys: number[] = [];
+        for (const ent_i of ents_i) {
+            const search_value_arr: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
+            if ((search_value_arr !== undefined) &&
+                this._compare(operator, search_value_arr[val_arr_index], search_val) ) {
+                found_keys.push(ent_i);
+            }
+        }
+        return found_keys;
+    }
+    /**
+     * Searches for the value using the operator
+     */
+    private _searchIndexedStrValue(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, val_k: string): number[] {
+        // clean up
+        val_k = val_k.replace(RE_SPACES, '');
+        // get the search value, null or a string
+        let search_val: string;
+        if (val_k === 'null') {
+            search_val = null;
+        } else { // value_str must be a number
+            search_val = val_k;
+        }
+        // do the search
+        const found_keys: number[] = [];
+        for (const ent_i of ents_i) {
+            const search_value_arr: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
+            if ( this._compare(operator, search_value_arr[val_arr_index], search_val) ) {
+                found_keys.push(ent_i);
+            }
+        }
+        return found_keys;
     }
 }

@@ -17,7 +17,7 @@
                 "make.Point.mob&node=1",
                 "make.Polyline.mob&node=1",
                 "make.Polygon.mob&node=1",
-                "make.Collection.mob&node=1`"
+                "make.Collection.mob&node=1"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
         }

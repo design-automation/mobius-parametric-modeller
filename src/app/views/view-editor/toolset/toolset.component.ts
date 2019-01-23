@@ -8,7 +8,7 @@ import { ModuleList, ModuleDocList } from '@shared/decorators';
 import { INode } from '@models/node';
 
 import { DownloadUtils } from '@shared/components/file/download.utils';
-import { inline_query_expr, inline_func, inline_sort_expr} from './toolset.inline';
+import { inline_query_expr, inline_func, inline_sort_expr} from '@assets/core/inline/inline';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { InputType } from '@models/port';

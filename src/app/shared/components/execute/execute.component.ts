@@ -32,7 +32,7 @@ function printFunc(_console, name, value){
     } else if (value.constructor === {}.constructor) {
         val = JSON.stringify(value);
     } else {
-        val = value; // TODO - make this generic
+        val = value;
     }
     _console.push(name+': '+val);
     return val;

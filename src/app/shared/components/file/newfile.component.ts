@@ -41,7 +41,8 @@ export class NewFileComponent {
             author: 'new_user',
             flowchart: FlowchartUtils.newflowchart(),
             last_updated: new Date(),
-            version: 1
+            version: 1,
+            settings: {}
         };
         this.dataService.file = file;
         const zooming = document.getElementById('zoomToFit');

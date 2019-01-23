@@ -68,7 +68,8 @@ export class LoadFileComponent {
                     author: f.author,
                     flowchart: f.flowchart,
                     last_updated: f.last_updated,
-                    version: f.version
+                    version: f.version,
+                    settings: f.settings || {}
                 };
                 file.flowchart.name = selectedFile.name.split('.mob')[0];
                 let hasError = false;

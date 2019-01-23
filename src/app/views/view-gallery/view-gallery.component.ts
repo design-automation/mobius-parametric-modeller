@@ -96,7 +96,8 @@ export class ViewGalleryComponent {
         //                 author: f.author,
         //                 flowchart: f.flowchart,
         //                 last_updated: f.last_updated,
-        //                 version: f.version
+        //                 version: f.version,
+        //                 settings: f.settings || {}
         //             };
         //             observer.next(file);
         //             observer.complete();

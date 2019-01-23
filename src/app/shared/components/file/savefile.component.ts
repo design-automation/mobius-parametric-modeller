@@ -104,7 +104,7 @@ export class SaveFileComponent {
         }
         */
 
-
+        savedfile.last_updated = new Date();
         savedfile.flowchart.meta.selected_nodes = [0];
         for (const edge of savedfile.flowchart.edges) {
             edge.selected = false;

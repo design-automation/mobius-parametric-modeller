@@ -58,7 +58,8 @@ export class LoadUrlComponent {
                         author: f.author,
                         flowchart: f.flowchart,
                         last_updated: f.last_updated,
-                        version: f.version
+                        version: f.version,
+                        settings: f.settings || {}
                     };
                     const urlSplit = url.split('/');
                     file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];

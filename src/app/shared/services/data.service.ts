@@ -11,7 +11,8 @@ export class DataService {
         author: 'new_user',
         last_updated: new Date(),
         version: 1,
-        flowchart: FlowchartUtils.newflowchart()
+        flowchart: FlowchartUtils.newflowchart(),
+        settings: {}
     };
 
     private static _consoleLog: string[] = [];
@@ -62,7 +63,8 @@ export class DataService {
             author: data.author,
             flowchart: data.flowchart,
             last_updated: data.last_updated,
-            version: data.version
+            version: data.version,
+            settings: data.settings || {}
         };
     }
 

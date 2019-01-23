@@ -201,9 +201,6 @@ export class CodeUtils {
                 const repImpVar = this.repSetAttrib(args[0].value);
                 if (!repImpVar) {
                     codeStr.push(`${prefix}${args[0].value} = ${fn};`);
-                    if (prefix === 'let ') {
-                        existingVars.push(args[0].value);
-                    }
                 } else {
                     codeStr.push(`${repImpVar[0]} ${fnCall} ${repImpVar[1]}`);
                 }
@@ -240,11 +237,9 @@ export class CodeUtils {
         if (openBracketMatch) {
             const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
             const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${bracketSplit[0]}',`,
-                    `, ${innerVar});`];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${bracketSplit[0]}',`, `, ${innerVar});`];
         } else {
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}',`,
-                    ');'];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}',`, ');'];
         }
 
 

@@ -220,7 +220,7 @@ export class ProcedureItemComponent {
     // }
 
     inputSize(val) {
-        return ctx.measureText(val).width + 2;
+        return ctx.measureText(val).width + 7;
     }
 
     checkEnum(param, index: number): boolean {

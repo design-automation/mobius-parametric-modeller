@@ -6,10 +6,13 @@ import { LoadUrlComponent } from '../file/loadurl.component';
 import { ExecuteComponent } from './execute.component';
 import { MatIconModule } from '@angular/material';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { FlowchartUtils } from '@models/flowchart';
 
 describe('Execute Component test', () => {
     let loadURLfixture:   ComponentFixture<LoadUrlComponent>;
     let executeFixture:   ComponentFixture<ExecuteComponent>;
+    let spinnerFixture:   ComponentFixture<SpinnerComponent>;
     let router: Router;
     let dataService: DataService;
 
@@ -19,7 +22,8 @@ describe('Execute Component test', () => {
         TestBed.configureTestingModule({
             declarations: [
                 LoadUrlComponent,
-                ExecuteComponent
+                ExecuteComponent,
+                SpinnerComponent
             ],
             imports: [
                 MatIconModule
@@ -32,8 +36,10 @@ describe('Execute Component test', () => {
         }).compileComponents();
         loadURLfixture = TestBed.createComponent(LoadUrlComponent);
         executeFixture = TestBed.createComponent(ExecuteComponent);
+        spinnerFixture = TestBed.createComponent(SpinnerComponent);
         router = TestBed.get(Router);
         dataService = TestBed.get(DataService);
+        dataService.file.flowchart = undefined;
     });
 
     for (const exampleSet of galleryUrl.data) {
@@ -43,18 +49,22 @@ describe('Execute Component test', () => {
             if (f.indexOf('node=') !== -1) {
                 nodeCheck = true;
             }
-            it('load file: ' + f.split('.mob')[0], async (done: DoneFn) => {
+            it('load and execute file: ' + f.split('.mob')[0], async (done: DoneFn) => {
                 await loadURLfixture.componentInstance.loadStartUpURL(`?file=${exampleSet.link}${f}`);
                 const spy = router.navigate as jasmine.Spy;
-                let nodeProcedures = 0;
-                for (const node of dataService.flowchart.nodes) {
-                    nodeProcedures += node.procedure.length;
+                expect(dataService.file.flowchart).toBeDefined(`Unable to load ${f.split('.mob')[0]}.mob`);
+                if (dataService.file.flowchart) {
+                    let nodeProcedures = 0;
+                    for (const node of dataService.flowchart.nodes) {
+                        nodeProcedures += node.procedure.length;
+                    }
+                    expect(nodeProcedures > dataService.flowchart.nodes.length + 1).toBe(true,
+                            `${f.split('.mob')[0]}.mob is an empty flowchart`);
+                    if (nodeCheck) {
+                        expect(spy.calls.first().args[0][0]).toBe('/editor', 'Navigate to editor');
+                    }
+                    // await executeFixture.componentInstance.execute();
                 }
-                expect(nodeProcedures > 4).toBe(true, `successfully imported ${f.split('.mob')[0]}`);
-                if (nodeCheck) {
-                    expect(spy.calls.first().args[0][0]).toBe('/editor', 'successfully navigate to editor');
-                }
-                // await executeFixture.componentInstance.execute();
                 done();
             });
         }

@@ -38,8 +38,8 @@ export class ProcedureInputViewerComponent {
     }
 
     inputSize(val, defaultVal) {
-        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 2; }
-        return ctx.measureText(val).width + 2;
+        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 7; }
+        return ctx.measureText(val).width + 7;
     }
 
     openFileBrowse(id) {

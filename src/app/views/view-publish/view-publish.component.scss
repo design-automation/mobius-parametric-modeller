@@ -5,7 +5,7 @@
     margin-top: $header-height;
     padding-left: 11px; //split bar width
 
-    height: calc(100% - 40px); //header height;
+    height: calc(100% - 70px); //header height;
     overflow-y: auto;
 }
 
@@ -13,4 +13,19 @@ h3 {
     line-height: 30px;
     height: 30px;
     color: $color8;
+}
+
+.footer{
+    border-top: 3px solid $color5;
+    padding-top: 5px;
+    color: $color1;
+
+    a:link, a:visited { 
+        color: $color1;
+        text-decoration: underline;
+    }
+    
+    a:link:active, a:visited:active { 
+        color: $color1;
+    }
 }

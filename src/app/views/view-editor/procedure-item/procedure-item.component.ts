@@ -5,7 +5,7 @@ import { ModuleDocList } from '@shared/decorators';
 
 import { _parameterTypes} from '@modules';
 
-import { inline_func } from '../toolset/toolset.inline';
+import { inline_func } from '@assets/core/inline/inline';
 import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';

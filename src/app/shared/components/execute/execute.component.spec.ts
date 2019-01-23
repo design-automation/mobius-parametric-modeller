@@ -61,7 +61,7 @@ describe('Execute Component test', () => {
                     expect(nodeProcedures > dataService.flowchart.nodes.length + 1).toBe(true,
                             `${f.split('.mob')[0]}.mob is an empty flowchart`);
                     if (nodeCheck) {
-                        expect(spy.calls.first().args[0][0]).toBe('/editor', 'successfully navigate to editor');
+                        expect(spy.calls.first().args[0][0]).toBe('/editor', 'Navigate to editor');
                     }
                     // await executeFixture.componentInstance.execute();
                 }

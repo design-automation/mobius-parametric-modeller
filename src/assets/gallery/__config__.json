@@ -17,7 +17,7 @@
                 "make.Point.mob&node=1",
                 "make.Polyline.mob&node=1",
                 "make.Polygon.mob&node=1",
-                "make.Collection.mob&node=1`",
+                "make.Collection.mob&node=1",
                 "calc_Distance.mob",
                 "calc_Length.mob",
                 "calc_Area.mob",

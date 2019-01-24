@@ -4,13 +4,13 @@
 .container{
     display: block;
     height: 100%;
-    overflow: auto;
 }
 .content__panel{
     margin-top: 1px;
     margin-left: 11px; //split bar width
     // max-width: 600px;
-    height: auto;
+    height: calc(100% - 41px);
+    overflow: auto;
 
     .logo{
         float: right;

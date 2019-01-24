@@ -53,7 +53,7 @@ export class ExecuteComponent {
         this.isDev = isDevMode();
     }
 
-    async execute() {
+    async execute(testing?: boolean) {
         this.startTime = performance.now();
         document.getElementById('spinner-on').click();
         this.dataService.log(' ');
@@ -146,45 +146,50 @@ export class ExecuteComponent {
             }
         }
 
-        // setTimeout for 20ms so that the loading screen has enough time to be loaded in
-        setTimeout(() => {
-            this.executeFlowchart(this.dataService.flowchart);
-            // this._webWorkerService.run(this.executeFlowchart, this.dataService.flowchart);
-
-            for (const node of this.dataService.flowchart.nodes) {
-                if (node.type !== 'end') {
-                    delete node.output.value;
-                }
-            }
-            document.getElementById('spinner-off').click();
-        }, 20);
-        const category = this.isDev ? 'dev' : 'execute';
-        this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
+        if (testing) {
+            this.executeFlowchart();
+            return;
+        } else {
+            // setTimeout for 20ms so that the loading screen has enough time to be loaded in
+            setTimeout(() => {
+                this.executeFlowchart();
+            }, 20);
+        }
 
     }
 
-    executeFlowchart(flowchart) {
+    executeFlowchart() {
         let globalVars = '';
 
         // order the flowchart
-        if (!flowchart.ordered) {
-            FlowchartUtils.orderNodes(flowchart);
+        if (!this.dataService.flowchart.ordered) {
+            FlowchartUtils.orderNodes(this.dataService.flowchart);
         }
 
         // get the string of all imported functions
         const funcStrings = {};
-        for (const func of flowchart.functions) {
+        for (const func of this.dataService.flowchart.functions) {
             funcStrings[func.name] =  CodeUtils.getFunctionString(func);
         }
 
         // execute each node
-        for (const node of flowchart.nodes) {
+        for (const node of this.dataService.flowchart.nodes) {
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
+
+        for (const node of this.dataService.flowchart.nodes) {
+            if (node.type !== 'end') {
+                delete node.output.value;
+            }
+        }
+
+        document.getElementById('spinner-off').click();
+        const category = this.isDev ? 'dev' : 'execute';
+        this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
     }
 
     async resolveImportedUrl(prodList: IProcedure[]) {

@@ -106,9 +106,10 @@ button.mat-menu-item:hover{
 
     z-index: 1;
     background-color: $color6;
-    border-left: 1px solid $color2;
+    border: 1px solid $color2;
+    // border-left: 1px solid $color2;
     // border-right: 1px solid $color2;
-    border-bottom: 1px solid $color2;
+    // border-bottom: 1px solid $color2;
     
     button{
         display: inline-block;
@@ -127,6 +128,7 @@ button.mat-menu-item:hover{
         }
         &:hover{
             color: $selected-color;
+            background-color: $color5;
         }
     }
 }

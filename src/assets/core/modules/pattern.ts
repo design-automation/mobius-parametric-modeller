@@ -146,9 +146,9 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
                 const index: number = (i * xy_num_positions[0]) + j;
                 const square: number[] = [
                     posis_i[index],
-                    posis_i[index + xy_num_positions[0]],
+                    posis_i[index + 1],
                     posis_i[index + xy_num_positions[0] + 1],
-                    posis_i[index + 1]
+                    posis_i[index + xy_num_positions[0]]
                 ];
                 posis_i2.push( square );
             }
@@ -185,9 +185,9 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
     const xy_size: [number, number] = (Array.isArray(size) ? size : [size, size]) as [number, number];
     const coords: Txyz[] = [
         [-(xy_size[0] / 2), -(xy_size[1] / 2), 0],
-        [-(xy_size[0] / 2),  (xy_size[1] / 2), 0],
+        [ (xy_size[0] / 2), -(xy_size[1] / 2), 0],
         [ (xy_size[0] / 2),  (xy_size[1] / 2), 0],
-        [ (xy_size[0] / 2), -(xy_size[1] / 2), 0]
+        [-(xy_size[0] / 2),  (xy_size[1] / 2), 0]
     ];
     for (const coord of coords) {
         let xyz: Txyz = coord;

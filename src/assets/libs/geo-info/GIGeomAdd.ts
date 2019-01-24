@@ -707,14 +707,17 @@ export class GIGeomAdd {
      * Posi attributes will also be deleted.
      * @param posis_i
      */
-    public delUnusedPosis(): void {
+    public delUnusedPosis(posis_i: number|number[]): void {
+        // create array
+        posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
+        if (posis_i.length === 0) { return; }
         // loop
         const deleted_posis_i: number[] = [];
-        for (let posi_i = 0; posi_i < this._geom_arrays.up_posis_verts.length; posi_i++) {
+        for (const posi_i of posis_i) {
             // update up arrays
             const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
-            if (!verts_i.length) {
-                this._geom_arrays.up_posis_verts[posi_i] = null; // only delete posis with no verts
+            if (verts_i.length === 0) { // only delete posis with no verts
+                this._geom_arrays.up_posis_verts[posi_i] = null;
                 deleted_posis_i.push(posi_i);
             }
             // no need to update down arrays
@@ -727,41 +730,41 @@ export class GIGeomAdd {
      * Posi attributes will also be deleted.
      * @param posis_i
      */
-    public delPosis(posis_i: number|number[], del_objs: boolean): void {
+    public delPosis(posis_i: number|number[]): void {
         // create array
         posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
-        if (!posis_i.length) { return; }
+        if (posis_i.length === 0) { return; }
         // get all objects that use these positions and delete them
-        if (del_objs) {
-            const points_i: number[] = [];
-            const plines_i: number[] = [];
-            const pgons_i: number[] = [];
-            for (const posi_i of posis_i) {
-                const found_points_i: number[] = this._geom.query.navAnyToPoint(EEntType.POSI, posi_i);
-                for (const found_point_i of found_points_i) {
-                    points_i.push(found_point_i);
-                }
-                const found_plines_i: number[] = this._geom.query.navAnyToPline(EEntType.PLINE, posi_i);
-                for (const found_pline_i of found_plines_i) {
-                    plines_i.push(found_pline_i);
-                }
-                const found_pgons_i: number[] = this._geom.query.navAnyToPgon(EEntType.PGON, posi_i);
-                for (const found_pgon_i of found_pgons_i) {
-                    pgons_i.push(found_pgon_i);
-                }
-            }
-            // this.delPoints(points_i, false); // TODO what about positions?
-            // this.delPlines(plines_i, false); // TODO what about positions?
-            // this.delPgons(pgons_i, false); // TODO what about positions?
+        // if (del_objs) {
+        //     const points_i: number[] = [];
+        //     const plines_i: number[] = [];
+        //     const pgons_i: number[] = [];
+        //     for (const posi_i of posis_i) {
+        //         const found_points_i: number[] = this._geom.query.navAnyToPoint(EEntType.POSI, posi_i);
+        //         for (const found_point_i of found_points_i) {
+        //             points_i.push(found_point_i);
+        //         }
+        //         const found_plines_i: number[] = this._geom.query.navAnyToPline(EEntType.PLINE, posi_i);
+        //         for (const found_pline_i of found_plines_i) {
+        //             plines_i.push(found_pline_i);
+        //         }
+        //         const found_pgons_i: number[] = this._geom.query.navAnyToPgon(EEntType.PGON, posi_i);
+        //         for (const found_pgon_i of found_pgons_i) {
+        //             pgons_i.push(found_pgon_i);
+        //         }
+        //     }
+        //     // this.delPoints(points_i, false); // TODO what about positions?
+        //     // this.delPlines(plines_i, false); // TODO what about positions?
+        //     // this.delPgons(pgons_i, false); // TODO what about positions?
 
-        }
+        // }
         // loop
         const deleted_posis_i: number[] = [];
         for (const posi_i of posis_i) {
             // update up arrays
             const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
-            if (!verts_i.length) {
-                this._geom_arrays.up_posis_verts[posi_i] = null; // only delete posis with no verts
+            if (verts_i.length === 0) { // only delete posis with no verts
+                this._geom_arrays.up_posis_verts[posi_i] = null;
                 deleted_posis_i.push(posi_i);
             }
             // no need to update down arrays
@@ -801,10 +804,7 @@ export class GIGeomAdd {
             }
             // delete unused posis
             if (del_unused_posis) {
-
-                // TODO
-                // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
-
+                this.delUnusedPosis(posis_i);
             }
             // down arrays
             this._geom_arrays.dn_points_verts[point_i] = null;
@@ -852,10 +852,7 @@ export class GIGeomAdd {
             }
             // delete unused posis
             if (del_unused_posis) {
-
-                // TODO
-                // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
-
+                this.delUnusedPosis(posis_i);
             }
             // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
             // down arrays
@@ -905,7 +902,7 @@ export class GIGeomAdd {
                 this._geom_arrays.dn_tris_verts[tri_i] = null;
                 this._geom_arrays.up_tris_faces[tri_i] = null;
             });
-            // clean up posis up arrays point to verts that may have been deleted
+            // clean up, posis up arrays point to verts that may have been deleted
             for (const posi_i of posis_i) {
                 const other_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
                 // loop through deleted verts
@@ -914,15 +911,10 @@ export class GIGeomAdd {
                     if (i !== -1) { other_verts_i.splice(i, 1); }
                     if (!other_verts_i.length) { break; }
                 }
-
-
             }
             // delete unused posis
             if (del_unused_posis) {
-
-                // TODO
-                // posis_i.forEach( posi_i => this._geom_arrays.dn_faces_wirestris[posi_i] = null );
-
+                this.delUnusedPosis(posis_i);
             }
             // down arrays
             this._geom_arrays.dn_pgons_faces[pgon_i] = null;

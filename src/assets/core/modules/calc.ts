@@ -205,7 +205,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
                 const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
                 normal_vec = vecAdd(normal_vec, tri_normal);
             }
-            return vecNorm(vecDiv(normal_vec, tris_i.length));
+            return vecNorm(vecDiv(normal_vec, tris_i.length)); // TODO should this be area weighted?
         } else if (isPline(ent_type) || isWire(ent_type)) {
             // wires, these need to be triangulated
             let wire_i: number = index;
@@ -224,7 +224,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
                 const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
                 normal_vec = vecAdd(normal_vec, tri_normal);
             }
-            return vecNorm(vecDiv(normal_vec, tris.length));
+            return vecNorm(vecDiv(normal_vec, tris.length)); // TODO should this be area weighted?
         }
     } else {
         return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr)) as Txyz[];

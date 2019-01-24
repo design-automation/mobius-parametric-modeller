@@ -11,6 +11,7 @@ import {Arr} from './arr';  // TODO remove dependence on this
  * Function that returns a matrix to transform a set of vertices in 3d space onto the xy plane.
  * This function assumes that the vertices are co-planar.
  * Returns a set of three Vectors that represent points on the xy plane.
+ * Returns null if the points 
  */
 function _getMatrix(points: three.Vector3[]): three.Matrix4 {
     const o: three.Vector3 = new three.Vector3();
@@ -23,13 +24,13 @@ function _getMatrix(points: three.Vector3[]): three.Matrix4 {
     let got_vx = false;
     for (let i = 0; i < points.length; i++) {
         if (!got_vx) {
-            vx =  threex.subVectors(points[i], o).normalize();
+            vx =  threex.subVectors(points[i], o).normalize(); // TODO why normalize
             if (vx.lengthSq() !== 0) {got_vx = true; }
         } else {
-            vz = threex.crossVectors(vx, threex.subVectors(points[i], o).normalize()).normalize();
+            vz = threex.crossVectors(vx, threex.subVectors(points[i], o).normalize()).normalize(); // TODO why normalize
             if (vz.lengthSq() !== 0) {break; }
         }
-        if (i === points.length - 1) {return null; }
+        if (i === points.length - 1) { return null; } // could not find any pair of vectors
     }
     const vy: three.Vector3 =  threex.crossVectors(vz, vx);
     const m: three.Matrix4 = threex.xformMatrix(o, vx, vy, vz);
@@ -39,7 +40,8 @@ function _getMatrix(points: three.Vector3[]): three.Matrix4 {
 }
 
 /**
- * Triangulates a polygon in 3d with holes
+ * Triangulates a set of coords in 3d with holes
+ * If the coords cannot be triangulated, it returns [].
  * @param coords
  */
 export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
@@ -47,6 +49,11 @@ export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
     // get the matrix to transform from 2D to 3D
     const coords_v: three.Vector3[] = coords.map( coord => new three.Vector3(...coord));
     const matrix: three.Matrix4 = _getMatrix( coords_v );
+
+    // check for null, which means no plane could be found
+    if (matrix === null) {
+        return [];
+    }
 
     // create an array to store all x y vertex coordinates
     const flat_vert_xys: number[] = [];

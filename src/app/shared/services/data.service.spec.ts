@@ -1,6 +1,4 @@
 import { DataService } from './data.service';
-import { IMobius } from '../models/mobius';
-import { IFlowchart, FlowchartUtils } from '../models/flowchart';
 
 describe('Main DataService test', () => {
     let dataService: DataService;
@@ -8,5 +6,9 @@ describe('Main DataService test', () => {
     beforeEach(() => {
         dataService = new DataService();
     });
+
+    // it('test DataService flowchart', () => {
+    //     expect(1).toBe(1, 'test');
+    // });
 });
 

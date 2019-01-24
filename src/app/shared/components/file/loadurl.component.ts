@@ -53,16 +53,16 @@ export class LoadUrlComponent {
             request.onload = () => {
                 if (request.status === 200) {
                     const f = circularJSON.parse(request.responseText);
+                    const urlSplit = url.split('/');
                     const file: IMobius = {
-                        name: f.name,
+                        name: urlSplit[urlSplit.length - 1 ].split('.mob')[0],
                         author: f.author,
                         flowchart: f.flowchart,
                         last_updated: f.last_updated,
                         version: f.version,
                         settings: f.settings || {}
                     };
-                    const urlSplit = url.split('/');
-                    file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
+                    // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
                     // TO BE REMOVED after all the existing mob files are updated
                     const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];

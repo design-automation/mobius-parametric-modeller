@@ -4,7 +4,7 @@
     (dragStart)='dragSplitStart($event)'
     (dragEnd)='dragSplitEnd($event)'>
         <as-split-area [size]="100 - getSplit()">
-            <panel-header [title]='getFlowchart().name'></panel-header>
+            <panel-header [title]='getFlowchartName()'></panel-header>
             <!-- viewchild content -->
             <div id = 'flowchart-main-container' class='flowchart-container'>
                 <!--

@@ -7,7 +7,7 @@ import { IProcedure } from '@models/procedure';
 @Injectable()
 export class DataService {
     private static _data: IMobius = {
-        name: 'default_file',
+        name: 'Untitled',
         author: 'new_user',
         last_updated: new Date(),
         version: 1,
@@ -67,6 +67,8 @@ export class DataService {
             settings: data.settings || {}
         };
     }
+    get settings() {return DataService._data.settings; }
+    set settings(settings: any) {DataService._data.settings = settings; }
 
     get flowchartPos() {return DataService._flowchartPosition; }
     set flowchartPos(transf: string) {DataService._flowchartPosition = transf; }

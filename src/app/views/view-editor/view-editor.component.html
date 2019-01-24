@@ -1,7 +1,7 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
         <as-split-area [size]="100 - getSplit()">
-            <panel-header [title]='getFlowchart().name'></panel-header>
+            <panel-header [title]='getFlowchartName()'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
 

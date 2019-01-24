@@ -207,6 +207,7 @@ h3 {
         color: $color8;
         &:hover{
             color: $selected-color;
+            background-color: $color5;
         }
     }
 

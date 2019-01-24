@@ -120,6 +120,7 @@ export class SaveFileComponent {
         if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length-4) !== '.mob') {
             fname = `${fname}.mob`;
         }
+        
         const blob = new Blob([fileString], {type: 'application/json'});
         DownloadUtils.downloadFile(fname, blob);
 

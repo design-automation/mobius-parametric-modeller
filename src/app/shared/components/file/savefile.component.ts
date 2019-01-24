@@ -110,14 +110,18 @@ export class SaveFileComponent {
             edge.selected = false;
         }
 
-        savedfile.name = savedfile.flowchart.name;
+
+        if (!savedfile.name || savedfile.name === '' || savedfile.name.toLowerCase() === 'untitled') {
+            savedfile.name = savedfile.flowchart.name;
+        }
+
 
         const fileString = circularJSON.stringify(savedfile, null, 4);
-        const fname = `${savedfile.flowchart.name.replace(/\ /g, '_')}.mob`;
+        const fname = `${savedfile.name.replace(/\ /g, '_')}.mob`;
         const blob = new Blob([fileString], {type: 'application/json'});
         DownloadUtils.downloadFile(fname, blob);
 
-        this.dataService.flowchart.name = 'Untitled';
+        this.dataService.file.name = 'Untitled';
     }
 
 }

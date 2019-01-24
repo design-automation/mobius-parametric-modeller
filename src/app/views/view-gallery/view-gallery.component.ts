@@ -143,4 +143,5 @@ export class ViewGalleryComponent {
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
     getActiveGallery() { return this.dataService.activeGallery; }
+    getFlowchartName() { return this.dataService.file.name; }
 }

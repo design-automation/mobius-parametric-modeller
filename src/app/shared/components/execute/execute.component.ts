@@ -285,6 +285,9 @@ export class ExecuteComponent {
             this.dataService.log(duration_msg);
             return globalVars;
         } catch (ex) {
+            for (const str of params.console) {
+                this.dataService.log(str);
+            }
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;

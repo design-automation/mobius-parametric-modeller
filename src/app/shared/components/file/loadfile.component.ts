@@ -64,14 +64,14 @@ export class LoadFileComponent {
                 // if (typeof reader.result === 'string') {}
                 const f = circularJSON.parse(<string>reader.result);
                 const file: IMobius = {
-                    name: f.name,
+                    name: selectedFile.name.split('.mob')[0],
                     author: f.author,
                     flowchart: f.flowchart,
                     last_updated: f.last_updated,
                     version: f.version,
                     settings: f.settings || {}
                 };
-                file.flowchart.name = selectedFile.name.split('.mob')[0];
+                // file.flowchart.name = selectedFile.name.split('.mob')[0];
                 let hasError = false;
                 for (const node of file.flowchart.nodes) {
                     if (!checkMissingProd(node.procedure)) {

@@ -20,5 +20,6 @@ export class ViewAboutComponent {
 
     routeTo(url: string) { this.router.navigate([url]); }
     getFlowchart() { return this.dataService.flowchart; }
+    getFlowchartName() { return this.dataService.file.name; }
 }
 

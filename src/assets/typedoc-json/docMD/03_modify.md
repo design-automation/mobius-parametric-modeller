@@ -97,11 +97,15 @@
   
 ## Delete  
 * **Description:** Deletes geometric entities: positions, points, polylines, polygons, and collections.
+When deleting positions, any topology that requires those positions will also be deleted.
+(For example, any vertices linked to the deleted position will also be deleted,
+which may in turn result in some edges being deleted, and so forth.)
+For positions, the selection to delete or keep unused positions is ignored.
 When deleting objects (point, polyline, and polygons), topology is also deleted.
-When deleting collections, the objects in teh collection are not deleted.  
+When deleting collections, none of the objects in the collection are deleted.  
 * **Parameters:**  
   * *entities:* Position, point, polyline, polygon, collection. Can be a list.  
-  * *del_unused_posis:* Enum  
+  * *del_unused_posis:* Enum, delete or keep unused positions.  
 * **Returns:** void  
 * **Examples:**  
   * modify.Delete(polygon1)  

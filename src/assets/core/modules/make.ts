@@ -377,12 +377,12 @@ export function Loft(__model__: GIModel, entities: TId[], method: _ELoftMethod):
 }
 // ================================================================================================
 function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
-        distance: number|Txyz, divisions: number): TEntTypeIdx|TEntTypeIdx[] {
+        distance: number|Txyz, divisions: number): TEntTypeIdx[] {
     const extrude_vec: Txyz = (Array.isArray(distance) ? distance : [0, 0, distance]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
-    if (!Array.isArray(ents_arr[0])) {
+    if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        // check if this is a collection
+        // check if this is a collection, call this function again
         if (isColl(ent_type)) {
             const points_i: number[] = __model__.geom.query.navCollToPoint(index);
             const res1 = points_i.map( point_i => _extrude(__model__, [EEntType.POINT, point_i], extrude_vec, divisions));
@@ -390,21 +390,22 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             const res2 = plines_i.map( pline_i => _extrude(__model__, [EEntType.PLINE, pline_i], extrude_vec, divisions));
             const pgons_i: number[] = __model__.geom.query.navCollToPgon(index);
             const res3 = pgons_i.map( pgon_i => _extrude(__model__, [EEntType.PGON, pgon_i], extrude_vec, divisions));
-            return [].concat(...[res1, res2, res3]);
+            return [].concat(res1, res2, res3);
         }
         // check if this is a position, a vertex, or a point -> pline
         if (isDim0(ent_type)) {
-            const all_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
-            const new_posis_i: number[] = [all_posis_i[0]];
+            const exist_posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
+            const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
+            const strip_posis_i: number[] = [exist_posi_i];
             for (let i = 1; i < divisions + 1; i++) {
-                const extrude_vec_mult: Txyz = vecMult(extrude_vec_div, i);
-                const new_pline_posi_i: number = __model__.geom.add.copyPosis(all_posis_i[0], false) as number; // Do not copy attribs
-                __model__.attribs.add.movePosiCoords(new_pline_posi_i, extrude_vec_mult);
-                new_posis_i.push(new_pline_posi_i);
+                const strip_posi_i: number = __model__.geom.add.addPosi();
+                const move_xyz = vecMult(extrude_vec_div, i);
+                __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                strip_posis_i.push(strip_posi_i);
             }
             // loft between the positions and create a single polyline
-            const pline_i: number = __model__.geom.add.addPline(new_posis_i);
-            return [EEntType.PLINE, pline_i];
+            const pline_i: number = __model__.geom.add.addPline(strip_posis_i);
+            return [[EEntType.PLINE, pline_i]];
         }
         // extrude edges -> polygons
         const new_pgons_i: number[] = [];
@@ -459,14 +460,19 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         }
         return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);
     } else {
-        return [].concat(...(ents_arr as TEntTypeIdx[]).map(_ents_arr => _extrude(__model__, _ents_arr, extrude_vec, divisions)));
+        const new_ents_arr: TEntTypeIdx[] = [];
+        (ents_arr as TEntTypeIdx[]).forEach(ent_arr => {
+            const result = _extrude(__model__, ent_arr, extrude_vec, divisions);
+            result.forEach( new_ent_arr => new_ents_arr.push(new_ent_arr));
+        });
+        return new_ents_arr;
     }
 }
 /**
  * Extrudes geometry by distance (in default direction = z-axis) or by vector.
- * - Extrusion of location produces a line;
- * - Extrusion of line produces a polygon;
- * - Extrusion of surface produces a list of surfaces.
+ * - Extrusion of a position, vertex, or point produces polylines;
+ * - Extrusion of edge, wire, or polyline produces polygons;
+ * - Extrusion of face or polygon produces polygons, also capped at the top.
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
@@ -486,8 +492,12 @@ export function Extrude(__model__: GIModel, entities: TId|TId[], distance: numbe
     checkCommTypes(fn_name, 'distance', distance, ['isNumber', 'isVector']);
     checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
     // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _extrude(__model__, ents_arr, distance, divisions);
-    return idsMake(new_ents_arr) as TId|TId[];
+    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, distance, divisions);
+    if (!Array.isArray(entities) && new_ents_arr.length === 1) {
+        return idsMake(new_ents_arr[0]) as TId;
+    } else {
+        return idsMake(new_ents_arr) as TId|TId[];
+    }
 }
 // ================================================================================================
 /**

@@ -117,7 +117,7 @@ export class SaveFileComponent {
 
         const fileString = circularJSON.stringify(savedfile, null, 4);
         let fname = savedfile.name.replace(/\ /g, '_');
-        if (savedfile.name.substring() === -1) {
+        if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length-4) !== '.mob') {
             fname = `${fname}.mob`;
         }
         const blob = new Blob([fileString], {type: 'application/json'});

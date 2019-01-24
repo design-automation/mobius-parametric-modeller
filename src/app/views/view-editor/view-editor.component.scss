@@ -118,13 +118,15 @@ h2{
     display: none;
     position: fixed;
     transition: display 0.4s;
+    left: 3px;
     top: 70px;
     width: 125px;
     z-index: 1;
     background-color: $color6;
-    border-right: 1px solid $color2;
-    border-bottom: 1px solid $color2;
-    border-top: 1px solid $color2;
+    border: 1px solid $color2;
+    // border-right: 1px solid $color2;
+    // border-bottom: 1px solid $color2;
+    // border-top: 1px solid $color2;
     cursor: pointer;
 
     button{

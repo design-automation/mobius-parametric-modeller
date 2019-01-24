@@ -166,7 +166,7 @@ h3 {
     display: none;
     position: absolute;
     width: fit-content;
-    left: 0px;
+    left: 10px;
 
     transition: display 0.4s;
     // top: 60px;
@@ -174,7 +174,8 @@ h3 {
     z-index: 1;
     background-color: $color6;
     // border-left: 1px solid $color1;
-    border-bottom: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
+    border: 1px solid $color1;
 
     button{
         cursor: pointer;

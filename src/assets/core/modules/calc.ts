@@ -1,3 +1,13 @@
+/**
+ * The `calc` module has functions for performing various types of calculations with entities in the model.
+ * These functions neither make nor modify anything in the model.
+ * All these functions all return either numbers or lists of numbers.
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, isPgon, isFace, idsBreak, getArrDepth } from '@libs/geo-info/id';

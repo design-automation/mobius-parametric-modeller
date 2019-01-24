@@ -65,6 +65,9 @@ export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
 
     // basic case, a quad with no holes
     if (coords.length === 4 && !has_holes) {
+        // TODO this does not take into account degenerate cases
+        // TODO two points in same location
+        // TODO Three points that are colinear
         const area1: number = area(coords[0], coords[1], coords[2]) + area(coords[2], coords[3], coords[0]);
         const area2: number = area(coords[0], coords[1], coords[3]) + area(coords[1], coords[2], coords[3]);
         const tri1a: Txyz[] = [coords[0], coords[1], coords[2]];

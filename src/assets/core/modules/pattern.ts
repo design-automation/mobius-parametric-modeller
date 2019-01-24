@@ -1,4 +1,14 @@
-import { checkCommTypes } from './_check_args';
+/**
+ * The `pattern` module has functions for creating patters of positions in the model.
+ * All these functions all return lists of position IDs.
+ * The list may be nested, depending on which function is selected.
+ */
+
+/**
+ *
+ */
+
+ import { checkCommTypes } from './_check_args';
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';

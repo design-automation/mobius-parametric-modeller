@@ -1,3 +1,13 @@
+/**
+ * The `isect` module has functions for performing intersections between entities in the model.
+ * These functions may make new entities, and may modify existing entities, depending on the function that is selected.
+ * If new entities are created, then the function will return the IDs of those entities.
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane } from '@libs/geo-info/common';
 import { __merge__ } from './_model';

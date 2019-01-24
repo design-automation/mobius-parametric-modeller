@@ -98,9 +98,9 @@ If the list of positions consists of a list of lists, then multiple holes will b
   
 ## Extrude  
 * **Description:** Extrudes geometry by distance (in default direction = z-axis) or by vector.
-- Extrusion of location produces a line;
-- Extrusion of line produces a polygon;
-- Extrusion of surface produces a list of surfaces.  
+- Extrusion of a position, vertex, or point produces polylines;
+- Extrusion of edge, wire, or polyline produces polygons;
+- Extrusion of face or polygon produces polygons, also capped at the top.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
   * *distance:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  

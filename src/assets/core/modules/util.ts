@@ -1,3 +1,12 @@
+/**
+ * The `util` module has functions for importing data into the model and
+ * exporting data out of the model.
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { exportObj } from '@libs/geo-info/export';
 import { importObj } from '@libs/geo-info/import';

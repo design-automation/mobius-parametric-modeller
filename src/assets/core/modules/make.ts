@@ -1,3 +1,12 @@
+/**
+ * The `make` module has functions for making new entities in the model.
+ * All these functions all return the IDs of the entities that are created.
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx } from '@libs/geo-info/common';
 import { idsBreak, isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,

@@ -1,3 +1,13 @@
+/**
+ * The `query` module has functions for querying entities in the the model.
+ * Most of these functions all return a list of IDs of entities in the model.
+ * The Count function returns the number of entities, rather than the list of entities. 
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
 import { idsMake } from '@libs/geo-info/id';

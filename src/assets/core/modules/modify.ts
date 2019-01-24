@@ -1,3 +1,13 @@
+/**
+ * The `modify` module has functions for modifying existing entities in the model.
+ * These functions do not make any new entities, but they may change attribute values.
+ * All these functions all return void.
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';

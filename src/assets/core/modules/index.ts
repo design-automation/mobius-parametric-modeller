@@ -11,6 +11,7 @@ export {_model};
 
 // functions for end users
 
+
 import * as query from './query';
 export {query};
 
@@ -60,7 +61,7 @@ export {_constants};
 
 // input, output ports
 
-import * as _Output from './output';
+import * as _Output from './_output';
 export {_Output};
 
 export * from './_parameterTypes';

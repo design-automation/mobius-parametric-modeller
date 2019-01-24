@@ -12241,7 +12241,7 @@
                             "kindString": "Call signature",
                             "flags": {},
                             "comment": {
-                                "shortText": "Deletes geometric entities: positions, points, polylines, polygons, and collections.\nWhen deleting objects (point, polyline, and polygons), topology is also deleted.\nWhen deleting collections, the objects in teh collection are not deleted.",
+                                "shortText": "Deletes geometric entities: positions, points, polylines, polygons, and collections.\nWhen deleting positions, any topology that requires those positions will also be deleted.\n(For example, any vertices linked to the deleted position will also be deleted,\nwhich may in turn result in some edges being deleted, and so forth.)\nFor positions, the selection to delete or keep unused positions is ignored.\nWhen deleting objects (point, polyline, and polygons), topology is also deleted.\nWhen deleting collections, none of the objects in the collection are deleted.",
                                 "returns": "void",
                                 "tags": [
                                     {
@@ -12303,7 +12303,7 @@
                                     "kindString": "Parameter",
                                     "flags": {},
                                     "comment": {
-                                        "text": "Enum"
+                                        "text": "Enum, delete or keep unused positions."
                                     },
                                     "type": {
                                         "type": "reference",
@@ -12321,7 +12321,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 408,
+                            "line": 412,
                             "character": 22
                         }
                     ]
@@ -24354,7 +24354,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 973,
+                                    "line": 965,
                                     "character": 23
                                 }
                             ]
@@ -24622,7 +24622,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 996,
+                                    "line": 988,
                                     "character": 20
                                 }
                             ]
@@ -25121,7 +25121,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 938,
+                                    "line": 930,
                                     "character": 19
                                 }
                             ]
@@ -25194,7 +25194,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 870,
+                                    "line": 867,
                                     "character": 19
                                 }
                             ]
@@ -25340,13 +25340,13 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 777,
+                                    "line": 780,
                                     "character": 20
                                 }
                             ]
                         },
                         {
-                            "id": 550,
+                            "id": 551,
                             "name": "delPosis",
                             "kind": 2048,
                             "kindString": "Method",
@@ -25357,7 +25357,7 @@
                             },
                             "signatures": [
                                 {
-                                    "id": 551,
+                                    "id": 552,
                                     "name": "delPosis",
                                     "kind": 4096,
                                     "kindString": "Call signature",
@@ -25367,7 +25367,7 @@
                                     },
                                     "parameters": [
                                         {
-                                            "id": 552,
+                                            "id": 553,
                                             "name": "posis_i",
                                             "kind": 32768,
                                             "kindString": "Parameter",
@@ -25391,17 +25391,6 @@
                                                     }
                                                 ]
                                             }
-                                        },
-                                        {
-                                            "id": 553,
-                                            "name": "del_objs",
-                                            "kind": 32768,
-                                            "kindString": "Parameter",
-                                            "flags": {},
-                                            "type": {
-                                                "type": "intrinsic",
-                                                "name": "boolean"
-                                            }
                                         }
                                     ],
                                     "type": {
@@ -25413,7 +25402,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 730,
+                                    "line": 733,
                                     "character": 19
                                 }
                             ]
@@ -25438,6 +25427,34 @@
                                     "comment": {
                                         "shortText": "Del all unused posis in the model.\nPosi attributes will also be deleted."
                                     },
+                                    "parameters": [
+                                        {
+                                            "id": 550,
+                                            "name": "posis_i",
+                                            "kind": 32768,
+                                            "kindString": "Parameter",
+                                            "flags": {},
+                                            "comment": {
+                                                "text": "\n"
+                                            },
+                                            "type": {
+                                                "type": "union",
+                                                "types": [
+                                                    {
+                                                        "type": "intrinsic",
+                                                        "name": "number"
+                                                    },
+                                                    {
+                                                        "type": "array",
+                                                        "elementType": {
+                                                            "type": "intrinsic",
+                                                            "name": "number"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ],
                                     "type": {
                                         "type": "intrinsic",
                                         "name": "void"
@@ -25505,7 +25522,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1043,
+                                    "line": 1035,
                                     "character": 25
                                 }
                             ]
@@ -25563,7 +25580,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1024,
+                                    "line": 1016,
                                     "character": 29
                                 }
                             ]
@@ -25613,7 +25630,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1016,
+                                    "line": 1008,
                                     "character": 19
                                 }
                             ]
@@ -25691,7 +25708,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1054,
+                                    "line": 1046,
                                     "character": 23
                                 }
                             ]
@@ -25738,7 +25755,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1113,
+                                    "line": 1105,
                                     "character": 18
                                 }
                             ]
@@ -25796,7 +25813,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1135,
+                                    "line": 1127,
                                     "character": 16
                                 }
                             ]
@@ -25852,7 +25869,7 @@
                             "sources": [
                                 {
                                     "fileName": "libs/geo-info/GIGeomAdd.ts",
-                                    "line": 1068,
+                                    "line": 1060,
                                     "character": 22
                                 }
                             ]
@@ -25904,7 +25921,7 @@
                                 562,
                                 558,
                                 554,
-                                550,
+                                551,
                                 548,
                                 584,
                                 580,

@@ -1,3 +1,16 @@
+/**
+ * The `virtual` module has functions for creating virtual geometric constructs.
+ * They are called 'virtual' due to the fact that they are not saved in the model.
+ * Currently there are two types of virtual constructs: planes and rays.
+ * Most of these functions neither make nor modify anything in the model.
+ * The exception is the `Vis` functions, that generate some polylines and polygons in the model
+ * to aid with visualizing these virtual constructs.
+ */
+
+/**
+ *
+ */
+
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';

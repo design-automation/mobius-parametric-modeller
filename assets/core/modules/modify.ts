@@ -1,3 +1,13 @@
+/**
+ * The `modify` module has functions for modifying existing entities in the model.
+ * These functions do not make any new entities, but they may change attribute values.
+ * All these functions all return void.
+ */
+
+/**
+ *
+ */
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
@@ -382,15 +392,19 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_un
     __model__.geom.add.delPgons(pgons_i, del_unused_posis);
     __model__.geom.add.delPlines(plines_i, del_unused_posis);
     __model__.geom.add.delPoints(points_i, del_unused_posis);
-    __model__.geom.add.delPosis(posis_i, del_unused_posis);
+    __model__.geom.add.delPosis(posis_i);
 }
 /**
  * Deletes geometric entities: positions, points, polylines, polygons, and collections.
+ * When deleting positions, any topology that requires those positions will also be deleted.
+ * (For example, any vertices linked to the deleted position will also be deleted,
+ * which may in turn result in some edges being deleted, and so forth.)
+ * For positions, the selection to delete or keep unused positions is ignored.
  * When deleting objects (point, polyline, and polygons), topology is also deleted.
- * When deleting collections, the objects in teh collection are not deleted.
+ * When deleting collections, none of the objects in the collection are deleted.
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection. Can be a list.
- * @param del_unused_posis Enum
+ * @param del_unused_posis Enum, delete or keep unused positions.
  * @returns void
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.

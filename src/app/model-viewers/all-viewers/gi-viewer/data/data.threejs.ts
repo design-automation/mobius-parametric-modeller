@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { EEntType } from '@assets/libs/geo-info/common';
 
 /**
  * ThreejsScene
@@ -138,7 +137,7 @@ export class DataThreejs {
         this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer);
         this._addLines(threejs_data.edge_indices, verts_xyz_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], 1);
-        this._addPositions(threejs_data.posis_indices, posis_xyz_buffer, [255, 255, 255], 1);
+        this._addPositions(threejs_data.posis_indices, posis_xyz_buffer, [255, 255, 255], this.settings.positions.size);
 
         // Create data for positions with no vertices
         // const posi_colors: number[] = [];
@@ -153,7 +152,7 @@ export class DataThreejs {
         // this.addPositions(check_posi_colors, this.settings.positions.size);
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
- 
+
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
         // this.grid.position.copy(center);
@@ -638,6 +637,7 @@ export class DataThreejs {
         this.sceneObjs.push(point);
         this._scene.add(point);
         this._positions.push(point);
+        this._positions.map(p => p.visible = this.settings.positions.show);
     }
 
     private _createTextLabel(container, type: string, labelText: string) {

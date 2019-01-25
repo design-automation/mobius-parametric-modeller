@@ -119,3 +119,73 @@ $ln-height: $fsize2 + 3px;
         color: $color3;
     }
 }
+
+
+h1 {
+    // display: inline-block;
+    padding-left: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 30px;
+    cursor: pointer;
+
+    .activeModName{
+        display: inline-block;
+        min-width: 50px;
+    }
+    
+}
+
+.moduleDesc{
+    font-size: 12px;
+}
+
+#helpMenu {
+    display: none;
+    position: absolute;
+    width: fit-content;
+
+    transition: display 0.4s;
+    // top: 60px;
+
+    z-index: 1;
+    background-color: $color6;
+    border: 1px solid $color1;
+    padding-left: 0px;
+
+    button{
+        cursor: pointer;
+        display: block;
+        min-width: 100px;
+        max-width: 200px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
+    li{
+        cursor: pointer;
+        display: block;
+        min-width: 100px;
+        max-width: 300px;
+        overflow: hidden;
+        line-height: 20px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px 10px 0px 10px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+        color: $color8;
+        &:hover{
+            color: $selected-color;
+            background-color: $color5;
+        }
+    }
+
+}

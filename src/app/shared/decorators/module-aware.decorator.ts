@@ -95,6 +95,9 @@ for (const mod of doc.children) {
         continue;
     }
     const moduleDoc = {};
+    if (mod.comment && mod.comment.shortText) {
+        moduleDoc['description'] = mod.comment.shortText;
+    }
     for (const func of mod.children) {
         const fn = {};
         fn['name'] = func.name;

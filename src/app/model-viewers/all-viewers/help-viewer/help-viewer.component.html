@@ -1,5 +1,14 @@
 <div id="help-container">
-    <div class = 'container' *ngIf='output'>
+    <h1 id = 'help-tab' (click)='openHelpMenu($event)'><span class='activeModName'>{{getActiveModule()||"Select Module"}}</span><span>▾</span></h1>
+    <div id="helpMenu">
+        <ng-container *ngFor='let mod of Modules; let i = index'>
+            <li (click)="switchHelp(i)">
+                {{mod.module}}
+            </li>
+        </ng-container>
+    </div>
+
+    <div class = 'container' *ngIf='output; else module_help'>
         <h2><span>{{output.module}}</span>.{{output.name}}</h2>
         <!--<h4>Module: <span>{{output.module}}</span></h4>-->
         <div class = 'body--container'>
@@ -48,4 +57,60 @@
             </div>
         </div>
     </div>
+
+    <ng-template #module_help>
+        <div class = 'container'> 
+            <p class='moduleDesc' *ngIf='Modules[activeModIndex]?.description'>{{Modules[activeModIndex].description}}</p> <br>
+            <ng-container *ngFor='let func of getFuncs()'>
+                <hr>
+                <h2><span>{{func.module}}</span>.{{func.name}}</h2>
+                <!--<h4>Module: <span>{{func.module}}</span></h4>-->
+                <div class = 'body--container'>
+                    <div class = 'descr--container'>
+                        <h5>Description:</h5>
+                        <p>{{func.description}}</p>
+                    </div>
+            
+                    <div class = 'param--container'>
+                        <h5 *ngIf='func.parameters?.length > 0'>Parameters:</h5>
+                        <ul class='params'>
+                            <ng-container *ngFor='let param of func.parameters'>
+                                <li *ngIf='param'>
+                                    <div class = 'li--item'>
+                                        <span>{{param.name}}: </span>{{param.description}}
+                                    </div>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </div>        
+            
+                    <!-- <p class='paramP' *ngFor='let param of func.parameters'>
+                        <span>{{param.name}} - </span>{{param.description}}
+                    </p> -->
+                    
+                    <div class = 'ret--container' *ngIf='func.returns'>
+                        <h5>Returns:</h5>
+                        <p>{{func.returns}}</p>
+                    </div>
+        
+                    <div *ngIf='func.example' class = 'exam--container'>
+                        <h5>Examples:</h5>
+                        <div *ngFor='let ex of func.example; let i = index;' class = 'examp'>
+                            <ul>
+                                <li>{{ex}}</li>
+                                <p *ngIf='func.example_info'>{{func.example_info[i]}}</p>
+                            </ul>
+                        </div>
+                    </div>
+        
+                    <div *ngIf='func.example_link' class = 'exam--container'>
+                        <h5>Example URLs:</h5>
+                        <ul *ngFor='let ex of func.example_link; let i = index;'>
+                            <li>{{i+1}}) <a class='hyperlink' href={{urlString+ex.split()}} target="_blank">{{ex.split('&node=')[0]}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-template>
 </div>

@@ -71,15 +71,19 @@ export class PanelHeaderComponent {
     onWindowClick(event: MouseEvent) {
         const dropdownMenu = document.getElementById('dropdownMenu');
         if (dropdownMenu) {
-            document.getElementById('dropdownMenu').style.display = 'none';
+            dropdownMenu.style.display = 'none';
         }
         const nodeMenu = document.getElementById('nodeMenu');
         if (nodeMenu) {
-            document.getElementById('nodeMenu').style.display = 'none';
+            nodeMenu.style.display = 'none';
         }
         const galleryMenu = document.getElementById('galleryMenu');
         if (galleryMenu) {
-            document.getElementById('galleryMenu').style.display = 'none';
+            galleryMenu.style.display = 'none';
+        }
+        const helpMenu = document.getElementById('helpMenu');
+        if (helpMenu) {
+            helpMenu.style.display = 'none';
         }
         if (this.dialogBox) {
             if ((<HTMLElement>event.target).tagName === 'SELECT') { return; }

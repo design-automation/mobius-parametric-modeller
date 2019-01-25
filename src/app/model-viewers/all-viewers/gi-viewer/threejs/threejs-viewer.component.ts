@@ -24,6 +24,7 @@ import { ThreeJSViewerService } from './threejs-viewer.service';
 export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     @Output() eventClicked = new EventEmitter<Event>();
     @Input() model: GIModel;
+    @Input() attr_table_select: {action: string, ent_type: string, id: number};
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
@@ -163,6 +164,50 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 this.updateModel(this.model);
             }
         }
+        if (changes['attr_table_select']) {
+            if (this.attr_table_select) {
+                this.attrTableSelect(this.attr_table_select);
+            }
+        }
+    }
+
+    attrTableSelect(attrib: {action: string, ent_type: string, id: number}) {
+        if (attrib.action === 'select') {
+            switch (attrib.ent_type) {
+                case EEntTypeStr[EEntType.POSI]:
+                this.selectPositions(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.VERT]:
+                this.selectVertex(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.EDGE]:
+                this.selectEdge(attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.WIRE]:
+                this.selectWire(attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.FACE]:
+                this.selectFace(attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.PGON]:
+                this.selectPGon(attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.PLINE]:
+                this.selectPLine(attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.POINT]:
+                this.selectPoint(attrib.id);
+                    break;
+                case EEntTypeStr[EEntType.COLL]:
+                this.chooseColl(attrib.id);
+                    break;
+                default:
+                    break;
+            }
+        } else if (attrib.action === 'unselect') {
+            this.unselectGeom(attrib.ent_type + attrib.id, attrib.ent_type);
+        }
+        this.render(this);
     }
 
     /**
@@ -204,7 +249,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (event.target.tagName !== 'CANVAS') {
             return null;
         } else {
-            if (this.dragHash < 5) {
+            if (this.dragHash < 10) {
                 this.onUserAction(event);
             } else {
                 // this._data_threejs._controls.enabled = true;
@@ -375,15 +420,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         switch (this.SelectingEntityType.id) {
             case EEntTypeStr[EEntType.POSI]:
                 if (intersect0.object.type === 'Points') {
-                    const point = intersect0.index;
-                    const ent_id = `_pt_posi${point}`;
+                    const posi = scene.posis_map.get(intersect0.index);
+                    const ent_id = `_pt_posi${posi}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPositions(point, null, null, ent_id);
+                        this.selectPositions(posi, null, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
@@ -412,14 +457,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 break;
             case EEntTypeStr[EEntType.VERT]:
                 if (intersect0.object.type === 'Points') {
-                    const vert = this.model.geom.query.navPosiToVert(intersect0.index);
+                    const vert = scene.vertex_map.get(intersect0.index);
+                    const verts = this.model.geom.query.navPosiToVert(intersect0.index);
                     let point: number;
-                    if (vert.length > 1) {
-                        this.dropdown.setItems(vert, EEntTypeStr[EEntType.VERT]);
+                    if (verts.length > 1) {
+                        this.dropdown.setItems(verts, EEntTypeStr[EEntType.VERT]);
                         this.dropdown.visible = true;
                         this.dropdown.position = this.dropdownPosition;
-                    } else if (vert.length === 1) {
-                        point = vert[0];
+                    } else {
+                        point = vert;
                     }
                     const ent_id = `_pt_v${point}`;
                     if (scene.selected_vertex.has(ent_id)) {
@@ -498,14 +544,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 break;
             case EEntTypeStr[EEntType.EDGE]:
                 if (intersect0.object.type === 'LineSegments') {
-                    const ent_id = `${EEntTypeStr[EEntType.EDGE]}${intersect0.index / 2}`;
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const ent_id = `${EEntTypeStr[EEntType.EDGE]}${edge}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.EDGE]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectEdge(intersect0);
+                        this.selectEdge(edge);
                     }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
@@ -537,7 +584,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectWireByFace(face, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
-                    const wire = this.model.geom.query.navEdgeToWire(intersect0.index / 2);
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const wire = this.model.geom.query.navEdgeToWire(edge);
                     const ent_id = `${EEntTypeStr[EEntType.WIRE]}${wire}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE]);
@@ -545,7 +593,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectWire(intersect0);
+                        this.selectWire(wire);
                     }
                 } else {
                     this.showMessages('Wires', true);
@@ -553,7 +601,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 break;
             case EEntTypeStr[EEntType.PLINE]:
                 if (intersect0.object.type === 'LineSegments') {
-                    const wire = this.model.geom.query.navEdgeToWire(intersect0.index / 2);
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const wire = this.model.geom.query.navEdgeToWire(edge);
                     const pline = this.model.geom.query.navWireToPline(wire);
                     const ent_id = `${EEntTypeStr[EEntType.PLINE]}${pline}`;
                     if (scene.selected_geoms.has(ent_id)) {
@@ -562,7 +611,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPLine(intersect0);
+                        this.selectPLine(pline);
                     }
                 } else {
                     this.showMessages('Polylines', true);
@@ -570,14 +619,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 break;
             case EEntTypeStr[EEntType.POINT]:
                 if (intersect0.object.type === 'Points') {
-                    const ent_id = `${EEntTypeStr[EEntType.POINT]}${intersect0.index}`;
+                    const point = scene.point_select_map.get(intersect0.index);
+                    const ent_id = `${EEntTypeStr[EEntType.POINT]}${point}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POINT]);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPoint(intersect0.index);
+                        this.selectPoint(point);
                     }
                 } else {
                     this.showMessages('Points', true);
@@ -738,16 +788,18 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             scene.unselectObj(ent_id, this.container);
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
         }
+
+        this.refreshTable(event);
     }
 
-    private selectEdge(line: THREE.Intersection) {
+    private selectEdge(line: number) {
         const ent_type_str = EEntTypeStr[EEntType.EDGE],
-            verts = this.model.geom.query.navEdgeToVert(line.index / 2),
+            verts = this.model.geom.query.navEdgeToVert(line),
             positions = verts.map(v => this.model.attribs.query.getVertCoords(v)),
             posi_flat = [].concat(...positions),
-            ent_id = `${ent_type_str}${line.index / 2}`;
+            ent_id = `${ent_type_str}${line}`;
         this._data_threejs.selectObjLine(ent_id, [], posi_flat, this.container);
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, line.index / 2);
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, line);
     }
 
     private selectEdgeByFace(face: number, parent_ent_id: string) {
@@ -771,9 +823,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.dataService.selected_face_edges.set(`${parent_ent_id}`, children);
     }
 
-    private selectWire(line: THREE.Intersection) {
+    private selectWire(line: number) {
         const ent_type_str = EEntTypeStr[EEntType.WIRE],
-            wire = this.model.geom.query.navEdgeToWire(line.index / 2),
+            wire = this.model.geom.query.navEdgeToWire(line),
             edges = this.model.geom.query.navWireToEdge(wire),
             verts = edges.map(e => this.model.geom.query.navEdgeToVert(e)),
             verts_flat = [].concat(...[].concat(...verts)),
@@ -797,11 +849,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const ent_id = `${ent_type_str}${wire}`;
             children.push(ent_id);
             const edges = this.model.geom.query.navWireToEdge(wire),
-            verts = edges.map(e => this.model.geom.query.navEdgeToVert(e));
+                verts = edges.map(e => this.model.geom.query.navEdgeToVert(e));
             // @ts-ignore
             const verts_flat = verts.flat(1),
-            indices = [],
-            positions = [];
+                indices = [],
+                positions = [];
             verts_flat.map((v, i) => {
                 positions.push(this.model.attribs.query.getVertCoords(v));
                 indices.push(i);
@@ -834,11 +886,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
     private selectPoint(point: number) {
         const ent_type_str = EEntTypeStr[EEntType.POINT];
-        const pt = this.model.geom.query.navVertToPoint(point);
-        if (pt === undefined) {
-            this.showMessages('This is not a Point', false, 'custom');
-            return;
-        }
         const result = this.getPointPosis(point, null);
         const point_indices = result.point_indices;
         const point_posi = result.posi_flat;
@@ -847,16 +894,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, point);
     }
 
-    private selectPLine(line: THREE.Intersection) {
-        const ent_type_str = EEntTypeStr[EEntType.PLINE],
-            wire = this.model.geom.query.navEdgeToWire(line.index / 2);
-        const result = this.getPLinePosis(wire);
+    private selectPLine(pline: number) {
+        const ent_type_str = EEntTypeStr[EEntType.PLINE];
+        const result = this.getPLinePosis(pline);
+        const ent_id = `${ent_type_str}${pline}`;
         if (result) {
             const posi_flat = result.posi_flat;
             const indices = result.indices;
-            const ent_id = `${ent_type_str}${wire}`;
             this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container);
-            this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, pline);
         } else {
             this.showMessages('Please Select a Polyline', false, 'custom');
         }
@@ -905,14 +951,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
      * @param plines
      */
 
-    private getPLinePosis(wire1: number = null, plines: number[] = null) {
+    private getPLinePosis(pline1: number = null, plines: number[] = null) {
         let wires_flat: number[] = null;
-        if (wire1 !== null) {
-            const _pline = this.model.geom.query.navWireToPline(wire1);
-            if (_pline === undefined) {
-                return null;
-            }
-            wires_flat = [this.model.geom.query.navPlineToWire(_pline)];
+        if (pline1 !== null) {
+            wires_flat = [this.model.geom.query.navPlineToWire(pline1)];
         }
         if (plines !== null) {
             const wires = plines.map(pl => this.model.geom.query.navPlineToWire(pl));

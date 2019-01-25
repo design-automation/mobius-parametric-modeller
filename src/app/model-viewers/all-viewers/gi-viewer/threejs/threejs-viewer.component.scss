@@ -159,7 +159,8 @@ button{
     text-align:center;
     color: #505050;
     top: 75px;
-    right:0px; 
+    right:0px;
+    cursor: pointer;
 }
 
 #selectDropdown{
@@ -172,7 +173,7 @@ button{
         font: $fsize1 bolder;
         display: block;
         background-color:transparent;
-        border:0;
+        border:1px solid transparent;
         font-family:sans-serif;
         color: #505050;
         cursor: pointer;
@@ -180,7 +181,8 @@ button{
             background-color:  #f3f3f3;
         }
         &:hover{
-            background-color:  #dadada;
+            background-color:  #f9f9f9;
+            border-color: #bbbbbb;
         }
     }
 }

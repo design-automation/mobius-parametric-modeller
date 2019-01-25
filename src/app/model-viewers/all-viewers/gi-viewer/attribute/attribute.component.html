@@ -4,18 +4,21 @@
       <div class="mat-elevation-z1">
         <div class = "table--container">
           <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
-            <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+            <ng-container *ngFor="let column of displayedColumns;" [matColumnDef]="column" [sticky] = 'column === "id"'>
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
                 <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row.id, $event)"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected]='row.selected?row.selected:false' (click)="selectRow(row.id, $event)"></tr>
           </table>
+          <div *ngIf="dataSource && dataSource.data.length === 0" id="emptyMessage">
+            No Data
+          </div>
         </div>
         <div class = 'btm--container'>
           <div id="displaySelected">
             <span>Show Selected</span>
-            <input type="checkbox" id="switch" (click)="showSelectedSwitch()" [checked]="showSelected"/><label for="switch">Toggle</label>
+            <input type="checkbox" id="switch" (click)="showSelectedSwitch();  $event.stopPropagation();" [checked]="showSelected"/><label for="switch">Toggle</label>
           </div>
           <div class = 'paginator--container'>
             <mat-paginator id="matPaginator" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>

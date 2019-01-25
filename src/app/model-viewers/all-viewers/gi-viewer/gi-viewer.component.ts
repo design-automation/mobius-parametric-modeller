@@ -40,7 +40,11 @@ export class GIViewerComponent implements OnInit {
 
     normalsEnabled = false;
 
+    columns_control;
+
     public clickedEvent: Event;
+    public attrTableSelect: Event;
+
     /**
      * constructor
      * @param dataService
@@ -51,6 +55,10 @@ export class GIViewerComponent implements OnInit {
         if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
+
+        // if (localStorage.getItem('mpm_attrib_columns') !== null) {
+        //     this.columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
+        // }
     }
 
     /**
@@ -83,6 +91,10 @@ export class GIViewerComponent implements OnInit {
 
     childEventClicked(event: Event) {
         this.clickedEvent = event;
+    }
+
+    attribTableSelected(event: Event) {
+        this.attrTableSelect = event;
     }
 
     openModal(id: string) {

@@ -57,6 +57,7 @@
         *ngIf="!selectDropdownVisible"
         id="SelectingEntityType"
         matTooltip="Selecting {{SelectingEntityType.name}}"
+        (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
     >
         {{SelectingEntityType.id}}
     </span>

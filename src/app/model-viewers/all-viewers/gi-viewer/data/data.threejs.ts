@@ -19,6 +19,9 @@ export class DataThreejs {
     public tri_select_map: Map<number, number>;
     public edge_select_map: Map<number, number>;
     public point_select_map: Map<number, number>;
+    public posis_map: Map<number, number>;
+    public vertex_map: Map<number, number>;
+
     public selected_geoms: Map<string, number> = new Map();
     public selected_positions: Map<string, Map<string, number>> = new Map();
     public selected_vertex: Map<string, Map<string, number>> = new Map();
@@ -65,7 +68,7 @@ export class DataThreejs {
         this._scene = new THREE.Scene();
 
         this.basic_scene = new THREE.Scene();
-        this.basic_scene.background = new THREE.Color(0xcccccc);
+        this.basic_scene.background = new THREE.Color(0xE6E6E6);
 
         // renderer
         this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -128,6 +131,8 @@ export class DataThreejs {
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
+        this.posis_map = threejs_data.posis_map;
+        this.vertex_map = threejs_data.vertex_map;
 
         // Create buffers that will be used by all geometry
         const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);

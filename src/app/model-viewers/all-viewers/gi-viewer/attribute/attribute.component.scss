@@ -4,6 +4,7 @@
 .table--container{
   // height: 100%;
   overflow-y: auto;
+  overflow-x: auto;
 }
 
 .mat-table{
@@ -15,6 +16,7 @@
 
 table {
   width: 100%;
+  min-width: 600px;
   font-family: sans-serif;
   background-color: transparent;
   
@@ -26,7 +28,7 @@ table {
     height: 24px;
     &.selected{
       .mat-cell{
-        background-color: chartreuse;
+        background-color: #e6e6e6;
       }
     }
     .mat-cell{
@@ -170,6 +172,12 @@ table {
   }
 }
 
+#emptyMessage{
+  text-align: center;
+  margin-top: 20px;
+  color: #888888;
+}
+
 .btm--container{
   position: relative;
   height: $fsize3;
@@ -181,7 +189,7 @@ table {
   bottom: 0px;
   #displaySelected{
     padding-left: 10px;
-    width: 20%;
+    width: 30%;
     span{
       vertical-align: middle;
       font-size: $fsize2;

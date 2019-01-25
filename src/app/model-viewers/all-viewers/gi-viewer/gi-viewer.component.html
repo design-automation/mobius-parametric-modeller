@@ -1,10 +1,10 @@
 <div id="gi-viewer-container">
 	<as-split direction="vertical">
 		<as-split-area [size]="68" id="three-js">
-			<threejs-viewer [model]='data' (eventClicked)="childEventClicked($event)"></threejs-viewer>
+			<threejs-viewer [model]='data' (eventClicked)="childEventClicked($event)" [attr_table_select]='attrTableSelect'></threejs-viewer>
 		</as-split-area>
 		<as-split-area [size]='32' id="attrib">
-			<attribute [data]="data" [refresh]="clickedEvent"></attribute>
+			<attribute [data]="data" [refresh]="clickedEvent" (attrTableSelect) = "attribTableSelected($event)"></attribute>
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')"><mat-icon>settings</mat-icon></button>
 			<modal-window id="settings_modal">
 				<h1>Settings</h1>

@@ -3,11 +3,6 @@
 @import '../general-viewer.scss';
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
-h2{
-    padding: 0px;
-    padding-bottom: 6px;
-    font-size: $fsize1;
-}
 #help-container {
     margin-top: 40px;
     padding: 0px;
@@ -124,7 +119,7 @@ $ln-height: $fsize2 + 3px;
 h1 {
     // display: inline-block;
     padding-left: 10px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 30px;
     cursor: pointer;
@@ -134,6 +129,11 @@ h1 {
         min-width: 50px;
     }
     
+}
+h2{
+    padding: 0px;
+    padding-bottom: 6px;
+    font-size: 14px;
 }
 
 .moduleDesc{

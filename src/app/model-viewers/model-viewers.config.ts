@@ -19,10 +19,11 @@ export const VIEWER_MOD = [
 ];
 
 export const Viewers: IView[] = [
+    // Step-3: Add Viewer Definition here: name, icon and component
+    // The order of these views here will influence the order of the view appearing in the viewer header.
+    { name: '3D Viewer', icon: undefined, component: GIViewerComponent },
+
     { name: 'Console', icon: undefined, component: ConsoleViewerComponent },
     { name: 'Help', icon: undefined, component: HelpViewerComponent },
-
-    // Step-3: Add Viewer Definition here: name, icon and component
-    { name: '3D Viewer', icon: undefined, component: GIViewerComponent },
 ];
 

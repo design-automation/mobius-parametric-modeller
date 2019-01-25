@@ -1,4 +1,4 @@
-import { Component, Input, DoCheck } from '@angular/core';
+import { Component, Input, DoCheck, OnDestroy } from '@angular/core';
 import { ModuleList, ModuleDocList } from '@shared/decorators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '@shared/services';
@@ -11,11 +11,11 @@ import { DataService } from '@shared/services';
   templateUrl: './help-viewer.component.html',
   styleUrls: ['./help-viewer.component.scss']
 })
-export class HelpViewerComponent implements DoCheck {
-    output;
+export class HelpViewerComponent implements DoCheck, OnDestroy {
+    output: any;
     ModuleDoc = ModuleDocList;
     Modules = [];
-    activeModIndex = '';
+    activeModIndex: string;
 
     // TODO: update mobius url
     urlString: string;
@@ -39,6 +39,12 @@ export class HelpViewerComponent implements DoCheck {
                 this.Modules.push(nMod);
             }
         }
+        this.output = this.mainDataService.helpViewData[0];
+        this.activeModIndex = this.mainDataService.helpViewData[1];
+    }
+
+    ngOnDestroy() {
+        this.mainDataService.helpViewData = [this.output, this.activeModIndex];
     }
 
     ngDoCheck() {

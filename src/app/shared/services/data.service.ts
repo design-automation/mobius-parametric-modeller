@@ -22,7 +22,9 @@ export class DataService {
 
     private static _modelOutputView = {};
     private static _testModel = false;
+
     private static _helpView = [false, false, undefined];
+    private static _helpViewData = [undefined, ''];
 
     private static _activeModelView: string = undefined;
     private static _activeGallery: any = undefined;
@@ -98,6 +100,9 @@ export class DataService {
     toggleHelp(state: boolean) { DataService._helpView[0] = state; DataService._helpView[1] = state; }
     toggleViewHelp(state: boolean) { DataService._helpView[0] = state; }
     togglePageHelp(state: boolean) { DataService._helpView[1] = state; }
+
+    get helpViewData() {return DataService._helpViewData; }
+    set helpViewData(view: any) {DataService._helpViewData = view; }
 
     get focusedInput() {return DataService._focusedInput; }
     set focusedInput(input: any) {DataService._focusedInput = input; }

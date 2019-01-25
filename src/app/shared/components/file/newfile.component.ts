@@ -37,7 +37,7 @@ export class NewFileComponent {
         const confirmed = confirm('Resetting would delete the current flowchart. Would you like to continue?');
         if (!confirmed) { return; }
         const file: IMobius = {
-            name: 'default_file.mob',
+            name: 'Untitled',
             author: 'new_user',
             flowchart: FlowchartUtils.newflowchart(),
             last_updated: new Date(),

@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class='filename-container'>
+    <div class='filename-container' *ngIf='getUrl() !== "/about"'>
         <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div>
         
         <div id="dropdownMenu">

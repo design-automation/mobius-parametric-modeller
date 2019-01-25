@@ -78,7 +78,7 @@ export class CodeUtils {
                     return [''];
                 }
                 let constName = args[0].value;
-                if (constName.substring(0, 1) === '"' || constName.substring(0, 1) === '\'') {
+                if (constName[0] === '"' || constName[0] === '\'') {
                     constName = args[0].value.substring(1, args[0].value.length - 1);
                 }
                 codeStr.push(`__params__['constants']['${constName}'] = ${prod.resolvedValue};`);
@@ -90,7 +90,7 @@ export class CodeUtils {
                 if (!addProdArr) {
                     return [`__modules__.${_parameterTypes.addData}( __params__.model, ${cst});`];
                 }
-                if (cst.substring(0, 1) === '"' || cst.substring(0, 1) === '\'') {
+                if (cst[0] === '"' || cst[0] === '\'') {
                     cst = args[0].value.substring(1, args[0].value.length - 1);
                 }
 
@@ -121,7 +121,7 @@ export class CodeUtils {
                         break;
                     }
                     if (arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                    if (arg.value.substring(0, 1) === '#') {
+                    if (arg.value[0] === '#') {
                         returnArgVals.push('`' + this.repGetAttrib(arg.value) + '`');
                         continue;
                     }
@@ -152,7 +152,7 @@ export class CodeUtils {
                         continue;
                     }
 
-                    if (arg.value && arg.value.substring(0, 1) === '#') {
+                    if (arg.value && arg.value[0] === '#') {
                         argVals.push('`' + this.repGetAttrib(arg.value) + '`');
                         continue;
                     }
@@ -260,7 +260,7 @@ export class CodeUtils {
                 }
                 let pref = '';
                 let postf = '';
-                while (splitted[0].substring(0, 1) === '[') {
+                while (splitted[0][0] === '[') {
                     splitted[0] = splitted[0].substring(1, splitted[0].length);
                     pref += '[';
                 }

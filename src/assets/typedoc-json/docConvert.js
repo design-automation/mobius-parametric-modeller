@@ -87,7 +87,7 @@ for (const mod of doc.children) {
     moduleDoc['name'] = modName;
     moduleDoc['func'] = [];
     for (const func of mod.children) {
-        if (func.name.substring(0, 1) === '_') { continue; }
+        if (func.name[0] === '_') { continue; }
         const fn = {};
         fn['id'] = func.id;
         fn['name'] = func.name;

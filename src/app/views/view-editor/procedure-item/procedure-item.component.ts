@@ -91,7 +91,7 @@ export class ProcedureItemComponent {
                 continue;
             }
             try {
-                if (i.substring(0, 1) === '_') {
+                if (i[0] === '_') {
                     arg.invalidVar = true;
                     return str;
                 }
@@ -164,7 +164,7 @@ export class ProcedureItemComponent {
     }
 
     haveHelpText() {
-        return (this.data.type === ProcedureTypes.Function || this.data.type ===  ProcedureTypes.Imported);
+        return (this.data.type === 8 || this.data.type ===  9);
     }
 
     emitHelpText($event) {
@@ -225,7 +225,7 @@ export class ProcedureItemComponent {
 
     checkEnum(param, index: number): boolean {
         try {
-            if (param.name.substring(0, 1) === '_') {
+            if (param.name[0] === '_') {
                 return false;
             }
             // @ts-ignore

@@ -5,9 +5,6 @@
     margin-top: $header-height;
     overflow: hidden;
 
-    :hover{
-        overflow: auto;
-    }
 }
 
 .container--editor{
@@ -71,8 +68,15 @@
 
 .container--procedure{
     width: calc(100% - 125px); //min-width toolset
+    max-height: calc(100vh - 40px);
     background-color: transparent;
     padding: 0px;   
+    overflow: auto;
+
+    // overflow: hidden;
+    // :hover{
+    //     overflow: auto;
+    // }
 }
 
 .procedureln--container{

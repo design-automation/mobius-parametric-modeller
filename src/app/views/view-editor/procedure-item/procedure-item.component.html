@@ -29,39 +29,74 @@
             </div>
 
         <!-- IF Template -->
-        <div class='line--item hasChildren' *ngSwitchCase="ProcedureTypes.If">
-            <div class='function-text'>
-                If
+        <ng-container *ngSwitchCase="ProcedureTypes.If">
+            <div class='line--item' >
+                <div class='function-text'>
+                    If
+                </div>
+                <input class='input--arg'
+                        [(ngModel)]='data.args[0].value'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >
+    
             </div>
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild(idx)'
+                    (helpText)='emitHelpText($event)'></procedure-item>
+            </div>
+        </ng-container>
+
+        <!-- ELSEIF Template -->
+        <ng-container *ngSwitchCase="ProcedureTypes.Elseif">
+            <div class='line--item'>
+                <div class='function-text'>
+                    Else if
+                </div>
+                
+            
             <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
                     (blur)='argMod($event, 0)'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >
-        </div>
-
-        <!-- ELSEIF Template -->
-        <div class='line--item hasChildren' *ngSwitchCase="ProcedureTypes.Elseif">
-            <div class='function-text'>
-                Else if
+                    >  
             </div>
-            
-        
-        <input class='input--arg'
-                [(ngModel)]='data.args[0].value'
-                (blur)='argMod($event, 0)'
-                placeholder={{data.args[0].name}}
-                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                >  
-        </div>
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild(idx)'
+                    (helpText)='emitHelpText($event)'></procedure-item>
+            </div>
+        </ng-container>
 
         <!-- ELSE Template -->
-        <div class='line--item hasChildren' *ngSwitchCase="ProcedureTypes.Else">
-            <div class='function-text'>
-                Else
+        <ng-container *ngSwitchCase="ProcedureTypes.Else">
+            <div class='line--item'>
+                <div class='function-text'>
+                    Else
+                </div>
             </div>
-        </div>
+                        
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild(idx)'
+                    (helpText)='emitHelpText($event)'></procedure-item>
+            </div>
+        </ng-container>
+    
+
+
 
         <!-- BREAK Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Break">
@@ -78,8 +113,9 @@
         </div>
 
 
-    <!-- FOREACH Template -->
-        <div class='line--item hasChildren' *ngSwitchCase="ProcedureTypes.Foreach">
+        <!-- FOREACH Template -->
+        <ng-container *ngSwitchCase="ProcedureTypes.Foreach">
+            <div class='line--item'>
                 <div class='function-text'>
                     Foreach
                 </div>
@@ -98,23 +134,48 @@
                     (blur)='argMod($event, 1)'
                     placeholder={{data.args[1].name}}
                     [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
-                    >  
-                    
-        </div>
+                        >  
+                        
+            </div>
+                                
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild(idx)'
+                    (helpText)='emitHelpText($event)'></procedure-item>
+            </div>
+        </ng-container>
+    
+
 
         <!-- WHILE Template -->
-        <div class='line--item hasChildren' *ngSwitchCase="ProcedureTypes.While">
-            <div class='function-text'>
-                While
+        <ng-container *ngSwitchCase="ProcedureTypes.While">
+            <div class='line--item'>
+                <div class='function-text'>
+                    While
+                </div>
+                <input class='input--arg' 
+                        [(ngModel)]='data.args[0].value'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >  
+    
             </div>
-            <input class='input--arg' 
-                    [(ngModel)]='data.args[0].value'
-                    (blur)='argMod($event, 0)'
-                    placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >  
+                                    
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    (select)='selectChild($event, line)'
+                    (delete)='deleteChild(idx)'
+                    (helpText)='emitHelpText($event)'></procedure-item>
+            </div>
+        </ng-container>
+    
 
-        </div>
 
         <!-- Constant (Not visible) Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Constant">
@@ -234,14 +295,5 @@
                 <mat-icon class='icon'>help</mat-icon>
             </button>
         </div>
-    </div>
-    <!-- list of child procedures (if the procedure has children) -->
-    <div *ngIf="data?.children" class='container--nested'>
-        <procedure-item 
-            *ngFor="let line of data?.children; let idx=index" 
-            [data]="line"
-            (select)='selectChild($event, line)'
-            (delete)='deleteChild(idx)'
-            (helpText)='emitHelpText($event)'></procedure-item>
     </div>
 </div>

@@ -30,7 +30,7 @@ export class ProcedureInputViewerComponent {
         if (!val) {
             return 'undefined :';
         }
-        if (val.substring(0, 1) === '"' || val.substring(0, 1) === '\'') {
+        if (val[0] === '"' || val[0] === '\'') {
             val = val.substring(1, val.length - 1);
         }
         // return val.replace(/_/g, ' ') + ':';

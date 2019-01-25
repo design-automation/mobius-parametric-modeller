@@ -1,20 +1,20 @@
 export enum ProcedureTypes {
-    Variable,
-    If,
-    Elseif,
-    Else,
-    Foreach,
-    While,
-    Break,
-    Continue,
+    Variable,   // 0
+    If,         // 1
+    Elseif,     // 2
+    Else,       // 3
+    Foreach,    // 4
+    While,      // 5
+    Break,      // 6
+    Continue,   // 7
 
-    Function,
-    Imported,
+    Function,   // 8
+    Imported,   // 9
 
-    Constant,
-    Return,
+    Constant,   // 10
+    Return,     // 11
 
-    AddData,
-    Blank,
+    AddData,    // 12
+    Blank,      // 13
 }
 

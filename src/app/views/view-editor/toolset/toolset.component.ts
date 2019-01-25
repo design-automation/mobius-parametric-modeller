@@ -51,10 +51,10 @@ export class ToolsetComponent implements OnInit {
 
     ngOnInit() {
         for (const mod of ModuleList) {
-            if (mod.module.substring(0, 1) === '_') { continue; }
+            if (mod.module[0] === '_') { continue; }
             const nMod = {'module': mod.module, 'functions': []};
             for (const fn of mod.functions) {
-                if (fn.name.substring(0, 1) === '_') { continue; }
+                if (fn.name[0] === '_') { continue; }
                 if (ModuleDocList[mod.module] && ModuleDocList[mod.module][fn.name]) {
                     fn['doc'] = ModuleDocList[mod.module][fn.name];
                     let fnDocHtml = `<p class="funcDesc">${fn.doc.summary || fn.doc.description}</p>`;
@@ -177,7 +177,7 @@ export class ToolsetComponent implements OnInit {
                 for (const prod of fl.nodes[0].procedure) {
                     if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
                     let v: string = prod.args[prod.argCount - 2].value || 'undefined';
-                    if (v.substring(0, 1) === '"' || v.substring(0, 1) === '\'') { v = v.substring(1, v.length - 1); }
+                    if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
                     if (prod.meta.inputMode !== InputType.Constant) {
                         documentation.parameters.push({
                             name: v,
@@ -353,10 +353,10 @@ export class ToolsetComponent implements OnInit {
         // @ts-ignore
         for (const mod of this.Modules) {
             if (this.searchedFunctions.length >= 10) { break; }
-            if (mod.module.substring(0, 1) === '_' || mod.module === 'Input' || mod.module === 'Output') {continue; }
+            if (mod.module[0] === '_' || mod.module === 'Input' || mod.module === 'Output') {continue; }
             for (const func of mod.functions) {
                 if (this.searchedFunctions.length >= 10) { break; }
-                if (func.name.substring(0, 1) === '_') {continue; }
+                if (func.name[0] === '_') {continue; }
                 if (func.name.toLowerCase().indexOf(str) !== -1) {
                     this.searchedFunctions.push({
                         'type': 'function',

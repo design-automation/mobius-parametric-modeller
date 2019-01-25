@@ -115,7 +115,7 @@ export class ExecuteComponent {
                     }
                 } else {
                     for (const arg of prod.args) {
-                        if (arg.name.substring(0, 1) === '_' || arg.type === 5) {
+                        if (arg.name[0] === '_' || arg.type === 5) {
                             continue;
                         }
                         if (arg.value !== 0 && !arg.value) {

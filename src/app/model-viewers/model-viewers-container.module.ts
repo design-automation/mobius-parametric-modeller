@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataViewersContainerComponent } from './model-viewers-container.component';
-import { VIEWER_ARR } from './model-viewers.config';
+import { VIEWER_ARR, VIEWER_MOD } from './model-viewers.config';
 // viewers
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/console-viewer.component';
 import { HelpViewerComponent } from './all-viewers/help-viewer/help-viewer.component';
@@ -29,8 +29,9 @@ import { MatIconModule } from '@angular/material';
     imports: [
         CommonModule,
         FormsModule,
-        GIViewerModule,
-        MatIconModule
+        MatIconModule,
+        ...VIEWER_MOD
+
         // SharedModule
     ],
     entryComponents: [

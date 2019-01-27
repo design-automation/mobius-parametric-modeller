@@ -340,6 +340,6 @@ export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId
     // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'POLYLINE']);
     // checkIDnTypes(fn_name, 'locations', locations, ['isID', 'isIDList', 'isCoord'], ['POSI', 'VERT', 'POINT']);
     // --- Error Check ---
-    throw new Error('Not impemented.'); return null;
+    throw new Error('Not implemented.'); return null;
 }
 // ================================================================================================

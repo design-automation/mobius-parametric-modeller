@@ -277,7 +277,7 @@ export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
     // --- Error Check ---
     const fn_name = 'calc.ParamTToXyz';
-    checkIDs(fn_name, 'line', line, ['isID'], ['EDGE', 'WIRE', 'POLYLINE']);
+    checkIDs(fn_name, 'line', line, ['isID'], ['EDGE', 'WIRE', 'PLINE']);
     checkCommTypes(fn_name, 't_param', t_param, ['isNumber']);
     if (t_param < 0 || t_param > 1) {throw new Error(fn_name + ': ' + 't_param is not between 0 and 1'); }
     // --- Error Check ---
@@ -337,9 +337,9 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
     // --- Error Check ---
     // const fn_name = 'calc.ParamXyzToT';
-    // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'POLYLINE']);
+    // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
     // checkIDnTypes(fn_name, 'locations', locations, ['isID', 'isIDList', 'isCoord'], ['POSI', 'VERT', 'POINT']);
     // --- Error Check ---
-    throw new Error('Not impemented.'); return null;
+    throw new Error('Not implemented.'); return null;
 }
 // ================================================================================================

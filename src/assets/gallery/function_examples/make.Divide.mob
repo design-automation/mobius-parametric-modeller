@@ -1,9 +1,9 @@
 {
-    "name": "basic_foreach",
+    "name": "default_file.mob",
     "author": "new_user",
     "flowchart": {
-        "name": "For-each Loop",
-        "description": "A for-each loop is a quick way of performing repeated actions without having to do them one by one. ",
+        "name": "make.Divide",
+        "description": "Here, this function is used to divide a polyline into segments of equal length. ",
         "language": "js",
         "meta": {
             "selected_nodes": [
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_2tjmojcwzg3",
+                "id": "node_rvvt0afgaq",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_6n0s0uej567",
+                                    "id": "node_cpqwg7qyed9",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -90,110 +90,131 @@
                                             "hasError": false
                                         },
                                         {
-                                            "type": 4,
-                                            "ID": "prod-ce11soggq6c",
+                                            "type": 8,
+                                            "ID": "prod-7fe2alnqczx",
                                             "enabled": true,
                                             "print": false,
-                                            "argCount": 2,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Position"
+                                            },
+                                            "argCount": 3,
                                             "args": [
                                                 {
-                                                    "name": "item",
-                                                    "value": "num",
+                                                    "name": "var_name",
+                                                    "value": "ps1",
                                                     "invalidVar": false
                                                 },
                                                 {
-                                                    "name": "list",
-                                                    "value": "range ( 0 , 100 )",
-                                                    "default": []
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "coords",
+                                                    "value": "[0 , 0 , 0]",
+                                                    "default": 0
                                                 }
                                             ],
-                                            "children": [
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-p8ci8a4qhuf",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Position"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
                                                 {
-                                                    "type": 13,
-                                                    "ID": "",
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
-                                                    "meta": {
-                                                        "name": "",
-                                                        "module": ""
-                                                    },
-                                                    "argCount": 0,
-                                                    "args": [],
-                                                    "print": false,
-                                                    "enabled": true,
-                                                    "selected": false,
-                                                    "hasError": false
+                                                    "name": "var_name",
+                                                    "value": "ps2",
+                                                    "invalidVar": false
                                                 },
                                                 {
-                                                    "type": 0,
-                                                    "ID": "prod-gl9lra1q4q9",
-                                                    "enabled": false,
-                                                    "print": false,
-                                                    "argCount": 2,
-                                                    "args": [
-                                                        {
-                                                            "name": "var_name",
-                                                            "value": "comment",
-                                                            "invalidVar": false
-                                                        },
-                                                        {
-                                                            "name": "value",
-                                                            "value": "This means for each number ( 'num' ) in the list of numbers from the list[0 , 1 , 2 , ... , 99]. 'num' is an arbitrary variable chosen; anything else may be used in place."
-                                                        }
-                                                    ],
-                                                    "selected": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
-                                                    "hasError": false
+                                                    "name": "__model__",
+                                                    "default": 0
                                                 },
                                                 {
-                                                    "type": 8,
-                                                    "ID": "prod-lipn07dvssp",
-                                                    "enabled": true,
-                                                    "print": false,
-                                                    "meta": {
-                                                        "module": "make",
-                                                        "name": "Position"
-                                                    },
-                                                    "argCount": 3,
-                                                    "args": [
-                                                        {
-                                                            "name": "var_name",
-                                                            "invalidVar": false,
-                                                            "value": "new_positions"
-                                                        },
-                                                        {
-                                                            "name": "__model__",
-                                                            "default": 0
-                                                        },
-                                                        {
-                                                            "name": "coords",
-                                                            "default": 0,
-                                                            "value": "[num , 0 , 0]"
-                                                        }
-                                                    ],
-                                                    "selected": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
-                                                    "hasError": false
+                                                    "name": "coords",
+                                                    "value": "[20 , 20 , 0]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-mzp0oze250b",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Polyline"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pl",
+                                                    "invalidVar": false
                                                 },
                                                 {
-                                                    "type": 0,
-                                                    "ID": "prod-6nohrvmhkeu",
-                                                    "enabled": false,
-                                                    "print": false,
-                                                    "argCount": 2,
-                                                    "args": [
-                                                        {
-                                                            "name": "var_name",
-                                                            "value": "comment",
-                                                            "invalidVar": false
-                                                        },
-                                                        {
-                                                            "name": "value",
-                                                            "value": "Positions are made in the order when num = 0 , position's xyz is[0 , 0 , 0]; when num = 1 , position's xyz is[1 , 0 , 0]... and so on."
-                                                        }
-                                                    ],
-                                                    "selected": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
-                                                    "hasError": false
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "positions",
+                                                    "value": "[ps1 , ps2]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "close",
+                                                    "value": "'open'",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-5s8g86lvz85",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Divide"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "div1",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "edge",
+                                                    "value": "pl",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "divisor",
+                                                    "value": "5",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "method",
+                                                    "value": "'by_number'",
+                                                    "default": 0
                                                 }
                                             ],
                                             "selected": false,
@@ -222,7 +243,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_oa5zb87atr",
+                                                        "id": "node_x81ns5zq8xc",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -317,7 +338,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-27T06:35:35.751Z",
+    "last_updated": "2019-01-27T11:01:04.297Z",
     "version": 1,
     "settings": {}
 }

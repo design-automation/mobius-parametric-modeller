@@ -139,8 +139,6 @@ export class DataThreejs {
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.vertex_map;
 
-        console.log(threejs_data.colors);
-
         // Create buffers that will be used by all geometry
         const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);

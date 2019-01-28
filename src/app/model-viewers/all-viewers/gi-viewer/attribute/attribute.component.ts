@@ -138,7 +138,9 @@ export class AttributeComponent implements OnChanges {
 
   public refreshTable() {
     const currentTab = this.getCurrentTab();
-    this.generateTable(currentTab);
+    setTimeout(() => {
+      this.generateTable(currentTab);
+    }, 0);
   }
 
   selectRow(ent_id: string, event: Event) {

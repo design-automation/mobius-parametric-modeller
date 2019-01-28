@@ -56,7 +56,7 @@ export class AttributeComponent implements OnChanges {
     }
   }
 
-  generateTable(tabIndex: number) {
+  async generateTable(tabIndex: number) {
     const EntityType = GICommon.EEntType;
     const tab_map = {
       0: EntityType.POSI,
@@ -105,8 +105,8 @@ export class AttributeComponent implements OnChanges {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
       }
-      this.dataSource.paginator = this.paginator.toArray()[tabIndex];
-      this.dataSource.sort = this.sort.toArray()[tabIndex];
+      this.dataSource.paginator = await this.paginator.toArray()[tabIndex];
+      this.dataSource.sort = await this.sort.toArray()[tabIndex];
     }
     return tabIndex;
   }
@@ -139,10 +139,6 @@ export class AttributeComponent implements OnChanges {
   public refreshTable() {
     const currentTab = this.getCurrentTab();
     this.generateTable(currentTab);
-  }
-
-  sortData(sort: Sort) {
-    // console.log(sort);
   }
 
   selectRow(ent_id: string, event: Event) {

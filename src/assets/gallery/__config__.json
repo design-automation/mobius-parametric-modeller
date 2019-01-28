@@ -24,7 +24,7 @@
         {
             "name": "Shapes Examples",
             "files": [
-                "make.Torus.mob&node=1"
+                "torus.mob&node=1"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/shapes_examples/"
         },

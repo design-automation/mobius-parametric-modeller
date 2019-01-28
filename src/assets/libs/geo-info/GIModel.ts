@@ -29,11 +29,7 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-
-        // TODO attribs must have a merge method
-        // this.attribs.io.merge(model.attribs._attribs_maps);
-
-        this.attribs.add.addData(model.getData()); // warning: must be before this.geom.add.addData()
+        this.attribs.io.merge(model.attribs._attribs_maps); // warning: must be before this.geom.add.addData()
         this.geom.io.merge(model.geom._geom_arrays);
     }
     /**
@@ -42,7 +38,7 @@ export class GIModel {
      * @param model_data The JSON data.
      */
     public setData (model_data: IModelData): IGeomPack {
-        this.attribs.add.addData(model_data); // warning: must be before this.geom.add.addData()
+        this.attribs.io.setData(model_data); // warning: must be before this.geom.add.addData()
         const new_ents_i: IGeomPack = this.geom.io.setData(model_data.geometry);
         return new_ents_i;
     }

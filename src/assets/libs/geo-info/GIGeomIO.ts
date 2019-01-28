@@ -146,10 +146,10 @@ export class GIGeomIO {
             if (verts_i === undefined) {
                 continue;
             } else if (verts_i === null) {
-                this._geom_arrays.up_posis_verts.push( null );
+                this._geom_arrays.up_posis_verts[i + num_posis] = null;
             } else {
                 const new_verts_i: number[] = verts_i.map( vert_i => vert_i + num_verts);
-                this._geom_arrays.up_posis_verts.push( new_verts_i );
+                this._geom_arrays.up_posis_verts[i + num_posis] = new_verts_i;
             }
         }
         // update verts to tris
@@ -158,10 +158,10 @@ export class GIGeomIO {
             if (tris_i === undefined) {
                 continue;
             } else if (tris_i === null) {
-                this._geom_arrays.up_verts_tris.push( null );
+                this._geom_arrays.up_verts_tris[i + num_verts] = null;
             } else {
                 const new_tris_i: number[] = tris_i.map( tri_i => tri_i + num_tris);
-                this._geom_arrays.up_verts_tris.push( new_tris_i );
+                this._geom_arrays.up_verts_tris[i + num_verts] = new_tris_i;
             }
         }
         // update tris to faces
@@ -170,10 +170,10 @@ export class GIGeomIO {
             if (face_i === undefined) {
                 continue;
             } else if (face_i === null) {
-                this._geom_arrays.up_tris_faces.push( null );
+                this._geom_arrays.up_tris_faces[i + num_tris] = null;
             } else {
                 const new_face_i: number = face_i + num_faces;
-                this._geom_arrays.up_tris_faces.push( new_face_i );
+                this._geom_arrays.up_tris_faces[i + num_tris] = new_face_i;
             }
         }
         // update verts to edges
@@ -182,10 +182,10 @@ export class GIGeomIO {
             if (edges_i === undefined) {
                 continue;
             } else if (edges_i === null) {
-                this._geom_arrays.up_verts_edges.push( null );
+                this._geom_arrays.up_verts_edges[i + num_verts] = null;
             } else {
                 const new_edges_i: number[] = edges_i.map( edge_i => edge_i + num_edges);
-                this._geom_arrays.up_verts_edges.push( new_edges_i );
+                this._geom_arrays.up_verts_edges[i + num_verts] = new_edges_i;
             }
         }
         // update edges to wires
@@ -194,10 +194,10 @@ export class GIGeomIO {
             if (wire_i === undefined) {
                 continue;
             } else if (wire_i === null) {
-                this._geom_arrays.up_edges_wires.push( null );
+                this._geom_arrays.up_edges_wires[i + num_edges] = null;
             } else {
                 const new_wire_i: number = wire_i + num_wires;
-                this._geom_arrays.up_edges_wires.push( new_wire_i );
+                this._geom_arrays.up_edges_wires[i + num_edges] = new_wire_i;
             }
         }
         // update wires to faces
@@ -206,10 +206,10 @@ export class GIGeomIO {
             if (face_i === undefined) {
                 continue;
             } else if (face_i === null) {
-                this._geom_arrays.up_wires_faces.push( null );
+                this._geom_arrays.up_wires_faces[i + num_wires] = null;
             } else {
                 const new_face_i: number = face_i + num_faces;
-                this._geom_arrays.up_wires_faces.push( new_face_i );
+                this._geom_arrays.up_wires_faces[i + num_wires] = new_face_i;
             }
         }
         // update verts to points
@@ -218,10 +218,10 @@ export class GIGeomIO {
             if (point_i === undefined) {
                 continue;
             } else if (point_i === null) {
-                this._geom_arrays.up_verts_points.push( null );
+                this._geom_arrays.up_verts_points[i + num_points] = null;
             } else {
                 const new_point_i: number = point_i + num_points;
-                this._geom_arrays.up_verts_points.push( new_point_i );
+                this._geom_arrays.up_verts_points[i + num_points] = new_point_i;
             }
         }
         // update wires to plines
@@ -230,10 +230,10 @@ export class GIGeomIO {
             if (pline_i === undefined) {
                 continue;
             } else if (pline_i === null) {
-                this._geom_arrays.up_wires_plines.push( null );
+                this._geom_arrays.up_wires_plines[i + num_wires] = null;
             } else {
                 const new_pline_i: number = pline_i + num_plines;
-                this._geom_arrays.up_wires_plines.push( new_pline_i );
+                this._geom_arrays.up_wires_plines[i + num_wires] = new_pline_i;
             }
         }
         // update faces to pgons
@@ -242,10 +242,10 @@ export class GIGeomIO {
             if (pgon_i === undefined) {
                 continue;
             } else if (pgon_i === null) {
-                this._geom_arrays.up_faces_pgons.push( null );
+                this._geom_arrays.up_faces_pgons[i + num_faces] = null;
             } else {
                 const new_pgon_i: number = pgon_i + num_pgons;
-                this._geom_arrays.up_faces_pgons.push( new_pgon_i );
+                this._geom_arrays.up_faces_pgons[i + num_faces] = new_pgon_i;
             }
         }
     }

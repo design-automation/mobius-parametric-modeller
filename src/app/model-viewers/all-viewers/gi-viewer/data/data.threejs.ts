@@ -139,6 +139,8 @@ export class DataThreejs {
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.vertex_map;
 
+        console.log(threejs_data.colors);
+
         // Create buffers that will be used by all geometry
         const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
@@ -249,6 +251,7 @@ export class DataThreejs {
             const line = new THREE.LineSegments(bg.geom, bg.mat);
             this._scene.add(line);
             this.selected_face_edges.get(parent_ent_id).set(ent_id, line.id);
+            this.selected_geoms.set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
             if (label) {
                 const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
@@ -279,6 +282,7 @@ export class DataThreejs {
             const line = new THREE.LineSegments(bg.geom, bg.mat);
             this._scene.add(line);
             this.selected_face_wires.get(parent_ent_id).set(ent_id, line.id);
+            this.selected_geoms.set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
             if (label) {
                 const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
@@ -289,10 +293,10 @@ export class DataThreejs {
     }
 
     private initBufferPoint(positions: number[],
-                point_indices = null,
-                colors: number[] = null,
-                color: [number, number, number],
-                size: number = 1) {
+        point_indices = null,
+        colors: number[] = null,
+        color: [number, number, number],
+        size: number = 1) {
         // TODO check color and colors
         const geom = new THREE.BufferGeometry();
         if (point_indices) {
@@ -339,52 +343,78 @@ export class DataThreejs {
 
     public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
         const bg = this.initBufferPoint(positions, null, null, [0, 60, 255], this.settings.positions.size + 0.1);
-        if (this.selected_positions.get(parent_ent_id) === undefined) {
-            this.selected_positions.set(parent_ent_id, new Map());
-        }
-
-        const check_exist: string[] = [];
-        this.selected_positions.forEach(v => {
-            v.forEach((vv, k) => {
-                check_exist.push(k);
-            });
-        });
-
-        if (!check_exist.includes(ent_id)) {
+        if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
-            this.selected_positions.get(parent_ent_id).set(ent_id, point.id);
+            this.selected_geoms.set(ent_id, point.id);
             this.sceneObjsSelected.set(ent_id, point);
             if (label) {
                 const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
                 this.createLabelforObj(container, obj.entity, obj.type, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
+        } else {
+            if (this.selected_positions.get(parent_ent_id) === undefined) {
+                this.selected_positions.set(parent_ent_id, new Map());
+            }
+
+            const check_exist: string[] = [];
+            this.selected_positions.forEach(v => {
+                v.forEach((vv, k) => {
+                    check_exist.push(k);
+                });
+            });
+
+            if (!check_exist.includes(ent_id)) {
+                const point = new THREE.Points(bg.geom, bg.mat);
+                this._scene.add(point);
+                this.selected_positions.get(parent_ent_id).set(ent_id, point.id);
+                this.selected_geoms.set(ent_id, point.id);
+                this.sceneObjsSelected.set(ent_id, point);
+                if (label) {
+                    const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
+                    this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                    this.ObjLabelMap.set(ent_id, obj);
+                }
+            }
         }
     }
 
     public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, label) {
         const bg = this.initBufferPoint(positions, null, null, [255, 215, 0], this.settings.positions.size + 0.1);
-        if (this.selected_vertex.get(parent_ent_id) === undefined) {
-            this.selected_vertex.set(parent_ent_id, new Map());
-        }
-
-        const check_exist: string[] = [];
-        this.selected_vertex.forEach(v => {
-            v.forEach((vv, k) => {
-                check_exist.push(k);
-            });
-        });
-
-        if (!check_exist.includes(ent_id)) {
+        if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
-            this.selected_vertex.get(parent_ent_id).set(ent_id, point.id);
             this.sceneObjsSelected.set(ent_id, point);
+            this.selected_geoms.set(ent_id, point.id);
             if (label) {
                 const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
                 this.createLabelforObj(container, obj.entity, obj.type, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
+            }
+        } else {
+            if (this.selected_vertex.get(parent_ent_id) === undefined) {
+                this.selected_vertex.set(parent_ent_id, new Map());
+            }
+
+            const check_exist: string[] = [];
+            this.selected_vertex.forEach(v => {
+                v.forEach((vv, k) => {
+                    check_exist.push(k);
+                });
+            });
+
+            if (!check_exist.includes(ent_id)) {
+                const point = new THREE.Points(bg.geom, bg.mat);
+                this._scene.add(point);
+                this.selected_vertex.get(parent_ent_id).set(ent_id, point.id);
+                this.sceneObjsSelected.set(ent_id, point);
+                this.selected_geoms.set(ent_id, point.id);
+                if (label) {
+                    const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
+                    this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                    this.ObjLabelMap.set(ent_id, obj);
+                }
             }
         }
     }
@@ -580,10 +610,10 @@ export class DataThreejs {
      * Add threejs points to the scene
      */
     private _addPoints(points_i: number[],
-                posis_buffer: THREE.Float32BufferAttribute,
-                colors_buffer: THREE.Float32BufferAttribute,
-                color: [number, number, number],
-                size: number = 1): void {
+        posis_buffer: THREE.Float32BufferAttribute,
+        colors_buffer: THREE.Float32BufferAttribute,
+        color: [number, number, number],
+        size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
         geom.addAttribute('position', posis_buffer);
@@ -602,9 +632,9 @@ export class DataThreejs {
     }
 
     private _addPositions(points_i: number[],
-                posis_buffer: THREE.Float32BufferAttribute,
-                color: [number, number, number],
-                size: number = 1): void {
+        posis_buffer: THREE.Float32BufferAttribute,
+        color: [number, number, number],
+        size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
         geom.addAttribute('position', posis_buffer);

@@ -86,7 +86,7 @@ export class AttributeComponent implements OnChanges {
         this.displayData = AllAttribData;
       }
       if (this.displayData.length > 0) {
-        const columns = Object.keys(this.displayData[0]);
+        const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
         // columns.shift();
         // let columns_control = [];
         // if (localStorage.getItem('mpm_attrib_columns') === null) {

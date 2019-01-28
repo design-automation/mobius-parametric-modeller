@@ -46,7 +46,12 @@ table {
       }
     }
   }
+  td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type{
+    width: 10%;
+  }
 }
+
+
 
 /deep/ #attribTab{
   height: 100%;

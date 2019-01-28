@@ -1,8 +1,10 @@
 import { GIModel } from './GIModel';
 import { IGeomData, IGeomArrays } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
+import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
 import { GIGeomThreejs } from './GIGeomThreejs';
+import { GIGeomIO } from './GIGeomIO';
 
 /**
  * Class for geometry.
@@ -10,7 +12,7 @@ import { GIGeomThreejs } from './GIGeomThreejs';
 export class GIGeom {
     public model: GIModel;
     //  all arrays
-    private _geom_arrays: IGeomArrays = {
+    public _geom_arrays: IGeomArrays = {  // TODO this should not be public
         // num_posis: 0,
         dn_verts_posis: [],
         dn_tris_verts: [],
@@ -35,7 +37,9 @@ export class GIGeom {
         up_pgons_colls: []
     };
     // sub classes with methods
+    public io: GIGeomIO;
     public add: GIGeomAdd;
+    public modify: GIGeomModify;
     public query: GIGeomQuery;
     public threejs: GIGeomThreejs;
     /**
@@ -44,25 +48,10 @@ export class GIGeom {
      */
     constructor(model: GIModel) {
         this.model = model;
+        this.io = new GIGeomIO(this, this._geom_arrays);
         this.add = new GIGeomAdd(this, this._geom_arrays);
+        this.modify = new GIGeomModify(this, this._geom_arrays);
         this.query = new GIGeomQuery(this, this._geom_arrays);
         this.threejs = new GIGeomThreejs(this, this._geom_arrays);
-    }
-    /**
-     * Returns the JSON data for this model.
-     */
-    public getData(): IGeomData {
-        return {
-            num_positions: this._geom_arrays.up_posis_verts.length,
-            triangles: this._geom_arrays.dn_tris_verts,
-            vertices: this._geom_arrays.dn_verts_posis,
-            edges: this._geom_arrays.dn_edges_verts,
-            wires: this._geom_arrays.dn_wires_edges,
-            faces: this._geom_arrays.dn_faces_wirestris,
-            points: this._geom_arrays.dn_points_verts,
-            polylines: this._geom_arrays.dn_plines_wires,
-            polygons: this._geom_arrays.dn_pgons_faces,
-            collections: this._geom_arrays.dn_colls_objs
-        };
     }
 }

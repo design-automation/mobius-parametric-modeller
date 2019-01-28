@@ -43,7 +43,7 @@ export class ViewDashboardComponent implements AfterViewInit {
         for (const prod of this.dataService.flowchart.nodes[0].procedure) {
             if (!prod.enabled || prod.type !== 10 || prod.meta.inputMode === 5) { continue; }
             textarea = document.getElementById(prod.ID + '_desc');
-            if (textarea) {
+            if (textarea && prod.meta.description) {
                 const desc = prod.meta.description.split('\n');
                 const textareaWidth = textarea.getBoundingClientRect().width - 30;
                 let lineCount = 0;

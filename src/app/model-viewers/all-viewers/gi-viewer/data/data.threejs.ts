@@ -109,7 +109,11 @@ export class DataThreejs {
         this._addHemisphereLight();
         this._addAxes();
     }
-
+    /**
+     *
+     * @param model
+     * @param container
+     */
     public addGeometry(model: GIModel, container): void {
         while (this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
@@ -127,7 +131,7 @@ export class DataThreejs {
         this._addAxes();
 
         // Add geometry
-        const threejs_data: IThreeJS = model.get3jsData();
+        const threejs_data: IThreeJS = model.threejs.get3jsData();
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
@@ -188,7 +192,14 @@ export class DataThreejs {
     //     this._positions.map(p => p.visible = this.settings.positions.show);
     // }
 
-
+    /**
+     *
+     * @param ent_id
+     * @param triangle_i
+     * @param positions
+     * @param container
+     * @param label
+     */
     public selectObjFace(ent_id: string, triangle_i: number[], positions: number[], container, label = true) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(triangle_i);

@@ -1,8 +1,8 @@
 {
-    "name": "box_with_holes",
+    "name": "Untitled",
     "author": "new_user",
     "flowchart": {
-        "name": "Box with holes",
+        "name": "Untitled",
         "description": "",
         "language": "js",
         "meta": {
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_8t3j2qw35rw",
+                "id": "node_7iob3xa05ll",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -22,28 +22,46 @@
                 "type": "start",
                 "procedure": [
                     {
+                        "type": 13,
+                        "ID": "",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
                         "type": 10,
-                        "ID": "prod-kmkvgvxczap",
+                        "ID": "prod-skgrxhb3qq9",
                         "enabled": true,
                         "print": false,
-                        "selected": false,
                         "argCount": 2,
                         "meta": {
                             "module": "Input",
                             "name": "Constant",
-                            "inputMode": "3"
+                            "inputMode": 4,
+                            "description": "A test file with deleted geometry."
                         },
                         "args": [
                             {
                                 "name": "const_name",
                                 "value": "model",
-                                "default": 0
+                                "default": 0,
+                                "invalidVar": false
                             },
                             {
                                 "name": "__input__",
-                                "default": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/box_with_holes.gi"
+                                "default": {
+                                    "name": "test.gi"
+                                }
                             }
                         ],
+                        "selected": false,
                         "hasError": false
                     }
                 ],
@@ -51,7 +69,6 @@
                     "procedure": []
                 },
                 "input": {
-                    "id": "7ce8196e-d4c6-a40b-199b-4179da396a02",
                     "name": "input",
                     "type": 0,
                     "edges": [],
@@ -62,14 +79,12 @@
                     "parentNode": "~flowchart~nodes~0"
                 },
                 "output": {
-                    "id": "9be2e758-107a-1d5f-1681-14166692bf1e",
                     "name": "output",
                     "type": 1,
                     "edges": [
                         {
                             "source": "~flowchart~nodes~0~output",
                             "target": {
-                                "id": "7118d9e4-b4b6-725f-ec4f-1378fac86a2a",
                                 "name": "input",
                                 "type": 0,
                                 "edges": [
@@ -81,7 +96,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_qak1nmx5bu",
+                                    "id": "node_w5arp212sr",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -105,7 +120,7 @@
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-msnwulxwk7",
+                                            "ID": "prod-vi80grx3seh",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
@@ -116,7 +131,7 @@
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "ents",
+                                                    "value": "res",
                                                     "invalidVar": false
                                                 },
                                                 {
@@ -135,7 +150,7 @@
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": true
                                         }
                                     ],
                                     "state": {
@@ -143,14 +158,12 @@
                                     },
                                     "input": "~flowchart~nodes~0~output~edges~0~target",
                                     "output": {
-                                        "id": "25f56b01-a857-9f6c-ea5c-c5cea8357b1f",
                                         "name": "output",
                                         "type": 1,
                                         "edges": [
                                             {
                                                 "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output",
                                                 "target": {
-                                                    "id": "d789d9eb-731d-7db2-e8c0-23c15736a826",
                                                     "name": "input",
                                                     "type": 0,
                                                     "edges": [
@@ -162,7 +175,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_97x4j50vcj7",
+                                                        "id": "node_mkj86xuan9",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -215,7 +228,6 @@
                                                         },
                                                         "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
                                                         "output": {
-                                                            "id": "3d269d12-c91e-ed06-a430-62138d283e47",
                                                             "name": "output",
                                                             "type": 1,
                                                             "edges": [],
@@ -235,7 +247,7 @@
                                         },
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
                                     },
-                                    "hasError": false
+                                    "hasError": true
                                 }
                             },
                             "selected": false
@@ -258,7 +270,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-27T08:09:56.420Z",
+    "last_updated": "2019-01-28T00:20:06.633Z",
     "version": 1,
     "settings": {}
 }

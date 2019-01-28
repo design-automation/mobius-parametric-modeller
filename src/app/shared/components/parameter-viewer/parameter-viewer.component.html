@@ -1,6 +1,6 @@
 <!-- <h2>{{displayName()}}</h2> -->
 
-<textarea id='display-flowchart-desc' [(ngModel)]='flowchart.description' placeholder="Flowchart Description" disabled></textarea>
+<textarea id='display-flowchart-desc' [(ngModel)]='flowchart.description' placeholder="Model Description" disabled></textarea>
 
 <hr>
 
@@ -10,7 +10,7 @@
         <textarea class='desc'
                   id='{{prod.ID}}_desc'
                   [(ngModel)]='prod.meta.description'
-                  placeholder="Input Description"
+                  placeholder="Parameter Description"
                   disabled></textarea>
         <procedure-input-viewer [prod]="prod"></procedure-input-viewer>
     </div>

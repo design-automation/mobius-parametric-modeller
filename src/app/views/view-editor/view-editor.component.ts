@@ -55,7 +55,7 @@ export class ViewEditorComponent implements AfterViewInit {
             for (const prod of this.dataService.node.procedure) {
                 if (prod.type !== ProcedureTypes.Constant) { continue; }
                 textarea = document.getElementById(prod.ID + '_desc');
-                if (textarea) {
+                if (textarea && prod.meta.description) {
                     const prodDesc = prod.meta.description.split('\n');
                     const prodTextareaWidth = textarea.getBoundingClientRect().width - 30;
                     let prodLineCount = 0;

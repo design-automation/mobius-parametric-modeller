@@ -261,7 +261,7 @@ function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
                 }
                 ent_new_posis_i.push(new_posi_i);
             }
-            __model__.geom.add.replacePosis(ent_type, index, ent_new_posis_i);
+            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
         }
     }
     // return all the new points
@@ -307,7 +307,7 @@ function _hole(__model__: GIModel, face_ent_arr: TEntTypeIdx, holes_ents_arr: TE
         holes_posis_i.push( hole_ents_arr.map( ent_arr => ent_arr[1] ) );
     }
     // create the hole
-    const wires_i: number[] = __model__.geom.add.addFaceHoles(face_ent_arr[1], holes_posis_i);
+    const wires_i: number[] = __model__.geom.modify.cutFaceHoles(face_ent_arr[1], holes_posis_i);
     return wires_i.map(wire_i => [EEntType.WIRE, wire_i]) as TEntTypeIdx[];
 }
 /**
@@ -544,7 +544,7 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
     for (const new_xyz of new_xyzs) {
         const posi_i = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
-        const new_edge_i: number = __model__.geom.add.insertVertIntoEdge(old_edge_i, posi_i);
+        const new_edge_i: number = __model__.geom.modify.insertVertIntoWire(old_edge_i, posi_i);
         new_edges_i.push(old_edge_i);
         old_edge_i = new_edge_i;
     }
@@ -621,7 +621,7 @@ export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
         const verts_i: number[] = __model__.geom.query.navAnyToVert(ents[0], ents[1]);
         all_verts_i.push(...verts_i);
     }
-    const new_posis_i: number [] = __model__.geom.add.unweldVerts(all_verts_i);
+    const new_posis_i: number [] = __model__.geom.modify.unweldVerts(all_verts_i);
     return new_posis_i.map( posi_i => idsMake([EEntType.POSI, posi_i]) ) as TId[];
 }
 // ================================================================================================

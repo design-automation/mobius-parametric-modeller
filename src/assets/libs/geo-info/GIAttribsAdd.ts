@@ -48,39 +48,39 @@ export class GIAttribsAdd {
         // exist_attribs_maps, new_attribs_data, num_existing_entities, num_new_entities
         if (attribs_data.positions !== undefined) {
             _addAttribData(this._attribs_maps.ps, attribs_data.positions,
-                this._model.geom.query.nextEntIndex(EEntType.POSI));
+                this._model.geom.query.numEnts(EEntType.POSI, true));
         }
         if (attribs_data.vertices !== undefined) {
             _addAttribData(this._attribs_maps._v, attribs_data.vertices,
-                this._model.geom.query.nextEntIndex(EEntType.VERT));
+                this._model.geom.query.numEnts(EEntType.VERT, true));
         }
         if (attribs_data.edges !== undefined) {
             _addAttribData(this._attribs_maps._e, attribs_data.edges,
-                this._model.geom.query.nextEntIndex(EEntType.EDGE));
+                this._model.geom.query.numEnts(EEntType.EDGE, true));
         }
         if (attribs_data.wires !== undefined) {
             _addAttribData(this._attribs_maps._w, attribs_data.wires,
-                this._model.geom.query.nextEntIndex(EEntType.WIRE));
+                this._model.geom.query.numEnts(EEntType.WIRE, true));
         }
         if (attribs_data.faces !== undefined) {
             _addAttribData(this._attribs_maps._f, attribs_data.faces,
-                this._model.geom.query.nextEntIndex(EEntType.FACE));
+                this._model.geom.query.numEnts(EEntType.FACE, true));
         }
         if (attribs_data.points !== undefined) {
             _addAttribData(this._attribs_maps.pt, attribs_data.points,
-                this._model.geom.query.nextEntIndex(EEntType.POINT));
+                this._model.geom.query.numEnts(EEntType.POINT, true));
         }
         if (attribs_data.polylines !== undefined) {
             _addAttribData(this._attribs_maps.pl, attribs_data.polylines,
-                this._model.geom.query.nextEntIndex(EEntType.PLINE));
+                this._model.geom.query.numEnts(EEntType.PLINE, true));
         }
         if (attribs_data.polygons !== undefined) {
             _addAttribData(this._attribs_maps.pg, attribs_data.polygons,
-                this._model.geom.query.nextEntIndex(EEntType.PGON));
+                this._model.geom.query.numEnts(EEntType.PGON, true));
         }
         if (attribs_data.collections !== undefined) {
             _addAttribData(this._attribs_maps.co, attribs_data.collections,
-                this._model.geom.query.nextEntIndex(EEntType.COLL));
+                this._model.geom.query.numEnts(EEntType.COLL, true));
         }
     }
     /**

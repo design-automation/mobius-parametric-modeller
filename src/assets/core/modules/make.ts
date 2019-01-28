@@ -329,6 +329,7 @@ export function Hole(__model__: GIModel, face: TId, positions: TId[]|TId[][]): T
         ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _hole(__model__, face_ent_arr, holes_ents_arr);
+    console.log(__model__);
     return idsMake(new_ents_arr) as TId[];
 }
 // ================================================================================================

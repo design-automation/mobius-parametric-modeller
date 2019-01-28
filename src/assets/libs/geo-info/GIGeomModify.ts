@@ -89,7 +89,7 @@ export class GIGeomModify {
             }
             // delete the vert by setting the up and down arrays to null
             this._geom_arrays.dn_verts_posis[vert_i] = null;
-            this._geom_arrays.up_verts_points[vert_i] = null;
+            delete this._geom_arrays.up_verts_points[vert_i];
             // remove the vert from up_posis_verts
             const posi_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
             arrRem(posi_verts_i, vert_i);
@@ -125,16 +125,16 @@ export class GIGeomModify {
             }
             // delete the wire
             this._geom_arrays.dn_wires_edges[wire_i] = null;
-            this._geom_arrays.up_wires_plines[wire_i] = null;
+            delete this._geom_arrays.up_wires_plines[wire_i];
             // delete the edges
             edges_i.forEach( edge_i => {
                 this._geom_arrays.dn_edges_verts[edge_i] = null;
-                this._geom_arrays.up_edges_wires[edge_i] = null;
+                delete this._geom_arrays.up_edges_wires[edge_i];
             });
             // delete the verts
             verts_i.forEach( vert_i => {
                 this._geom_arrays.dn_verts_posis[vert_i] = null;
-                this._geom_arrays.up_verts_edges[vert_i] = null;
+                delete this._geom_arrays.up_verts_edges[vert_i];
             });
             // remove the verts from up_posis_verts
             for (const posi_i of posis_i) {
@@ -179,28 +179,28 @@ export class GIGeomModify {
             }
             // delete the face
             this._geom_arrays.dn_faces_wirestris[face_i] = null;
-            this._geom_arrays.up_faces_pgons[face_i] = null;
+            delete this._geom_arrays.up_faces_pgons[face_i];
             // delete the wires
             wires_i.forEach( wire_i => {
                 this._geom_arrays.dn_wires_edges[wire_i] = null;
-                this._geom_arrays.up_wires_faces[wire_i] = null;
+                delete this._geom_arrays.up_wires_faces[wire_i];
             });
             // delete the edges
             edges_i.forEach( edge_i => {
                 this._geom_arrays.dn_edges_verts[edge_i] = null;
-                this._geom_arrays.up_edges_wires[edge_i] = null;
+                delete this._geom_arrays.up_edges_wires[edge_i];
 
             });
             // delete the verts
             verts_i.forEach( vert_i => {
                 this._geom_arrays.dn_verts_posis[vert_i] = null;
-                this._geom_arrays.up_verts_edges[vert_i] = null;
-                this._geom_arrays.up_verts_tris[vert_i] = null;
+                delete this._geom_arrays.up_verts_edges[vert_i];
+                delete this._geom_arrays.up_verts_tris[vert_i];
             });
             // delete the tris
             tris_i.forEach( tri_i => {
                 this._geom_arrays.dn_tris_verts[tri_i] = null;
-                this._geom_arrays.up_tris_faces[tri_i] = null;
+                delete this._geom_arrays.up_tris_faces[tri_i];
             });
             // clean up, posis up arrays point to verts that may have been deleted
             for (const posi_i of posis_i) {
@@ -448,11 +448,16 @@ export class GIGeomModify {
         new_tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
         // delete the old trianges
         for (const old_face_tri_i of old_face_tris_i) {
+            // remove these deleted tris from the verts
             for (const vertex_i of this._geom_arrays.dn_tris_verts[old_face_tri_i]) {
                 const tris_i: number[] = this._geom_arrays.up_verts_tris[vertex_i];
                 arrRem(tris_i, old_face_tri_i);
             }
+            // tris to verts
             this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;
+            // tris to faces
+            delete this._geom_arrays.up_tris_faces[old_face_tri_i];
+            
         }
         // TODO deal with the old triangles, stored in face_tris_i
         // TODO These are still there and are still pointing up at this face

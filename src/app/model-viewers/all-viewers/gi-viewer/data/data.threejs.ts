@@ -9,7 +9,7 @@ import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 export class DataThreejs {
     // threeJS objects
     public _scene: THREE.Scene;
-    public basic_scene: THREE.Scene;
+    // public basic_scene: THREE.Scene;
     public _renderer: THREE.WebGLRenderer;
     public _camera: THREE.PerspectiveCamera;
     public _controls: THREE.OrbitControls;
@@ -66,9 +66,10 @@ export class DataThreejs {
         this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
+        this._scene.background = new THREE.Color(0xE6E6E6);
 
-        this.basic_scene = new THREE.Scene();
-        this.basic_scene.background = new THREE.Color(0xE6E6E6);
+        // this.basic_scene = new THREE.Scene();
+        // this.basic_scene.background = new THREE.Color(0xE6E6E6);
 
         // renderer
         this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -148,17 +149,6 @@ export class DataThreejs {
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], 1);
         this._addPositions(threejs_data.posis_indices, posis_xyz_buffer, [255, 255, 255], this.settings.positions.size);
 
-        // Create data for positions with no vertices
-        // const posi_colors: number[] = [];
-        // const numPosi = this._model.geom.query.numEnts(EEntType.POSI, false);
-        // for (let index = 0; index < numPosi; index++) {
-        //     posi_colors.push(1, 1, 1);
-        // }
-        // const check_posi_colors = threejs_data.colors.length === 0 ?
-        //     posi_colors :
-        //     (posi_colors.length > threejs_data.colors.length ? posi_colors : threejs_data.colors);
-
-        // this.addPositions(check_posi_colors, this.settings.positions.size);
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
 
@@ -167,30 +157,6 @@ export class DataThreejs {
         // this.grid.position.copy(center);
         // this.axesHelper.position.copy(center);
     }
-
-    // public addPositions(all_positions_colors: number[] = null, size: number): void {
-    //     // TODO get a select map for positions
-
-    //     const all_posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI, false);
-    //     const all_positions = all_posis_i.map(posi => this._model.attribs.query.getPosiCoords(posi));
-
-    //     // console.log("all_positions", all_positions, "length = ", all_positions.length);
-    //     // @ts-ignore
-    //     const all_positions_flat = all_positions.flat(1);
-    //     const all_positions_indices = [];
-    //     let index = 0;
-    //     const l = all_positions_flat.length / 3;
-    //     for (; index < l; index++) {
-    //         all_positions_indices.push(index);
-    //     }
-
-    //     this._addPositions(all_positions_flat,
-    //         all_positions_indices,
-    //         all_positions_colors,
-    //         [0, 0, 0],
-    //         size);
-    //     this._positions.map(p => p.visible = this.settings.positions.show);
-    // }
 
     /**
      *
@@ -532,11 +498,11 @@ export class DataThreejs {
      */
     public _addGrid(size: number = this.settings.grid.size) {
         let i = 0;
-        const length = this.basic_scene.children.length;
+        const length = this._scene.children.length;
         for (; i < length; i++) {
-            if (this.basic_scene.children[i]) {
-                if (this.basic_scene.children[i].name === 'GridHelper') {
-                    this.basic_scene.remove(this.basic_scene.children[i]);
+            if (this._scene.children[i]) {
+                if (this._scene.children[i].name === 'GridHelper') {
+                    this._scene.remove(this._scene.children[i]);
                 }
             }
         }
@@ -548,7 +514,7 @@ export class DataThreejs {
             const vector = new THREE.Vector3(0, 1, 0);
             this.grid.lookAt(vector);
             this.grid.position.set(0, 0, 0);
-            this.basic_scene.add(this.grid);
+            this._scene.add(this.grid);
         }
     }
     /**

@@ -24,7 +24,7 @@ import { ThreeJSViewerService } from './threejs-viewer.service';
 export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     @Output() eventClicked = new EventEmitter<Event>();
     @Input() model: GIModel;
-    @Input() attr_table_select: {action: string, ent_type: string, id: number};
+    @Input() attr_table_select: { action: string, ent_type: string, id: number };
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
@@ -127,9 +127,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 label.updatePosition();
             });
         }
-        // self._data_threejs._renderer.clear();
-        self._data_threejs._renderer.render(self._data_threejs.basic_scene, self._data_threejs._camera);
-        self._data_threejs._renderer.clearDepth();
         self._data_threejs._renderer.render(self._data_threejs._scene, self._data_threejs._camera);
     }
 
@@ -171,41 +168,41 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    attrTableSelect(attrib: {action: string, ent_type: string, id: number}) {
+    attrTableSelect(attrib: { action: string, ent_type: string, id: number }) {
         if (attrib.action === 'select') {
             switch (attrib.ent_type) {
                 case EEntTypeStr[EEntType.POSI]:
-                this.selectPositions(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    this.selectPositions(attrib.id, null, null, attrib.ent_type + attrib.id);
                     break;
                 case EEntTypeStr[EEntType.VERT]:
-                this.selectVertex(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    this.selectVertex(attrib.id, null, null, attrib.ent_type + attrib.id);
                     break;
                 case EEntTypeStr[EEntType.EDGE]:
-                this.selectEdge(attrib.id);
+                    this.selectEdge(attrib.id);
                     break;
                 case EEntTypeStr[EEntType.WIRE]:
-                this.selectWire(attrib.id);
+                    this.selectWire(attrib.id);
                     break;
                 case EEntTypeStr[EEntType.FACE]:
-                this.selectFace(attrib.id);
+                    this.selectFace(attrib.id);
                     break;
                 case EEntTypeStr[EEntType.PGON]:
-                this.selectPGon(attrib.id);
+                    this.selectPGon(attrib.id);
                     break;
                 case EEntTypeStr[EEntType.PLINE]:
-                this.selectPLine(attrib.id);
+                    this.selectPLine(attrib.id);
                     break;
                 case EEntTypeStr[EEntType.POINT]:
-                this.selectPoint(attrib.id);
+                    this.selectPoint(attrib.id);
                     break;
                 case EEntTypeStr[EEntType.COLL]:
-                this.chooseColl(attrib.id);
+                    this.chooseColl(attrib.id);
                     break;
                 default:
                     break;
             }
         } else if (attrib.action === 'unselect') {
-            this.unselectGeom(attrib.ent_type + attrib.id, attrib.ent_type);
+            this.unselectGeom(attrib.ent_type + attrib.id, attrib.ent_type, true);
         }
         this.render(this);
     }
@@ -571,7 +568,18 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 }
                 break;
             case EEntTypeStr[EEntType.WIRE]:
-                if (intersect0.object.type === 'Mesh') {
+                if (intersect0.object.type === 'LineSegments') {
+                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    const ent_id = `${EEntTypeStr[EEntType.WIRE]}${edge}`;
+                    if (scene.selected_geoms.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE]);
+                    } else {
+                        if (!this.shiftKeyPressed) {
+                            this.unselectAll();
+                        }
+                        this.selectWire(edge);
+                    }
+                } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.geom.query.navTriToFace(tri);
                     const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
@@ -582,18 +590,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                             this.unselectAll();
                         }
                         this.selectWireByFace(face, ent_id);
-                    }
-                } else if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2);
-                    const wire = this.model.geom.query.navEdgeToWire(edge);
-                    const ent_id = `${EEntTypeStr[EEntType.WIRE]}${wire}`;
-                    if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE]);
-                    } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
-                        this.selectWire(wire);
                     }
                 } else {
                     this.showMessages('Wires', true);
@@ -751,44 +747,46 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         }
     }
 
-    private unselectGeom(ent_id: string, ent_type_str: string) {
+    private unselectGeom(ent_id: string, ent_type_str: string, direct = false) {
         const scene = this._data_threejs;
-        if (ent_type_str === EEntTypeStr[EEntType.POSI]) {
-            scene.unselectObjGroup(ent_id, this.container, 'positions');
-            const children = this.dataService.selected_positions.get(ent_id);
-            children.forEach(c => {
-                this.dataService.selected_ents.get(EEntTypeStr[EEntType.POSI]).delete(c);
-            });
-            this.dataService.selected_positions.delete(ent_id);
+        if (!direct) {
+            if (ent_type_str === EEntTypeStr[EEntType.POSI]) {
+                scene.unselectObjGroup(ent_id, this.container, 'positions');
+                const children = this.dataService.selected_positions.get(ent_id);
+                children.forEach(c => {
+                    this.dataService.selected_ents.get(EEntTypeStr[EEntType.POSI]).delete(c);
+                });
+                this.dataService.selected_positions.delete(ent_id);
 
-        } else if (ent_type_str === EEntTypeStr[EEntType.VERT]) {
-            scene.unselectObjGroup(ent_id, this.container, 'vertex');
-            const children = this.dataService.selected_vertex.get(ent_id);
-            children.forEach(c => {
-                this.dataService.selected_ents.get(EEntTypeStr[EEntType.VERT]).delete(c);
-            });
-            this.dataService.selected_vertex.delete(ent_id);
+            } else if (ent_type_str === EEntTypeStr[EEntType.VERT]) {
+                scene.unselectObjGroup(ent_id, this.container, 'vertex');
+                const children = this.dataService.selected_vertex.get(ent_id);
+                children.forEach(c => {
+                    this.dataService.selected_ents.get(EEntTypeStr[EEntType.VERT]).delete(c);
+                });
+                this.dataService.selected_vertex.delete(ent_id);
 
-        } else if (ent_type_str === 'face_edges') {
-            scene.unselectObjGroup(ent_id, this.container, 'face_edges');
-            const children = this.dataService.selected_face_edges.get(ent_id);
-            children.forEach(c => {
-                this.dataService.selected_ents.get(EEntTypeStr[EEntType.EDGE]).delete(c);
-            });
-            this.dataService.selected_face_edges.delete(ent_id);
+            } else if (ent_type_str === 'face_edges') {
+                scene.unselectObjGroup(ent_id, this.container, 'face_edges');
+                const children = this.dataService.selected_face_edges.get(ent_id);
+                children.forEach(c => {
+                    this.dataService.selected_ents.get(EEntTypeStr[EEntType.EDGE]).delete(c);
+                });
+                this.dataService.selected_face_edges.delete(ent_id);
 
-        } else if (ent_type_str === 'face_wires') {
-            scene.unselectObjGroup(ent_id, this.container, 'face_wires');
-            const children = this.dataService.selected_face_wires.get(ent_id);
-            children.forEach(c => {
-                this.dataService.selected_ents.get(EEntTypeStr[EEntType.WIRE]).delete(c);
-            });
-            this.dataService.selected_face_wires.delete(ent_id);
+            } else if (ent_type_str === 'face_wires') {
+                scene.unselectObjGroup(ent_id, this.container, 'face_wires');
+                const children = this.dataService.selected_face_wires.get(ent_id);
+                children.forEach(c => {
+                    this.dataService.selected_ents.get(EEntTypeStr[EEntType.WIRE]).delete(c);
+                });
+                this.dataService.selected_face_wires.delete(ent_id);
+            }
         } else {
             scene.unselectObj(ent_id, this.container);
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
         }
-
+        this.render(this);
         this.refreshTable(event);
     }
 

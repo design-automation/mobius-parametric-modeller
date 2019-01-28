@@ -11,7 +11,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { exportObj } from '@libs/geo-info/export';
 import { importObj } from '@libs/geo-info/import';
 import { download } from '@libs/filesys/download';
-import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack } from '@libs/geo-info/common';
+import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
 import { _model } from '@modules';
 import { idsMake } from '@libs/geo-info/id';
@@ -24,7 +24,7 @@ export enum _EIODataFormat {
 }
 /**
  * Imports data into the model.
- * In order to get the model data from a file, you need to define the File or URL parameter 
+ * In order to get the model data from a file, you need to define the File or URL parameter
  * in the Start node of the flowchart.
  *
  * @param model_data The model data
@@ -37,12 +37,13 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
     let geom_pack: IGeomPack;
     switch (data_format) {
         case _EIODataFormat.GI:
-            const gi_model: GIModel = new GIModel(JSON.parse(model_data));
-            geom_pack = __merge__(__model__, gi_model);
+            const gi_json: IModelData = JSON.parse(model_data) as IModelData;
+            geom_pack = __model__.setData(gi_json);
             break;
         case _EIODataFormat.OBJ:
-            const obj_model: GIModel = importObj(model_data);
-            geom_pack = __merge__(__model__, obj_model);
+            throw new Error("Not implemented");
+            // const obj_model: GIModel = importObj(model_data);
+            // geom_pack = __merge__(__model__, obj_model);
             break;
         default:
             throw new Error('Data type not recognised');

@@ -3,6 +3,7 @@ import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
 import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
+import { GIAttribsIO } from './GIAttribsIO';
 
 /**
  * Class for attributes.
@@ -10,7 +11,7 @@ import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMap
 export class GIAttribs {
     private _model: GIModel;
     // maps, the key is the name, the value is the attrib map clas
-    private _attribs_maps: IAttribsMaps = {
+    public _attribs_maps: IAttribsMaps = { // TODO this should not be public
         ps: new Map(),
         _v: new Map(),
         _e: new Map(),
@@ -22,6 +23,7 @@ export class GIAttribs {
         co: new Map()
     };
     // sub classes with methods
+    public io: GIAttribsIO;
     public add: GIAttribsAdd;
     public query: GIAttribsQuery;
     public threejs: GIAttribsThreejs;
@@ -31,6 +33,7 @@ export class GIAttribs {
      */
     constructor(model: GIModel) {
         this._model = model;
+        this.io = new GIAttribsIO(model, this._attribs_maps);
         this.add = new GIAttribsAdd(model, this._attribs_maps);
         this.query = new GIAttribsQuery(model, this._attribs_maps);
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);

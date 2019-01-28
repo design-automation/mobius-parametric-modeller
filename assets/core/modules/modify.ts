@@ -228,7 +228,7 @@ function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
-        wires_i.forEach( wire_i => __model__.geom.add.reverse(wire_i) );
+        wires_i.forEach( wire_i => __model__.geom.modify.reverse(wire_i) );
     } else {
         (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _reverse(__model__, ent_arr) );
     }
@@ -255,7 +255,7 @@ function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset:
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
-        wires_i.forEach( wire_i => __model__.geom.add.shift(wire_i, offset) );
+        wires_i.forEach( wire_i => __model__.geom.modify.shift(wire_i, offset) );
     } else {
         (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _shift(__model__, ent_arr, offset) );
     }
@@ -287,7 +287,7 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
         } else if (ent_type !== EEntType.WIRE) {
             throw new Error('modify.Close: Entity is of wrong type. It must be either a polyline or a wire.');
         }
-        __model__.geom.add.closeWire(wire_i);
+        __model__.geom.modify.closeWire(wire_i);
     } else {
         for (const ents of ents_arr) {
             _close(__model__, ents as TEntTypeIdx);
@@ -388,11 +388,11 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_un
             posis_i.push(index);
         }
     }
-    __model__.geom.add.delColls(colls_i, del_unused_posis);
-    __model__.geom.add.delPgons(pgons_i, del_unused_posis);
-    __model__.geom.add.delPlines(plines_i, del_unused_posis);
-    __model__.geom.add.delPoints(points_i, del_unused_posis);
-    __model__.geom.add.delPosis(posis_i);
+    __model__.geom.modify.delColls(colls_i, del_unused_posis);
+    __model__.geom.modify.delPgons(pgons_i, del_unused_posis);
+    __model__.geom.modify.delPlines(plines_i, del_unused_posis);
+    __model__.geom.modify.delPoints(points_i, del_unused_posis);
+    __model__.geom.modify.delPosis(posis_i);
 }
 /**
  * Deletes geometric entities: positions, points, polylines, polygons, and collections.
@@ -414,7 +414,6 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
         ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    console.log('WARNING: Delete function is experimental.');
     const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
     _delete(__model__, ents_arr, bool_del_unused_posis);
 }

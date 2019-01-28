@@ -54,25 +54,24 @@ export class GIAttribMap {
             data: _data
         };
     }
-    /**
-     * Adds ent_ities to this attribute from JSON data.
-     * The existing attribute data in the model is not deleted.
-     * @param attrib_data The JSON data for the new ent_ities.
-     */
-    public addData(attrib_data: IAttribData, ent_i_offset: number): void {
-        if (this._name !== attrib_data.name ||
-            this._data_type !== attrib_data.data_type ||
-            this._data_size !== attrib_data.data_size) {
-            throw Error('Attributes do not match.');
-        }
-        // increment all the keys by the number of ent_ities in the existing data
-        attrib_data.data.forEach( keys_value => {
-            const new_keys: number[] = keys_value[0].map(key => key + ent_i_offset);
-            const value: TAttribDataTypes = keys_value[1];
-            this.setEntVal(new_keys, value);
-        });
-
-    }
+    // /**
+    //  * Adds ent_ities to this attribute from JSON data.
+    //  * The existing attribute data in the model is not deleted.
+    //  * @param attrib_data The JSON data for the new ent_ities.
+    //  */
+    // public addData(attrib_data: IAttribData, ent_i_offset: number): void {
+    //     if (this._name !== attrib_data.name ||
+    //         this._data_type !== attrib_data.data_type ||
+    //         this._data_size !== attrib_data.data_size) {
+    //         throw Error('Attributes do not match.');
+    //     }
+    //     // increment all the keys by the number of ent_ities in the existing data
+    //     attrib_data.data.forEach( keys_value => {
+    //         const new_keys: number[] = keys_value[0].map(key => key + ent_i_offset);
+    //         const value: TAttribDataTypes = keys_value[1];
+    //         this.setEntVal(new_keys, value);
+    //     });
+    // }
     /**
      * Returns the name of this attribute.
      */
@@ -121,6 +120,30 @@ export class GIAttribMap {
                 this._cleanUp(val_i);
             }
         });
+    }
+    /**
+     * Returns a nested array of entities and values, like this:
+     * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
+     * This is the same format as used in gi-json
+     * This matches the method setEntsVals()
+     */
+    public getEntsVals(): [number[], TAttribDataTypes][] {
+        const ents_i_values: [number[], TAttribDataTypes][] = [];
+        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
+            const value: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
+            ents_i_values.push([ents_i, value]);
+        });
+        return ents_i_values;
+    }
+    /**
+     * Sets the value for multiple entity-value pairs at the same time.
+     * @param ent_i
+     * @param val
+     */
+    public setEntsVals(ents_i_values: [number[], TAttribDataTypes][]): void {
+        for (let i = 0; i < ents_i_values.length; i++) {
+            this.setEntVal(ents_i_values[i][0], ents_i_values[i][1]);
+        }
     }
     /**
      * Sets the value for a given entity or entities.
@@ -214,22 +237,6 @@ export class GIAttribMap {
     public getEntsWithVal(ents_i: number[]): number[] {
         return ents_i.filter(ent_i => this._map_ent_i_to_val_i.has(ent_i));
     }
-    // /**
-    //  * Gets an array of values, given an array of entity indices
-    //  */
-    // public getEntsVals(ents_i: number[]): TAttribDataTypes[] {
-    //     const vals: TAttribDataTypes[] = [];
-    //     ents_i.forEach( ent_i => {
-    //         const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-    //         if (val_i === undefined) {
-    //             vals.push(null);
-    //         } else {
-    //             const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-    //             vals.push(val);
-    //         }
-    //     });
-    //     return vals;
-    // }
     /**
      * Executes a query
      * @param ents_i
@@ -244,8 +251,8 @@ export class GIAttribMap {
             if (!Number.isInteger(val_arr_index)) {
                 throw new Error('Query index "' + val_arr_index + '" cannot be converted to an integer: ' + val_arr_index);
             }
-            if (!(this._data_size > 0))  { 
-                throw new Error('Query attribute ' + this._name + ' is not a list.'); 
+            if (!(this._data_size > 0))  {
+                throw new Error('Query attribute ' + this._name + ' is not a list.');
             }
         }
         if (this._data_type === EAttribDataTypeStrs.STRING) {
@@ -388,7 +395,7 @@ export class GIAttribMap {
                 }
                 return found_keys;
             default:
-                throw new Error('Query error: Operator not found.')
+                throw new Error('Query error: Operator not found.');
         }
     }
     /**

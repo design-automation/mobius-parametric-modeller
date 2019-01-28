@@ -2,8 +2,6 @@
 import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
-import { TPosi } from './common';
-import { ConeBufferGeometry } from 'three';
 /**
  * Class for geometry.
  */
@@ -27,7 +25,7 @@ export class GIGeomQuery {
      * @param ent_type
      */
     public getEnts(ent_type: EEntType, include_deleted: boolean): number[] {
-        // get posis indices array
+        // get posis indices array from up array: up_posis_verts
         if (isPosi(ent_type)) {
             const posis: number[][] = this._geom_arrays.up_posis_verts;
             const posis_i: number[] = [];
@@ -37,7 +35,7 @@ export class GIGeomQuery {
                     if (posi !== null) {
                         posis_i.push(i);
                     } else {
-                        posis_i.push(null);
+                        posis_i.push(null); // TODO
                     }
                 }
             } else {
@@ -50,17 +48,17 @@ export class GIGeomQuery {
             }
             return posis_i;
         }
-        // get ents indices array
+        // get ents indices array from down arrays
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
         const ents_i: number[] = [];
         if (include_deleted) {
-            for (let i = 0; i < geom_array.length; i++ ) { 
+            for (let i = 0; i < geom_array.length; i++ ) {
                 const ent = geom_array[i];
                 if (ent !== null) {
                     ents_i.push(i);
                 } else {
-                    ents_i.push(null);
+                    ents_i.push(null); // TODO
                 }
             }
         } else {
@@ -74,30 +72,18 @@ export class GIGeomQuery {
         return ents_i;
     }
     /**
-     * Returns the number of entities, including deleted entities (which are set to null)
+     * Returns the number of entities
      * @param ent_type
      */
     public numEnts(ent_type: EEntType, include_deleted: boolean): number {
         return this.getEnts(ent_type, include_deleted).length;
-    }
-    /**
-     * Returns the number of entities, including deleted entities
-     * @param ent_type
-     */
-    public nextEntIndex(ent_type: EEntType): number {
-        if (isPosi(ent_type)) {
-            // TODO how to handle deleted positions
-            return this._geom_arrays.up_posis_verts.length;
-        }
-        const geom_array_key: string = EEntStrToGeomArray[ent_type];
-        const geom_array: any[] = this._geom_arrays[geom_array_key];
-        return geom_array.length;
     }
     // ============================================================================
     // Util
     // ============================================================================
     /**
      * Check if an entity exists
+     * @param ent_type
      * @param index
      */
     public entExists(ent_type: EEntType, index: number): boolean {
@@ -123,6 +109,7 @@ export class GIGeomQuery {
      * Returns the vertices.
      * For a closed wire, #vertices = #edges
      * For an open wire, #vertices = #edges + 1
+     * @param wire_i
      */
     private getWireVerts(wire_i: number): number[] {
         const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
@@ -135,22 +122,22 @@ export class GIGeomQuery {
     }
     /**
      * Get the parent of a collection.
-     * @param wire_i
+     * @param coll_i
      */
     public getCollParent(coll_i: number): number {
         return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
     /**
-     * 
-     * @param  
+     *
+     * @param face_i
      */
     public getFaceBoundary(face_i: number): number {
         const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
         return wires_i[0];
     }
     /**
-     * 
-     * @param  
+     *
+     * @param face_i
      */
     public getFaceHoles(face_i: number): number[] {
         const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];

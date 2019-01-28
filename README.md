@@ -1,6 +1,6 @@
 # mobius-parametric-modeller
 
-https://design-automation.github.io/mobius-parametric-modeller/
+https://mobius.design-automation.net/
 
 Mobius for parametric modelling, using gs-json format.
 =======

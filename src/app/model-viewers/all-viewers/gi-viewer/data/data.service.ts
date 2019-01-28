@@ -16,11 +16,12 @@ export class DataService {
     selecting: any = [];
 
     // Selected Entities by Threejs Viewer for Attribute Table
-    selected_ents: Map<string, Map<string, number | string[]>> = new Map();
+    selected_ents: Map<string, Map<string, number>> = new Map();
     selected_positions: Map<string, string[]>;
     selected_vertex: Map<string, string[]>;
     selected_face_edges: Map<string, string[]>;
     selected_face_wires: Map<string, string[]>;
+    selected_coll: Map<string, string[]>;
     /**
      * Create a data service.
      */
@@ -38,6 +39,7 @@ export class DataService {
         this.selected_vertex = new Map();
         this.selected_face_edges = new Map();
         this.selected_face_wires = new Map();
+        this.selected_coll = new Map();
     }
 
     /**

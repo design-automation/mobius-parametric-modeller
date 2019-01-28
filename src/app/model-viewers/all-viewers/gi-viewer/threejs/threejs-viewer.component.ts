@@ -203,8 +203,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             }
         } else if (attrib.action === 'unselect') {
             if (attrib.ent_type === EEntTypeStr[EEntType.COLL]) {
-                const coll_children = this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL])
-                .get(attrib.ent_type + attrib.id) as Array<string>;
+                const coll_children = this.dataService.selected_coll.get(attrib.ent_type + attrib.id);
                 if (coll_children.length) {
                     coll_children.forEach(child => {
                         this.unselectGeom(child, attrib.ent_type, true);
@@ -1094,7 +1093,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             }
         }
 
-        this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, children);
+        this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, id);
+        this.dataService.selected_coll.set(coll_id, children);
         this.refreshTable(null);
         this.render(this);
     }

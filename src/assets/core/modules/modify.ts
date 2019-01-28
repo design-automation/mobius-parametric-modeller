@@ -414,7 +414,6 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
         ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    console.log('WARNING: Delete function is experimental.');
     const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
     _delete(__model__, ents_arr, bool_del_unused_posis);
 }

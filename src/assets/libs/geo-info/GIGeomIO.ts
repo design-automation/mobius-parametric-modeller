@@ -248,6 +248,42 @@ export class GIGeomIO {
                 this._geom_arrays.up_faces_pgons[i + num_faces] = new_pgon_i;
             }
         }
+        // update points to colls
+        for (let i = 0; i < geom_arrays.up_points_colls.length; i++) {
+            const colls_i: number[] = geom_arrays.up_points_colls[i];
+            if (colls_i === undefined) {
+                continue;
+            } else if (colls_i === null) {
+                this._geom_arrays.up_points_colls[i + num_points] = null;
+            } else {
+                const new_colls_i: number[] = colls_i.map(coll_i => coll_i + num_colls);
+                this._geom_arrays.up_points_colls[i + num_points] = new_colls_i;
+            }
+        }
+        // update plines to colls
+        for (let i = 0; i < geom_arrays.up_plines_colls.length; i++) {
+            const colls_i: number[] = geom_arrays.up_plines_colls[i];
+            if (colls_i === undefined) {
+                continue;
+            } else if (colls_i === null) {
+                this._geom_arrays.up_plines_colls[i + num_plines] = null;
+            } else {
+                const new_colls_i: number[] = colls_i.map(coll_i => coll_i + num_colls);
+                this._geom_arrays.up_plines_colls[i + num_plines] = new_colls_i;
+            }
+        }
+        // update pgons to colls
+        for (let i = 0; i < geom_arrays.up_pgons_colls.length; i++) {
+            const colls_i: number[] = geom_arrays.up_pgons_colls[i];
+            if (colls_i === undefined) {
+                continue;
+            } else if (colls_i === null) {
+                this._geom_arrays.up_pgons_colls[i + num_pgons] = null;
+            } else {
+                const new_colls_i: number[] = colls_i.map(coll_i => coll_i + num_colls);
+                this._geom_arrays.up_pgons_colls[i + num_pgons] = new_colls_i;
+            }
+        }
     }
 
     /**

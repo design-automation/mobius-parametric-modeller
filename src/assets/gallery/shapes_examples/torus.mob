@@ -1,9 +1,9 @@
 {
-    "name": "Untitled",
+    "name": "torus",
     "author": "new_user",
     "flowchart": {
-        "name": "Untitled",
-        "description": "",
+        "name": "A torus with holes",
+        "description": "Creates a torus, with holes cut in the faces of the torus.",
         "language": "js",
         "meta": {
             "selected_nodes": [
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_aok39unw2cu",
+                "id": "node_xo1832gzasl",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -32,6 +32,68 @@
                         "args": [],
                         "print": false,
                         "enabled": true,
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-sue5vafnil",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "The number of segments in the cross section of the torus."
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "segments",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "value": 10,
+                                "default": 4,
+                                "step": "1",
+                                "min": "4",
+                                "max": "12"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-vn1h2ayw3jc",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "The number of slices in the torus, as viewed from above."
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "slices",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "value": 11,
+                                "default": 4,
+                                "step": "1",
+                                "min": "4",
+                                "max": "12"
+                            }
+                        ],
                         "selected": false,
                         "hasError": false
                     }
@@ -66,8 +128,8 @@
                                     "opts": {}
                                 },
                                 "parentNode": {
-                                    "name": "Node",
-                                    "id": "node_kcck8poy5vo",
+                                    "name": "make torus",
+                                    "id": "node_skzty66tr8",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -121,7 +183,7 @@
                                                 },
                                                 {
                                                     "name": "num_positions",
-                                                    "value": "6",
+                                                    "value": "segments",
                                                     "default": 0
                                                 },
                                                 {
@@ -233,7 +295,7 @@
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "6"
+                                                    "value": "slices"
                                                 }
                                             ],
                                             "selected": false,
@@ -445,14 +507,14 @@
                                                         "opts": {}
                                                     },
                                                     "parentNode": {
-                                                        "name": "End",
-                                                        "id": "node_h0j12th1nuq",
+                                                        "name": "cut holes",
+                                                        "id": "node_xqoevztn4h9",
                                                         "position": {
-                                                            "x": 5350,
-                                                            "y": 5400
+                                                            "x": 5349.091796875,
+                                                            "y": 5402.365234375
                                                         },
                                                         "enabled": true,
-                                                        "type": "end",
+                                                        "type": "",
                                                         "procedure": [
                                                             {
                                                                 "type": 13,
@@ -469,27 +531,290 @@
                                                                 "hasError": false
                                                             },
                                                             {
-                                                                "type": 11,
-                                                                "ID": "",
+                                                                "type": 8,
+                                                                "ID": "prod-9frmtomzfq8",
+                                                                "enabled": true,
+                                                                "print": false,
                                                                 "meta": {
-                                                                    "name": "",
-                                                                    "module": ""
+                                                                    "module": "query",
+                                                                    "name": "Get"
                                                                 },
-                                                                "argCount": 2,
+                                                                "argCount": 5,
                                                                 "args": [
                                                                     {
+                                                                        "name": "var_name",
+                                                                        "value": "pgons",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
                                                                         "name": "__model__",
-                                                                        "value": "",
                                                                         "default": 0
                                                                     },
                                                                     {
-                                                                        "name": "value",
-                                                                        "value": "",
+                                                                        "name": "select",
+                                                                        "value": "'polygons'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
                                                                         "default": 0
                                                                     }
                                                                 ],
-                                                                "print": false,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 4,
+                                                                "ID": "prod-4gni2gvpxy8",
                                                                 "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "item",
+                                                                        "value": "pgon",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "list",
+                                                                        "value": "pgons",
+                                                                        "default": []
+                                                                    }
+                                                                ],
+                                                                "children": [
+                                                                    {
+                                                                        "type": 13,
+                                                                        "ID": "",
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "meta": {
+                                                                            "name": "",
+                                                                            "module": ""
+                                                                        },
+                                                                        "argCount": 0,
+                                                                        "args": [],
+                                                                        "print": false,
+                                                                        "enabled": true,
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-7025u31b8a7",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "make",
+                                                                            "name": "Copy"
+                                                                        },
+                                                                        "argCount": 4,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "pgon_cp",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pgon",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "copy_attributes",
+                                                                                "value": "'no_attributes'",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-zu22kiuf62q",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "virtual",
+                                                                            "name": "GetPlane"
+                                                                        },
+                                                                        "argCount": 3,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "plane",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pgon_cp",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-yxqfz3onbx",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "modify",
+                                                                            "name": "Scale"
+                                                                        },
+                                                                        "argCount": 5,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "__none__"
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pgon_cp",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "origin",
+                                                                                "value": "plane",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "scale",
+                                                                                "value": "0.7",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-k7rhym1chw",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "query",
+                                                                            "name": "Get"
+                                                                        },
+                                                                        "argCount": 5,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "posis",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "select",
+                                                                                "value": "'positions'",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pgon_cp",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "query_expr",
+                                                                                "value": "null",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-mm1nyx6fqq",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "make",
+                                                                            "name": "Hole"
+                                                                        },
+                                                                        "argCount": 4,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "wires",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "face",
+                                                                                "value": "pgon",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "positions",
+                                                                                "value": "posis",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-81ne08hrhmf",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "modify",
+                                                                            "name": "Delete"
+                                                                        },
+                                                                        "argCount": 4,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "__none__"
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pgon_cp",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "del_unused_posis",
+                                                                                "value": "'del_unused_posis'",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    }
+                                                                ],
                                                                 "selected": false,
                                                                 "hasError": false
                                                             }
@@ -501,12 +826,95 @@
                                                         "output": {
                                                             "name": "output",
                                                             "type": 1,
-                                                            "edges": [],
+                                                            "edges": [
+                                                                {
+                                                                    "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output",
+                                                                    "target": {
+                                                                        "name": "input",
+                                                                        "type": 0,
+                                                                        "edges": [
+                                                                            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0"
+                                                                        ],
+                                                                        "meta": {
+                                                                            "mode": 0,
+                                                                            "opts": {}
+                                                                        },
+                                                                        "parentNode": {
+                                                                            "name": "End",
+                                                                            "id": "node_92fpfu7vrtp",
+                                                                            "position": {
+                                                                                "x": 5347.96875,
+                                                                                "y": 5597.05908203125
+                                                                            },
+                                                                            "enabled": true,
+                                                                            "type": "end",
+                                                                            "procedure": [
+                                                                                {
+                                                                                    "type": 13,
+                                                                                    "ID": "",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 0,
+                                                                                    "args": [],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "hasError": false
+                                                                                },
+                                                                                {
+                                                                                    "type": 11,
+                                                                                    "ID": "",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 2,
+                                                                                    "args": [
+                                                                                        {
+                                                                                            "name": "__model__",
+                                                                                            "value": "",
+                                                                                            "default": 0
+                                                                                        },
+                                                                                        {
+                                                                                            "name": "value",
+                                                                                            "value": "",
+                                                                                            "default": 0
+                                                                                        }
+                                                                                    ],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "hasError": false
+                                                                                }
+                                                                            ],
+                                                                            "state": {
+                                                                                "procedure": []
+                                                                            },
+                                                                            "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target",
+                                                                            "output": {
+                                                                                "name": "output",
+                                                                                "type": 1,
+                                                                                "edges": [],
+                                                                                "meta": {
+                                                                                    "mode": 0
+                                                                                },
+                                                                                "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                                            },
+                                                                            "hasError": false,
+                                                                            "hasExecuted": true
+                                                                        }
+                                                                    },
+                                                                    "selected": false
+                                                                }
+                                                            ],
                                                             "meta": {
                                                                 "mode": 0
                                                             },
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
+                                                        "hasExecuted": true,
                                                         "hasError": false
                                                     }
                                                 },
@@ -518,7 +926,8 @@
                                         },
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
                                     },
-                                    "hasError": false
+                                    "hasError": false,
+                                    "hasExecuted": true
                                 }
                             },
                             "selected": false
@@ -529,19 +938,22 @@
                     },
                     "parentNode": "~flowchart~nodes~0"
                 },
-                "hasError": false
+                "hasError": false,
+                "hasExecuted": true
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
-            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
         ],
         "edges": [
             "~flowchart~nodes~0~output~edges~0",
-            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0"
         ],
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-28T04:00:29.660Z",
+    "last_updated": "2019-01-28T10:44:57.918Z",
     "version": 1,
     "settings": {}
 }

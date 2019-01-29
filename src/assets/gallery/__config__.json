@@ -31,7 +31,7 @@
         {
             "name": "Flow Examples",
             "files": [
-                "podium_with_towers.mob&node=1"
+                "podium_with_towers.mob&node=3"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/flow_examples/"
         },

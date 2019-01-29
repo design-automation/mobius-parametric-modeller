@@ -104,7 +104,7 @@ describe('Execute Component test', () => {
                 const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
                 expect(output.model).toBeDefined(
                     `Execute fails. The end node model is not defined.`);
-                const geom_data = output.model.getGeomData();
+                const geom_data = output.model.getData().geometry;
                 if (test.requirements.hasOwnProperty('num_positions')) {
                     expect(geom_data.num_positions).toBe(test.requirements['num_positions'], 'No. positions do not match');
                 }

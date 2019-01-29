@@ -67,7 +67,7 @@ export class GIAttribsThreejs {
      * Verts that have been deleted will not be included
      * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
      */
-    public get3jsSeqVertsAttrib(attrib_name: string): number[] {
+    public get3jsSeqVertsAttrib(attrib_name: EAttribNames): number[] {
         if (!this._attribs_maps._v.has(attrib_name)) { return null; }
         const verts_attrib: GIAttribMap = this._attribs_maps._v.get(attrib_name);
         //
@@ -75,7 +75,13 @@ export class GIAttribsThreejs {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, true);
         verts_i.forEach( (vert_i, gi_index) => {
             if (vert_i !== null) {
-                verts_attribs_values.push( verts_attrib.getEntVal(vert_i) as TAttribDataTypes);
+                const value = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
+                if (attrib_name === EAttribNames.COLOUR) {
+                    const _value = value === undefined ? [1, 1, 1] : value;
+                    verts_attribs_values.push(_value);
+                } else {
+                    verts_attribs_values.push(value);
+                }
             }
         });
         // @ts-ignore

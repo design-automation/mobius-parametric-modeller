@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { MatIconModule} from '@angular/material';
 import { MatExpansionModule} from '@angular/material/expansion';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AttributeModule } from './attribute/attribute.module';
 
@@ -48,7 +49,8 @@ import { ThreeJSViewerService } from './threejs/threejs-viewer.service';
         MatExpansionModule,
         MatTooltipModule,
         AttributeModule,
-        FormsModule
+        FormsModule,
+        ColorPickerModule
     ],
     providers: [
         ModalService,

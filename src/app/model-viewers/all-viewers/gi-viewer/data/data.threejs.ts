@@ -51,7 +51,8 @@ export class DataThreejs {
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean }
+        tjs_summary: { show: boolean },
+        colors: { viewer_bg: string }
     };
     /**
      * Constructs a new data subscriber.
@@ -61,12 +62,13 @@ export class DataThreejs {
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean }
+        tjs_summary: { show: boolean },
+        colors: { viewer_bg: string }
     }) {
         this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
-        this._scene.background = new THREE.Color(0xE6E6E6);
+        this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
 
         // this.basic_scene = new THREE.Scene();
         // this.basic_scene.background = new THREE.Color(0xE6E6E6);
@@ -107,7 +109,8 @@ export class DataThreejs {
 
         // add grid and lights
         this._addGrid();
-        this._addHemisphereLight();
+        // this._addHemisphereLight();
+        this._addAmbientLight('#fefefe', 1);
         this._addAxes();
     }
     /**
@@ -116,6 +119,7 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
+        this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         while (this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
             this.sceneObjs = [];
@@ -127,8 +131,9 @@ export class DataThreejs {
         this._textLabels.clear();
 
         this._addGrid();
-        this._addHemisphereLight();
-        // this._addDirectionalLight();
+        // this._addHemisphereLight();
+        this._addAmbientLight('#fefefe', 1);
+        this._addDirectionalLight();
         this._addAxes();
 
         // Add geometry
@@ -151,6 +156,13 @@ export class DataThreejs {
 
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? 1 : position_size / 2;
+
+        // const planeGeometry = new THREE.PlaneBufferGeometry( 100, 100, 32, 32 );
+        // const planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
+        // const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+        // plane.receiveShadow = true;
+        // plane.position.setZ(-50);
+        // this._scene.add( plane );
 
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
@@ -496,7 +508,7 @@ export class DataThreejs {
     // Creates a Directional Light
     private _addDirectionalLight() {
         const light = new THREE.SpotLight(0xffffff);
-        light.position.set(200, 100, 200);
+        light.position.set(100, 100, 100);
         light.castShadow = true;
         this._scene.add(light);
     }
@@ -559,18 +571,19 @@ export class DataThreejs {
         geom.addAttribute('color', colors_buffer);
         const mat = new THREE.MeshPhongMaterial({
             // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
-            specular: 0xffffff,
-            emissive: 0xdddddd,
-            shininess: 0, // 250
+            specular: 0x000000,
+            emissive: 0x000000,
+            color: 0xffffff,
+            shininess: 10, // 250
             side: THREE.DoubleSide,
-            vertexColors: THREE.VertexColors,
+            // vertexColors: THREE.VertexColors,
             // wireframe: true
         });
         const mesh = new THREE.Mesh(geom, mat);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         mesh.castShadow = true;
-        mesh.receiveShadow = false;
+        // mesh.receiveShadow = true;
 
         // show vertex normals
         this.vnh = new THREE.VertexNormalsHelper(mesh, this.settings.normals.size, 0x0000ff);

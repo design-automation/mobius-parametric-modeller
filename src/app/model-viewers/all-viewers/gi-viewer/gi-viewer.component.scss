@@ -285,3 +285,9 @@ body.modal-open {
         width: 50px;
     }
 }
+
+#viewerBackground{
+    &.light{
+        color: #ffffff;
+    }
+}

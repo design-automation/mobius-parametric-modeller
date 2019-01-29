@@ -775,7 +775,7 @@ export class DataThreejs {
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];
         if (last_segment === 'editor') {
-            // return;
+            return;
         }
         const keyCode = event.which;
         // console.log(keyCode);

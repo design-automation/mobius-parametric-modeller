@@ -68,7 +68,9 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
     let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null);
     checkAttribNameValue(fn_name , attrib_name, attrib_value, attrib_index);
     // --- Error Check ---
-    if (!Array.isArray(ents_arr[0])) {
+    if (ents_arr.length === 0) {
+        return;
+    } else if (getArrDepth(ents_arr) === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     for (const ent_arr of ents_arr) {

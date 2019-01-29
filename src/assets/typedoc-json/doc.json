@@ -4137,7 +4137,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_model.ts",
-							"line": 106,
+							"line": 108,
 							"character": 29
 						}
 					]
@@ -4590,7 +4590,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_model.ts",
-							"line": 84,
+							"line": 86,
 							"character": 19
 						}
 					]
@@ -9299,7 +9299,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a new collection to the model.",
-								"returns": "New collection if successful, null if unsuccessful or on error.",
+								"returns": "New collection.",
 								"tags": [
 									{
 										"tag": "example",
@@ -9405,7 +9405,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a new copy of specified entities to the model.",
-								"returns": "New copy if successful, null if unsuccessful or on error.",
+								"returns": "The copied entity or a list of copied entities.",
 								"tags": [
 									{
 										"tag": "example",
@@ -9520,7 +9520,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Divides edge, wire or polyline by length or by number of segments.\nIf object is not exact multiple of length, length of last segment will be the remainder.",
-								"returns": "List of new edges (segments of original edges), null if unsuccessful or on error.",
+								"returns": "List of new edges resulting from the divide.",
 								"tags": [
 									{
 										"tag": "example",
@@ -9647,7 +9647,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Extrudes geometry by distance (in default direction = z-axis) or by vector.\n- Extrusion of a position, vertex, or point produces polylines;\n- Extrusion of edge, wire, or polyline produces polygons;\n- Extrusion of face or polygon produces polygons, also capped at the top.",
-								"returns": "Extrusion of entities if successful, null if unsuccessful or on error.",
+								"returns": "List of new polygons resulting from the extrude.",
 								"tags": [
 									{
 										"tag": "example",
@@ -9794,7 +9794,7 @@
 							"comment": {
 								"shortText": "Makes one or more holes in a polygon.\nEach hole is defined by a list of positions.\nThe positions must be on the polygon, i.e. they must be co-planar with the polygon and\nthey must be within the boundary of the polygon.\nIf the list of positions consists of a single list, then one hole will be generated.\nIf the list of positions consists of a list of lists, then multiple holes will be generated.",
 								"text": "The hole positions should lie within the polygon surface.\n",
-								"returns": "Wires for the new holes.\n"
+								"returns": "List of wires resulting from the hole(s).\n"
 							},
 							"parameters": [
 								{
@@ -9895,7 +9895,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Lofts between edges.",
-								"returns": "Lofted polygons between edges if successful, null if unsuccessful or on error.",
+								"returns": "List of new polygons resulting from the loft.",
 								"tags": [
 									{
 										"tag": "example",
@@ -9990,7 +9990,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.",
-								"returns": "New point if successful, null if unsuccessful or on error.",
+								"returns": "New point or a list of new points.",
 								"tags": [
 									{
 										"tag": "example_info",
@@ -10098,7 +10098,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a new polygon to the model.",
-								"returns": "New polygon if successful, null if unsuccessful or on error.",
+								"returns": "New polygon.",
 								"tags": [
 									{
 										"tag": "example",
@@ -10208,7 +10208,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a new polyline to the model.",
-								"returns": "New polyline if successful, null if unsuccessful or on error.",
+								"returns": "New polyline.",
 								"tags": [
 									{
 										"tag": "example",
@@ -10333,7 +10333,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a new position to the model.",
-								"returns": "New position if successful, null if unsuccessful or on error.",
+								"returns": "New position, or a list of new positions, or a list of lists of new positions .",
 								"tags": [
 									{
 										"tag": "example",
@@ -10459,7 +10459,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Unweld vertices so that they do not share positions.\nFor the vertices of the specified entities, if they share positions with other entities in the model,\nthen those positions will be replaced with new positions.\nThis function performs a simple unweld.\nThat is, the vertices within the set of specified entities are not unwelded.",
-								"returns": "The newly created positions resulting from the unweld.",
+								"returns": "List of new positions resulting from the unweld.",
 								"tags": [
 									{
 										"tag": "example",
@@ -10549,7 +10549,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Joins polylines to polylines or polygons to polygons.",
-								"returns": "New joined polyline or polygon if successful, null if unsuccessful or on error.",
+								"returns": "New joined polyline or polygon .",
 								"tags": [
 									{
 										"tag": "example",
@@ -10624,7 +10624,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Adds a single new polygon to the model with one or more holes.",
-								"returns": "New polygon if successful, null if unsuccessful or on error.",
+								"returns": "New polygon.",
 								"tags": [
 									{
 										"tag": "example",
@@ -13845,7 +13845,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/pattern.ts",
-									"line": 67,
+									"line": 69,
 									"character": 11
 								}
 							],
@@ -13862,7 +13862,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/pattern.ts",
-									"line": 66,
+									"line": 68,
 									"character": 8
 								}
 							],
@@ -13879,7 +13879,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/pattern.ts",
-									"line": 68,
+									"line": 70,
 									"character": 8
 								}
 							],
@@ -13896,7 +13896,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/pattern.ts",
-									"line": 69,
+									"line": 71,
 									"character": 11
 								}
 							],
@@ -13918,7 +13918,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/pattern.ts",
-							"line": 65,
+							"line": 67,
 							"character": 24
 						}
 					]
@@ -13939,8 +13939,8 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Creates a list of XYZ coordinates in an arc arrangement.",
-								"returns": "XYZ coordinates if successful, null if unsuccessful or on error.",
+								"shortText": "Creates positions in an arc pattern, and returns the list of new positions.\nIf the angle of the arc is set to 2*PI, then circular patterns will be created.",
+								"returns": "A list of positions.",
 								"tags": [
 									{
 										"tag": "example",
@@ -14047,7 +14047,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/pattern.ts",
-							"line": 31,
+							"line": 33,
 							"character": 19
 						}
 					]
@@ -14068,8 +14068,8 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Creates a list of XYZ coordinates in a grid arrangement.",
-								"returns": "XYZ coordinates if successful, null if unsuccessful or on error.",
+								"shortText": "Creates positions in a grid pattern, and returns the list (or list of lists) of new positions.",
+								"returns": "A list of positions, or a list of lists of positions (depending on the 'method' setting).",
 								"tags": [
 									{
 										"tag": "example",
@@ -14237,7 +14237,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/pattern.ts",
-							"line": 85,
+							"line": 87,
 							"character": 20
 						}
 					]
@@ -14258,8 +14258,8 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Creates a list of XYZ coordinates in a rectangular arrangement.",
-								"returns": "XYZ coordinates if successful, null if unsuccessful or on error.",
+								"shortText": "Creates four positions in a rectangle pattern, and returns the list of new positions.",
+								"returns": "A list of four positions.",
 								"tags": [
 									{
 										"tag": "example",
@@ -14364,7 +14364,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/pattern.ts",
-							"line": 171,
+							"line": 173,
 							"character": 25
 						}
 					]
@@ -14672,7 +14672,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 297,
+									"line": 301,
 									"character": 15
 								}
 							],
@@ -14689,7 +14689,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 296,
+									"line": 300,
 									"character": 16
 								}
 							],
@@ -14709,7 +14709,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 295,
+							"line": 299,
 							"character": 24
 						}
 					]
@@ -14825,7 +14825,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 227,
+							"line": 231,
 							"character": 21
 						}
 					]
@@ -14977,7 +14977,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 148,
+							"line": 152,
 							"character": 19
 						}
 					]
@@ -15082,7 +15082,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 197,
+							"line": 201,
 							"character": 22
 						}
 					]
@@ -15180,7 +15180,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 344,
+							"line": 348,
 							"character": 24
 						}
 					]
@@ -15285,7 +15285,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 267,
+							"line": 271,
 							"character": 26
 						}
 					]
@@ -15395,7 +15395,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 312,
+							"line": 316,
 							"character": 20
 						}
 					]
@@ -15505,7 +15505,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 360,
+							"line": 364,
 							"character": 25
 						}
 					]
@@ -15762,7 +15762,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 163,
+							"line": 167,
 							"character": 16
 						}
 					]
@@ -15840,7 +15840,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 322,
+							"line": 326,
 							"character": 18
 						}
 					]
@@ -15937,7 +15937,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 236,
+							"line": 240,
 							"character": 27
 						}
 					]
@@ -16021,7 +16021,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 279,
+							"line": 283,
 							"character": 14
 						}
 					]

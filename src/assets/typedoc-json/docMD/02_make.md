@@ -4,7 +4,7 @@
 * **Description:** Adds a new position to the model.  
 * **Parameters:**  
   * *coords:* XYZ coordinates as a list of three numbers.  
-* **Returns:** New position if successful, null if unsuccessful or on error.  
+* **Returns:** New position, or a list of new positions, or a list of lists of new positions .  
 * **Examples:**  
   * position1 = make.Position([1,2,3])  
     Creates a position with coordinates x=1, y=2, z=3.  
@@ -16,7 +16,7 @@
 * **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
 * **Parameters:**  
   * *positions:* Position of point.  
-* **Returns:** New point if successful, null if unsuccessful or on error.  
+* **Returns:** New point or a list of new points.  
 * **Examples:**  
   * point1 = make.Point(position1)  
     Creates a point at position1.  
@@ -29,7 +29,7 @@
 * **Parameters:**  
   * *positions:* List of positions.  
   * *close:* Enum of 'close' or 'open'.  
-* **Returns:** New polyline if successful, null if unsuccessful or on error.  
+* **Returns:** New polyline.  
 * **Examples:**  
   * polyline1 = make.Polyline([position1,position2,position3], close)  
     Creates a closed polyline with vertices position1, position2, position3 in sequence.  
@@ -41,7 +41,7 @@
 * **Description:** Adds a new polygon to the model.  
 * **Parameters:**  
   * *positions:* List of positions.  
-* **Returns:** New polygon if successful, null if unsuccessful or on error.  
+* **Returns:** New polygon.  
 * **Examples:**  
   * polygon1 = make.Polygon([position1,position2,position3])  
     Creates a polygon with vertices position1, position2, position3 in sequence.  
@@ -54,7 +54,7 @@
 * **Parameters:**  
   * *parent_coll:* Collection  
   * *geometry:* List of points, polylines, polygons.  
-* **Returns:** New collection if successful, null if unsuccessful or on error.  
+* **Returns:** New collection.  
 * **Examples:**  
   * collection1 = make.Collection([point1,polyine1,polygon1])  
     Creates a collection containing point1, polyline1, polygon1.  
@@ -67,7 +67,7 @@
 * **Parameters:**  
   * *entities:* Position, point, polyline, polygon, collection to be copied.  
   * *copy_attributes:* Enum to copy attributes or to have no attributes copied.  
-* **Returns:** New copy if successful, null if unsuccessful or on error.  
+* **Returns:** The copied entity or a list of copied entities.  
 * **Examples:**  
   * copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)  
     Creates a list containing a copy of the entities in sequence of input.
@@ -83,14 +83,14 @@ If the list of positions consists of a list of lists, then multiple holes will b
 * **Parameters:**  
   * *face:* A polygon or a face to make holes in.  
   * *positions:* A list of positions defining the wires of the holes.  
-* **Returns:** Wires for the new holes.  
+* **Returns:** List of wires resulting from the hole(s).  
   
 ## Loft  
 * **Description:** Lofts between edges.  
 * **Parameters:**  
   * *entities:* Edges (or wires, polylines or polygons with the same number of edges).  
   * *method:* Enum, if 'closed', then close the loft back to the first edge in the input.  
-* **Returns:** Lofted polygons between edges if successful, null if unsuccessful or on error.  
+* **Returns:** List of new polygons resulting from the loft.  
 * **Examples:**  
   * surface1 = make.Loft([polyline1,polyline2,polyline3], closed)  
     Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
@@ -105,7 +105,7 @@ If the list of positions consists of a list of lists, then multiple holes will b
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
   * *distance:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
   * *divisions:* Number of divisions to divide extrusion by. Minimum is 1.  
-* **Returns:** Extrusion of entities if successful, null if unsuccessful or on error.  
+* **Returns:** List of new polygons resulting from the extrude.  
 * **Examples:**  
   * extrusion1 = make.Extrude(point1, 10, 2)  
     Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
@@ -121,7 +121,7 @@ If object is not exact multiple of length, length of last segment will be the re
   * *edge:* Edge, wire, or polyline(s) to be divided.  
   * *divisor:* Segment length or number of segments.  
   * *method:* Enum to choose which method.  
-* **Returns:** List of new edges (segments of original edges), null if unsuccessful or on error.  
+* **Returns:** List of new edges resulting from the divide.  
 * **Examples:**  
   * segments1 = make.Divide(edge1, 5, by_number)  
     Creates a list of 5 equal segments from edge1.  
@@ -137,7 +137,7 @@ This function performs a simple unweld.
 That is, the vertices within the set of specified entities are not unwelded.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, point, polyline, polygon, collection.  
-* **Returns:** The newly created positions resulting from the unweld.  
+* **Returns:** List of new positions resulting from the unweld.  
 * **Examples:**  
   * mod.Unweld(polyline1)  
     Unwelds polyline1 from all ther entities that shares the same position.

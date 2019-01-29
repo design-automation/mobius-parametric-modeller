@@ -12,7 +12,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { idsMake } from '@libs/geo-info/id';
+import { idsMake, getArrDepth } from '@libs/geo-info/id';
 import { checkIDs } from './_check_args';
 
 // TQuery should be something like this:
@@ -96,7 +96,11 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         if (ents_arr === null || ents_arr === undefined) {
             found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type, false));
         } else {
-            if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+            if (ents_arr.length === 0) {
+                return [];
+            } else if (getArrDepth(ents_arr) === 1) {
+                ents_arr = [ents_arr] as TEntTypeIdx[];
+            }
             for (const ents of ents_arr) {
                 found_entities_i.push(...__model__.geom.query.navAnyToAny(ents[0], select_ent_type, ents[1]));
             }

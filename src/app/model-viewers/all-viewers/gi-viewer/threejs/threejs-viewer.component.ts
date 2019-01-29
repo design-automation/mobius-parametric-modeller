@@ -204,7 +204,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         } else if (attrib.action === 'unselect') {
             if (attrib.ent_type === EEntTypeStr[EEntType.COLL]) {
                 const coll_children = this.dataService.selected_coll.get(attrib.ent_type + attrib.id);
-                if (coll_children.length) {
+                if (coll_children && coll_children.length) {
                     coll_children.forEach(child => {
                         this.unselectGeom(child, attrib.ent_type, true);
                     });
@@ -276,7 +276,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             return null;
         } else {
             const intersects = this.threeJSViewerService.initRaycaster(event);
-            if (intersects.length > 0) {
+            if (intersects && intersects.length > 0) {
                 body[0].style.cursor = 'pointer';
                 // if (this.mouse_label !== null) {
                 //     const x = event.clientX, y = event.clientY;
@@ -510,7 +510,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 break;
             case EEntTypeStr[EEntType.COLL]:
                 if (!this.shiftKeyPressed) {
-                    // this.unselectAll();
+                    this.unselectAll();
                 }
                 this.selectColl(intersect0, intersect0.object.type);
                 break;
@@ -1025,12 +1025,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private selectColl(object: THREE.Intersection, type) {
         let colls = [];
         if (type === 'Mesh') {
-            colls = this.model.geom.query.navAnyToAny(EEntType.TRI, EEntType.COLL, object.faceIndex);
+            colls = this.model.geom.query.navAnyToColl(EEntType.TRI, object.faceIndex);
         } else if (type === 'LineSegments') {
-            colls = this.model.geom.query.navAnyToAny(EEntType.EDGE, EEntType.COLL, object.index / 2);
+            colls = this.model.geom.query.navAnyToColl(EEntType.EDGE, object.index / 2);
         } else if (type === 'Points') {
-            const vert = this.model.geom.query.navVertToPoint(object.index);
-            colls = this.model.geom.query.navAnyToAny(EEntType.POINT, EEntType.COLL, vert);
+            const vert = this.model.geom.query.navPosiToVert(object.index);
+            const point = this.model.geom.query.navVertToPoint(vert[0]);
+            colls = this.model.geom.query.navAnyToColl(EEntType.POINT, point);
         }
         /**
          * Show dropdown menu only when Entity belongs to more than 1 Collection.
@@ -1039,7 +1040,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             this.dropdown.setItems(colls, 'co');
             this.dropdown.visible = true;
             this.dropdown.position = this.dropdownPosition;
-        } else if (colls.length === 1) {
+        } else if (colls && colls.length === 1) {
             this.chooseColl(colls[0]);
         } else {
             this.showMessages('No Collections Available', true, 'custom');
@@ -1059,7 +1060,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const pgons_indices = pgonResult.indices;
 
             if (pgons_indices.length !== 0) {
-                const attrib_val = this.model.attribs.query.getAttribValue(EEntType.COLL, EAttribNames.NAME, id);
+                // const attrib_val = this.model.attribs.query.getAttribValue(EEntType.COLL, EAttribNames.NAME, id);
                 // const selecting = attrib_val ? attrib_val.toString() : `${EEntType.COLL}${id}`;
                 const pgon_id = `${EEntTypeStr[EEntType.COLL]}_pg_${id}`;
                 scene.selectObjFace(pgon_id, pgons_indices, pgons_posi, this.container, false);

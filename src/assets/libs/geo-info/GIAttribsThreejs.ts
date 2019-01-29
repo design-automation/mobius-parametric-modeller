@@ -93,10 +93,11 @@ export class GIAttribsThreejs {
         const data_obj_map: Map< number, { '#': number, id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
+        let i = 0;
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { '#': ent_i, id: `${attribs_maps_key}${ent_i}` } );
+            data_obj_map.set(ent_i, { '#': i, id: `${attribs_maps_key}${ent_i}` } );
+            i++;
         }
-
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
@@ -125,8 +126,10 @@ export class GIAttribsThreejs {
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
+        let i = 0;
         selected_ents.forEach(ent => {
-            data_obj_map.set(ent, { '#': ent, id: `${attribs_maps_key}${ent}` } );
+            data_obj_map.set(ent, { '#': i, id: `${attribs_maps_key}${ent}` } );
+            i++;
         });
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();

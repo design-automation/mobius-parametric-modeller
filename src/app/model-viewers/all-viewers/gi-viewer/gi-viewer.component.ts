@@ -6,6 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
+import { ColorPickerService } from 'ngx-color-picker';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -29,13 +30,15 @@ export class GIViewerComponent implements OnInit {
         axes: { show: boolean, size: number },
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean}
+        tjs_summary: { show: boolean },
+        colors: { viewer_bg: string }
     } = {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
             positions: { show: true, size: 0.5 },
-            tjs_summary: { show: false}
+            tjs_summary: { show: false },
+            colors: { viewer_bg: '#E6E6E6' }
         };
 
     normalsEnabled = false;
@@ -49,9 +52,9 @@ export class GIViewerComponent implements OnInit {
      * constructor
      * @param dataService
      */
-    constructor(private dataService: DataService, private modalService: ModalService) {
+    constructor(private dataService: DataService, private modalService: ModalService, private cpService: ColorPickerService) {
         //
-        const previous_settings = localStorage.getItem('mpm_settings');
+        const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
@@ -84,7 +87,7 @@ export class GIViewerComponent implements OnInit {
     }
 
     private getSettings() {
-        if (localStorage.getItem('mpm_settings') != null) {
+        if (localStorage.getItem('mpm_settings') !== null) {
             this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
         }
     }
@@ -117,6 +120,7 @@ export class GIViewerComponent implements OnInit {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             document.getElementById('executeButton').click();
         }
+        console.log(this.settings.colors.viewer_bg);
     }
 
     settingOnChange(setting: string, value?: number) {
@@ -159,5 +163,20 @@ export class GIViewerComponent implements OnInit {
                 break;
         }
         scene._renderer.render(scene._scene, scene._camera);
+    }
+
+    resetDefault(setting, value) {
+        const seg = setting.split('.');
+        this.settings[seg[0]][seg[1]] = value;
+    }
+
+    checkColor() {
+        const color = this.settings.colors.viewer_bg;
+        const _color = this.cpService.hsvaToRgba(this.cpService.stringToHsva(color));
+        if ((_color.r + _color.g + _color.b) / _color.a < 1.5) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

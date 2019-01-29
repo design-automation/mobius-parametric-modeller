@@ -109,6 +109,17 @@
 							</label>
 						</div>
 					</li>
+					<li><h3>Colors</h3></li>
+					<li>
+						<div class="label">Viewer Background</div>
+						<input [(colorPicker)]="settings.colors.viewer_bg"
+						[style.background]="settings.colors.viewer_bg"
+						[cpColorMode]="'grayscale'"
+						[value]="settings.colors.viewer_bg"
+						[class.light] = "checkColor()"
+						id="viewerBackground"/>
+						<button (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button>
+					</li>
 					<!-- <li>Shadow On/Off</li>
 					<li>Position color/size</li> -->
 				</ul>

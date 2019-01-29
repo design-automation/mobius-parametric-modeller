@@ -428,9 +428,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             case EEntTypeStr[EEntType.POSI]:
                 if (intersect0.object.type === 'Points') {
                     const posi = scene.posis_map.get(intersect0.index);
-                    const ent_id = `_pt_posi${posi}`;
-                    if (scene.selected_positions.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
+                    const ent_id = `${EEntTypeStr[EEntType.POSI]}${posi}`;
+                    if (scene.selected_geoms.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
@@ -474,9 +474,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     } else {
                         point = vert;
                     }
-                    const ent_id = `_pt_v${point}`;
-                    if (scene.selected_vertex.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    const ent_id = `${EEntTypeStr[EEntType.VERT]}${point}`;
+                    if (scene.selected_geoms.has(ent_id)) {
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
@@ -681,7 +681,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         if (point !== null) {
             const position = this.model.attribs.query.getPosiCoords(point);
-            const ent_id = `${ent_type_str}${point}`;
+            const ent_id = parent_ent_id;
             scene.selectObjPosition(null, ent_id, position, this.container, true);
             posi_ent.set(ent_id, point);
             this.dataService.selected_positions.set(`${parent_ent_id}`, [ent_id]);
@@ -726,7 +726,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const scene = this._data_threejs;
         if (point !== null) {
             const position = this.model.attribs.query.getVertCoords(point);
-            const ent_id = `${ent_type_str}${point}`;
+            const ent_id = parent_ent_id;
             scene.selectObjVetex(null, ent_id, position, this.container, true);
             posi_ent.set(ent_id, point);
             this.dataService.selected_vertex.set(`${parent_ent_id}`, [ent_id]);

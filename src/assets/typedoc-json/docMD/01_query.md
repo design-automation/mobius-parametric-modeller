@@ -34,7 +34,7 @@ Query expressions can be combined with either && (and) and || (or), where
   * *entities:* List of entities to be excluded.  
 * **Returns:** List of entities that match the type specified in 'select'.  
 * **Examples:**  
-  * polylines = query.Get(objects, polyline1, null)  
+  * objects = query.Get(objects, polyline1, null)  
     Returns a list of all the objects in the model except polyline1.
   
   

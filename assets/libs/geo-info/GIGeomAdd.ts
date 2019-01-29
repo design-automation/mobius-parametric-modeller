@@ -116,17 +116,17 @@ export class GIGeomAdd {
             }
         }
         for (const pline_i of plines_i) {
-            if (this._geom_arrays.up_points_colls[pline_i] === undefined) {
-                this._geom_arrays.up_points_colls[pline_i] = [coll_i];
+            if (this._geom_arrays.up_plines_colls[pline_i] === undefined) {
+                this._geom_arrays.up_plines_colls[pline_i] = [coll_i];
             } else {
-                this._geom_arrays.up_points_colls[pline_i].push(coll_i);
+                this._geom_arrays.up_plines_colls[pline_i].push(coll_i);
             }
         }
         for (const pgon_i of pgons_i) {
-            if (this._geom_arrays.up_points_colls[pgon_i] === undefined) {
-                this._geom_arrays.up_points_colls[pgon_i] = [coll_i];
+            if (this._geom_arrays.up_pgons_colls[pgon_i] === undefined) {
+                this._geom_arrays.up_pgons_colls[pgon_i] = [coll_i];
             } else {
-                this._geom_arrays.up_points_colls[pgon_i].push(coll_i);
+                this._geom_arrays.up_pgons_colls[pgon_i].push(coll_i);
             }
         }
         return coll_i;

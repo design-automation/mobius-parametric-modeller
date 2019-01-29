@@ -13,10 +13,29 @@ Query expressions can be combined with either && (and) and || (or), where
   * *select:* Enum, specifies what type of entities will be returned.  
   * *entities:* List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.  
   * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.  
-* **Returns:** List of entities whose type matches the type specified in 'select'.  
+* **Returns:** List of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
 * **Examples:**  
   * positions = query.Get(positions, polyline1, #@xyz[2]>10)  
-    Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
+    Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
+  * positions = query.Get(positions, null, #@xyz[2]>10)  
+    Returns a list of positions in the model where the z-coordinate is more than 10.  
+  * positions = query.Get(positions, polyline1, null)  
+    Returns a list of all of the positions that are part of polyline1.  
+  * polylines = query.Get(polylines, position1, null)  
+    Returns a list of all of the polylines that use position1.  
+  * collections = query.Get(collections, null, #@type=="floors")  
+    Returns a list of all the collections that have an attribute called "type" with a value "floors".
+  
+  
+## Invert  
+* **Description:** Returns a list of entities excluding the specified entities.  
+* **Parameters:**  
+  * *select:* Enum, specifies what type of entities will be returned.  
+  * *entities:* List of entities to be excluded.  
+* **Returns:** List of entities that match the type specified in 'select'.  
+* **Examples:**  
+  * objects = query.Get(objects, polyline1, null)  
+    Returns a list of all the objects in the model except polyline1.
   
   
 ## Count  

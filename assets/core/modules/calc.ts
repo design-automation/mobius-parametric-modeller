@@ -154,15 +154,63 @@ export function Area(__model__: GIModel, entities: TId): number {
     }
 }
 // ================================================================================================
+function _boundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz[] {
+    const posis_set_i: Set<number> = new Set();
+    for (const ent_arr of ents_arr) {
+        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        for (const ent_posi_i of ent_posis_i) {
+            posis_set_i.add(ent_posi_i);
+        }
+    }
+    const unique_posis_i = Array.from(posis_set_i);
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const corner_min: Txyz = [Infinity, Infinity, Infinity];
+    const corner_max: Txyz = [-Infinity, -Infinity, -Infinity];
+    for (const unique_xyz of unique_xyzs) {
+        if (unique_xyz[0] < corner_min[0]) { corner_min[0] = unique_xyz[0]; }
+        if (unique_xyz[1] < corner_min[1]) { corner_min[1] = unique_xyz[1]; }
+        if (unique_xyz[2] < corner_min[2]) { corner_min[2] = unique_xyz[2]; }
+        if (unique_xyz[0] > corner_max[0]) { corner_max[0] = unique_xyz[0]; }
+        if (unique_xyz[1] > corner_max[1]) { corner_max[1] = unique_xyz[1]; }
+        if (unique_xyz[2] > corner_max[2]) { corner_max[2] = unique_xyz[2]; }
+    }
+    return [
+        corner_min,
+        corner_max,
+        [(corner_min[0] + corner_max[0]) / 2, (corner_min[1] + corner_max[1]) / 2, (corner_min[2] + corner_max[2]) / 2],
+        [corner_max[0] - corner_min[0], corner_max[1] + corner_min[1], corner_max[2] + corner_min[2]]
+    ];
+}
+/**
+ * Returns the bounding box of the entities.
+ * The bounding box is an imaginary box that completley contains all the geometry.
+ * The box is always aligned with the global x, y, and z axes.
+ * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+ * - The first [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
+ * - The second [x, y, z] is the corner of the bounding box with the highest x, y, z values.
+ * - The third [x, y, z] is the coordinates of the centre of the bounding box.
+ * - The fourth [x, y, z] is the dimensions of the bounding box.
+ * @param __model__
+ * @param entities The etities for which to calculate the bounding box.
+ * @returns The bounding box consisting of a list of four lists.
+ */
+export function BoundingBox(__model__: GIModel, entities: TId|TId[]): Txyz[] {
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    // --- Error Check ---
+    const ents_arr: TEntTypeIdx[] = checkIDs('calc.BoundingBox', 'entities', entities, ['isIDList'], null) as TEntTypeIdx[]; // all
+    // --- Error Check ---
+    return _boundingBox(__model__, ents_arr);
+}
+// ================================================================================================
 /**
  * Returns a vector along an edge.
  * @param __model__
  * @param edge An edge
- * @returns The vector from the start point of an edge to the end point of an edge
+ * @returns The vector [x, y, z] from the start point of an edge to the end point of an edge.
  */
 export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
-    checkIDs('vector.GetVector', 'edge', edge, ['isID'], ['EDGE']);
+    checkIDs('calc.Vector', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     const [ent_type, index]: [EEntType, number] = idsBreak(edge) as TEntTypeIdx;
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
@@ -172,6 +220,7 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
 }
 // ================================================================================================
 function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
+    // TODO opt this, like bounding box code
     const posis_i: number[] = [];
     for (const ent_arr of ents_arr) {
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]));
@@ -184,7 +233,7 @@ function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
  * Calculates the centroid of a list of any entity.
  * @param __model__
  * @param entities List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
- * @returns Centroid.
+ * @returns The centroid [x, y, z] of the entities. (No position is created in the model.)
  * @example centroid1 = calc.Centroid (polygon1)
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
@@ -253,7 +302,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
  * Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..
  * @param __model__
  * @param entities List of positions, a polygon, a face, a closed polyline, a closed wire, or a plane.
- * @returns Vector.
+ * @returns The normal vector [x, y, z].
  * @example normal1 = calc.Normal (polygon1)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
@@ -267,11 +316,11 @@ export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
 }
 // ================================================================================================
 /**
- * Calculates the position on a linear entity, given a t parameter.
+ * Calculates the location on a linear entity, given a t parameter.
  * @param __model__
  * @param line Edge, wire, or polyline.
  * @param t_param A value between 0 to 1.
- * @returns Set of XYZ coordinates.
+ * @returns The coordinates of the location, [x, y, z]. (No position is created in the model.)
  * @example coord1 = calc.ParamTToXyz (polyline1, 0.23)
  */
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
@@ -328,10 +377,13 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
 }
 // ================================================================================================
 /**
- * Calculates a location on a line to get t parameter.
+ * Calculates the 't' parameter along a linear entity, given a location.
+ * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
+ * 
  * @param __model__
  * @param lines List of edges, wires, or polylines.
  * @param locations List of positions, vertices, points, or coordinates.
+ * @return The 't' parameter vale, between 0 and 1.
  * @example coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {

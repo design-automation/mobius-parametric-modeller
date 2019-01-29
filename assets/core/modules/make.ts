@@ -317,6 +317,9 @@ function _hole(__model__: GIModel, face_ent_arr: TEntTypeIdx, holes_ents_arr: TE
  * they must be within the boundary of the polygon.
  * If the list of positions consists of a single list, then one hole will be generated.
  * If the list of positions consists of a list of lists, then multiple holes will be generated.
+ *
+ * The hole positions should lie within the polygon surface.
+ *
  * @param __model__
  * @param face A polygon or a face to make holes in.
  * @param positions A list of positions defining the wires of the holes.
@@ -587,7 +590,7 @@ export function Divide(__model__: GIModel, edge: TId|TId[], divisor: number, met
     // --- Error Check ---
     const fn_name = 'make.Divide';
     const ents_arr = checkIDs('make.Copy', 'edge', edge,
-        ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']) as TEntTypeIdx|TEntTypeIdx[];
+        ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[];
     checkCommTypes(fn_name, 'divisor', divisor, ['isNumber']);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _divide(__model__, ents_arr, divisor, method);

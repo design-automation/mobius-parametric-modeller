@@ -67,7 +67,7 @@ export class GIAttribsThreejs {
      * Verts that have been deleted will not be included
      * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
      */
-    public get3jsSeqVertsAttrib(attrib_name: string): number[] {
+    public get3jsSeqVertsAttrib(attrib_name: EAttribNames): number[] {
         if (!this._attribs_maps._v.has(attrib_name)) { return null; }
         const verts_attrib: GIAttribMap = this._attribs_maps._v.get(attrib_name);
         //
@@ -75,7 +75,13 @@ export class GIAttribsThreejs {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, true);
         verts_i.forEach( (vert_i, gi_index) => {
             if (vert_i !== null) {
-                verts_attribs_values.push( verts_attrib.getEntVal(vert_i) as TAttribDataTypes);
+                const value = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
+                if (attrib_name === EAttribNames.COLOUR) {
+                    const _value = value === undefined ? [1, 1, 1] : value;
+                    verts_attribs_values.push(_value);
+                } else {
+                    verts_attribs_values.push(value);
+                }
             }
         });
         // @ts-ignore
@@ -93,19 +99,26 @@ export class GIAttribsThreejs {
         const data_obj_map: Map< number, { '#': number, id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
+        let i = 0;
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { '#': ent_i, id: `${attribs_maps_key}${ent_i}` } );
+            data_obj_map.set(ent_i, { '#': i, id: `${attribs_maps_key}${ent_i}` } );
+            i++;
         }
-
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of ents_i) {
                 const attrib_value = attrib.getEntVal(ent_i);
                 if ( data_size > 1 ) {
-                    (attrib_value as any[]).forEach( (v, i) => {
-                        data_obj_map.get(ent_i)[`${attrib_name}[${i}]`] = v;
-                    });
+                    if (attrib_value !== undefined) {
+                        (attrib_value as any[]).forEach( (v, idx) => {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                        });
+                    } else {
+                        for (let idx = 0; idx < data_size; idx++) {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                        }
+                    }
                 } else {
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 }
@@ -125,17 +138,25 @@ export class GIAttribsThreejs {
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
+        let i = 0;
         selected_ents.forEach(ent => {
-            data_obj_map.set(ent, { '#': ent, id: `${attribs_maps_key}${ent}` } );
+            data_obj_map.set(ent, { '#': i, id: `${attribs_maps_key}${ent}` } );
+            i++;
         });
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of Array.from(selected_ents.values())) {
                 const attrib_value = attrib.getEntVal(ent_i);
                 if ( data_size > 1 ) {
-                    (attrib_value as any[]).forEach( (v, i) => {
-                        data_obj_map.get(ent_i)[`${attrib_name}[${i}]`] = v;
-                    });
+                    if (attrib_value !== undefined) {
+                        (attrib_value as any[]).forEach( (v, idx) => {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                        });
+                    } else {
+                        for (let idx = 0; idx < data_size; idx++) {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                        }
+                    }
                 } else {
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 }

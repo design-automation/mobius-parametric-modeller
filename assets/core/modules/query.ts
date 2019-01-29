@@ -1,7 +1,9 @@
 /**
  * The `query` module has functions for querying entities in the the model.
  * Most of these functions all return a list of IDs of entities in the model.
- * The Count function returns the number of entities, rather than the list of entities. 
+ * The Count function returns the number of entities, rather than the list of entities.
+ *
+ * The Get() function is an important function, and is used in many modelling workflows.
  */
 
 /**
@@ -10,7 +12,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { idsMake } from '@libs/geo-info/id';
+import { idsMake, getArrDepth } from '@libs/geo-info/id';
 import { checkIDs } from './_check_args';
 
 // TQuery should be something like this:
@@ -94,7 +96,11 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         if (ents_arr === null || ents_arr === undefined) {
             found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type, false));
         } else {
-            if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+            if (ents_arr.length === 0) {
+                return [];
+            } else if (getArrDepth(ents_arr) === 1) {
+                ents_arr = [ents_arr] as TEntTypeIdx[];
+            }
             for (const ents of ents_arr) {
                 found_entities_i.push(...__model__.geom.query.navAnyToAny(ents[0], select_ent_type, ents[1]));
             }
@@ -131,9 +137,17 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
  * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
- * @returns List of entities whose type matches the type specified in 'select'.
+ * @returns List of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
  * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
- * @example_info Returns a list of positions defined by polyline1 where the z-coordinate is more than 10.
+ * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
+ * @example positions = query.Get(positions, null, #@xyz[2]>10)
+ * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
+ * @example positions = query.Get(positions, polyline1, null)
+ * @example_info Returns a list of all of the positions that are part of polyline1.
+ * @example polylines = query.Get(polylines, position1, null)
+ * @example_info Returns a list of all of the polylines that use position1.
+ * @example collections = query.Get(collections, null, #@type=="floors")
+ * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
     // --- Error Check ---
@@ -141,10 +155,58 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
     }
+    // TODO add a condition called isNull for entities
     // TODO check the query string
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
+    return idsMake(found_ents_arr) as TId[];
+}
+// ================================================================================================
+// ================================================================================================
+function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
+    if (!Array.isArray(select_ent_types)) {
+        const select_ent_type: EEntType = select_ent_types as EEntType;
+        // get the ents to exclude
+        if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+        const excl_ents_i: number[] = (ents_arr as TEntTypeIdx[])
+            .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
+        // get the list of entities
+        const found_entities_i: number[] = [];
+        const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type, false);
+        for (const ent_i of ents_i) {
+            if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
+        }
+        return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
+    } else {
+        const query_results_arr: TEntTypeIdx[] = [];
+        for (const select_ent_type of select_ent_types) {
+            const ent_type_query_results: TEntTypeIdx[] = _invert(__model__, select_ent_type, ents_arr);
+            for (const query_result of ent_type_query_results) {
+                query_results_arr.push(query_result);
+            }
+        }
+        return query_results_arr;
+    }
+}
+/**
+ * Returns a list of entities excluding the specified entities.
+ * @param __model__
+ * @param select Enum, specifies what type of entities will be returned.
+ * @param entities List of entities to be excluded.
+ * @returns List of entities that match the type specified in 'select'.
+ * @example objects = query.Get(objects, polyline1, null)
+ * @example_info Returns a list of all the objects in the model except polyline1.
+ */
+export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
+    const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
 // ================================================================================================

@@ -154,6 +154,54 @@ export function Area(__model__: GIModel, entities: TId): number {
     }
 }
 // ================================================================================================
+function _boundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz[] {
+    const posis_set_i: Set<number> = new Set();
+    for (const ent_arr of ents_arr) {
+        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        for (const ent_posi_i of ent_posis_i) {
+            posis_set_i.add(ent_posi_i);
+        }
+    }
+    const unique_posis_i = Array.from(posis_set_i);
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const corner_min: Txyz = [Infinity, Infinity, Infinity];
+    const corner_max: Txyz = [-Infinity, -Infinity, -Infinity];
+    for (const unique_xyz of unique_xyzs) {
+        if (unique_xyz[0] < corner_min[0]) { corner_min[0] = unique_xyz[0]; }
+        if (unique_xyz[1] < corner_min[1]) { corner_min[1] = unique_xyz[1]; }
+        if (unique_xyz[2] < corner_min[2]) { corner_min[2] = unique_xyz[2]; }
+        if (unique_xyz[0] > corner_max[0]) { corner_max[0] = unique_xyz[0]; }
+        if (unique_xyz[1] > corner_max[1]) { corner_max[1] = unique_xyz[1]; }
+        if (unique_xyz[2] > corner_max[2]) { corner_max[2] = unique_xyz[2]; }
+    }
+    return [
+        corner_min,
+        corner_max,
+        [(corner_min[0] + corner_max[0]) / 2, (corner_min[1] + corner_max[1]) / 2, (corner_min[2] + corner_max[2]) / 2],
+        [corner_max[0] - corner_min[0], corner_max[1] + corner_min[1], corner_max[2] + corner_min[2]]
+    ];
+}
+/**
+ * Returns the bounding box of the entities.
+ * The bounding box is an imaginary box that completley contains all the geometry.
+ * The box is always aligned with the global x, y, and z axes.
+ * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+ * - The first [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
+ * - The second [x, y, z] is the corner of the bounding box with the highest x, y, z values.
+ * - The third [x, y, z] is the coordinates of the centre of the bounding box.
+ * - The fourth [x, y, z] is the dimensions of the bounding box.
+ * @param __model__
+ * @param entities The etities for which to calculate the bounding box.
+ * @returns The bounding box consisting of a list of four lists.
+ */
+export function BoundingBox(__model__: GIModel, entities: TId|TId[]): Txyz[] {
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    // --- Error Check ---
+    const ents_arr: TEntTypeIdx[] = checkIDs('calc.BoundingBox', 'entities', entities, ['isIDList'], null) as TEntTypeIdx[]; // all
+    // --- Error Check ---
+    return _boundingBox(__model__, ents_arr);
+}
+// ================================================================================================
 /**
  * Returns a vector along an edge.
  * @param __model__
@@ -162,7 +210,7 @@ export function Area(__model__: GIModel, entities: TId): number {
  */
 export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
-    checkIDs('vector.GetVector', 'edge', edge, ['isID'], ['EDGE']);
+    checkIDs('calc.Vector', 'edge', edge, ['isID'], ['EDGE']);
     // --- Error Check ---
     const [ent_type, index]: [EEntType, number] = idsBreak(edge) as TEntTypeIdx;
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
@@ -172,6 +220,7 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
 }
 // ================================================================================================
 function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
+    // TODO opt this, like bounding box code
     const posis_i: number[] = [];
     for (const ent_arr of ents_arr) {
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]));

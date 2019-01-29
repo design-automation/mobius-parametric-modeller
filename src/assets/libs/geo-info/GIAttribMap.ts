@@ -256,7 +256,9 @@ export class GIAttribMap {
             }
         }
         if (this._data_type === EAttribDataTypeStrs.STRING) {
-            { throw new Error('Query operator "' + operator + '" and query "' + val_k + '" value are incompatible.'); }
+            if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+                { throw new Error('Query operator "' + operator + '" and query "' + val_k + '" value are incompatible.'); }
+            }
         }
         if (val_k === 'null') {
             if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {

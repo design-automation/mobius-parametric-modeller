@@ -104,9 +104,15 @@ export class GIAttribsThreejs {
             for (const ent_i of ents_i) {
                 const attrib_value = attrib.getEntVal(ent_i);
                 if ( data_size > 1 ) {
-                    (attrib_value as any[]).forEach( (v, i) => {
-                        data_obj_map.get(ent_i)[`${attrib_name}[${i}]`] = v;
-                    });
+                    if (attrib_value !== undefined) {
+                        (attrib_value as any[]).forEach( (v, idx) => {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                        });
+                    } else {
+                        for (let idx = 0; idx < data_size; idx++) {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                        }
+                    }
                 } else {
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 }
@@ -136,9 +142,15 @@ export class GIAttribsThreejs {
             for (const ent_i of Array.from(selected_ents.values())) {
                 const attrib_value = attrib.getEntVal(ent_i);
                 if ( data_size > 1 ) {
-                    (attrib_value as any[]).forEach( (v, i) => {
-                        data_obj_map.get(ent_i)[`${attrib_name}[${i}]`] = v;
-                    });
+                    if (attrib_value !== undefined) {
+                        (attrib_value as any[]).forEach( (v, idx) => {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                        });
+                    } else {
+                        for (let idx = 0; idx < data_size; idx++) {
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                        }
+                    }
                 } else {
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 }

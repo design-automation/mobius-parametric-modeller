@@ -158,7 +158,7 @@ export function Area(__model__: GIModel, entities: TId): number {
  * Returns a vector along an edge.
  * @param __model__
  * @param edge An edge
- * @returns The vector from the start point of an edge to the end point of an edge
+ * @returns The vector [x, y, z] from the start point of an edge to the end point of an edge.
  */
 export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
@@ -184,7 +184,7 @@ function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
  * Calculates the centroid of a list of any entity.
  * @param __model__
  * @param entities List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.
- * @returns Centroid.
+ * @returns The centroid [x, y, z] of the entities. (No position is created in the model.)
  * @example centroid1 = calc.Centroid (polygon1)
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
@@ -253,7 +253,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
  * Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..
  * @param __model__
  * @param entities List of positions, a polygon, a face, a closed polyline, a closed wire, or a plane.
- * @returns Vector.
+ * @returns The normal vector [x, y, z].
  * @example normal1 = calc.Normal (polygon1)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
@@ -267,11 +267,11 @@ export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
 }
 // ================================================================================================
 /**
- * Calculates the position on a linear entity, given a t parameter.
+ * Calculates the location on a linear entity, given a t parameter.
  * @param __model__
  * @param line Edge, wire, or polyline.
  * @param t_param A value between 0 to 1.
- * @returns Set of XYZ coordinates.
+ * @returns The coordinates of the location, [x, y, z]. (No position is created in the model.)
  * @example coord1 = calc.ParamTToXyz (polyline1, 0.23)
  */
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
@@ -328,10 +328,13 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
 }
 // ================================================================================================
 /**
- * Calculates a location on a line to get t parameter.
+ * Calculates the 't' parameter along a linear entity, given a location.
+ * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
+ * 
  * @param __model__
  * @param lines List of edges, wires, or polylines.
  * @param locations List of positions, vertices, points, or coordinates.
+ * @return The 't' parameter vale, between 0 and 1.
  * @example coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
  */
 export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {

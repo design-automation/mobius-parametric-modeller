@@ -191,7 +191,7 @@ function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be excluded.
  * @returns List of entities that match the type specified in 'select'.
- * @example polylines = query.Get(objects, polyline1, null)
+ * @example objects = query.Get(objects, polyline1, null)
  * @example_info Returns a list of all the objects in the model except polyline1.
  */
 export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {

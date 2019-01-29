@@ -520,7 +520,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const face = this.model.geom.query.navTriToFace(tri);
                     const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
                     if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.FACE]);
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.FACE], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
@@ -538,7 +538,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const pgon = this.model.geom.query.navFaceToPgon(face);
                     const ent_id = `${EEntTypeStr[EEntType.PGON]}${pgon}`;
                     if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.PGON]);
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.PGON], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
@@ -554,7 +554,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `${EEntTypeStr[EEntType.EDGE]}${edge}`;
                     if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.EDGE]);
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.EDGE], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
@@ -583,7 +583,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         wire = this.model.geom.query.navEdgeToWire(edge);
                     const ent_id = `${EEntTypeStr[EEntType.WIRE]}${edge}`;
                     if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE]);
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
@@ -613,12 +613,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const pline = this.model.geom.query.navWireToPline(wire);
                     const ent_id = `${EEntTypeStr[EEntType.PLINE]}${pline}`;
                     if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.PLINE]);
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.PLINE], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPLine(pline);
+                        if (pline) {
+                            this.selectPLine(pline);
+                        } else {
+                            this.showMessages('Selection is not a Polyline', false, 'custom');
+                        }
                     }
                 } else {
                     this.showMessages('Polylines', true);
@@ -631,12 +635,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const point = scene.point_select_map.get(_point);
                     const ent_id = `${EEntTypeStr[EEntType.POINT]}${point}`;
                     if (scene.selected_geoms.has(ent_id)) {
-                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.POINT]);
+                        this.unselectGeom(ent_id, EEntTypeStr[EEntType.POINT], true);
                     } else {
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        this.selectPoint(point);
+                        if (point) {
+                            this.selectPoint(point);
+                        } else {
+                            this.showMessages('Selection is not a Point', false, 'custom');
+                        }
                     }
                 } else {
                     this.showMessages('Points', true);
@@ -645,16 +653,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             default:
                 this.showMessages('Please choose an Entity type.', true, 'custom');
                 break;
-            // if (intersect0.object.type === 'LineSegments') {
-            //     const intersect1 = intersects[1];
-            //     if (intersect1 && intersect0.distance === intersect1.distance) {
-            //         this.chooseLine(intersect0, intersect1);
-            //         this.selectWire(intersect0);
-            //     } else {
-            //         this.selectEdge(intersect0);
-            //         this.selectWire(intersect0);
-            //     }
-            // }
         }
         this.render(this);
     }
@@ -1043,7 +1041,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         } else if (colls && colls.length === 1) {
             this.chooseColl(colls[0]);
         } else {
-            this.showMessages('No Collections Available', true, 'custom');
+            this.showMessages('No Collections Available', false, 'custom');
         }
     }
 

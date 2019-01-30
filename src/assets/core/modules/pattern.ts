@@ -50,7 +50,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     // create positions
     const posis_i: number[] = [];
     for (let i = 0; i < num_positions; i++) {
-        const angle: number = rot * i;
+        const angle: number = -1 * rot * i; // clockwise
         const x: number = (Math.cos(angle) * radius);
         const y: number = (Math.sin(angle) * radius);
         let xyz: Txyz = [x, y, 0];

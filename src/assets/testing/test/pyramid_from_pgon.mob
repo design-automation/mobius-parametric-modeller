@@ -1,5 +1,5 @@
 {
-    "name": "pyramid_from_pgon",
+    "name": "PyramidFromPolygon",
     "author": "new_user",
     "flowchart": {
         "name": "PyramidFromPolygon",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_3xtgctb9rio",
+                "id": "node_lmnnx07o9bp",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -221,6 +221,72 @@
                         "hasError": false
                     },
                     {
+                        "type": 8,
+                        "ID": "prod-jshzx3pcim",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "modify",
+                            "name": "Reverse"
+                        },
+                        "argCount": 3,
+                        "args": [
+                            {
+                                "name": "__none__"
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "entities",
+                                "value": "pgon2",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-d6yp292yo9",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "query",
+                            "name": "Get"
+                        },
+                        "argCount": 5,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "all_pgons",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "select",
+                                "value": "'polygons'",
+                                "default": 0
+                            },
+                            {
+                                "name": "entities",
+                                "value": "null",
+                                "default": 0
+                            },
+                            {
+                                "name": "query_expr",
+                                "value": "null",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
                         "type": 10,
                         "ID": "prod-6z4cnf6i78s",
                         "enabled": true,
@@ -241,7 +307,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "default": "pgons3"
+                                "default": "all_pgons"
                             }
                         ],
                         "selected": false,
@@ -272,7 +338,7 @@
                                 "step": "0.1",
                                 "min": "0",
                                 "max": "100",
-                                "value": 56.2
+                                "value": 34.8
                             }
                         ],
                         "selected": false,
@@ -310,7 +376,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_w4oew8wteho",
+                                    "id": "node_1px9n99uzno",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -704,7 +770,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_eiudzaqlamt",
+                                                        "id": "node_dll9u9df1oh",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -859,7 +925,7 @@
         "ordered": true,
         "returnDescription": "The triangular polygons resulting from the pyramid operation."
     },
-    "last_updated": "2019-01-30T08:03:36.105Z",
+    "last_updated": "2019-01-30T08:24:13.461Z",
     "version": 1,
     "settings": {}
 }

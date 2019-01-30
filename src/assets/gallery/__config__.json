@@ -38,7 +38,7 @@
         {
             "name": "User Function Examples",
             "files": [
-                "pyramid_from_pgon.mob&node=3"
+                "pyramid_from_pgon.mob&node=1"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/user_functions_examples/"
         },

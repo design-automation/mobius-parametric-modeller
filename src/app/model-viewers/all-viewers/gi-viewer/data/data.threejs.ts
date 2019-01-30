@@ -52,7 +52,15 @@ export class DataThreejs {
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
         tjs_summary: { show: boolean },
-        colors: { viewer_bg: string, position: string, position_s: string  }
+        wireframe: { show: boolean },
+        colors: {
+            viewer_bg: string,
+            position: string,
+            position_s: string,
+            vertex_s: string,
+            face: string,
+            face_s: string
+        }
     };
     /**
      * Constructs a new data subscriber.
@@ -63,7 +71,15 @@ export class DataThreejs {
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
         tjs_summary: { show: boolean },
-        colors: { viewer_bg: string, position: string, position_s: string  }
+        wireframe: { show: boolean },
+        colors: {
+            viewer_bg: string,
+            position: string,
+            position_s: string,
+            vertex_s: string,
+            face: string,
+            face_s: string
+        }
     }) {
         this.settings = settings;
         // scene
@@ -184,14 +200,13 @@ export class DataThreejs {
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.addAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        const color = new THREE.Color(parseInt(this.settings.colors.face_s.replace('#', '0x'), 16));
         const mat = new THREE.MeshPhongMaterial({
-            // specular:  new THREE.Color('rgb(255, 0, 0)'), // 0xffffff,
             specular: 0x000000,
-            emissive: 0xff0000,
-            shininess: 20, // 250
-            side: THREE.DoubleSide,
-            vertexColors: THREE.VertexColors,
-            // wireframe: true
+            emissive: 0x000000,
+            color: color,
+            shininess: 0,
+            side: THREE.DoubleSide
         });
         const mesh = new THREE.Mesh(geom, mat);
         mesh.geometry.computeBoundingSphere();
@@ -390,7 +405,7 @@ export class DataThreejs {
     }
 
     public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, label) {
-        const bg = this.initBufferPoint(positions, null, null, '#ffcc00', this.settings.positions.size + 0.1);
+        const bg = this.initBufferPoint(positions, null, null, this.settings.colors.vertex_s, this.settings.positions.size + 0.1);
         if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
@@ -568,14 +583,15 @@ export class DataThreejs {
         geom.addAttribute('position', posis_buffer);
         // geom.addAttribute('normal', normals_buffer);
         geom.addAttribute('color', colors_buffer);
+        const color = new THREE.Color(parseInt(this.settings.colors.face.replace('#', '0x'), 16));
         const mat = new THREE.MeshPhongMaterial({
             specular: 0xffffff,
             emissive: 0x000000,
-            color: 0xffffff,
-            shininess: 50,
+            color: color,
+            shininess: 0,
             side: THREE.DoubleSide,
             vertexColors: THREE.VertexColors,
-            // wireframe: true
+            wireframe: this.settings.wireframe.show
         });
         const mesh = new THREE.Mesh(geom, mat);
         mesh.geometry.computeBoundingSphere();

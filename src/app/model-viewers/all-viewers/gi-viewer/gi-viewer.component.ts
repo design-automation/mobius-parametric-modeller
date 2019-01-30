@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
+import { string } from '@assets/core/modules/_mathjs';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -31,7 +32,15 @@ export class GIViewerComponent implements OnInit {
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
         tjs_summary: { show: boolean },
-        colors: { viewer_bg: string, position: string, position_s: string },
+        wireframe: { show: boolean },
+        colors: {
+            viewer_bg: string,
+            position: string,
+            position_s: string,
+            vertex_s: string,
+            face: string,
+            face_s: string
+        },
         version: string
     } = {
             normals: { show: false, size: 5 },
@@ -39,9 +48,38 @@ export class GIViewerComponent implements OnInit {
             grid: { show: true, size: 500 },
             positions: { show: true, size: 0.5 },
             tjs_summary: { show: false },
-            colors: { viewer_bg: '#E6E6E6', position: '#100000', position_s: '#0033ff' },
+            wireframe: { show: false },
+            colors: {
+                viewer_bg: '#E6E6E6',
+                position: '#000000',
+                position_s: '#0033ff',
+                vertex_s: '#ffcc00',
+                face: '#ffffff',
+                face_s: '#ff0000'
+            },
             version: VERSION.version
         };
+
+    setting_colors = [{
+        label: 'Viewer Background',
+        setting: 'viewer_bg',
+        default: '#E6E6E6'
+    }, {
+        label: 'Position Default',
+        setting: 'position'
+    }, {
+        label: 'Position Selected',
+        setting: 'position_s'
+    }, {
+        label: 'Vertex Selected',
+        setting: 'vertex_s'
+    }, {
+        label: 'Face Default',
+        setting: 'face'
+    }, {
+        label: 'Face Selected',
+        setting: 'face_s'
+    }];
 
     normalsEnabled = false;
 
@@ -74,7 +112,7 @@ export class GIViewerComponent implements OnInit {
      * @param obj2
      */
     hasDiffProps(obj1, obj2) {
-        return !Object.keys(obj2).every( e => Object.keys(obj1).includes(e));
+        return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
     }
 
     /**
@@ -159,6 +197,9 @@ export class GIViewerComponent implements OnInit {
             case 'tjs_summary.show':
                 this.settings.tjs_summary.show = !this.settings.tjs_summary.show;
                 break;
+            case 'wireframe.show':
+                this.wireframeToggle();
+                break;
             default:
                 break;
         }
@@ -177,5 +218,16 @@ export class GIViewerComponent implements OnInit {
         } else {
             return false;
         }
+    }
+
+    wireframeToggle() {
+        const scene = this.dataService.getThreejsScene();
+        scene.sceneObjs.forEach(obj => {
+            if (obj.type === 'Mesh') {
+                this.settings.wireframe.show = !this.settings.wireframe.show;
+                // @ts-ignore
+                // obj.material.wireframe = this.settings.wireframe.show;
+            }
+        });
     }
 }

@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import * as THREE from 'three';
+import { VERSION } from '@env/version';
 
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
+import { string } from '@assets/core/modules/_mathjs';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -31,15 +32,54 @@ export class GIViewerComponent implements OnInit {
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
         tjs_summary: { show: boolean },
-        colors: { viewer_bg: string }
+        wireframe: { show: boolean },
+        colors: {
+            viewer_bg: string,
+            position: string,
+            position_s: string,
+            vertex_s: string,
+            face: string,
+            face_s: string
+        },
+        version: string
     } = {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
             positions: { show: true, size: 0.5 },
             tjs_summary: { show: false },
-            colors: { viewer_bg: '#E6E6E6' }
+            wireframe: { show: false },
+            colors: {
+                viewer_bg: '#E6E6E6',
+                position: '#000000',
+                position_s: '#0033ff',
+                vertex_s: '#ffcc00',
+                face: '#ffffff',
+                face_s: '#ff0000'
+            },
+            version: VERSION.version
         };
+
+    setting_colors = [{
+        label: 'Viewer Background',
+        setting: 'viewer_bg',
+        default: '#E6E6E6'
+    }, {
+        label: 'Position Default',
+        setting: 'position'
+    }, {
+        label: 'Position Selected',
+        setting: 'position_s'
+    }, {
+        label: 'Vertex Selected',
+        setting: 'vertex_s'
+    }, {
+        label: 'Face Default',
+        setting: 'face'
+    }, {
+        label: 'Face Selected',
+        setting: 'face_s'
+    }];
 
     normalsEnabled = false;
 
@@ -53,9 +93,10 @@ export class GIViewerComponent implements OnInit {
      * @param dataService
      */
     constructor(private dataService: DataService, private modalService: ModalService, private cpService: ColorPickerService) {
-        //
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
+        if (previous_settings === null ||
+            this.hasDiffProps(previous_settings, this.settings) ||
+            this.settings.version !== previous_settings.version) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
@@ -71,7 +112,7 @@ export class GIViewerComponent implements OnInit {
      * @param obj2
      */
     hasDiffProps(obj1, obj2) {
-        return !Object.keys(obj2).every( e => Object.keys(obj1).includes(e));
+        return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
     }
 
     /**
@@ -118,7 +159,6 @@ export class GIViewerComponent implements OnInit {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             document.getElementById('executeButton').click();
         }
-        console.log(this.settings.colors.viewer_bg);
     }
 
     settingOnChange(setting: string, value?: number) {
@@ -157,6 +197,9 @@ export class GIViewerComponent implements OnInit {
             case 'tjs_summary.show':
                 this.settings.tjs_summary.show = !this.settings.tjs_summary.show;
                 break;
+            case 'wireframe.show':
+                this.wireframeToggle();
+                break;
             default:
                 break;
         }
@@ -168,13 +211,23 @@ export class GIViewerComponent implements OnInit {
         this.settings[seg[0]][seg[1]] = value;
     }
 
-    checkColor() {
-        const color = this.settings.colors.viewer_bg;
+    checkColor(color) {
         const _color = this.cpService.hsvaToRgba(this.cpService.stringToHsva(color));
         if ((_color.r + _color.g + _color.b) / _color.a < 1.5) {
             return true;
         } else {
             return false;
         }
+    }
+
+    wireframeToggle() {
+        const scene = this.dataService.getThreejsScene();
+        scene.sceneObjs.forEach(obj => {
+            if (obj.type === 'Mesh') {
+                this.settings.wireframe.show = !this.settings.wireframe.show;
+                // @ts-ignore
+                // obj.material.wireframe = this.settings.wireframe.show;
+            }
+        });
     }
 }

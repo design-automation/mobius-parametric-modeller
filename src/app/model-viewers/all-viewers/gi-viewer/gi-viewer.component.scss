@@ -90,6 +90,20 @@ modal-window {
                     background-color: inherit;
                 }
             }
+            &.colors{
+                .label{
+                    line-height: 20px;
+                }
+                input{
+                    padding-left:5px;
+                    margin-left: 0px !important;
+                    border:1px solid #E6E6E6;
+                    width: 120px;
+                    &.light{
+                        color: #ffffff !important;
+                    }
+                }
+            }
         }
     }
 
@@ -235,6 +249,7 @@ body.modal-open {
         -webkit-transition: .2s; /* 0.2 seconds transition on hover */
         transition: opacity .2s;
         margin: 0;
+        margin-left: 10px !important;
     }
     
     /* Mouse-over effects */
@@ -274,20 +289,13 @@ body.modal-open {
         cursor: help;
     }
 
-    input {
-        margin-left: 10px !important;
-    }
     input + input{
         vertical-align: top;
         border: none;
         line-height: 20px;
         background: transparent;
         width: 50px;
-    }
-}
-
-#viewerBackground{
-    &.light{
-        color: #ffffff;
+        margin-left: 10px !important;
+        height: 14px;
     }
 }

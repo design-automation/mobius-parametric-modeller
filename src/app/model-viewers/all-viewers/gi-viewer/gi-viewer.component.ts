@@ -71,9 +71,7 @@ export class GIViewerComponent implements OnInit {
      * @param obj2
      */
     hasDiffProps(obj1, obj2) {
-        return Object.keys(obj1).every(function (prop) {
-            return !obj2.hasOwnProperty(prop);
-        });
+        return !Object.keys(obj2).every( e => Object.keys(obj1).includes(e));
     }
 
     /**

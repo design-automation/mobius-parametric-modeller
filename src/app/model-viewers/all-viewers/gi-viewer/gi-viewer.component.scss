@@ -286,7 +286,7 @@ body.modal-open {
     }
 }
 
-#viewerBackground{
+#c_viewerBackground, #c_positionDefault, #c_positionSelected{
     &.light{
         color: #ffffff;
     }

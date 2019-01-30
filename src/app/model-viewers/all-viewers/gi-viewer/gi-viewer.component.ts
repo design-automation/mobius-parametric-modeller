@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import * as THREE from 'three';
+import { VERSION } from '@env/version';
 
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -31,14 +31,16 @@ export class GIViewerComponent implements OnInit {
         grid: { show: boolean, size: number },
         positions: { show: boolean, size: number },
         tjs_summary: { show: boolean },
-        colors: { viewer_bg: string }
+        colors: { viewer_bg: string, position: string, position_s: string },
+        version: string
     } = {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
             positions: { show: true, size: 0.5 },
             tjs_summary: { show: false },
-            colors: { viewer_bg: '#E6E6E6' }
+            colors: { viewer_bg: '#E6E6E6', position: '#100000', position_s: '#0033ff' },
+            version: VERSION.version
         };
 
     normalsEnabled = false;
@@ -53,9 +55,10 @@ export class GIViewerComponent implements OnInit {
      * @param dataService
      */
     constructor(private dataService: DataService, private modalService: ModalService, private cpService: ColorPickerService) {
-        //
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
+        if (previous_settings === null ||
+            this.hasDiffProps(previous_settings, this.settings) ||
+            this.settings.version !== previous_settings.version) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
@@ -118,7 +121,6 @@ export class GIViewerComponent implements OnInit {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             document.getElementById('executeButton').click();
         }
-        console.log(this.settings.colors.viewer_bg);
     }
 
     settingOnChange(setting: string, value?: number) {
@@ -168,8 +170,7 @@ export class GIViewerComponent implements OnInit {
         this.settings[seg[0]][seg[1]] = value;
     }
 
-    checkColor() {
-        const color = this.settings.colors.viewer_bg;
+    checkColor(color) {
         const _color = this.cpService.hsvaToRgba(this.cpService.stringToHsva(color));
         if ((_color.r + _color.g + _color.b) / _color.a < 1.5) {
             return true;

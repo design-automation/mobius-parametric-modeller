@@ -114,14 +114,28 @@
 						<div class="label">Viewer Background</div>
 						<input [(colorPicker)]="settings.colors.viewer_bg"
 						[style.background]="settings.colors.viewer_bg"
-						[cpColorMode]="'grayscale'"
 						[value]="settings.colors.viewer_bg"
-						[class.light] = "checkColor()"
-						id="viewerBackground"/>
+						[class.light] = "checkColor(this.settings.colors.viewer_bg)"
+						id="c_viewerBackground"/>
 						<button (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button>
 					</li>
-					<!-- <li>Shadow On/Off</li>
-					<li>Position color/size</li> -->
+					<li>
+						<div class="label">Position Default</div>
+						<input [(colorPicker)]="settings.colors.position"
+						[style.background]="settings.colors.position"
+						[value]="settings.colors.position"
+						[class.light] = "checkColor(this.settings.colors.position)"
+						id="c_positionDefault"/>
+					</li>
+					<li>
+						<div class="label">Position Selected</div>
+						<input [(colorPicker)]="settings.colors.position_s"
+						[style.background]="settings.colors.position_s"
+						[value]="settings.colors.position_s"
+						[class.light] = "checkColor(this.settings.colors.position_s)"
+						id="c_positionSelected"/>
+					</li>
+					<!-- <li>Shadow On/Off</li> -->
 				</ul>
 				<button (click)="closeModal('settings_modal', true);" class="filebtn">Save</button>
 				<button (click)="closeModal('settings_modal');" class='filebtn closebtn'>Close</button>

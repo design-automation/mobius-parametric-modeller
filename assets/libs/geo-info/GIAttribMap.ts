@@ -1,4 +1,5 @@
 import { EQueryOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, RE_SPACES } from './common';
+import { arrRem } from '../util/arrays';
 
 /**
  * Geo-info attribute class for one attribute.
@@ -32,7 +33,7 @@ export class GIAttribMap {
         this._data_type = data_type;
         this._data_size = data_size;
         // the maps
-        this._num_vals = -1;
+        this._num_vals = 0;
         this._map_val_k_to_val_i = new Map();
         this._map_val_i_to_val = new Map();
         this._map_val_i_to_ents_i = new Map();
@@ -152,24 +153,33 @@ export class GIAttribMap {
      */
     public setEntVal(ents_i: number|number[], val: TAttribDataTypes): void {
         const val_k: string | number = this._valToValkey(val);
-        let val_i: number;
-        if (this._map_val_k_to_val_i.has(val_k)) {
-            val_i = this._map_val_k_to_val_i.get(val_k);
-        } else {
+        // check if this val already exists, if not create it
+        if (!this._map_val_k_to_val_i.has(val_k)) {
+            this._map_val_k_to_val_i.set(val_k, this._num_vals);
+            this._map_val_i_to_val.set(this._num_vals, val);
+            this._map_val_i_to_ents_i.set(this._num_vals, []);
             this._num_vals += 1;
-            val_i = this._num_vals;
-            this._map_val_i_to_val.set(val_i, val);
-            this._map_val_k_to_val_i.set(val_k, val_i);
-            this._map_val_i_to_ents_i.set(val_i, []);
         }
+        // get the new val_i
+        const new_val_i: number = this._map_val_k_to_val_i.get(val_k);
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
-        const old_vals_i: number[] = ents_i.map(e => this._map_ent_i_to_val_i.get(e));
-        // set all the new values
-        ents_i.forEach(e => this._map_ent_i_to_val_i.set(e, val_i));
-        const ents_i_union: number[] = Array.from(new Set([...this._map_val_i_to_ents_i.get(val_i), ...ents_i]));
-        this._map_val_i_to_ents_i.set(val_i, ents_i_union);
-        // check that none of the old values need to be cleaned up
-        old_vals_i.forEach(old_val_i => this._cleanUp(old_val_i));
+        // loop through all the unique ents, and set _map_ent_i_to_val_i
+        const unique_ents_i: number[] = Array.from(new Set(ents_i));
+        unique_ents_i.forEach( ent_i => {
+            // keep the old value for later
+            const old_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+            // for each ent_i, set the new val_i
+            this._map_ent_i_to_val_i.set(ent_i, new_val_i);
+            // clean up the old val_i
+            if (old_val_i !== undefined && old_val_i !== new_val_i) {
+                arrRem(this._map_val_i_to_ents_i.get(old_val_i), ent_i);
+            this._cleanUp(old_val_i);
+            }
+        });
+        // for the new val_i, set it ot point to all the ents that have this value
+        const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(new_val_i);
+        const exist_new_ents_i: number[] = Array.from(new Set(exist_ents_i.concat(ents_i)));
+        this._map_val_i_to_ents_i.set(new_val_i, exist_new_ents_i);
     }
     /**
      * Sets the indexed value for a given entity or entities.

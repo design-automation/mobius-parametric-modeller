@@ -576,7 +576,7 @@ export class DataThreejs {
             color: 0xffffff,
             shininess: 10, // 250
             side: THREE.DoubleSide,
-            // vertexColors: THREE.VertexColors,
+            vertexColors: THREE.VertexColors,
             // wireframe: true
         });
         const mesh = new THREE.Mesh(geom, mat);

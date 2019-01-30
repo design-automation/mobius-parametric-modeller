@@ -19,7 +19,8 @@ import { GIModel } from '@libs/geo-info/GIModel';
 // ================================================================================================
 /**
  * Creates positions in an arc pattern, and returns the list of new positions.
- * If the angle of the arc is set to 2*PI, then circular patterns will be created.
+ * If the angle of the arc is set to null, then circular patterns will be created.
+ * For circular patterns, duplicates at start and end are automatically removed.
  *
  * @param __model__
  * @param origin XYZ coordinates as a list of three numbers.
@@ -36,7 +37,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
     checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
     checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt']);
-    checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber']);
+    // checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber', 'isNull']);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -44,10 +45,12 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     if (origin_is_plane) {
         matrix = xfromSourceTargetMatrix(XYPLANE, origin as  TPlane);
     }
+    // calc the rot angle per position
+    const rot: number = (arc_angle === null) ? (2 * Math.PI) / num_positions : arc_angle / (num_positions - 1);
     // create positions
     const posis_i: number[] = [];
-    for (let i = 0; i < num_positions + 1; i++) {
-        const angle: number = (arc_angle / num_positions) * i;
+    for (let i = 0; i < num_positions; i++) {
+        const angle: number = rot * i;
         const x: number = (Math.cos(angle) * radius);
         const y: number = (Math.sin(angle) * radius);
         let xyz: Txyz = [x, y, 0];

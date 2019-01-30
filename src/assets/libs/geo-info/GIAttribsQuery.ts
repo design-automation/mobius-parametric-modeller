@@ -106,6 +106,8 @@ export class GIAttribsQuery {
                         and_query.operator_type,
                         and_query.attrib_value_str
                     );
+                } else {
+                    query_ents_i = [];
                 }
             }
             // combine the results of the '&&' queries

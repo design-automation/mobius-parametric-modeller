@@ -2,7 +2,8 @@
 
 ## Arc  
 * **Description:** Creates positions in an arc pattern, and returns the list of new positions.
-If the angle of the arc is set to 2*PI, then circular patterns will be created.  
+If the angle of the arc is set to null, then circular patterns will be created.
+For circular patterns, duplicates at start and end are automatically removed.  
 * **Parameters:**  
   * *origin:* XYZ coordinates as a list of three numbers.  
   * *radius:* Radius of circle as a number.  

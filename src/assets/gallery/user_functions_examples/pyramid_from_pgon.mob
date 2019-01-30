@@ -1,9 +1,9 @@
 {
-    "name": "pyramid_from_pgon_test",
+    "name": "Pyramid from polygon",
     "author": "new_user",
     "flowchart": {
-        "name": "Untitled",
-        "description": "",
+        "name": "Pyramid from polygon",
+        "description": "This model demonstrates how a user function can be used. In this case, the model includes a user function that generates a pyramid from a polygon. \n\nThe function is used to generate a whole bunch of pyramids. ",
         "language": "js",
         "meta": {
             "selected_nodes": [
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_ia5vzq4kwc",
+                "id": "node_bv73miagc6k",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_klhjfvqp9ri",
+                                    "id": "node_xtnwkzblv7c",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -271,7 +271,7 @@
                                                         }
                                                     ],
                                                     "selected": false,
-                                                    "hasError": false
+                                                    "hasError": true
                                                 },
                                                 {
                                                     "type": 8,
@@ -361,7 +361,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_qasbog36k2",
+                                                        "id": "node_unc3h3zup4",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -433,7 +433,7 @@
                                         },
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
                                     },
-                                    "hasError": false
+                                    "hasError": true
                                 }
                             },
                             "selected": false
@@ -1406,7 +1406,7 @@
         ],
         "ordered": true
     },
-    "last_updated": "2019-01-30T08:25:25.820Z",
+    "last_updated": "2019-01-30T09:15:38.934Z",
     "version": 1,
     "settings": {}
 }

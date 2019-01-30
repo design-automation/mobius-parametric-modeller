@@ -1,5 +1,5 @@
 {
-    "name": "PyramidFromPolygon",
+    "name": "pyramid_from_pgon",
     "author": "new_user",
     "flowchart": {
         "name": "PyramidFromPolygon",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_lmnnx07o9bp",
+                "id": "node_qr5mmkvlc2p",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -376,7 +376,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_1px9n99uzno",
+                                    "id": "node_qjcelxasxuh",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -503,7 +503,7 @@
                                                         },
                                                         {
                                                             "name": "value",
-                                                            "value": "vecsAdd ( ray[0] , vecMult ( ray[1] , height ) )"
+                                                            "value": "vecAdd ( ray[0] , vecMult ( ray[1] , height ) )"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -770,7 +770,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_dll9u9df1oh",
+                                                        "id": "node_uycz9livsyi",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -925,7 +925,7 @@
         "ordered": true,
         "returnDescription": "The triangular polygons resulting from the pyramid operation."
     },
-    "last_updated": "2019-01-30T08:24:13.461Z",
+    "last_updated": "2019-01-30T09:12:30.398Z",
     "version": 1,
     "settings": {}
 }

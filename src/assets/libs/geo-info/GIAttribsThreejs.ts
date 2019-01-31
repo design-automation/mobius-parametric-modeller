@@ -89,6 +89,15 @@ export class GIAttribsThreejs {
     }
     /**
      *
+     */
+    public getModelAttribsForTable(): any[] {
+        const attribs_maps_key: string = EEntTypeStr[ EEntType.MOD ];
+        const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        if (attrib === undefined) { return []; }
+        return Array.from(attrib.values());
+    }
+    /**
+     *
      * @param ent_type
      */
     public getAttribsForTable(ent_type: EEntType): any[] {

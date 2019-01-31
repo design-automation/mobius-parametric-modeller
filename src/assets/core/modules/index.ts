@@ -36,6 +36,9 @@ export {virtual};
 import * as util from './util';
 export {util};
 
+import * as render from './render';
+export {render};
+
 import * as list from './list';
 export {list};
 

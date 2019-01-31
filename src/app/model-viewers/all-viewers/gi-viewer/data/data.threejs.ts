@@ -157,6 +157,9 @@ export class DataThreejs {
         this._addAxes();
 
         // Add geometry
+        if (!model.threejs) {
+            return;
+        }
         const threejs_data: IThreeJS = model.threejs.get3jsData();
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;

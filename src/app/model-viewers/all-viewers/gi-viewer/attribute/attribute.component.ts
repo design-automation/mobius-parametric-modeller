@@ -4,6 +4,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { GICommon } from '@libs/geo-info';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
+import { GIAttribsThreejs } from '@assets/libs/geo-info/GIAttribsThreejs';
 
 @Component({
   selector: 'attribute',
@@ -70,14 +71,16 @@ export class AttributeComponent implements OnChanges {
       8: EntityType.COLL
     };
     if (this.data) {
-      const ThreeJS = this.data.attribs.threejs;
+      const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
+      const ThreeJSData = this.data.attribs.threejs;
       this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
 
+      if (!ready) { return; }
       if (this.showSelected) {
-        const SelectedAttribData = ThreeJS.getEntsVals(this.selected_ents, tab_map[tabIndex]);
+        const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, tab_map[tabIndex]);
         this.displayData = SelectedAttribData;
       } else {
-        const AllAttribData = ThreeJS.getAttribsForTable(tab_map[tabIndex]);
+        const AllAttribData = ThreeJSData.getAttribsForTable(tab_map[tabIndex]);
         AllAttribData.map(row => {
           if (this.selected_ents.has(row.id)) {
             return row.selected = true;

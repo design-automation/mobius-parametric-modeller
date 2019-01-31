@@ -19,7 +19,9 @@ table {
   min-width: 600px;
   font-family: sans-serif;
   background-color: transparent;
-  
+  th.mat-header-cell:not(:first-of-type){
+    padding-left: 3px;
+  }
   tr.mat-header-row{
     background-color: $color5-5;
     height: 27px;
@@ -36,6 +38,9 @@ table {
       color: $color8;
       background-color: $color6;
       border-bottom: 1px solid $color3;
+      &:not(:first-of-type){
+        padding-left: 3px;
+      }
       // overflow: hidden;
       // text-overflow: ellipsis;
       // white-space: nowrap;
@@ -68,6 +73,7 @@ table {
     top:1px;
     width: 100%;
     min-width: fit-content;
+    display: inline-flex;
     li{
       list-style: none;
       // display: inline-block;

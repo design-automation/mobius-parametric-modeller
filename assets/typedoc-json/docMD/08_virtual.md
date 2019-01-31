@@ -36,13 +36,14 @@ A ray is defined by a list of two lists, as follows: [origin, direction_vector].
 * **Returns:** Ray or list of rays.  
   
 ## GetRay  
-* **Description:** Returns a plane of a face.  
+* **Description:** Returns a ray along an edge.  
 * **Parameters:**  
   * *edge:* The id of an edge  
 * **Returns:** The face plane.  
   
 ## GetPlane  
-* **Description:** Returns a plane from a set of positions.  
+* **Description:** Returns a plane from a polygon, a face, a polyline, or a wire.
+For polylines or wires, there must be at least three non-colinear vertices.  
 * **Parameters:**  
   * *entities:* Any entities  
 * **Returns:** The plane.  

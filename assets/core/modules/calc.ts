@@ -250,41 +250,52 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
     if (getArrDepth(ents_arr) === 1) {
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
-        if (isPgon(ent_type) || isFace(ent_type)) {
-            // faces, these are already triangulated
-            let face_i: number = index;
-            if (isPgon(ent_type)) {
-                face_i = __model__.geom.query.navPgonToFace(index);
-            }
-            const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
-            let normal_vec: Txyz = [0, 0, 0];
-            for (const tri_i of tris_i) {
-                const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
-                const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
-                const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true);
-                normal_vec = vecAdd(normal_vec, tri_normal);
-            }
-            return vecNorm(vecDiv(normal_vec, tris_i.length)); // TODO should this be area weighted?
-        } else if (isPline(ent_type) || isWire(ent_type)) {
-            // wires, these need to be triangulated
-            let wire_i: number = index;
-            if (isPline(ent_type)) {
-                wire_i = __model__.geom.query.navPlineToWire(index);
-            }
-            if (!__model__.geom.query.istWireClosed(wire_i)) {
-                throw new Error('To calculate normals, wire must be closed');
-            }
-            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
-            const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
-            const tris: number[][] = triangulate(xyzs);
-            let normal_vec: Txyz = [0, 0, 0];
-            for (const tri of tris) {
-                const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
-                const tri_normal: Txyz = normal( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2], true );
-                normal_vec = vecAdd(normal_vec, tri_normal);
-            }
-            return vecNorm(vecDiv(normal_vec, tris.length)); // TODO should this be area weighted?
+        if (isPgon(ent_type)) {
+            return __model__.geom.query.getFaceNormal(__model__.geom.query.navPgonToFace(index));
+        } else if (isFace(ent_type)) {
+            return __model__.geom.query.getFaceNormal(index);
+        } else if (isPline(ent_type)) {
+            return __model__.geom.query.getWireNormal(__model__.geom.query.navPlineToWire(index));
+        } else if (isWire(ent_type)) {
+            return __model__.geom.query.getWireNormal(index);
         }
+
+        // if (isPgon(ent_type) || isFace(ent_type)) {
+        //     // faces, these are already triangulated
+        //     let face_i: number = index;
+        //     if (isPgon(ent_type)) {
+        //         face_i = __model__.geom.query.navPgonToFace(index);
+        //     }
+        //     const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        //     let normal_vec: Txyz = [0, 0, 0];
+        //     for (const tri_i of tris_i) {
+        //         const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+        //         const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
+        //         const tri_normal: Txyz = normal( corners_xyzs[2], corners_xyzs[1], corners_xyzs[0], true); // CCW
+        //         normal_vec = vecAdd(normal_vec, tri_normal);
+        //     }
+        //     return vecNorm(vecDiv(normal_vec, tris_i.length)); // TODO should this be area weighted?
+        // } else if (isPline(ent_type) || isWire(ent_type)) {
+        //     // wires, these need to be triangulated
+        //     let wire_i: number = index;
+        //     if (isPline(ent_type)) {
+        //         wire_i = __model__.geom.query.navPlineToWire(index);
+        //     }
+        //     if (!__model__.geom.query.istWireClosed(wire_i)) {
+        //         throw new Error('To calculate normals, wire must be closed');
+        //     }
+        //     const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
+        //     const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
+        //     const tris: number[][] = triangulate(xyzs);
+        //     let normal_vec: Txyz = [0, 0, 0];
+        //     for (const tri of tris) {
+        //         const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
+        //         const tri_normal: Txyz = normal( corners_xyzs[2], corners_xyzs[1], corners_xyzs[0], true ); // CCW
+        //         normal_vec = vecAdd(normal_vec, tri_normal);
+        //     }
+        //     return vecNorm(vecDiv(normal_vec, tris.length)); // TODO should this be area weighted?
+        // }
+
     } else {
         return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr)) as Txyz[];
     }

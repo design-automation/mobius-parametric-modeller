@@ -19,10 +19,10 @@
         {
             "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/basic_ifelse.mob&node=1",
             "requirements": {
-                "num_positions": 6,
+                "num_positions": 5,
                 "num_triangles": 0,
-                "num_vertices": 6,
-                "num_edges": 6,
+                "num_vertices": 5,
+                "num_edges": 5,
                 "num_wires": 1,
                 "num_faces": 0,
                 "num_points": 0,

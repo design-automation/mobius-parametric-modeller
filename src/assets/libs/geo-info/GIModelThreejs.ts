@@ -104,7 +104,7 @@ export class GIModelThreejs {
             materials: materials,
             material_indices: material_indices
         };
-        console.log(data);
+        // console.log(data);
         return data;
     }
 }

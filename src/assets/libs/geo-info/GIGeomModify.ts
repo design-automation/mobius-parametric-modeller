@@ -1,6 +1,7 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem } from '../util/arrays';
+import { vecDot } from '../geom/vectors';
 
 /**
  * Class for geometry.
@@ -260,6 +261,8 @@ export class GIGeomModify {
      * @param posis_id
      */
     public cutFaceHoles(face_i: number, posis_i_arr: number[][]): number[] {
+        // get the normal of the face
+        const face_normal: Txyz = this._geom.query.getFaceNormal(face_i);
         // make the wires for the holes
         const hole_wires_i: number[] = [];
         for (const hole_posis_i of posis_i_arr) {
@@ -270,6 +273,12 @@ export class GIGeomModify {
             }
             hole_edges_i_arr.push( this._geom.add._addEdge(hole_vert_i_arr[hole_vert_i_arr.length - 1], hole_vert_i_arr[0]));
             const hole_wire_i: number = this._geom.add._addWire(hole_edges_i_arr, true);
+            // get normal of wire and check if we need to reverse the wire
+            const wire_normal: Txyz = this._geom.query.getWireNormal(hole_wire_i);
+            if (vecDot(face_normal, wire_normal) > 0) {
+                this.reverse(hole_wire_i);
+            }
+            // add to list of holes
             hole_wires_i.push(hole_wire_i);
         }
         // create the holes
@@ -457,7 +466,6 @@ export class GIGeomModify {
             this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;
             // tris to faces
             delete this._geom_arrays.up_tris_faces[old_face_tri_i];
-            
         }
         // TODO deal with the old triangles, stored in face_tris_i
         // TODO These are still there and are still pointing up at this face

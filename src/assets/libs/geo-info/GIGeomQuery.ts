@@ -1,7 +1,8 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire } from './common';
+import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
+import { vecFromTo, vecCross, vecDiv } from '../geom/vectors';
 /**
  * Class for geometry.
  */
@@ -143,7 +144,70 @@ export class GIGeomQuery {
         const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
         return wires_i.slice(1);
     }
-
+    /**
+     *
+     * @param ent_i
+     */
+    public getCentroid(ent_type: EEntType, ent_i: number): Txyz {
+        const posis_i: number[] = this.navAnyToPosi(ent_type, ent_i);
+        const centroid: Txyz = [0, 0, 0];
+        for (const posi_i of posis_i) {
+            const xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(posi_i);
+            centroid[0] += xyz[0];
+            centroid[1] += xyz[1];
+            centroid[2] += xyz[2];
+        }
+        return vecDiv(centroid, posis_i.length);
+    }
+    /**
+     *
+     * @param face_i
+     */
+    public getFaceNormal(face_i: number): Txyz {
+        const normal: Txyz = [0, 0, 0];
+        const tris_i: number[] = this._geom._geom_arrays.dn_faces_wirestris[face_i][1];
+        let count = 0;
+        for (const tri_i of tris_i) {
+            const posis_i: number[] = this._geom_arrays.dn_tris_verts[tri_i].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
+            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i));
+            const vec_a: Txyz = vecFromTo(xyzs[0], xyzs[2]);
+            const vec_b: Txyz = vecFromTo(xyzs[0], xyzs[1]); // CCW
+            const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
+            if (!(tri_normal[0] === 0 && tri_normal[1] === 0 && tri_normal[2] === 0)) {
+                count += 1;
+                normal[0] += tri_normal[0];
+                normal[1] += tri_normal[1];
+                normal[2] += tri_normal[2];
+            }
+        }
+        if (count === 0) { return [0, 0, 0]; }
+        return vecDiv(normal, count);
+    }
+    /**
+     *
+     * @param wire_i
+     */
+    public getWireNormal(wire_i: number): Txyz {
+        const centroid: Txyz = this.getCentroid(EEntType.WIRE, wire_i);
+        const edges_i: number[] = this._geom._geom_arrays.dn_wires_edges[wire_i];
+        const normal: Txyz = [0, 0, 0];
+        let count = 0;
+        for (const edge_i of edges_i) {
+            const posis_i: number[] = this._geom_arrays.dn_edges_verts[edge_i].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
+            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i));
+            const vec_a: Txyz = vecFromTo(centroid, xyzs[1]);
+            const vec_b: Txyz = vecFromTo(centroid, xyzs[0]); // CCW
+            const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
+            if (!(tri_normal[0] === 0 && tri_normal[1] === 0 && tri_normal[2] === 0)) {
+                count += 1;
+                normal[0] += tri_normal[0];
+                normal[1] += tri_normal[1];
+                normal[2] += tri_normal[2];
+            }
+        }
+        if (count === 0) { return [0, 0, 0]; }
+        return vecDiv(normal, count);
+    }
     // ============================================================================
     // Navigate down the hierarchy
     // ============================================================================

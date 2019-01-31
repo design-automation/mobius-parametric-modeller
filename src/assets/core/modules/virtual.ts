@@ -115,7 +115,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
     }
 }
 /**
- * Returns a plane of a face.
+ * Returns a ray along an edge.
  * @param __model__
  * @param edge The id of an edge
  * @returns The face plane.
@@ -146,8 +146,12 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
     }
 }
 /**
- * Returns a plane from a set of positions.
- * @param __model__
+ * Returns a plane from a polygon, a face, a polyline, or a wire.
+ * For polylines or wires, there must be at least three non-colinear vertices.
+ *
+ * The winding order is counter-clockwise.
+ * This means that if the vertices are ordered counter-clockwise relative to your point of view,
+ * then the z axis of the plane will be pointing towards you.
  * @param entities Any entities
  * @returns The plane.
  */

@@ -65,7 +65,11 @@ export function vecMult(vec: Txyz, multiplier: number): Txyz {
 }
 
 export function vecCross(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
-    return mathjs.cross(v1, v2);
+    const n: Txyz = mathjs.cross(v1, v2);
+    if (norm) {
+        return vecNorm(n);
+    }
+    return n;
 }
 
 export function vecDot(v1: Txyz, v2: Txyz): number {
@@ -74,6 +78,7 @@ export function vecDot(v1: Txyz, v2: Txyz): number {
 
 export function vecNorm(v: Txyz): Txyz {
     const length: number = Math.hypot(...v);
+    if (length === 0) {return [0, 0, 0]; }
     return [v[0] / length, v[1] / length, v[2] / length];
 }
 

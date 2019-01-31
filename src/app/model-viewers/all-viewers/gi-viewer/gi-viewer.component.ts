@@ -1,5 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { VERSION } from '@env/version';
+import { isDevMode } from '@angular/core';
 
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -38,8 +39,10 @@ export class GIViewerComponent implements OnInit {
             position: string,
             position_s: string,
             vertex_s: string,
-            face: string,
-            face_s: string
+            face_f: string,
+            face_f_s: string,
+            face_b: string,
+            face_b_s: string
         },
         version: string
     } = {
@@ -54,8 +57,10 @@ export class GIViewerComponent implements OnInit {
                 position: '#000000',
                 position_s: '#0033ff',
                 vertex_s: '#ffcc00',
-                face: '#ffffff',
-                face_s: '#ff0000'
+                face_f: '#ffffff',
+                face_f_s: '#4949bd',
+                face_b: '#dddddd',
+                face_b_s: '#00006d'
             },
             version: VERSION.version
         };
@@ -74,11 +79,17 @@ export class GIViewerComponent implements OnInit {
         label: 'Vertex Selected',
         setting: 'vertex_s'
     }, {
-        label: 'Face Default',
-        setting: 'face'
+        label: 'Face Front Default',
+        setting: 'face_f'
     }, {
-        label: 'Face Selected',
-        setting: 'face_s'
+        label: 'Face Front Selected',
+        setting: 'face_f_s'
+    }, {
+        label: 'Face Back Default',
+        setting: 'face_b'
+    }, {
+        label: 'Face Back Selected',
+        setting: 'face_b_s'
     }];
 
     normalsEnabled = false;
@@ -96,7 +107,8 @@ export class GIViewerComponent implements OnInit {
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         if (previous_settings === null ||
             this.hasDiffProps(previous_settings, this.settings) ||
-            this.settings.version !== previous_settings.version) {
+            this.settings.version !== previous_settings.version ||
+            isDevMode()) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 

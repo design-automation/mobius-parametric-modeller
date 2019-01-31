@@ -58,8 +58,10 @@ export class DataThreejs {
             position: string,
             position_s: string,
             vertex_s: string,
-            face: string,
-            face_s: string
+            face_f: string,
+            face_f_s: string,
+            face_b: string,
+            face_b_s: string
         }
     };
     /**
@@ -77,8 +79,10 @@ export class DataThreejs {
             position: string,
             position_s: string,
             vertex_s: string,
-            face: string,
-            face_s: string
+            face_f: string,
+            face_f_s: string,
+            face_b: string,
+            face_b_s: string
         }
     }) {
         this.settings = settings;
@@ -194,21 +198,32 @@ export class DataThreejs {
      * @param container
      * @param label
      */
-    public selectObjFace(ent_id: string, triangle_i: number[], positions: number[], container, label = true) {
+    public selectObjFace(ent_id: string, tris_i: number[], positions: number[], container, label = true) {
         const geom = new THREE.BufferGeometry();
-        geom.setIndex(triangle_i);
+        geom.setIndex(tris_i);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.addAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
-        const color = new THREE.Color(parseInt(this.settings.colors.face_s.replace('#', '0x'), 16));
-        const mat = new THREE.MeshPhongMaterial({
+        geom.clearGroups();
+        geom.addGroup( 0, tris_i.length, 0 );
+        geom.addGroup( 0, tris_i.length, 1 );
+        const colorf = new THREE.Color(parseInt(this.settings.colors.face_f_s.replace('#', '0x'), 16));
+        const colorb = new THREE.Color(parseInt(this.settings.colors.face_b_s.replace('#', '0x'), 16));
+        const matf = new THREE.MeshPhongMaterial({
             specular: 0x000000,
             emissive: 0x000000,
-            color: color,
+            color: colorf,
             shininess: 0,
-            side: THREE.DoubleSide
+            side: THREE.FrontSide
         });
-        const mesh = new THREE.Mesh(geom, mat);
+        const matb = new THREE.MeshPhongMaterial({
+            specular: 0x000000,
+            emissive: 0x000000,
+            color: colorb,
+            shininess: 0,
+            side: THREE.BackSide
+        });
+        const mesh = new THREE.Mesh(geom, [matf, matb]);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         this._scene.add(mesh);
@@ -583,17 +598,30 @@ export class DataThreejs {
         geom.addAttribute('position', posis_buffer);
         // geom.addAttribute('normal', normals_buffer);
         geom.addAttribute('color', colors_buffer);
-        const color = new THREE.Color(parseInt(this.settings.colors.face.replace('#', '0x'), 16));
-        const mat = new THREE.MeshPhongMaterial({
+        const colorf = new THREE.Color(parseInt(this.settings.colors.face_f.replace('#', '0x'), 16));
+        const colorb = new THREE.Color(parseInt(this.settings.colors.face_b.replace('#', '0x'), 16));
+        geom.clearGroups();
+        geom.addGroup( 0, tris_i.length, 0 );
+        geom.addGroup( 0, tris_i.length, 1 );
+        const matf = new THREE.MeshPhongMaterial({
             specular: 0xffffff,
             emissive: 0x000000,
-            color: color,
+            color: colorf,
             shininess: 0,
-            side: THREE.DoubleSide,
+            side: THREE.FrontSide,
             vertexColors: THREE.VertexColors,
-            wireframe: this.settings.wireframe.show
+            // wireframe: this.settings.wireframe.show
         });
-        const mesh = new THREE.Mesh(geom, mat);
+        const matb = new THREE.MeshPhongMaterial({
+            specular: 0xffffff,
+            emissive: 0x000000,
+            color: colorb,
+            shininess: 0,
+            side: THREE.BackSide,
+            vertexColors: THREE.VertexColors,
+            // wireframe: this.settings.wireframe.show
+        });
+        const mesh = new THREE.Mesh(geom, [matf, matb]);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         mesh.castShadow = true;

@@ -41,7 +41,8 @@ export enum EEntType {
     POINT,
     PLINE,
     PGON,
-    COLL
+    COLL,
+    MOD
 }
 
 // Types of entities
@@ -55,7 +56,8 @@ export enum EEntTypeStr {
     'pt',
     'pl',
     'pg',
-    'co'
+    'co',
+    'mo'
 }
 
 export enum EEntStrToGeomArray {
@@ -84,6 +86,7 @@ export interface IAttribsMaps {
     pl: Map<string, GIAttribMap>;
     pg: Map<string, GIAttribMap>;
     co: Map<string, GIAttribMap>;
+    mo: Map<string, any>;
 }
 
 // Names of attributes

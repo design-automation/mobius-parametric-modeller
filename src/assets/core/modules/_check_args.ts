@@ -426,9 +426,9 @@ function isStringListArg(fn_name: string, arg_name: string, arg_list: any[], typ
     isListArg(fn_name, arg_name, arg_list, typ);
     for (let i = 0; i < arg_list.length; i++) {
         isStringArg(fn_name, arg_name + '[' + i + ']', arg_list[i], typ);
-        if (arg_list[i].slice(2).length === 0) {
-            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' needs to have an index specified');
-        }
+        // if (arg_list[i].slice(2).length === 0) {
+        //     throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' needs to have an index specified');
+        // }
     }
     return;
 }

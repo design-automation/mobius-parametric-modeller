@@ -20,7 +20,8 @@ export class GIAttribs {
         pt: new Map(),
         pl: new Map(),
         pg: new Map(),
-        co: new Map()
+        co: new Map(),
+        mo: new Map()
     };
     // sub classes with methods
     public io: GIAttribsIO;

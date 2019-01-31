@@ -226,26 +226,83 @@ export class CodeUtils {
         return codeStr;
     }
     static repSetAttrib(val: string) {
+        // if (!val || val.indexOf('@') === -1) {
+        //     return false;
+        // }
+        // const splitted = val.split('@');
+        // if (splitted.length > 2) {
+        //     splitted[1] = splitted.splice(1, splitted.length - 1).join('@');
+        // }
+        // const openBracketMatch = (splitted[1].match(/\[/g) || []).length;
+        // if (openBracketMatch) {
+        //     const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
+        //     const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
+        //     return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${bracketSplit[0]}',`, `, ${innerVar});`];
+        // } else {
+        //     return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}',`, ');'];
+        // }
+
         if (!val || val.indexOf('@') === -1) {
             return false;
         }
-        const splitted = val.split('@');
-        if (splitted.length > 2) {
-            splitted[1] = splitted.splice(1, splitted.length - 1).join('@');
-        }
-        const openBracketMatch = (splitted[1].match(/\[/g) || []).length;
-        if (openBracketMatch) {
-            const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
-            const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${bracketSplit[0]}',`, `, ${innerVar});`];
+        // get two parts, before @ and after @
+        let val_0: string;
+        let val_1: string;
+        const atIndex: number = val.indexOf('@');
+        if (atIndex === 0) {
+            val_0 = null;
+            val_1 = val.slice(1);
         } else {
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}',`, ');'];
+            val_0 = val.slice(0, atIndex);
+            val_1 = val.slice(atIndex + 1);
         }
-
-
+        const openBracketMatch = (val_1.match(/\[/g) || []).length;
+        if (openBracketMatch) {
+            const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
+            const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${bracketSplit[0]}',`, `, ${innerVar});`];
+        } else {
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}',`, ');'];
+        }
     }
 
     static repGetAttrib(val: string) {
+        // if (!val) { return; }
+        // const res = val.split(' ');
+        // for (const i in res) {
+        //     if (!res[i]) {
+        //         continue;
+        //     }
+        //     const atIndex = res[i].indexOf('@');
+        //     if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
+        //         const splitted = res[i].split('@');
+        //         if (splitted.length > 2) {
+        //             splitted[1] = splitted.splice(1, splitted.length - 1).join('@');
+        //         }
+        //         let pref = '';
+        //         let postf = '';
+        //         while (splitted[0][0] === '[') {
+        //             splitted[0] = splitted[0].substring(1, splitted[0].length);
+        //             pref += '[';
+        //         }
+        //         const closeBracketMatch = (splitted[1].match(/\]/g) || []).length;
+        //         const openBracketMatch = (splitted[1].match(/\[/g) || []).length;
+        //         if (closeBracketMatch > openBracketMatch) {
+        //             splitted[1] = splitted[1].substring(0, splitted[1].length - (closeBracketMatch - openBracketMatch));
+        //             postf = ']'.repeat(closeBracketMatch - openBracketMatch);
+        //         }
+        //         if (openBracketMatch) {
+        //             const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
+        //             const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
+        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}` +
+        //                 `(__params__.model, ${splitted[0]}, '${bracketSplit[0]}', ${innerVar})${postf}`;
+        //         } else {
+        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
+        //         }
+        //     }
+        // }
+        // return res.join(' ');
+
         if (!val) { return; }
         const res = val.split(' ');
         for (const i in res) {
@@ -253,30 +310,36 @@ export class CodeUtils {
                 continue;
             }
             const atIndex = res[i].indexOf('@');
-            if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
-                const splitted = res[i].split('@');
-                if (splitted.length > 2) {
-                    splitted[1] = splitted.splice(1, splitted.length - 1).join('@');
-                }
+            if (atIndex !== -1 && atIndex >= 0 && res[i].trim()[0] !== '#') {
+                // get two parts, before @ and after @
+                let val_0: string;
+                let val_1: string;
                 let pref = '';
                 let postf = '';
-                while (splitted[0][0] === '[') {
-                    splitted[0] = splitted[0].substring(1, splitted[0].length);
-                    pref += '[';
+                if (atIndex === 0) {
+                    val_0 = null;
+                    val_1 = val.slice(1);
+                } else {
+                    val_0 = val.slice(0, atIndex);
+                    val_1 = val.slice(atIndex + 1);
+                    while (val_0[0] === '[') {
+                        val_0 = val_0.substring(1, val_0.length);
+                        pref += '[';
+                    }
                 }
-                const closeBracketMatch = (splitted[1].match(/\]/g) || []).length;
-                const openBracketMatch = (splitted[1].match(/\[/g) || []).length;
+                const closeBracketMatch = (val_1.match(/\]/g) || []).length;
+                const openBracketMatch = (val_1.match(/\[/g) || []).length;
                 if (closeBracketMatch > openBracketMatch) {
-                    splitted[1] = splitted[1].substring(0, splitted[1].length - (closeBracketMatch - openBracketMatch));
+                    val_1 = val_1.substring(0, val_1.length - (closeBracketMatch - openBracketMatch));
                     postf = ']'.repeat(closeBracketMatch - openBracketMatch);
                 }
                 if (openBracketMatch) {
-                    const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
+                    const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
                     const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
                     res[i] = `${pref}__modules__.${_parameterTypes.getattrib}` +
-                        `(__params__.model, ${splitted[0]}, '${bracketSplit[0]}', ${innerVar})${postf}`;
+                        `(__params__.model, ${val_0}, '${bracketSplit[0]}', ${innerVar})${postf}`;
                 } else {
-                    res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
+                    res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${val_0}, '${val_1}')${postf}`;
                 }
             }
         }

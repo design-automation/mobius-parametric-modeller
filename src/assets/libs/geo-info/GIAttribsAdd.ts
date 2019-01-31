@@ -35,6 +35,33 @@ export class GIAttribsAdd {
         return attribs[name];
     }
     /**
+     * Set a model attrib value
+     * @param id
+     * @param name
+     * @param value
+     */
+    public setModelAttribValue(name: string, value: TAttribDataTypes): void {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
+        attrib.set(name, value);
+    }
+    /**
+     * Set a model attrib indexed value.
+     * If the attribute does not exist, it throws an error.
+     * @param id
+     * @param name
+     * @param value
+     */
+    public setModelAttribIndexedValue(name: string, value_index: number, value: number|string): void {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
+        const list_value: TAttribDataTypes = attrib.get(name);
+        if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (!Array.isArray(list_value)) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
+        if (value_index >= list_value.length) { throw new Error('Value index is out of range for attribute list size.'); }
+        list_value[value_index] = value;
+    }
+    /**
      * Set an entity attrib value
      * If the attribute does not exist, then it is created.
      * @param id

@@ -18,6 +18,31 @@ export class GIAttribsQuery {
         this._attribs_maps = attribs_maps;
     }
     /**
+     * Get a model attrib value
+     * @param ent_type
+     * @param name
+     */
+    public getModelAttribValue(name: string): TAttribDataTypes|TAttribDataTypes[] {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        if (attrib.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        return attrib.get(name);
+    }
+    /**
+     * Get a model attrib indexed value
+     * @param ent_type
+     * @param name
+     */
+    public getModelAttribIndexedValue(name: string, value_index: number): number|string|number[]|string[] {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        const list_value: TAttribDataTypes = attrib.get(name);
+        if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (!Array.isArray(list_value)) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
+        if (value_index >= list_value.length) { throw new Error('Value index is out of range for attribute list size.'); }
+        return list_value[value_index];
+    }
+    /**
      * Get an entity attrib value
      * @param ent_type
      * @param name
@@ -25,7 +50,7 @@ export class GIAttribsQuery {
     public getAttribValue(ent_type: EEntType, name: string, ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
+        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
         return attribs.get(name).getEntVal(ents_i);
     }
     /**
@@ -37,7 +62,7 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
-        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        if (attrib === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
         if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
         return attrib.getEntIdxVal(ents_i, value_index) as number|string;

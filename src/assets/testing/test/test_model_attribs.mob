@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_ydrb5oc6vdp",
+                "id": "node_5wob0kzab1a",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_ezqvosix16",
+                                    "id": "node_ts67mz1wjbk",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -232,7 +232,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_ti598b64qf",
+                                                        "id": "node_br3ozsh3d56",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -253,6 +253,26 @@
                                                                 "enabled": true,
                                                                 "selected": false,
                                                                 "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "ID": "prod-wtvzrhx8ur",
+                                                                "enabled": true,
+                                                                "print": true,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "back_item_end",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "@test_item[1]"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": true
                                                             },
                                                             {
                                                                 "type": 11,
@@ -293,7 +313,7 @@
                                                             },
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
-                                                        "hasError": false
+                                                        "hasError": true
                                                     }
                                                 },
                                                 "selected": false
@@ -327,7 +347,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-31T08:06:41.332Z",
+    "last_updated": "2019-01-31T08:16:19.418Z",
     "version": 1,
     "settings": {}
 }

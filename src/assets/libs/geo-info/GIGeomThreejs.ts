@@ -95,7 +95,7 @@ export class GIGeomThreejs {
                     mat_groups_map.set(mat_index, start_end_arrs);
                 } else {
                     const start_end: [number, number] = start_end_arrs[start_end_arrs.length - 1];
-                    if (tjs_i === start_end[1] - 1) {
+                    if (tjs_i === start_end[1] + 1) {
                         start_end[1] = tjs_i;
                     } else {
                         start_end_arrs.push([tjs_i, tjs_i]);

@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_fcywu83a68w",
+                "id": "node_uarcxchyky",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -129,7 +129,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_n36t7a5ik7q",
+                                    "id": "node_6sun7k9cd59",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -655,6 +655,103 @@
                                             ],
                                             "selected": false,
                                             "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-jwskto8tueo",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "query",
+                                                "name": "Get"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "verts",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select",
+                                                    "value": "'vertices'",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "null",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "query_expr",
+                                                    "value": "null",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 4,
+                                            "ID": "prod-8huiisof6m4",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "item",
+                                                    "value": "vert",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "list",
+                                                    "value": "verts",
+                                                    "default": []
+                                                }
+                                            ],
+                                            "children": [
+                                                {
+                                                    "type": 13,
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~16",
+                                                    "meta": {
+                                                        "name": "",
+                                                        "module": ""
+                                                    },
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "print": false,
+                                                    "enabled": true,
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 0,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~16",
+                                                    "ID": "prod-7dbo4wkoog",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 2,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "vert@rgb",
+                                                            "invalidVar": false
+                                                        },
+                                                        {
+                                                            "name": "value",
+                                                            "value": "[rand ( 0 , 1 ) , rand ( 0 , 1 ) , rand ( 0 , 1 ) ]"
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                }
+                                            ],
+                                            "hasError": false
                                         }
                                     ],
                                     "state": {
@@ -679,7 +776,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_9gk644mlet",
+                                                        "id": "node_o7fy9s7nklm",
                                                         "position": {
                                                             "x": 5353.7099609375,
                                                             "y": 5392.28857421875
@@ -777,7 +874,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-01T01:02:57.380Z",
+    "last_updated": "2019-02-01T01:08:42.351Z",
     "version": 1,
     "settings": {}
 }

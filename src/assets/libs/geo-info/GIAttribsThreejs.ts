@@ -95,7 +95,11 @@ export class GIAttribsThreejs {
         const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         if (attribs === undefined) { return []; }
         const arr = [];
-        attribs.forEach(attrib => arr.push(JSON.parse(attrib as string)));
+        attribs.forEach((value, key) => {
+            const obj = {Name: key, Value: value as string};
+            arr.push(obj);
+        });
+        console.log(arr);
         return arr;
     }
     /**

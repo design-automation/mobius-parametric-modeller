@@ -2,6 +2,8 @@ import { GIGeom } from './GIGeom';
 import { IGeomArrays, TTri, TEdge, TPgon, TPoint } from './common';
 import { GIAttribs } from './GIAttribs';
 import { GIAttribMap } from './GIAttribMap';
+import * as THREE from 'three';
+import { Material } from 'three';
 
 /**
  * Class for geometry.
@@ -41,8 +43,8 @@ export class GIGeomThreejs {
     public get3jsTris(vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
         // arrays to store threejs data
         const tri_data_arrs: [number[], TTri, number][] = []; // tri_mat_indices, new_tri_verts_i, tri_i
-        const materials: object[] = [];
-        const material_names:  string[] = [];
+        const materials: object[] = [this._getMaterial( {side: THREE.FrontSide} ), this._getMaterial( {side: THREE.BackSide} )];
+        const material_names:  string[] = ['default_front', 'default_back'];
         // get the material attribute from polygons
         const material_attrib: GIAttribMap = this._geom.model.attribs._attribs_maps.pg.get('material');
         // loop through all tris
@@ -65,12 +67,18 @@ export class GIGeomThreejs {
                             if (mat !== undefined) {
                                 pgon_mat_index = materials.length;
                                 material_names.push(pgon_mat_name);
-                                const mat_obj: object = JSON.parse(mat);
-                                materials.push(mat_obj);
+                                const mat_settings_obj: object = JSON.parse(mat);
+                                materials.push(this._getMaterial(mat_settings_obj));
                             }
                         }
-                        tri_mat_indices.push(pgon_mat_index);
+                        if (pgon_mat_index !== -1) {
+                            tri_mat_indices.push(pgon_mat_index);
+                        }
                     }
+                }
+                if (tri_mat_indices.length === 0) {
+                    tri_mat_indices.push(0); // default material front
+                    tri_mat_indices.push(1); // default material back
                 }
                 // add the data to the data_array
                 tri_data_arrs.push( [ tri_mat_indices, new_tri_verts_i, tri_i ] );
@@ -185,5 +193,26 @@ export class GIGeomThreejs {
         }
         return [points_verts_i_filt, point_select_map];
         // return this._geom_arrays.dn_points_verts;
+    }
+
+    /**
+     * Create a threejs material
+     * @param settings
+     */
+    private _getMaterial(settings?: object) {
+        const material =  {
+            type: 'MeshPhongMaterial',
+            specular: 0x000000,
+            emissive: 0x000000,
+            shininess: 0,
+            side: THREE.DoubleSide,
+            vertexColors: THREE.VertexColors
+        };
+        if (settings) {
+            for (const key of Object.keys(settings)) {
+                material[key] = settings[key];
+            }
+        }
+        return material;
     }
 }

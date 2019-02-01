@@ -111,7 +111,6 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         }
         // do the query on the list of entities
         const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type, query_expr, found_entities_i);
-console.log(query_expr, query_result, __model__);
         if (query_result.length === 0) { return []; }
         return query_result.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
     } else {

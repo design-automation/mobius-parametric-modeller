@@ -12,4 +12,7 @@ export interface IThreeJS {
     edge_select_map: Map<number, number>;
     triangle_indices: number[];
     triangle_select_map: Map<number, number>;
+    materials: object[];
+    material_groups: [number, number, number][];
 }
+

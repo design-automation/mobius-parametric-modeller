@@ -37,7 +37,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
     checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
     checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt']);
-    // checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber', 'isNull']);
+    checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber', 'isNull']);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;

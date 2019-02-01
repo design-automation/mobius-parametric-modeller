@@ -65,10 +65,20 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
                               attrib_name: string, attrib_value: TAttribDataTypes, attrib_index?: number): void {
     // --- Error Check ---
     const fn_name = entities + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']';
-    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null);
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
     checkAttribNameValue(fn_name , attrib_name, attrib_value, attrib_index);
     // --- Error Check ---
-    if (ents_arr.length === 0) {
+    if (ents_arr === null) {
+        if (attrib_index !== null && attrib_index !== undefined) {
+            __model__.attribs.add.setModelAttribIndexedValue(attrib_name, attrib_index, attrib_value as number|string);
+        } else {
+            __model__.attribs.add.setModelAttribValue(attrib_name, attrib_value);
+        }
+        return;
+    } else if (ents_arr.length === 0) {
         return;
     } else if (getArrDepth(ents_arr) === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
@@ -85,9 +95,17 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
 //  ===============================================================================================
 function _getAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
-    if (getArrDepth(ents_arr) === 1) {
+    const has_index: boolean = attrib_index !== null && attrib_index !== undefined;
+    if (ents_arr === null) {
+        if (has_index) {
+            return __model__.attribs.query.getModelAttribIndexedValue(attrib_name, attrib_index);
+        } else {
+            return __model__.attribs.query.getModelAttribValue(attrib_name);
+        }
+    } else if (ents_arr.length === 0) {
+        return;
+    } else if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        const has_index: boolean = attrib_index !== null && attrib_index !== undefined;
         if (attrib_name === 'id') {
             if (has_index) { throw new Error('The "id" attribute does have an index.'); }
             return EEntTypeStr[ent_type] + ent_i as TAttribDataTypes;
@@ -109,7 +127,10 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
         attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
     // --- Error Check ---
     const fn_name = 'Inline.__getAttrib__';
-    const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
     checkCommTypes(fn_name, 'attrib_name', attrib_name, ['isString']);
     if (attrib_index !== null && attrib_index !== undefined) {
         checkCommTypes(fn_name, 'attrib_index', attrib_index, ['isNumber']);

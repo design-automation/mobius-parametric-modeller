@@ -32,6 +32,7 @@ export class GIAttribsIO {
         if (attribs_maps.pl !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PLINE); }
         if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON); }
         if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL); }
+        if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
     }
     /**
      * Adds data to this model from JSON data.
@@ -73,6 +74,18 @@ export class GIAttribsIO {
     // ============================================================================
     // Private methods
     // ============================================================================
+    /**
+     * From another model
+     * The existing attributes are not deleted
+     * @param attribs_maps
+     */
+    private _mergeModelAttribs(attribs_maps: IAttribsMaps) {
+        const from_attrib: Map<string, TAttribDataTypes> = attribs_maps[EEntTypeStr[ EEntType.MOD ]];
+        const to_attrib: Map<string, TAttribDataTypes> = this._attribs_maps[EEntTypeStr[ EEntType.MOD ]];
+        from_attrib.forEach( (value, name) => {
+            to_attrib.set(name, value);
+        });
+    }
     /**
      * From another model
      * The existing attributes are not deleted

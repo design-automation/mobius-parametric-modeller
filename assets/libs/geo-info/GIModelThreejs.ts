@@ -55,7 +55,8 @@ export class GIModelThreejs {
         // get posi indices
         const posis_indices: number[] = Array.from(posis_map.values());
         // get the indices of the vertices for edges, points and triangles
-        const [tris_verts_i, triangle_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsTris(vertex_map);
+        const [tris_verts_i, triangle_select_map, materials, material_groups]:
+            [number[], Map<number, number>, object[], [number, number, number][]] = this._model.geom.threejs.get3jsTris(vertex_map);
         const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsEdges(vertex_map);
         const [points_verts_i, point_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsPoints(vertex_map);
         // return an object containing all the data
@@ -72,7 +73,9 @@ export class GIModelThreejs {
             edge_indices: edges_verts_i,
             edge_select_map: edge_select_map,
             triangle_indices: tris_verts_i,
-            triangle_select_map: triangle_select_map
+            triangle_select_map: triangle_select_map,
+            materials: materials,
+            material_groups: material_groups
         };
         // console.log(data);
         return data;

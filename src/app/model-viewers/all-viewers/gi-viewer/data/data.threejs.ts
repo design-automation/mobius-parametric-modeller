@@ -167,12 +167,15 @@ export class DataThreejs {
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.vertex_map;
 
+        const material_groups = threejs_data.material_groups;
+        const materials = threejs_data.materials;
+
         // Create buffers that will be used by all geometry
         const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
-        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer);
+        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, material_groups, materials);
         this._addLines(threejs_data.edge_indices, verts_xyz_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], 1);
         this._addPositions(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
@@ -208,8 +211,8 @@ export class DataThreejs {
         geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.addAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.clearGroups();
-        geom.addGroup( 0, tris_i.length, 0 );
-        geom.addGroup( 0, tris_i.length, 1 );
+        geom.addGroup(0, tris_i.length, 0);
+        geom.addGroup(0, tris_i.length, 1);
         const colorf = new THREE.Color(parseInt(this.settings.colors.face_f_s.replace('#', '0x'), 16));
         const colorb = new THREE.Color(parseInt(this.settings.colors.face_b_s.replace('#', '0x'), 16));
         const matf = new THREE.MeshPhongMaterial({
@@ -595,7 +598,9 @@ export class DataThreejs {
     private _addTris(tris_i: number[],
         posis_buffer: THREE.Float32BufferAttribute,
         // normals_buffer: THREE.Float32BufferAttribute,
-        colors_buffer: THREE.Float32BufferAttribute): void {
+        colors_buffer: THREE.Float32BufferAttribute,
+        material_groups,
+        materials): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
         geom.addAttribute('position', posis_buffer);
@@ -604,27 +609,36 @@ export class DataThreejs {
         const colorf = new THREE.Color(parseInt(this.settings.colors.face_f.replace('#', '0x'), 16));
         const colorb = new THREE.Color(parseInt(this.settings.colors.face_b.replace('#', '0x'), 16));
         geom.clearGroups();
-        geom.addGroup( 0, tris_i.length, 0 );
-        geom.addGroup( 0, tris_i.length, 1 );
-        const matf = new THREE.MeshPhongMaterial({
-            specular: 0xffffff,
-            emissive: 0x000000,
-            color: colorf,
-            shininess: 0,
-            side: THREE.FrontSide,
-            vertexColors: THREE.VertexColors,
-            // wireframe: this.settings.wireframe.show
+        material_groups.forEach(element => {
+            geom.addGroup(element[0], element[1], element[2]);
         });
-        const matb = new THREE.MeshPhongMaterial({
-            specular: 0xffffff,
-            emissive: 0x000000,
-            color: colorb,
-            shininess: 0,
-            side: THREE.BackSide,
-            vertexColors: THREE.VertexColors,
-            // wireframe: this.settings.wireframe.show
-        });
-        const mesh = new THREE.Mesh(geom, [matf, matb]);
+        const material_arr = [];
+        let index = 0;
+        const l = materials.length;
+        for (; index < l; index++) {
+            const element = materials[index];
+            let mat;
+            if (index === 0) {
+                if (element.type === MaterialType.MeshPhongMaterial) {
+                    delete element.type;
+                    element.color = colorf;
+                    mat = new THREE.MeshPhongMaterial(element);
+                }
+            } else if (index === 1) {
+                if (element.type === MaterialType.MeshPhongMaterial) {
+                    delete element.type;
+                    element.color = colorb;
+                    mat = new THREE.MeshPhongMaterial(element);
+                }
+            } else {
+                if (element.type === MaterialType.MeshPhongMaterial) {
+                    delete element.type;
+                    mat = new THREE.MeshPhongMaterial(element);
+                }
+            }
+            material_arr.push(mat);
+        }
+        const mesh = new THREE.Mesh(geom, material_arr);
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         mesh.castShadow = true;
@@ -895,4 +909,9 @@ enum objType {
     point = 'point',
     line = 'line',
     face = 'face'
+}
+
+enum MaterialType {
+    MeshPhongMaterial = 'MeshPhongMaterial',
+    MeshStandardMaterial = 'MeshStandardMaterial'
 }

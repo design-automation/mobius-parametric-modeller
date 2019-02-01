@@ -118,7 +118,7 @@ export class GIGeomThreejs {
             for (const start_end of start_end_arrs) {
                 const start: number = start_end[0];
                 const count: number = start_end[1] - start_end[0] + 1;
-                material_groups.push( [ start, count, mat_index ] );
+                material_groups.push( [ start * 3, count * 3, mat_index ] );
             }
         });
         // convert the verts list to a flat array
@@ -205,8 +205,8 @@ export class GIGeomThreejs {
             specular: 0x000000,
             emissive: 0x000000,
             shininess: 0,
-            side: THREE.DoubleSide,
-            vertexColors: THREE.VertexColors
+            side: THREE.DoubleSide
+            // vertexColors: THREE.VertexColors
         };
         if (settings) {
             for (const key of Object.keys(settings)) {

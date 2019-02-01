@@ -23,6 +23,7 @@ import { ThreeJSViewerService } from './threejs-viewer.service';
 })
 export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     @Output() eventClicked = new EventEmitter<Event>();
+    @Output() resetTableEvent = new EventEmitter<number>();
     @Input() model: GIModel;
     @Input() attr_table_select: { action: string, ent_type: string, id: number };
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
@@ -232,8 +233,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 try {
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
-                    const rows = document.querySelector('selected-row');
-                    if (rows) { rows.classList.remove('selected-row'); }
+                    this.resetTable();
                     this._model_error = false;
                     this._no_model = false;
                     this.render(this);
@@ -373,6 +373,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
     private refreshTable(event: Event) {
         this.eventClicked.emit(event);
+    }
+
+    private resetTable() {
+        this.resetTableEvent.emit();
     }
 
     private unselectAll() {

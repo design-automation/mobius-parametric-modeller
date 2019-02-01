@@ -15,6 +15,7 @@ import { GIAttribsThreejs } from '@assets/libs/geo-info/GIAttribsThreejs';
 export class AttributeComponent implements OnChanges {
   @Input() data: GIModel;
   @Input() refresh: Event;
+  @Input() reset: Event;
   @Output() attrTableSelect = new EventEmitter<Object>();
   showSelected = false;
 
@@ -28,11 +29,12 @@ export class AttributeComponent implements OnChanges {
       { type: EEntType.POINT, title: 'Points' },
       { type: EEntType.PLINE, title: 'Polylines' },
       { type: EEntType.PGON, title: 'Polygons' },
-      { type: EEntType.COLL, title: 'Collections' }
+      { type: EEntType.COLL, title: 'Collections' },
+      { type: EEntType.MOD, title: 'Model' }
     ];
   displayedColumns: string[] = [];
   displayData: { id: string }[] = [];
-  selected_ents;
+  selected_ents = new Map();
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -52,6 +54,9 @@ export class AttributeComponent implements OnChanges {
     if (changes['data'] && this.data) {
       this.refreshTable();
     }
+    if (changes['reset']) {
+      this.resetTable();
+    }
     if (changes['refresh']) {
       this.refreshTable();
     }
@@ -68,25 +73,32 @@ export class AttributeComponent implements OnChanges {
       5: EntityType.POINT,
       6: EntityType.PLINE,
       7: EntityType.PGON,
-      8: EntityType.COLL
+      8: EntityType.COLL,
+      9: EntityType.MOD
     };
     if (this.data) {
-      const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
       const ThreeJSData = this.data.attribs.threejs;
-      this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
-
-      if (!ready) { return; }
-      if (this.showSelected) {
-        const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, tab_map[tabIndex]);
-        this.displayData = SelectedAttribData;
+      if (Number(tabIndex) === 9) {
+        this.displayData = ThreeJSData.getModelAttribsForTable();
+        console.log('hello', this.displayData);
       } else {
-        const AllAttribData = ThreeJSData.getAttribsForTable(tab_map[tabIndex]);
-        AllAttribData.map(row => {
-          if (this.selected_ents.has(row.id)) {
-            return row.selected = true;
-          }
-        });
-        this.displayData = AllAttribData;
+        const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
+        this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
+
+        if (!ready) { return; }
+        if (this.showSelected) {
+          const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, tab_map[tabIndex]);
+          this.displayData = SelectedAttribData;
+        } else {
+          console.log(tab_map[tabIndex]);
+          const AllAttribData = ThreeJSData.getAttribsForTable(tab_map[tabIndex]);
+          AllAttribData.map(row => {
+            if (this.selected_ents.has(row.id)) {
+              return row.selected = true;
+            }
+          });
+          this.displayData = AllAttribData;
+        }
       }
       if (this.displayData.length > 0) {
         const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
@@ -144,6 +156,12 @@ export class AttributeComponent implements OnChanges {
     setTimeout(() => {
       this.generateTable(currentTab);
     }, 0);
+  }
+
+  resetTable() {
+    const rows = document.querySelectorAll('.selected-row');
+    rows.forEach(row => row.classList.remove('selected-row'));
+    this.selected_ents.clear();
   }
 
   selectRow(ent_id: string, event: Event) {

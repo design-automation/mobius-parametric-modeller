@@ -98,6 +98,7 @@ export class GIViewerComponent implements OnInit {
 
     public clickedEvent: Event;
     public attrTableSelect: Event;
+    public attrTableReset: number;
 
     /**
      * constructor
@@ -149,6 +150,10 @@ export class GIViewerComponent implements OnInit {
 
     attribTableSelected(event: Event) {
         this.attrTableSelect = event;
+    }
+
+    resetTable() {
+        this.attrTableReset = Date.now();
     }
 
     openModal(id: string) {

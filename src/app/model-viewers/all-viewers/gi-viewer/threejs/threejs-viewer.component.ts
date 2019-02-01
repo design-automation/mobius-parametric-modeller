@@ -232,6 +232,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 try {
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
+                    const rows = document.querySelector('selected-row');
+                    if (rows) { rows.classList.remove('selected-row'); }
                     this._model_error = false;
                     this._no_model = false;
                     this.render(this);

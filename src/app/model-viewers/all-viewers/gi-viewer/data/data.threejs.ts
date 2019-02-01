@@ -619,21 +619,22 @@ export class DataThreejs {
             const element = materials[index];
             let mat;
             if (index === 0) {
-                if (element.type === MaterialType.MeshPhongMaterial) {
-                    delete element.type;
-                    element.color = colorf;
-                    mat = new THREE.MeshPhongMaterial(element);
-                }
+                delete element.type; element.color = colorf;
+                mat = new THREE.MeshPhongMaterial(element);
             } else if (index === 1) {
-                if (element.type === MaterialType.MeshPhongMaterial) {
-                    delete element.type;
-                    element.color = colorb;
-                    mat = new THREE.MeshPhongMaterial(element);
-                }
+                delete element.type;
+                element.color = colorb;
+                mat = new THREE.MeshPhongMaterial(element);
             } else {
                 if (element.type === MaterialType.MeshPhongMaterial) {
                     delete element.type;
                     mat = new THREE.MeshPhongMaterial(element);
+                } else if (element.type === MaterialType.MeshPhysicalMaterial) {
+                    delete element.type;
+                    mat = new THREE.MeshPhysicalMaterial(element);
+                } else if (element.type === MaterialType.MeshLambertMaterial) {
+                    delete element.type;
+                    mat = new THREE.MeshLambertMaterial(element);
                 }
             }
             material_arr.push(mat);
@@ -913,5 +914,6 @@ enum objType {
 
 enum MaterialType {
     MeshPhongMaterial = 'MeshPhongMaterial',
-    MeshStandardMaterial = 'MeshStandardMaterial'
+    MeshLambertMaterial = 'MeshLambertMaterial',
+    MeshPhysicalMaterial = 'MeshPhysicalMaterial'
 }

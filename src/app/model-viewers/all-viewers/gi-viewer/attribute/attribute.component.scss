@@ -28,7 +28,7 @@ table {
   }
   tr.mat-row{
     height: 24px;
-    &.selected{
+    &.selected-row{
       .mat-cell{
         background-color: #e6e6e6;
       }

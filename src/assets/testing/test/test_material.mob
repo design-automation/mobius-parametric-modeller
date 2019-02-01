@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_jp99xuid1a",
+                "id": "node_fcywu83a68w",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -129,7 +129,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_44pgymxwx54",
+                                    "id": "node_n36t7a5ik7q",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -514,6 +514,26 @@
                                         },
                                         {
                                             "type": 0,
+                                            "ID": "prod-f3s7hi2ew4v",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "rand_pgons1",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "randPick ( skin , 50 )"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
                                             "ID": "prod-t8pyri6ycb",
                                             "enabled": true,
                                             "print": false,
@@ -521,12 +541,12 @@
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "skin@material",
+                                                    "value": "rand_pgons1@material",
                                                     "invalidVar": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "\"glass\""
+                                                    "value": "\"glass1\""
                                                 }
                                             ],
                                             "selected": false,
@@ -552,12 +572,84 @@
                                                 },
                                                 {
                                                     "name": "name",
-                                                    "value": "\"glass\"",
+                                                    "value": "\"glass1\"",
                                                     "default": 0
                                                 },
                                                 {
                                                     "name": "opacity",
                                                     "value": "0.7",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-qngiv4dmmf",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "rand_pgons2",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "randPick ( skin , 50 )"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-t5588z8vzaf",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "rand_pgons2@material",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "\"glass2\""
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-j64246m0bg9",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "render",
+                                                "name": "MaterialGlass"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "__none__"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "value": "\"glass2\"",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "opacity",
+                                                    "value": "0.2",
                                                     "default": 0
                                                 }
                                             ],
@@ -587,7 +679,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_npcmt8yz7m",
+                                                        "id": "node_9gk644mlet",
                                                         "position": {
                                                             "x": 5353.7099609375,
                                                             "y": 5392.28857421875
@@ -685,7 +777,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-01T00:54:26.184Z",
+    "last_updated": "2019-02-01T01:02:57.380Z",
     "version": 1,
     "settings": {}
 }

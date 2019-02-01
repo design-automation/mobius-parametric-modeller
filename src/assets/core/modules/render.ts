@@ -22,7 +22,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
  */
 export function MaterialGlass(__model__: GIModel, name: string, opacity: number): void {
     opacity = (opacity > 1) ? 1 : opacity;
-    opacity = (opacity < 1) ? 0 : opacity;
+    opacity = (opacity < 0) ? 0 : opacity;
     const val: string = JSON.stringify({opacity: opacity, transparent: true});
     __model__.attribs.add.setModelAttribValue(name, val);
 }

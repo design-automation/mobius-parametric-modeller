@@ -144,12 +144,20 @@ const typeCheckObj  = {
         return;
     },
     isEntityList: function(fn_name: string, arg_name: string, arg_list: string[]): void {
-        isStringListArg(fn_name, arg_name, arg_list, 'entity');
+        isListArg(fn_name, arg_name, arg_list, 'entity');
+        for (let i = 0; i < arg_list.length; i++) {
+            typeCheckObj.isEntity(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
         return;
     },
     // any: to catch undefined
     isAny: function(fn_name: string, arg_name: string, arg: string): void {
         isAnyArg(fn_name, arg_name, arg);
+        return;
+    },
+    // null: allow Null input
+    isNull: function(fn_name: string, arg_name: string, arg: string): void {
+        isNullArg(fn_name, arg_name, arg);
         return;
     },
     // list
@@ -415,6 +423,13 @@ function isAnyArg(fn_name: string, arg_name: string, arg: any): void {
     }
     return;
 }
+// Null
+function isNullArg(fn_name: string, arg_name: string, arg: any): void {
+    if (arg !== null) {
+        throw new Error(fn_name + ': ' + arg_name + ' is not null');
+    }
+    return;
+}
 // String
 function isStringArg(fn_name: string, arg_name: string, arg: any, typ: string): void {
     if (typeof arg !== 'string') {
@@ -426,9 +441,6 @@ function isStringListArg(fn_name: string, arg_name: string, arg_list: any[], typ
     isListArg(fn_name, arg_name, arg_list, typ);
     for (let i = 0; i < arg_list.length; i++) {
         isStringArg(fn_name, arg_name + '[' + i + ']', arg_list[i], typ);
-        // if (arg_list[i].slice(2).length === 0) {
-        //     throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' needs to have an index specified');
-        // }
     }
     return;
 }

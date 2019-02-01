@@ -16200,7 +16200,7 @@
 			},
 			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/assets/core/modules/render.ts",
 			"comment": {
-				"shortText": "The `render` module has functions for defining various settings for the 3D viewer.\nThese settings are saved as attributes at the model level.\nThese include things like creating more advanced materials."
+				"shortText": "The `render` module has functions for defining various settings for the 3D viewer.\nThese settings are saved as attributes at the model level.\nThese include things like creating more advanced materials.\nFor more informtion, see the threejs docs: https://threejs.org/"
 			},
 			"children": [
 				{
@@ -16223,7 +16223,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 31,
+									"line": 32,
 									"character": 19
 								}
 							],
@@ -16240,7 +16240,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 32,
+									"line": 33,
 									"character": 16
 								}
 							],
@@ -16260,7 +16260,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 30,
+							"line": 31,
 							"character": 21
 						}
 					]
@@ -16281,7 +16281,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 44,
+									"line": 45,
 									"character": 9
 								}
 							],
@@ -16296,7 +16296,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 45,
+									"line": 46,
 									"character": 11
 								}
 							],
@@ -16311,7 +16311,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 46,
+									"line": 47,
 									"character": 9
 								}
 							],
@@ -16326,7 +16326,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 48,
+									"line": 49,
 									"character": 12
 								}
 							],
@@ -16341,7 +16341,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 47,
+									"line": 48,
 									"character": 12
 								}
 							],
@@ -16364,7 +16364,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 43,
+							"line": 44,
 							"character": 19
 						}
 					]
@@ -16389,7 +16389,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 17,
+									"line": 18,
 									"character": 8
 								}
 							],
@@ -16406,7 +16406,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 18,
+									"line": 19,
 									"character": 8
 								}
 							],
@@ -16423,7 +16423,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/render.ts",
-									"line": 16,
+									"line": 17,
 									"character": 9
 								}
 							],
@@ -16444,7 +16444,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 15,
+							"line": 16,
 							"character": 18
 						}
 					]
@@ -16465,7 +16465,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Creates a Basic material and saves it in the model attributes.\n~\n[See the threejs docs](threejs.org/docs/#api/en/materials/MeshBasicMaterial)\n~\nAdditional material properties can be set by calling the functions for the more advanced materials.\nThese include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.\nEach of these more advanced materials allows you to specify certain additional settings.\n~\nIn order to assign a material to polygons in the model, a polygon attribute called 'material\nneeds to be created. The value for each polygon must either be null, or must be a material name.",
+								"shortText": "Creates a Basic material and saves it in the model attributes.\n~\n[See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)\n~\nAdditional material properties can be set by calling the functions for the more advanced materials.\nThese include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.\nEach of these more advanced materials allows you to specify certain additional settings.\n~\nIn order to assign a material to polygons in the model, a polygon attribute called 'material\nneeds to be created. The value for each polygon must either be null, or must be a material name.",
 								"returns": "void\n"
 							},
 							"parameters": [
@@ -16564,7 +16564,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 96,
+							"line": 97,
 							"character": 29
 						}
 					]
@@ -16585,7 +16585,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Creates a glass material with an opacity setting. The material will default to a Phong material.\n~\nIn order to assign a material to polygons in the model, a polygon attribute called 'material\nneeds to be created. The value for each polygon must either be null, or must be a material name.",
+								"shortText": "Creates a glass material with an opacity setting. The material will default to a Phong material.\n~\nIn order to assign a material to polygons in the model, a polygon attribute called 'material'\nneeds to be created. The value for each polygon must either be null, or must be a material name.",
 								"returns": "void\n"
 							},
 							"parameters": [
@@ -16639,7 +16639,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 61,
+							"line": 62,
 							"character": 29
 						}
 					]
@@ -16715,7 +16715,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 132,
+							"line": 133,
 							"character": 31
 						}
 					]
@@ -16820,7 +16820,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 159,
+							"line": 160,
 							"character": 29
 						}
 					]
@@ -16938,7 +16938,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 227,
+							"line": 228,
 							"character": 32
 						}
 					]
@@ -17042,7 +17042,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 193,
+							"line": 194,
 							"character": 33
 						}
 					]
@@ -17082,7 +17082,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 248,
+							"line": 249,
 							"character": 17
 						}
 					]
@@ -17122,7 +17122,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 253,
+							"line": 254,
 							"character": 19
 						}
 					]
@@ -17165,7 +17165,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 258,
+							"line": 259,
 							"character": 20
 						}
 					]
@@ -17206,7 +17206,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 263,
+							"line": 264,
 							"character": 16
 						}
 					]
@@ -17247,7 +17247,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 34,
+							"line": 35,
 							"character": 36
 						}
 					]
@@ -17288,7 +17288,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 20,
+							"line": 21,
 							"character": 33
 						}
 					]
@@ -17351,7 +17351,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 266,
+							"line": 267,
 							"character": 32
 						}
 					]
@@ -25066,7 +25066,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-									"line": 103,
+									"line": 109,
 									"character": 29
 								}
 							]
@@ -25137,7 +25137,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-									"line": 143,
+									"line": 149,
 									"character": 22
 								}
 							]

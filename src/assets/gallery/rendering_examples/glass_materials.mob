@@ -3,7 +3,7 @@
     "author": "new_user",
     "flowchart": {
         "name": "Glass Materials",
-        "description": "This example show how to define two material and how to apply them to some polygons.\n\nOne of teh materials is a glass material.",
+        "description": "This example show how to define two materials and how to apply them to some polygons.\n\nOne of the materials is a glass material.\n",
         "language": "js",
         "meta": {
             "selected_nodes": [
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_sptdpdraff",
+                "id": "node_b5jcffod07t",
                 "position": {
                     "x": 5338.904296875,
                     "y": 4903.47021484375
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make some geometry",
-                                    "id": "node_vyc9m35dto",
+                                    "id": "node_h5nc8lmzj46",
                                     "position": {
                                         "x": 5346.67138671875,
                                         "y": 5071.5751953125
@@ -432,7 +432,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "apply materials",
-                                                        "id": "node_dz8xo6r8o4b",
+                                                        "id": "node_szcgvvd2ah",
                                                         "position": {
                                                             "x": 5286.47314453125,
                                                             "y": 5230.0283203125
@@ -716,7 +716,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_xldrh3j085f",
+                                                                            "id": "node_pq4cqmisja",
                                                                             "position": {
                                                                                 "x": 5352.21923828125,
                                                                                 "y": 5385.576171875
@@ -828,7 +828,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-01T08:34:50.450Z",
+    "last_updated": "2019-02-01T23:01:50.619Z",
     "version": 1,
     "settings": {}
 }

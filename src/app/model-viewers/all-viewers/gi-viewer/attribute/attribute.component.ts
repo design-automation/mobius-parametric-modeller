@@ -80,7 +80,6 @@ export class AttributeComponent implements OnChanges {
       const ThreeJSData = this.data.attribs.threejs;
       if (Number(tabIndex) === 9) {
         this.displayData = ThreeJSData.getModelAttribsForTable();
-        console.log('hello', this.displayData);
       } else {
         const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
         this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
@@ -90,7 +89,6 @@ export class AttributeComponent implements OnChanges {
           const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, tab_map[tabIndex]);
           this.displayData = SelectedAttribData;
         } else {
-          console.log(tab_map[tabIndex]);
           const AllAttribData = ThreeJSData.getAttribsForTable(tab_map[tabIndex]);
           AllAttribData.map(row => {
             if (this.selected_ents.has(row.id)) {
@@ -165,6 +163,10 @@ export class AttributeComponent implements OnChanges {
   }
 
   selectRow(ent_id: string, event: Event) {
+    const currentTab = this.getCurrentTab();
+    if (currentTab === 9) {
+      return;
+    }
     const ent_type = ent_id.substr(0, 2);
     const id = Number(ent_id.substr(2));
     const target = event.target || event.srcElement || event.currentTarget;

@@ -48,13 +48,13 @@ export class GIGeomThreejs {
             emissive: 0x000000,
             shininess: 0,
             side: THREE.FrontSide
-        }
+        };
         const mat_b: object = {
             specular: 0x000000,
             emissive: 0x000000,
             shininess: 0,
             side: THREE.BackSide
-        }
+        };
         const materials: object[] = [this._getMaterial( mat_f ), this._getMaterial( mat_b )];
         const material_names:  string[] = ['default_front', 'default_back'];
         // get the material attribute from polygons

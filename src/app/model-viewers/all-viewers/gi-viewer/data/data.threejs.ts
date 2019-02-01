@@ -626,7 +626,10 @@ export class DataThreejs {
                 element.color = colorb;
                 mat = new THREE.MeshPhongMaterial(element);
             } else {
-                if (element.type === MaterialType.MeshPhongMaterial) {
+                if (element.type === MaterialType.MeshBasicMaterial) {
+                    delete element.type;
+                    mat = new THREE.MeshBasicMaterial(element);
+                } else if (element.type === MaterialType.MeshPhongMaterial) {
                     delete element.type;
                     mat = new THREE.MeshPhongMaterial(element);
                 } else if (element.type === MaterialType.MeshPhysicalMaterial) {
@@ -916,6 +919,7 @@ enum objType {
 }
 
 enum MaterialType {
+    MeshBasicMaterial = 'MeshBasicMaterial',
     MeshStandardMaterial = 'MeshStandardMaterial',
     MeshLambertMaterial = 'MeshLambertMaterial',
     MeshPhongMaterial = 'MeshPhongMaterial',

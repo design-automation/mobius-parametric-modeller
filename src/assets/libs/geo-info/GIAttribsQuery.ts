@@ -18,8 +18,16 @@ export class GIAttribsQuery {
         this._attribs_maps = attribs_maps;
     }
     /**
+     * Checks if an attribute with this name exists.
+     * @param name
+     */
+    public hasModelAttrib(name: string): boolean {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        return attrib.has(name);
+    }
+    /**
      * Get a model attrib value
-     * @param ent_type
      * @param name
      */
     public getModelAttribValue(name: string): TAttribDataTypes|TAttribDataTypes[] {

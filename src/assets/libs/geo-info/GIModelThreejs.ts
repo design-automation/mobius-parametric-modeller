@@ -77,7 +77,7 @@ export class GIModelThreejs {
             materials: materials,
             material_groups: material_groups
         };
-        // console.log(data);
+        console.log(data);
         return data;
     }
 }

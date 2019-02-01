@@ -635,6 +635,9 @@ export class DataThreejs {
                 } else if (element.type === MaterialType.MeshLambertMaterial) {
                     delete element.type;
                     mat = new THREE.MeshLambertMaterial(element);
+                } else if (element.type === MaterialType.MeshStandardMaterial) {
+                    delete element.type;
+                    mat = new THREE.MeshStandardMaterial(element);
                 }
             }
             material_arr.push(mat);
@@ -913,7 +916,8 @@ enum objType {
 }
 
 enum MaterialType {
-    MeshPhongMaterial = 'MeshPhongMaterial',
+    MeshStandardMaterial = 'MeshStandardMaterial',
     MeshLambertMaterial = 'MeshLambertMaterial',
+    MeshPhongMaterial = 'MeshPhongMaterial',
     MeshPhysicalMaterial = 'MeshPhysicalMaterial'
 }

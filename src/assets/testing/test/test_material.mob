@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_uarcxchyky",
+                "id": "node_15wpwnlbssy",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -129,7 +129,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_6sun7k9cd59",
+                                    "id": "node_nv5arasa2mt",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -554,12 +554,64 @@
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-76yx3y3bwar",
+                                            "ID": "prod-98yotcv6me5",
+                                            "enabled": false,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "render",
+                                                "name": "LambertMaterial"
+                                            },
+                                            "argCount": 8,
+                                            "args": [
+                                                {
+                                                    "name": "__none__"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "value": "\"glass1\"",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select_side",
+                                                    "value": "2",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select_vert_colours",
+                                                    "value": "1",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "opacity",
+                                                    "value": "0.7",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "diffuse_colour",
+                                                    "value": "[1 , 1 , 1]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "emissive_colour",
+                                                    "value": "[1 , 1 , 1]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-8r7p2m73029",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
                                                 "module": "render",
-                                                "name": "MaterialGlass"
+                                                "name": "GlassMaterial"
                                             },
                                             "argCount": 4,
                                             "args": [
@@ -626,12 +678,64 @@
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-j64246m0bg9",
+                                            "ID": "prod-ob0815icu7",
+                                            "enabled": false,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "render",
+                                                "name": "LambertMaterial"
+                                            },
+                                            "argCount": 8,
+                                            "args": [
+                                                {
+                                                    "name": "__none__"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "value": "\"glass2\"",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select_side",
+                                                    "value": "2",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select_vert_colours",
+                                                    "value": "1",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "opacity",
+                                                    "value": "0.2",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "diffuse_colour",
+                                                    "value": "[1 , 1 , 1]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "emissive_colour",
+                                                    "value": "[1 , 1 , 1]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-hdi6vyi69h",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
                                                 "module": "render",
-                                                "name": "MaterialGlass"
+                                                "name": "GlassMaterial"
                                             },
                                             "argCount": 4,
                                             "args": [
@@ -698,7 +802,7 @@
                                         {
                                             "type": 4,
                                             "ID": "prod-8huiisof6m4",
-                                            "enabled": true,
+                                            "enabled": false,
                                             "print": false,
                                             "argCount": 2,
                                             "args": [
@@ -717,7 +821,7 @@
                                                 {
                                                     "type": 13,
                                                     "ID": "",
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~16",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~18",
                                                     "meta": {
                                                         "name": "",
                                                         "module": ""
@@ -731,7 +835,7 @@
                                                 },
                                                 {
                                                     "type": 0,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~16",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~18",
                                                     "ID": "prod-7dbo4wkoog",
                                                     "enabled": true,
                                                     "print": false,
@@ -751,7 +855,8 @@
                                                     "hasError": false
                                                 }
                                             ],
-                                            "hasError": false
+                                            "hasError": false,
+                                            "selected": false
                                         }
                                     ],
                                     "state": {
@@ -776,7 +881,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_o7fy9s7nklm",
+                                                        "id": "node_89yhuscsq5s",
                                                         "position": {
                                                             "x": 5353.7099609375,
                                                             "y": 5392.28857421875
@@ -874,7 +979,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-01T01:08:42.351Z",
+    "last_updated": "2019-02-01T04:32:28.327Z",
     "version": 1,
     "settings": {}
 }

@@ -36,6 +36,14 @@
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/flow_examples/"
         },
         {
+            "name": "Rendering Examples",
+            "files": [
+                "glass_materials.mob&node=1",
+                "front_and_back_materials.mob&node=1"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/rendering_examples/"
+        },
+        {
             "name": "User Function Examples",
             "files": [
                 "pyramids_from_pgons.mob&node=1"

@@ -24,6 +24,7 @@ export interface IGeomPack {
 // Types
 export type TRay = [Txyz, Txyz]; // an origin and a direction vector
 export type TPlane = [Txyz, Txyz, Txyz]; // an origin, an x vec and a y vec
+export type TBBox = [Txyz, Txyz, Txyz, Txyz]; // an origin, an x vec and a y vec
 export type TQuery = string;
 export type TId = string;
 export type TColor = [number, number, number]; // TODO replace with Txyz

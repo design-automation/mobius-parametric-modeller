@@ -248,6 +248,16 @@ const typeCheckObj  = {
         });
         return;
     },
+    isBBox: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TBbox = Txyz, Txyz, Txyz]
+        // four coords
+        isListArg(fn_name, arg_name, arg_list, 'origin, min corner, max corner, size');
+        isListLenArg(fn_name, arg_name, arg_list, 4);
+        typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
+        [0, 1, 2, 3].forEach((i) => {
+            typeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        });
+        return;
+    },
     isPlaneList: function(fn_name: string, arg_name: string, arg_list: number[][][]): void {
         // Add if required
     },

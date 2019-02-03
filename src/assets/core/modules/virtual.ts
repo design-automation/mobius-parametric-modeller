@@ -11,12 +11,13 @@
  *
  */
 
-import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx, TBBox } from '@libs/geo-info/common';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
 import { _normal } from './calc';
+import { TPline } from 'dist/assets/libs/geo-info/common';
 
 // ================================================================================================
 /**
@@ -163,6 +164,54 @@ export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane
     return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
+function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
+    const posis_set_i: Set<number> = new Set();
+    for (const ent_arr of ents_arr) {
+        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        for (const ent_posi_i of ent_posis_i) {
+            posis_set_i.add(ent_posi_i);
+        }
+    }
+    const unique_posis_i = Array.from(posis_set_i);
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const corner_min: Txyz = [Infinity, Infinity, Infinity];
+    const corner_max: Txyz = [-Infinity, -Infinity, -Infinity];
+    for (const unique_xyz of unique_xyzs) {
+        if (unique_xyz[0] < corner_min[0]) { corner_min[0] = unique_xyz[0]; }
+        if (unique_xyz[1] < corner_min[1]) { corner_min[1] = unique_xyz[1]; }
+        if (unique_xyz[2] < corner_min[2]) { corner_min[2] = unique_xyz[2]; }
+        if (unique_xyz[0] > corner_max[0]) { corner_max[0] = unique_xyz[0]; }
+        if (unique_xyz[1] > corner_max[1]) { corner_max[1] = unique_xyz[1]; }
+        if (unique_xyz[2] > corner_max[2]) { corner_max[2] = unique_xyz[2]; }
+    }
+    return [
+        [(corner_min[0] + corner_max[0]) / 2, (corner_min[1] + corner_max[1]) / 2, (corner_min[2] + corner_max[2]) / 2],
+        corner_min,
+        corner_max,
+        [corner_max[0] - corner_min[0], corner_max[1] + corner_min[1], corner_max[2] + corner_min[2]]
+    ];
+}
+/**
+ * Returns the bounding box of the entities.
+ * The bounding box is an imaginary box that completley contains all the geometry.
+ * The box is always aligned with the global x, y, and z axes.
+ * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+ * - The first [x, y, z] is the coordinates of the centre of the bounding box. 
+ * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
+ * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
+ * - The fourth [x, y, z] is the dimensions of the bounding box.
+ * @param __model__
+ * @param entities The etities for which to calculate the bounding box.
+ * @returns The bounding box consisting of a list of four lists.
+ */
+export function GetBBox(__model__: GIModel, entities: TId|TId[]): TBBox {
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    // --- Error Check ---
+    const ents_arr: TEntTypeIdx[] = checkIDs('virtual.BBox', 'entities', entities, ['isIDList'], null) as TEntTypeIdx[]; // all
+    // --- Error Check ---
+    return _getBoundingBox(__model__, ents_arr);
+}
+// ================================================================================================
 /**
  * Visualises a ray by adding geometry to the model.
  * @param __model__
@@ -213,6 +262,7 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
     const y_vec: Txyz = vecMult(plane[2], scale);
     let x_end: Txyz = vecAdd(origin, x_vec);
     let y_end: Txyz = vecAdd(origin, y_vec);
+    const z_end: Txyz = vecAdd(origin, vecMult(vecCross(x_vec, y_vec), 0.1));
     const plane_corners: Txyz[] = [
         vecAdd(x_end, y_vec),
         vecSub(y_end, x_vec),
@@ -233,6 +283,10 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
     const y_end_posi_i: number = __model__.geom.add.addPosi();
     __model__.attribs.add.setPosiCoords(y_end_posi_i, y_end);
     const y_pline_i = __model__.geom.add.addPline([origin_posi_i, y_end_posi_i]);
+    // create the z axis
+    const z_end_posi_i: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(z_end_posi_i, z_end);
+    const z_pline_i = __model__.geom.add.addPline([origin_posi_i, z_end_posi_i]);
     // create pline for plane
     const corner_posis_i: number[] = [];
     for (const corner of plane_corners) {
@@ -246,7 +300,60 @@ export function VisPlane(__model__: GIModel, plane: TPlane, scale: number): TId[
         idsMake([EEntType.POINT, point_i]),
         idsMake([EEntType.PLINE, x_pline_i]),
         idsMake([EEntType.PLINE, y_pline_i]),
+        idsMake([EEntType.PLINE, z_pline_i]),
         idsMake([EEntType.PLINE, plane_i])
     ] as TId[];
+}
+// ================================================================================================
+/**
+ * Visualises a bounding box by adding geometry to the model.
+ * @param __model__
+ * @param bbox A list of lists.
+ * @returns Twelve polylines representing the box.
+ * @example bbox1 = virtual.viBBox(position1, vector1, [0,1,0])
+ * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
+ */
+export function visBBox(__model__: GIModel, bbox: TBBox): TId[] {
+    // --- Error Check ---
+    const fn_name = 'virtual.visBBox';
+    checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']);
+    // --- Error Check ---
+    const min: Txyz = bbox[1];
+    const max: Txyz = bbox[2];
+    // bottom
+    const ps0: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps0, min);
+    const ps1: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps1, [max[0], min[1], min[2]]);
+    const ps2: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps2, [max[0], max[1], min[2]]);
+    const ps3: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps3, [min[0], max[1], min[2]]);
+    // top
+    const ps4: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps4, [min[0], min[1], max[2]]);
+    const ps5: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps5, [max[0], min[1], max[2]]);
+    const ps6: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps6, max);
+    const ps7: number = __model__.geom.add.addPosi();
+    __model__.attribs.add.setPosiCoords(ps7, [min[0], max[1], max[2]]);
+    // plines bottom
+    const pl0 = __model__.geom.add.addPline([ps0, ps1]);
+    const pl1 = __model__.geom.add.addPline([ps1, ps2]);
+    const pl2 = __model__.geom.add.addPline([ps2, ps3]);
+    const pl3 = __model__.geom.add.addPline([ps3, ps0]);
+    // plines top
+    const pl4 = __model__.geom.add.addPline([ps4, ps5]);
+    const pl5 = __model__.geom.add.addPline([ps5, ps6]);
+    const pl6 = __model__.geom.add.addPline([ps6, ps7]);
+    const pl7 = __model__.geom.add.addPline([ps7, ps4]);
+    // plines vertical
+    const pl8 = __model__.geom.add.addPline([ps0, ps4]);
+    const pl9 = __model__.geom.add.addPline([ps1, ps5]);
+    const pl10 = __model__.geom.add.addPline([ps2, ps6]);
+    const pl11 = __model__.geom.add.addPline([ps3, ps7]);
+    // return
+    return [pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7, pl8, pl9, pl10, pl11].map(pl => idsMake([EEntType.PLINE, pl])) as TId[];
 }
 // ================================================================================================

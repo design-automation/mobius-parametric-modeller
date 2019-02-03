@@ -203,7 +203,8 @@ export type TPgon = number; // [face,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
 export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
 export type TAttribDataTypes = string | string[] | number | number[];
-export type TAttribValuesArr = Array<[number[], TAttribDataTypes]>;
+export type TEntAttribValuesArr = Array<[number[], TAttribDataTypes]>;
+export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
 // interfaces for JSON data
 
 export const RE_SPACES: RegExp = /\s+/g;
@@ -224,7 +225,7 @@ export interface IAttribData {
     name: string;
     data_type: EAttribDataTypeStrs;
     data_size: number;
-    data: TAttribValuesArr;
+    data: TEntAttribValuesArr;
 }
 export interface IAttribsData {
     positions: IAttribData[];
@@ -236,6 +237,7 @@ export interface IAttribsData {
     polylines: IAttribData[];
     polygons: IAttribData[];
     collections: IAttribData[];
+    model: TModelAttribValuesArr;
 }
 export interface IModelData {
     geometry: IGeomData;

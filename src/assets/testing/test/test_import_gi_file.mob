@@ -1,9 +1,9 @@
 {
-    "name": "pig_head",
+    "name": "test_import_gi_file",
     "author": "new_user",
     "flowchart": {
-        "name": "Test Geometry: Pig Head",
-        "description": "This flowchart downloads and imports a model of a pig head in the gi-json format.",
+        "name": "Untitled",
+        "description": "",
         "language": "js",
         "meta": {
             "selected_nodes": [
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_irntlhnrgs",
+                "id": "node_92qs6y0ja1l",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -22,29 +22,46 @@
                 "type": "start",
                 "procedure": [
                     {
+                        "type": 13,
+                        "ID": "",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
                         "type": 10,
-                        "ID": "prod-lzxb8gx0zz",
+                        "ID": "prod-ggzyfiw8uv5",
                         "enabled": true,
                         "print": false,
-                        "selected": false,
                         "argCount": 2,
                         "meta": {
                             "module": "Input",
                             "name": "Constant",
-                            "inputMode": "3",
-                            "description": "The URL where to download the gi-json model."
+                            "inputMode": 4,
+                            "description": ""
                         },
                         "args": [
                             {
                                 "name": "const_name",
                                 "value": "model",
-                                "default": 0
+                                "default": 0,
+                                "invalidVar": false
                             },
                             {
                                 "name": "__input__",
-                                "default": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/pig_head_rgb.gi"
+                                "default": {
+                                    "name": "test_export_gi_file.gi"
+                                }
                             }
                         ],
+                        "selected": false,
                         "hasError": false
                     }
                 ],
@@ -52,7 +69,6 @@
                     "procedure": []
                 },
                 "input": {
-                    "id": "ac1f91d8-a5ee-232f-0a9e-b4f806942a7d",
                     "name": "input",
                     "type": 0,
                     "edges": [],
@@ -63,14 +79,12 @@
                     "parentNode": "~flowchart~nodes~0"
                 },
                 "output": {
-                    "id": "5bfc377c-7df0-73af-984e-e69b4a5593bb",
                     "name": "output",
                     "type": 1,
                     "edges": [
                         {
                             "source": "~flowchart~nodes~0~output",
                             "target": {
-                                "id": "65d6a8ba-6ff4-c9a9-f3bc-774bce0c3d1d",
                                 "name": "input",
                                 "type": 0,
                                 "edges": [
@@ -82,7 +96,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_hf7bhjajmea",
+                                    "id": "node_4au92xnkxe4",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -106,7 +120,7 @@
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-jz9s5b2cilp",
+                                            "ID": "prod-txqgt1ycrs",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
@@ -117,7 +131,7 @@
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "ents",
+                                                    "value": "res",
                                                     "invalidVar": false
                                                 },
                                                 {
@@ -144,14 +158,12 @@
                                     },
                                     "input": "~flowchart~nodes~0~output~edges~0~target",
                                     "output": {
-                                        "id": "4b9c687b-9e9a-01f6-ea1e-58c47455d9e1",
                                         "name": "output",
                                         "type": 1,
                                         "edges": [
                                             {
                                                 "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output",
                                                 "target": {
-                                                    "id": "726c034e-4129-0add-bce5-4c295ceafe9d",
                                                     "name": "input",
                                                     "type": 0,
                                                     "edges": [
@@ -163,7 +175,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_02a9qmiwrgnz",
+                                                        "id": "node_gnbd9o190jl",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -216,7 +228,6 @@
                                                         },
                                                         "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
                                                         "output": {
-                                                            "id": "60d5b8cd-9dd8-1848-e1e0-d02f34c40828",
                                                             "name": "output",
                                                             "type": 1,
                                                             "edges": [],
@@ -259,7 +270,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-02T09:23:20.689Z",
+    "last_updated": "2019-02-03T08:59:22.543Z",
     "version": 1,
     "settings": {}
 }

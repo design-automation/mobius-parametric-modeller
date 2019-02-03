@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntType, IAttribsMaps, EEntTypeStr } from './common';
+import { IAttribsData, IAttribData, TAttribDataTypes, EEntType, IAttribsMaps, EEntTypeStr, TModelAttribValuesArr } from './common';
 import { GIAttribMap } from './GIAttribMap';
 
 /**
@@ -39,9 +39,7 @@ export class GIAttribsIO {
      * The existing data in the model is not deleted.
      * @param model_data The JSON data for the model.
      */
-    public setData(model_data: IModelData): void {
-        // data for all the new atttributes
-        const attribs_data: IAttribsData = model_data.attributes;
+    public setData(attribs_data: IAttribsData): void {
         // add the attribute data
         if (attribs_data.positions !== undefined) {
             this._setAttribs(attribs_data.positions, EEntType.POSI);
@@ -70,6 +68,26 @@ export class GIAttribsIO {
         if (attribs_data.collections !== undefined) {
             this._setAttribs(attribs_data.collections, EEntType.COLL);
         }
+        if (attribs_data.model !== undefined) {
+            this._setModelAttribs(attribs_data.model);
+        }
+    }
+    /**
+     * Returns the JSON data for this model.
+     */
+    public getData(): IAttribsData {
+        return {
+            positions: Array.from(this._attribs_maps.ps.values()).map(attrib => attrib.getData()),
+            vertices: Array.from(this._attribs_maps._v.values()).map(attrib => attrib.getData()),
+            edges: Array.from(this._attribs_maps._e.values()).map(attrib => attrib.getData()),
+            wires: Array.from(this._attribs_maps._w.values()).map(attrib => attrib.getData()),
+            faces: Array.from(this._attribs_maps._f.values()).map(attrib => attrib.getData()),
+            points: Array.from(this._attribs_maps.pt.values()).map(attrib => attrib.getData()),
+            polylines: Array.from(this._attribs_maps.pl.values()).map(attrib => attrib.getData()),
+            polygons: Array.from(this._attribs_maps.pg.values()).map(attrib => attrib.getData()),
+            collections: Array.from(this._attribs_maps.co.values()).map(attrib => attrib.getData()),
+            model: Array.from(this._attribs_maps.mo)
+        };
     }
     // ============================================================================
     // Private methods
@@ -85,6 +103,14 @@ export class GIAttribsIO {
         from_attrib.forEach( (value, name) => {
             to_attrib.set(name, value);
         });
+    }
+    /**
+     * From JSON data
+     * Existing attributes are deleted
+     * @param new_attribs_data
+     */
+    private _setModelAttribs(new_attribs_data: TModelAttribValuesArr) {
+        this._attribs_maps[EEntTypeStr[ EEntType.MOD ]] = new Map(new_attribs_data);
     }
     /**
      * From another model
@@ -117,7 +143,7 @@ export class GIAttribsIO {
      * @param new_attribs_data
      */
     private _setAttribs(new_attribs_data: IAttribData[], ent_type: EEntType) {
-        const to_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        const to_attribs: Map<string, GIAttribMap> = new Map();
         new_attribs_data.forEach( new_attrib_data => {
             const name: string = new_attrib_data.name;
             // create a new attrib
@@ -126,5 +152,6 @@ export class GIAttribsIO {
             // set the data
             to_attrib.setEntsVals(new_attrib_data.data);
         });
+        this._attribs_maps[EEntTypeStr[ ent_type ]] = to_attribs;
     }
 }

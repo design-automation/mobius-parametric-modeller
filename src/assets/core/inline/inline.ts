@@ -1,16 +1,17 @@
+
 export const inline_query_expr = [
-    ['#@name == value', 'Search attributes equal to a given value'],
-    ['#@name[i] == value', 'Search attribute index i equal to a given value'],
-    ['#@name != value', 'Search attributes not equal to a given value'],
-    ['#@name[i] != value', 'Search attribute index not equal to a given value'],
-    ['#@name > value', 'Search attributes greater than a given value'],
-    ['#@name[i] > value', 'Search attribute index greater than a given value'],
-    ['#@name >= value', 'Search attributes greater than or equal to a given value'],
-    ['#@name[i] >= value', 'Search attribute index greater than or equal to a given value'],
-    ['#@name < value', 'Search attributes less than a given value'],
-    ['#@name[i] < value', 'Search attribute index less than a given value'],
-    ['#@name <= value', 'Search attributes less than or equal to a given value'],
-    ['#@name[i] <= value', 'Search attribute index less than or equal to a given value']
+    ['#@name == value', 'Search for entities with attributes equal to a given value'],
+    ['#@name[i] == value', 'Search for entities with attributes with index equal to a given value'],
+    ['#@name != value', 'Search for entities with attributes not equal to a given value'],
+    ['#@name[i] != value', 'Search for entities with attributes with index not equal to a given value'],
+    ['#@name > value', 'Search for entities with attributes greater than a given value'],
+    ['#@name[i] > value', 'Search for entities with attributes with index greater than a given value'],
+    ['#@name >= value', 'Search for entities with attributes greater than or equal to a given value'],
+    ['#@name[i] >= value', 'Search for entities with attributes with index greater than or equal to a given value'],
+    ['#@name < value', 'Search for entities with attributes less than a given value'],
+    ['#@name[i] < value', 'Search for entities with attributes with index less than a given value'],
+    ['#@name <= value', 'Search for entities with attributes less than or equal to a given value'],
+    ['#@name[i] <= value', 'Search for entities with attributes with index less than or equal to a given value']
 ];
 
 export const inline_sort_expr = [
@@ -19,7 +20,7 @@ export const inline_sort_expr = [
 ];
 
 const constants = [
-    ['PI', 'Generates a list of integers as a range'],
+    ['PI', 'The mathematical constant PI, 3.141... '],
     ['XY', 'A plane at the origin, aligned with the XY plane'],
     ['YZ', 'A plane at the origin, aligned with the YZ plane'],
     ['ZX', 'A plane at the origin, aligned with the ZX plane'],
@@ -29,11 +30,17 @@ const constants = [
  ];
 
 const lists = [
-    ['range(start, end)', 'Generates a list of integers as a range'],
-    ['length(list)', 'Returns the number of items in the list'],
-    ['shuffle(list)', 'Shuffles the items in a list in random order'],
-    ['zip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list.'],
-    ['zip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list.']
+    ['range(start, end)', 'Generates a list of integers as a range, from start to end'],
+    ['isList(list)', 'Returns true if this is a list, false otherwise.'],
+    ['listLen(list)', 'Returns the number of items in the list'],
+    ['listCopy(list)', 'Returns a copy of the list'],
+    ['listFind(list, val)', 'Returns the index of the first occurence of the value in the list, or -1 if not found'],
+    ['listHas(list, val)', 'Returns true if the list contains the value, false otherwise'],
+    ['listJoin(list1, list2)', 'Joins two lists into a single list'],
+    ['listFlat(list, depth?)', 'Returns a copy of the nested list, flattened to the specified depth'],
+    ['listSlice(start, end?)', 'Return a sub-list from the list'],
+    ['listZip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list'],
+    ['lisZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
  ];
 
  const vectors = [

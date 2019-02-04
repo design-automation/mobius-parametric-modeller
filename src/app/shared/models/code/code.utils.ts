@@ -302,7 +302,6 @@ export class CodeUtils {
         //     }
         // }
         // return res.join(' ');
-
         if (!val) { return; }
         const res = val.split(' ');
         for (const i in res) {
@@ -318,10 +317,10 @@ export class CodeUtils {
                 let postf = '';
                 if (atIndex === 0) {
                     val_0 = null;
-                    val_1 = val.slice(1);
+                    val_1 = res[i].slice(1);
                 } else {
-                    val_0 = val.slice(0, atIndex);
-                    val_1 = val.slice(atIndex + 1);
+                    val_0 = res[i].slice(0, atIndex);
+                    val_1 = res[i].slice(atIndex + 1);
                     while (val_0[0] === '[') {
                         val_0 = val_0.substring(1, val_0.length);
                         pref += '[';

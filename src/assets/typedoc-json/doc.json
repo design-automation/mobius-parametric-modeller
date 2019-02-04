@@ -16820,7 +16820,7 @@
 									"character": 16
 								}
 							],
-							"defaultValue": "\"rgb\""
+							"defaultValue": "\"apply_rgb\""
 						}
 					],
 					"groups": [
@@ -17041,7 +17041,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Creates a Basic material and saves it in the model attributes.\n~\n[See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)\n~\nAdditional material properties can be set by calling the functions for the more advanced materials.\nThese include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.\nEach of these more advanced materials allows you to specify certain additional settings.\n~\nIn order to assign a material to polygons in the model, a polygon attribute called 'material\nneeds to be created. The value for each polygon must either be null, or must be a material name.",
+								"shortText": "Creates a Basic material and saves it in the model attributes.\n~\n[See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)\n~\nThe colour pf teh material can either ignore or apply the vertex rgb colours.\nIf 'apply' id selected, then the actual colour will be a combination of the material colour\nand the vertex colours, as specified by the a vertex attribute called 'rgb'.\nIn such a case, if material colour is set to white, then it will\nhave no effect, and the colour will be defined by the vertex [r,g,b] values.\n~\nAdditional material properties can be set by calling the functions for the more advanced materials.\nThese include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.\nEach of these more advanced materials allows you to specify certain additional settings.\n~\nIn order to assign a material to polygons in the model, a polygon attribute called 'material'.\nneeds to be created. The value for each polygon must either be null, or must be a material name.",
 								"returns": "void\n"
 							},
 							"parameters": [
@@ -17073,6 +17073,35 @@
 								},
 								{
 									"id": 2184,
+									"name": "colour",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "The diffuse colour, as [r, g, b] values between 0 and 1. White is [1, 1, 1]."
+									},
+									"type": {
+										"type": "reference",
+										"name": "Txyz",
+										"id": 260
+									}
+								},
+								{
+									"id": 2185,
+									"name": "opacity",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque)."
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2186,
 									"name": "select_side",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17087,7 +17116,7 @@
 									}
 								},
 								{
-									"id": 2185,
+									"id": 2187,
 									"name": "select_vert_colours",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17100,35 +17129,6 @@
 										"name": "_EColours",
 										"id": 2160
 									}
-								},
-								{
-									"id": 2186,
-									"name": "opacity",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque)."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2187,
-									"name": "colour",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "The diffuse colour, as [r, g, b] values between 0 and 1. White is [1, 1, 1]."
-									},
-									"type": {
-										"type": "reference",
-										"name": "Txyz",
-										"id": 260
-									}
 								}
 							],
 							"type": {
@@ -17140,7 +17140,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 97,
+							"line": 103,
 							"character": 29
 						}
 					]
@@ -17291,7 +17291,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 133,
+							"line": 139,
 							"character": 31
 						}
 					]
@@ -17396,7 +17396,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 160,
+							"line": 166,
 							"character": 29
 						}
 					]
@@ -17514,7 +17514,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 228,
+							"line": 234,
 							"character": 32
 						}
 					]
@@ -17618,7 +17618,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 194,
+							"line": 200,
 							"character": 33
 						}
 					]
@@ -17658,7 +17658,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 249,
+							"line": 255,
 							"character": 17
 						}
 					]
@@ -17698,7 +17698,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 254,
+							"line": 260,
 							"character": 19
 						}
 					]
@@ -17741,7 +17741,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 259,
+							"line": 265,
 							"character": 20
 						}
 					]
@@ -17782,7 +17782,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 264,
+							"line": 270,
 							"character": 16
 						}
 					]
@@ -17927,7 +17927,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/render.ts",
-							"line": 267,
+							"line": 273,
 							"character": 32
 						}
 					]

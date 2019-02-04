@@ -158,9 +158,9 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
         const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
         const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
         // const normal: Txyz = newellNorm(unique_xyzs);
-        const normal: Txyz = _normal(__model__, ent_arr) as Txyz; // TODO
+        const normal: Txyz = _normal(__model__, ent_arr) as Txyz;
         const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
-        const y_vec: Txyz = vecCross(x_vec, normal);
+        const y_vec: Txyz = vecCross(normal, x_vec); // must be z-axis, x-axis
         return [origin, x_vec, y_vec] as TPlane;
     } else {
         return (ents_arr as TEntTypeIdx[]).map(ent_arr => _getPlane(__model__, ent_arr)) as TPlane[];

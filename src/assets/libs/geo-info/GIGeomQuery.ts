@@ -22,7 +22,6 @@ export class GIGeomQuery {
     // ============================================================================
     /**
      * Returns a list of indices for all, including ents that are null
-     * TODO This seems unecessary
      * @param ent_type
      */
     public getEnts(ent_type: EEntType, include_deleted: boolean): number[] {
@@ -78,6 +77,33 @@ export class GIGeomQuery {
      */
     public numEnts(ent_type: EEntType, include_deleted: boolean): number {
         return this.getEnts(ent_type, include_deleted).length;
+    }
+    /**
+     * Returns a list of indices for all posis that have no verts
+     * @param ent_type
+     */
+    public getUnusedPosis(include_deleted: boolean): number[] {
+        // get posis indices array from up array: up_posis_verts
+        const posis: number[][] = this._geom_arrays.up_posis_verts;
+        const posis_i: number[] = [];
+        if (include_deleted) {
+            for (let i = 0; i < posis.length; i++ ) {
+                const posi = posis[i];
+                if (posi !== null) {
+                    if (posi.length === 0) { posis_i.push(i); }
+                } else {
+                    posis_i.push(null);
+                }
+            }
+        } else {
+            for (let i = 0; i < posis.length; i++ ) {
+                const posi = posis[i];
+                if (posi !== null) {
+                    if (posi.length === 0) { posis_i.push(i); }
+                }
+            }
+        }
+        return posis_i;
     }
     // ============================================================================
     // Util

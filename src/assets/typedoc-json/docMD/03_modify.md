@@ -112,3 +112,16 @@ When deleting collections, none of the objects in the collection are deleted.
     Deletes polygon1 from the model.
   
   
+## Keep  
+* **Description:** Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
+Everything else in the model is deleted.
+When a collection is kept, all objects inside the collection are also kept.
+When an object is kept, all positions used by the object are also kept.  
+* **Parameters:**  
+  * *entities:* Position, point, polyline, polygon, collection.  
+* **Returns:** void  
+* **Examples:**  
+  * modify.Delete(polygon1)  
+    Deletes polygon1 from the model.
+  
+  

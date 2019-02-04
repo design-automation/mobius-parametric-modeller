@@ -1,5 +1,91 @@
 # LIST    
 
+## Append  
+* **Description:** Adds one value to the end of an list.
+If value is an list, the entire list will be appended as one value.  
+* **Parameters:**  
+  * *list:* List to add to.  
+  * *value:* Item to add.  
+  * *method:* Enum, append to start or end.  
+* **Examples:**  
+  * append = list.Append(list, 4, 'at_end')  
+    where list = [1,2,3]
+Expected value of list is [1,2,3,4].
+  
+  
+## RemoveIndex  
+* **Description:** Removes the value at the specified index from a list.  
+* **Parameters:**  
+  * *list:* List to remove value from.  
+  * *index:* Zero-based index number of value to remove.  
+* **Examples:**  
+  * remove = list.RemoveIndex(list,1)  
+    where list = [1,2,3]
+Expected value of remove is [1,3].
+  
+  
+## RemoveValue  
+* **Description:** Removes values that matches specified value from a list.
+Items must match both the value and type of specified value.  
+* **Parameters:**  
+  * *list:* List to remove value from.  
+  * *value:* Value to search for.  
+  * *method:* Enum; specifies whether to remove all occurances or only the first.  
+* **Examples:**  
+  * remove = list.RemoveValue(list,2,'remove_all')  
+    where list = [1,2,2,3]
+Expected value of remove is [1,3].
+  
+  
+## ReplaceValue  
+* **Description:** Replaces values that matches specified value from an list with a new value
+Items must match both the value and type of specified value  
+* **Parameters:**  
+  * *list:* List to remove value from.  
+  * *value1:* Value to search for.  
+  * *value2:* Value to replace existing value with.  
+  * *method:* Enum; specifies whether to replace all occurances or only the first.  
+* **Examples:**  
+  * replace = list.ReplaceValue(list,2,9,'replace_all')  
+    where list = [1,2,2,3]
+Expected value of replace is [1,9,9,3].
+  
+  
+## Sort  
+* **Description:** Sorts an list of values.
+~
+For alphabetical sort, values are sorted according to string Unicode code points
+(character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)  
+* **Parameters:**  
+  * *list:* List to sort.  
+  * *method:* Enum; specifies the sort method to use.  
+* **Returns:** void  
+* **Examples:**  
+  * list.Sort(list, 'alpha')  
+    where list = ["1","2","10","Orange","apple"]
+Expected value of list is ["1","10","2","Orange","apple"].  
+  * list.Sort(list, 'numeric')  
+    where list = [56,6,48]
+Expected value of list is [6,48,56].
+  
+  
+## Splice  
+* **Description:** Adds and/or removes values to/from a list.
+~
+If no values_to_add are specified, then values are only removed.
+If num_to_remove is 0, then values are only added.  
+* **Parameters:**  
+  * *list:* List to splice.  
+  * *index:* Zero-based index at which to add/remove values. (Items are added/removed after specified index)  
+  * *num_to_remove:* Number of values to remove.  
+  * *values_to_add:* List of values to add, or null.  
+* **Returns:** void  
+* **Examples:**  
+  * result = list.Splice(list1, 1, 3, [2.2, 3.3])  
+    where list1 = [10, 20, 30, 40, 50]
+Expected value of result is [10, 2.2, 3.3, 50]. New values were added where the values were removed.
+  
+  
 ## IndexOf  
 * **Description:** Searches for a value in a list and returns the index position if found.
 Items must match both the value and type of specified value.
@@ -64,7 +150,9 @@ Expected value of newlist is [1,2,3,9,0].
   
   
 ## Flatten  
-* **Description:** Creates a new list by flattening an n-dimensional list into a one-dimensional list.  
+* **Description:** Creates a new list by flattening an n-dimensional list into a one-dimensional list.
+~
+WARNING: This function has been deprecated. Please use the inline listFlat() function.  
 * **Parameters:**  
   * *list:* List to flatten.  
 * **Returns:** Flattened list.  
@@ -93,57 +181,6 @@ WARNING: This function has been deprecated. Please use the inline listSlice() fu
 Expected value of result is [2,3].
   
   
-## Append  
-* **Description:** Adds one value to the end of an list.
-If value is an list, the entire list will be appended as one value.  
-* **Parameters:**  
-  * *list:* List to add to.  
-  * *value:* Item to add.  
-  * *method:* Enum, append to start or end.  
-* **Examples:**  
-  * append = list.Append(list, 4, 'at_end')  
-    where list = [1,2,3]
-Expected value of list is [1,2,3,4].
-  
-  
-## RemoveIndex  
-* **Description:** Removes the value at the specified index from a list.  
-* **Parameters:**  
-  * *list:* List to remove value from.  
-  * *index:* Zero-based index number of value to remove.  
-* **Examples:**  
-  * remove = list.RemoveIndex(list,1)  
-    where list = [1,2,3]
-Expected value of remove is [1,3].
-  
-  
-## RemoveValue  
-* **Description:** Removes values that matches specified value from a list.
-Items must match both the value and type of specified value.  
-* **Parameters:**  
-  * *list:* List to remove value from.  
-  * *value:* Value to search for.  
-  * *method:* Enum; specifies whether to remove all occurances or only the first.  
-* **Examples:**  
-  * remove = list.RemoveValue(list,2,'remove_all')  
-    where list = [1,2,2,3]
-Expected value of remove is [1,3].
-  
-  
-## ReplaceValue  
-* **Description:** Replaces values that matches specified value from an list with a new value
-Items must match both the value and type of specified value  
-* **Parameters:**  
-  * *list:* List to remove value from.  
-  * *value1:* Value to search for.  
-  * *value2:* Value to replace existing value with.  
-  * *method:* Enum; specifies whether to replace all occurances or only the first.  
-* **Examples:**  
-  * replace = list.ReplaceValue(list,2,9,'replace_all')  
-    where list = [1,2,2,3]
-Expected value of replace is [1,9,9,3].
-  
-  
 ## Reverse  
 * **Description:** Reverses the order of values in a list and returns a new list.
 ~
@@ -155,40 +192,5 @@ WARNING: This function has been deprecated. Please use the list.Sort() function.
   * result = list.Reverse(list1)  
     where list1 = [1,2,3]
 Expected value of result is [3,2,1].
-  
-  
-## Sort  
-* **Description:** Sorts an list of values.
-~
-For alphabetical sort, values are sorted according to string Unicode code points
-(character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)  
-* **Parameters:**  
-  * *list:* List to sort.  
-  * *method:* Enum; specifies the sort method to use.  
-* **Returns:** void  
-* **Examples:**  
-  * list.Sort(list, 'alpha')  
-    where list = ["1","2","10","Orange","apple"]
-Expected value of list is ["1","10","2","Orange","apple"].  
-  * list.Sort(list, 'numeric')  
-    where list = [56,6,48]
-Expected value of list is [6,48,56].
-  
-  
-## Splice  
-* **Description:** Adds and/or removes values to/from a list.
-~
-If no values_to_add are specified, then values are only removed.
-If num_to_remove is 0, then values are only added.  
-* **Parameters:**  
-  * *list:* List to splice.  
-  * *index:* Zero-based index at which to add/remove values. (Items are added/removed after specified index)  
-  * *num_to_remove:* Number of values to remove.  
-  * *values_to_add:* List of values to add, or null.  
-* **Returns:** void  
-* **Examples:**  
-  * result = list.Splice(list1, 1, 3, [2.2, 3.3])  
-    where list1 = [10, 20, 30, 40, 50]
-Expected value of result is [10, 2.2, 3.3, 50]. New values were added where the values were removed.
   
   

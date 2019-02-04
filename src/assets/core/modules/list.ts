@@ -3,7 +3,7 @@
  * These functions have no direct link with the model, the are generic functions for manipulating lists.
  * The functions are often used when manipulating lists of IDs of entities in the model.
  * These functions neither make nor modify anything in the model.
- * There are also inline functions available for working with lists.
+ * In addition to these functions, there are also various inline functions available for working with lists.
  */
 
 /**
@@ -12,177 +12,7 @@
 
 import { checkCommTypes } from './_check_args';
 
-/**
- * ================================================================================================
- * list functions that obtain and return information from an input list. Does not modify input list.
- */
 
-export enum _EIndexOfMethod {
-    SEARCH_ALL = 'search_all',
-    SEARCH_FIRST = 'search_first'
-}
-/**
- * Searches for a value in a list and returns the index position if found.
- * Items must match both the value and type of specified value.
- * ~
- * Returns -1 if no values in list match specified value.
- * ~
- * WARNING: This function has been deprecated. Please use the inline listFind() function.
- *
- * @param list List.
- * @param value Value to search for.
- * @param method Enum, specifies whether to search all occurances or only the first.
- * @returns Index position or list of index positions containing specified value.
- * @example positions = list.IndexOf(list,2,true)
- * @example_info where list = [6,2,2,7]
- * Expected value of positions is [1,2].
- */
-export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
-    // --- Error Check ---
-    const fn_name = 'list.IndexOf';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the inline listFind() function.');
-    const positions = [];
-    for (let i = 0 ; i < list.length; i++) {
-        if (list[i] === value) {
-            positions.push(i);
-            if (method === _EIndexOfMethod.SEARCH_FIRST) {
-                return i;
-            }
-        }
-    }
-    if (positions.length > 0) {
-        return positions;
-    } else {
-        return -1;
-    }
-}
-// ================================================================================================
-/**
- * Searches for a value in an list and returns true if found.
- * Items must match both the value and type of specified value.
- * ~
- * Returns false if no values in list match specified value.
- * ~
- * WARNING: This function has been deprecated. Please use the inline listHas() function.
- *
- * @param list List.
- * @param value Value to search for.
- * @returns Returns true if value can be found in list, false if value cannot be found.
- * @example exists = list.Includes(list,2)
- * @example_info where list = [6,2,2,7]
- * Expected value of exists is true.
- */
-export function Includes(list: any[], value: any): boolean {
-    // --- Error Check ---
-    const fn_name = 'list.Includes';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the inline listHas() function.');
-    for (let i = list.length - 1; i >= 0; i--) {
-        if (list[i] === value) {
-            return true;
-        }
-    }
-    return false;
-}
-/**
- * ================================================================================================
- * list functions that return a new list. The input list is not modified.
- */
-
-/**
- * Creates a new list by creating a new list by making a copy of an existing list.
- * ~
- * WARNING: This function has been deprecated. Please use the inline listCopy() function.
- *
- * @param list List to copy.
- * @returns New duplicated list.
- * @example copy1 = list.Copy(list)
- * @example_info where list = [1,2,3]
- * Expected value of copy is [1,2,3].
- */
-export function Copy(list: any[]): any[] {
-    // --- Error Check ---
-    checkCommTypes('list.Copy', 'list', list, ['isList']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the inline listCopy() function.');
-    return list.slice();
-}
-// ================================================================================================
-/**
- * Creates a new list by combining two lists into a new list.
- * ~
- * WARNING: This function has been deprecated. Please use the inline listJoin() function.
- *
- * @param list1 First list.
- * @param list2 Second list.
- * @returns Combined list (list1 first, followed by list2).
- * @example newlist = list.Concat(list1,list2)
- * @example_info where list1 = [1,2,3]
- * and list2 = [9,0]
- * Expected value of newlist is [1,2,3,9,0].
- */
-export function Concat(list1: any[], list2: any[]): any[] {
-    // --- Error Check ---
-    const fn_name = 'list.Concat';
-    checkCommTypes(fn_name, 'list1', list1, ['isList']);
-    checkCommTypes(fn_name, 'list2', list2, ['isList']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the inline listJoin() function.');
-    return list1.concat(list2);
-}
-// ================================================================================================
-/**
- * Creates a new list by flattening an n-dimensional list into a one-dimensional list.
- *
- * @param list List to flatten.
- * @returns Flattened list.
- * @example flatten = list.Flatten(list)
- * @example_info where list = [1,2,3,[4,5]]
- * Expected value of flatten is [1,2,3,4,5].
- */
-export function Flatten(list: any[]): any[] {
-    // --- Error Check ---
-    checkCommTypes('list.Flatten', 'list', list, ['isList']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the inline listFlat() function.');
-    return _flattenDeep(list);
-}
-function _flattenDeep(list: any[]): any[] {
-    return list.reduce((acc, val) => Array.isArray(val) ? acc.concat(_flattenDeep(val)) : acc.concat(val), []);
-}
-// ================================================================================================
-/**
- * Creates a new list by copying a portion of an existing list, from start index to end index (end not included).
- * ~
- * WARNING: This function has been deprecated. Please use the inline listSlice() function.
- *
- * @param list List to slice.
- * @param start Zero-based index at which to begin slicing.
- *      A negative index can be used, indicating an offset from the end of the sequence.
- *      If start is undefined, slice begins from index 0.
- * @param end Zero-based index before which to end slicing. Slice extracts up to but not including end.
- *      A negative index can be used, indicating an offset from the end of the sequence.
- *      If end is undefined, slice extracts through the end of the sequence.
- * @returns A new list.
- * @example result = list.Slice(list,1,3)
- * @example_info where list = [1,2,3,4,5]
- * Expected value of result is [2,3].
- */
-export function Slice(list: any[], start: number, end: number): any[] {
-    // --- Error Check ---
-    const fn_name = 'list.Slice';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'start', start, ['isInt']);
-    checkCommTypes(fn_name, 'end', end, ['isInt']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the inline listSlice() function.');
-    return list.slice(start, end);
-}
 // ================================================================================================
 /**
  * ================================================================================================
@@ -297,25 +127,7 @@ export function ReplaceValue(list: any[], value1: any, value2: any, method: _ERe
         }
     }
 }
-// ================================================================================================
-/**
- * Reverses the order of values in a list and returns a new list.
- * ~
- * WARNING: This function has been deprecated. Please use the list.Sort() function.
- *
- * @param list List to reverse.
- * @returns New reversed list.
- * @example result = list.Reverse(list1)
- * @example_info where list1 = [1,2,3]
- * Expected value of result is [3,2,1].
- */
-export function Reverse(list: any[]): void {
-    // --- Error Check ---
-    checkCommTypes('list.Reverse', 'list', list, ['isList']);
-    // --- Error Check ---
-    console.log('WARNING: This function has been deprecated. Please use the list.Sort() function.');
-    list.reverse();
-}
+
 // ================================================================================================
 export enum _ESortMethod {
     'REV' = 'reverse',
@@ -415,4 +227,226 @@ export function Splice(list: any[], index: number, num_to_remove: number, values
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ================================================================================================
+// ================================================================================================
+// ================================================================================================
+// DEPRECATED
+// ================================================================================================
+// ================================================================================================
+// ================================================================================================
+/**
+ * ================================================================================================
+ * list functions that obtain and return information from an input list. Does not modify input list.
+ */
+
+export enum _EIndexOfMethod {
+    SEARCH_ALL = 'search_all',
+    SEARCH_FIRST = 'search_first'
+}
+/**
+ * Searches for a value in a list and returns the index position if found.
+ * Items must match both the value and type of specified value.
+ * ~
+ * Returns -1 if no values in list match specified value.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listFind() function.
+ *
+ * @param list List.
+ * @param value Value to search for.
+ * @param method Enum, specifies whether to search all occurances or only the first.
+ * @returns Index position or list of index positions containing specified value.
+ * @example positions = list.IndexOf(list,2,true)
+ * @example_info where list = [6,2,2,7]
+ * Expected value of positions is [1,2].
+ */
+export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
+    // --- Error Check ---
+    const fn_name = 'list.IndexOf';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listFind() function.');
+    const positions = [];
+    for (let i = 0 ; i < list.length; i++) {
+        if (list[i] === value) {
+            positions.push(i);
+            if (method === _EIndexOfMethod.SEARCH_FIRST) {
+                return i;
+            }
+        }
+    }
+    if (positions.length > 0) {
+        return positions;
+    } else {
+        return -1;
+    }
+}
+// ================================================================================================
+/**
+ * Searches for a value in an list and returns true if found.
+ * Items must match both the value and type of specified value.
+ * ~
+ * Returns false if no values in list match specified value.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listHas() function.
+ *
+ * @param list List.
+ * @param value Value to search for.
+ * @returns Returns true if value can be found in list, false if value cannot be found.
+ * @example exists = list.Includes(list,2)
+ * @example_info where list = [6,2,2,7]
+ * Expected value of exists is true.
+ */
+export function Includes(list: any[], value: any): boolean {
+    // --- Error Check ---
+    const fn_name = 'list.Includes';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listHas() function.');
+    for (let i = list.length - 1; i >= 0; i--) {
+        if (list[i] === value) {
+            return true;
+        }
+    }
+    return false;
+}
+/**
+ * Creates a new list by creating a new list by making a copy of an existing list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listCopy() function.
+ *
+ * @param list List to copy.
+ * @returns New duplicated list.
+ * @example copy1 = list.Copy(list)
+ * @example_info where list = [1,2,3]
+ * Expected value of copy is [1,2,3].
+ */
+export function Copy(list: any[]): any[] {
+    // --- Error Check ---
+    checkCommTypes('list.Copy', 'list', list, ['isList']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listCopy() function.');
+    return list.slice();
+}
+// ================================================================================================
+/**
+ * Creates a new list by combining two lists into a new list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listJoin() function.
+ *
+ * @param list1 First list.
+ * @param list2 Second list.
+ * @returns Combined list (list1 first, followed by list2).
+ * @example newlist = list.Concat(list1,list2)
+ * @example_info where list1 = [1,2,3]
+ * and list2 = [9,0]
+ * Expected value of newlist is [1,2,3,9,0].
+ */
+export function Concat(list1: any[], list2: any[]): any[] {
+    // --- Error Check ---
+    const fn_name = 'list.Concat';
+    checkCommTypes(fn_name, 'list1', list1, ['isList']);
+    checkCommTypes(fn_name, 'list2', list2, ['isList']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listJoin() function.');
+    return list1.concat(list2);
+}
+// ================================================================================================
+/**
+ * Creates a new list by flattening an n-dimensional list into a one-dimensional list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listFlat() function.
+ *
+ * @param list List to flatten.
+ * @returns Flattened list.
+ * @example flatten = list.Flatten(list)
+ * @example_info where list = [1,2,3,[4,5]]
+ * Expected value of flatten is [1,2,3,4,5].
+ */
+export function Flatten(list: any[]): any[] {
+    // --- Error Check ---
+    checkCommTypes('list.Flatten', 'list', list, ['isList']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listFlat() function.');
+    return _flattenDeep(list);
+}
+function _flattenDeep(list: any[]): any[] {
+    return list.reduce((acc, val) => Array.isArray(val) ? acc.concat(_flattenDeep(val)) : acc.concat(val), []);
+}
+// ================================================================================================
+/**
+ * Creates a new list by copying a portion of an existing list, from start index to end index (end not included).
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listSlice() function.
+ *
+ * @param list List to slice.
+ * @param start Zero-based index at which to begin slicing.
+ *      A negative index can be used, indicating an offset from the end of the sequence.
+ *      If start is undefined, slice begins from index 0.
+ * @param end Zero-based index before which to end slicing. Slice extracts up to but not including end.
+ *      A negative index can be used, indicating an offset from the end of the sequence.
+ *      If end is undefined, slice extracts through the end of the sequence.
+ * @returns A new list.
+ * @example result = list.Slice(list,1,3)
+ * @example_info where list = [1,2,3,4,5]
+ * Expected value of result is [2,3].
+ */
+export function Slice(list: any[], start: number, end: number): any[] {
+    // --- Error Check ---
+    const fn_name = 'list.Slice';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'start', start, ['isInt']);
+    checkCommTypes(fn_name, 'end', end, ['isInt']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listSlice() function.');
+    return list.slice(start, end);
+}
+// ================================================================================================
+/**
+ * Reverses the order of values in a list and returns a new list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the list.Sort() function.
+ *
+ * @param list List to reverse.
+ * @returns New reversed list.
+ * @example result = list.Reverse(list1)
+ * @example_info where list1 = [1,2,3]
+ * Expected value of result is [3,2,1].
+ */
+export function Reverse(list: any[]): void {
+    // --- Error Check ---
+    checkCommTypes('list.Reverse', 'list', list, ['isList']);
+    // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the list.Sort() function.');
+    list.reverse();
+}

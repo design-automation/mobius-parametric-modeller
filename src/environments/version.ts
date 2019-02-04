@@ -9,6 +9,6 @@ export const VERSION = {
     "semver": null,
     "suffix": "0e1dbb68",
     "semverString": null,
-    "version": "0.4.7"
+    "version": "0.4.8"
 };
 /* tslint:enable */

@@ -297,7 +297,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             if (!this.isDown) { return; }
 
             // Put your mousemove stuff here
-            const mouseX = event.offsetX - event.target.getBoundingClientRect().left;
+            const mouseX = event.clientX - event.target.getBoundingClientRect().left;
             const mouseY = event.clientY - event.target.getBoundingClientRect().top;
             const dx = mouseX - this.lastX;
             const dy = mouseY - this.lastY;
@@ -307,7 +307,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             // accumulate the drag distance
             // (used in mouseup to see if this is a drag or click)
             this.dragHash += Math.abs(dx) + Math.abs(dy);
-
             if (this.dragHash > 4) {
                 // dragging
             }
@@ -344,6 +343,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     public onUserAction(event) {
+        console.log('Select');
         // get entities for mouse event
         const intersects = this.threeJSViewerService.initRaycaster(event);
 

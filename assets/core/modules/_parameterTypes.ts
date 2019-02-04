@@ -5,19 +5,19 @@ export const _parameterTypes = {
     model: '__model__',
     input: '__input__',
 
-    new: '_model.__new__', // TODO - make this genric
+    new: '_model.__new__',
     newFn: __new__,
 
-    merge: '_model.__merge__', // TODO - make this genric
+    merge: '_model.__merge__',
     mergeFn: __merge__,
 
-    addData: '_model.addGiData', // TODO - make this genric
+    addData: '_model.addGiData',
 
-    preprocess: '_model.__preprocess__', // TODO - make this genric
-    postprocess: '_model.__postprocess__', // TODO - make this genric
+    preprocess: '_model.__preprocess__',
+    postprocess: '_model.__postprocess__',
 
-    setattrib: '_model.__setAttrib__', // TODO - make this genric
-    getattrib: '_model.__getAttrib__', // TODO - make this genric
+    setattrib: '_model.__setAttrib__',
+    getattrib: '_model.__getAttrib__',
 
     return: '_Output.Return'
 };

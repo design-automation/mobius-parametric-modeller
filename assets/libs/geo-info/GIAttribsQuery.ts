@@ -140,7 +140,8 @@ export class GIAttribsQuery {
                         and_query.attrib_value_str
                     );
                 } else {
-                    query_ents_i = [];
+                    throw new Error('Attribute "' + and_query.attrib_name + '" does not exist.');
+                    // query_ents_i = [];
                 }
             }
             // combine the results of the '&&' queries

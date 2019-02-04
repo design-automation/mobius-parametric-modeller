@@ -419,6 +419,77 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
     const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
     _delete(__model__, ents_arr, bool_del_unused_posis);
 }
+// ================================================================================================
+function _keep(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
+    ents_arr = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
+    const colls_i: Set<number> = new Set();
+    const pgons_i: Set<number> = new Set();
+    const plines_i: Set<number> = new Set();
+    const points_i: Set<number> = new Set();
+    const posis_i: Set<number> = new Set();
+    for (const ent_arr of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+        if (isColl(ent_type)) {
+            colls_i.add(index);
+            for (const pgon_i of __model__.geom.query.navCollToPgon(index)) {
+                pgons_i.add(pgon_i);
+            }
+            for (const pline_i of __model__.geom.query.navCollToPline(index)) {
+                plines_i.add(pline_i);
+            }
+            for (const point_i of __model__.geom.query.navCollToPoint(index)) {
+                points_i.add(point_i);
+            }
+        } else if (isPgon(ent_type)) {
+            pgons_i.add(index);
+        } else if (isPline(ent_type)) {
+            plines_i.add(index);
+        } else if (isPoint(ent_type)) {
+            points_i.add(index);
+        } else if (isPosi(ent_type)) {
+            posis_i.add(index);
+        }
+    }
+    const all_colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL, false);
+    const del_colls_i: number[] = all_colls_i.filter( coll_i => !colls_i.has(coll_i) );
+    __model__.geom.modify.delColls(del_colls_i, false);
+    const all_pgons_i: number[] = __model__.geom.query.getEnts(EEntType.PGON, false);
+    const del_pgons_i: number[] = all_pgons_i.filter( pgon_i => !pgons_i.has(pgon_i) );
+    __model__.geom.modify.delPgons(del_pgons_i, false);
+    const all_plines_i: number[] = __model__.geom.query.getEnts(EEntType.PLINE, false);
+    const del_plines_i: number[] = all_plines_i.filter( pline_i => !plines_i.has(pline_i) );
+    __model__.geom.modify.delPlines(del_plines_i, false);
+    const all_points_i: number[] = __model__.geom.query.getEnts(EEntType.POINT, false);
+    const del_points_i: number[] = all_points_i.filter( point_i => !points_i.has(point_i) );
+    __model__.geom.modify.delPoints(del_points_i, false);
+    // finally, only del posis that are unused and that are not in the keep list
+    const all_unused_posis_i: number[] = __model__.geom.query.getUnusedPosis(false);
+    const del_posis_i: number[] = all_unused_posis_i.filter( posi_i => !posis_i.has(posi_i) );
+    __model__.geom.modify.delPosis(del_posis_i);
+}
+/**
+ * Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
+ * Everything else in the model is deleted.
+ * When a collection is kept, all objects inside the collection are also kept.
+ * When an object is kept, all positions used by the object are also kept.
+ *
+ * @param __model__
+ * @param entities Position, point, polyline, polygon, collection.
+ * @returns void
+ * @example modify.Delete(polygon1)
+ * @example_info Deletes polygon1 from the model.
+ */
+export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
+    // @ts-ignore
+    if (Array.isArray(entities)) { entities = entities.flat(); }
+    // --- Error Check ---
+    const ents_arr = checkIDs('modify.Delete', 'entities', entities,
+        ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    _keep(__model__, ents_arr);
+}
+
+
 
 // Collection Add Entities
 

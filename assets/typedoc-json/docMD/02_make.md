@@ -116,11 +116,13 @@ If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrus
   
 ## Divide  
 * **Description:** Divides edge, wire or polyline by length or by number of segments.
-If object is not exact multiple of length, length of last segment will be the remainder.  
+~
+If the 'by length' method is selected, length of last segment will be the remainder.
+~  
 * **Parameters:**  
   * *edge:* Edge, wire, or polyline(s) to be divided.  
   * *divisor:* Segment length or number of segments.  
-  * *method:* Enum to choose which method.  
+  * *method:* Enum, select the method for dividing edges.  
 * **Returns:** List of new edges resulting from the divide.  
 * **Examples:**  
   * segments1 = make.Divide(edge1, 5, by_number)  

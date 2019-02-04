@@ -16,6 +16,7 @@ import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd } from '@libs/geom/ve
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs } from './_check_args';
 import { Arr } from '@libs/arr/arr';
+import { distance } from '@assets/libs/geom/distance';
 
 // ================================================================================================
 function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
@@ -530,7 +531,8 @@ export function _Join(__model__: GIModel, geometry: TId[]): TId {
 // Divide edge modelling operation
 export enum _EDivideMethod {
     BY_NUMBER =  'by_number',
-    BY_LENGTH  =  'by_length'
+    BY_LENGTH  =  'by_length',
+    BY_MIN_LENGTH  =  'by_min_length'
 }
 function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method: _EDivideMethod): number[] {
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
@@ -539,8 +541,12 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
     let new_xyzs: Txyz[];
     if (method === _EDivideMethod.BY_NUMBER) {
         new_xyzs = interpByNum(start, end, divisor - 1);
-    } else {
+    } else if (method === _EDivideMethod.BY_LENGTH) {
         new_xyzs = interpByLen(start, end, divisor);
+    } else { // BY_MIN_LENGTH
+        const len: number = distance(start, end);
+        const num_div: number = Math.ceil(len / divisor);
+        new_xyzs = interpByNum(start, end, num_div - 1);
     }
     const new_edges_i: number[] = [];
     let old_edge_i: number = edge_i;
@@ -575,11 +581,13 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
 }
 /**
  * Divides edge, wire or polyline by length or by number of segments.
- * If object is not exact multiple of length, length of last segment will be the remainder.
+ * ~
+ * If the 'by length' method is selected, length of last segment will be the remainder.
+ * ~
  * @param __model__
  * @param edge Edge, wire, or polyline(s) to be divided.
  * @param divisor Segment length or number of segments.
- * @param method Enum to choose which method.
+ * @param method Enum, select the method for dividing edges.
  * @returns List of new edges resulting from the divide.
  * @example segments1 = make.Divide(edge1, 5, by_number)
  * @example_info Creates a list of 5 equal segments from edge1.

@@ -17,7 +17,6 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
 import { _normal } from './calc';
-import { TPline } from 'dist/assets/libs/geo-info/common';
 
 // ================================================================================================
 /**

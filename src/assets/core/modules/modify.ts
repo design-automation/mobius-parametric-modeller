@@ -9,7 +9,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EAttribNames, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';

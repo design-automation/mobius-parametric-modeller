@@ -1,8 +1,7 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem } from '../util/arrays';
 import { vecDot } from '../geom/vectors';
-import { TColl } from 'dist/assets/libs/geo-info/common';
 
 /**
  * Class for geometry.

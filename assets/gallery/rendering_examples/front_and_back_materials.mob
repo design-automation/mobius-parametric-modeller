@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_j8x8slvkd9c",
+                "id": "node_56j0yx94gej",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_akcyhaxrtho",
+                                    "id": "node_pmdt8aurqqq",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -218,7 +218,7 @@
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-91zqwa7uwk",
+                                            "ID": "prod-x1n7wt6wdas",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
@@ -240,6 +240,16 @@
                                                     "default": 0
                                                 },
                                                 {
+                                                    "name": "colour",
+                                                    "value": "[0 , 1 , 0]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "opacity",
+                                                    "value": "0.7",
+                                                    "default": 0
+                                                },
+                                                {
                                                     "name": "select_side",
                                                     "value": "'front'",
                                                     "default": 0
@@ -247,16 +257,6 @@
                                                 {
                                                     "name": "select_vert_colours",
                                                     "value": "'none'",
-                                                    "default": 0
-                                                },
-                                                {
-                                                    "name": "opacity",
-                                                    "value": "0.5",
-                                                    "default": 0
-                                                },
-                                                {
-                                                    "name": "colour",
-                                                    "value": "[1 , 0 , 0]",
                                                     "default": 0
                                                 }
                                             ],
@@ -330,22 +330,22 @@
                                                 },
                                                 {
                                                     "name": "select_side",
-                                                    "value": "'back'",
+                                                    "value": "[0 , 0 , 1]",
                                                     "default": 0
                                                 },
                                                 {
                                                     "name": "select_vert_colours",
-                                                    "value": "'none'",
-                                                    "default": 0
-                                                },
-                                                {
-                                                    "name": "opacity",
                                                     "value": "1",
                                                     "default": 0
                                                 },
                                                 {
+                                                    "name": "opacity",
+                                                    "value": "'back'",
+                                                    "default": 0
+                                                },
+                                                {
                                                     "name": "colour",
-                                                    "value": "[0 , 1 , 0]",
+                                                    "value": "'none'",
                                                     "default": 0
                                                 }
                                             ],
@@ -422,7 +422,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_w2ov9x2gxua",
+                                                        "id": "node_ml2xqs1fncb",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -517,7 +517,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-01T08:36:20.769Z",
+    "last_updated": "2019-02-04T01:54:29.597Z",
     "version": 1,
     "settings": {}
 }

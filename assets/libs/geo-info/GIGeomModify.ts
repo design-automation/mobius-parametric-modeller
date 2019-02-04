@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem } from '../util/arrays';
 import { vecDot } from '../geom/vectors';
@@ -55,9 +55,10 @@ export class GIGeomModify {
         // loop
         const deleted_posis_i: number[] = [];
         for (const posi_i of posis_i) {
+            if (this._geom_arrays.up_posis_verts[posi_i] === null) { continue; } // already deleted
             // delete all verts for this posi
-            const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
-            verts_i.forEach(vert_i => this._delVert(vert_i));
+            const copy_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i].slice(); // make a copy
+            copy_verts_i.forEach(vert_i => this._delVert(vert_i));
             // delete the posi
             this._geom_arrays.up_posis_verts[posi_i] = null;
             deleted_posis_i.push(posi_i);
@@ -81,6 +82,7 @@ export class GIGeomModify {
         for (const point_i of points_i) {
             // first get all the arrays so we dont break navigation
             const vert_i: number = this._geom_arrays.dn_points_verts[point_i];
+            if (vert_i === null) { continue; } // already deleted
             const posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
             // delete the point and check collections
             this._geom_arrays.dn_points_verts[point_i] = null;
@@ -115,6 +117,7 @@ export class GIGeomModify {
         for (const pline_i of plines_i) {
             // first get all the arrays so we dont break navigation
             const wire_i: number = this._geom_arrays.dn_plines_wires[pline_i];
+            if (wire_i === null) { continue; } // already deleted
             const edges_i: number[] = this._geom.query.navAnyToEdge(EEntType.PLINE, pline_i);
             const verts_i: number[] = this._geom.query.navAnyToVert(EEntType.PLINE, pline_i);
             const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.PLINE, pline_i);
@@ -167,6 +170,7 @@ export class GIGeomModify {
         for (const pgon_i of pgons_i) {
             // first get all the arrays so we dont break navigation
             const face_i: number = this._geom_arrays.dn_pgons_faces[pgon_i];
+            if (face_i === null) { continue; } // already deleted
             const wires_i: number[] = this._geom.query.navAnyToWire(EEntType.PGON, pgon_i);
             const edges_i: number[] = this._geom.query.navAnyToEdge(EEntType.PGON, pgon_i);
             const verts_i: number[] = this._geom.query.navAnyToVert(EEntType.PGON, pgon_i);
@@ -233,18 +237,20 @@ export class GIGeomModify {
         if (!colls_i.length) { return; }
         // loop
         for (const coll_i of colls_i) {
+            const coll: TColl = this._geom_arrays.dn_colls_objs[coll_i];
+            if (coll === null) { continue; } // already deleted
             // up arrays, delete points, plines, pgons
-            const points_i: number[] = this._geom_arrays.dn_colls_objs[coll_i][1];
+            const points_i: number[] = coll[1];
             points_i.forEach(point_i =>  {
                 const other_colls_i: number[] = this._geom_arrays.up_points_colls[point_i];
                 arrRem(other_colls_i, coll_i);
             });
-            const plines_i: number[] = this._geom_arrays.dn_colls_objs[coll_i][2];
+            const plines_i: number[] = coll[2];
             plines_i.forEach(pline_i =>  {
                 const other_colls_i: number[] = this._geom_arrays.up_plines_colls[pline_i];
                 arrRem(other_colls_i, coll_i);
             });
-            const pgons_i: number[] = this._geom_arrays.dn_colls_objs[coll_i][3];
+            const pgons_i: number[] = coll[3];
             pgons_i.forEach(pgon_i =>  {
                 const other_colls_i: number[] = this._geom_arrays.up_pgons_colls[pgon_i];
                 arrRem(other_colls_i, coll_i);
@@ -558,7 +564,7 @@ export class GIGeomModify {
         } else {
 
             // standard case, delete the prev edge and reqire the next edge
-            this.__delVert__StandardCase(wire_edges_i, vert_i);
+            this.__delVert__StandardCase(wire_edges_i, vert_i, index_vert_i === 0);
 
             if (face_i !== undefined) {
 
@@ -600,7 +606,7 @@ export class GIGeomModify {
         const start_edge_i: number = wire_edges_i[0];
         // delete the first edge
         this._geom_arrays.dn_edges_verts[start_edge_i] = null;
-        this._geom_arrays.up_edges_wires[start_edge_i] = null;
+        delete this._geom_arrays.up_edges_wires[start_edge_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, start_edge_i);
         // update the second vert
         const second_vert_i: number = wire_verts_i[1];
@@ -609,7 +615,7 @@ export class GIGeomModify {
         arrRem(wire_edges_i, start_edge_i);
         // delete the vert
         this._geom_arrays.dn_verts_posis[vert_i] = null;
-        this._geom_arrays.up_verts_edges[vert_i] = null;
+        delete this._geom_arrays.up_verts_edges[vert_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
         // update the posis
         arrRem(this._geom_arrays.up_posis_verts[posi_i], vert_i);
@@ -624,7 +630,7 @@ export class GIGeomModify {
         const end_edge_i: number = wire_edges_i[wire_edges_i.length - 1];
         // delete the last edge
         this._geom_arrays.dn_edges_verts[end_edge_i] = null;
-        this._geom_arrays.up_edges_wires[end_edge_i] = null;
+        delete this._geom_arrays.up_edges_wires[end_edge_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, end_edge_i);
         // update the one before last vert
         const before_last_vert_i: number = wire_verts_i[wire_verts_i.length - 2];
@@ -633,7 +639,7 @@ export class GIGeomModify {
         arrRem(wire_edges_i, end_edge_i);
         // delete the vert
         this._geom_arrays.dn_verts_posis[vert_i] = null;
-        this._geom_arrays.up_verts_edges[vert_i] = null;
+        delete this._geom_arrays.up_verts_edges[vert_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
         // update the posis
         arrRem(this._geom_arrays.up_posis_verts[posi_i], vert_i);
@@ -643,12 +649,12 @@ export class GIGeomModify {
      * For pgons, this does not update the tris
      * @param vert_i
      */
-    private __delVert__StandardCase(wire_edges_i: number[], vert_i: number) {
+    private __delVert__StandardCase(wire_edges_i: number[], vert_i: number, is_first: boolean) {
         const posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
         // vert_i is in the middle of a wire, we must have two edges
         const edges_i: number[] = this._geom_arrays.up_verts_edges[vert_i];
-        const prev_edge_i: number = edges_i[0];
-        const next_edge_i: number = edges_i[1];
+        const prev_edge_i: number = is_first ? edges_i[1] : edges_i[0];
+        const next_edge_i: number = is_first ? edges_i[0] : edges_i[1];
         // get the verts of the two edges
         const prev_edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[prev_edge_i];
         const next_edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];
@@ -664,13 +670,13 @@ export class GIGeomModify {
         this._geom_arrays.up_verts_edges[next_vert_i][0] = prev_edge_i;
         // delete the next edge
         this._geom_arrays.dn_edges_verts[next_edge_i] = null;
-        this._geom_arrays.up_edges_wires[next_edge_i] = null;
+        delete this._geom_arrays.up_edges_wires[next_edge_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, next_edge_i);
         // update the wire
         arrRem(wire_edges_i, next_edge_i);
         // delete the vert
         this._geom_arrays.dn_verts_posis[vert_i] = null;
-        this._geom_arrays.up_verts_edges[vert_i] = null;
+        delete this._geom_arrays.up_verts_edges[vert_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
         // update the posis
         arrRem(this._geom_arrays.up_posis_verts[posi_i], vert_i);

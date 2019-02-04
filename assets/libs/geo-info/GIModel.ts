@@ -38,7 +38,7 @@ export class GIModel {
      * @param model_data The JSON data.
      */
     public setData (model_data: IModelData): IGeomPack {
-        this.attribs.io.setData(model_data); // warning: must be before this.geom.add.addData()
+        this.attribs.io.setData(model_data.attributes); // warning: must be before this.geom.add.addData()
         const new_ents_i: IGeomPack = this.geom.io.setData(model_data.geometry);
         return new_ents_i;
     }
@@ -48,7 +48,7 @@ export class GIModel {
     public getData(): IModelData {
         return {
             geometry: this.geom.io.getData(),
-            attributes: this.attribs.getData()
+            attributes: this.attribs.io.getData()
         };
     }
 }

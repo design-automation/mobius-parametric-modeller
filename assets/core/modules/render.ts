@@ -30,7 +30,7 @@ function _convertSelectESideToNum(select: _ESide): number {
 }
 export enum _EColours {
     NO_VERT_COLOURS =   'none',
-    VERT_COLOURS =   'rgb'
+    VERT_COLOURS =   'apply_rgb'
 }
 function _convertSelectEColoursToNum(select: _EColours): number {
     switch (select) {
@@ -80,25 +80,31 @@ export function GlassMaterial(__model__: GIModel, name: string, opacity: number)
  * ~
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)
  * ~
+ * The colour pf teh material can either ignore or apply the vertex rgb colours.
+ * If 'apply' id selected, then the actual colour will be a combination of the material colour
+ * and the vertex colours, as specified by the a vertex attribute called 'rgb'.
+ * In such a case, if material colour is set to white, then it will
+ * have no effect, and the colour will be defined by the vertex [r,g,b] values.
+ * ~
  * Additional material properties can be set by calling the functions for the more advanced materials.
  * These include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.
  * Each of these more advanced materials allows you to specify certain additional settings.
  * ~
- * In order to assign a material to polygons in the model, a polygon attribute called 'material
+ * In order to assign a material to polygons in the model, a polygon attribute called 'material'.
  * needs to be created. The value for each polygon must either be null, or must be a material name.
  *
  * @param name The name of the material.
+ * @param colour The diffuse colour, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
+ * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
  * @param select_side Enum, select front, back, or both.
  * @param select_vert_colours Enum, select whether to use vertex colours if they exist.
- * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
- * @param colour The diffuse colour, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @returns void
  */
 export function BasicMaterial(__model__: GIModel, name: string,
-            select_side: _ESide,
-            select_vert_colours: _EColours,
+            colour: Txyz,
             opacity: number,
-            colour: Txyz
+            select_side: _ESide,
+            select_vert_colours: _EColours
         ): void {
     const side: number = _convertSelectESideToNum(select_side);
     const vert_colours: number = _convertSelectEColoursToNum(select_vert_colours);

@@ -3,6 +3,7 @@
  * These functions have no direct link with the model, the are generic functions for manipulating lists.
  * The functions are often used when manipulating lists of IDs of entities in the model.
  * These functions neither make nor modify anything in the model.
+ * There are also inline functions available for working with lists.
  */
 
 /**
@@ -23,8 +24,10 @@ export enum _EIndexOfMethod {
 /**
  * Searches for a value in a list and returns the index position if found.
  * Items must match both the value and type of specified value.
- *
+ * ~
  * Returns -1 if no values in list match specified value.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listFind() function.
  *
  * @param list List.
  * @param value Value to search for.
@@ -40,6 +43,7 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
     checkCommTypes(fn_name, 'list', list, ['isList']);
     checkCommTypes(fn_name, 'value', value, ['isAny']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listFind() function.');
     const positions = [];
     for (let i = 0 ; i < list.length; i++) {
         if (list[i] === value) {
@@ -55,11 +59,14 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
         return -1;
     }
 }
+// ================================================================================================
 /**
  * Searches for a value in an list and returns true if found.
  * Items must match both the value and type of specified value.
- *
+ * ~
  * Returns false if no values in list match specified value.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listHas() function.
  *
  * @param list List.
  * @param value Value to search for.
@@ -74,6 +81,7 @@ export function Includes(list: any[], value: any): boolean {
     checkCommTypes(fn_name, 'list', list, ['isList']);
     checkCommTypes(fn_name, 'value', value, ['isAny']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listHas() function.');
     for (let i = list.length - 1; i >= 0; i--) {
         if (list[i] === value) {
             return true;
@@ -85,8 +93,11 @@ export function Includes(list: any[], value: any): boolean {
  * ================================================================================================
  * list functions that return a new list. The input list is not modified.
  */
+
 /**
  * Creates a new list by creating a new list by making a copy of an existing list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listCopy() function.
  *
  * @param list List to copy.
  * @returns New duplicated list.
@@ -98,10 +109,14 @@ export function Copy(list: any[]): any[] {
     // --- Error Check ---
     checkCommTypes('list.Copy', 'list', list, ['isList']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listCopy() function.');
     return list.slice();
 }
+// ================================================================================================
 /**
  * Creates a new list by combining two lists into a new list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listJoin() function.
  *
  * @param list1 First list.
  * @param list2 Second list.
@@ -117,8 +132,10 @@ export function Concat(list1: any[], list2: any[]): any[] {
     checkCommTypes(fn_name, 'list1', list1, ['isList']);
     checkCommTypes(fn_name, 'list2', list2, ['isList']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listJoin() function.');
     return list1.concat(list2);
 }
+// ================================================================================================
 /**
  * Creates a new list by flattening an n-dimensional list into a one-dimensional list.
  *
@@ -132,13 +149,17 @@ export function Flatten(list: any[]): any[] {
     // --- Error Check ---
     checkCommTypes('list.Flatten', 'list', list, ['isList']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listFlat() function.');
     return _flattenDeep(list);
 }
 function _flattenDeep(list: any[]): any[] {
     return list.reduce((acc, val) => Array.isArray(val) ? acc.concat(_flattenDeep(val)) : acc.concat(val), []);
 }
+// ================================================================================================
 /**
  * Creates a new list by copying a portion of an existing list, from start index to end index (end not included).
+ * ~
+ * WARNING: This function has been deprecated. Please use the inline listSlice() function.
  *
  * @param list List to slice.
  * @param start Zero-based index at which to begin slicing.
@@ -159,8 +180,10 @@ export function Slice(list: any[], start: number, end: number): any[] {
     checkCommTypes(fn_name, 'start', start, ['isInt']);
     checkCommTypes(fn_name, 'end', end, ['isInt']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the inline listSlice() function.');
     return list.slice(start, end);
 }
+// ================================================================================================
 /**
  * ================================================================================================
  * list functions that modify the original input list. Return void.
@@ -192,6 +215,7 @@ export function Append(list: any[], value: any, method: _EAppendMethod): void {
         list.unshift(value);
     }
 }
+// ================================================================================================
 /**
  * Removes the value at the specified index from a list.
  *
@@ -209,6 +233,7 @@ export function RemoveIndex(list: any[], index: number): void {
     // --- Error Check ---
     list.splice(index, 1);
 }
+// ================================================================================================
 export enum _ERemoveValueMethod {
     REMOVE_ALL = 'remove_all',
     REMOVE_FIRST = 'remove_first'
@@ -239,6 +264,7 @@ export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod
         }
     }
 }
+// ================================================================================================
 export enum _EReplaceValueMethod {
     REPLACE_ALL = 'replace_all',
     REPLACE_FIRST = 'replace_first'
@@ -271,8 +297,11 @@ export function ReplaceValue(list: any[], value1: any, value2: any, method: _ERe
         }
     }
 }
+// ================================================================================================
 /**
  * Reverses the order of values in a list and returns a new list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the list.Sort() function.
  *
  * @param list List to reverse.
  * @returns New reversed list.
@@ -284,9 +313,12 @@ export function Reverse(list: any[]): void {
     // --- Error Check ---
     checkCommTypes('list.Reverse', 'list', list, ['isList']);
     // --- Error Check ---
+    console.log('WARNING: This function has been deprecated. Please use the list.Sort() function.');
     list.reverse();
 }
+// ================================================================================================
 export enum _ESortMethod {
+    'REV' = 'reverse',
     'ALPHA' = 'alpha_descending',
     'REV_ALPHA' = 'alpha_ascending',
     'NUM' = 'numeric_descending',
@@ -295,26 +327,11 @@ export enum _ESortMethod {
     'REV_SHIFT' = 'reverse_shift_1',
     'RANDOM' = 'random'
 }
-/**
- * Sorts an list of values.
- *
- * For alphabetical sort, values are sorted according to string Unicode code points
- * (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)
- *
- * @param list List to sort.
- * @param method Enum; specifies the sort method to use.
- * @example sort = list.Sort(list, 'alpha')
- * @example_info where list = ["1","2","10","Orange","apple"]
- * Expected value of list is ["1","10","2","Orange","apple"].
- * @example sort = list.Sort(list, 'numeric')
- * @example_info where list = [56,6,48]
- * Expected value of list is [6,48,56].
- */
-export function Sort(list: any[], method: _ESortMethod): void {
-    // --- Error Check ---
-    checkCommTypes('list.Sort', 'list', list, ['isList']);
-    // --- Error Check ---
+function _sort(list: any[], method: _ESortMethod): void {
     switch (method) {
+        case _ESortMethod.REV:
+            list.reverse();
+            break;
         case _ESortMethod.ALPHA:
             list.sort();
             break;
@@ -344,18 +361,42 @@ export function Sort(list: any[], method: _ESortMethod): void {
     }
 }
 /**
- * Adds and/or removes values to/from a list.
+ * Sorts an list of values.
+ * ~
+ * For alphabetical sort, values are sorted according to string Unicode code points
+ * (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)
  *
+ * @param list List to sort.
+ * @param method Enum; specifies the sort method to use.
+ * @returns void
+ * @example list.Sort(list, 'alpha')
+ * @example_info where list = ["1","2","10","Orange","apple"]
+ * Expected value of list is ["1","10","2","Orange","apple"].
+ * @example list.Sort(list, 'numeric')
+ * @example_info where list = [56,6,48]
+ * Expected value of list is [6,48,56].
+ */
+export function Sort(list: any[], method: _ESortMethod): void {
+    // --- Error Check ---
+    checkCommTypes('list.Sort', 'list', list, ['isList']);
+    // --- Error Check ---
+    _sort(list, method);
+}
+// ================================================================================================
+/**
+ * Adds and/or removes values to/from a list.
+ * ~
  * If no values_to_add are specified, then values are only removed.
  * If num_to_remove is 0, then values are only added.
  *
  * @param list List to splice.
  * @param index Zero-based index at which to add/remove values. (Items are added/removed after specified index)
  * @param num_to_remove Number of values to remove.
- * @param values_to_add List of values to add.
+ * @param values_to_add List of values to add, or null.
+ * @returns void
  * @example result = list.Splice(list1, 1, 3, [2.2, 3.3])
  * @example_info where list1 = [10, 20, 30, 40, 50]
- * Expected value of result is [10, 2.2, 3.2, 50]. New values were added where the values were removed.
+ * Expected value of result is [10, 2.2, 3.3, 50]. New values were added where the values were removed.
  */
 export function Splice(list: any[], index: number, num_to_remove: number, values_to_add: any[]): void {
     // --- Error Check ---
@@ -366,8 +407,12 @@ export function Splice(list: any[], index: number, num_to_remove: number, values
     checkCommTypes(fn_name, 'values_to_add', values_to_add, ['isList']);
     // --- Error Check ---
 
-    // const list2 = list.slice();
-    // list2.splice(index, num_to_remove, ...values_to_add);
-    // return list2;
-    list.splice(index, num_to_remove, ...values_to_add);
+    // avoid the spread operator
+    list.splice(index, num_to_remove);
+    if (values_to_add !== null && values_to_add.length) {
+        for (let i = 0; i < values_to_add.length; i++) {
+            list.splice(index + i, 0, values_to_add[i]);
+        }
+    }
 }
+// ================================================================================================

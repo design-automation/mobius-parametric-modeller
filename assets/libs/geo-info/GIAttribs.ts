@@ -40,20 +40,4 @@ export class GIAttribs {
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
         this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     }
-    /**
-     * Returns the JSON data for this model.
-     */
-    public getData(): IAttribsData {
-        return {
-            positions: Array.from(this._attribs_maps.ps.values()).map(attrib => attrib.getData()),
-            vertices: Array.from(this._attribs_maps._v.values()).map(attrib => attrib.getData()),
-            edges: Array.from(this._attribs_maps._e.values()).map(attrib => attrib.getData()),
-            wires: Array.from(this._attribs_maps._w.values()).map(attrib => attrib.getData()),
-            faces: Array.from(this._attribs_maps._f.values()).map(attrib => attrib.getData()),
-            points: Array.from(this._attribs_maps.pt.values()).map(attrib => attrib.getData()),
-            polylines: Array.from(this._attribs_maps.pl.values()).map(attrib => attrib.getData()),
-            polygons: Array.from(this._attribs_maps.pg.values()).map(attrib => attrib.getData()),
-            collections: Array.from(this._attribs_maps.co.values()).map(attrib => attrib.getData())
-        };
-    }
 }

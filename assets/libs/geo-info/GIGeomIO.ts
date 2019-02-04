@@ -292,7 +292,6 @@ export class GIGeomIO {
      * @param geom_data The JSON data
      */
     public setData(geom_data: IGeomData): IGeomPack {
-
         // update the down arrays
         // these are assumed never to undefined
 

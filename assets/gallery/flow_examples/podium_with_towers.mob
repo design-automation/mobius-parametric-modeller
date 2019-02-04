@@ -1,5 +1,5 @@
 {
-    "name": "test_workflow",
+    "name": "podium_with_towers",
     "author": "new_user",
     "flowchart": {
         "name": "Podium with towers",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_qfv0i11f79",
+                "id": "node_gliklmvkxdk",
                 "position": {
                     "x": 5191.82470703125,
                     "y": 4807.4736328125
@@ -98,7 +98,7 @@
                                 },
                                 "parentNode": {
                                     "name": "podium massing",
-                                    "id": "node_4y0agppqsv",
+                                    "id": "node_15r2ubmcf9b",
                                     "position": {
                                         "x": 5181.83056640625,
                                         "y": 5001.61474609375
@@ -305,7 +305,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "tower base",
-                                                        "id": "node_y2i8wleaac",
+                                                        "id": "node_xyn0og0zzvn",
                                                         "position": {
                                                             "x": 5483.2900390625,
                                                             "y": 5199.95751953125
@@ -752,7 +752,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "tower",
-                                                                            "id": "node_9exqy6zugl7",
+                                                                            "id": "node_fyqd0biva4p",
                                                                             "position": {
                                                                                 "x": 5432.31689453125,
                                                                                 "y": 5353.759765625
@@ -1258,10 +1258,10 @@
                                                                                                         },
                                                                                                         "parentNode": {
                                                                                                             "name": "podium facades",
-                                                                                                            "id": "node_3o9oiy169wc",
+                                                                                                            "id": "node_pqnv43wzg1f",
                                                                                                             "position": {
-                                                                                                                "x": 4949.365234375,
-                                                                                                                "y": 5288.9501953125
+                                                                                                                "x": 4951.43994140625,
+                                                                                                                "y": 5291.02490234375
                                                                                                             },
                                                                                                             "enabled": true,
                                                                                                             "type": "",
@@ -1321,12 +1321,12 @@
                                                                                                                 },
                                                                                                                 {
                                                                                                                     "type": 8,
-                                                                                                                    "ID": "prod-9d1118l2z2c",
+                                                                                                                    "ID": "prod-fyk1oziu5hm",
                                                                                                                     "enabled": true,
                                                                                                                     "print": false,
                                                                                                                     "meta": {
-                                                                                                                        "module": "calc",
-                                                                                                                        "name": "BoundingBox"
+                                                                                                                        "module": "virtual",
+                                                                                                                        "name": "GetBBox"
                                                                                                                     },
                                                                                                                     "argCount": 3,
                                                                                                                     "args": [
@@ -1345,8 +1345,7 @@
                                                                                                                             "default": 0
                                                                                                                         }
                                                                                                                     ],
-                                                                                                                    "selected": false,
-                                                                                                                    "hasError": false
+                                                                                                                    "selected": false
                                                                                                                 },
                                                                                                                 {
                                                                                                                     "type": 0,
@@ -1712,7 +1711,7 @@
                                                                                                             },
                                                                                                             "output": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~edges~0~source",
                                                                                                             "hasExecuted": true,
-                                                                                                            "hasError": false
+                                                                                                            "hasError": true
                                                                                                         }
                                                                                                     },
                                                                                                     "target": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target",
@@ -1730,7 +1729,7 @@
                                                                                                         },
                                                                                                         "parentNode": {
                                                                                                             "name": "roof slab",
-                                                                                                            "id": "node_pbaensfcsnm",
+                                                                                                            "id": "node_60sotxwcmmq",
                                                                                                             "position": {
                                                                                                                 "x": 5175.7138671875,
                                                                                                                 "y": 5500.87890625
@@ -2086,7 +2085,7 @@
                                                                                             },
                                                                                             "parentNode": {
                                                                                                 "name": "colours",
-                                                                                                "id": "node_w63ia60ktgo",
+                                                                                                "id": "node_v3xea3wfbol",
                                                                                                 "position": {
                                                                                                     "x": 5142.90283203125,
                                                                                                     "y": 5808.93017578125
@@ -2229,7 +2228,7 @@
                                                                                                                 },
                                                                                                                 "parentNode": {
                                                                                                                     "name": "End",
-                                                                                                                    "id": "node_djcnhz8y7g",
+                                                                                                                    "id": "node_kxnofwyd12",
                                                                                                                     "position": {
                                                                                                                         "x": 5106.09423828125,
                                                                                                                         "y": 5970.7421875
@@ -2379,7 +2378,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-29T05:26:07.052Z",
+    "last_updated": "2019-02-04T01:36:45.270Z",
     "version": 1,
     "settings": {}
 }

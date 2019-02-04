@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_b5jcffod07t",
+                "id": "node_mjbdhkbdik",
                 "position": {
                     "x": 5338.904296875,
                     "y": 4903.47021484375
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make some geometry",
-                                    "id": "node_h5nc8lmzj46",
+                                    "id": "node_1hd7lapj7iw",
                                     "position": {
                                         "x": 5346.67138671875,
                                         "y": 5071.5751953125
@@ -432,7 +432,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "apply materials",
-                                                        "id": "node_szcgvvd2ah",
+                                                        "id": "node_xakju8cu7go",
                                                         "position": {
                                                             "x": 5286.47314453125,
                                                             "y": 5230.0283203125
@@ -574,7 +574,7 @@
                                                             },
                                                             {
                                                                 "type": 8,
-                                                                "ID": "prod-91zqwa7uwk",
+                                                                "ID": "prod-ljb4eoaiwjn",
                                                                 "enabled": true,
                                                                 "print": false,
                                                                 "meta": {
@@ -592,28 +592,28 @@
                                                                     },
                                                                     {
                                                                         "name": "name",
-                                                                        "value": "\"solid\"",
-                                                                        "default": 0
-                                                                    },
-                                                                    {
-                                                                        "name": "select_side",
-                                                                        "value": "'both'",
-                                                                        "default": 0
-                                                                    },
-                                                                    {
-                                                                        "name": "select_vert_colours",
-                                                                        "value": "'none'",
-                                                                        "default": 0
-                                                                    },
-                                                                    {
-                                                                        "name": "opacity",
-                                                                        "value": "1",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "value": "\"solid\""
                                                                     },
                                                                     {
                                                                         "name": "colour",
-                                                                        "value": "[0.5 , 0.6 , 0.7]",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "value": "[0 , 1 , 0]"
+                                                                    },
+                                                                    {
+                                                                        "name": "opacity",
+                                                                        "default": 0,
+                                                                        "value": "1"
+                                                                    },
+                                                                    {
+                                                                        "name": "select_side",
+                                                                        "default": 0,
+                                                                        "value": "'both'"
+                                                                    },
+                                                                    {
+                                                                        "name": "select_vert_colours",
+                                                                        "default": 0,
+                                                                        "value": "'none'"
                                                                     }
                                                                 ],
                                                                 "selected": false,
@@ -716,7 +716,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_pq4cqmisja",
+                                                                            "id": "node_8rxudy6x5ib",
                                                                             "position": {
                                                                                 "x": 5352.21923828125,
                                                                                 "y": 5385.576171875
@@ -828,7 +828,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-01T23:01:50.619Z",
+    "last_updated": "2019-02-04T01:52:38.822Z",
     "version": 1,
     "settings": {}
 }

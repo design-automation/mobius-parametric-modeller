@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_kj1ouk2k19r",
+                "id": "node_irntlhnrgs",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -42,7 +42,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "default": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/pig_head.gi"
+                                "default": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/pig_head_rgb.gi"
                             }
                         ],
                         "hasError": false
@@ -82,7 +82,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_uf5yghqpcen",
+                                    "id": "node_hf7bhjajmea",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -163,7 +163,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_wi6y8o4d7y",
+                                                        "id": "node_02a9qmiwrgnz",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -259,7 +259,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-01-27T07:58:07.246Z",
+    "last_updated": "2019-02-02T09:23:20.689Z",
     "version": 1,
     "settings": {}
 }

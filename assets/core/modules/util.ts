@@ -70,7 +70,8 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
 export function ExportData(__model__: GIModel, filename: string, data_format: _EIODataFormat): boolean {
     switch (data_format) {
         case _EIODataFormat.GI:
-            const gi_data: string = JSON.stringify(__model__.getData());
+            let gi_data: string = JSON.stringify(__model__.getData());
+            gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             return download(gi_data , filename);
             break;
         case _EIODataFormat.OBJ:

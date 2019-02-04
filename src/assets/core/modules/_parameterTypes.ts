@@ -71,6 +71,7 @@ square = __modules__._mathjs.square;
 cube = __modules__._mathjs.cube;
 distance = __modules__._mathjs.distance;
 range = __modules__._list.range;
+isList = __modules__._list.isList;
 listLen = __modules__._list.listLen;
 listCopy = __modules__._list.listCopy;
 listFind = __modules__._list.listFind;

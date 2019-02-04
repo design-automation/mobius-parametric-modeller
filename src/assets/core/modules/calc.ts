@@ -342,7 +342,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
 /**
  * Calculates the 't' parameter along a linear entity, given a location.
  * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
- * 
+ *
  * @param __model__
  * @param lines List of edges, wires, or polylines.
  * @param locations List of positions, vertices, points, or coordinates.

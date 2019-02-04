@@ -403,13 +403,15 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_un
  * When deleting objects (point, polyline, and polygons), topology is also deleted.
  * When deleting collections, none of the objects in the collection are deleted.
  * @param __model__
- * @param entities Position, point, polyline, polygon, collection. Can be a list.
+ * @param entities Position, point, polyline, polygon, collection.
  * @param del_unused_posis Enum, delete or keep unused positions.
  * @returns void
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.
  */
 export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
+    // @ts-ignore
+    if (Array.isArray(entities)) { entities = entities.flat(); }
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
         ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];

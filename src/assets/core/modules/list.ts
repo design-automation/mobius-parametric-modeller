@@ -67,7 +67,7 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
  * Returns false if no values in list match specified value.
  * ~
  * WARNING: This function has been deprecated. Please use the inline listHas() function.
- * 
+ *
  * @param list List.
  * @param value Value to search for.
  * @returns Returns true if value can be found in list, false if value cannot be found.
@@ -98,7 +98,7 @@ export function Includes(list: any[], value: any): boolean {
  * Creates a new list by creating a new list by making a copy of an existing list.
  * ~
  * WARNING: This function has been deprecated. Please use the inline listCopy() function.
- * 
+ *
  * @param list List to copy.
  * @returns New duplicated list.
  * @example copy1 = list.Copy(list)
@@ -327,7 +327,7 @@ export enum _ESortMethod {
     'REV_SHIFT' = 'reverse_shift_1',
     'RANDOM' = 'random'
 }
-function _sort(list: any[], method: _ESortMethod):void {
+function _sort(list: any[], method: _ESortMethod): void {
     switch (method) {
         case _ESortMethod.REV:
             list.reverse();

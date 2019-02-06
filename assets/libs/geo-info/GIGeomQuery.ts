@@ -221,8 +221,8 @@ export class GIGeomQuery {
         for (const edge_i of edges_i) {
             const posis_i: number[] = this._geom_arrays.dn_edges_verts[edge_i].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
             const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i));
-            const vec_a: Txyz = vecFromTo(centroid, xyzs[1]);
-            const vec_b: Txyz = vecFromTo(centroid, xyzs[0]); // CCW
+            const vec_a: Txyz = vecFromTo(centroid, xyzs[0]);
+            const vec_b: Txyz = vecFromTo(centroid, xyzs[1]); // CCW
             const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
             if (!(tri_normal[0] === 0 && tri_normal[1] === 0 && tri_normal[2] === 0)) {
                 count += 1;

@@ -326,11 +326,14 @@ export function Sort(__model__: GIModel, entities: TId[], sort_expr: TQuery, met
 function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boolean|boolean[] {
     if (!Array.isArray(ents_arr[0])) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        if (ent_type === EEntType.PGON) {
+            return true;
+        } else if (ent_type !== EEntType.WIRE && ent_type !== EEntType.PLINE) {
+            return false;
+        }
         let wire_i: number = index;
         if (ent_type === EEntType.PLINE) {
             wire_i = __model__.geom.query.navPlineToWire(index);
-        } else if (ent_type !== EEntType.WIRE) {
-            throw new Error('query.isClosed: Entity is of wrong type. It must be either a polyline or a wire.');
         }
         return __model__.geom.query.istWireClosed(wire_i) as boolean;
     } else {
@@ -339,34 +342,216 @@ function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boo
 }
 /**
  * Checks if polyline(s) or wire(s) are closed.
+ * ~
+ * WARNING: This function has been deprecated. Plese use the query.Type() function instead.
+ *
  * @param __model__
- * @param lines Polyline(s) or wire(s).
+ * @param lines Wires, polylines, or polygons.
  * @returns Boolean or list of boolean in input sequence of lines.
  * @example mod.IsClosed([polyline1,polyline2,polyline3])
  * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
  */
 export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     // --- Error Check ---
-    const ents_arr = checkIDs('query.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
+    const ents_arr = checkIDs('query.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE', 'PGON']);
     // --- Error Check ---
     return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
-// ================================================================================================
-/**
- * Checks if a wire, polyline, face, or polygon is planar.
- * @param __model__
- * @param entities Wire, polyline, face, or polygon.
- * @param tolerance
- * @returns Boolean or list of boolean in input sequence of lines.
- * @example mod.IsPlanar([polyline1,polyline2,polyline3])
- * @example_info Returns list [true,true,false] if polyline1 and polyline2 are planar but polyline3 is not planar.
- */
-export function _IsPlanar(__model__: GIModel, entities: TId|TId[], tolerance: number): boolean|boolean[] {
-    // --- Error Check ---
-    // const fn_name = 'query.isPlanar';
-    // const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PLINE', 'WIRE']);
-    // checkCommTypes(fn_name, 'tolerance', tolerance, ['isNumber']);
-    // --- Error Check ---
-    throw new Error('Not implemented');
+
+export enum _EQueryEntType {
+    IS_POSI =   'is_position',
+    IS_USED_POSI = 'is_used_posi',
+    IS_UNUSED_POSI = 'is_unused_posi',
+    IS_VERT =   'is_vertex',
+    IS_EDGE =   'is_edge',
+    IS_WIRE =   'is_wire',
+    IS_FACE =   'is_face',
+    IS_POINT =  'is_point',
+    IS_PLINE =  'is_polyline',
+    IS_PGON =   'is_polygon',
+    IS_COLL =   'is_collection',
+    IS_OBJ =    'is_object',
+    IS_TOPO =   'is_topology',
+    IS_POINT_TOPO =   'is_point_topology',
+    IS_PLINE_TOPO =   'is_polyline_topology',
+    IS_PGON_TOPO =   'is_polygon_topology',
+    IS_OPEN =      'is_open',
+    IS_CLOSED =    'is_closed',
+    IS_HOLE =      'is_hole',
+    HAS_HOLES =    'has_holes',
+    HAS_NO_HOLES = 'has_no_holes'
 }
+function _isUsedPosi(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type !== EEntType.POSI) {
+        return false;
+    }
+    const verts_i: number[] = __model__.geom.query.navPosiToVert(index);
+    if (verts_i === undefined || verts_i === null) {
+        return false;
+    }
+    return verts_i.length > 0;
+}
+function _isObj(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type === EEntType.POINT || ent_type === EEntType.PLINE || ent_type === EEntType.PGON) {
+        return true;
+    }
+    return false;
+}
+function _isTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+        return true;
+    }
+    return false;
+}
+function _isPointTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+        const points_i: number[] = __model__.geom.query.navAnyToPoint(ent_type, index);
+        if (points_i !== undefined && points_i !== null && points_i.length) { return true; }
+    }
+    return false;
+}
+function _isPlineTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+        const plines_i: number[] = __model__.geom.query.navAnyToPline(ent_type, index);
+        if (plines_i !== undefined && plines_i !== null && plines_i.length) { return true; }
+    }
+    return false;
+}
+function _isPgonTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+        const pgons_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, index);
+        if (pgons_i !== undefined && pgons_i !== null && pgons_i.length) { return true; }
+    }
+    return false;
+}
+function _isClosed2(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type === EEntType.PGON) {
+        return true;
+    } else if (ent_type !== EEntType.WIRE && ent_type !== EEntType.PLINE) {
+        return false;
+    }
+    let wire_i: number = index;
+    if (ent_type === EEntType.PLINE) {
+        wire_i = __model__.geom.query.navPlineToWire(index);
+    }
+    return __model__.geom.query.istWireClosed(wire_i) as boolean;
+}
+function _isHole(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type !== EEntType.WIRE) {
+        return false;
+    }
+    const face_i: number = __model__.geom.query.navWireToFace(index);
+    if (face_i === undefined || face_i === null) {
+        return false;
+    }
+    const wires_i: number[] = __model__.geom.query.navFaceToWire(face_i);
+    return wires_i.indexOf(index) > 0;
+}
+function _hasNoHoles(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    if (ent_type !== EEntType.FACE && ent_type !== EEntType.PGON) {
+        return false;
+    }
+    let face_i: number = index;
+    if (ent_type === EEntType.PGON) {
+        face_i = __model__.geom.query.navPgonToFace(index);
+    }
+    const wires_i: number[] = __model__.geom.query.navFaceToWire(face_i);
+    return wires_i.length === 1;
+}
+function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_ent_type: _EQueryEntType): boolean|boolean[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const ent_arr: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        const [ent_type, _]: TEntTypeIdx = ent_arr;
+        switch (query_ent_type) {
+            case _EQueryEntType.IS_POSI:
+                return ent_type === EEntType.POSI;
+            case _EQueryEntType.IS_USED_POSI:
+                return _isUsedPosi(__model__, ent_arr);
+            case _EQueryEntType.IS_UNUSED_POSI:
+                return !_isUsedPosi(__model__, ent_arr);
+            case _EQueryEntType.IS_VERT:
+                return ent_type === EEntType.VERT;
+            case _EQueryEntType.IS_EDGE:
+                return ent_type === EEntType.EDGE;
+            case _EQueryEntType.IS_WIRE:
+                return ent_type === EEntType.WIRE;
+            case _EQueryEntType.IS_FACE:
+                return ent_type === EEntType.FACE;
+            case _EQueryEntType.IS_POINT:
+                return ent_type === EEntType.POINT;
+            case _EQueryEntType.IS_PLINE:
+                return ent_type === EEntType.PLINE;
+            case _EQueryEntType.IS_PGON:
+                return ent_type === EEntType.PGON;
+            case _EQueryEntType.IS_COLL:
+                return ent_type === EEntType.COLL;
+            case _EQueryEntType.IS_OBJ:
+                return _isObj(__model__, ent_arr);
+            case _EQueryEntType.IS_TOPO:
+                return _isTopo(__model__, ent_arr);
+            case _EQueryEntType.IS_POINT_TOPO:
+                return _isPointTopo(__model__, ent_arr);
+            case _EQueryEntType.IS_PLINE_TOPO:
+                return _isPlineTopo(__model__, ent_arr);
+            case _EQueryEntType.IS_PGON_TOPO:
+                return _isPgonTopo(__model__, ent_arr);
+            case _EQueryEntType.IS_OPEN:
+                return !_isClosed2(__model__, ent_arr);
+            case _EQueryEntType.IS_CLOSED:
+                return _isClosed2(__model__, ent_arr);
+            case _EQueryEntType.IS_HOLE:
+                return _isHole(__model__, ent_arr);
+            case _EQueryEntType.HAS_HOLES:
+                return !_hasNoHoles(__model__, ent_arr);
+            case _EQueryEntType.HAS_NO_HOLES:
+                return _hasNoHoles(__model__, ent_arr);
+            default:
+                break;
+        }
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _type(__model__, ent_arr, query_ent_type)) as boolean[];
+    }
+
+}
+/**
+ * Checks the type of an entity.
+ * ~
+ * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex. 
+ * For is_unused_posi, it returns the opposite of is_used_posi.
+ * For is_object, returns true if the entity is a point, a polyline, or a polygon.
+ * For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
+ * For is_point_topology, is_polyline_topology, and is_polygon_topology, returns true
+ * if the entity is a topological entity, and it is part of an object of the specified type.
+ * ~
+ * For is_open, returns true if the entity is a wire or polyline and is open. For is_closed, it returns the opposite of is_open.
+ * For is_hole, returns ture if the entity is a wire, and it defines a hole in a face.
+ * For has_holes, returns true if the entity is a face or polygon, and it has holes.
+ * For has_no_holes, it returns the opposite of has_holes.
+ *
+ * @param __model__
+ * @param entities An entity, or a list of entities.
+ * @param query_ent_type Enum, select the conditions to test agains.
+ * @returns Boolean or list of boolean in input sequence.
+ * @example query.Type([polyline1, polyline2, polygon1], is_polyline )
+ * @example_info Returns a list [true, true, false] if polyline1 and polyline2 are polylines but polygon1 is not a polyline.
+ */
+export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _EQueryEntType): boolean|boolean[] {
+    // --- Error Check ---
+    const fn_name = 'query.Type';
+    const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    return _type(__model__, ents_arr, query_ent_type);
+}
+// TODO IS_PLANAR
+// TODO IS_QUAD
+
 // ================================================================================================

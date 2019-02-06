@@ -2,8 +2,8 @@
     "name": "offset_floors_and_windows",
     "author": "new_user",
     "flowchart": {
-        "name": "Untitled",
-        "description": "",
+        "name": "Offset floors and windows",
+        "description": "This is an example of a model that uses a user defined offset function.\n\nThe function is called user.OffsetPgon(). It will offset a polygon by some specified distance. This operation differs from scaling the polygon, because it ensures that the offset distance is the same along all edges. (With scaling, this is only true in some special cases.)\n\nThe function is used twice: once for offsetting teh floors, and a second time for offsetting the windows.\n",
         "language": "js",
         "meta": {
             "selected_nodes": [
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_lcl7v4af5t",
+                "id": "node_nglwlgnamf",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -66,8 +66,8 @@
                                     "opts": {}
                                 },
                                 "parentNode": {
-                                    "name": "Node",
-                                    "id": "node_m7241m3dqoe",
+                                    "name": "Generate building massing",
+                                    "id": "node_q6bdfxbo7k",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -779,7 +779,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_wnit2kbu6ap",
+                                                        "id": "node_nfbwgrt878b",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -2336,7 +2336,7 @@
         ],
         "ordered": true
     },
-    "last_updated": "2019-02-06T06:33:00.379Z",
+    "last_updated": "2019-02-06T06:48:59.503Z",
     "version": 1,
     "settings": {}
 }

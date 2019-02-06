@@ -46,7 +46,8 @@
         {
             "name": "User Function Examples",
             "files": [
-                "pyramids_from_pgons.mob&node=1"
+                "pyramids_from_pgons.mob&node=1",
+                "offset_floors_and_windows.mob&node=1"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/user_functions_examples/"
         },

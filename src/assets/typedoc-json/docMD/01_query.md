@@ -84,12 +84,37 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
   
   
 ## IsClosed  
-* **Description:** Checks if polyline(s) or wire(s) are closed.  
+* **Description:** Checks if polyline(s) or wire(s) are closed.
+~
+WARNING: This function has been deprecated. Plese use the query.Type() function instead.  
 * **Parameters:**  
-  * *lines:* Polyline(s) or wire(s).  
+  * *lines:* Wires, polylines, or polygons.  
 * **Returns:** Boolean or list of boolean in input sequence of lines.  
 * **Examples:**  
   * mod.IsClosed([polyline1,polyline2,polyline3])  
     Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
+  
+  
+## Type  
+* **Description:** Checks the type of an entity.
+~
+For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex.
+For is_unused_posi, it returns the opposite of is_used_posi.
+For is_object, returns true if the entity is a point, a polyline, or a polygon.
+For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
+For is_point_topology, is_polyline_topology, and is_polygon_topology, returns true
+if the entity is a topological entity, and it is part of an object of the specified type.
+~
+For is_open, returns true if the entity is a wire or polyline and is open. For is_closed, it returns the opposite of is_open.
+For is_hole, returns ture if the entity is a wire, and it defines a hole in a face.
+For has_holes, returns true if the entity is a face or polygon, and it has holes.
+For has_no_holes, it returns the opposite of has_holes.  
+* **Parameters:**  
+  * *entities:* An entity, or a list of entities.  
+  * *query_ent_type:* Enum, select the conditions to test agains.  
+* **Returns:** Boolean or list of boolean in input sequence.  
+* **Examples:**  
+  * query.Type([polyline1, polyline2, polygon1], is_polyline )  
+    Returns a list [true, true, false] if polyline1 and polyline2 are polylines but polygon1 is not a polyline.
   
   

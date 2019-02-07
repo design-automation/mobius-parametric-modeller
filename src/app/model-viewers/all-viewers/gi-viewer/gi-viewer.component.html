@@ -8,138 +8,149 @@
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon>settings</mat-icon></button>
 			<modal-window id="settings_modal">
 				<h1>Settings</h1>
-				<ul>
-					<li [title] = "!normalsEnabled?'No models available':''">
-						<div class="label">Normals</div>
-						<div class="onoffswitch">
-							<input type="checkbox"
-							name="onoffswitch"
-							class="onoffswitch-checkbox"
-							id="normalsOnOff"
-							[checked]='settings.normals.show'
-							[disabled] = "!normalsEnabled"
-							(change)="settingOnChange('normals.show')"
-							>
-							<label class="onoffswitch-label" for="normalsOnOff">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
+				<my-tabs id="settingsTab">
+					<my-tab tabTitle="Scene">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd [title] = "!normalsEnabled?'No models available':''">
+									<div class="label">Normals</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="normalsOnOff"
+										[checked]='settings.normals.show'
+										[disabled] = "!normalsEnabled"
+										(change)="settingOnChange('normals.show')"
+										>
+										<label class="onoffswitch-label" for="normalsOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="1" max="100" step="1"
+										[value]="settings.normals.size"
+										class="slider" id="normalSize"
+										(input)="settingOnChange('normals.size', $event.target.value)"
+										[disabled] = "!normalsEnabled">
+										<input type="text" [value]="settings.normals.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Axes</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="axesOnOff"
+										[checked]="settings.axes.show"
+										(change)="settingOnChange('axes.show')">
+										<label class="onoffswitch-label" for="axesOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="1" max="1000" step="1" [value]="settings.axes.size" class="slider" id="axesSize" (input)="settingOnChange('axes.size', $event.target.value)">
+										<input type="text" [value]="settings.axes.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Grid</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="gridOnOff"
+										[checked]='settings.grid.show'
+										(change)="settingOnChange('grid.show')"
+										>
+										<label class="onoffswitch-label" for="gridOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="10" max="10000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
+										<input type="text" [value]="settings.grid.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Positions</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="positionsOnOff"
+										[checked]='settings.positions.show'
+										(change)="settingOnChange('positions.show')"
+										>
+										<label class="onoffswitch-label" for="positionsOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="0.1" max="10" step="0.1" [value]="settings.positions.size" class="slider" id="positionsSize" (input)="settingOnChange('positions.size', $event.target.value)">
+										<input type="text" [value]="settings.positions.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Wireframe</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="wireframeOnOff"
+										[checked]='settings.wireframe.show'
+										(change)="settingOnChange('wireframe.show')"
+										>
+										<label class="onoffswitch-label" for="wireframeOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Threejs Summary</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="tjs_summaryOnOff"
+										[checked]='settings.tjs_summary.show'
+										(change)="settingOnChange('tjs_summary.show')"
+										>
+										<label class="onoffswitch-label" for="tjs_summaryOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+							</dl>
 						</div>
-						<div class="slidecontainer">
-							<input type="range" min="1" max="100" step="1"
-							[value]="settings.normals.size"
-							class="slider" id="normalSize"
-							(input)="settingOnChange('normals.size', $event.target.value)"
-							[disabled] = "!normalsEnabled">
-							<input type="text" [value]="settings.normals.size" disabled>
+					</my-tab>
+					<my-tab tabTitle="Colors">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd class='colors' *ngFor="let item of setting_colors">
+									<div class="label">{{item.label}}</div>
+									<input
+									[(colorPicker)]="settings.colors[item.setting]"
+									[style.background]="settings.colors[item.setting]"
+									[value]="settings.colors[item.setting]"
+									[class.light] = "checkColor(this.settings.colors[item.setting])"
+									/>
+									<button *ngIf="item.default" (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button>
+								</dd>
+							</dl>
 						</div>
-					</li>
-					<li>
-						<div class="label">Axes</div>
-						<div class="onoffswitch">
-							<input type="checkbox"
-							name="onoffswitch"
-							class="onoffswitch-checkbox"
-							id="axesOnOff"
-							[checked]="settings.axes.show"
-							(change)="settingOnChange('axes.show')">
-							<label class="onoffswitch-label" for="axesOnOff">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
-						</div>
-						<div class="slidecontainer">
-							<input type="range" min="1" max="1000" step="1" [value]="settings.axes.size" class="slider" id="axesSize" (input)="settingOnChange('axes.size', $event.target.value)">
-							<input type="text" [value]="settings.axes.size" disabled>
-						</div>
-					</li>
-					<li>
-						<div class="label">Grid</div>
-						<div class="onoffswitch">
-							<input type="checkbox"
-							name="onoffswitch"
-							class="onoffswitch-checkbox"
-							id="gridOnOff"
-							[checked]='settings.grid.show'
-							(change)="settingOnChange('grid.show')"
-							>
-							<label class="onoffswitch-label" for="gridOnOff">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
-						</div>
-						<div class="slidecontainer">
-							<input type="range" min="10" max="10000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
-							<input type="text" [value]="settings.grid.size" disabled>
-						</div>
-					</li>
-					<li>
-						<div class="label">Positions</div>
-						<div class="onoffswitch">
-							<input type="checkbox"
-							name="onoffswitch"
-							class="onoffswitch-checkbox"
-							id="positionsOnOff"
-							[checked]='settings.positions.show'
-							(change)="settingOnChange('positions.show')"
-							>
-							<label class="onoffswitch-label" for="positionsOnOff">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
-						</div>
-						<div class="slidecontainer">
-							<input type="range" min="0.1" max="10" step="0.1" [value]="settings.positions.size" class="slider" id="positionsSize" (input)="settingOnChange('positions.size', $event.target.value)">
-							<input type="text" [value]="settings.positions.size" disabled>
-						</div>
-					</li>
-					<li>
-						<div class="label">Wireframe</div>
-						<div class="onoffswitch">
-							<input type="checkbox"
-							name="onoffswitch"
-							class="onoffswitch-checkbox"
-							id="wireframeOnOff"
-							[checked]='settings.wireframe.show'
-							(change)="settingOnChange('wireframe.show')"
-							>
-							<label class="onoffswitch-label" for="wireframeOnOff">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
-						</div>
-					</li>
-					<li>
-						<div class="label">Threejs Summary</div>
-						<div class="onoffswitch">
-							<input type="checkbox"
-							name="onoffswitch"
-							class="onoffswitch-checkbox"
-							id="tjs_summaryOnOff"
-							[checked]='settings.tjs_summary.show'
-							(change)="settingOnChange('tjs_summary.show')"
-							>
-							<label class="onoffswitch-label" for="tjs_summaryOnOff">
-								<span class="onoffswitch-inner"></span>
-								<span class="onoffswitch-switch"></span>
-							</label>
-						</div>
-					</li>
-					<li><h3>Colors</h3></li>
-					<li class='colors' *ngFor="let item of setting_colors">
-						<div class="label">{{item.label}}</div>
-						<input
-						[(colorPicker)]="settings.colors[item.setting]"
-						[style.background]="settings.colors[item.setting]"
-						[value]="settings.colors[item.setting]"
-						[class.light] = "checkColor(this.settings.colors[item.setting])"
-						/>
-						<button *ngIf="item.default" (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button>
-					</li>
-					<!-- <li>Shadow On/Off</li> -->
-				</ul>
-				<button (click)="closeModal('settings_modal', true);" class="filebtn">Save</button>
-				<button (click)="closeModal('settings_modal');" class='filebtn closebtn'>Close</button>
+					</my-tab>
+				</my-tabs>
+				
+				<button (click)="closeModal('settings_modal', true);" class="filebtn setting">Save</button>
+				<button (click)="closeModal('settings_modal');" class='filebtn closebtn setting'>Close</button>
 			</modal-window>
 		</as-split-area>
 	</as-split>

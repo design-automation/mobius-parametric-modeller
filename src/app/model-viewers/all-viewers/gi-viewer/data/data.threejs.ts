@@ -153,7 +153,7 @@ export class DataThreejs {
         this._addGrid();
         // this._addHemisphereLight();
         this._addAmbientLight('#fefefe', 1);
-        // this._addDirectionalLight();
+        this._addDirectionalLight();
         this._addAxes();
 
         // Add geometry
@@ -183,12 +183,12 @@ export class DataThreejs {
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
 
-        // const planeGeometry = new THREE.PlaneBufferGeometry( 100, 100, 32, 32 );
-        // const planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
-        // const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-        // plane.receiveShadow = true;
-        // plane.position.setZ(-50);
-        // this._scene.add( plane );
+        const planeGeometry = new THREE.PlaneBufferGeometry( 1000, 1000, 32, 32 );
+        const planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
+        const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+        plane.receiveShadow = true;
+        // plane.position.setZ(-10);
+        this._scene.add( plane );
 
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
@@ -542,8 +542,8 @@ export class DataThreejs {
 
     // Creates a Directional Light
     private _addDirectionalLight() {
-        const light = new THREE.DirectionalLight(0xffffff);
-        light.position.set(50, 50, 100).normalize();
+        const light = new THREE.SpotLight(0xffffff);
+        light.position.set(200, 200, 150);
         light.castShadow = true;
         this._scene.add(light);
     }
@@ -649,7 +649,6 @@ export class DataThreejs {
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         mesh.castShadow = true;
-        // mesh.receiveShadow = true;
 
         // show vertex normals
         this.vnh = new THREE.VertexNormalsHelper(mesh, this.settings.normals.size, 0x0000ff);

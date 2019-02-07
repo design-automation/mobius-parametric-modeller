@@ -8,18 +8,18 @@ import {
     AfterViewInit
 } from '@angular/core';
 
-import { TabComponent } from './tab.component';
+import { ATabComponent } from './tab.component';
 
 @Component({
     selector: 'my-tabs',
     templateUrl: `./tabs.component.html`,
     styleUrls: ['./tabs.component.scss']
 })
-export class TabsComponent implements AfterContentInit, AfterViewInit {
+export class ATabsComponent implements AfterContentInit, AfterViewInit {
     @Output() selectedTab = new EventEmitter<number>();
     @Output() selectedTopology = new EventEmitter<number>();
 
-    @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
+    @ContentChildren(ATabComponent) tabs: QueryList<ATabComponent>;
 
     tab_active = 0;
 

@@ -68,6 +68,7 @@ modal-window {
             list-style: none;
             padding: 10px 0;
             margin-left: 20px;
+            margin-right: 20px;
             background-color: inherit;
             height: $fsize1;
             box-sizing: content-box;
@@ -210,6 +211,12 @@ body.modal-open {
         &:hover{
             background-color: transparent;  
         }
+        &.light{
+            width: calc(100% - 120px);
+            .slider{
+                margin-left: 0px !important;
+            }
+        }
     }
       
     /* The slider itself */
@@ -272,9 +279,19 @@ body.modal-open {
         border: none;
         line-height: 20px;
         background: transparent;
-        width: 50px;
+        width: 60px;
         margin-left: 10px !important;
         height: 14px;
+    }
+
+    .number{
+        width: 100px;
+        padding-left: 5px;
+        border:1px solid #dddddd;
+    }
+    .light-shadow{
+        width: 120px;
+        float: left;
     }
 
 }
@@ -297,7 +314,7 @@ body.modal-open {
         list-style: none;
         // display: inline-block;
         float: left;
-        width: 75px;
+        min-width: 75px;
         color: $color1;
         overflow:visible;
         cursor: pointer;
@@ -313,9 +330,8 @@ body.modal-open {
             border: 1px solid transparent;
             position: relative;
             display: block;
-            padding: 2px;
+            padding: 2px 7px;
             text-align: center;
-            position: absolute;
             width: inherit;
             box-sizing: border-box;
             width: 100%;
@@ -343,7 +359,7 @@ body.modal-open {
     }
     // contains everything
     .pane{
-      margin-top: 17px;
+      margin-top: -1px;
       border: 1px solid #B3B3B3;
     //   height: calc(100% - 20px);
       .mat-elevation-z1{
@@ -353,6 +369,11 @@ body.modal-open {
         justify-content: space-between;
         box-shadow: none;
       }
+    }
+
+    hr{
+        border: 1px solid #dfdfdf;
+        background: #dfdfdf;
     }
   }
 

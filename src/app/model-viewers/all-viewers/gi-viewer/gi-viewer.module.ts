@@ -17,8 +17,10 @@ import { GIViewerComponent } from './gi-viewer.component';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 import { AttributeComponent } from './attribute/attribute.component';
 
-import { TabComponent } from './attribute/tab.component';
-import { TabsComponent } from './attribute/tabs.component';
+import { ATabComponent } from './attribute/tab.component';
+import { ATabsComponent } from './attribute/tabs.component';
+import { TabComponent } from './html/tab.component';
+import { TabsComponent } from './html/tabs.component';
 import { DropdownMenuComponent } from './html/dropdown-menu.component';
 import { ModalWindowComponent } from './html/modal-window.component';
 import { ModalService } from './html/modal-window.service';
@@ -32,6 +34,8 @@ import { ThreeJSViewerService } from './threejs/threejs-viewer.service';
         GIViewerComponent,
         ThreejsViewerComponent,
         AttributeComponent,
+        ATabComponent,
+        ATabsComponent,
         TabComponent,
         TabsComponent,
         DropdownMenuComponent,

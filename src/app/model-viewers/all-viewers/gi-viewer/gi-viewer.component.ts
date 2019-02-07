@@ -44,6 +44,13 @@ export class GIViewerComponent implements OnInit {
             face_b: string,
             face_b_s: string
         },
+        day_light: {
+            show: boolean,
+            helper: boolean,
+            intensity: number,
+            position: [number, number, number],
+            size: number
+        },
         version: string
     } = {
             normals: { show: false, size: 5 },
@@ -61,6 +68,13 @@ export class GIViewerComponent implements OnInit {
                 face_f_s: '#4949bd',
                 face_b: '#dddddd',
                 face_b_s: '#00006d'
+            },
+            day_light: {
+                show: false,
+                helper: false,
+                intensity: 0.5,
+                position: [0, 2000, 1000],
+                size: 1000
             },
             version: VERSION.version
         };
@@ -110,7 +124,7 @@ export class GIViewerComponent implements OnInit {
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
             isDevMode()) {
-            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+            // localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {
@@ -216,6 +230,33 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'wireframe.show':
                 this.wireframeToggle();
+                break;
+            case 'day_light.show':
+                this.settings.day_light.show = !this.settings.day_light.show;
+                scene.daylight.visible = this.settings.day_light.show;
+                break;
+            case 'day_light.helper':
+                this.settings.day_light.helper = !this.settings.day_light.helper;
+                break;
+            case 'day_light.intensity':
+                this.settings.day_light.intensity = Number(value);
+                scene.daylight.intensity = this.settings.day_light.intensity;
+                break;
+            case 'day_light.p.x':
+                this.settings.day_light.position[0] = Number(value);
+                scene.daylight.position.setX(this.settings.day_light.position[0]);
+                break;
+            case 'day_light.p.y':
+                this.settings.day_light.position[1] = Number(value);
+                scene.daylight.position.setY(this.settings.day_light.position[1]);
+                break;
+            case 'day_light.p.z':
+                this.settings.day_light.position[2] = Number(value);
+                scene.daylight.position.setZ(this.settings.day_light.position[2]);
+                break;
+            case 'day_light.size':
+                this.settings.day_light.size = Number(value);
+                scene.dayLightScale(this.settings.day_light.size);
                 break;
             default:
                 break;

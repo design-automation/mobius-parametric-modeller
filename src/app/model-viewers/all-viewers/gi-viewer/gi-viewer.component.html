@@ -8,8 +8,8 @@
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon>settings</mat-icon></button>
 			<modal-window id="settings_modal">
 				<h1>Settings</h1>
-				<my-tabs id="settingsTab">
-					<my-tab tabTitle="Scene">
+				<tabs id="settingsTab">
+					<tab tabTitle="Scene">
 						<div class="mat-elevation-z1">
 							<dl>
 								<dd [title] = "!normalsEnabled?'No models available':''">
@@ -130,8 +130,8 @@
 								</dd>
 							</dl>
 						</div>
-					</my-tab>
-					<my-tab tabTitle="Colors">
+					</tab>
+					<tab tabTitle="Colors">
 						<div class="mat-elevation-z1">
 							<dl>
 								<dd class='colors' *ngFor="let item of setting_colors">
@@ -146,8 +146,75 @@
 								</dd>
 							</dl>
 						</div>
-					</my-tab>
-				</my-tabs>
+					</tab>
+					<tab tabTitle="Light & Shadow">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd>
+									<div class="label">Daylight</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DaylightOnOff"
+										[checked]='settings.day_light.show'
+										(change)="settingOnChange('day_light.show')"
+										>
+										<label class="onoffswitch-label" for="DaylightOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="label" style="margin-left:90px">Helper</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DaylightHelperOnOff"
+										[checked]='settings.day_light.helper'
+										(change)="settingOnChange('day_light.helper')"
+										>
+										<label class="onoffswitch-label" for="DaylightHelperOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Position</div>
+									<div class="light-shadow">
+										<input type="number" [value]="settings.day_light.position[0]" class="number" (input)="settingOnChange('day_light.p.x', $event.target.value)">
+									</div>
+									<div class="light-shadow">
+										<input type="number" [value]="settings.day_light.position[1]" class="number" (input)="settingOnChange('day_light.p.y', $event.target.value)">
+									</div>
+									<div class="light-shadow">
+										<input type="number" [value]="settings.day_light.position[2]" class="number" (input)="settingOnChange('day_light.p.z', $event.target.value)">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Intensity</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.day_light.intensity" class="slider" (input)="settingOnChange('day_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.day_light.intensity" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Size</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="100000" step="1000" [value]="settings.day_light.size" class="slider" (input)="settingOnChange('day_light.size', $event.target.value)">
+										<input type="number" [value]="settings.day_light.size" class="number" (input)="settingOnChange('day_light.size', $event.target.value)">
+									</div>
+								</dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Ground</div>
+								</dd>
+							</dl>
+							
+						</div>
+					</tab>
+				</tabs>
 				
 				<button (click)="closeModal('settings_modal', true);" class="filebtn setting">Save</button>
 				<button (click)="closeModal('settings_modal');" class='filebtn closebtn setting'>Close</button>

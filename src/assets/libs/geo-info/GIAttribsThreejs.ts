@@ -99,7 +99,7 @@ export class GIAttribsThreejs {
             const obj = {Name: key, Value: value as string};
             arr.push(obj);
         });
-        console.log(arr);
+        // console.log(arr);
         return arr;
     }
     /**

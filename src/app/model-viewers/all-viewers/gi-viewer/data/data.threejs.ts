@@ -153,7 +153,7 @@ export class DataThreejs {
         this._addGrid();
         // this._addHemisphereLight();
         this._addAmbientLight('#fefefe', 1);
-        this._addDirectionalLight();
+        // this._addDirectionalLight();
         this._addAxes();
 
         // Add geometry
@@ -183,12 +183,11 @@ export class DataThreejs {
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
 
-        const planeGeometry = new THREE.PlaneBufferGeometry( 1000, 1000, 32, 32 );
-        const planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
-        const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-        plane.receiveShadow = true;
-        // plane.position.setZ(-10);
-        this._scene.add( plane );
+        // const planeGeometry = new THREE.PlaneBufferGeometry( 1000, 1000, 32, 32 );
+        // const planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
+        // const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+        // plane.receiveShadow = true;
+        // this._scene.add( plane );
 
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;

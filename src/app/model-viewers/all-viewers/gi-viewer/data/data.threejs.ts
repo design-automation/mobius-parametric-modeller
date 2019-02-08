@@ -38,6 +38,7 @@ export class DataThreejs {
     // axes
     public axesHelper: THREE.AxesHelper;
     daylight: THREE.DirectionalLight;
+    groundObj: THREE.Mesh;
     // the GI model to display
     public _model: GIModel;
 
@@ -158,12 +159,13 @@ export class DataThreejs {
             const planeGeometry = new THREE.PlaneBufferGeometry(ground.width, ground.length, 32, 32);
             const planeMaterial = new THREE.MeshPhongMaterial({
                 color: new THREE.Color(parseInt(ground.color.replace('#', '0x'), 16)),
-                shininess: ground.shininess
+                shininess: ground.shininess,
+                side: THREE.DoubleSide
             });
-            const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-            plane.position.setZ(-10);
-            plane.receiveShadow = true;
-            this._scene.add(plane);
+            this.groundObj = new THREE.Mesh(planeGeometry, planeMaterial);
+            this.groundObj.position.setZ(ground.height);
+            this.groundObj.receiveShadow = true;
+            this._scene.add(this.groundObj);
         }
 
         // const allObjs = this.getAllObjs();
@@ -954,6 +956,7 @@ interface Settings {
         show: boolean,
         width: number,
         length: number,
+        height: number,
         color: string,
         shininess: number
     };

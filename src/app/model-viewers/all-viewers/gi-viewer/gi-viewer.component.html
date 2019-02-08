@@ -237,6 +237,13 @@
 										<input type="number" [value]="settings.ground.length" min="0" max="100000" class="number" (input)="settingOnChange('ground.length', $event.target.value)">
 									</div>
 								</dd>
+								<dd>
+									<div class="label">Height</div>
+									<div class="slidecontainer light">
+										<input type="range" min="-10" max="10" step="0.1" [value]="settings.ground.height" class="slider" (input)="settingOnChange('ground.height', $event.target.value)">
+										<input type="number" [value]="settings.ground.height" min="-10" max="10" class="number" (input)="settingOnChange('ground.height', $event.target.value)">
+									</div>
+								</dd>
 								<dd class='colors'>
 									<div class="label">Color</div>
 									<input

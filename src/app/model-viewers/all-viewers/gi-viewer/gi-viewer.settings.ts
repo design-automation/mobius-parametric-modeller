@@ -27,6 +27,7 @@ export const DefaultSettings = {
         show: false,
         width: 1000,
         length: 1000,
+        height: -0.5,
         color: '#FFFFFF',
         shininess: 0
     },

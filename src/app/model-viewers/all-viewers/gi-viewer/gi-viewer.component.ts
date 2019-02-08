@@ -209,6 +209,10 @@ export class GIViewerComponent implements OnInit {
             case 'ground.length':
                 this.settings.ground.length = Number(value);
                 break;
+            case 'ground.height':
+                this.settings.ground.height = Number(value);
+                scene.groundObj.position.setZ(this.settings.ground.height);
+                break;
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
                 break;
@@ -272,6 +276,7 @@ interface Settings {
         show: boolean,
         width: number,
         length: number,
+        height: number,
         color: string,
         shininess: number
     };

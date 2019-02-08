@@ -13,7 +13,7 @@ import { TId, Txyz, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, isPgon, isFace, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
-import { vecSum, vecDiv, vecAdd, vecSub, vecNorm, newellNorm } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecNorm, newellNorm, vecMult } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
 import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
@@ -331,8 +331,8 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
             const dist_b = dists[i];
             const edge_length = dist_b - dist_a;
             const to_t = t_param_mapped - dist_a;
-            const divisor = to_t / edge_length;
-            return vecAdd( xyz_pair[0], vecDiv(vecSub(xyz_pair[1], xyz_pair[0]), divisor) );
+            const vec_len = to_t / edge_length;
+            return vecAdd( xyz_pair[0], vecMult(vecSub(xyz_pair[1], xyz_pair[0]), vec_len) );
         }
     }
     // t param must be 1 (or greater)
@@ -349,7 +349,7 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
  * @return The 't' parameter vale, between 0 and 1.
  * @example coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
  */
-export function ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
+export function _ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
     // --- Error Check ---
     // const fn_name = 'calc.ParamXyzToT';
     // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);

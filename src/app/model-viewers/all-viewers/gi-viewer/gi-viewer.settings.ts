@@ -17,9 +17,9 @@ export const DefaultSettings = {
         face_b_s: '#00006D'
     },
     day_light: {
-        show: false,
+        show: true,
         helper: false,
-        intensity: 0.5,
+        intensity: 1,
         position: [0, 2000, 1000],
         size: 1000
     },

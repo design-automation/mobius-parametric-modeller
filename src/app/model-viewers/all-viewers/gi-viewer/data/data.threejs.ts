@@ -97,8 +97,8 @@ export class DataThreejs {
         // add grid and lights
         this._addGrid();
         this._addDayLight();
-        // this._addHemisphereLight();
-        this._addAmbientLight('#fefefe', 0.8);
+        this._addHemisphereLight();
+        // this._addAmbientLight('#fefefe', 1);
         this._addAxes();
     }
     /**
@@ -119,8 +119,8 @@ export class DataThreejs {
         this._textLabels.clear();
 
         this._addGrid();
-        // this._addHemisphereLight();
-        this._addAmbientLight('#fefefe', 0.8);
+        this._addHemisphereLight();
+        // this._addAmbientLight('#fefefe', 0.9);
         if (this.settings.day_light.show) {
             this._addDayLight();
         }
@@ -504,7 +504,7 @@ export class DataThreejs {
         const light: THREE.HemisphereLight = new THREE.HemisphereLight(
             0xffffff, // skyColor
             0xffffff, // groundColor
-            1 // intensity
+            0.5 // intensity
         );
         this._scene.add(light);
     }

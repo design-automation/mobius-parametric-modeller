@@ -49,7 +49,7 @@ export class GIViewerComponent implements OnInit {
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
             isDevMode()) {
-            // localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
         const singapore = Locale[0];

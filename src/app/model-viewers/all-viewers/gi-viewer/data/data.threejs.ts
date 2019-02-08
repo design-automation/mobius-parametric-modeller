@@ -518,7 +518,7 @@ export class DataThreejs {
 
     // Creates a Daylight
     private _addDayLight() {
-        this.daylight = new THREE.DirectionalLight(0xffffff, 0.3);
+        this.daylight = new THREE.DirectionalLight(0xffffff, this.settings.day_light.intensity);
         const scale = 1000;
         this.daylight.position.set(0, 2 * scale, 1 * scale);
         this.daylight.castShadow = true;

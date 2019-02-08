@@ -66,14 +66,3 @@ TODO: allow for a list of surfaces
   * coord1 = calc.ParamTToXyz (polyline1, 0.23)
   
   
-## ParamXyzToT  
-* **Description:** Calculates the 't' parameter along a linear entity, given a location.
-The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.  
-* **Parameters:**  
-  * *lines:* List of edges, wires, or polylines.  
-  * *locations:* List of positions, vertices, points, or coordinates.  
-* **Returns:** The 't' parameter vale, between 0 and 1.  
-* **Examples:**  
-  * coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
-  
-  

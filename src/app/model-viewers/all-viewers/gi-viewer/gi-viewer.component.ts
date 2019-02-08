@@ -8,7 +8,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
-import { number } from '@assets/core/modules/_mathjs';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -106,7 +105,7 @@ export class GIViewerComponent implements OnInit {
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
             isDevMode()) {
-            // localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {

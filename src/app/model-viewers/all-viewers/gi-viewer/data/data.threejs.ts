@@ -947,7 +947,7 @@ interface Settings {
         show: boolean,
         helper: boolean,
         intensity: number,
-        position: [number, number, number],
+        position: number[],
         size: number
     };
     ground: {

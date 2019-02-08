@@ -1,6 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { VERSION } from '@env/version';
 import { isDevMode } from '@angular/core';
+import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
+import SunCalc from 'suncalc';
 
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -8,7 +9,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
-import { number } from '@assets/core/modules/_mathjs';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -27,66 +27,9 @@ export class GIViewerComponent implements OnInit {
     @Input() data: GIModel;
     modelData: GIModel;
 
-    settings: Settings = {
-            normals: { show: false, size: 5 },
-            axes: { show: true, size: 50 },
-            grid: { show: true, size: 500 },
-            positions: { show: true, size: 0.5 },
-            tjs_summary: { show: false },
-            wireframe: { show: false },
-            colors: {
-                viewer_bg: '#E6E6E6',
-                position: '#000000',
-                position_s: '#0033FF',
-                vertex_s: '#FFCC00',
-                face_f: '#FFFFFF',
-                face_f_s: '#4949BD',
-                face_b: '#DDDDDD',
-                face_b_s: '#00006D'
-            },
-            day_light: {
-                show: false,
-                helper: false,
-                intensity: 0.5,
-                position: [0, 2000, 1000],
-                size: 1000
-            },
-            ground: {
-                show: false,
-                width: 1000,
-                length: 1000,
-                color: '#FFFFFF',
-                shininess: 0
-            },
-            version: VERSION.version
-        };
+    settings: Settings = DefaultSettings;
 
-    setting_colors = [{
-        label: 'Viewer Background',
-        setting: 'viewer_bg',
-        default: '#E6E6E6'
-    }, {
-        label: 'Position Default',
-        setting: 'position'
-    }, {
-        label: 'Position Selected',
-        setting: 'position_s'
-    }, {
-        label: 'Vertex Selected',
-        setting: 'vertex_s'
-    }, {
-        label: 'Face Front Default',
-        setting: 'face_f'
-    }, {
-        label: 'Face Front Selected',
-        setting: 'face_f_s'
-    }, {
-        label: 'Face Back Default',
-        setting: 'face_b'
-    }, {
-        label: 'Face Back Selected',
-        setting: 'face_b_s'
-    }];
+    setting_colors = SettingsColorMap;
 
     normalsEnabled = false;
 
@@ -109,6 +52,22 @@ export class GIViewerComponent implements OnInit {
             // localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
+        const singapore = Locale[0];
+
+        const times = SunCalc.getTimes(new Date(), singapore.lat, singapore.lat);
+        // console.log(times);
+
+        const date = times.sunrise;
+
+        const now_utc = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
+        console.log(new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000));
+
+        const sunrisePos = SunCalc.getPosition(now_utc, singapore.lat, singapore.lat);
+        const sunriseAzimuth = sunrisePos.azimuth * 180 / Math.PI;
+
+        console.log('sunrisePos', sunrisePos);
+        console.log('sunriseAzimuth', sunriseAzimuth);
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {
         //     this.columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
         // }
@@ -306,7 +265,7 @@ interface Settings {
         show: boolean,
         helper: boolean,
         intensity: number,
-        position: [number, number, number],
+        position: number[],
         size: number
     };
     ground: {

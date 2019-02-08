@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
-import { string } from '@assets/core/modules/_mathjs';
+import { number } from '@assets/core/modules/_mathjs';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -27,32 +27,7 @@ export class GIViewerComponent implements OnInit {
     @Input() data: GIModel;
     modelData: GIModel;
 
-    settings: {
-        normals: { show: boolean, size: number },
-        axes: { show: boolean, size: number },
-        grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean },
-        wireframe: { show: boolean },
-        colors: {
-            viewer_bg: string,
-            position: string,
-            position_s: string,
-            vertex_s: string,
-            face_f: string,
-            face_f_s: string,
-            face_b: string,
-            face_b_s: string
-        },
-        day_light: {
-            show: boolean,
-            helper: boolean,
-            intensity: number,
-            position: [number, number, number],
-            size: number
-        },
-        version: string
-    } = {
+    settings: Settings = {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
@@ -62,12 +37,12 @@ export class GIViewerComponent implements OnInit {
             colors: {
                 viewer_bg: '#E6E6E6',
                 position: '#000000',
-                position_s: '#0033ff',
-                vertex_s: '#ffcc00',
-                face_f: '#ffffff',
-                face_f_s: '#4949bd',
-                face_b: '#dddddd',
-                face_b_s: '#00006d'
+                position_s: '#0033FF',
+                vertex_s: '#FFCC00',
+                face_f: '#FFFFFF',
+                face_f_s: '#4949BD',
+                face_b: '#DDDDDD',
+                face_b_s: '#00006D'
             },
             day_light: {
                 show: false,
@@ -75,6 +50,13 @@ export class GIViewerComponent implements OnInit {
                 intensity: 0.5,
                 position: [0, 2000, 1000],
                 size: 1000
+            },
+            ground: {
+                show: false,
+                width: 1000,
+                length: 1000,
+                color: '#FFFFFF',
+                shininess: 0
             },
             version: VERSION.version
         };
@@ -258,6 +240,19 @@ export class GIViewerComponent implements OnInit {
                 this.settings.day_light.size = Number(value);
                 scene.dayLightScale(this.settings.day_light.size);
                 break;
+            case 'ground.show':
+                this.settings.ground.show = !this.settings.ground.show;
+                // scene.daylight.visible = this.settings.day_light.show;
+                break;
+            case 'ground.width':
+                this.settings.ground.width = Number(value);
+                break;
+            case 'ground.length':
+                this.settings.ground.length = Number(value);
+                break;
+            case 'ground.shininess':
+                this.settings.ground.shininess = Number(value);
+                break;
             default:
                 break;
         }
@@ -288,4 +283,38 @@ export class GIViewerComponent implements OnInit {
             }
         });
     }
+}
+
+interface Settings {
+    normals: { show: boolean, size: number };
+    axes: { show: boolean, size: number };
+    grid: { show: boolean, size: number };
+    positions: { show: boolean, size: number };
+    tjs_summary: { show: boolean };
+    wireframe: { show: boolean };
+    colors: {
+        viewer_bg: string,
+        position: string,
+        position_s: string,
+        vertex_s: string,
+        face_f: string,
+        face_f_s: string,
+        face_b: string,
+        face_b_s: string
+    };
+    day_light: {
+        show: boolean,
+        helper: boolean,
+        intensity: number,
+        position: [number, number, number],
+        size: number
+    };
+    ground: {
+        show: boolean,
+        width: number,
+        length: number,
+        color: string,
+        shininess: number
+    };
+    version: string;
 }

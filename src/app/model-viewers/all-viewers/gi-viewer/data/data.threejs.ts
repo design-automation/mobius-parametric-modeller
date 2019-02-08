@@ -47,59 +47,11 @@ export class DataThreejs {
     // Show Normals
     public vnh: THREE.VertexNormalsHelper;
     // Settings
-    public settings: {
-        normals: { show: boolean, size: number },
-        axes: { show: boolean, size: number },
-        grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean },
-        wireframe: { show: boolean },
-        colors: {
-            viewer_bg: string,
-            position: string,
-            position_s: string,
-            vertex_s: string,
-            face_f: string,
-            face_f_s: string,
-            face_b: string,
-            face_b_s: string
-        },
-        day_light: {
-            show: boolean,
-            helper: boolean,
-            intensity: number,
-            position: [number, number, number],
-            size: number
-        }
-    };
+    public settings: Settings;
     /**
      * Constructs a new data subscriber.
      */
-    constructor(settings: {
-        normals: { show: boolean, size: number },
-        axes: { show: boolean, size: number },
-        grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean },
-        wireframe: { show: boolean },
-        colors: {
-            viewer_bg: string,
-            position: string,
-            position_s: string,
-            vertex_s: string,
-            face_f: string,
-            face_f_s: string,
-            face_b: string,
-            face_b_s: string
-        },
-        day_light: {
-            show: boolean,
-            helper: boolean,
-            intensity: number,
-            position: [number, number, number],
-            size: number
-        }
-    }) {
+    constructor(settings: Settings) {
         this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
@@ -201,12 +153,18 @@ export class DataThreejs {
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
 
-        const planeGeometry = new THREE.PlaneBufferGeometry(800, 800, 32, 32);
-        const planeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, emissive: 0x000000, shininess: 0 });
-        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        plane.position.setZ(-10);
-        plane.receiveShadow = true;
-        this._scene.add(plane);
+        const ground = this.settings.ground;
+        if (ground.show) {
+            const planeGeometry = new THREE.PlaneBufferGeometry(ground.width, ground.length, 32, 32);
+            const planeMaterial = new THREE.MeshPhongMaterial({
+                color: new THREE.Color(parseInt(ground.color.replace('#', '0x'), 16)),
+                shininess: ground.shininess
+            });
+            const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.position.setZ(-10);
+            plane.receiveShadow = true;
+            this._scene.add(plane);
+        }
 
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
@@ -966,4 +924,37 @@ enum MaterialType {
     MeshLambertMaterial = 'MeshLambertMaterial',
     MeshPhongMaterial = 'MeshPhongMaterial',
     MeshPhysicalMaterial = 'MeshPhysicalMaterial'
+}
+
+interface Settings {
+    normals: { show: boolean, size: number };
+    axes: { show: boolean, size: number };
+    grid: { show: boolean, size: number };
+    positions: { show: boolean, size: number };
+    tjs_summary: { show: boolean };
+    wireframe: { show: boolean };
+    colors: {
+        viewer_bg: string,
+        position: string,
+        position_s: string,
+        vertex_s: string,
+        face_f: string,
+        face_f_s: string,
+        face_b: string,
+        face_b_s: string
+    };
+    day_light: {
+        show: boolean,
+        helper: boolean,
+        intensity: number,
+        position: [number, number, number],
+        size: number
+    };
+    ground: {
+        show: boolean,
+        width: number,
+        length: number,
+        color: string,
+        shininess: number
+    };
 }

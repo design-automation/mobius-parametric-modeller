@@ -101,6 +101,7 @@ modal-window {
                     border:1px solid #E6E6E6;
                     width: 120px;
                     vertical-align: top;
+                    text-transform: uppercase;
                     &.light{
                         color: #ffffff !important;
                     }
@@ -215,6 +216,10 @@ body.modal-open {
             width: calc(100% - 120px);
             .slider{
                 margin-left: 0px !important;
+                width: calc(100% - 80px);
+            }
+            .slider + input[type='text']{
+                margin-left: 15px !important;
             }
         }
     }

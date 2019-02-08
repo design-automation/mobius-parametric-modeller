@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
-import { string } from '@assets/core/modules/_mathjs';
+import { number } from '@assets/core/modules/_mathjs';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -27,25 +27,7 @@ export class GIViewerComponent implements OnInit {
     @Input() data: GIModel;
     modelData: GIModel;
 
-    settings: {
-        normals: { show: boolean, size: number },
-        axes: { show: boolean, size: number },
-        grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean },
-        wireframe: { show: boolean },
-        colors: {
-            viewer_bg: string,
-            position: string,
-            position_s: string,
-            vertex_s: string,
-            face_f: string,
-            face_f_s: string,
-            face_b: string,
-            face_b_s: string
-        },
-        version: string
-    } = {
+    settings: Settings = {
             normals: { show: false, size: 5 },
             axes: { show: true, size: 50 },
             grid: { show: true, size: 500 },
@@ -55,12 +37,26 @@ export class GIViewerComponent implements OnInit {
             colors: {
                 viewer_bg: '#E6E6E6',
                 position: '#000000',
-                position_s: '#0033ff',
-                vertex_s: '#ffcc00',
-                face_f: '#ffffff',
-                face_f_s: '#4949bd',
-                face_b: '#dddddd',
-                face_b_s: '#00006d'
+                position_s: '#0033FF',
+                vertex_s: '#FFCC00',
+                face_f: '#FFFFFF',
+                face_f_s: '#4949BD',
+                face_b: '#DDDDDD',
+                face_b_s: '#00006D'
+            },
+            day_light: {
+                show: false,
+                helper: false,
+                intensity: 0.5,
+                position: [0, 2000, 1000],
+                size: 1000
+            },
+            ground: {
+                show: false,
+                width: 1000,
+                length: 1000,
+                color: '#FFFFFF',
+                shininess: 0
             },
             version: VERSION.version
         };
@@ -110,7 +106,7 @@ export class GIViewerComponent implements OnInit {
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
             isDevMode()) {
-            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+            // localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
 
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {
@@ -217,6 +213,46 @@ export class GIViewerComponent implements OnInit {
             case 'wireframe.show':
                 this.wireframeToggle();
                 break;
+            case 'day_light.show':
+                this.settings.day_light.show = !this.settings.day_light.show;
+                scene.daylight.visible = this.settings.day_light.show;
+                break;
+            case 'day_light.helper':
+                this.settings.day_light.helper = !this.settings.day_light.helper;
+                break;
+            case 'day_light.intensity':
+                this.settings.day_light.intensity = Number(value);
+                scene.daylight.intensity = this.settings.day_light.intensity;
+                break;
+            case 'day_light.p.x':
+                this.settings.day_light.position[0] = Number(value);
+                scene.daylight.position.setX(this.settings.day_light.position[0]);
+                break;
+            case 'day_light.p.y':
+                this.settings.day_light.position[1] = Number(value);
+                scene.daylight.position.setY(this.settings.day_light.position[1]);
+                break;
+            case 'day_light.p.z':
+                this.settings.day_light.position[2] = Number(value);
+                scene.daylight.position.setZ(this.settings.day_light.position[2]);
+                break;
+            case 'day_light.size':
+                this.settings.day_light.size = Number(value);
+                scene.dayLightScale(this.settings.day_light.size);
+                break;
+            case 'ground.show':
+                this.settings.ground.show = !this.settings.ground.show;
+                // scene.daylight.visible = this.settings.day_light.show;
+                break;
+            case 'ground.width':
+                this.settings.ground.width = Number(value);
+                break;
+            case 'ground.length':
+                this.settings.ground.length = Number(value);
+                break;
+            case 'ground.shininess':
+                this.settings.ground.shininess = Number(value);
+                break;
             default:
                 break;
         }
@@ -247,4 +283,38 @@ export class GIViewerComponent implements OnInit {
             }
         });
     }
+}
+
+interface Settings {
+    normals: { show: boolean, size: number };
+    axes: { show: boolean, size: number };
+    grid: { show: boolean, size: number };
+    positions: { show: boolean, size: number };
+    tjs_summary: { show: boolean };
+    wireframe: { show: boolean };
+    colors: {
+        viewer_bg: string,
+        position: string,
+        position_s: string,
+        vertex_s: string,
+        face_f: string,
+        face_f_s: string,
+        face_b: string,
+        face_b_s: string
+    };
+    day_light: {
+        show: boolean,
+        helper: boolean,
+        intensity: number,
+        position: [number, number, number],
+        size: number
+    };
+    ground: {
+        show: boolean,
+        width: number,
+        length: number,
+        color: string,
+        shininess: number
+    };
+    version: string;
 }

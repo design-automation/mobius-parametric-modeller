@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'my-tab',
+  selector: 'tab',
   styles: [
     `
     .pane{
@@ -15,7 +15,7 @@ import { Component, Input } from '@angular/core';
     </div>
   `
 })
-export class ATabComponent {
+export class TabComponent {
     // tslint:disable-next-line: no-input-rename
     @Input('tabTitle') title: string;
     @Input() active = false;

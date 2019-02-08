@@ -37,6 +37,7 @@ export class DataThreejs {
     public grid: THREE.GridHelper;
     // axes
     public axesHelper: THREE.AxesHelper;
+    daylight: THREE.DirectionalLight;
     // the GI model to display
     public _model: GIModel;
 
@@ -46,45 +47,11 @@ export class DataThreejs {
     // Show Normals
     public vnh: THREE.VertexNormalsHelper;
     // Settings
-    public settings: {
-        normals: { show: boolean, size: number },
-        axes: { show: boolean, size: number },
-        grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean },
-        wireframe: { show: boolean },
-        colors: {
-            viewer_bg: string,
-            position: string,
-            position_s: string,
-            vertex_s: string,
-            face_f: string,
-            face_f_s: string,
-            face_b: string,
-            face_b_s: string
-        }
-    };
+    public settings: Settings;
     /**
      * Constructs a new data subscriber.
      */
-    constructor(settings: {
-        normals: { show: boolean, size: number },
-        axes: { show: boolean, size: number },
-        grid: { show: boolean, size: number },
-        positions: { show: boolean, size: number },
-        tjs_summary: { show: boolean },
-        wireframe: { show: boolean },
-        colors: {
-            viewer_bg: string,
-            position: string,
-            position_s: string,
-            vertex_s: string,
-            face_f: string,
-            face_f_s: string,
-            face_b: string,
-            face_b_s: string
-        }
-    }) {
+    constructor(settings: Settings) {
         this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
@@ -129,8 +96,9 @@ export class DataThreejs {
 
         // add grid and lights
         this._addGrid();
+        this._addDayLight();
         // this._addHemisphereLight();
-        this._addAmbientLight('#fefefe', 1);
+        this._addAmbientLight('#fefefe', 0.8);
         this._addAxes();
     }
     /**
@@ -152,8 +120,10 @@ export class DataThreejs {
 
         this._addGrid();
         // this._addHemisphereLight();
-        this._addAmbientLight('#fefefe', 1);
-        // this._addDirectionalLight();
+        this._addAmbientLight('#fefefe', 0.8);
+        if (this.settings.day_light.show) {
+            this._addDayLight();
+        }
         this._addAxes();
 
         // Add geometry
@@ -183,11 +153,18 @@ export class DataThreejs {
         const position_size = this.settings.positions.size;
         this._raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
 
-        // const planeGeometry = new THREE.PlaneBufferGeometry( 1000, 1000, 32, 32 );
-        // const planeMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
-        // const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-        // plane.receiveShadow = true;
-        // this._scene.add( plane );
+        const ground = this.settings.ground;
+        if (ground.show) {
+            const planeGeometry = new THREE.PlaneBufferGeometry(ground.width, ground.length, 32, 32);
+            const planeMaterial = new THREE.MeshPhongMaterial({
+                color: new THREE.Color(parseInt(ground.color.replace('#', '0x'), 16)),
+                shininess: ground.shininess
+            });
+            const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.position.setZ(-10);
+            plane.receiveShadow = true;
+            this._scene.add(plane);
+        }
 
         // const allObjs = this.getAllObjs();
         // const center = allObjs.center;
@@ -525,8 +502,8 @@ export class DataThreejs {
      */
     private _addHemisphereLight() {
         const light: THREE.HemisphereLight = new THREE.HemisphereLight(
-            0xffffbb, // skyColor
-            0x080820, // groundColor
+            0xffffff, // skyColor
+            0xffffff, // groundColor
             1 // intensity
         );
         this._scene.add(light);
@@ -539,13 +516,38 @@ export class DataThreejs {
         this._scene.add(light);
     }
 
-    // Creates a Directional Light
-    private _addDirectionalLight() {
-        const light = new THREE.SpotLight(0xffffff);
-        light.position.set(200, 200, 150);
-        light.castShadow = true;
-        this._scene.add(light);
+    // Creates a Daylight
+    private _addDayLight() {
+        this.daylight = new THREE.DirectionalLight(0xffffff, 0.3);
+        const scale = 1000;
+        this.daylight.position.set(0, 2 * scale, 1 * scale);
+        this.daylight.castShadow = true;
+        this.daylight.visible = this.settings.day_light.show;
+        this.daylight.shadow.mapSize.width = 2048;  // default
+        this.daylight.shadow.mapSize.height = 2048; // default
+        this.daylight.shadow.camera.near = 0.5;    // default
+        this._scene.add(this.daylight);
+        this.dayLightScale(this.settings.day_light.size);
+        const helper = new THREE.CameraHelper( this.daylight.shadow.camera );
+        helper.visible = this.settings.day_light.helper;
+        this._scene.add( helper );
+        this._renderer.render(this._scene, this._camera);
     }
+
+    public dayLightScale(size = null) {
+        let scale;
+        if (size) {
+            scale = size;
+        } else {
+            scale = 1000;
+        }
+        this.daylight.shadow.camera.far = 4 * scale;
+        this.daylight.shadow.camera.left = -scale;
+        this.daylight.shadow.camera.right = scale;
+        this.daylight.shadow.camera.top = scale;
+        this.daylight.shadow.camera.bottom = -scale;
+    }
+
     // add axes
     public _addAxes(size: number = this.settings.axes.size) {
         let i = 0;
@@ -922,4 +924,37 @@ enum MaterialType {
     MeshLambertMaterial = 'MeshLambertMaterial',
     MeshPhongMaterial = 'MeshPhongMaterial',
     MeshPhysicalMaterial = 'MeshPhysicalMaterial'
+}
+
+interface Settings {
+    normals: { show: boolean, size: number };
+    axes: { show: boolean, size: number };
+    grid: { show: boolean, size: number };
+    positions: { show: boolean, size: number };
+    tjs_summary: { show: boolean };
+    wireframe: { show: boolean };
+    colors: {
+        viewer_bg: string,
+        position: string,
+        position_s: string,
+        vertex_s: string,
+        face_f: string,
+        face_f_s: string,
+        face_b: string,
+        face_b_s: string
+    };
+    day_light: {
+        show: boolean,
+        helper: boolean,
+        intensity: number,
+        position: [number, number, number],
+        size: number
+    };
+    ground: {
+        show: boolean,
+        width: number,
+        length: number,
+        color: string,
+        shininess: number
+    };
 }

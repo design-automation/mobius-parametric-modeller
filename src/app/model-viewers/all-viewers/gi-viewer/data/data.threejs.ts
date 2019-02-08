@@ -159,7 +159,8 @@ export class DataThreejs {
             const groundGeom = new THREE.PlaneBufferGeometry(ground.width, ground.length, 32, 32);
             const planeMaterial = new THREE.MeshPhongMaterial({
                 color: new THREE.Color(parseInt(ground.color.replace('#', '0x'), 16)),
-                shininess: ground.shininess
+                shininess: ground.shininess,
+                side: THREE.DoubleSide
             });
             this.groundObj = new THREE.Mesh(groundGeom, planeMaterial);
             this.groundObj.position.setZ(ground.height);

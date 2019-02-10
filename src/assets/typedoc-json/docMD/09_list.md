@@ -1,58 +1,30 @@
 # LIST    
 
 ## Append  
-* **Description:** Adds one value to the end of an list.
-If value is an list, the entire list will be appended as one value.  
+* **Description:** Adds an item to a list.
+If item is a list, the entire list will be appended as a single item.  
 * **Parameters:**  
-  * *list:* List to add to.  
-  * *value:* Item to add.  
-  * *method:* Enum, append to start or end.  
+  * *list:* List to append the item to.  
+  * *value:* Item to append.  
+  * *method:* Enum, select the method.  
+* **Returns:** void  
 * **Examples:**  
   * append = list.Append(list, 4, 'at_end')  
     where list = [1,2,3]
 Expected value of list is [1,2,3,4].
   
   
-## RemoveIndex  
-* **Description:** Removes the value at the specified index from a list.  
+## Edit  
+* **Description:** Modifies items in a list, either replacing or removing values, depending on the method that is selected.  
 * **Parameters:**  
-  * *list:* List to remove value from.  
-  * *index:* Zero-based index number of value to remove.  
-* **Examples:**  
-  * remove = list.RemoveIndex(list,1)  
-    where list = [1,2,3]
-Expected value of remove is [1,3].
-  
-  
-## RemoveValue  
-* **Description:** Removes values that matches specified value from a list.
-Items must match both the value and type of specified value.  
-* **Parameters:**  
-  * *list:* List to remove value from.  
-  * *value:* Value to search for.  
-  * *method:* Enum; specifies whether to remove all occurances or only the first.  
-* **Examples:**  
-  * remove = list.RemoveValue(list,2,'remove_all')  
-    where list = [1,2,2,3]
-Expected value of remove is [1,3].
-  
-  
-## ReplaceValue  
-* **Description:** Replaces values that matches specified value from an list with a new value
-Items must match both the value and type of specified value  
-* **Parameters:**  
-  * *list:* List to remove value from.  
-  * *value1:* Value to search for.  
-  * *value2:* Value to replace existing value with.  
-  * *method:* Enum; specifies whether to replace all occurances or only the first.  
-* **Examples:**  
-  * replace = list.ReplaceValue(list,2,9,'replace_all')  
-    where list = [1,2,2,3]
-Expected value of replace is [1,9,9,3].
-  
+  * *list:* The list in which to modify items  
+  * *old_value:* undefined  
+  * *new_value:* The new value (only used if a 'replace' method is selected)  
+  * *method:* Enum, select the method for modifying the list.  
+* **Returns:** void  
   
 ## Sort  
-* **Description:** Sorts an list of values.
+* **Description:** Sorts an list, based on the values of the items in the list.
 ~
 For alphabetical sort, values are sorted according to string Unicode code points
 (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)  
@@ -70,20 +42,68 @@ Expected value of list is [6,48,56].
   
   
 ## Splice  
-* **Description:** Adds and/or removes values to/from a list.
+* **Description:** Removes and inserts items in a list.
 ~
-If no values_to_add are specified, then values are only removed.
-If num_to_remove is 0, then values are only added.  
+If no items_to_add are specified, then items are only removed.
+If num_to_remove is 0, then values are only inserted.  
 * **Parameters:**  
   * *list:* List to splice.  
-  * *index:* Zero-based index at which to add/remove values. (Items are added/removed after specified index)  
-  * *num_to_remove:* Number of values to remove.  
-  * *values_to_add:* List of values to add, or null.  
+  * *index:* Zero-based index after which to starting removing or inserting items.  
+  * *num_to_remove:* Number of items to remove.  
+  * *items_to_insert:* List of items to add, or null.  
 * **Returns:** void  
 * **Examples:**  
   * result = list.Splice(list1, 1, 3, [2.2, 3.3])  
     where list1 = [10, 20, 30, 40, 50]
-Expected value of result is [10, 2.2, 3.3, 50]. New values were added where the values were removed.
+Expected value of result is [10, 2.2, 3.3, 50]. New items were added where the items were removed.
+  
+  
+## RemoveIndex  
+* **Description:** Removes the value at the specified index from a list.
+~
+WARNING: This function has been deprecated. Please use the list.Modify() function.  
+* **Parameters:**  
+  * *list:* List to remove value from.  
+  * *index:* Zero-based index number of value to remove.  
+* **Examples:**  
+  * remove = list.RemoveIndex(list,1)  
+    where list = [1,2,3]
+Expected value of remove is [1,3].
+  
+  
+## RemoveValue  
+* **Description:** Removes values that matches specified value from a list.
+Items must match both the value and type of specified value.
+~
+Returns original list if no values in list match specified value.
+~
+WARNING: This function has been deprecated. Please use the list.Modify() function.  
+* **Parameters:**  
+  * *list:* List to remove value from.  
+  * *value:* Value to search for.  
+  * *method:* Enum; specifies whether to remove all occurances or only the first.  
+* **Examples:**  
+  * remove = list.RemoveValue(list,2,'remove_all')  
+    where list = [1,2,2,3]
+Expected value of remove is [1,3].
+  
+  
+## ReplaceValue  
+* **Description:** Replaces values that matches specified value from an list with a new value
+Items must match both the value and type of specified value
+~
+Returns original list if no value in list matches specified value.
+~
+WARNING: This function has been deprecated. Please use the list.Modify() function.  
+* **Parameters:**  
+  * *list:* List to remove value from.  
+  * *value1:* Value to search for.  
+  * *value2:* Value to replace existing value with.  
+  * *method:* Enum; specifies whether to replace all occurances or only the first.  
+* **Examples:**  
+  * replace = list.ReplaceValue(list,2,9,'replace_all')  
+    where list = [1,2,2,3]
+Expected value of replace is [1,9,9,3].
   
   
 ## IndexOf  

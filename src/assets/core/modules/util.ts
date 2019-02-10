@@ -41,7 +41,7 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
             geom_pack = __model__.setData(gi_json);
             break;
         case _EIODataFormat.OBJ:
-            throw new Error("Not implemented");
+            throw new Error('Not implemented');
             // const obj_model: GIModel = importObj(model_data);
             // geom_pack = __merge__(__model__, obj_model);
             break;
@@ -84,3 +84,38 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
     }
 }
 // ================================================================================================
+/**
+ * Returns a text summary of the contents of this model
+ * 
+ * @param __model__
+ * @returns Text that summarises what is in the model, click print to see this text.
+ */
+export function ModelInfo(__model__: GIModel): string {
+    return JSON.stringify(
+        {
+            'geometry': {
+                'num_positions': __model__.geom.query.numEnts(EEntType.POSI, false),
+                'num_vertices': __model__.geom.query.numEnts(EEntType.VERT, false),
+                'num_edges': __model__.geom.query.numEnts(EEntType.EDGE, false),
+                'num_wires': __model__.geom.query.numEnts(EEntType.WIRE, false),
+                'num_faces': __model__.geom.query.numEnts(EEntType.FACE, false),
+                'num_points': __model__.geom.query.numEnts(EEntType.POINT, false),
+                'num_polylines': __model__.geom.query.numEnts(EEntType.PLINE, false),
+                'num_polygons': __model__.geom.query.numEnts(EEntType.PGON, false),
+                'num_collections': __model__.geom.query.numEnts(EEntType.COLL, false)
+            },
+            'attributes': {
+                'position_attribs': __model__.attribs.query.getAttribNames(EEntType.POSI),
+                'vertex_attribs': __model__.attribs.query.getAttribNames(EEntType.VERT),
+                'edge_attribs': __model__.attribs.query.getAttribNames(EEntType.EDGE),
+                'wire_attribs': __model__.attribs.query.getAttribNames(EEntType.WIRE),
+                'face_attribs': __model__.attribs.query.getAttribNames(EEntType.FACE),
+                'point_attribs': __model__.attribs.query.getAttribNames(EEntType.POINT),
+                'polyline_attribs': __model__.attribs.query.getAttribNames(EEntType.PLINE),
+                'polygon_attribs': __model__.attribs.query.getAttribNames(EEntType.PGON),
+                'collection_attribs': __model__.attribs.query.getAttribNames(EEntType.COLL),
+                'model_attribs': __model__.attribs.query.getAttribNames(EEntType.MOD)
+            }
+        },
+    );
+}

@@ -30,13 +30,18 @@ const constants = [
  ];
 
 const lists = [
-    ['range(start, end)', 'Generates a list of integers as a range, from start to end'],
+    ['range(start, end)', 'Generates a list of integers, from start to end, with a step size of 1'],
+    ['range(start, end, step?)', 'Generates a list of integers, from start to end, with a specified step size'],
     ['isList(list)', 'Returns true if this is a list, false otherwise.'],
     ['listLen(list)', 'Returns the number of items in the list'],
-    ['listCopy(list)', 'Returns a copy of the list'],
+    ['listLast(list)', 'Returns the last item in a list'],
+    ['listGet(list, index)', 'Returns the item in the list specified by index, either a positive or negative integer'],
     ['listFind(list, val)', 'Returns the index of the first occurence of the value in the list, or -1 if not found'],
     ['listHas(list, val)', 'Returns true if the list contains the value, false otherwise'],
+    ['listCount(list, val)', 'Returns the number of times the value is in the list'],
+    ['listCopy(list)', 'Returns a copy of the list'],
     ['listJoin(list1, list2)', 'Joins two lists into a single list'],
+    ['listFlat(list)', 'Returns a copy of the nested list, flattened to a depth of 1'],
     ['listFlat(list, depth?)', 'Returns a copy of the nested list, flattened to the specified depth'],
     ['listSlice(start, end?)', 'Return a sub-list from the list'],
     ['listZip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list'],

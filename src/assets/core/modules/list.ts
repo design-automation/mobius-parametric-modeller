@@ -11,24 +11,23 @@
  */
 
 import { checkCommTypes } from './_check_args';
+import { idsBreak } from '@libs/geo-info/id';
+import { TEntTypeIdx } from '@libs/geo-info/common';
 
 
 // ================================================================================================
-/**
- * ================================================================================================
- * list functions that modify the original input list. Return void.
- */
 export enum _EAppendMethod {
     TO_START = 'to_start',
     TO_END = 'to_end'
 }
 /**
- * Adds one value to the end of an list.
- * If value is an list, the entire list will be appended as one value.
+ * Adds an item to a list.
+ * If item is a list, the entire list will be appended as a single item.
  *
- * @param list List to add to.
- * @param value Item to add.
- * @param method Enum, append to start or end.
+ * @param list List to append the item to.
+ * @param value Item to append.
+ * @param method Enum, select the method.
+ * @returns void
  * @example append = list.Append(list, 4, 'at_end')
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].
@@ -46,87 +45,68 @@ export function Append(list: any[], value: any, method: _EAppendMethod): void {
     }
 }
 // ================================================================================================
-/**
- * Removes the value at the specified index from a list.
- *
- * @param list List to remove value from.
- * @param index Zero-based index number of value to remove.
- * @example remove = list.RemoveIndex(list,1)
- * @example_info where list = [1,2,3]
- * Expected value of remove is [1,3].
- */
-export function RemoveIndex(list: any[], index: number): void {
-    // --- Error Check ---
-    const fn_name = 'list.RemoveIndex';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'index', index, ['isInt']);
-    // --- Error Check ---
-    list.splice(index, 1);
-}
-// ================================================================================================
-export enum _ERemoveValueMethod {
-    REMOVE_ALL = 'remove_all',
-    REMOVE_FIRST = 'remove_first'
+export enum _EEditMethod {
+    REMOVE_FIRST_VALUE = 'remove_first_value',
+    REMOVE_LAST_VALUE = 'remove_last_value',
+    REMOVE_ALL_VALUES = 'remove_all_values',
+    REPLACE_FIRST_VALUE = 'replace_first_value',
+    REPLACE_LAST_VALUE = 'replace_last_value',
+    REPLACE_ALL_VALUES = 'replace_all_values'
 }
 /**
- * Removes values that matches specified value from a list.
- * Items must match both the value and type of specified value.
- *
- * Returns original list if no values in list match specified value.
- *
- * @param list List to remove value from.
- * @param value Value to search for.
- * @param method Enum; specifies whether to remove all occurances or only the first.
- * @example remove = list.RemoveValue(list,2,'remove_all')
- * @example_info where list = [1,2,2,3]
- * Expected value of remove is [1,3].
+ * Modifies items in a list, either replacing or removing values, depending on the method that is selected.
+ * 
+ * @param list The list in which to modify items
+ * @param item The item to modify, either the index of the item or the value
+ * @param new_value The new value (only used if a 'replace' method is selected)
+ * @param method Enum, select the method for modifying the list.
+ * @returns void
  */
-export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
+export function Edit(list: any[], old_value: any, new_value: any, method: _EEditMethod): void {
     // --- Error Check ---
-    const fn_name = 'list.RemoveValue';
+    const fn_name = 'list.Edit';
     checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    checkCommTypes(fn_name, 'old_value', old_value, ['isAny']);
+    checkCommTypes(fn_name, 'new_value', new_value, ['isAny']);
     // --- Error Check ---
-    for (let i = list.length - 1; i >= 0; i--) {
-        if (list[i] === value) {
-            list.splice(i, 1);
-            if (method === _ERemoveValueMethod.REMOVE_FIRST) {break; }
-        }
+    let index: number;
+    switch (method) {
+        case _EEditMethod.REMOVE_FIRST_VALUE:
+            index = list.indexOf(old_value);
+            if (index !== -1) { list.splice(index, 1); }
+            break;
+        case _EEditMethod.REMOVE_LAST_VALUE:
+            index = list.lastIndexOf(old_value);
+            if (index !== -1) { list.splice(index, 1); }
+            break;
+        case _EEditMethod.REMOVE_ALL_VALUES:
+            for (index = 0; index < list.length; index++) {
+                if (list[index] === old_value) {
+                    list.splice(index, 1);
+                    index -= 1;
+                }
+            }
+            break;
+        case _EEditMethod.REPLACE_FIRST_VALUE:
+            index = list.indexOf(old_value);
+            if (index !== -1) { list[index] = new_value; }
+            break;
+        case _EEditMethod.REPLACE_LAST_VALUE:
+            index = list.lastIndexOf(old_value);
+            if (index !== -1) { list[index] = new_value; }
+            break;
+        case _EEditMethod.REPLACE_ALL_VALUES:
+            for (index = 0; index < list.length; index++) {
+                if (list[index] === old_value) {
+                    list[index] = new_value;
+                }
+            }
+            break;
+        default:
+            throw new Error('list.Modify: Modify method not recognised.');
     }
 }
 // ================================================================================================
-export enum _EReplaceValueMethod {
-    REPLACE_ALL = 'replace_all',
-    REPLACE_FIRST = 'replace_first'
-}
-/**
- * Replaces values that matches specified value from an list with a new value
- * Items must match both the value and type of specified value
- *
- * Returns original list if no value in list matches specified value.
- *
- * @param list List to remove value from.
- * @param value1 Value to search for.
- * @param value2 Value to replace existing value with.
- * @param method Enum; specifies whether to replace all occurances or only the first.
- * @example replace = list.ReplaceValue(list,2,9,'replace_all')
- * @example_info where list = [1,2,2,3]
- * Expected value of replace is [1,9,9,3].
- */
-export function ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
-    // --- Error Check ---
-    const fn_name = 'list.ReplaceValue';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value1', value1, ['isAny']);
-    checkCommTypes(fn_name, 'value2', value2, ['isAny']);
-    // --- Error Check ---
-    for (let i = 0 ; i < list.length ; i++) {
-        if (list[i] === value1) {
-            list[i] = value2;
-            if (method === _EReplaceValueMethod.REPLACE_FIRST) {break; }
-        }
-    }
-}
 
 // ================================================================================================
 export enum _ESortMethod {
@@ -135,9 +115,18 @@ export enum _ESortMethod {
     'REV_ALPHA' = 'alpha_ascending',
     'NUM' = 'numeric_descending',
     'REV_NUM' = 'numeric_ascending',
+    'ID' = 'ID_descending',
+    'REV_ID' = 'ID_ascending',
     'SHIFT' = 'shift_1',
     'REV_SHIFT' = 'reverse_shift_1',
     'RANDOM' = 'random'
+}
+function _compareID(id1: string, id2: string): number {
+    const [ent_type1, index1]: TEntTypeIdx = idsBreak(id1) as TEntTypeIdx;
+    const [ent_type2, index2]: TEntTypeIdx = idsBreak(id2) as TEntTypeIdx;
+    if (ent_type1 !== ent_type2) { return ent_type1 -  ent_type2; }
+    if (index1 !== index2) { return ent_type1 -  ent_type2; }
+    return 0;
 }
 function _sort(list: any[], method: _ESortMethod): void {
     switch (method) {
@@ -156,6 +145,12 @@ function _sort(list: any[], method: _ESortMethod): void {
         case _ESortMethod.REV_NUM:
             list.sort((a, b) => a - b).reverse();
             break;
+        case _ESortMethod.ID:
+            list.sort(_compareID);
+            break;
+        case _ESortMethod.REV_ID:
+            list.sort(_compareID).reverse();
+            break;
         case _ESortMethod.SHIFT:
             const first: any = list.shift();
             list.push(first);
@@ -169,11 +164,10 @@ function _sort(list: any[], method: _ESortMethod): void {
             break;
         default:
             throw new Error('list.Sort: Sort method not recognised.');
-            break;
     }
 }
 /**
- * Sorts an list of values.
+ * Sorts an list, based on the values of the items in the list.
  * ~
  * For alphabetical sort, values are sorted according to string Unicode code points
  * (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)
@@ -196,34 +190,34 @@ export function Sort(list: any[], method: _ESortMethod): void {
 }
 // ================================================================================================
 /**
- * Adds and/or removes values to/from a list.
+ * Removes and inserts items in a list.
  * ~
- * If no values_to_add are specified, then values are only removed.
- * If num_to_remove is 0, then values are only added.
+ * If no items_to_add are specified, then items are only removed.
+ * If num_to_remove is 0, then values are only inserted.
  *
  * @param list List to splice.
- * @param index Zero-based index at which to add/remove values. (Items are added/removed after specified index)
- * @param num_to_remove Number of values to remove.
- * @param values_to_add List of values to add, or null.
+ * @param index Zero-based index after which to starting removing or inserting items.
+ * @param num_to_remove Number of items to remove.
+ * @param items_to_insert List of items to add, or null.
  * @returns void
  * @example result = list.Splice(list1, 1, 3, [2.2, 3.3])
  * @example_info where list1 = [10, 20, 30, 40, 50]
- * Expected value of result is [10, 2.2, 3.3, 50]. New values were added where the values were removed.
+ * Expected value of result is [10, 2.2, 3.3, 50]. New items were added where the items were removed.
  */
-export function Splice(list: any[], index: number, num_to_remove: number, values_to_add: any[]): void {
+export function Splice(list: any[], index: number, num_to_remove: number, items_to_insert: any[]): void {
     // --- Error Check ---
     const fn_name = 'list.Splice';
     checkCommTypes(fn_name, 'list', list, ['isList']);
     checkCommTypes(fn_name, 'index', index, ['isInt']);
     checkCommTypes(fn_name, 'num_to_remove', num_to_remove, ['isInt']);
-    checkCommTypes(fn_name, 'values_to_add', values_to_add, ['isList']);
+    checkCommTypes(fn_name, 'values_to_add', items_to_insert, ['isList']);
     // --- Error Check ---
 
     // avoid the spread operator
     list.splice(index, num_to_remove);
-    if (values_to_add !== null && values_to_add.length) {
-        for (let i = 0; i < values_to_add.length; i++) {
-            list.splice(index + i, 0, values_to_add[i]);
+    if (items_to_insert !== null && items_to_insert.length) {
+        for (let i = 0; i < items_to_insert.length; i++) {
+            list.splice(index + i, 0, items_to_insert[i]);
         }
     }
 }
@@ -267,6 +261,95 @@ export function Splice(list: any[], index: number, num_to_remove: number, values
  * ================================================================================================
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
+
+/**
+ * Removes the value at the specified index from a list.
+ * ~
+ * WARNING: This function has been deprecated. Please use the list.Modify() function.
+ * 
+ * @param list List to remove value from.
+ * @param index Zero-based index number of value to remove.
+ * @example remove = list.RemoveIndex(list,1)
+ * @example_info where list = [1,2,3]
+ * Expected value of remove is [1,3].
+ */
+export function RemoveIndex(list: any[], index: number): void {
+    // --- Error Check ---
+    const fn_name = 'list.RemoveIndex';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'index', index, ['isInt']);
+    // --- Error Check ---
+    list.splice(index, 1);
+}
+// ================================================================================================
+export enum _ERemoveValueMethod {
+    REMOVE_ALL = 'remove_all',
+    REMOVE_FIRST = 'remove_first'
+}
+/**
+ * Removes values that matches specified value from a list.
+ * Items must match both the value and type of specified value.
+ * ~
+ * Returns original list if no values in list match specified value.
+ * ~
+ * WARNING: This function has been deprecated. Please use the list.Modify() function.
+ *
+ * @param list List to remove value from.
+ * @param value Value to search for.
+ * @param method Enum; specifies whether to remove all occurances or only the first.
+ * @example remove = list.RemoveValue(list,2,'remove_all')
+ * @example_info where list = [1,2,2,3]
+ * Expected value of remove is [1,3].
+ */
+export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
+    // --- Error Check ---
+    const fn_name = 'list.RemoveValue';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
+    for (let i = list.length - 1; i >= 0; i--) {
+        if (list[i] === value) {
+            list.splice(i, 1);
+            if (method === _ERemoveValueMethod.REMOVE_FIRST) {break; }
+        }
+    }
+}
+// ================================================================================================
+export enum _EReplaceValueMethod {
+    REPLACE_ALL = 'replace_all',
+    REPLACE_FIRST = 'replace_first'
+}
+/**
+ * Replaces values that matches specified value from an list with a new value
+ * Items must match both the value and type of specified value
+ * ~
+ * Returns original list if no value in list matches specified value.
+ * ~
+ * WARNING: This function has been deprecated. Please use the list.Modify() function.
+ *
+ * @param list List to remove value from.
+ * @param value1 Value to search for.
+ * @param value2 Value to replace existing value with.
+ * @param method Enum; specifies whether to replace all occurances or only the first.
+ * @example replace = list.ReplaceValue(list,2,9,'replace_all')
+ * @example_info where list = [1,2,2,3]
+ * Expected value of replace is [1,9,9,3].
+ */
+export function ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
+    // --- Error Check ---
+    const fn_name = 'list.ReplaceValue';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value1', value1, ['isAny']);
+    checkCommTypes(fn_name, 'value2', value2, ['isAny']);
+    // --- Error Check ---
+    for (let i = 0 ; i < list.length ; i++) {
+        if (list[i] === value1) {
+            list[i] = value2;
+            if (method === _EReplaceValueMethod.REPLACE_FIRST) {break; }
+        }
+    }
+}
+
 
 export enum _EIndexOfMethod {
     SEARCH_ALL = 'search_all',

@@ -274,7 +274,7 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 export function VisRay(__model__: GIModel, ray: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visRay';
-    // checkCommTypes(fn_name, 'ray', ray, ['isRay']); // TODO rays can be a list
+    checkCommTypes(fn_name, 'ray', ray, ['isRay']); // TODO rays can be a list // add isRayList to enable check
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
    return idsMake(_visRay(__model__, ray, scale)) as TId[];
@@ -352,7 +352,7 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
 export function VisPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visPlane';
-    // checkCommTypes(fn_name, 'planes', planes, ['isPlane']); // TODO planes can be a list
+    checkCommTypes(fn_name, 'planes', planes, ['isPlane']); // TODO planes can be a list // add isPlaneList to enable check
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
@@ -421,7 +421,7 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
 export function visBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visBBox';
-    // checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']); // TODO bboxs can be a list
+    checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']); // TODO bboxs can be a list // add isBBoxList to enable check
     // --- Error Check ---
     return  idsMake(_visBBox(__model__, bbox)) as TId[];
 }

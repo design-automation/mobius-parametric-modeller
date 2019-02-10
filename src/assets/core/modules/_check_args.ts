@@ -232,13 +232,17 @@ const typeCheckObj  = {
         typeCheckObj.isCoord(fn_name, arg_name, arg_list);
         return;
     },
-    isVectorList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
-        // Add if required
+    isVectorList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'vectors');
+        for (let i = 0; i < arg_list.length; i++) {
+            typeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
     },
     isOrigin: function(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx {
         return checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']) as TEntTypeIdx;
     },
-    isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = Txyz, Txyz, Txyz]
+    isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = [Txyz, Txyz, Txyz]
         // one origin: point, posi, vert, coord + 2 vectors
         isListArg(fn_name, arg_name, arg_list, 'origin and vectors');
         isListLenArg(fn_name, arg_name, arg_list, 3);
@@ -248,7 +252,14 @@ const typeCheckObj  = {
         });
         return;
     },
-    isBBox: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TBbox = Txyz, Txyz, Txyz]
+    isPlaneList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'planes');
+        for (let i = 0; i < arg_list.length; i++) {
+            typeCheckObj.isPlane(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
+    },
+    isBBox: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TBbox = [Txyz, Txyz, Txyz, Txyz]
         // four coords
         isListArg(fn_name, arg_name, arg_list, 'origin, min corner, max corner, size');
         isListLenArg(fn_name, arg_name, arg_list, 4);
@@ -258,14 +269,25 @@ const typeCheckObj  = {
         });
         return;
     },
-    isPlaneList: function(fn_name: string, arg_name: string, arg_list: number[][][]): void {
-        // Add if required
+    isBBoxList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'BBoxes');
+        for (let i = 0; i < arg_list.length; i++) {
+            typeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
     },
     isRay: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TRay = [Txyz, Txyz]
         isListArg(fn_name, arg_name, arg_list, 'origin and vector');
         isListLenArg(fn_name, arg_name, arg_list, 2);
         typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
         typeCheckObj.isVector(fn_name, arg_name + '[1]', arg_list[1]);
+        return;
+    },
+    isRayList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'Rays');
+        for (let i = 0; i < arg_list.length; i++) {
+            typeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
         return;
     }
 };

@@ -143,6 +143,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 const svgP = this.convertCoord(pt);
 
                 NodeUtils.updateNode(newNode, svgP);
+                newNode.enabled = false;
                 this.dataService.flowchart.nodes.push(newNode);
                 this.notificationMessage = `Pasted Node`;
                 this.notificationTrigger = !this.notificationTrigger;

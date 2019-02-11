@@ -237,7 +237,8 @@ export class CodeUtils {
         // if (openBracketMatch) {
         //     const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
         //     const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-        //     return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${bracketSplit[0]}',`, `, ${innerVar});`];
+        //     return [`__modules__.${_parameterTypes.setattrib}(
+        //              __params__.model, ${splitted[0]}, '${bracketSplit[0]}',`, `, ${innerVar});`];
         // } else {
         //     return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}',`, ');'];
         // }
@@ -297,7 +298,8 @@ export class CodeUtils {
         //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}` +
         //                 `(__params__.model, ${splitted[0]}, '${bracketSplit[0]}', ${innerVar})${postf}`;
         //         } else {
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
+        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(
+        //                      __params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
         //         }
         //     }
         // }
@@ -324,6 +326,9 @@ export class CodeUtils {
                     while (val_0[0] === '[') {
                         val_0 = val_0.substring(1, val_0.length);
                         pref += '[';
+                    }
+                    if (val_0 === '') {
+                        val_0 = null;
                     }
                 }
                 const closeBracketMatch = (val_1.match(/\]/g) || []).length;

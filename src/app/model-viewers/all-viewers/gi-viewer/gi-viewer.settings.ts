@@ -16,12 +16,27 @@ export const DefaultSettings = {
         face_b: '#DDDDDD',
         face_b_s: '#00006D'
     },
-    day_light: {
+    ambient_light: {
+        show: true,
+        color: '#FFFFFF',
+        intensity: 0.5
+    },
+    hemisphere_light: {
         show: true,
         helper: false,
+        skyColor: '#FFFFFF',
+        groundColor: '#FFFFFF',
+        intensity: 0.5
+    },
+    directional_light: {
+        show: false,
+        helper: false,
+        color: '#FFFFFF',
         intensity: 1,
+        shadow: true,
         position: [0, 2000, 1000],
-        size: 1000
+        azimuth: 0,
+        altitude: 90
     },
     ground: {
         show: false,

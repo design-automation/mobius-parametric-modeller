@@ -172,36 +172,68 @@ export class GIViewerComponent implements OnInit {
             case 'wireframe.show':
                 this.wireframeToggle();
                 break;
-            case 'day_light.show':
-                this.settings.day_light.show = !this.settings.day_light.show;
-                scene.daylight.visible = this.settings.day_light.show;
+            case 'ambient_light.show': // Ambient Light
+                this.settings.ambient_light.show = !this.settings.ambient_light.show;
+                if (scene.ambient_light) {
+                    scene.ambient_light.visible = this.settings.ambient_light.show;
+                }
                 break;
-            case 'day_light.helper':
-                this.settings.day_light.helper = !this.settings.day_light.helper;
+            case 'ambient_light.intensity':
+                this.settings.ambient_light.intensity = Number(value);
+                scene.ambient_light.intensity = this.settings.ambient_light.intensity;
                 break;
-            case 'day_light.intensity':
-                this.settings.day_light.intensity = Number(value);
-                scene.daylight.intensity = this.settings.day_light.intensity;
+            case 'hemisphere_light.show': // Hemisphere Light
+                this.settings.hemisphere_light.show = !this.settings.hemisphere_light.show;
+                if (scene.hemisphere_light) {
+                    scene.hemisphere_light.visible = this.settings.hemisphere_light.show;
+                }
                 break;
-            case 'day_light.p.x':
-                this.settings.day_light.position[0] = Number(value);
-                scene.daylight.position.setX(this.settings.day_light.position[0]);
+            case 'hemisphere_light.helper':
+                this.settings.hemisphere_light.helper = !this.settings.hemisphere_light.helper;
                 break;
-            case 'day_light.p.y':
-                this.settings.day_light.position[1] = Number(value);
-                scene.daylight.position.setY(this.settings.day_light.position[1]);
+            case 'hemisphere_light.intensity':
+                this.settings.hemisphere_light.intensity = Number(value);
+                scene.hemisphere_light.intensity = this.settings.hemisphere_light.intensity;
                 break;
-            case 'day_light.p.z':
-                this.settings.day_light.position[2] = Number(value);
-                scene.daylight.position.setZ(this.settings.day_light.position[2]);
+            case 'directional_light.show': // Directional Light
+                this.settings.directional_light.show = !this.settings.directional_light.show;
+                if (scene.directional_light) {
+                    scene.directional_light.visible = this.settings.directional_light.show;
+                }
                 break;
-            case 'day_light.size':
-                this.settings.day_light.size = Number(value);
-                scene.dayLightScale(this.settings.day_light.size);
+            case 'directional_light.helper':
+                this.settings.directional_light.helper = !this.settings.directional_light.helper;
+                break;
+            case 'directional_light.intensity':
+                this.settings.directional_light.intensity = Number(value);
+                scene.directional_light.intensity = this.settings.directional_light.intensity;
+                break;
+            case 'directional_light.shadow':
+                this.settings.directional_light.shadow = !this.settings.directional_light.shadow;
+                break;
+            case 'directional_light.p.x':
+                this.settings.directional_light.position[0] = Number(value);
+                scene.directional_light.position.setX(this.settings.directional_light.position[0]);
+                break;
+            case 'directional_light.p.y':
+                this.settings.directional_light.position[1] = Number(value);
+                scene.directional_light.position.setY(this.settings.directional_light.position[1]);
+                break;
+            case 'directional_light.p.z':
+                this.settings.directional_light.position[2] = Number(value);
+                scene.directional_light.position.setZ(this.settings.directional_light.position[2]);
+                break;
+            case 'directional_light.azimuth':
+                this.settings.directional_light.azimuth = Number(value);
+                scene.directionalLightScale(this.settings.directional_light.azimuth);
+                break;
+            case 'directional_light.altitude':
+                this.settings.directional_light.altitude = Number(value);
+                scene.directionalLightScale(this.settings.directional_light.altitude);
                 break;
             case 'ground.show':
                 this.settings.ground.show = !this.settings.ground.show;
-                // scene.daylight.visible = this.settings.day_light.show;
+                // scene.directional_light.visible = this.settings.directional_light.show;
                 break;
             case 'ground.width':
                 this.settings.ground.width = Number(value);
@@ -265,12 +297,27 @@ interface Settings {
         face_b: string,
         face_b_s: string
     };
-    day_light: {
+    ambient_light: {
+        show: boolean,
+        color: string,
+        intensity: number
+    };
+    hemisphere_light: {
         show: boolean,
         helper: boolean,
+        skyColor: string,
+        groundColor: string,
+        intensity: number
+    };
+    directional_light: {
+        show: boolean,
+        helper: boolean,
+        color: string,
         intensity: number,
+        shadow: boolean,
         position: number[],
-        size: number
+        azimuth: number,
+        altitude: number
     };
     ground: {
         show: boolean,

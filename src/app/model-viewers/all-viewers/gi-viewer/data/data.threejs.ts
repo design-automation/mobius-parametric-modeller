@@ -37,7 +37,9 @@ export class DataThreejs {
     public grid: THREE.GridHelper;
     // axes
     public axesHelper: THREE.AxesHelper;
-    daylight: THREE.DirectionalLight;
+    directional_light: THREE.DirectionalLight;
+    ambient_light: THREE.AmbientLight;
+    hemisphere_light: THREE.HemisphereLight;
     groundObj: THREE.Mesh;
     // the GI model to display
     public _model: GIModel;
@@ -97,9 +99,15 @@ export class DataThreejs {
 
         // add grid and lights
         this._addGrid();
-        this._addDayLight();
-        this._addHemisphereLight();
-        // this._addAmbientLight('#fefefe', 1);
+        if (this.settings.ambient_light.show) {
+            this._addAmbientLight();
+        }
+        if (this.settings.hemisphere_light.show) {
+            this._addHemisphereLight();
+        }
+        if (this.settings.directional_light.show) {
+            this._addDirectionalLight();
+        }
         this._addAxes();
     }
     /**
@@ -120,10 +128,14 @@ export class DataThreejs {
         this._textLabels.clear();
 
         this._addGrid();
-        this._addHemisphereLight();
-        // this._addAmbientLight('#fefefe', 0.9);
-        if (this.settings.day_light.show) {
-            this._addDayLight();
+        if (this.settings.ambient_light.show) {
+            this._addAmbientLight();
+        }
+        if (this.settings.hemisphere_light.show) {
+            this._addHemisphereLight();
+        }
+        if (this.settings.directional_light.show) {
+            this._addDirectionalLight();
         }
         this._addAxes();
 
@@ -499,55 +511,65 @@ export class DataThreejs {
     // ============================================================================
     // Private methods
     // ============================================================================
+
+    /**
+     * Creates an ambient light
+     */
+    private _addAmbientLight() {
+        const color = new THREE.Color(parseInt(this.settings.ambient_light.color.replace('#', '0x'), 16));
+        const intensity = this.settings.ambient_light.intensity;
+        this.ambient_light = new THREE.AmbientLight(color, intensity); // soft white light
+        this._scene.add(this.ambient_light);
+    }
+
     /**
      * Creates a hemisphere light
      */
     private _addHemisphereLight() {
-        const light: THREE.HemisphereLight = new THREE.HemisphereLight(
-            0xffffff, // skyColor
-            0xffffff, // groundColor
-            0.5 // intensity
+        const skyColor = new THREE.Color(parseInt(this.settings.hemisphere_light.skyColor.replace('#', '0x'), 16));
+        const groundColor = new THREE.Color(parseInt(this.settings.hemisphere_light.groundColor.replace('#', '0x'), 16));
+        const intensity = this.settings.hemisphere_light.intensity;
+        this.hemisphere_light = new THREE.HemisphereLight(
+            skyColor, // skyColor
+            groundColor, // groundColor
+            intensity // intensity
         );
-        this._scene.add(light);
-    }
-    /**
-     * Creates an ambient light
-     */
-    private _addAmbientLight(color: string, intensity: number) {
-        const light = new THREE.AmbientLight(color, intensity); // soft white light
-        this._scene.add(light);
+        this._scene.add(this.hemisphere_light);
+        const helper = new THREE.HemisphereLightHelper(this.hemisphere_light, 10);
+        helper.visible = this.settings.hemisphere_light.helper;
+        this._scene.add( helper );
     }
 
-    // Creates a Daylight
-    private _addDayLight() {
-        this.daylight = new THREE.DirectionalLight(0xffffff, this.settings.day_light.intensity);
+    // Creates a Directional Light
+    private _addDirectionalLight() {
+        this.directional_light = new THREE.DirectionalLight(0xffffff, this.settings.directional_light.intensity);
         const scale = 1000;
-        this.daylight.position.set(0, 2 * scale, 1 * scale);
-        this.daylight.castShadow = true;
-        this.daylight.visible = this.settings.day_light.show;
-        this.daylight.shadow.mapSize.width = 2048;  // default
-        this.daylight.shadow.mapSize.height = 2048; // default
-        this.daylight.shadow.camera.near = 0.5;    // default
-        this._scene.add(this.daylight);
-        this.dayLightScale(this.settings.day_light.size);
-        const helper = new THREE.CameraHelper( this.daylight.shadow.camera );
-        helper.visible = this.settings.day_light.helper;
+        this.directional_light.position.set(0, 2 * scale, 1 * scale);
+        this.directional_light.castShadow = this.settings.directional_light.shadow;
+        this.directional_light.visible = this.settings.directional_light.show;
+        this.directional_light.shadow.mapSize.width = 2048;  // default
+        this.directional_light.shadow.mapSize.height = 2048; // default
+        this.directional_light.shadow.camera.near = 0.5;    // default
+        this._scene.add(this.directional_light);
+        this.directionalLightScale(5000);
+        const helper = new THREE.CameraHelper( this.directional_light.shadow.camera );
+        helper.visible = this.settings.directional_light.helper;
         this._scene.add( helper );
         this._renderer.render(this._scene, this._camera);
     }
 
-    public dayLightScale(size = null) {
+    public directionalLightScale(size = null) {
         let scale;
         if (size) {
             scale = size;
         } else {
             scale = 1000;
         }
-        this.daylight.shadow.camera.far = 4 * scale;
-        this.daylight.shadow.camera.left = -scale;
-        this.daylight.shadow.camera.right = scale;
-        this.daylight.shadow.camera.top = scale;
-        this.daylight.shadow.camera.bottom = -scale;
+        this.directional_light.shadow.camera.far = 4 * scale;
+        this.directional_light.shadow.camera.left = -scale;
+        this.directional_light.shadow.camera.right = scale;
+        this.directional_light.shadow.camera.top = scale;
+        this.directional_light.shadow.camera.bottom = -scale;
     }
 
     // add axes
@@ -945,12 +967,27 @@ interface Settings {
         face_b: string,
         face_b_s: string
     };
-    day_light: {
+    ambient_light: {
+        show: boolean,
+        color: string,
+        intensity: number
+    };
+    hemisphere_light: {
         show: boolean,
         helper: boolean,
+        skyColor: string,
+        groundColor: string,
+        intensity: number
+    };
+    directional_light: {
+        show: boolean,
+        helper: boolean,
+        color: string,
         intensity: number,
+        shadow: boolean,
         position: number[],
-        size: number
+        azimuth: number,
+        altitude: number
     };
     ground: {
         show: boolean,

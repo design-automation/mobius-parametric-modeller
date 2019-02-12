@@ -3,6 +3,8 @@ import { ModuleList } from './decorators';
 import * as funcs from '@modules';
 import * as depreciated from '@assets/core/depreciated.json';
 
+import * as circularJSON from 'circular-json';
+
 
 export function checkMissingProd(prodList: any[]) {
     let check = true;
@@ -24,7 +26,7 @@ export function checkMissingProd(prodList: any[]) {
                     if (mod.module.toLowerCase() === dpFn.new_func.module.toLowerCase()) {
                         for (const fn of mod.functions) {
                             if (fn.name.toLowerCase() === dpFn.new_func.name.toLowerCase()) {
-                                data = fn;
+                                data = circularJSON.parse(circularJSON.stringify(fn));
                                 break;
                             }
                         }
@@ -32,7 +34,6 @@ export function checkMissingProd(prodList: any[]) {
                     }
                 }
                 if (dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)) { break; }
-
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: undefined, default: undefined};

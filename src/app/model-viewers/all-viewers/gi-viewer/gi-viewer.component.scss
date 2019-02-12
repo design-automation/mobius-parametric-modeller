@@ -66,11 +66,12 @@ modal-window {
         background-color: transparent;
         dd{
             list-style: none;
-            padding: 10px 0;
+            padding: 8px 0;
             margin-left: 20px;
             margin-right: 20px;
             background-color: inherit;
-            height: $fsize1;
+            // height: $fsize1;
+            min-height: 12px;
             box-sizing: content-box;
             color: $color8;
             font-size: $fsize2;
@@ -92,6 +93,9 @@ modal-window {
                 }
             }
             &.colors{
+                hr{
+                    margin: 20px 0px 0px;
+                }
                 .label{
                     line-height: 20px;
                 }

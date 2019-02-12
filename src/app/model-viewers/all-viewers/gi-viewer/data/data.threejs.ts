@@ -544,7 +544,13 @@ export class DataThreejs {
     private _addDirectionalLight() {
         this.directional_light = new THREE.DirectionalLight(0xffffff, this.settings.directional_light.intensity);
         const scale = 10000;
-        this.directional_light.position.set(0, 1 * scale, 1 * scale);
+        const azimuth = this.settings.directional_light.azimuth,
+        altitude = this.settings.directional_light.altitude,
+        posX = Math.cos(azimuth * Math.PI * 2 / 360) * scale,
+        posY = Math.sin(azimuth * Math.PI * 2 / 360) * scale,
+        posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
+
+        this.directional_light.position.set(posX, posY, posZ);
         this.directional_light.castShadow = this.settings.directional_light.shadow;
         this.directional_light.visible = this.settings.directional_light.show;
         this.directional_light.shadow.mapSize.width = 10240;  // default

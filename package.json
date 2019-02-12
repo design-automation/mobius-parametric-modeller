@@ -53,6 +53,7 @@
     "npm": "^6.6.0",
     "rxjs": "^6.3.2",
     "rxjs-compat": "^6.3.2",
+    "suncalc": "^1.8.0",
     "three": "^0.99.0",
     "three-orbit-controls": "^82.1.0",
     "zone.js": "^0.8.28"

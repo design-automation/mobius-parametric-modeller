@@ -151,16 +151,108 @@
 						<div class="mat-elevation-z1">
 							<dl>
 								<dd>
-									<div class="label">Daylight</div>
+									<div class="label">Ambient Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
 										class="onoffswitch-checkbox"
-										id="DaylightOnOff"
-										[checked]='settings.day_light.show'
-										(change)="settingOnChange('day_light.show')"
+										id="AmbientOnOff"
+										[checked]='settings.ambient_light.show'
+										(change)="settingOnChange('ambient_light.show')"
 										>
-										<label class="onoffswitch-label" for="DaylightOnOff">
+										<label class="onoffswitch-label" for="AmbientOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Color</div>
+									<input
+									[(colorPicker)]="settings.ambient_light.color"
+									[style.background]="settings.ambient_light.color"
+									[value]="settings.ambient_light.color"
+									[class.light] = "checkColor(settings.ambient_light.color)"
+									/>
+									<button (click)="resetDefault('ambient_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button>
+								</dd>
+								<dd>
+									<div class="label">Intensity</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.ambient_light.intensity" class="slider" (input)="settingOnChange('ambient_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.ambient_light.intensity" disabled>
+									</div>
+								</dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Hemisphere Light</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="HemisphereOnOff"
+										[checked]='settings.hemisphere_light.show'
+										(change)="settingOnChange('hemisphere_light.show')"
+										>
+										<label class="onoffswitch-label" for="HemisphereOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="label" style="margin-left:90px">Helper</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="HemisphereLightHelperOnOff"
+										[checked]='settings.hemisphere_light.helper'
+										(change)="settingOnChange('hemisphere_light.helper')"
+										>
+										<label class="onoffswitch-label" for="HemisphereLightHelperOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Sky Color</div>
+									<input
+									[(colorPicker)]="settings.hemisphere_light.skyColor"
+									[style.background]="settings.hemisphere_light.skyColor"
+									[value]="settings.hemisphere_light.skyColor"
+									[class.light] = "checkColor(settings.hemisphere_light.skyColor)"
+									/>
+									<button (click)="resetDefault('hemisphere_light.skyColor','#FFFFFF');" class='filebtn closebtn'>Default</button>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Ground Color</div>
+									<input
+									[(colorPicker)]="settings.hemisphere_light.groundColor"
+									[style.background]="settings.hemisphere_light.groundColor"
+									[value]="settings.hemisphere_light.groundColor"
+									[class.light] = "checkColor(settings.hemisphere_light.groundColor)"
+									/>
+									<button (click)="resetDefault('hemisphere_light.groundColor','#FFFFFF');" class='filebtn closebtn'>Default</button>
+								</dd>
+								<dd>
+									<div class="label">Intensity</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.hemisphere_light.intensity" class="slider" (input)="settingOnChange('hemisphere_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.hemisphere_light.intensity" disabled>
+									</div>
+								</dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Directional Light</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DirectionalOnOff"
+										[checked]='settings.directional_light.show'
+										(change)="settingOnChange('directional_light.show')"
+										>
+										<label class="onoffswitch-label" for="DirectionalOnOff">
 											<span class="onoffswitch-inner"></span>
 											<span class="onoffswitch-switch"></span>
 										</label>
@@ -171,8 +263,8 @@
 										name="onoffswitch"
 										class="onoffswitch-checkbox"
 										id="DaylightHelperOnOff"
-										[checked]='settings.day_light.helper'
-										(change)="settingOnChange('day_light.helper')"
+										[checked]='settings.directional_light.helper'
+										(change)="settingOnChange('directional_light.helper')"
 										>
 										<label class="onoffswitch-label" for="DaylightHelperOnOff">
 											<span class="onoffswitch-inner"></span>
@@ -180,33 +272,53 @@
 										</label>
 									</div>
 								</dd>
-								<dd>
-									<div class="label">Position</div>
-									<div class="light-shadow">
-										<input type="number" [value]="settings.day_light.position[0]" class="number" (input)="settingOnChange('day_light.p.x', $event.target.value)">
-									</div>
-									<div class="light-shadow">
-										<input type="number" [value]="settings.day_light.position[1]" class="number" (input)="settingOnChange('day_light.p.y', $event.target.value)">
-									</div>
-									<div class="light-shadow">
-										<input type="number" [value]="settings.day_light.position[2]" class="number" (input)="settingOnChange('day_light.p.z', $event.target.value)">
-									</div>
+								<dd class='colors'>
+									<div class="label">Color</div>
+									<input
+									[(colorPicker)]="settings.directional_light.color"
+									[style.background]="settings.directional_light.color"
+									[value]="settings.directional_light.color"
+									[class.light] = "checkColor(settings.directional_light.color)"
+									/>
+									<button (click)="resetDefault('directional_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button>
 								</dd>
 								<dd>
 									<div class="label">Intensity</div>
 									<div class="slidecontainer light">
-										<input type="range" min="0" max="1" step="0.01" [value]="settings.day_light.intensity" class="slider" (input)="settingOnChange('day_light.intensity', $event.target.value)">
-										<input type="text" [value]="settings.day_light.intensity" disabled>
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.directional_light.intensity" class="slider" (input)="settingOnChange('directional_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.directional_light.intensity" disabled>
 									</div>
 								</dd>
 								<dd>
-									<div class="label">Size</div>
-									<div class="slidecontainer light">
-										<input type="range" min="0" max="100000" step="1000" [value]="settings.day_light.size" class="slider" (input)="settingOnChange('day_light.size', $event.target.value)">
-										<input type="number" min="0" max="100000" [value]="settings.day_light.size" class="number" (input)="settingOnChange('day_light.size', $event.target.value)">
+									<div class="label">Shadow</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DirectionalShadowOnOff"
+										[checked]='settings.directional_light.shadow'
+										(change)="settingOnChange('directional_light.shadow')"
+										>
+										<label class="onoffswitch-label" for="DirectionalShadowOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
 									</div>
 								</dd>
-								<dd><hr></dd>
+								<dd>
+									<div class="label">Azimuth</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="360" step="0.1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
+										<input type="number" disabled [value]="settings.directional_light.azimuth" class="number">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Altitude</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="180" step="0.1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
+										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">
+									</div>
+								</dd>
 							</dl>
 						</div>
 					</tab>

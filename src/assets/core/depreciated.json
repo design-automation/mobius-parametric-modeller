@@ -9,9 +9,11 @@
             "module": "list",
             "values": {
                 "method": "'reverse'"
-            },
-            "__comment__" : "#### for values of enumeration or string arguments, the values have to be in single quotes ('') ####",
-            "__comment__1": "#### for string argument values, the values can also be in escaped double quotes (e.g. \"test\") ####"
-        }
+            }
+        },
+
+
+        "__comment__" : "#### for values of enumeration or string arguments, the values have to be in single quotes ('') ####",
+        "__comment__1": "#### for string argument values, the values can also be in escaped double quotes (e.g. \"test\") ####"
     }
 ]

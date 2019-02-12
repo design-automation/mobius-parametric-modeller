@@ -8,6 +8,7 @@ import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
+import * as depreciated from '@assets/core/depreciated.json';
 
 @Component({
   selector: 'load-url',
@@ -23,6 +24,71 @@ import { Router } from '@angular/router';
 export class LoadUrlComponent {
 
     constructor(private dataService: DataService, private router: Router) {}
+
+    static checkMissingProd(prodList: any[]) {
+        let check = true;
+        for (const prod of prodList) {
+            if (prod.children) {
+                if (!LoadUrlComponent.checkMissingProd(prod.children)) {
+                    check = false;
+                }
+            }
+            prod.hasError = false;
+            if (prod.type !== ProcedureTypes.Function) { continue; }
+
+            // @ts-ignore
+            for (const dpFn of depreciated.default) {
+                if (dpFn.old_func.name.toLowerCase() === prod.meta.name.toLowerCase()) {
+                    let data: any;
+                    for (const mod of ModuleList) {
+                        if (mod.module.toLowerCase() === dpFn.new_func.module.toLowerCase()) {
+                            for (const fn of mod.functions) {
+                                if (fn.name.toLowerCase() === dpFn.new_func.name.toLowerCase()) {
+                                    data = fn;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    prod.meta = { module: data.module, name: data.name};
+                    prod.argCount = data.argCount + 1;
+                    let returnArg = {name: 'var_name', value: undefined, default: undefined};
+                    if (!data.hasReturn) {
+                        returnArg = {name: '__none__', value: undefined, default: undefined};
+                    } else if (prod.args[0].name !== '__none__') {
+                        returnArg.value = prod.args[0].value;
+                        returnArg.default = prod.args[0].default;
+                    }
+                    for (const arg of data.args) {
+                        let UpdateCheck = false;
+                        for (const updatedArg in dpFn.new_func.values) {
+                            if (updatedArg.toLowerCase() === arg.name.toLowerCase()) {
+                                arg.value = dpFn.new_func.values[updatedArg];
+                                UpdateCheck = true;
+                                break;
+                            }
+                        }
+                        if (UpdateCheck) { continue; }
+                        for (const oldArg of prod.args) {
+                            if (arg.name.toLowerCase() === oldArg.name.toLowerCase()) {
+                                arg.value = oldArg.value;
+                                arg.default = oldArg.default;
+                                break;
+                            }
+                        }
+                    }
+                    prod.args = [ returnArg, ...data.args];
+                    break;
+                }
+            }
+            if (!funcs[prod.meta.module] || !funcs[prod.meta.module][prod.meta.name]) {
+                prod.hasError = true;
+                check = false;
+            }
+        }
+        return check;
+    }
 
     async loadStartUpURL(routerUrl: string) {
         let url: any = routerUrl.split('file=');
@@ -45,6 +111,8 @@ export class LoadUrlComponent {
         }
     }
 
+
+
     async loadURL(url: string, nodeID?: number) {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
@@ -52,6 +120,7 @@ export class LoadUrlComponent {
             request.open('GET', url);
             request.onload = () => {
                 if (request.status === 200) {
+
                     const f = circularJSON.parse(request.responseText);
                     const urlSplit = url.split('/');
                     const file: IMobius = {
@@ -100,6 +169,17 @@ export class LoadUrlComponent {
                         }
                     }
                     // REMOVE ENDS
+                    let hasError = false;
+                    for (const node of file.flowchart.nodes) {
+                        if (!LoadUrlComponent.checkMissingProd(node.procedure)) {
+                            node.hasError = true;
+                            hasError = true;
+                        }
+                    }
+                    if (hasError) {
+                        alert('The flowchart contains functions that does not exist in the current version of Mobius');
+                    }
+
 
                     resolve(file);
                 } else {

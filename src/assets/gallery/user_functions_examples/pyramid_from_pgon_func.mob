@@ -1,5 +1,5 @@
 {
-    "name": "PyramidFromPolygon",
+    "name": "pyramid_from_pgon_func",
     "author": "new_user",
     "flowchart": {
         "name": "PyramidFromPolygon",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_44hkxf7foyz",
+                "id": "node_1bo5j1g49igh",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -376,7 +376,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_e6m5k8n2gd",
+                                    "id": "node_grrj32ba7k",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -798,12 +798,12 @@
                                                         {
                                                             "type": 8,
                                                             "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~5~children~6",
-                                                            "ID": "prod-eh1q02w3grc",
+                                                            "ID": "prod-s2g02xkg0ta",
                                                             "enabled": true,
                                                             "print": false,
                                                             "meta": {
                                                                 "module": "list",
-                                                                "name": "Append"
+                                                                "name": "Add"
                                                             },
                                                             "argCount": 4,
                                                             "args": [
@@ -812,22 +812,21 @@
                                                                 },
                                                                 {
                                                                     "name": "list",
-                                                                    "default": 0,
-                                                                    "value": "posis"
+                                                                    "value": "posis",
+                                                                    "default": 0
                                                                 },
                                                                 {
-                                                                    "name": "value",
-                                                                    "default": 0,
-                                                                    "value": "cen_pos"
+                                                                    "name": "item",
+                                                                    "value": "cen_pos",
+                                                                    "default": 0
                                                                 },
                                                                 {
                                                                     "name": "method",
-                                                                    "default": 0,
-                                                                    "value": "'to_end'"
+                                                                    "value": "'to_end'",
+                                                                    "default": 0
                                                                 }
                                                             ],
-                                                            "selected": false,
-                                                            "hasError": false
+                                                            "selected": false
                                                         },
                                                         {
                                                             "type": 8,
@@ -888,7 +887,7 @@
                                                             "print": false,
                                                             "meta": {
                                                                 "module": "list",
-                                                                "name": "Append"
+                                                                "name": "_Append"
                                                             },
                                                             "argCount": 4,
                                                             "args": [
@@ -897,18 +896,18 @@
                                                                 },
                                                                 {
                                                                     "name": "list",
-                                                                    "value": "@ret",
-                                                                    "default": 0
+                                                                    "default": 0,
+                                                                    "value": "@ret"
                                                                 },
                                                                 {
                                                                     "name": "value",
-                                                                    "value": "tri",
-                                                                    "default": 0
+                                                                    "default": 0,
+                                                                    "value": "tri"
                                                                 },
                                                                 {
                                                                     "name": "method",
-                                                                    "value": "'to_end'",
-                                                                    "default": 0
+                                                                    "default": 0,
+                                                                    "value": "'to_end'"
                                                                 }
                                                             ],
                                                             "selected": false,
@@ -945,7 +944,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_tvqorzqamab",
+                                                        "id": "node_lcrcwfqctup",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -1041,7 +1040,7 @@
         "ordered": true,
         "returnDescription": "The triangular polygons resulting from the pyramid operation."
     },
-    "last_updated": "2019-02-04T00:56:58.427Z",
+    "last_updated": "2019-02-12T11:08:19.802Z",
     "version": 1,
     "settings": {}
 }

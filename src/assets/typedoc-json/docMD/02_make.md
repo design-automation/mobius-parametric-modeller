@@ -25,10 +25,10 @@
 )  
   
 ## Polyline  
-* **Description:** Adds a new polyline to the model.  
+* **Description:** Adds one or more new polylines to the model.  
 * **Parameters:**  
-  * *positions:* List of positions.  
-  * *close:* Enum of 'close' or 'open'.  
+  * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
+  * *close:* Enum, 'open' or 'close'.  
 * **Returns:** New polyline.  
 * **Examples:**  
   * polyline1 = make.Polyline([position1,position2,position3], close)  
@@ -38,9 +38,9 @@
 )  
   
 ## Polygon  
-* **Description:** Adds a new polygon to the model.  
+* **Description:** Adds one or more new polygons to the model.  
 * **Parameters:**  
-  * *positions:* List of positions.  
+  * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
 * **Returns:** New polygon.  
 * **Examples:**  
   * polygon1 = make.Polygon([position1,position2,position3])  
@@ -79,31 +79,38 @@ Each hole is defined by a list of positions.
 The positions must be on the polygon, i.e. they must be co-planar with the polygon and
 they must be within the boundary of the polygon.
 If the list of positions consists of a single list, then one hole will be generated.
-If the list of positions consists of a list of lists, then multiple holes will be generated.  
+If the list of positions consists of a list of lists, then multiple holes will be generated.
+~
+The hole positions should lie within the polygon surface.  
 * **Parameters:**  
   * *face:* A polygon or a face to make holes in.  
-  * *positions:* A list of positions defining the wires of the holes.  
+  * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
 * **Returns:** List of wires resulting from the hole(s).  
   
 ## Loft  
-* **Description:** Lofts between edges.  
+* **Description:** Lofts between entities.
+~
+The geometry that is generated depends on the method that is selected.
+The 'loft_quads' methods will generate polygons.
+The 'loft_stringers' and 'loft_ribs' methods will generate polylines.  
 * **Parameters:**  
-  * *entities:* Edges (or wires, polylines or polygons with the same number of edges).  
-  * *method:* Enum, if 'closed', then close the loft back to the first edge in the input.  
-* **Returns:** List of new polygons resulting from the loft.  
+  * *entities:* Entities to loft between.  
+  * *divisions:* undefined  
+  * *method:* Enum, if 'closed', then close the loft back to the first entity in the list.  
+* **Returns:** List of new polygons or polylines resulting from the loft.  
 * **Examples:**  
-  * surface1 = make.Loft([polyline1,polyline2,polyline3], closed)  
+  * surface1 = make.Loft([polyline1,polyline2,polyline3], 1, 'closed_quads')  
     Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
   
   
 ## Extrude  
-* **Description:** Extrudes geometry by distance (in default direction = z-axis) or by vector.
+* **Description:** Extrudes geometry by distance or by vector.
 - Extrusion of a position, vertex, or point produces polylines;
-- Extrusion of edge, wire, or polyline produces polygons;
-- Extrusion of face or polygon produces polygons, also capped at the top.  
+- Extrusion of an edge, wire, or polyline produces polygons;
+- Extrusion of a face or polygon produces polygons, capped at the top.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
-  * *distance:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
+  * *dist:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
   * *divisions:* Number of divisions to divide extrusion by. Minimum is 1.  
 * **Returns:** List of new polygons resulting from the extrude.  
 * **Examples:**  
@@ -115,12 +122,17 @@ If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrus
   
   
 ## Divide  
-* **Description:** Divides edge, wire or polyline by length or by number of segments.
+* **Description:** Divides edges in a set of shorter edges.
 ~
-If the 'by length' method is selected, length of last segment will be the remainder.
+If the 'by_number' method is selected, then each edge is divided into a fixed number of equal length shorter edges.
+If the 'by length' method is selected, then each edge is divided into shorter edges of the specified length.
+The length of the last segment will be the remainder.
+If the 'by_min_length' method is selected,
+then the edge is divided into the maximum number of shorter edges
+that have a new length that is equal to or greater than the minimum.
 ~  
 * **Parameters:**  
-  * *edge:* Edge, wire, or polyline(s) to be divided.  
+  * *edges:* Edges, or entities from which edges can be extracted.  
   * *divisor:* Segment length or number of segments.  
   * *method:* Enum, select the method for dividing edges.  
 * **Returns:** List of new edges resulting from the divide.  

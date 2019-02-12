@@ -5,7 +5,7 @@
 If item is a list, the entire list will be added as a single item.  
 * **Parameters:**  
   * *list:* List to add the item to.  
-  * *value:* Item to add.  
+  * *item:* Item to add.  
   * *method:* Enum, select the method.  
 * **Returns:** void  
 * **Examples:**  

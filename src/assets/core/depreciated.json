@@ -10,10 +10,20 @@
             "values": {
                 "method": "'reverse'"
             }
+        }
+    },
+    {
+        "old_func": {
+            "name": "Loft",
+            "module": "make"
         },
-
-
-        "__comment__" : "#### for values of enumeration or string arguments, the values have to be in single quotes ('') ####",
-        "__comment__1": "#### for string argument values, the values can also be in escaped double quotes (e.g. \"test\") ####"
+        "new_func": {
+            "name": "Loft",
+            "module": "make",
+            "values": {
+                "divisions": "1",
+                "method": "'open_quads'"
+            }
+        },
     }
 ]

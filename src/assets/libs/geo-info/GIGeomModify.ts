@@ -287,7 +287,7 @@ export class GIGeomModify {
             // add to list of holes
             hole_wires_i.push(hole_wire_i);
         }
-        // create the holes
+        // create the holes, does everything at face level
         this._cutFaceHoles(face_i, hole_wires_i);
         // no need to change either the up or down arrays
         // return the new wires
@@ -352,7 +352,15 @@ export class GIGeomModify {
             throw new Error('Replacing positions operation failed due to incorrect number of positions.');
         }
         for (let i = 0; i < verts_i.length; i++) {
-            this._geom_arrays.dn_verts_posis[verts_i[i]] = new_posis_i[i];
+            const vert_i: number = verts_i[i];
+            const old_posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
+            const new_posi_i: number = new_posis_i[i];
+            // set the down array
+            this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+            // update the up arrays for the old posi, i.e. remove this vert
+            arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+            // update the up arrays for teh new posi, i.e. add this vert
+            this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
         }
     }
     /**
@@ -361,6 +369,7 @@ export class GIGeomModify {
      * @param verts_i
      */
     public unweldVerts(verts_i: number[]): number[] {
+        // create a map, for each posi_i, count how many verts there are in the input verts
         const exist_posis_i_map: Map<number, number> = new Map(); // posi_i -> count
         for (const vert_i of verts_i) {
             const posi_i: number = this._geom.query.navVertToPosi(vert_i);

@@ -312,7 +312,7 @@ export class GIGeomAdd {
             this._geom_arrays.up_verts_edges[vert_i2] = [];
         }
         this._geom_arrays.up_verts_edges[vert_i2].push(edge_i);
-        // return the numeric index pf teh edge
+        // return the numeric index of the edge
         return edge_i;
     }
     /**

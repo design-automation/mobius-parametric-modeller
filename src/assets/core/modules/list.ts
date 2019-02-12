@@ -16,110 +16,209 @@ import { TEntTypeIdx } from '@libs/geo-info/common';
 
 
 // ================================================================================================
-export enum _EAppendMethod {
+export enum _EAddMethod {
     TO_START = 'to_start',
-    TO_END = 'to_end'
+    TO_END = 'to_end',
+    SORTED_ALPHA = 'alpha_descending',
+    SORTED_REV_ALPHA = 'alpha_ascending',
+    SORTED_NUM = 'numeric_descending',
+    SORTED_REV_NUM = 'numeric_ascending',
+    SORTED_ID = 'ID_descending',
+    SORTED_REV_ID = 'ID_ascending'
 }
 /**
  * Adds an item to a list.
- * If item is a list, the entire list will be appended as a single item.
+ * If item is a list, the entire list will be added as a single item.
  *
- * @param list List to append the item to.
- * @param value Item to append.
+ * @param list List to add the item to.
+ * @param value Item to add.
  * @param method Enum, select the method.
  * @returns void
- * @example append = list.Append(list, 4, 'at_end')
+ * @example append = list.Add(list, 4, 'at_end')
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].
  */
-export function Append(list: any[], value: any, method: _EAppendMethod): void {
+export function Add(list: any[], value: any, method: _EAddMethod): void {
     // --- Error Check ---
-    const fn_name = 'list.Append';
+    const fn_name = 'list.Add';
     checkCommTypes(fn_name, 'list', list, ['isList']);
     checkCommTypes(fn_name, 'value', value, ['isAny']);
     // --- Error Check ---
-    if (method === _EAppendMethod.TO_END) {
-        list.push(value);
-    } else {
-        list.unshift(value);
+    let str_value: string;
+    switch (method) {
+        case _EAddMethod.TO_START:
+            list.unshift(value);
+            break;
+        case _EAddMethod.TO_END:
+            list.push(value);
+            break;
+        case _EAddMethod.SORTED_ALPHA:
+            str_value = value + '';
+            for (let i = 0; i < list.length + 1; i++) {
+                if (str_value < list[i] + '' || i === list.length) {
+                    list.splice(i, 0, value);
+                    break;
+                }
+            }
+            break;
+        case _EAddMethod.SORTED_REV_ALPHA:
+            str_value = value + '';
+            for (let i = 0; i < list.length + 1; i++) {
+                if (str_value > list[i] + '' || i === list.length) {
+                    list.splice(i, 0, value);
+                    break;
+                }
+            }
+            break;
+        case _EAddMethod.SORTED_NUM:
+            for (let i = 0; i < list.length + 1; i++) {
+                if (value - list[i] > 0 || i === list.length) {
+                    list.splice(i, 0, value);
+                    break;
+                }
+            }
+            break;
+        case _EAddMethod.SORTED_REV_NUM:
+            for (let i = 0; i < list.length + 1; i++) {
+                if (value - list[i] < 0 || i === list.length) {
+                    list.splice(i, 0, value);
+                    break;
+                }
+            }
+            break;
+        case _EAddMethod.SORTED_ID:
+            for (let i = 0; i < list.length + 1; i++) {
+                if (_compareID(value, list[i]) > 0 || i === list.length) {
+                    list.splice(i, 0, value);
+                    break;
+                }
+            }
+            break;
+        case _EAddMethod.SORTED_REV_ID:
+            for (let i = 0; i < list.length + 1; i++) {
+                if (_compareID(value, list[i]) < 0 || i === list.length) {
+                    list.splice(i, 0, value);
+                    break;
+                }
+            }
+            break;
+        default:
+            break;
     }
 }
 // ================================================================================================
-export enum _EEditMethod {
+export enum _ERemoveMethod {
+    REMOVE_INDEX = 'remove_index',
     REMOVE_FIRST_VALUE = 'remove_first_value',
     REMOVE_LAST_VALUE = 'remove_last_value',
-    REMOVE_ALL_VALUES = 'remove_all_values',
-    REPLACE_FIRST_VALUE = 'replace_first_value',
-    REPLACE_LAST_VALUE = 'replace_last_value',
-    REPLACE_ALL_VALUES = 'replace_all_values'
+    REMOVE_ALL_VALUES = 'remove_all_values'
 }
 /**
- * Modifies items in a list, either replacing or removing values, depending on the method that is selected.
- * 
- * @param list The list in which to modify items
- * @param item The item to modify, either the index of the item or the value
- * @param new_value The new value (only used if a 'replace' method is selected)
- * @param method Enum, select the method for modifying the list.
+ * Removes items in a list.
+ *
+ * @param list The list in which to remove items
+ * @param item The item to remove, either the index of the item or the value. Negative indexes are allowed.
+ * @param method Enum, select the method for removing items from the list.
  * @returns void
  */
-export function Edit(list: any[], old_value: any, new_value: any, method: _EEditMethod): void {
+export function Remove(list: any[], item: any, method: _ERemoveMethod): void {
     // --- Error Check ---
-    const fn_name = 'list.Edit';
+    const fn_name = 'list.Remove';
     checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'old_value', old_value, ['isAny']);
-    checkCommTypes(fn_name, 'new_value', new_value, ['isAny']);
+    checkCommTypes(fn_name, 'item', item, ['isAny']);
     // --- Error Check ---
     let index: number;
     switch (method) {
-        case _EEditMethod.REMOVE_FIRST_VALUE:
-            index = list.indexOf(old_value);
+        case _ERemoveMethod.REMOVE_INDEX:
+            index = item;
+            if (! isNaN(index) ) {
+                if (index < 0) { index = list.length + index; }
+                list.splice(index, 1);
+            }
+            break;
+        case _ERemoveMethod.REMOVE_FIRST_VALUE:
+            index = list.indexOf(item);
             if (index !== -1) { list.splice(index, 1); }
             break;
-        case _EEditMethod.REMOVE_LAST_VALUE:
-            index = list.lastIndexOf(old_value);
+        case _ERemoveMethod.REMOVE_LAST_VALUE:
+            index = list.lastIndexOf(item);
             if (index !== -1) { list.splice(index, 1); }
             break;
-        case _EEditMethod.REMOVE_ALL_VALUES:
+        case _ERemoveMethod.REMOVE_ALL_VALUES:
             for (index = 0; index < list.length; index++) {
-                if (list[index] === old_value) {
+                if (list[index] === item) {
                     list.splice(index, 1);
                     index -= 1;
                 }
             }
             break;
-        case _EEditMethod.REPLACE_FIRST_VALUE:
-            index = list.indexOf(old_value);
+        default:
+            throw new Error('list.Remove: Remove method not recognised.');
+    }
+}
+// ================================================================================================
+export enum _EReplaceMethod {
+    REPLACE_INDEX = 'index',
+    REPLACE_FIRST_VALUE = 'first_value',
+    REPLACE_LAST_VALUE = 'last_value',
+    REPLACE_ALL_VALUES = 'all_values'
+}
+/**
+ * Replaces items in a list.
+ *
+ * @param list The list in which to replace items
+ * @param item The item to replace, either the index of the item or the value. Negative indexes are allowed.
+ * @param new_value The new value.
+ * @param method Enum, select the method for replacing items in the list.
+ * @returns void
+ */
+export function Replace(list: any[], item: any, new_value: any, method: _EReplaceMethod): void {
+    // --- Error Check ---
+    const fn_name = 'list.Replace';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'item', item, ['isAny']);
+    checkCommTypes(fn_name, 'new_value', new_value, ['isAny']);
+    // --- Error Check ---
+    let index: number;
+    switch (method) {
+        case _EReplaceMethod.REPLACE_INDEX:
+            index = item;
+            if (! isNaN(index) ) {
+                if (index < 0) { index = list.length + index; }
+                list[index] = new_value;
+            }
+            break;
+        case _EReplaceMethod.REPLACE_FIRST_VALUE:
+            index = list.indexOf(item);
             if (index !== -1) { list[index] = new_value; }
             break;
-        case _EEditMethod.REPLACE_LAST_VALUE:
-            index = list.lastIndexOf(old_value);
+        case _EReplaceMethod.REPLACE_LAST_VALUE:
+            index = list.lastIndexOf(item);
             if (index !== -1) { list[index] = new_value; }
             break;
-        case _EEditMethod.REPLACE_ALL_VALUES:
+        case _EReplaceMethod.REPLACE_ALL_VALUES:
             for (index = 0; index < list.length; index++) {
-                if (list[index] === old_value) {
+                if (list[index] === item) {
                     list[index] = new_value;
                 }
             }
             break;
         default:
-            throw new Error('list.Modify: Modify method not recognised.');
+            throw new Error('list.Replace: Replace method not recognised.');
     }
 }
 // ================================================================================================
-
-// ================================================================================================
 export enum _ESortMethod {
-    'REV' = 'reverse',
-    'ALPHA' = 'alpha_descending',
-    'REV_ALPHA' = 'alpha_ascending',
-    'NUM' = 'numeric_descending',
-    'REV_NUM' = 'numeric_ascending',
-    'ID' = 'ID_descending',
-    'REV_ID' = 'ID_ascending',
-    'SHIFT' = 'shift_1',
-    'REV_SHIFT' = 'reverse_shift_1',
-    'RANDOM' = 'random'
+    REV = 'reverse',
+    ALPHA = 'alpha_descending',
+    REV_ALPHA = 'alpha_ascending',
+    NUM = 'numeric_descending',
+    REV_NUM = 'numeric_ascending',
+    ID = 'ID_descending',
+    REV_ID = 'ID_ascending',
+    SHIFT = 'shift_1',
+    REV_SHIFT = 'reverse_shift_1',
+    RANDOM = 'random'
 }
 function _compareID(id1: string, id2: string): number {
     const [ent_type1, index1]: TEntTypeIdx = idsBreak(id1) as TEntTypeIdx;
@@ -169,8 +268,8 @@ function _sort(list: any[], method: _ESortMethod): void {
 /**
  * Sorts an list, based on the values of the items in the list.
  * ~
- * For alphabetical sort, values are sorted according to string Unicode code points
- * (character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)
+ * For alphabetical sort, values are sorted character by character,
+ * numbers before upper case alphabets, upper case alphabets before lower case alphabets.
  *
  * @param list List to sort.
  * @param method Enum; specifies the sort method to use.
@@ -261,7 +360,39 @@ export function Splice(list: any[], index: number, num_to_remove: number, items_
  * ================================================================================================
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
-
+export enum _EAppendMethod {
+    TO_START = 'to_start',
+    TO_END = 'to_end'
+}
+/**
+ * Adds an item to a list.
+ * If item is a list, the entire list will be appended as a single item.
+ *
+ * @param list List to append the item to.
+ * @param value Item to append.
+ * @param method Enum, select the method.
+ * @returns void
+ * @example append = list.Append(list, 4, 'at_end')
+ * @example_info where list = [1,2,3]
+ * Expected value of list is [1,2,3,4].
+ */
+export function Append(list: any[], value: any, method: _EAppendMethod): void {
+    // --- Error Check ---
+    const fn_name = 'list.Append';
+    checkCommTypes(fn_name, 'list', list, ['isList']);
+    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    // --- Error Check ---
+    switch (method) {
+        case _EAppendMethod.TO_START:
+            list.unshift(value);
+            break;
+        case _EAppendMethod.TO_END:
+            list.push(value);
+            break;
+        default:
+            break;
+    }
+}
 /**
  * Removes the value at the specified index from a list.
  * ~

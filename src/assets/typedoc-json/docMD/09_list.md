@@ -1,33 +1,41 @@
 # LIST    
 
-## Append  
+## Add  
 * **Description:** Adds an item to a list.
-If item is a list, the entire list will be appended as a single item.  
+If item is a list, the entire list will be added as a single item.  
 * **Parameters:**  
-  * *list:* List to append the item to.  
-  * *value:* Item to append.  
+  * *list:* List to add the item to.  
+  * *value:* Item to add.  
   * *method:* Enum, select the method.  
 * **Returns:** void  
 * **Examples:**  
-  * append = list.Append(list, 4, 'at_end')  
+  * append = list.Add(list, 4, 'at_end')  
     where list = [1,2,3]
 Expected value of list is [1,2,3,4].
   
   
-## Edit  
-* **Description:** Modifies items in a list, either replacing or removing values, depending on the method that is selected.  
+## Remove  
+* **Description:** Removes items in a list.  
 * **Parameters:**  
-  * *list:* The list in which to modify items  
-  * *old_value:* undefined  
-  * *new_value:* The new value (only used if a 'replace' method is selected)  
-  * *method:* Enum, select the method for modifying the list.  
+  * *list:* The list in which to remove items  
+  * *item:* The item to remove, either the index of the item or the value. Negative indexes are allowed.  
+  * *method:* Enum, select the method for removing items from the list.  
+* **Returns:** void  
+  
+## Replace  
+* **Description:** Replaces items in a list.  
+* **Parameters:**  
+  * *list:* The list in which to replace items  
+  * *item:* The item to replace, either the index of the item or the value. Negative indexes are allowed.  
+  * *new_value:* The new value.  
+  * *method:* Enum, select the method for replacing items in the list.  
 * **Returns:** void  
   
 ## Sort  
 * **Description:** Sorts an list, based on the values of the items in the list.
 ~
-For alphabetical sort, values are sorted according to string Unicode code points
-(character by character, numbers before upper case alphabets, upper case alphabets before lower case alphabets)  
+For alphabetical sort, values are sorted character by character,
+numbers before upper case alphabets, upper case alphabets before lower case alphabets.  
 * **Parameters:**  
   * *list:* List to sort.  
   * *method:* Enum; specifies the sort method to use.  
@@ -56,6 +64,20 @@ If num_to_remove is 0, then values are only inserted.
   * result = list.Splice(list1, 1, 3, [2.2, 3.3])  
     where list1 = [10, 20, 30, 40, 50]
 Expected value of result is [10, 2.2, 3.3, 50]. New items were added where the items were removed.
+  
+  
+## Append  
+* **Description:** Adds an item to a list.
+If item is a list, the entire list will be appended as a single item.  
+* **Parameters:**  
+  * *list:* List to append the item to.  
+  * *value:* Item to append.  
+  * *method:* Enum, select the method.  
+* **Returns:** void  
+* **Examples:**  
+  * append = list.Append(list, 4, 'at_end')  
+    where list = [1,2,3]
+Expected value of list is [1,2,3,4].
   
   
 ## RemoveIndex  

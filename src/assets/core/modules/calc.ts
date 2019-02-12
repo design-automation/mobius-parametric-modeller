@@ -253,7 +253,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         // }
 
     } else {
-        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr)) as Txyz[];
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr, 1)) as Txyz[];
     }
 }
 // function _newell_normal(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {

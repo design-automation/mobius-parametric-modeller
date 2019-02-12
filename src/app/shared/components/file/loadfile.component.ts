@@ -7,6 +7,7 @@ import * as funcs from '@modules';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
+import * as depreciated from '@assets/core/depreciated.json';
 
 @Component({
   selector: 'file-load',
@@ -54,6 +55,54 @@ export class LoadFileComponent {
                         }
                         prod.hasError = false;
                         if (prod.type !== ProcedureTypes.Function) { continue; }
+
+                        // @ts-ignore
+                        for (const dpFn of depreciated.default) {
+                            if (dpFn.old_func.name.toLowerCase() === prod.meta.name.toLowerCase()) {
+                                let data: any;
+                                for (const mod of ModuleList) {
+                                    if (mod.module.toLowerCase() === dpFn.new_func.module.toLowerCase()) {
+                                        for (const fn of mod.functions) {
+                                            if (fn.name.toLowerCase() === dpFn.new_func.name.toLowerCase()) {
+                                                data = fn;
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                                prod.meta = { module: data.module, name: data.name};
+                                prod.argCount = data.argCount + 1;
+                                let returnArg = {name: 'var_name', value: undefined, default: undefined};
+                                if (!data.hasReturn) {
+                                    returnArg = {name: '__none__', value: undefined, default: undefined};
+                                } else if (prod.args[0].name !== '__none__') {
+                                    returnArg.value = prod.args[0].value;
+                                    returnArg.default = prod.args[0].default;
+                                }
+                                for (const arg of data.args) {
+                                    let UpdateCheck = false;
+                                    for (const updatedArg in dpFn.new_func.values) {
+                                        if (updatedArg.toLowerCase() === arg.name.toLowerCase()) {
+                                            arg.value = dpFn.new_func.values[updatedArg];
+                                            UpdateCheck = true;
+                                            break;
+                                        }
+                                    }
+                                    if (UpdateCheck) { continue; }
+                                    for (const oldArg of prod.args) {
+                                        if (arg.name.toLowerCase() === oldArg.name.toLowerCase()) {
+                                            arg.value = oldArg.value;
+                                            arg.default = oldArg.default;
+                                            break;
+                                        }
+                                    }
+                                }
+                                prod.args = [ returnArg, ...data.args];
+                                break;
+                            }
+                        }
+
                         if (!funcs[prod.meta.module] || !funcs[prod.meta.module][prod.meta.name]) {
                             prod.hasError = true;
                             check = false;

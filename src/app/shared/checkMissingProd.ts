@@ -17,7 +17,8 @@ export function checkMissingProd(prodList: any[]) {
 
         // @ts-ignore
         for (const dpFn of depreciated.default) {
-            if (dpFn.old_func.name.toLowerCase() === prod.meta.name.toLowerCase()) {
+            if (dpFn.old_func.name.toLowerCase() === prod.meta.name.toLowerCase() &&
+                dpFn.old_func.module.toLowerCase() === prod.meta.module.toLowerCase()) {
                 let data: any;
                 for (const mod of ModuleList) {
                     if (mod.module.toLowerCase() === dpFn.new_func.module.toLowerCase()) {

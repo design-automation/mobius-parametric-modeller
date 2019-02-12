@@ -31,73 +31,73 @@ export enum _EAddMethod {
  * If item is a list, the entire list will be added as a single item.
  *
  * @param list List to add the item to.
- * @param value Item to add.
+ * @param item Item to add.
  * @param method Enum, select the method.
  * @returns void
  * @example append = list.Add(list, 4, 'at_end')
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].
  */
-export function Add(list: any[], value: any, method: _EAddMethod): void {
+export function Add(list: any[], item: any, method: _EAddMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Add';
     checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    checkCommTypes(fn_name, 'value', item, ['isAny']);
     // --- Error Check ---
     let str_value: string;
     switch (method) {
         case _EAddMethod.TO_START:
-            list.unshift(value);
+            list.unshift(item);
             break;
         case _EAddMethod.TO_END:
-            list.push(value);
+            list.push(item);
             break;
         case _EAddMethod.SORTED_ALPHA:
-            str_value = value + '';
+            str_value = item + '';
             for (let i = 0; i < list.length + 1; i++) {
                 if (str_value < list[i] + '' || i === list.length) {
-                    list.splice(i, 0, value);
+                    list.splice(i, 0, item);
                     break;
                 }
             }
             break;
         case _EAddMethod.SORTED_REV_ALPHA:
-            str_value = value + '';
+            str_value = item + '';
             for (let i = 0; i < list.length + 1; i++) {
                 if (str_value > list[i] + '' || i === list.length) {
-                    list.splice(i, 0, value);
+                    list.splice(i, 0, item);
                     break;
                 }
             }
             break;
         case _EAddMethod.SORTED_NUM:
             for (let i = 0; i < list.length + 1; i++) {
-                if (value - list[i] > 0 || i === list.length) {
-                    list.splice(i, 0, value);
+                if (item - list[i] > 0 || i === list.length) {
+                    list.splice(i, 0, item);
                     break;
                 }
             }
             break;
         case _EAddMethod.SORTED_REV_NUM:
             for (let i = 0; i < list.length + 1; i++) {
-                if (value - list[i] < 0 || i === list.length) {
-                    list.splice(i, 0, value);
+                if (item - list[i] < 0 || i === list.length) {
+                    list.splice(i, 0, item);
                     break;
                 }
             }
             break;
         case _EAddMethod.SORTED_ID:
             for (let i = 0; i < list.length + 1; i++) {
-                if (_compareID(value, list[i]) > 0 || i === list.length) {
-                    list.splice(i, 0, value);
+                if (_compareID(item, list[i]) > 0 || i === list.length) {
+                    list.splice(i, 0, item);
                     break;
                 }
             }
             break;
         case _EAddMethod.SORTED_REV_ID:
             for (let i = 0; i < list.length + 1; i++) {
-                if (_compareID(value, list[i]) < 0 || i === list.length) {
-                    list.splice(i, 0, value);
+                if (_compareID(item, list[i]) < 0 || i === list.length) {
+                    list.splice(i, 0, item);
                     break;
                 }
             }

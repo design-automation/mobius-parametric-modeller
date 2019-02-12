@@ -1,5 +1,5 @@
 {
-    "name": "Podium with towers",
+    "name": "podium_with_towers",
     "author": "new_user",
     "flowchart": {
         "name": "Podium with towers",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_rqbug6ufug",
+                "id": "node_4fok8mxcwr7",
                 "position": {
                     "x": 4964.228515625,
                     "y": 4809.43603515625
@@ -98,7 +98,7 @@
                                 },
                                 "parentNode": {
                                     "name": "podium massing",
-                                    "id": "node_yfvoes6cur",
+                                    "id": "node_vc5fnlf2tjm",
                                     "position": {
                                         "x": 5186.3505859375,
                                         "y": 4958.6728515625
@@ -212,12 +212,11 @@
                                                 "module": "make",
                                                 "name": "Extrude"
                                             },
-                                            "argCount": 5,
+                                            "argCount": 6,
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "podium",
-                                                    "invalidVar": false
+                                                    "value": "podium"
                                                 },
                                                 {
                                                     "name": "__model__",
@@ -225,18 +224,23 @@
                                                 },
                                                 {
                                                     "name": "entities",
-                                                    "value": "pgon",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "value": "pgon"
                                                 },
                                                 {
                                                     "name": "distance",
-                                                    "value": "pod_height",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "value": "pod_height"
                                                 },
                                                 {
                                                     "name": "divisions",
-                                                    "value": "1",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "value": "1"
+                                                },
+                                                {
+                                                    "name": "method",
+                                                    "default": 0,
+                                                    "value": "'quads'"
                                                 }
                                             ],
                                             "selected": false,
@@ -305,7 +309,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "podium divide",
-                                                        "id": "node_z29a18xb3dc",
+                                                        "id": "node_sqz5v58xoy",
                                                         "position": {
                                                             "x": 5441.09521484375,
                                                             "y": 5102.306640625
@@ -792,7 +796,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "tower base",
-                                                                            "id": "node_2mjlmew5e5y",
+                                                                            "id": "node_l5gb532289g",
                                                                             "position": {
                                                                                 "x": 5442.19091796875,
                                                                                 "y": 5251.3896484375
@@ -1012,7 +1016,7 @@
                                                                                             },
                                                                                             "parentNode": {
                                                                                                 "name": "tower",
-                                                                                                "id": "node_c24zxwf9738",
+                                                                                                "id": "node_46uaquaiufm",
                                                                                                 "position": {
                                                                                                     "x": 5359.4658203125,
                                                                                                     "y": 5413.42578125
@@ -1319,12 +1323,11 @@
                                                                                                                     "module": "make",
                                                                                                                     "name": "Extrude"
                                                                                                                 },
-                                                                                                                "argCount": 5,
+                                                                                                                "argCount": 6,
                                                                                                                 "args": [
                                                                                                                     {
                                                                                                                         "name": "var_name",
-                                                                                                                        "value": "fac",
-                                                                                                                        "invalidVar": false
+                                                                                                                        "value": "fac"
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "__model__",
@@ -1332,18 +1335,23 @@
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "entities",
-                                                                                                                        "value": "edges2",
-                                                                                                                        "default": 0
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "edges2"
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "distance",
-                                                                                                                        "value": "30",
-                                                                                                                        "default": 0
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "30"
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "divisions",
-                                                                                                                        "value": "10",
-                                                                                                                        "default": 0
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "30 / 3"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "name": "method",
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "'quads'"
                                                                                                                     }
                                                                                                                 ],
                                                                                                                 "selected": false,
@@ -1359,12 +1367,11 @@
                                                                                                                     "module": "make",
                                                                                                                     "name": "Extrude"
                                                                                                                 },
-                                                                                                                "argCount": 5,
+                                                                                                                "argCount": 6,
                                                                                                                 "args": [
                                                                                                                     {
                                                                                                                         "name": "var_name",
-                                                                                                                        "value": "sides",
-                                                                                                                        "invalidVar": false
+                                                                                                                        "value": "sides"
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "__model__",
@@ -1372,18 +1379,23 @@
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "entities",
-                                                                                                                        "value": "[edges[0] , edges[2]]",
-                                                                                                                        "default": 0
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "[edges[0] , edges[2]]"
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "distance",
-                                                                                                                        "value": "30",
-                                                                                                                        "default": 0
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "30"
                                                                                                                     },
                                                                                                                     {
                                                                                                                         "name": "divisions",
-                                                                                                                        "value": "10",
-                                                                                                                        "default": 0
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "1"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "name": "method",
+                                                                                                                        "default": 0,
+                                                                                                                        "value": "'quads'"
                                                                                                                     }
                                                                                                                 ],
                                                                                                                 "selected": false,
@@ -1469,7 +1481,7 @@
                                                                                                                             },
                                                                                                                             "parentNode": {
                                                                                                                                 "name": "podium facades",
-                                                                                                                                "id": "node_2zoljl1jt0i",
+                                                                                                                                "id": "node_re6gnjxscy",
                                                                                                                                 "position": {
                                                                                                                                     "x": 4904.35107421875,
                                                                                                                                     "y": 5285.138671875
@@ -1867,12 +1879,11 @@
                                                                                                                                                     "module": "make",
                                                                                                                                                     "name": "Extrude"
                                                                                                                                                 },
-                                                                                                                                                "argCount": 5,
+                                                                                                                                                "argCount": 6,
                                                                                                                                                 "args": [
                                                                                                                                                     {
                                                                                                                                                         "name": "var_name",
-                                                                                                                                                        "value": "fac",
-                                                                                                                                                        "invalidVar": false
+                                                                                                                                                        "value": "fac"
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "__model__",
@@ -1880,18 +1891,23 @@
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "entities",
-                                                                                                                                                        "value": "pl",
-                                                                                                                                                        "default": 0
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "pl"
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "distance",
-                                                                                                                                                        "value": "[0 , 0 , height]",
-                                                                                                                                                        "default": 0
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "[0 , 0 , height]"
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "divisions",
-                                                                                                                                                        "value": "height / 4",
-                                                                                                                                                        "default": 0
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "ceil ( pod_height / 5 )"
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        "name": "method",
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "'quads'"
                                                                                                                                                     }
                                                                                                                                                 ],
                                                                                                                                                 "selected": false,
@@ -1962,7 +1978,7 @@
                                                                                                                             },
                                                                                                                             "parentNode": {
                                                                                                                                 "name": "roof slab",
-                                                                                                                                "id": "node_uwywzctzv",
+                                                                                                                                "id": "node_5su46tpm7pu",
                                                                                                                                 "position": {
                                                                                                                                     "x": 5153.72412109375,
                                                                                                                                     "y": 5531.21875
@@ -2200,12 +2216,11 @@
                                                                                                                                                     "module": "make",
                                                                                                                                                     "name": "Extrude"
                                                                                                                                                 },
-                                                                                                                                                "argCount": 5,
+                                                                                                                                                "argCount": 6,
                                                                                                                                                 "args": [
                                                                                                                                                     {
                                                                                                                                                         "name": "var_name",
-                                                                                                                                                        "value": "roof_slab",
-                                                                                                                                                        "invalidVar": false
+                                                                                                                                                        "value": "roof_slab"
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "__model__",
@@ -2213,18 +2228,23 @@
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "entities",
-                                                                                                                                                        "value": "roof",
-                                                                                                                                                        "default": 0
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "roof"
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "distance",
-                                                                                                                                                        "value": "1.6",
-                                                                                                                                                        "default": 0
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "1.6"
                                                                                                                                                     },
                                                                                                                                                     {
                                                                                                                                                         "name": "divisions",
-                                                                                                                                                        "value": "1",
-                                                                                                                                                        "default": 0
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "1"
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        "name": "method",
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "'quads'"
                                                                                                                                                     }
                                                                                                                                                 ],
                                                                                                                                                 "selected": false,
@@ -2323,7 +2343,7 @@
                                                                                                                             },
                                                                                                                             "parentNode": {
                                                                                                                                 "name": "tower columns",
-                                                                                                                                "id": "node_hl46mtii4up",
+                                                                                                                                "id": "node_a922yjjyfxb",
                                                                                                                                 "position": {
                                                                                                                                     "x": 5525.94189453125,
                                                                                                                                     "y": 5408.9580078125
@@ -2750,11 +2770,10 @@
                                                                                                                                                     "module": "make",
                                                                                                                                                     "name": "Extrude"
                                                                                                                                                 },
-                                                                                                                                                "argCount": 5,
+                                                                                                                                                "argCount": 6,
                                                                                                                                                 "args": [
                                                                                                                                                     {
                                                                                                                                                         "name": "var_name",
-                                                                                                                                                        "invalidVar": false,
                                                                                                                                                         "value": "col"
                                                                                                                                                     },
                                                                                                                                                     {
@@ -2775,6 +2794,11 @@
                                                                                                                                                         "name": "divisions",
                                                                                                                                                         "default": 0,
                                                                                                                                                         "value": "1"
+                                                                                                                                                    },
+                                                                                                                                                    {
+                                                                                                                                                        "name": "method",
+                                                                                                                                                        "default": 0,
+                                                                                                                                                        "value": "'quads'"
                                                                                                                                                     }
                                                                                                                                                 ],
                                                                                                                                                 "selected": false,
@@ -2850,7 +2874,7 @@
                                                                                                                 },
                                                                                                                 "parentNode": {
                                                                                                                     "name": "colours",
-                                                                                                                    "id": "node_6a3bqmdiefy",
+                                                                                                                    "id": "node_gd8hwgmto6h",
                                                                                                                     "position": {
                                                                                                                         "x": 5108.39111328125,
                                                                                                                         "y": 5828.4365234375
@@ -3091,7 +3115,7 @@
                                                                                                                                     },
                                                                                                                                     "parentNode": {
                                                                                                                                         "name": "End",
-                                                                                                                                        "id": "node_yqv2dt4w93",
+                                                                                                                                        "id": "node_9zn0omd90h",
                                                                                                                                         "position": {
                                                                                                                                             "x": 5108.3369140625,
                                                                                                                                             "y": 5972.98486328125
@@ -3259,7 +3283,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-02-04T09:18:50.567Z",
+    "last_updated": "2019-02-12T22:59:28.993Z",
     "version": 1,
     "settings": {}
 }

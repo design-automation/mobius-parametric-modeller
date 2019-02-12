@@ -10,7 +10,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
-    isEdge, idsMake, idIndicies, getArrDepth } from '@libs/geo-info/id';
+    isEdge, idsMake, idIndicies, getArrDepth, isFace } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@libs/geom/vectors';
 import { _model } from '@modules';
@@ -426,18 +426,57 @@ function _loftQuads(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: numb
     if (method === _ELoftMethod.CLOSED_QUADS) {
         edges_arrs_i.push(edges_arrs_i[0]);
     }
-    const pgons_i: number[] = [];
+    const new_pgons_i: number[] = [];
     for (let i = 0; i < edges_arrs_i.length - 1; i++) {
         const edges_i_a: number[] = edges_arrs_i[i];
         const edges_i_b: number[] = edges_arrs_i[i + 1];
-        for (let j = 0; j < num_edges; j++) {
-            const verts_i_a: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edges_i_a[j]);
-            const verts_i_b: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edges_i_b[j]);
-            const pgon_i: number = __model__.geom.add.addPgon([verts_i_a[0], verts_i_a[1], verts_i_b[1], verts_i_b[0]]);
-            pgons_i.push(pgon_i);
+        if (divisions > 0) {
+            const strip_posis_map: Map<number, number[]> = new Map();
+            for (let j = 0; j < num_edges; j++) {
+                const edge_i_a: number = edges_i_a[j];
+                const edge_i_b: number = edges_i_b[j];
+                // get exist two posis_i
+                const exist_posis_a_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i_a);
+                const exist_posis_b_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i_b);
+                // create the new posis strip if necessary
+                for (const k of [0, 1]) {
+                    if (strip_posis_map.get(exist_posis_a_i[k]) === undefined) {
+                        const xyz_a: Txyz = __model__.attribs.query.getPosiCoords(exist_posis_a_i[k]);
+                        const xyz_b: Txyz = __model__.attribs.query.getPosiCoords(exist_posis_b_i[k]);
+                        const extrude_vec_div: Txyz = vecDiv(vecFromTo(xyz_a, xyz_b), divisions);
+                        const strip_posis_i: number[] = [exist_posis_a_i[k]];
+                        for (let d = 1; d < divisions; d++) {
+                            const strip_posi_i: number = __model__.geom.add.addPosi();
+                            const move_xyz = vecMult(extrude_vec_div, d);
+                            __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz_a, move_xyz));
+                            strip_posis_i.push(strip_posi_i);
+                        }
+                        strip_posis_i.push(exist_posis_b_i[k]);
+                        strip_posis_map.set(exist_posis_a_i[k], strip_posis_i);
+                    }
+                }
+                // get the two strips and make polygons
+                const strip1_posis_i: number[] = strip_posis_map.get(exist_posis_a_i[0]);
+                const strip2_posis_i: number[] = strip_posis_map.get(exist_posis_a_i[1]);
+                for (let k = 0; k < strip1_posis_i.length - 1; k++) {
+                    const c1: number = strip1_posis_i[k];
+                    const c2: number = strip2_posis_i[k];
+                    const c3: number = strip2_posis_i[k + 1];
+                    const c4: number = strip1_posis_i[k + 1];
+                    const pgon_i: number = __model__.geom.add.addPgon([c1, c2, c3, c4]);
+                    new_pgons_i.push(pgon_i);
+                }
+            }
+        } else {
+            for (let j = 0; j < num_edges; j++) {
+                const posis_i_a: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edges_i_a[j]);
+                const posis_i_b: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edges_i_b[j]);
+                const pgon_i: number = __model__.geom.add.addPgon([posis_i_a[0], posis_i_a[1], posis_i_b[1], posis_i_b[0]]);
+                new_pgons_i.push(pgon_i);
+            }
         }
     }
-    return pgons_i.map( pgon_i => [EEntType.PGON, pgon_i]) as TEntTypeIdx[];
+    return new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i]) as TEntTypeIdx[];
 }
 function _loftStringers(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: number, method: _ELoftMethod): TEntTypeIdx[] {
     const posis_arrs_i: number[][] = [];
@@ -590,93 +629,218 @@ export function Loft(__model__: GIModel, entities: TId[], divisions: number, met
 //     return idsMake(new_ents_arr) as TId[];
 // }
 // ================================================================================================
-function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
-        dist: number|Txyz, divisions: number): TEntTypeIdx[] {
-    const extrude_vec: Txyz = (Array.isArray(dist) ? dist : [0, 0, dist]) as Txyz;
+export enum _EExtrudeMethod {
+    QUADS =  'quads',
+    STRINGERS = 'stringers',
+    RIBS = 'ribs'
+}
+function _extrudeColl(__model__: GIModel, index: number,
+        extrude_vec: Txyz, divisions: number, method: _EExtrudeMethod): TEntTypeIdx[] {
+    const points_i: number[] = __model__.geom.query.navCollToPoint(index);
+    const res1 = points_i.map( point_i => _extrude(__model__, [EEntType.POINT, point_i], extrude_vec, divisions, method));
+    const plines_i: number[] = __model__.geom.query.navCollToPline(index);
+    const res2 = plines_i.map( pline_i => _extrude(__model__, [EEntType.PLINE, pline_i], extrude_vec, divisions, method));
+    const pgons_i: number[] = __model__.geom.query.navCollToPgon(index);
+    const res3 = pgons_i.map( pgon_i => _extrude(__model__, [EEntType.PGON, pgon_i], extrude_vec, divisions, method));
+    return [].concat(res1, res2, res3);
+}
+function _extrudeDim0(__model__: GIModel, ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
+    const exist_posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
+    const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
+    const strip_posis_i: number[] = [exist_posi_i];
+    for (let i = 1; i < divisions + 1; i++) {
+        const strip_posi_i: number = __model__.geom.add.addPosi();
+        const move_xyz = vecMult(extrude_vec_div, i);
+        __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+        strip_posis_i.push(strip_posi_i);
+    }
+    // loft between the positions and create a single polyline
+    const pline_i: number = __model__.geom.add.addPline(strip_posis_i);
+    return [[EEntType.PLINE, pline_i]];
+}
+function _extrudeQuads(__model__: GIModel, ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
+    const new_pgons_i: number[] = [];
+    const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
+    const strip_posis_map: Map<number, number[]> = new Map();
+    for (const edge_i of edges_i) {
+        // get exist posis_i
+        const exist_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
+        // create the new posis strip if necessary
+        for (const exist_posi_i of exist_posis_i) {
+            if (strip_posis_map.get(exist_posi_i) === undefined) {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
+                const strip_posis_i: number[] = [exist_posi_i];
+                for (let i = 1; i < divisions + 1; i++) {
+                    const strip_posi_i: number = __model__.geom.add.addPosi();
+                    const move_xyz = vecMult(extrude_vec_div, i);
+                    __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                    strip_posis_i.push(strip_posi_i);
+                }
+                strip_posis_map.set(exist_posi_i, strip_posis_i);
+            }
+        }
+        // get the two strips and make polygons
+        const strip1_posis_i: number[] = strip_posis_map.get(exist_posis_i[0]);
+        const strip2_posis_i: number[] = strip_posis_map.get(exist_posis_i[1]);
+        for (let i = 0; i < strip1_posis_i.length - 1; i++) {
+            const c1: number = strip1_posis_i[i];
+            const c2: number = strip2_posis_i[i];
+            const c3: number = strip2_posis_i[i + 1];
+            const c4: number = strip1_posis_i[i + 1];
+            const pgon_i: number = __model__.geom.add.addPgon([c1, c2, c3, c4]);
+            new_pgons_i.push(pgon_i);
+        }
+    }
+    // cap the top
+    if (isDim2(ent_type)) { // create a top -> polygon
+        const face_i: number = isFace(ent_type) ? index : __model__.geom.query.navPgonToFace(index);
+        const cap_pgon_i: number = _extrudeCap(__model__, face_i, strip_posis_map, divisions);
+        new_pgons_i.push(cap_pgon_i);
+    }
+    return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);
+}
+function _extrudeStringers(__model__: GIModel, ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
+    const new_plines_i: number[] = [];
+    const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
+    const strip_posis_map: Map<number, number[]> = new Map();
+    for (const edge_i of edges_i) {
+        // get exist posis_i
+        const exist_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
+        // create the new posis strip if necessary
+        for (const exist_posi_i of exist_posis_i) {
+            if (strip_posis_map.get(exist_posi_i) === undefined) {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
+                const strip_posis_i: number[] = [exist_posi_i];
+                for (let i = 1; i < divisions + 1; i++) {
+                    const strip_posi_i: number = __model__.geom.add.addPosi();
+                    const move_xyz = vecMult(extrude_vec_div, i);
+                    __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                    strip_posis_i.push(strip_posi_i);
+                }
+                strip_posis_map.set(exist_posi_i, strip_posis_i);
+            }
+        }
+    }
+    // make the stringers
+    strip_posis_map.forEach(strip_posis_i => {
+        const pline_i: number = __model__.geom.add.addPline(strip_posis_i);
+        new_plines_i.push(pline_i);
+    });
+    // return the stringers
+    return new_plines_i.map(pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx);
+}
+function _extrudeRibs(__model__: GIModel, ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
+    const new_plines_i: number[] = [];
+    const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
+    const strip_posis_map: Map<number, number[]> = new Map();
+    for (const edge_i of edges_i) {
+        // get exist posis_i
+        const exist_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
+        // create the new posis strip if necessary
+        for (const exist_posi_i of exist_posis_i) {
+            if (strip_posis_map.get(exist_posi_i) === undefined) {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
+                const strip_posis_i: number[] = [exist_posi_i];
+                for (let i = 1; i < divisions + 1; i++) {
+                    const strip_posi_i: number = __model__.geom.add.addPosi();
+                    const move_xyz = vecMult(extrude_vec_div, i);
+                    __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                    strip_posis_i.push(strip_posi_i);
+                }
+                strip_posis_map.set(exist_posi_i, strip_posis_i);
+            }
+        }
+    }
+    // make an array of ents to process as ribs
+    let ribs_is_closed = false;
+    const ribs_posis_i: number[][] = [];
+    switch (ent_type) { // check if the entity is closed
+        case EEntType.PGON:
+        case EEntType.FACE:
+            ribs_is_closed = true;
+            const face_wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+            for (const face_wire_i of face_wires_i) {
+                const face_wire_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, face_wire_i);
+                ribs_posis_i.push(face_wire_posis_i);
+            }
+            break;
+        case EEntType.PLINE:
+            const pline_wire_i: number = __model__.geom.query.navPlineToWire(index);
+            const pline_wire_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, pline_wire_i);
+            ribs_posis_i.push(pline_wire_posis_i);
+            ribs_is_closed = __model__.geom.query.istWireClosed(pline_wire_i);
+            break;
+        case EEntType.WIRE:
+            const wire_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
+            ribs_posis_i.push(wire_posis_i);
+            ribs_is_closed = __model__.geom.query.istWireClosed(index);
+            break;
+        default:
+            const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            ribs_posis_i.push(posis_i);
+            break;
+    }
+    // make the ribs
+    for (let i = 0; i < divisions + 1; i++) {
+        for (const rib_posis_i of ribs_posis_i) {
+            const mapped_rib_posis_i: number[] = rib_posis_i.map( rib_posi_i => strip_posis_map.get(rib_posi_i)[divisions]);
+            const pline_i: number = __model__.geom.add.addPline(mapped_rib_posis_i, ribs_is_closed);
+            new_plines_i.push(pline_i);
+        }
+    }
+    // return the ribs
+    return new_plines_i.map(pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx);
+}
+function _extrudeCap(__model__: GIModel, index: number, strip_posis_map: Map<number, number[]>, divisions: number): number {
+    const face_i: number = __model__.geom.query.navPgonToFace(index);
+    // get positions on boundary
+    const old_wire_i: number = __model__.geom.query.getFaceBoundary(face_i);
+    const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_wire_i);
+    const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
+    // get positions for holes
+    const old_holes_wires_i: number[] = __model__.geom.query.getFaceHoles(face_i);
+    const new_holes_posis_i: number[][] = [];
+    for (const old_hole_wire_i of old_holes_wires_i) {
+        const old_hole_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_hole_wire_i);
+        const new_hole_posis_i: number[] = old_hole_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
+        new_holes_posis_i.push(new_hole_posis_i);
+    }
+    // make new polygon
+    const pgon_i: number = __model__.geom.add.addPgon( new_posis_i, new_holes_posis_i );
+    return pgon_i;
+}
+function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
+        dist: number|Txyz, divisions: number, method: _EExtrudeMethod): TEntTypeIdx[] {
+    const extrude_vec: Txyz = (Array.isArray(dist) ? dist : [0, 0, dist]) as Txyz;
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         // check if this is a collection, call this function again
         if (isColl(ent_type)) {
-            const points_i: number[] = __model__.geom.query.navCollToPoint(index);
-            const res1 = points_i.map( point_i => _extrude(__model__, [EEntType.POINT, point_i], extrude_vec, divisions));
-            const plines_i: number[] = __model__.geom.query.navCollToPline(index);
-            const res2 = plines_i.map( pline_i => _extrude(__model__, [EEntType.PLINE, pline_i], extrude_vec, divisions));
-            const pgons_i: number[] = __model__.geom.query.navCollToPgon(index);
-            const res3 = pgons_i.map( pgon_i => _extrude(__model__, [EEntType.PGON, pgon_i], extrude_vec, divisions));
-            return [].concat(res1, res2, res3);
+            return _extrudeColl(__model__, index, extrude_vec, divisions, method);
         }
         // check if this is a position, a vertex, or a point -> pline
         if (isDim0(ent_type)) {
-            const exist_posi_i: number = __model__.geom.query.navAnyToPosi(ent_type, index)[0];
-            const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
-            const strip_posis_i: number[] = [exist_posi_i];
-            for (let i = 1; i < divisions + 1; i++) {
-                const strip_posi_i: number = __model__.geom.add.addPosi();
-                const move_xyz = vecMult(extrude_vec_div, i);
-                __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
-                strip_posis_i.push(strip_posi_i);
-            }
-            // loft between the positions and create a single polyline
-            const pline_i: number = __model__.geom.add.addPline(strip_posis_i);
-            return [[EEntType.PLINE, pline_i]];
+            return _extrudeDim0(__model__, ent_type, index, extrude_vec, divisions);
         }
         // extrude edges -> polygons
-        const new_pgons_i: number[] = [];
-        const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
-        const strip_posis_map: Map<number, number[]> = new Map();
-        for (const edge_i of edges_i) {
-            // get exist posis_i
-            const exist_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
-            // create the new posis strip if necessary
-            for (const exist_posi_i of exist_posis_i) {
-                if (strip_posis_map.get(exist_posi_i) === undefined) {
-                    const xyz: Txyz = __model__.attribs.query.getPosiCoords(exist_posi_i);
-                    const strip_posis_i: number[] = [exist_posi_i];
-                    for (let i = 1; i < divisions + 1; i++) {
-                        const strip_posi_i: number = __model__.geom.add.addPosi();
-                        const move_xyz = vecMult(extrude_vec_div, i);
-                        __model__.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
-                        strip_posis_i.push(strip_posi_i);
-                    }
-                    strip_posis_map.set(exist_posi_i, strip_posis_i);
-                }
-            }
-            // get the two strips and make polygons
-            const strip1_posis_i: number[] = strip_posis_map.get(exist_posis_i[0]);
-            const strip2_posis_i: number[] = strip_posis_map.get(exist_posis_i[1]);
-            for (let i = 0; i < strip1_posis_i.length - 1; i++) {
-                const c1: number = strip1_posis_i[i];
-                const c2: number = strip2_posis_i[i];
-                const c3: number = strip2_posis_i[i + 1];
-                const c4: number = strip1_posis_i[i + 1];
-                const pgon_i: number = __model__.geom.add.addPgon([c1, c2, c3, c4]);
-                new_pgons_i.push(pgon_i);
-            }
+        switch (method) {
+            case _EExtrudeMethod.QUADS:
+                return _extrudeQuads(__model__, ent_type, index, extrude_vec, divisions);
+            case _EExtrudeMethod.STRINGERS:
+                return _extrudeStringers(__model__, ent_type, index, extrude_vec, divisions);
+            case _EExtrudeMethod.RIBS:
+                return _extrudeRibs(__model__, ent_type, index, extrude_vec, divisions);
+            default:
+                throw new Error('Extrude method not recognised.');
         }
-        if (isDim2(ent_type)) { // create a top -> polygon
-            const face_i: number = __model__.geom.query.navPgonToFace(index);
-            // get positions on boundary
-            const old_wire_i: number = __model__.geom.query.getFaceBoundary(face_i);
-            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_wire_i);
-            const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
-            // get positions for holes
-            const old_holes_wires_i: number[] = __model__.geom.query.getFaceHoles(face_i);
-            const new_holes_posis_i: number[][] = [];
-            for (const old_hole_wire_i of old_holes_wires_i) {
-                const old_hole_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, old_hole_wire_i);
-                const new_hole_posis_i: number[] = old_hole_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
-                new_holes_posis_i.push(new_hole_posis_i);
-            }
-            // make new polygon
-            const pgon_i: number = __model__.geom.add.addPgon( new_posis_i, new_holes_posis_i );
-            new_pgons_i.push(pgon_i);
-        }
-        return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);
     } else {
         const new_ents_arr: TEntTypeIdx[] = [];
         (ents_arr as TEntTypeIdx[]).forEach(ent_arr => {
-            const result = _extrude(__model__, ent_arr, extrude_vec, divisions);
+            const result = _extrude(__model__, ent_arr, extrude_vec, divisions, method);
             result.forEach( new_ent_arr => new_ents_arr.push(new_ent_arr));
         });
         return new_ents_arr;
@@ -690,45 +854,48 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  *
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param dist Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
+ * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
  * @param divisions Number of divisions to divide extrusion by. Minimum is 1.
- * @returns List of new polygons resulting from the extrude.
- * @example extrusion1 = make.Extrude(point1, 10, 2)
- * @example_info Creates a list of 2 lines of total length 10 (length 5 each) in the z-direction.
- * If point1 = [0,0,0], extrusion1[0] is a line between [0,0,0] and [0,0,5]; extrusion1[1] is a line between [0,0,5] and [0,0,10].
- * @example extrusion2 = make.Extrude(polygon1, [0,5,0], 1)
- * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of surfaces.
+ * @param method Enum, when extruding edges, select quads, stringers, or ribs
+ * @returns List of new polygons or polylines resulting from the extrude.
+ * @example extrusion1 = make.Extrude(point1, 10, 2, 'quads')
+ * @example_info Creates a polyline of total length 10 (with two edges of length 5 each) in the z-direction.
+ * In this case, the 'quads' setting is ignored.
+ * @example extrusion2 = make.Extrude(polygon1, [0,5,0], 1, 'quads')
+ * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of quad surfaces.
  */
-export function Extrude(__model__: GIModel, entities: TId|TId[], dist: number|Txyz, divisions: number): TId|TId[] {
+export function Extrude(__model__: GIModel, entities: TId|TId[], 
+        distance: number|Txyz, divisions: number, method: _EExtrudeMethod): TId|TId[] {
     // --- Error Check ---
     const fn_name = 'make.Extrude';
     const ents_arr =  checkIDs(fn_name, 'entities', entities,
         ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
-    checkCommTypes(fn_name, 'dist', dist, ['isNumber', 'isVector']);
+    checkCommTypes(fn_name, 'dist', distance, ['isNumber', 'isVector']);
     checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
     // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, dist, divisions);
+    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, distance, divisions, method);
     if (!Array.isArray(entities) && new_ents_arr.length === 1) {
         return idsMake(new_ents_arr[0]) as TId;
     } else {
         return idsMake(new_ents_arr) as TId|TId[];
     }
 }
-export function _Extrude(__model__: GIModel, entities: TId|TId[], dist: number|Txyz, divisions: number): TId|TId[] {
-    // --- Error Check ---
-    const fn_name = 'make.Extrude';
-    const ents_arr =  checkIDs(fn_name, 'entities', entities,
-        ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
-    checkCommTypes(fn_name, 'dist', dist, ['isNumber', 'isVector']);
-    checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
-    // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, dist, divisions);
-    if (!Array.isArray(entities) && new_ents_arr.length === 1) {
-        return idsMake(new_ents_arr[0]) as TId;
-    } else {
-        return idsMake(new_ents_arr) as TId|TId[];
-    }
-}
+// the old extrude
+// export function _Extrude(__model__: GIModel, entities: TId|TId[], dist: number|Txyz, divisions: number): TId|TId[] {
+//     // --- Error Check ---
+//     const fn_name = 'make.Extrude';
+//     const ents_arr =  checkIDs(fn_name, 'entities', entities,
+//         ['isID', 'isIDList'], ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+//     checkCommTypes(fn_name, 'dist', dist, ['isNumber', 'isVector']);
+//     checkCommTypes(fn_name, 'divisions', divisions, ['isInt']);
+//     // --- Error Check ---
+//     const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, dist, divisions);
+//     if (!Array.isArray(entities) && new_ents_arr.length === 1) {
+//         return idsMake(new_ents_arr[0]) as TId;
+//     } else {
+//         return idsMake(new_ents_arr) as TId|TId[];
+//     }
+// }
 // ================================================================================================
 /**
  * Joins polylines to polylines or polygons to polygons.

@@ -89,7 +89,7 @@ The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], 
     Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
   
   
-## visBBox  
+## VisBBox  
 * **Description:** Visualises a bounding box by adding geometry to the model.  
 * **Parameters:**  
   * *bbox:* A list of lists.  

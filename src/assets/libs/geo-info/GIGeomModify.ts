@@ -340,7 +340,7 @@ export class GIGeomModify {
         // update the up arrays
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
         // return the new edge
-        return new_vert_i;
+        return new_edge_i;
     }
     /**
      * Adds a vertex to a wire and updates the wire with the new edge
@@ -367,7 +367,7 @@ export class GIGeomModify {
         // update the up arrays
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
         // return the new edge
-        return new_vert_i;
+        return new_edge_i;
     }
     /**
      * Replace positions

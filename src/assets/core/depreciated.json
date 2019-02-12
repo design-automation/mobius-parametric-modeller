@@ -126,6 +126,20 @@
     },
     {
         "old_func": {
+            "name": "Extrude",
+            "module": "make"
+        },
+        "new_func": {
+            "name": "Extrude",
+            "module": "make",
+            "values": {
+                "divisions": "1",
+                "method": "'quads'"
+            }
+        }
+    },
+    {
+        "old_func": {
             "name": "Normal",
             "module": "calc"
         },

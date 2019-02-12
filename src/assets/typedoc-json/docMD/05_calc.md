@@ -50,6 +50,7 @@ TODO: allow for a list of surfaces
 * **Description:** Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..  
 * **Parameters:**  
   * *entities:* List of positions, a polygon, a face, a closed polyline, a closed wire, or a plane.  
+  * *scale:* undefined  
 * **Returns:** The normal vector [x, y, z].  
 * **Examples:**  
   * normal1 = calc.Normal (polygon1)  

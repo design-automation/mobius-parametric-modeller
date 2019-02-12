@@ -376,7 +376,7 @@ export enum _EAppendMethod {
  * @example_info where list = [1,2,3]
  * Expected value of list is [1,2,3,4].
  */
-export function Append(list: any[], value: any, method: _EAppendMethod): void {
+export function _Append(list: any[], value: any, method: _EAppendMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Append';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -393,6 +393,7 @@ export function Append(list: any[], value: any, method: _EAppendMethod): void {
             break;
     }
 }
+// ================================================================================================
 /**
  * Removes the value at the specified index from a list.
  * ~
@@ -404,7 +405,7 @@ export function Append(list: any[], value: any, method: _EAppendMethod): void {
  * @example_info where list = [1,2,3]
  * Expected value of remove is [1,3].
  */
-export function RemoveIndex(list: any[], index: number): void {
+export function _RemoveIndex(list: any[], index: number): void {
     // --- Error Check ---
     const fn_name = 'list.RemoveIndex';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -432,7 +433,7 @@ export enum _ERemoveValueMethod {
  * @example_info where list = [1,2,2,3]
  * Expected value of remove is [1,3].
  */
-export function RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
+export function _RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
     // --- Error Check ---
     const fn_name = 'list.RemoveValue';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -466,7 +467,7 @@ export enum _EReplaceValueMethod {
  * @example_info where list = [1,2,2,3]
  * Expected value of replace is [1,9,9,3].
  */
-export function ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
+export function _ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
     // --- Error Check ---
     const fn_name = 'list.ReplaceValue';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -502,7 +503,7 @@ export enum _EIndexOfMethod {
  * @example_info where list = [6,2,2,7]
  * Expected value of positions is [1,2].
  */
-export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
+export function _IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
     // --- Error Check ---
     const fn_name = 'list.IndexOf';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -540,7 +541,7 @@ export function IndexOf(list: any[], value: any, method: _EIndexOfMethod): numbe
  * @example_info where list = [6,2,2,7]
  * Expected value of exists is true.
  */
-export function Includes(list: any[], value: any): boolean {
+export function _Includes(list: any[], value: any): boolean {
     // --- Error Check ---
     const fn_name = 'list.Includes';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -554,23 +555,24 @@ export function Includes(list: any[], value: any): boolean {
     }
     return false;
 }
+// ================================================================================================
 /**
  * Creates a new list by creating a new list by making a copy of an existing list.
  * ~
  * WARNING: This function has been deprecated. Please use the inline listCopy() function.
  *
- * @param list List to copy.
+ * @param entities List to copy.
  * @returns New duplicated list.
  * @example copy1 = list.Copy(list)
  * @example_info where list = [1,2,3]
  * Expected value of copy is [1,2,3].
  */
-export function Copy(list: any[]): any[] {
+export function _Copy(entities: any[]): any[] {
     // --- Error Check ---
-    checkCommTypes('list.Copy', 'list', list, ['isList']);
+    checkCommTypes('list.Copy', 'list', entities, ['isList']);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listCopy() function.');
-    return list.slice();
+    return entities.slice();
 }
 // ================================================================================================
 /**
@@ -586,7 +588,7 @@ export function Copy(list: any[]): any[] {
  * and list2 = [9,0]
  * Expected value of newlist is [1,2,3,9,0].
  */
-export function Concat(list1: any[], list2: any[]): any[] {
+export function _Concat(list1: any[], list2: any[]): any[] {
     // --- Error Check ---
     const fn_name = 'list.Concat';
     checkCommTypes(fn_name, 'list1', list1, ['isList']);
@@ -607,7 +609,7 @@ export function Concat(list1: any[], list2: any[]): any[] {
  * @example_info where list = [1,2,3,[4,5]]
  * Expected value of flatten is [1,2,3,4,5].
  */
-export function Flatten(list: any[]): any[] {
+export function _Flatten(list: any[]): any[] {
     // --- Error Check ---
     checkCommTypes('list.Flatten', 'list', list, ['isList']);
     // --- Error Check ---
@@ -635,7 +637,7 @@ function _flattenDeep(list: any[]): any[] {
  * @example_info where list = [1,2,3,4,5]
  * Expected value of result is [2,3].
  */
-export function Slice(list: any[], start: number, end: number): any[] {
+export function _Slice(list: any[], start: number, end: number): any[] {
     // --- Error Check ---
     const fn_name = 'list.Slice';
     checkCommTypes(fn_name, 'list', list, ['isList']);
@@ -651,16 +653,17 @@ export function Slice(list: any[], start: number, end: number): any[] {
  * ~
  * WARNING: This function has been deprecated. Please use the list.Sort() function.
  *
- * @param list List to reverse.
+ * @param entities List to reverse.
  * @returns New reversed list.
  * @example result = list.Reverse(list1)
  * @example_info where list1 = [1,2,3]
  * Expected value of result is [3,2,1].
  */
-export function Reverse(list: any[]): void {
+export function _Reverse(entities: any[]): void {
     // --- Error Check ---
-    checkCommTypes('list.Reverse', 'list', list, ['isList']);
+    checkCommTypes('list.Reverse', 'entities', entities, ['isList']);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the list.Sort() function.');
-    list.reverse();
+    entities.reverse();
 }
+// ================================================================================================

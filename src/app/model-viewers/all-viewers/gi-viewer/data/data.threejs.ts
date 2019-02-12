@@ -543,15 +543,15 @@ export class DataThreejs {
     // Creates a Directional Light
     private _addDirectionalLight() {
         this.directional_light = new THREE.DirectionalLight(0xffffff, this.settings.directional_light.intensity);
-        const scale = 1000;
+        const scale = 10000;
         this.directional_light.position.set(0, 1 * scale, 1 * scale);
         this.directional_light.castShadow = this.settings.directional_light.shadow;
         this.directional_light.visible = this.settings.directional_light.show;
-        this.directional_light.shadow.mapSize.width = 2048;  // default
-        this.directional_light.shadow.mapSize.height = 2048; // default
+        this.directional_light.shadow.mapSize.width = 10240;  // default
+        this.directional_light.shadow.mapSize.height = 10240; // default
         this.directional_light.shadow.camera.near = 0.5;    // default
         this._scene.add(this.directional_light);
-        this.directionalLightScale(1000);
+        this.directionalLightScale(scale);
         const helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
         helper.visible = this.settings.directional_light.helper;
         this._scene.add(helper);
@@ -563,9 +563,9 @@ export class DataThreejs {
         if (size) {
             scale = size;
         } else {
-            scale = 1000;
+            scale = 10000;
         }
-        this.directional_light.shadow.camera.far = 2 * scale;
+        this.directional_light.shadow.camera.far = 4 * scale;
         this.directional_light.shadow.camera.left = -scale;
         this.directional_light.shadow.camera.right = scale;
         this.directional_light.shadow.camera.top = scale;
@@ -574,11 +574,12 @@ export class DataThreejs {
 
     public directionalLightMove(azimuth = null, altitude = null) {
         if (azimuth) {
-            this.directional_light.position.setX(Math.cos(azimuth) * 1000);
-            this.directional_light.position.setY(Math.sin(azimuth) * 1000);
+            this.directional_light.position.x = Math.cos(azimuth * Math.PI * 2 / 360) * 10000;
+            this.directional_light.position.y = Math.sin(azimuth * Math.PI * 2 / 360) * 10000;
         }
         if (altitude) {
-            this.directional_light.position.setZ(Math.sin(altitude) * 1000);
+            this.directional_light.position.x = Math.cos(altitude * Math.PI * 2 / 360) * 10000;
+            this.directional_light.position.z = Math.sin(altitude * Math.PI * 2 / 360) * 10000;
         }
     }
 
@@ -995,7 +996,6 @@ interface Settings {
         color: string,
         intensity: number,
         shadow: boolean,
-        position: number[],
         azimuth: number,
         altitude: number
     };

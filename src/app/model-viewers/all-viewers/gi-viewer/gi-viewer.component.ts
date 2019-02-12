@@ -61,13 +61,13 @@ export class GIViewerComponent implements OnInit {
 
         const now_utc = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 
-        console.log(new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000));
+        // console.log(new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000));
 
         const sunrisePos = SunCalc.getPosition(now_utc, singapore.lat, singapore.lat);
         const sunriseAzimuth = sunrisePos.azimuth * 180 / Math.PI;
 
-        console.log('sunrisePos', sunrisePos);
-        console.log('sunriseAzimuth', sunriseAzimuth);
+        // console.log('sunrisePos', sunrisePos);
+        // console.log('sunriseAzimuth', sunriseAzimuth);
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {
         //     this.columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
         // }
@@ -200,6 +200,13 @@ export class GIViewerComponent implements OnInit {
                 if (scene.directional_light) {
                     scene.directional_light.visible = this.settings.directional_light.show;
                 }
+                if (this.settings.directional_light.show) {
+                    this.settings.ambient_light.intensity = 0.3;
+                    this.settings.hemisphere_light.intensity = 0.3;
+                } else {
+                    this.settings.ambient_light.intensity = 0.5;
+                    this.settings.hemisphere_light.intensity = 0.5;
+                }
                 break;
             case 'directional_light.helper':
                 this.settings.directional_light.helper = !this.settings.directional_light.helper;
@@ -303,7 +310,6 @@ interface Settings {
         color: string,
         intensity: number,
         shadow: boolean,
-        position: number[],
         azimuth: number,
         altitude: number
     };

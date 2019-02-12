@@ -308,14 +308,14 @@
 								<dd>
 									<div class="label">Azimuth</div>
 									<div class="slidecontainer light">
-										<input type="range" min="-180" max="180" step="1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
+										<input type="range" min="0" max="360" step="0.1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.azimuth" class="number">
 									</div>
 								</dd>
 								<dd>
 									<div class="label">Altitude</div>
 									<div class="slidecontainer light">
-										<input type="range" min="-90" max="90" step="0.1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
+										<input type="range" min="0" max="180" step="0.1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">
 									</div>
 								</dd>

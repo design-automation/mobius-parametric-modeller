@@ -34,9 +34,8 @@ export const DefaultSettings = {
         color: '#FFFFFF',
         intensity: 1,
         shadow: true,
-        position: [0, 2000, 1000],
-        azimuth: 0,
-        altitude: 90
+        azimuth: 90,
+        altitude: 45
     },
     ground: {
         show: false,

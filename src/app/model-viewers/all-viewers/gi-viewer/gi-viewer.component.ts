@@ -211,25 +211,13 @@ export class GIViewerComponent implements OnInit {
             case 'directional_light.shadow':
                 this.settings.directional_light.shadow = !this.settings.directional_light.shadow;
                 break;
-            case 'directional_light.p.x':
-                this.settings.directional_light.position[0] = Number(value);
-                scene.directional_light.position.setX(this.settings.directional_light.position[0]);
-                break;
-            case 'directional_light.p.y':
-                this.settings.directional_light.position[1] = Number(value);
-                scene.directional_light.position.setY(this.settings.directional_light.position[1]);
-                break;
-            case 'directional_light.p.z':
-                this.settings.directional_light.position[2] = Number(value);
-                scene.directional_light.position.setZ(this.settings.directional_light.position[2]);
-                break;
             case 'directional_light.azimuth':
                 this.settings.directional_light.azimuth = Number(value);
-                scene.directionalLightScale(this.settings.directional_light.azimuth);
+                scene.directionalLightMove(this.settings.directional_light.azimuth);
                 break;
             case 'directional_light.altitude':
                 this.settings.directional_light.altitude = Number(value);
-                scene.directionalLightScale(this.settings.directional_light.altitude);
+                scene.directionalLightMove(null, this.settings.directional_light.altitude);
                 break;
             case 'ground.show':
                 this.settings.ground.show = !this.settings.ground.show;

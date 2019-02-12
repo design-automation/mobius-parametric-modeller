@@ -537,24 +537,24 @@ export class DataThreejs {
         this._scene.add(this.hemisphere_light);
         const helper = new THREE.HemisphereLightHelper(this.hemisphere_light, 10);
         helper.visible = this.settings.hemisphere_light.helper;
-        this._scene.add( helper );
+        this._scene.add(helper);
     }
 
     // Creates a Directional Light
     private _addDirectionalLight() {
         this.directional_light = new THREE.DirectionalLight(0xffffff, this.settings.directional_light.intensity);
         const scale = 1000;
-        this.directional_light.position.set(0, 2 * scale, 1 * scale);
+        this.directional_light.position.set(0, 1 * scale, 1 * scale);
         this.directional_light.castShadow = this.settings.directional_light.shadow;
         this.directional_light.visible = this.settings.directional_light.show;
         this.directional_light.shadow.mapSize.width = 2048;  // default
         this.directional_light.shadow.mapSize.height = 2048; // default
         this.directional_light.shadow.camera.near = 0.5;    // default
         this._scene.add(this.directional_light);
-        this.directionalLightScale(5000);
-        const helper = new THREE.CameraHelper( this.directional_light.shadow.camera );
+        this.directionalLightScale(1000);
+        const helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
         helper.visible = this.settings.directional_light.helper;
-        this._scene.add( helper );
+        this._scene.add(helper);
         this._renderer.render(this._scene, this._camera);
     }
 
@@ -565,11 +565,21 @@ export class DataThreejs {
         } else {
             scale = 1000;
         }
-        this.directional_light.shadow.camera.far = 4 * scale;
+        this.directional_light.shadow.camera.far = 2 * scale;
         this.directional_light.shadow.camera.left = -scale;
         this.directional_light.shadow.camera.right = scale;
         this.directional_light.shadow.camera.top = scale;
         this.directional_light.shadow.camera.bottom = -scale;
+    }
+
+    public directionalLightMove(azimuth = null, altitude = null) {
+        if (azimuth) {
+            this.directional_light.position.setX(Math.cos(azimuth) * 1000);
+            this.directional_light.position.setY(Math.sin(azimuth) * 1000);
+        }
+        if (altitude) {
+            this.directional_light.position.setZ(Math.sin(altitude) * 1000);
+        }
     }
 
     // add axes

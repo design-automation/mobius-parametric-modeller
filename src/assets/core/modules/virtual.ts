@@ -418,7 +418,7 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
  * @example bbox1 = virtual.viBBox(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function visBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
+export function VisBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visBBox';
     checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']); // TODO bboxs can be a list // add isBBoxList to enable check

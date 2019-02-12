@@ -122,6 +122,19 @@
                 "divisions": "1",
                 "method": "'open_quads'"
             }
+        }
+    },
+    {
+        "old_func": {
+            "name": "Normal",
+            "module": "calc"
         },
+        "new_func": {
+            "name": "Normal",
+            "module": "calc",
+            "values": {
+                "scale": "1"
+            }
+        }
     }
 ]

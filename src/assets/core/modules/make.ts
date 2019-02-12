@@ -83,8 +83,8 @@ export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
 // ================================================================================================
 // Enums for Polyline()
 export enum _EClose {
-    CLOSE = 'close',
-    OPEN = 'open'
+    OPEN = 'open',
+    CLOSE = 'close'
 }
 function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], close: _EClose): TEntTypeIdx|TEntTypeIdx[] {
     if (getArrDepth(ents_arr) === 2) {
@@ -96,21 +96,53 @@ function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], 
         return (ents_arr as TEntTypeIdx[][]).map(ent_arr => _polyline(__model__, ent_arr, close)) as TEntTypeIdx[];
     }
 }
+function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): void {
+    for (let i = 0; i < ents_arr.length; i++) {
+        const depth: number = getArrDepth(ents_arr[i]);
+        if (depth === 1) {
+            const [ent_type, index]: TEntTypeIdx = ents_arr[i] as TEntTypeIdx;
+            switch (ent_type) {
+                case EEntType.EDGE:
+                case EEntType.WIRE:
+                case EEntType.PLINE:
+                    const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+                    const posis_arr: TEntTypeIdx[] = posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
+                    ents_arr.splice(i, 1, posis_arr);
+                    break;
+                case EEntType.FACE:
+                case EEntType.PGON:
+                    ents_arr.splice(i, 1);
+                    const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+                    for (let j = 0; j < wires_i.length; j++) {
+                        const wire_i: number = wires_i[j];
+                        const wire_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
+                        const wire_posis_arr: TEntTypeIdx[] = wire_posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
+                        ents_arr.splice(i + j, 0, wire_posis_arr);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
 /**
  * Adds a new polyline to the model.
  * @param __model__
- * @param positions List of positions.
- * @param close Enum of 'close' or 'open'.
+ * @param entities List of positions, or entities from which positions can be extracted.
+ * @param close Enum, 'open' or 'close'.
  * @returns New polyline.
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  * @example_link make.Polyline.mob&node=1
  */
-export function Polyline(__model__: GIModel, positions: TId[]|TId[][], close: _EClose): TId|TId[] {
+export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close: _EClose): TId|TId[] {
+    if (!Array.isArray(entities)) { entities = [entities]; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Polyline', 'positions', positions,
-        ['isIDList', 'isIDList_list'], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][]; // TODO
+    const ents_arr = checkIDs('make.Polyline', 'entities', entities,
+        ['isIDList', 'isIDList_list'], ['POSI', 'EDGE', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[]|TEntTypeIdx[][]; // TODO
     // --- Error Check ---
+    _getPlinePosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _polyline(__model__, ents_arr, close);
     return idsMake(new_ents_arr) as TId|TId[];
 }

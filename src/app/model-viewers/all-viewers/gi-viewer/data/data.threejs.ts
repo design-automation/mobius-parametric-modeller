@@ -541,9 +541,21 @@ export class DataThreejs {
     }
 
     // Creates a Directional Light
-    private _addDirectionalLight() {
+    private _addDirectionalLight(): void {
         this.directional_light = new THREE.DirectionalLight(0xffffff, this.settings.directional_light.intensity);
-        const scale = 10000;
+        const distance = this.settings.directional_light.distance;
+        this.getDLPosition(distance);
+        this.directional_light.castShadow = this.settings.directional_light.shadow;
+        this.directional_light.visible = this.settings.directional_light.show;
+        const shadowMapSize = this.settings.directional_light.shadowSize;
+        this.directional_light.shadow.mapSize.width = 1024 * shadowMapSize;  // default
+        this.directional_light.shadow.mapSize.height = 1024 * shadowMapSize; // default
+        this.directional_light.shadow.camera.near = 0.5;    // default
+        this._scene.add(this.directional_light);
+        this.DLDistance(distance);
+    }
+
+    private getDLPosition(scale: number): void {
         const azimuth = this.settings.directional_light.azimuth,
         altitude = this.settings.directional_light.altitude,
         posX = Math.cos(azimuth * Math.PI * 2 / 360) * scale,
@@ -551,41 +563,64 @@ export class DataThreejs {
         posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
 
         this.directional_light.position.set(posX, posY, posZ);
-        this.directional_light.castShadow = this.settings.directional_light.shadow;
-        this.directional_light.visible = this.settings.directional_light.show;
-        this.directional_light.shadow.mapSize.width = 10240;  // default
-        this.directional_light.shadow.mapSize.height = 10240; // default
-        this.directional_light.shadow.camera.near = 0.5;    // default
-        this._scene.add(this.directional_light);
-        this.directionalLightScale(scale);
-        const helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
-        helper.visible = this.settings.directional_light.helper;
-        this._scene.add(helper);
+    }
+
+    public DLMapSize(size = null): void {
+        let _size;
+        if (size) {
+            _size = 1024 * size;
+        } else {
+            _size = 8192;
+        }
+        if (this.directional_light) {
+            this.directional_light.shadow.mapSize.width = _size;
+            this.directional_light.shadow.mapSize.width = _size;
+        }
         this._renderer.render(this._scene, this._camera);
     }
 
-    public directionalLightScale(size = null) {
+    public DLDistance(size = null): void {
         let scale;
         if (size) {
             scale = size;
         } else {
             scale = 10000;
         }
-        this.directional_light.shadow.camera.far = 4 * scale;
-        this.directional_light.shadow.camera.left = -scale;
-        this.directional_light.shadow.camera.right = scale;
-        this.directional_light.shadow.camera.top = scale;
-        this.directional_light.shadow.camera.bottom = -scale;
+        if (this.directional_light) {
+            let i = 0;
+            const length = this._scene.children.length;
+            if (length !== 0) {
+                for (; i < length; i++) {
+                    if (this._scene.children[i]) {
+                        if (this._scene.children[i].name === 'DLHelper') {
+                            this._scene.remove(this._scene.children[i]);
+                        }
+                    }
+                }
+            }
+            this.directional_light.shadow.camera.far = 3 * scale;
+            this.directional_light.shadow.camera.left = -scale;
+            this.directional_light.shadow.camera.right = scale;
+            this.directional_light.shadow.camera.top = scale;
+            this.directional_light.shadow.camera.bottom = -scale;
+            const helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
+            helper.visible = this.settings.directional_light.helper;
+            helper.name = 'DLHelper';
+            this._scene.add(helper);
+            this.getDLPosition(scale);
+            this._renderer.render(this._scene, this._camera);
+        }
     }
 
-    public directionalLightMove(azimuth = null, altitude = null) {
+    public directionalLightMove(azimuth = null, altitude = null): void {
+        const distance = this.settings.directional_light.distance;
         if (azimuth) {
-            this.directional_light.position.x = Math.cos(azimuth * Math.PI * 2 / 360) * 10000;
-            this.directional_light.position.y = Math.sin(azimuth * Math.PI * 2 / 360) * 10000;
+            this.directional_light.position.x = Math.cos(azimuth * Math.PI * 2 / 360) * distance;
+            this.directional_light.position.y = Math.sin(azimuth * Math.PI * 2 / 360) * distance;
         }
         if (altitude) {
-            this.directional_light.position.x = Math.cos(altitude * Math.PI * 2 / 360) * 10000;
-            this.directional_light.position.z = Math.sin(altitude * Math.PI * 2 / 360) * 10000;
+            this.directional_light.position.x = Math.cos(altitude * Math.PI * 2 / 360) * distance;
+            this.directional_light.position.z = Math.sin(altitude * Math.PI * 2 / 360) * distance;
         }
     }
 
@@ -1002,8 +1037,10 @@ interface Settings {
         color: string,
         intensity: number,
         shadow: boolean,
+        shadowSize: number,
         azimuth: number,
-        altitude: number
+        altitude: number,
+        distance: number
     };
     ground: {
         show: boolean,

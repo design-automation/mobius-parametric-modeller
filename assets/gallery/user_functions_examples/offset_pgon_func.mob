@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_yhgjp2pj7p",
+                "id": "node_oiirdidn1em",
                 "position": {
                     "x": 5327.205078125,
                     "y": 4964.93408203125
@@ -329,7 +329,7 @@
                                 },
                                 "parentNode": {
                                     "name": "offset closed plines and pgons",
-                                    "id": "node_wog7y3jln1m",
+                                    "id": "node_5w0ztg184do",
                                     "position": {
                                         "x": 5325.953125,
                                         "y": 5169.02587890625
@@ -487,12 +487,11 @@
                                                         "module": "calc",
                                                         "name": "Normal"
                                                     },
-                                                    "argCount": 3,
+                                                    "argCount": 4,
                                                     "args": [
                                                         {
                                                             "name": "var_name",
-                                                            "value": "normal",
-                                                            "invalidVar": false
+                                                            "value": "normal"
                                                         },
                                                         {
                                                             "name": "__model__",
@@ -500,8 +499,13 @@
                                                         },
                                                         {
                                                             "name": "entities",
-                                                            "value": "pg",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "value": "pg"
+                                                        },
+                                                        {
+                                                            "name": "scale",
+                                                            "default": 0,
+                                                            "value": "1"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -1214,12 +1218,12 @@
                                                                 {
                                                                     "type": 8,
                                                                     "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
-                                                                    "ID": "prod-8kb8d7zo49h",
+                                                                    "ID": "prod-k3jr3l6v2fb",
                                                                     "enabled": true,
                                                                     "print": false,
                                                                     "meta": {
                                                                         "module": "list",
-                                                                        "name": "Append"
+                                                                        "name": "Add"
                                                                     },
                                                                     "argCount": 4,
                                                                     "args": [
@@ -1232,7 +1236,7 @@
                                                                             "default": 0
                                                                         },
                                                                         {
-                                                                            "name": "value",
+                                                                            "name": "item",
                                                                             "value": "new_posi",
                                                                             "default": 0
                                                                         },
@@ -1282,12 +1286,12 @@
                                                         {
                                                             "type": 8,
                                                             "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
-                                                            "ID": "prod-f47zi7chuff",
+                                                            "ID": "prod-m5opz2q4on",
                                                             "enabled": true,
                                                             "print": false,
                                                             "meta": {
                                                                 "module": "list",
-                                                                "name": "Append"
+                                                                "name": "Add"
                                                             },
                                                             "argCount": 4,
                                                             "args": [
@@ -1300,7 +1304,7 @@
                                                                     "default": 0
                                                                 },
                                                                 {
-                                                                    "name": "value",
+                                                                    "name": "item",
                                                                     "value": "new_pg",
                                                                     "default": 0
                                                                 },
@@ -1314,7 +1318,8 @@
                                                             "hasError": false
                                                         }
                                                     ],
-                                                    "hasError": false
+                                                    "hasError": false,
+                                                    "selected": false
                                                 }
                                             ],
                                             "hasError": false,
@@ -1343,7 +1348,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_uq2tqpjvap",
+                                                        "id": "node_1ydedfk0zidi",
                                                         "position": {
                                                             "x": 5327.20947265625,
                                                             "y": 5349.1142578125
@@ -1515,7 +1520,7 @@
         "ordered": true,
         "returnDescription": "Return the new offset polylines and polygons."
     },
-    "last_updated": "2019-02-08T07:28:14.825Z",
+    "last_updated": "2019-02-12T11:13:00.445Z",
     "version": 1,
     "settings": {}
 }

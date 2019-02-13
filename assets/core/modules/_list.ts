@@ -2,7 +2,6 @@
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
 
-
 export function range(start: number, end: number, step?: number): number[] {
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }
     if (end === undefined) { throw new Error('Invalid inline arg: max must be defined.'); }
@@ -23,21 +22,39 @@ export function isList(list: any): boolean {
 }
 
 export function listLen(list: any[]): number {
-    if (list === undefined) { throw new Error('Invalid inline arg: list must be defined.'); }
     return list.length;
+}
+
+export function listCount(list: any[], val: any): number {
+    let count = 0;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i] === val) {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 export function listCopy(list: any[]): any[] {
     return list.slice();
 }
 
-export function listFind(list: any[], item: any): number {
-    return list.indexOf(item);
+export function listLast(list: any[]): number {
+    return list[list.length - 1];
 }
 
-export function listHas(list: any[], item: any): boolean {
+export function listGet(list: any[], index: number): number {
+    if (index < 0) { index = list.length + index; }
+    return list[index];
+}
+
+export function listFind(list: any[], val: any): number {
+    return list.indexOf(val);
+}
+
+export function listHas(list: any[], val: any): boolean {
     for (let i = list.length - 1; i >= 0; i--) {
-        if (list[i] === item) {
+        if (list[i] === val) {
             return true;
         }
     }

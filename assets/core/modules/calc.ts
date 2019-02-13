@@ -198,18 +198,22 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     return _centroid(__model__, ents_arr);
 }
 // ================================================================================================
-export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
+export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], scale: number): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
         if (isPgon(ent_type)) {
-            return __model__.geom.query.getFaceNormal(__model__.geom.query.navPgonToFace(index));
+            const norm_vec: Txyz = __model__.geom.query.getFaceNormal(__model__.geom.query.navPgonToFace(index));
+            return vecMult(norm_vec, scale);
         } else if (isFace(ent_type)) {
-            return __model__.geom.query.getFaceNormal(index);
+            const norm_vec: Txyz = __model__.geom.query.getFaceNormal(index);
+            return vecMult(norm_vec, scale);
         } else if (isPline(ent_type)) {
-            return __model__.geom.query.getWireNormal(__model__.geom.query.navPlineToWire(index));
+            const norm_vec: Txyz = __model__.geom.query.getWireNormal(__model__.geom.query.navPlineToWire(index));
+            return vecMult(norm_vec, scale);
         } else if (isWire(ent_type)) {
-            return __model__.geom.query.getWireNormal(index);
+            const norm_vec: Txyz = __model__.geom.query.getWireNormal(index);
+            return vecMult(norm_vec, scale);
         }
 
         // if (isPgon(ent_type) || isFace(ent_type)) {
@@ -249,7 +253,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
         // }
 
     } else {
-        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr)) as Txyz[];
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr, 1)) as Txyz[];
     }
 }
 // function _newell_normal(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
@@ -269,13 +273,13 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[])
  * @example normal1 = calc.Normal (polygon1)
  * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
  */
-export function Normal(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
+export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): Txyz|Txyz[] {
     const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const fn_name = 'calc.Normal';
     checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
-    return _normal(__model__, ents_arr);
+    return _normal(__model__, ents_arr, scale);
 }
 // ================================================================================================
 /**

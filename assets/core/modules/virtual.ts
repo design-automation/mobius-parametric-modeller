@@ -158,7 +158,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
         const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
         const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
         // const normal: Txyz = newellNorm(unique_xyzs);
-        const normal: Txyz = _normal(__model__, ent_arr) as Txyz;
+        const normal: Txyz = _normal(__model__, ent_arr, 1) as Txyz;
         const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
         const y_vec: Txyz = vecCross(normal, x_vec); // must be z-axis, x-axis
         return [origin, x_vec, y_vec] as TPlane;
@@ -274,7 +274,7 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 export function VisRay(__model__: GIModel, ray: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visRay';
-    // checkCommTypes(fn_name, 'ray', ray, ['isRay']); // TODO rays can be a list
+    checkCommTypes(fn_name, 'ray', ray, ['isRay']); // TODO rays can be a list // add isRayList to enable check
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
    return idsMake(_visRay(__model__, ray, scale)) as TId[];
@@ -352,7 +352,7 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
 export function VisPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visPlane';
-    // checkCommTypes(fn_name, 'planes', planes, ['isPlane']); // TODO planes can be a list
+    checkCommTypes(fn_name, 'planes', planes, ['isPlane']); // TODO planes can be a list // add isPlaneList to enable check
     checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
@@ -418,10 +418,10 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
  * @example bbox1 = virtual.viBBox(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function visBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
+export function VisBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visBBox';
-    // checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']); // TODO bboxs can be a list
+    checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']); // TODO bboxs can be a list // add isBBoxList to enable check
     // --- Error Check ---
     return  idsMake(_visBBox(__model__, bbox)) as TId[];
 }

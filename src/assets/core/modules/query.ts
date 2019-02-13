@@ -340,23 +340,6 @@ function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boo
         return (ents_arr as TEntTypeIdx[]).map(ents => _isClosed(__model__, ents)) as boolean[];
     }
 }
-/**
- * Checks if polyline(s) or wire(s) are closed.
- * ~
- * WARNING: This function has been deprecated. Plese use the query.Type() function instead.
- *
- * @param __model__
- * @param lines Wires, polylines, or polygons.
- * @returns Boolean or list of boolean in input sequence of lines.
- * @example mod.IsClosed([polyline1,polyline2,polyline3])
- * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
- */
-export function IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    // --- Error Check ---
-    const ents_arr = checkIDs('query.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE', 'PGON']);
-    // --- Error Check ---
-    return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
-}
 
 export enum _EQueryEntType {
     IS_POSI =   'is_position',
@@ -555,3 +538,55 @@ export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _E
 // TODO IS_QUAD
 
 // ================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Checks if polyline(s) or wire(s) are closed.
+ * ~
+ * WARNING: This function has been deprecated. Plese use the query.Type() function instead.
+ *
+ * @param __model__
+ * @param lines Wires, polylines, or polygons.
+ * @returns Boolean or list of boolean in input sequence of lines.
+ * @example mod.IsClosed([polyline1,polyline2,polyline3])
+ * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
+ */
+export function _IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
+    // --- Error Check ---
+    const ents_arr = checkIDs('query.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE', 'PGON']);
+    // --- Error Check ---
+    return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
+}

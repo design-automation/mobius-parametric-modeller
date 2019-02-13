@@ -27,7 +27,7 @@
 ## Polyline  
 * **Description:** Adds one or more new polylines to the model.  
 * **Parameters:**  
-  * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
+  * *entities:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
   * *close:* Enum, 'open' or 'close'.  
 * **Returns:** New polyline.  
 * **Examples:**  
@@ -40,7 +40,7 @@
 ## Polygon  
 * **Description:** Adds one or more new polygons to the model.  
 * **Parameters:**  
-  * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
+  * *entities:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
 * **Returns:** New polygon.  
 * **Examples:**  
   * polygon1 = make.Polygon([position1,position2,position3])  

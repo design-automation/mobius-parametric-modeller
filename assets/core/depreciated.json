@@ -149,5 +149,15 @@
                 "scale": "1"
             }
         }
+    },
+    {
+        "old_func": {
+            "name": "IsClosed",
+            "module": "query"
+        },
+        "new_func": {
+            "name": "_IsClosed",
+            "module": "query"
+        }
     }
 ]

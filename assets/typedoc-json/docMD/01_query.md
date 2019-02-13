@@ -83,18 +83,6 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
     Returns a list of three positions, sorted according to the descending z value.
   
   
-## IsClosed  
-* **Description:** Checks if polyline(s) or wire(s) are closed.
-~
-WARNING: This function has been deprecated. Plese use the query.Type() function instead.  
-* **Parameters:**  
-  * *lines:* Wires, polylines, or polygons.  
-* **Returns:** Boolean or list of boolean in input sequence of lines.  
-* **Examples:**  
-  * mod.IsClosed([polyline1,polyline2,polyline3])  
-    Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
-  
-  
 ## Type  
 * **Description:** Checks the type of an entity.
 ~

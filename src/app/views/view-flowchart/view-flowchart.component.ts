@@ -547,41 +547,30 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         const heightZoom = canvasSize / (frame[3] - frame[1]);
 
         zoom = Math.min(zoom, heightZoom, this.maxZoom);
-        zoom = Math.max(zoom, this.minZoom);
 
+        let nX;
+        let nY;
 
-        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
-        // const ctm = this.zoom * boundingDiv.width / canvasSize;
-        const ctm = bRect.width / canvasSize;
+        if (zoom > this.minZoom) {
+            const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+            // const ctm = this.zoom * boundingDiv.width / canvasSize;
+            const ctm = bRect.width / canvasSize;
 
-        let nX = (boundingDiv.width  - (frame[2] + frame[0]) * ctm * zoom / this.zoom) / 2;
-        let nY = (boundingDiv.height - (frame[3] + frame[1]) * ctm * zoom / this.zoom) / 2;
+            nX = (boundingDiv.width  - (frame[2] + frame[0]) * ctm * zoom / this.zoom) / 2;
+            nY = (boundingDiv.height - (frame[3] + frame[1]) * ctm * zoom / this.zoom) / 2;
 
-        /*
-        frame[0] = -( frame[0] * ctm.a * zoom / this.zoom );
-        frame[1] = -( frame[1] * ctm.a * zoom / this.zoom );
-        */
+            // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
+            if (nX > 0) { nX = 0; }
+            if (nY > 0) { nY = 0; }
 
-        // -( frame[0] * ctm.a * zoom / this.zoom )
-
-        /*
-        // calculate the difference between height and width, if height is bigger than width,
-        // centering the flowchart based on the difference
-        const height_width_diff = ((frame[3] - frame[1]) - (frame[2] - frame[0])) / 2;
-        if (height_width_diff > 0) {
-            frame[0] -= height_width_diff;
+        } else {
+            zoom = this.minZoom;
+            const ctm = bRect.width / canvasSize;
+            nX = - frame[0] * ctm * zoom / this.zoom;
+            nY = - frame[1] * ctm * zoom / this.zoom;
         }
-        */
-
-        // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
-        if (nX > 0) { nX = 0; }
-        if (nY > 0) { nY = 0; }
 
         // transform
-        /*
-        this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${
-            -frame[0] * ctm.a * zoom / this.zoom},${-frame[1] * ctm.a * zoom / this.zoom})`;
-            */
         this.dataService.flowchartPos = `matrix(${zoom},0,0,${zoom},${nX},${nY})`;
         this.canvas.style.transform = this.dataService.flowchartPos;
 

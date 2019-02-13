@@ -34,8 +34,10 @@ export const DefaultSettings = {
         color: '#FFFFFF',
         intensity: 1,
         shadow: true,
+        shadowSize: 4,
         azimuth: 90,
-        altitude: 45
+        altitude: 45,
+        distance: 10000
     },
     ground: {
         show: false,
@@ -54,26 +56,26 @@ export const SettingsColorMap = [{
     setting: 'viewer_bg',
     default: '#E6E6E6'
 }, {
-    label: 'Position Default',
+    label: 'Position',
     setting: 'position'
 }, {
     label: 'Position Selected',
     setting: 'position_s'
 }, {
-    label: 'Vertex Selected',
-    setting: 'vertex_s'
-}, {
-    label: 'Face Front Default',
+    label: 'Face Front',
     setting: 'face_f'
 }, {
     label: 'Face Front Selected',
     setting: 'face_f_s'
 }, {
-    label: 'Face Back Default',
+    label: 'Face Back',
     setting: 'face_b'
 }, {
     label: 'Face Back Selected',
     setting: 'face_b_s'
+}, {
+    label: 'Vertex Selected',
+    setting: 'vertex_s'
 }];
 
 export const Locale = [{

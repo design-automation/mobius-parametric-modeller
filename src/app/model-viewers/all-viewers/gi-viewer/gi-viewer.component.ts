@@ -218,6 +218,12 @@ export class GIViewerComponent implements OnInit {
             case 'directional_light.shadow':
                 this.settings.directional_light.shadow = !this.settings.directional_light.shadow;
                 break;
+            case 'directional_light.shadowSize':
+                this.settings.directional_light.shadowSize = Number(value);
+                setTimeout(() => {
+                    scene.DLMapSize(this.settings.directional_light.shadowSize);
+                }, 10);
+                break;
             case 'directional_light.azimuth':
                 this.settings.directional_light.azimuth = Number(value);
                 scene.directionalLightMove(this.settings.directional_light.azimuth);
@@ -225,6 +231,10 @@ export class GIViewerComponent implements OnInit {
             case 'directional_light.altitude':
                 this.settings.directional_light.altitude = Number(value);
                 scene.directionalLightMove(null, this.settings.directional_light.altitude);
+                break;
+            case 'directional_light.distance':
+                this.settings.directional_light.distance = Number(value);
+                scene.DLDistance(this.settings.directional_light.distance);
                 break;
             case 'ground.show':
                 this.settings.ground.show = !this.settings.ground.show;
@@ -310,8 +320,10 @@ interface Settings {
         color: string,
         intensity: number,
         shadow: boolean,
+        shadowSize: number,
         azimuth: number,
-        altitude: number
+        altitude: number,
+        distance: number
     };
     ground: {
         show: boolean,

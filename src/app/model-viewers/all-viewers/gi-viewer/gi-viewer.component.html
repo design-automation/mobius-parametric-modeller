@@ -134,7 +134,7 @@
 					<tab tabTitle="Colors">
 						<div class="mat-elevation-z1">
 							<dl>
-								<dd class='colors' *ngFor="let item of setting_colors">
+								<dd class='colors' *ngFor="let item of setting_colors; let i = index">
 									<div class="label">{{item.label}}</div>
 									<input
 									[(colorPicker)]="settings.colors[item.setting]"
@@ -143,6 +143,7 @@
 									[class.light] = "checkColor(this.settings.colors[item.setting])"
 									/>
 									<button *ngIf="item.default" (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button>
+									<hr [hidden]="i % 2 === 1">
 								</dd>
 							</dl>
 						</div>
@@ -306,17 +307,31 @@
 									</div>
 								</dd>
 								<dd>
+									<div class="label">Shadow Size</div>
+									<div class="slidecontainer light">
+										<input type="range" min="1" max="20" step="1" [value]="settings.directional_light.shadowSize" class="slider" (input)="settingOnChange('directional_light.shadowSize', $event.target.value)">
+										<input type="text" [value]="settings.directional_light.shadowSize" disabled>
+									</div>
+								</dd>
+								<dd>
 									<div class="label">Azimuth</div>
 									<div class="slidecontainer light">
-										<input type="range" min="0" max="360" step="0.1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
+										<input type="range" min="0" max="360" step="1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.azimuth" class="number">
 									</div>
 								</dd>
 								<dd>
 									<div class="label">Altitude</div>
 									<div class="slidecontainer light">
-										<input type="range" min="0" max="180" step="0.1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
+										<input type="range" min="0" max="180" step="1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Distance</div>
+									<div class="slidecontainer light">
+										<input type="range" min="1000" max="100000" step="1000" [value]="settings.directional_light.distance" class="slider" (input)="settingOnChange('directional_light.distance', $event.target.value)">
+										<input type="text" [value]="settings.directional_light.distance" disabled>
 									</div>
 								</dd>
 							</dl>

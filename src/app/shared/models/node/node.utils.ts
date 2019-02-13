@@ -311,7 +311,13 @@ export abstract class NodeUtils {
             case ProcedureTypes.Imported:
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
-                prod.args = [ {name: 'var_name', value: undefined, default: undefined}, ...data.args];
+
+                let iReturnArg = {name: 'var_name', value: undefined, default: undefined};
+                if (!data.hasReturn) {
+                    iReturnArg = {name: '__none__', value: undefined, default: undefined};
+                }
+
+                prod.args = [ iReturnArg, ...data.args];
                 break;
         }
         // select the procedure

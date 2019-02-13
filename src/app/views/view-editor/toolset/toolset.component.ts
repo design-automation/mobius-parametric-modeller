@@ -192,12 +192,14 @@ export class ToolsetComponent implements OnInit {
                     });
                 }
                 func.argCount = func.args.length;
-                /*
-                if (!func.argCount) {
-                    resolve('error');
-                }
-                */
 
+                const end = fl.nodes[fl.nodes.length - 1];
+                const returnProd = end.procedure[end.procedure.length - 1];
+                if (returnProd.args[1].value) {
+                    func.hasReturn = true;
+                } else {
+                    func.hasReturn = false;
+                }
 
                 // add func and all the imported functions of the imported flowchart to funcs
                 funcs.push(func);

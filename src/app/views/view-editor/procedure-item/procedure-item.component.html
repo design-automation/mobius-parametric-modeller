@@ -257,13 +257,15 @@
 
         <!-- Imported Function Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Imported">
-            <input class='input--var'
+            <ng-container *ngIf="data.args[0].name !=='__none__'">
+                <input class='input--var'
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
                     [class.error]='data.args[0].invalidVar'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
-            = 
+                = 
+            </ng-container>
             <div class='function-text'><span class='module-name'>user.</span>{{data.meta.name}} </div> 
             
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>

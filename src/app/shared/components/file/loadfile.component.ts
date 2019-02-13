@@ -1,13 +1,10 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { Observable } from 'rxjs';
-import { ProcedureTypes } from '@shared/models/procedure';
 import * as circularJSON from 'circular-json';
-import * as funcs from '@modules';
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
-import * as depreciated from '@assets/core/depreciated.json';
 import { checkMissingProd } from '@shared/checkMissingProd';
 
 @Component({

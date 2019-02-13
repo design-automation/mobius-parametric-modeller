@@ -197,15 +197,15 @@ export class CodeUtils {
 
                 const fn = `${prod.meta.name}(__params__, ${argsVals} )`;
 
-                if (!args[0].value) {
-                    codeStr.push(`${fnCall};`);
+                if (args[0].name === '__none__' || !args[0].value) {
+                    codeStr.push(`${fn};`);
                     break;
                 }
                 const repImpVar = this.repSetAttrib(args[0].value);
                 if (!repImpVar) {
                     codeStr.push(`${prefix}${args[0].value} = ${fn};`);
                 } else {
-                    codeStr.push(`${repImpVar[0]} ${fnCall} ${repImpVar[1]}`);
+                    codeStr.push(`${repImpVar[0]} ${fn} ${repImpVar[1]}`);
                 }
 
                 if (prefix === 'let ') {

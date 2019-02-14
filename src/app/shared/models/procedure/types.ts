@@ -16,5 +16,6 @@ export enum ProcedureTypes {
 
     AddData,    // 12
     Blank,      // 13
+    Comment,    // 14
 }
 

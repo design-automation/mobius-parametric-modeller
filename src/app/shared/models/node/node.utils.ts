@@ -289,6 +289,12 @@ export abstract class NodeUtils {
                 {name: '__input__', value: undefined, default: 0} ];
             break;
 
+            case ProcedureTypes.Comment:
+                prod.argCount = 1;
+                prod.args = [{name: 'comment', value: undefined, default: 0}];
+            break;
+
+
             case ProcedureTypes.Return:
                 prod.meta = { module: 'Output', name: 'Return', description: undefined};
                 prod.argCount = 1;

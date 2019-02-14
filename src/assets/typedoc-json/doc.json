@@ -11175,7 +11175,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 306,
+									"line": 337,
 									"character": 19
 								}
 							],
@@ -11192,7 +11192,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 307,
+									"line": 338,
 									"character": 17
 								}
 							],
@@ -11212,7 +11212,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 305,
+							"line": 336,
 							"character": 27
 						}
 					]
@@ -11237,7 +11237,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 921,
+									"line": 952,
 									"character": 13
 								}
 							],
@@ -11254,7 +11254,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 922,
+									"line": 953,
 									"character": 17
 								}
 							],
@@ -11271,7 +11271,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 920,
+									"line": 951,
 									"character": 13
 								}
 							],
@@ -11292,7 +11292,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 919,
+							"line": 950,
 							"character": 26
 						}
 					]
@@ -11317,7 +11317,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 633,
+									"line": 664,
 									"character": 9
 								}
 							],
@@ -11334,7 +11334,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 635,
+									"line": 666,
 									"character": 8
 								}
 							],
@@ -11351,7 +11351,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 634,
+									"line": 665,
 									"character": 13
 								}
 							],
@@ -11372,7 +11372,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 632,
+							"line": 663,
 							"character": 27
 						}
 					]
@@ -11397,7 +11397,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 408,
+									"line": 439,
 									"character": 16
 								}
 							],
@@ -11414,7 +11414,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 412,
+									"line": 443,
 									"character": 15
 								}
 							],
@@ -11431,7 +11431,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 410,
+									"line": 441,
 									"character": 20
 								}
 							],
@@ -11448,7 +11448,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 407,
+									"line": 438,
 									"character": 14
 								}
 							],
@@ -11465,7 +11465,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 411,
+									"line": 442,
 									"character": 13
 								}
 							],
@@ -11482,7 +11482,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 409,
+									"line": 440,
 									"character": 18
 								}
 							],
@@ -11506,7 +11506,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 406,
+							"line": 437,
 							"character": 24
 						}
 					]
@@ -11612,7 +11612,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 237,
+							"line": 268,
 							"character": 26
 						}
 					]
@@ -11727,7 +11727,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 320,
+							"line": 351,
 							"character": 20
 						}
 					]
@@ -11854,7 +11854,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 989,
+							"line": 1020,
 							"character": 22
 						}
 					]
@@ -12015,7 +12015,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 867,
+							"line": 898,
 							"character": 23
 						}
 					]
@@ -12121,7 +12121,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 390,
+							"line": 421,
 							"character": 20
 						}
 					]
@@ -12227,7 +12227,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 614,
+							"line": 645,
 							"character": 20
 						}
 					]
@@ -12389,7 +12389,7 @@
 								},
 								{
 									"id": 1842,
-									"name": "positions",
+									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
@@ -12450,7 +12450,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 200,
+							"line": 227,
 							"character": 23
 						}
 					]
@@ -12504,7 +12504,7 @@
 								},
 								{
 									"id": 1829,
-									"name": "positions",
+									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
@@ -12580,7 +12580,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 141,
+							"line": 152,
 							"character": 24
 						}
 					]
@@ -12796,7 +12796,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1013,
+							"line": 1044,
 							"character": 22
 						}
 					]
@@ -12873,7 +12873,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 911,
+							"line": 942,
 							"character": 21
 						}
 					]
@@ -12982,7 +12982,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1075,
+							"line": 1106,
 							"character": 22
 						}
 					]
@@ -13062,7 +13062,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 211,
+							"line": 242,
 							"character": 27
 						}
 					]
@@ -13153,7 +13153,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 254,
+							"line": 285,
 							"character": 18
 						}
 					]
@@ -13234,7 +13234,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 277,
+							"line": 308,
 							"character": 23
 						}
 					]
@@ -13327,7 +13327,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 950,
+							"line": 981,
 							"character": 16
 						}
 					]
@@ -13405,7 +13405,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 924,
+							"line": 955,
 							"character": 20
 						}
 					]
@@ -13519,7 +13519,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 816,
+							"line": 847,
 							"character": 17
 						}
 					]
@@ -13606,7 +13606,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 798,
+							"line": 829,
 							"character": 20
 						}
 					]
@@ -13697,7 +13697,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 637,
+							"line": 668,
 							"character": 21
 						}
 					]
@@ -13787,7 +13787,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 647,
+							"line": 678,
 							"character": 21
 						}
 					]
@@ -13877,7 +13877,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 662,
+							"line": 693,
 							"character": 22
 						}
 					]
@@ -13967,7 +13967,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 735,
+							"line": 766,
 							"character": 21
 						}
 					]
@@ -14057,7 +14057,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 704,
+							"line": 735,
 							"character": 26
 						}
 					]
@@ -14129,7 +14129,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 348,
+							"line": 379,
 							"character": 30
 						}
 					]
@@ -14170,6 +14170,11 @@
 										"type": "union",
 										"types": [
 											{
+												"type": "reference",
+												"name": "TEntTypeIdx",
+												"id": 251
+											},
+											{
 												"type": "array",
 												"elementType": {
 													"type": "reference",
@@ -14193,15 +14198,22 @@
 								}
 							],
 							"type": {
-								"type": "intrinsic",
-								"name": "void"
+								"type": "array",
+								"elementType": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
 							}
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 161,
+							"line": 177,
 							"character": 30
 						}
 					]
@@ -14242,6 +14254,11 @@
 										"type": "union",
 										"types": [
 											{
+												"type": "reference",
+												"name": "TEntTypeIdx",
+												"id": 251
+											},
+											{
 												"type": "array",
 												"elementType": {
 													"type": "reference",
@@ -14265,8 +14282,15 @@
 								}
 							],
 							"type": {
-								"type": "intrinsic",
-								"name": "void"
+								"type": "array",
+								"elementType": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
 							}
 						}
 					],
@@ -14361,7 +14385,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 335,
+							"line": 366,
 							"character": 14
 						}
 					]
@@ -14444,7 +14468,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 585,
+							"line": 616,
 							"character": 14
 						}
 					]
@@ -14527,7 +14551,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 414,
+							"line": 445,
 							"character": 19
 						}
 					]
@@ -14610,7 +14634,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 522,
+							"line": 553,
 							"character": 18
 						}
 					]
@@ -14693,7 +14717,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 481,
+							"line": 512,
 							"character": 23
 						}
 					]
@@ -14870,7 +14894,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 152,
+							"line": 168,
 							"character": 17
 						}
 					]
@@ -14958,7 +14982,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1053,
+							"line": 1084,
 							"character": 22
 						}
 					]
@@ -17892,7 +17916,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 381,
+									"line": 364,
 									"character": 13
 								}
 							],
@@ -17909,7 +17933,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 382,
+									"line": 365,
 									"character": 16
 								}
 							],
@@ -17926,7 +17950,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 379,
+									"line": 362,
 									"character": 13
 								}
 							],
@@ -17943,7 +17967,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 372,
+									"line": 355,
 									"character": 11
 								}
 							],
@@ -17960,7 +17984,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 366,
+									"line": 349,
 									"character": 11
 								}
 							],
@@ -17977,7 +18001,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 368,
+									"line": 351,
 									"character": 11
 								}
 							],
@@ -17994,7 +18018,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 380,
+									"line": 363,
 									"character": 11
 								}
 							],
@@ -18011,7 +18035,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 373,
+									"line": 356,
 									"character": 10
 								}
 							],
@@ -18028,7 +18052,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 378,
+									"line": 361,
 									"character": 11
 								}
 							],
@@ -18045,7 +18069,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 371,
+									"line": 354,
 									"character": 11
 								}
 							],
@@ -18062,7 +18086,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 377,
+									"line": 360,
 									"character": 16
 								}
 							],
@@ -18079,7 +18103,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 370,
+									"line": 353,
 									"character": 12
 								}
 							],
@@ -18096,7 +18120,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 376,
+									"line": 359,
 									"character": 17
 								}
 							],
@@ -18113,7 +18137,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 369,
+									"line": 352,
 									"character": 12
 								}
 							],
@@ -18130,7 +18154,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 375,
+									"line": 358,
 									"character": 17
 								}
 							],
@@ -18147,7 +18171,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 362,
+									"line": 345,
 									"character": 11
 								}
 							],
@@ -18164,7 +18188,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 374,
+									"line": 357,
 									"character": 11
 								}
 							],
@@ -18181,7 +18205,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 364,
+									"line": 347,
 									"character": 18
 								}
 							],
@@ -18198,7 +18222,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 363,
+									"line": 346,
 									"character": 16
 								}
 							],
@@ -18215,7 +18239,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 365,
+									"line": 348,
 									"character": 11
 								}
 							],
@@ -18232,7 +18256,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 367,
+									"line": 350,
 									"character": 11
 								}
 							],
@@ -18271,7 +18295,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 361,
+							"line": 344,
 							"character": 26
 						}
 					]
@@ -18954,104 +18978,6 @@
 					]
 				},
 				{
-					"id": 1729,
-					"name": "IsClosed",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 1730,
-							"name": "IsClosed",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Checks if polyline(s) or wire(s) are closed.\n~\nWARNING: This function has been deprecated. Plese use the query.Type() function instead.",
-								"returns": "Boolean or list of boolean in input sequence of lines.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "mod.IsClosed([polyline1,polyline2,polyline3])"
-									},
-									{
-										"tag": "example_info",
-										"text": "Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 1731,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1283
-									}
-								},
-								{
-									"id": 1732,
-									"name": "lines",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Wires, polylines, or polygons."
-									},
-									"type": {
-										"type": "union",
-										"types": [
-											{
-												"type": "reference",
-												"name": "TId",
-												"id": 256
-											},
-											{
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 256
-												}
-											}
-										]
-									}
-								}
-							],
-							"type": {
-								"type": "union",
-								"types": [
-									{
-										"type": "intrinsic",
-										"name": "boolean"
-									},
-									{
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "boolean"
-										}
-									}
-								]
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/query.ts",
-							"line": 354,
-							"character": 24
-						}
-					]
-				},
-				{
 					"id": 1708,
 					"name": "Neighbours",
 					"kind": 64,
@@ -19267,7 +19193,7 @@
 					]
 				},
 				{
-					"id": 1774,
+					"id": 1770,
 					"name": "Type",
 					"kind": 64,
 					"kindString": "Function",
@@ -19276,7 +19202,7 @@
 					},
 					"signatures": [
 						{
-							"id": 1775,
+							"id": 1771,
 							"name": "Type",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -19297,7 +19223,7 @@
 							},
 							"parameters": [
 								{
-									"id": 1776,
+									"id": 1772,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19310,7 +19236,7 @@
 									}
 								},
 								{
-									"id": 1777,
+									"id": 1773,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19338,7 +19264,7 @@
 									}
 								},
 								{
-									"id": 1778,
+									"id": 1774,
 									"name": "query_ent_type",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19374,8 +19300,106 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 547,
+							"line": 530,
 							"character": 20
+						}
+					]
+				},
+				{
+					"id": 1775,
+					"name": "_IsClosed",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true
+					},
+					"signatures": [
+						{
+							"id": 1776,
+							"name": "_IsClosed",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Checks if polyline(s) or wire(s) are closed.\n~\nWARNING: This function has been deprecated. Plese use the query.Type() function instead.",
+								"returns": "Boolean or list of boolean in input sequence of lines.",
+								"tags": [
+									{
+										"tag": "example",
+										"text": "mod.IsClosed([polyline1,polyline2,polyline3])"
+									},
+									{
+										"tag": "example_info",
+										"text": "Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.\n"
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 1777,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1283
+									}
+								},
+								{
+									"id": 1778,
+									"name": "lines",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"comment": {
+										"text": "Wires, polylines, or polygons."
+									},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "TId",
+												"id": 256
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "TId",
+													"id": 256
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "boolean"
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "boolean"
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/query.ts",
+							"line": 587,
+							"character": 25
 						}
 					]
 				},
@@ -19542,21 +19566,21 @@
 					]
 				},
 				{
-					"id": 1765,
+					"id": 1761,
 					"name": "_hasNoHoles",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1766,
+							"id": 1762,
 							"name": "_hasNoHoles",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1767,
+									"id": 1763,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19568,7 +19592,7 @@
 									}
 								},
 								{
-									"id": 1768,
+									"id": 1764,
 									"name": "ent_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19589,7 +19613,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 458,
+							"line": 441,
 							"character": 20
 						}
 					]
@@ -19768,174 +19792,15 @@
 					]
 				},
 				{
-					"id": 1757,
+					"id": 1753,
 					"name": "_isClosed2",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1758,
-							"name": "_isClosed2",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1759,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1283
-									}
-								},
-								{
-									"id": 1760,
-									"name": "ent_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 251
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "boolean"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/query.ts",
-							"line": 433,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 1761,
-					"name": "_isHole",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1762,
-							"name": "_isHole",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1763,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1283
-									}
-								},
-								{
-									"id": 1764,
-									"name": "ent_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 251
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "boolean"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/query.ts",
-							"line": 446,
-							"character": 16
-						}
-					]
-				},
-				{
-					"id": 1737,
-					"name": "_isObj",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1738,
-							"name": "_isObj",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1739,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1283
-									}
-								},
-								{
-									"id": 1740,
-									"name": "ent_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 251
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "boolean"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/query.ts",
-							"line": 395,
-							"character": 15
-						}
-					]
-				},
-				{
-					"id": 1753,
-					"name": "_isPgonTopo",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
 							"id": 1754,
-							"name": "_isPgonTopo",
+							"name": "_isClosed2",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -19974,27 +19839,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 425,
-							"character": 20
+							"line": 416,
+							"character": 19
 						}
 					]
 				},
 				{
-					"id": 1749,
-					"name": "_isPlineTopo",
+					"id": 1757,
+					"name": "_isHole",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1750,
-							"name": "_isPlineTopo",
+							"id": 1758,
+							"name": "_isHole",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1751,
+									"id": 1759,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20006,7 +19871,7 @@
 									}
 								},
 								{
-									"id": 1752,
+									"id": 1760,
 									"name": "ent_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20027,127 +19892,21 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 417,
-							"character": 21
-						}
-					]
-				},
-				{
-					"id": 1745,
-					"name": "_isPointTopo",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1746,
-							"name": "_isPointTopo",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1747,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1283
-									}
-								},
-								{
-									"id": 1748,
-									"name": "ent_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 251
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "boolean"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/query.ts",
-							"line": 409,
-							"character": 21
-						}
-					]
-				},
-				{
-					"id": 1741,
-					"name": "_isTopo",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1742,
-							"name": "_isTopo",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1743,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1283
-									}
-								},
-								{
-									"id": 1744,
-									"name": "ent_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 251
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "boolean"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/query.ts",
-							"line": 402,
+							"line": 429,
 							"character": 16
 						}
 					]
 				},
 				{
 					"id": 1733,
-					"name": "_isUsedPosi",
+					"name": "_isObj",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
 							"id": 1734,
-							"name": "_isUsedPosi",
+							"name": "_isObj",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -20186,7 +19945,272 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 384,
+							"line": 378,
+							"character": 15
+						}
+					]
+				},
+				{
+					"id": 1749,
+					"name": "_isPgonTopo",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1750,
+							"name": "_isPgonTopo",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1751,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1283
+									}
+								},
+								{
+									"id": 1752,
+									"name": "ent_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "boolean"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/query.ts",
+							"line": 408,
+							"character": 20
+						}
+					]
+				},
+				{
+					"id": 1745,
+					"name": "_isPlineTopo",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1746,
+							"name": "_isPlineTopo",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1747,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1283
+									}
+								},
+								{
+									"id": 1748,
+									"name": "ent_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "boolean"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/query.ts",
+							"line": 400,
+							"character": 21
+						}
+					]
+				},
+				{
+					"id": 1741,
+					"name": "_isPointTopo",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1742,
+							"name": "_isPointTopo",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1743,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1283
+									}
+								},
+								{
+									"id": 1744,
+									"name": "ent_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "boolean"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/query.ts",
+							"line": 392,
+							"character": 21
+						}
+					]
+				},
+				{
+					"id": 1737,
+					"name": "_isTopo",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1738,
+							"name": "_isTopo",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1739,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1283
+									}
+								},
+								{
+									"id": 1740,
+									"name": "ent_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "boolean"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/query.ts",
+							"line": 385,
+							"character": 16
+						}
+					]
+				},
+				{
+					"id": 1729,
+					"name": "_isUsedPosi",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1730,
+							"name": "_isUsedPosi",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1731,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1283
+									}
+								},
+								{
+									"id": 1732,
+									"name": "ent_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 251
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "boolean"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/query.ts",
+							"line": 367,
 							"character": 20
 						}
 					]
@@ -20373,21 +20397,21 @@
 					]
 				},
 				{
-					"id": 1769,
+					"id": 1765,
 					"name": "_type",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1770,
+							"id": 1766,
 							"name": "_type",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1771,
+									"id": 1767,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20399,7 +20423,7 @@
 									}
 								},
 								{
-									"id": 1772,
+									"id": 1768,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20424,7 +20448,7 @@
 									}
 								},
 								{
-									"id": 1773,
+									"id": 1769,
 									"name": "query_ent_type",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20457,7 +20481,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 470,
+							"line": 453,
 							"character": 14
 						}
 					]
@@ -20480,26 +20504,26 @@
 						1697,
 						1681,
 						1692,
-						1729,
 						1708,
 						1719,
-						1774,
+						1770,
+						1775,
 						1672,
 						1675,
-						1765,
+						1761,
 						1687,
 						1725,
-						1757,
-						1761,
-						1737,
 						1753,
+						1757,
+						1733,
 						1749,
 						1745,
 						1741,
-						1733,
+						1737,
+						1729,
 						1703,
 						1713,
-						1769
+						1765
 					]
 				}
 			],

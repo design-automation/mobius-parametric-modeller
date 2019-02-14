@@ -9,7 +9,7 @@
 
 .mat-table{
   background-color: $color5-5;
-  border-top: 1px solid $color3;
+  // border-top: 1px solid $color3;
   border-bottom: 1px solid $color4;
   // height: 100%;
 }
@@ -135,6 +135,7 @@ table {
       height: 100%;
       justify-content: space-between;
       box-shadow: none;
+      border-top: 1px solid $color3;
     }
   }
 }

@@ -34,7 +34,7 @@ export class NewFileComponent {
     constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
 
     sendNewFile() {
-        const confirmed = confirm('Resetting would delete the current flowchart. Would you like to continue?');
+        const confirmed = confirm('Loading a new file will delete the current flowchart. Would you like to continue?');
         if (!confirmed) { return; }
         const file: IMobius = {
             name: 'Untitled',

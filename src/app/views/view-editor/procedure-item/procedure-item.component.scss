@@ -352,3 +352,17 @@
         color: $selected-color;
     }
 }
+
+.basic-function-text{
+    display: inline-block;
+    white-space: nowrap;
+    font-style: italic;
+    color: $basic-function-text-color;
+    font-weight: 550;
+    text-align: center;
+    min-height: 17px;
+
+    .module-name{
+        color: $selected-color;
+    }
+}

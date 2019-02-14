@@ -1,7 +1,7 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
         <as-split-area [size]="100 - getSplit()">
-            <panel-header [title]='getFlowchartName()'></panel-header>
+            <panel-header [flowchart]='getFlowchart()'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
 
@@ -12,16 +12,6 @@
                     <div class='container__content'>
                         <!-- toolset on the left side -->
                         <div class="container--toolset">
-                            <h2 (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{getFlowchart().meta.selected_nodes[0]}}. {{getNode().name}}</span><span id='node--arr'>▾</span></h2>
-
-                            <div id="nodeMenu">
-                                <div *ngFor='let nd of getFlowchart().nodes; let i = index;'>
-                                    <li (click)="changeNode(i)"> 
-                                        {{i}}. {{nd.name}}
-                                    </li>
-                                </div>
-                            </div>
-                            <div class = "divider"></div>
                             <toolset 
                             (delete)='deleteFunction($event)' 
                             (selected)='add($event)' 

@@ -1,7 +1,7 @@
 <div class='container'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
         <as-split-area [size]="100 - getSplit()">
-            <panel-header [title]='getFlowchartName()'></panel-header>
+            <panel-header [flowchart]='getFlowchart()'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel'>
                 <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{getActiveGallery().name}}<span>▾</span></h3>

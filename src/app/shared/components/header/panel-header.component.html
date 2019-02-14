@@ -46,38 +46,53 @@
         </div>
     </div>
 
-    <div class='filename-container' *ngIf='getUrl() !== "/about"'>
-        <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div>
-        
-        <div id="dropdownMenu">
-            <button onclick="document.getElementById('newfile').click();"
-            title="Create New Flowchart"> 
-                <mat-icon>rotate_left</mat-icon> 
-                New File
-            </button>
-            <br>
-            <button onclick="document.getElementById('savefile').click();"
-            title="Save Flowchart File to Computer">
-                <mat-icon>save_alt</mat-icon>
-                Save File
-                
-            </button>
-            <br>
-            <button (click)="loadFile()"
-            title="Load Flowchart File from Computer">
-                <mat-icon>launch</mat-icon>
-                Load File 
-            </button>
-            <br>
-            <button (click)="openUrlDialog($event)"
-            title="Generate Möbius view url from url of .mob file">
-                <mat-icon>link</mat-icon>
-                &nbsp;Publish&nbsp;
-            </button>
+    <div class='nodename-container' *ngIf='executeCheck'>
+        <div id = 'node-name' (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{flowchart.meta.selected_nodes[0]}}. {{getNode().name}}</span><span id='node--arr'>▾</span></div>
+        <div id="nodeMenu">
+            <div *ngFor='let nd of flowchart.nodes; let i = index;'>
+                <li (click)="changeNode(i)"> 
+                    {{i}}. {{nd.name}}
+                </li>
+            </div>
         </div>
     </div>
 
+    <div class='filename-container' *ngIf='executeCheck'>
+        <!-- <div class = "divider"></div> -->
 
+        <!-- <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div> -->
+        <button class='menu-btn' (click)='openDropdownMenu($event)' title='Procedure'>
+            <mat-icon>menu</mat-icon>
+        </button>
+        <div class='dropdownContainer'>
+            <div id="dropdownMenu">
+                <button onclick="document.getElementById('newfile').click();"
+                title="Create New Flowchart"> 
+                    <mat-icon>rotate_left</mat-icon> 
+                    New File
+                </button>
+                <br>
+                <button onclick="document.getElementById('savefile').click();"
+                title="Save Flowchart File to Computer">
+                    <mat-icon>save_alt</mat-icon>
+                    Save File
+                    
+                </button>
+                <br>
+                <button (click)="loadFile()"
+                title="Load Flowchart File from Computer">
+                    <mat-icon>launch</mat-icon>
+                    Load File 
+                </button>
+                <br>
+                <button (click)="openUrlDialog($event)"
+                title="Generate Möbius view url from url of .mob file">
+                    <mat-icon>link</mat-icon>
+                    &nbsp;Publish&nbsp;
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <dialog id='genUrlDialog'>
     <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows

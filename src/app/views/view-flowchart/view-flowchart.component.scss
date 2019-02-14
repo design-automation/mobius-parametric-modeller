@@ -47,14 +47,13 @@
     background-color: transparent;
     border: none;
     position: absolute; 
-    top: 0px; 
-    right: 0px;
+    top:  34px; 
+    right: 2px;
     color: $color1;
-    border: none;
     padding: 0px;
-    background-color: transparent;
-    width: $header-height;
-    height: $header-height;
+    width: 30px;
+    height: 34px;
+    outline: none;
 }
 
 #arrow{

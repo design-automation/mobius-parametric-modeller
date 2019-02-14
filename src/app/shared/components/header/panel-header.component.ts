@@ -2,6 +2,12 @@ import { Component, Input, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '@shared/services';
 import * as circularJSON from 'circular-json';
+import { IFlowchart } from '@models/flowchart';
+import { ProcedureTypes } from '@models/procedure';
+
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+ctx.font = '12px sans-serif';
 
 @Component({
   selector: 'panel-header',
@@ -10,7 +16,7 @@ import * as circularJSON from 'circular-json';
 })
 export class PanelHeaderComponent {
 
-    @Input() title: string;
+    @Input() flowchart: IFlowchart;
     executeCheck: boolean;
     dialogBox: HTMLDialogElement;
 
@@ -26,13 +32,60 @@ export class PanelHeaderComponent {
         }
     }
 
-    getTitle() {
-        return this.title.replace(/_/g, ' ');
-    }
 
     getUrl() {
         return this.router.url;
     }
+    getNode() {
+        return this.flowchart.nodes[this.flowchart.meta.selected_nodes[0]];
+    }
+
+    changeNode(index: number) {
+        this.dataService.flowchart.meta.selected_nodes = [index];
+        if (this.router.url === '/editor' &&
+           (index === 0 || index === this.dataService.flowchart.nodes.length - 1)) { setTimeout(() => {
+            this.adjustTextArea();
+        }, 50); }
+    }
+
+    adjustTextArea() {
+        let textarea = document.getElementById('flowchart-desc');
+        if (textarea) {
+            const desc = this.dataService.flowchart.description.split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 30;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
+
+            for (const prod of this.dataService.node.procedure) {
+                if (prod.type !== ProcedureTypes.Constant) { continue; }
+                textarea = document.getElementById(prod.ID + '_desc');
+                if (textarea && prod.meta.description) {
+                    const prodDesc = prod.meta.description.split('\n');
+                    const prodTextareaWidth = textarea.getBoundingClientRect().width - 30;
+                    let prodLineCount = 0;
+                    for (const line of prodDesc) {
+                        prodLineCount += Math.floor(ctx.measureText(line).width / prodTextareaWidth) + 1;
+                    }
+                    textarea.style.height = prodLineCount * 14 + 4 + 'px';
+                }
+            }
+        }
+        textarea = document.getElementById('flowchart-return');
+        if (textarea) {
+            const desc = (this.dataService.flowchart.returnDescription || '').split('\n');
+            const textareaWidth = textarea.getBoundingClientRect().width - 30;
+            let lineCount = 0;
+            for (const line of desc) {
+                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+            }
+            textarea.style.height = lineCount * 14 + 4 + 'px';
+        }
+    }
+
+
 
     loadFile() {
         document.getElementById('file-input').click();
@@ -58,8 +111,19 @@ export class PanelHeaderComponent {
             stl.display = 'none';
         }
         e.stopPropagation();
+    }
+
+    openNodeMenu(e: MouseEvent) {
+        const stl = document.getElementById('nodeMenu').style;
+        if (!stl.display || stl.display === 'none') {
+            stl.display = 'block';
+        } else {
+            stl.display = 'none';
+        }
+        e.stopPropagation();
 
     }
+
 
     openUrlDialog(event) {
         event.stopPropagation();

@@ -208,6 +208,16 @@
         <div class='line--blank' *ngSwitchCase="ProcedureTypes.Blank">
         </div>
 
+        <!-- Comment -->
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.Comment">
+            <input 
+            class='input--comment' 
+            [(ngModel)]='data.args[0].value'
+            placeholder='Comment'
+            [style.width.px]='inputSize(data.args[0].value||"Comment")'
+            >
+        </div>
+
         
         <!-- Function Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Function">
@@ -285,7 +295,7 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button>
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
                 <mat-icon class='icon'>tv_off</mat-icon>
             </button>
             <!-- Print button-->

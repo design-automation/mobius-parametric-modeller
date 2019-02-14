@@ -167,6 +167,18 @@
             background-color: $color7;
         }
     }
+    .input--comment{
+        font-size: $fsize2;
+        resize: horizontal;
+        min-width: 200px;
+        color: $comment-color;
+        font-style: italic;
+        background-color: transparent; 
+        margin: 2px;
+        border: 0px;
+        border-left: 2px solid $comment-color;
+        padding-left: 3px;
+    }
 
     // .input--arg--p{
     //     position: absolute;

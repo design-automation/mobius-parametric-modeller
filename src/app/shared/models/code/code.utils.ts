@@ -9,7 +9,7 @@ import { _parameterTypes } from '@modules';
 export class CodeUtils {
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string[] {
-        if (prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
+        if (prod.enabled === false || prod.type === ProcedureTypes.Blank || prod.type === ProcedureTypes.Comment) { return ['']; }
 
         prod.hasError = false;
 

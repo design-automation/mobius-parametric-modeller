@@ -102,8 +102,10 @@ export class PanelHeaderComponent {
             }
         }
         */
-        const stl = document.getElementById('dropdownMenu').style;
-        if (!stl.display || stl.display === 'none') {
+       const stl = document.getElementById('dropdownMenu').style;
+       if (!stl.display || stl.display === 'none') {
+            const pos = document.getElementById('dropdownMenuButton').getBoundingClientRect();
+            stl.left = (pos.left + 34 - 100) + 'px';
             stl.display = 'block';
             // const bRect = (<Element>e.target).getBoundingClientRect();
             // stl.transform = `translate(` + bRect.left + `px, ` + bRect.height + `px)`;

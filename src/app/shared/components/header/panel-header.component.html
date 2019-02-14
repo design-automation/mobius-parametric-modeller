@@ -61,7 +61,7 @@
         <!-- <div class = "divider"></div> -->
 
         <!-- <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div> -->
-        <button class='menu-btn' (click)='openDropdownMenu($event)' title='Procedure'>
+        <button id='dropdownMenuButton' class='menu-btn' (click)='openDropdownMenu($event)' title='Procedure'>
             <mat-icon>menu</mat-icon>
         </button>
         <div class='dropdownContainer'>
@@ -76,7 +76,6 @@
                 title="Save Flowchart File to Computer">
                     <mat-icon>save_alt</mat-icon>
                     Save File
-                    
                 </button>
                 <br>
                 <button (click)="loadFile()"

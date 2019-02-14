@@ -157,7 +157,8 @@ export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close:
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPlinePosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _polyline(__model__, posis_arrs, close) as  TEntTypeIdx[];
-    if (new_ents_arr.length === 1) {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1 || (depth === 2 && ents_arr[0][0] === EEntType.POSI)) {
         const first_ent: TEntTypeIdx = new_ents_arr[0] as TEntTypeIdx;
         return idsMake(first_ent) as TId;
     } else {
@@ -231,7 +232,8 @@ export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TI
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPgonPosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _polygon(__model__, posis_arrs) as TEntTypeIdx[];
-    if (new_ents_arr.length === 1) {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1 || (depth === 2 && ents_arr[0][0] === EEntType.POSI)) {
         const first_ent: TEntTypeIdx = new_ents_arr[0] as TEntTypeIdx;
         return idsMake(first_ent) as TId;
     } else {

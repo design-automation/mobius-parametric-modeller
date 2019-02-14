@@ -1,0 +1,1526 @@
+{
+    "name": "offset_pgon_func",
+    "author": "new_user",
+    "flowchart": {
+        "name": "OffsetPgon",
+        "description": "Offsets polygons by a fixed distance. \n\nA positive offset will increase the size of the polygon, while a negative offset will decrease it. ",
+        "language": "js",
+        "meta": {
+            "selected_nodes": [
+                0
+            ]
+        },
+        "nodes": [
+            {
+                "name": "Start",
+                "id": "node_oiirdidn1em",
+                "position": {
+                    "x": 5327.205078125,
+                    "y": 4964.93408203125
+                },
+                "enabled": true,
+                "type": "start",
+                "procedure": [
+                    {
+                        "type": 13,
+                        "ID": "",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-hf4l1bnz4ls",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "pattern",
+                            "name": "Rectangle"
+                        },
+                        "argCount": 4,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "rec1",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "origin",
+                                "value": "[80 , 0 , - 0]",
+                                "default": 0
+                            },
+                            {
+                                "name": "size",
+                                "value": "[30 , 123]",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-8zkgjlv1xgr",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "make",
+                            "name": "Polygon"
+                        },
+                        "argCount": 3,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "pg",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "positions",
+                                "value": "rec1",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-3677lnn2r3y",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "pattern",
+                            "name": "Rectangle"
+                        },
+                        "argCount": 4,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "rec2",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "origin",
+                                "value": "[80 , 0 , - 0]",
+                                "default": 0
+                            },
+                            {
+                                "name": "size",
+                                "value": "[10 , 70]",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-b916xsbxhhi",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "make",
+                            "name": "Hole"
+                        },
+                        "argCount": 4,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "h",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "face",
+                                "value": "pg",
+                                "default": 0
+                            },
+                            {
+                                "name": "positions",
+                                "value": "rec2",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-aba8t0excho",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "pattern",
+                            "name": "Grid"
+                        },
+                        "argCount": 6,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "g",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "origin",
+                                "value": "XY",
+                                "default": 0
+                            },
+                            {
+                                "name": "size",
+                                "value": "50",
+                                "default": 0
+                            },
+                            {
+                                "name": "num_positions",
+                                "value": "3",
+                                "default": 0
+                            },
+                            {
+                                "name": "method",
+                                "value": "'flat'",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 8,
+                        "ID": "prod-juo4wsmh6q",
+                        "enabled": true,
+                        "print": false,
+                        "meta": {
+                            "module": "make",
+                            "name": "Polygon"
+                        },
+                        "argCount": 3,
+                        "args": [
+                            {
+                                "name": "var_name",
+                                "value": "pgg",
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__model__",
+                                "default": 0
+                            },
+                            {
+                                "name": "positions",
+                                "value": "[g[0] , g[2] , g[5] , g[4] , g[7] , g[6]]",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-xopq4nw29",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Polygons to offset"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "ents",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "[pg, pgg]"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-2bjh2cd64qc",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "Offset distance"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "dist",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "value": 7.5,
+                                "default": 6.4,
+                                "step": "0.1",
+                                "min": "0",
+                                "max": "10"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    }
+                ],
+                "state": {
+                    "procedure": []
+                },
+                "input": {
+                    "name": "input",
+                    "type": 0,
+                    "edges": [],
+                    "meta": {
+                        "mode": 0,
+                        "opts": {}
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "output": {
+                    "name": "output",
+                    "type": 1,
+                    "edges": [
+                        {
+                            "source": "~flowchart~nodes~0~output",
+                            "target": {
+                                "name": "input",
+                                "type": 0,
+                                "edges": [
+                                    "~flowchart~nodes~0~output~edges~0"
+                                ],
+                                "meta": {
+                                    "mode": 0,
+                                    "opts": {}
+                                },
+                                "parentNode": {
+                                    "name": "offset closed plines and pgons",
+                                    "id": "node_5w0ztg184do",
+                                    "position": {
+                                        "x": 5325.953125,
+                                        "y": 5169.02587890625
+                                    },
+                                    "enabled": true,
+                                    "type": "",
+                                    "procedure": [
+                                        {
+                                            "type": 13,
+                                            "ID": "",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-ntnf8plemz",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "@ret",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "[]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-6qqibxox406",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pgons",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "ents"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 1,
+                                            "ID": "prod-shncbtj46e",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 1,
+                                            "args": [
+                                                {
+                                                    "name": "condition",
+                                                    "value": "! isList ( pgons )"
+                                                }
+                                            ],
+                                            "children": [
+                                                {
+                                                    "type": 13,
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                    "meta": {
+                                                        "name": "",
+                                                        "module": ""
+                                                    },
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "print": false,
+                                                    "enabled": true,
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 0,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                    "ID": "prod-fv42lzzgz8q",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 2,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "pgons",
+                                                            "invalidVar": false
+                                                        },
+                                                        {
+                                                            "name": "value",
+                                                            "value": "[ents]"
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                }
+                                            ],
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 4,
+                                            "ID": "prod-09wjcj2z2aa8",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "item",
+                                                    "value": "pg",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "list",
+                                                    "value": "pgons",
+                                                    "default": []
+                                                }
+                                            ],
+                                            "children": [
+                                                {
+                                                    "type": 13,
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
+                                                    "meta": {
+                                                        "name": "",
+                                                        "module": ""
+                                                    },
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "print": false,
+                                                    "enabled": true,
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
+                                                    "ID": "prod-043i3lgs8xsd",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "calc",
+                                                        "name": "Normal"
+                                                    },
+                                                    "argCount": 4,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "normal"
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "default": 0,
+                                                            "value": "pg"
+                                                        },
+                                                        {
+                                                            "name": "scale",
+                                                            "default": 0,
+                                                            "value": "1"
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
+                                                    "ID": "prod-n9yc8cq6gd",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "query",
+                                                        "name": "Get"
+                                                    },
+                                                    "argCount": 5,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "wires",
+                                                            "invalidVar": false
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "select",
+                                                            "value": "'wires'",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "value": "pg",
+                                                            "default": 0
+                                                        },
+                                                        {
+                                                            "name": "query_expr",
+                                                            "value": "null",
+                                                            "default": 0
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 4,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
+                                                    "ID": "prod-t6ejoh1w1b",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 2,
+                                                    "args": [
+                                                        {
+                                                            "name": "item",
+                                                            "value": "wire",
+                                                            "invalidVar": false
+                                                        },
+                                                        {
+                                                            "name": "list",
+                                                            "value": "wires",
+                                                            "default": []
+                                                        }
+                                                    ],
+                                                    "children": [
+                                                        {
+                                                            "type": 13,
+                                                            "ID": "",
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
+                                                            "meta": {
+                                                                "name": "",
+                                                                "module": ""
+                                                            },
+                                                            "argCount": 0,
+                                                            "args": [],
+                                                            "print": false,
+                                                            "enabled": true,
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 0,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
+                                                            "ID": "prod-d0xo7sb0x8",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "new_posis",
+                                                                    "invalidVar": false
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "value": "[]"
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
+                                                            "ID": "prod-thg89lcgwub",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "query",
+                                                                "name": "Get"
+                                                            },
+                                                            "argCount": 5,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "verts",
+                                                                    "invalidVar": false
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "select",
+                                                                    "value": "'vertices'",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "entities",
+                                                                    "value": "wire",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "query_expr",
+                                                                    "value": "null",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 4,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
+                                                            "ID": "prod-04f0y9radgkl",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "argCount": 2,
+                                                            "args": [
+                                                                {
+                                                                    "name": "item",
+                                                                    "value": "i",
+                                                                    "invalidVar": false
+                                                                },
+                                                                {
+                                                                    "name": "list",
+                                                                    "value": "range ( 0 , listLen ( verts ) )",
+                                                                    "default": []
+                                                                }
+                                                            ],
+                                                            "children": [
+                                                                {
+                                                                    "type": 13,
+                                                                    "ID": "prod-wfv1e1qqxf",
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "meta": {
+                                                                        "name": "",
+                                                                        "module": ""
+                                                                    },
+                                                                    "argCount": 0,
+                                                                    "args": [],
+                                                                    "print": false,
+                                                                    "enabled": true,
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-q086ft5q35",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "vert",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "verts[i]"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 8,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-q3fdyvnsjl",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "meta": {
+                                                                        "module": "query",
+                                                                        "name": "Get"
+                                                                    },
+                                                                    "argCount": 5,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "posis",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "__model__",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "select",
+                                                                            "value": "'positions'",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "entities",
+                                                                            "value": "vert",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "query_expr",
+                                                                            "value": "null",
+                                                                            "default": 0
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-ueb565xd6os",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "posi",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "posis[0]"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-vxz8g30haoj",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "xyz",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "posi@xyz"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 8,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-u4v4rgwv2em",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "meta": {
+                                                                        "module": "query",
+                                                                        "name": "Get"
+                                                                    },
+                                                                    "argCount": 5,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "edges",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "__model__",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "select",
+                                                                            "value": "'edges'",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "entities",
+                                                                            "value": "vert",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "query_expr",
+                                                                            "value": "null",
+                                                                            "default": 0
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-vuq4641p0y",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "vec_a",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "null"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-d8cldl9h5id",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "vec_b",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "null"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 1,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-l4f6h6kka9o",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 1,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "condition",
+                                                                            "value": "i > 0"
+                                                                        }
+                                                                    ],
+                                                                    "children": [
+                                                                        {
+                                                                            "type": 13,
+                                                                            "ID": "prod-haazlgsvj4",
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~8",
+                                                                            "meta": {
+                                                                                "name": "",
+                                                                                "module": ""
+                                                                            },
+                                                                            "argCount": 0,
+                                                                            "args": [],
+                                                                            "print": false,
+                                                                            "enabled": true,
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        },
+                                                                        {
+                                                                            "type": 8,
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~8",
+                                                                            "ID": "prod-mgodm225w39",
+                                                                            "enabled": true,
+                                                                            "print": false,
+                                                                            "meta": {
+                                                                                "module": "calc",
+                                                                                "name": "Vector"
+                                                                            },
+                                                                            "argCount": 3,
+                                                                            "args": [
+                                                                                {
+                                                                                    "name": "var_name",
+                                                                                    "value": "vec_a",
+                                                                                    "invalidVar": false
+                                                                                },
+                                                                                {
+                                                                                    "name": "__model__",
+                                                                                    "default": 0
+                                                                                },
+                                                                                {
+                                                                                    "name": "edge",
+                                                                                    "value": "edges[0]",
+                                                                                    "default": 0
+                                                                                }
+                                                                            ],
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        },
+                                                                        {
+                                                                            "type": 8,
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~8",
+                                                                            "ID": "prod-pgqfogd8txk",
+                                                                            "enabled": true,
+                                                                            "print": false,
+                                                                            "meta": {
+                                                                                "module": "calc",
+                                                                                "name": "Vector"
+                                                                            },
+                                                                            "argCount": 3,
+                                                                            "args": [
+                                                                                {
+                                                                                    "name": "var_name",
+                                                                                    "value": "vec_b",
+                                                                                    "invalidVar": false
+                                                                                },
+                                                                                {
+                                                                                    "name": "__model__",
+                                                                                    "default": 0
+                                                                                },
+                                                                                {
+                                                                                    "name": "edge",
+                                                                                    "value": "edges[1]",
+                                                                                    "default": 0
+                                                                                }
+                                                                            ],
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 3,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-sm4xf1y2m3f",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 0,
+                                                                    "args": [],
+                                                                    "children": [
+                                                                        {
+                                                                            "type": 13,
+                                                                            "ID": "prod-v8yvlh6zsxg",
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~9",
+                                                                            "meta": {
+                                                                                "name": "",
+                                                                                "module": ""
+                                                                            },
+                                                                            "argCount": 0,
+                                                                            "args": [],
+                                                                            "print": false,
+                                                                            "enabled": true,
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        },
+                                                                        {
+                                                                            "type": 8,
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~9",
+                                                                            "ID": "prod-ecnvggipk1c",
+                                                                            "enabled": true,
+                                                                            "print": false,
+                                                                            "meta": {
+                                                                                "module": "calc",
+                                                                                "name": "Vector"
+                                                                            },
+                                                                            "argCount": 3,
+                                                                            "args": [
+                                                                                {
+                                                                                    "name": "var_name",
+                                                                                    "value": "vec_a",
+                                                                                    "invalidVar": false
+                                                                                },
+                                                                                {
+                                                                                    "name": "__model__",
+                                                                                    "default": 0
+                                                                                },
+                                                                                {
+                                                                                    "name": "edge",
+                                                                                    "value": "edges[1]",
+                                                                                    "default": 0
+                                                                                }
+                                                                            ],
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        },
+                                                                        {
+                                                                            "type": 8,
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~9",
+                                                                            "ID": "prod-m369k2jf7h8",
+                                                                            "enabled": true,
+                                                                            "print": false,
+                                                                            "meta": {
+                                                                                "module": "calc",
+                                                                                "name": "Vector"
+                                                                            },
+                                                                            "argCount": 3,
+                                                                            "args": [
+                                                                                {
+                                                                                    "name": "var_name",
+                                                                                    "value": "vec_b",
+                                                                                    "invalidVar": false
+                                                                                },
+                                                                                {
+                                                                                    "name": "__model__",
+                                                                                    "default": 0
+                                                                                },
+                                                                                {
+                                                                                    "name": "edge",
+                                                                                    "value": "edges[0]",
+                                                                                    "default": 0
+                                                                                }
+                                                                            ],
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        }
+                                                                    ],
+                                                                    "hasError": false,
+                                                                    "selected": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-k150a0q76f9",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "vec_a",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "vecMult ( vecNorm ( vec_a ) , dist )"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-fv40g9lh8d",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "vec_b",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "vecMult ( vecNorm ( vec_b ) , dist )"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 0,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-uu1rf3y7uep",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 2,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "is_vertex_concave",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "value",
+                                                                            "value": "vecDot ( vecCross ( vec_a , vec_b ) , normal ) < 0"
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 1,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-13mz253c0omb",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "argCount": 1,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "condition",
+                                                                            "value": "is_vertex_concave"
+                                                                        }
+                                                                    ],
+                                                                    "children": [
+                                                                        {
+                                                                            "type": 13,
+                                                                            "ID": "prod-9bhhyzzd16e",
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~13",
+                                                                            "meta": {
+                                                                                "name": "",
+                                                                                "module": ""
+                                                                            },
+                                                                            "argCount": 0,
+                                                                            "args": [],
+                                                                            "print": false,
+                                                                            "enabled": true,
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        },
+                                                                        {
+                                                                            "type": 0,
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~13",
+                                                                            "ID": "prod-bmftlqt2vho",
+                                                                            "enabled": true,
+                                                                            "print": false,
+                                                                            "argCount": 2,
+                                                                            "args": [
+                                                                                {
+                                                                                    "name": "var_name",
+                                                                                    "value": "vec_a",
+                                                                                    "invalidVar": false
+                                                                                },
+                                                                                {
+                                                                                    "name": "value",
+                                                                                    "value": "vecMult ( vec_a , - 1 )"
+                                                                                }
+                                                                            ],
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        },
+                                                                        {
+                                                                            "type": 0,
+                                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3~children~13",
+                                                                            "ID": "prod-sy1trnb2ad",
+                                                                            "enabled": true,
+                                                                            "print": false,
+                                                                            "argCount": 2,
+                                                                            "args": [
+                                                                                {
+                                                                                    "name": "var_name",
+                                                                                    "value": "vec_b",
+                                                                                    "invalidVar": false
+                                                                                },
+                                                                                {
+                                                                                    "name": "value",
+                                                                                    "value": "vecMult ( vec_b , - 1 )"
+                                                                                }
+                                                                            ],
+                                                                            "selected": false,
+                                                                            "hasError": false
+                                                                        }
+                                                                    ],
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 8,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-9szvwbiotod",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "meta": {
+                                                                        "module": "make",
+                                                                        "name": "Position"
+                                                                    },
+                                                                    "argCount": 3,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "var_name",
+                                                                            "value": "new_posi",
+                                                                            "invalidVar": false
+                                                                        },
+                                                                        {
+                                                                            "name": "__model__",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "coords",
+                                                                            "value": "vecSub ( vecAdd ( xyz , vec_a ) , vec_b )",
+                                                                            "default": 0
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                },
+                                                                {
+                                                                    "type": 8,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3~children~3",
+                                                                    "ID": "prod-k3jr3l6v2fb",
+                                                                    "enabled": true,
+                                                                    "print": false,
+                                                                    "meta": {
+                                                                        "module": "list",
+                                                                        "name": "Add"
+                                                                    },
+                                                                    "argCount": 4,
+                                                                    "args": [
+                                                                        {
+                                                                            "name": "__none__"
+                                                                        },
+                                                                        {
+                                                                            "name": "list",
+                                                                            "value": "new_posis",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "item",
+                                                                            "value": "new_posi",
+                                                                            "default": 0
+                                                                        },
+                                                                        {
+                                                                            "name": "method",
+                                                                            "value": "'to_end'",
+                                                                            "default": 0
+                                                                        }
+                                                                    ],
+                                                                    "selected": false,
+                                                                    "hasError": false
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
+                                                            "ID": "prod-zf3r4p1vrfo",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "make",
+                                                                "name": "Polygon"
+                                                            },
+                                                            "argCount": 3,
+                                                            "args": [
+                                                                {
+                                                                    "name": "var_name",
+                                                                    "value": "new_pg",
+                                                                    "invalidVar": false
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "positions",
+                                                                    "value": "new_posis",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4~children~3",
+                                                            "ID": "prod-m5opz2q4on",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "list",
+                                                                "name": "Add"
+                                                            },
+                                                            "argCount": 4,
+                                                            "args": [
+                                                                {
+                                                                    "name": "__none__"
+                                                                },
+                                                                {
+                                                                    "name": "list",
+                                                                    "value": "@ret",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "item",
+                                                                    "value": "new_pg",
+                                                                    "default": 0
+                                                                },
+                                                                {
+                                                                    "name": "method",
+                                                                    "value": "'to_end'",
+                                                                    "default": 0
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        }
+                                                    ],
+                                                    "hasError": false,
+                                                    "selected": false
+                                                }
+                                            ],
+                                            "hasError": false,
+                                            "selected": false
+                                        }
+                                    ],
+                                    "state": {
+                                        "procedure": []
+                                    },
+                                    "input": "~flowchart~nodes~0~output~edges~0~target",
+                                    "output": {
+                                        "name": "output",
+                                        "type": 1,
+                                        "edges": [
+                                            {
+                                                "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output",
+                                                "target": {
+                                                    "name": "input",
+                                                    "type": 0,
+                                                    "edges": [
+                                                        "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+                                                    ],
+                                                    "meta": {
+                                                        "mode": 0,
+                                                        "opts": {}
+                                                    },
+                                                    "parentNode": {
+                                                        "name": "End",
+                                                        "id": "node_1ydedfk0zidi",
+                                                        "position": {
+                                                            "x": 5327.20947265625,
+                                                            "y": 5349.1142578125
+                                                        },
+                                                        "enabled": true,
+                                                        "type": "end",
+                                                        "procedure": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "ID": "prod-ht1btgbrl1g",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "result",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "@ret"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 1,
+                                                                "ID": "prod-snxbykbkd2a",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 1,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "condition",
+                                                                        "value": "listLen ( result ) == 1"
+                                                                    }
+                                                                ],
+                                                                "children": [
+                                                                    {
+                                                                        "type": 13,
+                                                                        "ID": "",
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "meta": {
+                                                                            "name": "",
+                                                                            "module": ""
+                                                                        },
+                                                                        "argCount": 0,
+                                                                        "args": [],
+                                                                        "print": false,
+                                                                        "enabled": true,
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 0,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-xtu56fr8wl",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "argCount": 2,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "result",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "value",
+                                                                                "value": "result[0]"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 11,
+                                                                "ID": "",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "value": "",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "result",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "state": {
+                                                            "procedure": []
+                                                        },
+                                                        "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
+                                                        "output": {
+                                                            "name": "output",
+                                                            "type": 1,
+                                                            "edges": [],
+                                                            "meta": {
+                                                                "mode": 0
+                                                            },
+                                                            "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                        },
+                                                        "hasError": false,
+                                                        "hasExecuted": true
+                                                    }
+                                                },
+                                                "selected": false
+                                            }
+                                        ],
+                                        "meta": {
+                                            "mode": 0
+                                        },
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                    },
+                                    "hasError": false,
+                                    "hasExecuted": true
+                                }
+                            },
+                            "selected": false
+                        }
+                    ],
+                    "meta": {
+                        "mode": 0
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "hasError": false,
+                "hasExecuted": true
+            },
+            "~flowchart~nodes~0~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+        ],
+        "edges": [
+            "~flowchart~nodes~0~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+        ],
+        "functions": [],
+        "ordered": true,
+        "returnDescription": "Return the new offset polylines and polygons."
+    },
+    "last_updated": "2019-02-12T11:13:00.445Z",
+    "version": 1,
+    "settings": {}
+}

@@ -117,6 +117,7 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             __model__.attribs.add.setAttribValue(ent_type, ent_i, attrib_name, attrib_value);
         }
     }
+    console.log(__model__);
 }
 /**
  * Sets an attribute value in the model.

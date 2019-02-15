@@ -9,7 +9,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, EAttribPromote} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
@@ -357,41 +357,138 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
     _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
-// Promote modelling operation
+// AttribPush modelling operation
 export enum _EPromoteMethod {
-    MEAN =  'mean',
-    MIN  =  'min',
-    MAX = 'max',
-    NONE = 'none'
+    FIRST = 'first',
+    LAST = 'last',
+    AVERAGE = 'average',
+    MEDIAN = 'median',
+    SUM = 'sum',
+    MIN = 'min',
+    MAX = 'max'
 }
 // Promote modelling operation
-export enum _EPromoteAttribTypes {
-    POSIS =  'positions',
-    VERTS  =  'vertices',
-    EDGES = 'edges',
-    WIRES = 'wires',
-    FACES = 'faces',
-    POINTS = 'points',
-    PLINES = 'plines',
-    PGONS = 'pgons',
-    COLLS = 'collections'
+export enum _EPromoteTarget {
+    POSI = 'positions',
+    VERT = 'vertices',
+    EDGE = 'edges',
+    WIRE = 'wires',
+    FACE = 'faces',
+    POINT = 'points',
+    PLINE = 'plines',
+    PGON = 'pgons',
+    COLL = 'collections',
+    MOD = 'model'
+}
+function _convertPromoteMethod(selection: _EPromoteMethod): EAttribPromote {
+    switch (selection) {
+        case _EPromoteMethod.AVERAGE:
+            return EAttribPromote.AVERAGE;
+        case _EPromoteMethod.MEDIAN:
+            return EAttribPromote.MEDIAN;
+        case _EPromoteMethod.SUM:
+            return EAttribPromote.SUM;
+        case _EPromoteMethod.MIN:
+            return EAttribPromote.MIN;
+        case _EPromoteMethod.MAX:
+            return EAttribPromote.MAX;
+        case _EPromoteMethod.FIRST:
+            return EAttribPromote.FIRST;
+        case _EPromoteMethod.LAST:
+            return EAttribPromote.LAST;
+        default:
+            break;
+    }
+}
+function _convertPromoteTarget(selection: _EPromoteTarget): EEntType {
+    switch (selection) {
+        case _EPromoteTarget.POSI:
+            return EEntType.POSI;
+        case _EPromoteTarget.VERT:
+            return EEntType.VERT;
+        case _EPromoteTarget.EDGE:
+            return EEntType.EDGE;
+        case _EPromoteTarget.WIRE:
+            return EEntType.WIRE;
+        case _EPromoteTarget.FACE:
+            return EEntType.FACE;
+        case _EPromoteTarget.POINT:
+            return EEntType.POINT;
+        case _EPromoteTarget.PLINE:
+            return EEntType.PLINE;
+        case _EPromoteTarget.PGON:
+            return EEntType.PGON;
+        case _EPromoteTarget.COLL:
+            return EEntType.COLL;
+        case _EPromoteTarget.MOD:
+            return EEntType.MOD;
+        default:
+            break;
+    }
 }
 /**
- * Promotes or demotes an attribute from one geometry level to another.
+ * Pushes existing attribute values onto other entities.
+ * Attribute values can be promoted up the hierarchy, demoted down the hierarchy, or transferred across the hierarchy.
+ * ~
+ * In certain cases, when attributes are pushed, they may be aggregated. For example, if you are pushing attributes
+ * from vertices to polygons, then there will be multiple vertex attributes that can be combined in
+ * different ways.
+ * The 'method' specifies how the attributes should be aggregated. Note that if no aggregation is required
+ * then the aggregation method is ignored.
+ * ~
+ * The aggregation methods consist of numerical functions such as average, median, sum, max, and min. These will
+ * only work if the attribute values are numbers or lists of numbers. If the attribute values are string, then
+ * the numerical functions are ignored.
+ * ~
+ * If the attribute values are lists of numbers, then these aggregation methods work on the individual items in the list.
+ * For example, lets say you have an attribute consisting of normal vectors on vertices. If you push these attributes
+ * down to the positions, then aggregation may be required, since multiple vertices can share the same position.
+ * In this case, if you choose the `average` aggregation method, then resulting vectors on the positions will be the
+ * average of vertex vectors.
+ *
  * @param __model__
- * @param attrib_name Attribute name to be promoted or demoted.
- * @param from Enum; Positions, vertices, edges, wires, faces or collections.
- * @param to Enum; Positions, vertices, edges, wires, faces or collections.
- * @param method Enum; Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
+ * @param entities The entities that currently contain the attribute values.
+ * @param attrib_name The name of the attribute to be promoted, demoted, or transferred.
+ * @param to_level Enum; The level to which to promote, demote, or transfer the attribute values.
+ * @param method Enum; The method to use when attribute values need to be aggregated.
  * @returns void
- * @example promote1 = modify.Promote (colour, positions, faces, sum)
+ * @example promote1 = modify.PushAttribs([pgon1, pgon2], 'area', collections, sum)
+ * @example_info For the two polygons (pgon1 and pgon2), it gets the attribute values from the attribute called `area`,
+ * and pushes them up to the collection level. The `sum` method specifies that the two areas should be added up.
+ * Note that in order to create an attribute at the collection level, the two polygons should be part of a
+ * collection. If they are not part of the collection, then no attribute values will be push.
  */
-export function _Promote(__model__: GIModel, attrib_name: string,
-    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
+export function PushAttribs(__model__: GIModel, entities: TId|TId[], attrib_name: string,
+        to_level: _EPromoteTarget, method: _EPromoteMethod): void {
     // --- Error Check ---
-    // checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (entities !== null) {
+        ents_arr = checkIDs('modify.Attribute', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        ents_arr = null;
+    }
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    let from_ent_type: EEntType;
+    const indices: number[] = [];
+    if (ents_arr !== null) {
+        const ents_arrs: TEntTypeIdx[] = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
+        from_ent_type = ents_arrs[0][0];
+        for (const [ent_type, index] of ents_arrs) {
+            if (ent_type !== from_ent_type) {
+                throw new Error('All entities must be of the same type.');
+            }
+            indices.push(index);
+        }
+    } else {
+        from_ent_type = EEntType.MOD;
+    }
+    const to_ent_type: EEntType = _convertPromoteTarget(to_level);
+    const promote_method: EAttribPromote = _convertPromoteMethod(method);
+    if (from_ent_type === to_ent_type) {
+        __model__.attribs.add.transferAttribValues(from_ent_type, attrib_name, indices, promote_method);
+    } else {
+        __model__.attribs.add.promoteAttribValues(from_ent_type, attrib_name, indices, to_ent_type, promote_method);
+    }
 }
 // ================================================================================================
 /**

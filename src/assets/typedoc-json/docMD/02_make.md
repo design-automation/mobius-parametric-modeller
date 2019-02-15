@@ -94,13 +94,17 @@ The geometry that is generated depends on the method that is selected.
 The 'loft_quads' methods will generate polygons.
 The 'loft_stringers' and 'loft_ribs' methods will generate polylines.  
 * **Parameters:**  
-  * *entities:* Entities to loft between.  
+  * *entities:* List of entities, or list of lists of entities.  
   * *divisions:* undefined  
   * *method:* Enum, if 'closed', then close the loft back to the first entity in the list.  
 * **Returns:** List of new polygons or polylines resulting from the loft.  
 * **Examples:**  
-  * surface1 = make.Loft([polyline1,polyline2,polyline3], 1, 'closed_quads')  
-    Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
+  * quads = make.Loft([polyline1,polyline2,polyline3], 1, 'open_quads')  
+    Creates quad polygons lofting between polyline1, polyline2, polyline3.  
+  * quads = make.Loft([polyline1,polyline2,polyline3], 1, 'closed_quads')  
+    Creates quad polygons lofting between polyline1, polyline2, polyline3, and back to polyline1.  
+  * quads = make.Loft([ [polyline1,polyline2], [polyline3,polyline4] ] , 1, 'open_quads')  
+    Creates quad polygons lofting first between polyline1 and polyline2, and then between polyline3 and polyline4.
   
   
 ## Extrude  

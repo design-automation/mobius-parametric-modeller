@@ -1,14 +1,25 @@
 # MODIFY    
 
 ## Move  
-* **Description:** Moves entities by vector.  
+* **Description:** Moves entities. The directio and distance if movement is specified as a vector.
+~
+If only one vector is given, then all entities are moved by the same vector.
+If a list of vectors is given, the each entity will be moved by a different vector.
+In this case, the number of vectors should be equal to the number of entities.
+~
+If a position is shared between entites that are being moved by different vectors,
+then the position will be moved by the average of the vectors.  
 * **Parameters:**  
-  * *entities:* Position, vertex, edge, wire, face, point, polyline, polygon, collection.  
-  * *vector:* List of three numbers.  
+  * *entities:* An entity or list of entities.  
+  * *vectors:* undefined  
 * **Returns:** void  
 * **Examples:**  
-  * modify.Move(position1, [1,1,1])  
-    Moves position1 by [1,1,1].
+  * modify.Move(pline1, [1,2,3])  
+    Moves pline1 by [1,2,3].  
+  * modify.Move([pos1, pos2, pos3], [[0,0,1], [0,0,1], [0,1,0]] )  
+    Moves pos1 by [0,0,1], pos2 by [0,0,1], and pos3 by [0,1,0].  
+  * modify.Move([pgon1, pgon2], [1,2,3] )  
+    Moves both pgon1 and pgon2 by [1,2,3].
   
   
 ## Rotate  
@@ -73,16 +84,23 @@
   
   
 ## Shift  
-* **Description:** Reverses direction of entities.  
+* **Description:** Shifts the order of the edges in a closed wire.
+~
+In a closed wire, any edge (or vertex) could be the first edge of the ring.
+In some cases, it is useful to have an edge in a particular position in a ring.
+This function allows the edges to be shifted either forwards or backwards around the ring.
+The order of the edges in the ring will remain unchanged.  
 * **Parameters:**  
   * *entities:* Wire, face, polyline, polygon.  
   * *offset:* undefined  
 * **Returns:** void  
 * **Examples:**  
-  * modify.Reverse(face1)  
-    Flips face1 and reverses its normal.  
-  * modify.Reverse(polyline1)  
-    Reverses the order of vertices to reverse the direction of the polyline.
+  * modify.Shift(face1, 1)  
+    Shifts the edges in the face wire, so that the every edge moves up by one position
+in the ring. The last edge will become the first edge .  
+  * modify.Shift(polyline1, -1)  
+    Shifts the edges in the closed polyline wire, so that every edge moves back by one position
+in the ring. The first edge will become the last edge.
   
   
 ## Close  
@@ -93,6 +111,39 @@
 * **Examples:**  
   * modify.Close([polyline1,polyline2,...])  
     If open, polylines are changed to closed; if already closed, nothing happens.
+  
+  
+## PushAttribs  
+* **Description:** Pushes existing attribute values onto other entities.
+Attribute values can be promoted up the hierarchy, demoted down the hierarchy, or transferred across the hierarchy.
+~
+In certain cases, when attributes are pushed, they may be aggregated. For example, if you are pushing attributes
+from vertices to polygons, then there will be multiple vertex attributes that can be combined in
+different ways.
+The 'method' specifies how the attributes should be aggregated. Note that if no aggregation is required
+then the aggregation method is ignored.
+~
+The aggregation methods consist of numerical functions such as average, median, sum, max, and min. These will
+only work if the attribute values are numbers or lists of numbers. If the attribute values are string, then
+the numerical functions are ignored.
+~
+If the attribute values are lists of numbers, then these aggregation methods work on the individual items in the list.
+For example, lets say you have an attribute consisting of normal vectors on vertices. If you push these attributes
+down to the positions, then aggregation may be required, since multiple vertices can share the same position.
+In this case, if you choose the `average` aggregation method, then resulting vectors on the positions will be the
+average of vertex vectors.  
+* **Parameters:**  
+  * *entities:* The entities that currently contain the attribute values.  
+  * *attrib_name:* The name of the attribute to be promoted, demoted, or transferred.  
+  * *to_level:* Enum; The level to which to promote, demote, or transfer the attribute values.  
+  * *method:* Enum; The method to use when attribute values need to be aggregated.  
+* **Returns:** void  
+* **Examples:**  
+  * promote1 = modify.PushAttribs([pgon1, pgon2], 'area', collections, sum)  
+    For the two polygons (pgon1 and pgon2), it gets the attribute values from the attribute called `area`,
+and pushes them up to the collection level. The `sum` method specifies that the two areas should be added up.
+Note that in order to create an attribute at the collection level, the two polygons should be part of a
+collection. If they are not part of the collection, then no attribute values will be push.
   
   
 ## Delete  

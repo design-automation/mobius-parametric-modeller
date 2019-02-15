@@ -144,6 +144,16 @@ export enum ESort {
     'ASCENDING' = 'ascending'
 }
 
+export enum EAttribPromote {
+    AVERAGE,
+    MEDIAN,
+    SUM,
+    MIN,
+    MAX,
+    FIRST,
+    LAST
+}
+
 /**
  * Geom arrays
  */

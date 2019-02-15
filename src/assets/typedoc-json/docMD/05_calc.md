@@ -63,8 +63,8 @@ For points and positions with no vertices, the normal is [0, 0, 0].
   * *scale:* The scale factor for the normal vector. (This is equivalent to the length of the normal vector.)  
 * **Returns:** The normal vector [x, y, z].  
 * **Examples:**  
-  * normal1 = calc.Normal (polygon1)  
-    If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
+  * normal1 = calc.Normal (polygon1, 1)  
+    If the input is non-planar, the output vector will be an average of all normals vector of the polygon triangles.
   
   
 ## ParamTToXyz  

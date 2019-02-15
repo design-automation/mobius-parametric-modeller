@@ -67,7 +67,7 @@
         padding-left: 8px;
         font-style: italic;
         font-weight: 550;
-        color: $function-text-color;
+        // color: $function-text-color;
         font-size: $fsize2;
         height: 18px;
         line-height: 18px;
@@ -160,12 +160,19 @@
     }
 }
 
-.tooltip{
+.tooltip-basic{
     display: block;
+    color: $basic-function-text-color;
+
     &.invalid{
         opacity: $disabled-opacity;
         pointer-events: none;
     }
+}
+
+.tooltip{
+    display: block;
+    color: $function-text-color;
 }
 
 // /* Tooltip text */

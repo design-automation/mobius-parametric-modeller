@@ -20,7 +20,18 @@ table {
   font-family: sans-serif;
   background-color: transparent;
   th.mat-header-cell:not(:first-of-type){
-    padding-left: 3px;
+    padding: 0px 5px;
+  }
+  th.mat-header-cell:not(:last-of-type){
+    border-right: 1px solid $color3;
+  }
+  th.mat-header-cell:first-of-type{
+    border-right: none;
+    width: 40px !important;
+    padding-left: 12px;
+  }
+  th:nth-child(2){
+    width: 55px !important;
   }
   tr.mat-header-row{
     background-color: $color5-5;
@@ -39,7 +50,18 @@ table {
       background-color: $color6;
       border-bottom: 1px solid $color3;
       &:not(:first-of-type){
-        padding-left: 3px;
+        padding: 0px 5px;
+        border-right: 1px solid $color3;
+      }
+      &:first-of-type{
+        width: 40px !important;
+        padding-left: 12px;
+      }
+      &:last-of-type{
+        border-right:none;
+      }
+      &:nth-child(2){
+        width: 55px !important;
       }
       // overflow: hidden;
       // text-overflow: ellipsis;
@@ -48,6 +70,7 @@ table {
     &:last-child{
       .mat-cell{
         border-bottom-color: transparent;
+        border-right:none;
       }
     }
   }
@@ -128,7 +151,7 @@ table {
   // contains everything
   .pane{
     margin-top: 20px;
-    height: calc(100% - 20px);
+    height: calc(100% - 31px);
     .mat-elevation-z1{
       display: flex;
       flex-flow: column nowrap;

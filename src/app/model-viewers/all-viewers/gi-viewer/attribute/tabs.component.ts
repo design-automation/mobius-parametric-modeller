@@ -30,7 +30,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit {
 
     topology: { tab: number, title: string }[] =
         [
-            { tab: 1, title: 'Vertex' },
+            { tab: 1, title: 'Vertices' },
             { tab: 2, title: 'Edges' },
             { tab: 3, title: 'Wires' },
             { tab: 4, title: 'Faces' }

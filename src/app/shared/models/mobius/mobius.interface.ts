@@ -6,5 +6,5 @@ export interface IMobius {
     flowchart: IFlowchart;
     last_updated: Date;
     version: number;
-    settings: {};
+    settings: any;
 }

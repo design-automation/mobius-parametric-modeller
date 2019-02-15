@@ -109,6 +109,9 @@ export class LoadFileComponent {
         });
         stream.subscribe(loadeddata => {
             this.dataService.file = loadeddata;
+            if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
+                window.localStorage.setItem('mpm_settings', loadeddata.settings);
+            }
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {
                 loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];

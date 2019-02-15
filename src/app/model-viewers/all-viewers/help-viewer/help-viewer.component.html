@@ -14,7 +14,7 @@
         <div class = 'body--container'>
             <div class = 'descr--container'>
                 <h5>Description:</h5>
-                <p>{{output.description}}</p>
+                <p *ngFor='let desc of output.description.split("~")'>{{desc}}</p>
             </div>
     
             <div class = 'param--container'>
@@ -61,6 +61,11 @@
     <ng-template #module_help>
         <div class = 'container'> 
             <p class='moduleDesc' *ngIf='Modules[activeModIndex]?.description'>{{Modules[activeModIndex].description}}</p> <br>
+            <!--
+            <ng-container *ngIf='Modules[activeModIndex]?.description'>
+                <p class='moduleDesc' *ngFor='let txt of Modules[activeModIndex].description.split("~")'>{{txt}}</p> <br>
+            </ng-container>
+            -->
             <ng-container *ngFor='let func of getFuncs()'>
                 <hr>
                 <h2><span>{{func.module}}</span>.{{func.name}}</h2>
@@ -68,7 +73,7 @@
                 <div class = 'body--container'>
                     <div class = 'descr--container'>
                         <h5>Description:</h5>
-                        <p>{{func.description}}</p>
+                        <p *ngFor='let txt of func.description.split("~")'>{{txt}}</p>
                     </div>
             
                     <div class = 'param--container'>

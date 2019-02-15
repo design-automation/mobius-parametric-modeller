@@ -5,6 +5,7 @@
     [class.printing]='data.print'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
     *ngIf= 'data.type != ProcedureTypes.Return && data.type != ProcedureTypes.Constant'>
     <div class='container--item' >
         <!-- Variable Assignment Template -->

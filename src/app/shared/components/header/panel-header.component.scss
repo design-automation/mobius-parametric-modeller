@@ -33,7 +33,7 @@
         z-index: 1;
     }
     .filename-container{
-        z-index: 3;
+        z-index: 5;
         width: calc(100% - 170px - 37px);//width of btn-container width of zoom fit in flowchart;
 
         .menu-btn{
@@ -57,7 +57,7 @@
         text-align: left;
         vertical-align: middle;
         line-height: $header-height - 5px;
-        z-index: 999999999;
+        z-index: 5;
 
         overflow: hidden;
         text-overflow: ellipsis;

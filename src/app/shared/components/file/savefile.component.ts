@@ -38,7 +38,7 @@ export class SaveFileComponent {
 
     async download() {
         const f = this.dataService.file;
-
+        f.settings = localStorage.getItem('mpm_settings');
         if (!f.flowchart.ordered) {
             FlowchartUtils.orderNodes(f.flowchart);
         }
@@ -117,10 +117,9 @@ export class SaveFileComponent {
 
         const fileString = circularJSON.stringify(savedfile, null, 4);
         let fname = savedfile.name.replace(/\ /g, '_');
-        if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length-4) !== '.mob') {
+        if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length - 4) !== '.mob') {
             fname = `${fname}.mob`;
         }
-        
         const blob = new Blob([fileString], {type: 'application/json'});
         DownloadUtils.downloadFile(fname, blob);
 

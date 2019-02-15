@@ -93,26 +93,22 @@ export abstract class NodeUtils {
     }
 
 
-    static rearrangeSelected(prodList: IProcedure[], tempList: IProcedure[], prods: IProcedure[]) {
+    static rearrangeProcedures(prodList: IProcedure[], tempList: IProcedure[], prods: IProcedure[]) {
         for (const pr of prods) {
-            if (!pr.selected) {
-                if (pr.children) { NodeUtils.rearrangeSelected(prodList, tempList, pr.children); }
-                continue;
-            }
             let i = 0;
             while (i < tempList.length) {
-                if (tempList[i] === pr) {
+                if (tempList[i].ID === pr.ID) {
                     prodList.push(pr);
                     tempList.splice(i, 1);
                     break;
                 }
                 i += 1;
             }
-            if (pr.children) { NodeUtils.rearrangeSelected(prodList, tempList, pr.children); }
+            if (pr.children) { NodeUtils.rearrangeProcedures(prodList, tempList, pr.children); }
         }
     }
 
-    static select_procedure(node: INode, procedure: IProcedure, ctrl: boolean) {
+    static select_procedure(node: INode, procedure: IProcedure, ctrl: boolean, shift: boolean) {
         if (!procedure) {
             return;
         }
@@ -124,22 +120,115 @@ export abstract class NodeUtils {
                     selected = true;
                     node.state.procedure.splice(selIndex, 1);
                     procedure.selected = false;
-                    break;
+                    return false;
                 }
                 selIndex += 1;
             }
             if (!selected) {
                 procedure.selected = true;
                 node.state.procedure.push(procedure);
-                const tempArray = node.state.procedure.splice(0, node.state.procedure.length);
-                NodeUtils.rearrangeSelected(node.state.procedure, tempArray, node.procedure);
             }
+        } else if (shift) {
+            // fromProd: the last selected procedure
+            let fromProd = node.state.procedure[node.state.procedure.length - 1];
+            // find the whole path to the fromProd from the base level
+            const fromTree = [fromProd];
+            while (fromProd.parent) {
+                fromProd = fromProd.parent;
+                fromTree.unshift(fromProd);
+            }
+            // toProd: the procedure that was shift + clicked on
+            let toProd = procedure;
+            // find the whole path to the toProd from the base level
+            const toTree = [procedure];
+            while (toProd.parent) {
+                toProd = toProd.parent;
+                toTree.unshift(toProd);
+            }
+
+            // removing the common parents in the fromProd-toProd path
+            // env would be the list of procedure containing the first different parents between fromProd and toProd
+            let env = node.procedure;
+            while (fromTree[0] === toTree[0]) {
+                env = fromTree[0].children;
+                fromTree.splice(0, 1);
+                toTree.splice(0, 1);
+            }
+
+            // find the indices of the first different parents of fromProd and toProd
+            const fromIndex = env.indexOf(fromTree[0]);
+            const toIndex = env.indexOf(toTree[0]);
+
+            // check the direction from fromProd to toProd
+            // reverse = false: fromProd is above toProd
+            // reverse = true : fromProd is below toProd
+            const reverse = fromIndex < toIndex ? false : true;
+
+            // add the procedures between fromProd and toProd that are inside the fromTree
+            while (fromTree.length > 1) {
+                fromProd = fromTree.pop();
+                const prodList = fromProd.parent.children;
+                if (!reverse) {
+                    // add procedure from the fromProcedure to the end, not inclusive of the fromProcedure
+                    // since it is already selected
+                    for (let i = prodList.indexOf(fromProd) + 1; i < prodList.length; i++) {
+                        prodList[i].selected = true;
+                        node.state.procedure.push(prodList[i]);
+                    }
+                } else {
+                    // add procedure from the fromProcedure to the beginning,
+                    // not inclusive of the fromProcedure since it is already selected.
+                    // stop adding procedure when at index 1,
+                    // procedure at index 0 is not added to the list since it is always a blank
+                    for (let i = prodList.indexOf(fromProd) - 1; i > 0; i--) {
+                        prodList[i].selected = true;
+                        node.state.procedure.push(prodList[i]);
+                    }
+                }
+            }
+
+            // add the procedure between the first different parents of the fromProd and toProd
+            if (!reverse) {
+                for (let i = fromIndex + 1; i < toIndex; i++) {
+                    env[i].selected = true;
+                    node.state.procedure.push(env[i]);
+                }
+            } else {
+                for (let i = fromIndex - 1; i > toIndex; i--) {
+                    env[i].selected = true;
+                    node.state.procedure.push(env[i]);
+                }
+            }
+
+            // add the procedures between fromProd and toProd that are inside the toTree
+            for (let ind = 1; ind < toTree.length; ind++) {
+                toProd = toTree[ind];
+                const prodList = toProd.parent.children;
+                if (!reverse) {
+
+                    // procedure at index 0 is not added to the list since it is always a blank
+                    for (let i = prodList.indexOf(toProd) - 1; i > 0; i--) {
+                        prodList[i].selected = true;
+                        node.state.procedure.push(prodList[i]);
+                    }
+                } else {
+                    for (let i = prodList.indexOf(toProd) + 1; i < prodList.length; i++) {
+                        prodList[i].selected = true;
+                        node.state.procedure.push(prodList[i]);
+                    }
+                }
+            }
+
+            // add the toProd itself
+            procedure.selected = true;
+            node.state.procedure.push(procedure);
+
         } else {
             const sel = procedure.selected;
             for (const prod of node.state.procedure) {
                 prod.selected = false;
             }
-            if (sel && node.state.procedure.length === 1 && node.state.procedure[0] === procedure) {
+            if (sel && node.state.procedure.length === 1 && node.state.procedure[node.state.procedure.length - 1] === procedure) {
                 node.state.procedure = [];
             } else {
                 node.state.procedure = [procedure];
@@ -151,8 +240,8 @@ export abstract class NodeUtils {
     static insert_procedure(node: INode, prod: IProcedure) {
         if (prod.type === ProcedureTypes.Constant) {
             if (node.type !== 'start') { return; }
-            if (node.state.procedure[0]) {
-                if (node.state.procedure[0].type === ProcedureTypes.Constant) {
+            if (node.state.procedure[node.state.procedure.length - 1]) {
+                if (node.state.procedure[node.state.procedure.length - 1].type === ProcedureTypes.Constant) {
                     for (const index in node.procedure) {
                         if (node.procedure[index].selected) {
                             node.procedure.splice(parseInt(index, 10) + 1, 0, prod);
@@ -177,16 +266,18 @@ export abstract class NodeUtils {
             }
             return;
         }
-        if (node.state.procedure[0] && node.state.procedure[0].type !== ProcedureTypes.Constant) {
+        const lastNode = node.state.procedure[node.state.procedure.length - 1];
+        if (lastNode &&
+            lastNode.type !== ProcedureTypes.Constant) {
             let list: IProcedure[];
-            if (node.state.procedure[0].parent) {
-                prod.parent = node.state.procedure[0].parent;
+            if (lastNode.parent) {
+                prod.parent = lastNode.parent;
                 list = prod.parent.children;
             } else {
                 list = node.procedure;
             }
             for (const index in list) {
-                if (list[index].selected) {
+                if (list[index].ID === lastNode.ID) {
                     list.splice(parseInt(index, 10) + 1, 0, prod);
                     break;
                 }
@@ -328,9 +419,9 @@ export abstract class NodeUtils {
         }
         // select the procedure
         if (prod.children) {
-            NodeUtils.select_procedure(node, prod.children[0], false);
+            NodeUtils.select_procedure(node, prod.children[0], false, false);
         } else {
-            NodeUtils.select_procedure(node, prod, false);
+            NodeUtils.select_procedure(node, prod, false, false);
         }
     }
 
@@ -359,7 +450,7 @@ export abstract class NodeUtils {
         const newProd = NodeUtils.updateID(circularJSON.parse(circularJSON.stringify(prod)));
         newProd.parent = undefined;
         NodeUtils.insert_procedure(node, newProd);
-        NodeUtils.select_procedure(node, newProd, false);
+        NodeUtils.select_procedure(node, newProd, false, false);
     }
 
 }

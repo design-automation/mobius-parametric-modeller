@@ -74,7 +74,7 @@ export const SettingsColorMap = [{
     label: 'Face Back Selected',
     setting: 'face_b_s'
 }, {
-    label: 'Vertex Selected',
+    label: 'Vertices Selected',
     setting: 'vertex_s'
 }];
 

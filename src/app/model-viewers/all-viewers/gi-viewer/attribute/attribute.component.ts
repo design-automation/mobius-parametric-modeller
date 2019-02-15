@@ -22,7 +22,7 @@ export class AttributeComponent implements OnChanges {
   tabs: { type: number, title: string }[] =
     [
       { type: EEntType.POSI, title: 'Positions' },
-      { type: EEntType.VERT, title: 'Vertex' },
+      { type: EEntType.VERT, title: 'Vertices' },
       { type: EEntType.EDGE, title: 'Edges' },
       { type: EEntType.WIRE, title: 'Wires' },
       { type: EEntType.FACE, title: 'Faces' },

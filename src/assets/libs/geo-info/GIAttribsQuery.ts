@@ -51,6 +51,28 @@ export class GIAttribsQuery {
         return list_value[value_index];
     }
     /**
+     * Get attrib data type
+     * @param ent_type
+     * @param name
+     */
+    public getAttribDataType(ent_type: EEntType, name: string): EAttribDataTypeStrs {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        return attribs.get(name).getDataType();
+    }
+    /**
+     * Get attrib data size
+     * @param ent_type
+     * @param name
+     */
+    public getAttribDataSize(ent_type: EEntType, name: string): number {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        return attribs.get(name).getDataSize();
+    }
+    /**
      * Get an entity attrib value
      * @param ent_type
      * @param name

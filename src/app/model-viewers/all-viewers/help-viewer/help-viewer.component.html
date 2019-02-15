@@ -14,7 +14,7 @@
         <div class = 'body--container'>
             <div class = 'descr--container'>
                 <h5>Description:</h5>
-                <p>{{output.description}}</p>
+                <p *ngFor='let desc of output.description.split("~")'>{{desc}}</p>
             </div>
     
             <div class = 'param--container'>

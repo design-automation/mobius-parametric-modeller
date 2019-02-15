@@ -106,6 +106,9 @@ for (const mod of doc.children) {
         if (func['signatures'][0].comment) {
             const cmmt = func['signatures'][0].comment;
             fn['description'] = cmmt.shortText;
+            if (cmmt.text) {
+                fn['description'] = fn['description'] + cmmt.text;
+            }
             if (cmmt.tags) {
                 for (const fnTag of cmmt.tags) {
                     if (fnTag.tag === 'summary') { fn['summary'] = fnTag.text;

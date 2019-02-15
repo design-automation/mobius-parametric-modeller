@@ -57,7 +57,16 @@ export class ToolsetComponent implements OnInit {
                 if (fn.name[0] === '_') { continue; }
                 if (ModuleDocList[mod.module] && ModuleDocList[mod.module][fn.name]) {
                     fn['doc'] = ModuleDocList[mod.module][fn.name];
-                    let fnDocHtml = `<p class="funcDesc">${fn.doc.summary || fn.doc.description}</p>`;
+                    let fnDocHtml;
+                    if (fn.doc.summary) {
+                        fnDocHtml = `<p class="funcDesc">${fn.doc.summary}</p>`;
+                    } else {
+                        const splittedDesc = fn.doc.description.split('~');
+                        fnDocHtml = ``;
+                        for (const txt of splittedDesc) {
+                            fnDocHtml += `<p class="funcDesc">${txt}</p>`;
+                        }
+                    }
                     if (fn.doc.parameters && fn.doc.parameters.length > 0) {
                         fnDocHtml += `<p><span>Parameters: </span></p>`;
                         for (const param of fn.doc.parameters) {

@@ -133,6 +133,9 @@ export class LoadUrlComponent {
             return;
         }
         this.dataService.file = loadeddata;
+        if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
+            window.localStorage.setItem('mpm_settings', loadeddata.settings);
+        }
         this.dataService.newFlowchart = true;
         if ((nodeID || nodeID === 0) && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
             loadeddata.flowchart.meta.selected_nodes = [nodeID];

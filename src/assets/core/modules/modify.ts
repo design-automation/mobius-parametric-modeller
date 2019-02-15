@@ -301,14 +301,22 @@ function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset:
     }
 }
 /**
- * Reverses direction of entities.
+ * Shifts the order of the edges in a closed wire.
+ * ~
+ * In a closed wire, any edge (or vertex) could be the first edge of the ring.
+ * In some cases, it is useful to have an edge in a particular position in a ring.
+ * This function allows the edges to be shifted either forwards or backwards around the ring.
+ * The order of the edges in the ring will remain unchanged. 
+ *
  * @param __model__
  * @param entities Wire, face, polyline, polygon.
  * @returns void
- * @example modify.Reverse(face1)
- * @example_info Flips face1 and reverses its normal.
- * @example modify.Reverse(polyline1)
- * @example_info Reverses the order of vertices to reverse the direction of the polyline.
+ * @example modify.Shift(face1, 1)
+ * @example_info Shifts the edges in the face wire, so that the every edge moves up by one position
+ * in the ring. The last edge will become the first edge .
+ * @example modify.Shift(polyline1, -1)
+ * @example_info Shifts the edges in the closed polyline wire, so that every edge moves back by one position
+ * in the ring. The first edge will become the last edge.
  */
 export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): void {
     // --- Error Check ---

@@ -10,10 +10,10 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, isFace, idsBreak, getArrDepth } from '@libs/geo-info/id';
+import { isPline, isWire, isEdge, isPgon, isFace, idsBreak, getArrDepth, isVert, isPosi, isPoint } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item';
-import { vecSum, vecDiv, vecAdd, vecSub, vecNorm, newellNorm, vecMult } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
 import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
@@ -198,6 +198,22 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     return _centroid(__model__, ents_arr);
 }
 // ================================================================================================
+function _vertNormal(__model__: GIModel, index: number) {
+    let norm_vec: Txyz;
+    const edges_i: number[] = __model__.geom.query.navVertToEdge(index);
+    if (edges_i.length === 1) {
+        const posis0_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edges_i[0]);
+        const posis1_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edges_i[1]);
+        const p_mid: Txyz = __model__.attribs.query.getPosiCoords(posis0_i[1]); // same as posis1_i[0]
+        const p_a: Txyz = __model__.attribs.query.getPosiCoords(posis0_i[0]);
+        const p_b: Txyz = __model__.attribs.query.getPosiCoords(posis1_i[1]);
+        norm_vec = vecCross( vecFromTo(p_mid, p_a), vecFromTo(p_mid, p_b), true);
+        if (vecLen(norm_vec) > 0) { return norm_vec; }
+    }
+    const wire_i: number = __model__.geom.query.navEdgeToWire(edges_i[0]);
+    norm_vec = __model__.geom.query.getWireNormal(wire_i);
+    return norm_vec;
+}
 export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], scale: number): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
@@ -214,6 +230,24 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         } else if (isWire(ent_type)) {
             const norm_vec: Txyz = __model__.geom.query.getWireNormal(index);
             return vecMult(norm_vec, scale);
+        } else if (isEdge(ent_type)) {
+            const verts_i: number[] = __model__.geom.query.navEdgeToVert(index);
+            const norm_vecs: Txyz[] = verts_i.map( vert_i => _vertNormal(__model__, vert_i) );
+            const norm_vec: Txyz = vecDiv( vecSum(norm_vecs), norm_vecs.length);
+            return vecMult(norm_vec, scale);
+        } else if (isVert(ent_type)) {
+            const norm_vec: Txyz = _vertNormal(__model__, index);
+            return vecMult(norm_vec, scale);
+        } else if (isPosi(ent_type)) {
+            const verts_i: number[] = __model__.geom.query.navPosiToVert(index);
+            if (verts_i.length > 0) {
+                const norm_vecs: Txyz[] = verts_i.map( vert_i => _vertNormal(__model__, vert_i) );
+                const norm_vec: Txyz = vecDiv( vecSum(norm_vecs), norm_vecs.length);
+                return vecMult(norm_vec, scale);
+            }
+            return [0, 0, 0];
+        }  else if (isPoint(ent_type)) {
+            return [0, 0, 0];
         }
 
         // if (isPgon(ent_type) || isFace(ent_type)) {
@@ -253,7 +287,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         // }
 
     } else {
-        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr, 1)) as Txyz[];
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _normal(__model__, ent_arr, scale)) as Txyz[];
     }
 }
 // function _newell_normal(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
@@ -266,18 +300,30 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 //     return newellNorm(unique_xyzs);
 // }
 /**
- * Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..
+ * Calculates the normal vector of an entity or list of entities.
+ * ~
+ * For polygons, faces, and face wires the normal is calculated by taking the average of all the normals of the face triangles.
+ * For polylines and polyline wires, the normal is calculated by triangulating the positions, and then 
+ * taking the average of all the normals of the triangles.
+ * For edges, the normal is calculated by takingthe avery of teh normals of the two vertices.
+ * For vertices, the normal is calculated by creating a triangle out of the two adjacent edges,
+ * and then calculating the normal of the triangle.
+ * (If there is only one edge, or if the two adjacent edges are colinear, the the normal of the wire is returned.)
+ * For positions, the normal is calculated by taking the average of the normals of all the vertices linked to the position.
+ * For points and positions with no vertices, the normal is [0, 0, 0].
+ *
  * @param __model__
- * @param entities List of positions, a polygon, a face, a closed polyline, a closed wire, or a plane.
+ * @param entities An entity, or list of entities.
+ * @param scale The scale factor for the normal vector. (This is equivalent to the length of the normal vector.)
  * @returns The normal vector [x, y, z].
- * @example normal1 = calc.Normal (polygon1)
- * @example_info If the input is non-planar, the output vector will be an average of all normal vector of the triangulated surfaces.
+ * @example normal1 = calc.Normal (polygon1, 1)
+ * @example_info If the input is non-planar, the output vector will be an average of all normals vector of the polygon triangles.
  */
 export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): Txyz|Txyz[] {
     const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const fn_name = 'calc.Normal';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null);
     // --- Error Check ---
     return _normal(__model__, ents_arr, scale);
 }

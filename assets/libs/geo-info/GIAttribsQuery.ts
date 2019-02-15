@@ -2,6 +2,7 @@ import { GIModel } from './GIModel';
 import { TAttribDataTypes, IAttribsMaps, IQueryComponent,
     Txyz, EAttribNames, EEntType, EQueryOperatorTypes, ISortComponent, ESort, EAttribDataTypeStrs, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
+import { string } from '@assets/core/modules/_mathjs';
 
 /**
  * Class for attributes.
@@ -27,10 +28,59 @@ export class GIAttribsQuery {
         return attrib.has(name);
     }
     /**
+     * Get attrib data type. Also works for MOD attribs.
+     *
+     * @param ent_type
+     * @param name
+     */
+    public getAttribDataType(ent_type: EEntType, name: string): EAttribDataTypeStrs {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (ent_type === EEntType.MOD) {
+            const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
+            const value: TAttribDataTypes = mod_attribs.get(name);
+            let first_value: number|string;
+            if (Array.isArray(value)) {
+                first_value = value[0];
+            } else {
+                first_value = value;
+            }
+            if (typeof first_value === 'string') { return EAttribDataTypeStrs.STRING; }
+            return EAttribDataTypeStrs.FLOAT;
+        } else {
+            const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
+            return ent_attribs.get(name).getDataType();
+        }
+    }
+    /**
+     * Get attrib data size. Also works for MOD attribs.
+     *
+     * @param ent_type
+     * @param name
+     */
+    public getAttribDataSize(ent_type: EEntType, name: string): number {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (ent_type === EEntType.MOD) {
+            const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
+            const value: TAttribDataTypes = mod_attribs.get(name);
+            if (Array.isArray(value)) {
+                return (value as number[]|string[]).length;
+            } else {
+                return 1;
+            }
+        } else {
+            const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
+            return ent_attribs.get(name).getDataSize();
+        }
+    }
+    /**
      * Get a model attrib value
      * @param name
      */
-    public getModelAttribValue(name: string): TAttribDataTypes|TAttribDataTypes[] {
+    public getModelAttribValue(name: string): TAttribDataTypes {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         if (attrib.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
@@ -41,7 +91,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getModelAttribIndexedValue(name: string, value_index: number): number|string|number[]|string[] {
+    public getModelAttribIndexedValue(name: string, value_index: number): number|string {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         const list_value: TAttribDataTypes = attrib.get(name);
@@ -66,7 +116,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribIndexedValue(ent_type: EEntType, name: string, ents_i: number, value_index: number): number|string|number[]|string[] {
+    public getAttribIndexedValue(ent_type: EEntType, name: string, ents_i: number, value_index: number): number|string {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);

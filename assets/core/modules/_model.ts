@@ -57,25 +57,15 @@ export function __stringify__(__model__: GIModel): string {
     return JSON.stringify(__model__.getData());
 }
 //  ===============================================================================================
-/**
- * Sets an attribute value in the model.
- * @param __model__
- */
-export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
-                              attrib_name: string, attrib_value: TAttribDataTypes, attrib_index?: number): void {
-    // --- Error Check ---
-    const fn_name = entities + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']';
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
-    }
-    checkAttribNameValue(fn_name , attrib_name, attrib_value, attrib_index);
-    // --- Error Check ---
+function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
+        attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], attrib_index?: number): void {
+    // check the ents_arr
     if (ents_arr === null) {
+        const model_attrib_value: TAttribDataTypes = attrib_values as TAttribDataTypes;
         if (attrib_index !== null && attrib_index !== undefined) {
-            __model__.attribs.add.setModelAttribIndexedValue(attrib_name, attrib_index, attrib_value as number|string);
+            __model__.attribs.add.setModelAttribIndexedValue(attrib_name, attrib_index, model_attrib_value as number|string);
         } else {
-            __model__.attribs.add.setModelAttribValue(attrib_name, attrib_value);
+            __model__.attribs.add.setModelAttribValue(attrib_name, model_attrib_value);
         }
         return;
     } else if (ents_arr.length === 0) {
@@ -83,6 +73,42 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
     } else if (getArrDepth(ents_arr) === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
     }
+    // check attrib_values
+    const attrib_values_depth: number = getArrDepth(attrib_values);
+    if (attrib_values_depth === 2) {
+        // attrib values is a list of lists
+        const attrib_values_arrs: TAttribDataTypes[] = attrib_values as TAttribDataTypes[];
+        if (ents_arr.length !== attrib_values_arrs.length) {
+            throw new Error('If multiple values are given, then the number of values must be equal to the number of entities.');
+        }
+        for (let i = 0; i < ents_arr.length; i++) {
+            _setAttrib(__model__, ents_arr[i] as TEntTypeIdx, attrib_name, attrib_values_arrs[i], attrib_index);
+        }
+        return;
+    } else if (attrib_values_depth === 1) {
+        // check if ents_arr.length equals attrib_values.length
+        // if true, then maybe we are trying to set each ent to each value
+        const attrib_values_arr: number[]|string[] = attrib_values as number[]|string[];
+        if (ents_arr.length === attrib_values_arr.length) {
+            const first_ent_type: number = ents_arr[0][0];
+            if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
+                if (__model__.attribs.query.getAttribDataSize(first_ent_type, attrib_name) === 1) {
+                    // we can assume that we are trying to set each ent to each value
+                    // we could also check that all ents are of same type but that seems unecessary
+                    for (let i = 0; i < ents_arr.length; i++) {
+                        _setAttrib(__model__, ents_arr[i] as TEntTypeIdx, attrib_name, attrib_values_arr[i], attrib_index);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+    // set the attribute value
+    const attrib_value: TAttribDataTypes = attrib_values as TAttribDataTypes;
+    // --- Error Check ---
+    const fn_name = ents_arr + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']';
+    checkAttribNameValue(fn_name , attrib_name, attrib_value, attrib_index);
+    // --- Error Check ---
     for (const ent_arr of ents_arr) {
         const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
         if (attrib_index !== null && attrib_index !== undefined) {
@@ -91,6 +117,23 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
             __model__.attribs.add.setAttribValue(ent_type, ent_i, attrib_name, attrib_value);
         }
     }
+    console.log(__model__);
+}
+/**
+ * Sets an attribute value in the model.
+ * @param __model__
+ */
+export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
+                              attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], attrib_index?: number): void {
+    // --- Error Check ---
+    const fn_name = entities + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']';
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // checkAttribNameValue(fn_name , attrib_name, attrib_value, attrib_index);
+    // --- Error Check ---
+    _setAttrib(__model__, ents_arr, attrib_name, attrib_values, attrib_index);
 }
 //  ===============================================================================================
 function _getAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],

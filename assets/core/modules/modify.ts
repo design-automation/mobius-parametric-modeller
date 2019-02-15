@@ -9,44 +9,84 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, EAttribPromote} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
-import { vecAdd } from '@libs/geom/vectors';
+import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 
 // ================================================================================================
 /**
- * Moves entities by vector.
+ * Moves entities. The directio and distance if movement is specified as a vector.
+ * ~
+ * If only one vector is given, then all entities are moved by the same vector.
+ * If a list of vectors is given, the each entity will be moved by a different vector.
+ * In this case, the number of vectors should be equal to the number of entities.
+ * ~
+ * If a position is shared between entites that are being moved by different vectors,
+ * then the position will be moved by the average of the vectors.
+ *
  * @param __model__
- * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection.
- * @param vector List of three numbers.
+ * @param entities An entity or list of entities.
+ * @param vector A vector or a list of vectors.
  * @returns void
- * @example modify.Move(position1, [1,1,1])
- * @example_info Moves position1 by [1,1,1].
+ * @example modify.Move(pline1, [1,2,3])
+ * @example_info Moves pline1 by [1,2,3].
+ * @example modify.Move([pos1, pos2, pos3], [[0,0,1], [0,0,1], [0,1,0]] )
+ * @example_info Moves pos1 by [0,0,1], pos2 by [0,0,1], and pos3 by [0,1,0].
+ * @example modify.Move([pgon1, pgon2], [1,2,3] )
+ * @example_info Moves both pgon1 and pgon2 by [1,2,3].
  */
-export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): void {
+export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz[]): void {
     // --- Error Check ---
     const fn_name = 'modify.Move';
     let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
                              ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'vector', vector, ['isVector']);
+    checkCommTypes(fn_name, 'vectors', vectors, ['isVector', 'isVectorList']);
     // --- Error Check ---
     if (!Array.isArray(ents_arr[0])) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
     }
-    const posis_i: number[] = [];
-    for (const ents of ents_arr) {
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
+    if (getArrDepth(vectors) === 1) {
+        const posis_i: number[] = [];
+        const vec: Txyz = vectors as Txyz;
+        for (const ents of ents_arr) {
+            __model__.geom.query.navAnyToPosi(ents[0], ents[1]).forEach(posi_i => posis_i.push(posi_i));
+        }
+        const unique_posis_i: number[] = Array.from(new Set(posis_i));
+        for (const unique_posi_i of unique_posis_i) {
+            const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+            const new_xyz: Txyz = vecAdd(old_xyz, vec);
+            __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+        }
+    } else {
+        if (ents_arr.length !== vectors.length) {
+            throw new Error('If multiple vectors are given, then the number of vectors must be equal to the number of entities.');
+        }
+        const posis_i: number[] = [];
+        const vecs_map: Map<number, Txyz[]> = new Map();
+        for (let i = 0; i < ents_arr.length; i++) {
+            const [ent_type, index]: [EEntType, number] = ents_arr[i] as TEntTypeIdx;
+            const vec: Txyz = vectors[i] as Txyz;
+            const ent_posis_i: number [] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            for (const ent_posi_i of ent_posis_i) {
+                posis_i.push(ent_posi_i);
+                if (! vecs_map.has(ent_posi_i)) {
+                    vecs_map.set(ent_posi_i, []);
+                }
+                vecs_map.get(ent_posi_i).push(vec);
+            }
+        }
+        for (const posi_i of posis_i) {
+            const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+            const vecs: Txyz[] = vecs_map.get(posi_i);
+            const vec: Txyz = vecDiv( vecSum( vecs ), vecs.length);
+            const new_xyz: Txyz = vecAdd(old_xyz, vec);
+            __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
+        }
     }
-    const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    for (const unique_posi_i of unique_posis_i) {
-        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
-        const new_xyz: Txyz = vecAdd(old_xyz, vector);
-        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
-    }
-    return;
+    return; // specifies that nothing is returned
 }
 // ================================================================================================
 /**
@@ -93,7 +133,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
-    return;
+    return; // specifies that nothing is returned
 }
 // ================================================================================================
 /**
@@ -139,7 +179,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
-    return;
+    return; // specifies that nothing is returned
 }
 // ================================================================================================
 /**
@@ -261,14 +301,22 @@ function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset:
     }
 }
 /**
- * Reverses direction of entities.
+ * Shifts the order of the edges in a closed wire.
+ * ~
+ * In a closed wire, any edge (or vertex) could be the first edge of the ring.
+ * In some cases, it is useful to have an edge in a particular position in a ring.
+ * This function allows the edges to be shifted either forwards or backwards around the ring.
+ * The order of the edges in the ring will remain unchanged. 
+ *
  * @param __model__
  * @param entities Wire, face, polyline, polygon.
  * @returns void
- * @example modify.Reverse(face1)
- * @example_info Flips face1 and reverses its normal.
- * @example modify.Reverse(polyline1)
- * @example_info Reverses the order of vertices to reverse the direction of the polyline.
+ * @example modify.Shift(face1, 1)
+ * @example_info Shifts the edges in the face wire, so that the every edge moves up by one position
+ * in the ring. The last edge will become the first edge .
+ * @example modify.Shift(polyline1, -1)
+ * @example_info Shifts the edges in the closed polyline wire, so that every edge moves back by one position
+ * in the ring. The first edge will become the last edge.
  */
 export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): void {
     // --- Error Check ---
@@ -309,41 +357,138 @@ export function Close(__model__: GIModel, lines: TId|TId[]): void {
     _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
-// Promote modelling operation
+// AttribPush modelling operation
 export enum _EPromoteMethod {
-    MEAN =  'mean',
-    MIN  =  'min',
-    MAX = 'max',
-    NONE = 'none'
+    FIRST = 'first',
+    LAST = 'last',
+    AVERAGE = 'average',
+    MEDIAN = 'median',
+    SUM = 'sum',
+    MIN = 'min',
+    MAX = 'max'
 }
 // Promote modelling operation
-export enum _EPromoteAttribTypes {
-    POSIS =  'positions',
-    VERTS  =  'vertices',
-    EDGES = 'edges',
-    WIRES = 'wires',
-    FACES = 'faces',
-    POINTS = 'points',
-    PLINES = 'plines',
-    PGONS = 'pgons',
-    COLLS = 'collections'
+export enum _EPromoteTarget {
+    POSI = 'positions',
+    VERT = 'vertices',
+    EDGE = 'edges',
+    WIRE = 'wires',
+    FACE = 'faces',
+    POINT = 'points',
+    PLINE = 'plines',
+    PGON = 'pgons',
+    COLL = 'collections',
+    MOD = 'model'
+}
+function _convertPromoteMethod(selection: _EPromoteMethod): EAttribPromote {
+    switch (selection) {
+        case _EPromoteMethod.AVERAGE:
+            return EAttribPromote.AVERAGE;
+        case _EPromoteMethod.MEDIAN:
+            return EAttribPromote.MEDIAN;
+        case _EPromoteMethod.SUM:
+            return EAttribPromote.SUM;
+        case _EPromoteMethod.MIN:
+            return EAttribPromote.MIN;
+        case _EPromoteMethod.MAX:
+            return EAttribPromote.MAX;
+        case _EPromoteMethod.FIRST:
+            return EAttribPromote.FIRST;
+        case _EPromoteMethod.LAST:
+            return EAttribPromote.LAST;
+        default:
+            break;
+    }
+}
+function _convertPromoteTarget(selection: _EPromoteTarget): EEntType {
+    switch (selection) {
+        case _EPromoteTarget.POSI:
+            return EEntType.POSI;
+        case _EPromoteTarget.VERT:
+            return EEntType.VERT;
+        case _EPromoteTarget.EDGE:
+            return EEntType.EDGE;
+        case _EPromoteTarget.WIRE:
+            return EEntType.WIRE;
+        case _EPromoteTarget.FACE:
+            return EEntType.FACE;
+        case _EPromoteTarget.POINT:
+            return EEntType.POINT;
+        case _EPromoteTarget.PLINE:
+            return EEntType.PLINE;
+        case _EPromoteTarget.PGON:
+            return EEntType.PGON;
+        case _EPromoteTarget.COLL:
+            return EEntType.COLL;
+        case _EPromoteTarget.MOD:
+            return EEntType.MOD;
+        default:
+            break;
+    }
 }
 /**
- * Promotes or demotes an attribute from one geometry level to another.
+ * Pushes existing attribute values onto other entities.
+ * Attribute values can be promoted up the hierarchy, demoted down the hierarchy, or transferred across the hierarchy.
+ * ~
+ * In certain cases, when attributes are pushed, they may be aggregated. For example, if you are pushing attributes
+ * from vertices to polygons, then there will be multiple vertex attributes that can be combined in
+ * different ways.
+ * The 'method' specifies how the attributes should be aggregated. Note that if no aggregation is required
+ * then the aggregation method is ignored.
+ * ~
+ * The aggregation methods consist of numerical functions such as average, median, sum, max, and min. These will
+ * only work if the attribute values are numbers or lists of numbers. If the attribute values are string, then
+ * the numerical functions are ignored.
+ * ~
+ * If the attribute values are lists of numbers, then these aggregation methods work on the individual items in the list.
+ * For example, lets say you have an attribute consisting of normal vectors on vertices. If you push these attributes
+ * down to the positions, then aggregation may be required, since multiple vertices can share the same position.
+ * In this case, if you choose the `average` aggregation method, then resulting vectors on the positions will be the
+ * average of vertex vectors.
+ *
  * @param __model__
- * @param attrib_name Attribute name to be promoted or demoted.
- * @param from Enum; Positions, vertices, edges, wires, faces or collections.
- * @param to Enum; Positions, vertices, edges, wires, faces or collections.
- * @param method Enum; Maximum, minimum, average, mode, median, sum, sum of squares, root mean square, first match or last match.
+ * @param entities The entities that currently contain the attribute values.
+ * @param attrib_name The name of the attribute to be promoted, demoted, or transferred.
+ * @param to_level Enum; The level to which to promote, demote, or transfer the attribute values.
+ * @param method Enum; The method to use when attribute values need to be aggregated.
  * @returns void
- * @example promote1 = modify.Promote (colour, positions, faces, sum)
+ * @example promote1 = modify.PushAttribs([pgon1, pgon2], 'area', collections, sum)
+ * @example_info For the two polygons (pgon1 and pgon2), it gets the attribute values from the attribute called `area`,
+ * and pushes them up to the collection level. The `sum` method specifies that the two areas should be added up.
+ * Note that in order to create an attribute at the collection level, the two polygons should be part of a
+ * collection. If they are not part of the collection, then no attribute values will be push.
  */
-export function _Promote(__model__: GIModel, attrib_name: string,
-    from: _EPromoteAttribTypes, to: _EPromoteAttribTypes, method: _EPromoteMethod): void {
+export function PushAttribs(__model__: GIModel, entities: TId|TId[], attrib_name: string,
+        to_level: _EPromoteTarget, method: _EPromoteMethod): void {
     // --- Error Check ---
-    // checkCommTypes('attrib.Promote', 'attrib_name', attrib_name, ['isString']);
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (entities !== null) {
+        ents_arr = checkIDs('modify.Attribute', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        ents_arr = null;
+    }
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    let from_ent_type: EEntType;
+    const indices: number[] = [];
+    if (ents_arr !== null) {
+        const ents_arrs: TEntTypeIdx[] = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
+        from_ent_type = ents_arrs[0][0];
+        for (const [ent_type, index] of ents_arrs) {
+            if (ent_type !== from_ent_type) {
+                throw new Error('All entities must be of the same type.');
+            }
+            indices.push(index);
+        }
+    } else {
+        from_ent_type = EEntType.MOD;
+    }
+    const to_ent_type: EEntType = _convertPromoteTarget(to_level);
+    const promote_method: EAttribPromote = _convertPromoteMethod(method);
+    if (from_ent_type === to_ent_type) {
+        __model__.attribs.add.transferAttribValues(from_ent_type, attrib_name, indices, promote_method);
+    } else {
+        __model__.attribs.add.promoteAttribValues(from_ent_type, attrib_name, indices, to_ent_type, promote_method);
+    }
 }
 // ================================================================================================
 /**

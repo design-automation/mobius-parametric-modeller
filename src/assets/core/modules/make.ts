@@ -615,19 +615,30 @@ function _loftRibs(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: numbe
     }
     return rib_plines_i.map( pline_i => [EEntType.PLINE, pline_i]) as TEntTypeIdx[];
 }
-function _loft(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: number, method: _ELoftMethod): TEntTypeIdx[] {
-    switch (method) {
-        case _ELoftMethod.OPEN_QUADS:
-        case _ELoftMethod.CLOSED_QUADS:
-            return _loftQuads(__model__, ents_arr, divisions, method);
-        case _ELoftMethod.OPEN_STRINGERS:
-        case _ELoftMethod.CLOSED_STRINGERS:
-            return _loftStringers(__model__, ents_arr, divisions, method);
-        case _ELoftMethod.OPEN_RIBS:
-        case _ELoftMethod.CLOSED_RIBS:
-            return _loftRibs(__model__, ents_arr, divisions, method);
-        default:
-            break;
+function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], divisions: number, method: _ELoftMethod): TEntTypeIdx[] {
+    const depth: number = getArrDepth(ents_arrs);
+    if (depth === 2) {
+        const ents_arr: TEntTypeIdx[] = ents_arrs as TEntTypeIdx[];
+        switch (method) {
+            case _ELoftMethod.OPEN_QUADS:
+            case _ELoftMethod.CLOSED_QUADS:
+                return _loftQuads(__model__, ents_arr, divisions, method);
+            case _ELoftMethod.OPEN_STRINGERS:
+            case _ELoftMethod.CLOSED_STRINGERS:
+                return _loftStringers(__model__, ents_arr, divisions, method);
+            case _ELoftMethod.OPEN_RIBS:
+            case _ELoftMethod.CLOSED_RIBS:
+                return _loftRibs(__model__, ents_arr, divisions, method);
+            default:
+                break;
+        }
+    } else if (depth === 3) {
+        const all_loft_ents: TEntTypeIdx[] = [];
+        for (const ents_arr of ents_arrs  as TEntTypeIdx[][]) {
+            const loft_ents: TEntTypeIdx[] = _loft(__model__, ents_arr, divisions, method);
+            loft_ents.forEach( loft_ent => all_loft_ents.push(loft_ent) );
+        }
+        return all_loft_ents;
     }
 }
 /**
@@ -638,16 +649,20 @@ function _loft(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: number, m
  * The 'loft_stringers' and 'loft_ribs' methods will generate polylines.
  *
  * @param __model__
- * @param entities Entities to loft between.
+ * @param entities List of entities, or list of lists of entities.
  * @param method Enum, if 'closed', then close the loft back to the first entity in the list.
  * @returns List of new polygons or polylines resulting from the loft.
- * @example surface1 = make.Loft([polyline1,polyline2,polyline3], 1, 'closed_quads')
- * @example_info Creates a list of polygons lofting between polyline1, polyline2, polyline3, and polyline1.
+ * @example quads = make.Loft([polyline1,polyline2,polyline3], 1, 'open_quads')
+ * @example_info Creates quad polygons lofting between polyline1, polyline2, polyline3.
+ * @example quads = make.Loft([polyline1,polyline2,polyline3], 1, 'closed_quads')
+ * @example_info Creates quad polygons lofting between polyline1, polyline2, polyline3, and back to polyline1.
+ * @example quads = make.Loft([ [polyline1,polyline2], [polyline3,polyline4] ] , 1, 'open_quads')
+ * @example_info Creates quad polygons lofting first between polyline1 and polyline2, and then between polyline3 and polyline4.
  */
-export function Loft(__model__: GIModel, entities: TId[], divisions: number, method: _ELoftMethod): TId[] {
+export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: number, method: _ELoftMethod): TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Loft', 'entities', entities,
-        ['isIDList'], ['EDGE', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[];
+        ['isIDList', 'isIDList_list'], ['EDGE', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _loft(__model__, ents_arr, divisions, method);
     return idsMake(new_ents_arr) as TId[];

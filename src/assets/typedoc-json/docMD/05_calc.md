@@ -47,10 +47,20 @@ TODO: allow for a list of surfaces
   
   
 ## Normal  
-* **Description:** Calculates the normal of a list of positions, a polygon, a face, a closed polyline, a closed wire, or a plane..  
+* **Description:** Calculates the normal vector of an entity or list of entities.
+~
+For polygons, faces, and face wires the normal is calculated by taking the average of all the normals of the face triangles.
+For polylines and polyline wires, the normal is calculated by triangulating the positions, and then
+taking the average of all the normals of the triangles.
+For edges, the normal is calculated by takingthe avery of teh normals of the two vertices.
+For vertices, the normal is calculated by creating a triangle out of the two adjacent edges,
+and then calculating the normal of the triangle.
+(If there is only one edge, or if the two adjacent edges are colinear, the the normal of the wire is returned.)
+For positions, the normal is calculated by taking the average of the normals of all the vertices linked to the position.
+For points and positions with no vertices, the normal is [0, 0, 0].  
 * **Parameters:**  
-  * *entities:* List of positions, a polygon, a face, a closed polyline, a closed wire, or a plane.  
-  * *scale:* undefined  
+  * *entities:* An entity, or list of entities.  
+  * *scale:* The scale factor for the normal vector. (This is equivalent to the length of the normal vector.)  
 * **Returns:** The normal vector [x, y, z].  
 * **Examples:**  
   * normal1 = calc.Normal (polygon1)  

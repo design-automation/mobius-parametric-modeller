@@ -11,42 +11,82 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
-import { vecAdd } from '@libs/geom/vectors';
+import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 
 // ================================================================================================
 /**
- * Moves entities by vector.
+ * Moves entities. The directio and distance if movement is specified as a vector.
+ * ~
+ * If only one vector is given, then all entities are moved by the same vector.
+ * If a list of vectors is given, the each entity will be moved by a different vector.
+ * In this case, the number of vectors should be equal to the number of entities.
+ * ~
+ * If a position is shared between entites that are being moved by different vectors,
+ * then the position will be moved by the average of the vectors.
+ *
  * @param __model__
- * @param entities Position, vertex, edge, wire, face, point, polyline, polygon, collection.
- * @param vector List of three numbers.
+ * @param entities An entity or list of entities.
+ * @param vector A vector or a list of vectors.
  * @returns void
- * @example modify.Move(position1, [1,1,1])
- * @example_info Moves position1 by [1,1,1].
+ * @example modify.Move(pline1, [1,2,3])
+ * @example_info Moves pline1 by [1,2,3].
+ * @example modify.Move([pos1, pos2, pos3], [[0,0,1], [0,0,1], [0,1,0]] )
+ * @example_info Moves pos1 by [0,0,1], pos2 by [0,0,1], and pos3 by [0,1,0].
+ * @example modify.Move([pgon1, pgon2], [1,2,3] )
+ * @example_info Moves both pgon1 and pgon2 by [1,2,3].
  */
-export function Move(__model__: GIModel, entities: TId|TId[], vector: Txyz): void {
+export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz[]): void {
     // --- Error Check ---
     const fn_name = 'modify.Move';
     let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
                              ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'vector', vector, ['isVector']);
+    checkCommTypes(fn_name, 'vectors', vectors, ['isVector', 'isVectorList']);
     // --- Error Check ---
     if (!Array.isArray(ents_arr[0])) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
     }
-    const posis_i: number[] = [];
-    for (const ents of ents_arr) {
-        posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
+    if (getArrDepth(vectors) === 1) {
+        const posis_i: number[] = [];
+        const vec: Txyz = vectors as Txyz;
+        for (const ents of ents_arr) {
+            __model__.geom.query.navAnyToPosi(ents[0], ents[1]).forEach(posi_i => posis_i.push(posi_i));
+        }
+        const unique_posis_i: number[] = Array.from(new Set(posis_i));
+        for (const unique_posi_i of unique_posis_i) {
+            const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
+            const new_xyz: Txyz = vecAdd(old_xyz, vec);
+            __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+        }
+    } else {
+        if (ents_arr.length !== vectors.length) {
+            throw new Error('If multiple vectors are given, then the number of vectors must be equal to the number of entities.');
+        }
+        const posis_i: number[] = [];
+        const vecs_map: Map<number, Txyz[]> = new Map();
+        for (let i = 0; i < ents_arr.length; i++) {
+            const [ent_type, index]: [EEntType, number] = ents_arr[i] as TEntTypeIdx;
+            const vec: Txyz = vectors[i] as Txyz;
+            const ent_posis_i: number [] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            for (const ent_posi_i of ent_posis_i) {
+                posis_i.push(ent_posi_i);
+                if (! vecs_map.has(ent_posi_i)) {
+                    vecs_map.set(ent_posi_i, []);
+                }
+                vecs_map.get(ent_posi_i).push(vec);
+            }
+        }
+        for (const posi_i of posis_i) {
+            const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+            const vecs: Txyz[] = vecs_map.get(posi_i);
+            const vec: Txyz = vecDiv( vecSum( vecs ), vecs.length);
+            const new_xyz: Txyz = vecAdd(old_xyz, vec);
+            __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
+        }
     }
-    const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    for (const unique_posi_i of unique_posis_i) {
-        const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
-        const new_xyz: Txyz = vecAdd(old_xyz, vector);
-        __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
-    }
-    return;
+    return; // specifies that nothing is returned
 }
 // ================================================================================================
 /**
@@ -93,7 +133,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
-    return;
+    return; // specifies that nothing is returned
 }
 // ================================================================================================
 /**
@@ -139,7 +179,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
     }
-    return;
+    return; // specifies that nothing is returned
 }
 // ================================================================================================
 /**

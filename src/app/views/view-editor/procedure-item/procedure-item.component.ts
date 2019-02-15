@@ -137,8 +137,15 @@ export class ProcedureItemComponent {
     // select this procedure
     emitSelect(event, procedure: IProcedure) {
         event.stopPropagation();
-        this.select.emit({'ctrl': event.ctrlKey, 'prod': procedure});
+        this.select.emit({'ctrl': event.ctrlKey, 'shift': event.shiftKey, 'prod': procedure});
     }
+
+    disableShift(event: MouseEvent) {
+        if (event.shiftKey) {
+            event.preventDefault();
+        }
+    }
+
 
     // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(index: number): void {
@@ -184,11 +191,6 @@ export class ProcedureItemComponent {
             this.helpText.emit('error');
         }
 
-    }
-
-    // stopPropagation to prevent cut/paste with input box focused
-    stopProp(event): void {
-        // event.stopPropagation();
     }
 
     // modify variable input: replace space " " with underscore "_"

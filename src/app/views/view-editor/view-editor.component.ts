@@ -95,7 +95,7 @@ export class ViewEditorComponent implements AfterViewInit {
         if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
             return;
         }
-        NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false);
+        NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false, event.shift || false);
     }
 
     // copy selected procedures
@@ -112,7 +112,9 @@ export class ViewEditorComponent implements AfterViewInit {
         }
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
-        this.dataService.copiedProd = node.state.procedure;
+        const temp = node.state.procedure.slice();
+        this.dataService.copiedProd = [];
+        NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
 
         this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
         this.notificationTrigger = !this.notificationTrigger;
@@ -132,7 +134,10 @@ export class ViewEditorComponent implements AfterViewInit {
         }
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
-        this.dataService.copiedProd = node.state.procedure;
+        const temp = node.state.procedure.slice();
+        this.dataService.copiedProd = [];
+        NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
+
         let parentArray: IProcedure[];
         for (const prod of this.dataService.copiedProd) {
             if (prod.type === ProcedureTypes.Blank) { continue; }
@@ -160,7 +165,7 @@ export class ViewEditorComponent implements AfterViewInit {
         && this.dataService.copiedProd
         && document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA') {
-            const pastingPlace = node.state.procedure[0];
+            const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
             const toBePasted = this.dataService.copiedProd;
             if (pastingPlace === undefined) {
                 for (let i = 0; i < toBePasted.length; i++) {
@@ -175,7 +180,7 @@ export class ViewEditorComponent implements AfterViewInit {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
                     NodeUtils.paste_procedure(node, toBePasted[i]);
-                    node.state.procedure[0].selected = false;
+                    node.state.procedure[node.state.procedure.length - 1].selected = false;
                     pastingPlace.selected = true;
                     node.state.procedure = [pastingPlace];
                 }

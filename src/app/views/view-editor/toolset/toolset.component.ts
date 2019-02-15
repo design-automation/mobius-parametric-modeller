@@ -269,20 +269,19 @@ export class ToolsetComponent implements OnInit {
         const node = this.dataService.node;
         const tp = type.toUpperCase();
         if (tp === 'ELSE') {
-            if (!node.state.procedure[0]) {
-                return true;
-            }
-            if (node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
-            && node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString()) {
+            if (node.state.procedure.length === 0) { return true; }
+            const checkNode = node.state.procedure[node.state.procedure.length - 1];
+            if (checkNode.type.toString() !== ProcedureTypes.If.toString()
+            && checkNode.type.toString() !== ProcedureTypes.Elseif.toString()) {
                 return true;
             }
             let prods: IProcedure[];
 
-            if (node.state.procedure[0].parent) { prods = node.state.procedure[0].parent.children;
+            if (checkNode.parent) { prods = checkNode.parent.children;
             } else { prods = node.procedure; }
 
             for (let i = 0 ; i < prods.length - 1; i++) {
-                if (prods[i].ID === node.state.procedure[0].ID) {
+                if (prods[i].ID === checkNode.ID) {
                     if (prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString() ||
                     prods[i + 1].type.toString() === ProcedureTypes.Else.toString()) {
                         return true;
@@ -292,14 +291,13 @@ export class ToolsetComponent implements OnInit {
             }
             return false;
         } else if (tp === 'ELSEIF') {
-            if (!node.state.procedure[0]) {
-                return true;
-            }
-            return (node.state.procedure[0].type.toString() !== ProcedureTypes.If.toString()
-            && node.state.procedure[0].type.toString() !== ProcedureTypes.Elseif.toString());
+            if (node.state.procedure.length === 0) { return true; }
+            const checkNode = node.state.procedure[node.state.procedure.length - 1];
+            return (checkNode.type.toString() !== ProcedureTypes.If.toString()
+            && checkNode.type.toString() !== ProcedureTypes.Elseif.toString());
         } else {
+            let checkNode = node.state.procedure[node.state.procedure.length - 1];
             if (tp === 'BREAK' || tp === 'CONTINUE') {
-                let checkNode = node.state.procedure[0];
                 if (!checkNode) {return true; }
                 while (checkNode.parent) {
                     if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
@@ -311,16 +309,16 @@ export class ToolsetComponent implements OnInit {
                 return true;
             }
 
-            if (node.state.procedure[0]) {
+            if (checkNode) {
                 let prods: IProcedure[];
 
-                if (node.state.procedure[0].parent) { prods = node.state.procedure[0].parent.children;
+                if (checkNode.parent) { prods = checkNode.parent.children;
                 } else { prods = node.procedure; }
 
-                if (node.state.procedure[0].type.toString() === ProcedureTypes.If.toString()
-                || node.state.procedure[0].type.toString() === ProcedureTypes.Elseif.toString()) {
+                if (checkNode.type.toString() === ProcedureTypes.If.toString()
+                || checkNode.type.toString() === ProcedureTypes.Elseif.toString()) {
                     for (let i = 0 ; i < prods.length - 1; i++) {
-                        if (prods[i].ID === node.state.procedure[0].ID) {
+                        if (prods[i].ID === checkNode.ID) {
                             if (prods[i + 1].type.toString() === ProcedureTypes.Else.toString()
                             || prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString()) {
                                 return true;

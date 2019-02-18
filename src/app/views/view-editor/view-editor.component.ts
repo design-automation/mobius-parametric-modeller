@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, AfterViewInit} from '@angular/core';
+import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { getViewerData } from '@shared/getViewerData';
+import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -39,6 +40,16 @@ export class ViewEditorComponent implements AfterViewInit {
         setTimeout(() => {
             this.adjustTextArea();
         }, 50);
+    }
+
+    // .............. ON INPUT FOCUS ................
+    onfocus(event: Event) {
+        if ((<HTMLElement>event.target).nodeName === 'INPUT') {
+            for (const prod of this.dataService.node.state.procedure) {
+                prod.selected = false;
+            }
+            this.dataService.node.state.procedure = [];
+        }
     }
 
     adjustTextArea() {
@@ -82,10 +93,18 @@ export class ViewEditorComponent implements AfterViewInit {
     // add a procedure
     add(data: {type: ProcedureTypes, data: IFunction}): void {
         NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
+        let prod = this.dataService.node.state.procedure[0];
+        if (prod.type === ProcedureTypes.Blank) {
+            prod = prod.parent;
+        }
+        this.dataService.registerEdtAction([{'type': 'add',
+            'parent': prod.parent, 'prod': prod}]);
     }
 
     // delete a procedure
     deleteChild(index: number): void {
+        this.dataService.registerEdtAction([{'type': 'del',
+            'parent': undefined, 'index': index, 'prod': this.dataService.node.procedure[index]}]);
         this.dataService.node.procedure.splice(index, 1);
         NodeUtils.deselect_procedure(this.dataService.node);
     }
@@ -139,6 +158,7 @@ export class ViewEditorComponent implements AfterViewInit {
         NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
 
         let parentArray: IProcedure[];
+        const redoActions = [];
         for (const prod of this.dataService.copiedProd) {
             if (prod.type === ProcedureTypes.Blank) { continue; }
             if (prod.parent) {
@@ -147,11 +167,14 @@ export class ViewEditorComponent implements AfterViewInit {
 
             for (let j = 0; j < parentArray.length; j++ ) {
                 if (parentArray[j] === prod) {
+                    redoActions.unshift({'type': 'del', 'parent': parentArray[j].parent, 'index': j, 'prod': parentArray[j]});
                     parentArray.splice(j, 1);
                     break;
                 }
             }
         }
+        this.dataService.registerEdtAction(redoActions);
+
         NodeUtils.deselect_procedure(node);
 
         this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
@@ -167,11 +190,14 @@ export class ViewEditorComponent implements AfterViewInit {
         && document.activeElement.nodeName !== 'TEXTAREA') {
             const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
             const toBePasted = this.dataService.copiedProd;
+            const redoActions = [];
             if (pastingPlace === undefined) {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
                     NodeUtils.paste_procedure(node, toBePasted[i]);
+                    redoActions.unshift({'type': 'add',
+                        'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
                     node.state.procedure[0].selected = false;
                     node.state.procedure = [];
                 }
@@ -180,14 +206,90 @@ export class ViewEditorComponent implements AfterViewInit {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
                     NodeUtils.paste_procedure(node, toBePasted[i]);
+                    redoActions.unshift({'type': 'add',
+                        'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
+
+                    // CHECK IF THE BELOW CAN BE CHANGED TO: node.state.procedure[0]
                     node.state.procedure[node.state.procedure.length - 1].selected = false;
                     pastingPlace.selected = true;
                     node.state.procedure = [pastingPlace];
                 }
             }
+            this.dataService.registerEdtAction(redoActions);
             // toBePasted = undefined;
             this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
             this.notificationTrigger = !this.notificationTrigger;
+        }
+    }
+
+    @HostListener('window:keyup', ['$event'])
+    onKeyUp(event: KeyboardEvent) {
+        if (!this.copyCheck) { return; }
+        if (event.key === 'Delete') {
+            const node = this.dataService.node;
+            const redoActions = [];
+            for (const prod of node.state.procedure) {
+                let prodList: IProcedure[];
+                if (prod.parent) {
+                    prodList = prod.parent.children;
+                } else {
+                    prodList = node.procedure;
+                }
+                for (let i = 1; i < prodList.length; i++) {
+                    if (prodList[i].ID === prod.ID) {
+                        redoActions.unshift({'type': 'del', 'parent': prodList[i].parent, 'index': i, 'prod': prodList[i]});
+                        prodList.splice(i, 1);
+                    }
+                }
+            }
+            this.dataService.registerEdtAction(redoActions);
+            this.dataService.node.state.procedure = [];
+        } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
+            let actions: any;
+            if (event.shiftKey) {
+                actions = this.dataService.redoEdt();
+                if (!actions) { return; }
+                for (const act of actions) {
+                    if (act.type === 'del') {
+                        let prodList: IProcedure[];
+                        if (!act.parent) { prodList = this.dataService.node.procedure;
+                        } else { prodList = act.parent.children; }
+                        prodList.splice(act.index, 1);
+                    } else {
+                        let prodList: IProcedure[];
+                        if (!act.parent) { prodList = this.dataService.node.procedure;
+                        } else { prodList = act.parent.children; }
+                        prodList.splice(act.index, 0, act.prod);
+                    }
+                }
+            } else {
+                actions = this.dataService.undoEdt();
+                if (!actions) { return; }
+                for (const act of actions) {
+                    if (act.type === 'add') {
+                        let prodList: IProcedure[];
+                        if (!act.parent) { prodList = this.dataService.node.procedure;
+                        } else { prodList = act.parent.children; }
+                        if (act.index) {
+                            prodList.splice(act.index, 1);
+                        } else {
+                            for (let i = 0; i < prodList.length; i++) {
+                                if (prodList[i].ID === act.prod.ID) {
+                                    act.index = i;
+                                    prodList.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        let prodList: IProcedure[];
+                        if (!act.parent) { prodList = this.dataService.node.procedure;
+                        } else { prodList = act.parent.children; }
+                        prodList.splice(act.index, 0, act.prod);
+                    }
+                }
+            }
+            NodeUtils.deselect_procedure(this.dataService.node);
         }
     }
 

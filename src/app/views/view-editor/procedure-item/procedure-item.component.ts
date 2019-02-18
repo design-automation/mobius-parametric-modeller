@@ -141,14 +141,15 @@ export class ProcedureItemComponent {
     }
 
     disableShift(event: MouseEvent) {
+        if ((<Element>event.target).tagName === 'INPUT') { return; }
         if (event.shiftKey) {
             event.preventDefault();
         }
     }
 
-
     // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(index: number): void {
+        this.dataService.registerEdtAction([{'type': 'del', 'parent': this.data, 'index': index, 'prod': this.data.children[index]}]);
         this.data.children.splice(index, 1);
     }
 

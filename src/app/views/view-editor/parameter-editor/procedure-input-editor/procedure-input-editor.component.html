@@ -37,6 +37,7 @@
             (ngModelChange)='prod.args[0].value=varMod($event)'
             [class.error]='prod.args[0].invalidVar'
             [class.disablePointer]='disableInput'
+            (focus)='emitClearSelect($event)'
             placeholder="name"
             [style.width.px]='inputSize(prod.args[0].value,"Undefined")'>
         </div>
@@ -51,11 +52,13 @@
             <ng-container [ngSwitch]="prod.meta.inputMode" >
                 <!-- Constant -->
                 <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+                (focus)='emitClearSelect($event)'
                 [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
     
                 <!-- simpleinput -->
                 <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+                (focus)='emitClearSelect($event)'
                 [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
     
@@ -63,16 +66,19 @@
                 <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
                     <div class = 'input--container'>
                         <input [(ngModel)]='prod.args[prod.argCount-1].step' placeholder='Step'
+                            (focus)='emitClearSelect($event)'
                             [class.disablePointer]='disableInput'
                             [style.width.px]='inputSize(prod.args[prod.argCount-1].step,"Step")'>
                         <input [value]='prod.args[prod.argCount-1].min||""' placeholder='Min'
                             (blur)='updateMin(prod.args[prod.argCount-1], $event)'
                             (keyup)='updateMin(prod.args[prod.argCount-1], $event)'
+                            (focus)='emitClearSelect($event)'
                             [class.disablePointer]='disableInput'
                             [style.width.px]='inputSize(prod.args[prod.argCount-1].min,"Min")'>
                         <input [value]='prod.args[prod.argCount-1].max||""' placeholder='Max'
                             (blur)='updateMax(prod.args[prod.argCount-1], $event)'
                             (keyup)='updateMax(prod.args[prod.argCount-1], $event)'
+                            (focus)='emitClearSelect($event)'
                             [class.disablePointer]='disableInput'
                             [style.width.px]='inputSize(prod.args[prod.argCount-1].max,"Max")'>
                     </div>              
@@ -90,6 +96,7 @@
     
                 <!-- URL -->
                 <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default URL'
+                    (focus)='emitClearSelect($event)'
                     [class.disablePointer]='disableInput'
                     [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
     
@@ -108,6 +115,7 @@
         <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
             <div class = 'slider--container'>
                 <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].default'
+                (focus)='emitClearSelect($event)'
                 [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"")'>
                 <mat-slider
@@ -121,6 +129,7 @@
     </ng-container>
     <div class = 'desc--container'>
         <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Description' 
+        (click)='emitClearSelect($event)'
         [class.disablePointer]='disableInput'
         [(ngModel)]='prod.meta.description'></textarea>
     </div>

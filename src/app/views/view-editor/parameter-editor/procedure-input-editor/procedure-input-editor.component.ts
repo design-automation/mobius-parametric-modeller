@@ -30,6 +30,11 @@ export class ProcedureInputEditorComponent {
         this.selectInp.emit({'ctrl': event.ctrlKey, 'shift': event.shiftKey, 'prod': this.prod});
     }
 
+    emitClearSelect(event: MouseEvent) {
+        event.stopPropagation();
+        this.selectInp.emit('clear');
+    }
+
     editOptions(): void { }
 
     openFileBrowse(id) {

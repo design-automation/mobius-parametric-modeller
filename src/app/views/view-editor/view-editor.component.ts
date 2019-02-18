@@ -113,6 +113,10 @@ export class ViewEditorComponent implements AfterViewInit {
 
     // select a procedure
     selectProcedure(event): void {
+        if (event === 'clear') {
+            NodeUtils.deselect_procedure(this.dataService.node);
+            return;
+        }
         if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
             return;
         }

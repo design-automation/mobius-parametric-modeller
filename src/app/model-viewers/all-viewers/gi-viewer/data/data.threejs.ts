@@ -116,6 +116,9 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
+        if (localStorage.getItem('mpm_settings') !== null) {
+            this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        }
         this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         while (this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);

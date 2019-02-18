@@ -132,6 +132,9 @@ export class DataService {
     registerFlwAction(action) {
         this._prevFlwActions.push(action);
         this._nextFlwActions = [];
+        if (this._prevFlwActions.length > 10) {
+            this._prevFlwActions.splice(0, 1);
+        }
     }
 
     undoFlw() {
@@ -157,6 +160,9 @@ export class DataService {
     registerEdtAction(actions: any[]) {
         this._prevEdtActions.push(actions);
         this._nextEdtActions = [];
+        if (this._prevEdtActions.length > 10) {
+            this._prevEdtActions.splice(0, 1);
+        }
     }
 
     undoEdt() {

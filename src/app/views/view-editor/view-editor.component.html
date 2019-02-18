@@ -22,7 +22,8 @@
                             <parameter-editor *ngIf="getNode().type == 'start'" 
                             [flowchart]='getFlowchart()' 
                             [node]='getNode()'
-                            [prodCheck]='false'></parameter-editor>
+                            [prodCheck]='false'
+                            [disableInput]='disableInput'></parameter-editor>
                             <ng-container *ngIf='getNode().enabled; else disabled_node'>
                                 <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
                                     <button (click)='setViewOutput()'>Viewing 
@@ -49,6 +50,7 @@
                                     <procedure-item 
                                     *ngFor="let line of getNode()?.procedure; let idx=index" 
                                     [data]="line"
+                                    [disableInput]='disableInput'
                                     (select)="selectProcedure($event)"
                                     (delete)="deleteChild(idx)"
                                     (helpText)='updateHelpView($event)'
@@ -62,6 +64,7 @@
                                 [flowchart]='getFlowchart()' 
                                 [node]='getNode()'
                                 [prodCheck]='true'
+                                [disableInput]='disableInput'
                                 (selectInp)='selectProcedure($event)'></parameter-editor>
                                 <div id = 'spacer'></div>
                                 

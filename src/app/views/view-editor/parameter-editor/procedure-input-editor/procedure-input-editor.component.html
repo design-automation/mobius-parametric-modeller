@@ -3,6 +3,7 @@
 [class.error]='prod.hasError' 
 [class.selected]='prod.selected' 
 [class.inputDisabled]='!prod.enabled' 
+(mousedown)='disableShift($event)'
 (click)='selectInput($event)'>
     <div class = "btn-container">
         <div class = "btns">
@@ -35,6 +36,7 @@
             [ngModel]='prod.args[0].value'
             (ngModelChange)='prod.args[0].value=varMod($event)'
             [class.error]='prod.args[0].invalidVar'
+            [class.disablePointer]='disableInput'
             placeholder="name"
             [style.width.px]='inputSize(prod.args[0].value,"Undefined")'>
         </div>
@@ -49,44 +51,54 @@
             <ng-container [ngSwitch]="prod.meta.inputMode" >
                 <!-- Constant -->
                 <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+                [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
     
                 <!-- simpleinput -->
                 <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+                [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
     
                 <!-- slider -->
                 <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
                     <div class = 'input--container'>
                         <input [(ngModel)]='prod.args[prod.argCount-1].step' placeholder='Step'
-                        [style.width.px]='inputSize(prod.args[prod.argCount-1].step,"Step")'>
+                            [class.disablePointer]='disableInput'
+                            [style.width.px]='inputSize(prod.args[prod.argCount-1].step,"Step")'>
                         <input [value]='prod.args[prod.argCount-1].min||""' placeholder='Min'
                             (blur)='updateMin(prod.args[prod.argCount-1], $event)'
                             (keyup)='updateMin(prod.args[prod.argCount-1], $event)'
+                            [class.disablePointer]='disableInput'
                             [style.width.px]='inputSize(prod.args[prod.argCount-1].min,"Min")'>
                         <input [value]='prod.args[prod.argCount-1].max||""' placeholder='Max'
                             (blur)='updateMax(prod.args[prod.argCount-1], $event)'
                             (keyup)='updateMax(prod.args[prod.argCount-1], $event)'
+                            [class.disablePointer]='disableInput'
                             [style.width.px]='inputSize(prod.args[prod.argCount-1].max,"Max")'>
                     </div>              
                 </div>
                 
                 <!-- checkbox -->
                 <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
-                    <input class='chkbox' id = 'chbox_{{prod.ID}}' [(ngModel)]='prod.args[prod.argCount-1].default' type="checkbox">
+                    <input class='chkbox' id = 'chbox_{{prod.ID}}' 
+                        [(ngModel)]='prod.args[prod.argCount-1].default' 
+                        [class.disablePointer]='disableInput'
+                        type="checkbox">
                     <label for = 'chbox_{{prod.ID}}'></label>
     
                 </div>
     
                 <!-- URL -->
                 <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default URL'
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
+                    [class.disablePointer]='disableInput'
+                    [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
     
                 <!-- File -->
                 <div class='div--filebtn inline-div' *ngSwitchCase="PortTypes.File" >
-                    <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>
+                    <button class='filebtn' (click)="openFileBrowse(prod.ID)" [class.disablePointer]='disableInput' >File</button>
                     <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-1].default.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].default.name,"")' disabled>
-                    <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" type="file">
+                    <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" 
+                        type="file">
                 </div>
             </ng-container>
         </div>
@@ -96,6 +108,7 @@
         <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
             <div class = 'slider--container'>
                 <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].default'
+                [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"")'>
                 <mat-slider
                 [(ngModel)]='prod.args[prod.argCount-1].default'
@@ -107,7 +120,9 @@
         </div> 
     </ng-container>
     <div class = 'desc--container'>
-        <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Description' [(ngModel)]='prod.meta.description'></textarea>
+        <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Description' 
+        [class.disablePointer]='disableInput'
+        [(ngModel)]='prod.meta.description'></textarea>
     </div>
 </div>
 

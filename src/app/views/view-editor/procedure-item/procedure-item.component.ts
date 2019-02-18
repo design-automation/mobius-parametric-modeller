@@ -53,6 +53,7 @@ for (const funcMod of inline_func) {
 })
 export class ProcedureItemComponent {
     @Input() data: IProcedure;
+    @Input() disableInput: boolean;
     @Output() delete = new EventEmitter();
     @Output() select = new EventEmitter();
     @Output() copied = new EventEmitter();
@@ -208,12 +209,9 @@ export class ProcedureItemComponent {
         if (!this.data.args[argIndex].value) { return; }
         this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
             /\s*([\[\]])\s*/g, '$1').replace(
-            // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').trim().replace(/[ ]{2,}/g, ' ');
             /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
             .replace(/([\<\>\=\!])\s+=/g, '$1=')
             .trim().replace(/\s{2,}/g, ' ');
-            // /([\+\-\*\/\%\[\]\{\}\(\)\,])/g, ' $1 ').replace(
-            // /@[a-z0-9]+\s\[\s/g, '[').trim().replace(/[ ]{2,}/g, ' ');
     }
 
     // argHighlight(value: any) {
@@ -224,6 +222,14 @@ export class ProcedureItemComponent {
 
     inputSize(val) {
         return ctx.measureText(val).width + 7;
+    }
+
+
+    onInputFocus() {
+        for (const prod of this.dataService.node.state.procedure) {
+            prod.selected = false;
+        }
+        this.dataService.node.state.procedure = [];
     }
 
     checkEnum(param, index: number): boolean {

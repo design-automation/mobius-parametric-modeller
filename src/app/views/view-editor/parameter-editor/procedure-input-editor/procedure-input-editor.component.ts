@@ -15,6 +15,7 @@ ctx.font = '13px Arial';
 export class ProcedureInputEditorComponent {
 
     @Input() prod: IProcedure;
+    @Input() disableInput: boolean;
     @Output() delete = new EventEmitter();
     @Output() selectInp = new EventEmitter();
 
@@ -26,7 +27,7 @@ export class ProcedureInputEditorComponent {
 
     selectInput(event: MouseEvent) {
         event.stopPropagation();
-        this.selectInp.emit({'ctrl': event.ctrlKey, 'prod': this.prod});
+        this.selectInp.emit({'ctrl': event.ctrlKey, 'shift': event.shiftKey, 'prod': this.prod});
     }
 
     editOptions(): void { }
@@ -88,5 +89,11 @@ export class ProcedureInputEditorComponent {
         return ProcedureItemComponent.modifyVarArg(event, this.prod.args[0]);
     }
 
+    disableShift(event: MouseEvent) {
+        if ((<Element>event.target).tagName === 'INPUT') { return; }
+        if (event.shiftKey) {
+            event.preventDefault();
+        }
+    }
 
 }

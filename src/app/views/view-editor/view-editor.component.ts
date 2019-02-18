@@ -30,6 +30,8 @@ export class ViewEditorComponent implements AfterViewInit {
     notificationMessage = '';
     notificationTrigger = true;
 
+    disableInput = false;
+
     private copyCheck = true;
 
     constructor(private dataService: DataService, private router: Router) {
@@ -221,9 +223,19 @@ export class ViewEditorComponent implements AfterViewInit {
             this.notificationTrigger = !this.notificationTrigger;
         }
     }
+    @HostListener('window:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (event.key === 'Control' || event.key === 'Shift') {
+            this.disableInput = true;
+        } else if (event.key === 'z' && event.ctrlKey) {
+            event.preventDefault();
+        }
+    }
+
 
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
+        if (!(event.ctrlKey && event.shiftKey)) { this.disableInput = false; }
         if (!this.copyCheck) { return; }
         if (event.key === 'Delete') {
             const node = this.dataService.node;
@@ -235,6 +247,7 @@ export class ViewEditorComponent implements AfterViewInit {
                 } else {
                     prodList = node.procedure;
                 }
+                prod.selected = false;
                 for (let i = 1; i < prodList.length; i++) {
                     if (prodList[i].ID === prod.ID) {
                         redoActions.unshift({'type': 'del', 'parent': prodList[i].parent, 'index': i, 'prod': prodList[i]});
@@ -246,6 +259,7 @@ export class ViewEditorComponent implements AfterViewInit {
             this.dataService.node.state.procedure = [];
         } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
             let actions: any;
+            // if ((<HTMLElement>event.target).nodeName === 'INPUT') {return; }
             if (event.shiftKey) {
                 actions = this.dataService.redoEdt();
                 if (!actions) { return; }

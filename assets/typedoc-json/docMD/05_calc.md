@@ -22,8 +22,7 @@
   
   
 ## Area  
-* **Description:** Calculates the area of a surface or a list of surfaces.
-TODO: allow for a list of surfaces  
+* **Description:** Calculates the area of a surface or a list of surfaces.  
 * **Parameters:**  
   * *entities:* A polygon, a face, a closed polyline, or a closed wire.  
 * **Returns:** Area.  

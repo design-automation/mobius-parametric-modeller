@@ -179,8 +179,10 @@ export class GIGeomModify {
             // delete the pgon and check the collections
             this._geom_arrays.dn_pgons_faces[pgon_i] = null;
             for (const coll of this._geom_arrays.dn_colls_objs) {
-                const coll_pgons_i: number[] = coll[3];
-                arrRem(coll_pgons_i, pgon_i);
+                if (coll !== null) {
+                    const coll_pgons_i: number[] = coll[3];
+                    arrRem(coll_pgons_i, pgon_i);
+                }
             }
             // delete the face
             this._geom_arrays.dn_faces_wirestris[face_i] = null;
@@ -194,7 +196,6 @@ export class GIGeomModify {
             edges_i.forEach( edge_i => {
                 this._geom_arrays.dn_edges_verts[edge_i] = null;
                 delete this._geom_arrays.up_edges_wires[edge_i];
-
             });
             // delete the verts
             verts_i.forEach( vert_i => {

@@ -218,7 +218,6 @@ export class ProcedureItemComponent {
                     result += '"' + vals[i - 1] + '"';
                 }
             }
-
             const valSplit = vals[i].split(`'`);
             for (let j = startOnEven ? 0 : 1; j < valSplit.length; j += 2) {
                 if (j === 1) {

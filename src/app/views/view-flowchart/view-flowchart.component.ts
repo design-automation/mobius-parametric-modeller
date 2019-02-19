@@ -148,7 +148,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 this.notificationMessage = `Pasted Node`;
                 this.notificationTrigger = !this.notificationTrigger;
 
-                this.dataService.registerAction({'type': 'add', 'nodes': [newNode]});
+                this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});
             }
         });
 
@@ -166,9 +166,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
                 let act: any;
                 if (event.shiftKey) {
-                    act = this.dataService.redo();
+                    act = this.dataService.redoFlw();
                 } else {
-                    act = this.dataService.undo();
+                    act = this.dataService.undoFlw();
                 }
                 if (!act) { return; }
                 if ( (act.type === 'add') !== event.shiftKey ) {
@@ -384,7 +384,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         newNode.position.x = svgP.x;
         newNode.position.y = svgP.y;
         this.dataService.flowchart.nodes.splice(this.dataService.flowchart.nodes.length - 1, 0, newNode);
-        this.dataService.registerAction({'type': 'add', 'nodes': [newNode]});
+        this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});
     }
 
     // activate event listener for copy (ctrl+c), paste (ctrl+v), delete (Delete) when mouse hover over the svg component
@@ -440,7 +440,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 break;
             }
         }
-        this.dataService.registerAction({'type': 'del', 'nodes': deletedNodes, 'edges': deletedEdges});
+        this.dataService.registerFlwAction({'type': 'del', 'nodes': deletedNodes, 'edges': deletedEdges});
 
 
     }
@@ -494,7 +494,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             deletedEdges.push(this.dataService.flowchart.edges[edge_index]);
             this.deleteEdge(edge_index);
         }
-        this.dataService.registerAction({'type': 'del', 'edges': deletedEdges});
+        this.dataService.registerFlwAction({'type': 'del', 'edges': deletedEdges});
         this.selectedEdge = [];
     }
 
@@ -853,7 +853,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 */
                 break;
             }
-            this.dataService.registerAction({'type': 'add', 'edges': [this.edge]});
+            this.dataService.registerFlwAction({'type': 'add', 'edges': [this.edge]});
 
         }
         this.isDown = 0;

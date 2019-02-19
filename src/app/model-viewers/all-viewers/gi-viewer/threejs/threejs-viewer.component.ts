@@ -343,7 +343,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     public onUserAction(event) {
-        console.log('Select');
         // get entities for mouse event
         const intersects = this.threeJSViewerService.initRaycaster(event);
 

@@ -9,7 +9,12 @@
     </ng-container>
 
     <div class='container--input' *ngIf='prodCheck'>
-        <procedure-input-editor *ngFor="let prod of node.procedure; let i = index;" [prod]="prod" (delete)='deleteProd(i)' (selectInp)='selectInput($event)'></procedure-input-editor>
+        <procedure-input-editor 
+            *ngFor="let prod of node.procedure; let i = index;" 
+            [prod]="prod" 
+            [disableInput]='disableInput'
+            (delete)='deleteProd(i)' 
+            (selectInp)='selectInput($event)'></procedure-input-editor>
     </div>
 </div>
 <div class='flowchart-info' *ngIf="node.type=='end'">

@@ -39,8 +39,11 @@ export class DataService {
 
     private static _consoleScroll: number;
 
-    private _prevActions = [];
-    private _nextActions = [];
+    private _prevFlwActions = [];
+    private _nextFlwActions = [];
+
+    private _prevEdtActions = [];
+    private _nextEdtActions = [];
 
     getLog(): string[] {
         return DataService._consoleLog;
@@ -126,27 +129,58 @@ export class DataService {
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
 
 
-    registerAction(action) {
-        this._prevActions.push(action);
-        this._nextActions = [];
+    registerFlwAction(action) {
+        this._prevFlwActions.push(action);
+        this._nextFlwActions = [];
+        if (this._prevFlwActions.length > 10) {
+            this._prevFlwActions.splice(0, 1);
+        }
     }
 
-    undo() {
-        if (this._prevActions.length === 0) {
+    undoFlw() {
+        if (this._prevFlwActions.length === 0) {
             return undefined;
         }
-        const action = this._prevActions.pop();
-        this._nextActions.push(action);
+        const action = this._prevFlwActions.pop();
+        this._nextFlwActions.push(action);
         return action;
     }
 
-    redo() {
-        if (this._nextActions.length === 0) {
+    redoFlw() {
+        if (this._nextFlwActions.length === 0) {
             return undefined;
         }
-        const action = this._nextActions.pop();
-        this._prevActions.push(action);
+        const action = this._nextFlwActions.pop();
+        this._prevFlwActions.push(action);
         return action;
+    }
+
+
+
+    registerEdtAction(actions: any[]) {
+        this._prevEdtActions.push(actions);
+        this._nextEdtActions = [];
+        if (this._prevEdtActions.length > 10) {
+            this._prevEdtActions.splice(0, 1);
+        }
+    }
+
+    undoEdt() {
+        if (this._prevEdtActions.length === 0) {
+            return undefined;
+        }
+        const actions = this._prevEdtActions.pop();
+        this._nextEdtActions.push(actions);
+        return actions;
+    }
+
+    redoEdt() {
+        if (this._nextEdtActions.length === 0) {
+            return undefined;
+        }
+        const actions = this._nextEdtActions.pop();
+        this._prevEdtActions.push(actions);
+        return actions;
     }
 
 

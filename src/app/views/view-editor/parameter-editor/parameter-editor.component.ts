@@ -16,6 +16,7 @@ export class ParameterEditorComponent  {
     @Input() node: INode;
     @Input() flowchart: IFlowchart;
     @Input() prodCheck: boolean;
+    @Input() disableInput: boolean;
     @Output() selectInp = new EventEmitter();
 
 

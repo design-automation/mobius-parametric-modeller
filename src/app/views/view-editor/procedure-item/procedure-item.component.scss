@@ -146,6 +146,9 @@
             border-color: $selected-color;
             background-color: $color7;
         }
+        &.disabled{
+            pointer-events: none;
+        }
     }
     
     .input--arg{
@@ -166,6 +169,9 @@
             border-color: $selected-color;
             background-color: $color7;
         }
+        &.disabled{
+            pointer-events: none;
+        }
     }
     .input--comment{
         font-size: $fsize2;
@@ -178,6 +184,9 @@
         border: 0px;
         border-left: 2px solid $comment-color;
         padding-left: 3px;
+        &.disabled{
+            pointer-events: none;
+        }
     }
 
     // .input--arg--p{

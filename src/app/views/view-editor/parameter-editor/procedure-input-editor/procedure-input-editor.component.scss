@@ -74,6 +74,9 @@ input, select {
     &.error{
         border: 2px solid $error-color;
     }
+    &.disablePointer{
+        pointer-events: none;
+    }
 }
 
 select{
@@ -149,6 +152,9 @@ select{
         height: $fsize1 + 3px;
         border: none;
         margin-left: 2px;
+        &.disablePointer{
+            pointer-events: none;
+        }
     }
 }
 
@@ -217,6 +223,9 @@ select{
             color: $color8;
             border-color: $selected-color;
             background-color: $color7;
+        }
+        &.disablePointer{
+            pointer-events: none;
         }
     }
 }

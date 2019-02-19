@@ -15,14 +15,17 @@
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
                 [class.error]='data.args[0].invalidVar'
+                [class.disabled]='disableInput'
+                (focus)='onInputFocus()'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
             <div style='position:relative; display:inline-block;'>
-                <input 
-                class='input--arg'
+                <input class='input--arg'
                 [(ngModel)]='data.args[1].value'
+                [class.disabled]='disableInput'
                 (blur)='argMod($event, 1)'
+                (focus)='onInputFocus()'
                 placeholder={{data.args[1].name}}
                 [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>
                 <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
@@ -37,7 +40,9 @@
                 </div>
                 <input class='input--arg'
                         [(ngModel)]='data.args[0].value'
+                        [class.disabled]='disableInput'
                         (blur)='argMod($event, 0)'
+                        (focus)='onInputFocus()'
                         placeholder={{data.args[0].name}}
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                         >
@@ -47,6 +52,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
                     (delete)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
@@ -63,7 +69,9 @@
             
             <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
+                    [class.disabled]='disableInput'
                     (blur)='argMod($event, 0)'
+                    (focus)='onInputFocus()'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -72,6 +80,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
                     (delete)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
@@ -90,6 +99,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
                     (delete)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
@@ -124,6 +134,8 @@
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
                     [class.error]='data.args[0].invalidVar'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus()'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -132,7 +144,9 @@
                 </div>
                 <input class='input--arg'
                     [(ngModel)]='data.args[1].value'
+                    [class.disabled]='disableInput'
                     (blur)='argMod($event, 1)'
+                    (focus)='onInputFocus()'
                     placeholder={{data.args[1].name}}
                     [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
                         >  
@@ -143,6 +157,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
                     (delete)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
@@ -159,7 +174,9 @@
                 </div>
                 <input class='input--arg' 
                         [(ngModel)]='data.args[0].value'
+                        [class.disabled]='disableInput'
                         (blur)='argMod($event, 0)'
+                        (focus)='onInputFocus()'
                         placeholder={{data.args[0].name}}
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                         >  
@@ -170,6 +187,7 @@
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
+                    [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
                     (delete)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
@@ -180,29 +198,10 @@
 
         <!-- Constant (Not visible) Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Constant">
-            <!-- <div class='function-text'>Constant</div>
-
-            <input class='input--arg' 
-                    [(ngModel)]='data.args[0].value'
-                    (blur)='argMod($event, 0)'
-                    placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >   -->
-
         </div>
         
         <!-- Return (Not visible) Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Return">
-            <!-- <div class='function-text'>Return</div>
-            <ng-container  *ngFor='let p of data.args;let i=index'>
-                <input class='input--arg' 
-                *ngIf='p.name[0] !== "_"'
-                [(ngModel)]='p.value'
-                (blur)='argMod($event, i)'
-                placeholder={{p.name}}
-                [style.width.px]='inputSize(p.value||p.name)'
-                >  
-            </ng-container> -->
         </div>
         
         <!-- Blank (always the first procedure of if/else/else if/for/while) -->
@@ -211,9 +210,10 @@
 
         <!-- Comment -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Comment">
-            <input 
-            class='input--comment' 
+            <input class='input--comment' 
             [(ngModel)]='data.args[0].value'
+            [class.disabled]='disableInput'
+            (focus)='onInputFocus()'
             placeholder='Comment'
             [style.width.px]='inputSize(data.args[0].value||"Comment")'
             >
@@ -227,6 +227,8 @@
                 [ngModel]='data.args[0].value'
                 (ngModelChange)='data.args[0].value=varMod($event)'
                 [class.error]='data.args[0].invalidVar'
+                [class.disabled]='disableInput'
+                (focus)='onInputFocus()'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
                 = 
@@ -235,16 +237,6 @@
             <div class='function-text'><span class='module-name'>{{data.meta.module}}.</span>{{data.meta.name}} </div>
 
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
-                <!--
-                <input *ngIf="p.name.toUpperCase() !== '__MODEL__'; else text_template" 
-                
-                [(ngModel)]='p.value' 
-                placeholder={{p.name}}>    
-                
-                <ng-template #text_template>
-                    model,
-                </ng-template>
-                -->
                 <select class='input--arg' [(ngModel)]='p.value' *ngIf="checkEnum(p, i); else default_template" >
                     <option *ngFor='let opt of getEnum(i)' value="'{{opt}}'">{{opt}}</option>
                     <!--
@@ -253,10 +245,12 @@
                 </select>    
                 
                 <ng-template #default_template>
-                    <input *ngIf="p.name[0] !== '_'" 
-                    class='input--arg' 
+                    <input class='input--arg' 
+                    *ngIf="p.name[0] !== '_'" 
                     [(ngModel)]='p.value'
+                    [class.disabled]='disableInput'
                     (blur)='argMod($event, i+1)'
+                    (focus)='onInputFocus()'
                     placeholder={{p.name}}
                     [style.width.px]='inputSize(p.value||p.name)'
                     >
@@ -273,6 +267,8 @@
                     [ngModel]='data.args[0].value'
                     (ngModelChange)='data.args[0].value=varMod($event)'
                     [class.error]='data.args[0].invalidVar'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus()'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
                 = 
@@ -283,7 +279,9 @@
                 <input class='input--arg' 
                     *ngIf='p.type !== 5'
                     [(ngModel)]='p.value'
+                    [class.disabled]='disableInput'
                     (blur)='argMod($event, i+1)'
+                    (focus)='onInputFocus()'
                     placeholder={{p.name}}
                     [style.width.px]='inputSize(p.value||p.name)'>    
             </ng-container>

@@ -12,6 +12,7 @@
     "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json",
     "deploy": "ng build --prod --base-href=%npm_package_config_prod_url% && npx ngh",
     "deploy1": "ng build --prod --base-href=%npm_package_config_prod_url% && ngh",
+    "deploy0": "ng build --prod --base-href=%npm_package_config_prod_url%",
     "build": "ng build",
     "build-test": "ng build --prod && http-server ./dist",
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",

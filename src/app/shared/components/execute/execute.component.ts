@@ -217,15 +217,20 @@ export class ExecuteComponent {
                         if (request.status === 200) {
                             resolve(request.responseText);
                         } else {
-                            resolve(arg.value);
+                            resolve(undefined);
                         }
                     };
                     request.onerror = () => {
-                        resolve(arg.value);
+                        resolve(undefined);
                     };
                     request.send();
                 });
-                prod.resolvedValue = '`' + await p + '`';
+                const result = await p;
+                if (result === undefined) {
+                    prod.resolvedValue = arg.value;
+                } else {
+                    prod.resolvedValue = '`' + result + '`';
+                }
             }
             if (prod.children) {await this.resolveImportedUrl(prod.children); }
         }

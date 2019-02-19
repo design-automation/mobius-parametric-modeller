@@ -204,7 +204,7 @@ export class ExecuteComponent {
             } else if (prod.type === ProcedureTypes.Function && prod.meta.name === 'ImportData') {
                 const arg = prod.args[2];
                 let val = <string>arg.value.replace(/ /g, '');
-                if (val[0] === '"') {
+                if (val[0] === '"' || val[0] === `'`) {
                     val = val.substring(1, val.length - 1);
                 }
                 if (val.indexOf('dropbox') !== -1) {

@@ -92,14 +92,14 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         if (ents_arr.length === attrib_values_arr.length) {
             const first_ent_type: number = ents_arr[0][0];
             if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
-                if (__model__.attribs.query.getAttribDataSize(first_ent_type, attrib_name) === 1) {
+                // if (__model__.attribs.query.getAttribDataSize(first_ent_type, attrib_name) === 1) {
                     // we can assume that we are trying to set each ent to each value
                     // we could also check that all ents are of same type but that seems unecessary
                     for (let i = 0; i < ents_arr.length; i++) {
                         _setAttrib(__model__, ents_arr[i] as TEntTypeIdx, attrib_name, attrib_values_arr[i], attrib_index);
                     }
                     return;
-                }
+                //  }
             }
         }
     }
@@ -117,7 +117,7 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             __model__.attribs.add.setAttribValue(ent_type, ent_i, attrib_name, attrib_value);
         }
     }
-    console.log(__model__);
+    // console.log(__model__);
 }
 /**
  * Sets an attribute value in the model.

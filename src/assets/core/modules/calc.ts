@@ -65,6 +65,8 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[
     }
 }
 // ================================================================================================
+
+
 /**
  * Calculates the length of a line or a list of lines.
  * @param __model__
@@ -103,55 +105,63 @@ export function Length(__model__: GIModel, lines: TId|TId[]): number {
     return dist;
 }
 // ================================================================================================
+function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number|number[] {
+    if (getArrDepth(ents_arrs) === 1) {
+        const [ent_type, index]: [EEntType, number] = ents_arrs as TEntTypeIdx;
+        if (isPgon(ent_type) || isFace(ent_type)) {
+            // faces, these are already triangulated
+            let face_i: number = index;
+            if (isPgon(ent_type)) {
+                face_i = __model__.geom.query.navPgonToFace(index);
+            }
+            const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+            let total_area = 0;
+            for (const tri_i of tris_i) {
+                const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+                const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
+                const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
+                total_area += tri_area;
+            }
+            return total_area;
+        } else if (isPline(ent_type) || isWire(ent_type)) {
+            // wires, these need to be triangulated
+            let wire_i: number = index;
+            if (isPline(ent_type)) {
+                wire_i = __model__.geom.query.navPlineToWire(index);
+            }
+            if (__model__.geom.query.istWireClosed(wire_i)) {
+                throw new Error('To calculate area, wire must be closed');
+            }
+            const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
+            const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
+            const tris: number[][] = triangulate(xyzs);
+            let total_area = 0;
+            for (const tri of tris) {
+                const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
+                const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2] );
+                total_area += tri_area;
+            }
+            return total_area;
+        } else {
+            return 0;
+        }
+    } else {
+        return (ents_arrs as TEntTypeIdx[]).map( ents_arr => _area(__model__, ents_arr) ) as number[];
+    }
+}
 /**
  * Calculates the area of a surface or a list of surfaces.
- * TODO: allow for a list of surfaces
  * @param __model__
  * @param entities A polygon, a face, a closed polyline, or a closed wire.
  * @returns Area.
  * @example area1 = calc.Area (surface1)
  */
-export function Area(__model__: GIModel, entities: TId): number {
+export function Area(__model__: GIModel, entities: TId): number|number[] {
     // --- Error Check ---
     const fn_name = 'calc.Area';
-    checkIDs(fn_name, 'entities', entities, ['isID'], ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PGON', 'FACE', 'PLINE', 'WIRE']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    const [ent_type, index]: [EEntType, number] = idsBreak(entities) as TEntTypeIdx;
-    if (isPgon(ent_type) || isFace(ent_type)) {
-        // faces, these are already triangulated
-        let face_i: number = index;
-        if (isPgon(ent_type)) {
-            face_i = __model__.geom.query.navPgonToFace(index);
-        }
-        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
-        let total_area = 0;
-        for (const tri_i of tris_i) {
-            const corners_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
-            const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
-            const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
-            total_area += tri_area;
-        }
-        return total_area;
-    } else if (isPline(ent_type) || isWire(ent_type)) {
-        // wires, these need to be triangulated
-        let wire_i: number = index;
-        if (isPline(ent_type)) {
-            wire_i = __model__.geom.query.navPlineToWire(index);
-        }
-        if (__model__.geom.query.istWireClosed(wire_i)) {
-            throw new Error(fn_name + ': ' + 'To calculate area, wire must be closed');
-        }
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);
-        const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
-        const tris: number[][] = triangulate(xyzs);
-        let total_area = 0;
-        for (const tri of tris) {
-            const corners_xyzs: Txyz[] = tri.map(corner_i => xyzs[corner_i]);
-            const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2] );
-            total_area += tri_area;
-        }
-        return total_area;
-    }
+    return _area(__model__, ents_arr);
 }
 // ================================================================================================
 /**

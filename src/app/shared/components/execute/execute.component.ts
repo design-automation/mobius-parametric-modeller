@@ -214,10 +214,14 @@ export class ExecuteComponent {
                     const request = new XMLHttpRequest();
                     request.open('GET', val);
                     request.onload = () => {
-                        resolve(request.responseText);
+                        if (request.status === 200) {
+                            resolve(request.responseText);
+                        } else {
+                            resolve(arg.value);
+                        }
                     };
                     request.onerror = () => {
-                        resolve(val);
+                        resolve(arg.value);
                     };
                     request.send();
                 });

@@ -160,7 +160,9 @@ export class CodeUtils {
                         continue;
                     }
                     argVals.push(this.repGetAttrib(arg.value));
-
+                }
+                if (prod.meta.name === 'ImportData') {
+                    argVals[1] = prod.resolvedValue;
                 }
                 const argValues = argVals.join(', ');
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;

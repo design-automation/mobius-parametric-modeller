@@ -201,7 +201,28 @@ export class ExecuteComponent {
                     if (arg.type.toString() !== InputType.URL.toString()) { continue; }
                     prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
                 }
-             }
+            } else if (prod.type === ProcedureTypes.Function && prod.meta.name === 'ImportData') {
+                const arg = prod.args[2];
+                let val = <string>arg.value.replace(/ /g, '');
+                if (val[0] === '"') {
+                    val = val.substring(1, val.length - 1);
+                }
+                if (val.indexOf('dropbox') !== -1) {
+                    val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
+                }
+                const p = new Promise((resolve) => {
+                    const request = new XMLHttpRequest();
+                    request.open('GET', val);
+                    request.onload = () => {
+                        resolve(request.responseText);
+                    };
+                    request.onerror = () => {
+                        resolve(val);
+                    };
+                    request.send();
+                });
+                prod.resolvedValue = '`' + await p + '`';
+            }
             if (prod.children) {await this.resolveImportedUrl(prod.children); }
         }
     }

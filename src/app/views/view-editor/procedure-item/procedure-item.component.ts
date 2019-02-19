@@ -207,11 +207,27 @@ export class ProcedureItemComponent {
         // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
-        this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
-            /\s*([\[\]])\s*/g, '$1').replace(
-            /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
-            .replace(/([\<\>\=\!])\s+=/g, '$1=')
-            .trim().replace(/\s{2,}/g, ' ');
+        const vals = this.data.args[argIndex].value.split('"');
+        let result = '';
+        for (let i = 0; i < vals.length; i += 2) {
+            if (i > 0) {
+                result += ' "' + vals[i - 1] + '" ';
+            }
+            result += vals[i].replace(
+                /\s*([\[\]])\s*/g, '$1').replace(
+                /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
+                .replace(/([\<\>\=\!])\s+=/g, '$1=')
+                .trim().replace(/\s{2,}/g, ' ');
+            if (i === vals.length - 2 ) {
+                result += ' "' + vals[i + 1] + '" ';
+            }
+        }
+        this.data.args[argIndex].value = result.trim();
+        // this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
+        //     /\s*([\[\]])\s*/g, '$1').replace(
+        //     /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
+        //     .replace(/([\<\>\=\!])\s+=/g, '$1=')
+        //     .trim().replace(/\s{2,}/g, ' ');
     }
 
     // argHighlight(value: any) {

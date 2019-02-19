@@ -209,15 +209,41 @@ export class ProcedureItemComponent {
         if (!this.data.args[argIndex].value) { return; }
         const vals = this.data.args[argIndex].value.split('"');
         let result = '';
+        let startOnEven = true;
         for (let i = 0; i < vals.length; i += 2) {
             if (i > 0) {
-                result += ' "' + vals[i - 1] + '" ';
+                if (startOnEven) {
+                    result += ' "' + vals[i - 1] + '" ';
+                } else {
+                    result += '"' + vals[i - 1] + '"';
+                }
             }
-            result += vals[i].replace(
-                /\s*([\[\]])\s*/g, '$1').replace(
-                /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
-                .replace(/([\<\>\=\!])\s+=/g, '$1=')
-                .trim().replace(/\s{2,}/g, ' ');
+
+            const valSplit = vals[i].split(`'`);
+            for (let j = startOnEven ? 0 : 1; j < valSplit.length; j += 2) {
+                if (j === 1) {
+                    result += valSplit[0] + `' `;
+                } else if (j > 1) {
+                    result += ` '` + valSplit[j - 1] + `' `;
+                }
+                result += valSplit[j].replace(
+                    /\s*([\[\]])\s*/g, '$1').replace(
+                    /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
+                    .replace(/([\<\>\=\!])\s+=/g, '$1=')
+                    .trim().replace(/\s{2,}/g, ' ');
+                if (j === valSplit.length - 2 ) {
+                    result += ` '` + valSplit[j + 1];
+                }
+            }
+            if (valSplit.length % 2 === 0) {
+                startOnEven = !startOnEven;
+            }
+
+            // result += vals[i].replace(
+            //     /\s*([\[\]])\s*/g, '$1').replace(
+            //     /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
+            //     .replace(/([\<\>\=\!])\s+=/g, '$1=')
+            //     .trim().replace(/\s{2,}/g, ' ');
             if (i === vals.length - 2 ) {
                 result += ' "' + vals[i + 1] + '" ';
             }

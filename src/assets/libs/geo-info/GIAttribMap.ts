@@ -145,7 +145,6 @@ export class GIAttribMap {
         for (let i = 0; i < ents_i_values.length; i++) {
             this.setEntVal(ents_i_values[i][0], ents_i_values[i][1]);
         }
-
     }
     /**
      * Sets the value for a given entity or entities.

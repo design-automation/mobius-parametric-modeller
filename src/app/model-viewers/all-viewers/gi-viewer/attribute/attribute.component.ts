@@ -172,9 +172,10 @@ export class AttributeComponent implements OnChanges {
     const target = event.target || event.srcElement || event.currentTarget;
 
     if (this.selected_ents.has(ent_id)) {
+      this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
+      this.selected_ents.delete(ent_id);
       // @ts-ignore
       target.parentNode.classList.remove('selected-row');
-      this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
     } else {
       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
       this.selected_ents.set(ent_id, id);

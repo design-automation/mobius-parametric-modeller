@@ -18,11 +18,25 @@ export class ParameterEditorComponent  {
     @Input() prodCheck: boolean;
     @Input() disableInput: boolean;
     @Output() selectInp = new EventEmitter();
+    @Output() delete = new EventEmitter();
+    @Output() disableProds = new EventEmitter();
+    @Output() regAction = new EventEmitter();
 
 
-    deleteProd(index: number) {
+    deleteProd() {
+        this.delete.emit();
+    }
+
+    deleteChild(index: number) {
+        this.regAction.emit([{'type': 'del', 'parent': undefined, 'index': index, 'prod': this.node.procedure[index]}]);
         this.node.procedure.splice(index, 1);
         NodeUtils.deselect_procedure(this.node);
+    }
+
+    markDisabled() {
+        // this.node.procedure.splice(index, 1);
+        // NodeUtils.deselect_procedure(this.node);
+        this.disableProds.emit();
     }
 
     inputSize(val) {

@@ -52,7 +52,8 @@
                                     [data]="line"
                                     [disableInput]='disableInput'
                                     (select)="selectProcedure($event)"
-                                    (delete)="deleteChild(idx)"
+                                    (delete)="deleteSelectedProds()"
+                                    (deleteC)='deleteChild(idx)'
                                     (helpText)='updateHelpView($event)'
                                     ></procedure-item>
                                 </div>
@@ -65,7 +66,10 @@
                                 [node]='getNode()'
                                 [prodCheck]='true'
                                 [disableInput]='disableInput'
-                                (selectInp)='selectProcedure($event)'></parameter-editor>
+                                (regAction)='regAction($event)'
+                                (selectInp)='selectProcedure($event)'
+                                (disableProds) = 'disableSelectedProds()'
+                                (delete)='deleteSelectedProds()'></parameter-editor>
                                 <div id = 'spacer'></div>
                                 
                             </div>

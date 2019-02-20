@@ -17,6 +17,8 @@ export class ProcedureInputEditorComponent {
     @Input() prod: IProcedure;
     @Input() disableInput: boolean;
     @Output() delete = new EventEmitter();
+    @Output() deleteC = new EventEmitter();
+    @Output() disableProds = new EventEmitter();
     @Output() selectInp = new EventEmitter();
 
     PortTypes = InputType;
@@ -51,11 +53,15 @@ export class ProcedureInputEditorComponent {
 
     // delete this procedure
     deleteProd(): void {
-        this.delete.emit();
+        if (!this.prod.selected) {
+            this.deleteC.emit();
+        } else {
+            this.delete.emit();
+        }
     }
 
     markDisabled() {
-        this.prod.enabled = !this.prod.enabled;
+        this.disableProds.emit();
     }
 
     updateMin(args, event) {

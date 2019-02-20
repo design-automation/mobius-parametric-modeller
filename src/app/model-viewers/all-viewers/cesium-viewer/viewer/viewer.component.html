@@ -1,0 +1,51 @@
+<div id="cesiumContainer" (click)="select();showAttribs($event)" (mousemove)="Colortext();">
+  <button class="cesium-button cesium-button-toolbar" (click)="save_geojson()" id="Download"><i class="fa fa-download"></i></button>
+  <div id="ColorBar" *ngIf="texts!==undefined">
+  	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 88%;margin-left: 9%">
+       <tr >
+          <th *ngFor="let text of texts;" style="text-align:right;width: 7%"><div  style="width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{text}}</div></th>
+        </tr>
+    </table>
+	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
+       <tr>
+          <th  *ngFor="let color of _Colorbar;let indx=index" style="width: 0.5px;" ><div [ngStyle]="{ 'background-color': color}" ><div *ngIf="indx%8===0" style="border-left: #FFFFFF 1px solid;border-color: black">&nbsp;</div><div *ngIf="indx%8!==0">&nbsp;</div></div></th>
+        </tr>
+    </table>
+  </div>
+  <div id="ColorBar" *ngIf="_Cattexts!==undefined" style="width: 100%;text-align: center">
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" *ngFor="let cattext of _Cattexts" style="display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; ">
+          <tr >
+            <th  style="width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; "><div [ngStyle]="{ 'background-color': cattext.color}" >&nbsp;&nbsp;&nbsp;</div></th>
+        </tr>
+        <tr>
+            <th><div matTooltip={{cattext.text}}  style="width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;">{{cattext.text}}</div></th>
+          </tr>
+        </table>
+  </div>
+  <div id="ColorBar" *ngIf="_CatNumtexts!==undefined" >
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 82%;margin: 0 auto;">
+      <tr >
+        <th *ngFor="let cattext of _CatNumtexts;" style="text-align:left;max-width: 3%"><div *ngIf="cattext.text!==null" style="width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{cattext.text}}</div><div *ngIf="cattext.text===null" style="width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">&nbsp;&nbsp;&nbsp;</div></th>
+      </tr>
+    </table>
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
+      <tr>
+        <th  *ngFor="let cattext of _CatNumtexts;let indx=index" style="width: 0.5px;" ><div [ngStyle]="{ 'background-color': cattext.color}" ><div style="border-color: black">&nbsp;</div></div></th>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="mode==='viewer'" id="ColorKey">
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;text-align:center;color:white;text-shadow: 0px 0px 3px black;" >
+      <tr>
+        <th  style="width: 40%;" ><div>Color:&nbsp;{{_ColorKey}}</div></th>
+        <th  style="width: 40%;" ><div>Extrude:&nbsp;{{_ExtrudeKey}}</div></th>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table id="cesium-infoBox-defaultTable" style="width: 140px;position:absolute;padding:4px;background-color:white;display: none;">
+       <tr *ngFor="let pickupArr of pickupArrs"><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px"><div matTooltip={{pickupArr.name}} style="width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.name}}</div></th><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px"><div matTooltip={{pickupArr.data}} style="width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.data}}</div></th></tr>
+       </table>
+        
+     </div>
+</div>

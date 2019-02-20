@@ -1,0 +1,8 @@
+<div id="mobiuscesium" style="height: 100%">
+	<cesium-viewer></cesium-viewer>
+	<div id="Toggle" (click)="toggleSlider()" ><span style="vertical-align: middle;">▹</span></div>
+	<div id="slide-nav"  [@slide_in_out]="slider_state" style="position: absolute;z-index: 101;top:0px;height: 100%">
+  		<app-setting ></app-setting>
+	</div>
+
+</div>

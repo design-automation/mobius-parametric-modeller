@@ -1,0 +1,13 @@
+<div id="setting" >
+  <mat-tab-group class="mat-tab-group" style="height: 100%;" (selectedTabChange)="changedata($event.index)">
+    <mat-tab label="&nbsp;Visualise&nbsp;" *ngIf="mode==='editor'" >
+      <app-visualise (change)="LoadViewer()" (click)="LoadViewer()"></app-visualise>
+    </mat-tab>
+    <mat-tab label="&nbsp;Attributes&nbsp;" *ngIf="mode==='editor'" >
+      <app-attributes ></app-attributes>
+    </mat-tab>
+    <mat-tab label="&nbsp;Publish&nbsp;" >
+      <app-publish  (change)="LoadViewer()" (click)="Reset();LoadViewer();"></app-publish>
+    </mat-tab>
+  </mat-tab-group>
+</div>

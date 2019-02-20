@@ -1,0 +1,84 @@
+<div id="publish" style="background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;"  >
+
+<div id="publishwindow" *ngIf="dataArr!==undefined">
+        <div *ngIf="_ColorKey!==undefined">
+        <table >
+          <tr>
+          <th class="colorkey" style="width: 280px" *ngIf="_ColorDescr!==undefined"><div style="color:#D3D3D3 !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{_ColorDescr}}</div></th></tr>
+        </table>
+        <table>
+          <tr>
+            <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;">Color&nbsp;&nbsp;:</div></th>
+          <th><div>
+            <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="_ColorKey">
+              <option class="cesium-option"  *ngFor="let ColorName of _ColorProperty" value={{ColorName}}>{{ColorName}}</option>
+            </select>
+          </div></th>
+          </tr>
+          </table>
+    </div>
+    <div *ngIf="_ExtrudeKey!==undefined">
+        <hr>
+          <table >
+          <tr>
+          <th class="colorkey" style="width: 280px" *ngIf="_ExtrudeDescr!==undefined"><div style="color:#D3D3D3 !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{_ExtrudeDescr}}</div></th></tr>
+        </table>
+        <table>
+          <tr>
+            <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;">Extrude&nbsp;&nbsp;:</div></th>
+          <th><div>
+            <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="_ExtrudeKey">
+               <option class="cesium-option"  *ngFor="let Height of _ExtrudeProperty" value={{Height}}>{{Height}}</option>
+            </select>
+          </div></th>
+          </tr>
+        </table>
+        <table>
+          <tr ><th style="width:40px;height: 25px;"><div style="width: 40px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;">Min&nbsp;&nbsp;:</div></th>
+          <th style="width:40px;"><div style="width: 40px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="_ExtrudeMin!==undefined">{{_ExtrudeMin}}</div></th></tr>
+
+          <tr><th style="width:40px;"><div style="width: 40px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;">Max&nbsp;&nbsp;:</div></th>
+          <th style="width:60px;"><div style="width: 60px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="_ExtrudeMax!==undefined">{{_ExtrudeMax}}</div></th></tr>
+      </table>
+    </div>
+    <div *ngIf="_Filter!==undefined">
+      <hr>
+      <div class="hide-container" style="margin-top:5px;">
+        <div *ngFor="let item of _Filter;" id={{item.divid}}>
+      <table>
+        <tr >
+          <th style="width:280px;height: 25px;"><div style="color:#D3D3D3 !important;text-align: justify;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;">{{item.descr}}</div></th></tr>
+        </table>
+        <table>
+          <tr>
+            <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;">{{item.HeightHide}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;">
+          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
+          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
+          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">=</div></th>
+          <th *ngIf="item.type === 'category'" style="width:40px;height: 25px;">
+          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">none</div>
+          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1">=</div>
+          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">!=</div></th>
+          <th *ngIf="item.type === 'number'" style="width:80px;color:#395D73 !important;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:80px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;"></th>
+          <th *ngIf="item.type === 'category'" style="width:73px;height: 25px;"><div style="width:73px;height: 25px;">
+          <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
+            <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
+          </select></div></th>
+        <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
+      </table>
+      <table>
+        <tr>
+        <th *ngIf="item.type === 'number'" style="width:50px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;text-align: right;">{{item.HideMin}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
+        </mat-slider></div></th>
+        <th *ngIf="item.type === 'number'" style="width:50px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
+      </table><hr>
+        </div>
+      </div>
+      <div style="padding: 10px 10px 0px 10px;">
+      <button style="color:#8AA8C0;border:1px solid #8AA8C0;" (click)="reset()">Reset</button></div>
+      </div>
+</div>
+
+  

@@ -12,7 +12,7 @@
  */
 
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx, TBBox } from '@libs/geo-info/common';
-import { checkCommTypes, checkIDs } from './_check_args';
+import { checkCommTypes, checkIDs, TypeCheckObj, IDcheckObj } from './_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
@@ -35,8 +35,8 @@ import { _normal } from './calc';
 export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
     // --- Error Check ---
     const fn_name = 'virtual.Ray';
-    const ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    checkCommTypes(fn_name, 'dir_vec', dir_vec, ['isVector']);
+    const ents_arr = checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin]);
+    checkCommTypes(fn_name, 'dir_vec', dir_vec, [TypeCheckObj.isVector]);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
@@ -65,9 +65,9 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
 export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec: Txyz): TPlane {
     // --- Error Check ---
     const fn_name = 'virtual.Plane';
-    const ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    checkCommTypes(fn_name, 'x_vec', x_vec, ['isVector']);
-    checkCommTypes(fn_name, 'xy_vec', xy_vec, ['isVector']);
+    const ents_arr = checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin]);
+    checkCommTypes(fn_name, 'x_vec', x_vec, [TypeCheckObj.isVector]);
+    checkCommTypes(fn_name, 'xy_vec', xy_vec, [TypeCheckObj.isVector]);
     // --- Error Check ---
     if (!Array.isArray(origin)) {
         const [ent_type, index]: [EEntType, number] = ents_arr as [EEntType, number];
@@ -101,7 +101,7 @@ function _rayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
  */
 export function RayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
     // --- Error Check ---
-    // checkCommTypes('virtual.RayFromPlane', 'origin', planes, ['isPlane']); //TODO accept a list of planes
+    // checkCommTypes('virtual.RayFromPlane', 'origin', planes, [TypeCheckObj.isPlane]); //TODO accept a list of planes
     // TODO allow list of planes
     // --- Error Check ---
     return _rayFromPlane(planes);
@@ -144,7 +144,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
 export function GetRay(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
     // --- Error Check ---
     const ents_arr = checkIDs('virtual.GetRay', 'entities', entities,
-        ['isID', 'isIDList'], ['EDGE', 'FACE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], ['EDGE', 'FACE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     return _getRay(__model__, ents_arr);
 }
@@ -179,7 +179,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  */
 export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
     // --- Error Check ---
-    const ents_arr =  checkIDs('virtual.GetPlane', 'entities', entities, ['isID', 'isIDList'], null); // takes in any
+    const ents_arr =  checkIDs('virtual.GetPlane', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null); // takes in any
     // TODO ['PGON', 'FACE', 'PLINE', 'WIRE']);
     // --- Error Check ---
     return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
@@ -228,7 +228,7 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
 export function GetBBox(__model__: GIModel, entities: TId|TId[]): TBBox {
     if (!Array.isArray(entities)) { entities = [entities]; }
     // --- Error Check ---
-    const ents_arr: TEntTypeIdx[] = checkIDs('virtual.BBox', 'entities', entities, ['isIDList'], null) as TEntTypeIdx[]; // all
+    const ents_arr: TEntTypeIdx[] = checkIDs('virtual.BBox', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
     // --- Error Check ---
     return _getBoundingBox(__model__, ents_arr);
 }
@@ -274,8 +274,8 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 export function VisRay(__model__: GIModel, ray: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visRay';
-    checkCommTypes(fn_name, 'ray', ray, ['isRay']); // TODO rays can be a list // add isRayList to enable check
-    checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
+    checkCommTypes(fn_name, 'ray', ray, [TypeCheckObj.isRay]); // TODO rays can be a list // add isRayList to enable check
+    checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
    return idsMake(_visRay(__model__, ray, scale)) as TId[];
 }
@@ -352,8 +352,8 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
 export function VisPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visPlane';
-    checkCommTypes(fn_name, 'planes', planes, ['isPlane']); // TODO planes can be a list // add isPlaneList to enable check
-    checkCommTypes(fn_name, 'scale', scale, ['isNumber']);
+    checkCommTypes(fn_name, 'planes', planes, [TypeCheckObj.isPlane]); // TODO planes can be a list // add isPlaneList to enable check
+    checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
 }
@@ -421,7 +421,7 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
 export function VisBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visBBox';
-    checkCommTypes(fn_name, 'bbox', bbox, ['isBBox']); // TODO bboxs can be a list // add isBBoxList to enable check
+    checkCommTypes(fn_name, 'bbox', bbox, [TypeCheckObj.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
     // --- Error Check ---
     return  idsMake(_visBBox(__model__, bbox)) as TId[];
 }

@@ -236,31 +236,51 @@ export class ViewEditorComponent implements AfterViewInit {
         }
     }
 
+    regAction(act) {
+        this.dataService.registerEdtAction(act);
+    }
+
+    disableSelectedProds() {
+        event.stopPropagation();
+        const prodList = this.dataService.node.state.procedure;
+        const newEnabled = ! prodList[prodList.length - 1].enabled;
+        for (const prod of prodList) {
+            if (prod.type === ProcedureTypes.Blank || prod.type === ProcedureTypes.Comment) { continue; }
+            prod.enabled = newEnabled;
+        }
+        // this.data.enabled = !this.data.enabled;
+    }
+
+
+    deleteSelectedProds() {
+        const node = this.dataService.node;
+        const redoActions = [];
+        for (const prod of node.state.procedure) {
+            let prodList: IProcedure[];
+            if (prod.parent) {
+                prodList = prod.parent.children;
+            } else {
+                prodList = node.procedure;
+            }
+            prod.selected = false;
+            for (let i = 1; i < prodList.length; i++) {
+                if (prodList[i].ID === prod.ID) {
+                    redoActions.unshift({'type': 'del', 'parent': prodList[i].parent, 'index': i, 'prod': prodList[i]});
+                    prodList.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        this.dataService.registerEdtAction(redoActions);
+        this.dataService.node.state.procedure = [];
+    }
 
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
         if (!(event.ctrlKey && event.shiftKey)) { this.disableInput = false; }
         if (!this.copyCheck) { return; }
         if (event.key === 'Delete') {
-            const node = this.dataService.node;
-            const redoActions = [];
-            for (const prod of node.state.procedure) {
-                let prodList: IProcedure[];
-                if (prod.parent) {
-                    prodList = prod.parent.children;
-                } else {
-                    prodList = node.procedure;
-                }
-                prod.selected = false;
-                for (let i = 1; i < prodList.length; i++) {
-                    if (prodList[i].ID === prod.ID) {
-                        redoActions.unshift({'type': 'del', 'parent': prodList[i].parent, 'index': i, 'prod': prodList[i]});
-                        prodList.splice(i, 1);
-                    }
-                }
-            }
-            this.dataService.registerEdtAction(redoActions);
-            this.dataService.node.state.procedure = [];
+            this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
             let actions: any;
             // if ((<HTMLElement>event.target).nodeName === 'INPUT') {return; }

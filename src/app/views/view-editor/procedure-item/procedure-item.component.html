@@ -54,7 +54,8 @@
                     [data]="line"
                     [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild(idx)'
+                    (delete)='emitDelete()'
+                    (deleteC)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -82,7 +83,8 @@
                     [data]="line"
                     [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild(idx)'
+                    (delete)='emitDelete()'
+                    (deleteC)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -101,7 +103,8 @@
                     [data]="line"
                     [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild(idx)'
+                    (delete)='emitDelete()'
+                    (deleteC)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -159,7 +162,8 @@
                     [data]="line"
                     [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild(idx)'
+                    (delete)='emitDelete()'
+                    (deleteC)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -189,7 +193,8 @@
                     [data]="line"
                     [disableInput]="disableInput"
                     (select)='selectChild($event, line)'
-                    (delete)='deleteChild(idx)'
+                    (delete)='emitDelete()'
+                    (deleteC)='deleteChild(idx)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -294,11 +299,11 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button>
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled()' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon'>tv_off</mat-icon>
             </button>
             <!-- Print button-->
-            <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint()' tabindex="-1">
+            <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint($event)' tabindex="-1">
                 <mat-icon class='icon'>print</mat-icon>
             </button>
             <!-- help button-->

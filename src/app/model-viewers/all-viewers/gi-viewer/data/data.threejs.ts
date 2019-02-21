@@ -35,8 +35,10 @@ export class DataThreejs {
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
     public grid: THREE.GridHelper;
+    private grid_pos: THREE.Vector3 = new THREE.Vector3();
     // axes
     public axesHelper: THREE.AxesHelper;
+    private axes_pos: THREE.Vector3 = new THREE.Vector3();
     directional_light: THREE.DirectionalLight;
     ambient_light: THREE.AmbientLight;
     hemisphere_light: THREE.HemisphereLight;
@@ -183,10 +185,15 @@ export class DataThreejs {
             this._scene.add(this.groundObj);
         }
 
-        // const allObjs = this.getAllObjs();
-        // const center = allObjs.center;
-        // this.grid.position.copy(center);
-        // this.axesHelper.position.copy(center);
+        const allObjs = this.getAllObjs();
+        const center = allObjs.center;
+        this.grid_pos.x = center.x;
+        this.grid_pos.y = center.y;
+        this.axes_pos.x = center.x;
+        this.axes_pos.y = center.y;
+        this.grid.position.set(center.x, center.y, 0);
+        this.axesHelper.position.set(center.x, center.y, 0);
+        this.cameraLookat(center, allObjs.radius);
     }
 
     /**
@@ -644,6 +651,7 @@ export class DataThreejs {
         this.axesHelper.visible = this.settings.axes.show;
         if (this.axesHelper.visible) {
             this.axesHelper.name = 'AxesHelper';
+            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0);
             this._scene.add(this.axesHelper);
         }
         // this.axesHelper.position.set(0, 0, 0);
@@ -668,7 +676,7 @@ export class DataThreejs {
             this.grid.name = 'GridHelper';
             const vector = new THREE.Vector3(0, 1, 0);
             this.grid.lookAt(vector);
-            this.grid.position.set(0, 0, 0);
+            this.grid.position.set(this.grid_pos.x, this.grid_pos.y, 0);
             this._scene.add(this.grid);
         }
     }
@@ -880,14 +888,16 @@ export class DataThreejs {
         // this.grid.position.set(center.x, center.y, 0);
         // this.axesHelper.position.set(center.x, center.y, 0);
 
+        this.cameraLookat(center, radius);
+    }
+
+    private cameraLookat(center, radius = 100) {
         const fov = this._camera.fov * (Math.PI / 180);
         const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
-        vec_centre_to_pos.subVectors(this._camera.position, center);
-        const r = radius < 100 ? 200 : (radius < 500 ? 10 : 1);
-        const f = 1 + (width / radius / r);
-        const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2) / f),
-            Math.abs(radius / Math.sin(fov / 2) / f),
-            Math.abs(radius / Math.sin(fov / 2)) / f);
+        vec_centre_to_pos.subVectors(this._camera.position, vec_centre_to_pos);
+        const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2)),
+            Math.abs(radius / Math.sin(fov / 2)),
+            Math.abs(radius / Math.sin(fov / 2)));
         vec_centre_to_pos.setLength(tmp_vec.length());
         const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
         perspectiveNewPos.addVectors(center, vec_centre_to_pos);

@@ -55,6 +55,7 @@ export class ProcedureItemComponent {
     @Input() data: IProcedure;
     @Input() disableInput: boolean;
     @Output() delete = new EventEmitter();
+    @Output() deleteC = new EventEmitter();
     @Output() select = new EventEmitter();
     @Output() copied = new EventEmitter();
     @Output() pasteOn = new EventEmitter();
@@ -130,11 +131,6 @@ export class ProcedureItemComponent {
     }
 
 
-    // delete this procedure
-    emitDelete(): void {
-        this.delete.emit();
-    }
-
     // select this procedure
     emitSelect(event, procedure: IProcedure) {
         event.stopPropagation();
@@ -148,23 +144,62 @@ export class ProcedureItemComponent {
         }
     }
 
+    // select child procedure (after receiving emitSelect from child procedure)
+    selectChild(event, procedure: IProcedure) {
+        this.select.emit(event);
+    }
+
+    markPrint(event: MouseEvent) {
+        event.stopPropagation();
+        if (!this.data.selected) {
+            this.data.print = !this.data.print;
+            return;
+        }
+        const prodList = this.dataService.node.state.procedure;
+        let newPrint;
+        let i = prodList.length - 1;
+        while (i >= 0 && !(prodList[i].argCount > 0 && prodList[i].args[0].name === 'var_name')) {
+            i--;
+        }
+        if (i === -1) { return; }
+        newPrint = ! prodList[i].print;
+        for (const prod of prodList) {
+            if (prod.argCount > 0 && prod.args[0].name === 'var_name') {
+                prod.print = newPrint;
+            }
+        }
+        // this.data.print = !this.data.print;
+    }
+
+    markDisabled(event: MouseEvent) {
+        event.stopPropagation();
+        if (!this.data.selected) {
+            this.data.enabled = !this.data.enabled;
+            return;
+        }
+        const prodList = this.dataService.node.state.procedure;
+        const newEnabled = ! prodList[prodList.length - 1].enabled;
+        for (const prod of prodList) {
+            if (prod.type === ProcedureTypes.Blank || prod.type === ProcedureTypes.Comment) { continue; }
+            prod.enabled = newEnabled;
+        }
+        // this.data.enabled = !this.data.enabled;
+    }
+
     // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(index: number): void {
         this.dataService.registerEdtAction([{'type': 'del', 'parent': this.data, 'index': index, 'prod': this.data.children[index]}]);
         this.data.children.splice(index, 1);
     }
 
-    // select child procedure (after receiving emitSelect from child procedure)
-    selectChild(event, procedure: IProcedure) {
-        this.select.emit(event);
-    }
 
-    markPrint() {
-        this.data.print = !this.data.print;
-    }
-
-    markDisabled() {
-        this.data.enabled = !this.data.enabled;
+    // delete this procedure
+    emitDelete(): void {
+        if (! this.data.selected) {
+            this.deleteC.emit();
+        } else {
+            this.delete.emit();
+        }
     }
 
     canBePrinted() {

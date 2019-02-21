@@ -16,7 +16,7 @@ import { _MatMenuItemMixinBase } from '@angular/material/menu/typings/menu-item'
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { normal, area } from '@libs/geom/triangle';
-import { checkIDs, checkCommTypes, checkIDnTypes} from './_check_args';
+import { checkIDs, checkCommTypes, checkIDnTypes, IDcheckObj, TypeCheckObj} from './_check_args';
 
 // ================================================================================================
 export enum _EDistanceMethod {
@@ -55,8 +55,8 @@ function _distancePtoP(__model__: GIModel, ent_arr1: TEntTypeIdx, ents_arr2: TEn
 export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[], method: _EDistanceMethod): number|number[] {
     // --- Error Check ---
     const fn_name = 'calc.Distance';
-    const ents_arr1 = checkIDs(fn_name, 'position1', position1, ['isID'], ['POSI'])  as TEntTypeIdx;
-    const ents_arr2 = checkIDs(fn_name, 'position2', position2, ['isID'], ['POSI']) as TEntTypeIdx|TEntTypeIdx[]; // TODO
+    const ents_arr1 = checkIDs(fn_name, 'position1', position1, [IDcheckObj.isID], ['POSI'])  as TEntTypeIdx;
+    const ents_arr2 = checkIDs(fn_name, 'position2', position2, [IDcheckObj.isID], ['POSI']) as TEntTypeIdx|TEntTypeIdx[]; // TODO
     // --- Error Check ---
     if (method === _EDistanceMethod.P_P_DISTANCE) {
         return _distancePtoP(__model__, ents_arr1, ents_arr2);
@@ -76,7 +76,7 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[
  */
 export function Length(__model__: GIModel, lines: TId|TId[]): number {
     // --- Error Check ---
-    checkIDs('calc.Length', 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
+    checkIDs('calc.Length', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], ['EDGE', 'WIRE', 'PLINE']);
     // --- Error Check ---
     if (!Array.isArray(lines)) {
         lines = [lines] as TId[];
@@ -159,7 +159,8 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
 export function Area(__model__: GIModel, entities: TId): number|number[] {
     // --- Error Check ---
     const fn_name = 'calc.Area';
-    const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], ['PGON', 'FACE', 'PLINE', 'WIRE']) as TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], ['PGON', 'FACE', 'PLINE', 'WIRE']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     return _area(__model__, ents_arr);
 }
@@ -172,7 +173,7 @@ export function Area(__model__: GIModel, entities: TId): number|number[] {
  */
 export function Vector(__model__: GIModel, edge: TId): Txyz {
     // --- Error Check ---
-    checkIDs('calc.Vector', 'edge', edge, ['isID'], ['EDGE']);
+    checkIDs('calc.Vector', 'edge', edge, [IDcheckObj.isID], ['EDGE']);
     // --- Error Check ---
     const [ent_type, index]: [EEntType, number] = idsBreak(edge) as TEntTypeIdx;
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
@@ -202,7 +203,7 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz {
     if (!Array.isArray(entities)) { entities = [entities]; }
     const ents_arr: TEntTypeIdx[] = idsBreak(entities) as TEntTypeIdx[];
     // --- Error Check ---
-    checkIDs('calc.Centroid', 'geometry', entities, ['isID', 'isIDList'],
+    checkIDs('calc.Centroid', 'geometry', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
             ['POSI', 'VERT', 'POINT', 'EDGE', 'WIRE', 'PLINE', 'FACE', 'PGON', 'COLL']);
     // --- Error Check ---
     return _centroid(__model__, ents_arr);
@@ -313,7 +314,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * Calculates the normal vector of an entity or list of entities.
  * ~
  * For polygons, faces, and face wires the normal is calculated by taking the average of all the normals of the face triangles.
- * For polylines and polyline wires, the normal is calculated by triangulating the positions, and then 
+ * For polylines and polyline wires, the normal is calculated by triangulating the positions, and then
  * taking the average of all the normals of the triangles.
  * For edges, the normal is calculated by takingthe avery of teh normals of the two vertices.
  * For vertices, the normal is calculated by creating a triangle out of the two adjacent edges,
@@ -333,7 +334,7 @@ export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): 
     const ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const fn_name = 'calc.Normal';
-    checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null);
+    checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
     // --- Error Check ---
     return _normal(__model__, ents_arr, scale);
 }
@@ -349,8 +350,8 @@ export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): 
 export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txyz|Txyz[] {
     // --- Error Check ---
     const fn_name = 'calc.ParamTToXyz';
-    checkIDs(fn_name, 'line', line, ['isID'], ['EDGE', 'WIRE', 'PLINE']);
-    checkCommTypes(fn_name, 't_param', t_param, ['isNumber']);
+    checkIDs(fn_name, 'line', line, [IDcheckObj.isID], ['EDGE', 'WIRE', 'PLINE']);
+    checkCommTypes(fn_name, 't_param', t_param, [TypeCheckObj.isNumber]);
     if (t_param < 0 || t_param > 1) {throw new Error(fn_name + ': ' + 't_param is not between 0 and 1'); }
     // --- Error Check ---
     const edges_i: number[] = [];
@@ -412,8 +413,9 @@ export function ParamTToXyz(__model__: GIModel, line: TId, t_param: number): Txy
 export function _ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
     // --- Error Check ---
     // const fn_name = 'calc.ParamXyzToT';
-    // checkIDs(fn_name, 'lines', lines, ['isID', 'isIDList'], ['EDGE', 'WIRE', 'PLINE']);
-    // checkIDnTypes(fn_name, 'locations', locations, ['isID', 'isIDList', 'isCoord'], ['POSI', 'VERT', 'POINT']);
+    // checkIDs(fn_name, 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], ['EDGE', 'WIRE', 'PLINE']);
+    // checkIDnTypes(fn_name, 'locations', locations,
+    //               [IDcheckObj.isID, IDcheckObj.isIDList, TypeCheckObj.isNumberList], ['POSI', 'VERT', 'POINT']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

@@ -124,8 +124,10 @@ export class GIGeomModify {
             // delete the pline and check collections
             this._geom_arrays.dn_plines_wires[pline_i] = null;
             for (const coll of this._geom_arrays.dn_colls_objs) {
-                const coll_plines_i: number[] = coll[2];
-                arrRem(coll_plines_i, pline_i);
+                if (coll !== null) {
+                    const coll_plines_i: number[] = coll[2];
+                    arrRem(coll_plines_i, pline_i);
+                }
             }
             // delete the wire
             this._geom_arrays.dn_wires_edges[wire_i] = null;

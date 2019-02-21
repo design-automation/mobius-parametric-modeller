@@ -13,7 +13,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
 import { idsMake, getArrDepth } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj } from './_check_args';
+import { checkIDs } from './_check_args';
 
 // TQuery should be something like this:
 //
@@ -107,6 +107,7 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         }
         // check if the query is null
         if (query_expr === null || query_expr === undefined) {
+            // sort
             return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
         }
         // do the query on the list of entities
@@ -121,6 +122,7 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
                 query_results_arr.push(query_result);
             }
         }
+        // sort
         return query_results_arr;
     }
 }
@@ -153,7 +155,7 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // TODO add a condition called isNull for entities
     // TODO check the query string
@@ -202,7 +204,7 @@ export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
@@ -231,7 +233,7 @@ export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
     // --- Error Check ---
     // if (entities !== null && entities !== undefined) {
-    //     checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
+    //     checkIDs('query.Count', 'entities', entities, ['isID', 'isIDList'], null);
     // }
     // --- Error Check ---
     return Get(__model__, select, entities, query_expr).length; // Check done in Get
@@ -272,7 +274,7 @@ export function Neighbours(__model__: GIModel, select: _EQuerySelect, entities: 
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.Get', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
@@ -315,7 +317,7 @@ export enum _ESortMethod {
  */
 export function Sort(__model__: GIModel, entities: TId[], sort_expr: TQuery, method: _ESortMethod): TId[] {
     // --- Error Check ---
-    const ents_arr = checkIDs('query.Sort', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const ents_arr = checkIDs('query.Sort', 'entities', entities, ['isIDList'], null) as TEntTypeIdx[];
     // TODO check the sort expression
     // --- Error Check ---
     const sort_method: ESort = (method === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
@@ -508,7 +510,7 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
 /**
  * Checks the type of an entity.
  * ~
- * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex.
+ * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex. 
  * For is_unused_posi, it returns the opposite of is_used_posi.
  * For is_object, returns true if the entity is a point, a polyline, or a polygon.
  * For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
@@ -530,7 +532,7 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
 export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _EQueryEntType): boolean|boolean[] {
     // --- Error Check ---
     const fn_name = 'query.Type';
-    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     return _type(__model__, ents_arr, query_ent_type);
 }
@@ -586,7 +588,7 @@ export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _E
  */
 export function _IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     // --- Error Check ---
-    const ents_arr = checkIDs('query.isClosed', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], ['PLINE', 'WIRE', 'PGON']);
+    const ents_arr = checkIDs('query.isClosed', 'lines', lines, ['isID', 'isIDList'], ['PLINE', 'WIRE', 'PGON']);
     // --- Error Check ---
     return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }

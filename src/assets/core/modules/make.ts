@@ -76,7 +76,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Point', 'positions', positions,
-        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], ['POSI'])  as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], [EEntType.POSI])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr);
     return idsMake(new_ents_arr) as TId|TId[];
@@ -153,7 +153,8 @@ export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close:
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polyline', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        ['POSI', 'EDGE', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.POSI, EEntType.EDGE, EEntType.WIRE,
+        EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPlinePosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _polyline(__model__, posis_arrs, close) as  TEntTypeIdx[];
@@ -229,7 +230,7 @@ export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TI
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polygon', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        ['POSI', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPgonPosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _polygon(__model__, posis_arrs) as TEntTypeIdx[];
@@ -273,13 +274,13 @@ export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|T
     const fn_name = 'make.Collection';
     let parent_index: number;
     if (parent_coll !== null && parent_coll !== undefined) {
-        const parent_ent_arr = checkIDs(fn_name, 'parent_coll', parent_coll, [IDcheckObj.isID], ['COLL']) as TEntTypeIdx;
+        const parent_ent_arr = checkIDs(fn_name, 'parent_coll', parent_coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
         parent_index = parent_ent_arr[1];
     } else {
         parent_index = -1;
     }
     const ents_arr = checkIDs(fn_name, 'geometry', geometry,
-        [IDcheckObj.isID, IDcheckObj.isIDList], ['POINT', 'PLINE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.POINT, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const new_ent_arr: TEntTypeIdx = _collection(__model__, parent_index, ents_arr);
     return idsMake(new_ent_arr) as TId;
@@ -354,7 +355,8 @@ export enum _ECopyAttribues {
 export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Copy', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
     // copy the list of entities
@@ -424,10 +426,10 @@ function _getHolePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntT
 export function Hole(__model__: GIModel, face: TId, positions: TId|TId[]|TId[][]): TId[] {
     if (!Array.isArray(positions)) { positions = [positions]; }
     // --- Error Check ---
-    const face_ent_arr = checkIDs('make.Hole', 'face', face, [IDcheckObj.isID], ['FACE', 'PGON']) as TEntTypeIdx;
+    const face_ent_arr = checkIDs('make.Hole', 'face', face, [IDcheckObj.isID], [EEntType.FACE, EEntType.PGON]) as TEntTypeIdx;
     const holes_ents_arr = checkIDs('make.Hole', 'positions', positions,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        ['POSI', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     _getHolePosisFromEnts(__model__, holes_ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _hole(__model__, face_ent_arr, holes_ents_arr);
@@ -664,7 +666,8 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
 export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: number, method: _ELoftMethod): TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Loft', 'entities', entities,
-        [IDcheckObj.isIDList, IDcheckObj.isIDList_list], ['EDGE', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[]|TEntTypeIdx[][];
+        [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _loft(__model__, ents_arr, divisions, method);
     return idsMake(new_ents_arr) as TId[];
@@ -673,7 +676,7 @@ export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: num
 // export function _Loft(__model__: GIModel, edges: TId[], method: _ELoftMethod): TId[] {
 //     // --- Error Check ---
 //     const ents_arr = checkIDs('make.Loft', 'edges', edges,
-//         [IDcheckObj.isIDList], ['EDGE', 'WIRE', 'FACE', 'PLINE', 'PGON']) as TEntTypeIdx[];
+//         [IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
 //     // --- Error Check ---
 //     const new_ents_arr: TEntTypeIdx[] = _loft(__model__, ents_arr, method);
 //     return idsMake(new_ents_arr) as TId[];
@@ -920,7 +923,8 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
     const fn_name = 'make.Extrude';
     const ents_arr =  checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList],
-        ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+        [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+         EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     checkCommTypes(fn_name, 'dist', distance, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
     checkCommTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
     // --- Error Check ---
@@ -937,7 +941,8 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
 //     const fn_name = 'make.Extrude';
 //     const ents_arr =  checkIDs(fn_name, 'entities', entities,
 //         [IDcheckObj.isID, IDcheckObj.isIDList],
-//         ['VERT', 'EDGE', 'WIRE', 'FACE', 'POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+//         [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.POSI,
+//          EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
 //     checkCommTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
 //     checkCommTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
 //     // --- Error Check ---
@@ -962,7 +967,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
  */
 export function _Join(__model__: GIModel, geometry: TId[]): TId {
     // --- Error Check ---
-    // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, [IDcheckObj.isIDList], ['PLINE', 'PGON']);
+    // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -1042,7 +1047,7 @@ export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, me
     // --- Error Check ---
     const fn_name = 'make.Divide';
     const ents_arr = checkIDs('make.Copy', 'edges', edges,
-        [IDcheckObj.isID, IDcheckObj.isIDList], ['EDGE', 'WIRE', 'PLINE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     checkCommTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _divide(__model__, ents_arr, divisor, method);
@@ -1065,7 +1070,8 @@ export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, me
 export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     // --- Error Check ---
     let ents_arr = checkIDs('modify.Unweld', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
-                              ['VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
+                            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+                            EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]);
     // --- Error Check ---
     if (!Array.isArray(ents_arr[0])) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
@@ -1126,9 +1132,9 @@ return [EEntType.PGON, pgon_i];
 */
 function _PolygonHoles(__model__: GIModel, positions: TId[], hole_positions: TId[]|TId[][]): TId {
 // --- Error Check ---
-const pgon_ents_arr = checkIDs('make.Polygon', 'positions', positions, [IDcheckObj.isIDList], ['POSI']) as TEntTypeIdx[];
+const pgon_ents_arr = checkIDs('make.Polygon', 'positions', positions, [IDcheckObj.isIDList], [EEntType.POSI]) as TEntTypeIdx[];
 const holes_ents_arr = checkIDs('make.Polygon', 'positions', hole_positions,
-    [IDcheckObj.isIDList, IDcheckObj.isIDList_list], ['POSI']) as TEntTypeIdx[]|TEntTypeIdx[][];
+    [IDcheckObj.isIDList, IDcheckObj.isIDList_list], [EEntType.POSI]) as TEntTypeIdx[]|TEntTypeIdx[][];
 // --- Error Check ---
 const new_ent_arr: TEntTypeIdx = _polygonHoles(__model__, pgon_ents_arr, holes_ents_arr);
 console.log(__model__);

@@ -510,7 +510,7 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
 /**
  * Checks the type of an entity.
  * ~
- * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex. 
+ * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex.
  * For is_unused_posi, it returns the opposite of is_used_posi.
  * For is_object, returns true if the entity is a point, a polyline, or a polygon.
  * For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
@@ -588,7 +588,8 @@ export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _E
  */
 export function _IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     // --- Error Check ---
-    const ents_arr = checkIDs('query.isClosed', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], ['PLINE', 'WIRE', 'PGON']);
+    const ents_arr = checkIDs('query.isClosed', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList],
+                                [EEntType.PLINE, EEntType.WIRE, EEntType.PGON]);
     // --- Error Check ---
     return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }

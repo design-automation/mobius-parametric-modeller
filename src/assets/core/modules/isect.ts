@@ -25,8 +25,12 @@ import { checkIDs, checkCommTypes, checkIDnTypes, IDcheckObj} from './_check_arg
 export function Intersect(__model__: GIModel, entities1: TId, entities2: TId): TId[] {
     // --- Error Check ---
     // const fn_name = 'isect.Intersect';
-    // const ents_arr_1 = checkIDnTypes(fn_name, 'object1', entities1, [IDcheckObj.isID, TypeCheckObj.isPlane], ['PLINE', 'PGON', 'FACE']);
-    // const ents_arr_2 = checkIDnTypes(fn_name, 'object2', entities2, [IDcheckObj.isID, TypeCheckObj.isPlane], ['PLINE', 'PGON', 'FACE']);
+    // const ents_arr_1 = checkIDnTypes(fn_name, 'object1', entities1,
+    //                                  [IDcheckObj.isID, TypeCheckObj.isPlane],
+    //                                  [EEntType.PLINE, EEntType.PGON, EEntType.FACE]);
+    // const ents_arr_2 = checkIDnTypes(fn_name, 'object2', entities2,
+    //                                  [IDcheckObj.isID, TypeCheckObj.isPlane],
+    //                                  [EEntType.PLINE, EEntType.PGON, EEntType.FACE]);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }
@@ -49,7 +53,7 @@ export enum _EKnifeKeep {
 export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: _EKnifeKeep): TId[] {
     // --- Error Check ---
     // const fn_name = 'isect.Knife';
-    // const ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isIDList'], ['POINT', 'PLINE', 'PGON']);
+    // const ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isIDList'], [EEntType.POINT, EEntType.PLINE, EEntType.PGON]);
     // checkCommTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
@@ -66,8 +70,8 @@ export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: 
 export function Split(__model__: GIModel, geometry: TId[], polyline: TId): TId[] {
     // --- Error Check ---
     // const fn_name = 'isect.Split';
-    // const ents_arr = checkIDs(fn_name, 'objects', geometry, ['isIDList'], ['PLINE', 'PGON']);
-    // checkIDs(fn_name, 'polyline', polyline, [IDcheckObj.isID], ['PLINE']);
+    // const ents_arr = checkIDs(fn_name, 'objects', geometry, ['isIDList'], [EEntType.PLINE, EEntType.PGON]);
+    // checkIDs(fn_name, 'polyline', polyline, [IDcheckObj.isID], [EEntType.PLINE]);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

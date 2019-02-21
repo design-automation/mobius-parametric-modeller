@@ -151,7 +151,7 @@ export class ProcedureItemComponent {
 
     markPrint(event: MouseEvent) {
         event.stopPropagation();
-        if (this.data.selected) {
+        if (!this.data.selected) {
             this.data.print = !this.data.print;
             return;
         }
@@ -167,7 +167,7 @@ export class ProcedureItemComponent {
 
     markDisabled(event: MouseEvent) {
         event.stopPropagation();
-        if (this.data.selected) {
+        if (!this.data.selected) {
             this.data.enabled = !this.data.enabled;
             return;
         }

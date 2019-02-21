@@ -156,7 +156,13 @@ export class ProcedureItemComponent {
             return;
         }
         const prodList = this.dataService.node.state.procedure;
-        const newPrint = ! prodList[prodList.length - 1].print;
+        let newPrint;
+        let i = prodList.length - 1;
+        while (i >= 0 && !(prodList[i].argCount > 0 && prodList[i].args[0].name === 'var_name')) {
+            i--;
+        }
+        if (i === -1) { return; }
+        newPrint = ! prodList[i].print;
         for (const prod of prodList) {
             if (prod.argCount > 0 && prod.args[0].name === 'var_name') {
                 prod.print = newPrint;

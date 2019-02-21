@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, EAttribPromote} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
-import { checkCommTypes, checkIDs} from './_check_args';
+import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 
@@ -41,9 +41,9 @@ import { Matrix4 } from 'three';
 export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz[]): void {
     // --- Error Check ---
     const fn_name = 'modify.Move';
-    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+    let ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                              ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'vectors', vectors, ['isVector', 'isVectorList']);
+    checkCommTypes(fn_name, 'vectors', vectors, [TypeCheckObj.isVector, TypeCheckObj.isVectorList]);
     // --- Error Check ---
     if (!Array.isArray(ents_arr[0])) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
@@ -103,11 +103,11 @@ export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz
 export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId|TPlane, axis: Txyz, angle: number): void {
     // --- Error Check ---
     const fn_name = 'modify.Rotate';
-    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+    let ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                             ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
-    checkCommTypes(fn_name, 'axis', axis, ['isXYZlist']);
-    checkCommTypes(fn_name, 'angle', angle, ['isNumber']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'axis', axis, [TypeCheckObj.isXYZlist]);
+    checkCommTypes(fn_name, 'angle', angle, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     // handle geometry type
     if (!Array.isArray(ents_arr[0])) {
@@ -149,10 +149,10 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
 export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Scale';
-    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+    let ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                              ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin', 'isPlane']);
-    checkCommTypes(fn_name, 'scale', scale, ['isNumber', 'isXYZlist']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber, TypeCheckObj.isXYZlist]);
     // --- Error Check ---
     // handle geometry type
     if (!Array.isArray(ents_arr[0])) {
@@ -195,10 +195,10 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|
 export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId, direction: Txyz): void {
     // --- Error Check ---
     const fn_name = 'modify.Mirror';
-    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+    let ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                      ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, ['isOrigin']);
-    checkCommTypes(fn_name, 'direction', direction, ['isVector']);
+    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin]);
+    checkCommTypes(fn_name, 'direction', direction, [TypeCheckObj.isVector]);
     // --- Error Check ---
 
     // handle geometry type
@@ -239,10 +239,10 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
 export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to: TPlane): void {
     // --- Error Check ---
     const fn_name = 'modify.XForm';
-    let ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'],
+    let ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                              ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
-    checkCommTypes(fn_name, 'from', from, ['isPlane']);
-    checkCommTypes(fn_name, 'to', to, ['isPlane']);
+    checkCommTypes(fn_name, 'from', from, [TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'to', to, [TypeCheckObj.isPlane]);
     // --- Error Check ---
     // handle geometry type
     if (!Array.isArray(ents_arr[0])) {
@@ -286,7 +286,7 @@ function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void
 export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Reverse', 'entities', entities,
-        ['isID', 'isIDList'], ['WIRE', 'PLINE', 'FACE', 'PGON'])  as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], ['WIRE', 'PLINE', 'FACE', 'PGON'])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     _reverse(__model__, ents_arr);
 }
@@ -306,7 +306,7 @@ function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset:
  * In a closed wire, any edge (or vertex) could be the first edge of the ring.
  * In some cases, it is useful to have an edge in a particular position in a ring.
  * This function allows the edges to be shifted either forwards or backwards around the ring.
- * The order of the edges in the ring will remain unchanged. 
+ * The order of the edges in the ring will remain unchanged.
  *
  * @param __model__
  * @param entities Wire, face, polyline, polygon.
@@ -321,7 +321,7 @@ function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset:
 export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): void {
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Reverse', 'entities', entities,
-        ['isID', 'isIDList'], ['WIRE', 'PLINE', 'FACE', 'PGON'])  as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], ['WIRE', 'PLINE', 'FACE', 'PGON'])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     _shift(__model__, ents_arr, offset);
 }
@@ -352,7 +352,7 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
  */
 export function Close(__model__: GIModel, lines: TId|TId[]): void {
     // --- Error Check ---
-    const ents_arr = checkIDs('modify.Close', 'lines', lines, ['isID', 'isIDList'], ['PLINE']);
+    const ents_arr = checkIDs('modify.Close', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], ['PLINE']);
     // --- Error Check ---
     _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
@@ -463,7 +463,8 @@ export function PushAttribs(__model__: GIModel, entities: TId|TId[], attrib_name
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
     if (entities !== null) {
-        ents_arr = checkIDs('modify.Attribute', 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('modify.Attribute', 'entities', entities,
+                            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         ents_arr = null;
     }
@@ -501,7 +502,7 @@ export function PushAttribs(__model__: GIModel, entities: TId|TId[], attrib_name
  */
 export function _Weld(__model__: GIModel, entities: TId[]): void {
     // --- Error Check ---
-    // const ents_arr = checkIDs('modify.Weld', 'entities', entities, ['isIDList'],
+    // const ents_arr = checkIDs('modify.Weld', 'entities', entities, [IDcheckObj.isIDList],
     //                          ['POSI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL']);
     // --- Error Check ---
     throw new Error('Not implemented.');
@@ -559,7 +560,7 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
     if (Array.isArray(entities)) { entities = entities.flat(); }
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
-        ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
     _delete(__model__, ents_arr, bool_del_unused_posis);
@@ -629,7 +630,7 @@ export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
     if (Array.isArray(entities)) { entities = entities.flat(); }
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
-        ['isID', 'isIDList'], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], ['POSI', 'POINT', 'PLINE', 'PGON', 'COLL']) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     _keep(__model__, ents_arr);
 }

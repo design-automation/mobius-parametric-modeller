@@ -6,7 +6,7 @@ import { idsBreak } from '@libs/geo-info/id';
 // Attribute Checks
 // =========================================================================================================================================
 function isValidName(fn_name: string, arg_name: string, arg: string): void {
-    typeCheckObj.isString(fn_name, arg_name, arg); // check arg is string
+    TypeCheckObj.isString(fn_name, arg_name, arg); // check arg is string
     if (arg.length === 0) {
         throw new Error (fn_name + ': ' + arg_name + ' not specified');
     }
@@ -29,7 +29,7 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
     if (attrib_index !== null && attrib_index !== undefined) {
         ind = true;
         // check if index is number
-        typeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
+        TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
     }
     // -- check blocked name
     const blk_att_nm_lst = Object.values(EAttribNames);
@@ -80,10 +80,10 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
                         err_arr.push(err.message);
                         throw new Error(err_arr.join(''));
                     }
-                    check_fns = ['isNumberList'];
+                    check_fns = [TypeCheckObj.isNumberList];
                     for (let i = 0; i < check_fns.length; i++) {
                         try {
-                            typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+                            check_fns[i](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
                         } catch (err) {
                             err_arr.push(err.message + '\n');
                             continue;
@@ -103,10 +103,10 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
                             throw new Error(err_arr.join(''));
                         }
                     }
-                    check_fns = ['isNumber'];
+                    check_fns = [TypeCheckObj.isNumber];
                     for (let i = 0; i < check_fns.length; i++) {
                         try {
-                            typeCheckObj[check_fns[i]](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
+                            check_fns[i](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
                                                       'attrib_value', attrib_value);
                         } catch (err) {
                             err_arr.push(err.message + '\n');
@@ -122,9 +122,11 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
             }
         } else {
             if (ind === false) {
-                checkCommTypes(fn_name, 'attrib_value', attrib_value, ['isString', 'isNumber', 'isStringList', 'isNumberList']);
+                checkCommTypes(fn_name, 'attrib_value', attrib_value,
+                    [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isStringList, TypeCheckObj.isNumberList]);
             } else { // no nested lists
-                checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value, ['isString', 'isNumber']);
+                checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
+                    [TypeCheckObj.isString, TypeCheckObj.isNumber]);
             }
         }
     }
@@ -134,91 +136,91 @@ export function checkAttribNameValue(fn_name: string, attrib_name: string, attri
 // =========================================================================================================================================
 // Function Dictionaries
 // =========================================================================================================================================
-const typeCheckObj  = {
+export class TypeCheckObj {
     // entities: Check if string
-    isEntity: function(fn_name: string, arg_name: string, arg: string): void {
+    static isEntity(fn_name: string, arg_name: string, arg: string): void {
         isStringArg(fn_name, arg_name, arg, 'entity');
         if (arg.slice(2).length === 0) {
             throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
         }
         return;
-    },
-    isEntityList: function(fn_name: string, arg_name: string, arg_list: string[]): void {
+    }
+    static isEntityList(fn_name: string, arg_name: string, arg_list: string[]): void {
         isListArg(fn_name, arg_name, arg_list, 'entity');
         for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isEntity(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+            TypeCheckObj.isEntity(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         }
         return;
-    },
+    }
     // any: to catch undefined
-    isAny: function(fn_name: string, arg_name: string, arg: string): void {
+    static isAny(fn_name: string, arg_name: string, arg: string): void {
         isAnyArg(fn_name, arg_name, arg);
         return;
-    },
+    }
     // null: allow Null input
-    isNull: function(fn_name: string, arg_name: string, arg: string): void {
+    static isNull(fn_name: string, arg_name: string, arg: string): void {
         isNullArg(fn_name, arg_name, arg);
         return;
-    },
+    }
     // list
-    isList: function(fn_name: string, arg_name: string, arg: string): void {
+    static isList(fn_name: string, arg_name: string, arg: string): void {
         isListArg(fn_name, arg_name, arg, 'any');
         return;
-    },
+    }
     // strings
-    isString: function(fn_name: string, arg_name: string, arg: string): void {
+    static isString(fn_name: string, arg_name: string, arg: string): void {
         isStringArg(fn_name, arg_name, arg, 'string');
         return;
-    },
-    isStringList: function(fn_name: string, arg_name: string, arg_list: string[]): void {
+    }
+    static isStringList(fn_name: string, arg_name: string, arg_list: string[]): void {
         isStringListArg(fn_name, arg_name, arg_list, 'string');
         return;
-    },
+    }
     // numbers and special numbers
-    isNumber: function(fn_name: string, arg_name: string, arg: number): void {
+    static isNumber(fn_name: string, arg_name: string, arg: number): void {
         isNumberArg(fn_name, arg_name, arg);
         return;
-    },
-    isNumberList: function(fn_name: string, arg_name: string, arg_list: number[]): void {
+    }
+    static isNumberList(fn_name: string, arg_name: string, arg_list: number[]): void {
         isNumberListArg(fn_name, arg_name, arg_list);
         return;
-    },
-    isInt: function(fn_name: string, arg_name: string, arg: number): void {
+    }
+    static isInt(fn_name: string, arg_name: string, arg: number): void {
         isIntArg(fn_name, arg_name, arg);
         return;
-    },
-    isXYlist: function(fn_name: string, arg_name: string, arg_list: [number, number]): void {
+    }
+    static isXYlist(fn_name: string, arg_name: string, arg_list: [number, number]): void {
         isListArg(fn_name, arg_name, arg_list, 'numbers');
         isListLenArg(fn_name, arg_name, arg_list, 2);
         isNumberListArg(fn_name, arg_name, arg_list);
         return;
-    },
-    isXYlistInt: function(fn_name: string, arg_name: string, arg_list: [number, number]): void {
+    }
+    static isXYlistInt(fn_name: string, arg_name: string, arg_list: [number, number]): void {
         isListArg(fn_name, arg_name, arg_list, 'integers');
         isListLenArg(fn_name, arg_name, arg_list, 2);
         isIntListArg(fn_name, arg_name, arg_list);
         return;
-    },
-    isXYZlist: function(fn_name: string, arg_name: string, arg_list: [number, number, number]): void {
-        typeCheckObj.isCoord(fn_name, arg_name, arg_list);
+    }
+    static isXYZlist(fn_name: string, arg_name: string, arg_list: [number, number, number]): void {
+        TypeCheckObj.isCoord(fn_name, arg_name, arg_list);
         return;
-    },
+    }
     // Other Geometry
-    isCoord: function(fn_name: string, arg_name: string, arg: [number, number, number]): void { // Txyz = [number, number, number]
+    static isCoord(fn_name: string, arg_name: string, arg: [number, number, number]): void { // Txyz = [number, number, number]
         isListArg(fn_name, arg_name, arg, 'numbers');
         isListLenArg(fn_name, arg_name, arg, 3);
         isNumberListArg(fn_name, arg_name, arg);
         return;
-    },
-    isCoordList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void {
+    }
+    static isCoordList(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void {
         isListArg(fn_name, arg_name, arg_list, 'coordinates');
         for (let i = 0; i < arg_list.length; i++) {
             isListLenArg(fn_name, arg_name + '[' + i + ']', arg_list[i], 3);
             isNumberListArg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         }
         return;
-    },
-    isCoordList_List: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+    }
+    static isCoordList_List(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
         isListArg(fn_name, arg_name, arg_list, 'lists of coordinates');
         for (let i = 0; i < arg_list.length; i++) {
             for (let j = 0; j < arg_list[i].length; j++) {
@@ -227,76 +229,76 @@ const typeCheckObj  = {
             }
         }
         return;
-    },
-    isVector: function(fn_name: string, arg_name: string, arg_list: [number, number, number]): void { // same checks as coord
-        typeCheckObj.isCoord(fn_name, arg_name, arg_list);
+    }
+    static isVector(fn_name: string, arg_name: string, arg_list: [number, number, number]): void { // same checks as coord
+        TypeCheckObj.isCoord(fn_name, arg_name, arg_list);
         return;
-    },
-    isVectorList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void {
+    }
+    static isVectorList(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void {
         isListArg(fn_name, arg_name, arg_list, 'vectors');
         for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        }
-        return;
-    },
-    isOrigin: function(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx {
-        return checkIDnTypes(fn_name, arg_name, arg, ['isID', 'isCoord'], ['POSI', 'VERT', 'POINT']) as TEntTypeIdx;
-    },
-    isPlane: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = [Txyz, Txyz, Txyz]
-        // one origin: point, posi, vert, coord + 2 vectors
-        isListArg(fn_name, arg_name, arg_list, 'origin and vectors');
-        isListLenArg(fn_name, arg_name, arg_list, 3);
-        typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
-        [1, 2].forEach((i) => {
-            typeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        });
-        return;
-    },
-    isPlaneList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
-        isListArg(fn_name, arg_name, arg_list, 'planes');
-        for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isPlane(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        }
-        return;
-    },
-    isBBox: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TBbox = [Txyz, Txyz, Txyz, Txyz]
-        // four coords
-        isListArg(fn_name, arg_name, arg_list, 'origin, min corner, max corner, size');
-        isListLenArg(fn_name, arg_name, arg_list, 4);
-        typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
-        [0, 1, 2, 3].forEach((i) => {
-            typeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        });
-        return;
-    },
-    isBBoxList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
-        isListArg(fn_name, arg_name, arg_list, 'BBoxes');
-        for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        }
-        return;
-    },
-    isRay: function(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TRay = [Txyz, Txyz]
-        isListArg(fn_name, arg_name, arg_list, 'origin and vector');
-        isListLenArg(fn_name, arg_name, arg_list, 2);
-        typeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
-        typeCheckObj.isVector(fn_name, arg_name + '[1]', arg_list[1]);
-        return;
-    },
-    isRayList: function(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
-        isListArg(fn_name, arg_name, arg_list, 'Rays');
-        for (let i = 0; i < arg_list.length; i++) {
-            typeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+            TypeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         }
         return;
     }
-};
-const IDcheckObj = {
+    static isOrigin(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx {
+        return checkIDnTypes(fn_name, arg_name, arg, [IDcheckObj.isID, TypeCheckObj.isCoord], ['POSI', 'VERT', 'POINT']) as TEntTypeIdx;
+    }
+    static isPlane(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = [Txyz, Txyz, Txyz]
+        // one origin: point, posi, vert, coord + 2 vectors
+        isListArg(fn_name, arg_name, arg_list, 'origin and vectors');
+        isListLenArg(fn_name, arg_name, arg_list, 3);
+        TypeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
+        [1, 2].forEach((i) => {
+            TypeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        });
+        return;
+    }
+    static isPlaneList(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'planes');
+        for (let i = 0; i < arg_list.length; i++) {
+            TypeCheckObj.isPlane(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
+    }
+    static isBBox(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TBbox = [Txyz, Txyz, Txyz, Txyz]
+        // four coords
+        isListArg(fn_name, arg_name, arg_list, 'origin, min corner, max corner, size');
+        isListLenArg(fn_name, arg_name, arg_list, 4);
+        TypeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
+        [0, 1, 2, 3].forEach((i) => {
+            TypeCheckObj.isVector(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        });
+        return;
+    }
+    static isBBoxList(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'BBoxes');
+        for (let i = 0; i < arg_list.length; i++) {
+            TypeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
+    }
+    static isRay(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TRay = [Txyz, Txyz]
+        isListArg(fn_name, arg_name, arg_list, 'origin and vector');
+        isListLenArg(fn_name, arg_name, arg_list, 2);
+        TypeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
+        TypeCheckObj.isVector(fn_name, arg_name + '[1]', arg_list[1]);
+        return;
+    }
+    static isRayList(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'Rays');
+        for (let i = 0; i < arg_list.length; i++) {
+            TypeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
+    }
+}
+export class IDcheckObj {
     // IDs
     // entity types
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
-    isID: function(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|null): TEntTypeIdx {
-        typeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
+    static isID(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|null): TEntTypeIdx {
+        TypeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
         const ent_arr = idsBreak(arg) as TEntTypeIdx; // split
 
         if (ent_type_strs === null) {
@@ -313,9 +315,9 @@ const IDcheckObj = {
             throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
         }
         return ent_arr;
-    },
-    isIDList: function(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|null): TEntTypeIdx[] {
-        typeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
+    }
+    static isIDList(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|null): TEntTypeIdx[] {
+        TypeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
         const ent_arr_lst = idsBreak(arg_list) as TEntTypeIdx[]; // split
 
         if (ent_type_strs === null) {
@@ -339,26 +341,26 @@ const IDcheckObj = {
             }
         }
         return ent_arr_lst;
-    },
-    isIDList_list: function(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|null): TEntTypeIdx[][] {
+    }
+    static isIDList_list(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|null): TEntTypeIdx[][] {
         const ret_arr = [];
         for (let i = 0; i < arg_list.length; i++) {
             ret_arr.push(IDcheckObj.isIDList(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
         }
         return ret_arr as TEntTypeIdx[][];
-    },
-};
+    }
+}
 // =========================================================================================================================================
 // Specific Checks
 // =========================================================================================================================================
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[]): void|TEntTypeIdx|
+export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[]): void|TEntTypeIdx|
                                TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
     let ret;
     for (let i = 0; i < check_fns.length; i++) {
         try {
-           ret = typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
+           ret = check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -367,20 +369,20 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret;
 }
 
-export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: string[],
+export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: Function[],
                          IDchecks: string[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
     let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         try {
-           ret =  IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+           ret =  check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -389,7 +391,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
@@ -397,36 +399,45 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
 // =========================================================================================================================================
 // Most General Check
 // =========================================================================================================================================
-export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: string[],
+export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[],
                               IDchecks?: string[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
     let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
-        if (Object.keys(IDcheckObj).includes(check_fns[i])) {
-            // checking for ID
-            try {
-                ret = IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
-            } catch (err) {
-                err_arr.push(err.message + '\n');
-                continue;
-            }
-            pass = true;
-            break; // passed
-        } else {
-            // checking common types
-            try {
-                typeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
-            } catch (err) {
-                err_arr.push(err.message + '\n');
-                continue;
-            }
-            pass = true;
-            break; // passed
+        try {
+            ret = check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+        } catch (err) {
+            err_arr.push(err.message + '\n');
+            continue;
         }
+        pass = true;
+        break; // passed
+
+        // if (Object.keys(IDcheckObj).includes(check_fns[i])) {
+        //     // checking for ID
+        //     try {
+        //         ret = IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+        //     } catch (err) {
+        //         err_arr.push(err.message + '\n');
+        //         continue;
+        //     }
+        //     pass = true;
+        //     break; // passed
+        // } else {
+        //     // checking common types
+        //     try {
+        //         TypeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
+        //     } catch (err) {
+        //         err_arr.push(err.message + '\n');
+        //         continue;
+        //     }
+        //     pass = true;
+        //     break; // passed
+        // }
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns void|TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes

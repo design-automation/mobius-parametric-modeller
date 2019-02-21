@@ -86,7 +86,7 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
 // ================================================================================================
 /**
  * Returns a text summary of the contents of this model
- * 
+ *
  * @param __model__
  * @returns Text that summarises what is in the model, click print to see this text.
  */

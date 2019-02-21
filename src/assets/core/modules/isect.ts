@@ -11,7 +11,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
-import { checkIDs, checkCommTypes, checkIDnTypes } from './_check_args';
+import { checkIDs, checkCommTypes, checkIDnTypes, IDcheckObj} from './_check_args';
 
 /**
  * Adds positions by intersecting polylines, planes, and polygons.
@@ -25,8 +25,8 @@ import { checkIDs, checkCommTypes, checkIDnTypes } from './_check_args';
 export function Intersect(__model__: GIModel, entities1: TId, entities2: TId): TId[] {
     // --- Error Check ---
     // const fn_name = 'isect.Intersect';
-    // const ents_arr_1 = checkIDnTypes(fn_name, 'object1', entities1, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
-    // const ents_arr_2 = checkIDnTypes(fn_name, 'object2', entities2, ['isID', 'isPlane'], ['PLINE', 'PGON', 'FACE']);
+    // const ents_arr_1 = checkIDnTypes(fn_name, 'object1', entities1, [IDcheckObj.isID, TypeCheckObj.isPlane], ['PLINE', 'PGON', 'FACE']);
+    // const ents_arr_2 = checkIDnTypes(fn_name, 'object2', entities2, [IDcheckObj.isID, TypeCheckObj.isPlane], ['PLINE', 'PGON', 'FACE']);
     // --- Error Check ---
     throw new Error('Not impemented.'); return null;
 }
@@ -50,7 +50,7 @@ export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: 
     // --- Error Check ---
     // const fn_name = 'isect.Knife';
     // const ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isIDList'], ['POINT', 'PLINE', 'PGON']);
-    // checkCommTypes(fn_name, 'plane', plane, ['isPlane']);
+    // checkCommTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }
@@ -67,7 +67,7 @@ export function Split(__model__: GIModel, geometry: TId[], polyline: TId): TId[]
     // --- Error Check ---
     // const fn_name = 'isect.Split';
     // const ents_arr = checkIDs(fn_name, 'objects', geometry, ['isIDList'], ['PLINE', 'PGON']);
-    // checkIDs(fn_name, 'polyline', polyline, ['isID'], ['PLINE']);
+    // checkIDs(fn_name, 'polyline', polyline, [IDcheckObj.isID], ['PLINE']);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

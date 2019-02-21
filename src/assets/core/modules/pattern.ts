@@ -8,7 +8,7 @@
  *
  */
 
- import { checkCommTypes } from './_check_args';
+ import { checkCommTypes, TypeCheckObj } from './_check_args';
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
@@ -34,10 +34,10 @@ import { GIModel } from '@libs/geo-info/GIModel';
 export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Arc';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
-    checkCommTypes(fn_name, 'radius', radius, ['isNumber']);
-    checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt']);
-    checkCommTypes(fn_name, 'arc_angle', arc_angle, ['isNumber', 'isNull']);
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkCommTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -91,9 +91,9 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
         num_positions: number|[number, number], method: _EGridMethod): TId[]|TId[][] {
     // --- Error Check ---
     const fn_name = 'pattern.Grid';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
-    checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
-    checkCommTypes(fn_name, 'num_positions', num_positions, ['isInt', 'isXYlistInt']);
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt, TypeCheckObj.isXYlistInt]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -176,8 +176,8 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
 export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Rectangle';
-    checkCommTypes(fn_name, 'origin', origin, ['isCoord', 'isPlane']);
-    checkCommTypes(fn_name, 'size', size, ['isNumber', 'isXYlist']);
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;

@@ -151,6 +151,10 @@ export class ProcedureItemComponent {
 
     markPrint(event: MouseEvent) {
         event.stopPropagation();
+        if (this.data.selected) {
+            this.data.print = !this.data.print;
+            return;
+        }
         const prodList = this.dataService.node.state.procedure;
         const newPrint = ! prodList[prodList.length - 1].print;
         for (const prod of prodList) {
@@ -163,6 +167,10 @@ export class ProcedureItemComponent {
 
     markDisabled(event: MouseEvent) {
         event.stopPropagation();
+        if (this.data.selected) {
+            this.data.enabled = !this.data.enabled;
+            return;
+        }
         const prodList = this.dataService.node.state.procedure;
         const newEnabled = ! prodList[prodList.length - 1].enabled;
         for (const prod of prodList) {

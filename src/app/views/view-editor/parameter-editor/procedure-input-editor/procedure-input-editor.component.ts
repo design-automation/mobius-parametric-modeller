@@ -61,7 +61,11 @@ export class ProcedureInputEditorComponent {
     }
 
     markDisabled() {
-        this.disableProds.emit();
+        if (!this.prod.selected) {
+            this.prod.enabled = ! this.prod.enabled;
+        } else {
+            this.disableProds.emit();
+        }
     }
 
     updateMin(args, event) {

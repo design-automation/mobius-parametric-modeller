@@ -2,10 +2,15 @@
 
 ## Get  
 * **Description:** Returns a list of entities based on a query expression.
+The result will always be a list of entities, even if there is only one entity.
+In a case where you expect only one entity, remember to get the first item in the list.
+~
 The query expression should use the following format: #@name == value,
 where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+~
 If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
 The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
+~
 Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
 Query expressions can be combined with either && (and) and || (or), where
 && takes precedence over ||.  

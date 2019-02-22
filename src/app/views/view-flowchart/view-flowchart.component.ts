@@ -121,8 +121,19 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             if (!this.listenerActive) { return; }
             const node = this.dataService.node;
             if (node.type === '') {
-                const cp = circularJSON.parse(circularJSON.stringify(node));
-                this.copied = circularJSON.stringify(cp);
+                const saved = {
+                    'input': node.input,
+                    'output': node.output,
+                    'model': node.model
+                };
+                node.input = undefined;
+                node.output = undefined;
+                node.model = undefined;
+                this.copied = circularJSON.stringify(node);
+
+                node.input = saved.input;
+                node.output = saved.output;
+                node.model = saved.model;
 
                 this.notificationMessage = `Copied Last Selected Node`;
                 this.notificationTrigger = !this.notificationTrigger;
@@ -822,7 +833,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 }
 
                 // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                if (Math.abs(pPos[0] - svgP.x) > this.maxZoom || Math.abs(pPos[1] - svgP.y) > this.maxZoom ) { continue; }
+                if (Math.abs(pPos[0] - svgP.x) > 50 || Math.abs(pPos[1] - svgP.y) > 40 ) { continue; }
 
                 // if there is already an existing edge with the same source and target as the new edge, return
                 for (const edge of this.dataService.flowchart.edges) {

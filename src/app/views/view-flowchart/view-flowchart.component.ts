@@ -74,8 +74,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     private offset: number[];
 
     // constants for offset positions of input/output port relative to the node's position
-    inputOffset = [50, -8];
-    outputOffset = [50, 88];
+    inputOffset = [50, 40];
+    outputOffset = [50, 40];
 
 
     static enableNode(node: INode) {
@@ -831,9 +831,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
                     pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
                 }
-
                 // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                if (Math.abs(pPos[0] - svgP.x) > 50 || Math.abs(pPos[1] - svgP.y) > 40 ) { continue; }
+                if (Math.abs(pPos[0] - svgP.x) > 60 || Math.abs(pPos[1] - svgP.y) > 50 ) { continue; }
 
                 // if there is already an existing edge with the same source and target as the new edge, return
                 for (const edge of this.dataService.flowchart.edges) {

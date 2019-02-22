@@ -24,9 +24,9 @@ import { GIModel } from '@libs/geo-info/GIModel';
 })
 export class MobiuscesiumComponent implements OnInit, DoCheck {
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService) {}
 
-        }
+    // MODEL data passed to the viewer
     @Input() data: GIModel;
     // @Input() mode: string;
     mode = 'editor'; // 'viewer'/'editor'

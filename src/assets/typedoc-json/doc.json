@@ -15,7 +15,2217 @@
 			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation/mobius-parametric-modeller/src/assets/core/modules/_check_args.ts",
 			"children": [
 				{
-					"id": 1368,
+					"id": 1489,
+					"name": "IDcheckObj",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"children": [
+						{
+							"id": 1490,
+							"name": "isID",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1491,
+									"name": "isID",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1492,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1493,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1494,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 1495,
+											"name": "ent_type_strs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "array",
+														"elementType": {
+															"type": "intrinsic",
+															"name": "string"
+														}
+													},
+													{
+														"type": "intrinsic",
+														"name": "null"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 259
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 300,
+									"character": 15
+								}
+							]
+						},
+						{
+							"id": 1496,
+							"name": "isIDList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1497,
+									"name": "isIDList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1498,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1499,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1500,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "any"
+												}
+											}
+										},
+										{
+											"id": 1501,
+											"name": "ent_type_strs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "array",
+														"elementType": {
+															"type": "intrinsic",
+															"name": "string"
+														}
+													},
+													{
+														"type": "intrinsic",
+														"name": "null"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TEntTypeIdx",
+											"id": 259
+										}
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 319,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1502,
+							"name": "isIDList_list",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1503,
+									"name": "isIDList_list",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1504,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1505,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1506,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "any"
+											}
+										},
+										{
+											"id": 1507,
+											"name": "ent_type_strs",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "union",
+												"types": [
+													{
+														"type": "array",
+														"elementType": {
+															"type": "intrinsic",
+															"name": "string"
+														}
+													},
+													{
+														"type": "intrinsic",
+														"name": "null"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"name": "TEntTypeIdx",
+												"id": 259
+											}
+										}
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 345,
+									"character": 24
+								}
+							]
+						}
+					],
+					"groups": [
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								1490,
+								1496,
+								1502
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/_check_args.ts",
+							"line": 296,
+							"character": 23
+						}
+					]
+				},
+				{
+					"id": 1363,
+					"name": "TypeCheckObj",
+					"kind": 128,
+					"kindString": "Class",
+					"flags": {
+						"isExported": true
+					},
+					"children": [
+						{
+							"id": 1374,
+							"name": "isAny",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1375,
+									"name": "isAny",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1376,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1377,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1378,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 156,
+									"character": 16
+								}
+							]
+						},
+						{
+							"id": 1469,
+							"name": "isBBox",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1470,
+									"name": "isBBox",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1471,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1472,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1473,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "tuple",
+													"elements": [
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 264,
+									"character": 17
+								}
+							]
+						},
+						{
+							"id": 1474,
+							"name": "isBBoxList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1475,
+									"name": "isBBoxList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1476,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1477,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1478,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "array",
+													"elementType": {
+														"type": "tuple",
+														"elements": [
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 274,
+									"character": 21
+								}
+							]
+						},
+						{
+							"id": 1429,
+							"name": "isCoord",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1430,
+									"name": "isCoord",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1431,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1432,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1433,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "tuple",
+												"elements": [
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 209,
+									"character": 18
+								}
+							]
+						},
+						{
+							"id": 1434,
+							"name": "isCoordList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1435,
+									"name": "isCoordList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1436,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1437,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1438,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "tuple",
+													"elements": [
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 215,
+									"character": 22
+								}
+							]
+						},
+						{
+							"id": 1439,
+							"name": "isCoordList_List",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1440,
+									"name": "isCoordList_List",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1441,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1442,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1443,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "array",
+													"elementType": {
+														"type": "tuple",
+														"elements": [
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 223,
+									"character": 27
+								}
+							]
+						},
+						{
+							"id": 1364,
+							"name": "isEntity",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1365,
+									"name": "isEntity",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1366,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1367,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1368,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 141,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1369,
+							"name": "isEntityList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1370,
+									"name": "isEntityList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1371,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1372,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1373,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 148,
+									"character": 23
+								}
+							]
+						},
+						{
+							"id": 1409,
+							"name": "isInt",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1410,
+									"name": "isInt",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1411,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1412,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1413,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 188,
+									"character": 16
+								}
+							]
+						},
+						{
+							"id": 1384,
+							"name": "isList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1385,
+									"name": "isList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1386,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1387,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1388,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 166,
+									"character": 17
+								}
+							]
+						},
+						{
+							"id": 1379,
+							"name": "isNull",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1380,
+									"name": "isNull",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1381,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1382,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1383,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 161,
+									"character": 17
+								}
+							]
+						},
+						{
+							"id": 1399,
+							"name": "isNumber",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1400,
+									"name": "isNumber",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1401,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1402,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1403,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 180,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1404,
+							"name": "isNumberList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1405,
+									"name": "isNumberList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1406,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1407,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1408,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "number"
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 184,
+									"character": 23
+								}
+							]
+						},
+						{
+							"id": 1454,
+							"name": "isOrigin",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1455,
+									"name": "isOrigin",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1456,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1457,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1458,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "number"
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "TEntTypeIdx",
+										"id": 259
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 244,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1459,
+							"name": "isPlane",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1460,
+									"name": "isPlane",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1461,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1462,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1463,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "tuple",
+													"elements": [
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 247,
+									"character": 18
+								}
+							]
+						},
+						{
+							"id": 1464,
+							"name": "isPlaneList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1465,
+									"name": "isPlaneList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1466,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1467,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1468,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "array",
+													"elementType": {
+														"type": "tuple",
+														"elements": [
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 257,
+									"character": 22
+								}
+							]
+						},
+						{
+							"id": 1479,
+							"name": "isRay",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1480,
+									"name": "isRay",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1481,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1482,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1483,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "tuple",
+													"elements": [
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 281,
+									"character": 16
+								}
+							]
+						},
+						{
+							"id": 1484,
+							"name": "isRayList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1485,
+									"name": "isRayList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1486,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1487,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1488,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "array",
+													"elementType": {
+														"type": "tuple",
+														"elements": [
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 288,
+									"character": 20
+								}
+							]
+						},
+						{
+							"id": 1389,
+							"name": "isString",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1390,
+									"name": "isString",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1391,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1392,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1393,
+											"name": "arg",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 171,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1394,
+							"name": "isStringList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1395,
+									"name": "isStringList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1396,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1397,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1398,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "string"
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 175,
+									"character": 23
+								}
+							]
+						},
+						{
+							"id": 1444,
+							"name": "isVector",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1445,
+									"name": "isVector",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1446,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1447,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1448,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "tuple",
+												"elements": [
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 233,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1449,
+							"name": "isVectorList",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1450,
+									"name": "isVectorList",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1451,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1452,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1453,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "array",
+												"elementType": {
+													"type": "tuple",
+													"elements": [
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														},
+														{
+															"type": "intrinsic",
+															"name": "number"
+														}
+													]
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 237,
+									"character": 23
+								}
+							]
+						},
+						{
+							"id": 1424,
+							"name": "isXYZlist",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1425,
+									"name": "isXYZlist",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1426,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1427,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1428,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "tuple",
+												"elements": [
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 204,
+									"character": 20
+								}
+							]
+						},
+						{
+							"id": 1414,
+							"name": "isXYlist",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1415,
+									"name": "isXYlist",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1416,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1417,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1418,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "tuple",
+												"elements": [
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 192,
+									"character": 19
+								}
+							]
+						},
+						{
+							"id": 1419,
+							"name": "isXYlistInt",
+							"kind": 2048,
+							"kindString": "Method",
+							"flags": {
+								"isStatic": true,
+								"isExported": true
+							},
+							"signatures": [
+								{
+									"id": 1420,
+									"name": "isXYlistInt",
+									"kind": 4096,
+									"kindString": "Call signature",
+									"flags": {},
+									"parameters": [
+										{
+											"id": 1421,
+											"name": "fn_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1422,
+											"name": "arg_name",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 1423,
+											"name": "arg_list",
+											"kind": 32768,
+											"kindString": "Parameter",
+											"flags": {},
+											"type": {
+												"type": "tuple",
+												"elements": [
+													{
+														"type": "intrinsic",
+														"name": "number"
+													},
+													{
+														"type": "intrinsic",
+														"name": "number"
+													}
+												]
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							],
+							"sources": [
+								{
+									"fileName": "core/modules/_check_args.ts",
+									"line": 198,
+									"character": 22
+								}
+							]
+						}
+					],
+					"groups": [
+						{
+							"title": "Methods",
+							"kind": 2048,
+							"children": [
+								1374,
+								1469,
+								1474,
+								1429,
+								1434,
+								1439,
+								1364,
+								1369,
+								1409,
+								1384,
+								1379,
+								1399,
+								1404,
+								1454,
+								1459,
+								1464,
+								1479,
+								1484,
+								1389,
+								1394,
+								1444,
+								1449,
+								1424,
+								1414,
+								1419
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/_check_args.ts",
+							"line": 139,
+							"character": 25
+						}
+					]
+				},
+				{
+					"id": 1513,
 					"name": "checkAttribNameValue",
 					"kind": 64,
 					"kindString": "Function",
@@ -24,14 +2234,14 @@
 					},
 					"signatures": [
 						{
-							"id": 1369,
+							"id": 1514,
 							"name": "checkAttribNameValue",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1370,
+									"id": 1515,
 									"name": "fn_name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -42,7 +2252,7 @@
 									}
 								},
 								{
-									"id": 1371,
+									"id": 1516,
 									"name": "attrib_name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53,7 +2263,7 @@
 									}
 								},
 								{
-									"id": 1372,
+									"id": 1517,
 									"name": "attrib_value",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -64,7 +2274,7 @@
 									}
 								},
 								{
-									"id": 1373,
+									"id": 1518,
 									"name": "attrib_index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -149,8 +2359,8 @@
 									"type": {
 										"type": "array",
 										"elementType": {
-											"type": "intrinsic",
-											"name": "string"
+											"type": "reference",
+											"name": "Function"
 										}
 									}
 								}
@@ -193,7 +2403,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 354,
+							"line": 356,
 							"character": 30
 						}
 					]
@@ -256,8 +2466,8 @@
 									"type": {
 										"type": "array",
 										"elementType": {
-											"type": "intrinsic",
-											"name": "string"
+											"type": "reference",
+											"name": "Function"
 										}
 									}
 								},
@@ -321,7 +2531,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 400,
+							"line": 402,
 							"character": 29
 						}
 					]
@@ -384,8 +2594,8 @@
 									"type": {
 										"type": "array",
 										"elementType": {
-											"type": "intrinsic",
-											"name": "string"
+											"type": "reference",
+											"name": "Function"
 										}
 									}
 								},
@@ -447,7 +2657,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 376,
+							"line": 378,
 							"character": 24
 						}
 					]
@@ -509,7 +2719,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 452,
+							"line": 463,
 							"character": 17
 						}
 					]
@@ -571,7 +2781,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 495,
+							"line": 506,
 							"character": 17
 						}
 					]
@@ -636,7 +2846,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 501,
+							"line": 512,
 							"character": 21
 						}
 					]
@@ -709,7 +2919,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 439,
+							"line": 450,
 							"character": 18
 						}
 					]
@@ -785,7 +2995,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 445,
+							"line": 456,
 							"character": 21
 						}
 					]
@@ -847,7 +3057,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 459,
+							"line": 470,
 							"character": 18
 						}
 					]
@@ -909,7 +3119,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 480,
+							"line": 491,
 							"character": 20
 						}
 					]
@@ -971,7 +3181,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 486,
+							"line": 497,
 							"character": 24
 						}
 					]
@@ -1044,7 +3254,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 466,
+							"line": 477,
 							"character": 20
 						}
 					]
@@ -1120,27 +3330,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/_check_args.ts",
-							"line": 472,
+							"line": 483,
 							"character": 24
 						}
 					]
 				},
 				{
-					"id": 1363,
+					"id": 1508,
 					"name": "isValidName",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1364,
+							"id": 1509,
 							"name": "isValidName",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1365,
+									"id": 1510,
 									"name": "fn_name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1151,7 +3361,7 @@
 									}
 								},
 								{
-									"id": 1366,
+									"id": 1511,
 									"name": "arg_name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1162,7 +3372,7 @@
 									}
 								},
 								{
-									"id": 1367,
+									"id": 1512,
 									"name": "arg",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1186,2148 +3396,22 @@
 							"character": 20
 						}
 					]
-				},
-				{
-					"id": 1500,
-					"name": "IDcheckObj",
-					"kind": 2097152,
-					"kindString": "Object literal",
-					"flags": {
-						"isConst": true
-					},
-					"children": [
-						{
-							"id": 1501,
-							"name": "isID",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1502,
-									"name": "isID",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1503,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1504,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1505,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "any"
-											}
-										},
-										{
-											"id": 1506,
-											"name": "ent_type_strs",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "union",
-												"types": [
-													{
-														"type": "array",
-														"elementType": {
-															"type": "intrinsic",
-															"name": "string"
-														}
-													},
-													{
-														"type": "intrinsic",
-														"name": "null"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 259
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 298,
-									"character": 8
-								}
-							]
-						},
-						{
-							"id": 1507,
-							"name": "isIDList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1508,
-									"name": "isIDList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1509,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1510,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1511,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "any"
-												}
-											}
-										},
-										{
-											"id": 1512,
-											"name": "ent_type_strs",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "union",
-												"types": [
-													{
-														"type": "array",
-														"elementType": {
-															"type": "intrinsic",
-															"name": "string"
-														}
-													},
-													{
-														"type": "intrinsic",
-														"name": "null"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "TEntTypeIdx",
-											"id": 259
-										}
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 317,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1513,
-							"name": "isIDList_list",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1514,
-									"name": "isIDList_list",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1515,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1516,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1517,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "any"
-											}
-										},
-										{
-											"id": 1518,
-											"name": "ent_type_strs",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "union",
-												"types": [
-													{
-														"type": "array",
-														"elementType": {
-															"type": "intrinsic",
-															"name": "string"
-														}
-													},
-													{
-														"type": "intrinsic",
-														"name": "null"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "array",
-											"elementType": {
-												"type": "reference",
-												"name": "TEntTypeIdx",
-												"id": 259
-											}
-										}
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 343,
-									"character": 17
-								}
-							]
-						}
-					],
-					"groups": [
-						{
-							"title": "Functions",
-							"kind": 64,
-							"children": [
-								1501,
-								1507,
-								1513
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/_check_args.ts",
-							"line": 294,
-							"character": 16
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "object"
-					}
-				},
-				{
-					"id": 1374,
-					"name": "typeCheckObj",
-					"kind": 2097152,
-					"kindString": "Object literal",
-					"flags": {
-						"isConst": true
-					},
-					"children": [
-						{
-							"id": 1385,
-							"name": "isAny",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1386,
-									"name": "isAny",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1387,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1388,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1389,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 154,
-									"character": 9
-								}
-							]
-						},
-						{
-							"id": 1480,
-							"name": "isBBox",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1481,
-									"name": "isBBox",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1482,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1483,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1484,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "tuple",
-													"elements": [
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														}
-													]
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 262,
-									"character": 10
-								}
-							]
-						},
-						{
-							"id": 1485,
-							"name": "isBBoxList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1486,
-									"name": "isBBoxList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1487,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1488,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1489,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "tuple",
-														"elements": [
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															}
-														]
-													}
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 272,
-									"character": 14
-								}
-							]
-						},
-						{
-							"id": 1440,
-							"name": "isCoord",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1441,
-									"name": "isCoord",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1442,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1443,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1444,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "tuple",
-												"elements": [
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 207,
-									"character": 11
-								}
-							]
-						},
-						{
-							"id": 1445,
-							"name": "isCoordList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1446,
-									"name": "isCoordList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1447,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1448,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1449,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "tuple",
-													"elements": [
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														}
-													]
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 213,
-									"character": 15
-								}
-							]
-						},
-						{
-							"id": 1450,
-							"name": "isCoordList_List",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1451,
-									"name": "isCoordList_List",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1452,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1453,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1454,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "tuple",
-														"elements": [
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															}
-														]
-													}
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 221,
-									"character": 20
-								}
-							]
-						},
-						{
-							"id": 1375,
-							"name": "isEntity",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1376,
-									"name": "isEntity",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1377,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1378,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1379,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 139,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1380,
-							"name": "isEntityList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1381,
-									"name": "isEntityList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1382,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1383,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1384,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "string"
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 146,
-									"character": 16
-								}
-							]
-						},
-						{
-							"id": 1420,
-							"name": "isInt",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1421,
-									"name": "isInt",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1422,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1423,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1424,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "number"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 186,
-									"character": 9
-								}
-							]
-						},
-						{
-							"id": 1395,
-							"name": "isList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1396,
-									"name": "isList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1397,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1398,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1399,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 164,
-									"character": 10
-								}
-							]
-						},
-						{
-							"id": 1390,
-							"name": "isNull",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1391,
-									"name": "isNull",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1392,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1393,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1394,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 159,
-									"character": 10
-								}
-							]
-						},
-						{
-							"id": 1410,
-							"name": "isNumber",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1411,
-									"name": "isNumber",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1412,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1413,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1414,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "number"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 178,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1415,
-							"name": "isNumberList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1416,
-									"name": "isNumberList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1417,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1418,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1419,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 182,
-									"character": 16
-								}
-							]
-						},
-						{
-							"id": 1465,
-							"name": "isOrigin",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1466,
-									"name": "isOrigin",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1467,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1468,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1469,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "reference",
-										"name": "TEntTypeIdx",
-										"id": 259
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 242,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1470,
-							"name": "isPlane",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1471,
-									"name": "isPlane",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1472,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1473,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1474,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "tuple",
-													"elements": [
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														}
-													]
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 245,
-									"character": 11
-								}
-							]
-						},
-						{
-							"id": 1475,
-							"name": "isPlaneList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1476,
-									"name": "isPlaneList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1477,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1478,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1479,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "tuple",
-														"elements": [
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															}
-														]
-													}
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 255,
-									"character": 15
-								}
-							]
-						},
-						{
-							"id": 1490,
-							"name": "isRay",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1491,
-									"name": "isRay",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1492,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1493,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1494,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "tuple",
-													"elements": [
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														}
-													]
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 279,
-									"character": 9
-								}
-							]
-						},
-						{
-							"id": 1495,
-							"name": "isRayList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1496,
-									"name": "isRayList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1497,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1498,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1499,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "tuple",
-														"elements": [
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															},
-															{
-																"type": "intrinsic",
-																"name": "number"
-															}
-														]
-													}
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 286,
-									"character": 13
-								}
-							]
-						},
-						{
-							"id": 1400,
-							"name": "isString",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1401,
-									"name": "isString",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1402,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1403,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1404,
-											"name": "arg",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 169,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1405,
-							"name": "isStringList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1406,
-									"name": "isStringList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1407,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1408,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1409,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "string"
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 173,
-									"character": 16
-								}
-							]
-						},
-						{
-							"id": 1455,
-							"name": "isVector",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1456,
-									"name": "isVector",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1457,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1458,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1459,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "tuple",
-												"elements": [
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 231,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1460,
-							"name": "isVectorList",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1461,
-									"name": "isVectorList",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1462,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1463,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1464,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "tuple",
-													"elements": [
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														},
-														{
-															"type": "intrinsic",
-															"name": "number"
-														}
-													]
-												}
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 235,
-									"character": 16
-								}
-							]
-						},
-						{
-							"id": 1435,
-							"name": "isXYZlist",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1436,
-									"name": "isXYZlist",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1437,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1438,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1439,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "tuple",
-												"elements": [
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 202,
-									"character": 13
-								}
-							]
-						},
-						{
-							"id": 1425,
-							"name": "isXYlist",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1426,
-									"name": "isXYlist",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1427,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1428,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1429,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "tuple",
-												"elements": [
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 190,
-									"character": 12
-								}
-							]
-						},
-						{
-							"id": 1430,
-							"name": "isXYlistInt",
-							"kind": 64,
-							"kindString": "Function",
-							"flags": {},
-							"signatures": [
-								{
-									"id": 1431,
-									"name": "isXYlistInt",
-									"kind": 4096,
-									"kindString": "Call signature",
-									"flags": {},
-									"parameters": [
-										{
-											"id": 1432,
-											"name": "fn_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1433,
-											"name": "arg_name",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "intrinsic",
-												"name": "string"
-											}
-										},
-										{
-											"id": 1434,
-											"name": "arg_list",
-											"kind": 32768,
-											"kindString": "Parameter",
-											"flags": {},
-											"type": {
-												"type": "tuple",
-												"elements": [
-													{
-														"type": "intrinsic",
-														"name": "number"
-													},
-													{
-														"type": "intrinsic",
-														"name": "number"
-													}
-												]
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							],
-							"sources": [
-								{
-									"fileName": "core/modules/_check_args.ts",
-									"line": 196,
-									"character": 15
-								}
-							]
-						}
-					],
-					"groups": [
-						{
-							"title": "Functions",
-							"kind": 64,
-							"children": [
-								1385,
-								1480,
-								1485,
-								1440,
-								1445,
-								1450,
-								1375,
-								1380,
-								1420,
-								1395,
-								1390,
-								1410,
-								1415,
-								1465,
-								1470,
-								1475,
-								1490,
-								1495,
-								1400,
-								1405,
-								1455,
-								1460,
-								1435,
-								1425,
-								1430
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/_check_args.ts",
-							"line": 137,
-							"character": 18
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "object"
-					}
 				}
 			],
 			"groups": [
 				{
+					"title": "Classes",
+					"kind": 128,
+					"children": [
+						1489,
+						1363
+					]
+				},
+				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						1368,
+						1513,
 						1519,
 						1532,
 						1525,
@@ -3341,15 +3425,7 @@
 						1578,
 						1561,
 						1567,
-						1363
-					]
-				},
-				{
-					"title": "Object literals",
-					"kind": 2097152,
-					"children": [
-						1500,
-						1374
+						1508
 					]
 				}
 			],
@@ -7396,7 +7472,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 201,
+							"line": 202,
 							"character": 24
 						}
 					]
@@ -7720,7 +7796,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 332,
+							"line": 333,
 							"character": 22
 						}
 					]
@@ -7817,7 +7893,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 349,
+							"line": 350,
 							"character": 27
 						}
 					]
@@ -7881,7 +7957,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 173,
+							"line": 174,
 							"character": 22
 						}
 					]
@@ -8016,7 +8092,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 412,
+							"line": 413,
 							"character": 28
 						}
 					]
@@ -8151,7 +8227,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 184,
+							"line": 185,
 							"character": 18
 						}
 					]
@@ -8424,7 +8500,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 227,
+							"line": 228,
 							"character": 23
 						}
 					]
@@ -8476,7 +8552,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/calc.ts",
-							"line": 211,
+							"line": 212,
 							"character": 20
 						}
 					]
@@ -11451,7 +11527,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 339,
+									"line": 340,
 									"character": 19
 								}
 							],
@@ -11468,7 +11544,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 340,
+									"line": 341,
 									"character": 17
 								}
 							],
@@ -11488,7 +11564,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 338,
+							"line": 339,
 							"character": 27
 						}
 					]
@@ -11513,7 +11589,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 969,
+									"line": 973,
 									"character": 13
 								}
 							],
@@ -11530,7 +11606,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 970,
+									"line": 974,
 									"character": 17
 								}
 							],
@@ -11547,7 +11623,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 968,
+									"line": 972,
 									"character": 13
 								}
 							],
@@ -11568,7 +11644,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 967,
+							"line": 971,
 							"character": 26
 						}
 					]
@@ -11593,7 +11669,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 681,
+									"line": 683,
 									"character": 9
 								}
 							],
@@ -11610,7 +11686,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 683,
+									"line": 685,
 									"character": 8
 								}
 							],
@@ -11627,7 +11703,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 682,
+									"line": 684,
 									"character": 13
 								}
 							],
@@ -11648,7 +11724,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 680,
+							"line": 682,
 							"character": 27
 						}
 					]
@@ -11673,7 +11749,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 441,
+									"line": 443,
 									"character": 16
 								}
 							],
@@ -11690,7 +11766,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 445,
+									"line": 447,
 									"character": 15
 								}
 							],
@@ -11707,7 +11783,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 443,
+									"line": 445,
 									"character": 20
 								}
 							],
@@ -11724,7 +11800,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 440,
+									"line": 442,
 									"character": 14
 								}
 							],
@@ -11741,7 +11817,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 444,
+									"line": 446,
 									"character": 13
 								}
 							],
@@ -11758,7 +11834,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 442,
+									"line": 444,
 									"character": 18
 								}
 							],
@@ -11782,7 +11858,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 439,
+							"line": 441,
 							"character": 24
 						}
 					]
@@ -11888,7 +11964,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 270,
+							"line": 271,
 							"character": 26
 						}
 					]
@@ -12003,7 +12079,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 353,
+							"line": 354,
 							"character": 20
 						}
 					]
@@ -12130,7 +12206,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1037,
+							"line": 1041,
 							"character": 22
 						}
 					]
@@ -12291,7 +12367,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 915,
+							"line": 917,
 							"character": 23
 						}
 					]
@@ -12397,7 +12473,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 423,
+							"line": 424,
 							"character": 20
 						}
 					]
@@ -12535,7 +12611,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 662,
+							"line": 664,
 							"character": 20
 						}
 					]
@@ -13104,7 +13180,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1061,
+							"line": 1065,
 							"character": 22
 						}
 					]
@@ -13181,7 +13257,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 959,
+							"line": 963,
 							"character": 21
 						}
 					]
@@ -13290,7 +13366,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1123,
+							"line": 1127,
 							"character": 22
 						}
 					]
@@ -13370,7 +13446,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 244,
+							"line": 245,
 							"character": 27
 						}
 					]
@@ -13461,7 +13537,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 287,
+							"line": 288,
 							"character": 18
 						}
 					]
@@ -13542,7 +13618,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 310,
+							"line": 311,
 							"character": 23
 						}
 					]
@@ -13635,7 +13711,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 998,
+							"line": 1002,
 							"character": 16
 						}
 					]
@@ -13713,7 +13789,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 972,
+							"line": 976,
 							"character": 20
 						}
 					]
@@ -13827,7 +13903,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 864,
+							"line": 866,
 							"character": 17
 						}
 					]
@@ -13914,7 +13990,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 846,
+							"line": 848,
 							"character": 20
 						}
 					]
@@ -14005,7 +14081,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 685,
+							"line": 687,
 							"character": 21
 						}
 					]
@@ -14095,7 +14171,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 695,
+							"line": 697,
 							"character": 21
 						}
 					]
@@ -14185,7 +14261,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 710,
+							"line": 712,
 							"character": 22
 						}
 					]
@@ -14275,7 +14351,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 783,
+							"line": 785,
 							"character": 21
 						}
 					]
@@ -14365,7 +14441,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 752,
+							"line": 754,
 							"character": 26
 						}
 					]
@@ -14437,7 +14513,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 381,
+							"line": 382,
 							"character": 30
 						}
 					]
@@ -14693,7 +14769,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 368,
+							"line": 369,
 							"character": 14
 						}
 					]
@@ -14792,7 +14868,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 618,
+							"line": 620,
 							"character": 14
 						}
 					]
@@ -14875,7 +14951,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 447,
+							"line": 449,
 							"character": 19
 						}
 					]
@@ -14958,7 +15034,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 555,
+							"line": 557,
 							"character": 18
 						}
 					]
@@ -15041,7 +15117,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 514,
+							"line": 516,
 							"character": 23
 						}
 					]
@@ -15306,7 +15382,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1101,
+							"line": 1105,
 							"character": 22
 						}
 					]
@@ -15610,7 +15686,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/modify.ts",
-									"line": 512,
+									"line": 513,
 									"character": 21
 								}
 							],
@@ -15627,7 +15703,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/modify.ts",
-									"line": 513,
+									"line": 514,
 									"character": 22
 								}
 							],
@@ -15647,7 +15723,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/modify.ts",
-							"line": 511,
+							"line": 512,
 							"character": 26
 						}
 					]
@@ -16192,7 +16268,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/modify.ts",
-							"line": 557,
+							"line": 558,
 							"character": 22
 						}
 					]
@@ -16278,7 +16354,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/modify.ts",
-							"line": 627,
+							"line": 628,
 							"character": 20
 						}
 					]
@@ -17337,7 +17413,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/modify.ts",
-							"line": 502,
+							"line": 503,
 							"character": 21
 						}
 					]
@@ -17564,7 +17640,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/modify.ts",
-							"line": 515,
+							"line": 516,
 							"character": 16
 						}
 					]
@@ -17630,7 +17706,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/modify.ts",
-							"line": 568,
+							"line": 569,
 							"character": 14
 						}
 					]
@@ -18441,7 +18517,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 364,
+									"line": 372,
 									"character": 13
 								}
 							],
@@ -18458,7 +18534,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 365,
+									"line": 373,
 									"character": 16
 								}
 							],
@@ -18475,7 +18551,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 362,
+									"line": 370,
 									"character": 13
 								}
 							],
@@ -18492,7 +18568,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 355,
+									"line": 363,
 									"character": 11
 								}
 							],
@@ -18509,7 +18585,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 349,
+									"line": 357,
 									"character": 11
 								}
 							],
@@ -18526,7 +18602,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 351,
+									"line": 359,
 									"character": 11
 								}
 							],
@@ -18543,7 +18619,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 363,
+									"line": 371,
 									"character": 11
 								}
 							],
@@ -18560,7 +18636,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 356,
+									"line": 364,
 									"character": 10
 								}
 							],
@@ -18577,7 +18653,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 361,
+									"line": 369,
 									"character": 11
 								}
 							],
@@ -18594,7 +18670,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 354,
+									"line": 362,
 									"character": 11
 								}
 							],
@@ -18611,7 +18687,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 360,
+									"line": 368,
 									"character": 16
 								}
 							],
@@ -18628,7 +18704,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 353,
+									"line": 361,
 									"character": 12
 								}
 							],
@@ -18645,7 +18721,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 359,
+									"line": 367,
 									"character": 17
 								}
 							],
@@ -18662,7 +18738,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 352,
+									"line": 360,
 									"character": 12
 								}
 							],
@@ -18679,7 +18755,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 358,
+									"line": 366,
 									"character": 17
 								}
 							],
@@ -18696,7 +18772,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 345,
+									"line": 353,
 									"character": 11
 								}
 							],
@@ -18713,7 +18789,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 357,
+									"line": 365,
 									"character": 11
 								}
 							],
@@ -18730,7 +18806,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 347,
+									"line": 355,
 									"character": 18
 								}
 							],
@@ -18747,7 +18823,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 346,
+									"line": 354,
 									"character": 16
 								}
 							],
@@ -18764,7 +18840,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 348,
+									"line": 356,
 									"character": 11
 								}
 							],
@@ -18781,7 +18857,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 350,
+									"line": 358,
 									"character": 11
 								}
 							],
@@ -18820,7 +18896,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 344,
+							"line": 352,
 							"character": 26
 						}
 					]
@@ -19087,7 +19163,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 301,
+									"line": 309,
 									"character": 15
 								}
 							],
@@ -19104,7 +19180,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/query.ts",
-									"line": 300,
+									"line": 308,
 									"character": 16
 								}
 							],
@@ -19124,7 +19200,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 299,
+							"line": 307,
 							"character": 24
 						}
 					]
@@ -19240,7 +19316,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 231,
+							"line": 239,
 							"character": 21
 						}
 					]
@@ -19261,7 +19337,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Returns a list of entities based on a query expression.\nThe query expression should use the following format: #@name == value,\nwhere 'name' is the attribute name, and 'value' is the attribute value that you are searching for.\nIf the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.\nThe '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.\nEntities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.\nQuery expressions can be combined with either && (and) and || (or), where\n&& takes precedence over ||.",
+								"shortText": "Returns a list of entities based on a query expression.\nThe result will always be a list of entities, even if there is only one entity.\nIn a case where you expect only one entity, remember to get the first item in the list.\n~~\nThe query expression should use the following format: #@name == value,\nwhere 'name' is the attribute name, and 'value' is the attribute value that you are searching for.\n~~\nIf the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.\nThe '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.\n~~\nEntities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.\nQuery expressions can be combined with either && (and) and || (or), where\n&& takes precedence over ||.",
 								"returns": "List of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.",
 								"tags": [
 									{
@@ -19392,7 +19468,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 152,
+							"line": 160,
 							"character": 19
 						}
 					]
@@ -19497,7 +19573,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 201,
+							"line": 209,
 							"character": 22
 						}
 					]
@@ -19602,7 +19678,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 271,
+							"line": 279,
 							"character": 26
 						}
 					]
@@ -19712,7 +19788,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 316,
+							"line": 324,
 							"character": 20
 						}
 					]
@@ -19825,7 +19901,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 530,
+							"line": 538,
 							"character": 20
 						}
 					]
@@ -19923,7 +19999,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 587,
+							"line": 595,
 							"character": 25
 						}
 					]
@@ -20138,7 +20214,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 441,
+							"line": 449,
 							"character": 20
 						}
 					]
@@ -20233,7 +20309,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 167,
+							"line": 175,
 							"character": 16
 						}
 					]
@@ -20311,7 +20387,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 326,
+							"line": 334,
 							"character": 18
 						}
 					]
@@ -20364,7 +20440,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 416,
+							"line": 424,
 							"character": 19
 						}
 					]
@@ -20417,7 +20493,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 429,
+							"line": 437,
 							"character": 16
 						}
 					]
@@ -20470,7 +20546,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 378,
+							"line": 386,
 							"character": 15
 						}
 					]
@@ -20523,7 +20599,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 408,
+							"line": 416,
 							"character": 20
 						}
 					]
@@ -20576,7 +20652,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 400,
+							"line": 408,
 							"character": 21
 						}
 					]
@@ -20629,7 +20705,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 392,
+							"line": 400,
 							"character": 21
 						}
 					]
@@ -20682,7 +20758,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 385,
+							"line": 393,
 							"character": 16
 						}
 					]
@@ -20735,7 +20811,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 367,
+							"line": 375,
 							"character": 20
 						}
 					]
@@ -20832,7 +20908,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 240,
+							"line": 248,
 							"character": 27
 						}
 					]
@@ -20916,7 +20992,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 283,
+							"line": 291,
 							"character": 14
 						}
 					]
@@ -21006,7 +21082,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/query.ts",
-							"line": 453,
+							"line": 461,
 							"character": 14
 						}
 					]
@@ -28248,7 +28324,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsIO.ts",
-									"line": 145,
+									"line": 146,
 									"character": 23
 								}
 							]
@@ -33150,7 +33226,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 620,
+									"line": 622,
 									"character": 37
 								}
 							]
@@ -33228,7 +33304,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 666,
+									"line": 668,
 									"character": 35
 								}
 							]
@@ -33306,7 +33382,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 642,
+									"line": 644,
 									"character": 37
 								}
 							]
@@ -33356,7 +33432,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 628,
+									"line": 630,
 									"character": 44
 								}
 							]
@@ -33414,7 +33490,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 636,
+									"line": 638,
 									"character": 40
 								}
 							]
@@ -33489,7 +33565,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 691,
+									"line": 693,
 									"character": 35
 								}
 							]
@@ -33550,7 +33626,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 482,
+									"line": 484,
 									"character": 25
 								}
 							]
@@ -33601,7 +33677,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 552,
+									"line": 554,
 									"character": 20
 								}
 							]
@@ -33651,7 +33727,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 727,
+									"line": 729,
 									"character": 27
 								}
 							]
@@ -33723,7 +33799,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 350,
+									"line": 352,
 									"character": 24
 								}
 							]
@@ -33773,7 +33849,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 301,
+									"line": 303,
 									"character": 20
 								}
 							]
@@ -33840,7 +33916,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 270,
+									"line": 272,
 									"character": 23
 								}
 							]
@@ -33913,7 +33989,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 233,
+									"line": 235,
 									"character": 19
 								}
 							]
@@ -33986,7 +34062,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 163,
+									"line": 165,
 									"character": 19
 								}
 							]
@@ -34317,7 +34393,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 331,
+									"line": 333,
 									"character": 29
 								}
 							]
@@ -34367,7 +34443,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 323,
+									"line": 325,
 									"character": 19
 								}
 							]
@@ -34445,7 +34521,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 379,
+									"line": 381,
 									"character": 23
 								}
 							]
@@ -34492,7 +34568,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 447,
+									"line": 449,
 									"character": 18
 								}
 							]
@@ -34550,7 +34626,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 469,
+									"line": 471,
 									"character": 16
 								}
 							]
@@ -34606,7 +34682,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 401,
+									"line": 403,
 									"character": 22
 								}
 							]

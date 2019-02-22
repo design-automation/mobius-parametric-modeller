@@ -121,7 +121,7 @@ export class GIAttribsQuery {
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute with this name does not exist.'); }
-        if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
+        // if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
         if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
         return attrib.getEntIdxVal(ents_i, value_index) as number|string;
     }

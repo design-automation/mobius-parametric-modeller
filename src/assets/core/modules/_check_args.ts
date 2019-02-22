@@ -374,7 +374,7 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
     let ret;
     for (let i = 0; i < check_fns.length; i++) {
         try {
-           ret = check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg);
+           ret = check_fns[i](fn_name, arg_name, arg);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -383,7 +383,7 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret;
@@ -396,7 +396,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
     let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         try {
-           ret =  check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+           ret =  check_fns[i](fn_name, arg_name, arg, IDchecks);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -405,7 +405,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
@@ -420,7 +420,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
     let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         try {
-            ret = check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+            ret = check_fns[i](fn_name, arg_name, arg, IDchecks);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -451,7 +451,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         // }
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns void|TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes

@@ -177,6 +177,14 @@ export class GIAttribsThreejs {
                 }
             }
         });
-        return Array.from(data_obj_map.values());
+        let result = Array.from(data_obj_map.values());
+        result = this.sortByKey(result, 'id');
+        return result;
+    }
+    private sortByKey(array, key) {
+        return array.sort(function(a, b) {
+            const x = Number(a[key].substr(2)), y = Number(b[key].substr(2));
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
     }
 }

@@ -61,11 +61,12 @@ export class ToolsetComponent implements OnInit {
                     if (fn.doc.summary) {
                         fnDocHtml = `<p class="funcDesc">${fn.doc.summary}</p>`;
                     } else {
-                        const splittedDesc = fn.doc.description.split('~');
-                        fnDocHtml = ``;
-                        for (const txt of splittedDesc) {
-                            fnDocHtml += `<p class="funcDesc">${txt}</p>`;
-                        }
+                        fnDocHtml = `<p class="funcDesc">${fn.doc.description.split('~')[0]}</p>`;
+                        // const splittedDesc = fn.doc.description.split('~');
+                        // fnDocHtml = ``;
+                        // for (const txt of splittedDesc) {
+                        //     fnDocHtml += `<p class="funcDesc">${txt}</p>`;
+                        // }
                     }
                     if (fn.doc.parameters && fn.doc.parameters.length > 0) {
                         fnDocHtml += `<p><span>Parameters: </span></p>`;

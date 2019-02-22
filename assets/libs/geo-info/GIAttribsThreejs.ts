@@ -154,7 +154,8 @@ export class GIAttribsThreejs {
             return [];
         }
         let i = 0;
-        selected_ents.forEach(ent => {
+        const selected_ents_sorted = this.sortByKey(selected_ents);
+        selected_ents_sorted.forEach(ent => {
             data_obj_map.set(ent, { '#': i, id: `${attribs_maps_key}${ent}` } );
             i++;
         });
@@ -178,5 +179,21 @@ export class GIAttribsThreejs {
             }
         });
         return Array.from(data_obj_map.values());
+    }
+    private sortByKey(unsortedMap) {
+        const keys = [];
+        const sortedMap = new Map();
+
+        unsortedMap.forEach((value, key) => {
+            keys.push(key);
+        });
+
+        keys.sort((a, b) => {
+            const x = Number(a.substr(2)), y = Number(b.substr(2));
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }).map(function(key) {
+            sortedMap.set(key, unsortedMap.get(key));
+        });
+        return sortedMap;
     }
 }

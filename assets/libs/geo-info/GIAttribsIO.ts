@@ -130,6 +130,7 @@ export class GIAttribsIO {
             const to_attrib: GIAttribMap = to_attribs.get(name);
             // get the data and shift the ents_i indices
             const ents_i_values: [number[], TAttribDataTypes][] = from_attrib.getEntsVals();
+
             for (const ents_i_value of ents_i_values) {
                 ents_i_value[0] = ents_i_value[0].map( ent_i => ent_i + num_ents ); // shift
             }

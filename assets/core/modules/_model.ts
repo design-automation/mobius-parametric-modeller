@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 import { getArrDepth } from '@libs/geo-info/id';
-import { checkIDs, checkCommTypes, checkAttribNameValue } from './_check_args';
+import { checkIDs, checkCommTypes, checkAttribNameValue, TypeCheckObj, IDcheckObj } from './_check_args';
 
 //  ===============================================================================================
 //  Functions used by Mobius
@@ -129,7 +129,7 @@ export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
     const fn_name = entities + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // checkAttribNameValue(fn_name , attrib_name, attrib_value, attrib_index);
     // --- Error Check ---
@@ -172,11 +172,11 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
     const fn_name = 'Inline.__getAttrib__';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, ['isID', 'isIDList'], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkCommTypes(fn_name, 'attrib_name', attrib_name, ['isString']);
+    checkCommTypes(fn_name, 'attrib_name', attrib_name, [TypeCheckObj.isString]);
     if (attrib_index !== null && attrib_index !== undefined) {
-        checkCommTypes(fn_name, 'attrib_index', attrib_index, ['isNumber']);
+        checkCommTypes(fn_name, 'attrib_index', attrib_index, [TypeCheckObj.isNumber]);
     }
     // --- Error Check ---
     return _getAttrib(__model__, ents_arr, attrib_name, attrib_index);

@@ -10,7 +10,7 @@
  *
  */
 
-import { checkCommTypes } from './_check_args';
+import { checkCommTypes, TypeCheckObj } from './_check_args';
 import { idsBreak } from '@libs/geo-info/id';
 import { TEntTypeIdx } from '@libs/geo-info/common';
 
@@ -41,8 +41,8 @@ export enum _EAddMethod {
 export function Add(list: any[], item: any, method: _EAddMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Add';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', item, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'value', item, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let str_value: string;
     switch (method) {
@@ -124,8 +124,8 @@ export enum _ERemoveMethod {
 export function Remove(list: any[], item: any, method: _ERemoveMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Remove';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'item', item, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'item', item, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -175,9 +175,9 @@ export enum _EReplaceMethod {
 export function Replace(list: any[], item: any, new_value: any, method: _EReplaceMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Replace';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'item', item, ['isAny']);
-    checkCommTypes(fn_name, 'new_value', new_value, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'item', item, [TypeCheckObj.isAny]);
+    checkCommTypes(fn_name, 'new_value', new_value, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -283,7 +283,7 @@ function _sort(list: any[], method: _ESortMethod): void {
  */
 export function Sort(list: any[], method: _ESortMethod): void {
     // --- Error Check ---
-    checkCommTypes('list.Sort', 'list', list, ['isList']);
+    checkCommTypes('list.Sort', 'list', list, [TypeCheckObj.isList]);
     // --- Error Check ---
     _sort(list, method);
 }
@@ -306,10 +306,10 @@ export function Sort(list: any[], method: _ESortMethod): void {
 export function Splice(list: any[], index: number, num_to_remove: number, items_to_insert: any[]): void {
     // --- Error Check ---
     const fn_name = 'list.Splice';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'index', index, ['isInt']);
-    checkCommTypes(fn_name, 'num_to_remove', num_to_remove, ['isInt']);
-    checkCommTypes(fn_name, 'values_to_add', items_to_insert, ['isList']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isInt]);
+    checkCommTypes(fn_name, 'num_to_remove', num_to_remove, [TypeCheckObj.isInt]);
+    checkCommTypes(fn_name, 'values_to_add', items_to_insert, [TypeCheckObj.isList]);
     // --- Error Check ---
 
     // avoid the spread operator
@@ -379,8 +379,8 @@ export enum _EAppendMethod {
 export function _Append(list: any[], value: any, method: _EAppendMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Append';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'value', value, [TypeCheckObj.isAny]);
     // --- Error Check ---
     switch (method) {
         case _EAppendMethod.TO_START:
@@ -398,7 +398,7 @@ export function _Append(list: any[], value: any, method: _EAppendMethod): void {
  * Removes the value at the specified index from a list.
  * ~
  * WARNING: This function has been deprecated. Please use the list.Modify() function.
- * 
+ *
  * @param list List to remove value from.
  * @param index Zero-based index number of value to remove.
  * @example remove = list.RemoveIndex(list,1)
@@ -408,8 +408,8 @@ export function _Append(list: any[], value: any, method: _EAppendMethod): void {
 export function _RemoveIndex(list: any[], index: number): void {
     // --- Error Check ---
     const fn_name = 'list.RemoveIndex';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'index', index, ['isInt']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isInt]);
     // --- Error Check ---
     list.splice(index, 1);
 }
@@ -436,8 +436,8 @@ export enum _ERemoveValueMethod {
 export function _RemoveValue(list: any[], value: any, method: _ERemoveValueMethod): void {
     // --- Error Check ---
     const fn_name = 'list.RemoveValue';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'value', value, [TypeCheckObj.isAny]);
     // --- Error Check ---
     for (let i = list.length - 1; i >= 0; i--) {
         if (list[i] === value) {
@@ -470,9 +470,9 @@ export enum _EReplaceValueMethod {
 export function _ReplaceValue(list: any[], value1: any, value2: any, method: _EReplaceValueMethod): void {
     // --- Error Check ---
     const fn_name = 'list.ReplaceValue';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value1', value1, ['isAny']);
-    checkCommTypes(fn_name, 'value2', value2, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'value1', value1, [TypeCheckObj.isAny]);
+    checkCommTypes(fn_name, 'value2', value2, [TypeCheckObj.isAny]);
     // --- Error Check ---
     for (let i = 0 ; i < list.length ; i++) {
         if (list[i] === value1) {
@@ -506,8 +506,8 @@ export enum _EIndexOfMethod {
 export function _IndexOf(list: any[], value: any, method: _EIndexOfMethod): number|number[] {
     // --- Error Check ---
     const fn_name = 'list.IndexOf';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'value', value, [TypeCheckObj.isAny]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listFind() function.');
     const positions = [];
@@ -544,8 +544,8 @@ export function _IndexOf(list: any[], value: any, method: _EIndexOfMethod): numb
 export function _Includes(list: any[], value: any): boolean {
     // --- Error Check ---
     const fn_name = 'list.Includes';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'value', value, ['isAny']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'value', value, [TypeCheckObj.isAny]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listHas() function.');
     for (let i = list.length - 1; i >= 0; i--) {
@@ -569,7 +569,7 @@ export function _Includes(list: any[], value: any): boolean {
  */
 export function _Copy(entities: any[]): any[] {
     // --- Error Check ---
-    checkCommTypes('list.Copy', 'list', entities, ['isList']);
+    checkCommTypes('list.Copy', 'list', entities, [TypeCheckObj.isList]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listCopy() function.');
     return entities.slice();
@@ -591,8 +591,8 @@ export function _Copy(entities: any[]): any[] {
 export function _Concat(list1: any[], list2: any[]): any[] {
     // --- Error Check ---
     const fn_name = 'list.Concat';
-    checkCommTypes(fn_name, 'list1', list1, ['isList']);
-    checkCommTypes(fn_name, 'list2', list2, ['isList']);
+    checkCommTypes(fn_name, 'list1', list1, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'list2', list2, [TypeCheckObj.isList]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listJoin() function.');
     return list1.concat(list2);
@@ -611,7 +611,7 @@ export function _Concat(list1: any[], list2: any[]): any[] {
  */
 export function _Flatten(list: any[]): any[] {
     // --- Error Check ---
-    checkCommTypes('list.Flatten', 'list', list, ['isList']);
+    checkCommTypes('list.Flatten', 'list', list, [TypeCheckObj.isList]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listFlat() function.');
     return _flattenDeep(list);
@@ -640,9 +640,9 @@ function _flattenDeep(list: any[]): any[] {
 export function _Slice(list: any[], start: number, end: number): any[] {
     // --- Error Check ---
     const fn_name = 'list.Slice';
-    checkCommTypes(fn_name, 'list', list, ['isList']);
-    checkCommTypes(fn_name, 'start', start, ['isInt']);
-    checkCommTypes(fn_name, 'end', end, ['isInt']);
+    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkCommTypes(fn_name, 'start', start, [TypeCheckObj.isInt]);
+    checkCommTypes(fn_name, 'end', end, [TypeCheckObj.isInt]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the inline listSlice() function.');
     return list.slice(start, end);
@@ -661,7 +661,7 @@ export function _Slice(list: any[], start: number, end: number): any[] {
  */
 export function _Reverse(entities: any[]): void {
     // --- Error Check ---
-    checkCommTypes('list.Reverse', 'entities', entities, ['isList']);
+    checkCommTypes('list.Reverse', 'entities', entities, [TypeCheckObj.isList]);
     // --- Error Check ---
     console.log('WARNING: This function has been deprecated. Please use the list.Sort() function.');
     entities.reverse();

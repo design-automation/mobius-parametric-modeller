@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import {DataService} from './data/data.service';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
+import { GIModel } from '@libs/geo-info/GIModel';
 
 @Component({
     selector: 'mobius-cesium',
@@ -26,7 +27,7 @@ export class MobiuscesiumComponent implements OnInit, DoCheck {
     constructor(private dataService: DataService) {
 
         }
-    @Input() output: JSON;
+    @Input() data: GIModel;
     // @Input() mode: string;
     mode = 'editor'; // 'viewer'/'editor'
 
@@ -37,23 +38,21 @@ export class MobiuscesiumComponent implements OnInit, DoCheck {
             this.dataService.setGsModel(data);
             // console.log("mode: ", this.mode);
         } catch (ex) {
-            this.output = undefined;
+            this.data = undefined;
             // console.error("Error generating model");
 
         }
     }
     public ngOnInit() {
-        this.setModel(this.output);
-        // console.log("Setting", this.mode)
         this.dataService.setMode(this.mode);
-        // console.log(this.data);
+        // SETMODEL HERE
+        this.setModel(this.data);
 
     }
     public ngDoCheck() {
-        if (this.dataService.getGsModel() !== this.output) {
-            this.setModel(this.output);
-            // console.log("data changed");
-            // console.log("mode:", this.mode);
+        if (this.dataService.getGsModel() !== this.data) {
+            // SETMODEL HERE
+            this.setModel(this.data);
         }
     }
     public toggleSlider(): void {

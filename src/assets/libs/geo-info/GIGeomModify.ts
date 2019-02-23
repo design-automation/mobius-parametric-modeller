@@ -411,13 +411,11 @@ export class GIGeomModify {
             const vert_count: number = exist_posis_i_map.get(posi_i);
             exist_posis_i_map.set(posi_i, vert_count + 1);
         }
-console.log("exist_posis_i_map", exist_posis_i_map)
         // copy positions on the perimeter and make a map
         const old_to_new_posis_i_map: Map<number, number> = new Map();
         exist_posis_i_map.forEach( (vert_count, old_posi_i) => {
             const all_old_verts_i: number[] = this._geom.query.navPosiToVert(old_posi_i);
             const all_vert_count: number = all_old_verts_i.length;
-console.log("all_old_verts_i", all_old_verts_i);
             if (vert_count !== all_vert_count) {
                 if (!old_to_new_posis_i_map.has(old_posi_i)) {
                     const new_posi_i: number = this._geom.add.copyPosis(old_posi_i, true) as number;

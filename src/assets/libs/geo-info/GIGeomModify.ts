@@ -391,7 +391,7 @@ export class GIGeomModify {
             this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
             // update the up arrays for the old posi, i.e. remove this vert
             arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
-            // update the up arrays for teh new posi, i.e. add this vert
+            // update the up arrays for the new posi, i.e. add this vert
             this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
         }
     }
@@ -411,11 +411,13 @@ export class GIGeomModify {
             const vert_count: number = exist_posis_i_map.get(posi_i);
             exist_posis_i_map.set(posi_i, vert_count + 1);
         }
+console.log("exist_posis_i_map", exist_posis_i_map)
         // copy positions on the perimeter and make a map
         const old_to_new_posis_i_map: Map<number, number> = new Map();
         exist_posis_i_map.forEach( (vert_count, old_posi_i) => {
             const all_old_verts_i: number[] = this._geom.query.navPosiToVert(old_posi_i);
             const all_vert_count: number = all_old_verts_i.length;
+console.log("all_old_verts_i", all_old_verts_i);
             if (vert_count !== all_vert_count) {
                 if (!old_to_new_posis_i_map.has(old_posi_i)) {
                     const new_posi_i: number = this._geom.add.copyPosis(old_posi_i, true) as number;
@@ -426,17 +428,15 @@ export class GIGeomModify {
         // now go through the geom again and rewire to the new posis
         for (const vert_i of verts_i) {
             const old_posi_i: number = this._geom.query.navVertToPosi(vert_i);
-            let new_posi_i: number = old_posi_i;
             if (old_to_new_posis_i_map.has(old_posi_i)) {
-                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+                const new_posi_i: number = old_to_new_posis_i_map.get(old_posi_i);
+                // update the down arrays
+                this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+                // update the up arrays for the old posi, i.e. remove this vert
+                arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+                // update the up arrays for the new posi, i.e. add this vert
+                this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
             }
-            // update the down arrays
-            this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
-            // update the up arrays
-            if (this._geom_arrays.up_posis_verts[new_posi_i] === undefined) {
-                this._geom_arrays.up_posis_verts[new_posi_i] = [];
-            }
-            this._geom_arrays.up_posis_verts[new_posi_i].push(new_posi_i);
         }
         // return all the new positions
         return Array.from(old_to_new_posis_i_map.values());

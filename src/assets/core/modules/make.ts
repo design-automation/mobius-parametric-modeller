@@ -1082,6 +1082,7 @@ export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
         const verts_i: number[] = __model__.geom.query.navAnyToVert(ents[0], ents[1]);
         for (const vert_i of verts_i) { all_verts_i.push(vert_i); }
     }
+    console.log(all_verts_i);
     const new_posis_i: number [] = __model__.geom.modify.unweldVerts(all_verts_i);
     return new_posis_i.map( posi_i => idsMake([EEntType.POSI, posi_i]) ) as TId[];
 }

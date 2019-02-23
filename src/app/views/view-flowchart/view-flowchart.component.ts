@@ -74,8 +74,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     private offset: number[];
 
     // constants for offset positions of input/output port relative to the node's position
-    inputOffset = [50, -8];
-    outputOffset = [50, 88];
+    inputOffset = [50, 40];
+    outputOffset = [50, 40];
 
 
     static enableNode(node: INode) {
@@ -778,8 +778,46 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             this.starTxyzs[0] = svgP.x;
             this.starTxyzs[1] = svgP.y;
 
-            this.element.position.x -= xDiff;
-            this.element.position.y -= yDiff;
+            let check: number;
+            for ( const nodeIndex of this.dataService.flowchart.meta.selected_nodes) {
+                if (this.dataService.flowchart.nodes[nodeIndex].id === this.element.id) {
+                    check = nodeIndex;
+                    break;
+                }
+            }
+            if (check === undefined) {
+                this.element.position.x -= xDiff;
+                this.element.position.y -= yDiff;
+
+                if (!event.shiftKey) {
+                    const offsetx = this.element.position.x % 20;
+                    const offsety = this.element.position.y % 20;
+
+                    this.element.position.x = this.element.position.x - offsetx;
+                    this.element.position.y = this.element.position.y - offsety;
+
+                    this.starTxyzs[0] -= offsetx;
+                    this.starTxyzs[1] -= offsety;
+                }
+
+            } else {
+                for ( const nodeIndex of this.dataService.flowchart.meta.selected_nodes) {
+                    const node =  this.dataService.flowchart.nodes[nodeIndex];
+                    node.position.x -= xDiff;
+                    node.position.y -= yDiff;
+                    if (!event.shiftKey) {
+                        const offsetx = node.position.x % 20;
+                        const offsety = node.position.y % 20;
+
+                        node.position.x = node.position.x - offsetx;
+                        node.position.y = node.position.y - offsety;
+                        if (nodeIndex === check) {
+                            this.starTxyzs[0] -= offsetx;
+                            this.starTxyzs[1] -= offsety;
+                        }
+                    }
+                }
+            }
 
     // if drag port
     } else if (this.isDown === 3) {
@@ -831,9 +869,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
                     pPos = [n.position.x + this.inputOffset[0], n.position.y + this.inputOffset[1]];
                 }
-
                 // if the distance between the port's position and the dropped position is bigger than 15px, continue
-                if (Math.abs(pPos[0] - svgP.x) > this.maxZoom || Math.abs(pPos[1] - svgP.y) > this.maxZoom ) { continue; }
+                if (Math.abs(pPos[0] - svgP.x) > 60 || Math.abs(pPos[1] - svgP.y) > 50 ) { continue; }
 
                 // if there is already an existing edge with the same source and target as the new edge, return
                 for (const edge of this.dataService.flowchart.edges) {

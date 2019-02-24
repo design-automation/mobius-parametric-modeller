@@ -6,7 +6,7 @@ import { VIEWER_ARR, VIEWER_MOD } from './model-viewers.config';
 // viewers
 import { ConsoleViewerComponent } from './all-viewers/console-viewer/console-viewer.component';
 import { HelpViewerComponent } from './all-viewers/help-viewer/help-viewer.component';
-import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
+// import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
 import { MatIconModule } from '@angular/material';
 // import { ThreejsViewerComponent } from './viewers/gi-viewer/threejs/threejs-viewer.component';
 // import { MobiusCesium } from './viewers/cesium-viewer/mobius-cesium.module';

@@ -46,13 +46,13 @@ export class MobiuscesiumComponent implements OnInit, DoCheck {
     public ngOnInit() {
         this.dataService.setMode(this.mode);
         // SETMODEL HERE
-        this.setModel(this.data);
+        // this.setModel(this.data);
 
     }
     public ngDoCheck() {
         if (this.dataService.getGsModel() !== this.data) {
             // SETMODEL HERE
-            this.setModel(this.data);
+            // this.setModel(this.data);
         }
     }
     public toggleSlider(): void {

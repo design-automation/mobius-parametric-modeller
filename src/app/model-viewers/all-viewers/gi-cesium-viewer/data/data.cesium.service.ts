@@ -30,4 +30,8 @@ export class DataCesiumService {
     setCesiumScene(settings: CesiumSettings) {
         this._data_cesium = new DataCesium(settings);
     }
+
+    createCesiumViewer() {
+        this._data_cesium.createCesiumViewer();
+    }
 }

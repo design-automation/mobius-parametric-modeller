@@ -37,7 +37,6 @@ export class DataCesium {
         // https://cesium.com/docs/tutorials/getting-started/
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
         console.log('=====CREATING CESIUM SCENE=====');
-        this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
 
         // renderer
         // camera settings
@@ -48,6 +47,10 @@ export class DataCesium {
         // add lights
     }
     // matrix points from xyz to long lat
+
+    createCesiumViewer() {
+        this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
+    }
 
     /**
      *
@@ -63,7 +66,6 @@ export class DataCesium {
 
         // Add geometry
         if (!model) {
-
             const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
             const tris_i: number[] = [];
             for (const pgon_i of pgons_i) {

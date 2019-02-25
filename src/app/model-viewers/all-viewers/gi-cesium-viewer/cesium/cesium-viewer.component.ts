@@ -2,7 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 // import @angular stuff
 import {
     Component, OnInit, Input, Output, EventEmitter,
-    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild
+    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild, OnDestroy
 } from '@angular/core';
 import { DataCesium } from '../data/data.cesium';
 import { DataCesiumService } from '../data/data.cesium.service';
@@ -94,7 +94,7 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
 
         // CREATING CESIUM VIEWER:
         // passing an undefined model into addGeometry along with the container to create the viewer
-        this._data_cesium.addGeometry(undefined, this._elem.nativeElement);
+        this._data_cesium.addGeometry(undefined, document.getElementById('cesium-container'));
 
         // this.container.appendChild(this._data_cesium._renderer.domElement);
 

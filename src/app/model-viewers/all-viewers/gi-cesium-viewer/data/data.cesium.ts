@@ -52,9 +52,7 @@ export class DataCesium {
      */
     public addGeometry(model: GIModel, container: any): void { // TODO why is container any?
 
-        if (!this._viewer) {
-            this._viewer = new Cesium.Viewer(container);
-        }
+        this._viewer = new Cesium.Viewer(container);
 
         // Add geometry
         if (!model) {

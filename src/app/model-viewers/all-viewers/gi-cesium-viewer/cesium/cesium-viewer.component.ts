@@ -92,10 +92,6 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
         this._data_cesium = this.dataService.getCesiumScene();
         this.cesiumViewerService.data_cesium = this._data_cesium;
 
-        // CREATING CESIUM VIEWER:
-        // passing an undefined model into addGeometry along with the container to create the viewer
-        this._data_cesium.addGeometry(undefined, document.getElementById('cesium-container'));
-
         // this.container.appendChild(this._data_cesium._renderer.domElement);
 
         // ??? What is happening here?

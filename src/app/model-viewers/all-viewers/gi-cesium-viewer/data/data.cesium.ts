@@ -36,6 +36,7 @@ export class DataCesium {
         // https://cesium.com/docs/tutorials/getting-started/
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
         console.log('=====CREATING CESIUM SCENE=====');
+        this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
 
         // renderer
         // camera settings
@@ -52,7 +53,6 @@ export class DataCesium {
      */
     public addGeometry(model: GIModel, container: any): void { // TODO why is container any?
 
-        this._viewer = new Cesium.Viewer(container);
 
         // Add geometry
         if (!model) {

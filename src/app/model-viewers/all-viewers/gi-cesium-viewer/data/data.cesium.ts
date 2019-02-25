@@ -6,6 +6,7 @@ import { CesiumSettings } from '../gi-cesium-viewer.settings';
  * Cesium data
  */
 export class DataCesium {
+    public _viewer: any;
     // the GI model to display
     public _model: GIModel;
     // Cesium Settings
@@ -34,7 +35,7 @@ export class DataCesium {
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
-        console.log("=====CREATING CESIUM SCENE=====");
+        console.log('=====CREATING CESIUM SCENE=====');
 
         // renderer
         // camera settings
@@ -51,6 +52,10 @@ export class DataCesium {
      */
     public addGeometry(model: GIModel, container: any): void { // TODO why is container any?
 
+        if (!this._viewer) {
+            this._viewer = new Cesium.Viewer(container);
+        }
+
         // Add geometry
         if (!model) {
             return;
@@ -58,7 +63,9 @@ export class DataCesium {
 
         // TODO INSERT CODE TO ADD GEOMETRY
         // Loop through the triangles in the GI Model and add them to Cesium
-        console.log("=====ADD GEOMETRY TO CESIUM SCENE=====");
+        console.log('=====ADD GEOMETRY TO CESIUM SCENE=====');
+
+        // update model onto viewer
 
         // this._scene.add(data);
 

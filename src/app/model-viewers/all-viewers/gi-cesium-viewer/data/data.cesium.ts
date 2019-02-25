@@ -36,7 +36,6 @@ export class DataCesium {
         // https://cesium.com/docs/tutorials/getting-started/
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
         console.log('=====CREATING CESIUM SCENE=====');
-        this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
 
         // renderer
         // camera settings
@@ -46,6 +45,11 @@ export class DataCesium {
         // add grid
         // add lights
     }
+
+    createCesiumViewer() {
+        this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
+    }
+
     /**
      *
      * @param model

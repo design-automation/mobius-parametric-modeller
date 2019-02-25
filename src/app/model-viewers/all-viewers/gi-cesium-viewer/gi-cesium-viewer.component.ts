@@ -47,6 +47,7 @@ export class GICesiumViewerComponent implements OnInit {
         if (this.dataService.getCesiumScene() === undefined) {
             this.dataService.setCesiumScene(this.settings);
         }
+        this.dataService.createCesiumViewer();
     }
     /**
      * childEventClicked

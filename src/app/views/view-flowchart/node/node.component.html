@@ -104,7 +104,8 @@
 (mousedown)='startDragNode($event)' 
 (dblclick)='switchToProcedure($event)'
 *ngIf='node.type=="end"'>
-    <!-- <path
+
+    <path
     class='outputPort'
     id = 'node.output.id'
     [attr.d]="'M'+ (node.position.x - 5)   +' '+ (node.position.y + 75) +
@@ -112,7 +113,7 @@
             ' L' + (node.position.x + 50)  +' '+ (node.position.y + 15) +
             ' L' + (node.position.x + 105) +' '+ (node.position.y + 37) +
             ' L' + (node.position.x + 105) +' '+ (node.position.y + 75) + ' Z'" 
-    /> -->
+    />
 
     <!-- Triangle with border -->
     <path class="node" 

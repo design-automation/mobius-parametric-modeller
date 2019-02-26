@@ -152,7 +152,6 @@ export class DataCesium {
      */
     public addGeometry(model: GIModel, container: any): void { // TODO why is container any?
         // set up the view
-        this.createCesiumViewer();
         const viewer = this._viewer;
         // set up the view
         const scene = viewer.scene;

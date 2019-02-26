@@ -1,6 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes } from '@assets/libs/geo-info/common';
+import { vecSum } from '@assets/libs/geom/vectors';
 /**
  * Cesium data
  */
@@ -41,7 +42,6 @@ export class DataCesium {
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
-        console.log('=====CREATING CESIUM VIEWER=====');
         const view_models = this._getImageryViewModels();
         this._viewer = new Cesium.Viewer(
             document.getElementById('cesium-container'),
@@ -59,6 +59,7 @@ export class DataCesium {
                 // selectedTerrainProviderViewModel : terrainViewModels[1]
             }
         );
+        this._viewer.scene.globe.depthTestAgainstTerrain = true;
         document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     }
     /**
@@ -67,12 +68,11 @@ export class DataCesium {
      * @param container
      */
     public addGeometry(model: GIModel, container: any): void { // TODO delete container
-        console.log('=====ADD CESIUM GEOMETRY=====', this._viewer);
         this._viewer.scene.primitives.removeAll();
         // the origin of the model
         let longitude = 103.77575;
         let latitude = 1.30298;
-        if (model.attribs.query.hasAttrib(EEntType.MOD, 'longitude')) {
+        if (model.attribs.query.hasModelAttrib('longitude')) {
             const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
@@ -82,7 +82,7 @@ export class DataCesium {
                 throw new Error('Longitude attribute must be between -180 and 180.');
             }
         }
-        if (model.attribs.query.hasAttrib(EEntType.MOD, 'latitude')) {
+        if (model.attribs.query.hasModelAttrib('latitude')) {
             const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribValue('latitude');
             if (typeof lat_value !== 'number') {
                 throw new Error('Latitude attribute must be a number');
@@ -103,6 +103,7 @@ export class DataCesium {
         if (model) {
             // get each polygon
             const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+            console.log("POLYGONS", pgons_i);
             // get each triangle
             const posi_to_point_map: Map<number, any> = new Map();
             const lines_instances: any[] = [];
@@ -121,19 +122,47 @@ export class DataCesium {
                     }
                     pgon_points.push(posi_to_point_map.get(posi_i));
                 }
-                // create the edge
-                const line_geom = new Cesium.PolygonOutlineGeometry({
-                    polygonHierarchy: new Cesium.PolygonHierarchy(pgon_points),
-                    vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-                    perPositionHeight: true
-                });
-                const line_instance = new Cesium.GeometryInstance({
-                    geometry : line_geom,
-                    attributes : {
-                        color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
+                // get the colour of the vertices
+                let pgon_colour = Cesium.Color.WHITE;
+                if (model.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+                    const verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
+                    const rgb_sum: Txyz = [0, 0, 0];
+                    for (const vert_i of verts_i) {
+                        const vert_rgb: Txyz = model.attribs.query.getAttribValue(EEntType.VERT, 'rgb', vert_i) as Txyz;
+                        if (vert_rgb !== null) {
+                            rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
+                            rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
+                            rgb_sum[2] = rgb_sum[2] + vert_rgb[2];
+                        }
                     }
-                });
-                lines_instances.push(line_instance);
+                    const num_verts: number = verts_i.length;
+                    pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
+                }
+                // create the edges
+                const wires_i: number[] = model.geom.query.navAnyToWire(EEntType.PGON, pgon_i);
+                console.log("WIRES", wires_i)
+                for (const wire_i of wires_i) {
+                    console.log("WIRE: ", wire_i);
+                    const wire_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
+                    if (wire_posis_i.length > 2) {
+                        // const wire_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.WIRE, wire_i);
+                        // const wire_posis_i: number[] = wire_verts_i.map( wire_vert_i => model.geom.query.navVertToPosi(wire_vert_i) );
+                        const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
+                        console.log("NUMS, ", wire_posis_i)
+                        const line_geom = new Cesium.PolygonOutlineGeometry({
+                            polygonHierarchy: new Cesium.PolygonHierarchy(wire_points),
+                            vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                            perPositionHeight: true
+                        });
+                        const line_instance = new Cesium.GeometryInstance({
+                            geometry : line_geom,
+                            attributes : {
+                                color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
+                            }
+                        });
+                        lines_instances.push(line_instance);
+                    }
+                }
                 // create the triangles
                 const pgon_tris_i: number[] = model.geom.query.navAnyToTri(EEntType.PGON, pgon_i);
                 for (const pgon_tri_i of pgon_tris_i) {
@@ -148,7 +177,7 @@ export class DataCesium {
                     const instance = new Cesium.GeometryInstance({
                         geometry : tri_geom,
                         attributes : {
-                            color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.WHITE)
+                            color : Cesium.ColorGeometryInstanceAttribute.fromColor(pgon_colour)
                         }
                     });
                     tris_instances.push(instance);

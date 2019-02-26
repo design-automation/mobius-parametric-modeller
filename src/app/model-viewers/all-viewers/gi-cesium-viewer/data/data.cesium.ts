@@ -62,7 +62,7 @@ export class DataCesium {
             }
         );
         this._viewer.scene.globe.depthTestAgainstTerrain = true;
-        this._viewer.clock.currentTime.secondsOfDay = 62624;
+        this._viewer.clock.currentTime.secondsOfDay = 50000;
         document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     }
     /**
@@ -130,12 +130,11 @@ export class DataCesium {
                     const verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
-                        const vert_rgb: Txyz = model.attribs.query.getAttribValue(EEntType.VERT, 'rgb', vert_i) as Txyz;
-                        if (vert_rgb !== null) {
-                            rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
-                            rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
-                            rgb_sum[2] = rgb_sum[2] + vert_rgb[2];
-                        }
+                        let vert_rgb: Txyz = model.attribs.query.getAttribValue(EEntType.VERT, 'rgb', vert_i) as Txyz;
+                        if (!vert_rgb) { vert_rgb = [1, 1, 1]; }
+                        rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
+                        rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
+                        rgb_sum[2] = rgb_sum[2] + vert_rgb[2];
                     }
                     const num_verts: number = verts_i.length;
                     pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);

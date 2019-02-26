@@ -20,6 +20,7 @@ export class DataCesium {
     // number of cesium points, lines, triangles
     // grid
     // axes
+    
 
     /**
      * Constructs a new data subscriber.
@@ -36,13 +37,112 @@ export class DataCesium {
     }
     // matrix points from xyz to long lat
 
-    createCesiumViewer() {
+    public createCesiumViewer() {
         // create the viewer
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
         console.log('=====CREATING CESIUM VIEWER=====');
-        this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
+        const view_models = this._getImageryViewModels();
+        this._viewer = new Cesium.Viewer(
+            document.getElementById('cesium-container'),
+            {
+                scene3DOnly: false,
+                sceneModePicker: false,
+                homeButton: false,
+                navigationHelpButton: false,
+                fullscreenButton: false,
+                animation: false,
+                timeline: false,
+                imageryProviderViewModels : view_models,
+                selectedImageryProviderViewModel : view_models[0],
+                // terrainProviderViewModels : terrainViewModels
+                // selectedTerrainProviderViewModel : terrainViewModels[1]
+            }
+        );
+    }
+
+    private _getImageryViewModels(): any[] {
+        const view_models: any[] = [];
+        view_models.push(new Cesium.ProviderViewModel({
+            name: "Open\u00adStreet\u00adMap",
+            iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/openStreetMap.png"),
+            tooltip: "OpenStreetMap (OSM) is a collaborative project to create a free editable \
+                 map of the world.\nhttp://www.openstreetmap.org",
+            creationFunction: function () {
+                return Cesium.createOpenStreetMapImageryProvider({
+                    url: "https://a.tile.openstreetmap.org/",
+                });
+            },
+        }));
+        view_models.push(new Cesium.ProviderViewModel({
+            name: "Stamen Toner",
+            iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
+            tooltip: "A high contrast black and white map.\nhttp://www.maps.stamen.com/",
+            creationFunction: function () {
+                return Cesium.createOpenStreetMapImageryProvider({
+                    url: "https://stamen-tiles.a.ssl.fastly.net/toner/",
+                });
+            },
+        }));
+        view_models.push(new Cesium.ProviderViewModel({
+            name: "Stamen Toner(Lite)",
+            iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
+            tooltip: "A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/",
+            creationFunction: function () {
+                return Cesium.createOpenStreetMapImageryProvider({
+                    url: "https://stamen-tiles.a.ssl.fastly.net/toner-lite/",
+                });
+            },
+        }));
+        view_models.push(new Cesium.ProviderViewModel({
+            name: "Terrain(Standard)",
+            iconUrl: Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
+            tooltip: "A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/",
+            creationFunction: function () {
+                return Cesium.createOpenStreetMapImageryProvider({
+                    url: "https://stamen-tiles.a.ssl.fastly.net/terrain/",
+                });
+            },
+        }));
+        view_models.push(new Cesium.ProviderViewModel({
+            name: "Terrain(Background)",
+            iconUrl: Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
+            tooltip: "A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/",
+            creationFunction: function () {
+                return Cesium.createOpenStreetMapImageryProvider({
+                    url: "https://stamen-tiles.a.ssl.fastly.net/terrain-background/",
+                });
+            },
+        }));
+        // view_models.push(new Cesium.ProviderViewModel({
+        //     name: "Earth at Night",
+        //     iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/earthAtNight.png"),
+        //     tooltip: "The lights of cities and villages trace the outlines of civilization \
+        //              in this global view of the Earth at night as seen by NASA/NOAA\'s Suomi NPP satellite.",
+        //     creationFunction: function () {
+        //         return new Cesium.IonImageryProvider({ assetId: 3812 });
+        //     },
+        // }));
+        // view_models.push(new Cesium.ProviderViewModel({
+        //     name: "Natural Earth\u00a0II",
+        //     iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
+        //     tooltip: "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
+        //     creationFunction: function () {
+        //         return Cesium.createTileMapServiceImageryProvider({
+        //             url: Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
+        //         });
+        //     },
+        // }));
+        // view_models.push(new Cesium.ProviderViewModel({
+        //     name: "Blue Marble",
+        //     iconUrl: Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/blueMarble.png"),
+        //     tooltip: "Blue Marble Next Generation July, 2004 imagery from NASA.",
+        //     creationFunction: function () {
+        //         return new Cesium.IonImageryProvider({ assetId: 3845 });
+        //     },
+        // }));
+        return view_models;
     }
 
     /**
@@ -71,7 +171,7 @@ export class DataCesium {
         }
         // make instance
         const newPoints = [];
-        for(const pt of points){
+        for (const pt of points) {
             const newP = Cesium.Matrix4.multiplyByPoint(mat, pt, new Cesium.Cartesian3());
             newPoints.push(newP);
         }

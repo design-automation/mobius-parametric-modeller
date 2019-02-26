@@ -46,6 +46,8 @@ export class DataCesium {
         this._viewer = new Cesium.Viewer(
             document.getElementById('cesium-container'),
             {
+                shadows : true,
+                terrainShadows: Cesium.ShadowMode.ENABLED,
                 scene3DOnly: false,
                 sceneModePicker: false,
                 homeButton: false,
@@ -60,6 +62,7 @@ export class DataCesium {
             }
         );
         this._viewer.scene.globe.depthTestAgainstTerrain = true;
+        this._viewer.clock.currentTime.secondsOfDay = 62624;
         document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     }
     /**

@@ -193,7 +193,7 @@ export class DataThreejs {
         this.axes_pos.y = center.y;
         this.grid.position.set(center.x, center.y, 0);
         this.axesHelper.position.set(center.x, center.y, 0);
-        this.cameraLookat(center, allObjs.radius);
+        // this.cameraLookat(center, allObjs.radius);
     }
 
     /**

@@ -103,7 +103,6 @@ export class DataCesium {
         if (model) {
             // get each polygon
             const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
-            console.log("POLYGONS", pgons_i);
             // get each triangle
             const posi_to_point_map: Map<number, any> = new Map();
             const lines_instances: any[] = [];
@@ -140,19 +139,21 @@ export class DataCesium {
                 }
                 // create the edges
                 const wires_i: number[] = model.geom.query.navAnyToWire(EEntType.PGON, pgon_i);
-                console.log("WIRES", wires_i)
                 for (const wire_i of wires_i) {
-                    console.log("WIRE: ", wire_i);
                     const wire_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
                     if (wire_posis_i.length > 2) {
                         // const wire_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.WIRE, wire_i);
                         // const wire_posis_i: number[] = wire_verts_i.map( wire_vert_i => model.geom.query.navVertToPosi(wire_vert_i) );
                         const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
-                        console.log("NUMS, ", wire_posis_i)
-                        const line_geom = new Cesium.PolygonOutlineGeometry({
-                            polygonHierarchy: new Cesium.PolygonHierarchy(wire_points),
-                            vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-                            perPositionHeight: true
+                        if (model.geom.query.istWireClosed(wire_i)) {
+                            wire_points.push(wire_points[0]);
+                        }
+                        const line_geom = new Cesium.SimplePolylineGeometry({
+                            positions: wire_points,
+                            vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                            perPositionHeight: true,
+                            // arcType: Cesium.ArcType.NONE,
+                            width: 1.0
                         });
                         const line_instance = new Cesium.GeometryInstance({
                             geometry : line_geom,
@@ -187,7 +188,7 @@ export class DataCesium {
             this._viewer.scene.primitives.add(new Cesium.Primitive({
                 allowPicking: false,
                 geometryInstances : lines_instances,
-                shadows : Cesium.ShadowMode.ENABLED,
+                shadows : Cesium.ShadowMode.DISABLED,
                 appearance : new Cesium.PerInstanceColorAppearance({
                     flat: true,
                     translucent : false

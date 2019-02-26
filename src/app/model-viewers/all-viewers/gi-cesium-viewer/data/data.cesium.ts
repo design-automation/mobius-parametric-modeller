@@ -1,7 +1,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz } from '@assets/libs/geo-info/common';
-
+import * as circularJSON from 'circular-json';
 /**
  * Cesium data
  */
@@ -43,6 +43,7 @@ export class DataCesium {
         // https://cesium.com/blog/2018/03/12/cesium-and-angular/
         console.log('=====CREATING CESIUM VIEWER=====');
         this._viewer = new Cesium.Viewer(document.getElementById('cesium-container'));
+        document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     }
 
     /**
@@ -86,6 +87,8 @@ export class DataCesium {
             color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.WHITE)
             }
         });
+        const a = circularJSON.stringify(scene.primitives);
+        console.log(a);
         // add all instances to a single primitive
         scene.primitives.add(new Cesium.Primitive({
             allowPicking: true,

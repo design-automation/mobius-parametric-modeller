@@ -52,7 +52,6 @@ export class DataCesium {
      */
     public addGeometry(model: GIModel, container: any): void { // TODO why is container any?
         // set up the view
-        this.createCesiumViewer();
         const viewer = this._viewer;
         // set up the view
         const scene = viewer.scene;
@@ -71,7 +70,7 @@ export class DataCesium {
         }
         // make instance
         const newPoints = [];
-        for(const pt of points){
+        for (const pt of points) {
             const newP = Cesium.Matrix4.multiplyByPoint(mat, pt, new Cesium.Cartesian3());
             newPoints.push(newP);
         }

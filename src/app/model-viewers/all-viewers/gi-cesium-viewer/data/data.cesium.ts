@@ -34,7 +34,7 @@ export class DataCesium {
     }
     // matrix points from xyz to long lat
     /**
-     * 
+     *
      */
     public createCesiumViewer() {
         // create the viewer
@@ -68,6 +68,7 @@ export class DataCesium {
      */
     public addGeometry(model: GIModel, container: any): void { // TODO delete container
         console.log('=====ADD CESIUM GEOMETRY=====', this._viewer);
+        this._viewer.scene.primitives.removeAll();
         // the origin of the model
         const origin = Cesium.Cartesian3.fromDegrees(103.77575, 1.30298);
         // create a matrix to transform points

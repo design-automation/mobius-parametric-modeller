@@ -1,7 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz } from '@assets/libs/geo-info/common';
-
 /**
  * Cesium data
  */
@@ -20,8 +19,6 @@ export class DataCesium {
     // number of cesium points, lines, triangles
     // grid
     // axes
-    
-
     /**
      * Constructs a new data subscriber.
      */
@@ -36,7 +33,9 @@ export class DataCesium {
         // add lights
     }
     // matrix points from xyz to long lat
-
+    /**
+     * 
+     */
     public createCesiumViewer() {
         // create the viewer
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
@@ -60,14 +59,14 @@ export class DataCesium {
                 // selectedTerrainProviderViewModel : terrainViewModels[1]
             }
         );
+        document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     }
-
     /**
      *
      * @param model
      * @param container
      */
-    public addGeometry(model: GIModel, container: any): void { // TODO why is container any?
+    public addGeometry(model: GIModel, container: any): void { // TODO delete container
         console.log('=====ADD CESIUM GEOMETRY=====', this._viewer);
         // the origin of the model
         const origin = Cesium.Cartesian3.fromDegrees(103.77575, 1.30298);
@@ -82,44 +81,70 @@ export class DataCesium {
             // get each polygon
             const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
             // get each triangle
-            const tris_i: number[] = [];
+            const posi_to_point_map: Map<number, any> = new Map();
+            const lines_instances: any[] = [];
+            const tris_instances: any[] = [];
             for (const pgon_i of pgons_i) {
-                const pgon_tris_i: number[] = model.geom.query.navAnyToTri(EEntType.PGON, pgon_i);
-                for (const pgon_tri_i of pgon_tris_i) {
-                    tris_i.push(pgon_tri_i);
+                // create the points
+                const posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.PGON, pgon_i);
+                const pgon_points: any[] = [];
+                for (const posi_i of posis_i) {
+                    if (!posi_to_point_map.has(posi_i)) {
+                        const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
+                        const pnt: any = Cesium.Cartesian3.fromArray(xyz);
+                        const xform_pnt: any = new Cesium.Cartesian3();
+                        Cesium.Matrix4.multiplyByPoint(xform_matrix, pnt, xform_pnt);
+                        posi_to_point_map.set(posi_i, xform_pnt);
+                    }
+                    pgon_points.push(posi_to_point_map.get(posi_i));
                 }
-            }
-            // create an instance for each triangle
-            const instances = [];
-            for (const tri_i of tris_i) {
-                const verts_i: number[] = model.geom.query.navTriToVert(tri_i);
-                const xyzs: Txyz[] = verts_i.map(vert_i => model.attribs.query.getVertCoords(vert_i));
-                console.log(xyzs);
-                const new_pnts = [];
-                for (const xyz of xyzs) {
-                    const old_pnt: any = Cesium.Cartesian3.fromArray(xyz);
-                    const new_pnt: any = new Cesium.Cartesian3();
-                    Cesium.Matrix4.multiplyByPoint(xform_matrix, old_pnt, new_pnt);
-                    new_pnts.push(new_pnt);
-                }
-                const geom = new Cesium.PolygonGeometry({
-                    perPositionHeight : true,
-                    polygonHierarchy: new Cesium.PolygonHierarchy(new_pnts),
-                    vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
+                // create the edge
+                const line_geom = new Cesium.PolygonOutlineGeometry({
+                    polygonHierarchy: new Cesium.PolygonHierarchy(pgon_points),
+                    vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                    perPositionHeight: true
                 });
-                const instance = new Cesium.GeometryInstance({
-                    geometry : geom,
+                const line_instance = new Cesium.GeometryInstance({
+                    geometry : line_geom,
                     attributes : {
-                      color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.WHITE)
+                        color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
                     }
                 });
-                instances.push(instance);
+                lines_instances.push(line_instance);
+                // create the triangles
+                const pgon_tris_i: number[] = model.geom.query.navAnyToTri(EEntType.PGON, pgon_i);
+                for (const pgon_tri_i of pgon_tris_i) {
+                    // tris_i.push(pgon_tri_i);
+                    const tri_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.TRI, pgon_tri_i);
+                    const tri_points: any[] = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
+                    const tri_geom = new Cesium.PolygonGeometry({
+                        perPositionHeight : true,
+                        polygonHierarchy: new Cesium.PolygonHierarchy(tri_points),
+                        vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
+                    });
+                    const instance = new Cesium.GeometryInstance({
+                        geometry : tri_geom,
+                        attributes : {
+                            color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.WHITE)
+                        }
+                    });
+                    tris_instances.push(instance);
+                }
             }
-            console.log(instances);
-            // add the instances to a primitive
+            // add the lines instances to a primitive
+            this._viewer.scene.primitives.add(new Cesium.Primitive({
+                allowPicking: false,
+                geometryInstances : lines_instances,
+                shadows : Cesium.ShadowMode.ENABLED,
+                appearance : new Cesium.PerInstanceColorAppearance({
+                    flat: true,
+                    translucent : false
+                })
+            }));
+            // add the triangle instances to a primitive
             this._viewer.scene.primitives.add(new Cesium.Primitive({
                 allowPicking: true,
-                geometryInstances : instances,
+                geometryInstances : tris_instances,
                 shadows : Cesium.ShadowMode.ENABLED,
                 appearance : new Cesium.PerInstanceColorAppearance({
                     translucent : false

@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
-import { EEntType, Txyz } from '@assets/libs/geo-info/common';
+import { EEntType, Txyz, TAttribDataTypes } from '@assets/libs/geo-info/common';
 /**
  * Cesium data
  */
@@ -70,7 +70,29 @@ export class DataCesium {
         console.log('=====ADD CESIUM GEOMETRY=====', this._viewer);
         this._viewer.scene.primitives.removeAll();
         // the origin of the model
-        const origin = Cesium.Cartesian3.fromDegrees(103.77575, 1.30298);
+        let longitude = 103.77575;
+        let latitude = 1.30298;
+        if (model.attribs.query.hasAttrib(EEntType.MOD, 'longitude')) {
+            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
+            if (typeof long_value !== 'number') {
+                throw new Error('Longitude attribute must be a number.');
+            }
+            longitude = long_value as number;
+            if (longitude < -180 || longitude > 180) {
+                throw new Error('Longitude attribute must be between -180 and 180.');
+            }
+        }
+        if (model.attribs.query.hasAttrib(EEntType.MOD, 'latitude')) {
+            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribValue('latitude');
+            if (typeof lat_value !== 'number') {
+                throw new Error('Latitude attribute must be a number');
+            }
+            latitude = lat_value as number;
+            if (latitude < 0 || latitude > 90) {
+                throw new Error('Latitude attribute must be between 0 and 90.');
+            }
+        }
+        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude);
         // create a matrix to transform points
         const xform_matrix: any = Cesium.Matrix4.multiplyByTranslation(
             Cesium.Transforms.eastNorthUpToFixedFrame(origin),

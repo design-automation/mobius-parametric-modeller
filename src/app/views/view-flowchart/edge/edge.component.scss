@@ -10,6 +10,14 @@
     opacity: 1;
     pointer-events: stroke;
     marker-mid: url(#arrow);
+    &.selected{
+        stroke: $selected-color;
+        opacity: 1;
+        marker-mid: url(#arrow_selected);
+    }
+    &.disabled{
+        opacity: $disabled-opacity;
+    }
 }
 .inviEdge{
     fill: none;
@@ -17,9 +25,4 @@
     stroke-width: 30px;
     opacity: 0;
     pointer-events: stroke;
-}
-.selected{
-    stroke: $selected-color;
-    opacity: 1;
-    marker-mid: url(#arrow_selected);
 }

@@ -1,0 +1,102 @@
+<div id="SettingView" >
+    <table>
+      <tr>
+      <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;">Imagery</div></th>
+      <th style="width:80px;height: 18px;"><div style="width:80px;height: 18px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="button" value="Disable" style="color:#8AA8C0;border:1px solid #8AA8C0;width: 80px;height: 22px;" (click)="changeImagery()"></div></th>
+    </tr>
+  </table>
+  <hr>
+    <table>
+      <tr>
+      <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;">Color</div></th>
+      <th><div>
+        <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="_ColorKey">
+          <option class="cesium-option"  *ngFor="let ColorName of _ColorProperty" value={{ColorName}}>{{ColorName}}</option>
+        </select>
+      </div></th>
+      </tr>
+      </table>
+      <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
+      <th style="width:80px;height: 18px;"><input type="text"  value={{_ColorMin}} style="width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;" (change)="changeColorMin($event.target.value)"></th></tr>  
+      </table>
+      <table >
+      <tr ><th style="width:80px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
+      <th style="width:80px;height: 18px;"><input type="text" value={{_ColorMax}} style="width: 80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;" (change)="changeColorMax($event.target.value)"></th></tr>
+  </table>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_ColorInvert" (click)="changeColorInvert()"></div></th></tr>
+    </table>
+    <hr>
+      <table>
+      <tr>
+      <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;">Extrude</div></th>
+      <th><div>
+        <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="_ExtrudeKey">
+           <option class="cesium-option"  *ngFor="let Height of _ExtrudeProperty" value={{Height}}>{{Height}}</option>
+        </select>
+      </div></th>
+      </tr>
+    </table>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
+      <th style="width:80px;height: 18px;"><input type="text"  value={{_ExtrudeMin}} style="width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left" (change)="changeHeightMin($event.target.value)"></th></tr>  
+      </table>
+      <table >
+      <tr ><th style="width:80px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
+      <th style="width:80px;height: 18px;"><input type="text" value={{_ExtrudeMax}} style="width: 80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;" (change)="changeHeightMax($event.target.value)"></th></tr>
+  </table>
+   <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Scale</div></th>
+      <th style="width:80px;height: 18px;"><input type="text" value={{_Scale}} style="width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left;" (change)="changescale($event.target.value)" ></th></tr>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_Invert" (click)="changeopp()"></div></th></tr>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Height Chart</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_HeightChart" (click)="changeExtrude();"></div></th></tr>  
+  </table>
+  <hr>
+  <table>
+    <tr>
+    <th class="colorkey" style="width: 75px;height: 22px;"><div class="Hide" style="width: 75px;height: 22;color:#D3D3D3 !important;border-color:#395d73;border:0;text-align: left;font-weight: normal;"><input type="button" value="Add Filter" style="color:#8AA8C0;border:1px solid #8AA8C0;width: 75px;height: 22px;" (click)="addHide()"></div></th>
+    <th style="width:20px;height: 22px;"><div style="width:20px;height: 22px;margin-left: 10px">
+      <select class="cesium-button-select"  (change)="ChangeHeight($event.target.value)">
+         <option class="cesium-option"  *ngFor="let ColorName of _ColorProperty" value={{ColorName}}>{{ColorName}}</option>
+      </select></div></th>
+    </tr>
+  </table>
+  <div class="hide-container" style="margin-top:5px;">
+    <div *ngFor="let item of _Filter;" id={{item.divid}}>
+  <table>
+    <tr ><th style="width:85px;height: 22px;"><div style="width:85px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
+    <th *ngIf="item.type === 'number'" style="width:40px;height: 22px;"><div style="width:40px;height: 22px;">
+      <select class="cesium-button-select" [ngModel]="item.RelaHide" (change)="Changerelation($event.target.value,item.id)" style="width:40px;height: 22px;">
+         <option class="cesium-option" value=0>></option>
+         <option class="cesium-option" value=1><</option>
+         <option class="cesium-option" value=2>=</option>
+      </select></div></th>
+      <th *ngIf="item.type === 'category'" style="width:40px;height: 22px;"><div style="width:40px;height: 22px;">
+      <select class="cesium-button-select" [ngModel]="item.RelaHide" (change)="ChangeCategory($event.target.value,item.id,0)" style="width:40px;height: 22px;">
+        <option class="cesium-option" value=0>none</option>
+        <option class="cesium-option" value=1>=</option>
+        <option class="cesium-option" value=2>!=</option>
+      </select></div></th>
+      <th *ngIf="item.type === 'number'" style="width:70px;height: 20px;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:70px;height: 20px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;"></th>
+      <th *ngIf="item.type === 'category'" style="width:73px;height: 22px;"><div style="width:73px;height: 22px;">
+      <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 22px;">
+        <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
+      </select></div></th>
+    <th style="width:20px;height: 22px;" id={{item.id}}><span id={{item.id}} (click)="deleteHide(item.id)" style="width:20px;height: 22px;cursor:pointer;"><i class="material-icons" style="color:#D3D3D3;font-size:16px">delete</i></span></th>
+    <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
+  </table>
+  <table>
+    <tr>
+    <th *ngIf="item.type === 'number'" style="width:50px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;">{{item.HideMin}}</div></th>
+    <th *ngIf="item.type === 'number'" style="width:150px;height: 22px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
+    </mat-slider></div></th>
+    <th *ngIf="item.type === 'number'" style="width:50px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
+  </table><hr>
+    </div>
+  </div>
+  </div>
+  

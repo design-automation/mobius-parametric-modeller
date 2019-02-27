@@ -8,8 +8,8 @@ import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer';
 import { GICesiumViewerComponent } from './all-viewers/gi-cesium-viewer/gi-cesium-viewer.component';
 import { GICesiumViewerModule } from './all-viewers/gi-cesium-viewer/gi-cesium-viewer';
 // Old Cesium viewer - to be deleted
-import { MobiuscesiumComponent } from './all-viewers/cesium-viewer/mobius-cesium.component';
-import { MobiusCesium } from './all-viewers/cesium-viewer/mobius-cesium';
+// import { MobiuscesiumComponent } from './all-viewers/cesium-viewer/mobius-cesium.component';
+// import { MobiusCesium } from './all-viewers/cesium-viewer/mobius-cesium';
 
 // Viewer Components array
 export const VIEWER_ARR = [

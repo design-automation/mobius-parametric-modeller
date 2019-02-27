@@ -14,7 +14,7 @@ $error-color: red;
 
     &.node--disabled{
         stroke-opacity: $disabled-opacity;
-        fill-opacity: $disabled-opacity;
+        // fill-opacity: $disabled-opacity;
     }
 
     &.node--selected{

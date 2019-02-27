@@ -119,6 +119,7 @@
     <path class="node" 
         [class.node--selected]='selected'
         [class.node--error]="node.hasError"
+        [class.node--disabled]='!node.enabled'
         [attr.d]="'M'+node.position.x +' '+ (node.position.y + 70) +
                  ' L' + node.position.x +' '+ (node.position.y + 40) +
                  ' L'+ (node.position.x + 50) +' '+ (node.position.y + 20) +

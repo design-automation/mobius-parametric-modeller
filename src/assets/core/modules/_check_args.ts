@@ -242,7 +242,9 @@ export class TypeCheckObj {
         return;
     }
     static isOrigin(fn_name: string, arg_name: string, arg: number[]): TEntTypeIdx {
-        return checkIDnTypes(fn_name, arg_name, arg, [IDcheckObj.isID, TypeCheckObj.isCoord], ['POSI', 'VERT', 'POINT']) as TEntTypeIdx;
+        return checkIDnTypes(fn_name, arg_name, arg,
+                            [IDcheckObj.isID, TypeCheckObj.isCoord],
+                            [EEntType.POSI, EEntType.VERT, EEntType.POINT]) as TEntTypeIdx;
     }
     static isPlane(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TPlane = [Txyz, Txyz, Txyz]
         // one origin: point, posi, vert, coord + 2 vectors
@@ -294,39 +296,51 @@ export class TypeCheckObj {
     }
 }
 export class IDcheckObj {
+    // static default_ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
+    static default_ent_type_strs = [EEntType.POSI,
+                                    EEntType.TRI,
+                                    EEntType.VERT,
+                                    EEntType.EDGE,
+                                    EEntType.WIRE,
+                                    EEntType.FACE,
+                                    EEntType.POINT,
+                                    EEntType.PLINE,
+                                    EEntType.PGON,
+                                    EEntType.COLL];
     // IDs
     // entity types
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
-    static isID(fn_name: string, arg_name: string, arg: any, ent_type_strs: string[]|null): TEntTypeIdx {
+    static isID(fn_name: string, arg_name: string, arg: any, ent_type_strs: EEntType[]|null): TEntTypeIdx {
         TypeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
         const ent_arr = idsBreak(arg) as TEntTypeIdx; // split
 
         if (ent_type_strs === null) {
-            ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
+            ent_type_strs = IDcheckObj.default_ent_type_strs;
         }
         let pass = false;
         for (let i = 0; i < ent_type_strs.length; i++) {
-            if (ent_arr[0] === EEntType[ent_type_strs[i]]) {
+            if (ent_arr[0] === ent_type_strs[i]) {
                 pass = true;
                 break;
             }
         }
         if (pass === false) {
-            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' + ent_type_strs.toString());
+            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+                            ent_type_strs.map((test_ent) => EEntType[test_ent]).toString());
         }
         return ent_arr;
     }
-    static isIDList(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: string[]|null): TEntTypeIdx[] {
+    static isIDList(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: EEntType[]|null): TEntTypeIdx[] {
         TypeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
         const ent_arr_lst = idsBreak(arg_list) as TEntTypeIdx[]; // split
 
         if (ent_type_strs === null) {
-            ent_type_strs = ['POSI', 'TRI', 'VERT', 'EDGE', 'WIRE', 'FACE', 'POINT', 'PLINE', 'PGON', 'COLL'];
+            ent_type_strs = IDcheckObj.default_ent_type_strs;
         }
         for (let i = 0; i < ent_arr_lst.length; i++) {
             let pass = false;
             for (let j = 0; j < ent_type_strs.length; j++) {
-                if (ent_arr_lst[i][0] === EEntType[ent_type_strs[j]]) {
+                if (ent_arr_lst[i][0] === ent_type_strs[j]) {
                     pass = true;
                     break;
                 }
@@ -334,15 +348,15 @@ export class IDcheckObj {
             if (pass === false) {
                 const ret_str_arr = [];
                 ent_type_strs.forEach((test_ent) => {
-                    ret_str_arr.push(test_ent + '_list');
+                    ret_str_arr.push(EEntType[test_ent] + '_list');
                 });
                 throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not one of the following valid types - '
-                                + ret_str_arr.toString());
+                                + ent_type_strs.map((test_ent) => EEntType[test_ent] + '_list').toString());
             }
         }
         return ent_arr_lst;
     }
-    static isIDList_list(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: string[]|null): TEntTypeIdx[][] {
+    static isIDList_list(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: EEntType[]|null): TEntTypeIdx[][] {
         const ret_arr = [];
         for (let i = 0; i < arg_list.length; i++) {
             ret_arr.push(IDcheckObj.isIDList(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
@@ -360,7 +374,7 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
     let ret;
     for (let i = 0; i < check_fns.length; i++) {
         try {
-           ret = check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg);
+           ret = check_fns[i](fn_name, arg_name, arg);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -369,20 +383,20 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret;
 }
 
 export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns: Function[],
-                         IDchecks: string[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+                         IDchecks: EEntType[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
     let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         try {
-           ret =  check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+           ret =  check_fns[i](fn_name, arg_name, arg, IDchecks);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -391,7 +405,7 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
@@ -400,13 +414,13 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
 // Most General Check
 // =========================================================================================================================================
 export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[],
-                              IDchecks?: string[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+                              IDchecks?: EEntType[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];
     let ret: TEntTypeIdx|TEntTypeIdx[];
     for (let i = 0; i < check_fns.length; i++) {
         try {
-            ret = check_fns[i](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
+            ret = check_fns[i](fn_name, arg_name, arg, IDchecks);
         } catch (err) {
             err_arr.push(err.message + '\n');
             continue;
@@ -437,7 +451,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         // }
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests - ' + check_fns.map(fn => fn.name).toString() + '\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns void|TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes

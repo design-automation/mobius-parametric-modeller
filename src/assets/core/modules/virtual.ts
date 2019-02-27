@@ -144,7 +144,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
 export function GetRay(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
     // --- Error Check ---
     const ents_arr = checkIDs('virtual.GetRay', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], ['EDGE', 'FACE', 'PGON']) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     return _getRay(__model__, ents_arr);
 }
@@ -180,7 +180,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
 export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
     // --- Error Check ---
     const ents_arr =  checkIDs('virtual.GetPlane', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null); // takes in any
-    // TODO ['PGON', 'FACE', 'PLINE', 'WIRE']);
+    // TODO [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE]);
     // --- Error Check ---
     return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }

@@ -424,11 +424,20 @@ export class GIGeomQuery {
             const face_i: number = this.navPgonToFace(index);
             return this.navFaceToWire(face_i);
         } else if (isColl(ent_type)) {
+            const all_wires_i: number[] = [];
             const plines_i: number[] = this.navCollToPline(index);
-            const wires1_i: number[] = [].concat(...plines_i.map(pline_i => this.navAnyToWire(EEntType.PLINE, pline_i)));
+            for (const pline_i of plines_i) {
+                const wire_i: number = this.navPlineToWire(index);
+                all_wires_i.push(wire_i);
+            }
             const pgons_i: number[] = this.navCollToPgon(index);
-            const wires2_i: number[] = [].concat(...pgons_i.map(pgon_i => this.navAnyToWire(EEntType.PGON, pgon_i)));
-            return [...wires1_i, ...wires2_i];
+            for (const pgon_i of pgons_i) {
+                const wires_i: number[] = this.navAnyToWire(EEntType.PGON, pgon_i);
+                for (const wire_i of wires_i) {
+                    all_wires_i.push(wire_i);
+                }
+            }
+            return all_wires_i;
         }
         throw new Error('Bad navigation in geometry data structure: ' + ent_type + index);
     }
@@ -461,11 +470,22 @@ export class GIGeomQuery {
             const face_i: number = this.navPgonToFace(index);
             return this.navAnyToEdge(EEntType.FACE, face_i);
         } else if (isColl(ent_type)) {
+            const all_edges_i: number[] = [];
             const plines_i: number[] = this.navCollToPline(index);
-            const edges1_i: number[] = [].concat(plines_i.map( pline_i => this.navAnyToEdge(EEntType.PLINE, pline_i) ));
-            const pgons_i:  number[] = this.navCollToPgon(index);
-            const edges2_i: number[] = [].concat(pgons_i.map( pgon_i => this.navAnyToEdge(EEntType.PGON, pgon_i) ));
-            return [...edges1_i, ...edges2_i];
+            for (const pline_i of plines_i) {
+                const edges_i: number[] = this.navAnyToVert(EEntType.PLINE, pline_i);
+                for (const edge_i of edges_i) {
+                    all_edges_i.push(edge_i);
+                }
+            }
+            const pgons_i: number[] = this.navCollToPgon(index);
+            for (const pgon_i of pgons_i) {
+                const edges_i: number[] = this.navAnyToVert(EEntType.PGON, pgon_i);
+                for (const edge_i of edges_i) {
+                    all_edges_i.push(edge_i);
+                }
+            }
+            return all_edges_i;
         }
         throw new Error('Bad navigation in geometry data structure: ' + ent_type + index);
     }
@@ -502,17 +522,27 @@ export class GIGeomQuery {
             const face_i: number = this.navPgonToFace(index);
             return this.navAnyToVert(EEntType.FACE, face_i);
         } else if (isColl(ent_type)) {
+            const all_verts_i: number[] = [];
             const points_i: number[] = this.navCollToPoint(index);
-            const verts1_i: number[] = [].concat(points_i.map( point_i => this.navAnyToVert(EEntType.POINT, point_i) ));
+            for (const point_i of points_i) {
+                const vert_i: number = this.navPointToVert(point_i);
+                all_verts_i.push(vert_i);
+            }
             const plines_i: number[] = this.navCollToPline(index);
-            const verts2_i: number[] = [].concat(plines_i.map( pline_i => this.navAnyToVert(EEntType.PLINE, pline_i) ));
-            const pgons_i:  number[] = this.navCollToPgon(index);
-            const verts3_i: number[] = [].concat(pgons_i.map( pgon_i => this.navAnyToVert(EEntType.PGON, pgon_i) ));
-            const verts_i: number[] = [];
-            for (const vert_i of verts1_i) { verts_i.push(vert_i); }
-            for (const vert_i of verts2_i) { verts_i.push(vert_i); }
-            for (const vert_i of verts3_i) { verts_i.push(vert_i); }
-            return verts_i;
+            for (const pline_i of plines_i) {
+                const verts_i: number[] = this.navAnyToVert(EEntType.PLINE, pline_i);
+                for (const vert_i of verts_i) {
+                    all_verts_i.push(vert_i);
+                }
+            }
+            const pgons_i: number[] = this.navCollToPgon(index);
+            for (const pgon_i of pgons_i) {
+                const verts_i: number[] = this.navAnyToVert(EEntType.PGON, pgon_i);
+                for (const vert_i of verts_i) {
+                    all_verts_i.push(vert_i);
+                }
+            }
+            return all_verts_i;
         }
         throw new Error('Bad navigation in geometry data structure: ' + ent_type + index);
     }
@@ -543,8 +573,15 @@ export class GIGeomQuery {
             const face_i: number = this.navPgonToFace(index);
             return this.navFaceToTri(face_i);
         } else if (isColl(ent_type)) {
-            const pgons_i:  number[] = this.navCollToPgon(index);
-            return [].concat(pgons_i.map( pgon_i => this.navAnyToTri(EEntType.PGON, pgon_i) ));
+            const all_tris_i: number[] = [];
+            const pgons_i: number[] = this.navCollToPgon(index);
+            for (const pgon_i of pgons_i) {
+                const tris_i: number[] = this.navAnyToTri(EEntType.PGON, pgon_i);
+                for (const tri_i of tris_i) {
+                    all_tris_i.push(tri_i);
+                }
+            }
+            return all_tris_i;
         }
         throw new Error('Bad navigation in geometry data structure: ' + ent_type + index);
     }

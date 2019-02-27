@@ -3,34 +3,28 @@
 id="main-edge" 
 class = "edge" 
 [class.selected] = "edge.selected"
-[attr.points] = "(edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1]+ 8) + ' ' +
+[attr.points] = "   (edge.source.parentNode.position.x + 50) + ',' +
+                    (edge.source.parentNode.position.y + 40) + ' ' +
 
-                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1] + 16) + ' ' +
+                    ((edge.target.parentNode.position.x + edge.source.parentNode.position.x) / 2 + 50) + ',' +
+                    ((edge.target.parentNode.position.y + edge.source.parentNode.position.y) / 2 + 40) + ' ' +
 
-                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +
-
-                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 22)" 
+                    (edge.target.parentNode.position.x + 50) + ',' +
+                    (edge.target.parentNode.position.y + 40)" 
 />
 
 <!--a wider invisible line to make the wire easier to click-->
 <svg:polyline 
 id="invisible-edge" 
 class = "inviEdge" 
-[attr.points] = "(edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1]+ 15) + ' ' +
+[attr.points] = "   (edge.source.parentNode.position.x + 50) + ',' +
+                    (edge.source.parentNode.position.y + 40) + ' ' +
 
-                    (edge.source.parentNode.position.x + outputOffset[0]) + ',' +
-                    (edge.source.parentNode.position.y + outputOffset[1] + 17) + ' ' +
+                    ((edge.target.parentNode.position.x + edge.source.parentNode.position.x) / 2 + 50) + ',' +
+                    ((edge.target.parentNode.position.y + edge.source.parentNode.position.y) / 2 + 40) + ' ' +
 
-                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 27) + ' ' +
-
-                    (edge.target.parentNode.position.x + inputOffset[0]) + ',' +
-                    (edge.target.parentNode.position.y + inputOffset[1] - 12)" 
+                    (edge.target.parentNode.position.x + 50) + ',' +
+                    (edge.target.parentNode.position.y + 40)" 
 (click)='select($event)'/>
     
 

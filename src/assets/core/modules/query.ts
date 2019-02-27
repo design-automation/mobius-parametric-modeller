@@ -128,13 +128,19 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
 }
 /**
  * Returns a list of entities based on a query expression.
+ * The result will always be a list of entities, even if there is only one entity.
+ * In a case where you expect only one entity, remember to get the first item in the list.
+ * ~
  * The query expression should use the following format: #@name == value,
  * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+ * ~
  * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
  * The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
+ * ~
  * Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
  * Query expressions can be combined with either && (and) and || (or), where
  * && takes precedence over ||.
+ * 
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
@@ -510,7 +516,7 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
 /**
  * Checks the type of an entity.
  * ~
- * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex. 
+ * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex.
  * For is_unused_posi, it returns the opposite of is_used_posi.
  * For is_object, returns true if the entity is a point, a polyline, or a polygon.
  * For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
@@ -588,7 +594,8 @@ export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _E
  */
 export function _IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
     // --- Error Check ---
-    const ents_arr = checkIDs('query.isClosed', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], ['PLINE', 'WIRE', 'PGON']);
+    const ents_arr = checkIDs('query.isClosed', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList],
+                                [EEntType.PLINE, EEntType.WIRE, EEntType.PGON]);
     // --- Error Check ---
     return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }

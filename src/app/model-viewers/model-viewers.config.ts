@@ -17,7 +17,7 @@ export const VIEWER_ARR = [
     HelpViewerComponent,
     // Step-1: Add Component here
     GIViewerComponent,
-    // GICesiumViewerComponent,
+    GICesiumViewerComponent,
     // MobiuscesiumComponent
 ];
 
@@ -25,7 +25,7 @@ export const VIEWER_ARR = [
 export const VIEWER_MOD = [
     // Step-2: Add Module here
     GIViewerModule,
-    // GICesiumViewerModule,
+    GICesiumViewerModule,
     // MobiusCesium
 ];
 
@@ -34,7 +34,7 @@ export const Viewers: IView[] = [
     // Step-3: Add Viewer Definition here: name, icon and component
     // The order of these views here will influence the order of the view appearing in the viewer header.
     { name: '3D Viewer', icon: undefined, component: GIViewerComponent },
-    // { name: 'Geo Viewer', icon: undefined, component: GICesiumViewerComponent },
+    { name: 'Geo Viewer', icon: undefined, component: GICesiumViewerComponent },
     // { name: 'Mobius Cesium', icon: undefined, component: MobiuscesiumComponent },
     { name: 'Console', icon: undefined, component: ConsoleViewerComponent },
     { name: 'Help', icon: undefined, component: HelpViewerComponent }

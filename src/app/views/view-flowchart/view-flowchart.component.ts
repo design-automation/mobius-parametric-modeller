@@ -78,21 +78,21 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     outputOffset = [50, 40];
 
 
-    static enableNode(node: INode) {
+    static disableNode(node: INode) {
         for (const edge of node.input.edges) {
-            if (!edge.source.parentNode.enabled) { return; }
+            if (edge.source.parentNode.enabled) { return; }
         }
-        node.enabled = true;
+        node.enabled = false;
         for (const edge of node.output.edges) {
-            ViewFlowchartComponent.enableNode(edge.target.parentNode);
+            ViewFlowchartComponent.disableNode(edge.target.parentNode);
         }
     }
 
 
-    static disableNode(node: INode) {
-        node.enabled = false;
+    static enableNode(node: INode) {
+        node.enabled = true;
         for (const edge of node.output.edges) {
-            ViewFlowchartComponent.disableNode(edge.target.parentNode);
+            ViewFlowchartComponent.enableNode(edge.target.parentNode);
         }
     }
 
@@ -476,20 +476,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             }
         }
 
-        tbrEdge.target.parentNode.enabled = false;
-        for (const remainingEdge of tbrEdge.target.edges) {
-            if (remainingEdge.source.parentNode.enabled) {
-                tbrEdge.target.parentNode.enabled = true;
-                break;
-            }
-        }
-        /*
-        if (tbrEdge.target.parentNode.input.edges.length === 0 && deletedNode !== tbrEdge.target.parentNode.id) {
-            ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
-        } else {
-            ViewFlowchartComponent.enableNode(tbrEdge.target.parentNode);
-        }
-        */
+        ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
 
         // remove the edge from the general list of edges
         this.dataService.flowchart.edges.splice(edge_index, 1);
@@ -885,20 +872,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 this.dataService.flowchart.ordered = false;
 
                 if (this.edge.source.parentNode.enabled) {
-                    this.edge.target.parentNode.enabled = true;
+                    ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
                 }
-                /*
-                try {
-                    if (this.edge.source.parentNode.enabled) {
-                        ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
-                    } else {
-                        ViewFlowchartComponent.disableNode(this.edge.target.parentNode);
-                    }
-                } catch (ex) {
-                    this.edge.target.parentNode.hasError = true;
-                    this.edge.source.parentNode.hasError = true;
-                }
-                */
                 break;
             }
             this.dataService.registerFlwAction({'type': 'add', 'edges': [this.edge]});

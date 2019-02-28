@@ -5,6 +5,7 @@ export const DefaultSettings = {
     grid: { show: true, size: 500 },
     positions: { show: true, size: 0.5 },
     tjs_summary: { show: false },
+    gi_summary: { show: false },
     wireframe: { show: false },
     colors: {
         viewer_bg: '#E6E6E6',

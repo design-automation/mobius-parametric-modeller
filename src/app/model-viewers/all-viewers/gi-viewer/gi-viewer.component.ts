@@ -9,6 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
+import { EEntType } from '@assets/libs/geo-info/common';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -167,7 +168,34 @@ export class GIViewerComponent implements OnInit {
                 this.settings.positions.size = Number(value);
                 break;
             case 'tjs_summary.show':
+                this.settings.gi_summary.show = false;
                 this.settings.tjs_summary.show = !this.settings.tjs_summary.show;
+                break;
+            case 'gi_summary.show':
+                this.settings.tjs_summary.show = false;
+                this.settings.gi_summary.show = !this.settings.gi_summary.show;
+                let colls = 0, pgons = 0, plines = 0, points = 0, faces = 0, wires = 0, edges = 0, vertices = 0, positions = 0;
+                if (scene._model) {
+                    colls = scene._model.geom.query.numEnts(EEntType.COLL, false);
+                    pgons = scene._model.geom.query.numEnts(EEntType.PGON, false);
+                    plines = scene._model.geom.query.numEnts(EEntType.PLINE, false);
+                    points = scene._model.geom.query.numEnts(EEntType.POINT, false);
+                    faces = scene._model.geom.query.numEnts(EEntType.FACE, false);
+                    wires = scene._model.geom.query.numEnts(EEntType.WIRE, false);
+                    edges = scene._model.geom.query.numEnts(EEntType.EDGE, false);
+                    vertices = scene._model.geom.query.numEnts(EEntType.VERT, false);
+                    positions = scene._model.geom.query.numEnts(EEntType.POSI, false);
+                }
+                const gi_summary = [{title: 'Collections', val: colls},
+                {title: 'Polygons', val: pgons},
+                {title: 'Polylines', val: plines},
+                {title: 'Points', val: points},
+                {title: 'Faces', val: faces},
+                {title: 'Wires', val: wires},
+                {title: 'Edges', val: edges},
+                {title: 'Vertices', val: vertices},
+                {title: 'Positions', val: positions}];
+                localStorage.setItem('gi_summary', JSON.stringify(gi_summary));
                 break;
             case 'wireframe.show':
                 this.wireframeToggle();
@@ -291,6 +319,7 @@ interface Settings {
     grid: { show: boolean, size: number };
     positions: { show: boolean, size: number };
     tjs_summary: { show: boolean };
+    gi_summary: { show: boolean };
     wireframe: { show: boolean };
     colors: {
         viewer_bg: string,

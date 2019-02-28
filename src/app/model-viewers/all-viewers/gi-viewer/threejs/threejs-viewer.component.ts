@@ -68,6 +68,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     private dragHash: number;
     private shiftKeyPressed = false;
     private mouse_label;
+    private giSummary = [];
     /**
      * Creates a new viewer,
      * @param injector
@@ -234,6 +235,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
                     this.resetTable();
+                    if (localStorage.getItem('gi_summary')) {
+                        this.giSummary = JSON.parse(localStorage.getItem('gi_summary'));
+                    }
                     this._model_error = false;
                     this._no_model = false;
                     this.render(this);

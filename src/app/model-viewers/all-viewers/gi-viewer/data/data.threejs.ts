@@ -1049,6 +1049,7 @@ interface Settings {
     grid: { show: boolean, size: number };
     positions: { show: boolean, size: number };
     tjs_summary: { show: boolean };
+    gi_summary: { show: boolean };
     wireframe: { show: boolean };
     colors: {
         viewer_bg: string,

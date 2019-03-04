@@ -194,8 +194,10 @@ export class ProcedureItemComponent {
 
 
     // delete this procedure
-    emitDelete(): void {
-        if (! this.data.selected) {
+    emitDelete(check?: boolean): void {
+        if (check) {
+            this.delete.emit();
+        } else if (! this.data.selected) {
             this.deleteC.emit();
         } else {
             this.delete.emit();

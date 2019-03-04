@@ -74,8 +74,14 @@
         </button>
     </div>
 
-
-    <div id="shownumber" [hidden]='!this._data_threejs.settings.tjs_summary.show'>
+    <div id="giSummary" [hidden]='!this._data_threejs.settings.gi_summary.show'>
+        <tbody>
+            <tr *ngFor="let item of giSummary">
+                <td style="width: 80px;">{{item.title}}</td><td>{{item.val}}</td>
+            </tr>
+        </tbody>
+    </div>
+    <div id="tjsSummary" [hidden]='!this._data_threejs.settings.tjs_summary.show'>
         <tbody>
             <tr>
                 <td

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
+import { EEntTypeStr, EEntType } from '@assets/libs/geo-info/common';
 
 /**
  * ThreejsScene
@@ -194,6 +195,16 @@ export class DataThreejs {
         this.grid.position.set(center.x, center.y, 0);
         this.axesHelper.position.set(center.x, center.y, 0);
         // this.cameraLookat(center, allObjs.radius);
+
+        setTimeout(() => {
+            const hud = this._model.attribs.query.getModelAttribValue('hud') as string;
+            const element = this._createHud(hud).element;
+            const old = document.getElementById('hud');
+            if (old) {
+                container.removeChild(old);
+            }
+            container.appendChild(element);
+        }, 0);
     }
 
     /**
@@ -567,10 +578,10 @@ export class DataThreejs {
 
     private getDLPosition(scale: number): void {
         const azimuth = this.settings.directional_light.azimuth,
-        altitude = this.settings.directional_light.altitude,
-        posX = Math.cos(azimuth * Math.PI * 2 / 360) * scale,
-        posY = Math.sin(azimuth * Math.PI * 2 / 360) * scale,
-        posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
+            altitude = this.settings.directional_light.altitude,
+            posX = Math.cos(azimuth * Math.PI * 2 / 360) * scale,
+            posY = Math.sin(azimuth * Math.PI * 2 / 360) * scale,
+            posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
 
         this.directional_light.position.set(posX, posY, posZ);
     }
@@ -935,6 +946,23 @@ export class DataThreejs {
         }
     }
 
+    private _createHud(text: string) {
+        const div = document.createElement('div');
+        div.id = `hud`;
+        div.style.position = 'absolute';
+        div.style.background = 'rgba(255, 255, 255, 0.3)';
+        div.style.padding = '5px';
+        div.innerHTML = text;
+        div.style.top = '40px';
+        div.style.left = '5px';
+        div.style.maxWidth = '200px';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.fontSize = '14px';
+        return {
+            element: div
+        };
+    }
+
     public onWindowKeyPress(event: KeyboardEvent) {
         const nodeName = (<Element>event.target).nodeName;
         if (nodeName === 'TEXTAREA' || nodeName === 'INPUT') { return; }
@@ -1021,6 +1049,7 @@ interface Settings {
     grid: { show: boolean, size: number };
     positions: { show: boolean, size: number };
     tjs_summary: { show: boolean };
+    gi_summary: { show: boolean };
     wireframe: { show: boolean };
     colors: {
         viewer_bg: string,

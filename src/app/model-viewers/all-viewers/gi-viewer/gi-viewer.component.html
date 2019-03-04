@@ -113,6 +113,22 @@
 									</div>
 								</dd>
 								<dd>
+									<div class="label">GI Summary</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="gi_summaryOnOff"
+										[checked]='settings.gi_summary.show'
+										(change)="settingOnChange('gi_summary.show')"
+										>
+										<label class="onoffswitch-label" for="gi_summaryOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
 									<div class="label">Threejs Summary</div>
 									<div class="onoffswitch">
 										<input type="checkbox"

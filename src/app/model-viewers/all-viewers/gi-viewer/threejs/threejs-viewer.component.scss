@@ -45,10 +45,6 @@ button{
     }
 }
 
-#tjsSummary{
-    left: unset;
-    right: 5px;
-}
 
 /*#rotating{
     width: 30px;
@@ -111,30 +107,37 @@ button{
     box-shadow: 2px 2px 5px 0px #505050;
 }
 
+
 #zoomingfit{
     width: 40px;
-    height: 40px;
+    height: 30px;
     font-size:$fsize1;
     position: absolute;
-    top:0px;
+    top:30px;
     right:0px; 
     text-align:center;
     color: #505050;
     background-color:transparent;
     border:0;
+    &:hover {
+        color:#7e7e7e;
+    }
 }
 
 #EntitySelection{
     width: 40px;
-    height: 40px;
+    height: 30px;
     font-size:$fsize1;
     position: absolute;
-    top: 40px;
+    top: 60px;
     right:0px; 
     text-align:center;
     color: #505050;
     background-color:transparent;
     border:0;
+    &:hover {
+        color:#7e7e7e;
+    }
 }
 .needSelect{
     position: absolute;
@@ -165,14 +168,14 @@ button{
     position: absolute;
     text-align:center;
     color: #505050;
-    top: 75px;
+    top: 90px;
     right:0px;
     cursor: pointer;
 }
 
 #selectDropdown{
     position: absolute;
-    top: 70px;
+    top: 85px;
     right: 5px;
     button{
         width: 30px;

@@ -17,28 +17,47 @@ as-split-area{
     overflow: hidden auto !important;
 }
 
-#settings_button {
-    position: absolute;
-    top: 2px;
-    right: 10px;
-    cursor: pointer;
-    z-index: 800;
-    display: inline-block;
-    vertical-align: bottom;
-    background-color: transparent;
-    color: $color1;
-    border: none;
+// #settings_button {
+//     position: absolute;
+//     top: 2px;
+//     right: 10px;
+//     cursor: pointer;
+//     z-index: 800;
+//     display: inline-block;
+//     vertical-align: bottom;
+//     background-color: transparent;
+//     color: $color1;
+//     border: none;
+//     outline: none;
+//     padding: 0px;
+//     width: 40px;
+//     height: 40px;
+//     transition: 0.3s;
+//     font-size: 14px;
+//     &:hover {
+//         color:$color5;
+//     }
+//     &.active {
+//         color: $selected-color;
+//     }
+// }
+
+
+#settings_button{
     outline: none;
-    padding: 0px;
     width: 40px;
-    height: 40px;
-    transition: 0.3s;
-    font-size: 14px;
+    height: 30px;
+    font-size:$fsize1;
+    position: absolute;
+    top:0px;
+    right:0px; 
+    text-align:center;
+    color: #505050;
+    background-color:transparent;
+    border:0;
+    cursor: pointer;
     &:hover {
-        color:$color5;
-    }
-    &.active {
-        color: $selected-color;
+        color:#7e7e7e;
     }
 }
 
@@ -113,12 +132,19 @@ modal-window {
             }
         }
     }
-
+    .save {
+        cursor: pointer;
+        background: #00006d;
+        color: #ffffff;
+        height: 20px;
+    }
     .closebtn{
+        cursor: pointer;
         background: $color7;
         border: 1px solid $color4;
         box-sizing: border-box;
         margin-left: 10px;
+        height: 20px;
         // padding: 3px 10px;
         // cursor: pointer;
         // margin-right: 10px;

@@ -2,6 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes } from '@assets/libs/geo-info/common';
 import { vecSum } from '@assets/libs/geom/vectors';
+// import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
 /**
  * Cesium data
  */
@@ -38,6 +39,13 @@ export class DataCesium {
      *
      */
     public createCesiumViewer() {
+        // add Cesium Access Token
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
+                                        '.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjM' +
+                                        'tOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY' +
+                                        '4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ' +
+                                        '6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
+
         // create the viewer
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/
@@ -66,7 +74,7 @@ export class DataCesium {
         this._viewer.shadowMap.maxmimumDistance = 10000.0;
         this._viewer.shadowMap.size = 2048;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
-        document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+        // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     }
     /**
      *
@@ -260,6 +268,18 @@ export class DataCesium {
      */
     private _getImageryViewModels(): any[] {
         const view_models: any[] = [];
+        // view_models.push(new Cesium.ProviderViewModel({
+        //     name: 'Here Map',
+        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/openStreetMap.png'),
+        //     tooltip: 'OpenStreetMap (OSM) is a collaborative project to create a free editable \
+        //          map of the world.\nhttp://www.openstreetmap.org',
+        //     creationFunction: function () {
+        //         return new Cesium.HereMapsImageryProvider({
+        //             appId: 'r4wDXkIdwoefnLKzNBmn',
+        //             appCode: 'VknnhofMzg10PmECHFXHaw'
+        //         });
+        //     },
+        // }));
         view_models.push(new Cesium.ProviderViewModel({
             name: 'Open\u00adStreet\u00adMap',
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/openStreetMap.png'),

@@ -16,6 +16,8 @@ export class DataCesium {
     // public _scene: THREE.Scene; // TODO switch with Cesium viewer
     // text to display
     public _text: string;
+    public _primitives: any[];
+    public _camera: any[];
     // interaction and selection
     // text labels
     // number of cesium points, lines, triangles
@@ -45,7 +47,6 @@ export class DataCesium {
                                         'tOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY' +
                                         '4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ' +
                                         '6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
-
         // create the viewer
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/
@@ -75,6 +76,19 @@ export class DataCesium {
         this._viewer.shadowMap.size = 2048;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
         // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+
+        if (this._primitives) {
+            this._viewer.scene.primitives.removeAll();
+            for (const primitive of this._primitives) {
+                this._viewer.scene.primitives.add(Cesium.clone(primitive));
+            }
+            this._viewer.camera.viewBoundingSphere(this._camera[0]);
+            this._viewer.camera.direction = this._camera[1].direction;
+            this._viewer.camera.position = this._camera[1].position;
+            this._viewer.camera.right = this._camera[1].right;
+            this._viewer.camera.up = this._camera[1].up;
+            this._viewer.render();
+        }
     }
     /**
      *
@@ -237,28 +251,39 @@ export class DataCesium {
                     lines_instances.push(line_instance);
                 }
             }
-            // add the lines instances to a primitive
-            this._viewer.scene.primitives.add(new Cesium.Primitive({
-                allowPicking: false,
-                geometryInstances : lines_instances,
-                shadows : Cesium.ShadowMode.DISABLED,
-                appearance : new Cesium.PerInstanceColorAppearance({
-                    flat: true,
-                    translucent : false
-                })
-            }));
-            // add the triangle instances to a primitive
-            this._viewer.scene.primitives.add(new Cesium.Primitive({
-                allowPicking: true,
-                geometryInstances : tris_instances,
-                shadows : Cesium.ShadowMode.ENABLED,
-                appearance : new Cesium.PerInstanceColorAppearance({
-                    translucent : false
-                })
-            }));
-            // set up the camera
-            const sphere = new Cesium.BoundingSphere(origin, 1e2);
-            this._viewer.camera.viewBoundingSphere(sphere);
+            const lines_primitive = new Cesium.Primitive({
+                                        allowPicking: false,
+                                        geometryInstances : lines_instances,
+                                        shadows : Cesium.ShadowMode.DISABLED,
+                                        appearance : new Cesium.PerInstanceColorAppearance({
+                                            flat: true,
+                                            translucent : false
+                                        })
+                                    });
+            const tris_primitive =  new Cesium.Primitive({
+                                        allowPicking: true,
+                                        geometryInstances : tris_instances,
+                                        shadows : Cesium.ShadowMode.ENABLED,
+                                        appearance : new Cesium.PerInstanceColorAppearance({
+                                            translucent : false
+                                        })
+                                    });
+            this._primitives = [lines_primitive, tris_primitive];
+            for (const primitive of this._primitives) {
+                this._viewer.scene.primitives.add(Cesium.clone(primitive));
+            }
+
+            // const sphere = new Cesium.BoundingSphere(origin, 1e2);
+            // this._viewer.camera.viewBoundingSphere(sphere);
+            // this._camera = [sphere, this._viewer.camera];
+
+            if (!this._camera) {
+                // set up the camera
+                const sphere = new Cesium.BoundingSphere(origin, 1e2);
+                this._viewer.camera.viewBoundingSphere(sphere);
+                this._camera = [sphere, this._viewer.camera];
+            }
+
             this._viewer.render();
         }
     }

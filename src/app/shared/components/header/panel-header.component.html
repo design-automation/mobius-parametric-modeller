@@ -107,12 +107,13 @@
     <button (click)='validateUrl()'>Validate Url</button>
 
     <ng-container *ngIf='urlValid === true'>
+    
         <hr>
         <input id='radio1' type='radio' name='showPage' value='publish' [(ngModel)]='urlSet[1]'/> <label for='radio1'>Uneditable</label> <br>
         <input id='radio2' type='radio' name='showPage' value='dashboard' [(ngModel)]='urlSet[1]'/> <label for='radio2'>Editable</label>
         <hr>
     
-        <ng-container *ngIf='urlSet[1] == "dashboard"'>
+        <ng-container *ngIf='urlSet[1] == "dashboard"; else publish_template'>
             <input id='radio3' type='radio' name='displayType' value='&node=' [(ngModel)]='urlSet[2]'/> <label for='radio3'>Show Specific Node</label> <br>
             <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
             <hr>
@@ -124,6 +125,12 @@
                 <hr>
             </ng-container>
         </ng-container>
+        <ng-template #publish_template>
+            <input id='radio3D' type='radio' name='showViewer' value='&viewer=0' [(ngModel)]='urlSet[4]'/> <label for='radio3D'>3D Viewer</label> <br>
+            <input id='radioGeo' type='radio' name='showViewer' value='&viewer=1' [(ngModel)]='urlSet[4]'/> <label for='radioGeo'>Geo Viewer</label> <br>
+            <input id='radioBothV' type='radio' name='showViewer' value='' [(ngModel)]='urlSet[4]'/> <label for='radioBothV'>Both</label>
+            <hr>
+        </ng-template>
     
         <button (click)='generateUrl()'>Create Link</button>
 

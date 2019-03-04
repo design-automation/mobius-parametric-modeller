@@ -3,6 +3,7 @@ import { Component, Injector, Input,
 import { IView } from './view.interface';
 import { Viewers } from './model-viewers.config';
 import { DataService } from '@services';
+import { Router } from '@angular/router';
 
 /**
  * A component that contains all the viewers.
@@ -25,8 +26,21 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
      * @param injector
      * @param r
      */
-    constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService) {
-        // do nothing
+    constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService, private router: Router) {
+        if (this.router.url.split('?')[0] === '/publish') {
+            this.Viewers = [];
+            let viewCheck: any = this.router.url.split('viewer=');
+
+            if (viewCheck.length === 0) { viewCheck = '';
+            } else { viewCheck = viewCheck[1]; }
+
+            for (const view of Viewers) {
+                if (view.component.name === 'HelpViewerComponent') { continue; }
+                if (viewCheck === '0' && view.component.name === 'GICesiumViewerComponent') { continue; }
+                if (viewCheck === '1' && view.component.name === 'GIViewerComponent') { continue; }
+                this.Viewers.push(view);
+            }
+        }
     }
     /**
      * ngOnInit

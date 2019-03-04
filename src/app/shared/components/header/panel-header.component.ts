@@ -20,7 +20,7 @@ export class PanelHeaderComponent {
     executeCheck: boolean;
     dialogBox: HTMLDialogElement;
 
-    urlSet = ['', 'publish', '', ''];
+    urlSet = ['', 'publish', '', '', ''];
     urlValid: boolean;
     urlNodes;
 
@@ -174,7 +174,7 @@ export class PanelHeaderComponent {
 
         let url = this.urlSet[0];
         if (url.indexOf('dropbox') !== -1) {
-            url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+            url = url.replace('www', 'dl').replace('?dl=0', '');
         }
         request.open('GET', url);
 
@@ -212,13 +212,13 @@ export class PanelHeaderComponent {
 
         let url = this.urlSet[0];
         if (url.indexOf('dropbox') !== -1) {
-            url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+            url = url.replace('www', 'dl').replace('?dl=0', '');
         }
         url = url.replace(/\//g, '%2F');
 
         const txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
-                            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}`;
+                            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}`;
     }
 
 }

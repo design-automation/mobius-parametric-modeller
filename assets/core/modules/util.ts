@@ -119,3 +119,13 @@ export function ModelInfo(__model__: GIModel): string {
         },
     );
 }
+// ================================================================================================
+/**
+ * Check tje internal consistency of the model.
+ *
+ * @param __model__
+ * @returns Text that summarises what is in the model, click print to see this text.
+ */
+export function ModelCheck(__model__: GIModel): string {
+    return __model__.check();
+}

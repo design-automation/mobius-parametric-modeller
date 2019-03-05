@@ -1,6 +1,7 @@
 import { GIModel } from './GIModel';
 import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
+import { isString } from 'util';
 
 /**
  * Class for attributes.
@@ -96,7 +97,9 @@ export class GIAttribsThreejs {
         if (attribs === undefined) { return []; }
         const arr = [];
         attribs.forEach((value, key) => {
-            const obj = {Name: key, Value: value as string};
+            // const _value = isString(value) ? `'${value}'` : value;
+            const _value = value;
+            const obj = {Name: key, Value: _value};
             arr.push(obj);
         });
         // console.log(arr);
@@ -127,7 +130,9 @@ export class GIAttribsThreejs {
                 if ( data_size > 1 ) {
                     if (attrib_value !== undefined) {
                         (attrib_value as any[]).forEach( (v, idx) => {
-                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                            // const _v = isString(v) ? `'${v}'` : v;
+                            const _v =  v;
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
                         });
                     } else {
                         for (let idx = 0; idx < data_size; idx++) {
@@ -135,7 +140,8 @@ export class GIAttribsThreejs {
                         }
                     }
                 } else {
-                    data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
+                    const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                    data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
                 }
             }
         });
@@ -166,7 +172,9 @@ export class GIAttribsThreejs {
                 if ( data_size > 1 ) {
                     if (attrib_value !== undefined) {
                         (attrib_value as any[]).forEach( (v, idx) => {
-                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                            // const _v = isString(v) ? `'${v}'` : v;
+                            const _v = v;
+                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
                         });
                     } else {
                         for (let idx = 0; idx < data_size; idx++) {
@@ -174,7 +182,8 @@ export class GIAttribsThreejs {
                         }
                     }
                 } else {
-                    data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
+                    const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                    data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
                 }
             }
         });

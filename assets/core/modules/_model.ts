@@ -182,3 +182,10 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
     return _getAttrib(__model__, ents_arr, attrib_name, attrib_index);
 }
 //  ===============================================================================================
+/**
+ * Checks the model for internal consistency.
+ * @param __model__
+ */
+export function __checkModel__(__model__: GIModel): string {
+    return __model__.check();
+}

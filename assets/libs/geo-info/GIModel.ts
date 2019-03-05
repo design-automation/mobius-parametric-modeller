@@ -1,7 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { EAttribNames, IModelData, IGeomData, IAttribsData, EEntType, IGeomPack, Txyz } from './common';
-import { IThreeJS } from './ThreejsJSON';
+import { IModelData, IGeomPack } from './common';
 import { GIModelThreejs } from './GIModelThreejs';
 /**
  * Geo-info model class.
@@ -50,5 +49,16 @@ export class GIModel {
             geometry: this.geom.io.getData(),
             attributes: this.attribs.io.getData()
         };
+    }
+    /**
+     * Check model for internal consistency
+     */
+    public check(): string {
+        const check_geom = this.geom.check();
+        if (check_geom.length > 0) {
+            console.log(this);
+            return String(check_geom);
+        }
+        return 'No internal inconsistencies have been found.';
     }
 }

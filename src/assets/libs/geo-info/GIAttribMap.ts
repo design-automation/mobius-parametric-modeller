@@ -414,8 +414,6 @@ export class GIAttribMap {
      * Searches for the value using the operator
      */
     private _searchStrValue(ents_i: number[], operator: EQueryOperatorTypes, val_k: string): number[] {
-        // clean up
-        val_k = val_k.replace(RE_SPACES, '');
         // first deal with null cases
         if (val_k === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);

@@ -97,7 +97,8 @@ export class GIAttribsThreejs {
         if (attribs === undefined) { return []; }
         const arr = [];
         attribs.forEach((value, key) => {
-            const _value = isString(value) ? `'${value}'` : value;
+            // const _value = isString(value) ? `'${value}'` : value;
+            const _value = value;
             const obj = {Name: key, Value: _value};
             arr.push(obj);
         });
@@ -129,7 +130,8 @@ export class GIAttribsThreejs {
                 if ( data_size > 1 ) {
                     if (attrib_value !== undefined) {
                         (attrib_value as any[]).forEach( (v, idx) => {
-                            const _v = isString(v) ? `'${v}'` : v;
+                            // const _v = isString(v) ? `'${v}'` : v;
+                            const _v =  v;
                             data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
                         });
                     } else {
@@ -170,7 +172,8 @@ export class GIAttribsThreejs {
                 if ( data_size > 1 ) {
                     if (attrib_value !== undefined) {
                         (attrib_value as any[]).forEach( (v, idx) => {
-                            const _v = isString(v) ? `'${v}'` : v;
+                            // const _v = isString(v) ? `'${v}'` : v;
+                            const _v = v;
                             data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
                         });
                     } else {

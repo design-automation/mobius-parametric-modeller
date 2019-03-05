@@ -285,12 +285,19 @@ export class DataCesium {
             // this._viewer.camera.viewBoundingSphere(sphere);
             // this._camera = [sphere, this._viewer.camera];
 
-            if (!this._camera) {
+            //if (!this._camera) {
                 // set up the camera
                 const sphere = new Cesium.BoundingSphere(origin, 1e2);
                 this._viewer.camera.viewBoundingSphere(sphere);
                 this._camera = [sphere, this._viewer.camera];
-            }
+            //}
+
+
+            const extent = new Cesium.Rectangle.fromDegrees(
+                origin[0] - 0.1, origin[1] - 0.1,
+                origin[0] + 0.1, origin[1] + 0.1); // 100.3, 5.4, 100.4, 5.5);
+                // Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
+                // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
 
             this._viewer.render();
         }

@@ -50,4 +50,15 @@ export class GIModel {
             attributes: this.attribs.io.getData()
         };
     }
+    /**
+     * Check model for internal consistency
+     */
+    public check(): string {
+        const check_geom = this.geom.check();
+        if (check_geom.length > 0) {
+            console.log(this);
+            return String(check_geom);
+        }
+        return 'No internal inconsistencies have been found.';
+    }
 }

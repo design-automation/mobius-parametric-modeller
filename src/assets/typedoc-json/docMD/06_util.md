@@ -30,3 +30,8 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Parameters:**  
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
   
+## ModelCheck  
+* **Description:** Check tje internal consistency of the model.  
+* **Parameters:**  
+* **Returns:** Text that summarises what is in the model, click print to see this text.  
+  

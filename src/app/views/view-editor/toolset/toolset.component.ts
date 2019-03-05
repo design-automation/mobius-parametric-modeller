@@ -241,8 +241,8 @@ export class ToolsetComponent implements OnInit {
         this.turnoffTooltip();
     }
 
-    toggleAccordion(id: string) {
-        if (this.dataService.focusedInput) {
+    toggleAccordion(id: string, inline?: boolean) {
+        if (inline && this.dataService.focusedInput) {
             this.dataService.focusedInput.focus();
         }
         const acc = document.getElementById(id);
@@ -257,9 +257,6 @@ export class ToolsetComponent implements OnInit {
     }
 
     toggleAccordionHead(id: string) {
-        if (this.dataService.focusedInput) {
-            this.dataService.focusedInput.focus();
-        }
         const acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
         acc.classList.toggle('active');

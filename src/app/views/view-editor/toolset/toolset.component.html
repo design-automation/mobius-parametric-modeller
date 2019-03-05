@@ -121,7 +121,7 @@
                 </div>
             </div>
             <div class="panel">
-                <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals")'>Globals</button>
+                <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals", true)'>Globals</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
                         <ng-container *ngFor='let cnst of getFlowchart().nodes[0].procedure'>
@@ -134,9 +134,9 @@
                     <div class = "divider--in"></div>
                 </div>
     
-                <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr")'>Expressions</button>
+                <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr", true)'>Expressions</button>
                 <div class="panel">
-                    <button id='inlineQueryExpr' class="accordion" (click)='toggleAccordion("inlineQueryExpr")'>Inline Query Expr</button>
+                    <button id='inlineQueryExpr' class="accordion" (click)='toggleAccordion("inlineQueryExpr", true)'>Inline Query Expr</button>
                     <div class="panel">
                         <ul class='toolset__functions--subset inline_set'>
                             <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
@@ -149,7 +149,7 @@
                         <!--Divider-->
                         <div class = "divider--in"></div>
                     </div>
-                    <button id='inlineSortExpr' class="accordion" (click)='toggleAccordion("inlineSortExpr")'>Inline Sort Expr</button>
+                    <button id='inlineSortExpr' class="accordion" (click)='toggleAccordion("inlineSortExpr", true)'>Inline Sort Expr</button>
                     <div class="panel">
                         <ul class='toolset__functions--subset inline_set'>
                             <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
@@ -165,10 +165,10 @@
                 </div>
     
     
-                <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc")'>Functions</button>
+                <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc", true)'>Functions</button>
                 <div class="panel">
                     <ng-container *ngFor='let category of inlineFunc'>
-                        <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0])'>{{category[0]}}</button>
+                        <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0], true)'>{{category[0]}}</button>
                         <div class="panel">
                             <ul class='toolset__functions--subset inline_set'>
                                 <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString[0])' title='{{funcString[1]}}'>

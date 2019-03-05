@@ -1,9 +1,7 @@
 import { GIGeom } from './GIGeom';
-import { IGeomArrays, TTri, TEdge, TPgon, TPoint } from './common';
-import { GIAttribs } from './GIAttribs';
+import { IGeomArrays, TTri, TEdge, TPoint } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import * as THREE from 'three';
-import { Material } from 'three';
 
 /**
  * Class for geometry.

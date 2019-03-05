@@ -71,6 +71,19 @@ then the position will be moved by the average of the vectors.
     Transforms polygon1 from plane1 to plane2.
   
   
+## Collection  
+* **Description:** Modifies a collection.
+~
+If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
+If the method is 'add_entities', then entities are added to the collection.
+If the method is 'remove_entities', then entities are removed from the collection.
+If adding or removing entities, then the entities must be points, polylines, or polygons.  
+* **Parameters:**  
+  * *coll:* The collection to be updated.  
+  * *entities:* Points, polylines, and polygons, or a single collection.  
+  * *method:* Enum, the method to use when modifying the collection.  
+* **Returns:** void  
+  
 ## Reverse  
 * **Description:** Reverses direction of entities.  
 * **Parameters:**  

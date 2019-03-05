@@ -59,11 +59,12 @@ export class DataCesium {
                 terrainShadows: Cesium.ShadowMode.ENABLED,
                 scene3DOnly: false,
                 sceneModePicker: false,
-                homeButton: false,
+                homeButton: true,
                 navigationHelpButton: false,
                 fullscreenButton: false,
                 animation: false,
                 timeline: false,
+                geocoder: false,
                 imageryProviderViewModels : view_models,
                 selectedImageryProviderViewModel : view_models[0],
                 // terrainProviderViewModels : terrainViewModels
@@ -76,6 +77,13 @@ export class DataCesium {
         this._viewer.shadowMap.size = 2048;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
         // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+
+        // prevent camera goes underground #375
+        const handler = this._viewer.screenSpaceEventHandler;
+        handler.setInputAction(() => {
+            this._viewer.camera._suspendTerrainAdjustment = false;
+            this._viewer.camera._adjustHeightForTerrain();
+        }, Cesium.ScreenSpaceEventType.MIDDLE_DOWN);
 
         if (this._primitives) {
             this._viewer.scene.primitives.removeAll();

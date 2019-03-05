@@ -52,12 +52,12 @@ as-split-area{
     top:0px;
     right:0px; 
     text-align:center;
-    color: #505050;
+    color: $color1;
     background-color:transparent;
     border:0;
     cursor: pointer;
     &:hover {
-        color:#7e7e7e;
+        color:$selected-color;
     }
 }
 
@@ -75,8 +75,8 @@ as-split-area{
 modal-window {
     display: none;
     h1{
-        font-size: $fsize1;
-        font-weight: 550;
+        font-size: 14px;
+        font-weight: 700;
         line-height: 35px;
     }
     dl{
@@ -134,7 +134,7 @@ modal-window {
     }
     .save {
         cursor: pointer;
-        background: #00006d;
+        background: $selected-color;
         color: #ffffff;
         height: 20px;
     }

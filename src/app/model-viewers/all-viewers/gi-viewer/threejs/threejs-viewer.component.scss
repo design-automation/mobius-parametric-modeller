@@ -116,11 +116,11 @@ button{
     top:30px;
     right:0px; 
     text-align:center;
-    color: #505050;
+    color: $color1;
     background-color:transparent;
     border:0;
     &:hover {
-        color:#7e7e7e;
+        color:$selected-color;
     }
 }
 
@@ -132,11 +132,11 @@ button{
     top: 60px;
     right:0px; 
     text-align:center;
-    color: #505050;
+    color: $color1;
     background-color:transparent;
     border:0;
     &:hover {
-        color:#7e7e7e;
+        color:$selected-color;
     }
 }
 .needSelect{

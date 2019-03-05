@@ -162,22 +162,6 @@ table {
   }
 }
 
-/deep/ #settings_button.btn{
-  height: 20px;
-  width: 20px;
-  background-color: $color6;
-  position: absolute;
-  top: -1px;
-  .mat-icon{
-    height: inherit;
-    width: inherit;
-    line-height: 20px;
-    font-size: 15px;
-  }
-  &:hover .mat-icon{
-    color: $selected-color;
-  }
-}
 .attrib--container{
   height: calc(100% - 30px); // $fsize3 btm container height
   #attribTab{

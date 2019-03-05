@@ -53,7 +53,7 @@
         transition: 0.3s;
         font-size: 14px;
         &:hover {
-            color:#505050;
+            color:$selected-color;
         }
         &.active {
             color: $selected-color;

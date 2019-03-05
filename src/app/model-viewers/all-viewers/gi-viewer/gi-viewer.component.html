@@ -2,12 +2,12 @@
 	<as-split direction="vertical">
 		<as-split-area [size]="66" id="three-js">
 			<threejs-viewer [model]='data' (eventClicked)="childEventClicked($event)" [attr_table_select]='attrTableSelect' (resetTableEvent) = "resetTable()"></threejs-viewer>
+			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon>settings</mat-icon></button>
 		</as-split-area>
 		<as-split-area [size]='34' id="attrib">
 			<attribute [data]="data" [refresh]="clickedEvent" [reset]="attrTableReset" (attrTableSelect) = "attribTableSelected($event)"></attribute>
-			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon>settings</mat-icon></button>
 			<modal-window id="settings_modal">
-				<h1>Settings</h1>
+				<h1>3D Viewer Settings</h1>
 				<tabs id="settingsTab">
 					<tab tabTitle="Scene">
 						<div class="mat-elevation-z1">
@@ -158,7 +158,7 @@
 									[value]="settings.colors[item.setting]"
 									[class.light] = "checkColor(this.settings.colors[item.setting])"
 									/>
-									<button *ngIf="item.default" (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button>
+									<!-- <button *ngIf="item.default" (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button> -->
 									<hr [hidden]="i % 2 === 1">
 								</dd>
 							</dl>
@@ -191,7 +191,7 @@
 									[value]="settings.ambient_light.color"
 									[class.light] = "checkColor(settings.ambient_light.color)"
 									/>
-									<button (click)="resetDefault('ambient_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button>
+									<!-- <button (click)="resetDefault('ambient_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
 								</dd>
 								<dd>
 									<div class="label">Intensity</div>
@@ -239,7 +239,7 @@
 									[value]="settings.hemisphere_light.skyColor"
 									[class.light] = "checkColor(settings.hemisphere_light.skyColor)"
 									/>
-									<button (click)="resetDefault('hemisphere_light.skyColor','#FFFFFF');" class='filebtn closebtn'>Default</button>
+									<!-- <button (click)="resetDefault('hemisphere_light.skyColor','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
 								</dd>
 								<dd class='colors'>
 									<div class="label">Ground Color</div>
@@ -249,7 +249,7 @@
 									[value]="settings.hemisphere_light.groundColor"
 									[class.light] = "checkColor(settings.hemisphere_light.groundColor)"
 									/>
-									<button (click)="resetDefault('hemisphere_light.groundColor','#FFFFFF');" class='filebtn closebtn'>Default</button>
+									<!-- <button (click)="resetDefault('hemisphere_light.groundColor','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
 								</dd>
 								<dd>
 									<div class="label">Intensity</div>
@@ -297,7 +297,7 @@
 									[value]="settings.directional_light.color"
 									[class.light] = "checkColor(settings.directional_light.color)"
 									/>
-									<button (click)="resetDefault('directional_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button>
+									<!-- <button (click)="resetDefault('directional_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
 								</dd>
 								<dd>
 									<div class="label">Intensity</div>
@@ -401,7 +401,7 @@
 									[value]="settings.ground.color"
 									[class.light] = "checkColor(settings.ground.color)"
 									/>
-									<button (click)="resetDefault('ground.color','#FFFFFF');" class='filebtn closebtn'>Default</button>
+									<!-- <button (click)="resetDefault('ground.color','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
 								</dd>
 								<dd>
 									<div class="label">Shininess</div>
@@ -416,8 +416,9 @@
 					</tab>
 				</tabs>
 				
-				<button (click)="closeModal('settings_modal', true);" class="filebtn setting">Save</button>
+				<button (click)="closeModal('settings_modal', true);" class="filebtn setting save">Save</button>
 				<button (click)="closeModal('settings_modal');" class='filebtn closebtn setting'>Close</button>
+				<button (click)="resetToDefault();" class='filebtn closebtn setting' style="float: right;">Default</button>
 			</modal-window>
 		</as-split-area>
 	</as-split>

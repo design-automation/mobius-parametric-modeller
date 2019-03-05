@@ -302,8 +302,7 @@ export class GIAttribsQuery {
  */
 function parseQuery(query_str: string): IQueryComponent[][] {
     if (!query_str.startsWith('#')) {throw new Error('Bad query, query string must start with #.'); }
-    const query_str_clean: string = query_str.replace(/\s/g, '');
-    const or_query_strs: string[] = query_str_clean.split('||');
+    const or_query_strs: string[] = query_str.split('||');
     const query_list: IQueryComponent[][] = [];
     or_query_strs.forEach(or_query_str => {
         const and_query_strs: string[] = or_query_str.split('&&');
@@ -326,16 +325,16 @@ function _parse_query_component(query_component: string): IQueryComponent {
     for (const key of Object.keys(EQueryOperatorTypes)) {
         const split_query = attrib_name_value_str.split(EQueryOperatorTypes[key]);
         if (split_query.length === 2) {
-            attrib_name_str =  split_query[0];
-            attrib_value_str = split_query[1];
+            attrib_name_str =  split_query[0].trim();
+            attrib_value_str = split_query[1].trim();
             operator_type = EQueryOperatorTypes[key];
             break;
         }
     }
     // check
+    if (!operator_type) {throw new Error('Bad operator in query.'); }
     if (!attrib_name_str) {throw new Error('Bad attribute name in query.'); }
     if (!attrib_value_str) {throw new Error('Bad attribute value in query.'); }
-    if (!operator_type) {throw new Error('Bad operator in query.'); }
     // parse the name
     const attrib_name_index = _parse_name_str(attrib_name_str);
     const attrib_name  = attrib_name_index[0];

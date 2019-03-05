@@ -92,6 +92,7 @@ export class GIViewerComponent implements OnInit {
         if (this.dataService.getThreejsScene() === undefined) {
             this.dataService.setThreejsScene(this.settings);
         }
+        localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
     }
 
     private getSettings() {
@@ -276,7 +277,9 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'ground.height':
                 this.settings.ground.height = Number(value);
-                scene.groundObj.position.setZ(this.settings.ground.height);
+                if (scene.groundObj) {
+                    scene.groundObj.position.setZ(this.settings.ground.height);
+                }
                 break;
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
@@ -287,9 +290,14 @@ export class GIViewerComponent implements OnInit {
         scene._renderer.render(scene._scene, scene._camera);
     }
 
-    resetDefault(setting, value) {
-        const seg = setting.split('.');
-        this.settings[seg[0]][seg[1]] = value;
+    // resetDefault(setting, value) {
+    //     const seg = setting.split('.');
+    //     this.settings[seg[0]][seg[1]] = value;
+    // }
+
+    resetToDefault() {
+        const default_settings = JSON.parse(localStorage.getItem('mpm_default_settings'));
+        this.settings = default_settings;
     }
 
     checkColor(color) {

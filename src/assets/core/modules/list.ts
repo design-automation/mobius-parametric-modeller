@@ -224,7 +224,7 @@ function _compareID(id1: string, id2: string): number {
     const [ent_type1, index1]: TEntTypeIdx = idsBreak(id1) as TEntTypeIdx;
     const [ent_type2, index2]: TEntTypeIdx = idsBreak(id2) as TEntTypeIdx;
     if (ent_type1 !== ent_type2) { return ent_type1 -  ent_type2; }
-    if (index1 !== index2) { return ent_type1 -  ent_type2; }
+    if (index1 !== index2) { return index1 -  index2; }
     return 0;
 }
 function _sort(list: any[], method: _ESortMethod): void {

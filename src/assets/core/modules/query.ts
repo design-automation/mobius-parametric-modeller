@@ -126,8 +126,15 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
         return query_results_arr;
     }
 }
+function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
+    const [ent_type1, index1]: TEntTypeIdx = ent_arr1;
+    const [ent_type2, index2]: TEntTypeIdx = ent_arr2;
+    if (ent_type1 !== ent_type2) { return ent_type1 -  ent_type2; }
+    if (index1 !== index2) { return index1 -  index2; }
+    return 0;
+}
 /**
- * Returns a list of entities based on a query expression.
+ * Returns a list of entities based on a query expression. The list will be ordered by entity ID, in descending order
  * The result will always be a list of entities, even if there is only one entity.
  * In a case where you expect only one entity, remember to get the first item in the list.
  * ~
@@ -168,7 +175,19 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
-    return idsMake(found_ents_arr) as TId[];
+    if (found_ents_arr.length === 0) { return []; }
+    // sort entities
+    found_ents_arr.sort(_compareID);
+    // remove duplicates
+    const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
+    for (let i = 1; i < found_ents_arr.length; i++) {
+        const current: TEntTypeIdx = found_ents_arr[i];
+        const previous: TEntTypeIdx = found_ents_arr[i - 1];
+        if (!(current[0] === previous[0] && current[1] === previous[1])) {
+            found_ents_arr_no_dups.push(found_ents_arr[i]);
+        }
+    }
+    return idsMake(found_ents_arr_no_dups) as TId[];
 }
 // ================================================================================================
 // ================================================================================================

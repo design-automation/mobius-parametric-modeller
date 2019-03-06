@@ -1,11 +1,10 @@
 import { GIModel } from './GIModel';
-import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon } from './common';
+import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomIO } from './GIGeomIO';
-import { TEntTypeIdx } from 'dist/assets/libs/geo-info/common';
 
 /**
  * Class for geometry.

@@ -10,6 +10,8 @@ import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';
 
+// import {parseArgument} from '@shared/parser';
+
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 ctx.font = '12px Arial';
@@ -149,6 +151,30 @@ export class ProcedureItemComponent {
         this.select.emit(event);
     }
 
+    markSelectGeom(event: MouseEvent) {
+        event.stopPropagation();
+        if (!this.data.selected) {
+            this.data.selectGeom = !this.data.selectGeom;
+            return;
+        }
+        const prodList = this.dataService.node.state.procedure;
+        let newSelect;
+        let i = prodList.length - 1;
+        while (i >= 0 && !(prodList[i].argCount > 0 && prodList[i].args[0].name === 'var_name')) {
+            i--;
+        }
+        if (i === -1) { return; }
+        newSelect = ! prodList[i].selectGeom;
+        for (const prod of prodList) {
+            if (prod.argCount > 0 && prod.args[0].name === 'var_name') {
+                prod.selectGeom = newSelect;
+            }
+        }
+        // this.data.print = !this.data.print;
+    }
+
+
+
     markPrint(event: MouseEvent) {
         event.stopPropagation();
         if (!this.data.selected) {
@@ -244,6 +270,9 @@ export class ProcedureItemComponent {
         // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
+
+        // parseArgument(this.data.args[argIndex].value);
+
         const vals = this.data.args[argIndex].value.split('"');
         let result = '';
         let startOnEven = true;

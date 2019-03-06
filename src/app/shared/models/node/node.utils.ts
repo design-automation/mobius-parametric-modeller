@@ -24,6 +24,7 @@ export abstract class NodeUtils {
                 print: false,
                 enabled: true,
                 selected: false,
+                selectGeom: false,
                 hasError: false}],
             state: {
                 procedure: [],
@@ -65,6 +66,7 @@ export abstract class NodeUtils {
                 print: false,
                 enabled: true,
                 selected: false,
+                selectGeom: false,
                 hasError: false};
                 for (const arg of newReturn.args) {
                     arg.value = '';
@@ -311,6 +313,7 @@ export abstract class NodeUtils {
             print: false,
             enabled: true,
             selected: false,
+            selectGeom: false,
             hasError: false}
         ];
     }

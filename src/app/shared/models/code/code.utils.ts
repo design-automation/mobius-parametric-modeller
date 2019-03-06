@@ -226,7 +226,10 @@ export class CodeUtils {
         if (prod.print && prod.args[0].value) {
             const repGet = this.repGetAttrib(prod.args[0].value);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
-            // codeStr.push(`wait(5000);`);
+        }
+        if (prod.selectGeom && prod.args[0].value) {
+            const repGet = this.repGetAttrib(prod.args[0].value);
+            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet});`);
         }
         return codeStr;
     }

@@ -78,7 +78,7 @@ textarea{
 .inputPort{
     stroke: transparent;
     stroke-width: 20px;
-    pointer-events: all;
+    pointer-events: stroke;
     fill:$color8;
     //fill:midnightblue;
     &.disabled{
@@ -88,8 +88,8 @@ textarea{
 }
 .outputPort{
     stroke: transparent;
-    stroke-width: 10px;
-    pointer-events: all;
+    stroke-width: 11px;
+    pointer-events: stroke;
     fill: transparent;
     //fill: midnightblue;
     &.disabled{

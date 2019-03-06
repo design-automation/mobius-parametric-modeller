@@ -81,6 +81,7 @@ export class LoadUrlComponent {
                         print: false,
                         enabled: true,
                         selected: false,
+                        selectGeom: false,
                         hasError: false}];
                     }
                     if (endNode.procedure[endNode.procedure.length - 1].type !== 11) {
@@ -98,6 +99,7 @@ export class LoadUrlComponent {
                                 print: false,
                                 enabled: true,
                                 selected: false,
+                                selectGeom: false,
                                 hasError: false});
                                 break;
                             }

@@ -17,6 +17,7 @@ export interface IProcedure {
     print: boolean;
     enabled: boolean;
     selected: boolean;
+    selectGeom: boolean;
     hasError: boolean;
 
     resolvedValue?: any;

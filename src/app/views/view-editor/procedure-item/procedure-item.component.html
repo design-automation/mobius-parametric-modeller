@@ -3,6 +3,7 @@
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
+    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -295,15 +296,19 @@
     <div class = "btn-container">
         <div class = "btns">
             <!-- delete button-->
-            <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
+            <!-- <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
                 <mat-icon class='icon'>delete_outline</mat-icon>
+            </button> -->
+            <!-- Select button -->
+            <button id = 'selectGeom-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Select Geometry Result In Viewer" (click)="markSelectGeom($event)" tabindex="-1">
+                <mat-icon class='icon'>near_me</mat-icon>
             </button>
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" [class.highlighted]='!data.enabled' (click)='markDisabled($event)' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon'>tv_off</mat-icon>
             </button>
             <!-- Print button-->
-            <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" [class.highlighted]='data.print' (click)='markPrint($event)' tabindex="-1">
+            <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                 <mat-icon class='icon'>print</mat-icon>
             </button>
             <!-- help button-->

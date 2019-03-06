@@ -113,6 +113,48 @@
         }
     }
 
+    &.selectGeom:not(.disabled){
+        border-bottom: 2px solid $selectGeom-color;
+        // border-left: 2px solid $selectGeom-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        #selectGeom-btn{
+            color: $selectGeom-color;
+        }
+        &:hover {
+            background-color: $selectGeom-color-lt;
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $selectGeom-color-lt;
+        }
+    }
+
+    &.selectGeom{
+        .btns{
+            display: inline-flex;
+            .btn{
+                background-color: inherit;
+            }
+            #selectGeom-btn{
+                display: flex;
+                justify-content: center;   
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $selectGeom-color-lt;
+        }
+        &:hover .btns{
+            #selectGeom-btn{
+                order: 1
+            }
+        }
+    }
+
     &.error:not(.disabled){
         border-bottom: 2px solid $error-color;
         border-left: 2px solid $error-color;

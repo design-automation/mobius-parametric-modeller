@@ -11,7 +11,7 @@ import { EEntType, EAttribNames, EEntTypeStr, Txyz } from '@libs/geo-info/common
 import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
-
+import { sortByKey } from '@libs/util/maps';
 /**
  * A threejs viewer for viewing geo-info (GI) models.
  * This component gets used in /app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html
@@ -109,7 +109,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
 
         if (this._data_threejs.ObjLabelMap.size !== 0) {
             this._data_threejs.ObjLabelMap.forEach((obj, label) => {
-                this._data_threejs.createLabelforObj(this.container, obj.entity, obj.type, label);
+                this._data_threejs.createLabelforObj(this.container, obj.entity, obj.type, obj.text, label);
             });
         }
 
@@ -232,6 +232,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             if (model !== this._data_threejs._model) {
                 this._data_threejs._model = model;
                 try {
+                    // to be completed and test
+                    this._data_threejs.disposeWebGL();
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
                     this.resetTable();
@@ -816,7 +818,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             positions = verts.map(v => this.model.attribs.query.getVertCoords(v)),
             posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${line}`;
-        this._data_threejs.selectObjLine(ent_id, [], posi_flat, this.container);
+        const labelText = this.indexAsLabel(ent_type_str, ent_id, line, EEntType.EDGE);
+        this._data_threejs.selectObjLine(ent_id, [], posi_flat, this.container, labelText);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, line);
     }
 
@@ -835,7 +838,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 indices.push(i);
             });
             const posi_flat = [].concat(...position);
-            this._data_threejs.selectEdgeByFace(parent_ent_id, ent_id, indices, posi_flat, this.container);
+            const labelText = this.indexAsLabel(ent_type_str, ent_id, edge, EEntType.EDGE);
+            this._data_threejs.selectEdgeByFace(parent_ent_id, ent_id, indices, posi_flat, this.container, labelText);
             this.dataService.selected_ents.get(ent_type_str).set(ent_id, edge);
         });
         this.dataService.selected_face_edges.set(`${parent_ent_id}`, children);
@@ -854,7 +858,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         });
         const posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${wire}`;
-        this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container);
+        const labelText = this.indexAsLabel(ent_type_str, ent_id, wire, EEntType.WIRE);
+        this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container, labelText);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
     }
 
@@ -876,7 +881,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 indices.push(i);
             });
             const posi_flat = [].concat(...positions);
-            this._data_threejs.selectWireByFace(parent_ent_id, ent_id, indices, posi_flat, this.container);
+            const labelText = this.indexAsLabel(ent_type_str, ent_id, wire, EEntType.WIRE);
+            this._data_threejs.selectWireByFace(parent_ent_id, ent_id, indices, posi_flat, this.container, labelText);
             this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
         });
         this.dataService.selected_face_wires.set(`${parent_ent_id}`, children);
@@ -897,8 +903,28 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         });
         const posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${face}`;
-        this._data_threejs.selectObjFace(ent_id, tri_indices, posi_flat, this.container);
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
+
+        const labelText = this.indexAsLabel(ent_type_str, ent_id, face, EEntType.FACE);
+        this._data_threejs.selectObjFace(ent_id, tri_indices, posi_flat, this.container, labelText);
+    }
+
+    private indexAsLabel(ent_type_str: string, ent_id: string, id: number, type: EEntType) {
+        let indexAsLabel;
+        const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, id);
+        if (showSelected) {
+            const selected_ents = this.dataService.selected_ents.get(ent_type_str);
+            const selected_ents_sorted = sortByKey(selected_ents);
+            const arr = []
+            selected_ents_sorted.forEach(ent => {
+                arr.push(ent);
+            });
+            indexAsLabel = String(arr.findIndex(ent => ent === id));
+            sessionStorage.setItem('mpm_selected_ents_arr', JSON.stringify(arr));
+        } else {
+            indexAsLabel = String(this._data_threejs._model.attribs.threejs.getIdIndex(type, id));
+        }
+        return indexAsLabel;
     }
 
     private selectPoint(point: number) {
@@ -907,7 +933,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const point_indices = result.point_indices;
         const point_posi = result.posi_flat;
         const ent_id = `${ent_type_str}${point}`;
-        this._data_threejs.selectObjPoint(ent_id, point_indices, point_posi, this.container);
+        const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POINT);
+        this._data_threejs.selectObjPoint(ent_id, point_indices, point_posi, this.container, labelText);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, point);
     }
 
@@ -918,7 +945,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (result) {
             const posi_flat = result.posi_flat;
             const indices = result.indices;
-            this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container);
+            const labelText = this.indexAsLabel(ent_type_str, ent_id, pline, EEntType.PLINE);
+            this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container, labelText);
             this.dataService.selected_ents.get(ent_type_str).set(ent_id, pline);
         } else {
             this.showMessages('Please Select a Polyline', false, 'custom');
@@ -932,7 +960,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         const tri_indices = result.indices;
 
         const ent_id = `${ent_type_str}${face}`;
-        this._data_threejs.selectObjFace(ent_id, tri_indices, posi_flat, this.container);
+        const labelText = this.indexAsLabel(ent_type_str, ent_id, face, EEntType.PGON);
+        this._data_threejs.selectObjFace(ent_id, tri_indices, posi_flat, this.container, labelText);
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
     }
 

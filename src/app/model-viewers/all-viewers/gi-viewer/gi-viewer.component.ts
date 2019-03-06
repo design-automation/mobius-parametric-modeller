@@ -1,8 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { isDevMode } from '@angular/core';
 import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
-// import SunCalc from 'suncalc';
-
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
 // import app services
@@ -52,23 +50,6 @@ export class GIViewerComponent implements OnInit {
             isDevMode()) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
-
-        const singapore = Locale[0];
-
-        // const times = SunCalc.getTimes(new Date(), singapore.lat, singapore.lat);
-        // console.log(times);
-
-        // const date = times.sunrise;
-
-        // const now_utc = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-
-        // console.log(new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000));
-
-        // const sunrisePos = SunCalc.getPosition(now_utc, singapore.lat, singapore.lat);
-        // const sunriseAzimuth = sunrisePos.azimuth * 180 / Math.PI;
-
-        // console.log('sunrisePos', sunrisePos);
-        // console.log('sunriseAzimuth', sunriseAzimuth);
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {
         //     this.columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
         // }

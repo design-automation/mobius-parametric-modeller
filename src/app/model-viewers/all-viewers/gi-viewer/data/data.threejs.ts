@@ -54,6 +54,9 @@ export class DataThreejs {
     public vnh: THREE.VertexNormalsHelper;
     // Settings
     public settings: Settings;
+
+    // BufferGeoms
+    private BufferGeoms: THREE.BufferGeometry[] = [];
     /**
      * Constructs a new data subscriber.
      */
@@ -216,7 +219,11 @@ export class DataThreejs {
      * @param container
      * @param label
      */
-    public selectObjFace(ent_id: string, tris_i: number[], positions: number[], container, label = true) {
+    public selectObjFace(ent_id: string,
+        tris_i: number[],
+        positions: number[],
+        container,
+        labelText = null) {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -247,11 +254,12 @@ export class DataThreejs {
         this._scene.add(mesh);
         this.selected_geoms.set(ent_id, mesh.id);
         this.sceneObjsSelected.set(ent_id, mesh);
-        if (label) {
-            const obj: { entity: THREE.Mesh, type: string } = { entity: mesh, type: objType.face };
-            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+        if (labelText) {
+            const obj: { entity: THREE.Mesh, type: string, text: string } = { entity: mesh, type: objType.face, text: labelText };
+            this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
             this.ObjLabelMap.set(ent_id, obj);
         }
+        this.BufferGeoms.push(geom);
     }
 
     private initBufferLine(positions, indices: number[], colors: [number, number, number]) {
@@ -263,6 +271,7 @@ export class DataThreejs {
         }
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        this.BufferGeoms.push(geom);
         const rgb = `rgb(${colors.toString()})`;
         const mat = new THREE.LineBasicMaterial({
             color: new THREE.Color(rgb),
@@ -274,21 +283,21 @@ export class DataThreejs {
         return bg;
     }
 
-    public selectObjLine(ent_id: string, indices, positions, container, label = true) {
+    public selectObjLine(ent_id: string, indices, positions, container, labelText = null) {
         const bg = this.initBufferLine(positions, indices, [255, 0, 0]);
         const line = new THREE.LineSegments(bg.geom, bg.mat);
         this._scene.add(line);
         this.selected_geoms.set(ent_id, line.id);
         this.sceneObjsSelected.set(ent_id, line);
 
-        if (label) {
-            const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
-            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+        if (labelText) {
+            const obj: { entity: THREE.LineSegments, type: string, text: string } = { entity: line, type: objType.line, text: labelText };
+            this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
             this.ObjLabelMap.set(ent_id, obj);
         }
     }
 
-    public selectEdgeByFace(parent_ent_id: string, ent_id: string, indices, positions, container, label = true) {
+    public selectEdgeByFace(parent_ent_id: string, ent_id: string, indices, positions, container, labelText = null) {
         const bg = this.initBufferLine(positions, indices, [255, 0, 0]);
         if (this.selected_face_edges.get(parent_ent_id) === undefined) {
             this.selected_face_edges.set(parent_ent_id, new Map());
@@ -311,15 +320,15 @@ export class DataThreejs {
             this.selected_face_edges.get(parent_ent_id).set(ent_id, line.id);
             this.selected_geoms.set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
-            if (label) {
-                const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
-                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+            if (labelText) {
+                const obj: { entity: THREE.LineSegments, type: string, text: string } = { entity: line, type: objType.line, text: labelText };
+                this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         }
     }
 
-    public selectWireByFace(parent_ent_id: string, ent_id: string, indices, positions, container, label = true) {
+    public selectWireByFace(parent_ent_id: string, ent_id: string, indices, positions, container, labelText = null) {
         const bg = this.initBufferLine(positions, indices, [255, 0, 0]);
         if (this.selected_face_wires.get(parent_ent_id) === undefined) {
             this.selected_face_wires.set(parent_ent_id, new Map());
@@ -342,9 +351,9 @@ export class DataThreejs {
             this.selected_face_wires.get(parent_ent_id).set(ent_id, line.id);
             this.selected_geoms.set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
-            if (label) {
-                const obj: { entity: THREE.LineSegments, type: string } = { entity: line, type: objType.line };
-                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+            if (labelText) {
+                const obj: { entity: THREE.LineSegments, type: string, text: string  } = { entity: line, type: objType.line, text: labelText };
+                this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         }
@@ -376,6 +385,7 @@ export class DataThreejs {
             geom.addAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));
         }
         geom.computeBoundingSphere();
+        this.BufferGeoms.push(geom);
         const mat = new THREE.PointsMaterial({
             color: color_rgb,
             size: size,
@@ -385,15 +395,15 @@ export class DataThreejs {
         return bg;
     }
 
-    public selectObjPoint(ent_id: string = null, point_indices, positions, container, label = true) {
+    public selectObjPoint(ent_id: string = null, point_indices, positions, container, labelText = null) {
         const bg = this.initBufferPoint(positions, point_indices, null, '#ff0000');
         const point = new THREE.Points(bg.geom, bg.mat);
         this._scene.add(point);
         this.selected_geoms.set(ent_id, point.id);
         this.sceneObjsSelected.set(ent_id, point);
-        if (label) {
-            const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-            this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+        if (labelText) {
+            const obj: { entity: THREE.Points, type: string, text: string } = { entity: point, type: objType.point, text: labelText };
+            this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
             this.ObjLabelMap.set(ent_id, obj);
         }
     }
@@ -407,7 +417,7 @@ export class DataThreejs {
             this.sceneObjsSelected.set(ent_id, point);
             if (label) {
                 const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         } else {
@@ -430,7 +440,7 @@ export class DataThreejs {
                 this.sceneObjsSelected.set(ent_id, point);
                 if (label) {
                     const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                    this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                    this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
                     this.ObjLabelMap.set(ent_id, obj);
                 }
             }
@@ -446,7 +456,7 @@ export class DataThreejs {
             this.selected_geoms.set(ent_id, point.id);
             if (label) {
                 const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         } else {
@@ -469,16 +479,32 @@ export class DataThreejs {
                 this.selected_geoms.set(ent_id, point.id);
                 if (label) {
                     const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                    this.createLabelforObj(container, obj.entity, obj.type, ent_id);
+                    this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
                     this.ObjLabelMap.set(ent_id, obj);
                 }
             }
         }
     }
 
-    public createLabelforObj(container, obj, type: string, labelText: string) {
-        const label = this._createTextLabel(container, type, labelText);
-        label.setHTML(labelText);
+    public createLabelforObj(container, obj, type: string, labelText: string, ent_id: string) {
+        const label = this._createTextLabel(container, type, labelText, ent_id);
+        const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+        if (showSelected) {
+            let arr = [];
+            if (JSON.parse(sessionStorage.getItem('mpm_selected_ents_arr'))) {
+                arr = JSON.parse(sessionStorage.getItem('mpm_selected_ents_arr'));
+            }
+            const allLabels = document.getElementsByClassName('text-label');
+            for (let i = 0; i < allLabels.length; i++) {
+                const element = allLabels[i];
+                const attr = Number(element.getAttribute('data-index'));
+                const index = arr.findIndex(l => l === attr);
+                element.innerHTML = String(index);
+            }
+        } else {
+            label.setHTML(labelText);
+        }
+        
         label.setParent(obj);
         this._textLabels.set(label.element.id, label);
         container.appendChild(label.element);
@@ -712,6 +738,9 @@ export class DataThreejs {
         material_groups.forEach(element => {
             geom.addGroup(element[0], element[1], element[2]);
         });
+
+        this.BufferGeoms.push(geom);
+
         const material_arr = [];
         let index = 0;
         const l = materials.length;
@@ -770,6 +799,7 @@ export class DataThreejs {
         geom.setIndex(lines_i);
         geom.addAttribute('position', posis_buffer);
         geom.addAttribute('normal', normals_buffer);
+        this.BufferGeoms.push(geom);
         // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial({
             color: 0x000000,
@@ -794,6 +824,7 @@ export class DataThreejs {
         geom.setIndex(points_i);
         geom.addAttribute('position', posis_buffer);
         geom.addAttribute('color', colors_buffer);
+        this.BufferGeoms.push(geom);
         // geom.computeBoundingSphere();
         const rgb = `rgb(${color.toString()})`;
         const mat = new THREE.PointsMaterial({
@@ -814,6 +845,7 @@ export class DataThreejs {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
         geom.addAttribute('position', posis_buffer);
+        this.BufferGeoms.push(geom);
         // geom.computeBoundingSphere();
         const mat = new THREE.PointsMaterial({
             color: new THREE.Color(parseInt(color.replace('#', '0x'), 16)),
@@ -827,14 +859,15 @@ export class DataThreejs {
         this._positions.map(p => p.visible = this.settings.positions.show);
     }
 
-    private _createTextLabel(container, type: string, labelText: string) {
+    private _createTextLabel(container, type: string, labelText: string, ent_id: string) {
         const div = document.createElement('div');
-        div.id = `textLabel_${labelText}`;
+        div.id = `textLabel_${ent_id}`;
+        div.setAttribute('data-index', ent_id.substr(2));
         div.className = 'text-label';
         div.style.position = 'absolute';
         div.style.background = 'rgba(255, 255, 255, 0.3)';
         div.style.padding = '1px';
-        div.innerHTML = '';
+        div.innerHTML = labelText;
         div.style.top = '-1000';
         div.style.left = '-1000';
         const _this = this;
@@ -871,6 +904,17 @@ export class DataThreejs {
                 return vector;
             }
         };
+    }
+
+    public disposeWebGL() {
+        console.log('this._renderer.info', this._renderer.info.memory.geometries);
+        this.sceneObjs.forEach(obj => this._scene.remove(obj));
+        const BufferGeoms = this.BufferGeoms;
+        BufferGeoms.forEach(geom => {
+            geom.dispose();
+        });
+        this.BufferGeoms = [];
+        console.log('this._renderer.info', this._renderer.info.memory.geometries);
     }
 
     public lookAtObj(width: number) {

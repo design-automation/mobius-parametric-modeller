@@ -2,6 +2,7 @@ import { GIModel } from './GIModel';
 import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { isString } from 'util';
+import { sortByKey } from '../util/maps';
 
 /**
  * Class for attributes.
@@ -152,7 +153,7 @@ export class GIAttribsThreejs {
      * @param ent_type
      * @param ents_i
      */
-    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
+    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType){
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const data_obj_map: Map< number, { '#': number, id: string} > = new Map();
@@ -160,11 +161,12 @@ export class GIAttribsThreejs {
             return [];
         }
         let i = 0;
-        const selected_ents_sorted = this.sortByKey(selected_ents);
+        const selected_ents_sorted = sortByKey(selected_ents);
         selected_ents_sorted.forEach(ent => {
             data_obj_map.set(ent, { '#': i, id: `${attribs_maps_key}${ent}` } );
             i++;
         });
+
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of Array.from(selected_ents.values())) {
@@ -189,20 +191,10 @@ export class GIAttribsThreejs {
         });
         return Array.from(data_obj_map.values());
     }
-    private sortByKey(unsortedMap) {
-        const keys = [];
-        const sortedMap = new Map();
 
-        unsortedMap.forEach((value, key) => {
-            keys.push(key);
-        });
-
-        keys.sort((a, b) => {
-            const x = Number(a.substr(2)), y = Number(b.substr(2));
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        }).map(function(key) {
-            sortedMap.set(key, unsortedMap.get(key));
-        });
-        return sortedMap;
+    public getIdIndex(ent_type: EEntType, id: number) {
+        const ents_i = this._model.geom.query.getEnts(ent_type, false);
+        const index = ents_i.findIndex(ent_i => ent_i === id);
+        return index;
     }
 }

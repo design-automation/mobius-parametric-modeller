@@ -133,6 +133,7 @@ export class AttributeComponent implements OnChanges {
       } else {
         this.generateTable(tabIndex);
       }
+      sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
     });
   }
 
@@ -146,6 +147,7 @@ export class AttributeComponent implements OnChanges {
 
   showSelectedSwitch() {
     this.showSelected = !this.showSelected;
+    sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
     this.refreshTable();
   }
 

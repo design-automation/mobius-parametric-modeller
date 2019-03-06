@@ -55,9 +55,14 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|
 function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
     const depth: number = getArrDepth(ents_arr);
     if (depth === 1) {
-        const index: number = ents_arr[1] as number;
-        const point_i: number = __model__.geom.add.addPoint(index);
-        return [EEntType.POINT, point_i] as TEntTypeIdx;
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx; // either a posi or something else
+        if (ent_type === EEntType.POSI) {
+            const point_i: number = __model__.geom.add.addPoint(index);
+            return [EEntType.POINT, point_i] as TEntTypeIdx;
+        } else {
+            const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            return posis_i.map(posi_i => _point(__model__, [EEntType.POSI, posi_i])) as TEntTypeIdx[];
+        }
     } else { // depth === 2 or 3
         return (ents_arr as TEntTypeIdx[]).map(_ents_arr => _point(__model__, _ents_arr)) as TEntTypeIdx[];
     }
@@ -66,7 +71,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
  * Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.
  *
  * @param __model__
- * @param positions Position of point.
+ * @param positions Position of point, or other entities from which positions will be extracted.
  * @returns New point or a list of new points.
  * @example_info Creates a point at position1.
  * @example point1 = make.Point(position1)
@@ -76,7 +81,9 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Point', 'positions', positions,
-        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], [EEntType.POSI])  as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], 
+        [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
+        EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr);
     return idsMake(new_ents_arr) as TId|TId[];
@@ -102,9 +109,21 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
     if (getArrDepth(ents_arr) === 1) {
         ents_arr =  [ents_arr] as TEntTypeIdx[];
     }
-    // check if this is a list of posis
-    if (getArrDepth(ents_arr) === 2 && ents_arr[0][0] === EEntType.POSI) {
-        ents_arr =  [ents_arr] as TEntTypeIdx[][];
+    // check if this is a list of posis, verts, or points
+    if (getArrDepth(ents_arr) === 2 && isDim0(ents_arr[0][0])) {
+        const ents_arr2: TEntTypeIdx[] = [];
+        for (const ent_arr of ents_arr) {
+            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+            if (ent_type === EEntType.POSI) {
+                ents_arr2.push(ent_arr as TEntTypeIdx);
+            } else {
+                const posis_i: number[] =__model__.geom.query.navAnyToPosi(ent_type, index);
+                for (const posi_i of posis_i) {
+                    ents_arr2.push([EEntType.POSI, posi_i]);
+                }
+            }
+        }
+        ents_arr = [ents_arr2] as TEntTypeIdx[][];
     }
     // now process the ents
     const posis_arrs: TEntTypeIdx[][] = [];
@@ -153,7 +172,7 @@ export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close:
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polyline', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        [EEntType.POSI, EEntType.EDGE, EEntType.WIRE,
+        [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPlinePosisFromEnts(__model__, ents_arr);
@@ -183,7 +202,20 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
     }
     // check if this is a list of posis
     if (getArrDepth(ents_arr) === 2 && ents_arr[0][0] === EEntType.POSI) {
-        ents_arr =  [ents_arr] as TEntTypeIdx[][];
+        // ents_arr =  [ents_arr] as TEntTypeIdx[][];
+        const ents_arr2: TEntTypeIdx[] = [];
+        for (const ent_arr of ents_arr) {
+            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+            if (ent_type === EEntType.POSI) {
+                ents_arr2.push(ent_arr as TEntTypeIdx);
+            } else {
+                const posis_i: number[] =__model__.geom.query.navAnyToPosi(ent_type, index);
+                for (const posi_i of posis_i) {
+                    ents_arr2.push([EEntType.POSI, posi_i]);
+                }
+            }
+        }
+        ents_arr = [ents_arr2] as TEntTypeIdx[][];
     }
     // now process the ents
     const posis_arrs: TEntTypeIdx[][] = [];

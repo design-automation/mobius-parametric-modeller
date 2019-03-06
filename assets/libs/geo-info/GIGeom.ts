@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon } from './common';
+import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
@@ -11,6 +11,7 @@ import { GIGeomIO } from './GIGeomIO';
  */
 export class GIGeom {
     public model: GIModel;
+    public selected: TEntTypeIdx[]; // entities that should become selected
     //  all arrays
     public _geom_arrays: IGeomArrays = {  // TODO this should not be public
         // num_posis: 0,
@@ -53,6 +54,7 @@ export class GIGeom {
         this.modify = new GIGeomModify(this, this._geom_arrays);
         this.query = new GIGeomQuery(this, this._geom_arrays);
         this.threejs = new GIGeomThreejs(this, this._geom_arrays);
+        this.selected = [];
     }
     /**
      * Checks geometry for internal consistency

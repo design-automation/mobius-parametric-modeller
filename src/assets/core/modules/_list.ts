@@ -43,9 +43,10 @@ export function listLast(list: any[]): number {
     return list[list.length - 1];
 }
 
-export function listGet(list: any[], index: number): number {
+export function listGet(list: any[], index: number|number[]): any|any[] {
+    if (Array.isArray(index)) { return index.map( i => listGet(list, i)) as any[]; }
     if (index < 0) { index = list.length + index; }
-    return list[index];
+    return list[index] as any;
 }
 
 export function listFind(list: any[], val: any): number {
@@ -90,6 +91,23 @@ export function listZip2(lists: any[][]): any[] {
     });
     return longest.map((_, i) => lists.map(array => array[i] ));
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // =============================== DEPRECATED
 

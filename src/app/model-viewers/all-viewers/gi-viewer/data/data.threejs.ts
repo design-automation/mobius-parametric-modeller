@@ -862,6 +862,7 @@ export class DataThreejs {
     private _createTextLabel(container, type: string, labelText: string, ent_id: string) {
         const div = document.createElement('div');
         div.id = `textLabel_${ent_id}`;
+        div.title = ent_id;
         div.setAttribute('data-index', ent_id.substr(2));
         div.className = 'text-label';
         div.style.position = 'absolute';

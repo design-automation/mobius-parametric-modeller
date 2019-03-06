@@ -233,7 +233,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 this._data_threejs._model = model;
                 try {
                     // to be completed and test
-                    this._data_threejs.disposeWebGL();
+                    // this._data_threejs.disposeWebGL();
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
                     this.resetTable();

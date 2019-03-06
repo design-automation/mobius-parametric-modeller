@@ -5,12 +5,14 @@ import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomIO } from './GIGeomIO';
+import { TEntTypeIdx } from 'dist/assets/libs/geo-info/common';
 
 /**
  * Class for geometry.
  */
 export class GIGeom {
     public model: GIModel;
+    public selected: TEntTypeIdx[]; // entities that should become selected
     //  all arrays
     public _geom_arrays: IGeomArrays = {  // TODO this should not be public
         // num_posis: 0,
@@ -53,6 +55,7 @@ export class GIGeom {
         this.modify = new GIGeomModify(this, this._geom_arrays);
         this.query = new GIGeomQuery(this, this._geom_arrays);
         this.threejs = new GIGeomThreejs(this, this._geom_arrays);
+        this.selected = [];
     }
     /**
      * Checks geometry for internal consistency

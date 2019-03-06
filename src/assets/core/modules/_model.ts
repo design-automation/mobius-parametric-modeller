@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
-import { getArrDepth } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes, checkAttribNameValue, TypeCheckObj, IDcheckObj } from './_check_args';
 
 //  ===============================================================================================
@@ -180,6 +180,17 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
     }
     // --- Error Check ---
     return _getAttrib(__model__, ents_arr, attrib_name, attrib_index);
+}
+//  ===============================================================================================
+/**
+ * Select entities in the model.
+ * @param __model__
+ */
+export function __select__(__model__: GIModel, ents_id: string[]): void {
+    const ents_arr: TEntTypeIdx[] = idsBreak(ents_id) as TEntTypeIdx[];
+    for (const ent_arr of ents_arr) {
+        __model__.geom.selected.push(ent_arr);
+    }
 }
 //  ===============================================================================================
 /**

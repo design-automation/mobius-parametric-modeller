@@ -43,7 +43,7 @@ const lists = [
     ['listJoin(list1, list2)', 'Joins two lists into a single list'],
     ['listFlat(list)', 'Returns a copy of the nested list, flattened to a depth of 1'],
     ['listFlat(list, depth?)', 'Returns a copy of the nested list, flattened to the specified depth'],
-    ['listSlice(start, end?)', 'Return a sub-list from the list'],
+    ['listSlice(list, start, end?)', 'Return a sub-list from the list'],
     ['listZip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list'],
     ['lisZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
  ];

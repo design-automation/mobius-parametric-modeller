@@ -53,9 +53,6 @@ export class AttributeComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && this.data) {
       this.refreshTable();
-      if (sessionStorage.getItem('mpm_showSelected')) {
-        this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-      }
     }
     if (changes['reset']) {
       this.resetTable();
@@ -158,6 +155,9 @@ export class AttributeComponent implements OnChanges {
     const currentTab = this.getCurrentTab();
     setTimeout(() => {
       this.generateTable(currentTab);
+      if (sessionStorage.getItem('mpm_showSelected')) {
+        this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+      }
     }, 0);
   }
 

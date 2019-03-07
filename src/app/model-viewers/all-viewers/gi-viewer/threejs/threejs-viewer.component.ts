@@ -246,11 +246,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     // Show Flowchart Selected Entities
                     const selected = this.model.geom.selected;
                     if (selected.length) {
-                        selected.forEach(s => {
-                            const type = EEntTypeStr[s[0]], id = Number(s[1]);
-                            this.attrTableSelect({action: 'select', ent_type: type, id: id});
-                            this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
-                        });
+                        this.dataService.clearAll();
+                        setTimeout(() => {
+                            selected.forEach(s => {
+                                const type = EEntTypeStr[s[0]], id = Number(s[1]);
+                                this.attrTableSelect({action: 'select', ent_type: type, id: id});
+                                this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
+                            });
+                        }, 50);
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                     }
 

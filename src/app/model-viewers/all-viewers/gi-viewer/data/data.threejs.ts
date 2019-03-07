@@ -552,7 +552,6 @@ export class DataThreejs {
         } else {
             label.setHTML(labelText);
         }
-        
         label.setParent(obj);
         this._textLabels.set(label.element.id, label);
         container.appendChild(label.element);

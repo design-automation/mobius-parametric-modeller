@@ -321,7 +321,15 @@ export class DataThreejs {
             this.selected_geoms.set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
             if (labelText) {
-                const obj: { entity: THREE.LineSegments, type: string, text: string } = { entity: line, type: objType.line, text: labelText };
+                const obj: {
+                    entity: THREE.LineSegments,
+                    type: string,
+                    text: string
+                } = {
+                    entity: line,
+                    type: objType.line,
+                    text: labelText
+                };
                 this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
@@ -352,7 +360,15 @@ export class DataThreejs {
             this.selected_geoms.set(ent_id, line.id);
             this.sceneObjsSelected.set(ent_id, line);
             if (labelText) {
-                const obj: { entity: THREE.LineSegments, type: string, text: string  } = { entity: line, type: objType.line, text: labelText };
+                const obj: {
+                    entity: THREE.LineSegments,
+                    type: string,
+                    text: string
+                } = {
+                    entity: line,
+                    type: objType.line,
+                    text: labelText
+                };
                 this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
@@ -408,16 +424,24 @@ export class DataThreejs {
         }
     }
 
-    public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, label) {
+    public selectObjPosition(parent_ent_id: string, ent_id: string, positions, container, labelText = null) {
         const bg = this.initBufferPoint(positions, null, null, this.settings.colors.position_s, this.settings.positions.size + 0.1);
         if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
             this.selected_geoms.set(ent_id, point.id);
             this.sceneObjsSelected.set(ent_id, point);
-            if (label) {
-                const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
+            if (labelText) {
+                const obj: {
+                    entity: THREE.Points,
+                    type: string,
+                    text: string
+                } = {
+                    entity: point,
+                    type: objType.point,
+                    text: labelText
+                };
+                this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         } else {
@@ -438,25 +462,41 @@ export class DataThreejs {
                 this.selected_positions.get(parent_ent_id).set(ent_id, point.id);
                 this.selected_geoms.set(ent_id, point.id);
                 this.sceneObjsSelected.set(ent_id, point);
-                if (label) {
-                    const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                    this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
+                if (labelText) {
+                    const obj: {
+                        entity: THREE.Points,
+                        type: string,
+                        text: string
+                    } = {
+                        entity: point,
+                        type: objType.point,
+                        text: labelText
+                    };
+                    this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                     this.ObjLabelMap.set(ent_id, obj);
                 }
             }
         }
     }
 
-    public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, label) {
+    public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, labelText = null) {
         const bg = this.initBufferPoint(positions, null, null, this.settings.colors.vertex_s, this.settings.positions.size + 0.1);
         if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);
             this._scene.add(point);
             this.sceneObjsSelected.set(ent_id, point);
             this.selected_geoms.set(ent_id, point.id);
-            if (label) {
-                const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
+            if (labelText) {
+                const obj: {
+                    entity: THREE.Points,
+                    type: string,
+                    text: string
+                } = {
+                    entity: point,
+                    type: objType.point,
+                    text: labelText
+                };
+                this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                 this.ObjLabelMap.set(ent_id, obj);
             }
         } else {
@@ -477,9 +517,17 @@ export class DataThreejs {
                 this.selected_vertex.get(parent_ent_id).set(ent_id, point.id);
                 this.sceneObjsSelected.set(ent_id, point);
                 this.selected_geoms.set(ent_id, point.id);
-                if (label) {
-                    const obj: { entity: THREE.Points, type: string } = { entity: point, type: objType.point };
-                    this.createLabelforObj(container, obj.entity, obj.type, ent_id, ent_id);
+                if (labelText) {
+                    const obj: {
+                        entity: THREE.Points,
+                        type: string,
+                        text: string
+                    } = {
+                        entity: point,
+                        type: objType.point,
+                        text: labelText
+                    };
+                    this.createLabelforObj(container, obj.entity, obj.type, labelText, ent_id);
                     this.ObjLabelMap.set(ent_id, obj);
                 }
             }

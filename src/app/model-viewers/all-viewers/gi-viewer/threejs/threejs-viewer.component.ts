@@ -693,7 +693,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (point !== null) {
             const position = this.model.attribs.query.getPosiCoords(point);
             const ent_id = parent_ent_id;
-            scene.selectObjPosition(null, ent_id, position, this.container, true);
+            const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POSI);
+            scene.selectObjPosition(null, ent_id, position, this.container, labelText);
             posi_ent.set(ent_id, point);
             this.dataService.selected_positions.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
@@ -701,10 +702,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const posis = verts.map(v => this.model.geom.query.navVertToPosi(v));
             const children = [];
             posis.map(posi => {
+                const ent_id = `${ent_type_str}${posi}`;
                 const position = this.model.attribs.query.getPosiCoords(posi);
-                scene.selectObjPosition(parent_ent_id, `${ent_type_str}${posi}`, position, this.container, true);
-                posi_ent.set(`${ent_type_str}${posi}`, posi);
-                children.push(`${ent_type_str}${posi}`);
+                const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
+                scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
+                posi_ent.set(ent_id, posi);
+                children.push(ent_id);
             });
             this.dataService.selected_positions.set(`${parent_ent_id}`, children);
         } else if (face !== null) {
@@ -715,10 +718,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const uniqPositions = this.uniq(posi_flat);
             const children = [];
             uniqPositions.map(posi => {
+                const ent_id = `${ent_type_str}${posi}`;
                 const position = this.model.attribs.query.getPosiCoords(posi);
-                scene.selectObjPosition(parent_ent_id, `${ent_type_str}${posi}`, position, this.container, true);
-                posi_ent.set(`${ent_type_str}${posi}`, posi);
-                children.push(`${ent_type_str}${posi}`);
+                const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
+                scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
+                posi_ent.set(ent_id, posi);
+                children.push(ent_id);
             });
             this.dataService.selected_positions.set(`${parent_ent_id}`, children);
         }
@@ -738,17 +743,20 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (point !== null) {
             const position = this.model.attribs.query.getVertCoords(point);
             const ent_id = parent_ent_id;
-            scene.selectObjVetex(null, ent_id, position, this.container, true);
+            const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POSI);
+            scene.selectObjVetex(null, ent_id, position, this.container, labelText);
             posi_ent.set(ent_id, point);
             this.dataService.selected_vertex.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
             const verts = this.model.geom.query.navEdgeToVert(edge);
             const children = [];
             verts.map(vert => {
+                const ent_id = `${ent_type_str}${vert}`;
                 const position = this.model.attribs.query.getVertCoords(vert);
-                scene.selectObjVetex(parent_ent_id, `${ent_type_str}${vert}`, position, this.container, true);
-                posi_ent.set(`${ent_type_str}${vert}`, vert);
-                children.push(`${ent_type_str}${vert}`);
+                const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
+                scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, labelText);
+                posi_ent.set(ent_id, vert);
+                children.push(ent_id);
             });
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
 
@@ -760,10 +768,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             const uniqVerts = this.uniq(verts_flat);
             const children = [];
             uniqVerts.map(vert => {
+                const ent_id = `${ent_type_str}${vert}`;
                 const position = this.model.attribs.query.getVertCoords(vert);
-                scene.selectObjVetex(parent_ent_id, `${ent_type_str}${vert}`, position, this.container, true);
-                posi_ent.set(`${ent_type_str}${vert}`, vert);
-                children.push(`${ent_type_str}${vert}`);
+                const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
+                scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, labelText);
+                posi_ent.set(ent_id, vert);
+                children.push(ent_id);
             });
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
         }
@@ -915,7 +925,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         if (showSelected) {
             const selected_ents = this.dataService.selected_ents.get(ent_type_str);
             const selected_ents_sorted = sortByKey(selected_ents);
-            const arr = []
+            const arr = [];
             selected_ents_sorted.forEach(ent => {
                 arr.push(ent);
             });

@@ -186,7 +186,8 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
  * Select entities in the model.
  * @param __model__
  */
-export function __select__(__model__: GIModel, ents_id: string[]): void {
+export function __select__(__model__: GIModel, ents_id: string|string[]): void {
+    ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
     const ents_arr: TEntTypeIdx[] = idsBreak(ents_id) as TEntTypeIdx[];
     for (const ent_arr of ents_arr) {
         __model__.geom.selected.push(ent_arr);

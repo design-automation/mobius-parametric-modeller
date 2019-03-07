@@ -251,8 +251,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                             this.attrTableSelect({action: 'select', ent_type: type, id: id});
                             this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
                         });
+                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                     }
-                    sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
 
                     this.render(this);
                 } catch (ex) {

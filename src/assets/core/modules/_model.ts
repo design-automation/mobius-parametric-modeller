@@ -221,10 +221,6 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
         }
         __model__.attribs.add.setAttribValue(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
     }
-
-    console.log(var_name);
-    console.log(__model__.geom.selected);
-    console.log(ents_indices);
 }
 //  ===============================================================================================
 /**

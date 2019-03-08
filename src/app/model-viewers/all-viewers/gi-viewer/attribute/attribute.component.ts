@@ -33,7 +33,7 @@ export class AttributeComponent implements OnChanges {
       { type: EEntType.MOD, title: 'Model' }
     ];
   displayedColumns: string[] = [];
-  displayData: { id: string }[] = [];
+  displayData: {}[] = [];
   selected_ents = new Map();
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
@@ -100,19 +100,11 @@ export class AttributeComponent implements OnChanges {
       }
       if (this.displayData.length > 0) {
         const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
-        // columns.shift();
-        // let columns_control = [];
-        // if (localStorage.getItem('mpm_attrib_columns') === null) {
-        //   columns.forEach(col => {
-        //     columns_control.push({ name: col, show: true });
-        //   });
-        //   localStorage.setItem('mpm_attrib_columns', JSON.stringify(columns_control));
-        // } else {
-        //   columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
-        // }
-
-        // const new_columns = columns_control.filter(col => col.show === true).map(col => col.name);
-        this.displayedColumns = columns;
+        const first = columns.shift();
+        const selected = columns.find(column => column.substr(0, 1) === '_');
+        const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
+        const new_columns = [first, selected, ...rest_of_columns];
+        this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
       } else {
         this.displayedColumns = [];

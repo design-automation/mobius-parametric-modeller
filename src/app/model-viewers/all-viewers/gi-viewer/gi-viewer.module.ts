@@ -25,6 +25,8 @@ import { DropdownMenuComponent } from './html/dropdown-menu.component';
 import { ModalWindowComponent } from './html/modal-window.component';
 import { ModalService } from './html/modal-window.service';
 import { ThreeJSViewerService } from './threejs/threejs-viewer.service';
+
+import { ClipboardModule } from 'ngx-clipboard';
 /**
  * GIViewer
  * A viewer for Geo-Info models.
@@ -54,7 +56,8 @@ import { ThreeJSViewerService } from './threejs/threejs-viewer.service';
         MatTooltipModule,
         AttributeModule,
         FormsModule,
-        ColorPickerModule
+        ColorPickerModule,
+        ClipboardModule
     ],
     providers: [
         ModalService,

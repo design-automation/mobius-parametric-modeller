@@ -49,7 +49,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     public selectable: number;
 
     // right selection dropdown
-    public needSelect = false;
+    // public needSelect = false;
     // current entity type enabled for selection
     public SelectingEntityType: { id: string, name: string } = { id: EEntTypeStr[EEntType.FACE], name: 'Faces' };
     public selectDropdownVisible = false;
@@ -254,7 +254,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                                 this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
                             });
                         }, 50);
-                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
+                        // sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                     }
 
                     this.render(this);
@@ -554,7 +554,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectFace(face);
                     }
                 } else {
-                    this.showMessages('Faces', true);
+                    this.showMessages('Faces');
                 }
                 break;
             case EEntTypeStr[EEntType.PGON]:
@@ -572,7 +572,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectPGon(face);
                     }
                 } else {
-                    this.showMessages('Polygons', true);
+                    this.showMessages('Polygons');
                 }
                 break;
             case EEntTypeStr[EEntType.EDGE]:
@@ -600,7 +600,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectEdgeByFace(face, ent_id);
                     }
                 } else {
-                    this.showMessages('Edges', true);
+                    this.showMessages('Edges');
                 }
                 break;
             case EEntTypeStr[EEntType.WIRE]:
@@ -629,7 +629,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         this.selectWireByFace(face, ent_id);
                     }
                 } else {
-                    this.showMessages('Wires', true);
+                    this.showMessages('Wires');
                 }
                 break;
             case EEntTypeStr[EEntType.PLINE]:
@@ -647,11 +647,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (pline) {
                             this.selectPLine(pline);
                         } else {
-                            this.showMessages('Selection is not a Polyline', false, 'custom');
+                            this.showMessages('Selection is not a Polyline', 'custom');
                         }
                     }
                 } else {
-                    this.showMessages('Polylines', true);
+                    this.showMessages('Polylines');
                 }
                 break;
             case EEntTypeStr[EEntType.POINT]:
@@ -669,21 +669,21 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         if (point) {
                             this.selectPoint(point);
                         } else {
-                            this.showMessages('Selection is not a Point', false, 'custom');
+                            this.showMessages('Selection is not a Point', 'custom');
                         }
                     }
                 } else {
-                    this.showMessages('Points', true);
+                    this.showMessages('Points');
                 }
                 break;
             default:
-                this.showMessages('Please choose an Entity type.', true, 'custom');
+                this.showMessages('Please choose an Entity type.', 'custom');
                 break;
         }
         this.render(this);
     }
 
-    private showMessages(msg: string, needSelect: boolean = false, mode: string = 'notice') {
+    private showMessages(msg: string, mode: string = 'notice') {
         switch (mode) {
             case 'custom':
                 this.message = msg;
@@ -694,7 +694,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             default:
                 break;
         }
-        this.needSelect = needSelect;
         this.messageVisible = true;
         setTimeout(() => {
             this.messageVisible = false;
@@ -974,7 +973,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
             this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container, labelText);
             this.dataService.selected_ents.get(ent_type_str).set(ent_id, pline);
         } else {
-            this.showMessages('Please Select a Polyline', false, 'custom');
+            this.showMessages('Please Select a Polyline', 'custom');
         }
     }
 
@@ -1104,7 +1103,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
         } else if (colls && colls.length === 1) {
             this.chooseColl(colls[0]);
         } else {
-            this.showMessages('No Collections Available', false, 'custom');
+            this.showMessages('No Collections Available', 'custom');
         }
     }
 

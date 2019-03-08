@@ -236,7 +236,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     // this._data_threejs.disposeWebGL();
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
-                    this.resetTable();
+                    // this.resetTable();
                     if (localStorage.getItem('gi_summary')) {
                         this.giSummary = JSON.parse(localStorage.getItem('gi_summary'));
                     }
@@ -246,17 +246,24 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     // Show Flowchart Selected Entities
                     const selected = this.model.geom.selected;
                     if (selected.length) {
-                        this.dataService.clearAll();
+                        let selectingType;
                         setTimeout(() => {
                             selected.forEach(s => {
                                 const type = EEntTypeStr[s[0]], id = Number(s[1]);
-                                this.attrTableSelect({action: 'select', ent_type: type, id: id});
+                                this.attrTableSelect({ action: 'select', ent_type: type, id: id });
                                 this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
+                                selectingType = type;
                             });
-                        }, 50);
-                        // sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
-                    }
+                            this.SelectingEntityType = this.selections.find(selection => selection.id === selectingType);
 
+                            sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
+                            this.refreshTable(event);
+                        }, 50);
+                    } else {
+                        this.dataService.clearAll();
+                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
+                        this.refreshTable(event);
+                    }
                     this.render(this);
                 } catch (ex) {
                     console.error('Error displaying model:', ex);

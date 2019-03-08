@@ -62,7 +62,7 @@ export class AttributeComponent implements OnChanges {
     }
   }
 
-  async generateTable(tabIndex: number) {
+  generateTable(tabIndex: number) {
     const EntityType = GICommon.EEntType;
     const tab_map = {
       0: EntityType.POSI,
@@ -103,15 +103,15 @@ export class AttributeComponent implements OnChanges {
         const first = columns.shift();
         const selected = columns.find(column => column.substr(0, 1) === '_');
         const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
-        const new_columns = [first, selected, ...rest_of_columns];
+        const new_columns = selected ? [first, selected, ...rest_of_columns] : [first, ...rest_of_columns];
         this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
       } else {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
       }
-      this.dataSource.paginator = await this.paginator.toArray()[tabIndex];
-      this.dataSource.sort = await this.sort.toArray()[tabIndex];
+      this.dataSource.paginator = this.paginator.toArray()[tabIndex];
+      this.dataSource.sort = this.sort.toArray()[tabIndex];
     }
     return tabIndex;
   }
@@ -125,8 +125,8 @@ export class AttributeComponent implements OnChanges {
       } else {
         this.generateTable(tabIndex);
       }
-      sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
     });
+    sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
   }
 
   private getCurrentTab() {
@@ -147,10 +147,10 @@ export class AttributeComponent implements OnChanges {
     const currentTab = this.getCurrentTab();
     setTimeout(() => {
       this.generateTable(currentTab);
-      if (sessionStorage.getItem('mpm_showSelected')) {
-        this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-      }
     }, 0);
+    if (sessionStorage.getItem('mpm_showSelected')) {
+      this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+    }
   }
 
   resetTable() {

@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_00abh46bpmoog",
+                "id": "node_ak8g50jovev",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -68,7 +68,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_dn7ipxntk34",
+                                    "id": "node_og5ca2vgkx",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -114,27 +114,36 @@
                                                 {
                                                     "name": "origin",
                                                     "value": "XY",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "size",
                                                     "value": "123",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "num_positions",
                                                     "value": "3",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "method",
                                                     "value": "'columns'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
                                             "hasError": false,
-                                            "selectGeom": false
+                                            "selectGeom": false,
+                                            "variable": "grid1"
                                         },
                                         {
                                             "type": 8,
@@ -159,27 +168,36 @@
                                                 {
                                                     "name": "origin",
                                                     "value": "XY",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "size",
                                                     "value": "55",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "num_positions",
                                                     "value": "4",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "method",
                                                     "value": "'rows'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
                                             "hasError": false,
-                                            "selectGeom": false
+                                            "selectGeom": false,
+                                            "variable": "grid2"
                                         },
                                         {
                                             "type": 0,
@@ -195,12 +213,22 @@
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "[grid1 , grid2]"
+                                                    "value": "[grid1 , grid2]",
+                                                    "usedVars": [
+                                                        [
+                                                            "grid1"
+                                                        ],
+                                                        [
+                                                            "grid2"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
                                             "selectGeom": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "posis"
                                         },
                                         {
                                             "type": 8,
@@ -225,17 +253,26 @@
                                                 {
                                                     "name": "entities",
                                                     "value": "[posis[0][0][0] , posis[1][0][0]]",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [
+                                                        [
+                                                            "posis"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "close",
                                                     "value": "'open'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
                                             "hasError": false,
-                                            "selectGeom": false
+                                            "selectGeom": false,
+                                            "variable": "pl1"
                                         },
                                         {
                                             "type": 0,
@@ -251,12 +288,19 @@
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "listFlat ( posis , 3 )"
+                                                    "value": "listFlat ( posis , 3 )",
+                                                    "usedVars": [
+                                                        [
+                                                            "posis"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
                                             "hasError": false,
-                                            "selectGeom": true
+                                            "selectGeom": true,
+                                            "variable": "posis_flat"
                                         },
                                         {
                                             "type": 8,
@@ -281,16 +325,25 @@
                                                 {
                                                     "name": "entities",
                                                     "value": "[posis_flat[6] , posis_flat[12]]",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [
+                                                        [
+                                                            "posis_flat"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "close",
                                                     "value": "'open'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "pl2"
                                         },
                                         {
                                             "type": 8,
@@ -315,16 +368,25 @@
                                                 {
                                                     "name": "entities",
                                                     "value": "grid1",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [
+                                                        [
+                                                            "grid1"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "close",
                                                     "value": "'open'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "plines1"
                                         },
                                         {
                                             "type": 8,
@@ -349,16 +411,25 @@
                                                 {
                                                     "name": "entities",
                                                     "value": "grid2",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [
+                                                        [
+                                                            "grid2"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "close",
                                                     "value": "'open'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "plines2"
                                         },
                                         {
                                             "type": 8,
@@ -383,22 +454,33 @@
                                                 {
                                                     "name": "select",
                                                     "value": "'edges'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "entities",
                                                     "value": "plines1",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [
+                                                        [
+                                                            "plines1"
+                                                        ]
+                                                    ],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "query_expr",
                                                     "value": "null",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
                                             "hasError": false,
-                                            "selectGeom": true
+                                            "selectGeom": false,
+                                            "variable": "edgesxxx"
                                         }
                                     ],
                                     "state": {
@@ -423,7 +505,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_jj262fdgubm",
+                                                        "id": "node_14xfta9ljam",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -520,7 +602,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-03-08T05:20:16.360Z",
+    "last_updated": "2019-03-08T12:10:11.736Z",
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":1.9},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"version\":\"0.4.22\"}"
 }

@@ -66,4 +66,8 @@ export class DataService {
         });
         return count;
     }
+
+    clearAll() {
+        this.selected_ents.forEach(selected_ents => selected_ents.clear());
+    }
 }

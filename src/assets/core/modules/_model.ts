@@ -182,16 +182,39 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
     return _getAttrib(__model__, ents_arr, attrib_name, attrib_index);
 }
 //  ===============================================================================================
+function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {
+    const arr_flat: string[] = [];
+    const arr_indices: number[][] = [];
+    let count = 0;
+    for (const item of arrs) {
+        if (Array.isArray(item)) {
+            const [arr_flat2, arr_indices2] = _flatten(item);
+            const indices: number[] = [count];
+            for (let i = 0; i < arr_flat2.length; i++) {
+                arr_flat.push(arr_flat2[i]);
+                indices.push(...arr_indices2[i]);
+            }
+            arr_indices.push(indices);
+        } else {
+            arr_flat.push(item);
+            arr_indices.push([count]);
+        }
+        count += 1;
+    }
+    return [arr_flat, arr_indices];
+}
 /**
  * Select entities in the model.
  * @param __model__
  */
-export function __select__(__model__: GIModel, ents_id: string|string[]): void {
+export function __select__(__model__: GIModel, ents_id: string|string[]|string[][], var_name: string): void {
     ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
-    const ents_arr: TEntTypeIdx[] = idsBreak(ents_id) as TEntTypeIdx[];
+    const [ents_id_flat, ents_id_indices] = _flatten(ents_id);
+    const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
     for (const ent_arr of ents_arr) {
         __model__.geom.selected.push(ent_arr);
     }
+    console.log(__model__.geom.selected);
 }
 //  ===============================================================================================
 /**

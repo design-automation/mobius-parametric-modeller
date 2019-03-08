@@ -9,6 +9,7 @@ import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
 import { checkMissingProd } from '@shared/checkMissingProd';
+import { checkNodeValidity } from '@shared/parser';
 
 @Component({
   selector: 'load-url',
@@ -76,6 +77,7 @@ export class LoadUrlComponent {
                         parent: undefined,
                         meta: {name: '', module: ''},
                         children: undefined,
+                        variable: undefined,
                         argCount: 0,
                         args: [],
                         print: false,
@@ -94,6 +96,7 @@ export class LoadUrlComponent {
                                 parent: undefined,
                                 meta: {name: '', module: ''},
                                 children: undefined,
+                                variable: undefined,
                                 argCount: j.argCount,
                                 args: j.args,
                                 print: false,
@@ -144,6 +147,9 @@ export class LoadUrlComponent {
             this.router.navigate(['/editor']);
         } else if (this.dataService.node.type !== 'end') {
             loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
+        }
+        for (const node of loadeddata.flowchart.nodes) {
+            checkNodeValidity(node);
         }
         const executeB = document.getElementById('executeButton');
         if (executeB) { executeB.click(); }

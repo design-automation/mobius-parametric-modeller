@@ -10,43 +10,11 @@ import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';
 
-// import {parseArgument} from '@shared/parser';
+import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument} from '@shared/parser';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 ctx.font = '12px Arial';
-
-const reservedWords = [
-    'abstract', 'arguments', 'await', 'boolean',
-    'break', 'byte', 'case', 'catch',
-    'char', 'class', 'const', 'continue',
-    'debugger', 'default', 'delete', 'do',
-    'double', 'else', 'enum', 'eval',
-    'export', 'extends', 'false', 'final',
-    'finally', 'float', 'for', 'function',
-    'goto', 'if', 'implements', 'import',
-    'in', 'instanceof', 'int', 'interface',
-    'let', 'long', 'native', 'new',
-    'null', 'package', 'private', 'protected',
-    'public', 'return', 'short', 'static',
-    'super', 'switch', 'synchronized', 'this',
-    'throw', 'throws', 'transient', 'true',
-    'try', 'typeof', 'var', 'void',
-    'volatile', 'while', 'with', 'yield',
-
-    'Array', 'Date', 'hasOwnProperty', 'Infinity',
-    'isFinite', 'isNaN', 'isPrototypeOf', 'length',
-    'Math', 'NaN', 'name', 'Number', 'Object',
-    'prototype', 'String', 'toString', 'undefined', 'valueOf'
-];
-
-const mathFuncs = [];
-for (const funcMod of inline_func) {
-    for (const func of funcMod[1]) {
-        mathFuncs.push(func[0].split('(')[0]);
-    }
-}
-
 
 @Component({
     selector: 'procedure-item',
@@ -62,6 +30,7 @@ export class ProcedureItemComponent {
     @Output() copied = new EventEmitter();
     @Output() pasteOn = new EventEmitter();
     @Output() helpText = new EventEmitter();
+    @Output() notifyError = new EventEmitter();
 
     ProcedureTypes = ProcedureTypes;
 
@@ -71,67 +40,6 @@ export class ProcedureItemComponent {
 
     constructor(private dataService: DataService) {
     }
-
-    static modifyVarArg(value: string, arg: IArgument) {
-        let str = value.trim();
-        str = str.replace(/ /g, '_');
-        str = str.toLowerCase();
-        if ((str.match(/\[/g) || []).length !== (str.match(/\]/g) || []).length) {
-            arg.invalidVar = true;
-            return str;
-        }
-        const strSplit = str.split(/[\@\[\]]/g);
-        let teststr = str;
-        for (const i of strSplit) {
-            if (i === '') { continue; }
-            if (i === '0' || Number(i)) {
-                const sStr = `[${i}]`;
-                const ind = teststr.indexOf(sStr);
-                if (ind === -1) {
-                    arg.invalidVar = true;
-                    return str;
-                }
-                teststr = teststr.slice(0, ind) + teststr.slice(ind + sStr.length);
-                continue;
-            }
-            try {
-                if (i[0] === '_') {
-                    arg.invalidVar = true;
-                    return str;
-                }
-                for (const reserved of reservedWords) {
-                    if (i === reserved) {
-                        arg.invalidVar = true;
-                        return str;
-                    }
-                }
-                for (const funcName of mathFuncs) {
-                    if (i === funcName) {
-                        arg.invalidVar = true;
-                        return str;
-                    }
-                }
-                let currentWindow;
-                if (window.hasOwnProperty(i)) {
-                    currentWindow = window[i];
-                }
-                const fn = new Function('', `${i}=1;`);
-                fn();
-                delete window[i];
-                if (currentWindow) {
-                    window[i] = currentWindow;
-                }
-
-                arg.invalidVar = false;
-            } catch (ex) {
-                arg.invalidVar = true;
-                return str;
-            }
-        }
-        return str;
-
-    }
-
 
     // select this procedure
     emitSelect(event, procedure: IProcedure) {
@@ -259,9 +167,8 @@ export class ProcedureItemComponent {
     }
 
     // modify variable input: replace space " " with underscore "_"
-    varMod(event: string) {
-        if (!event) { return event; }
-        return ProcedureItemComponent.modifyVarArg(event, this.data.args[0]);
+    varMod() {
+        modifyVar(this.data, this.dataService.node.procedure);
     }
 
 
@@ -270,55 +177,7 @@ export class ProcedureItemComponent {
         // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
-
-        // parseArgument(this.data.args[argIndex].value);
-
-        const vals = this.data.args[argIndex].value.split('"');
-        let result = '';
-        let startOnEven = true;
-        for (let i = 0; i < vals.length; i += 2) {
-            if (i > 0) {
-                if (startOnEven) {
-                    result += ' "' + vals[i - 1] + '" ';
-                } else {
-                    result += '"' + vals[i - 1] + '"';
-                }
-            }
-            const valSplit = vals[i].split(`'`);
-            for (let j = startOnEven ? 0 : 1; j < valSplit.length; j += 2) {
-                if (j === 1) {
-                    result += valSplit[0] + `' `;
-                } else if (j > 1) {
-                    result += ` '` + valSplit[j - 1] + `' `;
-                }
-                result += valSplit[j].replace(
-                    /\s*([\[\]])\s*/g, '$1').replace(
-                    /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
-                    .replace(/([\<\>\=\!])\s+=/g, '$1=')
-                    .trim().replace(/\s{2,}/g, ' ');
-                if (j === valSplit.length - 2 ) {
-                    result += ` '` + valSplit[j + 1];
-                }
-            }
-            if (valSplit.length % 2 === 0) {
-                startOnEven = !startOnEven;
-            }
-
-            // result += vals[i].replace(
-            //     /\s*([\[\]])\s*/g, '$1').replace(
-            //     /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
-            //     .replace(/([\<\>\=\!])\s+=/g, '$1=')
-            //     .trim().replace(/\s{2,}/g, ' ');
-            if (i === vals.length - 2 ) {
-                result += ' "' + vals[i + 1] + '" ';
-            }
-        }
-        this.data.args[argIndex].value = result.trim();
-        // this.data.args[argIndex].value = this.data.args[argIndex].value.replace(
-        //     /\s*([\[\]])\s*/g, '$1').replace(
-        //     /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
-        //     .replace(/([\<\>\=\!])\s+=/g, '$1=')
-        //     .trim().replace(/\s{2,}/g, ' ');
+        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
     }
 
     // argHighlight(value: any) {
@@ -332,11 +191,18 @@ export class ProcedureItemComponent {
     }
 
 
-    onInputFocus() {
+    onInputFocus(index: number) {
         for (const prod of this.dataService.node.state.procedure) {
             prod.selected = false;
         }
         this.dataService.node.state.procedure = [];
+        if (this.data.args[index].invalidVar && typeof this.data.args[index].invalidVar === 'string') {
+            this.emitNotifyError(this.data.args[index].invalidVar);
+        }
+    }
+
+    emitNotifyError(message) {
+        this.notifyError.emit(message);
     }
 
     checkEnum(param, index: number): boolean {

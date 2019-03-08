@@ -8,6 +8,7 @@ import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { getViewerData } from '@shared/getViewerData';
 import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
+import { checkNodeValidity } from '@shared/parser';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -180,6 +181,7 @@ export class ViewEditorComponent implements AfterViewInit {
             }
         }
         this.dataService.registerEdtAction(redoActions);
+        checkNodeValidity(this.dataService.node);
 
         NodeUtils.deselect_procedure(node);
 
@@ -222,6 +224,7 @@ export class ViewEditorComponent implements AfterViewInit {
                 }
             }
             this.dataService.registerEdtAction(redoActions);
+            checkNodeValidity(this.dataService.node);
             // toBePasted = undefined;
             this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
             this.notificationTrigger = !this.notificationTrigger;
@@ -272,6 +275,7 @@ export class ViewEditorComponent implements AfterViewInit {
             }
         }
         this.dataService.registerEdtAction(redoActions);
+        checkNodeValidity(this.dataService.node);
         this.dataService.node.state.procedure = [];
     }
 
@@ -328,7 +332,13 @@ export class ViewEditorComponent implements AfterViewInit {
                 }
             }
             NodeUtils.deselect_procedure(this.dataService.node);
+            checkNodeValidity(this.dataService.node);
         }
+    }
+
+    notifyError(message) {
+        this.notificationMessage = message;
+        this.notificationTrigger = !this.notificationTrigger;
     }
 
     // activate copying/cutting/pasting when the mouse hovers over the procedure list

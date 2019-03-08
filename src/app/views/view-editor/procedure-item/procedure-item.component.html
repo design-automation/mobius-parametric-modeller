@@ -13,20 +13,21 @@
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Variable">
             <input class='input--var'
                 id='argVar_{{data.ID}}'
-                [ngModel]='data.args[0].value'
-                (ngModelChange)='data.args[0].value=varMod($event)'
+                [(ngModel)]='data.args[0].value'
                 [class.error]='data.args[0].invalidVar'
                 [class.disabled]='disableInput'
-                (focus)='onInputFocus()'
+                (blur)='varMod()'
+                (focus)='onInputFocus(0)'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
             = 
             <div style='position:relative; display:inline-block;'>
                 <input class='input--arg'
                 [(ngModel)]='data.args[1].value'
+                [class.error]='data.args[1].invalidVar'
                 [class.disabled]='disableInput'
                 (blur)='argMod($event, 1)'
-                (focus)='onInputFocus()'
+                (focus)='onInputFocus(1)'
                 placeholder={{data.args[1].name}}
                 [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>
                 <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
@@ -41,9 +42,10 @@
                 </div>
                 <input class='input--arg'
                         [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
                         [class.disabled]='disableInput'
                         (blur)='argMod($event, 0)'
-                        (focus)='onInputFocus()'
+                        (focus)='onInputFocus(0)'
                         placeholder={{data.args[0].name}}
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                         >
@@ -57,6 +59,7 @@
                     (select)='selectChild($event, line)'
                     (delete)='emitDelete(true)'
                     (deleteC)='deleteChild(idx)'
+                    (notifyError)='emitNotifyError($event)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -71,9 +74,10 @@
             
             <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
                     [class.disabled]='disableInput'
                     (blur)='argMod($event, 0)'
-                    (focus)='onInputFocus()'
+                    (focus)='onInputFocus(0)'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -86,6 +90,7 @@
                     (select)='selectChild($event, line)'
                     (delete)='emitDelete(true)'
                     (deleteC)='deleteChild(idx)'
+                    (notifyError)='emitNotifyError($event)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -106,6 +111,7 @@
                     (select)='selectChild($event, line)'
                     (delete)='emitDelete(true)'
                     (deleteC)='deleteChild(idx)'
+                    (notifyError)='emitNotifyError($event)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -135,11 +141,11 @@
                     Foreach
                 </div>
                 <input class='input--arg'
-                    [ngModel]='data.args[0].value'
-                    (ngModelChange)='data.args[0].value=varMod($event)'
+                    [(ngModel)]='data.args[0].value'
                     [class.error]='data.args[0].invalidVar'
                     [class.disabled]='disableInput'
-                    (focus)='onInputFocus()'
+                    (blur)='varMod()'
+                    (focus)='onInputFocus(0)'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >  
@@ -148,9 +154,10 @@
                 </div>
                 <input class='input--arg'
                     [(ngModel)]='data.args[1].value'
+                    [class.error]='data.args[1].invalidVar'
                     [class.disabled]='disableInput'
                     (blur)='argMod($event, 1)'
-                    (focus)='onInputFocus()'
+                    (focus)='onInputFocus(1)'
                     placeholder={{data.args[1].name}}
                     [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
                         >  
@@ -165,6 +172,7 @@
                     (select)='selectChild($event, line)'
                     (delete)='emitDelete(true)'
                     (deleteC)='deleteChild(idx)'
+                    (notifyError)='emitNotifyError($event)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -179,9 +187,10 @@
                 </div>
                 <input class='input--arg' 
                         [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
                         [class.disabled]='disableInput'
                         (blur)='argMod($event, 0)'
-                        (focus)='onInputFocus()'
+                        (focus)='onInputFocus(0)'
                         placeholder={{data.args[0].name}}
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                         >  
@@ -196,6 +205,7 @@
                     (select)='selectChild($event, line)'
                     (delete)='emitDelete(true)'
                     (deleteC)='deleteChild(idx)'
+                    (notifyError)='emitNotifyError($event)'
                     (helpText)='emitHelpText($event)'></procedure-item>
             </div>
         </ng-container>
@@ -219,7 +229,6 @@
             <input class='input--comment' 
             [(ngModel)]='data.args[0].value'
             [class.disabled]='disableInput'
-            (focus)='onInputFocus()'
             placeholder='Comment'
             [style.width.px]='inputSize(data.args[0].value||"Comment")'
             >
@@ -230,11 +239,11 @@
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Function">
             <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
-                [ngModel]='data.args[0].value'
-                (ngModelChange)='data.args[0].value=varMod($event)'
+                [(ngModel)]='data.args[0].value'
+                (blur)='varMod()'
                 [class.error]='data.args[0].invalidVar'
                 [class.disabled]='disableInput'
-                (focus)='onInputFocus()'
+                (focus)='onInputFocus(0)'
                 placeholder={{data.args[0].name}}
                 [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
                 = 
@@ -254,13 +263,14 @@
                     <input class='input--arg' 
                     *ngIf="p.name[0] !== '_'" 
                     [(ngModel)]='p.value'
+                    [class.error]='p.invalidVar'
                     [class.disabled]='disableInput'
                     (blur)='argMod($event, i+1)'
-                    (focus)='onInputFocus()'
+                    (focus)='onInputFocus(i+1)'
                     placeholder={{p.name}}
                     [style.width.px]='inputSize(p.value||p.name)'
                     >
-            </ng-template>
+                </ng-template>
 
             </ng-container>
 
@@ -270,11 +280,11 @@
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Imported">
             <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
-                    [ngModel]='data.args[0].value'
-                    (ngModelChange)='data.args[0].value=varMod($event)'
+                    [(ngModel)]='data.args[0].value'
+                    (blur)='varMod()'
                     [class.error]='data.args[0].invalidVar'
                     [class.disabled]='disableInput'
-                    (focus)='onInputFocus()'
+                    (focus)='onInputFocus(0)'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
                 = 
@@ -285,9 +295,10 @@
                 <input class='input--arg' 
                     *ngIf='p.type !== 5'
                     [(ngModel)]='p.value'
+                    [class.error]='p.invalidVar'
                     [class.disabled]='disableInput'
                     (blur)='argMod($event, i+1)'
-                    (focus)='onInputFocus()'
+                    (focus)='onInputFocus(i+1)'
                     placeholder={{p.name}}
                     [style.width.px]='inputSize(p.value||p.name)'>    
             </ng-container>

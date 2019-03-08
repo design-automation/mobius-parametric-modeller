@@ -33,8 +33,8 @@
         <div class='inline-div'>
             <!-- <input [class.disabled-input]='true' value='Name:' disabled> -->
             <input 
-            [ngModel]='prod.args[0].value'
-            (ngModelChange)='prod.args[0].value=varMod($event)'
+            [(ngModel)]='prod.args[0].value'
+            (blur)='varMod()'
             [class.error]='prod.args[0].invalidVar'
             [class.disablePointer]='disableInput'
             (focus)='emitClearSelect($event)'

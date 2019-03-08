@@ -12,18 +12,18 @@
     padding: 16px;
     position: fixed; 
     z-index: 1; 
-    left: 10px; 
-    bottom: 0px;
+    right: 40px; 
+    top: 0px;
 }
 
 #notificationBox.show {
     opacity: 1;
-    bottom: 10px;
+    top: 20px;
     transition: ease-in 0.2s; 
 }
 
 #notificationBox.hide {
     opacity: 0;
-    bottom: 0px;
+    top: 0px;
     transition: ease-in 0.2s; 
 }

@@ -227,6 +227,10 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
  * Checks the model for internal consistency.
  * @param __model__
  */
-export function __checkModel__(__model__: GIModel): string {
-    return __model__.check();
+export function __checkModel__(__model__: GIModel): string[] {
+    const check: string[] = __model__.check();
+    if (check.length > 0) {
+        return check;
+    }
+    return ['No errors found in model.'];
 }

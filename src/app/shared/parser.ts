@@ -296,21 +296,21 @@ function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number
         if (comp.value === '(') {
             openBrackets[0] += 1;
             if (!isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable after "("\n` +
+                return { 'error': `Error: Expect expression, string, number or variable after "(" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (comp.value === '[') {
             openBrackets[1] += 1;
             if (!isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable after "["\n` +
+                return { 'error': `Error: Expect expression, string, number or variable after "[" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (comp.value === '{') {
             openBrackets[2] += 1;
             if (!isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable after "{"\n` +
+                return { 'error': `Error: Expect expression, string, number or variable after "{" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
@@ -324,30 +324,30 @@ function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number
             if (comps[i + 1].type !== strType.OTHER) {
                 i++;
             } else {
-                return { 'error': 'Error: Expect attribute name after @\n' +
+                return { 'error': 'Error: Expect attribute name after @ \n' +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (postfixUnaryOperators.has(comp.value)) {
             if (!isParameter(comps[i - 1], true)) {
-                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value}` +
+                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (prefixUnaryOperators.has(comp.value)) {
             if (i === comps.length - 1 || !isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value}` +
+                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (binaryOperators.has(comp.value)) {
             if (!isParameter(comps[i - 1], true)) {
-                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value}` +
+                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
             if (i === comps.length - 1 || !isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value}` +
+                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
@@ -369,7 +369,7 @@ function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
     }
     // if variable is followed immediately by another var/num/str --> not allowed
     if ( comps[i + 1].type !== strType.OTHER ) {
-        return { 'error': 'Error: Variable followed by another variable/number/string' +
+        return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
     // if variable is followed by "[" --> array/json
@@ -379,7 +379,7 @@ function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
         openBrackets[1] += 1;
         i += 2;
         if (!isParameter(comps[i])) {
-            return { 'error': 'Error: Expect expression, string, number or variable after "["' +
+            return { 'error': 'Error: Expect expression, string, number or variable after "[" \n' +
             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
         }
 
@@ -392,13 +392,13 @@ function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
             i++;
             openBrackets[0] -= 1;
         } else if (!isParameter(comps[i])) {
-            return { 'error': 'Error: Expect expression, string, number, variable or ")" after "("' +
+            return { 'error': 'Error: Expect expression, string, number, variable or ")" after "(" \n' +
             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
         }
 
     // if variable is followed by "{" --> not allowed
     } else if (comps[i + 1].value === '{') {
-        return { 'error': 'Error: Variable followed by "{"' +
+        return { 'error': 'Error: Variable followed by "{" \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
     // all other cases
@@ -419,24 +419,24 @@ function checkNumStr(comps: {'type': strType, 'value': string}[], i: number, ope
     }
     // if num/str is followed by another var/num/str --> not allowed
     if ( comps[i + 1].type !== strType.OTHER ) {
-        return { 'error': 'Error: number/string followed by another variable/number/string' +
+        return { 'error': 'Error: number/string followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
     // if num/str is followed by "(" or "{" --> not allowed
     } else if (comps[i + 1].value === '(' || comps[i + 1].value === '{') {
-        return { 'error': 'Error: number/string followed by bracket' +
+        return { 'error': 'Error: number/string followed by bracket \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
     // if num/str is followed by "[" --> only allowed for str
     } else if (comps[i + 1].value === '[') {
         if (comp.type === strType.NUM) {
-            return { 'error': 'Error: number/string followed by bracket' +
+            return { 'error': 'Error: number/string followed by bracket \n' +
             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
         }
         openBrackets[1] += 1;
         i += 2;
         if (!isParameter(comps[i])) {
-            return { 'error': 'Error: Expect expression, string, number or variable after [' +
+            return { 'error': 'Error: Expect expression, string, number or variable after [ \n' +
             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
         }
     // all other cases

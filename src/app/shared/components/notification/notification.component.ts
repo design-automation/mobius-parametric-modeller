@@ -30,7 +30,7 @@ export class NotificationComponent implements AfterViewInit, OnChanges {
             this.notificationBox.className = this.notificationBox.className.replace('show', '');
             this.notificationBox.className = 'hide';
             this.message = '';
-        }, 2500);
+        }, 5000);
     }
 
 }

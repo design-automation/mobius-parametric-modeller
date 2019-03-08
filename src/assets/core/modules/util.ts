@@ -127,5 +127,10 @@ export function ModelInfo(__model__: GIModel): string {
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function ModelCheck(__model__: GIModel): string {
-    return __model__.check();
+    const check: string[] = __model__.check();
+    if (check.length > 0) {
+        console.log(__model__);
+        return String(check);
+    }
+    return 'No internal inconsistencies have been found.';
 }

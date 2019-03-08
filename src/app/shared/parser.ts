@@ -82,8 +82,6 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
         }
     }
     procedure.args[0].invalidVar = false;
-    updateInputValidity('add', procedure, nodeProdList);
-
 }
 
 export function modifyVarArg(arg: IArgument) {

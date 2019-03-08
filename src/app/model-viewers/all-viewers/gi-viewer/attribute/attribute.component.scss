@@ -175,6 +175,7 @@ table {
   position: absolute;
   bottom: 17px;
   left: 10px;
+  z-index: 1;
   span{
     vertical-align: middle;
     font-size: $fsize2;

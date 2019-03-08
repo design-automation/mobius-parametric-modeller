@@ -229,7 +229,7 @@ export class CodeUtils {
         }
         if (prod.selectGeom && prod.args[0].value) {
             const repGet = this.repGetAttrib(prod.args[0].value);
-            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet});`);
+            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
         }
         return codeStr;
     }

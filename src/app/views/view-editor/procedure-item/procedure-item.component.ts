@@ -10,7 +10,7 @@ import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';
 
-import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument} from '@shared/parser';
+import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity} from '@shared/parser';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -61,24 +61,25 @@ export class ProcedureItemComponent {
 
     markSelectGeom(event: MouseEvent) {
         event.stopPropagation();
-        if (!this.data.selected) {
-            this.data.selectGeom = !this.data.selectGeom;
-            return;
+        if (!this.data.selectGeom) {
+            this.unselectGeomRecursive(this.dataService.node.procedure);
         }
-        const prodList = this.dataService.node.state.procedure;
-        let newSelect;
-        let i = prodList.length - 1;
-        while (i >= 0 && !(prodList[i].argCount > 0 && prodList[i].args[0].name === 'var_name')) {
-            i--;
-        }
-        if (i === -1) { return; }
-        newSelect = ! prodList[i].selectGeom;
+        this.data.selectGeom = !this.data.selectGeom;
+    }
+
+    unselectGeomRecursive(prodList: IProcedure[]): boolean {
         for (const prod of prodList) {
-            if (prod.argCount > 0 && prod.args[0].name === 'var_name') {
-                prod.selectGeom = newSelect;
+            if (prod.selectGeom) {
+                prod.selectGeom = false;
+                return true;
+            }
+            if (prod.children) {
+                if (this.unselectGeomRecursive(prod.children)) {
+                    return true;
+                }
             }
         }
-        // this.data.print = !this.data.print;
+        return false;
     }
 
 
@@ -169,6 +170,7 @@ export class ProcedureItemComponent {
     // modify variable input: replace space " " with underscore "_"
     varMod() {
         modifyVar(this.data, this.dataService.node.procedure);
+        checkNodeValidity(this.dataService.node);
     }
 
 

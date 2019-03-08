@@ -78,13 +78,20 @@
         padding-left: 1px;
         #print-btn{
             color: $print-color;
+            background-color: $color6;
         }
         &:hover {
             background-color: $print-color-lt;
+            #print-btn{
+                background-color: transparent;
+            }
         }
         &.selected{
             border-bottom: 2px solid $selected-color;
             background-color: $print-color-lt;
+            #print-btn{
+                background-color: transparent;
+            }
         }
     }
 
@@ -120,13 +127,20 @@
         padding-left: 1px;
         #selectGeom-btn{
             color: $selectGeom-color;
+            background-color: $color6;
         }
         &:hover {
             background-color: $selectGeom-color-lt;
+            #selectGeom-btn{
+                background-color: transparent;
+            }
         }
         &.selected{
             border-bottom: 2px solid $selected-color;
             background-color: $selectGeom-color-lt;
+            #selectGeom-btn{
+                background-color: transparent;
+            }
         }
     }
 

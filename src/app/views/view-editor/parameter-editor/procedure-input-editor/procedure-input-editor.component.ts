@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
-import { ProcedureItemComponent } from '../../procedure-item/procedure-item.component';
-import { IProcedure, ProcedureTypes } from '@models/procedure';
+import { IProcedure } from '@models/procedure';
 import { InputType } from '@models/port';
+import { modifyVarArg } from '@shared/parser';
 const keys = Object.keys(InputType);
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -20,6 +20,7 @@ export class ProcedureInputEditorComponent {
     @Output() deleteC = new EventEmitter();
     @Output() disableProds = new EventEmitter();
     @Output() selectInp = new EventEmitter();
+    @Output() updateGlbs = new EventEmitter();
 
     PortTypes = InputType;
     PortTypesArr = keys.slice(keys.length / 2);
@@ -99,9 +100,10 @@ export class ProcedureInputEditorComponent {
     }
 
     // modify variable input: replace space " " with underscore "_"
-    varMod(event: string) {
-        if (!event) { return event; }
-        return ProcedureItemComponent.modifyVarArg(event, this.prod.args[0]);
+    varMod() {
+        if (!this.prod.args[0].value) { return; }
+        this.updateGlbs.emit('');
+        // this.prod.args[0].value = modifyVarArg(this.prod.args[0]);
     }
 
     disableShift(event: MouseEvent) {

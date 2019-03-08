@@ -2,6 +2,7 @@ import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked, Ou
 import { INode, NodeUtils } from '@models/node';
 import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
+import { updateGlobals } from '@shared/parser';
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -45,6 +46,10 @@ export class ParameterEditorComponent  {
 
     selectInput(event) {
         this.selectInp.emit(event);
+    }
+
+    updateGlbs() {
+        updateGlobals(this.node);
     }
 }
 

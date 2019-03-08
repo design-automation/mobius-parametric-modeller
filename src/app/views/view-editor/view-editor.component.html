@@ -54,6 +54,7 @@
                                     (select)="selectProcedure($event)"
                                     (delete)="deleteSelectedProds()"
                                     (deleteC)='deleteChild(idx)'
+                                    (notifyError)='notifyError($event)'
                                     (helpText)='updateHelpView($event)'
                                     ></procedure-item>
                                 </div>

@@ -6,6 +6,7 @@ import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
 import { checkMissingProd } from '@shared/checkMissingProd';
+import { checkNodeValidity } from '@shared/parser';
 
 @Component({
   selector: 'file-load',
@@ -71,6 +72,7 @@ export class LoadFileComponent {
                     endNode.procedure = [{type: 13, ID: '',
                     parent: undefined,
                     meta: {name: '', module: ''},
+                    variable: undefined,
                     children: undefined,
                     argCount: 0,
                     args: [],
@@ -89,6 +91,7 @@ export class LoadFileComponent {
                             endNode.procedure.push({type: 11, ID: '',
                             parent: undefined,
                             meta: {name: '', module: ''},
+                            variable: undefined,
                             children: undefined,
                             argCount: j.argCount,
                             args: j.args,
@@ -123,6 +126,9 @@ export class LoadFileComponent {
                 //         break;
                 //     }
                 // }
+            }
+            for (const node of loadeddata.flowchart.nodes) {
+                checkNodeValidity(node);
             }
             document.getElementById('executeButton').click();
             const zooming = document.getElementById('zoomToFit');

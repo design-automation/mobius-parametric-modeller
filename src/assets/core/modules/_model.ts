@@ -227,6 +227,6 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
  * Checks the model for internal consistency.
  * @param __model__
  */
-export function __checkModel__(__model__: GIModel): string {
+export function __checkModel__(__model__: GIModel): string[] {
     return __model__.check();
 }

@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_tufcoazixb",
+                "id": "node_00abh46bpmoog",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -68,7 +68,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_vu0un3nys1i",
+                                    "id": "node_dn7ipxntk34",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -234,7 +234,8 @@
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "selectGeom": false
                                         },
                                         {
                                             "type": 0,
@@ -255,7 +256,7 @@
                                             ],
                                             "selected": false,
                                             "hasError": false,
-                                            "selectGeom": false
+                                            "selectGeom": true
                                         },
                                         {
                                             "type": 8,
@@ -372,7 +373,7 @@
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "edges",
+                                                    "value": "edgesxxx",
                                                     "invalidVar": false
                                                 },
                                                 {
@@ -422,7 +423,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_je1nwjaa8p",
+                                                        "id": "node_jj262fdgubm",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -519,7 +520,7 @@
         "functions": [],
         "ordered": true
     },
-    "last_updated": "2019-03-08T04:57:16.451Z",
+    "last_updated": "2019-03-08T05:20:16.360Z",
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":1.9},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"version\":\"0.4.22\"}"
 }

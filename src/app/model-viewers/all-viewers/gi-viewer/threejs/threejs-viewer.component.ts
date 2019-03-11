@@ -247,20 +247,21 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const selected = this.model.geom.selected;
                     if (selected.length) {
                         let selectingType;
-                        setTimeout(() => {
+                        // setTimeout(() => {
                             selected.forEach(s => {
                                 const type = EEntTypeStr[s[0]], id = Number(s[1]);
                                 this.attrTableSelect({ action: 'select', ent_type: type, id: id });
                                 this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
-                                selectingType = type;
+                                selectingType = s[0];
                             });
-                            this.SelectingEntityType = this.selections.find(selection => selection.id === selectingType);
+                            this.SelectingEntityType = this.selections.find(selection => selection.id === EEntTypeStr[selectingType]);
 
                             sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
+                            localStorage.setItem('mpm_attrib_current_tab', selectingType.toString());
                             this.refreshTable(event);
-                        }, 50);
+                        // }, 50);
                     } else {
-                        this.dataService.clearAll();
+                        // this.dataService.clearAll();
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
                         this.refreshTable(event);
                     }

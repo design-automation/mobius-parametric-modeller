@@ -22,16 +22,29 @@ table {
   th.mat-header-cell:not(:first-of-type){
     padding: 0px 5px;
   }
-  th.mat-header-cell:not(:last-of-type){
-    border-right: 1px solid $color3;
+  th.mat-header-cell{
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    &:hover{
+      border-left-color: $color3;
+      border-right-color: $color3;
+    }
   }
   th.mat-header-cell:first-of-type{
-    border-right: none;
+    // border-right: none;
     width: 40px !important;
     padding-left: 12px;
   }
   th:nth-child(2){
     // width: 55px !important;
+    width: 100px;
+    font-style: italic;
+  }
+  th:nth-child(n+3){
+    width: 50px;
+  }
+  th:last-child{
+    width: 2000px;
   }
   tr.mat-header-row{
     background-color: $color5-5;
@@ -49,19 +62,27 @@ table {
       color: $color8;
       background-color: $color6;
       border-bottom: 1px solid $color3;
+      border-left: 1px solid transparent;
+      border-right: 1px solid $color3;
       &:not(:first-of-type){
         padding: 0px 5px;
-        border-right: 1px solid $color3;
       }
       &:first-of-type{
         width: 40px !important;
         padding-left: 12px;
       }
       &:last-of-type{
-        border-right:none;
+        // border-right:none;
       }
       &:nth-child(2){
-        width: 55px !important;
+        width: 100px;
+        font-style: italic;
+      }
+      &:nth-child(n+3){
+        width: 50px;
+      }
+      &:last-child{
+        width: 2000px;
       }
       // overflow: hidden;
       // text-overflow: ellipsis;

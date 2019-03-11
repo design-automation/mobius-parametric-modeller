@@ -1,18 +1,4 @@
 <ul class="nav nav-tabs">
-    <!-- <li
-        *ngFor="let tab of tabs;"
-        (click)="(tab.index==='0' || tab.index==='8' || tab.index==='9')?selectTab(tab):null;"
-        [class.active]="topologyActive?(tab.index==='1'?true:false):tab.active"
-        [class.open]='topology_open'
-        [hidden]="tab.index==='2' || tab.index==='3' || tab.index==='4' || tab.index==='5' || tab.index==='6' || tab.index==='7'"
-    >
-        <div *ngIf="tab.index==='0' || tab.index==='8' || tab.index==='9' ; else topoTemplate">
-            <span>{{tab.title}}</span>
-        </div>
-        <div *ngIf="tab.index==='5' || tab.index==='6' || tab.index==='7'; then objectTemplate">
-            <span>{{tab.title}}</span>
-        </div>
-    </li> -->
     <li (click)="selectTab(0)" [class.active]="tab_active===0"><span>Positions</span></li>
     <li
         [class.active]="tab_active===1"
@@ -21,7 +7,7 @@
         <div class="dropdown">
             <button class="dropbtn" (click) = 'showTDropdown()' title="Topology{{topology_text!=='Topology'?(': '+topology_text):''}}">{{topology_text}}</button>
             <div class="dropdown-content" id='topology_dropdown'>
-                <div *ngFor="let option of topology;" (click)="selectTopology(option, $event);">{{option.title}}</div>
+                <div *ngFor="let option of topology;" (click)="selectTopology(option.tab, $event);">{{option.title}}</div>
             </div>
         </div>
     </li>
@@ -32,7 +18,7 @@
         <div class="dropdown">
             <button class="dropbtn" (click) = 'showODropdown()' title="Object{{object_text!=='Object'?(': '+object_text):''}}">{{object_text}}</button>
             <div class="dropdown-content" id='object_dropdown'>
-                <div *ngFor="let option of object;" (click)="selectObject(option, $event);">{{option.title}}</div>
+                <div *ngFor="let option of object;" (click)="selectObject(option.tab, $event);">{{option.title}}</div>
             </div>
         </div>
     </li>

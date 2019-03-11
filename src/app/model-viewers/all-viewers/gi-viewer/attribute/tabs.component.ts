@@ -87,35 +87,37 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit {
         this.object_open = false;
     }
 
-    selectTopology(option, event: Event) {
+    selectTopology(tab, event: Event) {
         this.tabs.toArray().forEach(_tab => _tab.active = false);
         this.tab_active = 1;
-        if (option !== 999) {
-            this.selectedTopology.emit(Number(option.tab));
-            this.topology_text = option.title;
-            this.tabs.toArray()[option.tab].active = true;
-        } else {
-            this.selectedTopology.emit(999);
-            this.topology_text = 'Topology';
+        const option = this.topology.find(item => item.tab === tab);
+        if (!option) {
+            return;
         }
-        // @ts-ignore
-        event.target.parentElement.style.display = 'none';
+        this.selectedTopology.emit(Number(tab));
+        this.topology_text = option.title;
+        this.tabs.toArray()[option.tab].active = true;
+        if (event !== undefined) {
+            // @ts-ignore
+            event.target.parentElement.style.display = 'none';
+        }
         this.topology_open = false;
     }
 
-    selectObject(option, event: Event) {
+    selectObject(tab, event: Event) {
         this.tabs.toArray().forEach(_tab => _tab.active = false);
         this.tab_active = 2;
-        if (option !== 999) {
-            this.selectedTopology.emit(Number(option.tab));
-            this.object_text = option.title;
-            this.tabs.toArray()[option.tab].active = true;
-        } else {
-            this.selectedTopology.emit(999);
-            this.object_text = 'Objects';
+        const option = this.object.find(item => item.tab === tab);
+        if (!option) {
+            return;
         }
-        // @ts-ignore
-        event.target.parentElement.style.display = 'none';
+        this.selectedTopology.emit(Number(tab));
+        this.object_text = option.title;
+        this.tabs.toArray()[option.tab].active = true;
+        if (event !== undefined) {
+            // @ts-ignore
+            event.target.parentElement.style.display = 'none';
+        }
         this.object_open = false;
     }
 

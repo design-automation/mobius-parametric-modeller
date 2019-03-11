@@ -1,11 +1,19 @@
 <div id="gi-viewer-container">
 	<as-split direction="vertical">
 		<as-split-area [size]="66" id="three-js">
-			<threejs-viewer [model]='data' (eventClicked)="childEventClicked($event)" [attr_table_select]='attrTableSelect' (resetTableEvent) = "resetTable()"></threejs-viewer>
+			<threejs-viewer [model]='data'
+				(eventClicked)="childEventClicked($event)"
+				[attr_table_select]='attrTableSelect'
+				(resetTableEvent) = "resetTable()">
+			</threejs-viewer>
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
 		</as-split-area>
 		<as-split-area [size]='34' id="attrib">
-			<attribute [data]="data" [refresh]="clickedEvent" [reset]="attrTableReset" (attrTableSelect) = "attribTableSelected($event)"></attribute>
+			<attribute [data]="data"
+				[refresh]="clickedEvent"
+				[reset]="attrTableReset"
+				(attrTableSelect) = "attribTableSelected($event)">
+			</attribute>
 			<modal-window id="settings_modal">
 				<h1>3D Viewer Settings</h1>
 				<tabs id="settingsTab">

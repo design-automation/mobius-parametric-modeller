@@ -310,13 +310,13 @@
             <!-- <button id = 'delete-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Return' class='btn' mat-icon-button title="Delete Procedure" (click)="emitDelete()" tabindex="-1">
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button> -->
-            <!-- Select button -->
-            <button id = 'selectGeom-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Select Geometry Result In Viewer" (click)="markSelectGeom($event)" tabindex="-1">
-                <mat-icon class='icon'>near_me</mat-icon>
-            </button>
             <!-- Disable button-->
             <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon'>tv_off</mat-icon>
+            </button>
+            <!-- Select button -->
+            <button id = 'selectGeom-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Select Geometry Result In Viewer" (click)="markSelectGeom($event)" tabindex="-1">
+                <mat-icon class='icon'>near_me</mat-icon>
             </button>
             <!-- Print button-->
             <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">

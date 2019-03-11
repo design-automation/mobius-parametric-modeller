@@ -31,7 +31,7 @@ table {
     padding-left: 12px;
   }
   th:nth-child(2){
-    width: 55px !important;
+    // width: 55px !important;
   }
   tr.mat-header-row{
     background-color: $color5-5;
@@ -173,6 +173,7 @@ table {
 }
 #displaySelected{
   position: absolute;
+  z-index: 1;
   bottom: 13px;
   left: 5px;
   span{

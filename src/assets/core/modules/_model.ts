@@ -228,9 +228,5 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
  * @param __model__
  */
 export function __checkModel__(__model__: GIModel): string[] {
-    const check: string[] = __model__.check();
-    if (check.length > 0) {
-        return check;
-    }
-    return ['No errors found in model.'];
+    return __model__.check();
 }

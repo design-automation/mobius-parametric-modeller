@@ -34,7 +34,7 @@ export class NodeComponent {
     */
     nodeSelect(event) {
         event.stopPropagation();
-        this.action.emit({ action: ACTIONS.SELECT, ctrlKey: event.ctrlKey });
+        this.action.emit({ action: ACTIONS.SELECT, ctrlKey: event.ctrlKey  || event.metaKey });
     }
 
 

@@ -21,9 +21,9 @@ export class EdgeComponent {
         event.preventDefault();
         event.stopPropagation();
         if (this.edge.selected) {
-            this.selected.emit(event.ctrlKey);
+            this.selected.emit(event.ctrlKey || event.metaKey);
         } else {
-            if (event.ctrlKey) { this.selected.emit('ctrl'); } else { this.selected.emit('single'); }
+            if (event.ctrlKey || event.metaKey) { this.selected.emit('ctrl'); } else { this.selected.emit('single'); }
         }
     }
 

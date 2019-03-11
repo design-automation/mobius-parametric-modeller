@@ -174,7 +174,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                         this.deleteSelectedNodes();
                     }
                 }
-            } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
+            } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
                 let act: any;
                 if (event.shiftKey) {
                     act = this.dataService.redoFlw();
@@ -296,7 +296,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             // select a node
             case ACTIONS.SELECT:
                 const selectedNode = this.dataService.flowchart.nodes[node_index];
-                if (event.ctrlKey) {
+                if (event.ctrlKey || event.metaKey) {
                     document.getElementById('executeButton').focus();
                     const index = this.dataService.flowchart.meta.selected_nodes.indexOf(node_index);
                     if (index === -1) {
@@ -918,7 +918,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     }
 
     deselectAll(e) {
-        if (e.ctrlKey) {return; }
+        if (e.ctrlKey || e.metaKey) {return; }
 
         document.getElementById('executeButton').focus();
         this.dataService.flowchart.meta.selected_nodes.splice(1, this.dataService.flowchart.meta.selected_nodes.length - 1);

@@ -30,7 +30,7 @@ export class ProcedureInputEditorComponent {
 
     selectInput(event: MouseEvent) {
         event.stopPropagation();
-        this.selectInp.emit({'ctrl': event.ctrlKey, 'shift': event.shiftKey, 'prod': this.prod});
+        this.selectInp.emit({'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': this.prod});
     }
 
     emitClearSelect(event: MouseEvent) {

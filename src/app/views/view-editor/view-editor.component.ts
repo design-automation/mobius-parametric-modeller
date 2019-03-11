@@ -232,9 +232,9 @@ export class ViewEditorComponent implements AfterViewInit {
     }
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
-        if (event.key === 'Control' || event.key === 'Shift') {
+        if (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta') {
             this.disableInput = true;
-        } else if (event.key === 'z' && event.ctrlKey) {
+        } else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
             event.preventDefault();
         }
     }
@@ -281,11 +281,11 @@ export class ViewEditorComponent implements AfterViewInit {
 
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
-        if (!(event.ctrlKey && event.shiftKey)) { this.disableInput = false; }
+        if (!(event.ctrlKey && event.metaKey && event.shiftKey)) { this.disableInput = false; }
         if (!this.copyCheck) { return; }
         if (event.key === 'Delete') {
             this.deleteSelectedProds();
-        } else if (event.key.toLowerCase() === 'z' && event.ctrlKey === true) {
+        } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
             let actions: any;
             // if ((<HTMLElement>event.target).nodeName === 'INPUT') {return; }
             if (event.shiftKey) {
@@ -414,7 +414,7 @@ export class ViewEditorComponent implements AfterViewInit {
     }
 
     unselectAll(event) {
-        if (event.ctrlKey) { return; }
+        if (event.ctrlKey || event.metaKey) { return; }
         NodeUtils.deselect_procedure(this.dataService.node);
     }
     getSplit() { return this.dataService.splitVal; }

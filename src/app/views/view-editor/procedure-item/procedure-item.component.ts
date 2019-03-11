@@ -42,9 +42,9 @@ export class ProcedureItemComponent {
     }
 
     // select this procedure
-    emitSelect(event, procedure: IProcedure) {
+    emitSelect(event: MouseEvent, procedure: IProcedure) {
         event.stopPropagation();
-        this.select.emit({'ctrl': event.ctrlKey, 'shift': event.shiftKey, 'prod': procedure});
+        this.select.emit({'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': procedure});
     }
 
     disableShift(event: MouseEvent) {

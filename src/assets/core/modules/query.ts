@@ -152,7 +152,7 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
  * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
- * @returns List of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
+ * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
  * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
  * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
  * @example positions = query.Get(positions, null, #@xyz[2]>10)
@@ -221,7 +221,7 @@ function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be excluded.
- * @returns List of entities that match the type specified in 'select'.
+ * @returns Entities, a list of entities that match the type specified in 'select'.
  * @example objects = query.Get(objects, polyline1, null)
  * @example_info Returns a list of all the objects in the model except polyline1.
  */
@@ -291,7 +291,7 @@ export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEnt
 * @param __model__
 * @param select Enum, select the types of neighbours to return
 * @param entities List of entities.
-* @returns A list of welded neighbours
+* @returns Entities, a list of welded neighbours
 * @example mod.Neighbours([polyline1,polyline2,polyline3])
 * @example_info Returns list of entities that are welded to polyline1 and polyline2.
 */
@@ -336,7 +336,7 @@ export enum _ESortMethod {
  * @param entities List of two or more entities to be sorted, all of the same entity type.
  * @param sort_expr Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.
  * @param method Enum, sort descending or ascending.
- * @returns Sorted entities.
+ * @returns Entities, a list of sorted entities.
  * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)
  * @example_info Returns a list of three positions, sorted according to the descending z value.
  */

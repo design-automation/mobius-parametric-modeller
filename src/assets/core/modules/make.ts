@@ -38,7 +38,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
  *
  * @param __model__
  * @param coords XYZ coordinates as a list of three numbers.
- * @returns New position, or a list of new positions, or a list of lists of new positions .
+ * @returns Entities, new position, or a list of new positions, or a list of lists of new positions .
  * @example position1 = make.Position([1,2,3])
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
  * @example_link make.Position.mob&node=1
@@ -72,7 +72,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
  *
  * @param __model__
  * @param positions Position of point, or other entities from which positions will be extracted.
- * @returns New point or a list of new points.
+ * @returns Entities, new point or a list of new points.
  * @example_info Creates a point at position1.
  * @example point1 = make.Point(position1)
  * @example_info Creates a point at position1.
@@ -163,7 +163,7 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
  * @param __model__
  * @param entities List of positions, or list of lists of positions, or entities from which positions can be extracted.
  * @param close Enum, 'open' or 'close'.
- * @returns New polyline.
+ * @returns Entities, new polyline, or a list of new polylines.
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
  * @example_info Creates a closed polyline with vertices position1, position2, position3 in sequence.
  * @example_link make.Polyline.mob&node=1
@@ -253,7 +253,7 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  *
  * @param __model__
  * @param entities List of positions, or list of lists of positions, or entities from which positions can be extracted.
- * @returns New polygon.
+ * @returns Entities, new polygon, or a list of new polygons.
  * @example polygon1 = make.Polygon([position1,position2,position3])
  * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
  * @example_link make.Polygon.mob&node=1
@@ -296,7 +296,7 @@ export function _collection(__model__: GIModel, parent_index: number, ents_arr: 
  * @param __model__
  * @param parent_coll Collection
  * @param geometry List of points, polylines, polygons.
- * @returns New collection.
+ * @returns Entities, new collection, or a list of new collections.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
  * @example_link make.Collection.mob&node=1
@@ -380,7 +380,7 @@ export enum _ECopyAttribues {
  * @param entities Position, point, polyline, polygon, collection to be copied.
  * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
  * @param copy_attributes Enum to copy attributes or to have no attributes copied.
- * @returns The copied entity or a list of copied entities.
+ * @returns Entities, the copied entity or a list of copied entities.
  * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
  * @example_info Creates a list containing a copy of the entities in sequence of input.
  */
@@ -453,7 +453,7 @@ function _getHolePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntT
  * @param __model__
  * @param face A polygon or a face to make holes in.
  * @param positions List of positions, or list of lists of positions, or entities from which positions can be extracted.
- * @returns List of wires resulting from the hole(s).
+ * @returns Entities, a list of wires resulting from the hole(s).
  */
 export function Hole(__model__: GIModel, face: TId, positions: TId|TId[]|TId[][]): TId[] {
     if (!Array.isArray(positions)) { positions = [positions]; }
@@ -687,7 +687,7 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
  * @param __model__
  * @param entities List of entities, or list of lists of entities.
  * @param method Enum, if 'closed', then close the loft back to the first entity in the list.
- * @returns List of new polygons or polylines resulting from the loft.
+ * @returns Entities, a list of new polygons or polylines resulting from the loft.
  * @example quads = make.Loft([polyline1,polyline2,polyline3], 1, 'open_quads')
  * @example_info Creates quad polygons lofting between polyline1, polyline2, polyline3.
  * @example quads = make.Loft([polyline1,polyline2,polyline3], 1, 'closed_quads')
@@ -942,7 +942,7 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
  * @param divisions Number of divisions to divide extrusion by. Minimum is 1.
  * @param method Enum, when extruding edges, select quads, stringers, or ribs
- * @returns List of new polygons or polylines resulting from the extrude.
+ * @returns Entities, a list of new polygons or polylines resulting from the extrude.
  * @example extrusion1 = make.Extrude(point1, 10, 2, 'quads')
  * @example_info Creates a polyline of total length 10 (with two edges of length 5 each) in the z-direction.
  * In this case, the 'quads' setting is ignored.
@@ -993,7 +993,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
  *
  * @param __model__
  * @param geometry Polylines or polygons.
- * @returns New joined polyline or polygon .
+ * @returns Entities, a list of new joined polylines or polygons.
  * @example joined1 = make.Join([polyline1,polyline2])
  * @example_info Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
  */
@@ -1069,7 +1069,7 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
  * @param edges Edges, or entities from which edges can be extracted.
  * @param divisor Segment length or number of segments.
  * @param method Enum, select the method for dividing edges.
- * @returns List of new edges resulting from the divide.
+ * @returns Entities, a list of new edges resulting from the divide.
  * @example segments1 = make.Divide(edge1, 5, by_number)
  * @example_info Creates a list of 5 equal segments from edge1.
  * @example segments2 = make.Divide(edge1, 5, by_length)
@@ -1095,7 +1095,7 @@ export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, me
  * @param __model__
  * @param entities Vertex, edge, wire, face, point, polyline, polygon, collection.
  * @param method Enum; the method to use for unweld.
- * @returns List of new positions resulting from the unweld.
+ * @returns Entities, a list of new positions resulting from the unweld.
  * @example mod.Unweld(polyline1)
  * @example_info Unwelds polyline1 from all ther entities that shares the same position.
  */
@@ -1158,7 +1158,7 @@ return [EEntType.PGON, pgon_i];
 * @param __model__
 * @param positions List of positions.
 * @param hole_positions List of positions for the holes. For multiple holes, a list of list can provided.
-* @returns New polygon.
+* @returns Entities, a list of new polygons.
 * @example polygon1 = make.Polygon([position1,position2,position3], [position4,position5,position6])
 * @example_info Creates a polygon with  a hole, with vertices in sequence from position1 to position6.
 */

@@ -65,9 +65,9 @@ export class AttributeComponent implements OnChanges {
     3: 2,
     4: 3,
     5: 4,
-    6: 5,
-    7: 6,
-    8: 7,
+    6: 5, // point
+    7: 6, // plines
+    8: 7, // pgons
     9: 8,
     10: 9
   };
@@ -178,11 +178,11 @@ export class AttributeComponent implements OnChanges {
       if (sessionStorage.getItem('mpm_changetab')) {
         changeTab = JSON.parse(sessionStorage.getItem('mpm_changetab'));
       }
-      sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+      // sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
       if (changeTab) {
         if (this.data) {
           if (currentTab === 0 || currentTab === 9 || currentTab === 10) {
-            this.child.selectTab(currentTab);
+            this.child.selectTab(this.tab_rev_map[currentTab]);
           } else if (currentTab === 2 || currentTab === 3 || currentTab === 4 || currentTab === 5) {
             this.child.selectTopology(this.tab_rev_map[currentTab], event);
           } else if (currentTab === 6 || currentTab === 7 || currentTab === 8) {

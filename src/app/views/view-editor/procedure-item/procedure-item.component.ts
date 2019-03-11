@@ -42,9 +42,9 @@ export class ProcedureItemComponent {
     }
 
     // select this procedure
-    emitSelect(event, procedure: IProcedure) {
+    emitSelect(event: MouseEvent, procedure: IProcedure) {
         event.stopPropagation();
-        this.select.emit({'ctrl': event.ctrlKey, 'shift': event.shiftKey, 'prod': procedure});
+        this.select.emit({'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': procedure});
     }
 
     disableShift(event: MouseEvent) {
@@ -140,8 +140,17 @@ export class ProcedureItemComponent {
     }
 
     canBePrinted() {
-        return this.data.type === ProcedureTypes.Return ||
-               (this.data.argCount > 0 && this.data.args[0].name === 'var_name');
+        return this.data.argCount > 0 && this.data.args[0].name === 'var_name';
+    }
+
+    canSelectGeom() {
+        const check = this.data.argCount > 0 && this.data.args[0].name === 'var_name';
+        if (!check) { return false; }
+        if (this.data.type !== ProcedureTypes.Function) { return true; }
+        const returns = this.ModuleDoc[this.data.meta.module][this.data.meta.name].returns;
+        if (returns.length < 5) { return false; }
+        if (returns.slice(0, 5).toLowerCase() === 'entit') {return true; }
+        return false;
     }
 
     haveHelpText() {

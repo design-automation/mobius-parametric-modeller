@@ -295,21 +295,21 @@ function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number
     } else {
         if (comp.value === '(') {
             openBrackets[0] += 1;
-            if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ')')) {
+            if (!comps[i + 1] || !isParameter(comps[i + 1])) {
                 return { 'error': `Error: Expect expression, string, number or variable after "(" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (comp.value === '[') {
             openBrackets[1] += 1;
-            if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ']')) {
+            if (!comps[i + 1] || !isParameter(comps[i + 1])) {
                 return { 'error': `Error: Expect expression, string, number or variable after "[" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (comp.value === '{') {
             openBrackets[2] += 1;
-            if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== '}')) {
+            if (!comps[i + 1] || !isParameter(comps[i + 1])) {
                 return { 'error': `Error: Expect expression, string, number or variable after "{" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
@@ -447,8 +447,8 @@ function checkNumStr(comps: {'type': strType, 'value': string}[], i: number, ope
 }
 
 function isParameter(comp: {'type': strType, 'value': string}, prev: boolean = false): boolean {
-    if (prev) { return comp.type !== strType.OTHER || comp.value === ')' || comp.value === ']'; }
-    return comp.type !== strType.OTHER || comp.value === '(' || comp.value === '-';
+    if (prev) { return comp.type !== strType.OTHER || comp.value === ')' || comp.value === ']' || comp.value === '}'; }
+    return comp.type !== strType.OTHER || comp.value === '(' || comp.value === '[' || comp.value === '{' || comp.value === '-';
 }
 
 function addVars(varList: string[], varName: string) {

@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { FlowchartUtils } from '@models/flowchart';
-
+import { _model } from '@modules';
 import * as galleryUrl from '@assets/gallery/__config__.json';
 import * as testUrl from '@assets/unit_tests/unit_test.json';
 
@@ -138,6 +138,7 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
+                expect(_model.__checkModel__(output.model)).toBe([], '_model.__checkModel__ failed');
             }
             done();
         });

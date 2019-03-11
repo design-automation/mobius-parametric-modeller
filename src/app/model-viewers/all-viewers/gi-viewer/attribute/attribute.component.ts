@@ -72,6 +72,8 @@ export class AttributeComponent implements OnChanges {
     10: 9
   };
 
+  columnItalic = 'c2';
+
   constructor(injector: Injector) {
     this.dataService = injector.get(DataService);
     if (localStorage.getItem('mpm_attrib_current_tab') === null) {
@@ -116,11 +118,16 @@ export class AttributeComponent implements OnChanges {
       }
       if (this.displayData.length > 0) {
         const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
-        const first = columns.shift();
-        const selected = columns.find(column => column.substr(0, 1) === '_' && column !== '_id');
-        const id = columns.find(column => column === '_id');
-        const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
-        const new_columns = selected ? [first, selected, id, ...rest_of_columns, ' '] : [first, id, ...rest_of_columns, ' '];
+        let new_columns;
+        if (Number(tabIndex) === 9) {
+          new_columns = columns;
+        } else {
+          const first = columns.shift();
+          const second = columns.shift();
+          const selected = columns.find(column => column.substr(0, 1) === '_');
+          const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
+          new_columns = selected ? [first, second, selected, ...rest_of_columns, ' '] : [first, second, ...rest_of_columns, ' '];
+        }
         this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
       } else {
@@ -157,16 +164,22 @@ export class AttributeComponent implements OnChanges {
   showSelectedSwitch() {
     this.showSelected = !this.showSelected;
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
-    this.refreshTable(false);
+    sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
+    this.refreshTable();
   }
 
-  public refreshTable(select = true) {
+  public refreshTable() {
     const currentTab = this.getCurrentTab();
     setTimeout(() => {
       if (sessionStorage.getItem('mpm_showSelected')) {
         this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
       }
-      if (select) {
+      let changeTab;
+      if (sessionStorage.getItem('mpm_changetab')) {
+        changeTab = JSON.parse(sessionStorage.getItem('mpm_changetab'));
+      }
+      sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+      if (changeTab) {
         if (this.data) {
           if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
             this.child.selectTab(currentTab);

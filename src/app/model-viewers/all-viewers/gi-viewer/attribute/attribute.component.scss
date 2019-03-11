@@ -38,7 +38,7 @@ table {
   th:nth-child(2){
     // width: 55px !important;
     width: 100px;
-    font-style: italic;
+    // font-style: italic;
   }
   th:nth-child(n+3){
     width: 50px;
@@ -76,7 +76,7 @@ table {
       }
       &:nth-child(2){
         width: 100px;
-        font-style: italic;
+        // font-style: italic;
       }
       &:nth-child(n+3){
         width: 50px;
@@ -99,6 +99,11 @@ table {
   }
 }
 
+table{
+  &.c2{
+    tr.mat-row .mat-cell:nth-child(2), th:nth-child(2){font-style: italic}
+  }
+}
 
 
 /deep/ #attribTab{

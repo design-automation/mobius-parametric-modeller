@@ -218,8 +218,10 @@ export class ProcedureItemComponent {
             } else if (this.data.args[index].usedVars && this.data.args[index].usedVars[0]) {
                 this.markLinkedArguments(this.data.args[index].usedVars[0], this.dataService.node.procedure);
             }
-        } else if (this.data.args[index].usedVars && this.data.args[index].usedVars.length === 1) {
-            this.markLinkedArguments(this.data.args[index].usedVars[0], this.dataService.node.procedure);
+        } else if (this.data.args[index].usedVars) {
+            for (const varName of this.data.args[index].usedVars) {
+                this.markLinkedArguments(varName, this.dataService.node.procedure);
+            }
         }
     }
 

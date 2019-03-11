@@ -1,7 +1,7 @@
 # QUERY    
 
 ## Get  
-* **Description:** Returns a list of entities based on a query expression.
+* **Description:** Returns a list of entities based on a query expression. The list will be ordered by entity ID, in descending order
 The result will always be a list of entities, even if there is only one entity.
 In a case where you expect only one entity, remember to get the first item in the list.
 ~
@@ -18,7 +18,7 @@ Query expressions can be combined with either && (and) and || (or), where
   * *select:* Enum, specifies what type of entities will be returned.  
   * *entities:* List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.  
   * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.  
-* **Returns:** List of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
+* **Returns:** Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
 * **Examples:**  
   * positions = query.Get(positions, polyline1, #@xyz[2]>10)  
     Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
@@ -37,7 +37,7 @@ Query expressions can be combined with either && (and) and || (or), where
 * **Parameters:**  
   * *select:* Enum, specifies what type of entities will be returned.  
   * *entities:* List of entities to be excluded.  
-* **Returns:** List of entities that match the type specified in 'select'.  
+* **Returns:** Entities, a list of entities that match the type specified in 'select'.  
 * **Examples:**  
   * objects = query.Get(objects, polyline1, null)  
     Returns a list of all the objects in the model except polyline1.
@@ -67,7 +67,7 @@ Query expressions can be combine with either && (and) and || (or), where
 * **Parameters:**  
   * *select:* Enum, select the types of neighbours to return  
   * *entities:* List of entities.  
-* **Returns:** A list of welded neighbours  
+* **Returns:** Entities, a list of welded neighbours  
 * **Examples:**  
   * mod.Neighbours([polyline1,polyline2,polyline3])  
     Returns list of entities that are welded to polyline1 and polyline2.
@@ -82,7 +82,7 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
   * *entities:* List of two or more entities to be sorted, all of the same entity type.  
   * *sort_expr:* Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.  
   * *method:* Enum, sort descending or ascending.  
-* **Returns:** Sorted entities.  
+* **Returns:** Entities, a list of sorted entities.  
 * **Examples:**  
   * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
     Returns a list of three positions, sorted according to the descending z value.

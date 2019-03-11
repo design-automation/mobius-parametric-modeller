@@ -6,7 +6,7 @@ A ray is defined by a list of two lists, as follows: [origin, direction_vector].
 * **Parameters:**  
   * *origin:* Origin of ray: Position, Vertex, Point, or a list of three numbers  
   * *dir_vec:* Direction of Ray: Vector, or list of three numbers  
-* **Returns:** : [[x,y,z],[x',y',z']]  
+* **Returns:** A list consisting of an origin and a vector, [origin, vector].  
 * **Examples:**  
   * virtual.Ray([1,2,3],[4,3,2])  
     Creates a ray from [1,2,3] with the vector [4,3,2].
@@ -20,7 +20,7 @@ A plane is define by a list of three lists, as folows: [origin, x_vector, y_vect
   * *origin:* Origin of plane: Position, Vertex, Point, or a list of three numbers  
   * *x_vec:* X vector of the plane: List of three numbers  
   * *xy_vec:* A vector in the xy plane (parallel to teh x vector): List of three numbers  
-* **Returns:** : [[x,y,z],[x',y',z'],[x",y",z"]]  
+* **Returns:** A list consisting of an origin and two vectors, [origin, vector, vector].  
 * **Examples:**  
   * virtual.Plane ([1,2,3],[4,3,2],[3,3,9])  
     Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
@@ -69,21 +69,21 @@ The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], 
 * **Returns:** The bounding box consisting of a list of four lists.  
   
 ## VisRay  
-* **Description:** Visualises a ray by adding geometry to the model.  
+* **Description:** Visualises a ray by creating a line.  
 * **Parameters:**  
   * *ray:* A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]  
   * *scale:* undefined  
-* **Returns:** A points and a line representing the ray. (The point is tha start point of the ray.)  
+* **Returns:** entities, a line representing the ray.  
 * **Examples:**  
   * ray1 = virtual.visRay([[1,2,3],[0,0,1]])
   
   
 ## VisPlane  
-* **Description:** Visualises a plane by adding geometry to the model.  
+* **Description:** Visualises a plane by creating a polygon and axis lines.  
 * **Parameters:**  
   * *planes:* undefined  
   * *scale:* undefined  
-* **Returns:** A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)  
+* **Returns:** Entities, a polygon and two polyline representing the plane.  
 * **Examples:**  
   * plane1 = virtual.visPlane(position1, vector1, [0,1,0])  
     Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
@@ -93,7 +93,7 @@ The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], 
 * **Description:** Visualises a bounding box by adding geometry to the model.  
 * **Parameters:**  
   * *bbox:* A list of lists.  
-* **Returns:** Twelve polylines representing the box.  
+* **Returns:** Entities, twelve polylines representing the box.  
 * **Examples:**  
   * bbox1 = virtual.viBBox(position1, vector1, [0,1,0])  
     Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.

@@ -157,22 +157,24 @@ export class AttributeComponent implements OnChanges {
   showSelectedSwitch() {
     this.showSelected = !this.showSelected;
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
-    this.refreshTable();
+    this.refreshTable(false);
   }
 
-  public refreshTable() {
+  public refreshTable(select = true) {
     const currentTab = this.getCurrentTab();
     setTimeout(() => {
       if (sessionStorage.getItem('mpm_showSelected')) {
         this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
       }
-      if (this.data) {
-        if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
-          this.child.selectTab(currentTab);
-        } else if (currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 4) {
-          this.child.selectTopology(this.tab_rev_map[currentTab], event);
-        } else if (currentTab === 5 || currentTab === 6 || currentTab === 7) {
-          this.child.selectObject(this.tab_rev_map[currentTab], event);
+      if (select) {
+        if (this.data) {
+          if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
+            this.child.selectTab(currentTab);
+          } else if (currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 4) {
+            this.child.selectTopology(this.tab_rev_map[currentTab], event);
+          } else if (currentTab === 5 || currentTab === 6 || currentTab === 7) {
+            this.child.selectObject(this.tab_rev_map[currentTab], event);
+          }
         }
       }
       this.generateTable(currentTab);

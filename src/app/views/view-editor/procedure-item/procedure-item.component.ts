@@ -180,6 +180,18 @@ export class ProcedureItemComponent {
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
         modifyArgument(this.data, argIndex, this.dataService.node.procedure);
+        this.clearLinkedArgs(this.dataService.node.procedure);
+    }
+
+    clearLinkedArgs(prodList: IProcedure[]) {
+        for (const prod of prodList) {
+            if (prod.children) {
+                this.clearLinkedArgs(prod.children);
+            }
+            for (const arg of prod.args) {
+                arg.linked = false;
+            }
+        }
     }
 
     // argHighlight(value: any) {
@@ -193,13 +205,39 @@ export class ProcedureItemComponent {
     }
 
 
-    onInputFocus(index: number) {
+    onInputFocus(index: number, isVar?: boolean) {
         for (const prod of this.dataService.node.state.procedure) {
             prod.selected = false;
         }
         this.dataService.node.state.procedure = [];
         if (this.data.args[index].invalidVar && typeof this.data.args[index].invalidVar === 'string') {
             this.emitNotifyError(this.data.args[index].invalidVar);
+        } else if (isVar) {
+            if (this.data.variable) {
+                this.markLinkedArguments(this.data.variable, this.dataService.node.procedure);
+            } else if (this.data.args[index].usedVars && this.data.args[index].usedVars[0]) {
+                this.markLinkedArguments(this.data.args[index].usedVars[0], this.dataService.node.procedure);
+            }
+        } else if (this.data.args[index].usedVars && this.data.args[index].usedVars.length === 1) {
+            this.markLinkedArguments(this.data.args[index].usedVars[0], this.dataService.node.procedure);
+        }
+    }
+
+    markLinkedArguments(varName: string, nodeList: IProcedure[]) {
+        for (const prod of nodeList) {
+            if (prod.children) {
+                this.markLinkedArguments(varName, prod.children);
+            }
+            if (prod === this.data) {continue; }
+            for (const arg of prod.args) {
+                if (arg.name === '__none__' || !arg.usedVars || arg.usedVars.length === 0) {continue; }
+                if (arg.usedVars.indexOf(varName) !== -1) {
+                    arg.linked = true;
+                }
+            }
+            if (prod.variable === varName) {
+                prod.args[0].linked = true;
+            }
         }
     }
 

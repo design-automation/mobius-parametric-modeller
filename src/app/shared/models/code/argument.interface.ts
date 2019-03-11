@@ -8,4 +8,5 @@ export interface IArgument {
     type?: any;
     invalidVar?: boolean|string;
     usedVars?: string[];
+    linked?: boolean;
 }

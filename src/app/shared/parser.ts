@@ -144,6 +144,7 @@ export function modifyVarArg(arg: IArgument) {
 }
 
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
+    if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);
     if (varResult.error) {
@@ -582,7 +583,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
     for (const glb of globals) {
         const i = vars.indexOf(glb);
         if (i !== -1) {
-            validVars.push(vars.splice(i, 1));
+            validVars.push(vars.splice(i, 1)[0]);
         }
     }
     while (current.parent) {
@@ -594,7 +595,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
                 } else {
                     const i = vars.indexOf(prod.variable);
                     if (i !== -1) {
-                        validVars.push(vars.splice(i, 1));
+                        validVars.push(vars.splice(i, 1)[0]);
                     }
                     break;
                 }
@@ -602,7 +603,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
             if (!prod.variable || prod.type === ProcedureTypes.Foreach) { continue; }
             const index = vars.indexOf(prod.variable);
             if (index !== -1) {
-                validVars.push(vars.splice(index, 1));
+                validVars.push(vars.splice(index, 1)[0]);
             }
         }
         current = current.parent;
@@ -617,7 +618,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
             } else {
                 const i = vars.indexOf(prod.variable);
                 if (i !== -1) {
-                    validVars.push(vars.splice(i, 1));
+                    validVars.push(vars.splice(i, 1)[0]);
                 }
                 break;
             }
@@ -625,7 +626,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
         if (!prod.variable || prod.type === ProcedureTypes.Foreach) { continue; }
         const index = vars.indexOf(prod.variable);
         if (index !== -1) {
-            validVars.push(vars.splice(index, 1));
+            validVars.push(vars.splice(index, 1)[0]);
         }
     }
     if (vars.length > 0) {
@@ -641,7 +642,7 @@ export function checkNodeValidity(node: INode) {
     checkProdListValidity(node.procedure, node.procedure);
 }
 
-export function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[]) {
+function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[]) {
     for (const prod of prodList) {
         switch (prod.type) {
             case ProcedureTypes.Variable:
@@ -664,6 +665,9 @@ export function checkProdListValidity(prodList: IProcedure[], nodeProdList: IPro
             case ProcedureTypes.While:
                 modifyArgument(prod, 0, nodeProdList);
                 break;
+        }
+        for (const arg of prod.args) {
+            arg.linked = false;
         }
         if (prod.children) {
             checkProdListValidity(prod.children, nodeProdList);

@@ -195,6 +195,9 @@
         border: 2px solid $color5;
         padding-left: 6px;
 
+        &.linked{
+            border: 2px solid $selectGeom-color;
+        }
         &.error{
             border: 2px solid $error-color;
         }
@@ -218,6 +221,9 @@
         border: 2px solid $color5;
         padding-left: 6px;
 
+        &.linked{
+            border: 2px solid $selectGeom-color;
+        }
         &.error{
             border: 2px solid $error-color;
         }

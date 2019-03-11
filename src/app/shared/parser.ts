@@ -295,21 +295,21 @@ function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number
     } else {
         if (comp.value === '(') {
             openBrackets[0] += 1;
-            if (!isParameter(comps[i + 1])) {
+            if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ')')) {
                 return { 'error': `Error: Expect expression, string, number or variable after "(" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (comp.value === '[') {
             openBrackets[1] += 1;
-            if (!isParameter(comps[i + 1])) {
+            if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ']')) {
                 return { 'error': `Error: Expect expression, string, number or variable after "[" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
             }
         } else if (comp.value === '{') {
             openBrackets[2] += 1;
-            if (!isParameter(comps[i + 1])) {
+            if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== '}')) {
                 return { 'error': `Error: Expect expression, string, number or variable after "{" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 

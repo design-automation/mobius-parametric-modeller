@@ -449,7 +449,17 @@ export abstract class NodeUtils {
             });
         }
         prod.ID = IdGenerator.getProdID();
+        NodeUtils.resetSelectGeom(prod);
         return prod;
+    }
+
+    static resetSelectGeom(prod: IProcedure) {
+        prod.selectGeom = false;
+        if (prod.children) {
+            for (const chl of prod.children) {
+                NodeUtils.resetSelectGeom(chl);
+            }
+        }
     }
 
     static paste_procedure(node: INode, prod: IProcedure ) {

@@ -104,12 +104,11 @@ export class SaveFileComponent {
         }
         */
 
-        savedfile.last_updated = new Date();
         savedfile.flowchart.meta.selected_nodes = [0];
+        savedfile.flowchart.last_updated = new Date();
         for (const edge of savedfile.flowchart.edges) {
             edge.selected = false;
         }
-
 
         if (!savedfile.name || savedfile.name === '' || savedfile.name.toLowerCase() === 'untitled') {
             savedfile.name = savedfile.flowchart.name;

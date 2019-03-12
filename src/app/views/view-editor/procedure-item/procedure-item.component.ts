@@ -178,7 +178,7 @@ export class ProcedureItemComponent {
 
     // modify variable input: replace space " " with underscore "_"
     varMod() {
-        modifyVar(this.data, this.dataService.node.procedure);
+        // modifyVar(this.data, this.dataService.node.procedure);
         checkNodeValidity(this.dataService.node);
     }
 

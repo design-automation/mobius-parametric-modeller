@@ -9,10 +9,13 @@ import { IEdge } from '@models/edge';
 import { IFunction } from '@models/procedure';
 
 export interface IFlowchart {
+    id: string;
     name: string;
     description: string;
     returnDescription?: string;
     language: string;
+
+    last_updated?: Date;
 
     nodes: INode[];
     edges: IEdge[];

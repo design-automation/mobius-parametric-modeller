@@ -7,6 +7,7 @@ import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
 import { checkMissingProd } from '@shared/checkMissingProd';
 import { checkNodeValidity } from '@shared/parser';
+import { IdGenerator } from '@utils';
 
 @Component({
   selector: 'file-load',
@@ -46,11 +47,13 @@ export class LoadFileComponent {
             reader.onloadend = () => {
                 // if (typeof reader.result === 'string') {}
                 const f = circularJSON.parse(<string>reader.result);
+                if (!f.flowchart.id) {
+                    f.flowchart.id = IdGenerator.getId();
+                }
                 const file: IMobius = {
                     name: selectedFile.name.split('.mob')[0],
                     author: f.author,
                     flowchart: f.flowchart,
-                    last_updated: f.last_updated,
                     version: f.version,
                     settings: f.settings || {}
                 };

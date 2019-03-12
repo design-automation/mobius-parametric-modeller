@@ -1,6 +1,7 @@
 import { IFlowchart, canvasSize } from './flowchart.interface';
 import { NodeUtils, INode } from '@models/node';
 import { IEdge } from '@models/edge';
+import { IdGenerator } from '@utils';
 
 export class FlowchartUtils {
 
@@ -34,6 +35,7 @@ export class FlowchartUtils {
         endNode.enabled = true;
 
         const flw: IFlowchart = {
+            id: IdGenerator.getId(),
             name: 'Untitled',
             description: '',
             language: 'js',

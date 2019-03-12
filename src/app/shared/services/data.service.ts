@@ -9,7 +9,6 @@ export class DataService {
     private static _data: IMobius = {
         name: 'Untitled',
         author: 'new_user',
-        last_updated: new Date(),
         version: 1,
         flowchart: FlowchartUtils.newflowchart(),
         settings: {}
@@ -67,7 +66,6 @@ export class DataService {
             name: data.name,
             author: data.author,
             flowchart: data.flowchart,
-            last_updated: data.last_updated,
             version: data.version,
             settings: data.settings || {}
         };

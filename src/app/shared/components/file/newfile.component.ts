@@ -40,7 +40,6 @@ export class NewFileComponent {
             name: 'Untitled',
             author: 'new_user',
             flowchart: FlowchartUtils.newflowchart(),
-            last_updated: new Date(),
             version: 2,
             settings: {}
         };

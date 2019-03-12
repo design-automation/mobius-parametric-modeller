@@ -9,7 +9,8 @@ export enum InputType {
     Checkbox,
     URL,
     File,
-    Constant
+    Constant,
+    Dropdown
 }
 
 export enum OutputType {

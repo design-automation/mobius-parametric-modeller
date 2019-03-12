@@ -12,6 +12,7 @@ import { inline_query_expr, inline_func, inline_sort_expr} from '@assets/core/in
 import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { InputType } from '@models/port';
+import { IdGenerator } from '@utils';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -173,6 +174,7 @@ export class ToolsetComponent implements OnInit {
                 };
                 const func: IFunction = <IFunction>{
                     flowchart: <IFlowchart>{
+                        id: fl.id ? fl.id : IdGenerator.getId(),
                         name: fl.name,
                         nodes: fl.nodes,
                         edges: fl.edges

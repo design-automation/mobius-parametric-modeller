@@ -71,6 +71,10 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     }
     if (modifiedVar.declaredVar) {
         procedure.variable = modifiedVar.declaredVar;
+        if (globals.indexOf(procedure.variable) !== -1) {
+            procedure.args[0].invalidVar = `Error: Variable shadowing global constant: ${procedure.variable}`;
+            return;
+        }
     }
     if (modifiedVar.usedVars) {
         const result = checkValidVar(modifiedVar.usedVars, procedure, nodeProdList);

@@ -1,5 +1,5 @@
 import { Component, isDevMode } from '@angular/core';
-import { IFlowchart, FlowchartUtils } from '@models/flowchart';
+import { FlowchartUtils } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
 import { INode, NodeUtils } from '@models/node';
 import { IProcedure, ProcedureTypes } from '@models/procedure';

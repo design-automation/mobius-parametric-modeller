@@ -10,6 +10,7 @@ import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
 import { checkMissingProd } from '@shared/checkMissingProd';
 import { checkNodeValidity } from '@shared/parser';
+import { IdGenerator } from '@utils';
 
 @Component({
   selector: 'load-url',
@@ -59,12 +60,14 @@ export class LoadUrlComponent {
                 if (request.status === 200) {
 
                     const f = circularJSON.parse(request.responseText);
+                    if (!f.flowchart.id) {
+                        f.flowchart.id = IdGenerator.getId();
+                    }
                     const urlSplit = url.split('/');
                     const file: IMobius = {
                         name: urlSplit[urlSplit.length - 1 ].split('.mob')[0],
                         author: f.author,
                         flowchart: f.flowchart,
-                        last_updated: f.last_updated,
                         version: f.version,
                         settings: f.settings || {}
                     };

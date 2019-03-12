@@ -16,11 +16,7 @@ export class ProcedureInputEditorComponent {
 
     @Input() prod: IProcedure;
     @Input() disableInput: boolean;
-    @Output() delete = new EventEmitter();
-    @Output() deleteC = new EventEmitter();
-    @Output() disableProds = new EventEmitter();
-    @Output() selectInp = new EventEmitter();
-    @Output() updateGlbs = new EventEmitter();
+    @Output() eventAction = new EventEmitter();
 
     PortTypes = InputType;
     PortTypesArr = keys.slice(keys.length / 2);
@@ -30,34 +26,30 @@ export class ProcedureInputEditorComponent {
 
     selectInput(event: MouseEvent) {
         event.stopPropagation();
-        this.selectInp.emit({'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': this.prod});
+        this.eventAction.emit({
+            'type': 'selectInp',
+            'content': {'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': this.prod}
+        });
     }
 
     emitClearSelect(event: MouseEvent) {
         event.stopPropagation();
-        this.selectInp.emit('clear');
-    }
-
-    editOptions(): void { }
-
-    openFileBrowse(id) {
-        document.getElementById(`file_${id}`).click();
-    }
-    onFileChange(event) {
-        this.prod.args[this.prod.argCount - 1].default = event.target.files[0];
-    }
-
-    inputSize(val, defaultVal) {
-        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 8; }
-        return ctx.measureText(val).width + 7;
+        this.eventAction.emit({
+            'type': 'selectInp',
+            'content': 'clear'
+        });
     }
 
     // delete this procedure
     deleteProd(): void {
         if (!this.prod.selected) {
-            this.deleteC.emit();
+            this.eventAction.emit({
+                'type': 'deleteC'
+            });
         } else {
-            this.delete.emit();
+            this.eventAction.emit({
+                'type': 'delete'
+            });
         }
     }
 
@@ -65,9 +57,36 @@ export class ProcedureInputEditorComponent {
         if (!this.prod.selected) {
             this.prod.enabled = ! this.prod.enabled;
         } else {
-            this.disableProds.emit();
+            this.eventAction.emit({
+                'type': 'disableProds'
+            });
         }
     }
+
+    // modify variable input: replace space " " with underscore "_"
+    varMod() {
+        if (!this.prod.args[0].value) { return; }
+        this.eventAction.emit({
+            'type': 'updateGlbs',
+        });
+        // this.prod.args[0].value = modifyVarArg(this.prod.args[0]);
+    }
+
+
+    editOptions(): void { }
+
+    openFileBrowse(id) {
+        document.getElementById(`file_${id}`).click();
+    }
+    onFileChange(event) {
+        this.prod.args[this.prod.argCount - 1].value = event.target.files[0];
+    }
+
+    inputSize(val, defaultVal) {
+        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 8; }
+        return ctx.measureText(val).width + 7;
+    }
+
 
     updateMin(args, event) {
         if (event.type === 'keyup' && event.which !== 13) { return; }
@@ -79,8 +98,8 @@ export class ProcedureInputEditorComponent {
         } else {
             args.min = event.target.value;
         }
-        if (!args.default || args.default < Number(args.min)) {
-            args.default = Number(args.min);
+        if (!args.value || args.value < Number(args.min)) {
+            args.value = Number(args.min);
         }
     }
 
@@ -94,16 +113,9 @@ export class ProcedureInputEditorComponent {
         } else {
             args.max = event.target.value;
         }
-        if (!args.default || args.default > Number(args.max)) {
-            args.default = Number(args.max);
+        if (!args.value || args.value > Number(args.max)) {
+            args.value = Number(args.max);
         }
-    }
-
-    // modify variable input: replace space " " with underscore "_"
-    varMod() {
-        if (!this.prod.args[0].value) { return; }
-        this.updateGlbs.emit('');
-        // this.prod.args[0].value = modifyVarArg(this.prod.args[0]);
     }
 
     disableShift(event: MouseEvent) {

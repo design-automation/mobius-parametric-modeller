@@ -11,10 +11,7 @@
                     <div class='container__content'>
                         <!-- toolset on the left side -->
                         <div class="container--toolset">
-                            <toolset 
-                            (delete)='deleteFunction($event)' 
-                            (selected)='add($event)' 
-                            (imported)='importFunction($event)'></toolset>
+                            <toolset (eventAction)='performAction_toolset($event)'></toolset>
                         </div>
                         <!-- procedure editor on the right side -->
                         <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
@@ -51,11 +48,7 @@
                                     *ngFor="let line of getNode()?.procedure; let idx=index" 
                                     [data]="line"
                                     [disableInput]='disableInput'
-                                    (select)="selectProcedure($event)"
-                                    (delete)="deleteSelectedProds()"
-                                    (deleteC)='deleteChild(idx)'
-                                    (notifyError)='notifyError($event)'
-                                    (helpText)='updateHelpView($event)'
+                                    (eventAction)='performAction_procedure_item($event, idx)'
                                     ></procedure-item>
                                 </div>
                                 <div class = 'divider--container' *ngIf="getNode().type !== ''">
@@ -67,10 +60,8 @@
                                 [node]='getNode()'
                                 [prodCheck]='true'
                                 [disableInput]='disableInput'
-                                (regAction)='regAction($event)'
-                                (selectInp)='selectProcedure($event)'
-                                (disableProds) = 'disableSelectedProds()'
-                                (delete)='deleteSelectedProds()'></parameter-editor>
+                                (eventAction)='performAction_param_editor($event)'
+                                ></parameter-editor>
                                 <div id = 'spacer'></div>
                                 
                             </div>

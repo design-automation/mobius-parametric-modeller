@@ -58,16 +58,16 @@ export class SaveFileComponent {
                     window.localStorage.setItem(arg.value.name, '`' + await p + '`');
                     arg.value = {'name': arg.value.name};
                 }
-                if (arg.default && arg.default.lastModified) {
+                if (arg.value && arg.value.lastModified) {
                     const p = new Promise((resolve) => {
                         const reader = new FileReader();
                         reader.onload = function() {
                             resolve(reader.result);
                         };
-                        reader.readAsText(arg.default);
+                        reader.readAsText(arg.value);
                     });
-                    window.localStorage.setItem(arg.default.name, '`' + await p + '`');
-                    arg.default = {'name': arg.default.name};
+                    window.localStorage.setItem(arg.value.name, '`' + await p + '`');
+                    arg.value = {'name': arg.value.name};
                 }
             }
         }

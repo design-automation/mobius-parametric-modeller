@@ -107,8 +107,7 @@ export class ExecuteComponent {
                         }
                         InvalidECheck = true;
                     }
-                    if (!prod.args[0].value || (!prod.args[1].value && !prod.args[1].default &&
-                        prod.args[1].value !== 0 && prod.args[1].default !== 0)) {
+                    if (!prod.args[0].value || (!prod.args[1].value && prod.args[1].value !== 0)) {
                         node.hasError = true;
                         prod.hasError = true;
                         EmptyECheck = true;

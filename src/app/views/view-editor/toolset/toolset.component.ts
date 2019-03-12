@@ -28,9 +28,10 @@ const inputEvent = new Event('input', {
 })
 export class ToolsetComponent implements OnInit {
 
-    @Output() selected = new EventEmitter();
-    @Output() delete = new EventEmitter();
-    @Output() imported = new EventEmitter();
+    // @Output() selected = new EventEmitter();
+    // @Output() delete = new EventEmitter();
+    // @Output() imported = new EventEmitter();
+    @Output() eventAction = new EventEmitter();
     // @Input() functions: IFunction[];
 
     ProcedureTypes = ProcedureTypes;
@@ -91,7 +92,10 @@ export class ToolsetComponent implements OnInit {
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {
-        this.selected.emit( { type: type, data: data } );
+        this.eventAction.emit({
+            'type': 'selected',
+            'content': { type: type, data: data }
+        });
     }
 
     // add selected function from core.modules as a new procedure
@@ -99,54 +103,38 @@ export class ToolsetComponent implements OnInit {
         // create a fresh copy of the params to avoid linked objects
         // todo: figure out
         fnData.args = fnData.args.map( (arg) => {
-            return {name: arg.name, value: arg.value, default: arg.default};
-            });
+            return {name: arg.name, value: arg.value};
+        });
 
-        this.selected.emit( { type: ProcedureTypes.Function, data: fnData } );
+        this.eventAction.emit({
+            'type': 'selected',
+            'content': { type: ProcedureTypes.Function, data: fnData }
+        });
     }
 
     // add selected imported function as a new procedure
     add_imported_function(fnData) {
         fnData.args = fnData.args.map( (arg) => {
             if (arg.type === InputType.Constant) {
-                return {name: arg.name, value: arg.default, type: arg.type};
+                return {name: arg.name, value: arg.value, type: arg.type};
             }
             return {name: arg.name, value: arg.value, type: arg.type};
-            });
-        this.selected.emit( { type: ProcedureTypes.Imported, data: fnData } );
-    }
-
-    setCurrent(event) {
-        if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
-            // this.dataService.focusedInput = [document.activeElement, (<HTMLInputElement>document.activeElement).selectionStart];
-            this.dataService.focusedInput = document.activeElement;
-        } else {
-            // this.dataService.focusedInput = undefined;
-        }
-    }
-
-    add_inline(string) {
-        if (!this.dataService.focusedInput) {
-            return;
-        }
-        this.dataService.focusedInput.focus();
-        const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
-            this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
-        this.dataService.focusedInput.value =
-            this.dataService.focusedInput.value.slice(0, index) +
-            string +
-            this.dataService.focusedInput.value.slice(index);
-
-        this.dataService.focusedInput.dispatchEvent(inputEvent);
-        this.dataService.focusedInput.selectionStart = index + string.length;
-        // this.dataService.focusedInput.trigger('input');
+        });
+        this.eventAction.emit({
+            'type': 'selected',
+            'content': { type: ProcedureTypes.Imported, data: fnData }
+        });
     }
 
     // delete imported function
     delete_imported_function(fnData) {
-        this.delete.emit(fnData);
+        this.eventAction.emit({
+            'type': 'delete',
+            'content': fnData
+        });
         this.turnoffTooltip();
     }
+
 
 
     // import a flowchart as function
@@ -198,8 +186,7 @@ export class ToolsetComponent implements OnInit {
                     }
                     func.args.push(<IArgument>{
                         name: v,
-                        default: prod.args[prod.argCount - 1].default,
-                        value: undefined,
+                        value: prod.args[prod.argCount - 1].value,
                         type: prod.meta.inputMode,
                     });
                 }
@@ -231,8 +218,40 @@ export class ToolsetComponent implements OnInit {
             console.warn('Error reading file');
             return;
         }
-        this.imported.emit(fnc);
+        this.eventAction.emit({
+            'type': 'imported',
+            'content': fnc
+        });
     }
+
+
+    setCurrent(event) {
+        if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
+            // this.dataService.focusedInput = [document.activeElement, (<HTMLInputElement>document.activeElement).selectionStart];
+            this.dataService.focusedInput = document.activeElement;
+        } else {
+            // this.dataService.focusedInput = undefined;
+        }
+    }
+
+    add_inline(string) {
+        if (!this.dataService.focusedInput) {
+            return;
+        }
+        this.dataService.focusedInput.focus();
+        const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+            this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        this.dataService.focusedInput.value =
+            this.dataService.focusedInput.value.slice(0, index) +
+            string +
+            this.dataService.focusedInput.value.slice(index);
+
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        this.dataService.focusedInput.selectionStart = index + string.length;
+        // this.dataService.focusedInput.trigger('input');
+    }
+
+
 
     downloadImported(event: MouseEvent, fnData) {
         event.stopPropagation();

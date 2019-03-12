@@ -18,34 +18,63 @@ export class ParameterEditorComponent  {
     @Input() flowchart: IFlowchart;
     @Input() prodCheck: boolean;
     @Input() disableInput: boolean;
-    @Output() selectInp = new EventEmitter();
-    @Output() delete = new EventEmitter();
-    @Output() disableProds = new EventEmitter();
-    @Output() regAction = new EventEmitter();
+    @Output() eventAction = new EventEmitter();
 
 
+    performAction(event: any, index: number) {
+        // (delete)='deleteProd()'
+        // (deleteC)='deleteChild(i)'
+        // (disableProds)='markDisabled()'
+        // (updateGlbs)='updateGlbs()'
+        // (selectInp)='selectInput($event)'
+        switch (event.type) {
+            case 'delete':
+                this.deleteProd();
+                break;
+            case 'deleteC':
+                this.deleteChild(index);
+                break;
+            case 'disableProds':
+                this.markDisabled();
+                break;
+            case 'updateGlbs':
+                this.updateGlbs();
+                break;
+            case 'selectInp':
+                this.selectInput(event.content);
+                break;
+        }
+    }
     deleteProd() {
-        this.delete.emit();
+        this.eventAction.emit({
+            'type': 'delete',
+        });
     }
 
     deleteChild(index: number) {
-        this.regAction.emit([{'type': 'del', 'parent': undefined, 'index': index, 'prod': this.node.procedure[index]}]);
+        this.eventAction.emit({
+            'type': 'regAction',
+            'content': [{'type': 'del', 'parent': undefined, 'index': index, 'prod': this.node.procedure[index]}]
+        });
         this.node.procedure.splice(index, 1);
         NodeUtils.deselect_procedure(this.node);
     }
 
     markDisabled() {
-        // this.node.procedure.splice(index, 1);
-        // NodeUtils.deselect_procedure(this.node);
-        this.disableProds.emit();
+        this.eventAction.emit({
+            'type': 'disableProds',
+        });
+    }
+
+    selectInput(event) {
+        this.eventAction.emit({
+            'type': 'selectInp',
+            'content': event
+        });
     }
 
     inputSize(val) {
         return ctx.measureText(val).width + 7;
-    }
-
-    selectInput(event) {
-        this.selectInp.emit(event);
     }
 
     updateGlbs() {

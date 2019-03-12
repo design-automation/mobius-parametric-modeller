@@ -51,16 +51,16 @@
         <div class='inline-div'>
             <ng-container [ngSwitch]="prod.meta.inputMode" >
                 <!-- Constant -->
-                <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+                <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Default Value' 
                 (focus)='emitClearSelect($event)'
                 [class.disablePointer]='disableInput'
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"Default Value")'>
     
                 <!-- simpleinput -->
-                <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default Value' 
+                <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Default Value' 
                 (focus)='emitClearSelect($event)'
                 [class.disablePointer]='disableInput'
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default Value")'>
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"Default Value")'>
     
                 <!-- slider -->
                 <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
@@ -87,7 +87,7 @@
                 <!-- checkbox -->
                 <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
                     <input class='chkbox' id = 'chbox_{{prod.ID}}' 
-                        [(ngModel)]='prod.args[prod.argCount-1].default' 
+                        [(ngModel)]='prod.args[prod.argCount-1].value' 
                         [class.disablePointer]='disableInput'
                         type="checkbox">
                     <label for = 'chbox_{{prod.ID}}'></label>
@@ -95,15 +95,15 @@
                 </div>
     
                 <!-- URL -->
-                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].default' placeholder='Default URL'
+                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Default URL'
                     (focus)='emitClearSelect($event)'
                     [class.disablePointer]='disableInput'
-                    [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"Default URL")'>
+                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"Default URL")'>
     
                 <!-- File -->
                 <div class='div--filebtn inline-div' *ngSwitchCase="PortTypes.File" >
                     <button class='filebtn' (click)="openFileBrowse(prod.ID)" [class.disablePointer]='disableInput' >File</button>
-                    <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-1].default.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].default.name,"")' disabled>
+                    <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-1].value.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].value.name,"")' disabled>
                     <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" 
                         type="file">
                 </div>
@@ -114,12 +114,12 @@
     <ng-container [ngSwitch]="prod.meta.inputMode" >
         <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
             <div class = 'slider--container'>
-                <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].default'
+                <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].value'
                 (focus)='emitClearSelect($event)'
                 [class.disablePointer]='disableInput'
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].default,"")'>
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"")'>
                 <mat-slider
-                [(ngModel)]='prod.args[prod.argCount-1].default'
+                [(ngModel)]='prod.args[prod.argCount-1].value'
                 thumbLabel
                 step={{prod.args[prod.argCount-1].step||1}}
                 min={{prod.args[prod.argCount-1].min||0}}

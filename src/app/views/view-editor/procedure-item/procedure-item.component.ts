@@ -24,13 +24,7 @@ ctx.font = '12px Arial';
 export class ProcedureItemComponent {
     @Input() data: IProcedure;
     @Input() disableInput: boolean;
-    @Output() delete = new EventEmitter();
-    @Output() deleteC = new EventEmitter();
-    @Output() select = new EventEmitter();
-    @Output() copied = new EventEmitter();
-    @Output() pasteOn = new EventEmitter();
-    @Output() helpText = new EventEmitter();
-    @Output() notifyError = new EventEmitter();
+    @Output() eventAction = new EventEmitter();
 
     ProcedureTypes = ProcedureTypes;
 
@@ -41,10 +35,95 @@ export class ProcedureItemComponent {
     constructor(private dataService: DataService) {
     }
 
+    performAction(event, idx) {
+        switch (event.type) {
+            case 'select':
+                this.selectChild(event.content);
+                break;
+            case 'delete':
+                this.emitDelete(true);
+                break;
+            case 'deleteC':
+                this.deleteChild(idx);
+                break;
+            case 'notifyError':
+                this.emitNotifyError(event.content);
+                break;
+            case 'helpText':
+                this.emitHelpText(event.content);
+                break;
+        }
+    }
+
     // select this procedure
     emitSelect(event: MouseEvent, procedure: IProcedure) {
         event.stopPropagation();
-        this.select.emit({'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': procedure});
+        this.eventAction.emit({
+            'type': 'select',
+            'content': {'ctrl': event.ctrlKey || event.metaKey, 'shift': event.shiftKey, 'prod': procedure}
+        });
+    }
+
+    // select child procedure (after receiving emitSelect from child procedure)
+    selectChild(event) {
+        this.eventAction.emit({
+            'type': 'select',
+            'content': event
+        });
+    }
+
+    // delete this procedure
+    emitDelete(check?: boolean): void {
+        if (check) {
+            this.eventAction.emit({
+                'type': 'delete',
+            });
+        } else if (! this.data.selected) {
+            this.eventAction.emit({
+                'type': 'deleteC',
+            });
+        } else {
+            this.eventAction.emit({
+                'type': 'delete',
+            });
+        }
+    }
+
+    emitHelpText($event) {
+        if ($event) {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': $event
+            });
+            return;
+        }
+        try {
+            if (this.data.type === ProcedureTypes.Imported) {
+                this.eventAction.emit({
+                    'type': 'helpText',
+                    'content': this.data.meta.name
+                });
+                // this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
+
+            } else {
+                this.eventAction.emit({
+                    'type': 'helpText',
+                    'content': this.ModuleDoc[this.data.meta.module][this.data.meta.name]
+                });
+            }
+        } catch (ex) {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': 'error'
+            });
+        }
+    }
+
+    emitNotifyError(message) {
+        this.eventAction.emit({
+            'type': 'notifyError',
+            'content': message
+        });
     }
 
     disableShift(event: MouseEvent) {
@@ -52,11 +131,6 @@ export class ProcedureItemComponent {
         if (event.shiftKey) {
             event.preventDefault();
         }
-    }
-
-    // select child procedure (after receiving emitSelect from child procedure)
-    selectChild(event, procedure: IProcedure) {
-        this.select.emit(event);
     }
 
     markSelectGeom(event: MouseEvent) {
@@ -128,17 +202,6 @@ export class ProcedureItemComponent {
     }
 
 
-    // delete this procedure
-    emitDelete(check?: boolean): void {
-        if (check) {
-            this.delete.emit();
-        } else if (! this.data.selected) {
-            this.deleteC.emit();
-        } else {
-            this.delete.emit();
-        }
-    }
-
     canBePrinted() {
         return this.data.argCount > 0 && this.data.args[0].name === 'var_name';
     }
@@ -157,24 +220,6 @@ export class ProcedureItemComponent {
         return (this.data.type === 8 || this.data.type ===  9);
     }
 
-    emitHelpText($event) {
-        if ($event) {
-            this.helpText.emit($event);
-            return;
-        }
-        try {
-            if (this.data.type === ProcedureTypes.Imported) {
-                this.helpText.emit(this.data.meta.name);
-                // this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
-
-            } else {
-            this.helpText.emit(this.ModuleDoc[this.data.meta.module][this.data.meta.name]);
-            }
-        } catch (ex) {
-            this.helpText.emit('error');
-        }
-
-    }
 
     // modify variable input: replace space " " with underscore "_"
     varMod() {
@@ -250,10 +295,6 @@ export class ProcedureItemComponent {
                 prod.args[0].linked = true;
             }
         }
-    }
-
-    emitNotifyError(message) {
-        this.notifyError.emit(message);
     }
 
     checkEnum(param, index: number): boolean {

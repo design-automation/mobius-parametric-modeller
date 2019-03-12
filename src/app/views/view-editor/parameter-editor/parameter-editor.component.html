@@ -13,11 +13,8 @@
             *ngFor="let prod of node.procedure; let i = index;" 
             [prod]="prod" 
             [disableInput]='disableInput'
-            (delete)='deleteProd()' 
-            (deleteC)='deleteChild(i)' 
-            (disableProds)='markDisabled()' 
-            (updateGlbs)='updateGlbs()' 
-            (selectInp)='selectInput($event)'></procedure-input-editor>
+            (eventAction)='performAction($event, i)' 
+            ></procedure-input-editor>
     </div>
 </div>
 <div class='flowchart-info' *ngIf="node.type=='end'">

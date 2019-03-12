@@ -23,9 +23,9 @@ function extract_params(func: Function): [IArgument[], boolean] {
         const r_value = r.split('=');
 
         if (r_value.length === 1) {
-            return { name: r_value[0].trim(), value: undefined, default: 0};
+            return { name: r_value[0].trim(), value: 0};
         } else {
-            return { name: r_value[0].trim(), value: undefined, default: 0 };
+            return { name: r_value[0].trim(), value: 0};
         }
 
     });

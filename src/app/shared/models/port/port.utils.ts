@@ -9,7 +9,6 @@ export class PortUtils {
             name: 'input',
             type: PortType.Input,
             value: undefined,
-            default: undefined,
             edges: [],
             meta: {
                 mode: InputType.SimpleInput,

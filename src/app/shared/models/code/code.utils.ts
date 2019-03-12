@@ -359,18 +359,17 @@ export class CodeUtils {
     }
 
     static async getStartInput(arg, inputMode): Promise<any> {
-        let val;
-        let defaultCheck = false;
-        if (arg.value === undefined) {
-            val = arg.default;
-            defaultCheck = true;
-        } else {
-            val = arg.value;
-        }
+        let val = arg.value;
         let result = val;
         if (inputMode.toString() === InputType.URL.toString() ) {
             if (val.indexOf('dropbox') !== -1) {
                 val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
+            }
+            if (val[0] === '"' || val[0] === '\'') {
+                val = val.substring(1);
+            }
+            if (val[val.length - 1] === '"' || val[val.length - 1] === '\'') {
+                val = val.substring(0, val.length - 1);
             }
             const p = new Promise((resolve) => {
                 const request = new XMLHttpRequest();
@@ -406,11 +405,7 @@ export class CodeUtils {
                 }
                 result = '`' + result + '`';
                     window.localStorage.setItem(val.name, result);
-                if (defaultCheck) {
-                    arg.default = {'name': val.name};
-                } else {
-                    arg.value = {'name': val.name};
-                }
+                arg.value = {'name': val.name};
             } else {
                 result = window.localStorage.getItem(val.name);
             }

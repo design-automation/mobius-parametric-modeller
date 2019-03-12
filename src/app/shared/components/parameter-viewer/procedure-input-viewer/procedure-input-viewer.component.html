@@ -6,16 +6,16 @@
         <div class = "FFA">
             <ng-container class='parameter__name' [ngSwitch]="prod.meta.inputMode">
                 <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' 
-                placeholder='{{prod.args[prod.argCount-1].default}}'
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)'>
+                placeholder='{{prod.args[prod.argCount-1].value}}'
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].value)'>
                 
                 <ng-container *ngSwitchCase="PortTypes.Slider">
                     <!--<input [class.disabled-input]='true' [(ngModel)]='prod.args[prod.argCount-1].value' 
-                    placeholder='prod.args[prod.argCount-1].default'
-                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)' disabled>-->
+                    placeholder='prod.args[prod.argCount-1].value'
+                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].value)' disabled>-->
                     <input [(ngModel)]='prod.args[prod.argCount-1].value' 
-                    placeholder='{{prod.args[prod.argCount-1].default}}'
-                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)'>
+                    placeholder='{{prod.args[prod.argCount-1].value}}'
+                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].value)'>
                     <mat-slider
                         [(ngModel)]='prod.args[prod.argCount-1].value'
                         thumbLabel
@@ -23,8 +23,8 @@
                         min={{prod.args[prod.argCount-1].min||0}}
                         max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
                     <!--
-                    <input [(ngModel)]='prod.args[prod.argCount-1].value' type="range" placeholder='{{prod.args[prod.argCount-1].default}}'>
-                    <input [(ngModel)]='prod.args[prod.argCount-1].value' value='prod.args[prod.argCount-1].value'  placeholder='{{prod.args[prod.argCount-1].default}}' disabled>
+                    <input [(ngModel)]='prod.args[prod.argCount-1].value' type="range" placeholder='{{prod.args[prod.argCount-1].value}}'>
+                    <input [(ngModel)]='prod.args[prod.argCount-1].value' value='prod.args[prod.argCount-1].value'  placeholder='{{prod.args[prod.argCount-1].value}}' disabled>
                     -->
                 </ng-container>
     
@@ -33,8 +33,8 @@
                     <label for = 'chbox_{{prod.ID}}'></label>
                 </div>
                 
-                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='{{prod.args[prod.argCount-1].default}}' 
-                [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].default)'>
+                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='{{prod.args[prod.argCount-1].value}}' 
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value, prod.args[prod.argCount-1].value)'>
     
                 <ng-container *ngSwitchCase="PortTypes.File" >
                     <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>

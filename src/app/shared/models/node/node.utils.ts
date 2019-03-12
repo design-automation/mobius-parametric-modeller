@@ -336,26 +336,26 @@ export abstract class NodeUtils {
             case ProcedureTypes.Variable:
                 prod.argCount = 2;
                 prod.args = [
-                    {name: 'var_name', value: undefined, default: undefined},
-                    {name: 'value', value: undefined, default: undefined} ];
+                    {name: 'var_name', value: undefined},
+                    {name: 'value', value: undefined} ];
                 break;
 
             case ProcedureTypes.Foreach:
                 prod.argCount = 2;
-                prod.args = [ {name: 'item', value: undefined, default: undefined}, {name: 'list', value: undefined, default: []} ];
+                prod.args = [ {name: 'item', value: undefined}, {name: 'list', value: undefined} ];
                 this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.While:
                 prod.argCount = 1;
-                prod.args = [ {name: 'condition', value: undefined, default: undefined} ];
+                prod.args = [ {name: 'condition', value: undefined} ];
                 this.initiateChildren(prod);
                 break;
 
             case ProcedureTypes.If:
             case ProcedureTypes.Elseif:
                 prod.argCount = 1;
-                prod.args = [ {name: 'condition', value: undefined, default: undefined} ];
+                prod.args = [ {name: 'condition', value: undefined} ];
                 this.initiateChildren(prod);
                 break;
 
@@ -374,28 +374,28 @@ export abstract class NodeUtils {
                 prod.argCount = 2;
                 prod.meta = { module: 'Input', name: 'Constant', inputMode: data, description: ''};
                 prod.args = [
-                {name: 'const_name', value: undefined, default: 0},
-                {name: '__input__', value: undefined, default: 0} ];
+                {name: 'const_name', value: undefined},
+                {name: '__input__', value: 0} ];
             break;
 
             case ProcedureTypes.AddData:
                 prod.argCount = 2;
                 prod.meta = { module: 'Input', name: 'Constant', inputMode: InputType.SimpleInput, description: undefined};
                 prod.args = [
-                {name: 'const_name', value: undefined, default: 0},
-                {name: '__input__', value: undefined, default: 0} ];
+                {name: 'const_name', value: undefined},
+                {name: '__input__', value: undefined} ];
             break;
 
             case ProcedureTypes.Comment:
                 prod.argCount = 1;
-                prod.args = [{name: 'comment', value: undefined, default: 0}];
+                prod.args = [{name: 'comment', value: undefined}];
             break;
 
 
             case ProcedureTypes.Return:
                 prod.meta = { module: 'Output', name: 'Return', description: undefined};
                 prod.argCount = 1;
-                prod.args = [ {name: 'index', value: undefined, default: 0} ];
+                prod.args = [ {name: 'index', value: undefined} ];
                 break;
 
             case ProcedureTypes.Function:
@@ -403,9 +403,9 @@ export abstract class NodeUtils {
 
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
-                let returnArg = {name: 'var_name', value: undefined, default: undefined};
+                let returnArg = {name: 'var_name', value: undefined};
                 if (!data.hasReturn) {
-                    returnArg = {name: '__none__', value: undefined, default: undefined};
+                    returnArg = {name: '__none__', value: undefined};
                 }
 
                 prod.args = [ returnArg, ...data.args];
@@ -415,9 +415,9 @@ export abstract class NodeUtils {
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
 
-                let iReturnArg = {name: 'var_name', value: undefined, default: undefined};
+                let iReturnArg = {name: 'var_name', value: undefined};
                 if (!data.hasReturn) {
-                    iReturnArg = {name: '__none__', value: undefined, default: undefined};
+                    iReturnArg = {name: '__none__', value: undefined};
                 }
 
                 prod.args = [ iReturnArg, ...data.args];

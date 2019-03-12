@@ -26,8 +26,8 @@ export class ViewEditorComponent implements AfterViewInit {
     */
     viewerData = getViewerData;
 
-    @Output() imported = new EventEmitter();
-    @Output() delete_Function = new EventEmitter();
+    // @Output() imported = new EventEmitter();
+    // @Output() delete_Function = new EventEmitter();
     notificationMessage = '';
     notificationTrigger = true;
 
@@ -43,6 +43,69 @@ export class ViewEditorComponent implements AfterViewInit {
         setTimeout(() => {
             this.adjustTextArea();
         }, 50);
+    }
+
+    performAction_param_editor(event: any) {
+        // (regAction)='regAction($event)'
+        // (selectInp)='selectProcedure($event)'
+        // (disableProds) = 'disableSelectedProds()'
+        // (delete)='deleteSelectedProds()'
+        switch (event.type) {
+            case 'regAction' :
+                this.regAction(event.content);
+                break;
+            case 'selectInp' :
+                this.selectProcedure(event.content);
+                break;
+            case 'disableProds' :
+                this.disableSelectedProds();
+                break;
+            case 'delete' :
+                this.deleteSelectedProds();
+                break;
+        }
+    }
+
+    performAction_toolset(event: any) {
+        // (delete)='deleteFunction($event)'
+        // (selected)='add($event)'
+        // (imported)='importFunction($event)'
+        switch (event.type) {
+            case 'delete' :
+                this.deleteFunction(event.content);
+                break;
+            case 'selected' :
+                this.add(event.content);
+                break;
+            case 'imported' :
+                this.importFunction(event.content);
+                break;
+        }
+    }
+
+    performAction_procedure_item(event: any, idx) {
+        // (select)="selectProcedure($event)"
+        // (delete)="deleteSelectedProds()"
+        // (deleteC)='deleteChild(idx)'
+        // (notifyError)='notifyError($event)'
+        // (helpText)='updateHelpView($event)'
+        switch (event.type) {
+            case 'select' :
+                this.selectProcedure(event.content);
+                break;
+            case 'delete' :
+                this.deleteSelectedProds();
+                break;
+            case 'deleteC' :
+                this.deleteChild(idx);
+                break;
+            case 'notifyError' :
+                this.notifyError(event.content);
+                break;
+            case 'helpText' :
+                this.updateHelpView(event.content);
+                break;
+        }
     }
 
     // .............. ON INPUT FOCUS ................
@@ -232,7 +295,7 @@ export class ViewEditorComponent implements AfterViewInit {
     }
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
-        if (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta') {
+        if (!this.disableInput && (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta')) {
             this.disableInput = true;
         } else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
             event.preventDefault();

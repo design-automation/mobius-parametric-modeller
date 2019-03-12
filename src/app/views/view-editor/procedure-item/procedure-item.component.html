@@ -59,11 +59,8 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     [disableInput]="disableInput"
-                    (select)='selectChild($event, line)'
-                    (delete)='emitDelete(true)'
-                    (deleteC)='deleteChild(idx)'
-                    (notifyError)='emitNotifyError($event)'
-                    (helpText)='emitHelpText($event)'></procedure-item>
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
             </div>
         </ng-container>
 
@@ -91,11 +88,8 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     [disableInput]="disableInput"
-                    (select)='selectChild($event, line)'
-                    (delete)='emitDelete(true)'
-                    (deleteC)='deleteChild(idx)'
-                    (notifyError)='emitNotifyError($event)'
-                    (helpText)='emitHelpText($event)'></procedure-item>
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
             </div>
         </ng-container>
 
@@ -112,11 +106,8 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     [disableInput]="disableInput"
-                    (select)='selectChild($event, line)'
-                    (delete)='emitDelete(true)'
-                    (deleteC)='deleteChild(idx)'
-                    (notifyError)='emitNotifyError($event)'
-                    (helpText)='emitHelpText($event)'></procedure-item>
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
             </div>
         </ng-container>
     
@@ -175,11 +166,8 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     [disableInput]="disableInput"
-                    (select)='selectChild($event, line)'
-                    (delete)='emitDelete(true)'
-                    (deleteC)='deleteChild(idx)'
-                    (notifyError)='emitNotifyError($event)'
-                    (helpText)='emitHelpText($event)'></procedure-item>
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
             </div>
         </ng-container>
     
@@ -209,11 +197,8 @@
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
                     [disableInput]="disableInput"
-                    (select)='selectChild($event, line)'
-                    (delete)='emitDelete(true)'
-                    (deleteC)='deleteChild(idx)'
-                    (notifyError)='emitNotifyError($event)'
-                    (helpText)='emitHelpText($event)'></procedure-item>
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
             </div>
         </ng-container>
     

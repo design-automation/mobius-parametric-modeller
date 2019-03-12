@@ -8,9 +8,9 @@ import { DataService } from '@services';
 import { _parameterTypes } from '@modules';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
-import { checkMissingProd } from '@shared/checkMissingProd';
 import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator } from '@utils';
+import { checkMobFile } from '@shared/updateOldMobFile';
 
 @Component({
   selector: 'load-url',
@@ -73,57 +73,7 @@ export class LoadUrlComponent {
                     };
                     // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
-                    // TO BE REMOVED after all the existing mob files are updated
-                    const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];
-                    if (endNode.procedure.length === 0) {
-                        endNode.procedure = [{type: 13, ID: '',
-                        parent: undefined,
-                        meta: {name: '', module: ''},
-                        children: undefined,
-                        variable: undefined,
-                        argCount: 0,
-                        args: [],
-                        print: false,
-                        enabled: true,
-                        selected: false,
-                        selectGeom: false,
-                        hasError: false}];
-                    }
-                    if (endNode.procedure[endNode.procedure.length - 1].type !== 11) {
-                        const returnMeta = _parameterTypes.return.split('.');
-                        for (const i of ModuleList) {
-                            if (i.module !== returnMeta[0]) { continue; }
-                            for ( const j of i.functions) {
-                                if (j.name !== returnMeta[1]) { continue; }
-                                endNode.procedure.push({type: 11, ID: '',
-                                parent: undefined,
-                                meta: {name: '', module: ''},
-                                children: undefined,
-                                variable: undefined,
-                                argCount: j.argCount,
-                                args: j.args,
-                                print: false,
-                                enabled: true,
-                                selected: false,
-                                selectGeom: false,
-                                hasError: false});
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                    // REMOVE ENDS
-                    let hasError = false;
-                    for (const node of file.flowchart.nodes) {
-                        if (!checkMissingProd(node.procedure)) {
-                            node.hasError = true;
-                            hasError = true;
-                        }
-                    }
-                    if (hasError) {
-                        alert('The flowchart contains functions that does not exist in the current version of Mobius');
-                    }
-
+                    checkMobFile(file);
 
                     resolve(file);
                 } else {

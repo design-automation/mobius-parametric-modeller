@@ -138,7 +138,7 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
-                expect(_model.__checkModel__(output.model)).toBe([], '_model.__checkModel__ failed');
+                expect(_model.__checkModel__(output.model)).toEqual([], '_model.__checkModel__ failed');
             }
             done();
         });

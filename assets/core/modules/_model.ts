@@ -182,14 +182,45 @@ export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
     return _getAttrib(__model__, ents_arr, attrib_name, attrib_index);
 }
 //  ===============================================================================================
+function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {
+    const arr_flat: string[] = [];
+    const arr_indices: number[][] = [];
+    let count = 0;
+    for (const item of arrs) {
+        if (Array.isArray(item)) {
+            const [arr_flat2, arr_indices2] = _flatten(item);
+            for (let i = 0; i < arr_flat2.length; i++) {
+                arr_flat.push(arr_flat2[i]);
+                arr_indices2[i].unshift(count);
+                arr_indices.push(arr_indices2[i]);
+            }
+        } else {
+            arr_flat.push(item);
+            arr_indices.push([count]);
+        }
+        count += 1;
+    }
+    return [arr_flat, arr_indices];
+}
 /**
  * Select entities in the model.
  * @param __model__
  */
-export function __select__(__model__: GIModel, ents_id: string[]): void {
-    const ents_arr: TEntTypeIdx[] = idsBreak(ents_id) as TEntTypeIdx[];
-    for (const ent_arr of ents_arr) {
+export function __select__(__model__: GIModel, ents_id: string|string[]|string[][], var_name: string): void {
+    __model__.geom.selected = [];
+    ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
+    const [ents_id_flat, ents_indices] = _flatten(ents_id);
+    const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
+    for (let i = 0; i < ents_arr.length; i++) {
+        const ent_arr: TEntTypeIdx = ents_arr[i];
+        const ent_indices: number[] = ents_indices[i];
+        const attrib_name: string = '_' + var_name;
+        const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
         __model__.geom.selected.push(ent_arr);
+        if (!__model__.attribs.query.hasAttrib(ent_arr[0], attrib_name)) {
+            __model__.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING, 1);
+        }
+        __model__.attribs.add.setAttribValue(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
     }
 }
 //  ===============================================================================================
@@ -197,6 +228,6 @@ export function __select__(__model__: GIModel, ents_id: string[]): void {
  * Checks the model for internal consistency.
  * @param __model__
  */
-export function __checkModel__(__model__: GIModel): string {
+export function __checkModel__(__model__: GIModel): string[] {
     return __model__.check();
 }

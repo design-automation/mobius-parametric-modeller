@@ -1,7 +1,7 @@
 /**
  * The `calc` module has functions for performing various types of calculations with entities in the model.
  * These functions neither make nor modify anything in the model.
- * All these functions all return either numbers or lists of numbers.
+ * These functions all return either numbers or lists of numbers.
  */
 
 /**
@@ -183,7 +183,7 @@ export function Vector(__model__: GIModel, edge: TId): Txyz {
 }
 // ================================================================================================
 function _centroid(__model__: GIModel, ents_arr: TEntTypeIdx[]): Txyz {
-    // TODO opt this, like bounding box code
+    // TODO optimise this, like bounding box code
     const posis_i: number[] = [];
     for (const ent_arr of ents_arr) {
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]));

@@ -19,6 +19,8 @@ export const _parameterTypes = {
     setattrib: '_model.__setAttrib__',
     getattrib: '_model.__getAttrib__',
 
+    select: '_model.__select__',
+
     return: '_Output.Return'
 };
 

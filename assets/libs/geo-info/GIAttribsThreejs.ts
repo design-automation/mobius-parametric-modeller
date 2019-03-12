@@ -2,6 +2,7 @@ import { GIModel } from './GIModel';
 import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { isString } from 'util';
+import { sortByKey } from '../util/maps';
 
 /**
  * Class for attributes.
@@ -114,34 +115,38 @@ export class GIAttribsThreejs {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         // create a map of objects to store the data
-        const data_obj_map: Map< number, { '#': number, id: string} > = new Map();
+        const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
         let i = 0;
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { '#': i, id: `${attribs_maps_key}${ent_i}` } );
+            data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
             i++;
         }
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of ents_i) {
-                const attrib_value = attrib.getEntVal(ent_i);
-                if ( data_size > 1 ) {
-                    if (attrib_value !== undefined) {
-                        (attrib_value as any[]).forEach( (v, idx) => {
-                            // const _v = isString(v) ? `'${v}'` : v;
-                            const _v =  v;
-                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
-                        });
-                    } else {
-                        for (let idx = 0; idx < data_size; idx++) {
-                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
-                        }
-                    }
+                if (attrib_name.substr(0, 1) === '_') {
+                    const attrib_value = attrib.getEntVal(ent_i);
+                    data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 } else {
-                    const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
-                    data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                    const attrib_value = attrib.getEntVal(ent_i);
+                    if ( data_size > 1 ) {
+                        if (attrib_value !== undefined) {
+                            (attrib_value as any[]).forEach( (v, idx) => {
+                                const _v =  v;
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
+                            });
+                        } else {
+                            for (let idx = 0; idx < data_size; idx++) {
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                            }
+                        }
+                    } else {
+                        const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                        data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                    }
                 }
             }
         });
@@ -152,57 +157,51 @@ export class GIAttribsThreejs {
      * @param ent_type
      * @param ents_i
      */
-    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
+    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType) {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const data_obj_map: Map< number, { '#': number, id: string} > = new Map();
+        const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         let i = 0;
-        const selected_ents_sorted = this.sortByKey(selected_ents);
+        const selected_ents_sorted = sortByKey(selected_ents);
         selected_ents_sorted.forEach(ent => {
-            data_obj_map.set(ent, { '#': i, id: `${attribs_maps_key}${ent}` } );
+            data_obj_map.set(ent, { '#': i, _id: `${attribs_maps_key}${ent}` } );
             i++;
         });
+
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of Array.from(selected_ents.values())) {
-                const attrib_value = attrib.getEntVal(ent_i);
-                if ( data_size > 1 ) {
-                    if (attrib_value !== undefined) {
-                        (attrib_value as any[]).forEach( (v, idx) => {
-                            // const _v = isString(v) ? `'${v}'` : v;
-                            const _v = v;
-                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
-                        });
-                    } else {
-                        for (let idx = 0; idx < data_size; idx++) {
-                            data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
-                        }
-                    }
+                if (attrib_name.substr(0, 1) === '_') {
+                    const attrib_value = attrib.getEntVal(ent_i);
+                    data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 } else {
-                    const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
-                    data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                    const attrib_value = attrib.getEntVal(ent_i);
+                    if ( data_size > 1 ) {
+                        if (attrib_value !== undefined) {
+                            (attrib_value as any[]).forEach( (v, idx) => {
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
+                            });
+                        } else {
+                            for (let idx = 0; idx < data_size; idx++) {
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                            }
+                        }
+                    } else {
+                        const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                        data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                    }
                 }
             }
         });
         return Array.from(data_obj_map.values());
     }
-    private sortByKey(unsortedMap) {
-        const keys = [];
-        const sortedMap = new Map();
 
-        unsortedMap.forEach((value, key) => {
-            keys.push(key);
-        });
-
-        keys.sort((a, b) => {
-            const x = Number(a.substr(2)), y = Number(b.substr(2));
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        }).map(function(key) {
-            sortedMap.set(key, unsortedMap.get(key));
-        });
-        return sortedMap;
+    public getIdIndex(ent_type: EEntType, id: number) {
+        const ents_i = this._model.geom.query.getEnts(ent_type, false);
+        const index = ents_i.findIndex(ent_i => ent_i === id);
+        return index;
     }
 }

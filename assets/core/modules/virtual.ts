@@ -26,7 +26,7 @@ import { _normal } from './calc';
  * @param __model__
  * @param origin Origin of ray: Position, Vertex, Point, or a list of three numbers
  * @param dir_vec Direction of Ray: Vector, or list of three numbers
- * @returns [origin, vector]: [[x,y,z],[x',y',z']]
+ * @returns A list consisting of an origin and a vector, [origin, vector].
  * @example virtual.Ray([1,2,3],[4,3,2])
  * @example_info Creates a ray from [1,2,3] with the vector [4,3,2].
  *
@@ -57,7 +57,7 @@ export function Ray(__model__: GIModel, origin: TId|Txyz, dir_vec: Txyz): TRay {
  * @param origin Origin of plane: Position, Vertex, Point, or a list of three numbers
  * @param x_vec X vector of the plane: List of three numbers
  * @param xy_vec A vector in the xy plane (parallel to teh x vector): List of three numbers
- * @returns [origin, vector, vector]: [[x,y,z],[x',y',z'],[x",y",z"]]
+ * @returns A list consisting of an origin and two vectors, [origin, vector, vector].
  * @example virtual.Plane ([1,2,3],[4,3,2],[3,3,9])
  * @example_info Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
  */
@@ -264,11 +264,11 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
     }
 }
 /**
- * Visualises a ray by adding geometry to the model.
+ * Visualises a ray by creating a line.
  *
  * @param __model__
  * @param ray A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
- * @returns A points and a line representing the ray. (The point is tha start point of the ray.)
+ * @returns entities, a line representing the ray.
  * @example ray1 = virtual.visRay([[1,2,3],[0,0,1]])
  */
 export function VisRay(__model__: GIModel, ray: TRay|TRay[], scale: number): TId[] {
@@ -341,11 +341,11 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
     }
 }
 /**
- * Visualises a plane by adding geometry to the model.
+ * Visualises a plane by creating a polygon and axis lines.
  *
  * @param __model__
  * @param plane A list of lists
- * @returns A points, a polygon and two polyline representing the plane. (The point is the origin of the plane.)
+ * @returns Entities, a polygon and two polyline representing the plane.
  * @example plane1 = virtual.visPlane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
@@ -414,7 +414,7 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
  *
  * @param __model__
  * @param bbox A list of lists.
- * @returns Twelve polylines representing the box.
+ * @returns Entities, twelve polylines representing the box.
  * @example bbox1 = virtual.viBBox(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */

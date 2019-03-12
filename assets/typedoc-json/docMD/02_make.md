@@ -4,7 +4,7 @@
 * **Description:** Adds a new position to the model.  
 * **Parameters:**  
   * *coords:* XYZ coordinates as a list of three numbers.  
-* **Returns:** New position, or a list of new positions, or a list of lists of new positions .  
+* **Returns:** Entities, new position, or a list of new positions, or a list of lists of new positions .  
 * **Examples:**  
   * position1 = make.Position([1,2,3])  
     Creates a position with coordinates x=1, y=2, z=3.  
@@ -15,8 +15,8 @@
 ## Point  
 * **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
 * **Parameters:**  
-  * *positions:* Position of point.  
-* **Returns:** New point or a list of new points.  
+  * *positions:* Position of point, or other entities from which positions will be extracted.  
+* **Returns:** Entities, new point or a list of new points.  
 * **Examples:**  
   * point1 = make.Point(position1)  
     Creates a point at position1.  
@@ -29,7 +29,7 @@
 * **Parameters:**  
   * *entities:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
   * *close:* Enum, 'open' or 'close'.  
-* **Returns:** New polyline.  
+* **Returns:** Entities, new polyline, or a list of new polylines.  
 * **Examples:**  
   * polyline1 = make.Polyline([position1,position2,position3], close)  
     Creates a closed polyline with vertices position1, position2, position3 in sequence.  
@@ -41,7 +41,7 @@
 * **Description:** Adds one or more new polygons to the model.  
 * **Parameters:**  
   * *entities:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
-* **Returns:** New polygon.  
+* **Returns:** Entities, new polygon, or a list of new polygons.  
 * **Examples:**  
   * polygon1 = make.Polygon([position1,position2,position3])  
     Creates a polygon with vertices position1, position2, position3 in sequence.  
@@ -54,7 +54,7 @@
 * **Parameters:**  
   * *parent_coll:* Collection  
   * *geometry:* List of points, polylines, polygons.  
-* **Returns:** New collection.  
+* **Returns:** Entities, new collection, or a list of new collections.  
 * **Examples:**  
   * collection1 = make.Collection([point1,polyine1,polygon1])  
     Creates a collection containing point1, polyline1, polygon1.  
@@ -67,7 +67,7 @@
 * **Parameters:**  
   * *entities:* Position, point, polyline, polygon, collection to be copied.  
   * *copy_attributes:* Enum to copy attributes or to have no attributes copied.  
-* **Returns:** The copied entity or a list of copied entities.  
+* **Returns:** Entities, the copied entity or a list of copied entities.  
 * **Examples:**  
   * copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)  
     Creates a list containing a copy of the entities in sequence of input.
@@ -85,7 +85,7 @@ The hole positions should lie within the polygon surface.
 * **Parameters:**  
   * *face:* A polygon or a face to make holes in.  
   * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
-* **Returns:** List of wires resulting from the hole(s).  
+* **Returns:** Entities, a list of wires resulting from the hole(s).  
   
 ## Loft  
 * **Description:** Lofts between entities.
@@ -97,7 +97,7 @@ The 'loft_stringers' and 'loft_ribs' methods will generate polylines.
   * *entities:* List of entities, or list of lists of entities.  
   * *divisions:* undefined  
   * *method:* Enum, if 'closed', then close the loft back to the first entity in the list.  
-* **Returns:** List of new polygons or polylines resulting from the loft.  
+* **Returns:** Entities, a list of new polygons or polylines resulting from the loft.  
 * **Examples:**  
   * quads = make.Loft([polyline1,polyline2,polyline3], 1, 'open_quads')  
     Creates quad polygons lofting between polyline1, polyline2, polyline3.  
@@ -117,7 +117,7 @@ The 'loft_stringers' and 'loft_ribs' methods will generate polylines.
   * *distance:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
   * *divisions:* Number of divisions to divide extrusion by. Minimum is 1.  
   * *method:* Enum, when extruding edges, select quads, stringers, or ribs  
-* **Returns:** List of new polygons or polylines resulting from the extrude.  
+* **Returns:** Entities, a list of new polygons or polylines resulting from the extrude.  
 * **Examples:**  
   * extrusion1 = make.Extrude(point1, 10, 2, 'quads')  
     Creates a polyline of total length 10 (with two edges of length 5 each) in the z-direction.
@@ -140,7 +140,7 @@ that have a new length that is equal to or greater than the minimum.
   * *edges:* Edges, or entities from which edges can be extracted.  
   * *divisor:* Segment length or number of segments.  
   * *method:* Enum, select the method for dividing edges.  
-* **Returns:** List of new edges resulting from the divide.  
+* **Returns:** Entities, a list of new edges resulting from the divide.  
 * **Examples:**  
   * segments1 = make.Divide(edge1, 5, by_number)  
     Creates a list of 5 equal segments from edge1.  
@@ -156,7 +156,7 @@ This function performs a simple unweld.
 That is, the vertices within the set of specified entities are not unwelded.  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, point, polyline, polygon, collection.  
-* **Returns:** List of new positions resulting from the unweld.  
+* **Returns:** Entities, a list of new positions resulting from the unweld.  
 * **Examples:**  
   * mod.Unweld(polyline1)  
     Unwelds polyline1 from all ther entities that shares the same position.

@@ -31164,7 +31164,7 @@
 													},
 													{
 														"id": 1205,
-														"name": "id",
+														"name": "_id",
 														"kind": 32,
 														"kindString": "Variable",
 														"flags": {
@@ -31174,7 +31174,7 @@
 															{
 																"fileName": "libs/geo-info/GIAttribsThreejs.ts",
 																"line": 163,
-																"character": 58
+																"character": 59
 															}
 														],
 														"type": {

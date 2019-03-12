@@ -37,7 +37,6 @@ export class GIViewerComponent implements OnInit {
     public clickedEvent: Event;
     public attrTableSelect: Event;
     public attrTableReset: number;
-
     /**
      * constructor
      * @param dataService

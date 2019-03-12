@@ -171,6 +171,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
     }
 
     attrTableSelect(attrib: { action: string, ent_type: string, id: number }) {
+        sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
         if (attrib.action === 'select') {
             switch (attrib.ent_type) {
                 case EEntTypeStr[EEntType.POSI]:
@@ -247,21 +248,23 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                     const selected = this.model.geom.selected;
                     if (selected.length) {
                         let selectingType;
-                        setTimeout(() => {
-                            selected.forEach(s => {
-                                const type = EEntTypeStr[s[0]], id = Number(s[1]);
-                                this.attrTableSelect({ action: 'select', ent_type: type, id: id });
-                                this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
-                                selectingType = type;
-                            });
-                            this.SelectingEntityType = this.selections.find(selection => selection.id === selectingType);
+                        selected.forEach(s => {
+                            const type = EEntTypeStr[s[0]], id = Number(s[1]);
+                            this.attrTableSelect({ action: 'select', ent_type: type, id: id });
+                            this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
+                            selectingType = s[0];
+                        });
+                        this.SelectingEntityType = this.selections.find(selection => selection.id === EEntTypeStr[selectingType]);
 
-                            sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
-                            this.refreshTable(event);
-                        }, 50);
+                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
+                        sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+                        localStorage.setItem('mpm_attrib_current_tab', selectingType.toString());
+                        console.log(selectingType.toString());
+                        this.refreshTable(event);
                     } else {
                         this.dataService.clearAll();
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
+                        sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
                         this.refreshTable(event);
                     }
                     this.render(this);

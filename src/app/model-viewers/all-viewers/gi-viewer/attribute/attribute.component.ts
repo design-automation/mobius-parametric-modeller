@@ -1,18 +1,21 @@
-import { Component, Injector, Input, OnChanges, SimpleChanges, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator, Sort } from '@angular/material';
+import { Component, Injector, Input, OnChanges, SimpleChanges,
+  ViewChildren, QueryList, Output, EventEmitter, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
-import { GICommon } from '@libs/geo-info';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
 import { GIAttribsThreejs } from '@assets/libs/geo-info/GIAttribsThreejs';
+import { ATabsComponent } from './tabs.component';
 
 @Component({
   selector: 'attribute',
   templateUrl: './attribute.component.html',
-  styleUrls: ['./attribute.component.scss']
+  styleUrls: ['./attribute.component.scss'],
 })
 
 export class AttributeComponent implements OnChanges {
+  @ViewChild(ATabsComponent ) child: ATabsComponent ;
+
   @Input() data: GIModel;
   @Input() refresh: Event;
   @Input() reset: Event;
@@ -43,6 +46,34 @@ export class AttributeComponent implements OnChanges {
 
   protected dataService: DataService;
 
+  tab_map = {
+    0: EEntType.POSI,
+    1: EEntType.VERT,
+    2: EEntType.EDGE,
+    3: EEntType.WIRE,
+    4: EEntType.FACE,
+    5: EEntType.POINT,
+    6: EEntType.PLINE,
+    7: EEntType.PGON,
+    8: EEntType.COLL,
+    9: EEntType.MOD
+  };
+
+  tab_rev_map = {
+    0: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+    5: 4,
+    6: 5, // point
+    7: 6, // plines
+    8: 7, // pgons
+    9: 8,
+    10: 9
+  };
+
+  columnItalic = 'c2';
+
   constructor(injector: Injector) {
     this.dataService = injector.get(DataService);
     if (localStorage.getItem('mpm_attrib_current_tab') === null) {
@@ -63,35 +94,22 @@ export class AttributeComponent implements OnChanges {
   }
 
   generateTable(tabIndex: number) {
-    const EntityType = GICommon.EEntType;
-    const tab_map = {
-      0: EntityType.POSI,
-      1: EntityType.VERT,
-      2: EntityType.EDGE,
-      3: EntityType.WIRE,
-      4: EntityType.FACE,
-      5: EntityType.POINT,
-      6: EntityType.PLINE,
-      7: EntityType.PGON,
-      8: EntityType.COLL,
-      9: EntityType.MOD
-    };
     if (this.data) {
       const ThreeJSData = this.data.attribs.threejs;
       if (Number(tabIndex) === 9) {
         this.displayData = ThreeJSData.getModelAttribsForTable();
       } else {
         const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
-        this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[tab_map[tabIndex]]);
+        this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[this.tab_map[tabIndex]]);
 
         if (!ready) { return; }
         if (this.showSelected) {
-          const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, tab_map[tabIndex]);
+          const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, this.tab_map[tabIndex]);
           this.displayData = SelectedAttribData;
         } else {
-          const AllAttribData = ThreeJSData.getAttribsForTable(tab_map[tabIndex]);
+          const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]);
           AllAttribData.map(row => {
-            if (this.selected_ents.has(row.id)) {
+            if (this.selected_ents.has(row._id)) {
               return row.selected = true;
             }
           });
@@ -100,10 +118,16 @@ export class AttributeComponent implements OnChanges {
       }
       if (this.displayData.length > 0) {
         const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
-        const first = columns.shift();
-        const selected = columns.find(column => column.substr(0, 1) === '_');
-        const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
-        const new_columns = selected ? [first, selected, ...rest_of_columns] : [first, ...rest_of_columns];
+        let new_columns;
+        if (Number(tabIndex) === 9) {
+          new_columns = columns;
+        } else {
+          const first = columns.shift();
+          const second = columns.shift();
+          const selected = columns.find(column => column.substr(0, 1) === '_');
+          const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
+          new_columns = selected ? [first, second, selected, ...rest_of_columns, ' '] : [first, second, ...rest_of_columns, ' '];
+        }
         this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
       } else {
@@ -129,7 +153,7 @@ export class AttributeComponent implements OnChanges {
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
   }
 
-  private getCurrentTab() {
+  getCurrentTab() {
     if (localStorage.getItem('mpm_attrib_current_tab') !== null) {
       return Number(localStorage.getItem('mpm_attrib_current_tab'));
     } else {
@@ -140,17 +164,34 @@ export class AttributeComponent implements OnChanges {
   showSelectedSwitch() {
     this.showSelected = !this.showSelected;
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
+    sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
     this.refreshTable();
   }
 
   public refreshTable() {
     const currentTab = this.getCurrentTab();
     setTimeout(() => {
+      if (sessionStorage.getItem('mpm_showSelected')) {
+        this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+      }
+      let changeTab;
+      if (sessionStorage.getItem('mpm_changetab')) {
+        changeTab = JSON.parse(sessionStorage.getItem('mpm_changetab'));
+      }
+      // sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+      if (changeTab) {
+        if (this.data) {
+          if (currentTab === 0 || currentTab === 9 || currentTab === 10) {
+            this.child.selectTab(this.tab_rev_map[currentTab]);
+          } else if (currentTab === 2 || currentTab === 3 || currentTab === 4 || currentTab === 5) {
+            this.child.selectTopology(this.tab_rev_map[currentTab], event);
+          } else if (currentTab === 6 || currentTab === 7 || currentTab === 8) {
+            this.child.selectObject(this.tab_rev_map[currentTab], event);
+          }
+        }
+      }
       this.generateTable(currentTab);
     }, 0);
-    if (sessionStorage.getItem('mpm_showSelected')) {
-      this.showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-    }
   }
 
   resetTable() {
@@ -167,7 +208,6 @@ export class AttributeComponent implements OnChanges {
     const ent_type = ent_id.substr(0, 2);
     const id = Number(ent_id.substr(2));
     const target = event.target || event.srcElement || event.currentTarget;
-
     if (this.selected_ents.has(ent_id)) {
       this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
       this.selected_ents.delete(ent_id);

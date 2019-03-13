@@ -391,11 +391,13 @@ export class DataThreejs {
             geom.addAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
         } else {
             let color_data;
-            if (positions.length < 3) {
-                color_data = [color_rgb.r, color_rgb.g, color_rgb.b];
-            } else {
-                // @ts-ignore
-                color_data = Array(positions.length / 3).fill([color_rgb.r, color_rgb.g, color_rgb.b]).flat(1);
+            if (positions) {
+                if (positions && positions.length < 3) {
+                    color_data = [color_rgb.r, color_rgb.g, color_rgb.b];
+                } else {
+                    // @ts-ignore
+                    color_data = Array(positions.length / 3).fill([color_rgb.r, color_rgb.g, color_rgb.b]).flat(1);
+                }
             }
             const color_buffer = new Uint8Array(color_data);
             geom.addAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));

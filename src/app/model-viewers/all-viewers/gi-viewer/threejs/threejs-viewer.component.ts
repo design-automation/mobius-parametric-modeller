@@ -259,7 +259,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
                         localStorage.setItem('mpm_attrib_current_tab', selectingType.toString());
-                        console.log(selectingType.toString());
                         this.refreshTable(event);
                     } else {
                         this.dataService.clearAll();

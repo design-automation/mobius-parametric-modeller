@@ -104,8 +104,9 @@ export class LoadUrlComponent {
         for (const node of loadeddata.flowchart.nodes) {
             checkNodeValidity(node);
         }
-        const executeB = document.getElementById('executeButton');
+        let executeB = document.getElementById('executeButton');
         if (executeB) { executeB.click(); }
+        executeB = null;
     }
 
 }

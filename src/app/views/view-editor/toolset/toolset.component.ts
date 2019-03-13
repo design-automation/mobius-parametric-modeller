@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit, ViewEncapsulation, OnDestroy} from '@angular/core';
 
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
@@ -89,6 +89,7 @@ export class ToolsetComponent implements OnInit {
             this.Modules.push(nMod);
         }
     }
+
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {
@@ -266,19 +267,21 @@ export class ToolsetComponent implements OnInit {
         if (inline && this.dataService.focusedInput) {
             this.dataService.focusedInput.focus();
         }
-        const acc = document.getElementById(id);
+        let acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
         acc.classList.toggle('active');
-        const panel = <HTMLElement>acc.nextElementSibling;
+        let panel = <HTMLElement>acc.nextElementSibling;
         if (panel.style.display === 'block') {
             panel.style.display = 'none';
         } else {
             panel.style.display = 'block';
         }
+        acc = null;
+        panel = null;
     }
 
     toggleAccordionHead(id: string) {
-        const acc = document.getElementById(id);
+        let acc = document.getElementById(id);
         // acc = document.getElementsByClassName("accordion");
         acc.classList.toggle('active');
         let panel = <HTMLElement>acc.nextElementSibling;
@@ -290,6 +293,8 @@ export class ToolsetComponent implements OnInit {
         } else {
             panel.style.display = 'block';
         }
+        acc = null;
+        panel = null;
     }
 
 
@@ -459,20 +464,22 @@ export class ToolsetComponent implements OnInit {
     }
 
     popupTooltip(event, funcText: string) {
-        const tooltip = document.getElementById('tooltiptext');
+        let tooltip = document.getElementById('tooltiptext');
         tooltip.innerHTML = funcText;
         tooltip.style.top = event.target.getBoundingClientRect().top + 'px';
         this.timeOut = setTimeout(() => {
             tooltip.style.transitionDuration = '0.3s';
             tooltip.style.opacity = '1';
+            tooltip = null;
         }, 700);
     }
 
     turnoffTooltip() {
         clearTimeout(this.timeOut);
-        const tooltip = document.getElementById('tooltiptext');
+        let tooltip = document.getElementById('tooltiptext');
         tooltip.style.transitionDuration = '0s';
         tooltip.style.opacity = '0';
+        tooltip = null;
     }
 
     getViewOutput() {

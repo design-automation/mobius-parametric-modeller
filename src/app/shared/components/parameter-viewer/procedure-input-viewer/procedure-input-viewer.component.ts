@@ -37,8 +37,7 @@ export class ProcedureInputViewerComponent {
         return val + ':';
     }
 
-    inputSize(val, defaultVal) {
-        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 7; }
+    inputSize(val) {
         return ctx.measureText(val).width + 7;
     }
 

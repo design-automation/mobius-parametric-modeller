@@ -50,14 +50,14 @@ export class ViewGalleryComponent {
     }
 
     openGalleryMenu(e: MouseEvent) {
-        const stl = document.getElementById('galleryMenu').style;
+        let stl = document.getElementById('galleryMenu').style;
         if (!stl.display || stl.display === 'none') {
             stl.display = 'block';
         } else {
             stl.display = 'none';
         }
         e.stopPropagation();
-
+        stl = null;
     }
 
 

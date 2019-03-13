@@ -1,4 +1,4 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, Input, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '@shared/services';
 import * as circularJSON from 'circular-json';
@@ -14,7 +14,7 @@ ctx.font = '12px sans-serif';
   templateUrl:  'panel-header.component.html',
   styleUrls: ['panel-header.component.scss']
 })
-export class PanelHeaderComponent {
+export class PanelHeaderComponent implements OnDestroy {
 
     @Input() flowchart: IFlowchart;
     executeCheck: boolean;
@@ -30,6 +30,10 @@ export class PanelHeaderComponent {
         } else {
             this.executeCheck = true;
         }
+    }
+
+    ngOnDestroy() {
+        this.dialogBox = null;
     }
 
 
@@ -83,6 +87,7 @@ export class PanelHeaderComponent {
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
         }
+        textarea = null;
     }
 
 
@@ -93,19 +98,9 @@ export class PanelHeaderComponent {
     }
 
     openDropdownMenu(e: MouseEvent) {
-        /*
-        const dropdowns = document.getElementsByClassName('dropdown-content');
-        for (let i = 0; i < dropdowns.length; i++) {
-            const openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-            }
-        }
-        */
-       const stl = document.getElementById('dropdownMenu').style;
+       let stl = document.getElementById('dropdownMenu').style;
        if (!stl.display || stl.display === 'none') {
-            const pos = document.getElementById('dropdownMenuButton').getBoundingClientRect();
-            stl.left = (pos.left + 34 - 100) + 'px';
+            stl.left = (document.getElementById('dropdownMenuButton').getBoundingClientRect().left + 34 - 100) + 'px';
             stl.display = 'block';
             // const bRect = (<Element>e.target).getBoundingClientRect();
             // stl.transform = `translate(` + bRect.left + `px, ` + bRect.height + `px)`;
@@ -113,17 +108,18 @@ export class PanelHeaderComponent {
             stl.display = 'none';
         }
         e.stopPropagation();
+        stl = null;
     }
 
     openNodeMenu(e: MouseEvent) {
-        const stl = document.getElementById('nodeMenu').style;
+        let stl = document.getElementById('nodeMenu').style;
         if (!stl.display || stl.display === 'none') {
             stl.display = 'block';
         } else {
             stl.display = 'none';
         }
         e.stopPropagation();
-
+        stl = null;
     }
 
 
@@ -135,19 +131,19 @@ export class PanelHeaderComponent {
 
     @HostListener('window:click', ['$event'])
     onWindowClick(event: MouseEvent) {
-        const dropdownMenu = document.getElementById('dropdownMenu');
+        let dropdownMenu = document.getElementById('dropdownMenu');
         if (dropdownMenu) {
             dropdownMenu.style.display = 'none';
         }
-        const nodeMenu = document.getElementById('nodeMenu');
+        let nodeMenu = document.getElementById('nodeMenu');
         if (nodeMenu) {
             nodeMenu.style.display = 'none';
         }
-        const galleryMenu = document.getElementById('galleryMenu');
+        let galleryMenu = document.getElementById('galleryMenu');
         if (galleryMenu) {
             galleryMenu.style.display = 'none';
         }
-        const helpMenu = document.getElementById('helpMenu');
+        let helpMenu = document.getElementById('helpMenu');
         if (helpMenu) {
             helpMenu.style.display = 'none';
         }
@@ -160,9 +156,14 @@ export class PanelHeaderComponent {
               && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
             if (!isInDialog) {
                 this.dialogBox.close();
-                this.dialogBox = undefined;
+                this.dialogBox = null;
             }
         }
+        dropdownMenu = null;
+        nodeMenu = null;
+        galleryMenu = null;
+        helpMenu = null;
+
     }
 
     validateUrl() {
@@ -216,9 +217,10 @@ export class PanelHeaderComponent {
         }
         url = url.replace(/\//g, '%2F');
 
-        const txtArea = document.getElementById('generatedLink');
+        let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
                             `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}`;
+        txtArea = null;
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener} from '@angular/core';
+import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener, OnDestroy} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
@@ -19,7 +19,7 @@ ctx.font = '12px sans-serif';
   templateUrl: './view-editor.component.html',
   styleUrls: ['./view-editor.component.scss']
 })
-export class ViewEditorComponent implements AfterViewInit {
+export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     /*
     @Input() flowchart: IFlowchart;
     @Input() node: INode;
@@ -43,6 +43,10 @@ export class ViewEditorComponent implements AfterViewInit {
         setTimeout(() => {
             this.adjustTextArea();
         }, 50);
+    }
+
+    ngOnDestroy() {
+        document.getElementById('view-editor-container').remove();
     }
 
     performAction_param_editor(event: any) {
@@ -153,6 +157,7 @@ export class ViewEditorComponent implements AfterViewInit {
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
         }
+        textarea = null;
     }
 
 

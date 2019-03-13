@@ -44,7 +44,7 @@ export class NewFileComponent {
             settings: {}
         };
         this.dataService.file = file;
-        const zooming = document.getElementById('zoomToFit');
+        let zooming = document.getElementById('zoomToFit');
         if (zooming) {
             zooming.click();
             this.dataService.newFlowchart = false;
@@ -53,5 +53,6 @@ export class NewFileComponent {
         }
         this.cdr.detectChanges();
         document.getElementById('executeButton').click();
+        zooming = null;
     }
 }

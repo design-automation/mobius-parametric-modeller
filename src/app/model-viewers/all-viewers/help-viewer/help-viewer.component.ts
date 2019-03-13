@@ -55,13 +55,14 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
     }
 
     openHelpMenu(e: MouseEvent) {
-        const stl = document.getElementById('helpMenu').style;
+        let stl = document.getElementById('helpMenu').style;
         if (!stl.display || stl.display === 'none') {
             stl.display = 'block';
         } else {
             stl.display = 'none';
         }
         e.stopPropagation();
+        stl = null;
     }
 
     getActiveModule() {

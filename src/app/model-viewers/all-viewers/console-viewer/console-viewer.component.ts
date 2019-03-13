@@ -21,9 +21,10 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     }
 
     ngOnDestroy() {
-        const ct = document.getElementById('console-container');
+        let ct = document.getElementById('console-container');
         if (!ct) { return; }
         this.dataService.consoleScroll = ct.scrollTop;
+        ct = null;
     }
 
     /**
@@ -37,12 +38,13 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * ngOnInit
      */
     ngAfterViewInit() {
-        const ct = document.getElementById('console-container');
+        let ct = document.getElementById('console-container');
         if (! this.dataService.consoleScroll) {
             ct.scrollTop = ct.scrollHeight;
         } else {
             ct.scrollTop = this.dataService.consoleScroll;
         }
+        ct = null;
     }
 
     /**
@@ -64,9 +66,10 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
         if (this.dataService.consoleScroll) {
             this.dataService.consoleScroll = undefined;
         } else if (this.scrollcheck) {
-            const ct = document.getElementById('console-container');
+            let ct = document.getElementById('console-container');
             ct.scrollTop = ct.scrollHeight;
             this.scrollcheck = false;
+            ct = null;
         }
     }
 

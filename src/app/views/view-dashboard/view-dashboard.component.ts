@@ -53,6 +53,7 @@ export class ViewDashboardComponent implements AfterViewInit {
                 textarea.style.height = lineCount * 14 + 4 + 'px';
             }
         }
+        textarea = null;
     }
 
     getEndNode(): INode {

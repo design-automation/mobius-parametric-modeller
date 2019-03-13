@@ -78,6 +78,7 @@ export class ProcedureInputEditorComponent {
     openFileBrowse(id) {
         document.getElementById(`file_${id}`).click();
     }
+
     onFileChange(event) {
         this.prod.args[this.prod.argCount - 1].value = event.target.files[0];
     }

@@ -458,16 +458,18 @@ function checkNumStr(comps: {'type': strType, 'value': string}[], i: number, ope
 }
 
 function isParameter(comp: {'type': strType, 'value': string}, prev: boolean = false): boolean {
-    if (prev) { return comp.type !== strType.OTHER ||
-                       comp.value === ')' ||
-                       comp.value === ']' ||
-                       comp.value === '}'; }
-    return comp.type !== strType.OTHER ||
-           comp.value === '(' ||
-           comp.value === '[' ||
-           comp.value === '{' ||
-           comp.value === '-' ||
-           comp.value === '@';
+    if (prev) {
+        return  comp.type !== strType.OTHER ||
+                comp.value === ')' ||
+                comp.value === ']' ||
+                comp.value === '}';
+    }
+    return  comp.type !== strType.OTHER ||
+            comp.value === '(' ||
+            comp.value === '[' ||
+            comp.value === '{' ||
+            comp.value === '-' ||
+            comp.value === '@';
 }
 
 function addVars(varList: string[], varName: string) {

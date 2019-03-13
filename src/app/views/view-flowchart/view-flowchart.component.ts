@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 
 import { NodeUtils, INode } from '@models/node';
 import { IEdge } from '@models/edge';
@@ -23,7 +23,7 @@ declare const InstallTrigger: any;
     templateUrl: './view-flowchart.component.html',
     styleUrls: ['./view-flowchart.component.scss']
 })
-export class ViewFlowchartComponent implements OnInit, AfterViewInit {
+export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     viewerData = getViewerData;
     @Output() switch = new EventEmitter();
@@ -99,8 +99,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.canvas = <HTMLElement>document.getElementById('svg-canvas');
         // const panZoom = svgPanZoom(this.canvas);
-        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+        let bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        let boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
         this.offset = [bRect.left, bRect.top];
 
         /*
@@ -250,8 +250,20 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-
+        bRect = null;
+        boundingDiv = null;
     }
+
+
+    ngOnDestroy() {
+        this.copySub.unsubscribe();
+        this.pasteSub.unsubscribe();
+        this.keydownSub.unsubscribe();
+        this.canvas = null;
+        this.element = null;
+    }
+
+
     convertCoord(pt) {
         const isFirefox = typeof InstallTrigger !== 'undefined';
         if (isFirefox) {
@@ -312,9 +324,10 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
                     && this.dataService.flowchart.meta.selected_nodes.length === 1
                     && this.dataService.flowchart.meta.selected_nodes[0] === node_index) {
                         if (document.activeElement.id !== selectedNode.id) {
-                            const textarea = <HTMLTextAreaElement>document.getElementById(selectedNode.id);
+                            let textarea = <HTMLTextAreaElement>document.getElementById(selectedNode.id);
                             textarea.focus();
                             textarea.select();
+                            textarea = null;
                         }
                     } else {
                         document.getElementById('executeButton').focus();
@@ -550,7 +563,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         let nY;
 
         if (zoom > this.minZoom) {
-            const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+            let boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
             // const ctm = this.zoom * boundingDiv.width / canvasSize;
             const ctm = bRect.width / canvasSize;
 
@@ -560,7 +573,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             // if the minX or minY goes below 0 (outside of svg frame), change them back to 0
             if (nX > 0) { nX = 0; }
             if (nY > 0) { nY = 0; }
-
+            boundingDiv = null;
         } else {
             zoom = this.minZoom;
             const ctm = bRect.width / canvasSize;
@@ -592,94 +605,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         }
 
 
-        /*
-        // VER 1: translate before and after re-scaling
-        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
-
-        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-        const beforeX = this.mousePos[0] - bRect.x + this.offset[0];
-        const beforeY = this.mousePos[1] - bRect.y + this.offset[1];
-
-        const afterX = beforeX / value + this.mousePos[0] * (value - this.zoom);
-        const afterY = beforeY / value + this.mousePos[1] * (value - this.zoom);
-
-        // find transformation matrix
-        const m = this.canvas.createSVGMatrix()
-        .translate(beforeX / this.zoom, beforeY / this.zoom)
-        .scale(value)
-        .translate(-afterX, -afterY);
-
-        this.dataService.flowchartPos = 'matrix(' + m.a + ',' + m.b + ',' + m.c + ',' + m.d + ',' + m.e + ',' + m.f + ')';
-        */
-
-        /*
-        // VER 2 : transform relative to the top-left of the bounding box of the canvas and adjust based on mouse position
-
-        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
-
-        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-        let newX = (bRect.left - this.offset[0] - this.mousePos[0] * (value - this.zoom)) / this.zoom;
-        let newY = (bRect.top - this.offset[1]  - this.mousePos[1] * (value - this.zoom)) / this.zoom;
-        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
-
-        const m = this.canvas.createSVGMatrix()
-        .scale(value)
-        .translate(newX, newY);
-
-        newX = m.e;
-        newY = m.f;
-
-        if (newX > 0) {
-            newX = 0;
-        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
-            newX = boundingDiv.width - bRect.width * value / this.zoom;
-        }
-        if (newY > 0) {
-            newY = 0;
-        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
-            newY = boundingDiv.height - bRect.height * value / this.zoom;
-        }
-        if (newY > 0) { newY = 0; }
-
-
-        this.dataService.flowchartPos = 'matrix(' + value + ', 0, 0,' + value + ',' + newX + ',' + newY + ')';
-        */
-
-        /*
-        // VER 3: transform relative to the center of the canvas
-
-        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
-
-        let newX = (bRect.left - this.offset[0]) / this.zoom;
-        let newY = (bRect.top - this.offset[1] ) / this.zoom;
-
-
-        const m = this.canvas.createSVGMatrix()
-        .scale(value)
-        .translate(newX, newY);
-
-        newX = m.e - boundingDiv.width * (value - this.zoom) / (2 * this.zoom);
-        newY = m.f - boundingDiv.width * (value - this.zoom) / (2 * this.zoom);
-
-        if (newX > 0) {
-            newX = 0;
-        } else if (boundingDiv.width - newX > bRect.width * value / this.zoom) {
-            newX = boundingDiv.width - bRect.width * value / this.zoom;
-        }
-        if (newY > 0) {
-            newY = 0;
-        } else if (boundingDiv.height - newY > bRect.height * value / this.zoom) {
-            newY = boundingDiv.height - bRect.height * value / this.zoom;
-        }
-        if (newY > 0) { newY = 0; }
-        */
-
         // VER 4: transform relative to the mouse position
         this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
 
-        const bRect = <DOMRect>this.canvas.getBoundingClientRect();
-        const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+        let bRect = <DOMRect>this.canvas.getBoundingClientRect();
+        let boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
 
         let newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom;
         let newY = ((bRect.top  - this.offset[1]) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
@@ -703,6 +633,10 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
         this.canvas.style.transform = this.dataService.flowchartPos;
 
         this.zoom = value;
+
+        bRect = null;
+        boundingDiv = null;
+
     }
 
 
@@ -735,7 +669,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             let y = Number(event.clientY - this.starTxyzs[1]);
             // let x = Number(event.deltaX - this.starTxyzs[0]);
             // let y = Number(event.deltaY - this.starTxyzs[1]);
-            const boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
+            let boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
             if (x > 0 || bRect.width < boundingDiv.width) {
                 x = 0;
             } else if (boundingDiv.width - x > bRect.width) {
@@ -748,7 +682,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
             }
             this.dataService.flowchartPos = 'matrix(' + this.zoom + ',0,0,' + this.zoom + ',' + x + ',' + y + ')';
             this.canvas.style.transform = this.dataService.flowchartPos;
-
+            boundingDiv = null;
 
         // if drag node
         } else if (this.isDown === 2) {
@@ -834,11 +768,12 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit {
 
 
             // reset temporary edge position to <(0,0),(0,0)>
-            const tempLine = <HTMLElement>document.getElementById('temporary-wire');
+            let tempLine = <HTMLElement>document.getElementById('temporary-wire');
             tempLine.setAttribute('x1', '0');
             tempLine.setAttribute('y1', '0');
             tempLine.setAttribute('x2', '0');
             tempLine.setAttribute('y2', '0');
+            tempLine = null;
 
             // go through all of the nodes' input/output ports
             for (const n of this.dataService.flowchart.nodes) {

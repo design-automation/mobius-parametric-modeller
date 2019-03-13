@@ -1,11 +1,11 @@
-import { Component, OnChanges, Input, AfterViewInit } from '@angular/core';
+import { Component, OnChanges, Input, AfterViewInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements AfterViewInit, OnChanges {
+export class NotificationComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     notificationBox: HTMLElement;
     @Input() message: string;
@@ -31,6 +31,10 @@ export class NotificationComponent implements AfterViewInit, OnChanges {
             this.notificationBox.className = 'hide';
             this.message = '';
         }, 5000);
+    }
+
+    ngOnDestroy() {
+        this.notificationBox = null;
     }
 
 }

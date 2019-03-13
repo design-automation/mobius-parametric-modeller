@@ -46,13 +46,13 @@
     <button
         id="EntitySelection"
         mat-icon-button
-        (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+        (click)="selectDropdownVisible = !selectDropdownVisible"
     >
         <mat-icon svgIcon="select"></mat-icon>
-        <div
+        <!-- <div
             [hidden]="needSelect?(!needSelect&&selectDropdownVisible):!needSelect"
             class="needSelect"
-        ></div>
+        ></div> -->
     </button>
     <span
         *ngIf="!selectDropdownVisible"

@@ -1182,7 +1182,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const date = new Date(), timestamp = date.getTime();
         const position = this.model.attribs.query.getVertCoords(id);
         const ent_id = `${ent_type_str}${id}`;
-        scene.selectObjVetex(`_single_v${timestamp}`, ent_id, position, this.container, true);
+        const labelText = this.indexAsLabel(ent_type_str, ent_id, id, EEntType.VERT);
+        scene.selectObjVetex(`_single_v${timestamp}`, ent_id, position, this.container, labelText);
         posi_ent.set(ent_id, id);
         this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
         this.refreshTable(null);

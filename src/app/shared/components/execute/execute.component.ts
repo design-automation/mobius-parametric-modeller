@@ -34,7 +34,7 @@ function printFunc(_console, name, value){
     } else {
         val = value;
     }
-    _console.push(name+': '+val);
+    _console.push('  _ ' + name+': '+val);
     return val;
 }
 `;
@@ -56,7 +56,7 @@ export class ExecuteComponent {
     async execute(testing?: boolean) {
         this.startTime = performance.now();
         document.getElementById('spinner-on').click();
-        this.dataService.log(' ');
+        this.dataService.log('=====================================================');
 
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
@@ -152,6 +152,7 @@ export class ExecuteComponent {
             // setTimeout for 20ms so that the loading screen has enough time to be loaded in
             setTimeout(() => {
                 this.executeFlowchart();
+                this.dataService.log(' ');
             }, 20);
         }
 
@@ -317,6 +318,7 @@ export class ExecuteComponent {
                 this.dataService.log(str);
             }
             this.dataService.log(duration_msg);
+            this.dataService.log(' ');
             return globalVars;
         } catch (ex) {
             for (const str of params.console) {
@@ -331,6 +333,7 @@ export class ExecuteComponent {
                 duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
             }
             this.dataService.log(duration_msg);
+            this.dataService.log(' ');
             document.getElementById('spinner-off').click();
             if (DEBUG) {
                 this.dataService.log('\n=======================================\n' +

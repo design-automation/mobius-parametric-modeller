@@ -69,8 +69,8 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     }
 
     ngOnDestroy() {
-        this.topology_dropdown = null;
-        this.object_dropdown = null;
+        // this.topology_dropdown = null;
+        // this.object_dropdown = null;
     }
 
     selectTab(tab: number) {

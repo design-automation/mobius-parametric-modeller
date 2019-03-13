@@ -10,7 +10,7 @@
     "ng": "ng",
     "start": "ng serve",
     "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json",
-    "deploy": "ng build --prod --base-href=%npm_package_config_prod_url% && npx ngh",
+    "deploy": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && npx ngh",
     "deploy1": "ng build --prod --base-href=%npm_package_config_prod_url% && ngh",
     "deploy0": "ng build --prod --base-href=%npm_package_config_prod_url%",
     "build": "ng build",

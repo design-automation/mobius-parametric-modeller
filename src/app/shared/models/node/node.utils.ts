@@ -133,6 +133,18 @@ export abstract class NodeUtils {
                 node.state.procedure.push(procedure);
             }
         } else if (shift) {
+            if (node.state.procedure.length === 0) {
+                node.state.procedure.push(procedure);
+                procedure.selected = true;
+                return;
+            } else if (procedure.selected) {
+                procedure.selected = false;
+                const i = node.state.procedure.indexOf(procedure);
+                if (i !== -1) {
+                    node.state.procedure.splice(i, 1);
+                    return;
+                }
+            }
             // fromProd: the last selected procedure
             let fromProd = node.state.procedure[node.state.procedure.length - 1];
             // find the whole path to the fromProd from the base level

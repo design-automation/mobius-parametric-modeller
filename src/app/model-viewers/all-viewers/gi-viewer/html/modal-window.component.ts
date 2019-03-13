@@ -25,9 +25,9 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const leftContent = document.getElementsByClassName('content__panel')[0];
+        let leftContent = document.getElementsByClassName('content__panel')[0];
         this.containerWidth = leftContent.clientWidth;
-        const modalWindow = this.element.querySelector('.modal-window');
+        let modalWindow = this.element.querySelector('.modal-window');
         modalWindow.style.width = `${this.containerWidth + 11}px`;
         modalWindow.style.left = `${-this.containerWidth - 11}px`;
 
@@ -43,21 +43,26 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
 
         // add self (this modal instance) to the modal service so it's accessible from controllers
         this.modalService.add(this);
+
+        leftContent = null;
+        modalWindow = null;
     }
 
     // remove self from modal service when directive is destroyed
     ngOnDestroy(): void {
         this.modalService.remove(this.id);
         this.element.remove();
+        this.element = null;
     }
 
     // open modal
     open(): void {
-        const modalWindow = document.getElementById('modal-window');
+        let modalWindow = document.getElementById('modal-window');
         // modalWindow.style.left = 0;
         modalWindow.classList.add('open');
         this.element.style.display = 'block';
         document.body.classList.add('modal-open');
+        modalWindow = null;
     }
 
     // close modal

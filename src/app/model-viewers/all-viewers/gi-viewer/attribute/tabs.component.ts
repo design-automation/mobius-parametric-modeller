@@ -5,7 +5,8 @@ import {
     AfterContentInit,
     Output,
     EventEmitter,
-    AfterViewInit
+    AfterViewInit,
+    OnDestroy
 } from '@angular/core';
 
 import { ATabComponent } from './tab.component';
@@ -15,7 +16,7 @@ import { ATabComponent } from './tab.component';
     templateUrl: `./tabs.component.html`,
     styleUrls: ['./tabs.component.scss']
 })
-export class ATabsComponent implements AfterContentInit, AfterViewInit {
+export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestroy {
     @Output() selectedTab = new EventEmitter<number>();
     @Output() selectedTopology = new EventEmitter<number>();
 
@@ -65,6 +66,11 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit {
 
         this.object_dropdown = document.getElementById('object_dropdown');
         this.object_dropdown.style.display = 'none';
+    }
+
+    ngOnDestroy() {
+        this.topology_dropdown = null;
+        this.object_dropdown = null;
     }
 
     selectTab(tab: number) {

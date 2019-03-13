@@ -1,7 +1,7 @@
 <div class='container'>
     <div class='container--parameter'>
         <input class='input-const-name' [class.disabled-input]='true' [value]='displayConstName()' 
-        [style.width.px]='inputSize(prod.args[prod.argCount-2].value,"Undefined") + 10' disabled>
+        [style.width.px]='inputSize(prod.args[prod.argCount-2].value) + 10' disabled>
 
         <div class = "FFA">
             <ng-container class='parameter__name' [ngSwitch]="prod.meta.inputMode">

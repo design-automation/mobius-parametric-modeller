@@ -203,11 +203,12 @@ export class DataThreejs {
             if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
             const hud = this._model.attribs.query.getModelAttribValue('hud') as string;
             const element = this._createHud(hud).element;
-            const old = document.getElementById('hud');
+            let old = document.getElementById('hud');
             if (old) {
                 container.removeChild(old);
             }
             container.appendChild(element);
+            old = null;
         }, 0);
     }
 
@@ -544,13 +545,14 @@ export class DataThreejs {
             if (JSON.parse(sessionStorage.getItem('mpm_selected_ents_arr'))) {
                 arr = JSON.parse(sessionStorage.getItem('mpm_selected_ents_arr'));
             }
-            const allLabels = document.getElementsByClassName('text-label');
+            let allLabels = document.getElementsByClassName('text-label');
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const attr = Number(element.getAttribute('data-index'));
                 const index = arr.findIndex(l => l === attr);
                 element.innerHTML = String(index);
             }
+            allLabels = null;
         } else {
             label.setHTML(labelText);
         }

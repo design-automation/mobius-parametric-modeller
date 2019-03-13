@@ -2,7 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 // import @angular stuff
 import {
     Component, OnInit, Input, Output, EventEmitter,
-    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild
+    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild, OnDestroy
 } from '@angular/core';
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
@@ -21,7 +21,7 @@ import { sortByKey } from '@libs/util/maps';
     templateUrl: './threejs-viewer.component.html',
     styleUrls: ['./threejs-viewer.component.scss']
 })
-export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
+export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
     @Output() eventClicked = new EventEmitter<Event>();
     @Output() resetTableEvent = new EventEmitter<number>();
     @Input() model: GIModel;
@@ -168,6 +168,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges {
                 this.attrTableSelect(this.attr_table_select);
             }
         }
+    }
+
+    ngOnDestroy() {
+        this.mouse_label = null;
+        this._elem = null;
+        this.container = null;
     }
 
     attrTableSelect(attrib: { action: string, ent_type: string, id: number }) {

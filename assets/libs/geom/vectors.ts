@@ -86,7 +86,6 @@ export function vecAng(v1: Txyz, v2: Txyz): number {
     const v1n: Txyz = vecNorm(v1);
     const v2n: Txyz = vecNorm(v2);
     const d: number = mathjs.dot(v1n, v2n);
-    if ((1 - Math.abs(d)) < EPS) { return 0; }
     return Math.acos( d );
 }
 
@@ -94,7 +93,6 @@ export function vecAng2(v1: Txyz, v2: Txyz, n: Txyz): number {
     const v1n: Txyz = vecNorm(v1);
     const v2n: Txyz = vecNorm(v2);
     const d: number = mathjs.dot(v1n, v2n);
-    if ((1 - Math.abs(d)) < EPS) { return 0; }
     let angle: number = Math.acos( d );
     const c: Txyz = mathjs.cross(v1n, v2n);
     angle = angle * mathjs.compare(mathjs.dot(n, c), 0);

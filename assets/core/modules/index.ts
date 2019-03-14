@@ -53,6 +53,9 @@ export {_rand};
 import * as _vec from './_vec';
 export {_vec};
 
+import * as _calc from './_calc';
+export {_calc};
+
 import * as _list from './_list';
 export {_list};
 

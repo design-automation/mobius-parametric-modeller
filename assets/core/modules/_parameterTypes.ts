@@ -72,6 +72,7 @@ mod = __modules__._mathjs.mod;
 square = __modules__._mathjs.square;
 cube = __modules__._mathjs.cube;
 distance = __modules__._mathjs.distance;
+intersect = __modules__._calc.intersect;
 range = __modules__._list.range;
 isList = __modules__._list.isList;
 listLen = __modules__._list.listLen;

@@ -90,12 +90,14 @@ const arithmetic = [
     ['round(num)', 'Returns the value of the number rounded to its nearest integer'],
     ['ceil(num)', 'Returns the value of the number rounded up to its nearest integer'],
     ['floor(num)', 'Returns the value of the number rounded down to its nearest integer'],
-    ['mod(num, num)', 'Converts the value to a boolean'],
+    ['mod(num1, num2)', 'Returns the remainder after division of num1 by num2'],
     ['sum(list)', 'Returns the sum of all values in a list'],
     ['prod(list)', 'Returns the product of all values in a list'],
     ['hypot(list)', 'Returns the hypothenuse of all values in a list'],
-    ['norm(list)', 'Returns the norm of a vector'],
-    ['distance(list, list)', 'Returns the Eucledian distance between two locations (each as a list of xyz coordinates)']
+    ['norm(list)', 'Returns the norm of a list'],
+    ['distance(c1, c2)', 'Returns the Eucledian distance between two xyz coordinates'],
+    ['intersect(r1, r2)', 'Returns the intersection xyz coordinates between two rays'],
+    ['intersect(r, p)', 'Returns the intersection xyz coordinates between a ray and a plane']
 ];
 
 const statistics = [

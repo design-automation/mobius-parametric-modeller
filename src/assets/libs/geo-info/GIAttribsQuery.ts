@@ -226,12 +226,12 @@ export class GIAttribsQuery {
                 }
                 const attrib: GIAttribMap = attribs.get(sort.attrib_name);
                 const data_size: number = attrib.getDataSize();
-                if (sort.attrib_index !== undefined && data_size === 1) {
+                if (sort.attrib_index !== null && data_size === 1) {
                     throw new Error('Bad sort: Attribute with index must have a size greater than 1.');
                 }
                 let val1: TAttribDataTypes = attrib.getEntVal(ent1_i) as TAttribDataTypes;
                 let val2: TAttribDataTypes = attrib.getEntVal(ent2_i) as TAttribDataTypes;
-                if (sort.attrib_index !== undefined && sort.attrib_index !== null) {
+                if (sort.attrib_index !== null) {
                     if (val1 !== undefined && val1 !== null) {
                         val1 = val1[sort.attrib_index];
                     }

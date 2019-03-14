@@ -446,7 +446,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         const deletedEdges = [];
         this.dataService.flowchart.meta.selected_nodes = this.dataService.flowchart.meta.selected_nodes.sort();
         // for each of the selected node
-        console.log(this.dataService.flowchart.meta.selected_nodes);
         while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
             const node_index = this.dataService.flowchart.meta.selected_nodes.pop();
             const node = this.dataService.flowchart.nodes[node_index];

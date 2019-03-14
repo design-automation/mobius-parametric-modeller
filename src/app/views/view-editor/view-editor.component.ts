@@ -10,10 +10,6 @@ import { getViewerData } from '@shared/getViewerData';
 import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
 
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = '12px sans-serif';
-
 @Component({
   selector: 'view-editor',
   templateUrl: './view-editor.component.html',
@@ -34,9 +30,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     disableInput = false;
 
     private copyCheck = true;
+    private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
+        this.ctx.font = 'bold 12px arial';
     }
 
     ngAfterViewInit() {
@@ -46,7 +44,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        document.getElementById('view-editor-container').remove();
+        this.ctx = null;
     }
 
     performAction_param_editor(event: any) {
@@ -129,7 +127,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const textareaWidth = textarea.getBoundingClientRect().width - 30;
             let lineCount = 0;
             for (const line of desc) {
-                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
 
@@ -141,7 +139,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                     const prodTextareaWidth = textarea.getBoundingClientRect().width - 30;
                     let prodLineCount = 0;
                     for (const line of prodDesc) {
-                        prodLineCount += Math.floor(ctx.measureText(line).width / prodTextareaWidth) + 1;
+                        prodLineCount += Math.floor(this.ctx.measureText(line).width / prodTextareaWidth) + 1;
                     }
                     textarea.style.height = prodLineCount * 14 + 4 + 'px';
                 }
@@ -153,7 +151,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const textareaWidth = textarea.getBoundingClientRect().width - 30;
             let lineCount = 0;
             for (const line of desc) {
-                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
         }

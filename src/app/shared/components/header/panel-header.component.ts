@@ -5,10 +5,6 @@ import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
 import { ProcedureTypes } from '@models/procedure';
 
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = '12px sans-serif';
-
 @Component({
   selector: 'panel-header',
   templateUrl:  'panel-header.component.html',
@@ -23,6 +19,7 @@ export class PanelHeaderComponent implements OnDestroy {
     urlSet = ['', 'publish', '', '', ''];
     urlValid: boolean;
     urlNodes;
+    private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService, private router: Router) {
         if (this.router.url === '/about' || this.router.url === '/gallery') {
@@ -30,10 +27,12 @@ export class PanelHeaderComponent implements OnDestroy {
         } else {
             this.executeCheck = true;
         }
+        this.ctx.font = '12px sans-serif';
     }
 
     ngOnDestroy() {
         this.dialogBox = null;
+        this.ctx = null;
     }
 
 
@@ -59,7 +58,7 @@ export class PanelHeaderComponent implements OnDestroy {
             const textareaWidth = textarea.getBoundingClientRect().width - 30;
             let lineCount = 0;
             for (const line of desc) {
-                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
 
@@ -71,7 +70,7 @@ export class PanelHeaderComponent implements OnDestroy {
                     const prodTextareaWidth = textarea.getBoundingClientRect().width - 30;
                     let prodLineCount = 0;
                     for (const line of prodDesc) {
-                        prodLineCount += Math.floor(ctx.measureText(line).width / prodTextareaWidth) + 1;
+                        prodLineCount += Math.floor(this.ctx.measureText(line).width / prodTextareaWidth) + 1;
                     }
                     textarea.style.height = prodLineCount * 14 + 4 + 'px';
                 }
@@ -83,7 +82,7 @@ export class PanelHeaderComponent implements OnDestroy {
             const textareaWidth = textarea.getBoundingClientRect().width - 30;
             let lineCount = 0;
             for (const line of desc) {
-                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
         }

@@ -469,8 +469,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 edge_index += 1;
             }
 
-            console.log(node_index, node.name, this.dataService.flowchart.nodes[node_index].name);
-
             // remove the node from the flowchart
             this.dataService.flowchart.nodes.splice(Number(node_index), 1);
         }

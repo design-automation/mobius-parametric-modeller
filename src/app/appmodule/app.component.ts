@@ -3,7 +3,9 @@ import { DataService } from '@services';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
-
+import { timer } from 'rxjs';
+import * as circularJSON from 'circular-json';
+import { SaveFileComponent } from '@shared/components/file';
 
 @Component({
     selector: 'app-root',
@@ -11,6 +13,9 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+    // subscribe: any;
+    // notificationMessage = 'Saving Flowchart...';
+    // notificationTrigger = true;
 
     constructor(private dataService: DataService, private injector: Injector,
         private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer,
@@ -30,6 +35,17 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('cDashboard', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Dashboard.svg'));
         this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Flowchart.svg'));
         this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Node.svg'));
+
+        // const mobiusObj = localStorage.getItem('__mobius__');
+        // if (mobiusObj) {
+        //     this.dataService.file = circularJSON.parse(mobiusObj);
+        // }
+        // const source = timer(10000, 600000);
+        // this.subscribe = source.subscribe(val => {
+        //     console.log('Saving to Local Storage...');
+        //     SaveFileComponent.saveFileToLocal(this.dataService.file);
+        //     this.notificationTrigger = !this.notificationTrigger;
+        // });
     }
 
     ngOnInit() {
@@ -37,6 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         this.googleAnalyticsService.unsubscribe();
+        // this.subscribe.unsubscribe();
     }
 
 }

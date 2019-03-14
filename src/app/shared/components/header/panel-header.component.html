@@ -49,11 +49,9 @@
     <div class='nodename-container' *ngIf='executeCheck'>
         <div id = 'node-name' (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{flowchart.meta.selected_nodes[0]}}. {{getNode().name}}</span><span id='node--arr'>▾</span></div>
         <div id="nodeMenu">
-            <div *ngFor='let nd of flowchart.nodes; let i = index;'>
-                <li (click)="changeNode(i)"> 
-                    {{i}}. {{nd.name}}
-                </li>
-            </div>
+            <li *ngFor='let nd of flowchart.nodes; let i = index;' (click)="changeNode(i)"> 
+                {{i}}. {{nd.name}}
+            </li>
         </div>
     </div>
 

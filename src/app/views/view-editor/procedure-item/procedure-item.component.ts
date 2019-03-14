@@ -246,6 +246,9 @@ export class ProcedureItemComponent implements OnDestroy {
             if (prod.children) {
                 this.clearLinkedArgs(prod.children);
             }
+            if (!prod.args) {
+                continue;
+            }
             for (const arg of prod.args) {
                 arg.linked = false;
             }

@@ -686,11 +686,14 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
                 modifyArgument(prod, 0, nodeProdList);
                 break;
         }
-        for (const arg of prod.args) {
-            arg.linked = false;
-        }
         if (prod.children) {
             checkProdListValidity(prod.children, nodeProdList);
+        }
+        if (!prod.args) {
+            continue;
+        }
+        for (const arg of prod.args) {
+            arg.linked = false;
         }
     }
 }

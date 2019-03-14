@@ -17,7 +17,7 @@ button{
     overflow:hidden;
 }
 
-#cesium-container {
+/deep/ #cesium-container {
     position: relative;
     // padding:50px;
     height: 100%;
@@ -26,6 +26,32 @@ button{
     overflow: hidden;
     // color: blue;
     font-family:sans-serif;
+    .cesium-viewer-toolbar{
+        
+    }
+    .cesium-toolbar-button{
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        background: transparent;
+        color: #808080;
+        fill: currentColor;
+        border: none;
+        box-shadow: unset;
+        &:first-of-type{
+            position: absolute;
+            top: 27px;
+            width: 28px;
+            height: 28px;
+            right: -2px;
+        }
+        &:last-of-type{
+            top: -3px;
+            right: 2px;
+            border-radius: unset;
+            vertical-align: top;
+        }
+    }
 }
 
 #container-top-right-resize { 

@@ -17,6 +17,7 @@ export const mod = Mathjs.mod;
 export const square = Mathjs.square;
 export const cube = Mathjs.cube;
 export const distance = Mathjs.distance;
+export const intersect = Mathjs.intersect;
 export const random = Mathjs.random;
 export const randomInt = Mathjs.randomInt;
 export const pickRandom = Mathjs.pickRandom;

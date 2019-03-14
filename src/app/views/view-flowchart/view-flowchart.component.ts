@@ -446,6 +446,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         const deletedEdges = [];
         this.dataService.flowchart.meta.selected_nodes = this.dataService.flowchart.meta.selected_nodes.sort();
         // for each of the selected node
+        console.log(this.dataService.flowchart.meta.selected_nodes);
         while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
             const node_index = this.dataService.flowchart.meta.selected_nodes.pop();
             const node = this.dataService.flowchart.nodes[node_index];
@@ -463,11 +464,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 if (tbrEdge.target.parentNode === node || tbrEdge.source.parentNode === node) {
                     deletedEdges.push(tbrEdge);
-                    this.deleteEdge(edge_index);
+                    this.deleteEdge(edge_index, false);
                     continue;
                 }
                 edge_index += 1;
             }
+
+            console.log(node_index, node.name, this.dataService.flowchart.nodes[node_index].name);
 
             // remove the node from the flowchart
             this.dataService.flowchart.nodes.splice(Number(node_index), 1);
@@ -485,7 +488,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     // delete an edge with a known index
-    deleteEdge(edge_index) {
+    deleteEdge(edge_index, reorder = true) {
         const tbrEdge = this.dataService.flowchart.edges[edge_index];
 
         // remove the edge from the target node's list of edges
@@ -505,7 +508,10 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         }
 
         ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
-        FlowchartUtils.orderNodes(this.dataService.flowchart);
+
+        if (reorder) {
+            // FlowchartUtils.orderNodes(this.dataService.flowchart);
+        }
 
         // remove the edge from the general list of edges
         this.dataService.flowchart.edges.splice(edge_index, 1);
@@ -823,7 +829,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.dataService.flowchart.ordered = false;
 
                 ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
-                FlowchartUtils.orderNodes(this.dataService.flowchart);
+                // FlowchartUtils.orderNodes(this.dataService.flowchart);
                 break;
             }
             this.dataService.registerFlwAction({'type': 'add', 'edges': [this.edge]});

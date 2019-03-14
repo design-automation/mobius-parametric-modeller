@@ -78,23 +78,23 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     outputOffset = [50, 40];
 
 
-    // static disableNode(node: INode) {
-    //     for (const edge of node.input.edges) {
-    //         if (edge.source.parentNode.enabled) { return; }
-    //     }
-    //     node.enabled = false;
-    //     for (const edge of node.output.edges) {
-    //         ViewFlowchartComponent.disableNode(edge.target.parentNode);
-    //     }
-    // }
+    static disableNode(node: INode) {
+        for (const edge of node.input.edges) {
+            if (edge.source.parentNode.enabled) { return; }
+        }
+        node.enabled = false;
+        for (const edge of node.output.edges) {
+            ViewFlowchartComponent.disableNode(edge.target.parentNode);
+        }
+    }
 
 
-    // static enableNode(node: INode) {
-    //     node.enabled = true;
-    //     for (const edge of node.output.edges) {
-    //         ViewFlowchartComponent.enableNode(edge.target.parentNode);
-    //     }
-    // }
+    static enableNode(node: INode) {
+        node.enabled = true;
+        for (const edge of node.output.edges) {
+            ViewFlowchartComponent.enableNode(edge.target.parentNode);
+        }
+    }
 
     ngOnInit() {
         this.canvas = <HTMLElement>document.getElementById('svg-canvas');
@@ -166,6 +166,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.notificationMessage = `Pasted Node`;
                 this.notificationTrigger = !this.notificationTrigger;
 
+                ViewFlowchartComponent.enableNode(newNode);
                 FlowchartUtils.orderNodes(this.dataService.flowchart);
 
                 this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});
@@ -503,7 +504,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
             }
         }
 
-        // ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
+        ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
         FlowchartUtils.orderNodes(this.dataService.flowchart);
 
         // remove the edge from the general list of edges
@@ -821,6 +822,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
 
+                ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
                 FlowchartUtils.orderNodes(this.dataService.flowchart);
                 break;
             }

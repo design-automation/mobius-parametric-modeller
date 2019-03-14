@@ -225,18 +225,23 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
 
     if (comps[1].value === '[') {
-        if (comps[comps.length - 1].value !== ']') {
-            return {'error': `Error: Expect ']' at the end of the input`};
-        }
         let i = 1;
         const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
         const vars: string[] = [];
-        while (i < comps.length) {
+        while (i < comps.length && comps[i].value !== ']') {
             const check = analyzeComponent(comps, i, openBrackets, vars);
             if (check.error) {
                 return check;
             }
             i = check.value;
+        }
+        if (i !== comps.length - 1) {
+            if (comps[i + 1].value !== '@') {
+                return {'error': 'Error: Expect ] at the end of the variable'};
+            }
+            if (!comps[i + 2] || comps[i + 2].type !== strType.VAR) {
+                return {'error': 'Error: Expect attribute name after @'};
+            }
         }
         addVars(vars, comps[0].value);
         return {'usedVars': vars};

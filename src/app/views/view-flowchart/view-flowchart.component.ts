@@ -66,8 +66,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     private pasteListener = fromEvent(document, 'paste');
     private listenerActive = false;
 
-    notificationMessage = '';
-    notificationTrigger = true;
+    // notificationMessage = '';
+    // notificationTrigger = true;
 
 
     // position of the current canvas view relative to the top left of the page
@@ -135,8 +135,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 node.output = saved.output;
                 node.model = saved.model;
 
-                this.notificationMessage = `Copied Last Selected Node`;
-                this.notificationTrigger = !this.notificationTrigger;
+                // this.notificationMessage = `Copied Last Selected Node`;
+                // this.notificationTrigger = !this.notificationTrigger;
+                this.dataService.notifyMessage(`Copied Last Selected Node`);
             }
         });
 
@@ -163,8 +164,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
                 this.dataService.flowchart.nodes.splice(this.dataService.flowchart.nodes.length - 1, 0, newNode);
 
-                this.notificationMessage = `Pasted Node`;
-                this.notificationTrigger = !this.notificationTrigger;
+                // this.notificationMessage = `Pasted Node`;
+                // this.notificationTrigger = !this.notificationTrigger;
+                this.dataService.notifyMessage(`Pasted Node`);
 
                 ViewFlowchartComponent.enableNode(newNode);
                 FlowchartUtils.orderNodes(this.dataService.flowchart);

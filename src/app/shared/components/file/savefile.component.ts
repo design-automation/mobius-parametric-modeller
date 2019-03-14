@@ -160,7 +160,7 @@ export class SaveFileComponent {
         }
         const blob = new Blob([fileString], {type: 'application/json'});
 
-        // SaveFileComponent.saveToLocalStorage(fileString);
+        SaveFileComponent.saveToLocalStorage(fileString);
 
         DownloadUtils.downloadFile(fname, blob);
 

@@ -246,7 +246,7 @@ export class ProcedureItemComponent implements OnDestroy {
             if (prod.children) {
                 this.clearLinkedArgs(prod.children);
             }
-            if (!prod.args) {
+            if (prod.argCount === 0) {
                 continue;
             }
             for (const arg of prod.args) {
@@ -291,7 +291,7 @@ export class ProcedureItemComponent implements OnDestroy {
             if (prod.children) {
                 this.markLinkedArguments(varName, prod.children);
             }
-            if (prod === this.data) {continue; }
+            if (prod === this.data || prod.argCount === 0) {continue; }
             for (const arg of prod.args) {
                 if (arg.name === '__none__' || !arg.usedVars || arg.usedVars.length === 0) {continue; }
                 if (arg.usedVars.indexOf(varName) !== -1) {

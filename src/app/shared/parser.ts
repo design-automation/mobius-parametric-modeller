@@ -689,7 +689,7 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
         if (prod.children) {
             checkProdListValidity(prod.children, nodeProdList);
         }
-        if (!prod.args) {
+        if (prod.argCount === 0) {
             continue;
         }
         for (const arg of prod.args) {
@@ -748,6 +748,7 @@ function updateAdd(prodList: IProcedure[], varName: string, procedure?: IProcedu
     for (let i = prodList.length - 1; i > 0; i--) {
         if (procedure && procedure.ID === prodList[i].ID) { break; }
         if (prodList[i].children) { updateAdd(prodList[i].children, varName); }
+        if (prodList[i].argCount === 0) { continue; }
         for (const arg of prodList[i].args) {
             if (!arg.invalidVar) { continue; }
             if (arg.invalidVar === `Error: Invalid vars: ${varName}`) {
@@ -764,6 +765,7 @@ function updateRemove(prodList: IProcedure[], varName: string, procedure?: IProc
     for (let i = prodList.length - 1; i > 0; i--) {
         if (procedure && procedure.ID === prodList[i].ID) { break; }
         if (prodList[i].children) { updateRemove(prodList[i].children, varName); }
+        if (prodList[i].argCount === 0) { continue; }
         for (const arg of prodList[i].args) {
             if (arg.usedVars.indexOf(varName) === -1) { continue; }
             if (!arg.invalidVar) {

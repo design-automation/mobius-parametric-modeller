@@ -69,8 +69,8 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     }
 
     ngOnDestroy() {
-        // this.topology_dropdown = null;
-        // this.object_dropdown = null;
+        this.topology_dropdown = null;
+        this.object_dropdown = null;
     }
 
     selectTab(tab: number) {
@@ -130,8 +130,9 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     showTDropdown() {
         this.object_text = 'Objects';
         this.object_open = false;
-        this.object_dropdown.style.display = 'none';
         // this.tabs.toArray().forEach(_tab => _tab.active = false);
+        if (!this.topology_dropdown) { return; }
+        this.object_dropdown.style.display = 'none';
         if (this.topology_dropdown.style.display === 'none') {
             this.topology_dropdown.style.display = 'block';
             this.topology_open = true;
@@ -144,8 +145,9 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     showODropdown() {
         this.topology_text = 'Topology';
         this.topology_open = false;
-        this.topology_dropdown.style.display = 'none';
         // this.tabs.toArray().forEach(_tab => _tab.active = false);
+        if (!this.object_dropdown) { return; }
+        this.topology_dropdown.style.display = 'none';
         if (this.object_dropdown.style.display === 'none') {
             this.object_dropdown.style.display = 'block';
             this.object_open = true;

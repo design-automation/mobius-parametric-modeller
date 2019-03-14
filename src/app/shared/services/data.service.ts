@@ -39,6 +39,9 @@ export class DataService {
     private static _consoleScroll: number;
     private static _consoleClear = true;
 
+    private static _notificationMessage: string;
+    private static _notificationTrigger = false;
+
     private _prevFlwActions = [];
     private _nextFlwActions = [];
 
@@ -130,6 +133,13 @@ export class DataService {
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
 
+    get notificationMessage(): string { return DataService._notificationMessage; }
+    get notificationTrigger(): boolean { return DataService._notificationTrigger; }
+
+    notifyMessage(message) {
+        DataService._notificationMessage = message;
+        DataService._notificationTrigger = !DataService._notificationTrigger;
+    }
 
     registerFlwAction(action) {
         this._prevFlwActions.push(action);

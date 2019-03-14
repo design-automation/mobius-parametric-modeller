@@ -24,8 +24,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     // @Output() imported = new EventEmitter();
     // @Output() delete_Function = new EventEmitter();
-    notificationMessage = '';
-    notificationTrigger = true;
+    // notificationMessage = '';
+    // notificationTrigger = true;
 
     disableInput = false;
 
@@ -208,8 +208,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         this.dataService.copiedProd = [];
         NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
 
-        this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
-        this.notificationTrigger = !this.notificationTrigger;
+        // this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
+        // this.notificationTrigger = !this.notificationTrigger;
+        this.dataService.notifyMessage(`Copied ${this.dataService.copiedProd.length} Procedures`);
     }
 
     // cut selected procedures
@@ -251,8 +252,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         NodeUtils.deselect_procedure(node);
 
-        this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
-        this.notificationTrigger = !this.notificationTrigger;
+        // this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
+        // this.notificationTrigger = !this.notificationTrigger;
+        this.dataService.notifyMessage(`Cut ${this.dataService.copiedProd.length} Procedures`);
     }
 
     // paste copied procedures
@@ -293,8 +295,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
             // toBePasted = undefined;
-            this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
-            this.notificationTrigger = !this.notificationTrigger;
+            // this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
+            // this.notificationTrigger = !this.notificationTrigger;
+            this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
         }
     }
     @HostListener('window:keydown', ['$event'])
@@ -404,8 +407,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     notifyError(message) {
-        this.notificationMessage = message;
-        this.notificationTrigger = !this.notificationTrigger;
+        // this.notificationMessage = message;
+        // this.notificationTrigger = !this.notificationTrigger;
+        this.dataService.notifyMessage(message);
     }
 
     // activate copying/cutting/pasting when the mouse hovers over the procedure list

@@ -13,7 +13,7 @@ import { SaveFileComponent } from '@shared/components/file';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    // subscribe: any;
+    subscribe: any;
     // notificationMessage = 'Saving Flowchart...';
     // notificationTrigger = true;
 
@@ -36,16 +36,16 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Flowchart.svg'));
         this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Node.svg'));
 
-        // const mobiusObj = localStorage.getItem('__mobius__');
-        // if (mobiusObj) {
-        //     this.dataService.file = circularJSON.parse(mobiusObj);
-        // }
-        // const source = timer(10000, 600000);
-        // this.subscribe = source.subscribe(val => {
-        //     console.log('Saving to Local Storage...');
-        //     SaveFileComponent.saveFileToLocal(this.dataService.file);
-        //     this.notificationTrigger = !this.notificationTrigger;
-        // });
+        const mobiusObj = localStorage.getItem('__mobius__');
+        if (mobiusObj) {
+            this.dataService.file = circularJSON.parse(mobiusObj);
+        }
+        const source = timer(60000, 600000);
+        this.subscribe = source.subscribe(val => {
+            SaveFileComponent.saveFileToLocal(this.dataService.file);
+            this.dataService.notifyMessage('Auto-saving Flowchart...');
+            // this.notificationTrigger = !this.notificationTrigger;
+        });
     }
 
     ngOnInit() {
@@ -53,7 +53,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
         this.googleAnalyticsService.unsubscribe();
-        // this.subscribe.unsubscribe();
+        this.subscribe.unsubscribe();
+    }
+
+    notificationMsg() {
+        return this.dataService.notificationMessage;
+    }
+
+    notificationTrig() {
+        return this.dataService.notificationTrigger;
     }
 
 }

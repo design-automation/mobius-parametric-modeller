@@ -13,11 +13,13 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     text: string;
     scrollcheck: boolean;
     logs: string[];
+    consoleClearCheck: boolean;
 
     /**
      * constructor
      */
     constructor(private dataService: DataService) {
+        this.consoleClearCheck = this.dataService.consoleClear;
     }
 
     ngOnDestroy() {
@@ -75,5 +77,10 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
 
     clearConsole() {
         this.dataService.clearLog();
+    }
+
+    toggleConsoleClear() {
+        this.dataService.consoleClear = !this.dataService.consoleClear;
+        return this.dataService.consoleClear;
     }
 }

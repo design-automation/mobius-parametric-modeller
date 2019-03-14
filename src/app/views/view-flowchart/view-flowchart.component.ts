@@ -143,7 +143,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         // paste: paste copied node
         this.pasteSub = this.pasteListener.subscribe((val: ClipboardEvent) => {
             //
-            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA') { return; }
+            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA' || this.router.url !== '/flowchart') { return; }
             if (this.copied) {
                 event.preventDefault();
                 const newNode = <INode>circularJSON.parse(this.copied);
@@ -463,13 +463,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 if (tbrEdge.target.parentNode === node || tbrEdge.source.parentNode === node) {
                     deletedEdges.push(tbrEdge);
-                    this.deleteEdge(edge_index, false);
+                    this.deleteEdge(edge_index);
                     continue;
                 }
                 edge_index += 1;
             }
-
-            console.log(node_index, node.name, this.dataService.flowchart.nodes[node_index].name);
 
             // remove the node from the flowchart
             this.dataService.flowchart.nodes.splice(Number(node_index), 1);
@@ -487,7 +485,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     // delete an edge with a known index
-    deleteEdge(edge_index, reorder = true) {
+    deleteEdge(edge_index) {
         const tbrEdge = this.dataService.flowchart.edges[edge_index];
 
         // remove the edge from the target node's list of edges
@@ -507,10 +505,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         }
 
         ViewFlowchartComponent.disableNode(tbrEdge.target.parentNode);
-
-        if (reorder) {
-            // FlowchartUtils.orderNodes(this.dataService.flowchart);
-        }
 
         // remove the edge from the general list of edges
         this.dataService.flowchart.edges.splice(edge_index, 1);

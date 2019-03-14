@@ -261,7 +261,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (this.copyCheck
         && this.dataService.copiedProd
         && document.activeElement.nodeName !== 'INPUT'
-        && document.activeElement.nodeName !== 'TEXTAREA') {
+        && document.activeElement.nodeName !== 'TEXTAREA'
+        && this.router.url === '/editor') {
             const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
             const toBePasted = this.dataService.copiedProd;
             const redoActions = [];

@@ -37,6 +37,7 @@ export class DataService {
     private static _copiedType: IProcedure[];
 
     private static _consoleScroll: number;
+    private static _consoleClear = true;
 
     private _prevFlwActions = [];
     private _nextFlwActions = [];
@@ -122,6 +123,9 @@ export class DataService {
 
     get consoleScroll() {return DataService._consoleScroll; }
     set consoleScroll(num: number) {DataService._consoleScroll = num; }
+
+    get consoleClear() {return DataService._consoleClear; }
+    set consoleClear(check: boolean) {DataService._consoleClear = check; }
 
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }

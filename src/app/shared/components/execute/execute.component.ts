@@ -55,6 +55,11 @@ export class ExecuteComponent {
 
     async execute(testing?: boolean) {
         this.startTime = performance.now();
+
+        if (this.dataService.consoleClear) {
+            this.dataService.clearLog();
+        }
+
         document.getElementById('spinner-on').click();
         this.dataService.log('=====================================================');
 

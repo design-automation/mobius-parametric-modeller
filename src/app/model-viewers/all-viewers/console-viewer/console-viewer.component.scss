@@ -48,3 +48,16 @@
     color: $color1;
 
 }
+#toggleClearConsole {
+    position: fixed;
+    background-color: transparent;
+    top: 5px;
+    right: 40px;
+    color: $color1;
+    display: inline-block;
+    height: 24px;
+
+    input, label{
+        vertical-align: middle;
+    }
+}

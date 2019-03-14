@@ -13,6 +13,14 @@
             </div>
         </ng-container>
     </div>
+    <form id='toggleClearConsole' title="Check to clear console every time the flowchart is executed.">
+        <input id='consoleClearCheck' 
+        name='consoleClearCheck' 
+        type="checkbox" 
+        [ngModel]='consoleClearCheck' 
+        (ngModelChange)='toggleConsoleClear()'>
+        <label for='consoleClearCheck'>Clear Console</label>
+    </form>
     <button id="clearConsole"
         mat-icon-button
         (click)="clearConsole()"

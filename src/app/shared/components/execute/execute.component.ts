@@ -23,7 +23,9 @@ function mergeInputs(models){
 export const printFunc = `
 function printFunc(_console, name, value){
     let val;
-    if (typeof value === 'number' || value === undefined) {
+    if (!value) {
+        val = value;
+    } else if (typeof value === 'number' || value === undefined) {
         val = value;
     } else if (typeof value === 'string') {
         val = '"' + value + '"';

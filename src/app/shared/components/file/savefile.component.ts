@@ -70,8 +70,12 @@ export class SaveFileComponent {
     }
 
     static saveToLocalStorage(f: string) {
-        localStorage.setItem('__mobius__', f);
-
+        try {
+            localStorage.setItem('__mobius__', f);
+        } catch (ex) {
+            console.log('Failed to save flowchart to local storage');
+            console.log(ex.message);
+        }
     }
 
 

@@ -115,7 +115,10 @@ export class GIGeomQuery {
      */
     public entExists(ent_type: EEntType, index: number): boolean {
         const geom_arrays_key: string = EEntStrToGeomArray[ent_type];
-        return (this._geom_arrays[geom_arrays_key][index] !== undefined);
+        return (
+            this._geom_arrays[geom_arrays_key][index] !== undefined &&
+            this._geom_arrays[geom_arrays_key][index] !== null
+        );
     }
     /**
      * Check if a wire is closed.

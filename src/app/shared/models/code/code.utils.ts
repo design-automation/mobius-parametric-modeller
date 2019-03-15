@@ -227,7 +227,7 @@ export class CodeUtils {
             const repGet = this.repGetAttrib(prod.args[0].value);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }
-        if (prod.selectGeom && prod.args[0].value) {
+        if (addProdArr && prod.selectGeom && prod.args[0].value) {
             const repGet = this.repGetAttrib(prod.args[0].value);
             codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
         }
@@ -526,8 +526,11 @@ export class CodeUtils {
         for (const node of func.flowchart.nodes) {
             const codeRes = CodeUtils.getNodeCode(node, false);
             let code: any = codeRes[0];
-
-            code = '{\n' + code.join('\n') + '\n}';
+            if (node.type === 'start') {
+                code = '{ return __params__.model; }';
+            } else {
+                code = '{\n' + code.join('\n') + '\n}';
+            }
             if (func.args.length === 0) {
                 fullCode += `function ${node.id}(__params__)` + code + `\n\n`;
             } else {

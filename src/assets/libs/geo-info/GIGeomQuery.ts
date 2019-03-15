@@ -114,6 +114,12 @@ export class GIGeomQuery {
      * @param index
      */
     public entExists(ent_type: EEntType, index: number): boolean {
+        if (ent_type === EEntType.POSI) {
+            return (
+                this._geom_arrays.up_posis_verts[index] !== undefined &&
+                this._geom_arrays.up_posis_verts[index] !== null
+            );
+        }
         const geom_arrays_key: string = EEntStrToGeomArray[ent_type];
         return (
             this._geom_arrays[geom_arrays_key][index] !== undefined &&

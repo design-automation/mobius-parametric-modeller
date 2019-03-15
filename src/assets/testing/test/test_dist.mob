@@ -1,8 +1,9 @@
 {
-    "name": "test_isect",
+    "name": "Untitled",
     "author": "new_user",
+    "version": 1,
     "flowchart": {
-        "id": "484082a2-607d-925a-cde2-8637109c6d35",
+        "id": "cd8dfcdb-e8d8-6b81-da3d-fdabadfa1404",
         "name": "Untitled",
         "description": "",
         "language": "js",
@@ -14,7 +15,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_4reenou67jq",
+                "id": "node_p6wazgxwkyh",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -69,9 +70,9 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_nbjidtz2b8b",
+                                    "id": "node_p6tswa80r4",
                                     "position": {
-                                        "x": 5340,
+                                        "x": 5350,
                                         "y": 5200
                                     },
                                     "enabled": true,
@@ -94,276 +95,7 @@
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-ncnf5xfwfoh",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "pattern",
-                                                "name": "Rectangle"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "g",
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "origin",
-                                                    "value": "XY",
-                                                    "linked": false,
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "size",
-                                                    "value": "9",
-                                                    "linked": false,
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "g",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-yd6t4zapa49",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "make",
-                                                "name": "Polygon"
-                                            },
-                                            "argCount": 3,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "p",
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "entities",
-                                                    "value": "g",
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "g"
-                                                    ],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "p",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-640uhvob0lo",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "virtual",
-                                                "name": "Ray"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "linked": false,
-                                                    "value": "r1",
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "origin",
-                                                    "linked": false,
-                                                    "value": "[0 , 0 , 0]",
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "dir_vec",
-                                                    "linked": false,
-                                                    "value": "[1 , 1 , 0]",
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "selectGeom": false,
-                                            "variable": "r1",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-3oeikqafchp",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "virtual",
-                                                "name": "Ray"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "linked": false,
-                                                    "value": "r2",
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "origin",
-                                                    "linked": false,
-                                                    "value": "[10 , 0 , 0]",
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "dir_vec",
-                                                    "linked": false,
-                                                    "value": "[ - 1 , 1 , 0]",
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "selectGeom": false,
-                                            "variable": "r2",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 0,
-                                            "ID": "prod-g3ubt4l2w8h",
-                                            "enabled": true,
-                                            "print": false,
-                                            "argCount": 2,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "i",
-                                                    "linked": false,
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "value": "intersect ( r1 , r2 )",
-                                                    "invalidVar": false,
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "r1",
-                                                        "r2"
-                                                    ]
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "i",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-dmm29vfzetf",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "virtual",
-                                                "name": "VisRay"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "v1",
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "ray",
-                                                    "value": "r1",
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "r1"
-                                                    ],
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "scale",
-                                                    "value": "1",
-                                                    "linked": false,
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "v1",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-i4fkfhui6ej",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "virtual",
-                                                "name": "VisRay"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "v2",
-                                                    "linked": false,
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "ray",
-                                                    "value": "r2",
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "r2"
-                                                    ],
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "scale",
-                                                    "value": "1",
-                                                    "linked": false,
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "v2",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-8nf4dugc8cv",
+                                            "ID": "prod-7w26wyitpq",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
@@ -374,7 +106,7 @@
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "pos",
+                                                    "value": "p1",
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
@@ -384,21 +116,92 @@
                                                 },
                                                 {
                                                     "name": "coords",
-                                                    "value": "i",
+                                                    "value": "[1 , 0 , 0]",
                                                     "linked": false,
-                                                    "usedVars": [
-                                                        "i"
-                                                    ],
+                                                    "usedVars": [],
                                                     "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "variable": "pos",
+                                            "variable": "p1",
                                             "hasError": false
                                         },
                                         {
                                             "type": 8,
-                                            "ID": "prod-qudb1je9uv",
+                                            "ID": "prod-d1d5ibhjsv",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Position"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "p2",
+                                                    "linked": false,
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "coords",
+                                                    "value": "[10 , 0 , 0]",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "variable": "p2",
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-v50yk09hg4q",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "virtual",
+                                                "name": "Ray"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "r",
+                                                    "linked": false,
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "origin",
+                                                    "value": "[ - 10 , 0 , 0]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "dir_vec",
+                                                    "value": "[0 , 1 , 0]",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "variable": "r",
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-j5la1pjn9q",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
@@ -409,9 +212,9 @@
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "pla",
-                                                    "invalidVar": false,
-                                                    "linked": false
+                                                    "value": "p",
+                                                    "linked": false,
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "__model__",
@@ -419,163 +222,116 @@
                                                 },
                                                 {
                                                     "name": "origin",
-                                                    "value": "[4 , 5 , 6]",
+                                                    "value": "[0 , 10 , 0]",
                                                     "linked": false,
                                                     "usedVars": [],
                                                     "invalidVar": false
                                                 },
                                                 {
                                                     "name": "x_vec",
-                                                    "value": "[1 , 2 , 1]",
+                                                    "value": "[1 , 0 , 0]",
                                                     "linked": false,
                                                     "usedVars": [],
                                                     "invalidVar": false
                                                 },
                                                 {
                                                     "name": "xy_vec",
-                                                    "value": "[3 , 4 , 1]",
+                                                    "value": "[0 , 0 , 1]",
                                                     "linked": false,
                                                     "usedVars": [],
                                                     "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "variable": "pla",
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-b7cfq84zwqt",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "virtual",
-                                                "name": "VisPlane"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "plv",
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "planes",
-                                                    "value": "pla",
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "pla"
-                                                    ],
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "scale",
-                                                    "value": "10",
-                                                    "linked": false,
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "plv",
+                                            "variable": "p",
                                             "hasError": false
                                         },
                                         {
                                             "type": 0,
-                                            "ID": "prod-mftshmn2tiq",
-                                            "enabled": true,
-                                            "print": false,
+                                            "ID": "prod-54ztau92p0k",
+                                            "enabled": false,
+                                            "print": true,
                                             "argCount": 2,
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "i2",
-                                                    "linked": false,
-                                                    "invalidVar": false
+                                                    "value": "d1",
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "intersect ( r2 , pla )",
-                                                    "invalidVar": false,
+                                                    "value": "distance ( p1@xyz , p2@xyz )",
                                                     "linked": false,
                                                     "usedVars": [
-                                                        "r2",
-                                                        "pla"
-                                                    ]
+                                                        "p1",
+                                                        "p2"
+                                                    ],
+                                                    "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "variable": "i2",
+                                            "variable": "d1",
                                             "hasError": false,
                                             "selectGeom": false
                                         },
                                         {
-                                            "type": 8,
-                                            "ID": "prod-w2njhdoipb",
-                                            "enabled": true,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "make",
-                                                "name": "Position"
-                                            },
-                                            "argCount": 3,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "pos",
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "coords",
-                                                    "value": "i2",
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "i2"
-                                                    ],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "pos",
-                                            "hasError": false,
-                                            "selectGeom": true
-                                        },
-                                        {
                                             "type": 0,
-                                            "ID": "prod-ewurkaawlcm",
-                                            "enabled": true,
-                                            "print": false,
+                                            "ID": "prod-ho36jv5g4l",
+                                            "enabled": false,
+                                            "print": true,
                                             "argCount": 2,
                                             "args": [
                                                 {
                                                     "name": "var_name",
-                                                    "value": "proj",
+                                                    "value": "d2",
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "project ( [ - 5 , 0 , 0] , r1 )",
+                                                    "value": "distance ( p1@xyz , r )",
                                                     "linked": false,
                                                     "usedVars": [
-                                                        "r1"
+                                                        "p1",
+                                                        "r"
                                                     ],
                                                     "invalidVar": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "variable": "proj",
-                                            "hasError": true
+                                            "variable": "d2",
+                                            "hasError": true,
+                                            "selectGeom": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-s9miek609iq",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "d3",
+                                                    "invalidVar": false,
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "distance ( p1@xyz , p )",
+                                                    "linked": false,
+                                                    "usedVars": [
+                                                        "p1",
+                                                        "p"
+                                                    ],
+                                                    "invalidVar": false
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "variable": "d3",
+                                            "hasError": true,
+                                            "selectGeom": false
                                         }
                                     ],
                                     "state": {
@@ -600,7 +356,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_ckof2d42xb9",
+                                                        "id": "node_f1z4pduejst",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -634,13 +390,11 @@
                                                                 "args": [
                                                                     {
                                                                         "name": "__model__",
-                                                                        "value": "",
-                                                                        "linked": false
+                                                                        "value": ""
                                                                     },
                                                                     {
                                                                         "name": "value",
-                                                                        "value": "",
-                                                                        "linked": false
+                                                                        "value": ""
                                                                     }
                                                                 ],
                                                                 "print": false,
@@ -696,8 +450,7 @@
         ],
         "functions": [],
         "ordered": true,
-        "last_updated": "2019-03-14T15:02:19.130Z"
+        "last_updated": "2019-03-14T16:39:03.394Z"
     },
-    "version": 1,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"version\":\"0.4.24\"}"
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"version\":\"0.4.25\"}"
 }

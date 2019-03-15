@@ -6,6 +6,7 @@ import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { ProcedureTypes } from '@models/procedure';
 import { IdGenerator } from '@utils';
+import { IMobius } from '@models/mobius';
 
 @Component({
   selector: 'file-save',
@@ -34,6 +35,44 @@ import { IdGenerator } from '@utils';
 export class SaveFileComponent {
 
     constructor(private dataService: DataService) {}
+
+    static saveFileToLocal(f: IMobius) {
+        const models = [];
+        for (const node of f.flowchart.nodes) {
+            const nodeModel = {
+                'model': node.model,
+                'input': node.input.value,
+                'output': node.output.value
+            };
+            node.model = undefined;
+            if (node.input.hasOwnProperty('value')) {
+                node.input.value = undefined;
+            }
+            if (node.output.hasOwnProperty('value')) {
+                node.output.value = undefined;
+            }
+            for (const prod of node.procedure) {
+                if (prod.hasOwnProperty('resolvedValue')) {
+                    prod.resolvedValue = undefined;
+                }
+            }
+            models.push(nodeModel);
+        }
+
+        SaveFileComponent.saveToLocalStorage(circularJSON.stringify(f));
+
+        for (const node of f.flowchart.nodes) {
+            const mod = models.shift();
+            node.model = mod.model;
+            node.input.value = mod.input;
+            node.output.value = mod.output;
+        }
+    }
+
+    static saveToLocalStorage(f: string) {
+        localStorage.setItem('__mobius__', f);
+
+    }
 
 
     async download() {
@@ -120,6 +159,9 @@ export class SaveFileComponent {
             fname = `${fname}.mob`;
         }
         const blob = new Blob([fileString], {type: 'application/json'});
+
+        SaveFileComponent.saveToLocalStorage(fileString);
+
         DownloadUtils.downloadFile(fname, blob);
 
         this.dataService.file.name = 'Untitled';

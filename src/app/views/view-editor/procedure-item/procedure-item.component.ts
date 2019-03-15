@@ -1,4 +1,4 @@
-import { Component, Input, Output,  EventEmitter} from '@angular/core';
+import { Component, Input, Output,  EventEmitter, OnDestroy} from '@angular/core';
 
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { ModuleDocList } from '@shared/decorators';
@@ -12,16 +12,13 @@ import { IArgument } from '@models/code';
 
 import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity} from '@shared/parser';
 
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = '12px Arial';
 
 @Component({
     selector: 'procedure-item',
     templateUrl: './procedure-item.component.html',
     styleUrls: ['procedure-item.component.scss']
 })
-export class ProcedureItemComponent {
+export class ProcedureItemComponent implements OnDestroy {
     @Input() data: IProcedure;
     @Input() disableInput: boolean;
     @Output() eventAction = new EventEmitter();
@@ -29,10 +26,17 @@ export class ProcedureItemComponent {
     ProcedureTypes = ProcedureTypes;
 
     private keys = Object.keys(ProcedureTypes);
+    private ctx = document.createElement('canvas').getContext('2d');
+
     ProcedureTypesArr = this.keys.slice(this.keys.length / 2);
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {
+        this.ctx.font = '12px Arial';
+    }
+
+    ngOnDestroy() {
+        this.ctx = null;
     }
 
     performAction(event, idx) {
@@ -242,6 +246,9 @@ export class ProcedureItemComponent {
             if (prod.children) {
                 this.clearLinkedArgs(prod.children);
             }
+            if (prod.argCount === 0) {
+                continue;
+            }
             for (const arg of prod.args) {
                 arg.linked = false;
             }
@@ -255,7 +262,7 @@ export class ProcedureItemComponent {
     // }
 
     inputSize(val) {
-        return ctx.measureText(val).width + 7;
+        return this.ctx.measureText(val).width + 7;
     }
 
 
@@ -284,7 +291,7 @@ export class ProcedureItemComponent {
             if (prod.children) {
                 this.markLinkedArguments(varName, prod.children);
             }
-            if (prod === this.data) {continue; }
+            if (prod === this.data || prod.argCount === 0) {continue; }
             for (const arg of prod.args) {
                 if (arg.name === '__none__' || !arg.usedVars || arg.usedVars.length === 0) {continue; }
                 if (arg.usedVars.indexOf(varName) !== -1) {

@@ -90,12 +90,18 @@ const arithmetic = [
     ['round(num)', 'Returns the value of the number rounded to its nearest integer'],
     ['ceil(num)', 'Returns the value of the number rounded up to its nearest integer'],
     ['floor(num)', 'Returns the value of the number rounded down to its nearest integer'],
-    ['mod(num, num)', 'Converts the value to a boolean'],
+    ['mod(num1, num2)', 'Returns the remainder after division of num1 by num2'],
     ['sum(list)', 'Returns the sum of all values in a list'],
     ['prod(list)', 'Returns the product of all values in a list'],
     ['hypot(list)', 'Returns the hypothenuse of all values in a list'],
-    ['norm(list)', 'Returns the norm of a vector'],
-    ['distance(list, list)', 'Returns the Eucledian distance between two locations (each as a list of xyz coordinates)']
+    ['norm(list)', 'Returns the norm of a list'],
+    ['distance(c1, c2)', 'Returns the Eucledian distance between two xyzs, c1 and c2'],
+    ['distance(c, r)', 'Returns the Eucledian distance between an xyz c and an infinite ray r'],
+    ['distance(c, p)', 'Returns the Eucledian distance between an xyz c and an infinite plane p'],
+    ['intersect(r1, r2)', 'Returns the intersection xyz between two infinite rays'],
+    ['intersect(r, p)', 'Returns the intersection xyz between a ray r and a plane p'],
+    ['project(c, r)', 'Returns the xyz from projecting an xyz c onto an infinite ray r'],
+    ['project(c, p)', 'Returns the xyz from projecting an xyz c onto an infinite plane p']
 ];
 
 const statistics = [

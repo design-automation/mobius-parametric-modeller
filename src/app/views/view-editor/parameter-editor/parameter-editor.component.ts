@@ -1,24 +1,29 @@
-import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked, Output, EventEmitter } from '@angular/core';
+import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { INode, NodeUtils } from '@models/node';
 import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
 import { updateGlobals } from '@shared/parser';
-
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = 'bold 12px arial';
 
 @Component({
   selector: 'parameter-editor',
   templateUrl: './parameter-editor.component.html',
   styleUrls: ['./parameter-editor.component.scss']
 })
-export class ParameterEditorComponent  {
+export class ParameterEditorComponent implements OnDestroy {
     @Input() node: INode;
     @Input() flowchart: IFlowchart;
     @Input() prodCheck: boolean;
     @Input() disableInput: boolean;
     @Output() eventAction = new EventEmitter();
+    private ctx = document.createElement('canvas').getContext('2d');
+
+    constructor() {
+        this.ctx.font = 'bold 12px arial';
+    }
+
+    ngOnDestroy() {
+        this.ctx = null;
+    }
 
 
     performAction(event: any, index: number) {
@@ -74,7 +79,7 @@ export class ParameterEditorComponent  {
     }
 
     inputSize(val) {
-        return ctx.measureText(val).width + 7;
+        return this.ctx.measureText(val).width + 7;
     }
 
     updateGlbs() {

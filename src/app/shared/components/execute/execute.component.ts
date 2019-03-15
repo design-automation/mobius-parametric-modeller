@@ -23,7 +23,9 @@ function mergeInputs(models){
 export const printFunc = `
 function printFunc(_console, name, value){
     let val;
-    if (typeof value === 'number' || value === undefined) {
+    if (!value) {
+        val = value;
+    } else if (typeof value === 'number' || value === undefined) {
         val = value;
     } else if (typeof value === 'string') {
         val = '"' + value + '"';
@@ -55,6 +57,11 @@ export class ExecuteComponent {
 
     async execute(testing?: boolean) {
         this.startTime = performance.now();
+
+        if (this.dataService.consoleClear) {
+            this.dataService.clearLog();
+        }
+
         document.getElementById('spinner-on').click();
         this.dataService.log('=====================================================');
 

@@ -9,7 +9,7 @@ import { fromEvent } from 'rxjs';
 import { DataService } from '@services';
 
 // import size of the canvas
-import { canvasSize } from '@models/flowchart';
+import { canvasSize, FlowchartUtils } from '@models/flowchart';
 import { Router } from '@angular/router';
 import { SplitComponent } from 'angular-split';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
@@ -66,8 +66,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     private pasteListener = fromEvent(document, 'paste');
     private listenerActive = false;
 
-    notificationMessage = '';
-    notificationTrigger = true;
+    // notificationMessage = '';
+    // notificationTrigger = true;
 
 
     // position of the current canvas view relative to the top left of the page
@@ -135,15 +135,16 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 node.output = saved.output;
                 node.model = saved.model;
 
-                this.notificationMessage = `Copied Last Selected Node`;
-                this.notificationTrigger = !this.notificationTrigger;
+                // this.notificationMessage = `Copied Last Selected Node`;
+                // this.notificationTrigger = !this.notificationTrigger;
+                this.dataService.notifyMessage(`Copied Last Selected Node`);
             }
         });
 
         // paste: paste copied node
         this.pasteSub = this.pasteListener.subscribe((val: ClipboardEvent) => {
             //
-            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA') { return; }
+            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA' || this.router.url !== '/flowchart') { return; }
             if (this.copied) {
                 event.preventDefault();
                 const newNode = <INode>circularJSON.parse(this.copied);
@@ -155,9 +156,20 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 NodeUtils.updateNode(newNode, svgP);
                 newNode.enabled = false;
-                this.dataService.flowchart.nodes.push(newNode);
-                this.notificationMessage = `Pasted Node`;
-                this.notificationTrigger = !this.notificationTrigger;
+
+                for (let i = 0; i < this.dataService.flowchart.meta.selected_nodes.length; i ++) {
+                    if (this.dataService.flowchart.meta.selected_nodes[i] === this.dataService.flowchart.nodes.length - 1) {
+                        this.dataService.flowchart.meta.selected_nodes[i] += 1;
+                    }
+                }
+                this.dataService.flowchart.nodes.splice(this.dataService.flowchart.nodes.length - 1, 0, newNode);
+
+                // this.notificationMessage = `Pasted Node`;
+                // this.notificationTrigger = !this.notificationTrigger;
+                this.dataService.notifyMessage(`Pasted Node`);
+
+                ViewFlowchartComponent.enableNode(newNode);
+                FlowchartUtils.orderNodes(this.dataService.flowchart);
 
                 this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});
             }
@@ -407,6 +419,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         // assign the position to the new node and add it to the flowchart
         newNode.position.x = svgP.x;
         newNode.position.y = svgP.y;
+        for (let i = 0; i < this.dataService.flowchart.meta.selected_nodes.length; i ++) {
+            if (this.dataService.flowchart.meta.selected_nodes[i] === this.dataService.flowchart.nodes.length - 1) {
+                this.dataService.flowchart.meta.selected_nodes[i] += 1;
+            }
+        }
         this.dataService.flowchart.nodes.splice(this.dataService.flowchart.nodes.length - 1, 0, newNode);
         this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});
     }
@@ -806,9 +823,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
 
-                if (this.edge.source.parentNode.enabled) {
-                    ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
-                }
+                ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
+                // FlowchartUtils.orderNodes(this.dataService.flowchart);
                 break;
             }
             this.dataService.registerFlwAction({'type': 'add', 'edges': [this.edge]});

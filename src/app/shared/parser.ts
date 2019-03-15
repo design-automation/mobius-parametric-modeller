@@ -225,18 +225,23 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
 
     if (comps[1].value === '[') {
-        if (comps[comps.length - 1].value !== ']') {
-            return {'error': `Error: Expect ']' at the end of the input`};
-        }
         let i = 1;
         const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
         const vars: string[] = [];
-        while (i < comps.length) {
+        while (i < comps.length && comps[i].value !== ']') {
             const check = analyzeComponent(comps, i, openBrackets, vars);
             if (check.error) {
                 return check;
             }
             i = check.value;
+        }
+        if (i !== comps.length - 1) {
+            if (comps[i + 1].value !== '@') {
+                return {'error': 'Error: Expect ] at the end of the variable'};
+            }
+            if (!comps[i + 2] || comps[i + 2].type !== strType.VAR) {
+                return {'error': 'Error: Expect attribute name after @'};
+            }
         }
         addVars(vars, comps[0].value);
         return {'usedVars': vars};
@@ -686,11 +691,14 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
                 modifyArgument(prod, 0, nodeProdList);
                 break;
         }
-        for (const arg of prod.args) {
-            arg.linked = false;
-        }
         if (prod.children) {
             checkProdListValidity(prod.children, nodeProdList);
+        }
+        if (prod.argCount === 0) {
+            continue;
+        }
+        for (const arg of prod.args) {
+            arg.linked = false;
         }
     }
 }
@@ -745,6 +753,7 @@ function updateAdd(prodList: IProcedure[], varName: string, procedure?: IProcedu
     for (let i = prodList.length - 1; i > 0; i--) {
         if (procedure && procedure.ID === prodList[i].ID) { break; }
         if (prodList[i].children) { updateAdd(prodList[i].children, varName); }
+        if (prodList[i].argCount === 0) { continue; }
         for (const arg of prodList[i].args) {
             if (!arg.invalidVar) { continue; }
             if (arg.invalidVar === `Error: Invalid vars: ${varName}`) {
@@ -761,6 +770,7 @@ function updateRemove(prodList: IProcedure[], varName: string, procedure?: IProc
     for (let i = prodList.length - 1; i > 0; i--) {
         if (procedure && procedure.ID === prodList[i].ID) { break; }
         if (prodList[i].children) { updateRemove(prodList[i].children, varName); }
+        if (prodList[i].argCount === 0) { continue; }
         for (const arg of prodList[i].args) {
             if (arg.usedVars.indexOf(varName) === -1) { continue; }
             if (!arg.invalidVar) {

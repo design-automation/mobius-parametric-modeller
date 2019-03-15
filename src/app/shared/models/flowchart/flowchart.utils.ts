@@ -73,6 +73,10 @@ export class FlowchartUtils {
 
     public static orderNodes(flw: IFlowchart) {
         let startNode;
+        const selectedNodesID = [];
+        for (const nodeIndex of flw.meta.selected_nodes) {
+            selectedNodesID.push(flw.nodes[nodeIndex].id);
+        }
         for (const node of flw.nodes) {
             if (node.type === 'start') {
                 startNode = node;
@@ -112,6 +116,16 @@ export class FlowchartUtils {
                 }
             }
         }
+        flw.meta.selected_nodes = [];
+        for (const nodeID of selectedNodesID) {
+            for (let i = 0; i < flw.nodes.length; i++) {
+                if (flw.nodes[i].id === nodeID) {
+                    flw.meta.selected_nodes.push(i);
+                    break;
+                }
+            }
+        }
+
         flw.nodes = nodeOrder;
         flw.ordered = true;
     }

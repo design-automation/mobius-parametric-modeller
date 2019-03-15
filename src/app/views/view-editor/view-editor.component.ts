@@ -10,10 +10,6 @@ import { getViewerData } from '@shared/getViewerData';
 import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
 
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = '12px sans-serif';
-
 @Component({
   selector: 'view-editor',
   templateUrl: './view-editor.component.html',
@@ -28,15 +24,17 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     // @Output() imported = new EventEmitter();
     // @Output() delete_Function = new EventEmitter();
-    notificationMessage = '';
-    notificationTrigger = true;
+    // notificationMessage = '';
+    // notificationTrigger = true;
 
     disableInput = false;
 
     private copyCheck = true;
+    private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
+        this.ctx.font = 'bold 12px arial';
     }
 
     ngAfterViewInit() {
@@ -46,7 +44,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        document.getElementById('view-editor-container').remove();
+        this.ctx = null;
     }
 
     performAction_param_editor(event: any) {
@@ -129,7 +127,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const textareaWidth = textarea.getBoundingClientRect().width - 30;
             let lineCount = 0;
             for (const line of desc) {
-                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
 
@@ -141,7 +139,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                     const prodTextareaWidth = textarea.getBoundingClientRect().width - 30;
                     let prodLineCount = 0;
                     for (const line of prodDesc) {
-                        prodLineCount += Math.floor(ctx.measureText(line).width / prodTextareaWidth) + 1;
+                        prodLineCount += Math.floor(this.ctx.measureText(line).width / prodTextareaWidth) + 1;
                     }
                     textarea.style.height = prodLineCount * 14 + 4 + 'px';
                 }
@@ -153,7 +151,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const textareaWidth = textarea.getBoundingClientRect().width - 30;
             let lineCount = 0;
             for (const line of desc) {
-                lineCount += Math.floor(ctx.measureText(line).width / textareaWidth) + 1;
+                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
             }
             textarea.style.height = lineCount * 14 + 4 + 'px';
         }
@@ -210,8 +208,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         this.dataService.copiedProd = [];
         NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
 
-        this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
-        this.notificationTrigger = !this.notificationTrigger;
+        // this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
+        // this.notificationTrigger = !this.notificationTrigger;
+        this.dataService.notifyMessage(`Copied ${this.dataService.copiedProd.length} Procedures`);
     }
 
     // cut selected procedures
@@ -253,8 +252,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         NodeUtils.deselect_procedure(node);
 
-        this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
-        this.notificationTrigger = !this.notificationTrigger;
+        // this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
+        // this.notificationTrigger = !this.notificationTrigger;
+        this.dataService.notifyMessage(`Cut ${this.dataService.copiedProd.length} Procedures`);
     }
 
     // paste copied procedures
@@ -263,7 +263,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (this.copyCheck
         && this.dataService.copiedProd
         && document.activeElement.nodeName !== 'INPUT'
-        && document.activeElement.nodeName !== 'TEXTAREA') {
+        && document.activeElement.nodeName !== 'TEXTAREA'
+        && this.router.url === '/editor') {
             const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
             const toBePasted = this.dataService.copiedProd;
             const redoActions = [];
@@ -294,8 +295,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
             // toBePasted = undefined;
-            this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
-            this.notificationTrigger = !this.notificationTrigger;
+            // this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
+            // this.notificationTrigger = !this.notificationTrigger;
+            this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
         }
     }
     @HostListener('window:keydown', ['$event'])
@@ -405,8 +407,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     notifyError(message) {
-        this.notificationMessage = message;
-        this.notificationTrigger = !this.notificationTrigger;
+        // this.notificationMessage = message;
+        // this.notificationTrigger = !this.notificationTrigger;
+        this.dataService.notifyMessage(message);
     }
 
     // activate copying/cutting/pasting when the mouse hovers over the procedure list

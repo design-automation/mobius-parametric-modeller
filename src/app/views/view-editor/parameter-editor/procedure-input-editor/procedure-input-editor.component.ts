@@ -1,18 +1,15 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
 import { IProcedure } from '@models/procedure';
 import { InputType } from '@models/port';
 import { modifyVarArg } from '@shared/parser';
 const keys = Object.keys(InputType);
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = '13px Arial';
 
 @Component({
   selector: 'procedure-input-editor',
   templateUrl: './procedure-input-editor.component.html',
   styleUrls: ['./procedure-input-editor.component.scss']
 })
-export class ProcedureInputEditorComponent {
+export class ProcedureInputEditorComponent implements OnDestroy {
 
     @Input() prod: IProcedure;
     @Input() disableInput: boolean;
@@ -20,8 +17,14 @@ export class ProcedureInputEditorComponent {
 
     PortTypes = InputType;
     PortTypesArr = keys.slice(keys.length / 2);
+    private ctx = document.createElement('canvas').getContext('2d');
 
     constructor() {
+        this.ctx.font = 'bold 12px arial';
+    }
+
+    ngOnDestroy() {
+        this.ctx = null;
     }
 
     selectInput(event: MouseEvent) {
@@ -84,8 +87,8 @@ export class ProcedureInputEditorComponent {
     }
 
     inputSize(val, defaultVal) {
-        if (val === undefined || val === '') { return ctx.measureText(defaultVal).width + 8; }
-        return ctx.measureText(val).width + 7;
+        if (val === undefined || val === '') { return this.ctx.measureText(defaultVal).width + 8; }
+        return this.ctx.measureText(val).width + 7;
     }
 
 

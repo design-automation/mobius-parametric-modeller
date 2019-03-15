@@ -1,23 +1,27 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { IProcedure } from '@models/procedure';
 import { InputType } from '@models/port';
-
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-ctx.font = '13px Arial';
 
 @Component({
   selector: 'procedure-input-viewer',
   templateUrl: './procedure-input-viewer.component.html',
   styleUrls: ['./procedure-input-viewer.component.scss']
 })
-export class ProcedureInputViewerComponent {
+export class ProcedureInputViewerComponent implements OnDestroy {
 
     @Input() prod: IProcedure;
     @Output() delete = new EventEmitter();
     PortTypes = InputType;
+    private ctx = document.createElement('canvas').getContext('2d');
 
-    constructor() { }
+    constructor() {
+        this.ctx.font = '13px Arial';
+
+    }
+
+    ngOnDestroy() {
+        this.ctx = null;
+    }
 
     editOptions(): void { }
 
@@ -38,7 +42,7 @@ export class ProcedureInputViewerComponent {
     }
 
     inputSize(val) {
-        return ctx.measureText(val).width + 7;
+        return this.ctx.measureText(val).width + 7;
     }
 
     openFileBrowse(id) {

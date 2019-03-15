@@ -37,6 +37,10 @@ export class DataService {
     private static _copiedType: IProcedure[];
 
     private static _consoleScroll: number;
+    private static _consoleClear = true;
+
+    private static _notificationMessage: string;
+    private static _notificationTrigger = false;
 
     private _prevFlwActions = [];
     private _nextFlwActions = [];
@@ -123,9 +127,19 @@ export class DataService {
     get consoleScroll() {return DataService._consoleScroll; }
     set consoleScroll(num: number) {DataService._consoleScroll = num; }
 
+    get consoleClear() {return DataService._consoleClear; }
+    set consoleClear(check: boolean) {DataService._consoleClear = check; }
+
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
 
+    get notificationMessage(): string { return DataService._notificationMessage; }
+    get notificationTrigger(): boolean { return DataService._notificationTrigger; }
+
+    notifyMessage(message) {
+        DataService._notificationMessage = message;
+        DataService._notificationTrigger = !DataService._notificationTrigger;
+    }
 
     registerFlwAction(action) {
         this._prevFlwActions.push(action);

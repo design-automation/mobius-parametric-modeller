@@ -6,6 +6,7 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { timer } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { SaveFileComponent } from '@shared/components/file';
+import { checkNodeValidity } from '@shared/parser';
 
 @Component({
     selector: 'app-root',
@@ -39,6 +40,9 @@ export class AppComponent implements OnInit, OnDestroy {
         const mobiusObj = localStorage.getItem('__mobius__');
         if (mobiusObj) {
             this.dataService.file = circularJSON.parse(mobiusObj);
+            for (const node of this.dataService.file.flowchart.nodes) {
+                checkNodeValidity(node);
+            }
         }
         const source = timer(60000, 600000);
         this.subscribe = source.subscribe(val => {

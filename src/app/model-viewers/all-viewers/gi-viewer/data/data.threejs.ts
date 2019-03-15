@@ -12,7 +12,7 @@ export class DataThreejs {
     public _scene: THREE.Scene;
     // public basic_scene: THREE.Scene;
     public _renderer: THREE.WebGLRenderer;
-    public _camera: THREE.PerspectiveCamera;
+    public _camera;
     public _controls: THREE.OrbitControls;
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
@@ -79,6 +79,12 @@ export class DataThreejs {
         this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // camera settings
+        // THREE.OrthographicCamera
+        const frustumSize = 600;
+        const aspect = window.innerWidth / window.innerHeight;
+        // this._camera = new THREE.OrthographicCamera( 0.5 * frustumSize * aspect / - 2,
+        //     0.5 * frustumSize * aspect / 2,
+        //     frustumSize / 2, frustumSize / - 2, 150, 1000 );
         this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
         // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
         this._camera.position.x = -80;
@@ -542,10 +548,10 @@ export class DataThreejs {
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
         if (showSelected) {
             let arr = [];
-            if (JSON.parse(sessionStorage.getItem('mpm_selected_ents_arr'))) {
-                arr = JSON.parse(sessionStorage.getItem('mpm_selected_ents_arr'));
+            if (JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(2)}`))) {
+                arr = JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(2)}`));
             }
-            let allLabels = document.getElementsByClassName('text-label');
+            let allLabels = document.getElementsByClassName(`text-label${ent_id.substr(2)}`);
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const attr = Number(element.getAttribute('data-index'));
@@ -915,7 +921,7 @@ export class DataThreejs {
         div.id = `textLabel_${ent_id}`;
         div.title = ent_id;
         div.setAttribute('data-index', ent_id.substr(2));
-        div.className = 'text-label';
+        div.className = `text-label${ent_id.substr(2)}`;
         div.style.position = 'absolute';
         div.style.background = 'rgba(255, 255, 255, 0.3)';
         div.style.padding = '1px';

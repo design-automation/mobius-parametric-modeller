@@ -71,12 +71,7 @@ export class SaveFileComponent {
     }
 
     static saveToLocalStorage(f: string) {
-        try {
-            localStorage.setItem('__mobius__', f);
-        } catch (ex) {
-            console.log('Failed to save flowchart to local storage');
-            console.log(ex.message);
-        }
+        localStorage.setItem('__mobius__', f);
     }
 
     static checkDisappearedNodes(checkNode: INode, nodeList: INode[]) {
@@ -179,7 +174,11 @@ export class SaveFileComponent {
         }
         const blob = new Blob([fileString], {type: 'application/json'});
 
-        SaveFileComponent.saveToLocalStorage(fileString);
+        try {
+            SaveFileComponent.saveToLocalStorage(fileString);
+        } catch (ex) {
+            console.log('Unable to save file to local storage');
+        }
 
         DownloadUtils.downloadFile(fname, blob);
 

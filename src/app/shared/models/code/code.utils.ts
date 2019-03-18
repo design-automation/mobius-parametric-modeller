@@ -5,12 +5,20 @@ import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@modules';
 
+let _terminateCheck: boolean;
 
 export class CodeUtils {
 
-    static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string[] {
-        if (prod.enabled === false || prod.type === ProcedureTypes.Blank || prod.type === ProcedureTypes.Comment) { return ['']; }
 
+    static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string[] {
+        if (_terminateCheck || prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
+        if (prod.type === ProcedureTypes.Comment) {
+            // terminate all process after this if there is a comment with 'TERMINATE'
+            if (addProdArr && prod.args[0].value.toUpperCase() === 'TERMINATE') {
+                _terminateCheck = true;
+            }
+            return [''];
+        }
         prod.hasError = false;
 
         let codeStr: string[] = [];
@@ -476,6 +484,15 @@ export class CodeUtils {
         node.hasError = false;
         let codeStr = [];
         const varsDefined: string[] = [];
+
+        // reset terminate check to false at start node.
+        // for every node after that, if terminate check is true, do not execute the node.
+        if (node.type === 'start') {
+            _terminateCheck = false;
+        } else if (_terminateCheck) {
+            return undefined;
+        }
+
         // input initializations
         if (addProdArr) {
             const input = CodeUtils.getInputValue(node.input, node);

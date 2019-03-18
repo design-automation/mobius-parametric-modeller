@@ -10,11 +10,16 @@ enum strType {
     OTHER
 }
 
+const mathOperators = new Set(['+', '*', '/', '%']);
 const binaryOperators = new Set([   '+' , '+=' , '-=', '*' , '/' , '%'  , '<' , '<=',
                                     '==', '===', '>' , '>=', '!=', '!==', '&&', '||']);
 
 const postfixUnaryOperators = new Set(['++', '--']);
 const prefixUnaryOperators = new Set(['-', '!']);
+const otherSymbols = new Set(['.', '#', '@', ',']);
+
+const noSpaceBefore = new Set(['@', ',', ']', '[']);
+
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
 
 const reservedWords = [
@@ -155,6 +160,8 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
     }
+
+    procedure.args[argIndex].value = varResult.str;
     varResult = checkValidVar(varResult.vars, procedure, nodeProdList);
     if (!varResult.error) {
         procedure.args[argIndex].usedVars = varResult.vars;
@@ -164,45 +171,45 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
     }
 
     // REGEX CALL
-    const vals = procedure.args[argIndex].value.split('"');
-    let result = '';
-    let startOnEven = true;
-    for (let i = 0; i < vals.length; i += 2) {
-        if (i > 0) {
-            if (startOnEven) {
-                result += ' "' + vals[i - 1] + '" ';
-            } else {
-                result += '"' + vals[i - 1] + '"';
-            }
-        }
-        const valSplit = vals[i].split(`'`);
-        for (let j = startOnEven ? 0 : 1; j < valSplit.length; j += 2) {
-            if (j === 1) {
-                result += valSplit[0] + `' `;
-            } else if (j > 1) {
-                result += ` '` + valSplit[j - 1] + `' `;
-            }
-            result += valSplit[j].replace(
-                /\s*([\[\]])\s*/g, '$1').replace(
-                /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
-                .replace(/([\<\>\=\!])\s+=/g, '$1=')
-                .trim().replace(/\s{2,}/g, ' ');
-            if (j === valSplit.length - 2 ) {
-                result += ` '` + valSplit[j + 1];
-            }
-        }
-        if (valSplit.length % 2 === 0) {
-            startOnEven = !startOnEven;
-        }
+    // const vals = procedure.args[argIndex].value.split('"');
+    // let result = '';
+    // let startOnEven = true;
+    // for (let i = 0; i < vals.length; i += 2) {
+    //     if (i > 0) {
+    //         if (startOnEven) {
+    //             result += ' "' + vals[i - 1] + '" ';
+    //         } else {
+    //             result += '"' + vals[i - 1] + '"';
+    //         }
+    //     }
+    //     const valSplit = vals[i].split(`'`);
+    //     for (let j = startOnEven ? 0 : 1; j < valSplit.length; j += 2) {
+    //         if (j === 1) {
+    //             result += valSplit[0] + `' `;
+    //         } else if (j > 1) {
+    //             result += ` '` + valSplit[j - 1] + `' `;
+    //         }
+    //         result += valSplit[j].replace(
+    //             /\s*([\[\]])\s*/g, '$1').replace(
+    //             /([\+\-\*\/\%\{\}\(\)\,\<\>\=\!])/g, ' $1 ')
+    //             .replace(/([\<\>\=\!])\s+=/g, '$1=')
+    //             .trim().replace(/\s{2,}/g, ' ');
+    //         if (j === valSplit.length - 2 ) {
+    //             result += ` '` + valSplit[j + 1];
+    //         }
+    //     }
+    //     if (valSplit.length % 2 === 0) {
+    //         startOnEven = !startOnEven;
+    //     }
 
-        if (i === vals.length - 2 ) {
-            result += ' "' + vals[i + 1] + '" ';
-        }
-    }
-    procedure.args[argIndex].value = result.trim();
+    //     if (i === vals.length - 2 ) {
+    //         result += ' "' + vals[i + 1] + '" ';
+    //     }
+    // }
+    // procedure.args[argIndex].value = result.trim();
 }
 
-
+// VAR INPUT
 export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 'usedVars'?: string[]} {
     let str = value.trim();
     // str = str.replace(/ /g, '_');
@@ -260,7 +267,9 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
 }
 
-export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]} {
+
+// ARGUMENT INPUT
+export function parseArgument(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
         return {'error': comps};
@@ -268,12 +277,14 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     let i = 0;
     const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
     const vars: string[] = [];
+    let newString = '';
     while (i < comps.length) {
         const check = analyzeComponent(comps, i, openBrackets, vars);
         if (check.error) {
             return check;
         }
         i = check.value;
+        newString += check.str;
     }
     if (openBrackets[0] > 0) {
         return { 'error': `Error: Mismatching number of round brackets: ${openBrackets[0]} extra open brackets "("`};
@@ -296,14 +307,17 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
         return { 'error': `Error: Mismatching number of curly brackets: ${0 - openBrackets[2]} extra closing brackets "}"`};
 
     }
-    return {'vars': vars};
+    return {'vars': vars, 'str': newString};
 }
 
 
-
+//
+// ANALYZE 1: GENERAL
+//
 function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number,
-                          openBrackets: number[], vars: string[]): {'error'?: string, 'value'?: number} {
+                          openBrackets: number[], vars: string[]): {'error'?: string, 'value'?: number, 'str'?: string} {
     const comp = comps[i];
+    let newString: string;
     if (comp.type === strType.VAR) {
         return checkVariable(comps, i, openBrackets, vars);
     } else if (comp.type !== strType.OTHER) {
@@ -314,74 +328,115 @@ function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number
             if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ')')) {
                 return { 'error': `Error: Expect expression, string, number or variable after "(" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
+            newString = '( ';
+
         } else if (comp.value === '[') {
             openBrackets[1] += 1;
             if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ']')) {
                 return { 'error': `Error: Expect expression, string, number or variable after "[" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
+            newString = '[';
+
         } else if (comp.value === '{') {
             openBrackets[2] += 1;
             if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== '}')) {
                 return { 'error': `Error: Expect expression, string, number or variable after "{" \n` +
                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
+            newString = '{ ';
+
         } else if (comp.value === ')') {
             openBrackets[0] -= 1;
+            newString = comp.value;
+            if (i + 1 < comps.length && !noSpaceBefore.has(comps[i + 1].value)) {
+                newString += ' ';
+            }
+
         } else if (comp.value === ']') {
             openBrackets[1] -= 1;
+            newString = comp.value;
+            if (i + 1 < comps.length && !noSpaceBefore.has(comps[i + 1].value)) {
+                newString += ' ';
+            }
+
         } else if (comp.value === '}') {
             openBrackets[2] -= 1;
+            newString = comp.value;
+            if (i + 1 < comps.length && !noSpaceBefore.has(comps[i + 1].value)) {
+                newString += ' ';
+            }
+
         } else if (comp.value === '@') {
             if (comps[i + 1].type !== strType.OTHER) {
+                newString = comp.value + comps[i + 1].value;
+                if (i + 2 < comps.length && comps[i + 2].value !== '[') {
+                    newString += ' ';
+                }
                 i++;
             } else {
                 return { 'error': 'Error: Expect attribute name after @ \n' +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
         } else if (postfixUnaryOperators.has(comp.value)) {
             if (!isParameter(comps[i - 1], true)) {
                 return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
+            newString = comp.value + ' ';
+
         } else if (prefixUnaryOperators.has(comp.value)) {
             if (i === comps.length - 1 || !isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
+                return { 'error': `Error: Expect expression, string, number or variable after operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
+            newString = comp.value;
+
         } else if (binaryOperators.has(comp.value)) {
-            if (!isParameter(comps[i - 1], true)) {
+            let checkBef: boolean, checkAft: boolean;
+            if (mathOperators.has(comp.value)) {
+                checkBef = !isParameter(comps[i - 1], true, true);
+                checkAft = i === comps.length - 1 || !isParameter(comps[i + 1], false, true);
+            } else {
+                checkBef = !isParameter(comps[i - 1], true);
+                checkAft = i === comps.length - 1 || !isParameter(comps[i + 1], false);
+            }
+            if (checkBef) {
                 return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
-            if (i === comps.length - 1 || !isParameter(comps[i + 1])) {
-                return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
+            if (checkAft) {
+                return { 'error': `Error: Expect expression, string, number or variable after operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
             }
+            newString = comp.value + ' ';
+        } else if (otherSymbols.has(comp.value)) {
+            if (comp.value === '.' || comp.value === '#') {
+                newString = comp.value;
+            } else {
+                newString = comp.value + ' ';
+            }
+        } else {
+            newString = comp.value + ' ';
         }
         i++;
     }
-    return {'value': i};
+    return {'value': i, 'str': newString};
 }
 
+//
+// ANALYZE 2: VARIABLE
+//
 function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
-                       openBrackets: number[], vars: string[]): {'error'?: string, 'value'?: number} {
+                       openBrackets: number[], vars: string[]): {'error'?: string, 'value'?: number, 'str'?: string} {
     const comp = comps[i];
     // if variable is the last component
     // add the variable to the var list
     if (i + 1 === comps.length) {
         addVars(vars, comp.value);
         i += 1;
-        return {'value': i};
+        return {'value': i, 'str': comp.value};
     }
     // if variable is followed immediately by another var/num/str --> not allowed
     if ( comps[i + 1].type !== strType.OTHER ) {
@@ -398,6 +453,7 @@ function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
             return { 'error': 'Error: Expect expression, string, number or variable after "[" \n' +
             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
         }
+        return {'value': i, 'str': comp.value + '['};
 
     // if variable is followed by "(" --> function
     // does not add to the var list since it's function name
@@ -411,27 +467,44 @@ function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
             return { 'error': 'Error: Expect expression, string, number, variable or ")" after "(" \n' +
             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
         }
+        return {'value': i, 'str': comp.value + '( '};
 
     // if variable is followed by "{" --> not allowed
     } else if (comps[i + 1].value === '{') {
         return { 'error': 'Error: Variable followed by "{" \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
+    // if variable is followed by "#" / "." / "@" / ")" / "]" / "}"
+    } else if (otherSymbols.has(comps[i + 1].value) ||
+               comps[i + 1].value === ')' ||
+               comps[i + 1].value === ']' ||
+               comps[i + 1].value === '}') {
+        if (comps[i + 1].value === '#') {
+            return { 'error': `Error: Variable followed by "${comps[i + 1].value}" \n` +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        addVars(vars, comp.value);
+        i += 1;
+        return {'value': i, 'str': comp.value};
     // all other cases
     } else {
         addVars(vars, comp.value);
         i += 1;
+        return {'value': i, 'str': comp.value + ' '};
     }
-    return {'value': i};
 }
 
-function checkNumStr(comps: {'type': strType, 'value': string}[], i: number, openBrackets: number[]): {'error'?: string, 'value'?: number} {
+//
+// ANALYZE 3: NUMBER/STRING
+//
+function checkNumStr(comps: {'type': strType, 'value': string}[], i: number,
+                     openBrackets: number[]): {'error'?: string, 'value'?: number, 'str'?: string} {
     const comp = comps[i];
 
     // if num/str is the last component --> return
     if (i + 1 === comps.length) {
         i += 1;
-        return {'value': i};
+        return {'value': i, 'str': comp.value};
     }
     // if num/str is followed by another var/num/str --> not allowed
     if ( comps[i + 1].type !== strType.OTHER ) {
@@ -455,25 +528,44 @@ function checkNumStr(comps: {'type': strType, 'value': string}[], i: number, ope
             return { 'error': 'Error: Expect expression, string, number or variable after [ \n' +
             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
         }
+    // if variable is followed by "#" / "." / "@" / ")" / "]" / "}"
+    } else if ( otherSymbols.has(comps[i + 1].value) ||
+                comps[i + 1].value === ')' ||
+                comps[i + 1].value === ']' ||
+                comps[i + 1].value === '}') {
+        if (comps[i + 1].value === '@' || comps[i + 1].value === '#') {
+            return { 'error': `Error: number/string followed by "${comps[i + 1].value}" \n` +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        i += 1;
+        return {'value': i, 'str': comp.value};
     // all other cases
     } else {
         i += 1;
+        return {'value': i, 'str': comp.value + ' '};
     }
-    return {'value': i};
 }
 
-function isParameter(comp: {'type': strType, 'value': string}, prev: boolean = false): boolean {
+function isParameter(comp: {'type': strType, 'value': string}, prev: boolean = false, noSpecialBracket: boolean = false): boolean {
     if (prev) {
+        if (comp.value === '}') {
+            if (noSpecialBracket) {
+                return false;
+            } else { return true; }
+        }
         return  comp.type !== strType.OTHER ||
-                comp.value === ')' ||
                 comp.value === ']' ||
-                comp.value === '}';
+                comp.value === ')';
+    }
+    if (comp.value === '[' || comp.value === '{') {
+        if (noSpecialBracket) {
+            return false;
+        } else { return true; }
     }
     return  comp.type !== strType.OTHER ||
             comp.value === '(' ||
-            comp.value === '[' ||
-            comp.value === '{' ||
             comp.value === '-' ||
+            comp.value === '#' ||
             comp.value === '@';
 }
 
@@ -485,6 +577,17 @@ function addVars(varList: string[], varName: string) {
     }
 }
 
+
+/**
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * ____________________ SPLITTING COMPONENTS FROM STRING ____________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ *
+*/
 function splitComponents(str: string): {'type': strType, 'value': string}[] | string {
     const comps = [];
     let i = 0;
@@ -494,7 +597,7 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
         // numeric (0-9) ==> number
         if (code > 47 && code < 58) {
             const startI = i;
-            while (code > 47 && code < 58) {
+            while ((code > 47 && code < 58) || code === 46) {
                 i ++;
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
@@ -601,7 +704,16 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
 
 
 
-
+/**
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * _________________ CHECK IF THE VARIABLES USED ARE VALID __________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ *
+*/
 export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdList: IProcedure[]): {'error'?: string, 'vars'?: string[]} {
     let current = procedure;
     const validVars = [];
@@ -660,6 +772,16 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
     return {'vars': validVars};
 }
 
+/**
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * ______________________ CHECK THE VALIDITY OF A NODE ______________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ * __________________________________________________________________________
+ *
+*/
 export function checkNodeValidity(node: INode) {
     if (node.type === 'start') {
         updateGlobals(node);

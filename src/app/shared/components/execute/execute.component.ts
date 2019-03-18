@@ -250,6 +250,14 @@ export class ExecuteComponent {
         try {
             // get the code for the node
             const codeRes = CodeUtils.getNodeCode(node, true);
+
+            // if process is terminated, return
+            if (!codeRes) {
+                this.dataService.notifyMessage('PROCESS TERMINATED!!!');
+                node.model = undefined;
+                return;
+            }
+
             const nodeCode = codeRes[0];
             const varsDefined = codeRes[1];
 

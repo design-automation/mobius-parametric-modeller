@@ -7,6 +7,7 @@ import { InputType } from '@models/port';
 import { ProcedureTypes } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
+import { INode } from '@models/node';
 
 @Component({
   selector: 'file-save',
@@ -78,10 +79,25 @@ export class SaveFileComponent {
         }
     }
 
+    static checkDisappearedNodes(checkNode: INode, nodeList: INode[]) {
+        for (const node of nodeList) {
+            if (node.id === checkNode.id) {
+                return true;
+            }
+        }
+        nodeList.splice(nodeList.length - 1, 0, checkNode);
+    }
+
 
     async download() {
         const f = this.dataService.file;
         f.settings = localStorage.getItem('mpm_settings');
+
+        for (const edge of f.flowchart.edges) {
+            SaveFileComponent.checkDisappearedNodes(edge.source.parentNode, f.flowchart.nodes);
+            SaveFileComponent.checkDisappearedNodes(edge.target.parentNode, f.flowchart.nodes);
+        }
+
         if (!f.flowchart.ordered) {
             FlowchartUtils.orderNodes(f.flowchart);
         }
@@ -156,7 +172,6 @@ export class SaveFileComponent {
         if (!savedfile.name || savedfile.name === '' || savedfile.name.toLowerCase() === 'untitled') {
             savedfile.name = savedfile.flowchart.name;
         }
-
         const fileString = circularJSON.stringify(savedfile, null, 4);
         let fname = savedfile.name.replace(/\ /g, '_');
         if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length - 4) !== '.mob') {

@@ -5,17 +5,17 @@ import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@modules';
 
-let _terminateCheck: boolean;
+let _terminateCheck: string;
 
 export class CodeUtils {
 
 
-    static getProcedureCode(prod: IProcedure, existingVars: string[], addProdArr: Boolean): string[] {
-        if (_terminateCheck || prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
+    static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean): string[] {
+        if (_terminateCheck === '' || prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
         if (prod.type === ProcedureTypes.Comment) {
             // terminate all process after this if there is a comment with 'TERMINATE'
-            if (addProdArr && prod.args[0].value.toUpperCase() === 'TERMINATE') {
-                _terminateCheck = true;
+            if (isMainFlowchart && prod.args[0].value.toUpperCase() === 'TERMINATE') {
+                _terminateCheck = '';
             }
             return [''];
         }
@@ -30,7 +30,7 @@ export class CodeUtils {
             && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
         }
         codeStr.push('');
-        if (addProdArr && prod.type !== ProcedureTypes.Else && prod.type !== ProcedureTypes.Elseif) {
+        if (isMainFlowchart && prod.type !== ProcedureTypes.Else && prod.type !== ProcedureTypes.Elseif) {
             codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
         }
 
@@ -85,7 +85,7 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Constant:
-                if (!addProdArr) {
+                if (!isMainFlowchart) {
                     return [''];
                 }
                 let constName = args[0].value;
@@ -98,7 +98,7 @@ export class CodeUtils {
 
             case ProcedureTypes.AddData:
                 let cst = args[0].value;
-                if (!addProdArr) {
+                if (!isMainFlowchart) {
                     return [`__modules__.${_parameterTypes.addData}( __params__.model, ${cst});`];
                 }
                 if (cst[0] === '"' || cst[0] === '\'') {
@@ -142,7 +142,7 @@ export class CodeUtils {
                     codeStr.push(`return __params__['model'];`);
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
-                    if (addProdArr) {
+                    if (isMainFlowchart) {
                         // codeStr.push(`console.(log'Return: ', __return_value__);`);
                         codeStr.push(`__params__.console.push('Return: ' + __return_value__.toString());`);
                     }
@@ -226,7 +226,7 @@ export class CodeUtils {
         }
         if (prod.children) {
             for (const p of prod.children) {
-                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, addProdArr));
+                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart));
             }
             codeStr.push(`}`);
         }
@@ -235,7 +235,7 @@ export class CodeUtils {
             const repGet = this.repGetAttrib(prod.args[0].value);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }
-        if (addProdArr && prod.selectGeom && prod.args[0].value) {
+        if (isMainFlowchart && prod.selectGeom && prod.args[0].value) {
             const repGet = this.repGetAttrib(prod.args[0].value);
             codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
         }
@@ -480,21 +480,23 @@ export class CodeUtils {
         return input;
     }
 
-    public static getNodeCode(node: INode, addProdArr = false): string[][] {
+    public static getNodeCode(node: INode, isMainFlowchart = false): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
         const varsDefined: string[] = [];
 
-        // reset terminate check to false at start node.
+        // reset terminate check to false at start node (only in main flowchart's start node).
         // for every node after that, if terminate check is true, do not execute the node.
-        if (node.type === 'start') {
-            _terminateCheck = false;
+        if (!isMainFlowchart) {
+            // do nothing
+        } else if (node.type === 'start') {
+            _terminateCheck = null;
         } else if (_terminateCheck) {
-            return undefined;
+            return [undefined, _terminateCheck];
         }
 
         // input initializations
-        if (addProdArr) {
+        if (isMainFlowchart) {
             const input = CodeUtils.getInputValue(node.input, node);
             node.input.value = input;
         }
@@ -506,20 +508,21 @@ export class CodeUtils {
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
         for (const prod of node.procedure) {
-            // if (node.type === 'start' && !addProdArr) { break; }
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, addProdArr) );
+            // if (node.type === 'start' && !isMainFlowchart) { break; }
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
-            return [codeStr, varsDefined];
-            // codeStr.push('}');
-            // return ['{'].concat(codeStr);
-            // return `{\n${codeStr.join('\n')}\n}`;
+            // return [[codeStr, varsDefined], _terminateCheck];
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
+            codeStr.push('return __params__.model;');
         }
 
-        codeStr.push('return __params__.model;');
-        return [codeStr, varsDefined];
+        if (_terminateCheck === '') {
+            _terminateCheck = node.name;
+        }
+
+        return [[codeStr, varsDefined], _terminateCheck];
         // return `\n${codeStr.join('\n')}\n\nreturn __params__.model;\n`;
 
 
@@ -541,7 +544,7 @@ export class CodeUtils {
         }
 
         for (const node of func.flowchart.nodes) {
-            const codeRes = CodeUtils.getNodeCode(node, false);
+            const codeRes = CodeUtils.getNodeCode(node, false)[0];
             let code: any = codeRes[0];
             if (node.type === 'start') {
                 code = '{ return __params__.model; }';

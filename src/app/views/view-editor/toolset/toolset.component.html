@@ -10,7 +10,7 @@
             <div class="panel">
                 <ul class='toolset__functions--subset'>
                     <ng-container *ngFor="let type of ProcedureTypesArr">
-                        <li *ngIf="8 > ProcedureTypes[type] || ProcedureTypes[type] == 14"
+                        <li *ngIf="8 > ProcedureTypes[type]"
                         class='tooltip-basic'
                         [class.invalid]='checkInvalid(type)'
                         [class.basic]='true'
@@ -18,6 +18,16 @@
                             {{type}}
                         </li>
                     </ng-container>
+                    <li class='tooltip-basic'
+                        [class.basic]='true'
+                        (click)='add(ProcedureTypes.Comment)'> 
+                            Comment
+                    </li>
+                    <li class='tooltip-basic'
+                        [class.basic]='true'
+                        (click)='add(ProcedureTypes.Terminate)'> 
+                            Terminate
+                    </li>
                 </ul>
             </div>
             

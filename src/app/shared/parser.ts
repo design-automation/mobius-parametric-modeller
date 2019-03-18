@@ -615,37 +615,24 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             }
             comps.push({ 'type': strType.VAR, 'value': str.substring(startI, i)});
 
-        // double-quotes (")
-        } else if (code === 34) {
+        // double-quotes (") or single-quotes (')
+        } else if (code === 34 || code === 39) {
+            const startCode = code;
             const startI = i;
             i += 1;
             code = str.charCodeAt(i);
-            while (code !== 34) { // string must end with double-quote as well
+            if (!code) {
+                return 'Error: Missing ending quote.';
+            }
+            while (code !== startCode) { // string must end with the same quote as well
                 i += 1;
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
             }
-            if (code === 34) { i += 1; }
+            if (code === startCode) { i += 1; }
             const subStr = str.substring(startI, i);
-            if (subStr.charCodeAt(subStr.length - 1) !== 34) {
-                return 'Error: Missing ending double-quotes.';
-            }
-            comps.push({ 'type': strType.STR, 'value': str.substring(startI, i)});
-
-        // single-quote (')
-        } else if ( code === 39) {
-            const startI = i;
-            i += 1;
-            code = str.charCodeAt(i);
-            while (code !== 39) { // string must end with single-quote as well
-                i += 1;
-                if (i === str.length) { break; }
-                code = str.charCodeAt(i);
-            }
-            if (code === 39) { i += 1; }
-            const subStr = str.substring(startI, i);
-            if (subStr.charCodeAt(subStr.length - 1) !== 39) {
-                return 'Error: Missing ending single-quotes.';
+            if (subStr.charCodeAt(subStr.length - 1) !== startCode) {
+                return 'Error: Missing ending quote.';
             }
             comps.push({ 'type': strType.STR, 'value': str.substring(startI, i)});
 

@@ -248,20 +248,19 @@ export class ExecuteComponent {
         let fnString = '';
         const startTime = performance.now();
         try {
-            // get the code for the node
-            const codeRes = CodeUtils.getNodeCode(node, true);
+            const codeResult = CodeUtils.getNodeCode(node, true);
 
             // if process is terminated, return
-            if (!codeRes) {
-                this.dataService.notifyMessage('PROCESS TERMINATED!!!');
+            if (!codeResult[0]) {
+                this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${codeResult[1]}"`);
                 node.model = undefined;
                 return;
             }
 
+            // get the code for the node
+            const codeRes = codeResult[0];
             const nodeCode = codeRes[0];
             const varsDefined = codeRes[1];
-
-
 
             // fnString = printFunc + nodeCode.join('\n');
             fnString = printFunc + '\nfunction __main_node_code__(){\n' + nodeCode.join('\n') + '\n}\nreturn __main_node_code__();';

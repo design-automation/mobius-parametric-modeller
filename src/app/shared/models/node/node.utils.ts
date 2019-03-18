@@ -403,6 +403,11 @@ export abstract class NodeUtils {
                 prod.args = [{name: 'comment', value: undefined}];
             break;
 
+            case ProcedureTypes.Terminate:
+                prod.argCount = 1;
+                prod.type = ProcedureTypes.Comment;
+                prod.args = [{name: 'comment', value: 'TERMINATE'}];
+            break;
 
             case ProcedureTypes.Return:
                 prod.meta = { module: 'Output', name: 'Return', description: undefined};

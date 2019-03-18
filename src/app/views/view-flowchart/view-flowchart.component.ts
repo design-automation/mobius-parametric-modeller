@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { SplitComponent } from 'angular-split';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { getViewerData } from '@shared/getViewerData';
+import { IProcedure } from '@models/procedure';
 
 declare const InstallTrigger: any;
 
@@ -878,6 +879,23 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         this.selectedEdge = [];
     }
+
+    disablePrint() {
+        for (const node of this.dataService.flowchart.nodes) {
+            this.recursiveDisablePrint(node.procedure);
+        }
+        this.dataService.notifyMessage('Cleared All Print Statements in Flowchart');
+    }
+
+    recursiveDisablePrint(prodList: IProcedure[]) {
+        for (const prod of prodList) {
+            if (prod.children) {
+                this.recursiveDisablePrint(prod.children);
+            }
+            prod.print = false;
+        }
+    }
+
     getSplit() { return this.dataService.splitVal; }
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }

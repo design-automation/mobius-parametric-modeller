@@ -55,7 +55,20 @@
     height: 34px;
     outline: none;
 }
-
+.disable-printing-button{
+    cursor: pointer;
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+    position: absolute; 
+    top:  68px; 
+    right: 2px;
+    color: $color1;
+    padding: 0px;
+    width: 30px;
+    height: 34px;
+    outline: none;
+}
 #arrow{
     stroke: $color8;
     fill: transparent;

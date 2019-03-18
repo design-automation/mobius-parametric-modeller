@@ -26,6 +26,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     @Output() resetTableEvent = new EventEmitter<number>();
     @Input() model: GIModel;
     @Input() attr_table_select: { action: string, ent_type: string, id: number };
+    @Input() selectSwitch: Boolean;
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
@@ -69,6 +70,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private shiftKeyPressed = false;
     private mouse_label;
     private giSummary = [];
+
+    tab_map = {
+        0: EEntType.POSI,
+        1: EEntType.VERT,
+        2: EEntType.EDGE,
+        3: EEntType.WIRE,
+        4: EEntType.FACE,
+        5: EEntType.POINT,
+        6: EEntType.PLINE,
+        7: EEntType.PGON,
+        8: EEntType.COLL,
+        9: EEntType.MOD
+    };
     /**
      * Creates a new viewer,
      * @param injector
@@ -156,6 +170,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
+    getCurrentTab() {
+        if (localStorage.getItem('mpm_attrib_current_tab') !== null) {
+          return Number(localStorage.getItem('mpm_attrib_current_tab'));
+        } else {
+          return 0;
+        }
+    }
+
     // receive data -> model from gi-viewer component and update model in the scene
     ngOnChanges(changes: SimpleChanges) {
         if (changes['model']) {
@@ -166,6 +188,30 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (changes['attr_table_select']) {
             if (this.attr_table_select) {
                 this.attrTableSelect(this.attr_table_select);
+            }
+        }
+        if (changes['selectSwitch']) {
+            if (this.selectSwitch !== undefined) {
+                const currentTab = EEntTypeStr[this.tab_map[this.getCurrentTab()]];
+                let arr = [];
+                if (JSON.parse(sessionStorage.getItem(`mpm_selected_${currentTab}`))) {
+                    arr = JSON.parse(sessionStorage.getItem(`mpm_selected_${currentTab}`));
+                }
+                const allLabels = document.getElementsByClassName(`text-label${currentTab}`);
+                if (this.selectSwitch === true) {
+                    for (let i = 0; i < allLabels.length; i++) {
+                        const element = allLabels[i];
+                        const attr = Number(element.getAttribute('data-index'));
+                        const index = arr.findIndex(l => l === attr);
+                        element.innerHTML = String(index);
+                    }
+                } else {
+                    for (let i = 0; i < allLabels.length; i++) {
+                        const element = allLabels[i];
+                        const attr = Number(element.getAttribute('data-index'));
+                        element.innerHTML = String(attr);
+                    }
+                }
             }
         }
     }
@@ -971,7 +1017,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private selectPoint(point: number) {
         const ent_type_str = EEntTypeStr[EEntType.POINT];
         const result = this.getPointPosis(point, null);
-        if(result) {
+        if (result) {
             const point_indices = result.point_indices;
             const point_posi = result.posi_flat;
             const ent_id = `${ent_type_str}${point}`;

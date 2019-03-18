@@ -20,6 +20,7 @@ export class AttributeComponent implements OnChanges {
   @Input() refresh: Event;
   @Input() reset: Event;
   @Output() attrTableSelect = new EventEmitter<Object>();
+  @Output() selectSwitch = new EventEmitter<Boolean>();
   showSelected = false;
 
   tabs: { type: number, title: string }[] =
@@ -165,6 +166,7 @@ export class AttributeComponent implements OnChanges {
     this.showSelected = !this.showSelected;
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
     sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
+    this.selectSwitch.emit(this.showSelected);
     this.refreshTable();
   }
 
@@ -221,5 +223,4 @@ export class AttributeComponent implements OnChanges {
     }
 
   }
-
 }

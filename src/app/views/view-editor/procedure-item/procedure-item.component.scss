@@ -254,7 +254,7 @@
     .input--terminate{
         font-size: $fsize2;
         resize: horizontal;
-        min-width: 200px;
+        width: 156px;
         color: $error-color;
         font-style: italic;
         font-weight: 800;
@@ -262,7 +262,9 @@
         margin: 2px;
         border: 0px;
         border-left: 2px solid $error-color;
+        border-right: 2px solid $error-color;
         padding-left: 3px;
+        padding-right: 3px;
         pointer-events: none;
     }
 

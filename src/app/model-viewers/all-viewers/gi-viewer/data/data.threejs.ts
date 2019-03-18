@@ -548,10 +548,10 @@ export class DataThreejs {
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
         if (showSelected) {
             let arr = [];
-            if (JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(2)}`))) {
-                arr = JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(2)}`));
+            if (JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(0, 2)}`))) {
+                arr = JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(0, 2)}`));
             }
-            let allLabels = document.getElementsByClassName(`text-label${ent_id.substr(2)}`);
+            let allLabels = document.getElementsByClassName(`text-label${ent_id.substr(0, 2)}`);
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const attr = Number(element.getAttribute('data-index'));
@@ -921,7 +921,7 @@ export class DataThreejs {
         div.id = `textLabel_${ent_id}`;
         div.title = ent_id;
         div.setAttribute('data-index', ent_id.substr(2));
-        div.className = `text-label${ent_id.substr(2)}`;
+        div.className = `text-label${ent_id.substr(0, 2)}`;
         div.style.position = 'absolute';
         div.style.background = 'rgba(255, 255, 255, 0.3)';
         div.style.padding = '1px';
@@ -1021,6 +1021,12 @@ export class DataThreejs {
         this._camera.updateProjectionMatrix();
         this._controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
         this._controls.update();
+        const textLabels = this._textLabels;
+        if (textLabels.size !== 0) {
+            textLabels.forEach((label) => {
+                label.updatePosition();
+            });
+        }
     }
 
     private getAllObjs() {

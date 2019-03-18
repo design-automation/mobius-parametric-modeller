@@ -380,6 +380,7 @@ export abstract class NodeUtils {
             case ProcedureTypes.Break:
             case ProcedureTypes.Continue:
                 prod.argCount = 0;
+                prod.args = [];
                 break;
 
             case ProcedureTypes.Constant:
@@ -404,9 +405,8 @@ export abstract class NodeUtils {
             break;
 
             case ProcedureTypes.Terminate:
-                prod.argCount = 1;
-                prod.type = ProcedureTypes.Comment;
-                prod.args = [{name: 'comment', value: 'TERMINATE'}];
+                prod.argCount = 0;
+                prod.args = [];
             break;
 
             case ProcedureTypes.Return:

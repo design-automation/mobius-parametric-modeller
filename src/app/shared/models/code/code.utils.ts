@@ -11,14 +11,16 @@ export class CodeUtils {
 
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean): string[] {
-        if (_terminateCheck === '' || prod.enabled === false || prod.type === ProcedureTypes.Blank) { return ['']; }
-        if (prod.type === ProcedureTypes.Comment) {
-            // terminate all process after this if there is a comment with 'TERMINATE'
-            if (isMainFlowchart && prod.args[0].value.toUpperCase() === 'TERMINATE') {
-                _terminateCheck = '';
-            }
+        if (_terminateCheck === '' || prod.enabled === false ||
+            prod.type === ProcedureTypes.Blank ||
+            prod.type === ProcedureTypes.Comment) { return ['']; }
+
+        // mark _terminateCheck to terminate all process after this
+        if (prod.type === ProcedureTypes.Terminate) {
+            _terminateCheck = '';
             return [''];
         }
+
         prod.hasError = false;
 
         let codeStr: string[] = [];
@@ -535,7 +537,7 @@ export class CodeUtils {
     static getFunctionString(func: IFunction): string {
         let fullCode = '';
         let fnCode;
-        if (func.args.length === 0) {
+        if (func.argCount === 0) {
             fnCode = `function ${func.name}(__params__)` +
             `{\nvar merged;\n`;
         } else {
@@ -551,7 +553,7 @@ export class CodeUtils {
             } else {
                 code = '{\n' + code.join('\n') + '\n}';
             }
-            if (func.args.length === 0) {
+            if (func.argCount === 0) {
                 fullCode += `function ${node.id}(__params__)` + code + `\n\n`;
             } else {
                 fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')})` + code + `\n\n`;
@@ -575,7 +577,7 @@ export class CodeUtils {
                 //     fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
                 //     fnCode += `__params__.model = merged;\n`;
                 // }
-                if (func.args.length === 0) {
+                if (func.argCount === 0) {
                     fnCode += `let result_${node.id} = ${node.id}(__params__);\n`;
                 } else {
                     fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;

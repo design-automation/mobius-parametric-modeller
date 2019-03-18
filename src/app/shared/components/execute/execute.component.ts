@@ -92,7 +92,7 @@ export class ExecuteComponent {
 
             for (const prod of node.procedure) {
                 if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
-                if (prod.args.length > 0 && prod.args[0].invalidVar) {
+                if (prod.argCount > 0 && prod.args[0].invalidVar) {
                     node.hasError = true;
                     prod.hasError = true;
                     InvalidECheck = true;

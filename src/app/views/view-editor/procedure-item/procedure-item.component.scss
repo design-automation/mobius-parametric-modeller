@@ -251,6 +251,21 @@
         }
     }
 
+    .input--terminate{
+        font-size: $fsize2;
+        resize: horizontal;
+        min-width: 200px;
+        color: $error-color;
+        font-style: italic;
+        font-weight: 800;
+        background-color: transparent; 
+        margin: 2px;
+        border: 0px;
+        border-left: 2px solid $error-color;
+        padding-left: 3px;
+        pointer-events: none;
+    }
+
     // .input--arg--p{
     //     position: absolute;
     //     z-index: 999;
@@ -390,6 +405,13 @@
 
 .line--item{
     color: $color1;
+    display: inline-block;
+    padding-right: 60px;
+}
+
+.line--terminate{
+    color: $color1;
+    background-color: $error-color-lt;
     display: inline-block;
     padding-right: 60px;
 }

@@ -226,6 +226,14 @@
             >
         </div>
 
+        <!-- Terminate -->
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.Terminate">
+            <input class='input--terminate' 
+            value='---------- TERMINATE ----------'
+            [style.width.px]='100'
+            disabled>
+        </div>
+
         
         <!-- Function Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Function">
@@ -307,7 +315,7 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button> -->
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='data.type != ProcedureTypes.Blank && data.type != ProcedureTypes.Comment' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='13 > data.type' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon' svgIcon='disabled'></mat-icon>
             </button>
             <!-- Select button -->

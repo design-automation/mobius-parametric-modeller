@@ -373,14 +373,19 @@
         color: $selected-color;
     }
 }
+.btn{
+    padding: 0px;
+    margin: 0px;
+    
 
-.icon{
-    vertical-align: center;
-    width: $fsize1;
-    height: $fsize1 + 2px;
-    margin: 1px;
-    font-size: $fsize2;
-    // border: 1px solid $color1;
+    .icon{
+        vertical-align: center;
+        width: $fsize1;
+        height: $fsize1 + 2px;
+        margin: 1px;
+        font-size: $fsize2;
+        // border: 1px solid $color1;
+    }
 }
 
 .line--item{

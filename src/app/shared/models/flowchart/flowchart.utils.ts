@@ -7,13 +7,16 @@ export class FlowchartUtils {
 
     public static newflowchart(): IFlowchart {
         const startNode = NodeUtils.getStartNode();
-        startNode.position = {x: canvasSize * 1.07 / 2, y: canvasSize / 2};
+        let startPos = canvasSize * 1.07 / 2;
+        startPos = startPos - startPos % 20;
+
+        startNode.position = {x: startPos, y: canvasSize / 2};
 
         const middleNode = NodeUtils.getNewNode();
-        middleNode.position = {x: canvasSize * 1.07 / 2, y: 200 + canvasSize / 2};
+        middleNode.position = {x: startPos, y: 200 + canvasSize / 2};
 
         const endNode = NodeUtils.getEndNode();
-        endNode.position = {x: canvasSize * 1.07 / 2, y: 400 + canvasSize / 2};
+        endNode.position = {x: startPos, y: 400 + canvasSize / 2};
 
         const startMid: IEdge = {
             source: startNode.output,

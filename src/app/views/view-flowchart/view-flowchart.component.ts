@@ -168,7 +168,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 // this.notificationTrigger = !this.notificationTrigger;
                 this.dataService.notifyMessage(`Pasted Node`);
 
-                ViewFlowchartComponent.enableNode(newNode);
+                // ViewFlowchartComponent.enableNode(newNode);
                 // FlowchartUtils.orderNodes(this.dataService.flowchart);
 
                 this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});

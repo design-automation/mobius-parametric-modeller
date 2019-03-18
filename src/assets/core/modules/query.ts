@@ -122,7 +122,7 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
                 query_results_arr.push(query_result);
             }
         }
-        // sort
+        // return the query results
         return query_results_arr;
     }
 }
@@ -132,6 +132,11 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
     if (ent_type1 !== ent_type2) { return ent_type1 -  ent_type2; }
     if (index1 !== index2) { return index1 -  index2; }
     return 0;
+}
+export enum _EQuerySortMethod {
+    'ID_DESCENDING' = 'ID_descending',
+    'ID_ASCENDING' = 'ID_ascending',
+    'GEOMETRIC' = 'geometric_order'
 }
 /**
  * Returns a list of entities based on a query expression. The list will be ordered by entity ID, in descending order
@@ -152,6 +157,7 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
  * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
+ * @param sort Enum, sort the entities that are returned in specific order.
  * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
  * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
  * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
@@ -164,7 +170,7 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
  * @example collections = query.Get(collections, null, #@type=="floors")
  * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
-export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
+export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery, sort: _EQuerySortMethod): TId[] {
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
@@ -177,7 +183,12 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
     if (found_ents_arr.length === 0) { return []; }
     // sort entities
-    found_ents_arr.sort(_compareID);
+    if (sort === _EQuerySortMethod.ID_DESCENDING) {
+        found_ents_arr.sort(_compareID);
+    } else if (sort === _EQuerySortMethod.ID_ASCENDING) {
+        found_ents_arr.sort(_compareID);
+        found_ents_arr.reverse();
+    }
     // remove duplicates
     const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
     for (let i = 1; i < found_ents_arr.length; i++) {

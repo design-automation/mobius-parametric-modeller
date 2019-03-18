@@ -47,6 +47,7 @@ export class DataService {
 
     private _prevEdtActions = [];
     private _nextEdtActions = [];
+    private _edtNode: string;
 
     getLog(): string[] {
         return DataService._consoleLog;
@@ -170,6 +171,11 @@ export class DataService {
 
 
     registerEdtAction(actions: any[]) {
+        if (this._edtNode !== this.node.id) {
+            this._prevEdtActions = [];
+            this._nextEdtActions = [];
+            this._edtNode = this.node.id;
+        }
         this._prevEdtActions.push(actions);
         this._nextEdtActions = [];
         if (this._prevEdtActions.length > 10) {
@@ -181,6 +187,11 @@ export class DataService {
         if (this._prevEdtActions.length === 0) {
             return undefined;
         }
+        if (this._edtNode !== this.node.id) {
+            this._prevEdtActions = [];
+            this._nextEdtActions = [];
+            return undefined;
+        }
         const actions = this._prevEdtActions.pop();
         this._nextEdtActions.push(actions);
         return actions;
@@ -190,11 +201,15 @@ export class DataService {
         if (this._nextEdtActions.length === 0) {
             return undefined;
         }
+        if (this._edtNode !== this.node.id) {
+            this._prevEdtActions = [];
+            this._nextEdtActions = [];
+            return undefined;
+        }
         const actions = this._nextEdtActions.pop();
         this._prevEdtActions.push(actions);
         return actions;
     }
-
 
 
 }

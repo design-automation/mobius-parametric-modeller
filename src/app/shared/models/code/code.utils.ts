@@ -18,7 +18,7 @@ export class CodeUtils {
         // mark _terminateCheck to terminate all process after this
         if (prod.type === ProcedureTypes.Terminate) {
             _terminateCheck = '';
-            return [''];
+            return ['return __params__.model;'];
         }
 
         prod.hasError = false;

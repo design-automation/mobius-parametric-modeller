@@ -75,8 +75,11 @@ const conversion = [
 
 const random = [
     ['rand(min, max)', 'Returns a random number in the specified range'],
+    ['rand(min, max, seed)', 'Returns a random number in the specified range, given a numeric seed'],
     ['randInt(min, max)', 'Returns a random integer in the specified range'],
-    ['randPick(list, num)', 'Returns a random set of items from the list']
+    ['randInt(min, max, seed)', 'Returns a random integer in the specified range, given a numeric seed'],
+    ['randPick(list, num)', 'Returns a random set of items from the list'],
+    ['randPick(list, num, seed)', 'Returns a random set of items from the list, given a numeric seed']
 ];
 
 const arithmetic = [

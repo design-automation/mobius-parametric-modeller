@@ -195,6 +195,12 @@ select{
             // max-width: 300px;
             padding: 0px;
         }
+
+        .dropdown-input{
+            height: $fsize1;
+            line-height:$fsize1;
+            width: 100%;
+        }
     }
 }
 

@@ -97,10 +97,8 @@
                 <!-- dropdown -->
                 <select *ngSwitchCase="PortTypes.Dropdown"
                 [(ngModel)]='prod.args[prod.argCount-1].value'
-                (focus)='emitClearSelect($event)'
-                [class.disablePointer]='disableInput'>
-                    <option value='"metal"'>"metal"</option>
-                    <option value='"glass"'>"glass"</option>
+                (focus)='emitClearSelect($event)'>
+                    <option *ngFor='let opt of getDropdownOptions()' value={{opt}}>{{opt}}</option>
                 </select>
 
                 <!-- URL -->
@@ -137,6 +135,10 @@
         </div> 
         <div class='div--slider' *ngSwitchCase="PortTypes.Dropdown">
             <div class = 'slider--container'>
+                <input class = 'dropdown-input' [(ngModel)]='prod.args[prod.argCount-1].max'
+                placeholder='list of options'
+                (focus)='emitClearSelect($event)'
+                (blur)='formOptionList($event)'>
             </div>
         </div> 
     </ng-container>

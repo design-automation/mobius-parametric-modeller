@@ -1,8 +1,8 @@
 export interface IArgument {
     name: string;
     value: any;
-    min?: number;
-    max?: number;
+    min?: any;
+    max?: any;
     step?: number;
     type?: any;
     invalidVar?: boolean|string;

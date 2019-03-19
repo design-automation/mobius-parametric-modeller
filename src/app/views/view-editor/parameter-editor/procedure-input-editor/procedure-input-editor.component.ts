@@ -75,6 +75,38 @@ export class ProcedureInputEditorComponent implements OnDestroy {
         // this.prod.args[0].value = modifyVarArg(this.prod.args[0]);
     }
 
+    replaceQuotes(val) {
+        return val.replace(/\"|\'/g, '');
+    }
+
+    getDropdownOptions() {
+        if (this.prod.args[this.prod.argCount - 1].min) {
+            return this.prod.args[this.prod.argCount - 1].min;
+            try {
+                return this.prod.args[this.prod.argCount - 1].min.map((val: string) => {
+                    let x = val;
+                    if (x[0] === '"' || x[0] === '\'') { x = x.substring(1); }
+                    if (x[x.length - 1] === '"' || x[x.length - 1] === '\'') { x = x.substring(0, x.length - 1); }
+                    return x;
+                });
+            } catch (ex) {
+                return [];
+            }
+        }
+        return [];
+    }
+
+    formOptionList() {
+        if (!this.prod.args[this.prod.argCount - 1].max) { return; }
+        try {
+        let str: string = this.prod.args[this.prod.argCount - 1].max;
+        if (str[0] === '[') { str = str.substring(1); }
+        if (str[str.length - 1] === ']') { str = str.substring(0, str.length - 1); }
+        this.prod.args[this.prod.argCount - 1].min = str.split(',').map(x => x.trim());
+        } catch (ex) {
+            this.prod.args[this.prod.argCount - 1].min = null;
+        }
+    }
 
     editOptions(): void { }
 

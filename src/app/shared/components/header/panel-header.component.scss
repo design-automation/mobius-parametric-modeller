@@ -267,18 +267,27 @@ button.mat-menu-item:hover{
     font-family: 12px sans-serif;
     color: $color1;
     background-color: $color6;
-    top: 10%;
+    top: 30%;
     max-width: 605px;
     min-width: 405px;
     padding: 5px;
 
-    button{
+    .loadBackupButton{
         width: fit-content;
         min-width: 400px;
         margin-bottom: 2px;
         padding: 0px 5px 0px 5px;
         background-color: $color5;
         color: $color1;
-        display: block;
+        display: inline-block;
+    }
+    .deleteBackupButton{
+        width: fit-content;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        padding: 0px 5px 0px 5px;
+        background-color: $color5;
+        color: $color1;
+        display: inline-block;
     }
 }

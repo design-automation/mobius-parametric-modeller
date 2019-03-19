@@ -151,7 +151,20 @@ export class PanelHeaderComponent implements OnDestroy {
         }
         this.dataService.file = circularJSON.parse(file);
         document.getElementById('executeButton').click();
+    }
 
+    deleteBackup(filename: string) {
+        const file = localStorage.getItem(filename);
+        if (!file) {
+            return;
+        }
+        localStorage.removeItem(filename);
+        const items: string[] = this.getBackupFiles();
+        const i = items.indexOf(filename);
+        if (i !== -1) {
+            items.splice(i, 1);
+            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+        }
     }
 
     @HostListener('window:click', ['$event'])

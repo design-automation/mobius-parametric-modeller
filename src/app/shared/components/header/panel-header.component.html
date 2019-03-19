@@ -91,7 +91,7 @@
                 <button (click)="openUrlDialog($event)"
                 title="Generate Möbius view url from url of .mob file">
                     <mat-icon>link</mat-icon>
-                    &nbsp;Publish&nbsp;
+                    Publish
                 </button>
             </div>
         </div>
@@ -150,5 +150,9 @@
 <dialog id='loadBackupDialog'>
     <p>Select Saved Flowchart to load: </p>
     <br>
-    <button *ngFor='let backup of getBackupFiles()' (click)="loadBackup(backup)">{{backup}}</button>
+    <div *ngFor='let backup of getBackupFiles()'>
+        <button class='loadBackupButton' (click)="loadBackup(backup)">{{backup}}</button>
+        <button class='deleteBackupButton' (click)="deleteBackup(backup)"><mat-icon>delete_outline</mat-icon></button>
+
+    </div>
 </dialog>

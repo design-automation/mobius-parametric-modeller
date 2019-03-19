@@ -398,7 +398,8 @@ export class CodeUtils {
             }
             result = '`' + result + '`';
         } else if (inputMode.toString() === InputType.File.toString()) {
-            if (val.lastModified) {
+            result = window.localStorage.getItem(val.name);
+            if (!result) {
                 const p = new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = function() {
@@ -414,10 +415,34 @@ export class CodeUtils {
                     throw(new Error(result));
                 }
                 result = '`' + result + '`';
-                    window.localStorage.setItem(val.name, result);
+                let savedFiles: any = window.localStorage.getItem('savedFileList');
+                if (!savedFiles) {
+                    window.localStorage.setItem('savedFileList', `["${val.name}"]`);
+                } else {
+                    savedFiles = JSON.parse(savedFiles);
+                    window.localStorage.removeItem(savedFiles[0]);
+                    window.localStorage.setItem('savedFileList', `["${val.name}"]`);
+                    // let check = false;
+                    // for (let i = 0; i < savedFiles.length; i++) {
+                    //     const item = savedFiles[i];
+                    //     if (item === val.name) {
+                    //         savedFiles.splice(i, 1);
+                    //         savedFiles.push(item);
+                    //         check = true;
+                    //         break;
+                    //     }
+                    // }
+                    // if (!check) {
+                    //     savedFiles.push(val.name);
+                    //     if (savedFiles.length > 1) {
+                    //         const item = savedFiles.shift();
+                    //         localStorage.removeItem(item);
+                    //     }
+                    //     localStorage.setItem('mobius_backup_list', JSON.stringify(savedFiles));
+                    // }
+                }
+                window.localStorage.setItem(val.name, result);
                 arg.value = {'name': val.name};
-            } else {
-                result = window.localStorage.getItem(val.name);
             }
         }
         return result;

@@ -82,6 +82,12 @@
                     Load File 
                 </button>
                 <br>
+                <button (click)="openbackupDialog($event)"
+                title="Load Flowchart Backup from Local Storage">
+                    <mat-icon>autorenew</mat-icon>
+                    Load Backup 
+                </button>
+                <br>
                 <button (click)="openUrlDialog($event)"
                 title="Generate Möbius view url from url of .mob file">
                     <mat-icon>link</mat-icon>
@@ -139,4 +145,10 @@
         </div>
     </ng-container>
 
+</dialog>
+
+<dialog id='loadBackupDialog'>
+    <p>Select Saved Flowchart to load: </p>
+    <br>
+    <button *ngFor='let backup of getBackupFiles()' (click)="loadBackup(backup)">{{backup}}</button>
 </dialog>

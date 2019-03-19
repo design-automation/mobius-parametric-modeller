@@ -123,11 +123,13 @@ button.mat-menu-item:hover{
     
     button{
         display: inline-block;
-        width: 100px;
+        width: 110px;
         line-height: $fsize3;
         height: $fsize3;
         font-size: $fsize2;
         vertical-align: middle;
+        text-align: left;
+        padding: 0px 5px 0px 5px;
         color: $color8;
         mat-icon{
             color: inherit;
@@ -258,5 +260,25 @@ button.mat-menu-item:hover{
         padding: 0px 5px 0px 5px;
         background-color: $color5;
         color: $color1;
+    }
+}
+
+#loadBackupDialog{
+    font-family: 12px sans-serif;
+    color: $color1;
+    background-color: $color6;
+    top: 10%;
+    max-width: 605px;
+    min-width: 405px;
+    padding: 5px;
+
+    button{
+        width: fit-content;
+        min-width: 400px;
+        margin-bottom: 2px;
+        padding: 0px 5px 0px 5px;
+        background-color: $color5;
+        color: $color1;
+        display: block;
     }
 }

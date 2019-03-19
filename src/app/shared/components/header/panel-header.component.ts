@@ -130,6 +130,30 @@ export class PanelHeaderComponent implements OnDestroy {
         this.dialogBox.showModal();
     }
 
+    openbackupDialog(event) {
+        event.stopPropagation();
+        this.dialogBox = <HTMLDialogElement>document.getElementById('loadBackupDialog');
+        this.dialogBox.showModal();
+    }
+
+    getBackupFiles() {
+        const items = localStorage.getItem('mobius_backup_list');
+        if (!items) {
+            return [];
+        }
+        return JSON.parse(items);
+    }
+
+    loadBackup(filename: string) {
+        const file = localStorage.getItem(filename);
+        if (!file) {
+            return;
+        }
+        this.dataService.file = circularJSON.parse(file);
+        document.getElementById('executeButton').click();
+
+    }
+
     @HostListener('window:click', ['$event'])
     onWindowClick(event: MouseEvent) {
         let dropdownMenu = document.getElementById('dropdownMenu');

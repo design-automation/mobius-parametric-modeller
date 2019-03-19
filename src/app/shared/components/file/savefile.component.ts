@@ -60,7 +60,7 @@ export class SaveFileComponent {
             models.push(nodeModel);
         }
 
-        SaveFileComponent.saveToLocalStorage(circularJSON.stringify(f));
+        SaveFileComponent.saveToLocalStorage(f.flowchart.name, circularJSON.stringify(f));
 
         for (const node of f.flowchart.nodes) {
             const mod = models.shift();
@@ -70,8 +70,32 @@ export class SaveFileComponent {
         }
     }
 
-    static saveToLocalStorage(f: string) {
-        localStorage.setItem('__mobius__', f);
+    static saveToLocalStorage(n: string, f: string) {
+        const itemstring = localStorage.getItem('mobius_backup_list');
+        if (!itemstring) {
+            localStorage.setItem('mobius_backup_list', `["${n}"]`);
+        } else {
+            const items: string[] = JSON.parse(itemstring);
+            let check = false;
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item === n) {
+                    items.splice(i, 1);
+                    items.push(item);
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                items.push(n);
+                if (items.length > 5) {
+                    const item = items.shift();
+                    localStorage.removeItem(item);
+                }
+                localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+            }
+        }
+        localStorage.setItem(n, f);
     }
 
     static checkDisappearedNodes(checkNode: INode, nodeList: INode[]) {
@@ -175,7 +199,7 @@ export class SaveFileComponent {
         const blob = new Blob([fileString], {type: 'application/json'});
 
         try {
-            SaveFileComponent.saveToLocalStorage(fileString);
+            SaveFileComponent.saveToLocalStorage(savedfile.flowchart.name, fileString);
         } catch (ex) {
             console.log('Unable to save file to local storage');
         }

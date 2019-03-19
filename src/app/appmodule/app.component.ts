@@ -40,13 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Flowchart.svg'));
         this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Node.svg'));
 
-        const mobiusObj = localStorage.getItem('__mobius__');
-        if (mobiusObj) {
-            this.dataService.file = circularJSON.parse(mobiusObj);
-            for (const node of this.dataService.file.flowchart.nodes) {
-                checkNodeValidity(node);
-            }
-        }
         const source = timer(60000, 600000);
         this.subscribe = source.subscribe(val => {
             try {

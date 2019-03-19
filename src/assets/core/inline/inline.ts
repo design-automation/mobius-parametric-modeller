@@ -80,6 +80,7 @@ const random = [
 ];
 
 const arithmetic = [
+    ['approx(num, num, tol)', 'Returns if the difference between the two numbers is less than the tolerance, t'],
     ['abs(num)', 'Returns the absolute value of the number'],
     ['square(num)', 'Returns the square of the number'],
     ['cube(num)', 'Returns the cube of the number'],

@@ -41,7 +41,7 @@ table {
     // font-style: italic;
   }
   th:nth-child(n+3){
-    width: 50px;
+    // width: 50px;
   }
   th:last-child{
     width: 2000px;
@@ -66,6 +66,7 @@ table {
       border-right: 1px solid $color3;
       &:not(:first-of-type){
         padding: 0px 5px;
+        white-space: nowrap;
       }
       &:first-of-type{
         width: 40px !important;
@@ -79,7 +80,7 @@ table {
         // font-style: italic;
       }
       &:nth-child(n+3){
-        width: 50px;
+        // width: 50px;
       }
       &:last-child{
         width: 2000px;

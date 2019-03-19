@@ -32,6 +32,7 @@ ZX = __modules__._constants.ZX;
 YX = __modules__._constants.YX;
 ZY = __modules__._constants.ZY;
 XZ = __modules__._constants.XZ;
+approx = __modules__._util.approx;
 min = Math.min;
 max = Math.max;
 pow = Math.pow;

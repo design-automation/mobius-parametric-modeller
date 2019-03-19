@@ -123,8 +123,10 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * Sets an attribute value in the model.
  * @param __model__
  */
-export function __setAttrib__(__model__: GIModel, entities: TId|TId[],
+export function __setAttrib__(__model__: GIModel, entities: TId|TId[]|TId[][],
                               attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], attrib_index?: number): void {
+    // @ts-ignore
+    if (entities !== null && getArrDepth(entities) === 2) { entities = entities.flat(); }
     // --- Error Check ---
     const fn_name = entities + '.Inline.__setAttrib__' + '[\'' + attrib_name + '\']';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -166,8 +168,10 @@ function _getAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * Gets an attribute value from the model.
  * @param __model__
  */
-export function __getAttrib__(__model__: GIModel, entities: TId|TId[],
+export function __getAttrib__(__model__: GIModel, entities: TId|TId[]|TId[][],
         attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
+    // @ts-ignore
+    if (entities !== null && getArrDepth(entities) === 2) { entities = entities.flat(); }
     // --- Error Check ---
     const fn_name = 'Inline.__getAttrib__';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;

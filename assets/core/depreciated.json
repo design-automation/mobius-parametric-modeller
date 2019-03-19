@@ -159,5 +159,18 @@
             "name": "_IsClosed",
             "module": "query"
         }
+    },
+    {
+        "old_func": {
+            "name": "Get",
+            "module": "query"
+        },
+        "new_func": {
+            "name": "Get",
+            "module": "query",
+            "values": {
+                "sort": "'ID_descending'"
+            }
+        }
     }
 ]

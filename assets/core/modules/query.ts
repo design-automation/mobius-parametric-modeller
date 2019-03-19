@@ -122,7 +122,7 @@ function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
                 query_results_arr.push(query_result);
             }
         }
-        // sort
+        // return the query results
         return query_results_arr;
     }
 }
@@ -133,8 +133,13 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
     if (index1 !== index2) { return index1 -  index2; }
     return 0;
 }
+export enum _EQuerySortMethod {
+    'ID_DESCENDING' = 'ID_descending',
+    'ID_ASCENDING' = 'ID_ascending',
+    'GEOMETRIC' = 'geometric_order'
+}
 /**
- * Returns a list of entities based on a query expression. The list will be ordered by entity ID, in descending order
+ * Returns a list of entities based on a query expression. 
  * The result will always be a list of entities, even if there is only one entity.
  * In a case where you expect only one entity, remember to get the first item in the list.
  * ~
@@ -147,24 +152,29 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
  * Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
  * Query expressions can be combined with either && (and) and || (or), where
  * && takes precedence over ||.
- * 
+ * ~
+ * The order of the entities is specified by the 'sort' method. If 'geometrc_order' is slected, then entities are
+ * returned in the order in which they are found within the geometric model. For exampl, when getting positions of a polygon, 
+ * then the order of the positions will follow the order of the vertices in the polygon.
+ * ~
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
  * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
+ * @param sort Enum, sort the entities that are returned in specific order.
  * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
- * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
+ * @example positions = query.Get(positions, polyline1, #@xyz[2]>10, 'geometric_order')
  * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, null, #@xyz[2]>10)
+ * @example positions = query.Get(positions, null, #@xyz[2]>10, 'ID_descending')
  * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, polyline1, null)
+ * @example positions = query.Get(positions, polyline1, null, 'geometric_order')
  * @example_info Returns a list of all of the positions that are part of polyline1.
- * @example polylines = query.Get(polylines, position1, null)
+ * @example polylines = query.Get(polylines, position1, null, 'ID_descending')
  * @example_info Returns a list of all of the polylines that use position1.
- * @example collections = query.Get(collections, null, #@type=="floors")
+ * @example collections = query.Get(collections, null, #@type=="floors", 'ID_descending')
  * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
-export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
+export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery, sort: _EQuerySortMethod): TId[] {
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
@@ -177,7 +187,12 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
     if (found_ents_arr.length === 0) { return []; }
     // sort entities
-    found_ents_arr.sort(_compareID);
+    if (sort === _EQuerySortMethod.ID_DESCENDING) {
+        found_ents_arr.sort(_compareID);
+    } else if (sort === _EQuerySortMethod.ID_ASCENDING) {
+        found_ents_arr.sort(_compareID);
+        found_ents_arr.reverse();
+    }
     // remove duplicates
     const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
     for (let i = 1; i < found_ents_arr.length; i++) {
@@ -261,7 +276,7 @@ export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|T
     //     checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
     // }
     // --- Error Check ---
-    return Get(__model__, select, entities, query_expr).length; // Check done in Get
+    return Get(__model__, select, entities, query_expr, _EQuerySortMethod.GEOMETRIC).length; // Check done in Get
 }
 // ================================================================================================
 export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEntType[],

@@ -168,7 +168,7 @@ export class ExecuteComponent {
     executeFlowchart() {
         let globalVars = '';
 
-        // order the flowchart
+        // reordering the flowchart
         if (!this.dataService.flowchart.ordered) {
             FlowchartUtils.orderNodes(this.dataService.flowchart);
         }
@@ -179,10 +179,29 @@ export class ExecuteComponent {
             funcStrings[func.name] =  CodeUtils.getFunctionString(func);
         }
 
+        let startIndex: number;
+        if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0) {
+            startIndex = 0;
+        } else {
+            startIndex = 0;
+            for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+                if (this.dataService.checkModifiedNode(this.dataService.flowchart.nodes[i].id)) {
+                    startIndex = i;
+                    break;
+                }
+            }
+            this.dataService.clearModifiedNode();
+        }
+
         // execute each node
-        for (const node of this.dataService.flowchart.nodes) {
+        for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+            const node = this.dataService.flowchart.nodes[i];
             if (!node.enabled) {
                 node.output.value = undefined;
+                continue;
+            }
+            if (0 < i && i < startIndex) {
+                node.output.value = node.model;
                 continue;
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);

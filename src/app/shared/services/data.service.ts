@@ -49,6 +49,8 @@ export class DataService {
     private _nextEdtActions = [];
     private _edtNode: string;
 
+    private _modifiedNodeSet = new Set([]);
+
     getLog(): string[] {
         return DataService._consoleLog;
     }
@@ -211,5 +213,20 @@ export class DataService {
         return actions;
     }
 
+    clearModifiedNode() {
+        this._modifiedNodeSet = new Set([this.node.id]);
+    }
 
+    flagModifiedNode(nodeID: string) {
+        // console.log(`adding ${nodeID} to modified node list`);
+        this._modifiedNodeSet.add(nodeID);
+    }
+
+    checkModifiedNode(nodeID: string) {
+        return this._modifiedNodeSet.has(nodeID);
+    }
+
+    numModifiedNode() {
+        return this._modifiedNodeSet.size;
+    }
 }

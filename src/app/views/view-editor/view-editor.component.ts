@@ -40,6 +40,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         setTimeout(() => {
             this.adjustTextArea();
+            this.dataService.flagModifiedNode(this.dataService.node.id);
         }, 50);
     }
 

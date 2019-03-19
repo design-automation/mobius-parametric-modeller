@@ -107,6 +107,7 @@ export class LoadUrlComponent {
         let executeB = document.getElementById('executeButton');
         if (executeB) { executeB.click(); }
         executeB = null;
+        this.dataService.clearModifiedNode();
     }
 
 }

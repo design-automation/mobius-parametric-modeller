@@ -83,6 +83,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         8: EEntType.COLL,
         9: EEntType.MOD
     };
+
+    tab_rev_map = {
+        0: 0,
+        2: 1,
+        3: 2,
+        4: 3,
+        5: 4,
+        6: 5, // point
+        7: 6, // plines
+        8: 7, // pgons
+        9: 8,
+        10: 9
+    };
     /**
      * Creates a new viewer,
      * @param injector
@@ -172,9 +185,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     getCurrentTab() {
         if (localStorage.getItem('mpm_attrib_current_tab') !== null) {
-          return Number(localStorage.getItem('mpm_attrib_current_tab'));
+            return Number(localStorage.getItem('mpm_attrib_current_tab'));
         } else {
-          return 0;
+            return 0;
         }
     }
 
@@ -192,26 +205,39 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         if (changes['selectSwitch']) {
             if (this.selectSwitch !== undefined) {
-                const currentTab = EEntTypeStr[this.tab_map[this.getCurrentTab()]];
-                let arr = [];
-                if (JSON.parse(sessionStorage.getItem(`mpm_selected_${currentTab}`))) {
-                    arr = JSON.parse(sessionStorage.getItem(`mpm_selected_${currentTab}`));
-                }
-                const allLabels = document.getElementsByClassName(`text-label${currentTab}`);
+                const ent_type = EEntTypeStr[this.tab_map[this.getCurrentTab()]];
                 if (this.selectSwitch === true) {
-                    for (let i = 0; i < allLabels.length; i++) {
-                        const element = allLabels[i];
-                        const attr = Number(element.getAttribute('data-index'));
-                        const index = arr.findIndex(l => l === attr);
-                        element.innerHTML = String(index);
-                    }
+                    this.refreshLabels(ent_type);
                 } else {
+                    const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
                     for (let i = 0; i < allLabels.length; i++) {
                         const element = allLabels[i];
                         const attr = Number(element.getAttribute('data-index'));
-                        element.innerHTML = String(attr);
+                        const label = this._data_threejs._model.attribs.threejs.getIdIndex(this.tab_map[this.getCurrentTab()], attr);
+                        element.innerHTML = String(label);
                     }
                 }
+            }
+        }
+    }
+
+    refreshLabels(ent_type): void {
+        const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
+        const sorted = sortByKey(this.dataService.selected_ents.get(ent_type));
+        const arr = Array.from(sorted.values());
+        const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+        if (showSelected) {
+            for (let i = 0; i < allLabels.length; i++) {
+                const element = allLabels[i];
+                const attr = Number(element.getAttribute('data-index'));
+                const index = arr.findIndex(l => l === attr);
+                element.innerHTML = String(index);
+            }
+        } else {
+            for (let i = 0; i < allLabels.length; i++) {
+                const element = allLabels[i];
+                const attr = Number(element.getAttribute('data-index'));
+                element.innerHTML = String(attr);
             }
         }
     }
@@ -304,16 +330,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         selected.forEach(s => {
                             const type = EEntTypeStr[s[0]], id = Number(s[1]);
                             if (this.model.geom.query.entExists(s[0], id)) {
-                                this.attrTableSelect({ action: 'select', ent_type: type, id: id });
                                 this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
                             }
                             selectingType = s[0];
                         });
-                        this.SelectingEntityType = this.selections.find(selection => selection.id === EEntTypeStr[selectingType]);
+
+                        selected.forEach(s => {
+                            const type = EEntTypeStr[s[0]], id = Number(s[1]);
+                            if (this.model.geom.query.entExists(s[0], id)) {
+                                this.attrTableSelect({ action: 'select', ent_type: type, id: id });
+                            }
+                        });
 
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
-                        localStorage.setItem('mpm_attrib_current_tab', selectingType.toString());
+                        localStorage.setItem('mpm_attrib_current_tab', this.tab_rev_map[selectingType]);
+                        this.selectEntityType(this.selections.find(selection => selection.id === EEntTypeStr[selectingType]));
                         this.refreshTable(event);
                     } else {
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
@@ -344,6 +376,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else {
             if (this.dragHash < 10) {
                 this.onUserAction(event);
+                this.refreshLabels(this.SelectingEntityType.id);
             } else {
                 // this._data_threejs._controls.enabled = true;
             }
@@ -770,9 +803,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (point !== null) {
             const position = this.model.attribs.query.getPosiCoords(point);
             const ent_id = parent_ent_id;
+            posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POSI);
             scene.selectObjPosition(null, ent_id, position, this.container, labelText);
-            posi_ent.set(ent_id, point);
             this.dataService.selected_positions.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
             const verts = this.model.geom.query.navEdgeToVert(edge);
@@ -781,9 +814,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             posis.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
                 const position = this.model.attribs.query.getPosiCoords(posi);
+                posi_ent.set(ent_id, posi);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
                 scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
-                posi_ent.set(ent_id, posi);
                 children.push(ent_id);
             });
             this.dataService.selected_positions.set(`${parent_ent_id}`, children);
@@ -797,9 +830,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             uniqPositions.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
                 const position = this.model.attribs.query.getPosiCoords(posi);
+                posi_ent.set(ent_id, posi);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
                 scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
-                posi_ent.set(ent_id, posi);
                 children.push(ent_id);
             });
             this.dataService.selected_positions.set(`${parent_ent_id}`, children);
@@ -820,9 +853,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (point !== null) {
             const position = this.model.attribs.query.getVertCoords(point);
             const ent_id = parent_ent_id;
+            posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.VERT);
             scene.selectObjVetex(null, ent_id, position, this.container, labelText);
-            posi_ent.set(ent_id, point);
             this.dataService.selected_vertex.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
             const verts = this.model.geom.query.navEdgeToVert(edge);
@@ -830,9 +863,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             verts.map(vert => {
                 const ent_id = `${ent_type_str}${vert}`;
                 const position = this.model.attribs.query.getVertCoords(vert);
+                posi_ent.set(ent_id, vert);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
                 scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, labelText);
-                posi_ent.set(ent_id, vert);
                 children.push(ent_id);
             });
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
@@ -847,9 +880,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             uniqVerts.map(vert => {
                 const ent_id = `${ent_type_str}${vert}`;
                 const position = this.model.attribs.query.getVertCoords(vert);
+                posi_ent.set(ent_id, vert);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
                 scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, labelText);
-                posi_ent.set(ent_id, vert);
                 children.push(ent_id);
             });
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
@@ -860,6 +893,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         if (!direct) {
             if (ent_type_str === EEntTypeStr[EEntType.POSI]) {
+                this.unselectLabel(ent_id, ent_type_str);
                 scene.unselectObjGroup(ent_id, this.container, 'positions');
                 const children = this.dataService.selected_positions.get(ent_id);
                 children.forEach(c => {
@@ -868,6 +902,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.dataService.selected_positions.delete(ent_id);
 
             } else if (ent_type_str === EEntTypeStr[EEntType.VERT]) {
+                this.unselectLabel(ent_id, ent_type_str);
                 scene.unselectObjGroup(ent_id, this.container, 'vertex');
                 const children = this.dataService.selected_vertex.get(ent_id);
                 children.forEach(c => {
@@ -894,9 +929,18 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else {
             scene.unselectObj(ent_id, this.container);
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
+            this.unselectLabel(ent_id, ent_type_str);
         }
         this.render(this);
         this.refreshTable(event);
+    }
+
+    private unselectLabel(ent_id, ent_type_str) {
+        let arr = Array.from(this.dataService.selected_ents.get(ent_type_str).values());
+        arr = arr.filter(item => {
+            return item !== Number(ent_id.substr(2));
+        });
+        this.refreshLabels(ent_type_str);
     }
 
     private selectEdge(line: number) {
@@ -905,9 +949,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             positions = verts.map(v => this.model.attribs.query.getVertCoords(v)),
             posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${line}`;
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, line);
         const labelText = this.indexAsLabel(ent_type_str, ent_id, line, EEntType.EDGE);
         this._data_threejs.selectObjLine(ent_id, [], posi_flat, this.container, labelText);
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, line);
     }
 
     private selectEdgeByFace(face: number, parent_ent_id: string) {
@@ -925,9 +969,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 indices.push(i);
             });
             const posi_flat = [].concat(...position);
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, edge);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, edge, EEntType.EDGE);
             this._data_threejs.selectEdgeByFace(parent_ent_id, ent_id, indices, posi_flat, this.container, labelText);
-            this.dataService.selected_ents.get(ent_type_str).set(ent_id, edge);
         });
         this.dataService.selected_face_edges.set(`${parent_ent_id}`, children);
     }
@@ -945,9 +989,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         });
         const posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${wire}`;
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
         const labelText = this.indexAsLabel(ent_type_str, ent_id, wire, EEntType.WIRE);
         this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container, labelText);
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
     }
 
     private selectWireByFace(face: number, parent_ent_id: string) {
@@ -968,9 +1012,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 indices.push(i);
             });
             const posi_flat = [].concat(...positions);
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, wire, EEntType.WIRE);
             this._data_threejs.selectWireByFace(parent_ent_id, ent_id, indices, posi_flat, this.container, labelText);
-            this.dataService.selected_ents.get(ent_type_str).set(ent_id, wire);
         });
         this.dataService.selected_face_wires.set(`${parent_ent_id}`, children);
     }
@@ -990,7 +1034,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         });
         const posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${face}`;
-
+        this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
         const labelText = this.indexAsLabel(ent_type_str, ent_id, face, EEntType.FACE);
         this._data_threejs.selectObjFace(ent_id, tri_indices, posi_flat, this.container, labelText);
     }
@@ -998,16 +1042,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private indexAsLabel(ent_type_str: string, ent_id: string, id: number, type: EEntType) {
         let indexAsLabel;
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        this.dataService.selected_ents.get(ent_type_str).set(ent_id, id);
+        const sorted = sortByKey(this.dataService.selected_ents.get(ent_type_str));
+        const arr = Array.from(sorted.values());
         if (showSelected) {
-            const selected_ents = this.dataService.selected_ents.get(ent_type_str);
-            const selected_ents_sorted = sortByKey(selected_ents);
-            const arr = [];
-            selected_ents_sorted.forEach(ent => {
-                arr.push(ent);
-            });
             indexAsLabel = String(arr.findIndex(ent => ent === id));
-            sessionStorage.setItem(`mpm_selected_${EEntTypeStr[type]}`, JSON.stringify(arr));
         } else {
             indexAsLabel = String(this._data_threejs._model.attribs.threejs.getIdIndex(type, id));
         }
@@ -1021,9 +1059,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const point_indices = result.point_indices;
             const point_posi = result.posi_flat;
             const ent_id = `${ent_type_str}${point}`;
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POINT);
             this._data_threejs.selectObjPoint(ent_id, point_indices, point_posi, this.container, labelText);
-            this.dataService.selected_ents.get(ent_type_str).set(ent_id, point);
         }
     }
 
@@ -1034,9 +1072,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (result) {
             const posi_flat = result.posi_flat;
             const indices = result.indices;
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, pline);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, pline, EEntType.PLINE);
             this._data_threejs.selectObjLine(ent_id, indices, posi_flat, this.container, labelText);
-            this.dataService.selected_ents.get(ent_type_str).set(ent_id, pline);
         } else {
             this.showMessages('Please Select a Polyline', 'custom');
         }
@@ -1050,9 +1088,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const tri_indices = result.indices;
 
             const ent_id = `${ent_type_str}${face}`;
+            this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, face, EEntType.PGON);
             this._data_threejs.selectObjFace(ent_id, tri_indices, posi_flat, this.container, labelText);
-            this.dataService.selected_ents.get(ent_type_str).set(ent_id, face);
         }
     }
 

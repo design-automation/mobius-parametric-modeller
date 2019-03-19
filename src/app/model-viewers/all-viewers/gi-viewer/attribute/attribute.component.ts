@@ -183,12 +183,12 @@ export class AttributeComponent implements OnChanges {
       // sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
       if (changeTab) {
         if (this.data) {
-          if (currentTab === 0 || currentTab === 9 || currentTab === 10) {
+          if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
             this.child.selectTab(this.tab_rev_map[currentTab]);
-          } else if (currentTab === 2 || currentTab === 3 || currentTab === 4 || currentTab === 5) {
-            this.child.selectTopology(this.tab_rev_map[currentTab], event);
-          } else if (currentTab === 6 || currentTab === 7 || currentTab === 8) {
-            this.child.selectObject(this.tab_rev_map[currentTab], event);
+          } else if (currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 4) {
+            this.child.selectTopology(currentTab, event);
+          } else if (currentTab === 5 || currentTab === 6 || currentTab === 7) {
+            this.child.selectObject(currentTab, event);
           }
         }
       }

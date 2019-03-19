@@ -45,10 +45,12 @@ export class PanelHeaderComponent implements OnDestroy {
 
     changeNode(index: number) {
         this.dataService.flowchart.meta.selected_nodes = [index];
-        if (this.router.url === '/editor' &&
-           (index === 0 || index === this.dataService.flowchart.nodes.length - 1)) { setTimeout(() => {
-            this.adjustTextArea();
-        }, 50); }
+        if (this.router.url === '/editor') {
+            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[index].id);
+            if ((index === 0 || index === this.dataService.flowchart.nodes.length - 1)) { setTimeout(() => {
+                this.adjustTextArea();
+            }, 50); }
+        }
     }
 
     adjustTextArea() {

@@ -545,23 +545,7 @@ export class DataThreejs {
 
     public createLabelforObj(container, obj, type: string, labelText: string, ent_id: string) {
         const label = this._createTextLabel(container, type, labelText, ent_id);
-        const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        if (showSelected) {
-            let arr = [];
-            if (JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(0, 2)}`))) {
-                arr = JSON.parse(sessionStorage.getItem(`mpm_selected_${ent_id.substr(0, 2)}`));
-            }
-            let allLabels = document.getElementsByClassName(`text-label${ent_id.substr(0, 2)}`);
-            for (let i = 0; i < allLabels.length; i++) {
-                const element = allLabels[i];
-                const attr = Number(element.getAttribute('data-index'));
-                const index = arr.findIndex(l => l === attr);
-                element.innerHTML = String(index);
-            }
-            allLabels = null;
-        } else {
-            label.setHTML(labelText);
-        }
+        label.setHTML(labelText);
         label.setParent(obj);
         this._textLabels.set(label.element.id, label);
         container.appendChild(label.element);

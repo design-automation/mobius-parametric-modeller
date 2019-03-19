@@ -91,6 +91,7 @@ export class LoadFileComponent {
             } else {
                 this.dataService.newFlowchart = true;
             }
+            this.dataService.clearModifiedNode();
         });
         (<HTMLInputElement>document.getElementById('file-input')).value = '';
     }

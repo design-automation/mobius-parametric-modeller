@@ -225,7 +225,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
         const sorted = sortByKey(this.dataService.selected_ents.get(ent_type));
         const arr = Array.from(sorted.values());
-        if (this.selectSwitch === true) {
+        const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+        if (showSelected) {
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const attr = Number(element.getAttribute('data-index'));
@@ -334,8 +335,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                             selectingType = s[0];
                         });
 
-                        this.setSelected(EEntTypeStr[selectingType]);
-
                         selected.forEach(s => {
                             const type = EEntTypeStr[s[0]], id = Number(s[1]);
                             if (this.model.geom.query.entExists(s[0], id)) {
@@ -349,7 +348,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         this.selectEntityType(this.selections.find(selection => selection.id === EEntTypeStr[selectingType]));
                         this.refreshTable(event);
                     } else {
-                        this.setSelected(this.SelectingEntityType.id);
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
                         this.refreshTable(event);
@@ -362,16 +360,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 }
             }
         }
-    }
-
-    private setSelected(selectingType) {
-        const selected_ents = this.dataService.selected_ents.get(selectingType);
-        const selected_ents_sorted = sortByKey(selected_ents);
-        const arr = [];
-        selected_ents_sorted.forEach(ent => {
-            arr.push(ent);
-        });
-        // sessionStorage.setItem(`mpm_selected_${selectingType}`, JSON.stringify(arr));
     }
 
     // private initRaycaster(event) {
@@ -815,7 +803,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (point !== null) {
             const position = this.model.attribs.query.getPosiCoords(point);
             const ent_id = parent_ent_id;
-            this.setSelected(this.SelectingEntityType.id);
             posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POSI);
             scene.selectObjPosition(null, ent_id, position, this.container, labelText);

@@ -162,7 +162,6 @@ export class ExecuteComponent {
                 this.dataService.log(' ');
             }, 20);
         }
-
     }
 
     executeFlowchart() {

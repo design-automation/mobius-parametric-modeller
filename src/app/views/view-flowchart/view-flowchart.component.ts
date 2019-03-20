@@ -823,8 +823,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.edge.source.edges.push(this.edge);
                 this.dataService.flowchart.edges.push(this.edge);
                 this.dataService.flowchart.ordered = false;
-
-                ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
+                if (this.edge.source.parentNode.enabled) {
+                    ViewFlowchartComponent.enableNode(this.edge.target.parentNode);
+                }
                 // FlowchartUtils.orderNodes(this.dataService.flowchart);
                 break;
             }

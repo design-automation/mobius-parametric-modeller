@@ -391,7 +391,11 @@ function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number
                 return { 'error': `Error: Expect expression, string, number or variable after operator ${comp.value} \n` +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
             }
-            newString = comp.value;
+            if (comp.value === '-') {
+                newString = comp.value + ' ';
+            } else {
+                newString = comp.value;
+            }
 
         } else if (binaryOperators.has(comp.value)) {
             let checkBef: boolean, checkAft: boolean;

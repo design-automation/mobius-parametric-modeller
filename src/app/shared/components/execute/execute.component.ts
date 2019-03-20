@@ -185,7 +185,6 @@ export class ExecuteComponent {
             executeSet = new Set(this.dataService.flowchart.nodes.keys());
             // startIndex = 0;
         } else {
-            // executeSet = new Set([]);
             executeSet = this.dataService.getExecutableNodes();
             // startIndex = 0;
             // for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {

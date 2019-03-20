@@ -19,7 +19,16 @@ export function checkMobFile(file: any) {
         }
     }
     if (hasError) {
-        alert('The flowchart contains functions that does not exist in the current version of Mobius');
+        alert('The flowchart contains functions that do not exist in the current version of Mobius');
+    }
+    for (const userDefFunc of file.flowchart.functions) {
+        if (!userDefFunc.flowchart) { continue; }
+        for (const node of userDefFunc.flowchart.nodes) {
+            if (!checkMissingProd(node.procedure, file.version)) {
+                alert('User Defined Function ' + userDefFunc.name +
+                      ' contains functions that do not exist in the current version of Mobius');
+            }
+        }
     }
 }
 

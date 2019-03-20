@@ -196,7 +196,6 @@ export class ExecuteComponent {
             // }
             this.dataService.clearModifiedNode();
         }
-        console.log('');
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
         // for (const i of executeSet) {
@@ -209,7 +208,6 @@ export class ExecuteComponent {
                 node.output.value = node.model;
                 continue;
             }
-            console.log(i);
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
 

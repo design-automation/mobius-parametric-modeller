@@ -39,6 +39,7 @@ export class AttributeComponent implements OnChanges {
   displayedColumns: string[] = [];
   displayData: {}[] = [];
   selected_ents = new Map();
+  attribLabels: string[] = ['##', 'id', 'attr'];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();

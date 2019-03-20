@@ -3,7 +3,13 @@
     <my-tab *ngFor="let tab of tabs; let i = index" tabTitle="{{tab.title}}" index="{{i}}">
       <div class="mat-elevation-z1">
         <div class = "table--container">
+          <dl id='attribLabel'>
+              <dd *ngFor="let label of attribLabels;">
+                <span [class]='label'></span>
+              </dd>
+          </dl>
           <table mat-table [dataSource]="dataSource" matSort [class] = 'columnItalic'>
+            
             <ng-container *ngFor="let column of displayedColumns;" [matColumnDef]="column" [sticky] = 'column === "_id"'>
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
                 <td mat-cell *matCellDef="let element"> {{element[column]}} </td>

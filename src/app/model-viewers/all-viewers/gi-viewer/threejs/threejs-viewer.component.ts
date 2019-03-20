@@ -205,15 +205,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         if (changes['selectSwitch']) {
             if (this.selectSwitch !== undefined) {
-                const ent_type = EEntTypeStr[this.tab_map[this.getCurrentTab()]];
+                const ent_type = this.tab_map[this.getCurrentTab()];
                 if (this.selectSwitch === true) {
                     this.refreshLabels(ent_type);
                 } else {
-                    const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
+                    const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
                     for (let i = 0; i < allLabels.length; i++) {
                         const element = allLabels[i];
                         const attr = Number(element.getAttribute('data-index'));
-                        const label = this._data_threejs._model.attribs.threejs.getIdIndex(this.tab_map[this.getCurrentTab()], attr);
+                        const label = this._data_threejs._model.attribs.threejs.getIdIndex(ent_type, attr);
                         element.innerHTML = String(label);
                     }
                 }
@@ -222,15 +222,21 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     refreshLabels(ent_type): void {
-        const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
-        const sorted = sortByKey(this.dataService.selected_ents.get(ent_type));
+        const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
+        const sorted = sortByKey(this.dataService.selected_ents.get(EEntTypeStr[ent_type]));
         const arr = Array.from(sorted.values());
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+
         if (showSelected) {
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const attr = Number(element.getAttribute('data-index'));
                 const index = arr.findIndex(l => l === attr);
+
+                // const attr_names = this._data_threejs._model.attribs.query.getAttribNames(ent_type);
+                // const attr_val = this._data_threejs._model.attribs.query.getAttribValue(ent_type, attr_names[0], attr);
+                // console.log(attr_val);
+
                 element.innerHTML = String(index);
             }
         } else {
@@ -334,7 +340,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                             }
                             selectingType = s[0];
                         });
-
+                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                         selected.forEach(s => {
                             const type = EEntTypeStr[s[0]], id = Number(s[1]);
                             if (this.model.geom.query.entExists(s[0], id)) {
@@ -342,7 +348,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                             }
                         });
 
-                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
                         localStorage.setItem('mpm_attrib_current_tab', this.tab_rev_map[selectingType]);
                         this.selectEntityType(this.selections.find(selection => selection.id === EEntTypeStr[selectingType]));

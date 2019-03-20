@@ -10,6 +10,7 @@ import { DataService } from '@services';
 // import { WebWorkerService } from 'ngx-web-worker';
 import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
+import { IEdge } from '@models/edge';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -162,7 +163,6 @@ export class ExecuteComponent {
                 this.dataService.log(' ');
             }, 20);
         }
-
     }
 
     executeFlowchart() {
@@ -179,31 +179,37 @@ export class ExecuteComponent {
             funcStrings[func.name] =  CodeUtils.getFunctionString(func);
         }
 
-        let startIndex: number;
+        let executeSet: any;
+        // let startIndex: number;
         if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0) {
-            startIndex = 0;
+            executeSet = new Set(this.dataService.flowchart.nodes.keys());
+            // startIndex = 0;
         } else {
-            startIndex = 0;
-            for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
-                if (this.dataService.checkModifiedNode(this.dataService.flowchart.nodes[i].id)) {
-                    startIndex = i;
-                    break;
-                }
-            }
+            // executeSet = new Set([]);
+            executeSet = this.dataService.getExecutableNodes();
+            // startIndex = 0;
+            // for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+            //     if (this.dataService.checkModifiedNode(this.dataService.flowchart.nodes[i].id)) {
+            //         startIndex = i;
+            //         break;
+            //     }
+            // }
             this.dataService.clearModifiedNode();
         }
-
+        console.log('');
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+        // for (const i of executeSet) {
             const node = this.dataService.flowchart.nodes[i];
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
-            if (0 < i && i < startIndex) {
+            if (!executeSet.has(i)) {
                 node.output.value = node.model;
                 continue;
             }
+            console.log(i);
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
 

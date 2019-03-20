@@ -82,16 +82,6 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     getDropdownOptions() {
         if (this.prod.args[this.prod.argCount - 1].min) {
             return this.prod.args[this.prod.argCount - 1].min;
-            try {
-                return this.prod.args[this.prod.argCount - 1].min.map((val: string) => {
-                    let x = val;
-                    if (x[0] === '"' || x[0] === '\'') { x = x.substring(1); }
-                    if (x[x.length - 1] === '"' || x[x.length - 1] === '\'') { x = x.substring(0, x.length - 1); }
-                    return x;
-                });
-            } catch (ex) {
-                return [];
-            }
         }
         return [];
     }

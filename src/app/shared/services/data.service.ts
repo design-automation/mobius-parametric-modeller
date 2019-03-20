@@ -3,6 +3,7 @@ import { IMobius } from '@models/mobius';
 import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
+import { IEdge } from '@models/edge';
 
 @Injectable()
 export class DataService {
@@ -229,4 +230,31 @@ export class DataService {
     numModifiedNode() {
         return this._modifiedNodeSet.size;
     }
+
+    getExecutableNodes() {
+        const checkList = new Set([0]);
+        this._modifiedNodeSet.forEach(nodeID => {
+            this.recursiveDownstreamNodeCheck(nodeID, checkList);
+        });
+        return checkList;
+    }
+
+    private recursiveDownstreamNodeCheck(nodeID: string, checkList: Set<number>) {
+        for (let i = 0; i < this.flowchart.nodes.length; i++) {
+            const node = this.flowchart.nodes[i];
+            if (!node.enabled) { continue; }
+            if (node.id === nodeID) {
+                checkList.add(i);
+                if (node.output.edges) {
+                    node.output.edges.forEach((edge: IEdge) => {
+                        this.recursiveDownstreamNodeCheck(edge.target.parentNode.id, checkList);
+                    });
+                }
+                return;
+            }
+        }
+    }
+
+
+
 }

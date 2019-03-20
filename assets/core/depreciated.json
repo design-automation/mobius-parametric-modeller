@@ -169,7 +169,7 @@
             "name": "Get",
             "module": "query",
             "values": {
-                "sort": "'ID_descending'"
+                "sort": "'ID_ascending'"
             }
         }
     }

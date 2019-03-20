@@ -187,9 +187,9 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
     if (found_ents_arr.length === 0) { return []; }
     // sort entities
-    if (sort === _EQuerySortMethod.ID_DESCENDING) {
+    if (sort === _EQuerySortMethod.ID_ASCENDING) {
         found_ents_arr.sort(_compareID);
-    } else if (sort === _EQuerySortMethod.ID_ASCENDING) {
+    } else if (sort === _EQuerySortMethod.ID_DESCENDING) {
         found_ents_arr.sort(_compareID);
         found_ents_arr.reverse();
     }

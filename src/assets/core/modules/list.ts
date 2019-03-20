@@ -19,6 +19,8 @@ import { TEntTypeIdx } from '@libs/geo-info/common';
 export enum _EAddMethod {
     TO_START = 'to_start',
     TO_END = 'to_end',
+    EXTEND_START = 'extend_start',
+    EXTEND_END = 'extend_end',
     SORTED_ALPHA = 'alpha_descending',
     SORTED_REV_ALPHA = 'alpha_ascending',
     SORTED_NUM = 'numeric_descending',
@@ -28,17 +30,21 @@ export enum _EAddMethod {
 }
 /**
  * Adds an item to a list.
- * If item is a list, the entire list will be added as a single item.
  *
  * @param list List to add the item to.
  * @param item Item to add.
  * @param method Enum, select the method.
  * @returns void
- * @example append = list.Add(list, 4, 'at_end')
- * @example_info where list = [1,2,3]
- * Expected value of list is [1,2,3,4].
+ * @example append = list.Add([1,2,3], 4, 'at_end')
+ * @example_info Expected value of list is [1,2,3,4].
+ * @example append = list.Add([1,2,3], [4, 5], 'at_end')
+ * @example_info Expected value of list is [1,2,3,[4,5]].
+ * @example append = list.Add([1,2,3], [4,5], 'extend_end')
+ * @example_info Expected value of list is [1,2,3,4,5].
+ * @example append = list.Add(["a", "c", "d"], "b", 'alpha_descending')
+ * @example_info Expected value of list is ["a", "b", "c", "d"].
  */
-export function Add(list: any[], item: any, method: _EAddMethod): void {
+export function Add(list: any[], item: any|any[], method: _EAddMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Add';
     checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
@@ -51,6 +57,18 @@ export function Add(list: any[], item: any, method: _EAddMethod): void {
             break;
         case _EAddMethod.TO_END:
             list.push(item);
+            break;
+        case _EAddMethod.EXTEND_START:
+            if (!Array.isArray(item)) { item = [item]; }
+            for (let i = item.length - 1; i >= 0; i--) {
+                list.unshift(item[i]);
+            }
+            break;
+        case _EAddMethod.EXTEND_END:
+            if (!Array.isArray(item)) { item = [item]; }
+            for (let i = 0; i < item.length; i++) {
+                list.push(item[i]);
+            }
             break;
         case _EAddMethod.SORTED_ALPHA:
             str_value = item + '';

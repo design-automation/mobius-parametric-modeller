@@ -49,6 +49,10 @@ export class ProcedureInputViewerComponent implements OnDestroy {
         document.getElementById(`file_${id}`).click();
     }
 
+    replaceQuotes(val) {
+        return val.replace(/(^[\'\"])|([\'\"]$)/g, '');
+    }
+
     getDropdownOptions() {
         if (this.prod.args[this.prod.argCount - 1].min) {
             return this.prod.args[this.prod.argCount - 1].min;

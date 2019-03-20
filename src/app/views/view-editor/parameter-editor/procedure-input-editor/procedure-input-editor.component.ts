@@ -76,7 +76,7 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     }
 
     replaceQuotes(val) {
-        return val.replace(/\"|\'/g, '');
+        return val.replace(/(^[\'\"])|([\'\"]$)/g, '');
     }
 
     getDropdownOptions() {
@@ -99,10 +99,10 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     formOptionList() {
         if (!this.prod.args[this.prod.argCount - 1].max) { return; }
         try {
-        let str: string = this.prod.args[this.prod.argCount - 1].max;
-        if (str[0] === '[') { str = str.substring(1); }
-        if (str[str.length - 1] === ']') { str = str.substring(0, str.length - 1); }
-        this.prod.args[this.prod.argCount - 1].min = str.split(',').map(x => x.trim());
+            let str: string = this.prod.args[this.prod.argCount - 1].max;
+            if (str[0] === '[') { str = str.substring(1); }
+            if (str[str.length - 1] === ']') { str = str.substring(0, str.length - 1); }
+            this.prod.args[this.prod.argCount - 1].min = str.split(',').map(x => x.trim());
         } catch (ex) {
             this.prod.args[this.prod.argCount - 1].min = null;
         }

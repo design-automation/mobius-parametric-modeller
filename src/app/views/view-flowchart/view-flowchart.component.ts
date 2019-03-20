@@ -230,8 +230,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                     }
                 } else {
                     if (act.nodes) {
+                        const addingPlace = this.dataService.flowchart.nodes.length - 1;
                         for (const tbaNode of act.nodes) {
-                            this.dataService.flowchart.nodes.push(tbaNode);
+                            this.dataService.flowchart.nodes.splice(addingPlace, 0, tbaNode);
                         }
                     }
                     if (!act.edges) { return; }
@@ -444,7 +445,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
     // delete selected node
     deleteSelectedNodes() {
-
         const deletedNodes = [];
         const deletedEdges = [];
         this.dataService.flowchart.meta.selected_nodes = this.dataService.flowchart.meta.selected_nodes.sort();
@@ -452,6 +452,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         while (this.dataService.flowchart.meta.selected_nodes.length > 0) {
             const node_index = this.dataService.flowchart.meta.selected_nodes.pop();
             const node = this.dataService.flowchart.nodes[node_index];
+            if (!node) {continue; }
             // continue if the node is a start/end node
             if (node.type !== '') { continue; }
 
@@ -477,7 +478,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         const nodes = this.dataService.flowchart.nodes;
         for ( let i = 0; i < nodes.length; i ++ ) {
-            if (nodes[i].type === 'end') {
+            if (nodes[i] && nodes[i].type === 'end') {
                 this.dataService.flowchart.meta.selected_nodes = [i];
                 break;
             }

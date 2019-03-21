@@ -129,6 +129,11 @@ table{
 }
 
 /deep/ table{
+  th:first-child{
+    i{
+      display: none;
+    }
+  }
   th:last-child{
     .mat-sort-header-container{
       display: none;

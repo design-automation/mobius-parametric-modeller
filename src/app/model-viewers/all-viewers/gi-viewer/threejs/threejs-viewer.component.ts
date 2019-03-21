@@ -243,33 +243,41 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else {
             isArr = false;
         }
-        if (attr_name !== '' && attr_names.includes(attr_name)) {
-            for (let i = 0; i < allLabels.length; i++) {
-                const element = allLabels[i];
-                const attr = Number(element.getAttribute('data-index'));
-                const attr_val = this._data_threejs._model.attribs.query.getAttribValue(ent_type, attr_name, attr);
-                const _attr_val = attr_val !== undefined ? attr_val : '';
-                if (isArr && _attr_val !== '') {
-                    const val = String(_attr_val).split(',')[key];
-                    const _val = val !== undefined ? val : '';
-                    element.innerHTML = _val;
-                } else {
-                    element.innerHTML = String(_attr_val);
+        if (attr_name !== '') {
+            if (attr_names.includes(attr_name)) {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const attr = Number(element.getAttribute('data-index'));
+                    const attr_val = this._data_threejs._model.attribs.query.getAttribValue(ent_type, attr_name, attr);
+                    const _attr_val = attr_val !== undefined ? attr_val : '';
+                    if (isArr && _attr_val !== '') {
+                        const val = String(_attr_val).split(',')[key];
+                        const _val = val !== undefined ? val : '';
+                        element.innerHTML = _val;
+                    } else {
+                        element.innerHTML = String(_attr_val);
+                    }
+                }
+            } else if (attr_name === '_id') {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const val = element.getAttribute('title');
+                    element.innerHTML = String(val);
                 }
             }
         } else {
             if (showSelected) {
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
-                    const attr = Number(element.getAttribute('data-index'));
-                    const index = arr.findIndex(l => l === attr);
+                    const val = Number(element.getAttribute('data-index'));
+                    const index = arr.findIndex(l => l === val);
                     element.innerHTML = String(index);
                 }
             } else {
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
-                    const attr = Number(element.getAttribute('data-index'));
-                    element.innerHTML = String(attr);
+                    const val = element.getAttribute('data-index');
+                    element.innerHTML = String(val);
                 }
             }
         }
@@ -402,7 +410,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else {
             if (this.dragHash < 10) {
                 this.onUserAction(event);
-                this.refreshLabels(this.SelectingEntityType.id);
+                this.refreshLabels(this.tab_map[this.getCurrentTab()]);
             } else {
                 // this._data_threejs._controls.enabled = true;
             }

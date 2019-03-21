@@ -24,13 +24,6 @@
         {{message}}
     </div>
 
-
-    <!-- <button id="zoomingfit"  
-        [class.visible]="Visible === 'zoomfit'" 
-        (click)="zoomfit()">
-        <span matTooltip="zoom to fit"><i class="fa fa-arrows-alt"></i></span>
-    </button> -->
-
     <button
         id="zoomingfit"
         mat-icon-button
@@ -39,20 +32,13 @@
         <mat-icon svgIcon="cZoom"></mat-icon>
     </button>
 
-
-    <!-- <button id="selecting" [class.visible]="Visible === 'select'" (click)= "select($event, Visible)" ><i class="fa fa-mouse-pointer"></i></button> -->
-    <!-- <button id="setting" [class.selected]="settingVisible" (click)= "setting(settingVisible)"><i class="fa fa-cog"></i></button> -->
-    <!-- <button id="selecting" [class.selected]="seVisible" (click)= "select(seVisible)" ><span matTooltip="select"><i class="fa fa-mouse-pointer"></i></span></button> -->
     <button
         id="EntitySelection"
         mat-icon-button
         (click)="selectDropdownVisible = !selectDropdownVisible"
     >
         <mat-icon svgIcon="select"></mat-icon>
-        <!-- <div
-            [hidden]="needSelect?(!needSelect&&selectDropdownVisible):!needSelect"
-            class="needSelect"
-        ></div> -->
+
     </button>
     <span
         *ngIf="!selectDropdownVisible"
@@ -75,7 +61,7 @@
         </button>
     </div>
 
-    <!-- <div id="giSummary" [hidden]='!this._data_threejs.settings.gi_summary.show'>
+    <div id="giSummary" [hidden]='!this._data_threejs.settings.gi_summary.show'>
         <tbody>
             <tr *ngFor="let item of giSummary">
                 <td style="width: 80px;">{{item.title}}</td><td>{{item.val}}</td>
@@ -127,16 +113,7 @@
                 </td>
             </tr>
         </tbody>
-    </div> -->
-
+    </div>
 
     <dropdown-menu (selected)='selectEntity($event)'></dropdown-menu>
-    <div id="mouse_label"></div>
-    <!-- <button id="imagery"  
-        [class.selected]="imVisible" (click)="leaflet()">I
-        </button> -->
-    <!-- setting -->
-
-
-    <!-- <app-setting *ngIf="settingVisible == true"></app-setting> -->
 </div>

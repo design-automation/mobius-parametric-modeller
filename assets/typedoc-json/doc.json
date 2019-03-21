@@ -20152,7 +20152,7 @@
                             "defaultValue": "\"geometric_order\""
                         },
                         {
-                            "id": 1791,
+                            "id": 1790,
                             "name": "ID_ASCENDING",
                             "kind": 16,
                             "kindString": "Enumeration member",
@@ -20162,14 +20162,14 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/query.ts",
-                                    "line": 138,
+                                    "line": 137,
                                     "character": 18
                                 }
                             ],
                             "defaultValue": "\"ID_ascending\""
                         },
                         {
-                            "id": 1790,
+                            "id": 1791,
                             "name": "ID_DESCENDING",
                             "kind": 16,
                             "kindString": "Enumeration member",
@@ -20179,7 +20179,7 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/query.ts",
-                                    "line": 137,
+                                    "line": 138,
                                     "character": 19
                                 }
                             ],
@@ -20192,8 +20192,8 @@
                             "kind": 16,
                             "children": [
                                 1792,
-                                1791,
-                                1790
+                                1790,
+                                1791
                             ]
                         }
                     ],

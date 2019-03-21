@@ -95,11 +95,14 @@
                                     <li (click)='add_imported_function(fn)'> {{fn.name}} 
                                     </li>
                                     <div class = 'btn--container'>
+                                        <button class='importedFunc-btn' (click)='edit_imported_function($event, fn)'>
+                                            <mat-icon class='importedFunc-btn-icon'>edit</mat-icon>
+                                        </button>
+                                        <button class='importedFunc-btn' (click)='download_imported_function($event, fn)'>
+                                            <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
+                                        </button>
                                         <button class='importedFunc-btn' (click)='delete_imported_function(fn)'>
                                             <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
-                                        </button>
-                                        <button class='importedFunc-btn' (click)='downloadImported($event, fn)'>
-                                            <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
                                         </button>
                                     </div>
                                 </div>

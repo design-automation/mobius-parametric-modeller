@@ -4,6 +4,7 @@ import { DataService } from '@shared/services';
 import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
 import { ProcedureTypes } from '@models/procedure';
+import { SaveFileComponent } from '../file';
 
 @Component({
   selector: 'panel-header',
@@ -201,7 +202,25 @@ export class PanelHeaderComponent implements OnDestroy {
         nodeMenu = null;
         galleryMenu = null;
         helpMenu = null;
+    }
 
+    @HostListener('window:keyup', ['$event'])
+    onKeyUp(event: KeyboardEvent) {
+        if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
+            try {
+                SaveFileComponent.saveFileToLocal(this.dataService.file);
+                this.dataService.notifyMessage(`Saved Flowchart as ${this.dataService.flowchart.name}...`);
+            } catch (ex) {
+                this.dataService.notifyMessage('ERROR: Unable to save Flowchart');
+            }
+        }
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
+            event.preventDefault();
+        }
     }
 
     validateUrl() {

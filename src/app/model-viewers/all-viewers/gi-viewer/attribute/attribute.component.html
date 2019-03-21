@@ -18,9 +18,9 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]='row.selected?row.selected:false' (click)="selectRow(row._id, $event)"></tr>
           </table>
-          <!-- <div *ngIf="dataSource && dataSource.data.length === 0" id="emptyMessage">
+          <div *ngIf="dataSource && dataSource.data.length === 0" id="emptyMessage">
             No Data
-          </div> -->
+          </div>
            
         </div>
         <div class = 'btm--container'>

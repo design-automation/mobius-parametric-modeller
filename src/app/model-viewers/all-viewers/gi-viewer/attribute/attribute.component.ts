@@ -1,5 +1,7 @@
-import { Component, Injector, Input, OnChanges, SimpleChanges,
-  ViewChildren, QueryList, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component, Injector, Input, OnChanges, SimpleChanges,
+  ViewChildren, QueryList, Output, EventEmitter, ViewChild
+} from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
@@ -14,14 +16,16 @@ import { ATabsComponent } from './tabs.component';
 })
 
 export class AttributeComponent implements OnChanges {
-  @ViewChild(ATabsComponent ) child: ATabsComponent ;
+  @ViewChild(ATabsComponent) child: ATabsComponent;
 
   @Input() data: GIModel;
   @Input() refresh: Event;
   @Input() reset: Event;
   @Output() attrTableSelect = new EventEmitter<Object>();
   @Output() selectSwitch = new EventEmitter<Boolean>();
+  @Output() attribLabel = new EventEmitter<string>();
   showSelected = false;
+  currentShowingCol = '';
 
   tabs: { type: number, title: string }[] =
     [
@@ -39,7 +43,6 @@ export class AttributeComponent implements OnChanges {
   displayedColumns: string[] = [];
   displayData: {}[] = [];
   selected_ents = new Map();
-  attribLabels: string[] = ['##', 'id', 'attr'];
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -138,6 +141,7 @@ export class AttributeComponent implements OnChanges {
       }
       this.dataSource.paginator = this.paginator.toArray()[tabIndex];
       this.dataSource.sort = this.sort.toArray()[tabIndex];
+
     }
     return tabIndex;
   }
@@ -223,5 +227,16 @@ export class AttributeComponent implements OnChanges {
       target.parentNode.classList.add('selected-row');
     }
 
+  }
+
+  showAttribLabel($event, column) {
+    $event.stopPropagation();
+    if (column === this.currentShowingCol) {
+      this.currentShowingCol = '';
+      this.attribLabel.emit('');
+    } else {
+      this.currentShowingCol = column;
+      this.attribLabel.emit(column);
+    }
   }
 }

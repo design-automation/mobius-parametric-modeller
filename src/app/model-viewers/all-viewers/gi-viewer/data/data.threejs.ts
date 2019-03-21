@@ -549,6 +549,7 @@ export class DataThreejs {
         label.setParent(obj);
         this._textLabels.set(label.element.id, label);
         container.appendChild(label.element);
+        label.updatePosition();
     }
 
     public unselectObj(ent_id, container) {
@@ -912,6 +913,7 @@ export class DataThreejs {
         div.innerHTML = labelText;
         div.style.top = '-1000';
         div.style.left = '-1000';
+        div.style.whiteSpace = 'pre-line';
         const _this = this;
         return {
             element: div,

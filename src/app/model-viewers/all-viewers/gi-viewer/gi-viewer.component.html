@@ -5,7 +5,9 @@
 				(eventClicked)="childEventClicked($event)"
 				[attr_table_select]='attrTableSelect'
 				[selectSwitch] = 'selectSwitchOnOff'
-				(resetTableEvent) = "resetTable()">
+				[attribLabel] = 'attribLabelVal'
+				(resetTableEvent) = "resetTable()"
+			>
 			</threejs-viewer>
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
 		</as-split-area>
@@ -14,7 +16,9 @@
 				[refresh]="clickedEvent"
 				[reset]="attrTableReset"
 				(attrTableSelect) = "attribTableSelected($event)"
-				(selectSwitch) = "selectSwitch($event)">
+				(selectSwitch) = "selectSwitch($event)"
+				(attribLabel) = "attribLabel($event)"
+			>
 			</attribute>
 			<modal-window id="settings_modal">
 				<h1>3D Viewer Settings</h1>

@@ -27,6 +27,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     @Input() model: GIModel;
     @Input() attr_table_select: { action: string, ent_type: string, id: number };
     @Input() selectSwitch: Boolean;
+    @Input() attribLabel: string;
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
@@ -70,6 +71,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private shiftKeyPressed = false;
     private mouse_label;
     private giSummary = [];
+    private currentAttribLabel = '';
 
     tab_map = {
         0: EEntType.POSI,
@@ -181,6 +183,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.render(this);
             }, 10);
         }
+
+
     }
 
     getCurrentTab() {
@@ -205,41 +209,79 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         if (changes['selectSwitch']) {
             if (this.selectSwitch !== undefined) {
-                const ent_type = EEntTypeStr[this.tab_map[this.getCurrentTab()]];
-                if (this.selectSwitch === true) {
-                    this.refreshLabels(ent_type);
-                } else {
-                    const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
-                    for (let i = 0; i < allLabels.length; i++) {
-                        const element = allLabels[i];
-                        const attr = Number(element.getAttribute('data-index'));
-                        const label = this._data_threejs._model.attribs.threejs.getIdIndex(this.tab_map[this.getCurrentTab()], attr);
-                        element.innerHTML = String(label);
-                    }
-                }
+                const ent_type = this.tab_map[this.getCurrentTab()];
+                this.refreshLabels(ent_type);
+            }
+        }
+        if (changes['attribLabel']) {
+            if (this.attribLabel !== undefined) {
+                const ent_type = this.tab_map[this.getCurrentTab()];
+                this.currentAttribLabel = this.attribLabel;
+                this.refreshLabels(ent_type);
             }
         }
     }
 
     refreshLabels(ent_type): void {
-        const allLabels = document.getElementsByClassName(`text-label${ent_type}`);
-        const sorted = sortByKey(this.dataService.selected_ents.get(ent_type));
+        const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
+        const unSorted = this.dataService.selected_ents.get(EEntTypeStr[ent_type]);
+        if (unSorted === undefined) {
+            return;
+        }
+        const sorted = sortByKey(unSorted);
         const arr = Array.from(sorted.values());
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        if (showSelected) {
-            for (let i = 0; i < allLabels.length; i++) {
-                const element = allLabels[i];
-                const attr = Number(element.getAttribute('data-index'));
-                const index = arr.findIndex(l => l === attr);
-                element.innerHTML = String(index);
+        const attr_names = this._data_threejs._model.attribs.query.getAttribNames(ent_type);
+
+        let attr_name = this.currentAttribLabel, isArr = false, key;
+        if (attr_name.match(/\[.*?\]/g)) {
+            isArr = true;
+            const _key = String(attr_name.match(/\[.*?\]/g));
+            const _attr_name = attr_name.replace(_key, '');
+            key = Number(_key.replace('[', '').replace(']', ''));
+            attr_name = _attr_name;
+        } else {
+            isArr = false;
+        }
+        if (attr_name !== '') {
+            if (attr_names.includes(attr_name)) {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const attr = Number(element.getAttribute('data-index'));
+                    const attr_val = this._data_threejs._model.attribs.query.getAttribValue(ent_type, attr_name, attr);
+                    const _attr_val = attr_val !== undefined ? attr_val : '';
+                    if (isArr && _attr_val !== '') {
+                        const val = String(_attr_val).split(',')[key];
+                        const _val = val !== undefined ? val : '';
+                        element.innerHTML = _val;
+                    } else {
+                        element.innerHTML = String(_attr_val);
+                    }
+                }
+            } else if (attr_name === '_id') {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const val = element.getAttribute('title');
+                    element.innerHTML = String(val);
+                }
             }
         } else {
-            for (let i = 0; i < allLabels.length; i++) {
-                const element = allLabels[i];
-                const attr = Number(element.getAttribute('data-index'));
-                element.innerHTML = String(attr);
+            if (showSelected) {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const val = Number(element.getAttribute('data-index'));
+                    const index = arr.findIndex(l => l === val);
+                    element.innerHTML = String(index);
+                }
+            } else {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const val = element.getAttribute('data-index');
+                    element.innerHTML = String(val);
+                }
             }
         }
+        this.render(this);
     }
 
     ngOnDestroy() {
@@ -295,6 +337,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.unselectGeom(attrib.ent_type + attrib.id, attrib.ent_type, true);
             }
         }
+        this.refreshLabels(this.tab_map[this.getCurrentTab()]);
         this.render(this);
     }
 
@@ -334,7 +377,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                             }
                             selectingType = s[0];
                         });
-
+                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                         selected.forEach(s => {
                             const type = EEntTypeStr[s[0]], id = Number(s[1]);
                             if (this.model.geom.query.entExists(s[0], id)) {
@@ -342,7 +385,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                             }
                         });
 
-                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
                         localStorage.setItem('mpm_attrib_current_tab', this.tab_rev_map[selectingType]);
                         this.selectEntityType(this.selections.find(selection => selection.id === EEntTypeStr[selectingType]));
@@ -362,21 +404,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
-    // private initRaycaster(event) {
-    //     const scene = this._data_threejs;
-    //     scene._mouse.x = (event.offsetX / scene._renderer.domElement.clientWidth) * 2 - 1;
-    //     scene._mouse.y = - (event.offsetY / scene._renderer.domElement.clientHeight) * 2 + 1;
-    //     scene._raycaster.setFromCamera(scene._mouse, scene._camera);
-    //     return scene._raycaster.intersectObjects(scene.sceneObjs);
-    // }
-
     onMouseUp(event) {
         if (event.target.tagName !== 'CANVAS') {
             return null;
         } else {
             if (this.dragHash < 10) {
                 this.onUserAction(event);
-                this.refreshLabels(this.SelectingEntityType.id);
+                this.refreshLabels(this.tab_map[this.getCurrentTab()]);
             } else {
                 // this._data_threejs._controls.enabled = true;
             }
@@ -397,23 +431,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const intersects = this.threeJSViewerService.initRaycaster(event);
             if (intersects && intersects.length > 0) {
                 body[0].style.cursor = 'pointer';
-                // if (this.mouse_label !== null) {
-                //     const x = event.clientX, y = event.clientY;
-                //     this.mouse_label.style.top = y + 'px';
-                //     this.mouse_label.style.left = (x + 15) + 'px';
-                //     this.mouse_label.style.display = 'block';
-                //     this.mouse_label.innerHTML = mouseLabel[intersects[0].object.type];
-                // }
+
             } else {
                 body[0].style.cursor = 'default';
-                // if (this.mouse_label !== null) {
-                //     this.mouse_label.style.display = 'none';
-                // }
             }
 
             if (!this.isDown) { return; }
 
-            // Put your mousemove stuff here
             const mouseX = event.clientX - event.target.getBoundingClientRect().left;
             const mouseY = event.clientY - event.target.getBoundingClientRect().top;
             const dx = mouseX - this.lastX;
@@ -421,8 +445,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.lastX = mouseX;
             this.lastY = mouseY;
 
-            // accumulate the drag distance
-            // (used in mouseup to see if this is a drag or click)
             this.dragHash += Math.abs(dx) + Math.abs(dy);
             if (this.dragHash > 4) {
                 // dragging

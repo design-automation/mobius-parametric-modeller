@@ -254,13 +254,20 @@ export class ToolsetComponent implements OnInit {
 
 
 
-    downloadImported(event: MouseEvent, fnData) {
+    download_imported_function(event: MouseEvent, fnData) {
         event.stopPropagation();
         const fileString = fnData.importedFile;
         const fname = `${fnData.name}.mob`;
         const blob = new Blob([fileString], {type: 'application/json'});
         DownloadUtils.downloadFile(fname, blob);
         this.turnoffTooltip();
+    }
+
+    edit_imported_function(event: MouseEvent, fnData) {
+        event.stopPropagation();
+        const fileString = fnData.importedFile;
+        localStorage.setItem('temp_file', fileString);
+        window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }
 
     toggleAccordion(id: string, inline?: boolean) {
@@ -445,12 +452,14 @@ export class ToolsetComponent implements OnInit {
 
     assembleImportedTooltip(funcDoc): string {
         // <span class="tooltiptext1">
-        //     <p class='funcDesc'>{{fn.doc.description}}</p>
+        //     <p class='funcDesc'>{{fn.doc.name}}</p>
+        //     <p>{{fn.doc.description}}</p>
         //     <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
         //     <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
         //     <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
         // </span>
-        let htmlDesc = `<p class="funcDesc">${funcDoc.description}</p>`;
+        let htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;
+        htmlDesc += `<p>${funcDoc.description}</p>`;
         if (funcDoc.parameters && funcDoc.parameters.length > 0) {
             htmlDesc += `<p><span>Parameters: </span></p>`;
             for (const param of funcDoc.parameters) {

@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.subscribe = source.subscribe(val => {
             try {
                 SaveFileComponent.saveFileToLocal(this.dataService.file);
-                this.dataService.notifyMessage('Auto-saving Flowchart...');
+                this.dataService.notifyMessage(`Auto-saving Flowchart as ${this.dataService.flowchart.name}...`);
             } catch (ex) {
                 this.dataService.notifyMessage('ERROR: Unable to save Flowchart');
             }

@@ -38,6 +38,7 @@ export class GIViewerComponent implements OnInit {
     public attrTableSelect: Event;
     public attrTableReset: number;
     public selectSwitchOnOff: Boolean;
+    public attribLabelVal: String;
     /**
      * constructor
      * @param dataService
@@ -92,6 +93,10 @@ export class GIViewerComponent implements OnInit {
 
     selectSwitch(event: Boolean) {
         this.selectSwitchOnOff = event;
+    }
+
+    attribLabel(event: String) {
+        this.attribLabelVal = event;
     }
 
     resetTable() {

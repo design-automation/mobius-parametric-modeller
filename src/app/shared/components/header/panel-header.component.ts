@@ -3,8 +3,11 @@ import { Router } from '@angular/router';
 import { DataService } from '@shared/services';
 import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
-import { ProcedureTypes } from '@models/procedure';
+import { ProcedureTypes, IFunction } from '@models/procedure';
 import { SaveFileComponent } from '../file';
+import { IdGenerator } from '@utils';
+import { InputType } from '@models/port';
+import { IArgument } from '@models/code';
 
 @Component({
   selector: 'panel-header',
@@ -15,7 +18,6 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @Input() flowchart: IFlowchart;
     executeCheck: boolean;
-    dialogBox: HTMLDialogElement;
 
     urlSet = ['', 'publish', '', '', ''];
     urlValid: boolean;
@@ -32,7 +34,7 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this.dialogBox = null;
+        this.dataService.dialog = null;
         this.ctx = null;
     }
 
@@ -127,14 +129,15 @@ export class PanelHeaderComponent implements OnDestroy {
 
     openUrlDialog(event) {
         event.stopPropagation();
-        this.dialogBox = <HTMLDialogElement>document.getElementById('genUrlDialog');
-        this.dialogBox.showModal();
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('genUrlDialog');
+        this.dataService.dialog.showModal();
     }
 
     openbackupDialog(event) {
         event.stopPropagation();
-        this.dialogBox = <HTMLDialogElement>document.getElementById('loadBackupDialog');
-        this.dialogBox.showModal();
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('loadBackupDialog');
+        this.dataService.dialog.showModal();
+        this.dataService.setbackup_header();
     }
 
     getBackupFiles() {
@@ -145,23 +148,95 @@ export class PanelHeaderComponent implements OnDestroy {
         return JSON.parse(items);
     }
 
-    loadBackup(filename: string) {
-        const file = localStorage.getItem(filename);
-        if (!file) {
-            return;
+    loadBackup(event: MouseEvent, filecode: string) {
+        event.stopPropagation();
+        if (this.dataService.checkbackup_header()) {
+            const file = localStorage.getItem(filecode);
+            if (!file) {
+                return;
+            }
+            this.dataService.file = circularJSON.parse(file);
+            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            document.getElementById('executeButton').click();
+        } else {
+            const func = this.dataService.getbackup();
+            let file: any = localStorage.getItem(filecode);
+            if (!file) {
+                return;
+            }
+            file = circularJSON.parse(file);
+            // parse the flowchart
+            const fl = file.flowchart;
+
+            const documentation = {
+                name: func.doc.name,
+                module: 'Imported',
+                description: fl.description,
+                summary: fl.description,
+                parameters: [],
+                returns: fl.returnDescription
+            };
+            // func = <IFunction>{
+            //     flowchart: <IFlowchart>{
+            //         id: fl.id ? fl.id : IdGenerator.getId(),
+            //         name: fl.name,
+            //         nodes: fl.nodes,
+            //         edges: fl.edges
+            //     },
+            //     name: func.name,
+            //     module: 'Imported',
+            //     doc: documentation,
+            //     importedFile: file
+            // };
+            func.flowchart = <IFlowchart>{
+                                id: fl.id ? fl.id : IdGenerator.getId(),
+                                name: fl.name,
+                                nodes: fl.nodes,
+                                edges: fl.edges
+                            };
+            func.doc = documentation;
+            func.importedFile = file;
+
+            func.args = [];
+            for (const prod of fl.nodes[0].procedure) {
+                if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
+                let v: string = prod.args[prod.argCount - 2].value || 'undefined';
+                if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
+                if (prod.meta.inputMode !== InputType.Constant) {
+                    documentation.parameters.push({
+                        name: v,
+                        description: prod.meta.description
+                    });
+                }
+                func.args.push(<IArgument>{
+                    name: v,
+                    value: prod.args[prod.argCount - 1].value,
+                    type: prod.meta.inputMode,
+                });
+            }
+            func.argCount = func.args.length;
+
+            const end = fl.nodes[fl.nodes.length - 1];
+            const returnProd = end.procedure[end.procedure.length - 1];
+            if (returnProd.args[1].value) {
+                func.hasReturn = true;
+            } else {
+                func.hasReturn = false;
+            }
+            document.getElementById('tooltiptext').click();
+
         }
-        this.dataService.file = circularJSON.parse(file);
-        document.getElementById('executeButton').click();
     }
 
-    deleteBackup(filename: string) {
-        const file = localStorage.getItem(filename);
+    deleteBackup(event: MouseEvent, filecode: string) {
+        event.stopPropagation();
+        const file = localStorage.getItem(filecode);
         if (!file) {
             return;
         }
-        localStorage.removeItem(filename);
+        localStorage.removeItem(filecode);
         const items: string[] = this.getBackupFiles();
-        const i = items.indexOf(filename);
+        const i = items.indexOf(filecode);
         if (i !== -1) {
             items.splice(i, 1);
             localStorage.setItem('mobius_backup_list', JSON.stringify(items));
@@ -186,16 +261,16 @@ export class PanelHeaderComponent implements OnDestroy {
         if (helpMenu) {
             helpMenu.style.display = 'none';
         }
-        if (this.dialogBox) {
+        if (this.dataService.dialog) {
             if ((<HTMLElement>event.target).tagName === 'SELECT') { return; }
 
-            const rect = this.dialogBox.getBoundingClientRect();
+            const rect = this.dataService.dialog.getBoundingClientRect();
 
             const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
               && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
             if (!isInDialog) {
-                this.dialogBox.close();
-                this.dialogBox = null;
+                this.dataService.dialog.close();
+                this.dataService.dialog = null;
             }
         }
         dropdownMenu = null;

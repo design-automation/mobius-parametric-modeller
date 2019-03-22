@@ -151,8 +151,7 @@
     <p>Select Saved Flowchart to load: </p>
     <br>
     <div *ngFor='let backup of getBackupFiles()'>
-        <button class='loadBackupButton' (click)="loadBackup(backup)">{{backup}}</button>
-        <button class='deleteBackupButton' (click)="deleteBackup(backup)"><mat-icon>delete_outline</mat-icon></button>
-
+        <button class='loadBackupButton' (click)="loadBackup($event, backup)">{{backup.split('_-_')[0]}}</button>
+        <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon>delete_outline</mat-icon></button>
     </div>
 </dialog>

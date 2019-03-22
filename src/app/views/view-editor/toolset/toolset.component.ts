@@ -270,6 +270,13 @@ export class ToolsetComponent implements OnInit {
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }
 
+    open_update_dialog(event: MouseEvent, fnData) {
+        event.stopPropagation();
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('loadBackupDialog');
+        this.dataService.dialog.showModal();
+        this.dataService.setbackup_updateImported(fnData);
+    }
+
     toggleAccordion(id: string, inline?: boolean) {
         if (inline && this.dataService.focusedInput) {
             this.dataService.focusedInput.focus();

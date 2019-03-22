@@ -160,16 +160,21 @@ export class PanelHeaderComponent implements OnDestroy {
             document.getElementById('executeButton').click();
         } else {
             const func = this.dataService.getbackup();
-            let file: any = localStorage.getItem(filecode);
-            if (!file) {
+            const fileString: any = localStorage.getItem(filecode);
+            if (!fileString) {
                 return;
             }
-            file = circularJSON.parse(file);
+            const file = circularJSON.parse(fileString);
             // parse the flowchart
             const fl = file.flowchart;
 
+            let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+            if (funcName.match(/^[\d_]/)) {
+                funcName = 'func' + funcName;
+            }
+
             const documentation = {
-                name: func.doc.name,
+                name: funcName,
                 module: 'Imported',
                 description: fl.description,
                 summary: fl.description,
@@ -194,8 +199,9 @@ export class PanelHeaderComponent implements OnDestroy {
                                 nodes: fl.nodes,
                                 edges: fl.edges
                             };
+            func.name = funcName;
             func.doc = documentation;
-            func.importedFile = file;
+            func.importedFile = fileString;
 
             func.args = [];
             for (const prod of fl.nodes[0].procedure) {

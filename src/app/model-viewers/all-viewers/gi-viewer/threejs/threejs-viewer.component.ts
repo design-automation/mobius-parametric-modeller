@@ -348,7 +348,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this._no_model = true;
             return;
         } else {
-            if (model !== this._data_threejs._model) {
+            // if (model !== this._data_threejs._model) {
                 this._data_threejs._model = model;
                 try {
                     // to be completed and test
@@ -398,7 +398,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this._data_threejs._text = ex;
                 }
             }
-        }
+        // }
     }
 
     onMouseUp(event) {

@@ -69,7 +69,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private lastY: number;
     private dragHash: number;
     private shiftKeyPressed = false;
-    private mouse_label;
     private giSummary = [];
     private currentAttribLabel = '';
 
@@ -112,7 +111,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
      * Called when the viewer is initialised.
      */
     ngOnInit() {
-        this.mouse_label = document.getElementById('mouse_label');
         this.dropdown.items = [];
         this.dropdown.visible = false;
         this.dropdown.position = { x: 0, y: 0 };
@@ -285,7 +283,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     ngOnDestroy() {
-        this.mouse_label = null;
         this._elem = null;
         this.container = null;
     }
@@ -423,15 +420,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
         if (event.target.tagName !== 'CANVAS') {
             body[0].style.cursor = 'default';
-            // if (this.mouse_label !== null) {
-            //     this.mouse_label.style.display = 'none';
-            // }
             return null;
         } else {
             const intersects = this.threeJSViewerService.initRaycaster(event);
             if (intersects && intersects.length > 0) {
                 body[0].style.cursor = 'pointer';
-
             } else {
                 body[0].style.cursor = 'default';
             }

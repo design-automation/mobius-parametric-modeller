@@ -60,7 +60,7 @@ export class SaveFileComponent {
             models.push(nodeModel);
         }
 
-        SaveFileComponent.saveToLocalStorage(f.flowchart.name, circularJSON.stringify(f));
+        SaveFileComponent.saveToLocalStorage(f.flowchart.id, f.flowchart.name, circularJSON.stringify(f));
 
         for (const node of f.flowchart.nodes) {
             const mod = models.shift();
@@ -70,16 +70,17 @@ export class SaveFileComponent {
         }
     }
 
-    static saveToLocalStorage(n: string, f: string) {
+    static saveToLocalStorage(id: string, name: string, file: string) {
         const itemstring = localStorage.getItem('mobius_backup_list');
+        const code = name + '_-_' + id;
         if (!itemstring) {
-            localStorage.setItem('mobius_backup_list', `["${n}"]`);
+            localStorage.setItem('mobius_backup_list', `["${code}"]`);
         } else {
             const items: string[] = JSON.parse(itemstring);
             let check = false;
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
-                if (item === n) {
+                if (item === code) {
                     items.splice(i, 1);
                     items.push(item);
                     check = true;
@@ -87,7 +88,7 @@ export class SaveFileComponent {
                 }
             }
             if (!check) {
-                items.push(n);
+                items.push(code);
                 if (items.length > 5) {
                     const item = items.shift();
                     localStorage.removeItem(item);
@@ -95,7 +96,7 @@ export class SaveFileComponent {
                 localStorage.setItem('mobius_backup_list', JSON.stringify(items));
             }
         }
-        localStorage.setItem(n, f);
+        localStorage.setItem(code, file);
     }
 
     static checkDisappearedNodes(checkNode: INode, nodeList: INode[]) {
@@ -199,7 +200,7 @@ export class SaveFileComponent {
         const blob = new Blob([fileString], {type: 'application/json'});
 
         try {
-            SaveFileComponent.saveToLocalStorage(savedfile.flowchart.name, fileString);
+            SaveFileComponent.saveToLocalStorage(savedfile.flowchart.id, savedfile.flowchart.name, fileString);
         } catch (ex) {
             console.log('Unable to save file to local storage');
         }

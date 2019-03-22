@@ -11,6 +11,7 @@ import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { IEdge } from '@models/edge';
+import { Router } from '@angular/router';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -52,7 +53,7 @@ export class ExecuteComponent {
 
     private startTime;
     private isDev = true;
-    constructor(private dataService: DataService, private googleAnalyticsService: GoogleAnalyticsService) {
+    constructor(private dataService: DataService, private router: Router, private googleAnalyticsService: GoogleAnalyticsService) {
         this.isDev = isDevMode();
     }
 
@@ -181,7 +182,9 @@ export class ExecuteComponent {
 
         let executeSet: any;
         // let startIndex: number;
-        if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0) {
+        const currentUrl = this.router.url.split('?')[0];
+        if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0
+            || (currentUrl !== '/flowchart' && currentUrl !== '/editor')) {
             executeSet = new Set(this.dataService.flowchart.nodes.keys());
             // startIndex = 0;
         } else {

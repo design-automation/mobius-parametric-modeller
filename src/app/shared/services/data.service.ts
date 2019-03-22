@@ -43,6 +43,10 @@ export class DataService {
     private static _notificationMessage: string;
     private static _notificationTrigger = false;
 
+    private static _dialog: HTMLDialogElement;
+
+    private _backupDialogType: any;
+
     private _prevFlwActions = [];
     private _nextFlwActions = [];
 
@@ -51,6 +55,7 @@ export class DataService {
     private _edtNode: string;
 
     private _modifiedNodeSet = new Set([]);
+
 
     getLog(): string[] {
         return DataService._consoleLog;
@@ -137,8 +142,13 @@ export class DataService {
     get flowchart(): IFlowchart { return DataService._data.flowchart; }
     get node(): INode { return DataService._data.flowchart.nodes[DataService._data.flowchart.meta.selected_nodes[0]]; }
 
+    get dialog() {return DataService._dialog; }
+    set dialog(dialog: HTMLDialogElement) {DataService._dialog = dialog; }
+
     get notificationMessage(): string { return DataService._notificationMessage; }
     get notificationTrigger(): boolean { return DataService._notificationTrigger; }
+
+
 
     notifyMessage(message) {
         DataService._notificationMessage = message;
@@ -255,6 +265,20 @@ export class DataService {
         }
     }
 
+    setbackup_header() {
+        this._backupDialogType = null;
+    }
 
+    setbackup_updateImported(func) {
+        this._backupDialogType = func;
+    }
+
+    checkbackup_header() {
+        return !this._backupDialogType;
+    }
+
+    getbackup() {
+        return this._backupDialogType;
+    }
 
 }

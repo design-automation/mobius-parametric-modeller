@@ -134,8 +134,8 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
     return 0;
 }
 export enum _EQuerySortMethod {
-    'ID_ASCENDING' = 'ID_ascending',
     'ID_DESCENDING' = 'ID_descending',
+    'ID_ASCENDING' = 'ID_ascending',
     'GEOMETRIC' = 'geometric_order'
 }
 /**

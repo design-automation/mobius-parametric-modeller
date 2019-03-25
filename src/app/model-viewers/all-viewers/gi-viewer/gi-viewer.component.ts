@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { isDevMode } from '@angular/core';
+import { isDevMode, ViewChild } from '@angular/core';
 import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -8,6 +8,7 @@ import { DataService } from './data/data.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { EEntType } from '@assets/libs/geo-info/common';
+import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -24,7 +25,6 @@ export class GIViewerComponent implements OnInit {
     dataservice: DataService;
     // model data passed to the viewer
     @Input() data: GIModel;
-    modelData: GIModel;
 
     settings: Settings = DefaultSettings;
 
@@ -39,6 +39,8 @@ export class GIViewerComponent implements OnInit {
     public attrTableReset: number;
     public selectSwitchOnOff: Boolean;
     public attribLabelVal: String;
+
+    @ViewChild(ThreejsViewerComponent) threejs: ThreejsViewerComponent;
     /**
      * constructor
      * @param dataService
@@ -121,7 +123,7 @@ export class GIViewerComponent implements OnInit {
         if (save) {
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-            document.getElementById('executeButton').click();
+            this.threejs.updateModel(this.data);
         }
     }
 

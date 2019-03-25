@@ -18,121 +18,143 @@ function isValidName(fn_name: string, arg_name: string, arg: string): void {
     }
     return;
 }
-export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
+export function checkAttribName(fn_name: string, attrib_name: string): void {
     isValidName(fn_name, 'attrib_name', attrib_name);
     // blocks writing to id
     if (attrib_name === 'id') {
         throw new Error(fn_name + ': id is not modifiable!');
     }
-    // -- check defined index
-    let ind = false;
-    if (attrib_index !== null && attrib_index !== undefined) {
-        ind = true;
-        // check if index is number
-        TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
-    }
-    // -- check blocked name
-    const blk_att_nm_lst = Object.values(EAttribNames);
-    let blocked = false;
-    let isTexture = false;
-    let isName = false;
-    for (let i = 0; i < blk_att_nm_lst.length; i++) {
-        if (attrib_name === 'texture') {
-            isTexture = true;
-            blocked = true;
-            break;
-        }
-        if (attrib_name === 'name') {
-            isName = true;
-            blocked = true;
-            break;
-        }
-        if (attrib_name === blk_att_nm_lst[i]) {
-            blocked = true;
-            break;
-        }
-    }
-    let check_fns = [];
-    if (attrib_value !== null && attrib_value !== undefined) {
-        if (blocked === true) {
-            let pass = false;
-            const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
-                            + Object.values(EAttribNames).toString() + '\n'];
-            if (isName) {
-                try {
-                    isValidName(fn_name, 'attrib_value', attrib_value);
-                    pass = true;
-                } catch (err) {
-                    err_arr.push(err);
-                }
-            } else {
-                if (ind === false) {
-                    try {
-                        isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
-                        let chkLstLen;
-                        if (isTexture) {
-                            chkLstLen = 2;
-                        } else {
-                            chkLstLen = 3;
-                        }
-                        isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
-                    } catch (err) {
-                        err_arr.push(err.message);
-                        throw new Error(err_arr.join(''));
-                    }
-                    check_fns = [TypeCheckObj.isNumberList];
-                    for (let i = 0; i < check_fns.length; i++) {
-                        try {
-                            check_fns[i](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
-                        } catch (err) {
-                            err_arr.push(err.message + '\n');
-                            continue;
-                        }
-                        pass = true;
-                        break; // passed
-                    }
-                } else {
-                    if (isTexture) {
-                        if (attrib_index > 1 || attrib_index < 0) {
-                            err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
-                            throw new Error(err_arr.join(''));
-                        }
-                    } else {
-                        if (attrib_index > 2 || attrib_index < 0) {
-                            err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
-                            throw new Error(err_arr.join(''));
-                        }
-                    }
-                    check_fns = [TypeCheckObj.isNumber];
-                    for (let i = 0; i < check_fns.length; i++) {
-                        try {
-                            check_fns[i](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
-                                                      'attrib_value', attrib_value);
-                        } catch (err) {
-                            err_arr.push(err.message + '\n');
-                            continue;
-                        }
-                        pass = true;
-                        break; // passed
-                    }
-                }
-            }
-            if (pass === false) {
-                throw new Error(err_arr.join(''));
-            }
-        } else {
-            if (ind === false) {
-                checkCommTypes(fn_name, 'attrib_value', attrib_value,
-                    [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isStringList, TypeCheckObj.isNumberList]);
-            } else { // no nested lists
-                checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
-                    [TypeCheckObj.isString, TypeCheckObj.isNumber]);
-            }
-        }
-    }
-    return;
 }
 
+export function checkAttribValue(fn_name: string, attrib_value: any, attrib_index?: number): void {
+    // -- check defined index
+    if (attrib_index !== null && attrib_index !== undefined) {
+        // check if index is number
+        TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
+        // check sting, number
+        checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
+            [TypeCheckObj.isString, TypeCheckObj.isNumber]);
+    } else {
+        // check sting, number, string[], number[]
+        checkCommTypes(fn_name, 'attrib_value', attrib_value,
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isStringList, TypeCheckObj.isNumberList]);
+    }
+}
+
+// export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
+//     isValidName(fn_name, 'attrib_name', attrib_name);
+//     // blocks writing to id
+//     if (attrib_name === 'id') {
+//         throw new Error(fn_name + ': id is not modifiable!');
+//     }
+//     // -- check defined index
+//     let ind = false;
+//     if (attrib_index !== null && attrib_index !== undefined) {
+//         ind = true;
+//         // check if index is number
+//         TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
+//     }
+//     // -- check blocked name
+//     const blk_att_nm_lst = Object.values(EAttribNames);
+//     let blocked = false;
+//     let isTexture = false;
+//     let isName = false;
+//     for (let i = 0; i < blk_att_nm_lst.length; i++) {
+//         if (attrib_name === 'texture') {
+//             isTexture = true;
+//             blocked = true;
+//             break;
+//         }
+//         if (attrib_name === 'name') {
+//             isName = true;
+//             blocked = true;
+//             break;
+//         }
+//         if (attrib_name === blk_att_nm_lst[i]) {
+//             blocked = true;
+//             break;
+//         }
+//     }
+//     let check_fns = [];
+//     if (attrib_value !== null && attrib_value !== undefined) {
+//         if (blocked === true) {
+//             let pass = false;
+//             const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
+//                             + Object.values(EAttribNames).toString() + '\n'];
+//             if (isName) {
+//                 try {
+//                     isValidName(fn_name, 'attrib_value', attrib_value);
+//                     pass = true;
+//                 } catch (err) {
+//                     err_arr.push(err);
+//                 }
+//             } else {
+//                 if (ind === false) {
+//                     try {
+//                         isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
+//                         let chkLstLen;
+//                         if (isTexture) {
+//                             chkLstLen = 2;
+//                         } else {
+//                             chkLstLen = 3;
+//                         }
+//                         isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
+//                     } catch (err) {
+//                         err_arr.push(err.message);
+//                         throw new Error(err_arr.join(''));
+//                     }
+//                     check_fns = [TypeCheckObj.isNumberList];
+//                     for (let i = 0; i < check_fns.length; i++) {
+//                         try {
+//                             check_fns[i](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
+//                         } catch (err) {
+//                             err_arr.push(err.message + '\n');
+//                             continue;
+//                         }
+//                         pass = true;
+//                         break; // passed
+//                     }
+//                 } else {
+//                     if (isTexture) {
+//                         if (attrib_index > 1 || attrib_index < 0) {
+//                             err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
+//                             throw new Error(err_arr.join(''));
+//                         }
+//                     } else {
+//                         if (attrib_index > 2 || attrib_index < 0) {
+//                             err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
+//                             throw new Error(err_arr.join(''));
+//                         }
+//                     }
+//                     check_fns = [TypeCheckObj.isNumber];
+//                     for (let i = 0; i < check_fns.length; i++) {
+//                         try {
+//                             check_fns[i](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
+//                                                       'attrib_value', attrib_value);
+//                         } catch (err) {
+//                             err_arr.push(err.message + '\n');
+//                             continue;
+//                         }
+//                         pass = true;
+//                         break; // passed
+//                     }
+//                 }
+//             }
+//             if (pass === false) {
+//                 throw new Error(err_arr.join(''));
+//             }
+//         } else {
+//             if (ind === false) {
+//                 checkCommTypes(fn_name, 'attrib_value', attrib_value,
+//                     [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isStringList, TypeCheckObj.isNumberList]);
+//             } else { // no nested lists
+//                 checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
+//                     [TypeCheckObj.isString, TypeCheckObj.isNumber]);
+//             }
+//         }
+//     }
+//     return;
+// }
 // =========================================================================================================================================
 // Function Dictionaries
 // =========================================================================================================================================

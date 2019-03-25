@@ -168,6 +168,21 @@ export class PanelHeaderComponent implements OnDestroy {
             // parse the flowchart
             const fl = file.flowchart;
 
+            if (this.dataService.flowchart.subFunctions) {
+                const subFunctions = this.dataService.flowchart.subFunctions;
+                let i = 0;
+                while (i < subFunctions.length) {
+                    const subFunc = subFunctions[i];
+                    if (subFunc.name.substring(0, func.name.length) === func.name) {
+                        subFunctions.splice(i, 1);
+                    } else {
+                        i++;
+                    }
+                }
+            } else {
+                this.dataService.flowchart.subFunctions = [];
+            }
+
             let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
             if (funcName.match(/^[\d_]/)) {
                 funcName = 'func' + funcName;
@@ -221,6 +236,15 @@ export class PanelHeaderComponent implements OnDestroy {
                 });
             }
             func.argCount = func.args.length;
+
+            for (const i of fl.functions) {
+                i.name = func.name + '_' + i.name;
+                this.dataService.flowchart.subFunctions.push(i);
+            }
+            for (const i of fl.subFunctions) {
+                i.name = func.name + '_' + i.name;
+                this.dataService.flowchart.subFunctions.push(i);
+            }
 
             const end = fl.nodes[fl.nodes.length - 1];
             const returnProd = end.procedure[end.procedure.length - 1];

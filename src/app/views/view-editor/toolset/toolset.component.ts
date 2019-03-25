@@ -145,10 +145,11 @@ export class ToolsetComponent implements OnInit {
             const reader = new FileReader();
             reader.onload = function() {
                 // parse the flowchart
-                const fl = CircularJSON.parse(reader.result.toString()).flowchart;
+                const fileString = reader.result.toString();
+                const fl = CircularJSON.parse(fileString).flowchart;
 
                 // create function and documentation of the function
-                const funcs = [];
+                const funcs = {'main': null, 'sub': []};
                 let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
                 if (funcName.match(/^[\d_]/)) {
                     funcName = 'func' + funcName;
@@ -171,7 +172,7 @@ export class ToolsetComponent implements OnInit {
                     name: funcName,
                     module: 'Imported',
                     doc: documentation,
-                    importedFile: reader.result.toString()
+                    importedFile: fileString
                 };
 
                 func.args = [];
@@ -202,9 +203,16 @@ export class ToolsetComponent implements OnInit {
                 }
 
                 // add func and all the imported functions of the imported flowchart to funcs
-                funcs.push(func);
+                funcs.main = func;
                 for (const i of fl.functions) {
-                    funcs.push(i);
+                    i.name = func.name + '_' + i.name;
+                    funcs.sub.push(i);
+                }
+                if (fl.subFunctions) {
+                    for (const i of fl.subFunctions) {
+                        i.name = func.name + '_' + i.name;
+                        funcs.sub.push(i);
+                    }
                 }
                 resolve(funcs);
             };

@@ -20,6 +20,7 @@ export interface IFlowchart {
     nodes: INode[];
     edges: IEdge[];
     functions: IFunction[];
+    subFunctions?: IFunction[];
     ordered: boolean;
 
     meta: {

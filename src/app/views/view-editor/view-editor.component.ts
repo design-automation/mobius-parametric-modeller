@@ -427,8 +427,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     // import a flowchart as function
     importFunction(event) {
-        for (const func of event) {
-            this.dataService.flowchart.functions.push(func);
+        this.dataService.flowchart.functions.push(event.main);
+        if (!this.dataService.flowchart.subFunctions) {
+            this.dataService.flowchart.subFunctions = [];
+        }
+        for (const func of event.sub) {
+            this.dataService.flowchart.subFunctions.push(func);
         }
     }
 

@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Flowchart.svg'));
         this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Node.svg'));
 
-        const source = timer(60000, 600000);
+        const source = timer(600000, 600000);
         this.subscribe = source.subscribe(val => {
             try {
                 SaveFileComponent.saveFileToLocal(this.dataService.file);

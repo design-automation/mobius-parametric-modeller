@@ -179,6 +179,11 @@ export class ExecuteComponent {
         for (const func of this.dataService.flowchart.functions) {
             funcStrings[func.name] =  CodeUtils.getFunctionString(func);
         }
+        if (this.dataService.flowchart.subFunctions) {
+            for (const func of this.dataService.flowchart.subFunctions) {
+                funcStrings[func.name] =  CodeUtils.getFunctionString(func);
+            }
+        }
 
         let executeSet: any;
         // let startIndex: number;

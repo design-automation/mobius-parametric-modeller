@@ -10,7 +10,7 @@ let _terminateCheck: string;
 export class CodeUtils {
 
 
-    static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean): string[] {
+    static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean, functionName?: string): string[] {
         if (_terminateCheck === '' || prod.enabled === false ||
             prod.type === ProcedureTypes.Blank ||
             prod.type === ProcedureTypes.Comment) { return ['']; }
@@ -196,6 +196,7 @@ export class CodeUtils {
                 break;
             case ProcedureTypes.Imported:
                 let argsVals: any = [];
+                const namePrefix = functionName ? `${functionName}_` : '';
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
                     // args.slice(1).map((arg) => {
@@ -207,7 +208,7 @@ export class CodeUtils {
                 }
                 argsVals = argsVals.join(', ');
 
-                const fn = `${prod.meta.name}(__params__, ${argsVals} )`;
+                const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
 
                 if (args[0].name === '__none__' || !args[0].value) {
                     codeStr.push(`${fn};`);
@@ -507,7 +508,7 @@ export class CodeUtils {
         return input;
     }
 
-    public static getNodeCode(node: INode, isMainFlowchart = false): [string[][], string] {
+    public static getNodeCode(node: INode, isMainFlowchart = false, functionName?: string): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
         const varsDefined: string[] = [];
@@ -536,7 +537,7 @@ export class CodeUtils {
         // procedure
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart) );
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName) );
         }
         if (node.type === 'end' && node.procedure.length > 0) {
             // return [[codeStr, varsDefined], _terminateCheck];
@@ -571,7 +572,7 @@ export class CodeUtils {
         }
 
         for (const node of func.flowchart.nodes) {
-            const codeRes = CodeUtils.getNodeCode(node, false)[0];
+            const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
             let code: any = codeRes[0];
             if (node.type === 'start') {
                 code = '{ return __params__.model; }';

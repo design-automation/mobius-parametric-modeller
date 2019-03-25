@@ -444,6 +444,16 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 break;
             }
         }
+        let j = 0;
+        while (j < this.dataService.flowchart.subFunctions.length) {
+            if (this.dataService.flowchart.subFunctions[j].name.substring(0, event.name.length) === event.name) {
+                this.dataService.flowchart.subFunctions.splice(j, 1);
+            } else {
+                j++;
+            }
+        }
+        console.log(this.dataService.flowchart.functions);
+        console.log(this.dataService.flowchart.subFunctions);
     }
 
     updateHelpView(event) {

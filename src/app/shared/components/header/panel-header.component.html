@@ -82,76 +82,97 @@
                     Load File 
                 </button>
                 <br>
-                <button (click)="openbackupDialog($event)"
+                <button (click)="openHeaderDialog($event, 'backup')"
                 title="Load Flowchart Backup from Local Storage">
                     <mat-icon>autorenew</mat-icon>
                     Load Backup 
                 </button>
                 <br>
-                <button (click)="openUrlDialog($event)"
+                <button (click)="openHeaderDialog($event, 'url')"
                 title="Generate Möbius view url from url of .mob file">
                     <mat-icon>link</mat-icon>
                     Publish
+                </button>
+                <br>
+                <button (click)="openHeaderDialog($event, 'settings')"
+                title="Generate Möbius view url from url of .mob file">
+                    <mat-icon class='mat-icon-svg' svgIcon="settings"></mat-icon>
+                    <!-- <mat-icon>settings</mat-icon> -->
+                    Settings
                 </button>
             </div>
         </div>
     </div>
 </div>
-<dialog id='genUrlDialog'>
-    <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
+<dialog id='headerDialog'>
+    <div class='genUrlDialog' *ngIf='checkDialog("url")'>
+        <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
         you to share the URL. (For example, you can upload your file to platforms such Github, Dropbox
         and Qiniu.) Then paste the URL for file below, and click 'Validate Url'. </p>
-    <br>
-    <br>
-    MOB file URL: <br>
-    <textarea [(ngModel)]='urlSet[0]' 
-            [class.valid]='urlValid === true' 
-            [class.invalid]='urlValid === false'
-            (keyup)='urlValid = undefined'></textarea><br>
-    <button (click)='validateUrl()'>Validate Url</button>
-
-    <ng-container *ngIf='urlValid === true'>
+        <br>
+        <br>
+        MOB file URL: <br>
+        <textarea [(ngModel)]='urlSet[0]' 
+                [class.valid]='urlValid === true' 
+                [class.invalid]='urlValid === false'
+                (keyup)='urlValid = undefined'></textarea><br>
+        <button (click)='validateUrl()'>Validate Url</button>
     
-        <hr>
-        <input id='radio1' type='radio' name='showPage' value='publish' [(ngModel)]='urlSet[1]'/> <label for='radio1'>Uneditable</label> <br>
-        <input id='radio2' type='radio' name='showPage' value='dashboard' [(ngModel)]='urlSet[1]'/> <label for='radio2'>Editable</label>
-        <hr>
-    
-        <ng-container *ngIf='urlSet[1] == "dashboard"; else publish_template'>
-            <input id='radio3' type='radio' name='displayType' value='&node=' [(ngModel)]='urlSet[2]'/> <label for='radio3'>Show Specific Node</label> <br>
-            <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
+        <ng-container *ngIf='urlValid === true'>
+        
             <hr>
-            <ng-container *ngIf='urlSet[2] == "&node="'>
-                <!-- Shown Node Index: <input [(ngModel)]='urlSet[3]'/> -->
-                Node Shown: <select [(ngModel)]='urlSet[3]'>
-                    <option *ngFor='let node of urlNodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
-                </select>
+            <input id='radio1' type='radio' name='showPage' value='publish' [(ngModel)]='urlSet[1]'/> <label for='radio1'>Uneditable</label> <br>
+            <input id='radio2' type='radio' name='showPage' value='dashboard' [(ngModel)]='urlSet[1]'/> <label for='radio2'>Editable</label>
+            <hr>
+        
+            <ng-container *ngIf='urlSet[1] == "dashboard"; else publish_template'>
+                <input id='radio3' type='radio' name='displayType' value='&node=' [(ngModel)]='urlSet[2]'/> <label for='radio3'>Show Specific Node</label> <br>
+                <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
                 <hr>
+                <ng-container *ngIf='urlSet[2] == "&node="'>
+                    <!-- Shown Node Index: <input [(ngModel)]='urlSet[3]'/> -->
+                    Node Shown: <select [(ngModel)]='urlSet[3]'>
+                        <option *ngFor='let node of urlNodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
+                    </select>
+                    <hr>
+                </ng-container>
             </ng-container>
-        </ng-container>
-        <ng-template #publish_template>
-            <input id='radio3D' type='radio' name='showViewer' value='&viewer=0' [(ngModel)]='urlSet[4]'/> <label for='radio3D'>3D Viewer</label> <br>
-            <input id='radioGeo' type='radio' name='showViewer' value='&viewer=1' [(ngModel)]='urlSet[4]'/> <label for='radioGeo'>Geo Viewer</label> <br>
-            <input id='radioBothV' type='radio' name='showViewer' value='' [(ngModel)]='urlSet[4]'/> <label for='radioBothV'>Both</label>
-            <hr>
-        </ng-template>
+            <ng-template #publish_template>
+                <input id='radio3D' type='radio' name='showViewer' value='&viewer=0' [(ngModel)]='urlSet[4]'/> <label for='radio3D'>3D Viewer</label> <br>
+                <input id='radioGeo' type='radio' name='showViewer' value='&viewer=1' [(ngModel)]='urlSet[4]'/> <label for='radioGeo'>Geo Viewer</label> <br>
+                <input id='radioBothV' type='radio' name='showViewer' value='' [(ngModel)]='urlSet[4]'/> <label for='radioBothV'>Both</label>
+                <hr>
+            </ng-template>
+        
+            <button (click)='generateUrl()'>Create Link</button>
     
-        <button (click)='generateUrl()'>Create Link</button>
-
-        <div>
-            <hr>
-            Möbius Link:<br>
-            <textarea [class.disabled]='true' id='generatedLink' disabled></textarea>
+            <div>
+                <hr>
+                Möbius Link:<br>
+                <textarea [class.disabled]='true' id='generatedLink' disabled></textarea>
+            </div>
+        </ng-container>
+    </div>
+    <div class='loadBackupDialog' *ngIf='checkDialog("backup")'>
+        <p>Select File from Browser's Cache to Load: </p>
+        <br>
+        <div *ngFor='let backup of getBackupFiles()'>
+            <button class='loadBackupButton' (click)="loadBackup($event, backup)">{{backup.split('_-_')[0]}}</button>
+            <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon>delete_outline</mat-icon></button>
         </div>
-    </ng-container>
-
-</dialog>
-
-<dialog id='loadBackupDialog'>
-    <p>Select File from Browser's Cache to Load: </p>
-    <br>
-    <div *ngFor='let backup of getBackupFiles()'>
-        <button class='loadBackupButton' (click)="loadBackup($event, backup)">{{backup.split('_-_')[0]}}</button>
-        <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon>delete_outline</mat-icon></button>
+    </div>
+    <div class='settingsDialog' *ngIf='checkDialog("settings")'>
+        <p>Mobius Settings:</p>
+        <br>
+        <label for='settings-execute'>Execute on file load:</label>
+        <input id='settings-execute' type='checkbox' [checked]='checkSetting("execute", true)'/> <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
+        <button class='settingsButton' (click)="closeDialog()">Cancel</button>
     </div>
 </dialog>

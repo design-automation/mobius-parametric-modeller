@@ -52,7 +52,9 @@ export class NewFileComponent {
             this.dataService.newFlowchart = true;
         }
         this.cdr.detectChanges();
-        document.getElementById('executeButton').click();
+        if (this.dataService.mobiusSettings.execute) {
+            document.getElementById('executeButton').click();
+        }
         zooming = null;
     }
 }

@@ -280,7 +280,8 @@ export class ToolsetComponent implements OnInit {
 
     open_update_dialog(event: MouseEvent, fnData) {
         event.stopPropagation();
-        this.dataService.dialog = <HTMLDialogElement>document.getElementById('loadBackupDialog');
+        this.dataService.dialogType = 'backup';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
         this.dataService.setbackup_updateImported(fnData);
     }

@@ -109,7 +109,7 @@ export class LoadUrlComponent {
             checkNodeValidity(node);
         }
         let executeB = document.getElementById('executeButton');
-        if (executeB) { executeB.click(); }
+        if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
         executeB = null;
         this.dataService.clearModifiedNode();
     }
@@ -147,7 +147,7 @@ export class LoadUrlComponent {
 
         setTimeout(() => {
             let executeB = document.getElementById('executeButton');
-            if (executeB) { executeB.click(); }
+            if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
         }, 50);
     }

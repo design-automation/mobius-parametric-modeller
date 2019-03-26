@@ -12,6 +12,7 @@ import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { IEdge } from '@models/edge';
 import { Router } from '@angular/router';
+import { resetIModel } from '@shared/getViewerData';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -224,6 +225,8 @@ export class ExecuteComponent {
             }
         }
 
+        resetIModel();
+
         document.getElementById('spinner-off').click();
         const category = this.isDev ? 'dev' : 'execute';
         this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
@@ -340,7 +343,7 @@ export class ExecuteComponent {
                     }
                 }
             }
-
+            node.input.value = null;
             node.output.value = result;
             if (node.type === 'start') {
                 for (const constant in params['constants']) {

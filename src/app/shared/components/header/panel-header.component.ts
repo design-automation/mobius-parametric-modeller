@@ -127,17 +127,18 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
 
-    openUrlDialog(event) {
+    openHeaderDialog(event, dialogType: string) {
         event.stopPropagation();
-        this.dataService.dialog = <HTMLDialogElement>document.getElementById('genUrlDialog');
+        this.dataService.dialogType = dialogType;
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
+        if (dialogType === 'backup') {
+            this.dataService.setbackup_header();
+        }
     }
 
-    openbackupDialog(event) {
-        event.stopPropagation();
-        this.dataService.dialog = <HTMLDialogElement>document.getElementById('loadBackupDialog');
-        this.dataService.dialog.showModal();
-        this.dataService.setbackup_header();
+    checkDialog(type) {
+        return this.dataService.dialogType === type;
     }
 
     getBackupFiles() {
@@ -146,6 +147,21 @@ export class PanelHeaderComponent implements OnDestroy {
             return [];
         }
         return JSON.parse(items);
+    }
+
+    updateSettings() {
+        const newSettings = {'execute': (<HTMLInputElement>document.getElementById('settings-execute')).checked};
+        this.dataService.mobiusSettings = newSettings;
+        this.dataService.dialog.close();
+    }
+
+    checkSetting(settingName: string, value: any) {
+        return this.dataService.mobiusSettings[settingName] === value;
+    }
+
+    closeDialog() {
+        (<HTMLInputElement>document.getElementById('settings-execute')).checked = this.dataService.mobiusSettings['execute'];
+        this.dataService.dialog.close();
     }
 
     loadBackup(event: MouseEvent, filecode: string) {
@@ -157,7 +173,9 @@ export class PanelHeaderComponent implements OnDestroy {
             }
             this.dataService.file = circularJSON.parse(file);
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            document.getElementById('executeButton').click();
+            if (this.dataService.mobiusSettings.execute) {
+                document.getElementById('executeButton').click();
+            }
         } else {
             const func = this.dataService.getbackup();
             const fileString: any = localStorage.getItem(filecode);
@@ -241,9 +259,11 @@ export class PanelHeaderComponent implements OnDestroy {
                 i.name = func.name + '_' + i.name;
                 this.dataService.flowchart.subFunctions.push(i);
             }
-            for (const i of fl.subFunctions) {
-                i.name = func.name + '_' + i.name;
-                this.dataService.flowchart.subFunctions.push(i);
+            if (fl.subFunctions) {
+                for (const i of fl.subFunctions) {
+                    i.name = func.name + '_' + i.name;
+                    this.dataService.flowchart.subFunctions.push(i);
+                }
             }
 
             const end = fl.nodes[fl.nodes.length - 1];

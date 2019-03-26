@@ -138,6 +138,10 @@ button.mat-menu-item:hover{
             height: 20px;
             width: 20px;
         }
+        .mat-icon-svg{
+            vertical-align: top;
+            padding-top: 3px;
+        }
         &:hover{
             color: $selected-color;
             background-color: $color5;
@@ -223,71 +227,95 @@ button.mat-menu-item:hover{
     }
 }
 
-#genUrlDialog{
-    font-family: 12px sans-serif;
-    color: $color1;
-    background-color: $color6;
+#headerDialog{
+    position: relative;
     top: 10%;
-    max-width: 605px;
-    padding: 5px;
 
-
-    textarea{
-        width: 600px;
-        max-width: 600px;
-        min-height: 70px;
+    .genUrlDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
         background-color: $color6;
-
-        &.disabled{
+        top: 10%;
+        max-width: 605px;
+        padding: 5px;
+    
+    
+        textarea{
+            width: 600px;
+            max-width: 600px;
+            min-height: 70px;
+            background-color: $color6;
+    
+            &.disabled{
+                background-color: $color5;
+            }
+    
+            &.valid{
+                border: 2px solid $print-color;
+            }
+    
+            &.invalid{
+                border: 2px solid $error-color;
+            }
+        }
+    
+        select{
+            color: $color1;
+        }
+    
+        button{
+            width: fit-content;
+            padding: 0px 5px 0px 5px;
             background-color: $color5;
-        }
-
-        &.valid{
-            border: 2px solid $print-color;
-        }
-
-        &.invalid{
-            border: 2px solid $error-color;
+            color: $color1;
         }
     }
 
-    select{
+    .loadBackupDialog{
+        font-family: 12px sans-serif;
         color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 605px;
+        min-width: 405px;
+        padding: 5px;
+    
+        .loadBackupButton{
+            width: fit-content;
+            min-width: 400px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+        .deleteBackupButton{
+            width: fit-content;
+            margin-bottom: 2px;
+            margin-left: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
     }
-
-    button{
-        width: fit-content;
-        padding: 0px 5px 0px 5px;
-        background-color: $color5;
+    .settingsDialog{
+        font-family: 12px sans-serif;
         color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 605px;
+        min-width: 405px;
+        padding: 5px;
+    
+        .settingsButton{
+            width: 80px;
+            margin: 0px 20px 2px 20px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
     }
 }
 
-#loadBackupDialog{
-    font-family: 12px sans-serif;
-    color: $color1;
-    background-color: $color6;
-    top: 30%;
-    max-width: 605px;
-    min-width: 405px;
-    padding: 5px;
-
-    .loadBackupButton{
-        width: fit-content;
-        min-width: 400px;
-        margin-bottom: 2px;
-        padding: 0px 5px 0px 5px;
-        background-color: $color5;
-        color: $color1;
-        display: inline-block;
-    }
-    .deleteBackupButton{
-        width: fit-content;
-        margin-bottom: 2px;
-        margin-left: 2px;
-        padding: 0px 5px 0px 5px;
-        background-color: $color5;
-        color: $color1;
-        display: inline-block;
-    }
-}

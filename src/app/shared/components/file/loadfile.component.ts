@@ -83,7 +83,9 @@ export class LoadFileComponent {
             for (const node of loadeddata.flowchart.nodes) {
                 checkNodeValidity(node);
             }
-            document.getElementById('executeButton').click();
+            if (this.dataService.mobiusSettings.execute) {
+                document.getElementById('executeButton').click();
+            }
             const zooming = document.getElementById('zoomToFit');
             if (zooming) {
                 zooming.click();

@@ -44,6 +44,9 @@ export class DataService {
     private static _notificationTrigger = false;
 
     private static _dialog: HTMLDialogElement;
+    private static _dialogType: string;
+
+    private static _mobiusSettings = {'execute': true};
 
     private _backupDialogType: any;
 
@@ -145,8 +148,14 @@ export class DataService {
     get dialog() {return DataService._dialog; }
     set dialog(dialog: HTMLDialogElement) {DataService._dialog = dialog; }
 
+    get dialogType() {return DataService._dialogType; }
+    set dialogType(dialogType: string) {DataService._dialogType = dialogType; }
+
     get notificationMessage(): string { return DataService._notificationMessage; }
     get notificationTrigger(): boolean { return DataService._notificationTrigger; }
+
+    get mobiusSettings() { return DataService._mobiusSettings; }
+    set mobiusSettings(settings) { DataService._mobiusSettings = settings; }
 
 
 

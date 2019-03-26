@@ -338,6 +338,31 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.render(this);
     }
 
+    getGISummary(model: GIModel) {
+        let colls = 0, pgons = 0, plines = 0, points = 0, faces = 0, wires = 0, edges = 0, vertices = 0, positions = 0;
+        if (this) {
+            colls = model.geom.query.numEnts(EEntType.COLL, false);
+            pgons = model.geom.query.numEnts(EEntType.PGON, false);
+            plines = model.geom.query.numEnts(EEntType.PLINE, false);
+            points = model.geom.query.numEnts(EEntType.POINT, false);
+            faces = model.geom.query.numEnts(EEntType.FACE, false);
+            wires = model.geom.query.numEnts(EEntType.WIRE, false);
+            edges = model.geom.query.numEnts(EEntType.EDGE, false);
+            vertices = model.geom.query.numEnts(EEntType.VERT, false);
+            positions = model.geom.query.numEnts(EEntType.POSI, false);
+        }
+        const gi_summary = [{title: 'Collections', val: colls},
+        {title: 'Polygons', val: pgons},
+        {title: 'Polylines', val: plines},
+        {title: 'Points', val: points},
+        {title: 'Faces', val: faces},
+        {title: 'Wires', val: wires},
+        {title: 'Edges', val: edges},
+        {title: 'Vertices', val: vertices},
+        {title: 'Positions', val: positions}];
+        localStorage.setItem('gi_summary', JSON.stringify(gi_summary));
+    }
+
     /**
      * Update the model in the viewer.
      */
@@ -356,6 +381,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
                     // this.resetTable();
+                    this.getGISummary(model);
                     if (localStorage.getItem('gi_summary')) {
                         this.giSummary = JSON.parse(localStorage.getItem('gi_summary'));
                     }

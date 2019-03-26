@@ -30,7 +30,8 @@ export class GIGeomQuery {
             const posis: number[][] = this._geom_arrays.up_posis_verts;
             const posis_i: number[] = [];
             if (include_deleted) {
-                for (let i = 0; i < posis.length; i++ ) {
+                let i = 0; const i_max = posis.length;
+                for (; i < i_max; i++ ) {
                     const posi = posis[i];
                     if (posi !== null) {
                         posis_i.push(i);
@@ -39,7 +40,8 @@ export class GIGeomQuery {
                     }
                 }
             } else {
-                for (let i = 0; i < posis.length; i++ ) {
+                let i = 0; const i_max = posis.length;
+                for (; i < i_max; i++ ) {
                     const posi = posis[i];
                     if (posi !== null) {
                         posis_i.push(i);
@@ -53,7 +55,8 @@ export class GIGeomQuery {
         const geom_array: any[] = this._geom_arrays[geom_array_key];
         const ents_i: number[] = [];
         if (include_deleted) {
-            for (let i = 0; i < geom_array.length; i++ ) {
+            let i = 0; const i_max = geom_array.length;
+            for (; i < i_max; i++ ) {
                 const ent = geom_array[i];
                 if (ent !== null) {
                     ents_i.push(i);
@@ -62,7 +65,8 @@ export class GIGeomQuery {
                 }
             }
         } else {
-            for (let i = 0; i < geom_array.length; i++ ) {
+            let i = 0; const i_max = geom_array.length;
+            for (; i < i_max; i++ ) {
                 const ent = geom_array[i];
                 if (ent !== null) {
                     ents_i.push(i);

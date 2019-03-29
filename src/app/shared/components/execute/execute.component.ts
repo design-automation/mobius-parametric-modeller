@@ -1,7 +1,7 @@
 import { Component, isDevMode } from '@angular/core';
 import { FlowchartUtils } from '@models/flowchart';
 import { CodeUtils } from '@models/code';
-import { INode, NodeUtils } from '@models/node';
+import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 
 import * as Modules from '@modules';
@@ -10,7 +10,6 @@ import { DataService } from '@services';
 // import { WebWorkerService } from 'ngx-web-worker';
 import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
-import { IEdge } from '@models/edge';
 import { Router } from '@angular/router';
 import { resetIModel } from '@shared/getViewerData';
 
@@ -230,6 +229,7 @@ export class ExecuteComponent {
         document.getElementById('spinner-off').click();
         const category = this.isDev ? 'dev' : 'execute';
         this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
+        console.log('total execute time:', (performance.now() - this.startTime) / 1000, 'sec');
     }
 
     async resolveImportedUrl(prodList: IProcedure[]) {
@@ -343,8 +343,9 @@ export class ExecuteComponent {
                     }
                 }
             }
-            node.input.value = null;
             node.output.value = result;
+
+            // diff(node.output.value.getData(), node.input.value.getData());
             if (node.type === 'start') {
                 for (const constant in params['constants']) {
                     if (params['constants'].hasOwnProperty(constant)) {
@@ -353,8 +354,13 @@ export class ExecuteComponent {
                     }
                 }
                 globalVars += '\n';
+                // node.model = params['model'].getData();
+            } else {
+                // node.model = diff(node.input.value.getData(), params['model'].getData());
             }
-            node.model = params['model'];
+            node.model = JSON.stringify(params['model'].getData());
+            node.input.value = null;
+
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;

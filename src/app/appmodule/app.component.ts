@@ -40,16 +40,15 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Flowchart.svg'));
         this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Node.svg'));
 
-        const source = timer(600000, 600000);
-        this.subscribe = source.subscribe(val => {
-            try {
-                SaveFileComponent.saveFileToLocal(this.dataService.file);
-                this.dataService.notifyMessage(`Auto-saving Flowchart as ${this.dataService.flowchart.name}...`);
-            } catch (ex) {
-                this.dataService.notifyMessage('ERROR: Unable to save Flowchart');
-            }
-            // this.notificationTrigger = !this.notificationTrigger;
-        });
+        // const source = timer(600000, 600000);
+        // this.subscribe = source.subscribe(val => {
+        //     try {
+        //         SaveFileComponent.saveFileToLocal(this.dataService.file);
+        //         this.dataService.notifyMessage(`Auto-saving Flowchart as ${this.dataService.flowchart.name}...`);
+        //     } catch (ex) {
+        //         this.dataService.notifyMessage('ERROR: Unable to save Flowchart');
+        //     }
+        // });
     }
 
     ngOnInit() {

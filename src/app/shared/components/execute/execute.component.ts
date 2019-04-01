@@ -212,7 +212,8 @@ export class ExecuteComponent {
                 continue;
             }
             if (!executeSet.has(i)) {
-                node.output.value = node.model;
+                node.output.value = _parameterTypes.newFn();
+                node.output.value.setData(JSON.parse(node.model));
                 continue;
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);

@@ -81,7 +81,7 @@ export class GIAttribsAdd {
         if (attribs.get(name) === undefined) {
             const [new_data_type, new_data_size]: [EAttribDataTypeStrs, number] = this._checkDataTypeSize(value);
             this.addAttrib(ent_type, name, new_data_type, new_data_size);
-        } 
+        }
         attribs.get(name).setEntVal(ents_i, value);
     }
     /**

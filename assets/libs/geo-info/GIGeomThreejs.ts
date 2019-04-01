@@ -58,7 +58,8 @@ export class GIGeomThreejs {
         // get the material attribute from polygons
         const material_attrib: GIAttribMap = this._geom.model.attribs._attribs_maps.pg.get('material');
         // loop through all tris
-        for (let tri_i = 0; tri_i < this._geom_arrays.dn_tris_verts.length; tri_i++) {
+        let tri_i = 0; const tri_i_max = this._geom_arrays.dn_tris_verts.length;
+        for (; tri_i < tri_i_max; tri_i++) {
             const tri_verts_i: number[] = this._geom_arrays.dn_tris_verts[tri_i];
             if (tri_verts_i !== null) {
                 // get the verts, face and the polygon for this tri

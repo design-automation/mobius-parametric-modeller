@@ -164,7 +164,10 @@ export class GIAttribMap {
         const new_val_i: number = this._map_val_k_to_val_i.get(val_k);
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         // loop through all the unique ents, and set _map_ent_i_to_val_i
-        const unique_ents_i: number[] = Array.from(new Set(ents_i));
+        let unique_ents_i: number[] = ents_i;
+        if (ents_i.length > 1) {
+            unique_ents_i = Array.from(new Set(ents_i));
+        }
         unique_ents_i.forEach( ent_i => {
             // keep the old value for later
             const old_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
@@ -187,11 +190,19 @@ export class GIAttribMap {
      * @param ent_i
      * @param val
      */
-    public setEntIdxVal(ent_i: number|number[], val_index: number, val: number|string): void {
-        const exist_value_arr: number[]|string[] = this.getEntVal(ent_i) as number[]|string[];
-        const new_value_arr: number[]|string[] = exist_value_arr.slice(); // IMPORTANT clone the array
-        new_value_arr[val_index] = val;
-        this.setEntVal(ent_i, new_value_arr);
+    public setEntIdxVal(ents_i: number|number[], val_index: number, val: number|string): void {
+        ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
+        // loop through all the unique ents, and setEntVal
+        let unique_ents_i: number[] = ents_i;
+        if (ents_i.length > 1) {
+            unique_ents_i = Array.from(new Set(ents_i));
+        }
+        unique_ents_i.forEach( ent_i => {
+            const exist_value_arr: number[]|string[] = this.getEntVal(ent_i) as number[]|string[];
+            const new_value_arr: number[]|string[] = exist_value_arr.slice(); // IMPORTANT clone the array
+            new_value_arr[val_index] = val;
+            this.setEntVal(ent_i, new_value_arr);
+        });
         // check that none of the old values need to be cleaned up
         // TODO
     }
@@ -222,7 +233,7 @@ export class GIAttribMap {
             const exist_value_arr: number[]|string[] = this.getEntVal(ent_i) as number[]|string[];
             return exist_value_arr[val_index] as number|string;
         } else {
-            return ents_i.map(ent_i => this.getEntVal(ent_i)) as number[]|string[];
+            return ents_i.map(ent_i => this.getEntVal(ent_i)[val_index]) as number[]|string[];
         }
     }
     /**

@@ -21,7 +21,9 @@ export const _parameterTypes = {
 
     select: '_model.__select__',
 
-    return: '_Output.Return'
+    return: '_Output.Return',
+
+    urlFunctions: ['util.ImportData']
 };
 
 export const _varString = `

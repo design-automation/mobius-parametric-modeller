@@ -141,147 +141,159 @@ export class GIGeomIO {
         // in this case, we want to make sure there is no value
 
         // update posis to verts (they can be null or [])
-        for (let i = 0; i < geom_arrays.up_posis_verts.length; i++) {
-            const verts_i: number[] = geom_arrays.up_posis_verts[i];
+        let pv_i = 0; const pv_i_max = geom_arrays.up_posis_verts.length;
+        for (; pv_i < pv_i_max; pv_i++) {
+            const verts_i: number[] = geom_arrays.up_posis_verts[pv_i];
             if (verts_i === undefined) {
                 continue;
             } else if (verts_i === null) {
-                this._geom_arrays.up_posis_verts[i + num_posis] = null;
+                this._geom_arrays.up_posis_verts[pv_i + num_posis] = null;
             } else {
                 const new_verts_i: number[] = verts_i.map( vert_i => vert_i + num_verts);
-                this._geom_arrays.up_posis_verts[i + num_posis] = new_verts_i;
+                this._geom_arrays.up_posis_verts[pv_i + num_posis] = new_verts_i;
             }
         }
         // update verts to tris
-        for (let i = 0; i < geom_arrays.up_verts_tris.length; i++) {
-            const tris_i: number[] = geom_arrays.up_verts_tris[i];
+        let vt_i = 0; const vt_i_max = geom_arrays.up_verts_tris.length;
+        for (; vt_i < vt_i_max; vt_i++) {
+            const tris_i: number[] = geom_arrays.up_verts_tris[vt_i];
             if (tris_i === undefined) {
                 continue;
             } else if (tris_i === null) {
-                this._geom_arrays.up_verts_tris[i + num_verts] = null;
+                this._geom_arrays.up_verts_tris[vt_i + num_verts] = null;
             } else {
                 const new_tris_i: number[] = tris_i.map( tri_i => tri_i + num_tris);
-                this._geom_arrays.up_verts_tris[i + num_verts] = new_tris_i;
+                this._geom_arrays.up_verts_tris[vt_i + num_verts] = new_tris_i;
             }
         }
         // update tris to faces
-        for (let i = 0; i < geom_arrays.up_tris_faces.length; i++) {
-            const face_i: number = geom_arrays.up_tris_faces[i];
+        let tf_i = 0; const tf_i_max = geom_arrays.up_tris_faces.length;
+        for (; tf_i < tf_i_max; tf_i++) {
+            const face_i: number = geom_arrays.up_tris_faces[tf_i];
             if (face_i === undefined) {
                 continue;
             } else if (face_i === null) {
-                this._geom_arrays.up_tris_faces[i + num_tris] = null;
+                this._geom_arrays.up_tris_faces[tf_i + num_tris] = null;
             } else {
                 const new_face_i: number = face_i + num_faces;
-                this._geom_arrays.up_tris_faces[i + num_tris] = new_face_i;
+                this._geom_arrays.up_tris_faces[tf_i + num_tris] = new_face_i;
             }
         }
         // update verts to edges
-        for (let i = 0; i < geom_arrays.up_verts_edges.length; i++) {
-            const edges_i: number[] = geom_arrays.up_verts_edges[i];
+        let ve_i = 0; const ve_i_max = geom_arrays.up_verts_edges.length;
+        for (; ve_i < ve_i_max; ve_i++) {
+            const edges_i: number[] = geom_arrays.up_verts_edges[ve_i];
             if (edges_i === undefined) {
                 continue;
             } else if (edges_i === null) {
-                this._geom_arrays.up_verts_edges[i + num_verts] = null;
+                this._geom_arrays.up_verts_edges[ve_i + num_verts] = null;
             } else {
                 const new_edges_i: number[] = edges_i.map( edge_i => edge_i + num_edges);
-                this._geom_arrays.up_verts_edges[i + num_verts] = new_edges_i;
+                this._geom_arrays.up_verts_edges[ve_i + num_verts] = new_edges_i;
             }
         }
         // update edges to wires
-        for (let i = 0; i < geom_arrays.up_edges_wires.length; i++) {
-            const wire_i: number = geom_arrays.up_edges_wires[i];
+        let ew_i = 0; const ew_i_max = geom_arrays.up_edges_wires.length;
+        for (; ew_i < ew_i_max; ew_i++) {
+            const wire_i: number = geom_arrays.up_edges_wires[ew_i];
             if (wire_i === undefined) {
                 continue;
             } else if (wire_i === null) {
-                this._geom_arrays.up_edges_wires[i + num_edges] = null;
+                this._geom_arrays.up_edges_wires[ew_i + num_edges] = null;
             } else {
                 const new_wire_i: number = wire_i + num_wires;
-                this._geom_arrays.up_edges_wires[i + num_edges] = new_wire_i;
+                this._geom_arrays.up_edges_wires[ew_i + num_edges] = new_wire_i;
             }
         }
         // update wires to faces
-        for (let i = 0; i < geom_arrays.up_wires_faces.length; i++) {
-            const face_i: number = geom_arrays.up_wires_faces[i];
+        let wf_i = 0; const wf_i_max = geom_arrays.up_wires_faces.length;
+        for (; wf_i < wf_i_max; wf_i++) {
+            const face_i: number = geom_arrays.up_wires_faces[wf_i];
             if (face_i === undefined) {
                 continue;
             } else if (face_i === null) {
-                this._geom_arrays.up_wires_faces[i + num_wires] = null;
+                this._geom_arrays.up_wires_faces[wf_i + num_wires] = null;
             } else {
                 const new_face_i: number = face_i + num_faces;
-                this._geom_arrays.up_wires_faces[i + num_wires] = new_face_i;
+                this._geom_arrays.up_wires_faces[wf_i + num_wires] = new_face_i;
             }
         }
         // update verts to points
-        for (let i = 0; i < geom_arrays.up_verts_points.length; i++) {
-            const point_i: number = geom_arrays.up_verts_points[i];
+        let vp_i = 0; const vp_i_max = geom_arrays.up_verts_points.length;
+        for (; vp_i < vp_i_max; vp_i++) {
+            const point_i: number = geom_arrays.up_verts_points[vp_i];
             if (point_i === undefined) {
                 continue;
             } else if (point_i === null) {
-                this._geom_arrays.up_verts_points[i + num_points] = null;
+                this._geom_arrays.up_verts_points[vp_i + num_points] = null;
             } else {
                 const new_point_i: number = point_i + num_points;
-                this._geom_arrays.up_verts_points[i + num_points] = new_point_i;
+                this._geom_arrays.up_verts_points[vp_i + num_points] = new_point_i;
             }
         }
         // update wires to plines
-        for (let i = 0; i < geom_arrays.up_wires_plines.length; i++) {
-            const pline_i: number = geom_arrays.up_wires_plines[i];
+        let wp_i = 0; const wp_i_max = geom_arrays.up_wires_plines.length;
+        for (; wp_i < wp_i_max; wp_i++) {
+            const pline_i: number = geom_arrays.up_wires_plines[wp_i];
             if (pline_i === undefined) {
                 continue;
             } else if (pline_i === null) {
-                this._geom_arrays.up_wires_plines[i + num_wires] = null;
+                this._geom_arrays.up_wires_plines[wp_i + num_wires] = null;
             } else {
                 const new_pline_i: number = pline_i + num_plines;
-                this._geom_arrays.up_wires_plines[i + num_wires] = new_pline_i;
+                this._geom_arrays.up_wires_plines[wp_i + num_wires] = new_pline_i;
             }
         }
         // update faces to pgons
-        for (let i = 0; i < geom_arrays.up_faces_pgons.length; i++) {
-            const pgon_i: number = geom_arrays.up_faces_pgons[i];
+        let fp_i = 0; const fp_i_max = geom_arrays.up_faces_pgons.length;
+        for (; fp_i < fp_i_max; fp_i++) {
+            const pgon_i: number = geom_arrays.up_faces_pgons[fp_i];
             if (pgon_i === undefined) {
                 continue;
             } else if (pgon_i === null) {
-                this._geom_arrays.up_faces_pgons[i + num_faces] = null;
+                this._geom_arrays.up_faces_pgons[fp_i + num_faces] = null;
             } else {
                 const new_pgon_i: number = pgon_i + num_pgons;
-                this._geom_arrays.up_faces_pgons[i + num_faces] = new_pgon_i;
+                this._geom_arrays.up_faces_pgons[fp_i + num_faces] = new_pgon_i;
             }
         }
         // update points to colls
-        for (let i = 0; i < geom_arrays.up_points_colls.length; i++) {
-            const colls_i: number[] = geom_arrays.up_points_colls[i];
+        let poc_i = 0; const poc_i_max = geom_arrays.up_points_colls.length;
+        for (; poc_i < poc_i_max; poc_i++) {
+            const colls_i: number[] = geom_arrays.up_points_colls[poc_i];
             if (colls_i === undefined) {
                 continue;
             } else if (colls_i === null) {
-                this._geom_arrays.up_points_colls[i + num_points] = null;
+                this._geom_arrays.up_points_colls[poc_i + num_points] = null;
             } else {
                 const new_colls_i: number[] = colls_i.map(coll_i => coll_i + num_colls);
-                this._geom_arrays.up_points_colls[i + num_points] = new_colls_i;
+                this._geom_arrays.up_points_colls[poc_i + num_points] = new_colls_i;
             }
         }
         // update plines to colls
-        for (let i = 0; i < geom_arrays.up_plines_colls.length; i++) {
-            const colls_i: number[] = geom_arrays.up_plines_colls[i];
+        let plc_i = 0; const plc_i_max = geom_arrays.up_plines_colls.length;
+        for (; plc_i < plc_i_max; plc_i++) {
+            const colls_i: number[] = geom_arrays.up_plines_colls[plc_i];
             if (colls_i === undefined) {
                 continue;
             } else if (colls_i === null) {
-                this._geom_arrays.up_plines_colls[i + num_plines] = null;
+                this._geom_arrays.up_plines_colls[plc_i + num_plines] = null;
             } else {
                 const new_colls_i: number[] = colls_i.map(coll_i => coll_i + num_colls);
-                this._geom_arrays.up_plines_colls[i + num_plines] = new_colls_i;
+                this._geom_arrays.up_plines_colls[plc_i + num_plines] = new_colls_i;
             }
         }
         // update pgons to colls
-        for (let i = 0; i < geom_arrays.up_pgons_colls.length; i++) {
-            const colls_i: number[] = geom_arrays.up_pgons_colls[i];
+        let pgc_i = 0; const pgc_i_max = geom_arrays.up_pgons_colls.length;
+        for (; pgc_i < pgc_i_max; pgc_i++) {
+            const colls_i: number[] = geom_arrays.up_pgons_colls[pgc_i];
             if (colls_i === undefined) {
                 continue;
             } else if (colls_i === null) {
-                this._geom_arrays.up_pgons_colls[i + num_pgons] = null;
+                this._geom_arrays.up_pgons_colls[pgc_i + num_pgons] = null;
             } else {
                 const new_colls_i: number[] = colls_i.map(coll_i => coll_i + num_colls);
-                this._geom_arrays.up_pgons_colls[i + num_pgons] = new_colls_i;
+                this._geom_arrays.up_pgons_colls[pgc_i + num_pgons] = new_colls_i;
             }
         }
     }
@@ -322,7 +334,8 @@ export class GIGeomIO {
         // the up_posis_verts array is special, it can have no undefine values
         // its length is used to determine how many posis there are in the model
         this._geom_arrays.up_posis_verts = [];
-        for (let posi_i = 0; posi_i < geom_data.num_positions; posi_i++) {
+        let posi_i = 0; const posi_i_max = geom_data.num_positions;
+        for (; posi_i < posi_i_max; posi_i++) {
             if (this._geom.model.attribs.query.getPosiCoords(posi_i) === undefined) {
                 this._geom_arrays.up_posis_verts[posi_i] = null;
             } else {
@@ -330,9 +343,9 @@ export class GIGeomIO {
             }
         }
         // posis->verts
-        this._geom_arrays.dn_verts_posis.forEach( (posi_i, vert_i) => { // val, index
-            if (posi_i !== null) {
-                this._geom_arrays.up_posis_verts[posi_i].push(vert_i);
+        this._geom_arrays.dn_verts_posis.forEach( (_posi_i, vert_i) => { // val, index
+            if (_posi_i !== null) {
+                this._geom_arrays.up_posis_verts[_posi_i].push(vert_i);
             }
         });
         // verts->tris, one to many

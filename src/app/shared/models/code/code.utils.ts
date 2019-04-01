@@ -214,7 +214,8 @@ export class CodeUtils {
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
                     if (urlCheck && arg.value.indexOf('://') !== -1) {
-                        argsVals.push(CodeUtils.getURLContent(arg.value));
+                        argsVals.push(prod.resolvedValue);
+                        prod.resolvedValue = null;
                     }
                     if (arg.type.toString() !== InputType.URL.toString()) {
                         argsVals.push(this.repGetAttrib(arg.value));
@@ -304,6 +305,8 @@ export class CodeUtils {
 
     static repGetAttrib(val: string) {
         if (!val) { return; }
+        if (typeof val === 'number') { return val; }
+
         const res = val.split(' ');
         for (const i in res) {
             if (!res[i]) {

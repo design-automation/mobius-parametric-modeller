@@ -15,17 +15,11 @@ export function randInt(min: number, max: number, seed?: number): number {
     }
 }
 export function randPick(list: any[], num: number, seed?: number): number[] {
-    if (seed !== undefined) {
-        const rand_picks: number[] = [];
-        for (let i = 0; i < num; i++) {
-            rand_picks.push(list[Math.floor(_randWithSeed(seed + 0.001) * list.length)]);
-        }
-        return rand_picks;
-    } else {
-        return mathjs.pickRandom(list, num);
-    }
+    const list_copy: any[] = list.slice();
+    _randShuffleWithSeed(list_copy, seed);
+    return list_copy.slice(0, num);
 }
-
+// TODO is there a better random function than this?
 function _randWithSeed(s: number): number {
     // https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
     /* tslint:disable */
@@ -34,3 +28,16 @@ function _randWithSeed(s: number): number {
     //return (2**31-1&(s=Math.imul(48271,s)))/2**31;
     /* tslint:enable */
 }
+function _randShuffleWithSeed(arr: any[], s?: number) {
+    let ctr = arr.length;
+    while (ctr > 0) {
+        const r: number = (s === undefined) ? Math.random() : _randWithSeed(ctr + s);
+        const index: number = Math.floor(r * ctr);
+        ctr--;
+        const temp: number = arr[ctr];
+        arr[ctr] = arr[index];
+        arr[index] = temp;
+    }
+    return arr;
+}
+

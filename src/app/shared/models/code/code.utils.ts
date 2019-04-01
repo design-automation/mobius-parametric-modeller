@@ -10,7 +10,8 @@ let _terminateCheck: string;
 export class CodeUtils {
 
 
-    static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean, functionName?: string): string[] {
+    static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean,
+                            functionName?: string, usedFunctions?: string[]): string[] {
         if (_terminateCheck === '' || prod.enabled === false ||
             prod.type === ProcedureTypes.Blank ||
             prod.type === ProcedureTypes.Comment) { return ['']; }
@@ -197,9 +198,24 @@ export class CodeUtils {
             case ProcedureTypes.Imported:
                 let argsVals: any = [];
                 const namePrefix = functionName ? `${functionName}_` : '';
+
+                let urlCheck = false;
+                if (isMainFlowchart) {
+                    usedFunctions.push(prod.meta.name);
+                } else {
+                    for (const urlfunc of _parameterTypes.urlFunctions) {
+                        const funcMeta = urlfunc.split('.');
+                        if (funcMeta[0] === prod.meta.module && funcMeta[1] === prod.meta.name) {
+                            urlCheck = true;
+                            break;
+                        }
+                    }
+                }
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
-                    // args.slice(1).map((arg) => {
+                    if (urlCheck && arg.value.indexOf('://') !== -1) {
+                        argsVals.push(CodeUtils.getURLContent(arg.value));
+                    }
                     if (arg.type.toString() !== InputType.URL.toString()) {
                         argsVals.push(this.repGetAttrib(arg.value));
                     } else {
@@ -287,42 +303,6 @@ export class CodeUtils {
     }
 
     static repGetAttrib(val: string) {
-        // if (!val) { return; }
-        // const res = val.split(' ');
-        // for (const i in res) {
-        //     if (!res[i]) {
-        //         continue;
-        //     }
-        //     const atIndex = res[i].indexOf('@');
-        //     if (atIndex !== -1 && atIndex > 0 && res[i].trim()[0] !== '#') {
-        //         const splitted = res[i].split('@');
-        //         if (splitted.length > 2) {
-        //             splitted[1] = splitted.splice(1, splitted.length - 1).join('@');
-        //         }
-        //         let pref = '';
-        //         let postf = '';
-        //         while (splitted[0][0] === '[') {
-        //             splitted[0] = splitted[0].substring(1, splitted[0].length);
-        //             pref += '[';
-        //         }
-        //         const closeBracketMatch = (splitted[1].match(/\]/g) || []).length;
-        //         const openBracketMatch = (splitted[1].match(/\[/g) || []).length;
-        //         if (closeBracketMatch > openBracketMatch) {
-        //             splitted[1] = splitted[1].substring(0, splitted[1].length - (closeBracketMatch - openBracketMatch));
-        //             postf = ']'.repeat(closeBracketMatch - openBracketMatch);
-        //         }
-        //         if (openBracketMatch) {
-        //             const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
-        //             const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}` +
-        //                 `(__params__.model, ${splitted[0]}, '${bracketSplit[0]}', ${innerVar})${postf}`;
-        //         } else {
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(
-        //                      __params__.model, ${splitted[0]}, '${splitted[1]}')${postf}`;
-        //         }
-        //     }
-        // }
-        // return res.join(' ');
         if (!val) { return; }
         const res = val.split(' ');
         for (const i in res) {
@@ -369,31 +349,35 @@ export class CodeUtils {
         return res.join(' ');
     }
 
+    static async getURLContent(url: string): Promise<any> {
+        if (url.indexOf('dropbox') !== -1) {
+            url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+        }
+        if (url[0] === '"' || url[0] === '\'') {
+            url = url.substring(1);
+        }
+        if (url[url.length - 1] === '"' || url[url.length - 1] === '\'') {
+            url = url.substring(0, url.length - 1);
+        }
+        const p = new Promise((resolve) => {
+            const request = new XMLHttpRequest();
+            request.open('GET', url);
+            request.onload = () => {
+                resolve(request.responseText);
+            };
+            request.onerror = () => {
+                resolve('HTTP Request Error: unable to retrieve file from url ' + url);
+            };
+            request.send();
+        });
+        return await p;
+    }
+
     static async getStartInput(arg, inputMode): Promise<any> {
-        let val = arg.value;
+        const val = arg.value;
         let result = val;
         if (inputMode.toString() === InputType.URL.toString() ) {
-            if (val.indexOf('dropbox') !== -1) {
-                val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
-            }
-            if (val[0] === '"' || val[0] === '\'') {
-                val = val.substring(1);
-            }
-            if (val[val.length - 1] === '"' || val[val.length - 1] === '\'') {
-                val = val.substring(0, val.length - 1);
-            }
-            const p = new Promise((resolve) => {
-                const request = new XMLHttpRequest();
-                request.open('GET', val);
-                request.onload = () => {
-                    resolve(request.responseText);
-                };
-                request.onerror = () => {
-                    resolve('HTTP Request Error: unable to retrieve file from url ' + val);
-                };
-                request.send();
-            });
-            result = await p;
+            result = await CodeUtils.getURLContent(val);
             if (result.indexOf('HTTP Request Error') !== -1) {
                 throw(new Error(result));
             }
@@ -416,33 +400,15 @@ export class CodeUtils {
                     throw(new Error(result));
                 }
                 result = '`' + result + '`';
-                let savedFiles: any = window.localStorage.getItem('savedFileList');
-                if (!savedFiles) {
-                    window.localStorage.setItem('savedFileList', `["${val.name}"]`);
-                } else {
-                    savedFiles = JSON.parse(savedFiles);
-                    window.localStorage.removeItem(savedFiles[0]);
-                    window.localStorage.setItem('savedFileList', `["${val.name}"]`);
-                    // let check = false;
-                    // for (let i = 0; i < savedFiles.length; i++) {
-                    //     const item = savedFiles[i];
-                    //     if (item === val.name) {
-                    //         savedFiles.splice(i, 1);
-                    //         savedFiles.push(item);
-                    //         check = true;
-                    //         break;
-                    //     }
-                    // }
-                    // if (!check) {
-                    //     savedFiles.push(val.name);
-                    //     if (savedFiles.length > 1) {
-                    //         const item = savedFiles.shift();
-                    //         localStorage.removeItem(item);
-                    //     }
-                    //     localStorage.setItem('mobius_backup_list', JSON.stringify(savedFiles));
-                    // }
-                }
-                window.localStorage.setItem(val.name, result);
+                // let savedFiles: any = window.localStorage.getItem('savedFileList');
+                // if (!savedFiles) {
+                //     window.localStorage.setItem('savedFileList', `["${val.name}"]`);
+                // } else {
+                //     savedFiles = JSON.parse(savedFiles);
+                //     window.localStorage.removeItem(savedFiles[0]);
+                //     window.localStorage.setItem('savedFileList', `["${val.name}"]`);
+                // }
+                // window.localStorage.setItem(val.name, result);
                 arg.value = {'name': val.name};
             }
         }
@@ -508,7 +474,8 @@ export class CodeUtils {
         return input;
     }
 
-    public static getNodeCode(node: INode, isMainFlowchart = false, functionName?: string): [string[][], string] {
+    public static getNodeCode(node: INode, isMainFlowchart = false,
+                                    functionName?: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
         const varsDefined: string[] = [];
@@ -537,7 +504,7 @@ export class CodeUtils {
         // procedure
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName) );
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
         }
         if (node.type === 'end' && node.procedure.length > 0) {
             // return [[codeStr, varsDefined], _terminateCheck];
@@ -556,8 +523,6 @@ export class CodeUtils {
 
         // return `{\n${codeStr.join('\n')}\nreturn result;\n}`;
         // return `/*    ${node.name.toUpperCase()}    */\n\n{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
-
-
     }
 
     static getFunctionString(func: IFunction): string {

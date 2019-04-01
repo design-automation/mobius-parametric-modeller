@@ -282,8 +282,9 @@ export class ExecuteComponent {
         let fnString = '';
         const startTime = performance.now();
         try {
-            const codeResult = CodeUtils.getNodeCode(node, true);
-
+            const usedFuncs: string[] = [];
+            const codeResult = CodeUtils.getNodeCode(node, true, undefined, usedFuncs);
+            const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${codeResult[1]}"`);
@@ -293,29 +294,39 @@ export class ExecuteComponent {
                 }
             }
 
-            // get the code for the node
             const codeRes = codeResult[0];
             const nodeCode = codeRes[0];
             const varsDefined = codeRes[1];
 
-            // fnString = printFunc + nodeCode.join('\n');
-            fnString = printFunc + '\nfunction __main_node_code__(){\n' + nodeCode.join('\n') + '\n}\nreturn __main_node_code__();';
-            // add the constants from the start node
-            fnString = _varString + globalVars + fnString;
-            params['model'] = _parameterTypes.newFn();
-            _parameterTypes.mergeFn(params['model'], node.input.value);
+            // Create function string:
+            // start with asembling the node's code
+            fnString =  '\n\n//  ------ MAIN CODE ------\n' +
+                        '\nfunction __main_node_code__(){\n' +
+                        nodeCode.join('\n') +
+                        '\n}\nreturn __main_node_code__();';
 
-            // add the imported functions code
-            let hasFunctions = false;
-            for (const funcName in funcStrings) {
-                if (funcStrings.hasOwnProperty(funcName)) {
-                    fnString = funcStrings[funcName] + fnString;
-                    hasFunctions = true;
+            // add the user defined functions that are used in the node
+            usedFuncsSet.forEach((funcName) => {
+                for (const otherFunc in funcStrings) {
+                    if (otherFunc.substring(0, funcName.length) === funcName) {
+                        fnString = funcStrings[otherFunc] + fnString;
+                    }
                 }
-            }
-            if (hasFunctions || node.type === 'start') {
-                fnString = mergeInputsFunc + '\n\n' + fnString;
-            }
+            });
+
+            // add the constants from the start node and the predefined constants/functions (e.g. PI, sqrt, ...)
+            fnString = _varString + globalVars + fnString;
+
+            // add the merge input function and the print function
+            fnString = mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
+
+            // ==> generated code structure:
+            //  1. mergeInputFunction
+            //  2. printFunction
+            //  3. constants
+            //  4. user functions
+            //  5. main node code
+
             // print the code
             this.dataService.log(`Executing node: ${node.name}\n`);
             if (DEBUG) {
@@ -329,6 +340,9 @@ export class ExecuteComponent {
                     prevWindowVar[v] = window[v];
                 }
             }
+
+            params['model'] = _parameterTypes.newFn();
+            _parameterTypes.mergeFn(params['model'], node.input.value);
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);

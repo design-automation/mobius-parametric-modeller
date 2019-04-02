@@ -69,7 +69,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private lastY: number;
     private dragHash: number;
     private shiftKeyPressed = false;
-    private giSummary = [];
+    public giSummary = [];
     private currentAttribLabel = '';
 
     tab_map = {

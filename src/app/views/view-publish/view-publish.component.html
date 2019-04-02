@@ -18,7 +18,7 @@
         <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
-                <a class='shareLink' title="Share" href={{expando_href}}>
+                <a class='shareLink' *ngIf="checkShareBtn()" title="Share" href={{expando_href}}>
                     <button class="shareBtn" mat-icon-button>
                             <mat-icon>share</mat-icon>
                     </button>

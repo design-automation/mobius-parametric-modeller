@@ -69,6 +69,10 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
       }
     }
 
+    checkShareBtn() {
+        return true;
+    }
+
     setSplit(event) {
         this.dataService.splitUpdate = true;
         this.dataService.splitVal = event.sizes[1];

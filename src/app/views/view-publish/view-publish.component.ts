@@ -80,7 +80,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
             this.dataService.splitVal = 100;
             return;
         }
-        this.dataService.splitVal = 80;
+        this.dataService.splitVal = 75;
     }
 
     getSplit() { return this.dataService.splitVal; }

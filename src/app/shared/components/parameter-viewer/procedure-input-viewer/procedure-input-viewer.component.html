@@ -15,7 +15,8 @@
                     [style.width.px]='inputSize(prod.args[prod.argCount-1].value)' disabled>-->
                     <input [(ngModel)]='prod.args[prod.argCount-1].value' 
                     placeholder='{{prod.args[prod.argCount-1].value}}'
-                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'>
+                    [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'
+                    (blur)='checkSliderVal()'>
                     <mat-slider
                         [(ngModel)]='prod.args[prod.argCount-1].value'
                         thumbLabel

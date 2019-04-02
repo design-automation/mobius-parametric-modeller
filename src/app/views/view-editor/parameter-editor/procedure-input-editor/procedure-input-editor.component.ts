@@ -151,4 +151,14 @@ export class ProcedureInputEditorComponent implements OnDestroy {
         }
     }
 
+    checkSliderVal() {
+        const min = Number(this.prod.args[this.prod.argCount - 1].min);
+        const max = Number(this.prod.args[this.prod.argCount - 1].max);
+        const val = Number(this.prod.args[this.prod.argCount - 1].value);
+        if (min && val < min) {
+            this.prod.args[this.prod.argCount - 1].value = min;
+        } else if (max && val > max) {
+            this.prod.args[this.prod.argCount - 1].value = max;
+        }
+    }
 }

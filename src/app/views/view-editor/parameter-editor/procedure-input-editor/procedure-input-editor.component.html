@@ -123,6 +123,7 @@
             <div class = 'slider--container'>
                 <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].value'
                 (focus)='emitClearSelect($event)'
+                (blur)='checkSliderVal()'
                 [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"")'>
                 <mat-slider

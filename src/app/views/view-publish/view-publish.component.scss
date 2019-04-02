@@ -9,6 +9,37 @@
     overflow-y: auto;
 }
 
+.content__viewer{
+    position: relative;
+
+    .sliderBtn{
+        position: absolute;
+        top: 34px;
+        background-color: transparent;
+        z-index: 2;
+        color: $color1;
+        border: none;
+        margin: none;
+        padding:none;
+        outline:none;
+    }
+    .shareLink{
+        position: absolute;
+        top: 0px;
+        right: 34px;
+        z-index: 2;
+        .shareBtn{
+            background-color: transparent;
+            z-index: 2;
+            color: $color1;
+            border: none;
+            margin: none;
+            padding:none;
+            outline:none;
+        }
+    }
+}
+
 h3 {
     line-height: 30px;
     height: 30px;

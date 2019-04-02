@@ -65,6 +65,7 @@ export class ExecuteComponent {
         }
 
         document.getElementById('spinner-on').click();
+        this.dataService.log(' ');
         this.dataService.log('=====================================================');
 
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)

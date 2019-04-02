@@ -405,4 +405,31 @@ export class PanelHeaderComponent implements OnDestroy {
         txtArea = null;
     }
 
+    generateEmbed() {
+        if (this.urlSet[0] === '') {
+            return;
+        }
+        if (this.urlSet[1] === 'publish') {
+            this.urlSet[2] = '';
+            this.urlSet[3] = '';
+        } else if (this.urlSet[2] === '') {
+            this.urlSet[3] = '';
+        } else if (this.urlSet[3] === '') {
+            this.urlSet[2] = '';
+        }
+
+        let url = this.urlSet[0];
+        if (url.indexOf('dropbox') !== -1) {
+            url = url.replace('www', 'dl').replace('?dl=0', '');
+        }
+        url = url.replace(/\//g, '%2F');
+
+        let txtArea = document.getElementById('generatedLink');
+        txtArea.innerHTML = `<iframe style='width: 100%; height: 700px;' src="` +
+                            `${window.location.origin}/${this.urlSet[1]}` +
+                            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}"` +
+                            `></iframe>`;
+        txtArea = null;
+    }
+
 }

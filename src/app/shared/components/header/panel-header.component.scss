@@ -190,6 +190,7 @@ button.mat-menu-item:hover{
         border: 0px;
         margin: 0px;
         padding: 0px;
+        padding-left: 0px;
         line-height: $fsize3;
         height: $fsize3;
         font-size: $fsize2;
@@ -243,7 +244,7 @@ button.mat-menu-item:hover{
         textarea{
             width: 600px;
             max-width: 600px;
-            min-height: 70px;
+            min-height: 80px;
             background-color: $color6;
     
             &.disabled{
@@ -266,6 +267,7 @@ button.mat-menu-item:hover{
         button{
             width: fit-content;
             padding: 0px 5px 0px 5px;
+            margin-right: 10px;
             background-color: $color5;
             color: $color1;
         }

@@ -16,10 +16,14 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
 
     viewerData = getViewerData;
     private ctx = document.createElement('canvas').getContext('2d');
+    expando_href: string;
 
     constructor(private dataService: DataService, private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url.split(/\s*&*\s*node\s*=/)[0]);
         this.ctx.font = '12px sans-serif';
+        this.dataService.splitVal = 100;
+        const url = window.location.href.replace(/:/g, '%3A').replace(/\//g, '%2F');
+        this.expando_href = `http://expando.github.io/add/?u=${url}&t=M%C3%B6bius%20Modeller%20Publish`;
     }
 
     ngAfterViewInit() {
@@ -69,6 +73,14 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         this.dataService.splitUpdate = true;
         this.dataService.splitVal = event.sizes[1];
         this.adjustTextArea();
+    }
+    toggleSlider() {
+        this.dataService.splitUpdate = true;
+        if (this.dataService.splitVal < 100) {
+            this.dataService.splitVal = 100;
+            return;
+        }
+        this.dataService.splitVal = 80;
     }
 
     getSplit() { return this.dataService.splitVal; }

@@ -1,5 +1,5 @@
 <div class='container'>
-    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+    <as-split direction="horizontal" (dragEnd)='setSplit($event)' disabled='true'>
         
         <as-split-area [size]="100 - getSplit()">
             <publish-header [title]='getFlowchart().name'></publish-header>
@@ -16,6 +16,17 @@
         <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
+                <a class='shareLink' title="Share" href={{expando_href}}>
+                    <button class="shareBtn" mat-icon-button>
+                            <mat-icon>share</mat-icon>
+                    </button>
+                </a>
+                <button class="sliderBtn" mat-icon-button (click)='toggleSlider()'>
+                    <mat-icon *ngIf='getSplit() === 100; else other_icon'>last_page</mat-icon>
+                    <ng-template #other_icon>
+                        <mat-icon>first_page</mat-icon>
+                    </ng-template>
+                </button>
                 <model-viewers-container [data]='viewerData(getNode(), true)'></model-viewers-container>
             </div>
         </as-split-area>

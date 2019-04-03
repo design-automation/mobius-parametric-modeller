@@ -14,13 +14,6 @@
                     placeholder='{{prod.args[prod.argCount-1].value}}'
                     [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'
                     (blur)='checkSliderVal()'>
-                    <br>
-                    <mat-slider
-                        [(ngModel)]='prod.args[prod.argCount-1].value'
-                        thumbLabel
-                        step={{prod.args[prod.argCount-1].step||1}}
-                        min={{prod.args[prod.argCount-1].min||0}}
-                        max={{prod.args[prod.argCount-1].max||100}}></mat-slider>
                 </ng-container>
     
                 <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
@@ -43,6 +36,15 @@
                 </ng-container>
     
             </ng-container>
+        </div>
+        <div class = "FFA" *ngIf='prod.meta.inputMode === PortTypes.Slider'>
+            <mat-slider
+                [(ngModel)]='prod.args[prod.argCount-1].value'
+                thumbLabel
+                step={{prod.args[prod.argCount-1].step||1}}
+                min={{prod.args[prod.argCount-1].min||0}}
+                max={{prod.args[prod.argCount-1].max||100}}>
+            </mat-slider>
         </div>
         
     </div>

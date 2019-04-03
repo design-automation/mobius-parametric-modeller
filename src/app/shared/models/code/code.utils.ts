@@ -172,8 +172,14 @@ export class CodeUtils {
                     }
                     argVals.push(this.repGetAttrib(arg.value));
                 }
-                if (prod.meta.name === 'ImportData') {
-                    argVals[1] = prod.resolvedValue;
+                if (prod.resolvedValue) {
+                    for (let i = 0; i < argVals.length; i++) {
+                        if (argVals[i].indexOf('://') !== -1) {
+                            argVals[i] = prod.resolvedValue;
+                            prod.resolvedValue = null;
+                            break;
+                        }
+                    }
                 }
                 const argValues = argVals.join(', ');
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
@@ -199,24 +205,24 @@ export class CodeUtils {
                 let argsVals: any = [];
                 const namePrefix = functionName ? `${functionName}_` : '';
 
-                let urlCheck = false;
+                // let urlCheck = false;
                 if (isMainFlowchart) {
                     usedFunctions.push(prod.meta.name);
-                } else {
-                    for (const urlfunc of _parameterTypes.urlFunctions) {
-                        const funcMeta = urlfunc.split('.');
-                        if (funcMeta[0] === prod.meta.module && funcMeta[1] === prod.meta.name) {
-                            urlCheck = true;
-                            break;
-                        }
-                    }
+                // } else {
+                //     for (const urlfunc of _parameterTypes.urlFunctions) {
+                //         const funcMeta = urlfunc.split('.');
+                //         if (funcMeta[0] === prod.meta.module && funcMeta[1] === prod.meta.name) {
+                //             urlCheck = true;
+                //             break;
+                //         }
+                //     }
                 }
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
-                    if (urlCheck && arg.value.indexOf('://') !== -1) {
-                        argsVals.push(prod.resolvedValue);
-                        prod.resolvedValue = null;
-                    }
+                    // if (urlCheck && arg.value.indexOf('://') !== -1) {
+                    //     argsVals.push(prod.resolvedValue);
+                    //     prod.resolvedValue = null;
+                    // }
                     if (arg.type.toString() !== InputType.URL.toString()) {
                         argsVals.push(this.repGetAttrib(arg.value));
                     } else {

@@ -179,8 +179,9 @@ body.modal-open {
 
     .onoffswitch {
         position: relative; 
-        width: 2 * $fsize1;
-        height: $fsize1;
+        width: 24px;
+        height: 6px;
+        top: 4px;
         box-sizing: border-box;
         vertical-align: middle;
         -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
@@ -192,28 +193,29 @@ body.modal-open {
         display: block;
         overflow: hidden;
         height: inherit;
-        background-color: $color4;
+        background-color: #dedede;
         cursor: pointer;
     }
 
     .onoffswitch-switch {
         position: absolute;
-        top: 1px;
-        left: 1px;
-        width: $fsize1 - 2px;
-        height: $fsize1 - 2px;
-        background: $color5;
+        top: -4px;
+        left: 0px;
+        width: 3px;
+        height: 12px;
+        background: #ccc;
+        border: 1px solid #ccc;
     }
     
     .onoffswitch-checkbox:hover:not(:checked) + .onoffswitch-label{
         background-color: rgba($selected-color, 0.4);
         .onoffswitch-switch{
-            box-shadow: 2px 0px 0px 0px;
+            // box-shadow: 2px 0px 0px 0px;
         }
     }
 
     .onoffswitch-checkbox:disabled + .onoffswitch-label{
-        background-color: $color4 !important;
+        background-color: #dedede !important;
         .onoffswitch-switch{
             box-shadow: none !important;
         }
@@ -224,7 +226,7 @@ body.modal-open {
         .onoffswitch-switch {
             right: 0px; 
             
-            left: calc(100% - 2px);
+            left: calc(100% + 1px);
             transform: translateX(-100%);
         }
     }

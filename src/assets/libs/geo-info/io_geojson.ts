@@ -1,6 +1,7 @@
 import { GIModel } from './GIModel';
-import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs } from './common';
+import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes } from './common';
 import { GIAttribMap } from './GIAttribMap';
+
 
  /**
  * Import geojson
@@ -29,161 +30,139 @@ enum EGeojsoFeatureType {
 export function processGeojson(model: GIModel, obj_data: any, elevation: number): void {
     console.log('Number of features = ', obj_data.features.length);
     // arrays for features
-    const points: any[] = [];
-    const linestrings: any[] = [];
-    const polygons: any[] = [];
-    const polygons_holes: any[] = [];
-    const multipoints: any[] = [];
-    const multilinestrings: any[] = [];
-    const multipolygons: any[] = [];
-    const multipolygons_holes: any[] = [];
-    const others: any[] = [];
-    // map for attributes
-    const point_attrib_types: Map<string, EAttribDataTypeStrs> = new Map();
-    const pline_attrib_types: Map<string, EAttribDataTypeStrs> = new Map();
-    const pgon_attrib_types: Map<string, EAttribDataTypeStrs> = new Map();
-    // loop through all features
+    const point_f: any[] = [];
+    const linestring_f: any[] = [];
+    const polygon_f: any[] = [];
+    const polygons_hole_f: any[] = [];
+    const multipoint_f: any[] = [];
+    const multilinestring_f: any[] = [];
+    const multipolygon_f: any[] = [];
+    const multipolygons_hole_f: any[] = [];
+    const other_f: any[] = [];
+    // arrays for objects
+    const points_i: number[] = [];
+    const plines_i: number[] = [];
+    const pgons_i: number[] = [];
+    const colls_i: number[] = [];
+    // loop
     for (const feature of obj_data.features) {
         // get the features
         switch (feature.geometry.type) {
             case EGeojsoFeatureType.POINT:
-                points.push(feature);
-                _addAttribsToMap(feature, point_attrib_types);
+                point_f.push(feature);
+                const point_i: number = _addPointToModel(model, feature, elevation);
+                points_i.push(point_i);
                 break;
             case EGeojsoFeatureType.LINESTRING:
-                linestrings.push(feature);
-                _addAttribsToMap(feature, pline_attrib_types);
+                linestring_f.push(feature);
+                const pline_i: number = _addPlineToModel(model, feature, elevation);
+                plines_i.push(pline_i);
                 break;
             case EGeojsoFeatureType.POLYGON:
-                polygons.push(feature);
-                if (feature.geometry.coordinates > 1) {
-                    polygons_holes.push(feature);
-                }
-                _addAttribsToMap(feature, pgon_attrib_types);
+                polygon_f.push(feature);
+                const pgon_i: number = _addPgonToModel(model, feature, elevation);
+                pgons_i.push(pgon_i);
                 break;
             case EGeojsoFeatureType.MULTIPOINT:
-                multipoints.push(feature);
-                _addAttribsToMap(feature, point_attrib_types);
+                multipoint_f.push(feature);
+                const points_coll_i: [number[], number] = _addPointCollToModel(model, feature, elevation);
+                for (const point_coll_i of points_coll_i[0]) {
+                    points_i.push(point_coll_i);
+                }
+                colls_i.push(points_coll_i[1]);
                 break;
             case EGeojsoFeatureType.MULTILINESTRING:
-                multilinestrings.push(feature);
-                _addAttribsToMap(feature, pline_attrib_types);
+                multilinestring_f.push(feature);
+                const plines_coll_i: [number[], number] = _addPlineCollToModel(model, feature, elevation);
+                for (const pline_coll_i of plines_coll_i[0]) {
+                    plines_i.push(pline_coll_i);
+                }
+                colls_i.push(plines_coll_i[1]);
                 break;
             case EGeojsoFeatureType.MULTIPOLYGON:
-                multipolygons.push(feature);
-                let has_holes = false;
-                for (const face of feature.geometry.coordinates) {
-                    if (face.length > 1) {has_holes = true; break; }
+                multipolygon_f.push(feature);
+                const pgons_coll_i: [number[], number] = _addPgonCollToModel(model, feature, elevation);
+                for (const pgon_coll_i of pgons_coll_i[0]) {
+                    pgons_i.push(pgon_coll_i);
                 }
-                if (has_holes) {
-                    multipolygons_holes.push(feature);
-                }
-                _addAttribsToMap(feature, pgon_attrib_types);
+                colls_i.push(pgons_coll_i[1]);
                 break;
             default:
-                others.push(feature);
+                other_f.push(feature);
                 break;
         }
     }
     // log message
     console.log(
-        'Point: '           + points.length + '\n' +
-        'LineString: '      + linestrings.length + '\n' +
-        'Polygon: '         + polygons.length + '\n' +
-        '    Polygon + hole: ' + polygons_holes.length + '\n' +
-        'MultiPoint: '      + multipoints.length + '\n' +
-        'MultiLineString: ' + multilinestrings.length + '\n' +
-        'MultiPolygon: '    + multipolygons.length + '\n' +
-        '    MultiPolygon + hole: ' + multipolygons_holes.length + '\n' +
-        'Other: '           + others + '\n\n');
-    // make geometry in model
-    const point_attribs: Map<string, GIAttribMap> = _addAttribsToModel(model, point_attrib_types, EEntType.POINT);
-    const pline_attribs: Map<string, GIAttribMap> = _addAttribsToModel(model, pline_attrib_types, EEntType.PLINE);
-    const pgon_attribs: Map<string, GIAttribMap> = _addAttribsToModel(model, pgon_attrib_types, EEntType.PGON);
-    // add_linestrings(linestrings, attribs, model, elevation);
-    _addPolygonsToModel(model, polygons, pgon_attribs, elevation);
-    // add_multilinestrings(linestrings, attribs, model, elevation);
-    // add_multipolygons(multipolygons, attribs, model, elevation);
-    // log model results
-    // console.log(model.toString());
+        'Point: '           + point_f.length + '\n' +
+        'LineString: '      + linestring_f.length + '\n' +
+        'Polygon: '         + polygon_f.length + '\n' +
+        'MultiPoint: '      + multipoint_f.length + '\n' +
+        'MultiLineString: ' + multilinestring_f.length + '\n' +
+        'MultiPolygon: '    + multipolygon_f.length + '\n' +
+        'Other: '           + other_f + '\n\n');
 }
-/**
- * 
- * @param feature
- * @param attrib_map
- */
-function _addAttribsToMap(feature: any, attrib_map: Map<string, EAttribDataTypeStrs>): void {
-    // get the attributes
-    const props: any = feature.properties;
-    for (const key of Object.keys(props)) {
-        let attrib_name: string = key;
-        const attrib_type: EAttribDataTypeStrs =
-            (typeof props[attrib_name] === 'number') ? EAttribDataTypeStrs.FLOAT : EAttribDataTypeStrs.STRING;
-        //
-        // TODO other data types, especially arrays
-        //
-        // check for attribs with same name but different data types
-        if (attrib_map.has(attrib_name)) {
-            if (attrib_map.get(attrib_name) !==  attrib_type) {
-                let count = 0;
-                while (attrib_map.has(attrib_name)) {
-                    attrib_name = key + '_' + count;
-                    count ++;
-                }
-            }
-        }
-        // add the attribute to the map
-        if (!attrib_map.has(attrib_name)) {
-            attrib_map.set(attrib_name, attrib_type);
-        }
+
+
+/*
+    "geometry": {
+        "type": "Point",
+        "coordinates": [40, 40]
     }
-}
-
+*/
 /**
- * Adds attributs to the model.
- * @param attrib_data Attrinute data (name, and data type)
- * @param model The model
- * @returns A Map containing the attrib name and the attrib object.
+ * Add a point to the model
+ * @param model The model.
+ * @param point The features to add.
  */
-function _addAttribsToModel(model: GIModel, attrib_data: Map<string, EAttribDataTypeStrs>, ent_type: EEntType): Map<string, GIAttribMap> {
-    // create the attributes in the model
-    const attribs_map: Map<string, GIAttribMap> = new Map();
-    attrib_data.forEach((data_type: EAttribDataTypeStrs, attrib_name: string) => {
-        const attrib: GIAttribMap = model.attribs.add.addAttrib(ent_type, attrib_name, data_type, 1); // TODO arrays
-        attribs_map.set(attrib_name, attrib);
-    });
-    return attribs_map;
+function _addPointToModel(model: GIModel, point: any, elevation: number): number {
+    // add feature
+    const xyz: Txyz = [point.geometry.coordinates[0], point.geometry.coordinates[1], elevation];
+    // create the posi
+    const posi_i: number = model.geom.add.addPosi();
+    model.attribs.add.setPosiCoords(posi_i, xyz);
+    // create the point
+    const point_i: number = model.geom.add.addPoint(posi_i);
+    // add attribs
+    _addAttribsToModel(model, EEntType.POINT, point_i, point);
+    // return the index
+    return point_i;
 }
 
-// /*
-//     "geometry": {
-//         "type": "LineString",
-//         "coordinates": [
-//             [30, 10], [10, 30], [40, 40]
-//         ]
-//     }
-// */
-// /**
-//  * Adds linestrings to the model
-//  * @param linestrings The features to add.
-//  * @param model The model
-//  */
-// function add_linestrings(linestrings: any[], attribs: Map<string, gs.IEntAttrib>,
-//         model: gs.IModel, elevation: number): void {
-//     const geom: gs.IGeom = model.getGeom();
-//     // create polygons
-//     for (const linestring of linestrings) {
-//         // add geometry,  single polyline per feature
-//         const points: gs.IPoint[] =
-//             geom.addPoints(linestring.geometry.coordinates.map((xy) => [xy[0], xy[1], elevation]));
-//         const polyline: gs.IPolymesh = geom.addPolyline(points, false);
-//         // add attribs
-//         const props = linestring.properties;
-//         for (const name of Object.keys(props)) {
-//             polyline.setAttribValue(attribs.get(name), props[name]);
-//         }
-//     }
-// }
+/*
+    "geometry": {
+        "type": "LineString",
+        "coordinates": [
+            [30, 10], [10, 30], [40, 40]
+        ]
+    }
+*/
+/**
+ * Add a pline to the model
+ * @param model The model
+ * @param linestrings The features to add.
+ */
+function _addPlineToModel(model: GIModel, linestring: any, elevation: number): number {
+    // add feature
+    let xyzs: Txyz[] = linestring.geometry.coordinates.map((xy: number[]) => [xy[0], xy[1], elevation]);
+    const first_xyz: Txyz = xyzs[0];
+    const last_xyz: Txyz = xyzs[xyzs.length - 1];
+    const close = xyzs.length > 2 && first_xyz[0] === last_xyz[0] && first_xyz[1] === last_xyz[1];
+    if (close) { xyzs = xyzs.slice(0, xyzs.length - 1); }
+    // create the posis
+    const posis_i: number[] = [];
+    for (const xyz of xyzs) {
+        const posi_i: number = model.geom.add.addPosi();
+        model.attribs.add.setPosiCoords(posi_i, xyz);
+        posis_i.push(posi_i);
+    }
+    // create the pline
+    const pline_i: number = model.geom.add.addPline(posis_i, close);
+    // add attribs
+    _addAttribsToModel(model, EEntType.PLINE, pline_i, linestring);
+    // return the index
+    return pline_i;
+}
 
 /*
     "geometry": {
@@ -195,98 +174,139 @@ function _addAttribsToModel(model: GIModel, attrib_data: Map<string, EAttribData
     }
 */
 /**
- * Adds polygons to the model
- * @param polygons The features to add.
+ * Add a pgon to the model
  * @param model The model
+ * @param polygons The features to add.
  */
-function _addPolygonsToModel(model: GIModel, polygons: any[], attribs: Map<string, GIAttribMap>, elevation: number): void {
-    // create polygons
-    for (const polygon of polygons) {
-        console.log("ADDING POLYGON")
-        // add geometry, single polygon per feature
+function _addPgonToModel(model: GIModel, polygon: any, elevation: number): number {
+    // add feature
+    const rings: number[][] = [];
+    for (const ring of polygon.geometry.coordinates) {
         const xyzs: Txyz[] = polygon.geometry.coordinates[0].map((xy: number[]) => [xy[0], xy[1], elevation]);
+        // create the posis
         const posis_i: number[] = [];
         for (const xyz of xyzs) {
             const posi_i: number = model.geom.add.addPosi();
             model.attribs.add.setPosiCoords(posi_i, xyz);
             posis_i.push(posi_i);
         }
-        const pgon_i: number = model.geom.add.addPgon(posis_i);
-        // add attribs
-        // const props = polygon.properties;
-        // for (const name of Object.keys(props)) {
-        //     polymesh.setAttribValue(attribs.get(name), props[name]);
-        // }
+        rings.push(posis_i);
+    }
+    // create the pgon
+    const pgon_i: number = model.geom.add.addPgon(rings[0], rings.slice(1));
+    // add attribs
+    _addAttribsToModel(model, EEntType.PGON, pgon_i, polygon);
+    // return the index
+    return pgon_i;
+}
+
+
+/*
+    "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [
+            [10, 10],
+            [40, 40]
+        ]
+    }
+*/
+/**
+ * Adds multipoint to the model
+ * @param model The model
+ * @param multipoint The features to add.
+ */
+function _addPointCollToModel(model: GIModel, multipoint: any, elevation: number): [number[], number] {
+    // add features
+    const points_i: number[] = [];
+    for (const coordinates of multipoint.geometry.coordinates) {
+        const point_i: number = _addPointToModel(model, {'coordinates': coordinates}, elevation);
+        points_i.push(point_i);
+    }
+    // create the collection
+    const coll_i: number = model.geom.add.addColl(null, [], points_i, []);
+    // add attribs
+    _addAttribsToModel(model, EEntType.COLL, coll_i, multipoint);
+    // return the indices of the plines and the index of the collection
+    return [points_i, coll_i];
+}
+
+/*
+    "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+            [[10, 10], [20, 20], [10, 40]],
+            [[40, 40], [30, 30], [40, 20], [30, 10]]
+        ]
+    }
+*/
+/**
+ * Adds multilinestrings to the model
+ * @param multilinestrings The features to add.
+ * @param model The model
+ */
+function _addPlineCollToModel(model: GIModel, multilinestring: any, elevation: number): [number[], number] {
+    // add features
+    const plines_i: number[] = [];
+    for (const coordinates of multilinestring.geometry.coordinates) {
+        const pline_i: number = _addPlineToModel(model, {'coordinates': coordinates}, elevation);
+        plines_i.push(pline_i);
+    }
+    // create the collection
+    const coll_i: number = model.geom.add.addColl(null, [], plines_i, []);
+    // add attribs
+    _addAttribsToModel(model, EEntType.COLL, coll_i, multilinestring);
+    // return the indices of the plines and the index of the collection
+    return [plines_i, coll_i];
+}
+
+/*
+    "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+            [
+                [[40, 40], [20, 45], [45, 30], [40, 40]]
+            ],
+            [
+                [[20, 35], [10, 30], [10, 10], [30, 5], [45, 20], [20, 35]],
+                [[30, 20], [20, 15], [20, 25], [30, 20]]
+            ]
+        ]
+    }
+*/
+/**
+ * Adds multipolygons to the model
+ * @param model The model
+ * @param multipolygons The features to add.
+ */
+function _addPgonCollToModel(model: GIModel, multipolygon: any, elevation: number): [number[], number] {
+    // add features
+    const pgons_i: number[] = [];
+    for (const coordinates of multipolygon.geometry.coordinates) {
+        const pgon_i: number = _addPgonToModel(model, {'coordinates': coordinates}, elevation);
+        pgons_i.push(pgon_i);
+    }
+    // create the collection
+    const coll_i: number = model.geom.add.addColl(null, [], [], pgons_i);
+    // add attribs
+    _addAttribsToModel(model, EEntType.COLL, coll_i, multipolygon);
+    // return the indices of the plines and the index of the collection
+    return [pgons_i, coll_i];
+}
+
+/**
+ * Adds multilinestrings to the model
+ * @param multilinestrings The features to add.
+ * @param model The model
+ */
+function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, feature: any): void {
+    // add attribs
+    for (const name of Object.keys(feature.properties)) {
+        let value: any = feature.properties[name];
+        const value_type: string = typeof feature.properties[name];
+        if (value_type === 'object') {
+            value = JSON.stringify(value);
+        }
+        model.attribs.add.setAttribValue(ent_type, ent_i, name, value);
     }
 }
 
-// /*
-//     "geometry": {
-//         "type": "MultiLineString",
-//         "coordinates": [
-//             [[10, 10], [20, 20], [10, 40]],
-//             [[40, 40], [30, 30], [40, 20], [30, 10]]
-//         ]
-//     }
-// */
-// /**
-//  * Adds multilinestrings to the model
-//  * @param multilinestrings The features to add.
-//  * @param model The model
-//  */
-// function add_multilinestrings(multilinestrings: any[], attribs: Map<string, gs.IEntAttrib>,
-//         model: gs.IModel, elevation: number): void {
-//     const geom: gs.IGeom = model.getGeom();
-//     // create polygons
-//     for (const multilinestring of multilinestrings) {
-//         // add geometry, multiple polyline per feature
-//         for (const coordinates of multilinestring.geometry.coordinates) {
-//             const points: gs.IPoint[] =
-//                 geom.addPoints(coordinates.map((xy) => [xy[0], xy[1], elevation]));
-//             const polyline: gs.IPolymesh = geom.addPolyline(points, false);
-//             // add attribs
-//             const props = multilinestring.properties;
-//             for (const name of Object.keys(props)) {
-//                 polyline.setAttribValue(attribs.get(name), props[name]);
-//             }
-//         }
-//     }
-// }
-
-// /*
-//     "geometry": {
-//         "type": "MultiPolygon",
-//         "coordinates": [
-//             [
-//                 [[40, 40], [20, 45], [45, 30], [40, 40]]
-//             ],
-//             [
-//                 [[20, 35], [10, 30], [10, 10], [30, 5], [45, 20], [20, 35]],
-//                 [[30, 20], [20, 15], [20, 25], [30, 20]]
-//             ]
-//         ]
-//     }
-// */
-// /**
-//  * Adds multipolygons to the model
-//  * @param multipolygons The features to add.
-//  * @param model The model
-//  */
-// function add_multipolygons(multipolygons: any[], attribs: Map<string, gs.IEntAttrib>,
-//         model: gs.IModel, elevation: number): void {
-//     const geom: gs.IGeom = model.getGeom();
-//     // create multi polygons
-//     for (const multipolygon of multipolygons) {
-//         // add geometry, a single mesh per feature
-//         const points: gs.IPoint[][] = [];
-//         for (const coordinates of multipolygon.geometry.coordinates) {
-//             points.push(geom.addPoints(coordinates[0].map((xy) => [xy[0], xy[1], elevation])));
-//         }
-//         const polymesh: gs.IPolymesh = geom.addPolymesh(points);
-//         // add attribs
-//         const props = multipolygon.properties;
-//         for (const name of Object.keys(props)) {
-//             polymesh.setAttribValue(attribs.get(name), props[name]);
-//         }
-//     }
-// }

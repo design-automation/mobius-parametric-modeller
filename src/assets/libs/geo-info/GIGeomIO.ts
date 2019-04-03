@@ -70,7 +70,7 @@ export class GIGeomIO {
         // add wires to model
         for (const edges_i of geom_arrays.dn_wires_edges) {
             if (edges_i === null) {
-                this._geom_arrays.dn_wires_edges.push( null )
+                this._geom_arrays.dn_wires_edges.push( null );
             } else {
                 const new_wire: TWire = edges_i.map(e => e + num_edges) as TWire;
                 this._geom_arrays.dn_wires_edges.push( new_wire );

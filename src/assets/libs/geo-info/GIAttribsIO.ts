@@ -36,7 +36,7 @@ export class GIAttribsIO {
     }
     /**
      * Adds data to this model from JSON data.
-     * The existing data in the model is not deleted.
+     * The existing data in the model is deleted.
      * @param model_data The JSON data for the model.
      */
     public setData(attribs_data: IAttribsData): void {

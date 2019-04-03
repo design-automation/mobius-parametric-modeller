@@ -56,5 +56,7 @@ export class NewFileComponent {
             document.getElementById('executeButton').click();
         }
         zooming = null;
+        this.dataService.clearModifiedNode();
+        this.dataService.flagModifiedNode(file.flowchart.nodes[0].id);
     }
 }

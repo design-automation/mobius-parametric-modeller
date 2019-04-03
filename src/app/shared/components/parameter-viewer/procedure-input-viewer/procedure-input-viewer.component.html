@@ -1,9 +1,9 @@
 <div class='container'>
     <div class='container--parameter'>
-        <input class='input-const-name' [class.disabled-input]='true' [value]='displayConstName()' 
-        [style.width.px]='inputSize(prod.args[prod.argCount-2].value) + 10' disabled>
 
         <div class = "FFA">
+            <input class='input-const-name' [class.disabled-input]='true' [value]='displayConstName()' 
+            [style.width.px]='inputSize(prod.args[prod.argCount-2].value) + 10' disabled>
             <ng-container class='parameter__name' [ngSwitch]="prod.meta.inputMode">
                 <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' 
                 placeholder='{{prod.args[prod.argCount-1].value}}'
@@ -14,6 +14,7 @@
                     placeholder='{{prod.args[prod.argCount-1].value}}'
                     [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'
                     (blur)='checkSliderVal()'>
+                    <br>
                     <mat-slider
                         [(ngModel)]='prod.args[prod.argCount-1].value'
                         thumbLabel

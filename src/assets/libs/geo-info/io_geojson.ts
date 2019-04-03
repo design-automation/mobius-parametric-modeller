@@ -11,6 +11,7 @@ export function importGeojson(geojson_str: string): any {
     console.log('GEOJSON', geojson_data);
     processGeojson(model, geojson_data, 0);
     return model;
+
 }
 
 enum EGeojsoFeatureType {

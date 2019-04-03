@@ -371,8 +371,9 @@ export class CodeUtils {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
             request.open('GET', url);
+            request.overrideMimeType('text/plain; charset=x-user-defined');
             request.onload = () => {
-                resolve(request.responseText);
+                resolve(request.responseText.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
             };
             request.onerror = () => {
                 resolve('HTTP Request Error: unable to retrieve file from url ' + url);

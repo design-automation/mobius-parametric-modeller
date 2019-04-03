@@ -11,18 +11,17 @@
 .container--parameter{
     padding: 10px 0px 5px 0px;
 
-    display: flex;
+    display: block;
     flex-flow: row nowrap;
     padding-left: $small-padding;
 
     color: $color8;
-    vertical-align: bottom;
 
     //border-bottom: 1px solid $color5;
 
     overflow: hidden;
     width: 100%;
-    height: $fsize1 + 2px;
+    // height: $fsize1 + 2px;
 
     &.inputDisabled{
         opacity: 0.4;
@@ -37,6 +36,7 @@
     display: flex;
     flex-flow: row nowrap;
     flex-grow: 1;
+    width: 100%;
     mat-slider{
         width: 100%;
         height: $fsize3;

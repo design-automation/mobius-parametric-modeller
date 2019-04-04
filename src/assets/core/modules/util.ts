@@ -47,9 +47,7 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
             // geom_pack = __merge__(__model__, obj_model);
             break;
         case _EIODataFormat.GEOJSON:
-            const geojson_model: GIModel = importGeojson(model_data);
-            geom_pack = __model__.setData(geojson_model.getData());
-            // __merge__(__model__, geojson_model);
+            geom_pack = importGeojson(__model__, model_data, 0);
             break;
         default:
             throw new Error('Data type not recognised');

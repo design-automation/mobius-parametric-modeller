@@ -1,6 +1,6 @@
 import {
   Component, Injector, Input, OnChanges, SimpleChanges,
-  ViewChildren, QueryList, Output, EventEmitter, ViewChild
+  ViewChildren, QueryList, Output, EventEmitter, ViewChild, AfterViewInit
 } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
@@ -15,7 +15,7 @@ import { ATabsComponent } from './tabs.component';
   styleUrls: ['./attribute.component.scss'],
 })
 
-export class AttributeComponent implements OnChanges {
+export class AttributeComponent implements OnChanges, AfterViewInit {
   @ViewChild(ATabsComponent) child: ATabsComponent;
 
   @Input() data: GIModel;
@@ -84,6 +84,27 @@ export class AttributeComponent implements OnChanges {
     if (localStorage.getItem('mpm_attrib_current_tab') === null) {
       localStorage.setItem('mpm_attrib_current_tab', '0');
     }
+  }
+
+  ngAfterViewInit(): void {
+    // setInterval(() => {
+    //   const attrib = document.getElementById('attrib');
+    //   const paginators = document.getElementsByClassName('mat-paginator');
+    //   const l = paginators.length;
+    //   if (attrib.clientWidth < 600) {
+    //     let index = 0;
+    //     for (; index < l; index++) {
+    //       const p = paginators[index];
+    //       p.className = 'mat-paginator hide';
+    //     }
+    //   } else {
+    //     let index = 0;
+    //     for (; index < l; index++) {
+    //       const p = paginators[index];
+    //       p.className = 'mat-paginator';
+    //     }
+    //   }
+    // }, 500);
   }
 
   ngOnChanges(changes: SimpleChanges) {

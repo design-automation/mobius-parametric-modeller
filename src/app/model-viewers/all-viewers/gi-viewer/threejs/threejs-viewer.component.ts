@@ -411,8 +411,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     } else {
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
+                        const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
+                        if (select !== undefined) {
+                            localStorage.setItem('mpm_attrib_current_tab', select.tab);
+                            sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+                        }
                         this.refreshTable(event);
                     }
+                    this.getSelectingEntityType();
+                    this.refreshTable(event);
                     this.render(this);
                 } catch (ex) {
                     console.error('Error displaying model:', ex);
@@ -420,7 +427,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this._data_threejs._text = ex;
                 }
             }
-            this.getSelectingEntityType();
         // }
     }
 
@@ -576,7 +582,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     private getSelectingEntityType() {
-        this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_settings'))['select'].selector;
+        const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
+        if (select !== undefined) {
+            this.SelectingEntityType = select.selector;
+        } else {
+            this.SelectingEntityType = {'id': '_f', 'name': 'Faces'};
+        }
         // if (localStorage.getItem('mpm_selecting_entity_type') != null) {
         //     this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
         // }

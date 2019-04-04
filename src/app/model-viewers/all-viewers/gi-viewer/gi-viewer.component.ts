@@ -127,7 +127,7 @@ export class GIViewerComponent implements OnInit {
         this.modalService.close(id);
         if (save) {
             const selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
-            const tab = JSON.parse(localStorage.getItem('mpm_attrib_current_tab'));
+            const tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
             this.settings.select.selector = selector;
             this.settings.select.tab = tab;
             this.dataService.getThreejsScene().settings = this.settings;

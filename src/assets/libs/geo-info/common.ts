@@ -234,6 +234,7 @@ export interface IGeomData {
     polylines: TPline[];
     polygons: TPgon[];
     collections: TColl[];
+    selected: TEntTypeIdx[];
 }
 export interface IAttribData {
     name: string;

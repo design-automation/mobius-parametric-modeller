@@ -1,5 +1,5 @@
 <div id="gi-viewer-container">
-	<as-split direction="vertical" (dragEnd)='dragSplitEnd($event)'>
+	<as-split direction="vertical" (dragEnd)='dragSplitEnd($event)' [disabled]='checkPublish()'>
 		<as-split-area [size]="100 - getSplit()" id="three-js">
 			<threejs-viewer [model]='data'
 				(eventClicked)="childEventClicked($event)"

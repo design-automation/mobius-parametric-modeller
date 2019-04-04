@@ -87,24 +87,24 @@ export class AttributeComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // setInterval(() => {
-    //   const attrib = document.getElementById('attrib');
-    //   const paginators = document.getElementsByClassName('mat-paginator');
-    //   const l = paginators.length;
-    //   if (attrib.clientWidth < 600) {
-    //     let index = 0;
-    //     for (; index < l; index++) {
-    //       const p = paginators[index];
-    //       p.className = 'mat-paginator hide';
-    //     }
-    //   } else {
-    //     let index = 0;
-    //     for (; index < l; index++) {
-    //       const p = paginators[index];
-    //       p.className = 'mat-paginator';
-    //     }
-    //   }
-    // }, 500);
+    setInterval(() => {
+      const attrib = document.getElementById('attrib');
+      const paginators = document.getElementsByClassName('mat-paginator');
+      const l = paginators.length;
+      if (attrib.clientWidth < 600) {
+        let index = 0;
+        for (; index < l; index++) {
+          const p = paginators[index];
+          p.className = 'mat-paginator hide';
+        }
+      } else {
+        let index = 0;
+        for (; index < l; index++) {
+          const p = paginators[index];
+          p.className = 'mat-paginator';
+        }
+      }
+    }, 500);
   }
 
   ngOnChanges(changes: SimpleChanges) {

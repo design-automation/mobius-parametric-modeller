@@ -22,6 +22,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url.split(/\s*&*\s*node\s*=/)[0]);
         this.ctx.font = '12px sans-serif';
         this.dataService.splitVal = 100;
+        this.dataService.attribVal = -1;
         const url = window.location.href.replace(/:/g, '%3A').replace(/\//g, '%2F');
         this.expando_href = `http://expando.github.io/add/?u=${url}&t=M%C3%B6bius%20Modeller%20Publish`;
     }
@@ -29,6 +30,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         setTimeout(() => {
             this.adjustTextArea();
+            this.dataService.attribVal = 0;
         }, 50);
     }
 
@@ -90,5 +92,15 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
     getSplit() { return this.dataService.splitVal; }
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
+
+    toggleAttrib() {
+        this.dataService.attribUpdate = true;
+        if (this.dataService.attribVal > 33) {
+            this.dataService.attribVal = 0;
+            return;
+        }
+        this.dataService.attribVal = 34;
+    }
+    getAttribSplit() { return this.dataService.attribVal; }
 }
 

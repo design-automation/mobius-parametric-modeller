@@ -34,6 +34,9 @@ export class DataService {
     private static _splitVal = 60;
     private static _flowchartSplitUpdate = false;
 
+    private static _attribVal = 34;
+    private static _attribSplitUpdate = false;
+
     private static _copiedProd: IProcedure[];
     private static _copiedType: IProcedure[];
 
@@ -135,6 +138,12 @@ export class DataService {
 
     get splitUpdate() {return DataService._flowchartSplitUpdate; }
     set splitUpdate(check: boolean) {DataService._flowchartSplitUpdate = check; }
+
+    get attribVal() {return DataService._attribVal; }
+    set attribVal(num: number) {DataService._attribVal = num; }
+
+    get attribUpdate() {return DataService._attribSplitUpdate; }
+    set attribUpdate(check: boolean) {DataService._attribSplitUpdate = check; }
 
     get consoleScroll() {return DataService._consoleScroll; }
     set consoleScroll(num: number) {DataService._consoleScroll = num; }

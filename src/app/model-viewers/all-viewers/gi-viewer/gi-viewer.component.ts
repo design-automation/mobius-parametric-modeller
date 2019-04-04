@@ -5,6 +5,7 @@ import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings'
 import { Component, Input, OnInit } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
+import { DataService as MD} from '@services';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { EEntType } from '@assets/libs/geo-info/common';
@@ -34,8 +35,6 @@ export class GIViewerComponent implements OnInit {
 
     columns_control;
 
-    splitVal = 34;
-
     public clickedEvent: Event;
     public attrTableSelect: Event;
     public attrTableReset: number;
@@ -47,7 +46,10 @@ export class GIViewerComponent implements OnInit {
      * constructor
      * @param dataService
      */
-    constructor(private dataService: DataService, private modalService: ModalService, private cpService: ColorPickerService) {
+    constructor(private dataService: DataService,
+        private modalService: ModalService,
+        private cpService: ColorPickerService,
+        private MD: MD ) {
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         if (previous_settings === null ||
             this.hasDiffProps(previous_settings, this.settings) ||
@@ -292,10 +294,15 @@ export class GIViewerComponent implements OnInit {
         });
     }
     dragSplitEnd(e) {
-        this.splitVal = e.sizes[1];
+        this.MD.attribVal = e.sizes[1];
     }
     getSplit() {
-        return this.splitVal;
+        return this.MD.attribVal;
+    }
+
+    checkPublish() {
+        const d = document.getElementById('published');
+        return d !== null;
     }
 }
 

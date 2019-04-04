@@ -14,16 +14,47 @@
 
     .sliderBtn{
         position: absolute;
-        top: 100px;
-        height: 40px;
+        top: 80px;
+        height: 34px;
         background-color: $color6;
         z-index: 2;
         color: $color1;
-        border: 2px solid $color4;
-        border-left: none;
-        margin: none;
-        padding: 0px !important;
+        border: unset;
+        margin: 0px;
+        padding: 5px 0;
         outline:none;
+        width: 20px;
+        left: -5px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px #808080;
+    }
+
+    .attribBtn{
+        position: absolute;
+        bottom: 250px;
+        right: 20px;
+        height: 18px;
+        width: 36px;
+        background-color: $color6;
+        z-index: 2;
+        color: $color1;
+        margin: 0px;
+        padding: 0 4px;
+        outline:none;
+        cursor: pointer;
+        border-radius: 4px;
+        border-radius: 4px;
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: unset;
+        border: 1px solid #cccccc;
+        border-bottom: 0px;
+        .mat-icon{
+            margin-top: -3px;
+        }
+        &.closed{
+            bottom: 0px;
+        }
     }
     .shareLink{
         position: absolute;

@@ -37,11 +37,43 @@ as-split-area{
     flex-grow: 1 !important;
 }
 
+
+
 as-split-gutter{
     background-image: none !important;
     background-color:$color6 !important;
-    flex-basis: 11px !important;
-    border-right: 2px solid $color4;
+    border-right: 1px solid $color4;
+}
+
+#gi-viewer-container{
+    as-split-gutter{
+        border-top: 1px solid $color4 !important;
+    }
+}
+
+#published {
+    as-split-area:first-of-type{
+        border-right: 1px solid $color4;  
+    }
+    as-split-gutter{
+        flex-basis: unset !important;
+        height: 5px !important;
+        border: unset;
+    }
+    #three-js{
+        flex-grow: unset;
+    }
+    #published_right{
+        &.flowchartclosed{
+            flex: 0 0 calc(100% - 0px) !important;
+        }
+        &.attribclosed{
+            
+            #three-js{
+                flex: 0 0 calc(100% - 0px) !important;
+            }
+        }
+    }
 }
 
 // for teh 4 views
@@ -82,7 +114,7 @@ as-split-gutter{
     .content__viewer{
         background-color: transparent;
         height: 100%; 
-        overflow: auto;
+        overflow: hidden;
     }
 }
 

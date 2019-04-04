@@ -24,6 +24,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         this.ctx.font = '12px sans-serif';
         this.dataService.splitVal = 100;
         this.dataService.attribVal = -1;
+        this.attribTogglePos();
         const url = window.location.href.replace(/:/g, '%3A').replace(/\//g, '%2F');
         this.expando_href = `http://expando.github.io/add/?u=${url}&t=M%C3%B6bius%20Modeller%20Publish`;
     }
@@ -102,10 +103,24 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         this.dataService.attribUpdate = true;
         if (this.dataService.attribVal > 33) {
             this.dataService.attribVal = 0;
+            setTimeout(() => {
+                const btn = document.getElementById('attribToggle');
+                btn.style.bottom = 0 + 'px';
+            }, 0);
             return;
         }
         this.dataService.attribVal = 34;
+        setTimeout(() => {
+            this.attribTogglePos();
+        }, 0);
     }
     getAttribSplit() { return this.dataService.attribVal; }
+    attribTogglePos() {
+        const attrib = document.getElementById('attrib');
+        if (attrib) {
+            const btn = document.getElementById('attribToggle');
+            btn.style.bottom = attrib.clientHeight + 5 + 'px';
+        }
+    }
 }
 

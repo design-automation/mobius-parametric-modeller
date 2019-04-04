@@ -26,13 +26,12 @@
         width: 20px;
         left: -5px;
         cursor: pointer;
-        border-radius: 4px;
         box-shadow: 1px 1px 2px #808080;
     }
 
     .attribBtn{
         position: absolute;
-        bottom: 250px;
+        // bottom: 250px;
         right: 20px;
         height: 18px;
         width: 36px;
@@ -43,10 +42,6 @@
         padding: 0 4px;
         outline:none;
         cursor: pointer;
-        border-radius: 4px;
-        border-radius: 4px;
-        border-bottom-left-radius: unset;
-        border-bottom-right-radius: unset;
         border: 1px solid #cccccc;
         border-bottom: 0px;
         .mat-icon{

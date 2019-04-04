@@ -1,6 +1,5 @@
-<div class='container'>
+<div class='container' (window:resize)='attribTogglePos()'>
     <as-split direction="horizontal" (dragEnd)='setSplit($event)' disabled='true' id="published">
-        
         <as-split-area [size]="100 - getSplit()">
             <publish-header [title]='getFlowchart().name'></publish-header>
             <!-- viewchild content -->
@@ -29,7 +28,7 @@
                         <mat-icon>chevron_left</mat-icon>
                     </ng-template>
                 </button>
-                <button class="attribBtn" mat-icon-button (click)='toggleAttrib()' [class.closed] = 'getAttribSplit() === 0'>
+                <button id='attribToggle' class="attribBtn" mat-icon-button (click)='toggleAttrib()' [class.closed] = 'getAttribSplit() === 0'>
                     <mat-icon *ngIf='getAttribSplit() === 0; else hide_attrib'>expand_less</mat-icon>
                     <ng-template #hide_attrib>
                         <mat-icon>expand_more</mat-icon>

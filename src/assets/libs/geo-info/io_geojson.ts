@@ -1,20 +1,8 @@
 import { GIModel } from './GIModel';
-import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes } from './common';
+import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack } from './common';
 import { getArrDepth } from './id';
 import proj4 from 'proj4';
 
-
- /**
- * Import geojson
- */
-export function importGeojson(geojson_str: string): any {
-    const model: GIModel = new GIModel();
-    const geojson_data: any = JSON.parse(geojson_str);
-    console.log('GEOJSON', geojson_data);
-    processGeojson(model, geojson_data, 0);
-    return model;
-
-}
 
 enum EGeojsoFeatureType {
     POINT = 'Point',
@@ -25,19 +13,18 @@ enum EGeojsoFeatureType {
     MULTIPOLYGON = 'MultiPolygon'
 }
 
-/**
- * Converts geojson to a gs model.
- * @param obj_data The geojson data..
- * @returns Model
+ /**
+ * Import geojson
  */
-export function processGeojson(model: GIModel, obj_data: any, elevation: number): void {
-    console.log('Number of features = ', obj_data.features.length);
+export function importGeojson(model: GIModel, geojson_str: string, elevation: number): IGeomPack {
+    // parse the json data str
+    const geojson_obj: any = JSON.parse(geojson_str);
     // create the function for transformation
     const proj_str_a = '+proj=tmerc +lat_0=';
     const proj_str_b = ' +lon_0=';
     const proj_str_c = '+k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs';
-    let longitude = 103.77575;
-    let latitude = 1.30298;
+    let longitude = LONGLAT[0];
+    let latitude = LONGLAT[1];
     if (model.attribs.query.hasModelAttrib('longitude')) {
         const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
         if (typeof long_value !== 'number') {
@@ -58,8 +45,34 @@ export function processGeojson(model: GIModel, obj_data: any, elevation: number)
             throw new Error('Latitude attribute must be between 0 and 90.');
         }
     }
-    const proj_str = proj_str_a + latitude + proj_str_b + longitude + proj_str_c;
-    const proj_obj: proj4.Converter = proj4(proj_str);
+    // try to figure out what the projection is of the source file
+    let proj_from_str = 'WGS84';
+    if (geojson_obj.hasOwnProperty('crs')) {
+        if (geojson_obj.crs.hasOwnProperty('properties')) {
+            if (geojson_obj.crs.properties.hasOwnProperty('name')) {
+                const name: string = geojson_obj.crs.properties.name;
+                const epsg_index = name.indexOf('EPSG');
+                if (epsg_index !== -1) {
+                    let epsg = name.slice(epsg_index);
+                    epsg = epsg.replace(/\s/g, '+');
+                    if (epsg === 'EPSG:4326') {
+                        // do nothing, 'WGS84' is fine
+                    } else if (['EPSG:4269', 'EPSG:3857', 'EPSG:3785', 'EPSG:900913', 'EPSG:102113'].indexOf(epsg) !== -1) {
+                        // these are the epsg codes that proj4 knows
+                        proj_from_str = epsg;
+                    } else if (epsg === 'EPSG:3414') {
+                        // singapore
+                        proj_from_str =
+                            '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 ' +
+                            '+ellps=WGS84 +units=m +no_defs';
+                    }
+                }
+            }
+        }
+    }
+    console.log('CRS of geojson data', proj_from_str);
+    const proj_to_str = proj_str_a + latitude + proj_str_b + longitude + proj_str_c;
+    const proj_obj: proj4.Converter = proj4(proj_from_str, proj_to_str);
     // arrays for features
     const point_f: any[] = [];
     const linestring_f: any[] = [];
@@ -74,7 +87,7 @@ export function processGeojson(model: GIModel, obj_data: any, elevation: number)
     const pgons_i: number[] = [];
     const colls_i: number[] = [];
     // loop
-    for (const feature of obj_data.features) {
+    for (const feature of geojson_obj.features) {
         // get the features
         switch (feature.geometry.type) {
             case EGeojsoFeatureType.POINT:
@@ -122,14 +135,22 @@ export function processGeojson(model: GIModel, obj_data: any, elevation: number)
         }
     }
     // log message
-    console.log(
-        'Point: '           + point_f.length + '\n' +
-        'LineString: '      + linestring_f.length + '\n' +
-        'Polygon: '         + polygon_f.length + '\n' +
-        'MultiPoint: '      + multipoint_f.length + '\n' +
-        'MultiLineString: ' + multilinestring_f.length + '\n' +
-        'MultiPolygon: '    + multipolygon_f.length + '\n' +
-        'Other: '           + other_f + '\n\n');
+    // console.log(
+    //     'Point: '           + point_f.length + '\n' +
+    //     'LineString: '      + linestring_f.length + '\n' +
+    //     'Polygon: '         + polygon_f.length + '\n' +
+    //     'MultiPoint: '      + multipoint_f.length + '\n' +
+    //     'MultiLineString: ' + multilinestring_f.length + '\n' +
+    //     'MultiPolygon: '    + multipolygon_f.length + '\n' +
+    //     'Other: '           + other_f + '\n\n');
+    // return a geom pack with all the new entities that have been added
+    return {
+        posis_i: [],
+        points_i: points_i,
+        plines_i: plines_i,
+        pgons_i: pgons_i,
+        colls_i: colls_i
+    };
 }
 
 
@@ -248,7 +269,7 @@ function _addPointCollToModel(model: GIModel, multipoint: any, proj_obj: proj4.C
     // add features
     const points_i: number[] = [];
     for (const coordinates of multipoint.geometry.coordinates) {
-        const point_i: number = _addPointToModel(model, {'coordinates': coordinates}, proj_obj, elevation);
+        const point_i: number = _addPointToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, elevation);
         points_i.push(point_i);
     }
     // create the collection
@@ -277,7 +298,7 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any, proj_obj: pr
     // add features
     const plines_i: number[] = [];
     for (const coordinates of multilinestring.geometry.coordinates) {
-        const pline_i: number = _addPlineToModel(model, {'coordinates': coordinates}, proj_obj, elevation);
+        const pline_i: number = _addPlineToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, elevation);
         plines_i.push(pline_i);
     }
     // create the collection
@@ -311,7 +332,7 @@ function _addPgonCollToModel(model: GIModel, multipolygon: any, proj_obj: proj4.
     // add features
     const pgons_i: number[] = [];
     for (const coordinates of multipolygon.geometry.coordinates) {
-        const pgon_i: number = _addPgonToModel(model, {'coordinates': coordinates}, proj_obj, elevation);
+        const pgon_i: number = _addPgonToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, elevation);
         pgons_i.push(pgon_i);
     }
     // create the collection
@@ -328,6 +349,7 @@ function _addPgonCollToModel(model: GIModel, multipolygon: any, proj_obj: proj4.
  */
 function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, feature: any): void {
     // add attribs
+    if (! feature.hasOwnProperty('properties')) { return; }
     for (const name of Object.keys(feature.properties)) {
         let value: any = feature.properties[name];
         const value_type: string = typeof feature.properties[name];
@@ -358,4 +380,3 @@ function _xformLongLat(long_lat_arr: [number, number]|[number, number][], proj_o
         return xyzs_xformed as Txyz[];
     }
 }
-

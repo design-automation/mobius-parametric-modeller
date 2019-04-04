@@ -11,7 +11,7 @@ import * as circularJSON from 'circular-json';
 import { Router } from '@angular/router';
 
 import * as galleryUrls from '@assets/gallery/__config__.json';
-import { getViewerData } from '@shared/getViewerData';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 
 @Component({
   selector: 'view-gallery',
@@ -20,7 +20,6 @@ import { getViewerData } from '@shared/getViewerData';
 })
 export class ViewGalleryComponent {
 
-    viewerData = getViewerData;
     // private allFiles: Observable<any>;
     allGalleries = [];
     @Output() switch = new EventEmitter();
@@ -32,7 +31,8 @@ export class ViewGalleryComponent {
 
     */
 
-    constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
+    constructor(private http: HttpClient, private dataService: DataService,
+                private dataOutputService: DataOutputService, private router: Router) {
         this.allGalleries = galleryUrls.data.map(gallery => gallery.name);
         if (!this.dataService.activeGallery || !this.switchGallery(this.dataService.activeGallery.name)) {
             this.dataService.activeGallery = galleryUrls.data[0];
@@ -44,6 +44,10 @@ export class ViewGalleryComponent {
         */
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
    }
+
+   viewerData() {
+    return this.dataOutputService.getViewerData(this.getNode(), true);
+}
 
     getFilesFromURL(): Observable<any> {
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});

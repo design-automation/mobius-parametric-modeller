@@ -13,8 +13,8 @@ import { canvasSize, FlowchartUtils } from '@models/flowchart';
 import { Router } from '@angular/router';
 import { SplitComponent } from 'angular-split';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
-import { getViewerData } from '@shared/getViewerData';
 import { IProcedure } from '@models/procedure';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 
 declare const InstallTrigger: any;
 
@@ -26,11 +26,12 @@ declare const InstallTrigger: any;
 })
 export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    viewerData = getViewerData;
     @Output() switch = new EventEmitter();
     @ViewChild('flowchartSplit') flowchartSplit: SplitComponent;
 
-    constructor(private dataService: DataService, private router: Router) {
+    constructor(private dataService: DataService,
+                private dataOutputService: DataOutputService,
+                private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
     }
 
@@ -277,6 +278,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         this.element = null;
     }
 
+    viewerData() {
+        return this.dataOutputService.getViewerData(this.getNode(), true);
+    }
 
     convertCoord(pt) {
         const isFirefox = typeof InstallTrigger !== 'undefined';

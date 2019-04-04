@@ -11,7 +11,7 @@ import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { Router } from '@angular/router';
-import { resetIModel } from '@shared/getViewerData';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -53,7 +53,10 @@ export class ExecuteComponent {
 
     private startTime;
     private isDev = true;
-    constructor(private dataService: DataService, private router: Router, private googleAnalyticsService: GoogleAnalyticsService) {
+    constructor(private dataService: DataService,
+                private dataOutputService: DataOutputService,
+                private router: Router,
+                private googleAnalyticsService: GoogleAnalyticsService) {
         this.isDev = isDevMode();
     }
 
@@ -239,7 +242,7 @@ export class ExecuteComponent {
             }
         }
 
-        resetIModel();
+        this.dataOutputService.resetIModel();
 
         document.getElementById('spinner-off').click();
         const category = this.isDev ? 'dev' : 'execute';

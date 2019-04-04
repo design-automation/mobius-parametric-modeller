@@ -6,9 +6,9 @@ import { DataService } from '@services';
 import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
-import { getViewerData } from '@shared/getViewerData';
 import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 
 @Component({
   selector: 'view-editor',
@@ -20,7 +20,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     @Input() flowchart: IFlowchart;
     @Input() node: INode;
     */
-    viewerData = getViewerData;
 
     // @Output() imported = new EventEmitter();
     // @Output() delete_Function = new EventEmitter();
@@ -32,7 +31,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     private copyCheck = true;
     private ctx = document.createElement('canvas').getContext('2d');
 
-    constructor(private dataService: DataService, private router: Router) {
+    constructor(private dataService: DataService,
+                private dataOutputService: DataOutputService,
+                private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
         this.ctx.font = 'bold 12px arial';
     }
@@ -46,6 +47,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.ctx = null;
+    }
+
+    viewerData() {
+        return this.dataOutputService.getViewerData(this.getNode(), this.getViewOutput());
     }
 
     performAction_param_editor(event: any) {

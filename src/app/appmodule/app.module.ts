@@ -20,6 +20,7 @@ import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
 import { AppRoutingModule } from './app-routing.module';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { DataCesiumService } from '../model-viewers/all-viewers/gi-cesium-viewer/data/data.cesium.service';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 // import { WebWorkerService } from 'ngx-web-worker';
 
 
@@ -53,7 +54,9 @@ import { DataCesiumService } from '../model-viewers/all-viewers/gi-cesium-viewer
         ViewGalleryComponent,
         ViewAboutComponent,
     ],
-    providers: [ DataService, GiViewerDataService, DataCesiumService, GoogleAnalyticsService],
+    providers: [ DataService, DataOutputService,
+                 GiViewerDataService, DataCesiumService,
+                 GoogleAnalyticsService],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

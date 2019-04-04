@@ -4,7 +4,7 @@ import { INode } from '@models/node';
 import { DataService } from '@services';
 import { Router } from '@angular/router';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
-import { getViewerData } from '@shared/getViewerData';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 
 @Component({
   selector: 'view-dashboard',
@@ -13,10 +13,11 @@ import { getViewerData } from '@shared/getViewerData';
 })
 export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
 
-    viewerData = getViewerData;
     private ctx = document.createElement('canvas').getContext('2d');
 
-    constructor(private dataService: DataService, private router: Router) {
+    constructor(private dataService: DataService,
+                private dataOutputService: DataOutputService,
+                private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
         this.ctx.font = '12px sans-serif';
     }
@@ -31,6 +32,9 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
         this.ctx = null;
     }
 
+    viewerData() {
+        return this.dataOutputService.getViewerData(this.getNode(), true);
+    }
 
     adjustTextArea() {
         let textarea = document.getElementById('display-flowchart-desc');

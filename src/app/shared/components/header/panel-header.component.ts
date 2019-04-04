@@ -425,7 +425,7 @@ export class PanelHeaderComponent implements OnDestroy {
         url = url.replace(/\//g, '%2F');
 
         let txtArea = document.getElementById('generatedLink');
-        txtArea.innerHTML = `<iframe style='width: 100%; height: 700px;' src="` +
+        txtArea.innerHTML = `<iframe width='100%' height='600px' style='border: 1px solid black;' src="` +
                             `${window.location.origin}/${this.urlSet[1]}` +
                             `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}"` +
                             `></iframe>`;

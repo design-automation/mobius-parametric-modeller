@@ -70,7 +70,7 @@ export class DataThreejs {
         // this.basic_scene.background = new THREE.Color(0xE6E6E6);
 
         // renderer
-        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, logarithmicDepthBuffer: true });
         this._renderer.autoClear = false;
         // this._renderer.setClearColor(0xcccccc, 0);
         this._renderer.setPixelRatio(window.devicePixelRatio);

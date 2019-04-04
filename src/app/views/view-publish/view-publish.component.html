@@ -24,9 +24,9 @@
                     </button>
                 </a>
                 <button class="sliderBtn" mat-icon-button (click)='toggleSlider()'>
-                    <mat-icon *ngIf='getSplit() === 100; else other_icon'>last_page</mat-icon>
+                    <mat-icon *ngIf='getSplit() === 100; else other_icon'>chevron_right</mat-icon>
                     <ng-template #other_icon>
-                        <mat-icon>first_page</mat-icon>
+                        <mat-icon>chevron_left</mat-icon>
                     </ng-template>
                 </button>
                 <model-viewers-container [data]='viewerData(getNode(), true)'></model-viewers-container>

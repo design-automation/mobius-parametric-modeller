@@ -48,6 +48,10 @@ export const DefaultSettings = {
         color: '#FFFFFF',
         shininess: 0
     },
+    select: {
+        selector: {'id': '_f', 'name': 'Faces'},
+        tab: 0
+    },
     version: VERSION.version
 };
 

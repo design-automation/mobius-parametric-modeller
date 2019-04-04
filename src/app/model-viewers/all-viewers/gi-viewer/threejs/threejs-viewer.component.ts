@@ -140,11 +140,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             });
         }
 
-        if (localStorage.getItem('mpm_selecting_entity_type') === null) {
-            localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(this.SelectingEntityType));
-        } else {
-            this.getSelectingEntityType();
-        }
+        this.getSelectingEntityType();
     }
     /**
      * @param self
@@ -424,6 +420,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this._data_threejs._text = ex;
                 }
             }
+            this.getSelectingEntityType();
         // }
     }
 
@@ -579,9 +576,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     private getSelectingEntityType() {
-        if (localStorage.getItem('mpm_selecting_entity_type') != null) {
-            this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
-        }
+        this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_settings'))['select'].selector;
+        // if (localStorage.getItem('mpm_selecting_entity_type') != null) {
+        //     this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
+        // }
     }
 
     private selectObj(intersect0: THREE.Intersection) {

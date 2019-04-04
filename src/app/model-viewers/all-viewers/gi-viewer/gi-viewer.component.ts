@@ -8,7 +8,6 @@ import { DataService } from './data/data.service';
 import { DataService as MD} from '@services';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
-import { EEntType } from '@assets/libs/geo-info/common';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
@@ -49,12 +48,14 @@ export class GIViewerComponent implements OnInit {
     constructor(private dataService: DataService,
         private modalService: ModalService,
         private cpService: ColorPickerService,
-        private MD: MD ) {
+        private mainDataService: MD) {
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        const devMode = isDevMode();
+        // const devMode = false;
         if (previous_settings === null ||
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
-            isDevMode()) {
+            devMode) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
         // if (localStorage.getItem('mpm_attrib_columns') !== null) {
@@ -125,6 +126,10 @@ export class GIViewerComponent implements OnInit {
     closeModal(id: string, save = false) {
         this.modalService.close(id);
         if (save) {
+            const selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
+            const tab = JSON.parse(localStorage.getItem('mpm_attrib_current_tab'));
+            this.settings.select.selector = selector;
+            this.settings.select.tab = tab;
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
@@ -294,10 +299,10 @@ export class GIViewerComponent implements OnInit {
         });
     }
     dragSplitEnd(e) {
-        this.MD.attribVal = e.sizes[1];
+        this.mainDataService.attribVal = e.sizes[1];
     }
     getSplit() {
-        return this.MD.attribVal;
+        return this.mainDataService.attribVal;
     }
 
     checkPublish() {
@@ -354,6 +359,10 @@ interface Settings {
         height: number,
         color: string,
         shininess: number
+    };
+    select: {
+        selector: object,
+        tab: number
     };
     version: string;
 }

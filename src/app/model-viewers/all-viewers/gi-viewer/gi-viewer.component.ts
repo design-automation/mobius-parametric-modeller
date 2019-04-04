@@ -34,6 +34,8 @@ export class GIViewerComponent implements OnInit {
 
     columns_control;
 
+    splitVal = 34;
+
     public clickedEvent: Event;
     public attrTableSelect: Event;
     public attrTableReset: number;
@@ -288,6 +290,12 @@ export class GIViewerComponent implements OnInit {
                 // obj.material.wireframe = this.settings.wireframe.show;
             }
         });
+    }
+    dragSplitEnd(e) {
+        this.splitVal = e.sizes[1];
+    }
+    getSplit() {
+        return this.splitVal;
     }
 }
 

@@ -14,7 +14,7 @@
 
     .sliderBtn{
         position: absolute;
-        top: 34px;
+        top: 100px;
         background-color: transparent;
         z-index: 2;
         color: $color1;
@@ -25,8 +25,8 @@
     }
     .shareLink{
         position: absolute;
-        top: 3px;
-        left: 100px;
+        top: 34px;
+        left: 0px;
         z-index: 2;
 
         .shareBtn{

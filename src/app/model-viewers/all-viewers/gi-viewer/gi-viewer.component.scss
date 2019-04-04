@@ -87,7 +87,6 @@ modal-window {
             list-style: none;
             padding: 8px 0;
             margin-left: 20px;
-            margin-right: 20px;
             background-color: inherit;
             // height: $fsize1;
             min-height: 12px;
@@ -179,7 +178,7 @@ body.modal-open {
 
     .onoffswitch {
         position: relative; 
-        width: 24px;
+        width: 17px;
         height: 6px;
         top: 4px;
         box-sizing: border-box;
@@ -260,7 +259,7 @@ body.modal-open {
     .slider {
         -webkit-appearance: none;  /* Override default CSS styles */
         appearance: none;
-        width: calc(100% - 230px);
+        width: 210px;
         max-width: 500px;
         height: $fsize1; /* Specified height */
         background: $color5-5; /* Grey background */
@@ -316,7 +315,7 @@ body.modal-open {
         border: none;
         line-height: 20px;
         background: transparent;
-        width: 60px;
+        width: 55px;
         margin-left: 10px !important;
         height: 14px;
     }

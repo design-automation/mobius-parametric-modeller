@@ -28,8 +28,11 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
         let leftContent = document.getElementsByClassName('content__panel')[0];
         this.containerWidth = leftContent.clientWidth;
         let modalWindow = this.element.querySelector('.modal-window');
-        modalWindow.style.width = `${this.containerWidth + 11}px`;
-        modalWindow.style.left = `${-this.containerWidth - 11}px`;
+        // modalWindow.style.width = `${this.containerWidth + 11}px`;
+        // modalWindow.style.left = `${-this.containerWidth - 11}px`;
+
+        modalWindow.style.width  = '500px';
+        modalWindow.style.left = '-500px';
 
         // move element to bottom of page (just before </body>) so it can be displayed above everything else
         document.body.appendChild(this.element);

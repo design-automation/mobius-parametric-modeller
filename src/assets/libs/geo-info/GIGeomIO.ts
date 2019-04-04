@@ -325,6 +325,8 @@ export class GIGeomIO {
         this._geom_arrays.dn_pgons_faces = geom_data.polygons;
         // add collections to model
         this._geom_arrays.dn_colls_objs = geom_data.collections;
+        // set selected
+        this._geom.selected = geom_data.selected;
 
         // update the up arrays
         // many of the values will be undefined
@@ -468,7 +470,8 @@ export class GIGeomIO {
             points: this._geom_arrays.dn_points_verts,
             polylines: this._geom_arrays.dn_plines_wires,
             polygons: this._geom_arrays.dn_pgons_faces,
-            collections: this._geom_arrays.dn_colls_objs
+            collections: this._geom_arrays.dn_colls_objs,
+            selected: this._geom.selected
         };
     }
 

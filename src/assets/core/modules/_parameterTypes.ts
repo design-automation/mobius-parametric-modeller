@@ -114,6 +114,7 @@ vecAng2 = __modules__._vec.vecAng2;
 vecDot = __modules__._vec.vecDot;
 vecCross = __modules__._vec.vecCross;
 vecEqual = __modules__._vec.vecEqual;
+colFalse = __modules__._colours.colFalse;
 radToDeg = __modules__._conversion.radToDeg;
 degToRad = __modules__._conversion.degToRad;
 rand = __modules__._rand.rand;

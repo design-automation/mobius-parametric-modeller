@@ -12,7 +12,7 @@ import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
-import * as hash from 'object-hash';
+
 /**
  * A threejs viewer for viewing geo-info (GI) models.
  * This component gets used in /app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html

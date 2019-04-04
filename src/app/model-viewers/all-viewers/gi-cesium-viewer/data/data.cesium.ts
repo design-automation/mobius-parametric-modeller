@@ -1,7 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
-import { EEntType, Txyz, TAttribDataTypes } from '@assets/libs/geo-info/common';
-import { vecSum } from '@assets/libs/geom/vectors';
+import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@assets/libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
 /**
  * Cesium data
@@ -119,8 +118,8 @@ export class DataCesium {
     public addGeometry(model: GIModel, container: any): void { // TODO delete container
         this._viewer.scene.primitives.removeAll();
         // the origin of the model
-        let longitude = 103.77575;
-        let latitude = 1.30298;
+        let longitude = LONGLAT[0];
+        let latitude = LONGLAT[1];
         if (model.attribs.query.hasModelAttrib('longitude')) {
             const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
             if (typeof long_value !== 'number') {

@@ -70,7 +70,7 @@ export class GIGeomIO {
         // add wires to model
         for (const edges_i of geom_arrays.dn_wires_edges) {
             if (edges_i === null) {
-                this._geom_arrays.dn_wires_edges.push( null )
+                this._geom_arrays.dn_wires_edges.push( null );
             } else {
                 const new_wire: TWire = edges_i.map(e => e + num_edges) as TWire;
                 this._geom_arrays.dn_wires_edges.push( new_wire );
@@ -325,6 +325,8 @@ export class GIGeomIO {
         this._geom_arrays.dn_pgons_faces = geom_data.polygons;
         // add collections to model
         this._geom_arrays.dn_colls_objs = geom_data.collections;
+        // set selected
+        this._geom.selected = geom_data.selected;
 
         // update the up arrays
         // many of the values will be undefined
@@ -468,7 +470,8 @@ export class GIGeomIO {
             points: this._geom_arrays.dn_points_verts,
             polylines: this._geom_arrays.dn_plines_wires,
             polygons: this._geom_arrays.dn_pgons_faces,
-            collections: this._geom_arrays.dn_colls_objs
+            collections: this._geom_arrays.dn_colls_objs,
+            selected: this._geom.selected
         };
     }
 

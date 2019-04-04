@@ -81,7 +81,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
 export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Point', 'positions', positions,
-        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], 
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
@@ -117,7 +117,7 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
             if (ent_type === EEntType.POSI) {
                 ents_arr2.push(ent_arr as TEntTypeIdx);
             } else {
-                const posis_i: number[] =__model__.geom.query.navAnyToPosi(ent_type, index);
+                const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
                 for (const posi_i of posis_i) {
                     ents_arr2.push([EEntType.POSI, posi_i]);
                 }
@@ -209,7 +209,7 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
             if (ent_type === EEntType.POSI) {
                 ents_arr2.push(ent_arr as TEntTypeIdx);
             } else {
-                const posis_i: number[] =__model__.geom.query.navAnyToPosi(ent_type, index);
+                const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
                 for (const posi_i of posis_i) {
                     ents_arr2.push([EEntType.POSI, posi_i]);
                 }

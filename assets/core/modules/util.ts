@@ -8,8 +8,8 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { exportObj } from '@libs/geo-info/export';
-import { importObj } from '@libs/geo-info/import';
+import { importObj, exportObj } from '@libs/geo-info/io_obj';
+import { importGeojson } from '@assets/libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
@@ -20,7 +20,8 @@ import { idsMake } from '@libs/geo-info/id';
 // Import / Export data types
 export enum _EIODataFormat {
     GI = 'gi',
-    OBJ = 'obj'
+    OBJ = 'obj',
+    GEOJSON = 'geojson'
 }
 /**
  * Imports data into the model.
@@ -45,9 +46,15 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
             // const obj_model: GIModel = importObj(model_data);
             // geom_pack = __merge__(__model__, obj_model);
             break;
+        case _EIODataFormat.GEOJSON:
+            geom_pack = importGeojson(__model__, model_data, 0);
+            break;
         default:
             throw new Error('Data type not recognised');
             break;
+    }
+    if (geom_pack === undefined) {
+        return [];
     }
     const posis_id: TId[] =  geom_pack.posis_i.map(  posi_i =>  idsMake([EEntType.POSI,  posi_i])) as TId[];
     const points_id: TId[] = geom_pack.points_i.map( point_i => idsMake([EEntType.POINT, point_i])) as TId[];
@@ -78,6 +85,10 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
             const obj_data: string = exportObj(__model__);
             return download(obj_data, filename);
             break;
+        // case _EIODataFormat.GEOJSON:
+        //     const geojson_data: string = exportObj(__model__);
+        //     return download(obj_data, filename);
+        //     break;
         default:
             throw new Error('Data type not recognised');
             break;

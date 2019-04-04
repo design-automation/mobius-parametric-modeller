@@ -1,5 +1,8 @@
 import { GIAttribMap } from './GIAttribMap';
 
+//longitude latitude in Singapore, NUS
+export const LONGLAT = [103.778329, 1.298759];
+
 // some constants
 export const XYPLANE: TPlane = [[0, 0, 0], [1, 0, 0], [0, 1, 0]];
 export const YZPLANE: TPlane = [[0, 0, 0], [0, 1, 0], [0, 0, 1]];
@@ -231,6 +234,7 @@ export interface IGeomData {
     polylines: TPline[];
     polygons: TPgon[];
     collections: TColl[];
+    selected: TEntTypeIdx[];
 }
 export interface IAttribData {
     name: string;

@@ -15,12 +15,14 @@
     .sliderBtn{
         position: absolute;
         top: 100px;
-        background-color: transparent;
+        height: 40px;
+        background-color: $color6;
         z-index: 2;
         color: $color1;
-        border: none;
+        border: 2px solid $color4;
+        border-left: none;
         margin: none;
-        padding:none;
+        padding: 0px !important;
         outline:none;
     }
     .shareLink{
@@ -43,6 +45,10 @@ h3 {
     line-height: 30px;
     height: 30px;
     color: $color8;
+}
+
+as-split-gutter{
+    flex-basis: 0px !important;
 }
 
 .footer{

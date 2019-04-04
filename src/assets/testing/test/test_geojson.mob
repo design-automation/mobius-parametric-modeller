@@ -14,7 +14,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_woi9t2s5hur",
+                "id": "node_v1k40ob995i",
                 "position": {
                     "x": 5340,
                     "y": 5000
@@ -35,33 +35,6 @@
                         "enabled": true,
                         "selected": false,
                         "selectGeom": false,
-                        "hasError": false
-                    },
-                    {
-                        "type": 10,
-                        "ID": "prod-ggxm62hu18",
-                        "enabled": false,
-                        "print": false,
-                        "argCount": 2,
-                        "meta": {
-                            "module": "Input",
-                            "name": "Constant",
-                            "inputMode": 3,
-                            "description": "test"
-                        },
-                        "args": [
-                            {
-                                "name": "const_name",
-                                "value": "gj",
-                                "linked": false
-                            },
-                            {
-                                "name": "__input__",
-                                "value": "\"https://www.dropbox.com/s/6qnoikoq7zm0eh2/test_wikipedia.geojson\"",
-                                "linked": false
-                            }
-                        ],
-                        "selected": false,
                         "hasError": false
                     }
                 ],
@@ -96,7 +69,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_4sfcb6r7omf",
+                                    "id": "node_p9woi61d4x",
                                     "position": {
                                         "x": 5340,
                                         "y": 5200
@@ -120,78 +93,8 @@
                                             "hasError": false
                                         },
                                         {
-                                            "type": 0,
-                                            "ID": "prod-qix43m2777",
-                                            "enabled": false,
-                                            "print": true,
-                                            "argCount": 2,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "check",
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "value": "gj",
-                                                    "linked": false,
-                                                    "usedVars": [
-                                                        "gj"
-                                                    ],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "check",
-                                            "hasError": false
-                                        },
-                                        {
                                             "type": 8,
-                                            "ID": "prod-5j5btaif86m",
-                                            "enabled": false,
-                                            "print": false,
-                                            "meta": {
-                                                "module": "util",
-                                                "name": "ImportData"
-                                            },
-                                            "argCount": 4,
-                                            "args": [
-                                                {
-                                                    "name": "var_name",
-                                                    "value": "mydata",
-                                                    "linked": false,
-                                                    "invalidVar": false
-                                                },
-                                                {
-                                                    "name": "__model__",
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "model_data",
-                                                    "value": "gj",
-                                                    "usedVars": [
-                                                        "gj"
-                                                    ],
-                                                    "invalidVar": false,
-                                                    "linked": false
-                                                },
-                                                {
-                                                    "name": "data_format",
-                                                    "value": "'geojson'",
-                                                    "linked": false,
-                                                    "usedVars": [],
-                                                    "invalidVar": false
-                                                }
-                                            ],
-                                            "selected": false,
-                                            "variable": "mydata",
-                                            "selectGeom": false,
-                                            "hasError": false
-                                        },
-                                        {
-                                            "type": 8,
-                                            "ID": "prod-p4ouw2yapp",
+                                            "ID": "prod-j38j99idc7b",
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
@@ -212,7 +115,7 @@
                                                 },
                                                 {
                                                     "name": "model_data",
-                                                    "value": "\"https://www.dropbox.com/s/6qnoikoq7zm0eh2/test_wikipedia.geojson\"",
+                                                    "value": "\"https://www.dropbox.com/s/tw0v0gyrl7m2hl4/test_sg.geojson?dl=0\"",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
@@ -227,6 +130,354 @@
                                             ],
                                             "selected": false,
                                             "variable": "test",
+                                            "hasError": false,
+                                            "selectGeom": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-hnu6hvukqs",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "query",
+                                                "name": "Get"
+                                            },
+                                            "argCount": 6,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pgons",
+                                                    "invalidVar": false,
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "select",
+                                                    "value": "'polygons'",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "null",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "query_expr",
+                                                    "value": "null",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "sort",
+                                                    "value": "'geometric_order'",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "variable": "pgons",
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 14,
+                                            "ID": "prod-5d3f5dkfhjc",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 1,
+                                            "args": [
+                                                {
+                                                    "name": "comment",
+                                                    "value": "delete attribut with lots of text"
+                                                }
+                                            ],
+                                            "selected": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-5uuolmwymw7",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pgons@description",
+                                                    "invalidVar": false,
+                                                    "usedVars": [
+                                                        "pgons"
+                                                    ],
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "\"\"",
+                                                    "linked": false,
+                                                    "usedVars": [],
+                                                    "invalidVar": false
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 14,
+                                            "ID": "prod-pnrxl805op",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 1,
+                                            "args": [
+                                                {
+                                                    "name": "comment",
+                                                    "value": "loop throu polygons and reverse those that are upside down"
+                                                }
+                                            ],
+                                            "selected": false
+                                        },
+                                        {
+                                            "type": 4,
+                                            "ID": "prod-7cieseaf44g",
+                                            "enabled": true,
+                                            "print": false,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "item",
+                                                    "value": "pgon",
+                                                    "invalidVar": false,
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "list",
+                                                    "value": "pgons",
+                                                    "linked": false,
+                                                    "usedVars": [
+                                                        "pgons"
+                                                    ],
+                                                    "invalidVar": false
+                                                }
+                                            ],
+                                            "children": [
+                                                {
+                                                    "type": 13,
+                                                    "ID": "",
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
+                                                    "meta": {
+                                                        "name": "",
+                                                        "module": ""
+                                                    },
+                                                    "argCount": 0,
+                                                    "args": [],
+                                                    "print": false,
+                                                    "enabled": true,
+                                                    "selected": false,
+                                                    "selectGeom": false,
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "ID": "prod-lepa5yh2j1b",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "calc",
+                                                        "name": "Normal"
+                                                    },
+                                                    "argCount": 4,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "linked": false,
+                                                            "value": "norm",
+                                                            "invalidVar": false
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "linked": false,
+                                                            "value": "pgon",
+                                                            "usedVars": [
+                                                                "pgon"
+                                                            ],
+                                                            "invalidVar": false
+                                                        },
+                                                        {
+                                                            "name": "scale",
+                                                            "linked": false,
+                                                            "value": "1",
+                                                            "usedVars": [],
+                                                            "invalidVar": false
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "selectGeom": false,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
+                                                    "variable": "norm",
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
+                                                    "ID": "prod-pia6f7wiuy",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "calc",
+                                                        "name": "Area"
+                                                    },
+                                                    "argCount": 3,
+                                                    "args": [
+                                                        {
+                                                            "name": "var_name",
+                                                            "value": "area",
+                                                            "invalidVar": false,
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "value": "pgon",
+                                                            "linked": false,
+                                                            "usedVars": [
+                                                                "pgon"
+                                                            ],
+                                                            "invalidVar": false
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "variable": "area",
+                                                    "hasError": false
+                                                },
+                                                {
+                                                    "type": 1,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
+                                                    "ID": "prod-olxmochovz",
+                                                    "enabled": true,
+                                                    "print": false,
+                                                    "argCount": 1,
+                                                    "args": [
+                                                        {
+                                                            "name": "condition",
+                                                            "value": "norm[2] < 0",
+                                                            "usedVars": [
+                                                                "norm"
+                                                            ],
+                                                            "invalidVar": false,
+                                                            "linked": false
+                                                        }
+                                                    ],
+                                                    "children": [
+                                                        {
+                                                            "type": 13,
+                                                            "ID": "",
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6~children~3",
+                                                            "meta": {
+                                                                "name": "",
+                                                                "module": ""
+                                                            },
+                                                            "argCount": 0,
+                                                            "args": [],
+                                                            "print": false,
+                                                            "enabled": true,
+                                                            "selected": false,
+                                                            "selectGeom": false,
+                                                            "hasError": false
+                                                        },
+                                                        {
+                                                            "type": 8,
+                                                            "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6~children~3",
+                                                            "ID": "prod-of2j7o37c7r",
+                                                            "enabled": true,
+                                                            "print": false,
+                                                            "meta": {
+                                                                "module": "modify",
+                                                                "name": "Reverse"
+                                                            },
+                                                            "argCount": 3,
+                                                            "args": [
+                                                                {
+                                                                    "name": "__none__",
+                                                                    "linked": false
+                                                                },
+                                                                {
+                                                                    "name": "__model__",
+                                                                    "linked": false
+                                                                },
+                                                                {
+                                                                    "name": "entities",
+                                                                    "value": "pgon",
+                                                                    "usedVars": [
+                                                                        "pgon"
+                                                                    ],
+                                                                    "invalidVar": false,
+                                                                    "linked": false
+                                                                }
+                                                            ],
+                                                            "selected": false,
+                                                            "hasError": false
+                                                        }
+                                                    ],
+                                                    "hasError": false,
+                                                    "selected": false
+                                                },
+                                                {
+                                                    "type": 8,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
+                                                    "ID": "prod-c5gy9khzehh",
+                                                    "enabled": false,
+                                                    "print": false,
+                                                    "meta": {
+                                                        "module": "modify",
+                                                        "name": "Move"
+                                                    },
+                                                    "argCount": 4,
+                                                    "args": [
+                                                        {
+                                                            "name": "__none__",
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "__model__",
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "entities",
+                                                            "value": "pgon",
+                                                            "usedVars": [
+                                                                "pgon"
+                                                            ],
+                                                            "invalidVar": false,
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "vectors",
+                                                            "value": "[0, 0, 6350 - ( area / 100000)]",
+                                                            "linked": false,
+                                                            "usedVars": [
+                                                                "area"
+                                                            ],
+                                                            "invalidVar": false
+                                                        }
+                                                    ],
+                                                    "selected": false,
+                                                    "hasError": false
+                                                }
+                                            ],
+                                            "variable": "pgon",
                                             "hasError": false
                                         }
                                     ],
@@ -252,7 +503,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_3sre9rafo5r",
+                                                        "id": "node_0kwatvn6c8zd",
                                                         "position": {
                                                             "x": 5340,
                                                             "y": 5400
@@ -348,8 +599,8 @@
         ],
         "functions": [],
         "ordered": true,
-        "last_updated": "2019-04-03T01:30:10.020Z"
+        "last_updated": "2019-04-04T00:56:30.758Z"
     },
     "version": 1,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"version\":\"0.4.32\"}"
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":true},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":true},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"version\":\"0.4.32\"}"
 }

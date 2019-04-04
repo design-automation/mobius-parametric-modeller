@@ -65,6 +65,10 @@ const lists = [
     ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaler than a specified tolerance']
 ];
 
+const colours = [
+    ['colFalse(val, min, max)', 'Creates a colour from a value in the range between min and max.']
+];
+
 const conversion = [
     ['boolean(val)', 'Converts the value to a boolean'],
     ['number(val)', 'Converts the value to a number'],
@@ -145,6 +149,7 @@ export const inline_func = [
     ['lists', lists],
     ['conversion', conversion],
     ['vectors', vectors],
+    ['colours', colours],
     ['arithmetic', arithmetic],
     ['statistics', statistics],
     ['trigonometry', trigonometry]

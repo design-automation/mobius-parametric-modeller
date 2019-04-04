@@ -62,6 +62,9 @@ export {_list};
 import * as _set from './_set';
 export {_set};
 
+import * as _colours from './_colours';
+export {_colours};
+
 import * as _conversion from './_conversion';
 export {_conversion};
 

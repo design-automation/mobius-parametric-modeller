@@ -1,5 +1,7 @@
 
 import { Component, AfterViewInit, } from '@angular/core';
+import { Router } from '@angular/router';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 @Component({
     selector: 'chrome',
@@ -10,11 +12,14 @@ export class ChromeComponent implements AfterViewInit {
 
     check: boolean;
 
-    constructor() {
+    constructor(private router: Router) {
 
     }
 
     ngAfterViewInit() {
+        if (this.router.url.split('?')[0] === '/publish') {
+            return;
+        }
         // @ts-ignore
         const isChromium = window.chrome;
         const winNav = window.navigator;

@@ -540,13 +540,15 @@ export class GIGeomModify {
             const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
             edge.reverse();
         }
-        // if this is a face, reverse the triangles
-        if (this._geom_arrays.up_wires_faces[wire_i] !== undefined) {
-            const face_i: number = this._geom_arrays.up_wires_faces[wire_i];
+        // if this is the first wire in a face, reverse the triangles
+        const face_i: number = this._geom_arrays.up_wires_faces[wire_i];
+        if (face_i !== undefined) {
             const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
-            for (const tri_i of face[1]) {
-                const tri: TTri = this._geom_arrays.dn_tris_verts[tri_i];
-                tri.reverse();
+            if (face[0][0] === wire_i) {
+                for (const tri_i of face[1]) {
+                    const tri: TTri = this._geom_arrays.dn_tris_verts[tri_i];
+                    tri.reverse();
+                }
             }
         }
     }

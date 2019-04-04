@@ -22,6 +22,8 @@ export class DataService {
     selected_face_edges: Map<string, string[]>;
     selected_face_wires: Map<string, string[]>;
     selected_coll: Map<string, string[]>;
+
+    model_hash: string;
     /**
      * Create a data service.
      */

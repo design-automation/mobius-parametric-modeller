@@ -12,6 +12,7 @@ import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
+import * as hash from 'object-hash';
 /**
  * A threejs viewer for viewing geo-info (GI) models.
  * This component gets used in /app/model-viewers/all-viewers/gi-viewer/gi-viewer.component.html
@@ -193,6 +194,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     ngOnChanges(changes: SimpleChanges) {
         if (changes['model']) {
             if (this.model) {
+                if (this.dataService.switch_page) {
+                    this.dataService.switch_page = false;
+                    return;
+                }
                 this.updateModel(this.model);
             }
         }
@@ -281,6 +286,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     ngOnDestroy() {
         this._elem = null;
         this.container = null;
+        this.dataService.switch_page = true;
     }
 
     attrTableSelect(attrib: { action: string, ent_type: string, id: number }) {

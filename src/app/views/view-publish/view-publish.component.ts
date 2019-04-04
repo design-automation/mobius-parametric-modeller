@@ -101,7 +101,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
 
     toggleAttrib() {
         this.dataService.attribUpdate = true;
-        if (this.dataService.attribVal > 33) {
+        if (this.dataService.attribVal > 34) {
             this.dataService.attribVal = 0;
             setTimeout(() => {
                 const btn = document.getElementById('attribToggle');
@@ -109,7 +109,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
             }, 0);
             return;
         }
-        this.dataService.attribVal = 34;
+        this.dataService.attribVal = 35;
         setTimeout(() => {
             this.attribTogglePos();
         }, 0);

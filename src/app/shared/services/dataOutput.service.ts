@@ -19,18 +19,29 @@ export class DataOutputService {
         // console.log('retrieve Data...');
         const model = _parameterTypes.newFn();
         if (getViewOutput) {
-            // const result = webWorker.run(input => {
-            //     return JSON.parse(input);
-            // }, node.model);
-            // result.then(r => {
-            //     model.setData(r);
-            //     console.log('.........');
-            // });
+            const result = webWorker.run(input => {
+                return JSON.parse(input);
+            }, node.model);
+            result.then(r => {
+                model.setData(r);
+                this.iModel.model = model;
+            });
             this.iModel.getOutput = true;
-            model.setData(JSON.parse(node.model));
+            this.iModel.nodeID = node.id;
+            return this.iModel.model;
+            // model.setData(JSON.parse(node.model));
         } else if (node.input.edges.length === 1) {
-            model.setData(JSON.parse(node.input.edges[0].source.parentNode.model));
+            const result = webWorker.run(input => {
+                return JSON.parse(input);
+            }, node.input.edges[0].source.parentNode.model);
+            result.then(r => {
+                model.setData(r);
+                this.iModel.model = model;
+            });
             this.iModel.getOutput = false;
+            this.iModel.nodeID = node.id;
+            return this.iModel.model;
+            // model.setData(JSON.parse(node.input.edges[0].source.parentNode.model));
         } else {
             for (const edge of node.input.edges) {
                 if (!edge.source.parentNode || !edge.source.parentNode.enabled) {

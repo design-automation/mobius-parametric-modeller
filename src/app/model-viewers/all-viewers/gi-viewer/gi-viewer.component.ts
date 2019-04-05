@@ -52,17 +52,14 @@ export class GIViewerComponent implements OnInit {
         private mainDataService: MD) {
 
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        // const devMode = isDevMode();
-        const devMode = false;
+        const devMode = isDevMode();
+        // const devMode = false;
         if (previous_settings === null ||
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
             devMode) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
-        // if (localStorage.getItem('mpm_attrib_columns') !== null) {
-        //     this.columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
-        // }
     }
 
     /**

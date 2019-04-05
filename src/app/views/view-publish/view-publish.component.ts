@@ -120,6 +120,11 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         if (attrib) {
             const btn = document.getElementById('attribToggle');
             btn.style.bottom = attrib.clientHeight + 5 + 'px';
+        } else {
+            const btn = document.getElementById('attribToggle');
+            if (btn) {
+                btn.style.display = 'none';
+            }
         }
     }
 }

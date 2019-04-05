@@ -49,6 +49,7 @@ export class GIViewerComponent implements OnInit {
         private modalService: ModalService,
         private cpService: ColorPickerService,
         private mainDataService: MD) {
+
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         const devMode = isDevMode();
         // const devMode = false;

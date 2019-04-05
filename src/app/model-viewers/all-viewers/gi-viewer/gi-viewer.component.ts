@@ -9,6 +9,7 @@ import { DataService as MD} from '@services';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
+import { Vector3 } from 'three';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -32,7 +33,7 @@ export class GIViewerComponent implements OnInit {
 
     normalsEnabled = false;
 
-    columns_control;
+    temp_camera_pos = new Vector3(-80, -80, 80);
 
     public clickedEvent: Event;
     public attrTableSelect: Event;
@@ -51,8 +52,8 @@ export class GIViewerComponent implements OnInit {
         private mainDataService: MD) {
 
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        const devMode = isDevMode();
-        // const devMode = false;
+        // const devMode = isDevMode();
+        const devMode = false;
         if (previous_settings === null ||
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
@@ -127,10 +128,10 @@ export class GIViewerComponent implements OnInit {
     closeModal(id: string, save = false) {
         this.modalService.close(id);
         if (save) {
-            const selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
-            const tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
-            this.settings.select.selector = selector;
-            this.settings.select.tab = tab;
+            const _selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
+            const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
+            this.settings.select = { selector: _selector, tab: _tab };
+            this.settings.camera = { pos: this.temp_camera_pos };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
@@ -180,6 +181,9 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'wireframe.show':
                 this.wireframeToggle();
+                break;
+            case 'camera.curr_pos':
+                this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
                 break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;
@@ -317,9 +321,12 @@ interface Settings {
     axes: { show: boolean, size: number };
     grid: { show: boolean, size: number };
     positions: { show: boolean, size: number };
+    wireframe: { show: boolean };
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
-    wireframe: { show: boolean };
+    camera: {
+        pos: Vector3
+    };
     colors: {
         viewer_bg: string,
         position: string,

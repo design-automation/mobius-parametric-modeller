@@ -3,6 +3,7 @@ import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 import { EEntTypeStr, EEntType } from '@assets/libs/geo-info/common';
+import { Vector3 } from 'three';
 
 /**
  * ThreejsScene
@@ -155,10 +156,20 @@ export class DataThreejs {
         this._addAxes();
 
         // Add geometry
-        if (!model.threejs) {
+        const threejs_data: IThreeJS = model.threejs.get3jsData();
+
+        if (threejs_data.posis_indices.length === 0) {
+            this._camera.position.set(-80, -80, 80);
             return;
         }
-        const threejs_data: IThreeJS = model.threejs.get3jsData();
+        if (this.settings.camera !== undefined) {
+            this._camera.position.set(this.settings.camera.pos.x, this.settings.camera.pos.y, this.settings.camera.pos.z);
+        } else {
+            this._camera.position.set(-200, -200, 200);
+        }
+        this._camera.lookAt(this._scene.position);
+        this._camera.updateProjectionMatrix();
+
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
@@ -1146,6 +1157,7 @@ interface Settings {
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
     wireframe: { show: boolean };
+    camera: { pos: Vector3 };
     colors: {
         viewer_bg: string,
         position: string,

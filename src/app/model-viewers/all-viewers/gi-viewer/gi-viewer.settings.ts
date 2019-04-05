@@ -1,4 +1,5 @@
 import { VERSION } from '@env/version';
+import { Vector3 } from 'three';
 export const DefaultSettings = {
     normals: { show: false, size: 5 },
     axes: { show: true, size: 50 },
@@ -7,6 +8,9 @@ export const DefaultSettings = {
     tjs_summary: { show: false },
     gi_summary: { show: false },
     wireframe: { show: false },
+    camera: {
+        pos: new Vector3(-80, -80, 80)
+    },
     colors: {
         viewer_bg: '#E6E6E6',
         position: '#000000',

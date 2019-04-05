@@ -417,17 +417,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     } else {
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
-                        const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-                        if (select !== undefined) {
-                            localStorage.setItem('mpm_attrib_current_tab', select.tab);
-                            sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
-                        }
-
-                        const settings = JSON.parse(localStorage.getItem('mpm_settings'));
-                        if (settings !== undefined) {
-                            settings.select.tab = select.tab;
-                            localStorage.setItem('mpm_settings', JSON.stringify(settings));
-                        }
                         this.refreshTable(event);
                     }
                     this.getSelectingEntityType();

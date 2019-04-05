@@ -110,10 +110,10 @@ export class DataCesium {
         svg.append(path);
         settingsBtn.append(svg);
 
-        const btn = document.getElementById('attribToggle');
-        if (btn) {
-            btn.style.display = 'none';
-        }
+        // const btn = document.getElementById('attribToggle');
+        // if (btn) {
+        //     btn.style.display = 'none';
+        // }
     }
     /**
      *

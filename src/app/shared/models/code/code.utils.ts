@@ -512,7 +512,6 @@ export class CodeUtils {
 
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
-        console.log(usedFunctions);
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));

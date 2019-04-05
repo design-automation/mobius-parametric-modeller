@@ -252,7 +252,7 @@ export class CodeUtils {
         }
         if (prod.children) {
             for (const p of prod.children) {
-                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart));
+                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
             }
             codeStr.push(`}`);
         }
@@ -512,6 +512,7 @@ export class CodeUtils {
 
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
+        console.log(usedFunctions);
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));

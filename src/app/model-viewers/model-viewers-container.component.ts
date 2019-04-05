@@ -3,6 +3,7 @@ import { Component, Injector, Input,
 import { IView } from './view.interface';
 import { Viewers } from './model-viewers.config';
 import { DataService } from '@services';
+import { DataService as GIDataService } from './all-viewers/gi-viewer/data/data.service';
 import { Router } from '@angular/router';
 
 /**
@@ -26,7 +27,8 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
      * @param injector
      * @param r
      */
-    constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService, private router: Router) {
+    constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService,
+                private giDataService: GIDataService, private router: Router) {
         if (this.router.url.split('?')[0] === '/publish') {
             this.Viewers = [];
             let viewCheck: any = this.router.url.split('viewer=');
@@ -53,6 +55,9 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                     this.activeView = view;
                 }
             }
+        }
+        if (this.activeView.name !== '3D Viewer') {
+            this.giDataService.switch_page = false;
         }
         this.updateView( this.activeView );
     }

@@ -92,7 +92,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
             this.dataService.splitVal = 100;
             return;
         }
-        this.dataService.splitVal = 75;
+        this.dataService.splitVal = 100 - (25000 / document.body.clientWidth);
     }
 
     getSplit() { return this.dataService.splitVal; }
@@ -101,7 +101,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
 
     toggleAttrib() {
         this.dataService.attribUpdate = true;
-        if (this.dataService.attribVal > 34) {
+        if (this.dataService.attribVal > 0) {
             this.dataService.attribVal = 0;
             setTimeout(() => {
                 const btn = document.getElementById('attribToggle');
@@ -109,10 +109,12 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
             }, 0);
             return;
         }
-        this.dataService.attribVal = 35;
+        this.dataService.attribVal = 25000 / document.body.clientHeight;
         setTimeout(() => {
-            this.attribTogglePos();
-        }, 0);
+            // this.attribTogglePos();
+            const btn = document.getElementById('attribToggle');
+            btn.style.bottom = 255 + 'px';
+    }, 0);
     }
     getAttribSplit() { return this.dataService.attribVal; }
     attribTogglePos() {

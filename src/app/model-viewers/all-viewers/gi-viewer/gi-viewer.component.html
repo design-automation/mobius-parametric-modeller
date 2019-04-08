@@ -158,11 +158,20 @@
 										</label>
 									</div>
 								</dd>
-								<dd>
+								<dd id='camera'>
 									<div class="label">Camera</div>
-									<div>
+									<!-- <div>
 										<button (click)="settingOnChange('camera.curr_pos')" class="filebtn closebtn" style="margin-left: 0">Get Camera</button>
-									</div>
+									</div> -->
+									<input type="number" 
+									(change)="settingOnChange('camera.curr_pos_x', $event.target.value)" 
+									[value]="formatNumber(temp_camera_pos.x)">
+									<input type="number" 
+									(change)="settingOnChange('camera.curr_pos_y', $event.target.value)"
+									[value]="formatNumber(temp_camera_pos.y)">
+									<input type="number" 
+									(change)="settingOnChange('camera.curr_pos_z', $event.target.value)"
+									[value]="formatNumber(temp_camera_pos.z)">
 								</dd>
 							</dl>
 						</div>

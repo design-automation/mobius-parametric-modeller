@@ -5,7 +5,7 @@ import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings'
 import { Component, Input, OnInit } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
-import { DataService as MD} from '@services';
+import { DataService as MD } from '@services';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
@@ -81,6 +81,7 @@ export class GIViewerComponent implements OnInit {
             this.dataService.setThreejsScene(this.settings);
         }
         localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
+        this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
     }
 
     private getSettings() {
@@ -128,7 +129,12 @@ export class GIViewerComponent implements OnInit {
             const _selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
             const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
             this.settings.select = { selector: _selector, tab: _tab };
-            this.settings.camera = { pos: this.temp_camera_pos };
+            this.settings.camera = {
+                pos: this.temp_camera_pos,
+                pos_x: this.temp_camera_pos.x,
+                pos_y: this.temp_camera_pos.y,
+                pos_z: this.temp_camera_pos.z,
+            };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
@@ -180,7 +186,28 @@ export class GIViewerComponent implements OnInit {
                 this.wireframeToggle();
                 break;
             case 'camera.curr_pos':
-                this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+                // this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+                break;
+            case 'camera.curr_pos_x':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.x = Math.round(value);
+                this.setCamera(value, null, null);
+                break;
+            case 'camera.curr_pos_y':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.y = Math.round(value);
+                this.setCamera(null, value, null);
+                break;
+            case 'camera.curr_pos_z':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.z = Math.round(value);
+                this.setCamera(null, null, value);
                 break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;
@@ -296,7 +323,7 @@ export class GIViewerComponent implements OnInit {
             if (obj.type === 'Mesh') {
                 this.settings.wireframe.show = !this.settings.wireframe.show;
                 // @ts-ignore
-                // obj.material.wireframe = this.settings.wireframe.show;
+                obj.material.wireframe = this.settings.wireframe.show;
             }
         });
     }
@@ -311,6 +338,24 @@ export class GIViewerComponent implements OnInit {
         const d = document.getElementById('published');
         return d !== null;
     }
+
+    setCamera(x = null, y = null, z = null) {
+        const scene = this.dataService.getThreejsScene();
+        if (x) {
+            scene._camera.position.x = x;
+        }
+        if (y) {
+            scene._camera.position.y = y;
+        }
+        if (z) {
+            scene._camera.position.z = z;
+        }
+        scene._camera.lookAt(scene._scene.position);
+        scene._camera.updateProjectionMatrix();
+    }
+    formatNumber(value) {
+        return Math.round(value * 100) / 100;
+    }
 }
 
 interface Settings {
@@ -322,7 +367,10 @@ interface Settings {
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
     camera: {
-        pos: Vector3
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number
     };
     colors: {
         viewer_bg: string,

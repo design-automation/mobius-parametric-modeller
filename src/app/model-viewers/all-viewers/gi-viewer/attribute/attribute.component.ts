@@ -172,8 +172,12 @@ export class AttributeComponent implements OnChanges, DoCheck {
       localStorage.setItem('mpm_attrib_current_tab', tabIndex.toString());
       const settings = JSON.parse(localStorage.getItem('mpm_settings'));
       if (settings !== undefined) {
+        if (settings.select !== undefined) {
           settings.select.tab = tabIndex.toString();
-          localStorage.setItem('mpm_settings', JSON.stringify(settings));
+        } else {
+          settings.select = {selector: {id: '_f', name: 'Faces'}, tab: '0'};
+        }
+        localStorage.setItem('mpm_settings', JSON.stringify(settings));
       }
       if (tabIndex === 999) {
         this.displayedColumns = [];

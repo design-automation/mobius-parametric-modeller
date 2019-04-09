@@ -16,7 +16,10 @@ const binaryOperators = new Set([   '+' , '+=' , '-=', '*' , '/' , '%'  , '<' , 
 
 const postfixUnaryOperators = new Set(['++', '--']);
 const prefixUnaryOperators = new Set(['-', '!']);
-const otherSymbols = new Set(['.', '#', '@', ',']);
+
+const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@']);
+
+const otherSymbols = new Set(['.', '#', ',']);
 
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
@@ -155,7 +158,15 @@ export function modifyVarArg(arg: IArgument) {
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
-    let varResult = parseArgument(procedure.args[argIndex].value);
+    let varResult = parseArgument1(procedure.args[argIndex].value);
+
+    // if (varResult.str !== procedure.args[argIndex].value) {
+    //     console.log('', varResult.str, '\n', procedure.args[argIndex].value);
+    // }
+    // console.log( varResult.str === procedure.args[argIndex].value, varResult.str, procedure.args[argIndex].value);
+    // console.log( varResult.str);
+
+    // return;
     if (varResult.error) {
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
@@ -267,6 +278,315 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
 }
 
+
+// NEW ARGUMENT INPUT
+export function parseArgument1(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
+    // console.log('_____',str);
+    const comps = splitComponents(str);
+    if (typeof comps === 'string') {
+        return {'error': comps};
+    }
+    // console.log(comps);
+    let i = 0;
+    const vars: string[] = [];
+    let newString = '';
+    while (i < comps.length) {
+        if (comps[i].value === ',') {
+            return {'error': 'Error: Invalid ","' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        // console.log('MAIN_____', i);
+        const check = analyzeComp(comps, i, vars);
+        if (check.error) {
+            console.log(check.error, '\n', str);
+            return check;
+        }
+        i = check.value;
+        newString += check.str;
+    }
+    return {'vars': vars, 'str': newString.trim()};
+}
+
+function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, vars: string[],
+                    noSpace?: boolean, expressionType?: string):
+                {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string} {
+    // console.log('analyzeComp |||', comps.slice(i).map(x => x.value).join(' '));
+    let newString = '';
+
+    // if variable ==> go to analyzeVar
+    if (comps[i].type === strType.VAR) {
+        const result = analyzeVar(comps, i, vars, false);
+        if (result.error) { return result; }
+        i = result.i;
+        newString += result.str;
+
+    // if number/string ==> basic
+    } else if (comps[i].type === strType.NUM || comps[i].type === strType.STR) {
+        newString += comps[i].value;
+
+    // if "-" or "!" add the operator then analyzeComp the next
+    } else if (prefixUnaryOperators.has(comps[i].value)) {
+        newString += comps[i].value; //////////
+        if (i + 1 === comps.length) {
+            return {'error': 'Error: Expressions expected after "-"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeComp(comps, i + 1, vars);
+        if (result.error) { return result; }
+        i = result.i;
+        newString += result.str;
+
+    // if '(' ==> calculation ==> analyze comp (first component inside the bracket)
+    } else if (comps[i].value === '(') {
+        if (i + 1 === comps.length) {
+            return {'error': 'Error: Expressions expected after "("\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeComp(comps, i + 1, vars);
+        if (result.error) { return result; }
+        if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ')') {
+            return {'error': 'Error: Closing Bracket ")" expected\n' +
+            `at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
+        }
+        i = result.i + 1;
+        newString += `(${result.str})`; //////////
+
+    // if '[' ==> array
+    } else if (comps[i].value === '[') {
+        if (comps[i + 1].value === ']') {
+            newString += `[]`;
+            i += 1;
+        } else {
+            const result = analyzeArray(comps, i + 1, vars);
+            if (result.error) { return result; }
+            if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
+                return {'error': 'Error: Closing Bracket "]" expected\n' +
+                `at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
+            }
+            i = result.i + 1;
+            newString += `[${result.str}]`; //////////
+        }
+    // if '{' ==> JSON
+    } else if (comps[i].value === '{') {
+        const result = analyzeJSON(comps, i + 1, vars);
+        if (result.error) { return result; }
+        if (result.i + 1 >= comps.length || comps[result.i + 1].value !== '}') {
+            return {'error': 'Error: Closing Bracket "}" expected\n' +
+            `at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
+        }
+        i = result.i + 1;
+        newString += `{${result.str}}`; //////////
+
+    // if "#" ==> #@variable
+    } else if (comps[i].value === '#') {
+        if (i + 1 === comps.length || comps[i + 1].value !== '@') {
+            return {'error': 'Error: "@" expected after "#"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        if (i + 2 === comps.length || comps[i + 2].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after "#@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeVar(comps, i + 2, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+        newString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
+
+    // if "@" ==> @variable
+    } else if (comps[i].value === '@') {
+        if (i + 1 === comps.length || comps[i + 1].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after "@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeVar(comps, i + 1, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+        newString = ' @' + result.str.replace(/ /g, '') + ' '; //////////
+    }
+
+    if (i + 1 >= comps.length) { return {'i': i, 'str': newString}; }
+
+    let nextComp = comps[i + 1];
+    // if the next component is '++' or '--', add it in and continue to the next one
+    if (postfixUnaryOperators.has(nextComp.value)) {
+        newString += nextComp.value;
+        i += 1;
+        if (i === comps.length) { return {'i': i, 'str': newString}; }
+        nextComp = comps[i + 1];
+    }
+
+    // if it is in an expression or array, return here
+    if ((expressionType === 'array' && nextComp.value === ',') || expressionType === 'expr') {
+        return {'i': i, 'str': newString};
+    }
+
+    // if next comp is Variable/String/Number, not allowed
+    if (nextComp.type !== strType.OTHER ) {
+        return {'error': 'Error: Variable/String/Number after Variable/String/Number\n' +
+                `at: ... ${comps.slice(i - 1).map(cp => cp.value).join(' ')}`};
+    }
+
+    // if next comp is "," or ")" or "]" or "}", return
+    if (nextComp.value === ',' || nextComp.value === ')' || nextComp.value === ']' || nextComp.value === '}') {
+        return {'i': i, 'str': newString};
+
+    // if next comp is '-' or any other binary operators, continue to analyzeExpression
+    } else if (nextComp.value === '-' || binaryOperators.has(nextComp.value)) {
+        const result = analyzeExpression(comps, i + 1, vars);
+        if (result.error) { return result; }
+        i = result.i;
+        if (newString[newString.length - 1] === ' ' && result.str[0] === ' ') {
+            newString += result.str.substring(1);
+        } else {
+            newString += result.str;
+        }
+    }
+    return {'i': i, 'str': newString};
+}
+
+function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars: string[],
+                    disallowAt: boolean):
+                    {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string} {
+    // console.log('analyzeVar |||', comps.slice(i).map(x => x.value).join(' '));
+    const comp = comps[i];
+    let newString = comp.value;
+    // if variable is the last component
+    // add the variable to the var list
+    if (i + 1 === comps.length) {
+        if (!disallowAt) {
+            addVars(vars, comp.value);
+        }
+        return {'i': i, 'str': newString};
+    }
+    // if variable is followed immediately by another var/num/str --> not allowed
+    if ( comps[i + 1].type !== strType.OTHER ) {
+        return { 'error': 'Error: Variable followed by another variable/number/string \n' +
+        `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+
+    // if variable is followed by "[" --> array/json
+    // add the variable to var list and check for validity of the first component inside the bracket
+    } else if (comps[i + 1].value === '[' || comps[i + 1].value === '.') {
+        if (!disallowAt) {
+            addVars(vars, comp.value);
+        }
+        while (i + 1 < comps.length && (comps[i + 1].value === '[' || comps[i + 1].value === '.')) {
+            if (comps[i + 1].value === '[') {
+                const result = analyzeComp(comps, i + 2, vars);
+                if (result.error) { return result; }
+                if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
+                    return { 'error': `Error: "]" expected \n
+                    at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
+                }
+                i = result.i + 1;
+                newString += '[' + result.str + ']';
+            } else {
+                i = i + 2;
+                if (comps[i].type !== strType.VAR) {
+                    return { 'error': `Error: attribute name expected \n
+                    at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+                }
+                newString += '.' + comps[i].value;
+            }
+        }
+
+    // if variable is followed by "(" --> function
+    // does not add to the var list since it's function name
+    } else if (comps[i + 1].value === '(') {
+        if (comps[i + 2].value === ')') {
+            i++;
+            newString += '()';
+        } else {
+            const result = analyzeArray(comps, i + 2, vars);
+            if (result.error) { return result; }
+            if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ')') {
+                return { 'error': `Error: ")" expected \nat: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`}; }
+            i = result.i + 1;
+            newString += `(${result.str})`;
+            return {'i': i, 'str': newString};
+        }
+    // if variable is followed by "{" --> not allowed
+    } else if (comps[i + 1].value === '{') {
+        return { 'error': 'Error: Variable followed by "{" \n' +
+        `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+
+    // // if variable is followed by "#" / "." / ")" / "]" / "}"
+    // } else if (otherSymbols.has(comps[i + 1].value) ||
+    //            comps[i + 1].value === ')' ||
+    //            comps[i + 1].value === ']' ||
+    //            comps[i + 1].value === '}') {
+    //     if (comps[i + 1].value === '#') {
+    //         return { 'error': `Error: Variable followed by "${comps[i + 1].value}" \n` +
+    //         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+    //     }
+    //     addVars(vars, comp.value);
+    //     i += 1;
+
+    // all other cases
+    } else if (!disallowAt) {
+        addVars(vars, comp.value);
+    }
+
+    if (i + 1 < comps.length && comps[i + 1].value === '@') {
+        if (disallowAt) {
+            return { 'error': 'Error: Invalid "@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        if (comps[i + 2].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after "@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeVar(comps, i + 2, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+        newString = ' ' + newString.replace(/ /g, '') + '@' + result.str.replace(/ /g, '') + ' '; //////////
+    }
+    return {'i': i, 'str': newString};
+}
+
+function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, vars: string[]):
+                {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string} {
+    // console.log('analyzeArray |||', comps.slice(i).map(x => x.value).join(' '));
+    if (comps[i].type === strType.OTHER && !componentStartSymbols.has(comps[i].value)) {
+        return {'i': i, 'str': ''};
+    }
+    const firstComp = analyzeComp(comps, i, vars, false, 'array');
+    if (firstComp.error) { return firstComp; }
+    i = firstComp.i + 1;
+    let newString = firstComp.str;
+
+    while (i < comps.length && comps[i].value === ',') {
+        newString += comps[i].value;
+        const result = analyzeComp(comps, i + 1, vars, false, 'array');
+        if (result.error) { return result; }
+        i = result.i + 1;
+        if (result.str[0] !== ' ') { newString += ' '; }
+        newString += result.str;
+    }
+    // console.log('~',i, comps.length, newString)
+    return {'i': i - 1, 'str': newString};
+}
+
+
+function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, vars: string[]):
+                {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string} {
+    return {};
+}
+
+function analyzeExpression(comps: {'type': strType, 'value': string}[], i: number, vars: string[], noSpace?: boolean):
+                {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string} {
+    // console.log('analyzeExpression |||', comps.slice(i).map(x => x.value).join(' '));
+    let newString = '';
+    while (i < comps.length && (comps[i].value === '-' || binaryOperators.has(comps[i].value))) {
+        if (newString[newString.length - 1] !== ' ') { newString += ' '; }
+        newString += comps[i].value;
+        const result = analyzeComp(comps, i + 1, vars, false, 'expr');
+        if (result.error) { return result; }
+        i = result.i + 1;
+        if (result.str[0] !== ' ') { newString += ' '; }
+        newString += result.str;
+    }
+    return {'i': i - 1, 'str': newString};
+}
 
 // ARGUMENT INPUT
 export function parseArgument(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {

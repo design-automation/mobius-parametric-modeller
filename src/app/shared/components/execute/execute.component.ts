@@ -110,8 +110,8 @@ export class ExecuteComponent {
                         node.hasError = true;
                         prod.hasError = true;
                         if (ex.message.indexOf('HTTP') !== -1 || ex.message.indexOf('File Reading') !== -1) {
-                            document.getElementById('Console').click();
                             document.getElementById('spinner-off').click();
+                            document.getElementById('Console').click();
                             const _category = this.isDev ? 'dev' : 'execute';
                             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
                                 'click', performance.now() - this.startTime);
@@ -171,15 +171,19 @@ export class ExecuteComponent {
             }
         }
 
-        if (testing) {
-            this.executeFlowchart();
-            return;
-        } else {
-            // setTimeout for 20ms so that the loading screen has enough time to be loaded in
-            setTimeout(() => {
+        try {
+            if (testing) {
                 this.executeFlowchart();
-                this.dataService.log(' ');
-            }, 20);
+                return;
+            } else {
+                // setTimeout for 20ms so that the loading screen has enough time to be loaded in
+                setTimeout(() => {
+                    this.executeFlowchart();
+                    this.dataService.log(' ');
+                }, 20);
+            }
+        } catch (ex) {
+            document.getElementById('spinner-off').click();
         }
     }
 
@@ -204,7 +208,12 @@ export class ExecuteComponent {
 
         let executeSet: any;
         // let startIndex: number;
-        const currentUrl = this.router.url.split('?')[0];
+        let currentUrl = this.router.url;
+        if (currentUrl) {
+            currentUrl = currentUrl.split('?')[0];
+        } else {
+            currentUrl = '/editor';
+        }
         if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0
             || (currentUrl !== '/flowchart' && currentUrl !== '/editor')) {
             executeSet = new Set(this.dataService.flowchart.nodes.keys());

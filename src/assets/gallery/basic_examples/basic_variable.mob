@@ -145,7 +145,7 @@
                             "module": "Input",
                             "name": "Constant",
                             "inputMode": 3,
-                            "description": "This is a URL to a file that can be accessed online. In the dashboard, it generates an input box where you paste in your URL. When you execute the procedure, the browser will go a get this file from the online source. So if you type in an invalid URL, you will get an error. In this case, I just usue google.com as an example. "
+                            "description": "This is a URL to a file that can be accessed online. In the dashboard, it generates an input box where you paste in your URL. When you execute the procedure, the browser will go a get this file from the online source. So if you type in an invalid URL, you will get an error. In this case, I just use github as an example. "
                         },
                         "args": [
                             {
@@ -156,7 +156,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "default": "http://google.com",
+                                "default": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/box_with_holes.gi",
                                 "value": ""
                             }
                         ],

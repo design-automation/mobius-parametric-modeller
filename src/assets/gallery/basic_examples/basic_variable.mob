@@ -162,33 +162,6 @@
                         ],
                         "selected": false,
                         "hasError": false
-                    },
-                    {
-                        "type": 10,
-                        "ID": "prod-hc8fxd8vz6c",
-                        "enabled": true,
-                        "print": false,
-                        "argCount": 2,
-                        "meta": {
-                            "module": "Input",
-                            "name": "Constant",
-                            "inputMode": 4,
-                            "description": "This is a file on your local hard disk. In the Dashboard, it generates a button. When you click the button, it will invoke the seacrh file dialog that belongs to the browser. When you select the file, it will save the contents in your browsers persistent cache. "
-                        },
-                        "args": [
-                            {
-                                "name": "const_name",
-                                "default": 0,
-                                "invalidVar": false,
-                                "value": "file1"
-                            },
-                            {
-                                "name": "__input__",
-                                "default": 0
-                            }
-                        ],
-                        "selected": false,
-                        "hasError": false
                     }
                 ],
                 "state": {

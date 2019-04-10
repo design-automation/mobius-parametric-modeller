@@ -70,6 +70,8 @@ export function updateGlobals(startNode: INode) {
 
 export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     if (!procedure.args[0].value) { return; }
+    procedure.variable = null;
+
     procedure.args[0].value = modifyVarArg(procedure.args[0]);
 
     const modifiedVar = parseVariable(procedure.args[0].value);
@@ -254,7 +256,7 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'error': `Error: Invalid "${comps[check.i + 1].value}"` +
         `at: ... ${comps.slice(check.i + 1).map(cp => cp.value).join(' ')}`};
     }
-    return {'usedVars': [comps[0].value]};
+    return {'usedVars': vars};
 
     // if (comps[1].value === '[') {
     //     let i = 1;

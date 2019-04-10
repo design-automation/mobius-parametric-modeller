@@ -569,7 +569,47 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
 
 function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, vars: string[]):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string} {
-    return {};
+    if (comps[i].type !== strType.STR) {
+        return {'i': i, 'str': ''};
+    }
+    let newString = comps[i].value;
+
+    if (comps[i + 1].value !== ':') {
+        return {'error': 'Error: ":" expected\n' +
+        `at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+    }
+    newString += ':';
+
+    const firstComp = analyzeComp(comps, i + 2, vars, false, 'array');
+    if (firstComp.error) { return firstComp; }
+    if (firstComp.str[0] !== ' ') { newString += ' '; }
+    newString += firstComp.str;
+
+    i = firstComp.i + 1;
+
+    while (i < comps.length && comps[i].value === ';') {
+        newString += comps[i].value;
+        if (comps[i + 1].type !== strType.STR) {
+            return {'error': 'Error: string expected\n' +
+            `at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+        }
+        newString += comps[i + 1].value;
+
+        if (comps[i + 2].value !== ':') {
+            return {'error': 'Error: ":" expected\n' +
+            `at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+        newString += ':';
+
+        const result = analyzeComp(comps, i + 2, vars, false, 'array');
+        if (firstComp.error) { return firstComp; }
+        if (result.str[0] !== ' ') { newString += ' '; }
+        newString += result.str;
+
+        i = firstComp.i + 1;
+    }
+
+    return {'i': i - 1, 'str': newString};
 }
 
 function analyzeExpression(comps: {'type': strType, 'value': string}[], i: number, vars: string[], noSpace?: boolean):

@@ -158,7 +158,7 @@ export function modifyVarArg(arg: IArgument) {
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
-    let varResult = parseArgument1(procedure.args[argIndex].value);
+    let varResult = parseArgument(procedure.args[argIndex].value);
 
     // if (varResult.str !== procedure.args[argIndex].value) {
     //     console.log('', varResult.str, '\n', procedure.args[argIndex].value);
@@ -229,6 +229,7 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     if (typeof comps === 'string') {
         return {'error': comps};
     }
+
     if (comps[0].value === '@') {
         if (comps[1].type !== strType.VAR) {
             return {'error': 'Error: Expect attribute name after @'};
@@ -242,67 +243,76 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'declaredVar': comps[0].value};
     }
 
-    if (comps[1].value === '[') {
-        let i = 1;
-        const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
-        const vars: string[] = [];
-        while (i < comps.length && comps[i].value !== ']') {
-            const check = analyzeComponent(comps, i, openBrackets, vars);
-            if (check.error) {
-                return check;
-            }
-            i = check.value;
-        }
-        if (i !== comps.length - 1) {
-            if (comps[i + 1].value !== '@') {
-                return {'error': 'Error: Expect ] at the end of the variable'};
-            }
-            if (!comps[i + 2] || comps[i + 2].type !== strType.VAR) {
-                return {'error': 'Error: Expect attribute name after @'};
-            }
-        }
-        addVars(vars, comps[0].value);
-        return {'usedVars': vars};
+    const vars = [];
+    const check = analyzeVar(comps, 0, vars, false);
+    if (check.error) {
+        console.log(check.error, '\n', str);
+        return check;
     }
-    if (comps[1].value === '@') {
-        if (comps[2].type !== strType.VAR) {
-            return {'error': 'Error: Expect attribute name after @'};
-        }
-        return {'usedVars': [comps[0].value]};
+    if (check.i !== comps.length - 1) {
+        console.log('..... Var', check.i, comps.length);
+        return {'error': `Error: Invalid "${comps[check.i + 1].value}"` +
+        `at: ... ${comps.slice(check.i + 1).map(cp => cp.value).join(' ')}`};
     }
-    if (comps[1].value === '.') {
-        if (comps[2].type !== strType.VAR) {
-            return {'error': 'Error: Expect attribute name after .'};
-        }
-        return {'usedVars': [comps[0].value]};
-    }
+    return {'usedVars': [comps[0].value]};
+
+    // if (comps[1].value === '[') {
+    //     let i = 1;
+    //     const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
+    //     const vars: string[] = [];
+    //     while (i < comps.length && comps[i].value !== ']') {
+    //         const check = analyzeComponent(comps, i, openBrackets, vars);
+    //         if (check.error) {
+    //             return check;
+    //         }
+    //         i = check.value;
+    //     }
+    //     if (i !== comps.length - 1) {
+    //         if (comps[i + 1].value !== '@') {
+    //             return {'error': 'Error: Expect ] at the end of the variable'};
+    //         }
+    //         if (!comps[i + 2] || comps[i + 2].type !== strType.VAR) {
+    //             return {'error': 'Error: Expect attribute name after @'};
+    //         }
+    //     }
+    //     addVars(vars, comps[0].value);
+    //     return {'usedVars': vars};
+    // }
+    // if (comps[1].value === '@') {
+    //     if (comps[2].type !== strType.VAR) {
+    //         return {'error': 'Error: Expect attribute name after @'};
+    //     }
+    //     return {'usedVars': [comps[0].value]};
+    // }
+    // if (comps[1].value === '.') {
+    //     if (comps[2].type !== strType.VAR) {
+    //         return {'error': 'Error: Expect attribute name after .'};
+    //     }
+    //     return {'usedVars': [comps[0].value]};
+    // }
 }
 
 
 // NEW ARGUMENT INPUT
-export function parseArgument1(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
+export function parseArgument(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
     // console.log('_____',str);
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
         return {'error': comps};
     }
     // console.log(comps);
-    let i = 0;
     const vars: string[] = [];
     let newString = '';
-    while (i < comps.length) {
-        if (comps[i].value === ',') {
-            return {'error': 'Error: Invalid ","' +
-            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-        }
-        // console.log('MAIN_____', i);
-        const check = analyzeComp(comps, i, vars);
-        if (check.error) {
-            console.log(check.error, '\n', str);
-            return check;
-        }
-        i = check.value;
-        newString += check.str;
+    const check = analyzeComp(comps, 0, vars);
+    if (check.error) {
+        console.log(check.error, '\n', str);
+        return check;
+    }
+    newString += check.str;
+    if (check.i !== comps.length - 1) {
+        console.log('..... Arg', newString, str, check.i, comps.length);
+        return {'error': `Error: Invalid "${comps[check.i + 1].value}"` +
+        `at: ... ${comps.slice(check.i + 1).map(cp => cp.value).join(' ')}`};
     }
     return {'vars': vars, 'str': newString.trim()};
 }
@@ -629,7 +639,7 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
 }
 
 // ARGUMENT INPUT
-export function parseArgument(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
+export function parseArgument_OLD(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
         return {'error': comps};

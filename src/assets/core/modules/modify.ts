@@ -15,6 +15,7 @@ import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from './_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
+import __ from 'underscore';
 
 // ================================================================================================
 /**
@@ -274,7 +275,7 @@ export enum _EModifyCollectionMethod {
     ADD_ENTITIES = 'add_entities',
     REMOVE_ENTITIES = 'remove_entities'
 }
-function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTypeIdx|TEntTypeIdx[], 
+function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         method: _EModifyCollectionMethod): void {
     const [_, coll_i]: TEntTypeIdx = coll_arr;
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
@@ -323,7 +324,7 @@ function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTy
  * If the method is 'add_entities', then entities are added to the collection.
  * If the method is 'remove_entities', then entities are removed from the collection.
  * If adding or removing entities, then the entities must be points, polylines, or polygons.
- * 
+ *
  * @param __model__
  * @param coll The collection to be updated.
  * @param entities Points, polylines, and polygons, or a single collection.
@@ -636,7 +637,7 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_un
  */
 export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
     // @ts-ignore
-    if (Array.isArray(entities)) { entities = entities.flat(); }
+    if (Array.isArray(entities)) { entities = __.flatten(entities); }
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList],
@@ -707,7 +708,7 @@ function _keep(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
  */
 export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
     // @ts-ignore
-    if (Array.isArray(entities)) { entities = entities.flat(); }
+    if (Array.isArray(entities)) { entities = __.flatten(entities); }
     // --- Error Check ---
     const ents_arr = checkIDs('modify.Delete', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList],

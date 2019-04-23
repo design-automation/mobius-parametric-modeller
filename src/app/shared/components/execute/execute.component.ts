@@ -229,26 +229,42 @@ export class ExecuteComponent {
             // }
             this.dataService.clearModifiedNode();
         }
+        for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+            if (executeSet.has(i)) {
+                this.dataService.flowchart.nodes[i].hasExecuted = false;
+            } else {
+                this.dataService.flowchart.nodes[i].hasExecuted = true;
+            }
+        }
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
-        // for (const i of executeSet) {
             const node = this.dataService.flowchart.nodes[i];
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
             if (!executeSet.has(i)) {
-                node.output.value = _parameterTypes.newFn();
-                node.output.value.setData(JSON.parse(node.model));
+                let exCheck = false;
+                for (const edge of node.output.edges) {
+                    if (!edge.target.parentNode.hasExecuted) {
+                        exCheck = true;
+                    }
+                }
+                if (exCheck) {
+                    node.output.value = _parameterTypes.newFn();
+                    node.output.value.setData(JSON.parse(node.model));
+                }
                 continue;
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
 
         for (const node of this.dataService.flowchart.nodes) {
-            if (node.type !== 'end') {
-                delete node.output.value;
-            }
+            delete node.output.value;
+
+            // if (node.type !== 'end') {
+            //     delete node.output.value;
+            // }
         }
 
         this.dataOutputService.resetIModel();
@@ -398,6 +414,16 @@ export class ExecuteComponent {
                 }
             }
             node.output.value = result;
+            node.hasExecuted = true;
+            node.input.edges.forEach( edge => {
+                const inputNode = edge.source.parentNode;
+                if (inputNode.output.edges.length > 1) {
+                    for (const outputEdge of inputNode.output.edges) {
+                        if (!outputEdge.target.parentNode.hasExecuted) { return; }
+                    }
+                }
+                inputNode.output.model = null;
+            });
 
             // diff(node.output.value.getData(), node.input.value.getData());
             if (node.type === 'start') {

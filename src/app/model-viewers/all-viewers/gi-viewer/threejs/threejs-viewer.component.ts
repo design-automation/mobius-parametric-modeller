@@ -417,11 +417,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     } else {
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
-                        const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-                        if (select !== undefined) {
-                            localStorage.setItem('mpm_attrib_current_tab', select.tab);
-                            sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
-                        }
                         this.refreshTable(event);
                     }
                     this.getSelectingEntityType();
@@ -601,7 +596,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private selectObj(intersect0: THREE.Intersection) {
         const scene = this._data_threejs;
-        this.getSelectingEntityType();
+        // this.getSelectingEntityType();
         switch (this.SelectingEntityType.id) {
             case EEntTypeStr[EEntType.POSI]:
                 if (intersect0.object.type === 'Points') {
@@ -1343,6 +1338,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private selectEntityType(selection: { id: string, name: string }) {
         this.SelectingEntityType = selection;
         localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(selection));
+
+        const settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        if (settings !== undefined) {
+            settings.select.selector = selection;
+            localStorage.setItem('mpm_settings', JSON.stringify(settings));
+        }
         this.selectDropdownVisible = false;
     }
 

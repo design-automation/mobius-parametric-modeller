@@ -110,8 +110,8 @@ export class ExecuteComponent {
                         node.hasError = true;
                         prod.hasError = true;
                         if (ex.message.indexOf('HTTP') !== -1 || ex.message.indexOf('File Reading') !== -1) {
-                            document.getElementById('Console').click();
                             document.getElementById('spinner-off').click();
+                            document.getElementById('Console').click();
                             const _category = this.isDev ? 'dev' : 'execute';
                             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
                                 'click', performance.now() - this.startTime);
@@ -171,15 +171,19 @@ export class ExecuteComponent {
             }
         }
 
-        if (testing) {
-            this.executeFlowchart();
-            return;
-        } else {
-            // setTimeout for 20ms so that the loading screen has enough time to be loaded in
-            setTimeout(() => {
+        try {
+            if (testing) {
                 this.executeFlowchart();
-                this.dataService.log(' ');
-            }, 20);
+                return;
+            } else {
+                // setTimeout for 20ms so that the loading screen has enough time to be loaded in
+                setTimeout(() => {
+                    this.executeFlowchart();
+                    this.dataService.log(' ');
+                }, 20);
+            }
+        } catch (ex) {
+            document.getElementById('spinner-off').click();
         }
     }
 
@@ -204,7 +208,12 @@ export class ExecuteComponent {
 
         let executeSet: any;
         // let startIndex: number;
-        const currentUrl = this.router.url.split('?')[0];
+        let currentUrl = this.router.url;
+        if (currentUrl) {
+            currentUrl = currentUrl.split('?')[0];
+        } else {
+            currentUrl = '/editor';
+        }
         if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0
             || (currentUrl !== '/flowchart' && currentUrl !== '/editor')) {
             executeSet = new Set(this.dataService.flowchart.nodes.keys());
@@ -220,26 +229,42 @@ export class ExecuteComponent {
             // }
             this.dataService.clearModifiedNode();
         }
+        for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
+            if (executeSet.has(i)) {
+                this.dataService.flowchart.nodes[i].hasExecuted = false;
+            } else {
+                this.dataService.flowchart.nodes[i].hasExecuted = true;
+            }
+        }
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
-        // for (const i of executeSet) {
             const node = this.dataService.flowchart.nodes[i];
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
             if (!executeSet.has(i)) {
-                node.output.value = _parameterTypes.newFn();
-                node.output.value.setData(JSON.parse(node.model));
+                let exCheck = false;
+                for (const edge of node.output.edges) {
+                    if (!edge.target.parentNode.hasExecuted) {
+                        exCheck = true;
+                    }
+                }
+                if (exCheck) {
+                    node.output.value = _parameterTypes.newFn();
+                    node.output.value.setData(JSON.parse(node.model));
+                }
                 continue;
             }
             globalVars = this.executeNode(node, funcStrings, globalVars);
         }
 
         for (const node of this.dataService.flowchart.nodes) {
-            if (node.type !== 'end') {
-                delete node.output.value;
-            }
+            delete node.output.value;
+
+            // if (node.type !== 'end') {
+            //     delete node.output.value;
+            // }
         }
 
         this.dataOutputService.resetIModel();
@@ -389,6 +414,16 @@ export class ExecuteComponent {
                 }
             }
             node.output.value = result;
+            node.hasExecuted = true;
+            node.input.edges.forEach( edge => {
+                const inputNode = edge.source.parentNode;
+                if (inputNode.output.edges.length > 1) {
+                    for (const outputEdge of inputNode.output.edges) {
+                        if (!outputEdge.target.parentNode.hasExecuted) { return; }
+                    }
+                }
+                inputNode.output.model = null;
+            });
 
             // diff(node.output.value.getData(), node.input.value.getData());
             if (node.type === 'start') {

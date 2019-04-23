@@ -10,6 +10,7 @@ import { FlowchartUtils } from '@models/flowchart';
 import { _model } from '@modules';
 import * as galleryUrl from '@assets/gallery/__config__.json';
 import * as testUrl from '@assets/unit_tests/unit_test.json';
+import { DataOutputService } from '@shared/services/dataOutput.service';
 
 describe('Execute Component test', () => {
     let loadURLfixture:   ComponentFixture<LoadUrlComponent>;
@@ -17,8 +18,10 @@ describe('Execute Component test', () => {
     let spinnerFixture:   ComponentFixture<SpinnerComponent>;
     let router: Router;
     let dataService: DataService;
+    let dataOutputService: DataOutputService;
 
     beforeEach(() => {
+        // jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
         const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
         TestBed.configureTestingModule({
@@ -32,6 +35,7 @@ describe('Execute Component test', () => {
             ],
             providers: [
                 DataService,
+                DataOutputService,
                 { provide: Router,      useValue: routerSpy },
                 GoogleAnalyticsService
             ]
@@ -41,6 +45,7 @@ describe('Execute Component test', () => {
         spinnerFixture = TestBed.createComponent(SpinnerComponent);
         router = TestBed.get(Router);
         dataService = TestBed.get(DataService);
+        dataOutputService = TestBed.get(DataOutputService);
         window['ga'] = function() { };
         // dataService.file.flowchart = undefined;
     });
@@ -61,6 +66,8 @@ describe('Execute Component test', () => {
                     for (const node of dataService.flowchart.nodes) {
                         nodeProcedures += node.procedure.length;
                     }
+                    dataService.flagModifiedNode(dataService.file.flowchart.nodes[0].id);
+
                     expect(nodeProcedures > dataService.flowchart.nodes.length + 1).toBe(true,
                             `${f.split('.mob')[0]}.mob is an empty flowchart`);
                     if (nodeCheck) {
@@ -85,6 +92,7 @@ describe('Execute Component test', () => {
             nodeCheck = true;
         }
         it('load and execute test file: ' + testName.split('.mob')[0], async (done: DoneFn) => {
+            console.log('---------------', router.url);
             await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url}`);
             const spy = router.navigate as jasmine.Spy;
             expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName}.mob`);
@@ -102,9 +110,10 @@ describe('Execute Component test', () => {
                 expect(testName.split('.mob')[0]).toBe(dataService.file.name,
                     'Loaded file name and the file name in dataService do not match.');
                 const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                expect(output.model).toBeDefined(
-                    `Execute fails. The end node model is not defined.`);
-                const geom_data = output.model.getData().geometry;
+                const oModel = dataOutputService.getViewerData(output, true);
+                // expect(oModel).toBeDefined( `Execute fails. The end node model is not defined.` + test.url);
+                expect(oModel).toBeTruthy( `Execute fails. The end node model is not defined.`);
+                const geom_data = oModel.getData().geometry;
                 if (test.requirements.hasOwnProperty('num_positions')) {
                     expect(geom_data.num_positions).toBe(test.requirements['num_positions'], 'No. positions do not match');
                 }
@@ -138,7 +147,7 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
-                expect(_model.__checkModel__(output.model)).toEqual([], '_model.__checkModel__ failed');
+                expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
             }
             done();
         });

@@ -252,7 +252,7 @@ export class CodeUtils {
         }
         if (prod.children) {
             for (const p of prod.children) {
-                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart));
+                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
             }
             codeStr.push(`}`);
         }

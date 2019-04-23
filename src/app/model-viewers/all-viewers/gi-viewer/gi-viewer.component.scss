@@ -330,6 +330,16 @@ body.modal-open {
         float: left;
     }
 
+    #camera{
+        input{
+            width: 80px;
+            border: 1px solid #bdbdbd;
+            height: 16px;
+            margin-right: 3px;
+            text-align: right;
+            padding-right: 3px
+        }
+    }
 }
 
 /deep/ #settingsTab{

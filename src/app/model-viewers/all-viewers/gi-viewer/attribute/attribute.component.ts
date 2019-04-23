@@ -1,6 +1,6 @@
 import {
   Component, Injector, Input, OnChanges, SimpleChanges,
-  ViewChildren, QueryList, Output, EventEmitter, ViewChild, AfterViewInit
+  ViewChildren, QueryList, Output, EventEmitter, ViewChild, DoCheck
 } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { GIModel } from '@libs/geo-info/GIModel';
@@ -15,7 +15,7 @@ import { ATabsComponent } from './tabs.component';
   styleUrls: ['./attribute.component.scss'],
 })
 
-export class AttributeComponent implements OnChanges, AfterViewInit {
+export class AttributeComponent implements OnChanges, DoCheck {
   @ViewChild(ATabsComponent) child: ATabsComponent;
 
   @Input() data: GIModel;
@@ -86,27 +86,25 @@ export class AttributeComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    setInterval(() => {
-      const attrib = document.getElementById('attrib');
-      if (attrib) {
-        const paginators = document.getElementsByClassName('mat-paginator');
-        const l = paginators.length;
-        if (attrib.clientWidth < 600) {
-          let index = 0;
-          for (; index < l; index++) {
-            const p = paginators[index];
-            p.className = 'mat-paginator hide';
-          }
-        } else {
-          let index = 0;
-          for (; index < l; index++) {
-            const p = paginators[index];
-            p.className = 'mat-paginator';
-          }
+  ngDoCheck() {
+    const attrib = document.getElementById('attrib');
+    if (attrib) {
+      const paginators = document.getElementsByClassName('mat-paginator');
+      const l = paginators.length;
+      if (attrib.clientWidth < 600) {
+        let index = 0;
+        for (; index < l; index++) {
+          const p = paginators[index];
+          p.className = 'mat-paginator hide';
+        }
+      } else {
+        let index = 0;
+        for (; index < l; index++) {
+          const p = paginators[index];
+          p.className = 'mat-paginator';
         }
       }
-    }, 500);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -172,6 +170,15 @@ export class AttributeComponent implements OnChanges, AfterViewInit {
   _setDataSource(tabIndex: number) {
     setTimeout(() => {
       localStorage.setItem('mpm_attrib_current_tab', tabIndex.toString());
+      const settings = JSON.parse(localStorage.getItem('mpm_settings'));
+      if (settings !== undefined) {
+        if (settings.select !== undefined) {
+          settings.select.tab = tabIndex.toString();
+        } else {
+          settings.select = {selector: {id: '_f', name: 'Faces'}, tab: '0'};
+        }
+        localStorage.setItem('mpm_settings', JSON.stringify(settings));
+      }
       if (tabIndex === 999) {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();

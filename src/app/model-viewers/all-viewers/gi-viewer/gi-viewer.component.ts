@@ -5,10 +5,11 @@ import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings'
 import { Component, Input, OnInit } from '@angular/core';
 // import app services
 import { DataService } from './data/data.service';
-import { DataService as MD} from '@services';
+import { DataService as MD } from '@services';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
+import { Vector3 } from 'three';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -32,7 +33,7 @@ export class GIViewerComponent implements OnInit {
 
     normalsEnabled = false;
 
-    columns_control;
+    temp_camera_pos = new Vector3(-80, -80, 80);
 
     public clickedEvent: Event;
     public attrTableSelect: Event;
@@ -49,6 +50,7 @@ export class GIViewerComponent implements OnInit {
         private modalService: ModalService,
         private cpService: ColorPickerService,
         private mainDataService: MD) {
+
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         const devMode = isDevMode();
         // const devMode = false;
@@ -58,9 +60,6 @@ export class GIViewerComponent implements OnInit {
             devMode) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
-        // if (localStorage.getItem('mpm_attrib_columns') !== null) {
-        //     this.columns_control = JSON.parse(localStorage.getItem('mpm_attrib_columns'));
-        // }
     }
 
     /**
@@ -82,6 +81,7 @@ export class GIViewerComponent implements OnInit {
             this.dataService.setThreejsScene(this.settings);
         }
         localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
+        this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
     }
 
     private getSettings() {
@@ -126,10 +126,15 @@ export class GIViewerComponent implements OnInit {
     closeModal(id: string, save = false) {
         this.modalService.close(id);
         if (save) {
-            const selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
-            const tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
-            this.settings.select.selector = selector;
-            this.settings.select.tab = tab;
+            const _selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
+            const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
+            this.settings.select = { selector: _selector, tab: _tab };
+            this.settings.camera = {
+                pos: this.temp_camera_pos,
+                pos_x: this.temp_camera_pos.x,
+                pos_y: this.temp_camera_pos.y,
+                pos_z: this.temp_camera_pos.z,
+            };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
@@ -179,6 +184,30 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'wireframe.show':
                 this.wireframeToggle();
+                break;
+            case 'camera.curr_pos':
+                // this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+                break;
+            case 'camera.curr_pos_x':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.x = Math.round(value);
+                this.setCamera(value, null, null);
+                break;
+            case 'camera.curr_pos_y':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.y = Math.round(value);
+                this.setCamera(null, value, null);
+                break;
+            case 'camera.curr_pos_z':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.z = Math.round(value);
+                this.setCamera(null, null, value);
                 break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;
@@ -294,7 +323,7 @@ export class GIViewerComponent implements OnInit {
             if (obj.type === 'Mesh') {
                 this.settings.wireframe.show = !this.settings.wireframe.show;
                 // @ts-ignore
-                // obj.material.wireframe = this.settings.wireframe.show;
+                obj.material.wireframe = this.settings.wireframe.show;
             }
         });
     }
@@ -309,6 +338,24 @@ export class GIViewerComponent implements OnInit {
         const d = document.getElementById('published');
         return d !== null;
     }
+
+    setCamera(x = null, y = null, z = null) {
+        const scene = this.dataService.getThreejsScene();
+        if (x) {
+            scene._camera.position.x = x;
+        }
+        if (y) {
+            scene._camera.position.y = y;
+        }
+        if (z) {
+            scene._camera.position.z = z;
+        }
+        scene._camera.lookAt(scene._scene.position);
+        scene._camera.updateProjectionMatrix();
+    }
+    formatNumber(value) {
+        return Math.round(value * 100) / 100;
+    }
 }
 
 interface Settings {
@@ -316,9 +363,15 @@ interface Settings {
     axes: { show: boolean, size: number };
     grid: { show: boolean, size: number };
     positions: { show: boolean, size: number };
+    wireframe: { show: boolean };
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
-    wireframe: { show: boolean };
+    camera: {
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number
+    };
     colors: {
         viewer_bg: string,
         position: string,

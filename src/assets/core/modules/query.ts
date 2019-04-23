@@ -384,6 +384,7 @@ function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boo
 }
 
 export enum _EQueryEntType {
+    EXISTS = 'exists',
     IS_POSI =   'is_position',
     IS_USED_POSI = 'is_used_posi',
     IS_UNUSED_POSI = 'is_unused_posi',
@@ -405,6 +406,10 @@ export enum _EQueryEntType {
     IS_HOLE =      'is_hole',
     HAS_HOLES =    'has_holes',
     HAS_NO_HOLES = 'has_no_holes'
+}
+function _exists(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
+    const [ent_type, index]: TEntTypeIdx = ent_arr;
+    return __model__.geom.query.entExists(ent_type, index);
 }
 function _isUsedPosi(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
     const [ent_type, index]: TEntTypeIdx = ent_arr;
@@ -497,6 +502,8 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
         const ent_arr: TEntTypeIdx = ents_arr as TEntTypeIdx;
         const [ent_type, _]: TEntTypeIdx = ent_arr;
         switch (query_ent_type) {
+            case _EQueryEntType.EXISTS:
+                return _exists(__model__, ent_arr);
             case _EQueryEntType.IS_POSI:
                 return ent_type === EEntType.POSI;
             case _EQueryEntType.IS_USED_POSI:

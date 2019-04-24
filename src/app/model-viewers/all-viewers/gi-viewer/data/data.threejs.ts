@@ -162,13 +162,12 @@ export class DataThreejs {
             this._camera.position.set(-80, -80, 80);
             return;
         }
-        if (this.settings.camera !== undefined) {
-            this._camera.position.set(this.settings.camera.pos.x, this.settings.camera.pos.y, this.settings.camera.pos.z);
-        } else {
-            this._camera.position.set(-200, -200, 200);
-        }
-        this._camera.lookAt(this._scene.position);
-        this._camera.updateProjectionMatrix();
+        // if (this.settings.camera !== undefined) {
+        //     this._camera.position.set(this.settings.camera.pos.x, this.settings.camera.pos.y, this.settings.camera.pos.z);
+        // } else {
+        //     this._camera.position.set(-200, -200, 200);
+        // }
+        // this._camera.lookAt(this._scene.position);
 
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
@@ -206,15 +205,17 @@ export class DataThreejs {
             this._scene.add(this.groundObj);
         }
 
-        const allObjs = this.getAllObjs();
-        const center = allObjs.center;
-        this.grid_pos.x = center.x;
-        this.grid_pos.y = center.y;
-        this.axes_pos.x = center.x;
-        this.axes_pos.y = center.y;
-        this.grid.position.set(center.x, center.y, 0);
-        this.axesHelper.position.set(center.x, center.y, 0);
+        // const allObjs = this.getAllObjs();
+        // const center = allObjs.center;
+        // this.grid_pos.x = center.x;
+        // this.grid_pos.y = center.y;
+        // this.axes_pos.x = center.x;
+        // this.axes_pos.y = center.y;
+        // this.grid.position.set(center.x, center.y, 0);
+        // this.axesHelper.position.set(center.x, center.y, 0);
         // this.cameraLookat(center, allObjs.radius);
+        // this._camera.lookAt(center);
+        // this._camera.updateProjectionMatrix();
 
         setTimeout(() => {
             if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }

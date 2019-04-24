@@ -52,8 +52,8 @@ export class GIViewerComponent implements OnInit {
         private mainDataService: MD) {
 
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        const devMode = isDevMode();
-        // const devMode = false;
+        // const devMode = isDevMode();
+        const devMode = false;
         if (previous_settings === null ||
             this.hasDiffProps(previous_settings, this.settings) ||
             this.settings.version !== previous_settings.version ||
@@ -193,21 +193,21 @@ export class GIViewerComponent implements OnInit {
                     return;
                 }
                 this.temp_camera_pos.x = Math.round(value);
-                this.setCamera(value, null, null);
+                // this.setCamera(value, null, null);
                 break;
             case 'camera.curr_pos_y':
                 if (isNaN(value)) {
                     return;
                 }
                 this.temp_camera_pos.y = Math.round(value);
-                this.setCamera(null, value, null);
+                // this.setCamera(null, value, null);
                 break;
             case 'camera.curr_pos_z':
                 if (isNaN(value)) {
                     return;
                 }
                 this.temp_camera_pos.z = Math.round(value);
-                this.setCamera(null, null, value);
+                // this.setCamera(null, null, value);
                 break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;

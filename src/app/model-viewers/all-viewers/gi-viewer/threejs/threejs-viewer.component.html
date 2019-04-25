@@ -46,7 +46,7 @@
         matTooltip="Selecting {{SelectingEntityType.name}}"
         (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
     >
-        {{SelectingEntityType.id}}
+        {{EntTypeToStr(SelectingEntityType.id)}}
     </span>
     <div
         id="selectDropdown"
@@ -57,7 +57,7 @@
             (click)="selectEntityType(selection); needSelect=false"
             [class.active]="SelectingEntityType.id === selection.id"
         >
-            <span matTooltip="Select {{selection.name}}">{{selection.id}}</span>
+            <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
         </button>
     </div>
 

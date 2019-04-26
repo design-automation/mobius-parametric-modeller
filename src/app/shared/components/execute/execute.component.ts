@@ -84,6 +84,7 @@ export class ExecuteComponent {
             try {
                 await this.resolveImportedUrl(node.procedure, true);
             } catch (ex) {
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
                 document.getElementById('Console').click();
                 this.dataService.log(ex.message);
@@ -112,6 +113,7 @@ export class ExecuteComponent {
                         if (ex.message.indexOf('HTTP') !== -1 || ex.message.indexOf('File Reading') !== -1) {
                             document.getElementById('spinner-off').click();
                             document.getElementById('Console').click();
+                            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                             const _category = this.isDev ? 'dev' : 'execute';
                             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
                                 'click', performance.now() - this.startTime);
@@ -141,6 +143,7 @@ export class ExecuteComponent {
             if (EmptyECheck) {
                 document.getElementById('Console').click();
                 this.dataService.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
@@ -151,6 +154,7 @@ export class ExecuteComponent {
                 this.dataService.log('Error: Invalid Argument or Argument with Reserved Word detected.' +
                                      'Check marked node(s) and procedure(s)!');
                 document.getElementById('spinner-off').click();
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
                     'click', performance.now() - this.startTime);
@@ -469,6 +473,7 @@ export class ExecuteComponent {
             }
             this.dataService.log(duration_msg);
             this.dataService.log(' ');
+            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             document.getElementById('spinner-off').click();
             if (DEBUG) {
                 this.dataService.log('\n=======================================\n' +

@@ -56,7 +56,7 @@ export const DefaultSettings = {
         shininess: 0
     },
     select: {
-        selector: {'id': '_f', 'name': 'Faces'},
+        selector: {id: 5, name: 'Faces'},
         tab: 0
     },
     version: VERSION.version

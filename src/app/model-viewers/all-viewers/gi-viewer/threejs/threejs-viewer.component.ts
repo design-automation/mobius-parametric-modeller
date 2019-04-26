@@ -54,14 +54,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     // right selection dropdown
     // public needSelect = false;
     // current entity type enabled for selection
-    public SelectingEntityType: { id: string, name: string } = { id: EEntTypeStr[EEntType.FACE], name: 'Faces' };
+    public SelectingEntityType: { id: number, name: string } = { id: EEntType.FACE, name: 'Faces' };
     public selectDropdownVisible = false;
     public selections = [
-        { id: EEntTypeStr[EEntType.POSI], name: 'Positions' }, { id: EEntTypeStr[EEntType.VERT], name: 'Vetex' },
-        { id: EEntTypeStr[EEntType.EDGE], name: 'Edges' }, { id: EEntTypeStr[EEntType.WIRE], name: 'Wires' },
-        { id: EEntTypeStr[EEntType.FACE], name: 'Faces' }, { id: EEntTypeStr[EEntType.POINT], name: 'Points' },
-        { id: EEntTypeStr[EEntType.PLINE], name: 'Polylines' }, { id: EEntTypeStr[EEntType.PGON], name: 'Polygons' },
-        { id: EEntTypeStr[EEntType.COLL], name: 'Collections' }];
+        { id: EEntType.POSI, name: 'Positions' }, { id: EEntType.VERT, name: 'Vetex' },
+        { id: EEntType.EDGE, name: 'Edges' }, { id: EEntType.WIRE, name: 'Wires' },
+        { id: EEntType.FACE, name: 'Faces' }, { id: EEntType.POINT, name: 'Points' },
+        { id: EEntType.PLINE, name: 'Polylines' }, { id: EEntType.PGON, name: 'Polygons' },
+        { id: EEntType.COLL, name: 'Collections' }];
 
     public dropdownPosition = { x: 0, y: 0 };
 
@@ -273,10 +273,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     element.innerHTML = String(index);
                 }
             } else {
+                const ent_arr = this.model.geom.query.getEnts(this.SelectingEntityType.id, false);
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
-                    const val = element.getAttribute('data-index');
-                    element.innerHTML = String(val);
+                    const val = Number(element.getAttribute('data-index'));
+                    const index = ent_arr.findIndex(l => l === val);
+                    element.innerHTML = String(index);
                 }
             }
         }
@@ -412,7 +414,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
                         sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
                         localStorage.setItem('mpm_attrib_current_tab', this.tab_rev_map[selectingType]);
-                        this.selectEntityType(this.selections.find(selection => selection.id === EEntTypeStr[selectingType]));
+                        this.selectEntityType(this.selections.find(selection => selection.id === selectingType));
                         this.refreshTable(event);
                     } else {
                         sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
@@ -587,7 +589,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (select !== undefined) {
             this.SelectingEntityType = select.selector;
         } else {
-            this.SelectingEntityType = {'id': '_f', 'name': 'Faces'};
+            this.SelectingEntityType = {id: EEntType.FACE, name: 'Faces'};
         }
         // if (localStorage.getItem('mpm_selecting_entity_type') != null) {
         //     this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
@@ -598,7 +600,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         // this.getSelectingEntityType();
         switch (this.SelectingEntityType.id) {
-            case EEntTypeStr[EEntType.POSI]:
+            case EEntType.POSI:
                 if (intersect0.object.type === 'Points') {
                     const posi = scene.posis_map.get(intersect0.index);
                     const ent_id = `${EEntTypeStr[EEntType.POSI]}${posi}`;
@@ -635,7 +637,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 }
                 break;
-            case EEntTypeStr[EEntType.VERT]:
+            case EEntType.VERT:
                 if (intersect0.object.type === 'Points') {
                     const vert = scene.vertex_map.get(intersect0.index);
                     const verts = this.model.geom.query.navPosiToVert(intersect0.index);
@@ -681,13 +683,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 }
                 break;
-            case EEntTypeStr[EEntType.COLL]:
+            case EEntType.COLL:
                 if (!this.shiftKeyPressed) {
                     this.unselectAll();
                 }
                 this.selectColl(intersect0, intersect0.object.type);
                 break;
-            case EEntTypeStr[EEntType.FACE]:
+            case EEntType.FACE:
                 if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.geom.query.navTriToFace(tri);
@@ -704,7 +706,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.showMessages('Faces');
                 }
                 break;
-            case EEntTypeStr[EEntType.PGON]:
+            case EEntType.PGON:
                 if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.geom.query.navTriToFace(tri);
@@ -722,7 +724,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.showMessages('Polygons');
                 }
                 break;
-            case EEntTypeStr[EEntType.EDGE]:
+            case EEntType.EDGE:
                 if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `${EEntTypeStr[EEntType.EDGE]}${edge}`;
@@ -750,7 +752,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.showMessages('Edges');
                 }
                 break;
-            case EEntTypeStr[EEntType.WIRE]:
+            case EEntType.WIRE:
                 if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2),
                         wire = this.model.geom.query.navEdgeToWire(edge);
@@ -779,7 +781,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.showMessages('Wires');
                 }
                 break;
-            case EEntTypeStr[EEntType.PLINE]:
+            case EEntType.PLINE:
                 if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const wire = this.model.geom.query.navEdgeToWire(edge);
@@ -801,7 +803,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.showMessages('Polylines');
                 }
                 break;
-            case EEntTypeStr[EEntType.POINT]:
+            case EEntType.POINT:
                 if (intersect0.object.type === 'Points') {
                     const vert = this.model.geom.query.navPosiToVert(intersect0.index);
                     const _point = this.model.geom.query.navVertToPoint(vert[0]);
@@ -1335,7 +1337,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._data_threejs.lookAtObj(this._width);
     }
 
-    private selectEntityType(selection: { id: string, name: string }) {
+    private EntTypeToStr(ent_type: EEntType) {
+        return EEntTypeStr[ent_type];
+    }
+
+    private selectEntityType(selection: { id: number, name: string }) {
         this.SelectingEntityType = selection;
         localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(selection));
 
@@ -1348,9 +1354,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     selectEntity(id: number) {
-        if (this.SelectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
+        if (this.SelectingEntityType.id === EEntType.COLL) {
             this.chooseColl(id);
-        } else if (this.SelectingEntityType.id === EEntTypeStr[EEntType.VERT]) {
+        } else if (this.SelectingEntityType.id === EEntType.VERT) {
             this.chooseVertex(id);
         }
     }

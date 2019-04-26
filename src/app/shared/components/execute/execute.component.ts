@@ -73,6 +73,7 @@ export class ExecuteComponent {
 
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
+            node.hasError = false;
             let EmptyECheck = false;
             let InvalidECheck = false;
             if (node.type !== 'start') {

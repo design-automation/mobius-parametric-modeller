@@ -322,6 +322,7 @@ export class ExecuteComponent {
             // if process is terminated, return
             if (codeResult[1]) {
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${codeResult[1]}"`);
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 if (!codeResult[0]) {
                     node.model = undefined;
                     return;

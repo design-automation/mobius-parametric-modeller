@@ -46,7 +46,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     // variable for flowchart zooming
     private mousePos = [0, 0];
     private zoom = 10;
-    private minZoom = 5;
+    private minZoom = 2;
     private maxZoom = 25;
     private zoomFactor = 1;
 

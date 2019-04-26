@@ -33,7 +33,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         setTimeout(() => {
             this.adjustTextArea();
             this.dataService.attribVal = 0;
-        }, 50);
+        }, 100);
     }
 
     ngOnDestroy() {
@@ -45,6 +45,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
     }
 
     adjustTextArea() {
+        if (!this.ctx) { return; }
         let textarea = document.getElementById('display-flowchart-desc');
         if (textarea) {
             const desc = this.dataService.flowchart.description.split('\n');

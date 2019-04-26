@@ -25,7 +25,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         setTimeout(() => {
             this.adjustTextArea();
-        }, 50);
+        }, 100);
     }
 
     ngOnDestroy() {
@@ -37,6 +37,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
     }
 
     adjustTextArea() {
+        if (!this.ctx) { return; }
         let textarea = document.getElementById('display-flowchart-desc');
         if (textarea) {
             const desc = this.dataService.flowchart.description.split('\n');

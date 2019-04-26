@@ -52,11 +52,12 @@ export class PanelHeaderComponent implements OnDestroy {
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[index].id);
             if ((index === 0 || index === this.dataService.flowchart.nodes.length - 1)) { setTimeout(() => {
                 this.adjustTextArea();
-            }, 50); }
+            }, 100); }
         }
     }
 
     adjustTextArea() {
+        if (!this.ctx) { return; }
         let textarea = document.getElementById('flowchart-desc');
         if (textarea) {
             const desc = this.dataService.flowchart.description.split('\n');

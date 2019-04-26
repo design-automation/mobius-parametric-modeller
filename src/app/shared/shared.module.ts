@@ -34,6 +34,7 @@ import { ChromeComponent } from './components/chrome/chrome.component';
 import { AutogrowDirective } from './directives/textarea';
 import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { ParameterViewerComponent } from './components/parameter-viewer/parameter-viewer.component';
+import { SaveJavascriptComponent } from './components/file/savejavascript.component';
 
 @NgModule({
     providers: [ ],
@@ -50,7 +51,7 @@ import { ParameterViewerComponent } from './components/parameter-viewer/paramete
             ParameterViewerComponent,
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             // ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
-            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent,
+            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent, SaveJavascriptComponent,
             SpinnerComponent,
             ChromeComponent
         ],
@@ -98,7 +99,7 @@ import { ParameterViewerComponent } from './components/parameter-viewer/paramete
             ChromeComponent,
             // ParameterViewerComponent,
             NotificationComponent,
-            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent,
+            NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent, SaveJavascriptComponent,
             ParameterViewerComponent
     ]
 })

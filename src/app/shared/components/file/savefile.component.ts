@@ -4,7 +4,7 @@ import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
 import { DataService } from '@services';
 import { InputType } from '@models/port';
-import { ProcedureTypes } from '@models/procedure';
+import { ProcedureTypes, IProcedure } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
 import { INode } from '@models/node';
@@ -108,6 +108,16 @@ export class SaveFileComponent {
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
+    static clearResolvedValue(prodList: IProcedure[]) {
+        prodList.forEach(prod => {
+            if (prod.hasOwnProperty('resolvedValue')) {
+                prod.resolvedValue = undefined;
+            }
+            if (prod.children) {
+                SaveFileComponent.clearResolvedValue(prod.children);
+            }
+        });
+    }
 
     async download() {
         const f = this.dataService.file;
@@ -151,7 +161,9 @@ export class SaveFileComponent {
             }
         }
 
+        const modelMap = {};
         for (const node of f.flowchart.nodes) {
+            modelMap[node.id] = node.model;
             node.model = undefined;
             if (node.input.hasOwnProperty('value')) {
                 node.input.value = undefined;
@@ -159,6 +171,7 @@ export class SaveFileComponent {
             if (node.output.hasOwnProperty('value')) {
                 node.output.value = undefined;
             }
+            SaveFileComponent.clearResolvedValue(node.procedure);
             for (const prod of node.procedure) {
                 if (prod.hasOwnProperty('resolvedValue')) {
                     prod.resolvedValue = undefined;
@@ -206,7 +219,9 @@ export class SaveFileComponent {
         }
 
         DownloadUtils.downloadFile(fname, blob);
-
+        for (const node of f.flowchart.nodes) {
+            node.model = modelMap[node.id];
+        }
         this.dataService.file.name = 'Untitled';
     }
 

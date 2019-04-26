@@ -5,6 +5,7 @@
         <file-new></file-new>
         <file-save></file-save>
         <file-load></file-load>
+        <javascript-save></javascript-save>
     </div>
 
     <!-- buttons -->
@@ -80,6 +81,12 @@
                 title="Load Flowchart File from Computer">
                     <mat-icon>launch</mat-icon>
                     Load File 
+                </button>
+                <br>
+                <button onclick="document.getElementById('savejavascript').click();"
+                title="Save Javascript Execution code to Computer">
+                    <mat-icon>save</mat-icon>
+                    Save JS
                 </button>
                 <br>
                 <button (click)="openHeaderDialog($event, 'backup')"

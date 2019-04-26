@@ -548,6 +548,7 @@ export class CodeUtils {
 
         for (const node of func.flowchart.nodes) {
             const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
+            const nodeFuncName = `${func.name}_${node.id}`;
             let code: any = codeRes[0];
             if (node.type === 'start') {
                 code = '{ return __params__.model; }';
@@ -555,14 +556,14 @@ export class CodeUtils {
                 code = '{\n' + code.join('\n') + '\n}';
             }
             if (func.argCount === 0) {
-                fullCode += `function ${node.id}(__params__)` + code + `\n\n`;
+                fullCode += `function ${nodeFuncName}(__params__)` + code + `\n\n`;
             } else {
-                fullCode += `function ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')})` + code + `\n\n`;
+                fullCode += `function ${nodeFuncName}(__params__, ${func.args.map(arg => arg.name).join(', ')})` + code + `\n\n`;
             }
 
             if (node.type === 'start') {
-                // fnCode += `let result_${node.id} = ${node.id}(__params__);\n`
-                fnCode += `let result_${node.id} = __params__.model;\n`;
+                // fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__);\n`
+                fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
                 const activeNodes = [];
                 for (const nodeEdge of node.input.edges) {
@@ -571,22 +572,23 @@ export class CodeUtils {
                     }
                     activeNodes.push(nodeEdge.source.parentNode.id);
                 }
-                fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
+                fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
+                    `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
                 // if (activeNodes.length === 1) {
                 //     fnCode += `__params__.model = mergeInputs([result_${activeNodes}]);\n`;
                 // } else {
-                //     fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => 'result_' + nodeId).join(', ')}]);\n`;
+                //     fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
                 //     fnCode += `__params__.model = merged;\n`;
                 // }
                 if (func.argCount === 0) {
-                    fnCode += `let result_${node.id} = ${node.id}(__params__);\n`;
+                    fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__);\n`;
                 } else {
-                    fnCode += `let result_${node.id} = ${node.id}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;
+                    fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;
                 }
             }
             if (node.type === 'end') {
                 // fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
-                fnCode += `\nreturn result_${node.id};\n`;
+                fnCode += `\nreturn result_${nodeFuncName};\n`;
             }
         }
         fnCode += '}\n\n';

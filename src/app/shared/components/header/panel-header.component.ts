@@ -102,6 +102,11 @@ export class PanelHeaderComponent implements OnDestroy {
         // this.router.navigate(['/dashboard']);
     }
 
+    saveJavascript() {
+        document.getElementById('savejavascript').click();
+        // this.router.navigate(['/dashboard']);
+    }
+
     openDropdownMenu(e: MouseEvent) {
        let stl = document.getElementById('dropdownMenu').style;
        if (!stl.display || stl.display === 'none') {

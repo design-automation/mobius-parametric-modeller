@@ -257,7 +257,7 @@ export class CodeUtils {
             codeStr.push(`}`);
         }
 
-        if (prod.print && prod.args[0].value) {
+        if (isMainFlowchart && prod.print && prod.args[0].value) {
             const repGet = this.repGetAttrib(prod.args[0].value);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }

@@ -5,6 +5,24 @@ import { DataService } from '@services';
 import { ProcedureTypes, IFunction } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IArgument, CodeUtils } from '@models/code';
+import { DownloadUtils } from './download.utils';
+import { _varString } from '@assets/core/modules';
+// const mergeInputsFunc = `
+// function mergeInputs(__params__, models){
+//     let result = __params__.modules._model.__new__();
+//     for (let model of models){
+//         __params__.modules._model.__merge__(result, model);
+//     }
+//     return result;
+// }`;
+const mergeInputsFunc = `
+function mergeInputs(models){
+    let result = __modules__._model.__new__();
+    for (let model of models){
+        __modules__._model.__merge__(result, model);
+    }
+    return result;
+}`;
 
 @Component({
   selector: 'javascript-save',
@@ -49,7 +67,7 @@ export class SaveJavascriptComponent {
                 nodes: fl.nodes,
                 edges: fl.edges
             },
-            name: funcName,
+            name: 'exec_' + funcName,
             module: 'Imported',
             doc: null,
             importedFile: ''
@@ -103,13 +121,33 @@ export class SaveJavascriptComponent {
             }
         }
 
-        fnString = fnString + 'const __params__ = {};\n__params__["model"]= module.';
+        fnString =
+            `/**\n * to use this code: import ${funcName} from this js file as well as the GI module\n` +
+            ` * run ${funcName} with the GI module as the only input\n` +
+            ` * e.g.:\n` +
+            ` * const ${funcName} = require('./${funcName}.js').${funcName}\n` +
+            ` * const module = require('gi-module')\n` +
+            ` * const result = ${funcName}(module);\n *\n` +
+            ` * returns: a json object:` +
+            ` *   _ result.model -> gi model of the flowchart\n` +
+            ` *   _ result.result -> returned output of the flowchart, if the flowchart does not return any value,` +
+            ` result.result is the model of the flowchart\n */\n\n` +
+            `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
+            _varString + `\n\n` +
+            fnString +
+            mergeInputsFunc +
+            `\n\nconst __params__ = {};\n` +
+            `__params__["model"]= __modules__._model.__new__();\n` +
+            `__params__["modules"]= __modules__;\n` +
+            `const result = exec_${funcName}(__params__` +
+            func.args.map(arg => ', ' + arg.name).join('') +
+            `)\n` +
+            `return {"model": __params__.model, "result": result};\n}\n\n` +
+            `module.exports = ${funcName};\n`;
 
-        console.log(fnString);
+        const blob = new Blob([fnString], {type: 'application/json'});
 
-        // const blob = new Blob([fileString], {type: 'application/json'});
-
-        // DownloadUtils.downloadFile(fname, blob);
+        DownloadUtils.downloadFile(funcName + '.js', blob);
     }
 
 }

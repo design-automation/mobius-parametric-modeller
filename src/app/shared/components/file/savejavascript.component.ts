@@ -1,5 +1,4 @@
 import { Component} from '@angular/core';
-import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
 import { DataService } from '@services';
 import { ProcedureTypes, IFunction } from '@models/procedure';
@@ -7,22 +6,8 @@ import { IdGenerator } from '@utils';
 import { IArgument, CodeUtils } from '@models/code';
 import { DownloadUtils } from './download.utils';
 import { _varString } from '@assets/core/modules';
-// const mergeInputsFunc = `
-// function mergeInputs(__params__, models){
-//     let result = __params__.modules._model.__new__();
-//     for (let model of models){
-//         __params__.modules._model.__merge__(result, model);
-//     }
-//     return result;
-// }`;
-const mergeInputsFunc = `
-function mergeInputs(models){
-    let result = __modules__._model.__new__();
-    for (let model of models){
-        __modules__._model.__merge__(result, model);
-    }
-    return result;
-}`;
+// import {js as beautify} from 'js-beautify';
+import { mergeInputsFunc, printFunc, ExecuteComponent } from '../execute/execute.component';
 
 @Component({
   selector: 'javascript-save',
@@ -94,9 +79,15 @@ export class SaveJavascriptComponent {
             func.hasReturn = false;
         }
 
+        for (const node of func.flowchart.nodes) {
+            await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+        }
         let fnString = CodeUtils.getFunctionString(func);
 
         for (const i of fl.functions) {
+            for (const node of i.flowchart.nodes) {
+                await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+            }
             const nFunc = <IFunction> {
                 module: i.module,
                 name: func.name + '_' + i.name,
@@ -109,6 +100,9 @@ export class SaveJavascriptComponent {
         }
         if (fl.subFunctions) {
             for (const i of fl.subFunctions) {
+                for (const node of i.flowchart.nodes) {
+                    await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+                }
                 const nFunc = <IFunction> {
                     module: i.module,
                     name: func.name + '_' + i.name,
@@ -123,12 +117,12 @@ export class SaveJavascriptComponent {
 
         fnString =
             `/**\n * to use this code: import ${funcName} from this js file as well as the GI module\n` +
-            ` * run ${funcName} with the GI module as the only input\n` +
+            ` * run ${funcName} with the GI module as input along with other start node input\n` +
             ` * e.g.:\n` +
             ` * const ${funcName} = require('./${funcName}.js').${funcName}\n` +
             ` * const module = require('gi-module')\n` +
-            ` * const result = ${funcName}(module);\n *\n` +
-            ` * returns: a json object:` +
+            ` * const result = ${funcName}(module, start_input_1, start_input_2, ...);\n *\n` +
+            ` * returns: a json object:\n` +
             ` *   _ result.model -> gi model of the flowchart\n` +
             ` *   _ result.result -> returned output of the flowchart, if the flowchart does not return any value,` +
             ` result.result is the model of the flowchart\n */\n\n` +
@@ -136,15 +130,18 @@ export class SaveJavascriptComponent {
             _varString + `\n\n` +
             fnString +
             mergeInputsFunc +
+            printFunc +
             `\n\nconst __params__ = {};\n` +
             `__params__["model"]= __modules__._model.__new__();\n` +
             `__params__["modules"]= __modules__;\n` +
             `const result = exec_${funcName}(__params__` +
             func.args.map(arg => ', ' + arg.name).join('') +
-            `)\n` +
+            `);\n` +
+            `if (result === __params__.model) { return { "model": __params__.model, "result": null };}\n` +
             `return {"model": __params__.model, "result": result};\n}\n\n` +
             `module.exports = ${funcName};\n`;
 
+        // fnString = beautify(fnString, { indent_size: 4, space_in_empty_paren: true });
         const blob = new Blob([fnString], {type: 'application/json'});
 
         DownloadUtils.downloadFile(funcName + '.js', blob);

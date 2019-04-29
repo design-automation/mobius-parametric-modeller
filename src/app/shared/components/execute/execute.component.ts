@@ -60,6 +60,41 @@ export class ExecuteComponent {
         this.isDev = isDevMode();
     }
 
+    static async resolveImportedUrl(prodList: IProcedure[], isMainFlowchart?: boolean) {
+        for (const prod of prodList) {
+            if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children); }
+            if (isMainFlowchart && prod.type === ProcedureTypes.Imported) {
+                for (let i = 1; i < prod.args.length; i++) {
+                    const arg = prod.args[i];
+                    // args.slice(1).map((arg) => {
+                    if (arg.type.toString() !== InputType.URL.toString()) { continue; }
+                    prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
+                }
+                continue;
+            }
+            if (prod.type !== ProcedureTypes.Function) {continue; }
+            for (const func of _parameterTypes.urlFunctions) {
+                const funcMeta = func.split('.');
+                if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
+                    for (const arg of prod.args) {
+                        if (arg.name[0] === '_') { continue; }
+                        if (arg.value.indexOf('://') !== -1) {
+                            const val = <string>arg.value.replace(/ /g, '');
+                            const result = await CodeUtils.getURLContent(val);
+                            if (result === undefined) {
+                                prod.resolvedValue = arg.value;
+                            } else {
+                                prod.resolvedValue = '`' + result + '`';
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     async execute(testing?: boolean) {
         this.startTime = performance.now();
 
@@ -83,7 +118,7 @@ export class ExecuteComponent {
             }
 
             try {
-                await this.resolveImportedUrl(node.procedure, true);
+                await  ExecuteComponent.resolveImportedUrl(node.procedure, true);
             } catch (ex) {
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
@@ -165,13 +200,13 @@ export class ExecuteComponent {
 
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
-                await this.resolveImportedUrl(node.procedure, false);
+                await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
             }
         }
         if (this.dataService.flowchart.subFunctions) {
             for (const func of this.dataService.flowchart.subFunctions) {
                 for (const node of func.flowchart.nodes) {
-                    await this.resolveImportedUrl(node.procedure, false);
+                    await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
                 }
             }
         }
@@ -280,62 +315,6 @@ export class ExecuteComponent {
         console.log('total execute time:', (performance.now() - this.startTime) / 1000, 'sec');
     }
 
-    async resolveImportedUrl(prodList: IProcedure[], isMainFlowchart?: boolean) {
-        for (const prod of prodList) {
-            if (prod.children) {await this.resolveImportedUrl(prod.children); }
-            if (isMainFlowchart && prod.type === ProcedureTypes.Imported) {
-                for (let i = 1; i < prod.args.length; i++) {
-                    const arg = prod.args[i];
-                    // args.slice(1).map((arg) => {
-                    if (arg.type.toString() !== InputType.URL.toString()) { continue; }
-                    prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
-                }
-                continue;
-            }
-            if (prod.type !== ProcedureTypes.Function) {continue; }
-            for (const func of _parameterTypes.urlFunctions) {
-                const funcMeta = func.split('.');
-                if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
-                    for (const arg of prod.args) {
-                        if (arg.name[0] === '_') { continue; }
-                        if (arg.value.indexOf('://') !== -1) {
-                            // const arg = prod.args[2];
-                            const val = <string>arg.value.replace(/ /g, '');
-                            // if (val[0] === '"' || val[0] === `'`) {
-                            //     val = val.substring(1, val.length - 1);
-                            // }
-                            // if (val.indexOf('dropbox') !== -1) {
-                            //     val = val.replace('www', 'dl').replace('dl=0', 'dl=1');
-                            // }
-                            // const p = new Promise((resolve) => {
-                            //     const request = new XMLHttpRequest();
-                            //     request.open('GET', val);
-                            //     request.onload = () => {
-                            //         if (request.status === 200) {
-                            //             resolve(request.responseText);
-                            //         } else {
-                            //             resolve(undefined);
-                            //         }
-                            //     };
-                            //     request.onerror = () => {
-                            //         resolve(undefined);
-                            //     };
-                            //     request.send();
-                            // });
-                            const result = await CodeUtils.getURLContent(val);
-                            if (result === undefined) {
-                                prod.resolvedValue = arg.value;
-                            } else {
-                                prod.resolvedValue = '`' + result + '`';
-                            }
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
 
     executeNode(node: INode, funcStrings, globalVars): string {
         const params = {'currentProcedure': [''], 'console': []};

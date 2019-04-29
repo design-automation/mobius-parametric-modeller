@@ -181,8 +181,8 @@ export class CodeUtils {
                         }
                     }
                 }
-                const argValues = argVals.join(', ');
-                const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argValues} )`;
+                // const argValues = argVals.join(', ');
+                const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argVals.join(', ')} )`;
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
                     if (prod.args[prod.args.length - 1].value) {
                         codeStr.push(`return ${fnCall};`);
@@ -202,7 +202,7 @@ export class CodeUtils {
                 }
                 break;
             case ProcedureTypes.Imported:
-                let argsVals: any = [];
+                const argsVals: any = [];
                 const namePrefix = functionName ? `${functionName}_` : '';
 
                 // let urlCheck = false;
@@ -229,9 +229,9 @@ export class CodeUtils {
                         argsVals.push(prod.resolvedValue);
                     }
                 }
-                argsVals = argsVals.join(', ');
-
-                const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
+                // argsVals = argsVals.join(', ');
+                // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
+                const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
 
                 if (args[0].name === '__none__' || !args[0].value) {
                     codeStr.push(`${fn};`);
@@ -528,43 +528,21 @@ export class CodeUtils {
         }
 
         return [[codeStr, varsDefined], _terminateCheck];
-        // return `\n${codeStr.join('\n')}\n\nreturn __params__.model;\n`;
-
-
-        // return `{\n${codeStr.join('\n')}\nreturn result;\n}`;
-        // return `/*    ${node.name.toUpperCase()}    */\n\n{\n${codeStr.join('\n')}\nreturn ${node.output.name};\n}`;
     }
 
     static getFunctionString(func: IFunction): string {
         let fullCode = '';
-        let fnCode;
-        if (func.argCount === 0) {
-            fnCode = `function ${func.name}(__params__)` +
-            `{\nvar merged;\n`;
-        } else {
-            fnCode = `function ${func.name}(__params__, ${func.args.map(arg => arg.name).join(', ')})` +
-            `{\nvar merged;\n`;
-        }
+        let fnCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name).join('')})` + `{\nvar merged;\n`;
 
         for (const node of func.flowchart.nodes) {
-            const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
             const nodeFuncName = `${func.name}_${node.id}`;
-            let code: any = codeRes[0];
             if (node.type === 'start') {
-                code = '{ return __params__.model; }';
-            } else {
-                code = '{\n' + code.join('\n') + '\n}';
-            }
-            if (func.argCount === 0) {
-                fullCode += `function ${nodeFuncName}(__params__)` + code + `\n\n`;
-            } else {
-                fullCode += `function ${nodeFuncName}(__params__, ${func.args.map(arg => arg.name).join(', ')})` + code + `\n\n`;
-            }
-
-            if (node.type === 'start') {
-                // fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__);\n`
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
+                const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
+                fullCode += `function ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name).join('')}){\n` +
+                            codeRes[0].join('\n') + `\n}\n\n`;
+
                 const activeNodes = [];
                 for (const nodeEdge of node.input.edges) {
                     if (!nodeEdge.source.parentNode.enabled) {
@@ -574,17 +552,8 @@ export class CodeUtils {
                 }
                 fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
                     `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
-                // if (activeNodes.length === 1) {
-                //     fnCode += `__params__.model = mergeInputs([result_${activeNodes}]);\n`;
-                // } else {
-                //     fnCode += `merged = mergeInputs([${activeNodes.map((nodeId) => `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
-                //     fnCode += `__params__.model = merged;\n`;
-                // }
-                if (func.argCount === 0) {
-                    fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__);\n`;
-                } else {
-                    fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__, ${func.args.map(arg => arg.name).join(', ')});\n`;
-                }
+                fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name).join('')});\n`;
+
             }
             if (node.type === 'end') {
                 // fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;

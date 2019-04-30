@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { FlowchartUtils } from '@models/flowchart';
-import { _model } from '@modules';
+import { _model, _parameterTypes } from '@modules';
 import * as galleryUrl from '@assets/gallery/__config__.json';
 import * as testUrl from '@assets/unit_tests/unit_test.json';
 import { DataOutputService } from '@shared/services/dataOutput.service';
@@ -92,7 +92,6 @@ describe('Execute Component test', () => {
             nodeCheck = true;
         }
         it('load and execute test file: ' + testName.split('.mob')[0], async (done: DoneFn) => {
-            console.log('---------------', router.url);
             await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url}`);
             const spy = router.navigate as jasmine.Spy;
             expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName}.mob`);
@@ -110,10 +109,8 @@ describe('Execute Component test', () => {
                 expect(testName.split('.mob')[0]).toBe(dataService.file.name,
                     'Loaded file name and the file name in dataService do not match.');
                 const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                const oModel = dataOutputService.getViewerData(output, true);
-                // expect(oModel).toBeDefined( `Execute fails. The end node model is not defined.` + test.url);
-                expect(oModel).toBeTruthy( `Execute fails. The end node model is not defined.`);
-                const geom_data = oModel.getData().geometry;
+                const model = JSON.parse(output.model);
+                const geom_data = model.geometry;
                 if (test.requirements.hasOwnProperty('num_positions')) {
                     expect(geom_data.num_positions).toBe(test.requirements['num_positions'], 'No. positions do not match');
                 }
@@ -147,6 +144,8 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
+                const oModel = _parameterTypes.newFn();
+                oModel.setData(model);
                 expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
             }
             done();

@@ -1,5 +1,6 @@
 import { GIModel } from './GIModel';
 import {  TColor, TNormal, TTexture, EAttribNames, Txyz, EEntType } from './common';
+import { ComponentFactoryResolver } from '@angular/core/src/render3';
 
 /**
  * Import obj

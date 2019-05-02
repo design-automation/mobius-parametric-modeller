@@ -25,14 +25,14 @@ function exportGetInstGeom(id: string): string {
                 </instance_geometry>
                 `;
 }
-function exportGetGeomMesh(id: string, positions: string, indices: string): string {
+function exportGetGeomMesh(id: string, num_posis: number, xyz_str: string, num_tri: number, indices_str: string): string {
     return `
         <geometry id="${id}">
             <mesh>
                 <source id="${id}_positions">
-                    <float_array id="${id}_positions_array" count="24">${positions}</float_array>
+                    <float_array id="${id}_positions_array" count="${num_posis}">${xyz_str}</float_array>
                     <technique_common>
-                        <accessor count="8" source="#${id}_positions_array" stride="3">
+                        <accessor count="3" source="#${id}_positions_array" stride="3">
                             <param name="X" type="float" />
                             <param name="Y" type="float" />
                             <param name="Z" type="float" />
@@ -42,9 +42,9 @@ function exportGetGeomMesh(id: string, positions: string, indices: string): stri
                 <vertices id="${id}_vertices">
                     <input semantic="POSITION" source="#${id}_positions" />
                 </vertices>
-                <triangles count="8" material="default_instance_material">
+                <triangles count="${num_tri}" material="default_instance_material">
                     <input offset="0" semantic="VERTEX" source="#${id}_vertices" />
-                    <p>${indices}</p>
+                    <p>${indices_str}</p>
                 </triangles>
             </mesh>
         </geometry>
@@ -65,18 +65,19 @@ export function exportDae(model: GIModel): string {
     const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
     for (const pgon_i of pgons_i) {
         const id = 'pg' + pgon_i;
-        let positions = '';
+        let xyz_str = '';
         const pgon_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
         const vert_map: Map<number, number> = new Map();
         for (let i = 0; i < pgon_verts_i.length; i++) {
             const vert_i: number = pgon_verts_i[i];
             const posi_i: number = model.geom.query.navVertToPosi(vert_i);
             const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
-            positions += ' ' + xyz.join(' ');
+            xyz_str += ' ' + xyz.join(' ');
             vert_map.set(posi_i, i);
         }
         let indices = '';
         const pgon_tris_i: number[] = model.geom.query.navAnyToTri(EEntType.PGON, pgon_i);
+        let num_tris = 0;
         for (const tri_i of pgon_tris_i) {
             const tri_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
             const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
@@ -85,10 +86,11 @@ export function exportDae(model: GIModel): string {
                 for (const tri_posi_i of tri_posis_i) {
                     indices += ' ' + vert_map.get(tri_posi_i);
                 }
+                num_tris++;
             }
         }
         inst_geoms = inst_geoms + exportGetInstGeom(id);
-        geom_meshes = geom_meshes + exportGetGeomMesh(id, positions, indices);
+        geom_meshes = geom_meshes + exportGetGeomMesh(id, pgon_verts_i.length * 3, xyz_str, num_tris, indices);
     }
     // snippets to insert into the template
     const lib_vis_scn = `

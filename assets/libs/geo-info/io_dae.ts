@@ -63,6 +63,7 @@ export function exportDae(model: GIModel): string {
     let inst_geoms = '';
     let geom_meshes = '';
     const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+    console.log(pgons_i.length);
     for (const pgon_i of pgons_i) {
         const id = 'pg' + pgon_i;
         let xyz_str = '';

@@ -89,13 +89,13 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
             return download(gi_data , filename);
             break;
         case _EIOExportDataFormat.OBJ:
-            let obj_data: string = exportObj(__model__);
-            obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
+            const obj_data: string = exportObj(__model__);
+            //obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
             return download(obj_data, filename);
             break;
         case _EIOExportDataFormat.DAE:
-            let dae_data: string = exportDae(__model__);
-            dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
+            const dae_data: string = exportDae(__model__);
+            //dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
             return download(dae_data, filename);
             break;
         // case _EIODataFormat.GEOJSON:

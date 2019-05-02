@@ -31,5 +31,5 @@ function SaveDatFileBro(localstorage) {
         });
     });
     // @ts-ignore
-    window.download = null;
+    // window.download = null;
 }

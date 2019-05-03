@@ -119,7 +119,7 @@ export function exportDae(model: GIModel): string {
             let color: TColor = [0, 0, 0];
             for (const pgon_vert_i of pgon_verts_i) {
                 let vert_color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOUR, pgon_vert_i) as TColor;
-                if (vert_color === null) { vert_color = [1, 1, 1]; }
+                if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
                 color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
             }
             const num_verts: number = pgon_verts_i.length;

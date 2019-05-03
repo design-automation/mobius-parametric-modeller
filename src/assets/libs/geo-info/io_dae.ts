@@ -1,6 +1,5 @@
 import { GIModel } from './GIModel';
-import { TColor, TNormal, TTexture, EAttribNames, Txyz, EEntType } from './common';
-import { ComponentFactoryResolver } from '@angular/core/src/render3';
+import { TColor, TNormal, TTexture, EAttribNames, Txyz, EEntType, TAttribDataTypes } from './common';
 import { area } from '@libs/geom/triangle';
 
 /**
@@ -12,12 +11,12 @@ export function importDae(obj_str: string): GIModel {
     return model;
 }
 
-function exportGetInstGeom(id: string): string {
+function exportGetInstGeom(id: string, material_id: string): string {
     return `
                 <instance_geometry url="#${id}">
                     <bind_material>
                         <technique_common>
-                            <instance_material symbol="default_instance_material" target="#default_material">
+                            <instance_material symbol="instance_material_${material_id}" target="#${material_id}">
                                 <bind_vertex_input semantic="UVSET0" input_semantic="TEXCOORD" input_set="0" />
                             </instance_material>
                         </technique_common>
@@ -25,7 +24,8 @@ function exportGetInstGeom(id: string): string {
                 </instance_geometry>
                 `;
 }
-function exportGetGeomMesh(id: string, num_posis: number, xyz_str: string, num_tri: number, indices_str: string): string {
+function exportGetGeomMesh(id: string,
+        num_posis: number, xyz_str: string, num_tri: number, indices_str: string, material_id: string): string {
     return `
         <geometry id="${id}">
             <mesh>
@@ -42,13 +42,35 @@ function exportGetGeomMesh(id: string, num_posis: number, xyz_str: string, num_t
                 <vertices id="${id}_vertices">
                     <input semantic="POSITION" source="#${id}_positions" />
                 </vertices>
-                <triangles count="${num_tri}" material="default_instance_material">
+                <triangles count="${num_tri}" material="instance_material_${material_id}">
                     <input offset="0" semantic="VERTEX" source="#${id}_vertices" />
                     <p>${indices_str}</p>
                 </triangles>
             </mesh>
         </geometry>
         `;
+}
+function exportGetMaterial(id: string, effect_id: string): string {
+    return `
+            <material id="${id}" name="material_${id}">
+                <instance_effect url="#${effect_id}" />
+            </material>
+        `;
+}
+function exportGetEffect(id: string, color: string): string {
+    return `
+            <effect id="${id}">
+                <profile_COMMON>
+                    <technique sid="COMMON">
+                        <lambert>
+                            <diffuse>
+                                <color>${color} 1</color>
+                            </diffuse>
+                        </lambert>
+                    </technique>
+                </profile_COMMON>
+            </effect>
+            `;
 }
 
 /**
@@ -62,8 +84,10 @@ export function exportDae(model: GIModel): string {
     // create the strings for the meshes
     let inst_geoms = '';
     let geom_meshes = '';
+    let materials = '';
+    let material_effects = '';
     const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
-    console.log(pgons_i.length);
+    const materials_map: Map<string, string> = new Map();
     for (const pgon_i of pgons_i) {
         const id = 'pg' + pgon_i;
         let xyz_str = '';
@@ -81,8 +105,8 @@ export function exportDae(model: GIModel): string {
         let num_tris = 0;
         for (const tri_i of pgon_tris_i) {
             const tri_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
-            const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
-            const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
+            // const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
+            // const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
             if (true) { //(tri_area > 0) {
                 for (const tri_posi_i of tri_posis_i) {
                     indices += ' ' + vert_map.get(tri_posi_i);
@@ -90,24 +114,30 @@ export function exportDae(model: GIModel): string {
                 num_tris++;
             }
         }
-        inst_geoms = inst_geoms + exportGetInstGeom(id);
-        geom_meshes = geom_meshes + exportGetGeomMesh(id, pgon_verts_i.length * 3, xyz_str, num_tris, indices);
+        let material_id = 'default_material';
+        if (has_color_attrib) {
+            let color: TColor = [0, 0, 0];
+            for (const pgon_vert_i of pgon_verts_i) {
+                let vert_color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOUR, pgon_vert_i) as TColor;
+                if (vert_color === null) { vert_color = [1, 1, 1]; }
+                color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
+            }
+            const num_verts: number = pgon_verts_i.length;
+            color = [color[0] / num_verts, color[1] / num_verts, color[2] / num_verts];
+            const color_str: string = color.join(' ');
+            if (materials_map.has(color_str)) {
+                material_id = materials_map.get(color_str);
+            } else {
+                material_id = 'mat_' + materials_map.size;
+                const effect_id = material_id + '_eff';
+                materials = materials + exportGetMaterial(material_id, effect_id);
+                material_effects = material_effects + exportGetEffect(effect_id, color_str);
+                materials_map.set(color_str, material_id);
+            }
+        }
+        inst_geoms = inst_geoms + exportGetInstGeom(id, material_id);
+        geom_meshes = geom_meshes + exportGetGeomMesh(id, pgon_verts_i.length * 3, xyz_str, num_tris, indices, material_id);
     }
-    // snippets to insert into the template
-    const lib_vis_scn = `
-    <library_visual_scenes>
-        <visual_scene id="visual_scene">
-            <node name="mobius_modeller">
-                ${inst_geoms}
-            </node>
-        </visual_scene>
-    </library_visual_scenes>
-    `;
-    const lib_geom = `
-    <library_geometries>
-        ${geom_meshes}
-    </library_geometries>
-    `;
     // main template for a dae file
     const template =
 `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -122,7 +152,8 @@ export function exportDae(model: GIModel): string {
 	<library_materials>
 		<material id="default_material" name="material">
 			<instance_effect url="#default_effect" />
-		</material>
+        </material>
+        ${materials}
 	</library_materials>
     <library_effects>
         <effect id="default_effect">
@@ -136,12 +167,21 @@ export function exportDae(model: GIModel): string {
                 </technique>
             </profile_COMMON>
         </effect>
+        ${material_effects}
     </library_effects>
     <scene>
         <instance_visual_scene url="#visual_scene" />
     </scene>
-    ${lib_vis_scn}
-    ${lib_geom}
+        <library_visual_scenes>
+            <visual_scene id="visual_scene">
+                <node name="mobius_modeller">
+                    ${inst_geoms}
+                </node>
+            </visual_scene>
+        </library_visual_scenes>
+        <library_geometries>
+            ${geom_meshes}
+        </library_geometries>
 </COLLADA>
 `;
     return template;

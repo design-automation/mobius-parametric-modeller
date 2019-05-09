@@ -4,7 +4,7 @@
   "license": "MIT",
   "config": {
     "dev_url": "https://design-automation.github.io/mobius-parametric-modeller/",
-    "prod_url": "https://mobius.design-automation.net/"
+    "prod_url": "https://design-automation.github.io/mobius-parametric-modeller-edx1/"
   },
   "scripts": {
     "ng": "ng",
@@ -59,6 +59,7 @@
     "suncalc": "^1.8.0",
     "three": "^0.99.0",
     "three-orbit-controls": "^82.1.0",
+    "underscore": "^1.9.1",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {

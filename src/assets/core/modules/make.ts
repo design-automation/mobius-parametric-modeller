@@ -1078,7 +1078,7 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
 export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    const ents_arr = checkIDs('make.Copy', 'edges', edges,
+    const ents_arr = checkIDs('make.Divide', 'edges', edges,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     checkCommTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
     // --- Error Check ---

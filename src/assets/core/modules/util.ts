@@ -9,6 +9,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportObj } from '@libs/geo-info/io_obj';
+import { importDae, exportDae } from '@libs/geo-info/io_dae';
 import { importGeojson } from '@assets/libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData } from '@libs/geo-info/common';
@@ -64,6 +65,12 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
     return [...posis_id, ...points_id, ...plines_id, ...pgons_id, ...colls_id];
 }
 // ================================================================================================
+export enum _EIOExportDataFormat {
+    GI = 'gi',
+    OBJ = 'obj',
+    DAE = 'dae',
+    GEOJSON = 'geojson'
+}
 /**
  * Export data from the model as a file.
  * This will result in a popup in your browser, asking you to save the filel.
@@ -74,16 +81,22 @@ export function ImportData(__model__: GIModel, model_data: string, data_format: 
  * @example util.ExportData ('my_model.obj', obj)
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportData(__model__: GIModel, filename: string, data_format: _EIODataFormat): boolean {
+export function ExportData(__model__: GIModel, filename: string, data_format: _EIOExportDataFormat): boolean {
     switch (data_format) {
-        case _EIODataFormat.GI:
+        case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
             gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             return download(gi_data , filename);
             break;
-        case _EIODataFormat.OBJ:
+        case _EIOExportDataFormat.OBJ:
             const obj_data: string = exportObj(__model__);
+            //obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
             return download(obj_data, filename);
+            break;
+        case _EIOExportDataFormat.DAE:
+            const dae_data: string = exportDae(__model__);
+            //dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
+            return download(dae_data, filename);
             break;
         // case _EIODataFormat.GEOJSON:
         //     const geojson_data: string = exportObj(__model__);

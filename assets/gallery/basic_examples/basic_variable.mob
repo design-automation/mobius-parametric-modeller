@@ -1,0 +1,530 @@
+{
+    "name": "basic_variable",
+    "author": "new_user",
+    "flowchart": {
+        "name": "basic_variable",
+        "description": "This file demonstrates how to create various different variables. \n\nThe file contains variables in the Start node and in node number 1, called \"Make some local variables\".\n\nThe Start node creates global variables. The values of these variables can be set in the dashbaord. All procedures can read these variables. But they cannot change the values - they are read only..\n\nNode1 creates some local variables. The procedure in Node 1 and read and write to these variables. But other procedures in other nodes can neither read them or weite to them. That is why they are called local variables - they are local to just one node.",
+        "language": "js",
+        "meta": {
+            "selected_nodes": [
+                0
+            ]
+        },
+        "nodes": [
+            {
+                "name": "Start",
+                "id": "node_fmhiallqmec",
+                "position": {
+                    "x": 5350,
+                    "y": 4999.1787109375
+                },
+                "enabled": true,
+                "type": "start",
+                "procedure": [
+                    {
+                        "type": 10,
+                        "ID": "prod-49o5h4hmp3o",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 5,
+                            "description": "This is a constant that can be used in all nodes, but that is not visible in the Dashboard."
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "default": 0,
+                                "invalidVar": false,
+                                "value": "constant1"
+                            },
+                            {
+                                "name": "__input__",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-nlzjm99so",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "This is a simple input. In the Dashboard, it generates a input box."
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "default": 0,
+                                "invalidVar": false,
+                                "value": "simple_input1"
+                            },
+                            {
+                                "name": "__input__",
+                                "default": 0,
+                                "value": "123"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-p4fp1qsmtrp",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "This is a slider. In the Dashboard, it generates a slider. The settings for the slider are as follows: step = 1, min = 10, max = 20."
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "default": 0,
+                                "invalidVar": false,
+                                "value": "slider1"
+                            },
+                            {
+                                "name": "__input__",
+                                "default": 10,
+                                "value": 14,
+                                "step": "1",
+                                "min": "10",
+                                "max": "20"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-ng9tu66cmk",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 2,
+                            "description": "This is a checkbox. In the Dashbaord, it generates a checkbox."
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "default": 0,
+                                "invalidVar": false,
+                                "value": "check_box1"
+                            },
+                            {
+                                "name": "__input__",
+                                "default": 0,
+                                "value": true
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-k1bbhi23t1f",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 3,
+                            "description": "This is a URL to a file that can be accessed online. In the dashboard, it generates an input box where you paste in your URL. When you execute the procedure, the browser will go a get this file from the online source. So if you type in an invalid URL, you will get an error. In this case, I just usue google.com as an example. "
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "default": 0,
+                                "invalidVar": false,
+                                "value": "url1"
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "http://google.com",
+                                "value": ""
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-hc8fxd8vz6c",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 4,
+                            "description": "This is a file on your local hard disk. In the Dashboard, it generates a button. When you click the button, it will invoke the seacrh file dialog that belongs to the browser. When you select the file, it will save the contents in your browsers persistent cache. "
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "default": 0,
+                                "invalidVar": false,
+                                "value": "file1"
+                            },
+                            {
+                                "name": "__input__",
+                                "default": 0
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    }
+                ],
+                "state": {
+                    "procedure": []
+                },
+                "input": {
+                    "name": "input",
+                    "type": 0,
+                    "edges": [],
+                    "meta": {
+                        "mode": 0,
+                        "opts": {}
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "output": {
+                    "name": "output",
+                    "type": 1,
+                    "edges": [
+                        {
+                            "source": "~flowchart~nodes~0~output",
+                            "target": {
+                                "name": "input",
+                                "type": 0,
+                                "edges": [
+                                    "~flowchart~nodes~0~output~edges~0"
+                                ],
+                                "meta": {
+                                    "mode": 0,
+                                    "opts": {}
+                                },
+                                "parentNode": {
+                                    "name": "Create some local variables",
+                                    "id": "node_t48cp70ih4a",
+                                    "position": {
+                                        "x": 5350.81982421875,
+                                        "y": 5201.63916015625
+                                    },
+                                    "enabled": true,
+                                    "type": "",
+                                    "procedure": [
+                                        {
+                                            "type": 13,
+                                            "ID": "",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-9wtq8cbfcp8",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var1",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "123"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-p39qn72t9p",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var2",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "456.789"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-7dbdm04r33f",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var3",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "\"this is some text\""
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-1qp89flv768",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var4",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "[1 , 2 , 3]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-ss9632kg70g",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var5",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "[\"aaa\" , \"bbb\"]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-jg61gqbg90f",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var6",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "[[1 , 2 , 3] , [\"aaa\" , \"bbb\"]]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-jkhgpeoao7",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var7",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "my_var1 + my_var2"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 0,
+                                            "ID": "prod-itccsmwmoor",
+                                            "enabled": true,
+                                            "print": true,
+                                            "argCount": 2,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "my_var8",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "value": "[my_var1 , my_var2 , my_var3]"
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        }
+                                    ],
+                                    "state": {
+                                        "procedure": []
+                                    },
+                                    "input": "~flowchart~nodes~0~output~edges~0~target",
+                                    "output": {
+                                        "name": "output",
+                                        "type": 1,
+                                        "edges": [
+                                            {
+                                                "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output",
+                                                "target": {
+                                                    "name": "input",
+                                                    "type": 0,
+                                                    "edges": [
+                                                        "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+                                                    ],
+                                                    "meta": {
+                                                        "mode": 0,
+                                                        "opts": {}
+                                                    },
+                                                    "parentNode": {
+                                                        "name": "End",
+                                                        "id": "node_3divs2flra4",
+                                                        "position": {
+                                                            "x": 5349.18017578125,
+                                                            "y": 5400.81982421875
+                                                        },
+                                                        "enabled": true,
+                                                        "type": "end",
+                                                        "procedure": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 11,
+                                                                "ID": "",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "value": "",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "state": {
+                                                            "procedure": []
+                                                        },
+                                                        "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
+                                                        "output": {
+                                                            "name": "output",
+                                                            "type": 1,
+                                                            "edges": [],
+                                                            "meta": {
+                                                                "mode": 0
+                                                            },
+                                                            "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                        },
+                                                        "hasError": false,
+                                                        "hasExecuted": true
+                                                    }
+                                                },
+                                                "selected": false
+                                            }
+                                        ],
+                                        "meta": {
+                                            "mode": 0
+                                        },
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                    },
+                                    "hasExecuted": true,
+                                    "hasError": false
+                                }
+                            },
+                            "selected": false
+                        }
+                    ],
+                    "meta": {
+                        "mode": 0
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "hasError": false,
+                "hasExecuted": true
+            },
+            "~flowchart~nodes~0~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+        ],
+        "edges": [
+            "~flowchart~nodes~0~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+        ],
+        "functions": [],
+        "ordered": true
+    },
+    "last_updated": "2019-01-14T08:48:11.827Z",
+    "version": 1
+}

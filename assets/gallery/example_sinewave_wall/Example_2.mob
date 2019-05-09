@@ -1,0 +1,1541 @@
+{
+    "name": "Example_2",
+    "author": "new_user",
+    "flowchart": {
+        "name": "Example_2",
+        "description": "Displacing a grid of rectangles by a variably shifted sine / cosine wave function based on their position in the grid. ",
+        "language": "js",
+        "meta": {
+            "selected_nodes": [
+                0
+            ]
+        },
+        "nodes": [
+            {
+                "name": "Start",
+                "id": "node_upheqbr4u6s",
+                "position": {
+                    "x": 5350,
+                    "y": 5000
+                },
+                "enabled": true,
+                "type": "start",
+                "procedure": [
+                    {
+                        "type": 10,
+                        "ID": "prod-omugs5py6ic",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "Number of squares in the grid (x direction)"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "num_sq_x",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "10",
+                                "step": "1",
+                                "min": "2",
+                                "max": "20"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-48lg3byjce",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "Number of squares in the grid (y direction)"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "num_sq_y",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "15",
+                                "step": "1",
+                                "min": "2",
+                                "max": "20"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-36m70kv690u",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Length of each side of square"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "sq_size",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "10"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-hyofo4vk07g",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Multiplier factor to increase displacement"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "increase_factor",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "10"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-7h7oot9uskd",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 0,
+                            "description": "Multiplier factor to reduce displacement"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "decrease_factor",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": "0.2"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    },
+                    {
+                        "type": 10,
+                        "ID": "prod-3jl6vg6s2xb",
+                        "enabled": true,
+                        "print": false,
+                        "argCount": 2,
+                        "meta": {
+                            "module": "Input",
+                            "name": "Constant",
+                            "inputMode": 1,
+                            "description": "Factor to translate wave pattern in positive/negative x-direction on graph (in degrees)"
+                        },
+                        "args": [
+                            {
+                                "name": "const_name",
+                                "value": "wave_shift",
+                                "default": 0,
+                                "invalidVar": false
+                            },
+                            {
+                                "name": "__input__",
+                                "default": 45,
+                                "step": "15",
+                                "min": "-180",
+                                "max": "180"
+                            }
+                        ],
+                        "selected": false,
+                        "hasError": false
+                    }
+                ],
+                "state": {
+                    "procedure": []
+                },
+                "input": {
+                    "name": "input",
+                    "type": 0,
+                    "edges": [],
+                    "meta": {
+                        "mode": 0,
+                        "opts": {}
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "output": {
+                    "name": "output",
+                    "type": 1,
+                    "edges": [
+                        {
+                            "source": "~flowchart~nodes~0~output",
+                            "target": {
+                                "name": "input",
+                                "type": 0,
+                                "edges": [
+                                    "~flowchart~nodes~0~output~edges~0"
+                                ],
+                                "meta": {
+                                    "mode": 0,
+                                    "opts": {}
+                                },
+                                "parentNode": {
+                                    "name": "1. Grid of squares",
+                                    "id": "node_729yli718xm",
+                                    "position": {
+                                        "x": 5350,
+                                        "y": 5147.541015625
+                                    },
+                                    "enabled": true,
+                                    "type": "",
+                                    "procedure": [
+                                        {
+                                            "type": 13,
+                                            "ID": "",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-odg2rwx03n",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "pattern",
+                                                "name": "Grid"
+                                            },
+                                            "argCount": 6,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "grid",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "origin",
+                                                    "value": "XY",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "size",
+                                                    "value": "[num_sq_x * sq_size , num_sq_y * sq_size]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "num_positions",
+                                                    "value": "[num_sq_x + 1 , num_sq_y + 1]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "method",
+                                                    "value": "'squares'",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-brkfdkn63t",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Polyline"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pls",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "positions",
+                                                    "value": "grid",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "close",
+                                                    "value": "'close'",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-2i4j417p3u8",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "modify",
+                                                "name": "Move"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "__none__"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "pls",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "vector",
+                                                    "value": "[num_sq_x * sq_size / 2 , num_sq_y * sq_size / 2 , 0]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        }
+                                    ],
+                                    "state": {
+                                        "procedure": []
+                                    },
+                                    "input": "~flowchart~nodes~0~output~edges~0~target",
+                                    "output": {
+                                        "name": "output",
+                                        "type": 1,
+                                        "edges": [
+                                            {
+                                                "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output",
+                                                "target": {
+                                                    "name": "input",
+                                                    "type": 0,
+                                                    "edges": [
+                                                        "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+                                                    ],
+                                                    "meta": {
+                                                        "mode": 0,
+                                                        "opts": {}
+                                                    },
+                                                    "parentNode": {
+                                                        "name": "2. Move by shifted sin/ cos/sin+cos wave",
+                                                        "id": "node_1l2eskucb2c",
+                                                        "position": {
+                                                            "x": 5350.02099609375,
+                                                            "y": 5296.05810546875
+                                                        },
+                                                        "enabled": true,
+                                                        "type": "",
+                                                        "procedure": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-1y4uhi6s1uk",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "pls",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'polylines'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 4,
+                                                                "ID": "prod-4v4teq0f4ru",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "item",
+                                                                        "value": "pl",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "list",
+                                                                        "value": "pls",
+                                                                        "default": []
+                                                                    }
+                                                                ],
+                                                                "children": [
+                                                                    {
+                                                                        "type": 13,
+                                                                        "ID": "prod-im2flsd3cki",
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "meta": {
+                                                                            "name": "",
+                                                                            "module": ""
+                                                                        },
+                                                                        "argCount": 0,
+                                                                        "args": [],
+                                                                        "print": false,
+                                                                        "enabled": true,
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-6qeto4jrfcw",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "make",
+                                                                            "name": "Unweld"
+                                                                        },
+                                                                        "argCount": 3,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "unweld",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pl",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-1zlddob6dzy",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "calc",
+                                                                            "name": "Centroid"
+                                                                        },
+                                                                        "argCount": 3,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "centre_xyz",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pl",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 9,
+                                                                        "ID": "prod-2t24n7rgiwi",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "Imported",
+                                                                            "name": "sincoswave"
+                                                                        },
+                                                                        "argCount": 6,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "invalidVar": false,
+                                                                                "value": "z_displ_sin_x"
+                                                                            },
+                                                                            {
+                                                                                "name": "sine_or_cosine",
+                                                                                "type": 0,
+                                                                                "value": "0"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_from_grid_origin",
+                                                                                "type": 0,
+                                                                                "value": "centre_xyz[0]"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_max_grid",
+                                                                                "type": 0,
+                                                                                "value": "num_sq_x * sq_size"
+                                                                            },
+                                                                            {
+                                                                                "name": "scale_factor",
+                                                                                "type": 0,
+                                                                                "value": "increase_factor"
+                                                                            },
+                                                                            {
+                                                                                "name": "wave_shift",
+                                                                                "type": 0,
+                                                                                "value": "degToRad ( wave_shift )"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 9,
+                                                                        "ID": "prod-kml58i2retp",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "Imported",
+                                                                            "name": "sincoswave"
+                                                                        },
+                                                                        "argCount": 6,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "invalidVar": false,
+                                                                                "value": "z_displ_cos_x"
+                                                                            },
+                                                                            {
+                                                                                "name": "sine_or_cosine",
+                                                                                "type": 0,
+                                                                                "value": "1"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_from_grid_origin",
+                                                                                "type": 0,
+                                                                                "value": "centre_xyz[0]"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_max_grid",
+                                                                                "type": 0,
+                                                                                "value": "num_sq_x * sq_size"
+                                                                            },
+                                                                            {
+                                                                                "name": "scale_factor",
+                                                                                "type": 0,
+                                                                                "value": "increase_factor"
+                                                                            },
+                                                                            {
+                                                                                "name": "wave_shift",
+                                                                                "type": 0,
+                                                                                "value": "degToRad ( wave_shift )"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 9,
+                                                                        "ID": "prod-e0lmf1l8rvi",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "Imported",
+                                                                            "name": "sincoswave"
+                                                                        },
+                                                                        "argCount": 6,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "invalidVar": false,
+                                                                                "value": "z_displ_sin_y"
+                                                                            },
+                                                                            {
+                                                                                "name": "sine_or_cosine",
+                                                                                "type": 0,
+                                                                                "value": "0"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_from_grid_origin",
+                                                                                "type": 0,
+                                                                                "value": "centre_xyz[1]"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_max_grid",
+                                                                                "type": 0,
+                                                                                "value": "num_sq_y * sq_size"
+                                                                            },
+                                                                            {
+                                                                                "name": "scale_factor",
+                                                                                "type": 0,
+                                                                                "value": "increase_factor"
+                                                                            },
+                                                                            {
+                                                                                "name": "wave_shift",
+                                                                                "type": 0,
+                                                                                "value": "degToRad ( wave_shift )"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 9,
+                                                                        "ID": "prod-2esfuuxdvzs",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "Imported",
+                                                                            "name": "sincoswave"
+                                                                        },
+                                                                        "argCount": 6,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "invalidVar": false,
+                                                                                "value": "z_displ_cos_y"
+                                                                            },
+                                                                            {
+                                                                                "name": "sine_or_cosine",
+                                                                                "type": 0,
+                                                                                "value": "1"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_from_grid_origin",
+                                                                                "type": 0,
+                                                                                "value": "centre_xyz[1]"
+                                                                            },
+                                                                            {
+                                                                                "name": "dist_max_grid",
+                                                                                "type": 0,
+                                                                                "value": "num_sq_y * sq_size"
+                                                                            },
+                                                                            {
+                                                                                "name": "scale_factor",
+                                                                                "type": 0,
+                                                                                "value": "increase_factor"
+                                                                            },
+                                                                            {
+                                                                                "name": "wave_shift",
+                                                                                "type": 0,
+                                                                                "value": "degToRad ( wave_shift )"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2",
+                                                                        "ID": "prod-4oiqqcfyalx",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "modify",
+                                                                            "name": "Move"
+                                                                        },
+                                                                        "argCount": 4,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "__none__"
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pl",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "vector",
+                                                                                "value": "[0 , 0 , z_displ_sin_x + z_displ_cos_y]",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    }
+                                                                ],
+                                                                "hasError": false,
+                                                                "selected": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-3budi79u39e",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "util",
+                                                                    "name": "ExportData"
+                                                                },
+                                                                "argCount": 4,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "exported",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "filename",
+                                                                        "value": "\"example_2_result\"",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "data_format",
+                                                                        "value": "'gi'",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "state": {
+                                                            "procedure": []
+                                                        },
+                                                        "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
+                                                        "output": {
+                                                            "name": "output",
+                                                            "type": 1,
+                                                            "edges": [
+                                                                {
+                                                                    "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output",
+                                                                    "target": {
+                                                                        "name": "input",
+                                                                        "type": 0,
+                                                                        "edges": [
+                                                                            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0"
+                                                                        ],
+                                                                        "meta": {
+                                                                            "mode": 0,
+                                                                            "opts": {}
+                                                                        },
+                                                                        "parentNode": {
+                                                                            "name": "End",
+                                                                            "id": "node_l9ry3cncd3q",
+                                                                            "position": {
+                                                                                "x": 5349.7265625,
+                                                                                "y": 5472.67822265625
+                                                                            },
+                                                                            "enabled": true,
+                                                                            "type": "end",
+                                                                            "procedure": [
+                                                                                {
+                                                                                    "type": 13,
+                                                                                    "ID": "",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 0,
+                                                                                    "args": [],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "hasError": false
+                                                                                },
+                                                                                {
+                                                                                    "type": 11,
+                                                                                    "ID": "",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 2,
+                                                                                    "args": [
+                                                                                        {
+                                                                                            "name": "__model__",
+                                                                                            "value": "",
+                                                                                            "default": 0
+                                                                                        },
+                                                                                        {
+                                                                                            "name": "value",
+                                                                                            "value": "",
+                                                                                            "default": 0
+                                                                                        }
+                                                                                    ],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "hasError": false
+                                                                                }
+                                                                            ],
+                                                                            "state": {
+                                                                                "procedure": []
+                                                                            },
+                                                                            "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target",
+                                                                            "output": {
+                                                                                "name": "output",
+                                                                                "type": 1,
+                                                                                "edges": [],
+                                                                                "meta": {
+                                                                                    "mode": 0
+                                                                                },
+                                                                                "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                                            },
+                                                                            "hasError": false,
+                                                                            "hasExecuted": true
+                                                                        }
+                                                                    },
+                                                                    "selected": false
+                                                                }
+                                                            ],
+                                                            "meta": {
+                                                                "mode": 0
+                                                            },
+                                                            "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                        },
+                                                        "hasExecuted": true,
+                                                        "hasError": false
+                                                    }
+                                                },
+                                                "selected": false
+                                            }
+                                        ],
+                                        "meta": {
+                                            "mode": 0
+                                        },
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                    },
+                                    "hasError": false,
+                                    "hasExecuted": true
+                                }
+                            },
+                            "selected": false
+                        }
+                    ],
+                    "meta": {
+                        "mode": 0
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "hasError": false,
+                "hasExecuted": true
+            },
+            "~flowchart~nodes~0~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+        ],
+        "edges": [
+            "~flowchart~nodes~0~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0"
+        ],
+        "functions": [
+            {
+                "flowchart": {
+                    "name": "sincoswave",
+                    "nodes": [
+                        {
+                            "name": "Start",
+                            "id": "node_mr9ypljdu2o",
+                            "position": {
+                                "x": 5350,
+                                "y": 5000
+                            },
+                            "enabled": true,
+                            "type": "start",
+                            "procedure": [
+                                {
+                                    "type": 10,
+                                    "ID": "prod-173483ik1tj",
+                                    "enabled": true,
+                                    "print": false,
+                                    "argCount": 2,
+                                    "meta": {
+                                        "module": "Input",
+                                        "name": "Constant",
+                                        "inputMode": 0,
+                                        "description": "Input 0 for sine, 1 for cosine"
+                                    },
+                                    "args": [
+                                        {
+                                            "name": "const_name",
+                                            "value": "sine_or_cosine",
+                                            "default": 0
+                                        },
+                                        {
+                                            "name": "__input__",
+                                            "value": "0",
+                                            "default": "0"
+                                        }
+                                    ],
+                                    "selected": false,
+                                    "hasError": false
+                                },
+                                {
+                                    "type": 10,
+                                    "ID": "prod-jmkltpghka",
+                                    "enabled": true,
+                                    "print": false,
+                                    "argCount": 2,
+                                    "meta": {
+                                        "module": "Input",
+                                        "name": "Constant",
+                                        "inputMode": 0,
+                                        "description": "Distance of the position from the origin"
+                                    },
+                                    "args": [
+                                        {
+                                            "name": "const_name",
+                                            "value": "dist_from_grid_origin",
+                                            "default": 0
+                                        },
+                                        {
+                                            "name": "__input__",
+                                            "default": "1",
+                                            "value": "1"
+                                        }
+                                    ],
+                                    "selected": false,
+                                    "hasError": false
+                                },
+                                {
+                                    "type": 10,
+                                    "ID": "prod-lkdn9fx226",
+                                    "enabled": true,
+                                    "print": false,
+                                    "argCount": 2,
+                                    "meta": {
+                                        "module": "Input",
+                                        "name": "Constant",
+                                        "inputMode": 0,
+                                        "description": "Distance of last position from the origin (max distance)"
+                                    },
+                                    "args": [
+                                        {
+                                            "name": "const_name",
+                                            "value": "dist_max_grid",
+                                            "default": 0
+                                        },
+                                        {
+                                            "name": "__input__",
+                                            "default": "1",
+                                            "value": "1"
+                                        }
+                                    ],
+                                    "selected": false,
+                                    "hasError": false
+                                },
+                                {
+                                    "type": 10,
+                                    "ID": "prod-kw612zx89no",
+                                    "enabled": true,
+                                    "print": false,
+                                    "argCount": 2,
+                                    "meta": {
+                                        "module": "Input",
+                                        "name": "Constant",
+                                        "inputMode": 0,
+                                        "description": "Scale factor to increase or decrease displacement"
+                                    },
+                                    "args": [
+                                        {
+                                            "name": "const_name",
+                                            "value": "scale_factor",
+                                            "default": 0
+                                        },
+                                        {
+                                            "name": "__input__",
+                                            "default": "1",
+                                            "value": "1"
+                                        }
+                                    ],
+                                    "selected": false,
+                                    "hasError": false
+                                },
+                                {
+                                    "type": 10,
+                                    "ID": "prod-ogyp9abjv",
+                                    "enabled": true,
+                                    "print": false,
+                                    "argCount": 2,
+                                    "meta": {
+                                        "module": "Input",
+                                        "name": "Constant",
+                                        "inputMode": 0,
+                                        "description": "Factor to translate wave pattern in positive/negative x-direction on graph (in radians)"
+                                    },
+                                    "args": [
+                                        {
+                                            "name": "const_name",
+                                            "value": "wave_shift",
+                                            "default": 0
+                                        },
+                                        {
+                                            "name": "__input__",
+                                            "default": 0,
+                                            "value": "0"
+                                        }
+                                    ],
+                                    "selected": false,
+                                    "hasError": false
+                                }
+                            ],
+                            "state": {
+                                "procedure": []
+                            },
+                            "input": {
+                                "id": "86510b21-a7ce-8a91-2af7-ec90bb50815a",
+                                "name": "input",
+                                "type": 0,
+                                "edges": [],
+                                "meta": {
+                                    "mode": 0,
+                                    "opts": {}
+                                },
+                                "parentNode": "~flowchart~functions~0~flowchart~nodes~0"
+                            },
+                            "output": {
+                                "id": "8f8536a5-099c-ecf5-1e2e-be74f2a0cd5f",
+                                "name": "output",
+                                "type": 1,
+                                "edges": [
+                                    {
+                                        "source": "~flowchart~functions~0~flowchart~nodes~0~output",
+                                        "target": {
+                                            "id": "821f14b7-5afb-69c1-699c-eef6ae7f4f32",
+                                            "name": "input",
+                                            "type": 0,
+                                            "edges": [
+                                                "~flowchart~functions~0~flowchart~nodes~0~output~edges~0"
+                                            ],
+                                            "meta": {
+                                                "mode": 0,
+                                                "opts": {}
+                                            },
+                                            "parentNode": {
+                                                "name": "End",
+                                                "id": "node_aczi8b6gvp9",
+                                                "position": {
+                                                    "x": 5350,
+                                                    "y": 5157.376953125
+                                                },
+                                                "enabled": true,
+                                                "type": "end",
+                                                "procedure": [
+                                                    {
+                                                        "type": 13,
+                                                        "ID": "",
+                                                        "meta": {
+                                                            "name": "",
+                                                            "module": ""
+                                                        },
+                                                        "argCount": 0,
+                                                        "args": [],
+                                                        "print": false,
+                                                        "enabled": true,
+                                                        "selected": false,
+                                                        "hasError": false
+                                                    },
+                                                    {
+                                                        "type": 0,
+                                                        "ID": "prod-ffi6mm7yfyn",
+                                                        "enabled": true,
+                                                        "print": false,
+                                                        "argCount": 2,
+                                                        "args": [
+                                                            {
+                                                                "name": "var_name",
+                                                                "value": "scaled_shifted_wave"
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "value": "0"
+                                                            }
+                                                        ],
+                                                        "selected": false,
+                                                        "hasError": false
+                                                    },
+                                                    {
+                                                        "type": 1,
+                                                        "ID": "prod-lhsu8c1myh",
+                                                        "enabled": true,
+                                                        "print": false,
+                                                        "argCount": 1,
+                                                        "args": [
+                                                            {
+                                                                "name": "condition",
+                                                                "value": "sine_or_cosine == 0"
+                                                            }
+                                                        ],
+                                                        "children": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "prod-csii3qz56fv",
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                                "ID": "prod-unv1ukntgmc",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "t_param"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "dist_from_grid_origin / dist_max_grid"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                                "ID": "prod-bn34r78twyu",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "sin_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "sin ( dist_from_grid_origin / dist_max_grid * 2 * PI )"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                                "ID": "prod-hjpwe57dz6n",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "shifted_sin_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "sin ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift )"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                                "ID": "prod-d2p44dzwsjs",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "scaled_shifted_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "sin ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift ) * scale_factor"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "selected": false,
+                                                        "hasError": false
+                                                    },
+                                                    {
+                                                        "type": 2,
+                                                        "ID": "prod-3d2z3554bc6",
+                                                        "enabled": true,
+                                                        "print": false,
+                                                        "argCount": 1,
+                                                        "args": [
+                                                            {
+                                                                "name": "condition",
+                                                                "value": "sine_or_cosine == 1"
+                                                            }
+                                                        ],
+                                                        "children": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "prod-mlfyfs28cwc",
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                                "ID": "prod-ti3i0rud4w",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "t_param"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "dist_from_grid_origin / dist_max_grid"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                                "ID": "prod-eo6hobweh3q",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "cos_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "cos ( dist_from_grid_origin / dist_max_grid * 2 * PI )"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                                "ID": "prod-6fnbq01rnxg",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "shifted_cos_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "cos ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift )"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                                "ID": "prod-9x6iwk3nzt",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "scaled_shifted_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "cos ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift ) * scale_factor"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "selected": false,
+                                                        "hasError": false
+                                                    },
+                                                    {
+                                                        "type": 3,
+                                                        "ID": "prod-su6uwd5bnr",
+                                                        "enabled": true,
+                                                        "print": false,
+                                                        "argCount": 0,
+                                                        "args": [],
+                                                        "children": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "prod-ppwjdbdjx",
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "parent": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
+                                                                "ID": "prod-r2crocmvlh",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "scaled_shifted_wave"
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "\"You need to specify 0 for sin wave or 1 for cos wave in the first argument.\""
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "hasError": false,
+                                                        "selected": false
+                                                    },
+                                                    {
+                                                        "type": 11,
+                                                        "ID": "",
+                                                        "meta": {
+                                                            "name": "",
+                                                            "module": ""
+                                                        },
+                                                        "argCount": 2,
+                                                        "args": [
+                                                            {
+                                                                "name": "__model__",
+                                                                "default": 0
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "value": "scaled_shifted_wave",
+                                                                "default": 0
+                                                            }
+                                                        ],
+                                                        "print": false,
+                                                        "enabled": true,
+                                                        "selected": false,
+                                                        "hasError": false
+                                                    }
+                                                ],
+                                                "state": {
+                                                    "procedure": []
+                                                },
+                                                "input": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target",
+                                                "output": {
+                                                    "id": "3e9a0314-9454-cc70-2ed8-7c8db95b8987",
+                                                    "name": "output",
+                                                    "type": 1,
+                                                    "edges": [],
+                                                    "meta": {
+                                                        "mode": 0
+                                                    },
+                                                    "parentNode": "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                                },
+                                                "hasError": false,
+                                                "hasExecuted": true
+                                            }
+                                        },
+                                        "selected": false
+                                    }
+                                ],
+                                "meta": {
+                                    "mode": 0
+                                },
+                                "parentNode": "~flowchart~functions~0~flowchart~nodes~0"
+                            },
+                            "hasError": false,
+                            "hasExecuted": true
+                        },
+                        "~flowchart~functions~0~flowchart~nodes~0~output~edges~0~target~parentNode"
+                    ],
+                    "edges": [
+                        "~flowchart~functions~0~flowchart~nodes~0~output~edges~0"
+                    ]
+                },
+                "name": "sincoswave",
+                "module": "Imported",
+                "doc": {
+                    "name": "sincoswave",
+                    "module": "Imported",
+                    "description": "Creation of a sine or cosine wave",
+                    "summary": "Creation of a sine or cosine wave",
+                    "parameters": [
+                        {
+                            "name": "sine_or_cosine",
+                            "description": "Input 0 for sine, 1 for cosine"
+                        },
+                        {
+                            "name": "dist_from_grid_origin",
+                            "description": "Distance of the position from the origin"
+                        },
+                        {
+                            "name": "dist_max_grid",
+                            "description": "Distance of last position from the origin (max distance)"
+                        },
+                        {
+                            "name": "scale_factor",
+                            "description": "Scale factor to increase or decrease displacement"
+                        },
+                        {
+                            "name": "wave_shift",
+                            "description": "Factor to translate wave pattern in positive/negative x-direction on graph (in radians)"
+                        }
+                    ]
+                },
+                "importedFile": "{\n    \"name\": \"sincoswave\",\n    \"author\": \"new_user\",\n    \"flowchart\": {\n        \"name\": \"sincoswave\",\n        \"description\": \"Creation of a sine or cosine wave\",\n        \"language\": \"js\",\n        \"meta\": {\n            \"selected_nodes\": [\n                0\n            ]\n        },\n        \"nodes\": [\n            {\n                \"name\": \"Start\",\n                \"id\": \"node_mr9ypljdu2o\",\n                \"position\": {\n                    \"x\": 5350,\n                    \"y\": 5000\n                },\n                \"enabled\": true,\n                \"type\": \"start\",\n                \"procedure\": [\n                    {\n                        \"type\": 10,\n                        \"ID\": \"prod-173483ik1tj\",\n                        \"enabled\": true,\n                        \"print\": false,\n                        \"argCount\": 2,\n                        \"meta\": {\n                            \"module\": \"Input\",\n                            \"name\": \"Constant\",\n                            \"inputMode\": 0,\n                            \"description\": \"Input 0 for sine, 1 for cosine\"\n                        },\n                        \"args\": [\n                            {\n                                \"name\": \"const_name\",\n                                \"value\": \"sine_or_cosine\",\n                                \"default\": 0\n                            },\n                            {\n                                \"name\": \"__input__\",\n                                \"value\": \"0\",\n                                \"default\": \"0\"\n                            }\n                        ],\n                        \"selected\": false,\n                        \"hasError\": false\n                    },\n                    {\n                        \"type\": 10,\n                        \"ID\": \"prod-jmkltpghka\",\n                        \"enabled\": true,\n                        \"print\": false,\n                        \"argCount\": 2,\n                        \"meta\": {\n                            \"module\": \"Input\",\n                            \"name\": \"Constant\",\n                            \"inputMode\": 0,\n                            \"description\": \"Distance of the position from the origin\"\n                        },\n                        \"args\": [\n                            {\n                                \"name\": \"const_name\",\n                                \"value\": \"dist_from_grid_origin\",\n                                \"default\": 0\n                            },\n                            {\n                                \"name\": \"__input__\",\n                                \"default\": \"1\",\n                                \"value\": \"1\"\n                            }\n                        ],\n                        \"selected\": false,\n                        \"hasError\": false\n                    },\n                    {\n                        \"type\": 10,\n                        \"ID\": \"prod-lkdn9fx226\",\n                        \"enabled\": true,\n                        \"print\": false,\n                        \"argCount\": 2,\n                        \"meta\": {\n                            \"module\": \"Input\",\n                            \"name\": \"Constant\",\n                            \"inputMode\": 0,\n                            \"description\": \"Distance of last position from the origin (max distance)\"\n                        },\n                        \"args\": [\n                            {\n                                \"name\": \"const_name\",\n                                \"value\": \"dist_max_grid\",\n                                \"default\": 0\n                            },\n                            {\n                                \"name\": \"__input__\",\n                                \"default\": \"1\",\n                                \"value\": \"1\"\n                            }\n                        ],\n                        \"selected\": false,\n                        \"hasError\": false\n                    },\n                    {\n                        \"type\": 10,\n                        \"ID\": \"prod-kw612zx89no\",\n                        \"enabled\": true,\n                        \"print\": false,\n                        \"argCount\": 2,\n                        \"meta\": {\n                            \"module\": \"Input\",\n                            \"name\": \"Constant\",\n                            \"inputMode\": 0,\n                            \"description\": \"Scale factor to increase or decrease displacement\"\n                        },\n                        \"args\": [\n                            {\n                                \"name\": \"const_name\",\n                                \"value\": \"scale_factor\",\n                                \"default\": 0\n                            },\n                            {\n                                \"name\": \"__input__\",\n                                \"default\": \"1\",\n                                \"value\": \"1\"\n                            }\n                        ],\n                        \"selected\": false,\n                        \"hasError\": false\n                    },\n                    {\n                        \"type\": 10,\n                        \"ID\": \"prod-ogyp9abjv\",\n                        \"enabled\": true,\n                        \"print\": false,\n                        \"argCount\": 2,\n                        \"meta\": {\n                            \"module\": \"Input\",\n                            \"name\": \"Constant\",\n                            \"inputMode\": 0,\n                            \"description\": \"Factor to translate wave pattern in positive/negative x-direction on graph (in radians)\"\n                        },\n                        \"args\": [\n                            {\n                                \"name\": \"const_name\",\n                                \"value\": \"wave_shift\",\n                                \"default\": 0\n                            },\n                            {\n                                \"name\": \"__input__\",\n                                \"default\": 0,\n                                \"value\": \"0\"\n                            }\n                        ],\n                        \"selected\": false,\n                        \"hasError\": false\n                    }\n                ],\n                \"state\": {\n                    \"procedure\": []\n                },\n                \"input\": {\n                    \"id\": \"86510b21-a7ce-8a91-2af7-ec90bb50815a\",\n                    \"name\": \"input\",\n                    \"type\": 0,\n                    \"edges\": [],\n                    \"meta\": {\n                        \"mode\": 0,\n                        \"opts\": {}\n                    },\n                    \"parentNode\": \"\\x7eflowchart~nodes~0\"\n                },\n                \"output\": {\n                    \"id\": \"8f8536a5-099c-ecf5-1e2e-be74f2a0cd5f\",\n                    \"name\": \"output\",\n                    \"type\": 1,\n                    \"edges\": [\n                        {\n                            \"source\": \"~flowchart~nodes~0~output\",\n                            \"target\": {\n                                \"id\": \"821f14b7-5afb-69c1-699c-eef6ae7f4f32\",\n                                \"name\": \"input\",\n                                \"type\": 0,\n                                \"edges\": [\n                                    \"~flowchart~nodes~0~output~edges~0\"\n                                ],\n                                \"meta\": {\n                                    \"mode\": 0,\n                                    \"opts\": {}\n                                },\n                                \"parentNode\": {\n                                    \"name\": \"End\",\n                                    \"id\": \"node_aczi8b6gvp9\",\n                                    \"position\": {\n                                        \"x\": 5350,\n                                        \"y\": 5157.376953125\n                                    },\n                                    \"enabled\": true,\n                                    \"type\": \"end\",\n                                    \"procedure\": [\n                                        {\n                                            \"type\": 13,\n                                            \"ID\": \"\",\n                                            \"meta\": {\n                                                \"name\": \"\",\n                                                \"module\": \"\"\n                                            },\n                                            \"argCount\": 0,\n                                            \"args\": [],\n                                            \"print\": false,\n                                            \"enabled\": true,\n                                            \"selected\": false,\n                                            \"hasError\": false\n                                        },\n                                        {\n                                            \"type\": 0,\n                                            \"ID\": \"prod-ffi6mm7yfyn\",\n                                            \"enabled\": true,\n                                            \"print\": false,\n                                            \"argCount\": 2,\n                                            \"args\": [\n                                                {\n                                                    \"name\": \"var_name\",\n                                                    \"value\": \"scaled_shifted_wave\"\n                                                },\n                                                {\n                                                    \"name\": \"value\",\n                                                    \"value\": \"0\"\n                                                }\n                                            ],\n                                            \"selected\": false,\n                                            \"hasError\": false\n                                        },\n                                        {\n                                            \"type\": 1,\n                                            \"ID\": \"prod-lhsu8c1myh\",\n                                            \"enabled\": true,\n                                            \"print\": false,\n                                            \"argCount\": 1,\n                                            \"args\": [\n                                                {\n                                                    \"name\": \"condition\",\n                                                    \"value\": \"sine_or_cosine == 0\"\n                                                }\n                                            ],\n                                            \"children\": [\n                                                {\n                                                    \"type\": 13,\n                                                    \"ID\": \"prod-csii3qz56fv\",\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2\",\n                                                    \"meta\": {\n                                                        \"name\": \"\",\n                                                        \"module\": \"\"\n                                                    },\n                                                    \"argCount\": 0,\n                                                    \"args\": [],\n                                                    \"print\": false,\n                                                    \"enabled\": true,\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2\",\n                                                    \"ID\": \"prod-unv1ukntgmc\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"t_param\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"dist_from_grid_origin / dist_max_grid\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2\",\n                                                    \"ID\": \"prod-bn34r78twyu\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"sin_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"sin ( dist_from_grid_origin / dist_max_grid * 2 * PI )\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2\",\n                                                    \"ID\": \"prod-hjpwe57dz6n\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"shifted_sin_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"sin ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift )\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2\",\n                                                    \"ID\": \"prod-d2p44dzwsjs\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"scaled_shifted_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"sin ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift ) * scale_factor\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                }\n                                            ],\n                                            \"selected\": false,\n                                            \"hasError\": false\n                                        },\n                                        {\n                                            \"type\": 2,\n                                            \"ID\": \"prod-3d2z3554bc6\",\n                                            \"enabled\": true,\n                                            \"print\": false,\n                                            \"argCount\": 1,\n                                            \"args\": [\n                                                {\n                                                    \"name\": \"condition\",\n                                                    \"value\": \"sine_or_cosine == 1\"\n                                                }\n                                            ],\n                                            \"children\": [\n                                                {\n                                                    \"type\": 13,\n                                                    \"ID\": \"prod-mlfyfs28cwc\",\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3\",\n                                                    \"meta\": {\n                                                        \"name\": \"\",\n                                                        \"module\": \"\"\n                                                    },\n                                                    \"argCount\": 0,\n                                                    \"args\": [],\n                                                    \"print\": false,\n                                                    \"enabled\": true,\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3\",\n                                                    \"ID\": \"prod-ti3i0rud4w\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"t_param\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"dist_from_grid_origin / dist_max_grid\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3\",\n                                                    \"ID\": \"prod-eo6hobweh3q\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"cos_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"cos ( dist_from_grid_origin / dist_max_grid * 2 * PI )\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3\",\n                                                    \"ID\": \"prod-6fnbq01rnxg\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"shifted_cos_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"cos ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift )\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3\",\n                                                    \"ID\": \"prod-9x6iwk3nzt\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"scaled_shifted_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"cos ( dist_from_grid_origin / dist_max_grid * 2 * PI + wave_shift ) * scale_factor\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                }\n                                            ],\n                                            \"selected\": false,\n                                            \"hasError\": false\n                                        },\n                                        {\n                                            \"type\": 3,\n                                            \"ID\": \"prod-su6uwd5bnr\",\n                                            \"enabled\": true,\n                                            \"print\": false,\n                                            \"argCount\": 0,\n                                            \"args\": [],\n                                            \"children\": [\n                                                {\n                                                    \"type\": 13,\n                                                    \"ID\": \"prod-ppwjdbdjx\",\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4\",\n                                                    \"meta\": {\n                                                        \"name\": \"\",\n                                                        \"module\": \"\"\n                                                    },\n                                                    \"argCount\": 0,\n                                                    \"args\": [],\n                                                    \"print\": false,\n                                                    \"enabled\": true,\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                },\n                                                {\n                                                    \"type\": 0,\n                                                    \"parent\": \"~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4\",\n                                                    \"ID\": \"prod-r2crocmvlh\",\n                                                    \"enabled\": true,\n                                                    \"print\": false,\n                                                    \"argCount\": 2,\n                                                    \"args\": [\n                                                        {\n                                                            \"name\": \"var_name\",\n                                                            \"value\": \"scaled_shifted_wave\"\n                                                        },\n                                                        {\n                                                            \"name\": \"value\",\n                                                            \"value\": \"\\\"You need to specify 0 for sin wave or 1 for cos wave in the first argument.\\\"\"\n                                                        }\n                                                    ],\n                                                    \"selected\": false,\n                                                    \"hasError\": false\n                                                }\n                                            ],\n                                            \"hasError\": false,\n                                            \"selected\": false\n                                        },\n                                        {\n                                            \"type\": 11,\n                                            \"ID\": \"\",\n                                            \"meta\": {\n                                                \"name\": \"\",\n                                                \"module\": \"\"\n                                            },\n                                            \"argCount\": 2,\n                                            \"args\": [\n                                                {\n                                                    \"name\": \"__model__\",\n                                                    \"default\": 0\n                                                },\n                                                {\n                                                    \"name\": \"value\",\n                                                    \"value\": \"scaled_shifted_wave\",\n                                                    \"default\": 0\n                                                }\n                                            ],\n                                            \"print\": false,\n                                            \"enabled\": true,\n                                            \"selected\": false,\n                                            \"hasError\": false\n                                        }\n                                    ],\n                                    \"state\": {\n                                        \"procedure\": []\n                                    },\n                                    \"input\": \"~flowchart~nodes~0~output~edges~0~target\",\n                                    \"output\": {\n                                        \"id\": \"3e9a0314-9454-cc70-2ed8-7c8db95b8987\",\n                                        \"name\": \"output\",\n                                        \"type\": 1,\n                                        \"edges\": [],\n                                        \"meta\": {\n                                            \"mode\": 0\n                                        },\n                                        \"parentNode\": \"~flowchart~nodes~0~output~edges~0~target~parentNode\"\n                                    },\n                                    \"hasError\": false,\n                                    \"hasExecuted\": true\n                                }\n                            },\n                            \"selected\": false\n                        }\n                    ],\n                    \"meta\": {\n                        \"mode\": 0\n                    },\n                    \"parentNode\": \"~flowchart~nodes~0\"\n                },\n                \"hasError\": false,\n                \"hasExecuted\": true\n            },\n            \"~flowchart~nodes~0~output~edges~0~target~parentNode\"\n        ],\n        \"edges\": [\n            \"~flowchart~nodes~0~output~edges~0\"\n        ],\n        \"functions\": [],\n        \"ordered\": true\n    },\n    \"last_updated\": \"2019-01-10T02:36:18.037Z\",\n    \"version\": 1\n}",
+                "args": [
+                    {
+                        "name": "sine_or_cosine",
+                        "type": 0
+                    },
+                    {
+                        "name": "dist_from_grid_origin",
+                        "type": 0
+                    },
+                    {
+                        "name": "dist_max_grid",
+                        "type": 0
+                    },
+                    {
+                        "name": "scale_factor",
+                        "type": 0
+                    },
+                    {
+                        "name": "wave_shift",
+                        "type": 0
+                    }
+                ],
+                "argCount": 5
+            }
+        ],
+        "ordered": true
+    },
+    "last_updated": "2019-01-15T01:41:47.722Z",
+    "version": 1
+}

@@ -1,0 +1,176 @@
+[
+    {
+        "old_func": {
+            "name": "Append",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Append",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "RemoveIndex",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_RemoveIndex",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "RemoveValue",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_RemoveValue",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "ReplaceValue",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_ReplaceValue",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "IndexOf",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_IndexOf",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Includes",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Includes",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Copy",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Copy",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Concat",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Concat",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Flatten",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Flatten",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Slice",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Slice",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Reverse",
+            "module": "list"
+        },
+        "new_func": {
+            "name": "_Reverse",
+            "module": "list"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Loft",
+            "module": "make"
+        },
+        "new_func": {
+            "name": "Loft",
+            "module": "make",
+            "values": {
+                "divisions": "1",
+                "method": "'open_quads'"
+            }
+        }
+    },
+    {
+        "old_func": {
+            "name": "Extrude",
+            "module": "make"
+        },
+        "new_func": {
+            "name": "Extrude",
+            "module": "make",
+            "values": {
+                "divisions": "1",
+                "method": "'quads'"
+            }
+        }
+    },
+    {
+        "old_func": {
+            "name": "Normal",
+            "module": "calc"
+        },
+        "new_func": {
+            "name": "Normal",
+            "module": "calc",
+            "values": {
+                "scale": "1"
+            }
+        }
+    },
+    {
+        "old_func": {
+            "name": "IsClosed",
+            "module": "query"
+        },
+        "new_func": {
+            "name": "_IsClosed",
+            "module": "query"
+        }
+    },
+    {
+        "old_func": {
+            "name": "Get",
+            "module": "query"
+        },
+        "new_func": {
+            "name": "Get",
+            "module": "query",
+            "values": {
+                "sort": "'ID_ascending'"
+            }
+        }
+    }
+]

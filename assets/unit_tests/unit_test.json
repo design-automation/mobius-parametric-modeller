@@ -1,0 +1,37 @@
+{
+    "test_data":[
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/basic_variable.mob&node=1",
+            "requirements": {
+                "num_positions": 0,
+                "num_triangles": 0,
+                "num_vertices": 0,
+                "num_edges": 0,
+                "num_wires": 0,
+                "num_faces": 0,
+                "num_points": 0,
+                "num_polylines": 0,
+                "num_polygons": 0,
+                "num_collections": 0
+            },
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/basic_ifelse.mob&node=1",
+            "requirements": {
+                "num_positions": 5,
+                "num_triangles": 0,
+                "num_vertices": 5,
+                "num_edges": 5,
+                "num_wires": 1,
+                "num_faces": 0,
+                "num_points": 0,
+                "num_polylines": 1,
+                "num_polygons": 0,
+                "num_collections": 0
+            },
+            "returns": ""
+        }
+
+    ]
+}

@@ -4,7 +4,7 @@ const dc = require('./doc.json');
 const fs = require('fs');
 const config = require('../gallery/__config__.json');
 
-const urlString = 'https://design-automation.github.io/mobius-parametric-modeller-0-4-34';
+const urlString = 'https://mobius.design-automation.net';
 
 // Edit this ModuleList to include modules that are to be converted into MD file
 const ModuleList = [

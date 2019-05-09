@@ -9,7 +9,7 @@
   * position1 = make.Position([1,2,3])  
     Creates a position with coordinates x=1, y=2, z=3.  
 * **Example URLs:**  
-  1. [make.Position.mob](https://design-automation.github.io/mobius-parametric-modeller-0-4-34/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Position.mob&node=1
+  1. [make.Position.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Position.mob&node=1
 )  
   
 ## Point  
@@ -21,7 +21,7 @@
   * point1 = make.Point(position1)  
     Creates a point at position1.  
 * **Example URLs:**  
-  1. [make.Point.mob](https://design-automation.github.io/mobius-parametric-modeller-0-4-34/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Point.mob&node=1
+  1. [make.Point.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Point.mob&node=1
 )  
   
 ## Polyline  
@@ -34,7 +34,7 @@
   * polyline1 = make.Polyline([position1,position2,position3], close)  
     Creates a closed polyline with vertices position1, position2, position3 in sequence.  
 * **Example URLs:**  
-  1. [make.Polyline.mob](https://design-automation.github.io/mobius-parametric-modeller-0-4-34/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polyline.mob&node=1
+  1. [make.Polyline.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polyline.mob&node=1
 )  
   
 ## Polygon  
@@ -46,7 +46,7 @@
   * polygon1 = make.Polygon([position1,position2,position3])  
     Creates a polygon with vertices position1, position2, position3 in sequence.  
 * **Example URLs:**  
-  1. [make.Polygon.mob](https://design-automation.github.io/mobius-parametric-modeller-0-4-34/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polygon.mob&node=1
+  1. [make.Polygon.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polygon.mob&node=1
 )  
   
 ## Collection  
@@ -59,7 +59,7 @@
   * collection1 = make.Collection([point1,polyine1,polygon1])  
     Creates a collection containing point1, polyline1, polygon1.  
 * **Example URLs:**  
-  1. [make.Collection.mob](https://design-automation.github.io/mobius-parametric-modeller-0-4-34/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Collection.mob&node=1
+  1. [make.Collection.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Collection.mob&node=1
 )  
   
 ## Copy  

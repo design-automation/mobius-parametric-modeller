@@ -105,9 +105,9 @@ export function exportDae(model: GIModel): string {
         let num_tris = 0;
         for (const tri_i of pgon_tris_i) {
             const tri_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
-            // const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
-            // const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
-            if (true) { //(tri_area > 0) {
+            const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
+            const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
+            if (tri_area > 0) {
                 for (const tri_posi_i of tri_posis_i) {
                     indices += ' ' + vert_map.get(tri_posi_i);
                 }

@@ -206,6 +206,7 @@ export class DataThreejs {
         }
 
         const allObjs = this.getAllObjs();
+
         const center = allObjs.center;
         this.grid_pos.x = center.x;
         this.grid_pos.y = center.y;
@@ -213,6 +214,7 @@ export class DataThreejs {
         this.axes_pos.y = center.y;
         this.grid.position.set(center.x, center.y, 0);
         this.axesHelper.position.set(center.x, center.y, 0);
+
 
         setTimeout(() => {
             if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
@@ -970,7 +972,7 @@ export class DataThreejs {
         console.log('this._renderer.info', this._renderer.info.memory.geometries);
     }
 
-    public lookAtObj(width: number) {
+    public lookAtObj() {
         const allObjs = this.getAllObjs();
         const selectedObjs = this.getSelectedObjs();
         if (allObjs === null && selectedObjs === null) {

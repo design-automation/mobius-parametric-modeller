@@ -1,0 +1,44 @@
+@import '~scss/variables';
+@import '~scss/colors';
+
+panel-header button {
+    display: inline-block;
+    vertical-align: bottom;
+    background-color: transparent;
+    color: $color1;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0px;
+    width: 34px;
+    height: 34px;
+    transition: 0.3s;
+    font-size: $fsize1;
+}
+
+publish-header button {
+    display: inline-block;
+    vertical-align: bottom;
+    background-color: transparent;
+    color: $color1;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0px;
+    width: 34px;
+    height: 34px;
+    transition: 0.3s;
+    font-size: $fsize1;
+}
+
+button:hover {
+    color:$selected-color;
+}
+
+panel-header button.active {
+    color: $selected-color;
+}
+
+publish-header button.active {
+    color: $selected-color;
+}

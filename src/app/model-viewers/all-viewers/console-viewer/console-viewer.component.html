@@ -1,0 +1,30 @@
+<div id='console-container'>
+    <div class='container'>
+        <ng-container *ngFor='let text of logs'>
+            <div class = 'line-container'>
+                <p class='normalText line'  *ngFor='let splittedText of text.split("\n")' >{{splittedText}}</p>
+
+                <!-- <ng-container *ngIf='text.join(" ").indexOf("Error") !== -1; else default_template'>
+                    <p class='errorText line' *ngFor='let splittedText of text.join(" ").split("\n")' >{{splittedText}}</p>
+                </ng-container>
+                <ng-template #default_template>
+                    <p class='normalText line'  *ngFor='let splittedText of text.join(" ").split("\n")' >{{splittedText}}</p>
+                </ng-template> -->
+            </div>
+        </ng-container>
+    </div>
+    <form id='toggleClearConsole' title="Check to clear console every time the flowchart is executed.">
+        <input id='consoleClearCheck' 
+        name='consoleClearCheck' 
+        type="checkbox" 
+        [ngModel]='consoleClearCheck' 
+        (ngModelChange)='toggleConsoleClear()'>
+        <label for='consoleClearCheck'>Clear Console</label>
+    </form>
+    <button id="clearConsole"
+        mat-icon-button
+        (click)="clearConsole()"
+        title='Clear Console'>
+        <mat-icon>block</mat-icon>
+    </button> 
+</div>

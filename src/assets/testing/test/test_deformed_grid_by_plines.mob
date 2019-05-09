@@ -1,0 +1,1103 @@
+{
+    "name": "test_deformed_grid",
+    "author": "new_user",
+    "flowchart": {
+        "name": "Defomed grid by creating polylins",
+        "description": "An example of how to create a defomed grid using polyline geometry.",
+        "language": "js",
+        "meta": {
+            "selected_nodes": [
+                0
+            ]
+        },
+        "nodes": [
+            {
+                "name": "Start",
+                "id": "node_ntw1asmrmy",
+                "position": {
+                    "x": 5350,
+                    "y": 5000
+                },
+                "enabled": true,
+                "type": "start",
+                "procedure": [
+                    {
+                        "type": 13,
+                        "ID": "",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "hasError": false
+                    }
+                ],
+                "state": {
+                    "procedure": []
+                },
+                "input": {
+                    "name": "input",
+                    "type": 0,
+                    "edges": [],
+                    "meta": {
+                        "mode": 0,
+                        "opts": {}
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "output": {
+                    "name": "output",
+                    "type": 1,
+                    "edges": [
+                        {
+                            "source": "~flowchart~nodes~0~output",
+                            "target": {
+                                "name": "input",
+                                "type": 0,
+                                "edges": [
+                                    "~flowchart~nodes~0~output~edges~0"
+                                ],
+                                "meta": {
+                                    "mode": 0,
+                                    "opts": {}
+                                },
+                                "parentNode": {
+                                    "name": "make pgon",
+                                    "id": "node_vkpbt859wfb",
+                                    "position": {
+                                        "x": 5282.931640625,
+                                        "y": 5140.26708984375
+                                    },
+                                    "enabled": true,
+                                    "type": "",
+                                    "procedure": [
+                                        {
+                                            "type": 13,
+                                            "ID": "",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-9hmxc0upq36",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "pattern",
+                                                "name": "Rectangle"
+                                            },
+                                            "argCount": 4,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "rec",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "origin",
+                                                    "value": "XY",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "size",
+                                                    "value": "123",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-65apffxytnw",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "make",
+                                                "name": "Polygon"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "pg",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "positions",
+                                                    "value": "rec",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-de9aknpmjah",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "query",
+                                                "name": "Get"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "edges",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "select",
+                                                    "value": "'edges'",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "pg",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "query_expr",
+                                                    "value": "null",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-45wbzqkek7f",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "calc",
+                                                "name": "Centroid"
+                                            },
+                                            "argCount": 3,
+                                            "args": [
+                                                {
+                                                    "name": "var_name",
+                                                    "value": "cen",
+                                                    "invalidVar": false
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "edges[0]",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        },
+                                        {
+                                            "type": 8,
+                                            "ID": "prod-785lyrzbj9j",
+                                            "enabled": true,
+                                            "print": false,
+                                            "meta": {
+                                                "module": "modify",
+                                                "name": "Scale"
+                                            },
+                                            "argCount": 5,
+                                            "args": [
+                                                {
+                                                    "name": "__none__"
+                                                },
+                                                {
+                                                    "name": "__model__",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "entities",
+                                                    "value": "edges[0]",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "origin",
+                                                    "value": "cen",
+                                                    "default": 0
+                                                },
+                                                {
+                                                    "name": "scale",
+                                                    "value": "0.5",
+                                                    "default": 0
+                                                }
+                                            ],
+                                            "selected": false,
+                                            "hasError": false
+                                        }
+                                    ],
+                                    "state": {
+                                        "procedure": []
+                                    },
+                                    "input": "~flowchart~nodes~0~output~edges~0~target",
+                                    "output": {
+                                        "name": "output",
+                                        "type": 1,
+                                        "edges": [
+                                            {
+                                                "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output",
+                                                "target": {
+                                                    "name": "input",
+                                                    "type": 0,
+                                                    "edges": [
+                                                        "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
+                                                    ],
+                                                    "meta": {
+                                                        "mode": 0,
+                                                        "opts": {}
+                                                    },
+                                                    "parentNode": {
+                                                        "name": "make grid",
+                                                        "id": "node_8zs4z106vb4",
+                                                        "position": {
+                                                            "x": 5381.595703125,
+                                                            "y": 5269.244140625
+                                                        },
+                                                        "enabled": true,
+                                                        "type": "",
+                                                        "procedure": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "ID": "prod-xecl9bksovj",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "num_posis_u",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "32"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 0,
+                                                                "ID": "prod-qyb6o3hc3fp",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "num_posis_v",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "value",
+                                                                        "value": "44"
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-n53a3iwc92",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "pgons",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'polygons'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-hj108pxfgn5",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "four_edges",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'edges'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "pgons[0]",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-kh0ytz7hn49",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "posis_a",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'positions'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "four_edges[0]",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-1u3dptlpk7c",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "posis_b",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'positions'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "four_edges[2]",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-hpx4fy277xf",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "make",
+                                                                    "name": "Polyline"
+                                                                },
+                                                                "argCount": 4,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "pl_a",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "positions",
+                                                                        "value": "posis_a",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "close",
+                                                                        "value": "'open'",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-foo37qwxf7o",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "make",
+                                                                    "name": "Polyline"
+                                                                },
+                                                                "argCount": 4,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "pl_b",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "positions",
+                                                                        "value": "posis_b",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "close",
+                                                                        "value": "'open'",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-o093jegw38h",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "modify",
+                                                                    "name": "Reverse"
+                                                                },
+                                                                "argCount": 3,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "__none__"
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "pl_b",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-ism264mv9st",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "make",
+                                                                    "name": "Divide"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "new_posis",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "edge",
+                                                                        "value": "[pl_a , pl_b]",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "divisor",
+                                                                        "value": "num_posis_u - 1",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "method",
+                                                                        "value": "'by_number'",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-yf9o05mp9k",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "posis_a",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'positions'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "pl_a",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-9sog969l8lr",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "query",
+                                                                    "name": "Get"
+                                                                },
+                                                                "argCount": 5,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "var_name",
+                                                                        "value": "posis_b",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "select",
+                                                                        "value": "'positions'",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "pl_b",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "query_expr",
+                                                                        "value": "null",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 4,
+                                                                "ID": "prod-co76ispw63j",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "argCount": 2,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "item",
+                                                                        "value": "i",
+                                                                        "invalidVar": false
+                                                                    },
+                                                                    {
+                                                                        "name": "list",
+                                                                        "value": "range ( 0 , num_posis_u )",
+                                                                        "default": []
+                                                                    }
+                                                                ],
+                                                                "children": [
+                                                                    {
+                                                                        "type": 13,
+                                                                        "ID": "",
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~13",
+                                                                        "meta": {
+                                                                            "name": "",
+                                                                            "module": ""
+                                                                        },
+                                                                        "argCount": 0,
+                                                                        "args": [],
+                                                                        "print": false,
+                                                                        "enabled": true,
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 0,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~13",
+                                                                        "ID": "prod-go2nhhe03kg",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "argCount": 2,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "posi_a",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "value",
+                                                                                "value": "posis_a[i]"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 0,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~13",
+                                                                        "ID": "prod-27c3jeoij2",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "argCount": 2,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "posi_b",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "value",
+                                                                                "value": "posis_b[i]"
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~13",
+                                                                        "ID": "prod-4ql9lk5og84",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "make",
+                                                                            "name": "Polyline"
+                                                                        },
+                                                                        "argCount": 4,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "pl",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "positions",
+                                                                                "value": "[posi_a , posi_b]",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "close",
+                                                                                "value": "'open'",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "ID": "prod-2hg92j55vmj",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "make",
+                                                                            "name": "Divide"
+                                                                        },
+                                                                        "argCount": 5,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "var_name",
+                                                                                "value": "new_posis",
+                                                                                "invalidVar": false
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "edge",
+                                                                                "value": "pl",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "divisor",
+                                                                                "value": "num_posis_v - 1",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "method",
+                                                                                "value": "'by_number'",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~13"
+                                                                    },
+                                                                    {
+                                                                        "type": 8,
+                                                                        "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~13",
+                                                                        "ID": "prod-m6iaeo4f38p",
+                                                                        "enabled": true,
+                                                                        "print": false,
+                                                                        "meta": {
+                                                                            "module": "modify",
+                                                                            "name": "Delete"
+                                                                        },
+                                                                        "argCount": 4,
+                                                                        "args": [
+                                                                            {
+                                                                                "name": "__none__"
+                                                                            },
+                                                                            {
+                                                                                "name": "__model__",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "entities",
+                                                                                "value": "pl",
+                                                                                "default": 0
+                                                                            },
+                                                                            {
+                                                                                "name": "del_unused_posis",
+                                                                                "value": "'keep_unused_posis'",
+                                                                                "default": 0
+                                                                            }
+                                                                        ],
+                                                                        "selected": false,
+                                                                        "hasError": false
+                                                                    }
+                                                                ],
+                                                                "hasError": false,
+                                                                "selected": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-85dtsfsgqlm",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "modify",
+                                                                    "name": "Delete"
+                                                                },
+                                                                "argCount": 4,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "__none__"
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "[pl_a , pl_b]",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "del_unused_posis",
+                                                                        "value": "'keep_unused_posis'",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            },
+                                                            {
+                                                                "type": 8,
+                                                                "ID": "prod-wtbh6uzo7w9",
+                                                                "enabled": true,
+                                                                "print": false,
+                                                                "meta": {
+                                                                    "module": "modify",
+                                                                    "name": "Move"
+                                                                },
+                                                                "argCount": 4,
+                                                                "args": [
+                                                                    {
+                                                                        "name": "__none__"
+                                                                    },
+                                                                    {
+                                                                        "name": "__model__",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "entities",
+                                                                        "value": "pgons",
+                                                                        "default": 0
+                                                                    },
+                                                                    {
+                                                                        "name": "vector",
+                                                                        "value": "[0 , 0 , - 1]",
+                                                                        "default": 0
+                                                                    }
+                                                                ],
+                                                                "selected": false,
+                                                                "hasError": false
+                                                            }
+                                                        ],
+                                                        "state": {
+                                                            "procedure": []
+                                                        },
+                                                        "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
+                                                        "output": {
+                                                            "name": "output",
+                                                            "type": 1,
+                                                            "edges": [
+                                                                {
+                                                                    "source": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output",
+                                                                    "target": {
+                                                                        "name": "input",
+                                                                        "type": 0,
+                                                                        "edges": [
+                                                                            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0"
+                                                                        ],
+                                                                        "meta": {
+                                                                            "mode": 0,
+                                                                            "opts": {}
+                                                                        },
+                                                                        "parentNode": {
+                                                                            "name": "End",
+                                                                            "id": "node_q1lhsimvtlh",
+                                                                            "position": {
+                                                                                "x": 5350,
+                                                                                "y": 5400
+                                                                            },
+                                                                            "enabled": true,
+                                                                            "type": "end",
+                                                                            "procedure": [
+                                                                                {
+                                                                                    "type": 13,
+                                                                                    "ID": "",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 0,
+                                                                                    "args": [],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "hasError": false
+                                                                                },
+                                                                                {
+                                                                                    "type": 11,
+                                                                                    "ID": "",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 2,
+                                                                                    "args": [
+                                                                                        {
+                                                                                            "name": "__model__",
+                                                                                            "value": "",
+                                                                                            "default": 0
+                                                                                        },
+                                                                                        {
+                                                                                            "name": "value",
+                                                                                            "value": "",
+                                                                                            "default": 0
+                                                                                        }
+                                                                                    ],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "hasError": false
+                                                                                }
+                                                                            ],
+                                                                            "state": {
+                                                                                "procedure": []
+                                                                            },
+                                                                            "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target",
+                                                                            "output": {
+                                                                                "name": "output",
+                                                                                "type": 1,
+                                                                                "edges": [],
+                                                                                "meta": {
+                                                                                    "mode": 0
+                                                                                },
+                                                                                "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                                            },
+                                                                            "hasError": false,
+                                                                            "hasExecuted": true
+                                                                        }
+                                                                    },
+                                                                    "selected": false
+                                                                }
+                                                            ],
+                                                            "meta": {
+                                                                "mode": 0
+                                                            },
+                                                            "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+                                                        },
+                                                        "hasExecuted": true,
+                                                        "hasError": false
+                                                    }
+                                                },
+                                                "selected": false
+                                            }
+                                        ],
+                                        "meta": {
+                                            "mode": 0
+                                        },
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                    },
+                                    "hasError": false,
+                                    "hasExecuted": true
+                                }
+                            },
+                            "selected": false
+                        }
+                    ],
+                    "meta": {
+                        "mode": 0
+                    },
+                    "parentNode": "~flowchart~nodes~0"
+                },
+                "hasError": false,
+                "hasExecuted": true
+            },
+            "~flowchart~nodes~0~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
+        ],
+        "edges": [
+            "~flowchart~nodes~0~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0",
+            "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0"
+        ],
+        "functions": [],
+        "ordered": true
+    },
+    "last_updated": "2019-02-08T08:49:26.740Z",
+    "version": 1,
+    "settings": {}
+}

@@ -1,0 +1,454 @@
+<div id="gi-viewer-container">
+	<as-split direction="vertical" (dragEnd)='dragSplitEnd($event)' [disabled]='checkPublish()'>
+		<as-split-area [size]="100 - getSplit()" id="three-js">
+			<threejs-viewer [model]='data'
+				(eventClicked)="childEventClicked($event)"
+				[attr_table_select]='attrTableSelect'
+				[selectSwitch] = 'selectSwitchOnOff'
+				[attribLabel] = 'attribLabelVal'
+				(resetTableEvent) = "resetTable()"
+			>
+			</threejs-viewer>
+			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
+		</as-split-area>
+		<as-split-area [size]='getSplit()' id="attrib">
+			<attribute [data]="data"
+				[refresh]="clickedEvent"
+				[reset]="attrTableReset"
+				(attrTableSelect) = "attribTableSelected($event)"
+				(selectSwitch) = "selectSwitch($event)"
+				(attribLabel) = "attribLabel($event)"
+			>
+			</attribute>
+			<modal-window id="settings_modal">
+				<h1>3D Viewer Settings</h1>
+				<tabs id="settingsTab">
+					<tab tabTitle="Scene">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd [title] = "!normalsEnabled?'No models available':''">
+									<div class="label">Normals</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="normalsOnOff"
+										[checked]='settings.normals.show'
+										[disabled] = "!normalsEnabled"
+										(change)="settingOnChange('normals.show')"
+										>
+										<label class="onoffswitch-label" for="normalsOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="1" max="100" step="1"
+										[value]="settings.normals.size"
+										class="slider" id="normalSize"
+										(input)="settingOnChange('normals.size', $event.target.value)"
+										[disabled] = "!normalsEnabled">
+										<input type="text" [value]="settings.normals.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Axes</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="axesOnOff"
+										[checked]="settings.axes.show"
+										(change)="settingOnChange('axes.show')">
+										<label class="onoffswitch-label" for="axesOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="1" max="1000" step="1" [value]="settings.axes.size" class="slider" id="axesSize" (input)="settingOnChange('axes.size', $event.target.value)">
+										<input type="text" [value]="settings.axes.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Grid</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="gridOnOff"
+										[checked]='settings.grid.show'
+										(change)="settingOnChange('grid.show')"
+										>
+										<label class="onoffswitch-label" for="gridOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="10" max="10000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
+										<input type="text" [value]="settings.grid.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Positions</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="positionsOnOff"
+										[checked]='settings.positions.show'
+										(change)="settingOnChange('positions.show')"
+										>
+										<label class="onoffswitch-label" for="positionsOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="slidecontainer">
+										<input type="range" min="0.1" max="10" step="0.1" [value]="settings.positions.size" class="slider" id="positionsSize" (input)="settingOnChange('positions.size', $event.target.value)">
+										<input type="text" [value]="settings.positions.size" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Wireframe</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="wireframeOnOff"
+										[checked]='settings.wireframe.show'
+										(change)="settingOnChange('wireframe.show')"
+										>
+										<label class="onoffswitch-label" for="wireframeOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">GI Summary</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="gi_summaryOnOff"
+										[checked]='settings.gi_summary.show'
+										(change)="settingOnChange('gi_summary.show')"
+										>
+										<label class="onoffswitch-label" for="gi_summaryOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Threejs Summary</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="tjs_summaryOnOff"
+										[checked]='settings.tjs_summary.show'
+										(change)="settingOnChange('tjs_summary.show')"
+										>
+										<label class="onoffswitch-label" for="tjs_summaryOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd id='camera'>
+									<div class="label">Camera</div>
+									<!-- <div>
+										<button (click)="settingOnChange('camera.curr_pos')" class="filebtn closebtn" style="margin-left: 0">Get Camera</button>
+									</div> -->
+									<input type="number" 
+									(change)="settingOnChange('camera.curr_pos_x', $event.target.value)" 
+									[value]="formatNumber(temp_camera_pos.x)">
+									<input type="number" 
+									(change)="settingOnChange('camera.curr_pos_y', $event.target.value)"
+									[value]="formatNumber(temp_camera_pos.y)">
+									<input type="number" 
+									(change)="settingOnChange('camera.curr_pos_z', $event.target.value)"
+									[value]="formatNumber(temp_camera_pos.z)">
+								</dd>
+							</dl>
+						</div>
+					</tab>
+					<tab tabTitle="Colors">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd class='colors' *ngFor="let item of setting_colors; let i = index">
+									<div class="label">{{item.label}}</div>
+									<input
+									[(colorPicker)]="settings.colors[item.setting]"
+									[style.background]="settings.colors[item.setting]"
+									[value]="settings.colors[item.setting]"
+									[class.light] = "checkColor(this.settings.colors[item.setting])"
+									/>
+									<!-- <button *ngIf="item.default" (click)="resetDefault('colors.viewer_bg','#E6E6E6');" class='filebtn closebtn'>Default</button> -->
+									<hr [hidden]="i % 2 === 1">
+								</dd>
+							</dl>
+						</div>
+					</tab>
+					<tab tabTitle="Light & Shadow">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd>
+									<div class="label">Ambient Light</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="AmbientOnOff"
+										[checked]='settings.ambient_light.show'
+										(change)="settingOnChange('ambient_light.show')"
+										>
+										<label class="onoffswitch-label" for="AmbientOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Color</div>
+									<input
+									[(colorPicker)]="settings.ambient_light.color"
+									[style.background]="settings.ambient_light.color"
+									[value]="settings.ambient_light.color"
+									[class.light] = "checkColor(settings.ambient_light.color)"
+									/>
+									<!-- <button (click)="resetDefault('ambient_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
+								</dd>
+								<dd>
+									<div class="label">Intensity</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.ambient_light.intensity" class="slider" (input)="settingOnChange('ambient_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.ambient_light.intensity" disabled>
+									</div>
+								</dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Hemisphere Light</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="HemisphereOnOff"
+										[checked]='settings.hemisphere_light.show'
+										(change)="settingOnChange('hemisphere_light.show')"
+										>
+										<label class="onoffswitch-label" for="HemisphereOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="label" style="margin-left:90px">Helper</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="HemisphereLightHelperOnOff"
+										[checked]='settings.hemisphere_light.helper'
+										(change)="settingOnChange('hemisphere_light.helper')"
+										>
+										<label class="onoffswitch-label" for="HemisphereLightHelperOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Sky Color</div>
+									<input
+									[(colorPicker)]="settings.hemisphere_light.skyColor"
+									[style.background]="settings.hemisphere_light.skyColor"
+									[value]="settings.hemisphere_light.skyColor"
+									[class.light] = "checkColor(settings.hemisphere_light.skyColor)"
+									/>
+									<!-- <button (click)="resetDefault('hemisphere_light.skyColor','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
+								</dd>
+								<dd class='colors'>
+									<div class="label">Ground Color</div>
+									<input
+									[(colorPicker)]="settings.hemisphere_light.groundColor"
+									[style.background]="settings.hemisphere_light.groundColor"
+									[value]="settings.hemisphere_light.groundColor"
+									[class.light] = "checkColor(settings.hemisphere_light.groundColor)"
+									/>
+									<!-- <button (click)="resetDefault('hemisphere_light.groundColor','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
+								</dd>
+								<dd>
+									<div class="label">Intensity</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.hemisphere_light.intensity" class="slider" (input)="settingOnChange('hemisphere_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.hemisphere_light.intensity" disabled>
+									</div>
+								</dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Directional Light</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DirectionalOnOff"
+										[checked]='settings.directional_light.show'
+										(change)="settingOnChange('directional_light.show')"
+										>
+										<label class="onoffswitch-label" for="DirectionalOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+									<div class="label" style="margin-left:90px">Helper</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DaylightHelperOnOff"
+										[checked]='settings.directional_light.helper'
+										(change)="settingOnChange('directional_light.helper')"
+										>
+										<label class="onoffswitch-label" for="DaylightHelperOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Color</div>
+									<input
+									[(colorPicker)]="settings.directional_light.color"
+									[style.background]="settings.directional_light.color"
+									[value]="settings.directional_light.color"
+									[class.light] = "checkColor(settings.directional_light.color)"
+									/>
+									<!-- <button (click)="resetDefault('directional_light.color','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
+								</dd>
+								<dd>
+									<div class="label">Intensity</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="1" step="0.01" [value]="settings.directional_light.intensity" class="slider" (input)="settingOnChange('directional_light.intensity', $event.target.value)">
+										<input type="text" [value]="settings.directional_light.intensity" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Shadow</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DirectionalShadowOnOff"
+										[checked]='settings.directional_light.shadow'
+										(change)="settingOnChange('directional_light.shadow')"
+										>
+										<label class="onoffswitch-label" for="DirectionalShadowOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Shadow Size</div>
+									<div class="slidecontainer light">
+										<input type="range" min="1" max="20" step="1" [value]="settings.directional_light.shadowSize" class="slider" (input)="settingOnChange('directional_light.shadowSize', $event.target.value)">
+										<input type="text" [value]="settings.directional_light.shadowSize" disabled>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Azimuth</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="360" step="1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
+										<input type="number" disabled [value]="settings.directional_light.azimuth" class="number">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Altitude</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="180" step="1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
+										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Distance</div>
+									<div class="slidecontainer light">
+										<input type="range" min="1000" max="100000" step="1000" [value]="settings.directional_light.distance" class="slider" (input)="settingOnChange('directional_light.distance', $event.target.value)">
+										<input type="text" [value]="settings.directional_light.distance" disabled>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</tab>
+					<tab tabTitle="Environment">
+						<div class="mat-elevation-z1">
+							<dl>
+								<dd>
+									<div class="label">Ground</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="GroundOnOff"
+										[checked]='settings.ground.show'
+										(change)="settingOnChange('ground.show')"
+										>
+										<label class="onoffswitch-label" for="GroundOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Width</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="100000" step="100" [value]="settings.ground.width" class="slider" (input)="settingOnChange('ground.width', $event.target.value)">
+										<input type="number" [value]="settings.ground.width" min="0" max="100000" class="number" (input)="settingOnChange('ground.width', $event.target.value)">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Length</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="100000" step="100" [value]="settings.ground.length" class="slider" (input)="settingOnChange('ground.length', $event.target.value)">
+										<input type="number" [value]="settings.ground.length" min="0" max="100000" class="number" (input)="settingOnChange('ground.length', $event.target.value)">
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Height</div>
+									<div class="slidecontainer light">
+										<input type="range" min="-10" max="10" step="0.1" [value]="settings.ground.height" class="slider" (input)="settingOnChange('ground.height', $event.target.value)">
+										<input type="number" [value]="settings.ground.height" min="-10" max="10" class="number" (input)="settingOnChange('ground.height', $event.target.value)">
+									</div>
+								</dd>
+								<dd class='colors'>
+									<div class="label">Color</div>
+									<input
+									[(colorPicker)]="settings.ground.color"
+									[style.background]="settings.ground.color"
+									[value]="settings.ground.color"
+									[class.light] = "checkColor(settings.ground.color)"
+									/>
+									<!-- <button (click)="resetDefault('ground.color','#FFFFFF');" class='filebtn closebtn'>Default</button> -->
+								</dd>
+								<dd>
+									<div class="label">Shininess</div>
+									<div class="slidecontainer light">
+										<input type="range" min="0" max="100" step="1" [value]="settings.ground.shininess" class="slider" (input)="settingOnChange('ground.shininess', $event.target.value)">
+										<input type="number" min="0" max="100" [value]="settings.ground.shininess" class="number" (input)="settingOnChange('ground.shininess', $event.target.value)">
+									</div>
+								</dd>
+							</dl>
+							
+						</div>
+					</tab>
+				</tabs>
+				
+				<button (click)="closeModal('settings_modal', true);" class="filebtn closebtn setting">Save</button>
+				<button (click)="closeModal('settings_modal');" class='filebtn closebtn setting'>Close</button>
+				<button (click)="resetToDefault();" class='filebtn closebtn setting' style="float: right;">Default</button>
+			</modal-window>
+		</as-split-area>
+	</as-split>
+</div>

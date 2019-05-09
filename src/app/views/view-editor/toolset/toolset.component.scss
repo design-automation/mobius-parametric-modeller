@@ -1,0 +1,352 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+// .fixed--head{
+//     position: fixed;
+// }
+
+:host{
+    overflow: hidden auto;
+    width: 100%;
+    background-color: transparent;
+    border: 1px;
+}
+
+
+.toolset--body{
+    max-height: calc(100vh - 41px);
+    overflow:hidden;
+    &:hover{
+        overflow-y: auto;
+    }
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: $color5;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: $color4; 
+        border-left: 2px solid $color5;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color2; 
+    }
+}
+
+.searchbar--container{
+    padding: 0px;
+}
+
+.searchBar{
+    width: 100%;
+    font-size: 12px;
+    padding: 0px 8px;
+    border: 0px;
+    height: $fsize1;
+    border-bottom: 5px solid $color7;
+}
+
+.toolset__functions--subset{
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    background-color: $color5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    //padding-top: 2px;
+    //padding-bottom: 2px;
+
+    li{
+        user-select: none;
+        margin: 0px;
+        padding: 0px;
+        padding-left: 8px;
+        font-style: italic;
+        font-weight: 550;
+        // color: $function-text-color;
+        font-size: $fsize2;
+        height: 18px;
+        line-height: 18px;
+        width: 100%;
+        box-sizing: border-box;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .user--add{
+        margin-bottom: 8px;
+    }
+    :hover{
+        background-color: $color4;
+        transition: 0.4s;
+    }
+
+}
+.user--def{
+    .user--def-lnContainer{
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        .btn--container{
+            display: flex;
+            flex-flow: row nowrap;
+        }
+    }
+}
+.importedFunc-btn{
+    background-color: transparent;
+    border: none;
+    width: 13px;
+    height : 13px;
+    height: 100%;
+    padding: 0px;
+
+    .importedFunc-btn-icon{
+        font-size: $fsize2;
+        color: $color8;
+        width: 13px;
+        height: 13px;
+        line-height: 13px;
+    }
+
+    &:hover .importedFunc-btn-icon{
+        color: $selected-color;
+    }
+}
+
+
+.accordion {
+    background-color: $color4;
+    color: $color8;
+    cursor: pointer;
+    width: 100%;
+    height: 24px;
+    padding: 2px 8px 2px 8px;
+    border: none;
+    display: block;
+    text-align: left;
+    outline: none;
+    font-size: $fsize2;
+    transition: 0.4s;
+    font-weight: 550;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.active, .accordion:hover {
+    background-color: $color3; 
+}
+
+.panel {
+    width: inherit;
+    padding: 0px;
+    display: none;
+    background-color: $color5;
+    overflow: hidden;
+    button:not(.inline--cat){
+        font-weight: 550;
+        color: $selected-color;
+        font-style: italic;
+        white-space: nowrap;
+    }
+
+    &.opened{
+        display: block;
+    }
+}
+
+.tooltip-basic{
+    display: block;
+    color: $basic-function-text-color;
+
+    &.invalid{
+        opacity: $disabled-opacity;
+        pointer-events: none;
+    }
+}
+
+.tooltip{
+    display: block;
+    color: $function-text-color;
+}
+
+// /* Tooltip text */
+// .tooltip .tooltiptext1 {
+//     // visibility: hidden;
+//     width: 250px;
+//     // min-width: 50px;
+//     // max-width: 250px;
+
+//     background-color: $color5-5;// $color4;
+//     border: 2px solid $color5;
+//     color: $color8;
+//     pointer-events: none;
+//     //text-align: left;
+//     padding: 0px 10px 0px 10px;
+//     //border-radius: 6px;
+//     opacity:0;
+
+//     position: fixed; //absolute
+//     bottom:50px;
+//     left:125px;
+
+//     float:left;
+//     z-index: 1;
+
+//     p{
+//         font-family: sans-serif;
+//         display: flex;
+//         flex-flow: row nowrap;
+
+//         &.funcDesc{
+//             font-weight: 600;
+//         }
+
+//         &.paramP{
+//             padding-left: 5px;
+
+//         ::before{
+//                 display: inline-block;
+//                 content: '';
+//                 -webkit-border-radius: 0.25rem;
+//                 border-radius: 0.25rem;
+//                 height: 0.25rem;
+//                 width: 0.25rem;
+//                 margin: 0rem 0.3rem 0.15rem 0rem;
+//                 background-color: $color1;
+//             }
+//         }
+//         span{
+//             font-style: italic;
+//             line-height: $fsize1;
+//             white-space: nowrap;
+//             margin-right: 2px;
+//         }
+//     }
+// }
+// /* Show the tooltip text when you mouse over the tooltip container */
+// .tooltip:hover .tooltiptext1 {
+//     transition-delay: 0.5s;
+//     transition-duration: 0.3s;
+//     opacity: 1;
+// }
+
+#tooltiptext {
+    // visibility: hidden;
+    width: 250px;
+    // min-width: 50px;
+    // max-width: 250px;
+
+    background-color: $color5-5;// $color4;
+    border: 2px solid $color5;
+    color: $color8;
+    pointer-events: none;
+    //text-align: left;
+    padding: 0px 10px 0px 10px;
+    //border-radius: 6px;
+    opacity: 0;
+
+    position: fixed; //absolute
+    top:100px;
+    left:125px;
+
+    float:left;
+    z-index: 1;
+
+
+    p{
+        font-family: sans-serif;
+        display: flex;
+        flex-flow: row nowrap;
+
+        &.funcDesc{
+            font-weight: 600;
+            padding-bottom: 5px;
+        }
+
+        &.paramP{
+            padding-left: 5px;
+
+        ::before{
+                display: inline-block;
+                content: '';
+                -webkit-border-radius: 0.25rem;
+                border-radius: 0.25rem;
+                height: 0.25rem;
+                width: 0.25rem;
+                margin: 0rem 0.3rem 0.15rem 0rem;
+                background-color: $color1;
+            }
+        }
+        span{
+            font-style: italic;
+            line-height: $fsize1;
+            white-space: nowrap;
+            margin-right: 2px;
+        }
+    }
+}
+
+// user functions
+.add-btn{
+    height: 20px;
+
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+
+    background-color: $color5;
+    color: $color8 !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+
+    height: 18px;
+    width: 100%;
+    line-height: 18px;
+    text-align: left;
+    text-decoration: none;
+
+    font-size: $fsize2;
+    // transition: 0.4s;
+    // &:hover{
+    //     background-color: $color4;
+    // }
+    // .add-icon{
+    //     float:left;
+    //     color: $color8;
+    // }
+}
+
+.divider, .divider--in{
+    background-color: $color6;
+    height: 8px;
+    &:hover{
+        background-color: transparent !important;
+    }
+}
+
+.divider--in{
+    background-color: $color5;
+}
+
+.module-name{
+    color: $selected-color;
+}
+
+// global variables
+
+// #globals{
+//     background-color: $color3;
+//     font-style: italic;
+// }
+
+.inline_set{
+    li{
+        color: $function-text-color2;
+    }
+}

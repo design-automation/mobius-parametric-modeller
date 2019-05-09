@@ -1,0 +1,195 @@
+@import '~scss/colors';
+@import '~scss/variables';
+@import '../general-viewer.scss';
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+
+#help-container {
+    margin-top: 40px;
+    padding: 0px;
+
+    height: calc(100vh - 40px); //$header-height
+    width: 100%;
+    min-width: fit-content;
+
+    overflow: auto;
+    resize: none;
+
+    background-color: transparent;
+    color: $color8;
+    border: none;
+}
+
+.container{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    box-sizing: border-box;
+
+    height: fit-content;
+    width: 100%;
+    min-width: 200px;
+    padding: $small-padding;
+}
+
+.body--container{
+    padding: 6px 0px;
+    border-top: 1px solid $color1;
+}
+
+$ln-height: $fsize2 + 3px;
+
+.descr--container, .param--container, .ret--container, .exam--container{
+    padding: 0px;
+    line-height: $ln-height;
+    margin-bottom: $ln-height/2;
+    h5{
+        margin-bottom: $ln-height/4;
+    }
+    ul{
+        margin: 0px;
+        padding-left: $small-padding;
+        background-color: transparent;
+        li{
+            display: list-item;
+            .li--item{
+                display: flex;
+                flex-flow: row nowrap;
+                padding:0px;
+                font-style: normal;
+                font-weight: 400;
+                span{
+                    margin-right: 2px;
+                    font-weight: 550;
+                }
+                &:hover{
+                    background-color: transparent;
+                }
+            }
+            &:hover{
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+.exam--container{
+    h5{
+        margin-top: $ln-height/4;
+    }
+    .examp{
+        padding: 0px;
+        // p{
+        //     padding-left: $small-padding;
+        // }
+        ul{
+            margin-bottom: 6px;
+            padding: 0px;
+            background-color: transparent;
+            li{
+                display: flex;
+                border: 1px solid $color1;
+                color: $color8;
+                font-style: normal;
+                font-family: 'Ubuntu Mono';
+                padding: 0px 0px 0px 2px;
+                margin: 4px 0px;
+                background-color: transparent !important;
+            }
+            p{
+                background-color: transparent !important;
+            }
+        }
+    }
+}
+
+.hyperlink{
+    color: $color1;
+    :link {
+        color: $color1;
+    }
+    :visited {
+        color: $color2;
+    }
+    :hover {
+        color: $color3;
+    }
+}
+
+
+h1 {
+    // display: inline-block;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 30px;
+    cursor: pointer;
+
+    .activeModName{
+        display: inline-block;
+        min-width: 50px;
+    }
+    
+}
+h2{
+    padding: 0px;
+    padding-bottom: 6px;
+    font-size: 14px;
+}
+
+p{
+    padding-bottom: 10px;
+}
+
+.moduleDesc{
+    font-size: 12px;
+}
+
+#helpMenu {
+    display: none;
+    position: absolute;
+    width: fit-content;
+
+    transition: display 0.4s;
+    // top: 60px;
+
+    z-index: 1;
+    background-color: $color6;
+    border: 1px solid $color1;
+    padding-left: 0px;
+
+    button{
+        cursor: pointer;
+        display: block;
+        min-width: 100px;
+        max-width: 200px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
+    li{
+        cursor: pointer;
+        display: block;
+        min-width: 100px;
+        max-width: 300px;
+        overflow: hidden;
+        line-height: 20px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px 10px 0px 10px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+        color: $color8;
+        &:hover{
+            color: $selected-color;
+            background-color: $color5;
+        }
+    }
+
+}

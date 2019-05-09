@@ -1,0 +1,468 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+
+.container--nested{
+    padding-left: 0px;
+}
+
+.container--line{
+    background-color: transparent;
+    font-size: $fsize2;
+    margin: 0px 5px 2px 8px;
+    padding: 0px;
+    padding-bottom: 1px;
+    padding-left: 2px;
+    //border-bottom: 1px solid red;
+    border-bottom: 1px solid $color2;
+    border-left: 1px solid $color2;
+    color: $color1;
+    //min-height: 22px;
+    opacity: 1;
+
+    display: flex;
+    // white-space: nowrap;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    overflow-x: hidden;
+    width: calc(100% - 15px);
+    // min-width: fit-content; // for global side scroll
+
+    &.disabled{
+        opacity: $disabled-opacity;
+        .btns{
+            display: inline-flex;
+            #disable-btn{
+                display: flex;
+                justify-content: center;
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+        }
+        &:hover .btns{
+            #disable-btn{
+                order: 0;
+            }
+        }
+    }
+
+    &.disabled .input--var, &.disabled .input--arg{
+        border: 2px solid $color5 !important;
+    }
+
+    &.selected{
+        border-bottom: 2px solid $selected-color;
+        border-left: 2px solid $selected-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+
+        // &:hover > .btn-container {
+        //     .btns{
+        //         border-bottom: 2px solid $selected-color;
+        //         border-left: 2px solid $selected-color;
+        //     }
+        // }
+    }
+
+    &.printing:not(.disabled){
+        border-bottom: 2px solid $print-color;
+        border-left: 2px solid $print-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        #print-btn{
+            color: $print-color;
+            background-color: $color6;
+        }
+        &:hover {
+            background-color: $print-color-lt;
+            #print-btn{
+                background-color: transparent;
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $print-color-lt;
+            #print-btn{
+                background-color: transparent;
+            }
+        }
+    }
+
+    &.printing{
+        .btns{
+            display: inline-flex;
+            .btn{
+                background-color: inherit;
+            }
+            #print-btn{
+                display: flex;
+                justify-content: center;   
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $print-color-lt;
+        }
+        &:hover .btns{
+            #print-btn{
+                order: 1
+            }
+        }
+    }
+
+    &.selectGeom:not(.disabled){
+        border-bottom: 2px solid $selectGeom-color;
+        // border-left: 2px solid $selectGeom-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        #selectGeom-btn{
+            color: $selectGeom-color;
+            background-color: $color6;
+        }
+        &:hover {
+            background-color: $selectGeom-color-lt;
+            #selectGeom-btn{
+                background-color: transparent;
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $selectGeom-color-lt;
+            #selectGeom-btn{
+                background-color: transparent;
+            }
+        }
+    }
+
+    &.selectGeom{
+        .btns{
+            display: inline-flex;
+            .btn{
+                background-color: inherit;
+            }
+            #selectGeom-btn{
+                display: flex;
+                justify-content: center;   
+                &:hover{
+                    color: $selected-color;
+                }
+            }
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $selectGeom-color-lt;
+        }
+        &:hover .btns{
+            #selectGeom-btn{
+                order: 1
+            }
+        }
+    }
+
+    &.error:not(.disabled){
+        border-bottom: 2px solid $error-color;
+        border-left: 2px solid $error-color;
+        padding-bottom: 0px;
+        padding-left: 1px;
+        .btn{
+            background-color: inherit;
+        }
+        &.selected{
+            border-bottom: 2px solid $selected-color;
+            background-color: $error-color-lt;
+        }
+        &:hover {
+            background-color: $error-color-lt;
+        }
+    }
+    
+    .input--var{
+        font-size: $fsize2;
+        min-width: 10px;
+        background-color: $color6; 
+        //border-bottom: 1px solid $color1;
+        margin-right: 5px;
+        border: 2px solid $color5;
+        padding-left: 6px;
+
+        &.linked{
+            border: 2px solid $selectGeom-color;
+        }
+        &.error{
+            border: 2px solid $error-color;
+        }
+        &:focus, &:hover{
+            border-color: $selected-color;
+            background-color: $color7;
+        }
+        &.disabled{
+            pointer-events: none;
+        }
+    }
+    
+    .input--arg{
+        font-size: $fsize2;
+        resize: horizontal;
+        min-width: 10px;
+        //max-width: 300px;
+        background-color: $color6; 
+        //border-bottom: 1px solid $color1;
+        margin-left: 5px;
+        border: 2px solid $color5;
+        padding-left: 6px;
+
+        &.linked{
+            border: 2px solid $selectGeom-color;
+        }
+        &.error{
+            border: 2px solid $error-color;
+        }
+        &:focus, &:hover{
+            border-color: $selected-color;
+            background-color: $color7;
+        }
+        &.disabled{
+            pointer-events: none;
+        }
+    }
+    .input--comment{
+        font-size: $fsize2;
+        resize: horizontal;
+        min-width: 200px;
+        color: $comment-color;
+        font-style: italic;
+        background-color: transparent; 
+        margin: 2px;
+        border: 0px;
+        border-left: 2px solid $comment-color;
+        padding-left: 3px;
+        &.disabled{
+            pointer-events: none;
+        }
+    }
+
+    .input--terminate{
+        font-size: $fsize2;
+        resize: horizontal;
+        width: 156px;
+        color: $error-color;
+        font-style: italic;
+        font-weight: 800;
+        background-color: transparent; 
+        margin: 2px;
+        border: 0px;
+        border-left: 2px solid $error-color;
+        border-right: 2px solid $error-color;
+        padding-left: 3px;
+        padding-right: 3px;
+        pointer-events: none;
+    }
+
+    // .input--arg--p{
+    //     position: absolute;
+    //     z-index: 999;
+    //     /deep/ .inline-function{
+    //         font-style: italic;
+    //         color: $function-text-color;
+    //     }
+    // }
+
+    &:hover{
+        background-color: $color5;
+        .btn{
+            background-color: inherit;
+        }
+    }
+}
+
+.container--item{
+    position: relative;
+
+    padding-bottom: 2px;
+    border: none;
+
+    display: inline-block;
+    width: 100%;
+    // min-width: fit-content; // for global side scroll
+
+    white-space: nowrap;
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        height: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: transparent; 
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color1; 
+    }
+
+    &:hover{
+        &::-webkit-scrollbar-thumb {
+            background: $color1; 
+        }
+    }
+}
+
+.container--item:hover + .btn-container{//.container--line
+    .btns{
+        display: inline-flex;
+        .btn{
+            display: flex;
+            justify-content: center;
+            background-color: inherit;
+        }
+    }
+}
+
+//.container--item .selected .btn {display: block}
+
+.btn-container{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: inherit;
+    justify-content: flex-end;
+    order: -1;
+    z-index: 2;
+    &:hover .btns{
+        display: inline-flex;
+        .btn{
+            display: flex;
+            justify-content: center;
+            background-color: inherit;
+        }
+    }
+}
+
+.btns{
+    position: absolute;
+
+    display: none;
+    flex-flow: row-reverse nowrap;
+    justify-content: flex-end;
+
+    background-color: inherit;
+
+    // border-left: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
+    &:hover{
+        display: inline-flex;
+    }
+}
+
+.btn{
+    //height: 100%;
+    width: $fsize1;
+    background-color: $color6;
+
+    border: none;
+    color: $color1;
+
+    display: none;
+
+    overflow: hidden;
+    vertical-align: center;
+    
+    order: 4;
+    // &.highlighted{
+    //     background-color: red;
+    // }
+    &:hover{
+        color: $selected-color;
+    }
+}
+.btn{
+    padding: 0px;
+    margin: 0px;
+    
+
+    .icon{
+        vertical-align: center;
+        width: $fsize1;
+        height: $fsize1 + 2px;
+        margin: 1px;
+        font-size: $fsize2;
+        // border: 1px solid $color1;
+    }
+}
+
+.line--item{
+    color: $color1;
+    display: inline-block;
+    padding-right: 60px;
+}
+
+.line--terminate{
+    color: $color1;
+    background-color: $error-color-lt;
+    display: inline-block;
+    padding-right: 60px;
+}
+
+.line--blank{
+    height: 8px;
+    // display: inline-block;
+    &:hover{
+        background-color: $color7;
+        border-color: $selected-color;
+    }
+}
+
+
+
+/*
+.hasChildren::before{
+    content: '\25B6';
+    position: absolute;
+    left: 3px;
+    font-size: 8px;
+}
+*/
+
+
+.function-text{
+    display: inline-block;
+    white-space: nowrap;
+    font-style: italic;
+    color: $function-text-color;
+    font-weight: 550;
+    text-align: center;
+    min-height: 17px;
+
+    .module-name{
+        color: $selected-color;
+    }
+}
+
+.basic-function-text{
+    display: inline-block;
+    white-space: nowrap;
+    font-style: italic;
+    color: $basic-function-text-color;
+    font-weight: 550;
+    text-align: center;
+    min-height: 17px;
+
+    .module-name{
+        color: $selected-color;
+    }
+}

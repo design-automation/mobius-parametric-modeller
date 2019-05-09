@@ -1,0 +1,29 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+#notificationBox {
+    pointer-events: none;
+    opacity: 0;
+    min-width: 250px; 
+    background-color: $color7; 
+    color: $color8; 
+    border: solid $color1 1px;
+    text-align: center;
+    padding: 16px;
+    position: fixed; 
+    z-index: 1; 
+    right: 40px; 
+    top: 0px;
+}
+
+#notificationBox.show {
+    opacity: 1;
+    top: 20px;
+    transition: ease-in 0.2s; 
+}
+
+#notificationBox.hide {
+    opacity: 0;
+    top: 0px;
+    transition: ease-in 0.2s; 
+}

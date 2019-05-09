@@ -1,0 +1,39 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "target": "es5",
+    "paths": {
+      "@assets/*" : ["src/assets/*"],
+      "@env/*" : ["src/environments/*"],
+      "@libs/*" : ["src/assets/libs/*"],
+      "@store" : ["src/app/core/store"],
+      "@models/*" : ["src/app/shared/models/*"],
+      "@utils" : ["src/app/shared/utils"],
+      "@shared/*" : ["src/app/shared/*"],
+      "@views" : ["src/app/views"],
+      "@model-viewers": ["src/app/mobius-viewer/viewers"],
+      "@services" : ["src/app/shared/services"],
+      "@modules" : ["src/assets/core/modules"]
+    },
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "module": "es2015",
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports":true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,0 +1,39 @@
+<div class='container'>
+    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [flowchart]='getFlowchart()'></panel-header>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+                <h3 id = 'gallery-tab' (click)='openGalleryMenu($event)'>{{getActiveGallery().name}}<span>▾</span></h3>
+                <div id="galleryMenu">
+                    <div *ngFor='let galleryName of allGalleries;'>
+                        <li (click)="switchGallery(galleryName)">
+                            {{galleryName}}
+                        </li>
+                    </div>
+                </div>
+                <div class = 'content--container'>
+                    <div class="container__element container__element--project-container">
+                        <div class="project-container__project" *ngFor="let f of getActiveGallery().files">
+                            <div class="tile--contents" (click)='loadFile(getActiveGallery().link + f)'>
+                                <img src ='{{getActiveGallery().link+"imgs/"+f.split(".mob")[0]+".JPG"}}' alt = 'project image'>
+                            </div>
+                            <span class = 'project__title'>{{ f | simplename }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </as-split-area>
+
+        <as-split-area [size]="getSplit()">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container [data]='viewerData()'></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+
+</div>
+<spinner></spinner>
+<chrome></chrome>

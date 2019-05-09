@@ -1,0 +1,44 @@
+<div class='container' (window:resize)='attribTogglePos()'>
+    <as-split direction="horizontal" (dragEnd)='setSplit($event)' disabled='true' id="published">
+        <as-split-area [size]="100 - getSplit()">
+            <publish-header [title]='getFlowchart().name'></publish-header>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+                <parameter-viewer [flowchart]='getFlowchart()' [startNode]='getFlowchart().nodes[0]' [endNode]='getEndNode()'></parameter-viewer>
+            </div>
+            <div class='footer'>
+                <p class='footer-p'>
+                <!-- <img  src="assets/logo/logo-16high.png" alt="Möbius Modeller"> -->
+                Powered by <a href='https://mobius.design-automation.net' target='_blank'>Möbius Modeller</a>
+                </p>
+            </div>
+        </as-split-area>
+
+        <as-split-area [size]="getSplit()" id="published_right" [class.attribclosed] = 'getAttribSplit() === 0' [class.flowchartclosed] = 'getSplit() === 100'>
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <a class='shareLink' *ngIf="checkShareBtn()" title="Share" href={{expando_href}} target='_blank'>
+                    <button class="shareBtn" mat-icon-button>
+                            <mat-icon>share</mat-icon>
+                    </button>
+                </a>
+                <button class="sliderBtn" mat-icon-button (click)='toggleSlider()'>
+                    <mat-icon *ngIf='getSplit() === 100; else other_icon'>chevron_right</mat-icon>
+                    <ng-template #other_icon>
+                        <mat-icon>chevron_left</mat-icon>
+                    </ng-template>
+                </button>
+                <button id='attribToggle' class="attribBtn" mat-icon-button (click)='toggleAttrib()' [class.closed] = 'getAttribSplit() === 0'>
+                    <mat-icon *ngIf='getAttribSplit() === 0; else hide_attrib'>expand_less</mat-icon>
+                    <ng-template #hide_attrib>
+                        <mat-icon>expand_more</mat-icon>
+                    </ng-template>
+                </button>
+                <model-viewers-container [data]='viewerData()'></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+</div>
+<spinner></spinner>
+<chrome></chrome>

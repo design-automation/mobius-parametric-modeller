@@ -1,0 +1,52 @@
+<div class='container'>
+    <div class='container--parameter'>
+
+        <div class = "FFA">
+            <input class='input-const-name' [class.disabled-input]='true' [value]='displayConstName()' 
+            [style.width.px]='inputSize(prod.args[prod.argCount-2].value) + 10' disabled>
+            <ng-container class='parameter__name' [ngSwitch]="prod.meta.inputMode">
+                <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' 
+                placeholder='{{prod.args[prod.argCount-1].value}}'
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'>
+                
+                <div class = "FFA"  *ngSwitchCase="PortTypes.Slider">
+                </div>
+    
+                <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
+                    <input id = 'chbox_{{prod.ID}}' *ngSwitchCase="PortTypes.Checkbox" [(ngModel)]='prod.args[prod.argCount-1].value' type="checkbox">
+                    <label for = 'chbox_{{prod.ID}}'></label>
+                </div>
+
+                <select *ngSwitchCase="PortTypes.Dropdown" [(ngModel)]='prod.args[prod.argCount-1].value'>
+                    <option *ngFor='let opt of getDropdownOptions()' value='{{opt}}'>{{replaceQuotes(opt)}}</option>
+                </select>
+
+                
+                <input *ngSwitchCase="PortTypes.URL" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='{{prod.args[prod.argCount-1].value}}' 
+                [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'>
+
+                <ng-container *ngSwitchCase="PortTypes.File" >
+                    <button class='filebtn' (click)="openFileBrowse(prod.ID)" >File</button>
+                    <input [class.disabled-input]='true' value='{{prod.args[prod.argCount-1].value?.name}}' [style.width.px]='inputSize(prod.args[prod.argCount-1].value?.name||undefined,"No Input")' disabled>
+                    <input id='file_{{prod.ID}}' style='display: none;' (change)="onFileChange($event)" type="file">
+                </ng-container>
+    
+            </ng-container>
+        </div>
+        <div class = "FFA" *ngIf='prod.meta.inputMode === PortTypes.Slider'>
+            <input [(ngModel)]='prod.args[prod.argCount-1].value' 
+            placeholder='{{prod.args[prod.argCount-1].value}}'
+            [style.width.px]='inputSize(prod.args[prod.argCount-1].value)'
+            (blur)='checkSliderVal()'>
+            <mat-slider
+                [(ngModel)]='prod.args[prod.argCount-1].value'
+                thumbLabel
+                step={{prod.args[prod.argCount-1].step||1}}
+                min={{prod.args[prod.argCount-1].min||0}}
+                max={{prod.args[prod.argCount-1].max||100}}>
+            </mat-slider>
+        </div>
+        
+    </div>
+</div>
+

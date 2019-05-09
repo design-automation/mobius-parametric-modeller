@@ -1,0 +1,79 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+
+.flowchart-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    background: transparent;
+
+    .svgCanvas{
+        // width: 100%;
+        // height: 100%;
+        transform-origin: top left 0px;
+    
+        .temp-wire{
+            stroke: $color1;
+            stroke-width: 2px;
+            stroke-dasharray: 10 15;
+            opacity: $disabled-opacity;
+        }
+    }
+    
+}
+
+.button-row {
+    position: absolute; 
+    bottom: 50px; 
+    left: 10px;
+
+    button{
+        color: $color1;
+        background-color: transparent;
+        border: none;
+        height: 24px;
+        width: 24px;
+        text-align: center;
+        font-size: 24px;
+        padding: 0px;
+    }
+}
+
+.resetViewer-button{
+    cursor: pointer;
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+    position: absolute; 
+    top:  34px; 
+    right: 2px;
+    color: $color1;
+    padding: 0px;
+    width: 30px;
+    height: 34px;
+    outline: none;
+}
+.disable-printing-button{
+    cursor: pointer;
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+    position: absolute; 
+    top:  68px; 
+    right: 2px;
+    color: $color1;
+    padding: 0px;
+    width: 30px;
+    height: 34px;
+    outline: none;
+}
+#arrow{
+    stroke: $color8;
+    fill: transparent;
+}
+#arrow_selected{
+    stroke: $selected-color;
+    fill: $selected-color;
+}

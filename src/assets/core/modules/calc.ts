@@ -56,7 +56,8 @@ export function Distance(__model__: GIModel, position1: TId, position2: TId|TId[
     // --- Error Check ---
     const fn_name = 'calc.Distance';
     const ents_arr1 = checkIDs(fn_name, 'position1', position1, [IDcheckObj.isID], [EEntType.POSI])  as TEntTypeIdx;
-    const ents_arr2 = checkIDs(fn_name, 'position2', position2, [IDcheckObj.isID], [EEntType.POSI]) as TEntTypeIdx|TEntTypeIdx[]; // TODO
+    const ents_arr2 = checkIDs(fn_name, 'position2', position2, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.POSI]) as
+    TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     if (method === _EDistanceMethod.P_P_DISTANCE) {
         return _distancePtoP(__model__, ents_arr1, ents_arr2);
@@ -129,7 +130,7 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
             if (isPline(ent_type)) {
                 wire_i = __model__.geom.query.navPlineToWire(index);
             }
-            if (__model__.geom.query.istWireClosed(wire_i)) {
+            if (!__model__.geom.query.istWireClosed(wire_i)) {
                 throw new Error('To calculate area, wire must be closed');
             }
             const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, index);

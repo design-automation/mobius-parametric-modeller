@@ -19,60 +19,7 @@ enum EGeojsoFeatureType {
 export function importGeojson(model: GIModel, geojson_str: string, elevation: number): IGeomPack {
     // parse the json data str
     const geojson_obj: any = JSON.parse(geojson_str);
-    // create the function for transformation
-    const proj_str_a = '+proj=tmerc +lat_0=';
-    const proj_str_b = ' +lon_0=';
-    const proj_str_c = '+k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs';
-    let longitude = LONGLAT[0];
-    let latitude = LONGLAT[1];
-    if (model.attribs.query.hasModelAttrib('longitude')) {
-        const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
-        if (typeof long_value !== 'number') {
-            throw new Error('Longitude attribute must be a number.');
-        }
-        longitude = long_value as number;
-        if (longitude < -180 || longitude > 180) {
-            throw new Error('Longitude attribute must be between -180 and 180.');
-        }
-    }
-    if (model.attribs.query.hasModelAttrib('latitude')) {
-        const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribValue('latitude');
-        if (typeof lat_value !== 'number') {
-            throw new Error('Latitude attribute must be a number');
-        }
-        latitude = lat_value as number;
-        if (latitude < 0 || latitude > 90) {
-            throw new Error('Latitude attribute must be between 0 and 90.');
-        }
-    }
-    // try to figure out what the projection is of the source file
-    let proj_from_str = 'WGS84';
-    if (geojson_obj.hasOwnProperty('crs')) {
-        if (geojson_obj.crs.hasOwnProperty('properties')) {
-            if (geojson_obj.crs.properties.hasOwnProperty('name')) {
-                const name: string = geojson_obj.crs.properties.name;
-                const epsg_index = name.indexOf('EPSG');
-                if (epsg_index !== -1) {
-                    let epsg = name.slice(epsg_index);
-                    epsg = epsg.replace(/\s/g, '+');
-                    if (epsg === 'EPSG:4326') {
-                        // do nothing, 'WGS84' is fine
-                    } else if (['EPSG:4269', 'EPSG:3857', 'EPSG:3785', 'EPSG:900913', 'EPSG:102113'].indexOf(epsg) !== -1) {
-                        // these are the epsg codes that proj4 knows
-                        proj_from_str = epsg;
-                    } else if (epsg === 'EPSG:3414') {
-                        // singapore
-                        proj_from_str =
-                            '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 ' +
-                            '+ellps=WGS84 +units=m +no_defs';
-                    }
-                }
-            }
-        }
-    }
-    console.log('CRS of geojson data', proj_from_str);
-    const proj_to_str = proj_str_a + latitude + proj_str_b + longitude + proj_str_c;
-    const proj_obj: proj4.Converter = proj4(proj_from_str, proj_to_str);
+    const proj_obj: proj4.Converter = _createProjection(model, geojson_obj);
     // arrays for features
     const point_f: any[] = [];
     const linestring_f: any[] = [];
@@ -153,6 +100,69 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
     };
 }
 
+
+/**
+ * Get long lat, Detect CRS, create projection function
+ * @param model The model.
+ * @param point The features to add.
+ */
+function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
+        // create the function for transformation
+        const proj_str_a = '+proj=tmerc +lat_0=';
+        const proj_str_b = ' +lon_0=';
+        const proj_str_c = '+k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs';
+        let longitude = LONGLAT[0];
+        let latitude = LONGLAT[1];
+        if (model.attribs.query.hasModelAttrib('longitude')) {
+            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
+            if (typeof long_value !== 'number') {
+                throw new Error('Longitude attribute must be a number.');
+            }
+            longitude = long_value as number;
+            if (longitude < -180 || longitude > 180) {
+                throw new Error('Longitude attribute must be between -180 and 180.');
+            }
+        }
+        if (model.attribs.query.hasModelAttrib('latitude')) {
+            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribValue('latitude');
+            if (typeof lat_value !== 'number') {
+                throw new Error('Latitude attribute must be a number');
+            }
+            latitude = lat_value as number;
+            if (latitude < 0 || latitude > 90) {
+                throw new Error('Latitude attribute must be between 0 and 90.');
+            }
+        }
+        // try to figure out what the projection is of the source file
+        let proj_from_str = 'WGS84';
+        if (geojson_obj.hasOwnProperty('crs')) {
+            if (geojson_obj.crs.hasOwnProperty('properties')) {
+                if (geojson_obj.crs.properties.hasOwnProperty('name')) {
+                    const name: string = geojson_obj.crs.properties.name;
+                    const epsg_index = name.indexOf('EPSG');
+                    if (epsg_index !== -1) {
+                        let epsg = name.slice(epsg_index);
+                        epsg = epsg.replace(/\s/g, '+');
+                        if (epsg === 'EPSG:4326') {
+                            // do nothing, 'WGS84' is fine
+                        } else if (['EPSG:4269', 'EPSG:3857', 'EPSG:3785', 'EPSG:900913', 'EPSG:102113'].indexOf(epsg) !== -1) {
+                            // these are the epsg codes that proj4 knows
+                            proj_from_str = epsg;
+                        } else if (epsg === 'EPSG:3414') {
+                            // singapore
+                            proj_from_str =
+                                '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 ' +
+                                '+ellps=WGS84 +units=m +no_defs';
+                        }
+                    }
+                }
+            }
+        }
+        console.log('CRS of geojson data', proj_from_str);
+        const proj_to_str = proj_str_a + latitude + proj_str_b + longitude + proj_str_c;
+        const proj_obj: proj4.Converter = proj4(proj_from_str, proj_to_str);
+        return proj_obj;
+}
 
 /*
     "geometry": {

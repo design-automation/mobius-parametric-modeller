@@ -2,6 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 import { checkIDs, checkCommTypes, TypeCheckObj, IDcheckObj, checkAttribName, checkAttribValue } from './_check_args';
+import __ from 'underscore';
 
 //  ===============================================================================================
 //  Functions used by Mobius
@@ -154,7 +155,7 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 export function __setAttrib__(__model__: GIModel, entities: TId|TId[]|TId[][],
                               attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], attrib_index?: number): void {
     // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = entities.flat(); }
+    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---
     const fn_name = 'entities@' + attrib_name;
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -199,7 +200,7 @@ function _getAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 export function __getAttrib__(__model__: GIModel, entities: TId|TId[]|TId[][],
         attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
     // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = entities.flat(); }
+    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---
     const fn_name = 'Inline.__getAttrib__';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;

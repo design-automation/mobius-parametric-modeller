@@ -30,8 +30,14 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Parameters:**  
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
   
+## ModelCompare  
+* **Description:** Compare this model to the data from another GI model.  
+* **Parameters:**  
+  * *gi_model_data:* undefined  
+* **Returns:** Text that summarises the comparison between this model and the the GI model.  
+  
 ## ModelCheck  
-* **Description:** Check tje internal consistency of the model.  
+* **Description:** Check the internal consistency of the model.  
 * **Parameters:**  
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
   

@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_fmhiallqmec",
+                "id": "node_sjj3q6ps3c8",
                 "position": {
                     "x": 5350,
                     "y": 4999.1787109375
@@ -38,11 +38,14 @@
                                 "name": "const_name",
                                 "default": 0,
                                 "invalidVar": false,
-                                "value": "constant1"
+                                "value": "constant1",
+                                "linked": false
                             },
                             {
                                 "name": "__input__",
-                                "default": 0
+                                "default": 0,
+                                "value": 0,
+                                "linked": false
                             }
                         ],
                         "selected": false,
@@ -65,12 +68,14 @@
                                 "name": "const_name",
                                 "default": 0,
                                 "invalidVar": false,
-                                "value": "simple_input1"
+                                "value": "simple_input1",
+                                "linked": false
                             },
                             {
                                 "name": "__input__",
                                 "default": 0,
-                                "value": "123"
+                                "value": "123",
+                                "linked": false
                             }
                         ],
                         "selected": false,
@@ -93,15 +98,17 @@
                                 "name": "const_name",
                                 "default": 0,
                                 "invalidVar": false,
-                                "value": "slider1"
+                                "value": "slider1",
+                                "linked": false
                             },
                             {
                                 "name": "__input__",
                                 "default": 10,
-                                "value": 14,
+                                "value": 10,
                                 "step": "1",
                                 "min": "10",
-                                "max": "20"
+                                "max": "20",
+                                "linked": false
                             }
                         ],
                         "selected": false,
@@ -124,12 +131,14 @@
                                 "name": "const_name",
                                 "default": 0,
                                 "invalidVar": false,
-                                "value": "check_box1"
+                                "value": "check_box1",
+                                "linked": false
                             },
                             {
                                 "name": "__input__",
                                 "default": 0,
-                                "value": true
+                                "value": true,
+                                "linked": false
                             }
                         ],
                         "selected": false,
@@ -145,46 +154,21 @@
                             "module": "Input",
                             "name": "Constant",
                             "inputMode": 3,
-                            "description": "This is a URL to a file that can be accessed online. In the dashboard, it generates an input box where you paste in your URL. When you execute the procedure, the browser will go a get this file from the online source. So if you type in an invalid URL, you will get an error. In this case, I just usue google.com as an example. "
+                            "description": "This is a URL to a file that can be accessed online. In the dashboard, it generates an input box where you paste in your URL. When you execute the procedure, the browser will go a get this file from the online source. So if you type in an invalid URL, you will get an error. In this case, I just use github as an example. "
                         },
                         "args": [
                             {
                                 "name": "const_name",
                                 "default": 0,
                                 "invalidVar": false,
-                                "value": "url1"
+                                "value": "url1",
+                                "linked": false
                             },
                             {
                                 "name": "__input__",
-                                "default": "http://google.com",
-                                "value": ""
-                            }
-                        ],
-                        "selected": false,
-                        "hasError": false
-                    },
-                    {
-                        "type": 10,
-                        "ID": "prod-hc8fxd8vz6c",
-                        "enabled": true,
-                        "print": false,
-                        "argCount": 2,
-                        "meta": {
-                            "module": "Input",
-                            "name": "Constant",
-                            "inputMode": 4,
-                            "description": "This is a file on your local hard disk. In the Dashboard, it generates a button. When you click the button, it will invoke the seacrh file dialog that belongs to the browser. When you select the file, it will save the contents in your browsers persistent cache. "
-                        },
-                        "args": [
-                            {
-                                "name": "const_name",
-                                "default": 0,
-                                "invalidVar": false,
-                                "value": "file1"
-                            },
-                            {
-                                "name": "__input__",
-                                "default": 0
+                                "default": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/box_with_holes.gi",
+                                "value": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gi-json/box_with_holes.gi",
+                                "linked": false
                             }
                         ],
                         "selected": false,
@@ -222,7 +206,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Create some local variables",
-                                    "id": "node_t48cp70ih4a",
+                                    "id": "node_fyw1l3z4dwt",
                                     "position": {
                                         "x": 5350.81982421875,
                                         "y": 5201.63916015625
@@ -254,15 +238,20 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var1",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "123"
+                                                    "value": "123",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var1"
                                         },
                                         {
                                             "type": 0,
@@ -274,15 +263,20 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var2",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "456.789"
+                                                    "value": "456.789",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var2"
                                         },
                                         {
                                             "type": 0,
@@ -294,15 +288,20 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var3",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "\"this is some text\""
+                                                    "value": "\"this is some text\"",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var3"
                                         },
                                         {
                                             "type": 0,
@@ -314,15 +313,20 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var4",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "[1 , 2 , 3]"
+                                                    "value": "[1, 2, 3]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var4"
                                         },
                                         {
                                             "type": 0,
@@ -334,15 +338,20 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var5",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "[\"aaa\" , \"bbb\"]"
+                                                    "value": "[\"aaa\", \"bbb\"]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var5"
                                         },
                                         {
                                             "type": 0,
@@ -354,15 +363,20 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var6",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "[[1 , 2 , 3] , [\"aaa\" , \"bbb\"]]"
+                                                    "value": "[[1, 2, 3], [\"aaa\", \"bbb\"]]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var6"
                                         },
                                         {
                                             "type": 0,
@@ -374,15 +388,23 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var7",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "my_var1 + my_var2"
+                                                    "value": "my_var1 + my_var2",
+                                                    "usedVars": [
+                                                        "my_var1",
+                                                        "my_var2"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var7"
                                         },
                                         {
                                             "type": 0,
@@ -394,15 +416,24 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "my_var8",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "[my_var1 , my_var2 , my_var3]"
+                                                    "value": "[my_var1, my_var2, my_var3]",
+                                                    "usedVars": [
+                                                        "my_var1",
+                                                        "my_var2",
+                                                        "my_var3"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "my_var8"
                                         }
                                     ],
                                     "state": {
@@ -427,7 +458,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_3divs2flra4",
+                                                        "id": "node_bonhv0i5hut",
                                                         "position": {
                                                             "x": 5349.18017578125,
                                                             "y": 5400.81982421875
@@ -461,12 +492,14 @@
                                                                     {
                                                                         "name": "__model__",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     },
                                                                     {
                                                                         "name": "value",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     }
                                                                 ],
                                                                 "print": false,
@@ -512,7 +545,7 @@
                     },
                     "parentNode": "~flowchart~nodes~0"
                 },
-                "hasError": false,
+                "hasError": true,
                 "hasExecuted": true
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
@@ -523,8 +556,10 @@
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
         ],
         "functions": [],
-        "ordered": true
+        "ordered": true,
+        "id": "2ba6f0e8-7f7b-4fd5-3375-c9e9fd1fff6e",
+        "last_updated": "2019-04-09T09:15:53.386Z"
     },
-    "last_updated": "2019-01-14T08:48:11.827Z",
-    "version": 1
+    "version": 1,
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":\"_f\",\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.33\"}"
 }

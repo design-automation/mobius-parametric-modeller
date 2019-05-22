@@ -84,7 +84,7 @@ export class GIGeom {
             'polylines',
             'polygons',
             'collections'
-        ]
+        ];
         for (const ent_type of eny_type_array) {
             if (this.model.geom.query.numEnts(ent_type, false) !== model.geom.query.numEnts(ent_type, false)) {
                 result.matches = false;

@@ -40,4 +40,12 @@ export class GIAttribs {
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
         this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
     }
+    /**
+     * Compares this model and another model.
+     * @param model The model to compare with.
+     */
+    compare(model: GIModel, result: {matches: boolean, comment: string}): void {
+        const matches = result.matches;
+        const comment = result.comment;
+    }
 }

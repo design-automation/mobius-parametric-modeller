@@ -145,7 +145,21 @@ export function ModelInfo(__model__: GIModel): string {
 }
 // ================================================================================================
 /**
- * Check tje internal consistency of the model.
+ * Compare this model to the data from another GI model.
+ *
+ * @param __model__
+ * @returns Text that summarises the comparison between this model and the the GI model.
+ */
+export function ModelCompare(__model__: GIModel, gi_model_data: string): string {
+    const gi_obj: IModelData = JSON.parse(gi_model_data) as IModelData;
+    const other_model = new GIModel(gi_obj);
+    const result: {matches: boolean, comment: string} = __model__.compare(other_model);
+    if (result.comment !== '') { return result.comment; }
+    return 'The two models match.';
+}
+// ================================================================================================
+/**
+ * Check the internal consistency of the model.
  *
  * @param __model__
  * @returns Text that summarises what is in the model, click print to see this text.

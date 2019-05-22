@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelData, IGeomPack } from './common';
+import { IModelData, IGeomPack, EEntType } from './common';
 import { GIModelThreejs } from './GIModelThreejs';
 /**
  * Geo-info model class.
@@ -19,7 +19,7 @@ export class GIModel {
         this.attribs = new GIAttribs(this);
         this.threejs = new GIModelThreejs(this);
         if (model_data) {
-            this.addData(model_data);
+            this.setData(model_data);
         }
     }
     /**
@@ -49,6 +49,21 @@ export class GIModel {
             geometry: this.geom.io.getData(),
             attributes: this.attribs.io.getData()
         };
+    }
+    /**
+     * Compares this model and another model.
+     * @param model The model to compare with.
+     */
+    public compare(model: GIModel): {matches: boolean, comment: string} {
+        const result: {matches: boolean, comment: string} = {matches: true, comment: ''};
+        this.geom.compare(model, result);
+        this.attribs.compare(model, result);
+        if (result.matches) {
+            result.comment = 'Models match.';
+        } else {
+            result.comment = 'Models do not match.\n' + result.comment;
+        }
+        return result;
     }
     /**
      * Check model for internal consistency

@@ -1,10 +1,11 @@
 import { GIModel } from './GIModel';
-import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx } from './common';
+import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx, EEntType } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomIO } from './GIGeomIO';
+import { ArrayCamera } from 'three';
 
 /**
  * Class for geometry.
@@ -45,7 +46,7 @@ export class GIGeom {
     public threejs: GIGeomThreejs;
     /**
      * Creates an object to store the geometry data.
-     * @param geom_data The JSON data
+     * @param model The parent model.
      */
     constructor(model: GIModel) {
         this.model = model;
@@ -55,6 +56,41 @@ export class GIGeom {
         this.query = new GIGeomQuery(this, this._geom_arrays);
         this.threejs = new GIGeomThreejs(this, this._geom_arrays);
         this.selected = [];
+    }
+    /**
+     * Compares this model and another model.
+     * @param model The model to compare with.
+     */
+    compare(model: GIModel, result: {matches: boolean, comment: string}): void {
+        const eny_type_array: EEntType[] = [
+            EEntType.POSI,
+            EEntType.TRI,
+            EEntType.VERT,
+            EEntType.EDGE,
+            EEntType.WIRE,
+            EEntType.FACE,
+            EEntType.POINT,
+            EEntType.PLINE,
+            EEntType.PGON,
+            EEntType.COLL
+        ];
+        const ent_type_strs: string[] = [
+            'positions',
+            'vertices',
+            'edges',
+            'wires',
+            'faces',
+            'points',
+            'polylines',
+            'polygons',
+            'collections'
+        ]
+        for (const ent_type of eny_type_array) {
+            if (this.model.geom.query.numEnts(ent_type, false) !== model.geom.query.numEnts(ent_type, false)) {
+                result.matches = false;
+                result.comment += 'Number of ' + ent_type_strs[ent_type] + ' do not match.\n';
+            }
+        }
     }
     /**
      * Checks geometry for internal consistency

@@ -39,19 +39,22 @@ export class GIGeomThreejs {
      * 3) the material groups array, which is an array of [ start, count, mat_index ]
      */
     public get3jsTris(vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
+        const settings = JSON.parse(localStorage.getItem('mpm_settings'));
         // arrays to store threejs data
         const tri_data_arrs: [number[], TTri, number][] = []; // tri_mat_indices, new_tri_verts_i, tri_i
         const mat_f: object = {
             specular: 0x000000,
             emissive: 0x000000,
             shininess: 0,
-            side: THREE.FrontSide
+            side: THREE.FrontSide,
+            wireframe: settings.wireframe.show
         };
         const mat_b: object = {
             specular: 0x000000,
             emissive: 0x000000,
             shininess: 0,
-            side: THREE.BackSide
+            side: THREE.BackSide,
+            wireframe: settings.wireframe.show
         };
         const materials: object[] = [this._getMaterial( mat_f ), this._getMaterial( mat_b )];
         const material_names:  string[] = ['default_front', 'default_back'];

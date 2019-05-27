@@ -25,7 +25,7 @@ export class PanelHeaderComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService, private router: Router) {
-        if (this.router.url === '/about' || this.router.url === '/gallery') {
+        if (this.router.url === '/about') {
             this.executeCheck = false;
         } else {
             this.executeCheck = true;

@@ -131,6 +131,11 @@ export class AttributeComponent implements OnChanges, DoCheck {
         if (!ready) { return; }
         if (this.showSelected) {
           const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, this.tab_map[tabIndex]);
+          SelectedAttribData.map(row => {
+            if (this.selected_ents.has(row._id)) {
+              return row.selected = true;
+            }
+          });
           this.displayData = SelectedAttribData;
         } else {
           const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]);
